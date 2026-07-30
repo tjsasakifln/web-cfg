@@ -1,0 +1,52 @@
+{
+  "file": "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+  "title": "SINAPI desonerado ou não desonerado: qual usar? | CONFENGE",
+  "description": "Entenda quando usar o SINAPI desonerado ou não desonerado, como conferir encargos, BDI e edital e quais erros podem comprometer a proposta.",
+  "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+  "h1": "SINAPI desonerado ou não desonerado: qual usar?",
+  "og_title": "SINAPI desonerado ou não desonerado: qual usar? | CONFENGE",
+  "og_image": "https://confenge.com.br/assets/conteudos/sinapi-desonerado-nao-desonerado.jpg",
+  "author": true,
+  "date_modified": true,
+  "has_table": true,
+  "has_answer_box": true,
+  "has_cprb": true,
+  "has_checklist": true,
+  "has_sources": true,
+  "comparativo_ok": true,
+  "garbled": false,
+  "jsonld_types": [
+    "Organization",
+    "Person",
+    "Article",
+    "BreadcrumbList",
+    "FAQPage"
+  ],
+  "wa": [
+    {
+      "phone": "5548988344559",
+      "text": "Olá, Tiago. Estou analisando uma licitação e preciso verificar se o orçamento deve usar SINAPI desonerado ou não desonerado. Posso enviar edital e planilha."
+    },
+    {
+      "phone": "5548988344559",
+      "text": "Olá, Tiago. Estou analisando uma licitação e preciso verificar se o orçamento deve usar SINAPI desonerado ou não desonerado. Posso enviar edital e planilha."
+    },
+    {
+      "phone": "5548988344559",
+      "text": "Olá, Tiago. Preciso de auditoria de orçamento: conferir base SINAPI desonerado vs não desonerado, encargos e BDI antes de enviar a proposta."
+    },
+    {
+      "phone": "5548988344559",
+      "text": "Olá, Tiago. Preciso de auditoria de orçamento: conferir base SINAPI desonerado vs não desonerado, encargos e BDI antes de enviar a proposta."
+    },
+    {
+      "phone": "5548988344559",
+      "text": "Olá, Tiago. Quero validar a referência de preço (SINAPI desonerado ou não desonerado) do meu edital."
+    },
+    {
+      "phone": "5548988344559",
+      "text": "Olá, Tiago. Estou analisando uma licitação e preciso verificar se o orçamento deve usar SINAPI desonerado ou não desonerado."
+    }
+  ],
+  "answer_excerpt": "SINAPI desonerado reflete composições com encargos sociais da mão de obra em base compatível com a desoneração da folha (CPRB, quando aplicável ao enquadramento). SINAPI não desonerado incorpora encargos plenos típicos do regime sem essa desoneração. Use a tabela que o edital e a planilha modelo exigem na data-base do certame; depois alinhe BDI, encargos da proposta e unitários à mesma base. Escol"
+}

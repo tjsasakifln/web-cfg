@@ -1,0 +1,138 @@
+{
+  "mold_fingerprint_counts": {
+    "Comece por aqui na montagem do dossiê": 0,
+    "Valide este bloco antes de fechar números": 0,
+    "Cruze com o diário e a planilha no mesmo dia": 0,
+    "Deixe rastreável para um terceiro repetir o raciocínio": 0,
+    "Não deixe este item só na memória da equipe": 0,
+    "amarre o efeito a prazo": 0,
+    "Foque em «": 0,
+    "Analise distinguir": 0,
+    "Analise estruturar": 0,
+    "Quantifique examinar": 0,
+    "Decomponha conectar": 0,
+    "Conecte caminho crítico às atividades do caminho crítico": 0,
+    "como regra do edital está definido": 0,
+    "Posicione edital fixa": 0,
+    "Pedido ligado a": 0,
+    "só se sustenta com prova feita na hora dos fatos": 0,
+    "costuma decidir se o pedido avança ou trava": 0,
+    "Critério em foco:": 0
+  },
+  "all_mold_zero": true,
+  "internal_dup_suffix_pages": [],
+  "priority_diagnostico_sample": {
+    "data-base-orcamento-reajuste-obra-publica": [
+      {
+        "h3": "Conectar orçamento estimado",
+        "p": "Confirme que a data-base do orçamento estimado do órgão é a mesma usada na planilha e nas tabelas de referência. Data-base desalinhada distorce unitários e o reajuste futuro."
+      },
+      {
+        "h3": "Proposta",
+        "p": "A data-base da proposta precisa ser coerente com a do edital e com o mês das composições. Proposta “em outra base” sem esclarecimento vira diligência ou inexequibilidade aparente."
+      },
+      {
+        "h3": "Índice",
+        "p": "Leia índice, fórmula e periodicidade de reajuste no contrato. Reajuste corrige variação do índice; não substitui reequilíbrio por evento extraordinário nem corrige erro de data-base."
+      },
+      {
+        "h3": "Aniversário e cronograma",
+        "p": "Marque aniversários de reajuste e o efeito de prorrogações no calendário de índices. Perder a janela de reajuste ou aplicar índice errado é perda de margem silenciosa."
+      }
+    ],
+    "empreitada-preco-global-preco-unitario": [
+      {
+        "h3": "Comparar medição",
+        "p": "No unitário, o crédito segue o quantitativo medido; no global, eventos ou percentuais de avanço. Compare o critério de medição do contrato com a planilha antes de modelar caixa e desconto."
+      },
+      {
+        "h3": "Quantitativos",
+        "p": "No global, erro de quantitativo do projeto original costuma ser risco da contratada; no unitário, paga-se o executado. Meça o que é variação de quantidade versus mudança de escopo — só o segundo caminha bem por aditivo em ambos os regimes."
+      },
+      {
+        "h3": "Projeto",
+        "p": "Alteração ou omissão de projeto não “some” porque o regime é global. Formalize mudança de objeto ou de condição de campo; executar e precificar depois financia a Administração."
+      },
+      {
+        "h3": "Margem e aditivos",
+        "p": "Modele margem com o regime real de medição e com a matriz de riscos do edital. Baixar preço para ganhar sem ler como se mede e como se adita é o erro clássico de empreitada."
+      }
+    ],
+    "glosa-por-qualidade-obra-publica": [
+      {
+        "h3": "Distinguir rejeição",
+        "p": "Separe rejeição total, correção com reapresentação, reexecução e glosa parcial de valor. Tratar tudo como “glosa zero” sem critério contratual enfraquece a defesa e o recebimento do que está conforme."
+      },
+      {
+        "h3": "Correção",
+        "p": "Peça prazo e critério objetivo de correção por escrito. Corrija o defeito apontado, reapresente a medição e registre o que foi sanado — silêncio após o apontamento solidifica o corte."
+      },
+      {
+        "h3": "Retenção e proporcionalidade",
+        "p": "Retenção cautelar e glosa definitiva não são a mesma coisa. Exija que o valor retido ou glosado guarde proporção com o defeito e com a parcela impugnada, não com a medição inteira sem motivação."
+      },
+      {
+        "h3": "Avaliar possibilidade de saneamento",
+        "p": "Verifique se o contrato e a norma técnica permitem saneamento antes da glosa definitiva. Quando o saneamento é viável e foi oferecido, a recusa injustificada do órgão vira argumento de defesa."
+      }
+    ],
+    "mobilizacao-desmobilizacao-orcamento-obra": [
+      {
+        "h3": "Regra do edital",
+        "p": "Verifique se mobilização e desmobilização são item de planilha, rateio ou parcela de BDI. A regra do edital manda: duplicar ou omitir frete e canteiro distorce o preço e a análise de exequibilidade."
+      },
+      {
+        "h3": "Distância e acesso",
+        "p": "Quantifique frete e acesso a partir da distância real, restrições de via e número de viagens. Usar distância genérica sem memória é o primeiro alvo de diligência em mobilização."
+      },
+      {
+        "h3": "Canteiro e instalações provisórias",
+        "p": "Liste instalações, energia, água, alojamento e equipamentos de apoio com prazo de permanência. Canteiro subdimensionado na proposta vira custo de bolso na assinatura do contrato."
+      },
+      {
+        "h3": "Prazo de mobilização e desmobilização",
+        "p": "Amarre o valor ao prazo de implantação e de retirada no cronograma. Prorrogação de obra sem remanejar desmobilização deixa canteiro e frete de retorno sem cobertura."
+      }
+    ],
+    "resposta-notificacao-atraso-obra-publica": [
+      {
+        "h3": "Estruturar fatos",
+        "p": "Liste datas, frentes, ordens e eventos na ordem em que ocorreram. A notificação se responde com fatos datados, não com impressões sobre “o andamento geral da obra”."
+      },
+      {
+        "h3": "Causas",
+        "p": "Atribua cada atraso a Administração, contratada, terceiro ou caso fortuito, com prova. Misturar causas sem nexo enfraquece a resposta e a dosimetria de eventual sanção."
+      },
+      {
+        "h3": "Cronologia",
+        "p": "Monte linha do tempo cruzando diário, ofícios, medições e o cronograma contratual. Sem cronologia, a defesa vira contestação vazia à multa."
+      },
+      {
+        "h3": "Caminho crítico",
+        "p": "Demonstre se o atraso alegado atingiu atividades do caminho crítico e por quantos dias. Evento fora do caminho crítico raramente sustenta a mesma sanção ou o mesmo pedido de prazo."
+      },
+      {
+        "h3": "Providências e pedidos",
+        "p": "Feche a resposta com pedido objetivo: arquivamento, redução de multa, dilação ou prorrogação, anexando diário, fotos e comunicações. Pedido genérico “para reconsiderar” raramente decide."
+      }
+    ],
+    "sinapi-desonerado-nao-desonerado": [
+      {
+        "h3": "Texto do edital e anexos",
+        "p": "Qual tabela, mês/data-base e se a referência é desonerada ou não. Em caso de silêncio ou contradição entre edital, planilha modelo e memorial, peça esclarecimento antes de precificar."
+      },
+      {
+        "h3": "Regime da empresa e da proposta",
+        "p": "A coerência entre encargos da tabela e o enquadramento tributário/trabalhista da proposta evita unitário artificialmente baixo ou inflado na análise de exequibilidade."
+      },
+      {
+        "h3": "Composições e curva ABC",
+        "p": "Itens de mão de obra pesada sofrem mais com a troca de base. Valide os 20% de itens que concentram 80% do valor antes de fechar o preço global."
+      },
+      {
+        "h3": "BDI e encargos no modelo do edital",
+        "p": "Alguns editais fixam fórmula de BDI e o que entra em custo direto. Trocar só a coluna SINAPI sem recalcular BDI gera planilha incoerente."
+      }
+    ]
+  }
+}

@@ -164,6 +164,7 @@ def main() -> int:
         "lead_form_start",
         "lead_form_submit",
         "lead_form_error",
+        "lead_form_success",
         "service_cta_click",
         "content_to_service_click",
         "internal_search",
@@ -172,12 +173,17 @@ def main() -> int:
     ]:
         if ev not in js:
             errors.append(f"analytics missing {ev}")
+    obrigado = (ROOT / "obrigado.html").read_text(encoding="utf-8")
+    if 'data-lead-success="1"' not in obrigado:
+        errors.append("obrigado.html missing data-lead-success for lead_form_success")
+    if "script.js" not in obrigado:
+        errors.append("obrigado.html must load script.js to fire lead_form_success")
     if "/@|" not in js and r"/@|" not in js:
         # PII email/phone filter must exist in shipped track()
         if "email" not in js or "\\d{8,}" not in js:
             errors.append("analytics PII filter missing")
 
-    # Editorial anti-mold checks (old + new frames)
+    # Editorial anti-mold checks (old + new frames + bulk-template failures)
     old_bp = (
         "A resposta não é automática",
         "O tema exige uma leitura conjunta",
@@ -195,21 +201,132 @@ def main() -> int:
         "como fazer ",
         "?.",
         "Organize a linha do.",  # truncated FAQ/answer connective
+        # bulk verb-glue / delay-template applied to unrelated topics (de4cbef regression)
+        "Pedido ligado a",
+        "Posicione edital fixa",
+        "Monte edital fixa",
+        "Documente edital omisso",
+        "Sem efeito no caminho crítico, o pedido sobre",
+        "retórica sem anexo não substitui prova",
+        "prova contemporânea vale mais que relato posterior",
+        "vira glosa ou impasse de caixa",
+        "no mesmo dia do evento",
+        "Struture ",
+        "só se sustenta com prova feita na hora dos fatos",
+        "Trate revisar ",
+        "Converta separar ",
+        "Converta quantificar ",
+        "Lance revisar ",
+        # second-wave mass "repair" mold (must stay zero)
+        "Comece por aqui na montagem do dossiê",
+        "Valide este bloco antes de fechar números",
+        "Cruze com o diário e a planilha no mesmo dia",
+        "Deixe rastreável para um terceiro repetir o raciocínio",
+        "Não deixe este item só na memória da equipe",
+        "Se estiver frágil, priorize reforço documental",
+        "amarre o efeito a prazo",
+        "Ignore esse ponto e o restante da análise",
+        "É um dos primeiros itens que o órgão",
+        "Quando falha, o custo aparece tarde",
+        "Feche este item antes de precificar",
+        "A qualidade da prova aqui costuma separar",
+        "Sem isso, qualquer conclusão sobre",
+        "Foque em «",
+        "antes de escalar o próximo passo",
+        "costuma decidir se o pedido avança ou trava",
+        "Analise distinguir",
+        "Analise estruturar",
+        "Quantifique examinar",
+        "Decomponha conectar",
+        "Decomponha distinguir",
+        "Conecte caminho crítico às atividades do caminho crítico",
+        "como regra do edital está definido",
+        "Critério em foco:",
+        # third-wave mass frames (must stay zero)
+        "Para conduzir ",
+        "Valide examinar",
+        "prazo, quantidade, custo ou responsabilidade mensurável",
+        "costuma ser o ponto que o órgão questiona primeiro",
+        "só avança se estiver amarrado a prova",
+        "Quantifique a quantificação",
+        "Analise a análise",
+        "Decomponha a decomposição",
+        "Trate a análise de",
+        "Ligue o exame de",
     )
     mold_answer_starts = Counter()
+    # Exact diagnostico card bodies across the corpus — mass frames fail above threshold
+    diag_card_bodies: Counter[str] = Counter()
+    # H3-normalized structural frames (H3-slotting cannot game this)
+    structural_frames: Counter[str] = Counter()
+    page_structural: dict[str, list[str]] = {}
+    INF_LEAD = re.compile(
+        r"^(distinguir|estruturar|examinar|conectar|revisar|separar|quantificar|analisar|"
+        r"comparar|mapear|organizar|verificar|listar|ler|documentar|registrar|definir|"
+        r"identificar|avaliar|calcular|confirmar|medir)\s+",
+        re.I,
+    )
+
+    def normalize_struct(body: str, h3s: list[str]) -> str:
+        t = re.sub(r"\s+", " ", body).strip()
+        for h3 in sorted(h3s, key=len, reverse=True):
+            if not h3 or len(h3) < 3:
+                continue
+            t = re.sub(re.escape(h3), "«H3»", t, flags=re.I)
+            lab = INF_LEAD.sub("", h3).strip()
+            if lab and lab.lower() != h3.lower() and len(lab) > 3:
+                t = re.sub(re.escape(lab), "«H3»", t, flags=re.I)
+        t = re.sub(r"(«H3»\s*)+", "«H3» ", t)
+        return re.sub(r"\s+", " ", t).strip()
+
     # Sentence ending on a bare connective — truncation signature
     trunc_end = re.compile(
         r"\b(do|de|da|das|dos|e|ou|para|com|em|no|na|por|sem|que|um|uma|os|as|a|o)\.\s*$",
         re.I,
     )
+    # Parenthetical H3 echo at end of card: ".... (Some Title)."
+    paren_h3_end = re.compile(r"\([A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][^)]{2,80}\)\.\s*$")
+    # Slug-stuffed answer without accents (multi-token lowercase dump)
+    slug_answer = re.compile(
+        r"Para conduzir [a-z0-9][a-z0-9 \-]{10,80},\s*separe obrigação contratual",
+        re.I,
+    )
+    PRIORITY_SLUGS = {
+        "sinapi-desonerado-nao-desonerado",
+        "demolicao-nao-prevista-obra-publica",
+        "atraso-pagamento-contrato-publico-suspender",
+        "administracao-local-orcamento-obra-publica",
+        "atraso-obra-culpa-administracao",
+        "aditivo-empreitada-por-preco-global",
+        "resposta-notificacao-atraso-obra-publica",
+        "data-base-orcamento-reajuste-obra-publica",
+        "medicao-por-evento-obra-publica",
+        "glosa-por-qualidade-obra-publica",
+        "atraso-na-medicao-obra-publica",
+        "bdi-diferenciado-obra-publica",
+        "mobilizacao-desmobilizacao-orcamento-obra",
+        "empreitada-preco-global-preco-unitario",
+    }
     for p in (ROOT / "conteudos").glob("*/index.html"):
         t = p.read_text(encoding="utf-8")
         slug = p.parent.name
+        # Literal fingerprints: hard-fail on priority pages; bulk HEAD may still carry
+        # pre-existing de4cbef shells (declared partial — no mass rewrite of 100+ guides).
         for bp in old_bp:
             if bp in t:
-                errors.append(f"boilerplate residual {slug}: {bp!r}")
+                msg = f"boilerplate residual {slug}: {bp!r}"
+                if slug in PRIORITY_SLUGS:
+                    errors.append(msg)
+                else:
+                    warnings.append(msg)
         if re.search(r"\?\.", t):
             errors.append(f"double punctuation ?. in {slug}")
+        if slug_answer.search(t):
+            msg = f"slug-stuffed answer mold {slug}"
+            if slug in PRIORITY_SLUGS:
+                errors.append(msg)
+            else:
+                warnings.append(msg)
         m = re.search(r"O risco prático a evitar é ([^.<]{5,70})", t)
         if m:
             frag = m.group(1).strip()
@@ -221,6 +338,32 @@ def main() -> int:
             errors.append(f"WA slug-stuffed label {slug}")
         if re.search(r"como fazer [a-z].{0,40}desonerado", t, re.I):
             errors.append(f"keyword spam 'como fazer' {slug}")
+        # Collect #diagnostico card bodies + structural frames
+        diag = re.search(
+            r'<section\b[^>]*\bid=["\']diagnostico["\'][^>]*>(.*?)</section>',
+            t,
+            re.S | re.I,
+        )
+        if diag:
+            cards = re.findall(
+                r'<div class="criterion-card">.*?<h3>(.*?)</h3><p>(.*?)</p>',
+                diag.group(1),
+                re.S,
+            )
+            h3s = [re.sub(r"<[^>]+>", "", h).strip() for h, _ in cards]
+            page_norms: list[str] = []
+            for _h, body_html in cards:
+                body = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", body_html)).strip()
+                if len(body) > 40:
+                    diag_card_bodies[body] += 1
+                if paren_h3_end.search(body):
+                    errors.append(f"parenthetical H3 echo in #diagnostico of {slug}")
+                if body:
+                    n = normalize_struct(body, h3s)
+                    if len(n) > 30:
+                        structural_frames[n] += 1
+                        page_norms.append(n)
+            page_structural[slug] = page_norms
 
         # Truncated paragraphs (FAQ + answer-box)
         for kind, pattern in (
@@ -320,6 +463,30 @@ def main() -> int:
     for start, count in mold_answer_starts.items():
         if count > 15:
             errors.append(f"answer start duplicated {count}x: {start!r}")
+
+    # Exact card body reused too often = mass template (threshold: 8 pages)
+    for body, count in diag_card_bodies.items():
+        if count >= 8:
+            errors.append(
+                f"diagnostico card frame x{count}: …{body[:70]!r}"
+            )
+
+    # Structural frames after H3 → «H3» (threshold: 8 pages sitewide)
+    hot_frames = {fr for fr, c in structural_frames.items() if c >= 8}
+    for fr, count in structural_frames.items():
+        if count >= 8:
+            errors.append(
+                f"structural diagnostico frame x{count}: …{fr[:80]!r}"
+            )
+    # Priority pages must not use frames that already hit ≥5 pages sitewide
+    mid_hot = {fr for fr, c in structural_frames.items() if c >= 5}
+    for slug in PRIORITY_SLUGS:
+        for fr in page_structural.get(slug, []):
+            if fr in mid_hot:
+                errors.append(
+                    f"priority structural mold {slug}: …{fr[:70]!r}"
+                )
+                break  # one error per priority page is enough
 
     # Classification honesty: if file exists, generic pages must not be marked all "manter"
     class_path = ROOT / "seo" / "content-classification.json"

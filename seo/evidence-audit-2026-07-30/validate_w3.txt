@@ -1,0 +1,9 @@
+pages=134 sitemap=132 indexable=132
+errors=7 warnings=0
+ERR duplicate criterion suffix x2 in consorcio-subcontratacao-obra-publica: …'ia, projeto, liberação), registre o impe'
+ERR duplicate criterion suffix x2 in consultoria-contrato-obra-publica-construtora: …'nta pleito se houver nexo entre fato, cl'
+ERR duplicate criterion suffix x2 in cotacao-mercado-orcamento-obra-publica: …'problema é evento de reequilíbrio ou err'
+ERR duplicate criterion suffix x3 in custos-indiretos-atraso-administracao-obra: …'stiver omisso ou contraditório entre edi'
+ERR duplicate criterion suffix x2 in divergencia-quantitativo-medicao-as-built: …'ativa ou quantitativa antes do cálculo d'
+ERR duplicate criterion suffix x2 in pedido-de-reequilibrio-negado: …' comodidade; formalize impacto e peça de'
+ERR duplicate criterion suffix x2 in projeto-basico-incompleto-obra-publica: …'ções do mesmo período — divergência prec'

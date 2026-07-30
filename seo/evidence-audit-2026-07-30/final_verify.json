@@ -1,0 +1,485 @@
+{
+  "priority_clean": "14/14",
+  "structural_ge8": 0,
+  "max_structural_freq": 1,
+  "priority": {
+    "sinapi-desonerado-nao-desonerado": {
+      "title": "SINAPI desonerado ou não desonerado: qual usar? | CONFENGE",
+      "desc": "Entenda quando usar o SINAPI desonerado ou não desonerado, como conferir encargos, BDI e edital e quais erros podem comprometer a proposta.",
+      "h1": "SINAPI desonerado ou não desonerado: qual usar?",
+      "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "answer": "SINAPI desonerado reflete composições com encargos sociais da mão de obra em base compatível com a desoneração da folha (CPRB, quando aplicável ao enquadramento). SINAPI não desonerado incorpora encargos plenos típicos d",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Estou analisando uma licitação e preciso verificar se o orçamento deve usar SINAPI desonerado ou não desonerado. Posso enviar ed",
+      "wa_count": 6,
+      "cards": [
+        {
+          "h3": "Texto do edital e anexos",
+          "p": "Qual tabela, mês/data-base e se a referência é desonerada ou não. Em caso de silêncio ou contradição entre edital, planilha modelo e memorial, peça esclarecimento antes de precificar."
+        },
+        {
+          "h3": "Regime da empresa e da proposta",
+          "p": "A coerência entre encargos da tabela e o enquadramento tributário/trabalhista da proposta evita unitário artificialmente baixo ou inflado na análise de exequibilidade."
+        },
+        {
+          "h3": "Composições e curva ABC",
+          "p": "Itens de mão de obra pesada sofrem mais com a troca de base. Valide os 20% de itens que concentram 80% do valor antes de fechar o preço global."
+        },
+        {
+          "h3": "BDI e encargos no modelo do edital",
+          "p": "Alguns editais fixam fórmula de BDI e o que entra em custo direto. Trocar só a coluna SINAPI sem recalcular BDI gera planilha incoerente."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "demolicao-nao-prevista-obra-publica": {
+      "title": "Demolição não prevista em obra pública: como cobrar | CONFENGE",
+      "desc": "Demolição não prevista no orçamento: como documentar, medir e cobrar sem absorver serviço extra no preço da obra pública.",
+      "h1": "Demolição não prevista em obra pública: como cobrar",
+      "canonical": "https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/",
+      "answer": "Demolição fora da planilha ou do projeto contratado não se “absorve” automaticamente no preço global. Antes de executar ou de aceitar silêncio da fiscalização, documente condição encontrada (vistoria, fotos, volumes), co",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Encontrei demolição não prevista na obra pública e preciso avaliar como documentar e cobrar.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Vistoria e condição encontrada",
+          "p": "Registre o estado de fato antes de demolir: fotos datadas, localização e volumes. Sem isso, a demolição vira narrativa tardia."
+        },
+        {
+          "h3": "Projeto e planilha contratados",
+          "p": "Confronte o que estava previsto no projeto/planilha com o que foi encontrado. A divergência de escopo é o núcleo do direito de cobrar."
+        },
+        {
+          "h3": "Quantitativos e composição de preço",
+          "p": "Meça volume demolido com memória conferível e forme preço com referência ou cotação coerente com data-base e desconto aplicável."
+        },
+        {
+          "h3": "Formalização e nexo causal",
+          "p": "Peça medição/aditivo com ordem, prova e valor. Executar sem formalizar é o caminho clássico de absorver custo sem cobertura."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "atraso-pagamento-contrato-publico-suspender": {
+      "title": "Atraso de pagamento: pode suspender a obra pública? | CONFENGE",
+      "desc": "Atraso de pagamento no contrato público autoriza suspender a obra? Condições, riscos e como formalizar a posição da construtora.",
+      "h1": "Atraso de pagamento: pode suspender a obra pública?",
+      "canonical": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "answer": "Atraso de pagamento pode legitimar medidas de preservação (cobrança, notificação, e, em hipóteses cabíveis, suspensão), mas não é automático nem irrestrito. Confira contrato, valores incontroversos, prazos, notificações ",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Gostaria de analisar um caso de atraso de pagamento e suspensão de obra pública (licitação, contrato ou obra pública).",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Crédito líquido e certo",
+          "p": "Isole valor, competência e documentos que tornam o crédito exigível (medição, ateste, NF, ordem de pagamento). Sem essa base, atraso vira reclamação genérica."
+        },
+        {
+          "h3": "Prazo contratual e legal de pagamento",
+          "p": "Conte o atraso com a regra do contrato e a legislação aplicável ao pagamento — não pelo “costume do órgão”. Datas de protocolo e de vencimento precisam estar na cronologia."
+        },
+        {
+          "h3": "Histórico de notificações",
+          "p": "Organize o histórico com fato, valor, prazo descumprido e pedido objetivo. Protesto sem anexo não substitui prova e pode complicar eventual discussão de sanção."
+        },
+        {
+          "h3": "Risco de sanção vs risco de caixa",
+          "p": "Suspender pode gerar notificação por abandono ou atraso; continuar pode quebrar o caixa. A decisão é de cenário documentado, com enquadramento contratual, não de impulso."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "administracao-local-orcamento-obra-publica": {
+      "title": "Administração local no orçamento: direto, BDI ou planilha? | CONFENGE",
+      "desc": "Administração local é custo direto, BDI ou item de planilha? Critérios para precificar sem duplicar nem omitir equipe de canteiro.",
+      "h1": "Administração local no orçamento: direto, BDI ou planilha?",
+      "canonical": "https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/",
+      "answer": "Administração local pode aparecer como item de planilha (custo direto), como parcela embutida no BDI, ou de forma mista — o que vale é o modelo do edital/orçamento de referência, não o hábito interno da empresa. Erro clá",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Preciso conferir se administração local no orçamento está como custo direto, BDI ou planilha.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Critérios",
+          "p": "Defina o que o edital/planilha trata como administração local: equipe, postos, encargos e se o item é custo direto ou entra no BDI. Critério ambíguo vira duplicidade ou omissão."
+        },
+        {
+          "h3": "Medição proporcional",
+          "p": "Se a administração local é medida por período ou por avanço, amarre a regra à planilha e ao cronograma. Medir sem memória abre glosa e disputa de caixa."
+        },
+        {
+          "h3": "Prorrogação e risco de duplicidade",
+          "p": "Em prorrogação, verifique se a administração local continua coberta por item próprio ou se foi embutida no BDI. Duplicar ou omitir é o erro clássico de margem."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "atraso-obra-culpa-administracao": {
+      "title": "Atraso por culpa da Administração: como provar | CONFENGE",
+      "desc": "Atraso por culpa da Administração: como provar causa, impacto no prazo e proteger a construtora antes de sanção ou prejuízo.",
+      "h1": "Atraso por culpa da Administração: como provar",
+      "canonical": "https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/",
+      "answer": "Atraso imputável à Administração (projeto, frente não liberada, interferência, decisão demorada, etc.) só protege prazo e custo se houver prova contemporânea de causa, impacto no caminho crítico e comunicação. Não basta ",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Tenho atraso de obra com indícios de culpa da Administração e preciso organizar a prova.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Mapear causas",
+          "p": "Separe causas imputáveis à Administração (projeto, frente, decisão, interferência) das da contratada. Sem nexo causal documentado, prorrogação e custo adicional não se sustentam."
+        },
+        {
+          "h3": "Caminho crítico",
+          "p": "Mostre quais atividades do caminho crítico foram afetadas e por quantos dias. Atraso sem efeito no caminho crítico raramente justifica o pedido de prazo integral."
+        },
+        {
+          "h3": "Comunicações",
+          "p": "Reúna ofícios, e-mails e registros com fato, impacto e pedido. Comunicação tardia ou só verbal enfraquece a tese de culpa da Administração."
+        },
+        {
+          "h3": "Impactos e pedido de prazo e custo",
+          "p": "Traduza a causa em dias, ociosidade e custos indiretos mensuráveis e formalize o pedido com cláusula, prova e valor. Pedido genérico não preserva posição."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "aditivo-empreitada-por-preco-global": {
+      "title": "Aditivo em empreitada global: quando cabe | CONFENGE",
+      "desc": "Aditivo em empreitada por preço global: quando a mudança de projeto ou escopo gera direito — e o que o risco de quantitativo não cobre.",
+      "h1": "Aditivo em empreitada global: quando cabe",
+      "canonical": "https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/",
+      "answer": "Em empreitada por preço global, o risco de quantitativo costuma ser do contratado — mas isso não elimina aditivo por alteração de projeto, serviço novo, erro da Administração ou fato extraordinário previsto na matriz de ",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Preciso avaliar aditivo em empreitada por preço global.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Separar risco de quantitativos",
+          "p": "Em preço global, o risco de quantitativo costuma ser da contratada — mas só no escopo original. Meça o que mudou de projeto/condição de campo versus mera variação de quantidade prevista."
+        },
+        {
+          "h3": "Erro de projeto",
+          "p": "Erro, omissão ou inconsistência de projeto pode autorizar aditivo se alterar o objeto ou as condições de execução. Execute com reserva e peça formalização; precificar depois é financiar a Administração."
+        },
+        {
+          "h3": "Alteração do contratante e eventos extraordinários",
+          "p": "Alteração determinada pelo contratante e eventos extraordinários têm regime próprio. Leia matriz de riscos, cláusulas de aditivo e limites legais antes de absorver custo no preço global."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "resposta-notificacao-atraso-obra-publica": {
+      "title": "Notificação por atraso: como montar a resposta | CONFENGE",
+      "desc": "Como responder notificação de atraso em obra pública: fatos, anexos, prazos e o que não admitir sem prova.",
+      "h1": "Notificação por atraso: como montar a resposta",
+      "canonical": "https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/",
+      "answer": "Resposta a notificação de atraso deve separar fato, causa, responsabilidade e impacto — não só “contestar a multa”. Use cronologia, diário, frentes, interferências e pedidos de prorrogação já protocolados. Admitir atraso",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Recebi notificação por atraso e preciso montar a resposta técnica.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Estruturar fatos",
+          "p": "Liste datas, frentes, ordens e eventos na ordem em que ocorreram. A notificação se responde com fatos datados, não com impressões sobre o andamento geral da obra."
+        },
+        {
+          "h3": "Causas",
+          "p": "Atribua cada atraso a Administração, contratada, terceiro ou caso fortuito, com prova. Misturar causas sem nexo enfraquece a resposta e a dosimetria de eventual sanção."
+        },
+        {
+          "h3": "Cronologia",
+          "p": "Monte linha do tempo cruzando diário, ofícios, medições e o cronograma contratual. Sem cronologia, a defesa vira contestação vazia à multa."
+        },
+        {
+          "h3": "Caminho crítico",
+          "p": "Demonstre se o atraso alegado atingiu atividades do caminho crítico e por quantos dias. Evento fora do caminho crítico raramente sustenta a mesma sanção ou o mesmo pedido de prazo."
+        },
+        {
+          "h3": "Providências e pedidos",
+          "p": "Feche a resposta com pedido objetivo: arquivamento, redução de multa, dilação ou prorrogação, anexando diário, fotos e comunicações. Pedido genérico para reconsiderar raramente decide."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "data-base-orcamento-reajuste-obra-publica": {
+      "title": "Data-base e reajuste: onde se perde margem | CONFENGE",
+      "desc": "Data-base e reajuste em obra pública: onde a construtora perde margem e o que conferir no edital e no contrato.",
+      "h1": "Data-base e reajuste: onde se perde margem",
+      "canonical": "https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/",
+      "answer": "Data-base do orçamento e regra de reajuste definem se a empresa corre atrás da inflação ou financia o contrato. Confira no edital/contrato: data-base dos preços, índices, periodicidade, o que está coberto por reajuste e ",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Preciso revisar data-base e reajuste do contrato de obra pública.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Conectar orçamento estimado",
+          "p": "Confirme que a data-base do orçamento estimado do órgão é a mesma usada na planilha e nas tabelas de referência. Data-base desalinhada distorce unitários e o reajuste futuro."
+        },
+        {
+          "h3": "Proposta",
+          "p": "A data-base da proposta precisa ser coerente com a do edital e com o mês das composições. Proposta em outra base sem esclarecimento vira diligência ou inexequibilidade aparente."
+        },
+        {
+          "h3": "Índice",
+          "p": "Leia índice, fórmula e periodicidade de reajuste no contrato. Reajuste corrige variação do índice; não substitui reequilíbrio por evento extraordinário nem corrige erro de data-base."
+        },
+        {
+          "h3": "Aniversário e cronograma",
+          "p": "Marque aniversários de reajuste e o efeito de prorrogações no calendário de índices. Perder a janela de reajuste ou aplicar índice errado é perda de margem silenciosa."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "medicao-por-evento-obra-publica": {
+      "title": "Medição por evento ou quantitativo: o que muda | CONFENGE",
+      "desc": "Medição por evento ou por quantitativo: diferenças de caixa, glosa e prova para a construtora em contrato público.",
+      "h1": "Medição por evento ou quantitativo: o que muda",
+      "canonical": "https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/",
+      "answer": "Medição por evento amarra o recebimento a marcos contratuais; por quantitativo, ao serviço efetivamente executado e medido. O modelo “protege” a construtora só se os eventos forem claros, mensuráveis e alinhados ao crono",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Meu contrato prevê medição por evento e preciso avaliar o impacto.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Comparar regimes",
+          "p": "Medição por evento amarra o recebimento a marcos; por quantitativo, ao serviço executado. Compare o contrato com a planilha e o cronograma antes de assumir que sempre se mede por m³."
+        },
+        {
+          "h3": "Riscos",
+          "p": "No regime por evento, atraso de marco mesmo com serviço parcial pode travar caixa. No quantitativo, critério de medição e aceite definem o crédito. Enquadre o risco antes de precificar."
+        },
+        {
+          "h3": "Documentação e impacto de alterações incompletas",
+          "p": "Alteração de escopo sem ajuste de eventos ou critérios gera medição impossível de fechar. Documente a mudança e peça adequação formal antes de acumular serviço sem marco de pagamento."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "glosa-por-qualidade-obra-publica": {
+      "title": "Glosa por qualidade: pode glosar a medição inteira? | CONFENGE",
+      "desc": "Glosa por qualidade na medição: o que a fiscalização precisa apontar e como a construtora responde com critério técnico.",
+      "h1": "Glosa por qualidade: pode glosar a medição inteira?",
+      "canonical": "https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/",
+      "answer": "Glosa por qualidade não autoriza, por si, zerar medição sem critério. Distinga rejeição, correção, reexecução, retenção e glosa. Exija apontamento objetivo (item, localização, norma/especificação, quantitativo afetado) e",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Sofri glosa por qualidade na medição e preciso analisar a resposta.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Distinguir rejeição",
+          "p": "Separe rejeição total, correção com reapresentação, reexecução e glosa parcial de valor. Tratar tudo como glosa zero sem critério contratual enfraquece a defesa e o recebimento do que está conforme."
+        },
+        {
+          "h3": "Correção",
+          "p": "Peça prazo e critério objetivo de correção por escrito. Corrija o defeito apontado, reapresente a medição e registre o que foi sanado — silêncio após o apontamento solidifica o corte."
+        },
+        {
+          "h3": "Retenção e proporcionalidade",
+          "p": "Retenção cautelar e glosa definitiva não são a mesma coisa. Exija que o valor retido ou glosado guarde proporção com o defeito e com a parcela impugnada, não com a medição inteira sem motivação."
+        },
+        {
+          "h3": "Avaliar possibilidade de saneamento",
+          "p": "Verifique se o contrato e a norma técnica permitem saneamento antes da glosa definitiva. Quando o saneamento é viável e foi oferecido, a recusa injustificada do órgão vira argumento de defesa."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "atraso-na-medicao-obra-publica": {
+      "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+      "desc": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
+      "h1": "Atraso na medição: como proteger o caixa",
+      "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+      "answer": "Atraso na medição trava caixa mesmo com serviço executado. Trate como problema de processo e prova: protocolo da medição, critérios do contrato, pendências da fiscalização, prazo de análise e parcela incontroversa. Não e",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. A medição da obra está atrasada e preciso proteger o fluxo de caixa.",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Cronologia",
+          "p": "Prove a data de entrega da medição (protocolo, sistema, e-mail) e as devoluções da fiscalização. Sem marco de apresentação, o atraso do órgão vira discussão sem âncora."
+        },
+        {
+          "h3": "Obrigações da fiscalização",
+          "p": "Mapeie prazos de ateste, liquidação e pagamento no contrato. Cobre com base nesses prazos e no histórico de devoluções — não em expectativa informal do fiscal."
+        },
+        {
+          "h3": "Impactos financeiros e comunicação de riscos à execução",
+          "p": "Notifique o efeito de caixa e o risco de paralisação com valor e pedido de decisão. Serviço executado sem medição atestada continua crédito a proteger, mas exige trilha formal."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "bdi-diferenciado-obra-publica": {
+      "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
+      "desc": "BDI diferenciado para materiais e equipamentos: critérios técnicos, riscos de rejeição e quando a planilha exige decomposição — guia CONFENGE.",
+      "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
+      "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "answer": "Use BDI diferenciado quando o edital permitir (ou a boa técnica exigir) e quando materiais/equipamentos tiverem estrutura de custo e risco distinta da mão de obra — por exemplo, fornecimento com baixa incidência de encar",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Gostaria de analisar um caso de BDI diferenciado em materiais e equipamentos (licitação, contrato ou obra pública).",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Modelo de BDI do edital",
+          "p": "Leia se o edital permite BDI diferenciado, qual fórmula usa e o que entra em custo direto. Adotar decomposição vedada ou incompleta é motivo clássico de rejeição da planilha."
+        },
+        {
+          "h3": "Natureza do fornecimento",
+          "p": "Materiais e equipamentos com logística, garantia e risco distintos da mão de obra são o núcleo legítimo da diferenciação — desde que a memória de cálculo feche com os unitários."
+        },
+        {
+          "h3": "Logística e garantia",
+          "p": "Frete, armazenagem, seguro de transporte e garantia podem estar no unitário, no BDI ou em item próprio — sem duplicar. A planilha precisa mostrar uma única casa para cada custo."
+        },
+        {
+          "h3": "Desconto global e jogo de planilha",
+          "p": "BDI baixo em equipamento com desconto agressivo em serviço pode parecer manipulação. A narrativa da planilha precisa ser defensável item a item na diligência."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "mobilizacao-desmobilizacao-orcamento-obra": {
+      "title": "Como calcular mobilização e desmobilização na proposta | CONFENGE",
+      "desc": "Como calcular mobilização e desmobilização na proposta de obra pública: frete, canteiro, prazos e erros que corroem a margem.",
+      "h1": "Como calcular mobilização e desmobilização na proposta",
+      "canonical": "https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+      "answer": "Calcule mobilização e desmobilização a partir de escopo real de implantação e retirada do canteiro: transporte de equipamentos e canteiro, montagem/desmontagem, instalações provisórias, equipes de abertura e encerramento",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Gostaria de analisar um caso de mobilização e desmobilização de obra (licitação, contrato ou obra pública).",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Regra do edital",
+          "p": "Verifique se mobilização e desmobilização são item de planilha, rateio ou parcela de BDI. A regra do edital manda: duplicar ou omitir frete e canteiro distorce o preço e a análise de exequibilidade."
+        },
+        {
+          "h3": "Distância e acesso",
+          "p": "Quantifique frete e acesso a partir da distância real, restrições de via e número de viagens. Usar distância genérica sem memória é o primeiro alvo de diligência em mobilização."
+        },
+        {
+          "h3": "Canteiro e instalações provisórias",
+          "p": "Liste instalações, energia, água, alojamento e equipamentos de apoio com prazo de permanência. Canteiro subdimensionado na proposta vira custo de bolso na assinatura do contrato."
+        },
+        {
+          "h3": "Prazo de mobilização e desmobilização",
+          "p": "Amarre o valor ao prazo de implantação e de retirada no cronograma. Prorrogação de obra sem remanejar desmobilização deixa canteiro e frete de retorno sem cobertura."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    },
+    "empreitada-preco-global-preco-unitario": {
+      "title": "Empreitada global ou unitária: qual regime é mais arriscado? | CONFENGE",
+      "desc": "Empreitada global ou unitária: qual regime é mais arriscado. Como decidir com base em contrato, planilha e prova — sem atalho genérico.",
+      "h1": "Empreitada global ou unitária: qual regime é mais arriscado?",
+      "canonical": "https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/",
+      "answer": "Na empreitada por preço unitário, o pagamento acompanha o quantitativo medido; na empreitada por preço global, o escopo fechado concentra na contratada o risco de quantidade do projeto original. Nenhum dos regimes elimin",
+      "wa_phone": "5548988344559",
+      "wa_text": "Olá, Tiago. Gostaria de analisar um caso de empreitada preço global preço unitário (licitação, contrato ou obra pública).",
+      "wa_count": 4,
+      "cards": [
+        {
+          "h3": "Comparar medição",
+          "p": "No unitário, o crédito segue o quantitativo medido; no global, eventos ou percentuais de avanço. Compare o critério de medição do contrato com a planilha antes de modelar caixa e desconto."
+        },
+        {
+          "h3": "Quantitativos",
+          "p": "No global, erro de quantitativo do projeto original costuma ser risco da contratada; no unitário, paga-se o executado. Meça o que é variação de quantidade versus mudança de escopo — só o segundo caminha bem por aditivo em ambos os regimes."
+        },
+        {
+          "h3": "Projeto",
+          "p": "Alteração ou omissão de projeto não some porque o regime é global. Formalize mudança de objeto ou de condição de campo; executar e precificar depois financia a Administração."
+        },
+        {
+          "h3": "Margem e aditivos",
+          "p": "Modele margem com o regime real de medição e com a matriz de riscos do edital. Baixar preço para ganhar sem ler como se mede e como se adita é o erro clássico de empreitada."
+        }
+      ],
+      "skeptic_hits": [],
+      "structural_hot_ge5": [],
+      "clean": true
+    }
+  },
+  "sinapi_extra": {
+    "has_table": true,
+    "has_cprb": true,
+    "has_checklist": true,
+    "comparativo_ok": true,
+    "posicione_garbled": false,
+    "jsonld_ok": true,
+    "jsonld_types": [
+      "Organization",
+      "Person",
+      "Article",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "form": {
+    "name": true,
+    "netlify": true,
+    "action": "/obrigado",
+    "required": 6,
+    "honeypot": true,
+    "obrigado_success": true,
+    "obrigado_script": true,
+    "events": {
+      "whatsapp_click": true,
+      "lead_form_start": true,
+      "lead_form_submit": true,
+      "lead_form_error": true,
+      "lead_form_success": true,
+      "service_cta_click": true,
+      "content_to_service_click": true,
+      "internal_search": true,
+      "qualified_scroll": true
+    },
+    "pii_filter": true
+  },
+  "validators": [
+    {
+      "cmd": "python3 seo/scripts/validate_seo.py",
+      "exit": 0,
+      "tail": "WARN boilerplate residual visita-tecnica-licitacao-obra-publica: 'Pedido ligado a'\nWARN boilerplate residual visita-tecnica-licitacao-obra-publica: 'prova contemporânea vale mais que relato posterior'\nWARN boilerplate residual visita-tecnica-licitacao-obra-publica: 'vira glosa ou impasse de caixa'\nWARN boilerplate residual visita-tecnica-licitacao-obra-publica: 'Para conduzir '\nVALIDATION_OK",
+      "err_count": 0
+    },
+    {
+      "cmd": "python3 seo/scripts/test_criterion_structure.py",
+      "exit": 0,
+      "tail": "FIXTURE_FAILS_AS_EXPECTED [\"duplicate criterion number '02' x2 in #diagnostico of bad-fixture\", 'orphan criterion-card outside .criteria-grid in #diagnostico of bad-fixture']\nADITIVO_CLEAN ['01', '02', '03', '04'] ['Natureza da alteração', 'Base de cálculo do limite', 'Formação de preço', 'Prova e formalização']\nCRITERION_STRUCTURE_OK",
+      "err_count": 0
+    },
+    {
+      "cmd": "node seo/scripts/test_analytics_pii.mjs",
+      "exit": 0,
+      "tail": "ANALYTICS_UNIT_OK {\"event\":\"whatsapp_click\",\"page_path\":\"/x\",\"cta_label\":\"ok\"}",
+      "err_count": 0
+    }
+  ]
+}

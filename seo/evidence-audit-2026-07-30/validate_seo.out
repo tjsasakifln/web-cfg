@@ -1,0 +1,8 @@
+pages=134 sitemap=132 indexable=132
+errors=0 warnings=0
+VALIDATION_OK
+EXIT:0
+ANALYTICS_UNIT_OK {"event":"whatsapp_click","page_path":"/x","cta_label":"ok"}
+FIXTURE_FAILS_AS_EXPECTED ["duplicate criterion number '02' x2 in #diagnostico of bad-fixture", 'orphan criterion-card outside .criteria-grid in #diagnostico of bad-fixture']
+ADITIVO_CLEAN ['01', '02', '03', '04'] ['Natureza da alteração', 'Base de cálculo do limite', 'Formação de preço', 'Prova e formalização']
+CRITERION_STRUCTURE_OK

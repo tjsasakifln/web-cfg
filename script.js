@@ -212,6 +212,17 @@
       }, true);
     }
 
+    // Thank-you page: real form success (Netlify redirect target)
+    if (typeof document.body?.getAttribute === 'function'
+      && document.body.getAttribute('data-lead-success') === '1') {
+      track('lead_form_success', {
+        page_path: pagePath,
+        content_cluster: defaultCluster,
+        device_context: deviceContext,
+        destination_type: 'form',
+      });
+    }
+
     // Qualified scroll (once at 50% and 75%)
     const scrollMarks = { 50: false, 75: false };
     const onScroll = () => {
