@@ -1,29 +1,29 @@
 old_url,current_status_before,decision,target_url,expected_status,reason,validated_after_deploy
-/servicos,301→/#atuacao,A,/#atuacao,301,Intenção de catálogo de serviços → seção Atuação B2G na home (equivalência semântica),
-/servicos/,301→/#atuacao,A,/#atuacao,301,Variante com barra final da mesma intenção,
-/contato,301→/#contato,A,/#contato,301,Formulário e canais de contato estão na home #contato,
-/contato/,301→/#contato,A,/#contato,301,Variante com barra final,
-/blog,301→/conteudos/,A,/conteudos/,301,Biblioteca técnica B2G é a sucessora legítima do blog,
-/blog/,301→/conteudos/,A,/conteudos/,301,Variante com barra final,
-/privacy-policy,301→/privacidade/,A,/privacidade/,301,Política EN legada → canônica PT /privacidade/,
-/privacy-policy/,301→/privacidade/,A,/privacidade/,301,Variante com barra final,
-/politica-de-privacidade,404,A,/privacidade/,301,Variante PT comum sem página própria → canônica,
-/politica-de-privacidade/,404,A,/privacidade/,301,Variante com barra final,
-/privacidade,301→/privacidade/,A,/privacidade/,301,Normalização de barra final canônica,
-/privacidade/,200,A,/privacidade/,200,Página canônica atual de privacidade (destino),
-/terms-and-conditions,301→/privacidade/ (soft),B,/termos-de-uso/,301,Terms não é privacidade; redirect para termos B2G canônicos,
-/terms-and-conditions/,301→/privacidade/ (soft),B,/termos-de-uso/,301,Variante com barra final,
-/termos-de-uso,n/a,B,/termos-de-uso/,301,Normalização sem barra → canônica,
-/termos-de-uso/,n/a (nova),B,/termos-de-uso/,200,Página institucional prudente de termos (B2G); revisar juridicamente se necessário,
-/trabalhe-conosco,301→/#contato,A,/#contato,301,Sem carreiras públicas; canal de contato é o substituto razoável,
-/trabalhe-conosco/,301→/#contato,A,/#contato,301,Variante com barra final,
-/vision,301→/ (soft-404),C,,410,Produto/marca legada Vision sem equivalente B2G; 410 Gone deliberado,
-/vision/,301→/ (soft-404),C,,410,Variante com barra final,
-/nexgen,301→/ (soft-404),C,,410,Produto/marca legada NexGen sem equivalente B2G; 410 Gone,
-/nexgen/,301→/ (soft-404),C,,410,Variante com barra final,
-/avcbclcb,301→/ (soft-404),C,,410,Serviço AVCB/CLCB abandonado; fora do posicionamento B2G; 410 Gone,
-/avcbclcb/,301→/ (soft-404),C,,410,Variante com barra final,
-https://confenge.netlify.app/*,200 (duplicata de host),A,https://confenge.com.br/:splat,301,Canonização de host Netlify → apex confenge.com.br preservando path,
-https://www.confenge.com.br/*,301 (Netlify auto),A,https://confenge.com.br/*,301,Alias www gerido pela Netlify (domínio principal apex); não duplicar regra,
-http://confenge.com.br/*,301,A,https://confenge.com.br/*,301,Upgrade HTTP→HTTPS pela plataforma Netlify,
-/* (desconhecido),404,C,/404.html,404,Catch-all real 404 com página de erro B2G; sem SPA 200,
+/servicos,301→/#atuacao,A,/#atuacao,301,Intenção de catálogo de serviços → seção Atuação B2G na home (equivalência semântica),yes
+/servicos/,301→/#atuacao,A,/#atuacao,301,Variante com barra final da mesma intenção,yes
+/contato,301→/#contato,A,/#contato,301,Formulário e canais de contato estão na home #contato,yes
+/contato/,301→/#contato,A,/#contato,301,Variante com barra final,yes
+/blog,301→/conteudos/,A,/conteudos/,301,Biblioteca técnica B2G é a sucessora legítima do blog,yes
+/blog/,301→/conteudos/,A,/conteudos/,301,Variante com barra final,yes
+/privacy-policy,301→/privacidade/,A,/privacidade/,301,Política EN legada → canônica PT /privacidade/,yes
+/privacy-policy/,301→/privacidade/,A,/privacidade/,301,Variante com barra final,yes
+/politica-de-privacidade,404,A,/privacidade/,301,Variante PT comum sem página própria → canônica,yes
+/politica-de-privacidade/,404,A,/privacidade/,301,Variante com barra final,yes
+/privacidade,301→/privacidade/,A,/privacidade/,301,Normalização de barra final canônica,yes
+/privacidade/,200,A,/privacidade/,200,Página canônica atual de privacidade (destino),yes
+/terms-and-conditions,301→/privacidade/ (soft),B,/termos-de-uso/,301,Terms não é privacidade; redirect para termos B2G canônicos,yes
+/terms-and-conditions/,301→/privacidade/ (soft),B,/termos-de-uso/,301,Variante com barra final,yes
+/termos-de-uso,n/a,B,/termos-de-uso/,301,Normalização sem barra → canônica,yes
+/termos-de-uso/,n/a (nova),B,/termos-de-uso/,200,Página institucional prudente de termos (B2G); revisar juridicamente se necessário,yes
+/trabalhe-conosco,301→/#contato,A,/#contato,301,Sem carreiras públicas; canal de contato é o substituto razoável,yes
+/trabalhe-conosco/,301→/#contato,A,/#contato,301,Variante com barra final,yes
+/vision,301→/ (soft-404),C,,410,Produto/marca legada Vision sem equivalente B2G; 410 Gone deliberado,yes
+/vision/,301→/ (soft-404),C,,410,Variante com barra final,yes
+/nexgen,301→/ (soft-404),C,,410,Produto/marca legada NexGen sem equivalente B2G; 410 Gone,yes
+/nexgen/,301→/ (soft-404),C,,410,Variante com barra final,yes
+/avcbclcb,301→/ (soft-404),C,,410,Serviço AVCB/CLCB abandonado; fora do posicionamento B2G; 410 Gone,yes
+/avcbclcb/,301→/ (soft-404),C,,410,Variante com barra final,yes
+https://confenge.netlify.app/*,200 (duplicata de host),A,https://confenge.com.br/:splat,301,Canonização de host Netlify → apex confenge.com.br preservando path,yes
+https://www.confenge.com.br/*,301 (Netlify auto),A,https://confenge.com.br/*,301,Alias www gerido pela Netlify (domínio principal apex); não duplicar regra,yes
+http://confenge.com.br/*,301,A,https://confenge.com.br/*,301,Upgrade HTTP→HTTPS pela plataforma Netlify,yes
+/* (desconhecido),404,C,/404.html,404,Catch-all real 404 com página de erro B2G; sem SPA 200,yes

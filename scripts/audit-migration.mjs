@@ -74,6 +74,8 @@ async function fetchHead(url, { follow = false } = {}) {
     });
     const location = res.headers.get("location") || "";
     const status = res.status;
+    // After redirect:follow, res.url is the final URL (critical for host hops).
+    const finalUrl = res.url || url;
     let body = "";
     // only read body for HTML probes when small / needed
     const ct = res.headers.get("content-type") || "";
@@ -81,7 +83,7 @@ async function fetchHead(url, { follow = false } = {}) {
       body = await res.text();
       if (body.length > 500_000) body = body.slice(0, 500_000);
     }
-    return { status, location, body, url, ok: true, error: null };
+    return { status, location, body, url: finalUrl, ok: true, error: null };
   } catch (err) {
     return {
       status: 0,
