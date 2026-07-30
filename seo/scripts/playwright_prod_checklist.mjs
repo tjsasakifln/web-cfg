@@ -10,16 +10,19 @@ import { chromium } from "playwright";
 const BASE = process.env.CONFENGE_BASE || "https://confenge.com.br";
 const expectLocalShaHints = true;
 
+// Legacy path expectations after host/path migration (no soft-404 to home).
+// status: 301 | 410 | 404 ; locPart matched against Location when redirecting.
 const legacy = [
-  ["/servicos", 301, "/#atuacao"],
-  ["/blog", 301, "/conteudos"],
-  ["/privacy-policy", 301, "/privacidade"],
-  ["/contato", 301, "/#contato"],
-  ["/avcbclcb", 301, "/"],
-  ["/vision", 301, "/"],
-  ["/trabalhe-conosco", 301, "/#contato"],
-  ["/nexgen", 301, "/"],
-  ["/terms-and-conditions", 301, "/privacidade"],
+  ["/servicos", 301, "atuacao"],
+  ["/blog", 301, "conteudos"],
+  ["/privacy-policy", 301, "privacidade"],
+  ["/politica-de-privacidade", 301, "privacidade"],
+  ["/contato", 301, "contato"],
+  ["/trabalhe-conosco", 301, "contato"],
+  ["/terms-and-conditions", 301, "termos-de-uso"],
+  ["/avcbclcb", 410, ""],
+  ["/vision", 410, ""],
+  ["/nexgen", 410, ""],
 ];
 
 function ok(cond, msg, rows) {
@@ -124,24 +127,40 @@ async function main() {
     rows
   );
 
-  // Legacy redirects
+  // Legacy redirects / gone (410)
   for (const [path, status, locPart] of legacy) {
     const res = await page.request.fetch(BASE + path, { maxRedirects: 0 });
     const loc = res.headers().location || "";
-    const pass =
-      res.status() === status && loc.toLowerCase().includes(locPart.replace("/#", "").toLowerCase().split("/")[0] || "") ||
-      (res.status() === 301 && loc.length > 0);
-    // Netlify hash redirects: location may be / or /#atuacao
-    const okRedirect =
-      res.status() === 301 &&
-      (loc.includes(locPart) ||
-        (path === "/servicos" && (loc.includes("atuacao") || loc.endsWith("/") || loc.includes("/#"))) ||
-        (["/vision", "/nexgen", "/avcbclcb"].includes(path) && (loc === "/" || loc.endsWith("confenge.com.br/") || loc.endsWith("/"))) ||
-        (path === "/blog" && loc.includes("conteudos")) ||
-        (path.includes("privacy") || path.includes("terms") ? loc.includes("privacidade") : false) ||
-        (path === "/contato" || path === "/trabalhe-conosco" ? loc.includes("contato") || loc.includes("/#") : false));
-    ok(okRedirect, `redirect ${path} ${res.status()} → ${loc}`, rows);
+    let okRedirect = res.status() === status;
+    if (okRedirect && status === 301) {
+      okRedirect = locPart
+        ? loc.toLowerCase().includes(locPart.toLowerCase())
+        : loc.length > 0;
+      // must not soft-404 abandoned brands to home
+      if (["/vision", "/nexgen", "/avcbclcb"].includes(path)) {
+        okRedirect = false;
+      }
+    }
+    if (status === 410 || status === 404) {
+      okRedirect = res.status() === 410 || res.status() === 404;
+      // forbid 301 to /
+      if ([301, 302, 307, 308].includes(res.status()) && (loc === "/" || loc.endsWith("confenge.com.br/"))) {
+        okRedirect = false;
+      }
+    }
+    ok(okRedirect, `legacy ${path} ${res.status()} → ${loc || "(body)"} (want ${status})`, rows);
   }
+
+  // Host: netlify.app must not stay as alternate site
+  const nf = await page.request.fetch("https://confenge.netlify.app/", {
+    maxRedirects: 0,
+  });
+  const nfLoc = nf.headers().location || "";
+  ok(
+    nf.status() === 301 && nfLoc.includes("confenge.com.br"),
+    `netlify.app host ${nf.status()} → ${nfLoc}`,
+    rows
+  );
 
   failures = rows.filter((r) => !r.ok).length;
   console.log(`\n${rows.length - failures}/${rows.length} checks passed`);

@@ -112,7 +112,30 @@ def main() -> int:
         "/trabalhe-conosco",
         "/terms-and-conditions",
         "/privacy-policy",
+        "/politica-de-privacidade",
     ]
+    # Abandoned legacies must be 410/404 in netlify.toml — never soft-404 301 → /
+    nt_pre = (ROOT / "netlify.toml").read_text(encoding="utf-8")
+    for abandoned in ("/vision", "/nexgen", "/avcbclcb"):
+        if f'from = "{abandoned}"' not in nt_pre:
+            errors.append(f"abandoned path missing explicit rule: {abandoned}")
+        else:
+            # crude block: from abandoned until next [[redirects]] or EOF
+            idx = nt_pre.find(f'from = "{abandoned}"')
+            block = nt_pre[idx : idx + 200]
+            if "status = 301" in block and 'to = "/"' in block:
+                errors.append(f"soft-404 forbidden: {abandoned} 301 to home")
+            if "status = 410" not in block and "status = 404" not in block:
+                # allow if later lines in same rule set status 410
+                pass
+    if 'to = "/privacidade/"' in nt_pre and 'from = "/terms-and-conditions"' in nt_pre:
+        # terms must not point at privacy
+        t_idx = nt_pre.find('from = "/terms-and-conditions"')
+        t_block = nt_pre[t_idx : t_idx + 180]
+        if 'to = "/privacidade' in t_block:
+            errors.append("terms-and-conditions must not redirect to privacidade")
+    if "confenge.netlify.app" not in nt_pre or "confenge.com.br/:splat" not in nt_pre:
+        errors.append("missing host redirect confenge.netlify.app → confenge.com.br/:splat")
     link_re = re.compile(r'href=["\']([^"\'#]+)')
     for path, p in paths_info.items():
         t = p.read_text(encoding="utf-8", errors="replace")

@@ -1,6 +1,13 @@
 [build]
   publish = "."
 
+# --- Host canonization (must be first; force so existing files do not shadow) ---
+[[redirects]]
+  from = "https://confenge.netlify.app/*"
+  to = "https://confenge.com.br/:splat"
+  status = 301
+  force = true
+
 # --- Canonical path normalization ---
 [[redirects]]
   from = "/conteudos"
@@ -19,11 +26,16 @@
   force = true
 
 [[redirects]]
+  from = "/termos-de-uso"
+  to = "/termos-de-uso/"
+  status = 301
+
+[[redirects]]
   from = "/obrigado"
   to = "/obrigado.html"
   status = 200
 
-# --- Legacy / ghost URLs from previous site (GSC cleanup) ---
+# --- Legacy URLs with semantic substitute (301, single hop) ---
 [[redirects]]
   from = "/privacy-policy"
   to = "/privacidade/"
@@ -35,13 +47,23 @@
   status = 301
 
 [[redirects]]
-  from = "/terms-and-conditions"
+  from = "/politica-de-privacidade"
   to = "/privacidade/"
   status = 301
 
 [[redirects]]
-  from = "/terms-and-conditions/"
+  from = "/politica-de-privacidade/"
   to = "/privacidade/"
+  status = 301
+
+[[redirects]]
+  from = "/terms-and-conditions"
+  to = "/termos-de-uso/"
+  status = 301
+
+[[redirects]]
+  from = "/terms-and-conditions/"
+  to = "/termos-de-uso/"
   status = 301
 
 [[redirects]]
@@ -75,16 +97,6 @@
   status = 301
 
 [[redirects]]
-  from = "/vision"
-  to = "/"
-  status = 301
-
-[[redirects]]
-  from = "/vision/"
-  to = "/"
-  status = 301
-
-[[redirects]]
   from = "/trabalhe-conosco"
   to = "/#contato"
   status = 301
@@ -94,29 +106,39 @@
   to = "/#contato"
   status = 301
 
+# --- Abandoned legacy products (410 Gone + custom page body) ---
+# No soft-404 to home: these brands/services are not B2G substitutes.
+[[redirects]]
+  from = "/vision"
+  to = "/404.html"
+  status = 410
+
+[[redirects]]
+  from = "/vision/"
+  to = "/404.html"
+  status = 410
+
 [[redirects]]
   from = "/nexgen"
-  to = "/"
-  status = 301
+  to = "/404.html"
+  status = 410
 
 [[redirects]]
   from = "/nexgen/"
-  to = "/"
-  status = 301
+  to = "/404.html"
+  status = 410
 
 [[redirects]]
   from = "/avcbclcb"
-  to = "/"
-  status = 301
+  to = "/404.html"
+  status = 410
 
 [[redirects]]
   from = "/avcbclcb/"
-  to = "/"
-  status = 301
-
+  to = "/404.html"
+  status = 410
 
 # --- Section trailing-slash normalization ---
-
 [[redirects]]
   from = "/medicoes-glosas-obras-publicas"
   to = "/medicoes-glosas-obras-publicas/"
@@ -162,7 +184,7 @@
   to = "/especialista/tiago-jun-sasaki/"
   status = 301
 
-# Catch-all 404
+# Catch-all real 404 (must remain last; never SPA 200)
 [[redirects]]
   from = "/*"
   to = "/404.html"

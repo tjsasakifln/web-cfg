@@ -1,0 +1,16 @@
+{
+  "name": "confenge-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "CONFENGE static site — SEO migration and host canonization tooling",
+  "type": "module",
+  "scripts": {
+    "audit:migration": "node scripts/audit-migration.mjs",
+    "validate:seo": "python3 seo/scripts/validate_seo.py",
+    "test:analytics": "node seo/scripts/test_analytics_pii.mjs",
+    "test:structure": "python3 seo/scripts/test_criterion_structure.py"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
