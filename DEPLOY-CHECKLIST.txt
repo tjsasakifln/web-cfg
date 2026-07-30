@@ -6,10 +6,11 @@ CONFENGE — CHECKLIST DE PUBLICAÇÃO (SEO inbound 2026-07-30)
    https://confenge.com.br/robots.txt
    https://confenge.com.br/llms.txt
    https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/
-3. Teste redirects legados:
+3. Teste redirects legados (fonte: _redirects na raiz):
    301: /servicos /blog /privacy-policy /politica-de-privacidade /contato /terms-and-conditions→/termos-de-uso/
    410: /vision /nexgen /avcbclcb  (não soft-404 para /)
    host: https://confenge.netlify.app/* → https://confenge.com.br/:splat
+   No Deploy summary: "Redirect rules processed" deve ser > 0
    npm run audit:migration -- --base=https://confenge.com.br
 4. No Search Console:
    - Envie/atualize apenas sitemap.xml

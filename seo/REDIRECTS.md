@@ -1,54 +1,56 @@
 # Redirects e URLs legadas (migração SEO)
 
-Fonte principal: `netlify.toml` (não duplicar em `_redirects`).
+**Fonte principal:** `_redirects` na raiz publicada (`publish = "."`).
 
-Mapa legível: `docs/legacy-url-map.csv`.
+`netlify.toml` só define build + espelho do redirect de host (opcional).  
+**Não** duplicar regras de path no `netlify.toml`.
 
+Mapa: `docs/legacy-url-map.csv`  
 Auditoria: `npm run audit:migration -- --base=https://confenge.com.br`
+
+## Deploy summary (obrigatório)
+
+No deploy Netlify, o resumo deve mostrar:
+
+```text
+Redirect rules processed
+X redirect rules processed
+```
+
+com **X > 0** (esperado ~12–14). Se aparecer `0`, o arquivo `_redirects` não entrou no publish.
 
 ## Host
 
-| De | Para | Status | Nota |
-|----|------|--------|------|
-| `https://confenge.netlify.app/*` | `https://confenge.com.br/:splat` | 301 force | Canonização de host; preserva path |
-| `https://www.confenge.com.br/*` | apex | 301 | Automático Netlify (domínio principal) |
-| `http://*` | `https://*` | 301 | Plataforma Netlify |
+| De | Para | Status |
+|----|------|--------|
+| `https://confenge.netlify.app/*` | `https://confenge.com.br/:splat` | 301! |
+| `www` / HTTP | apex HTTPS | plataforma Netlify |
 
-## Path — substituta semântica (A)
+## Path — substituta (A/B)
 
-| De | Para | Status | Nota |
-|----|------|--------|------|
-| `/blog`, `/blog/` | `/conteudos/` | 301 | Biblioteca técnica |
-| `/contato`, `/contato/` | `/#contato` | 301 | Formulário na home |
-| `/servicos`, `/servicos/` | `/#atuacao` | 301 | Seção de atuação |
-| `/privacy-policy` (+ `/`) | `/privacidade/` | 301 | Política canônica |
-| `/politica-de-privacidade` (+ `/`) | `/privacidade/` | 301 | Variante PT |
-| `/privacidade` | `/privacidade/` | 301 | Normalização |
-| `/trabalhe-conosco` (+ `/`) | `/#contato` | 301 | Sem carreiras públicas |
+| De | Para | Status |
+|----|------|--------|
+| `/blog` | `/conteudos/` | 301 |
+| `/contato` | `/#contato` | 301 |
+| `/servicos` | `/#atuacao` | 301 |
+| `/privacy-policy` | `/privacidade/` | 301 |
+| `/politica-de-privacidade` | `/privacidade/` | 301 |
+| `/terms-and-conditions` | `/termos-de-uso/` | 301 |
+| `/trabalhe-conosco` | `/#contato` | 301 |
+| `/privacidade.html` | `/privacidade/` | 301! |
 
-## Path — termos (B)
+## Path — abandonados (C)
 
-| De | Para | Status | Nota |
-|----|------|--------|------|
-| `/terms-and-conditions` (+ `/`) | `/termos-de-uso/` | 301 | **Não** redirecionar para privacidade |
-| `/termos-de-uso` | `/termos-de-uso/` | 301 | Canônica institucional prudente |
+| De | Status |
+|----|--------|
+| `/vision`, `/nexgen`, `/avcbclcb` | **410** → body `/404.html` |
 
-## Path — abandonados (C) — sem soft-404
+## Barra final
 
-| De | Para | Status | Nota |
-|----|------|--------|------|
-| `/vision`, `/vision/` | `/404.html` | **410** | Marca/produto legado sem equivalente B2G |
-| `/nexgen`, `/nexgen/` | `/404.html` | **410** | Idem |
-| `/avcbclcb`, `/avcbclcb/` | `/404.html` | **410** | AVCB/CLCB fora do posicionamento atual |
-| `/*` (desconhecido) | `/404.html` | **404** | Catch-all real; sem SPA 200 |
+**Não** há regras `/foo` → `/foo/` só para normalizar.  
+Netlify normaliza antes do match; Pretty URLs cuida de `/dir` ↔ `/dir/`.
 
-## Ordem das regras
+## 404
 
-1. Host `confenge.netlify.app`
-2. Normalização de paths canônicos
-3. Legados 301 com substituta
-4. Legados 410 abandonados
-5. Trailing slash de pilares
-6. Catch-all 404
-
-Não usar `/* /index.html 200`.
+`404.html` na raiz → Netlify serve 404 real em paths inexistentes.  
+Sem `/* /index.html 200`.

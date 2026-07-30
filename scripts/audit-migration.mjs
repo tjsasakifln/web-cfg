@@ -153,12 +153,17 @@ async function main() {
 
   // --- Config / static artifact checks (always) ---
   const tomlPath = join(ROOT, "netlify.toml");
+  const redirectsPath = join(ROOT, "_redirects");
   const robotsPath = join(ROOT, "robots.txt");
   const sitemapPath = join(ROOT, "sitemap.xml");
   const termsPath = join(ROOT, "termos-de-uso/index.html");
   const page404 = join(ROOT, "404.html");
 
   const toml = existsSync(tomlPath) ? readFileSync(tomlPath, "utf8") : "";
+  const redirectsFile = existsSync(redirectsPath)
+    ? readFileSync(redirectsPath, "utf8")
+    : "";
+  const cfgBlob = `${redirectsFile}\n${toml}`;
   const robotsLocal = existsSync(robotsPath) ? readFileSync(robotsPath, "utf8") : "";
   const sitemapLocal = existsSync(sitemapPath) ? readFileSync(sitemapPath, "utf8") : "";
 
@@ -174,35 +179,48 @@ async function main() {
   }
 
   check(!!toml, "netlify.toml present");
+  check(!!redirectsFile, "_redirects present in publish root");
   check(
-    /confenge\.netlify\.app\/\*/.test(toml) &&
-      /confenge\.com\.br\/:splat/.test(toml) &&
-      /status\s*=\s*301/.test(toml),
-    "netlify.toml host redirect confenge.netlify.app → confenge.com.br/:splat 301"
+    /confenge\.netlify\.app\/\*/.test(cfgBlob) &&
+      /confenge\.com\.br\/:splat/.test(cfgBlob),
+    "host redirect confenge.netlify.app → confenge.com.br/:splat"
   );
   check(
-    toml.indexOf("confenge.netlify.app") < toml.indexOf('from = "/*"'),
-    "host redirect appears before catch-all /*"
-  );
-  check(!/\/\* *\/index\.html *200/.test(toml), "no SPA /* → index.html 200");
-  check(/status\s*=\s*404/.test(toml), "catch-all 404 present");
-  check(
-    /from = "\/vision"[\s\S]*?status = 410/.test(toml) ||
-      /from = "\/vision"[\s\S]*?status = 404/.test(toml),
-    "abandoned /vision is 410 or 404 (not soft-404 to home)"
+    !/\/\* *\/index\.html *200/.test(cfgBlob) &&
+      !/\/\* +\/index\.html +200/.test(cfgBlob),
+    "no SPA /* → index.html 200"
   );
   check(
-    !/from = "\/vision"[\s\S]*?to = "\/"[\s\S]*?status = 301/.test(toml),
-    "/vision must not 301 to home"
+    /\/vision\s+\/404\.html\s+410/.test(redirectsFile),
+    "abandoned /vision is 410 in _redirects"
   );
+  check(!/\/vision\s+\/\s+301/.test(redirectsFile), "/vision must not 301 to home");
   check(
-    /from = "\/terms-and-conditions"[\s\S]*?to = "\/termos-de-uso\//.test(toml),
+    /\/terms-and-conditions\s+\/termos-de-uso\//.test(redirectsFile),
     "terms-and-conditions → /termos-de-uso/ (not privacy)"
   );
   check(
-    /from = "\/politica-de-privacidade"[\s\S]*?to = "\/privacidade\//.test(toml),
+    /\/politica-de-privacidade\s+\/privacidade\//.test(redirectsFile),
     "politica-de-privacidade → /privacidade/"
   );
+  check(/\/blog\s+\/conteudos\//.test(redirectsFile), "_redirects has /blog → /conteudos/");
+  check(/\/servicos\s+\/#atuacao/.test(redirectsFile), "_redirects has /servicos → /#atuacao");
+  check(/\/contato\s+\/#contato/.test(redirectsFile), "_redirects has /contato → /#contato");
+  let slashOnly = 0;
+  for (const line of redirectsFile.split("\n")) {
+    const s = line.trim();
+    if (!s || s.startsWith("#")) continue;
+    const parts = s.split(/\s+/);
+    if (parts.length >= 3 && /^301/.test(parts[2])) {
+      if (
+        parts[0].replace(/\/$/, "") === parts[1].replace(/\/$/, "") &&
+        parts[0] !== parts[1]
+      ) {
+        slashOnly++;
+      }
+    }
+  }
+  check(slashOnly === 0, `no trailing-slash-only redirects (${slashOnly})`);
   check(existsSync(termsPath), "termos-de-uso/index.html exists");
   check(existsSync(page404), "404.html exists");
   const html404 = existsSync(page404) ? readFileSync(page404, "utf8") : "";
@@ -409,19 +427,21 @@ async function main() {
       c.wantStatus.some((s) => [301, 308, 410].includes(s)) || c.forbidLocHome;
     const criticalHttp = !needsEdge || httpRedirectsAuthoritative;
     if (!pass && needsEdge && !httpRedirectsAuthoritative) {
-      const inToml =
+      const pathKey = c.path.replace(/\/$/, "") || c.path;
+      const inCfg =
+        redirectsFile.includes(pathKey) ||
         toml.includes(`from = "${c.path}"`) ||
-        toml.includes(`from = "${c.path.replace(/\/$/, "")}"`);
+        toml.includes(`from = "${pathKey}"`);
       check(
-        inToml,
-        `${c.name}: local static ${res.status} (Netlify edge not applied); config has rule=${inToml}`,
+        inCfg,
+        `${c.name}: local static ${res.status} (Netlify edge not applied); config has rule=${inCfg}`,
         true
       );
       table.push({
         path: c.path,
         status: res.status,
         location: loc || "(local; edge N/A)",
-        result: inToml ? "CONFIG" : "FAIL",
+        result: inCfg ? "CONFIG" : "FAIL",
       });
       continue;
     }

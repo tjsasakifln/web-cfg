@@ -1,0 +1,30 @@
+# CONFENGE redirects — single source of truth for Netlify edge.
+# Lives in publish root (.) so Deploy summary must report N redirect rules processed.
+# Do NOT add trailing-slash-only rules: Netlify normalizes slashes before matching
+# (Pretty URLs). One rule matches both /path and /path/.
+
+# --- Host canonization (force so existing files do not shadow) ---
+https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
+
+# --- File extension / legacy HTML ---
+/privacidade.html  /privacidade/  301!
+
+# --- Form success rewrite (URL stays /obrigado) ---
+/obrigado  /obrigado.html  200
+
+# --- Legacy with semantic substitute (301, single hop) ---
+/privacy-policy            /privacidade/     301
+/politica-de-privacidade   /privacidade/     301
+/terms-and-conditions      /termos-de-uso/   301
+/blog                      /conteudos/       301
+/contato                   /#contato         301
+/servicos                  /#atuacao         301
+/trabalhe-conosco          /#contato         301
+
+# --- Abandoned products (410 Gone + custom body; never soft-404 to home) ---
+/vision     /404.html  410
+/nexgen     /404.html  410
+/avcbclcb   /404.html  410
+
+# Custom 404: Netlify auto-serves /404.html for missing paths with status 404.
+# Do not add a catch-all rewrite to index.html (SPA-style status 200).

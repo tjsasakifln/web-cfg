@@ -114,28 +114,49 @@ def main() -> int:
         "/privacy-policy",
         "/politica-de-privacidade",
     ]
-    # Abandoned legacies must be 410/404 in netlify.toml — never soft-404 301 → /
-    nt_pre = (ROOT / "netlify.toml").read_text(encoding="utf-8")
+    # Redirect source of truth: publish-root `_redirects` (plus optional host in toml).
+    redirects_blob = ""
+    rd_path = ROOT / "_redirects"
+    if not rd_path.exists():
+        errors.append("missing _redirects in publish root")
+    else:
+        redirects_blob = rd_path.read_text(encoding="utf-8")
+    nt_pre = (ROOT / "netlify.toml").read_text(encoding="utf-8") if (ROOT / "netlify.toml").exists() else ""
+    combined = redirects_blob + "\n" + nt_pre
     for abandoned in ("/vision", "/nexgen", "/avcbclcb"):
-        if f'from = "{abandoned}"' not in nt_pre:
+        if abandoned not in combined:
             errors.append(f"abandoned path missing explicit rule: {abandoned}")
-        else:
-            # crude block: from abandoned until next [[redirects]] or EOF
-            idx = nt_pre.find(f'from = "{abandoned}"')
-            block = nt_pre[idx : idx + 200]
-            if "status = 301" in block and 'to = "/"' in block:
-                errors.append(f"soft-404 forbidden: {abandoned} 301 to home")
-            if "status = 410" not in block and "status = 404" not in block:
-                # allow if later lines in same rule set status 410
-                pass
-    if 'to = "/privacidade/"' in nt_pre and 'from = "/terms-and-conditions"' in nt_pre:
-        # terms must not point at privacy
-        t_idx = nt_pre.find('from = "/terms-and-conditions"')
-        t_block = nt_pre[t_idx : t_idx + 180]
-        if 'to = "/privacidade' in t_block:
+        # soft-404 to home forbidden
+        for line in combined.splitlines():
+            s = line.strip()
+            if not s or s.startswith("#"):
+                continue
+            if s.startswith(abandoned) and " 301" in s and s.rstrip().endswith("/"):
+                # e.g. /vision  /  301
+                parts = s.split()
+                if len(parts) >= 3 and parts[1] in ("/", "/index.html"):
+                    errors.append(f"soft-404 forbidden: {abandoned} 301 to home")
+            if abandoned in s and " 301" in s and " / " in f" {s} ":
+                parts = s.split()
+                if len(parts) >= 2 and parts[1] == "/":
+                    errors.append(f"soft-404 forbidden: {abandoned} → /")
+    # terms must not point at privacy
+    for line in combined.splitlines():
+        s = line.strip()
+        if "terms-and-conditions" in s and "privacidade" in s and not s.startswith("#"):
             errors.append("terms-and-conditions must not redirect to privacidade")
-    if "confenge.netlify.app" not in nt_pre or "confenge.com.br/:splat" not in nt_pre:
+    if "confenge.netlify.app" not in combined or "confenge.com.br/:splat" not in combined:
         errors.append("missing host redirect confenge.netlify.app → confenge.com.br/:splat")
+    # no trailing-slash-only normalization rules (Netlify Pretty URLs)
+    for line in redirects_blob.splitlines():
+        s = line.strip()
+        if not s or s.startswith("#"):
+            continue
+        parts = s.split()
+        if len(parts) >= 3 and parts[2].startswith("301"):
+            a, b = parts[0].rstrip("/"), parts[1].rstrip("/")
+            if a and b and a == b and parts[0] != parts[1]:
+                errors.append(f"trailing-slash-only redirect forbidden: {s}")
     link_re = re.compile(r'href=["\']([^"\'#]+)')
     for path, p in paths_info.items():
         t = p.read_text(encoding="utf-8", errors="replace")
@@ -529,9 +550,11 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             warnings.append(f"classification parse: {exc}")
 
-    nt = (ROOT / "netlify.toml").read_text(encoding="utf-8")
+    rd = (ROOT / "_redirects").read_text(encoding="utf-8") if (ROOT / "_redirects").exists() else ""
+    nt = (ROOT / "netlify.toml").read_text(encoding="utf-8") if (ROOT / "netlify.toml").exists() else ""
+    cfg = rd + "\n" + nt
     for leg in legacy:
-        if leg not in nt:
+        if leg not in cfg:
             errors.append(f"redirect missing {leg}")
 
     print(f"pages={len(html_pages)} sitemap={len(sm_urls)} indexable={len(indexable)}")
