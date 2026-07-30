@@ -1,0 +1,509 @@
+{
+  "pages": [
+    {
+      "slug": "aceleracao-obra-publica-custo-adicional",
+      "cards_touched": 4
+    },
+    {
+      "slug": "aditivo-empreitada-por-preco-global",
+      "cards_touched": 3
+    },
+    {
+      "slug": "administracao-local-orcamento-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "administracao-local-prolongada-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "analise-edital-obra-publica-construtora",
+      "cards_touched": 5
+    },
+    {
+      "slug": "ata-reuniao-ordem-servico-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "atraso-na-medicao-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "atraso-obra-culpa-administracao",
+      "cards_touched": 3
+    },
+    {
+      "slug": "atraso-pagamento-contrato-publico-suspender",
+      "cards_touched": 4
+    },
+    {
+      "slug": "atraso-projeto-executivo-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "auditoria-contrato-obra-publica-mensal",
+      "cards_touched": 4
+    },
+    {
+      "slug": "aumento-material-reequilibrio-contrato-publico",
+      "cards_touched": 3
+    },
+    {
+      "slug": "bdi-diferenciado-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "bdi-obra-publica",
+      "cards_touched": 5
+    },
+    {
+      "slug": "calculo-reequilibrio-economico-financeiro",
+      "cards_touched": 3
+    },
+    {
+      "slug": "capacidade-tecnica-operacional-profissional-licitacao",
+      "cards_touched": 2
+    },
+    {
+      "slug": "chuva-prorrogacao-prazo-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "clausula-matriz-risco-abusiva-edital",
+      "cards_touched": 2
+    },
+    {
+      "slug": "como-provar-atraso-obra-publica",
+      "cards_touched": 5
+    },
+    {
+      "slug": "compensacao-acrescimo-supressao-aditivo",
+      "cards_touched": 2
+    },
+    {
+      "slug": "composicao-propria-preco-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "comprovacao-exequibilidade-proposta-obra",
+      "cards_touched": 4
+    },
+    {
+      "slug": "comunicacao-fiscal-contrato-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "consorcio-subcontratacao-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "consultoria-b2g-engenharia-construtora",
+      "cards_touched": 3
+    },
+    {
+      "slug": "consultoria-contrato-obra-publica-construtora",
+      "cards_touched": 4
+    },
+    {
+      "slug": "contratacao-integrada-semi-integrada-obra",
+      "cards_touched": 2
+    },
+    {
+      "slug": "controle-mudancas-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "cotacao-mercado-orcamento-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "criterio-de-medicao-nao-previsto-contrato",
+      "cards_touched": 3
+    },
+    {
+      "slug": "cronograma-fisico-financeiro-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "cronologia-contrato-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "culpa-sancao-atraso-contrato-publico",
+      "cards_touched": 3
+    },
+    {
+      "slug": "curva-abc-orcamento-obra",
+      "cards_touched": 3
+    },
+    {
+      "slug": "curva-abc-reequilibrio-contrato",
+      "cards_touched": 2
+    },
+    {
+      "slug": "custos-indiretos-atraso-administracao-obra",
+      "cards_touched": 4
+    },
+    {
+      "slug": "data-base-orcamento-reajuste-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "defesa-processo-sancionador-contrato-publico",
+      "cards_touched": 4
+    },
+    {
+      "slug": "demora-decisao-administracao-contrato-obra",
+      "cards_touched": 3
+    },
+    {
+      "slug": "desagio-licitacao-obra-publica",
+      "cards_touched": 4
+    },
+    {
+      "slug": "desconto-da-proposta-em-item-novo-aditivo",
+      "cards_touched": 1
+    },
+    {
+      "slug": "diario-de-obra-pleito-contrato-publico",
+      "cards_touched": 3
+    },
+    {
+      "slug": "divergencia-diario-obra-fiscalizacao",
+      "cards_touched": 3
+    },
+    {
+      "slug": "divergencia-quantitativo-medicao-as-built",
+      "cards_touched": 3
+    },
+    {
+      "slug": "documentos-reequilibrio-obra-publica",
+      "cards_touched": 5
+    },
+    {
+      "slug": "dosimetria-multa-contrato-administrativo",
+      "cards_touched": 3
+    },
+    {
+      "slug": "empreitada-preco-global-preco-unitario",
+      "cards_touched": 4
+    },
+    {
+      "slug": "erro-de-projeto-gera-aditivo-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "erros-comunicacao-contrato-publico-construtora",
+      "cards_touched": 3
+    },
+    {
+      "slug": "evento-previsivel-consequencias-incalculaveis-reequilibrio",
+      "cards_touched": 2
+    },
+    {
+      "slug": "extincao-contrato-culpa-administracao",
+      "cards_touched": 2
+    },
+    {
+      "slug": "extincao-contrato-obra-publica-pelo-contratado",
+      "cards_touched": 3
+    },
+    {
+      "slug": "fiscal-mandou-executar-sem-aditivo",
+      "cards_touched": 4
+    },
+    {
+      "slug": "frente-de-servico-nao-liberada-obra",
+      "cards_touched": 3
+    },
+    {
+      "slug": "garantia-proposta-licitacao-obra",
+      "cards_touched": 3
+    },
+    {
+      "slug": "gestao-contrato-obra-publica-indicadores",
+      "cards_touched": 5
+    },
+    {
+      "slug": "glosa-de-medicao-obra-publica",
+      "cards_touched": 4
+    },
+    {
+      "slug": "glosa-por-qualidade-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "impedimento-de-licitar-construtora",
+      "cards_touched": 1
+    },
+    {
+      "slug": "indenizacao-servico-extracontratual-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "jogo-de-planilha-aditivo-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "juros-atraso-pagamento-contrato-administrativo",
+      "cards_touched": 3
+    },
+    {
+      "slug": "limite-aditivo-25-50-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "manutencao-habilitacao-contrato-publico",
+      "cards_touched": 2
+    },
+    {
+      "slug": "matriz-de-riscos-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "matriz-de-riscos-reequilibrio-economico-financeiro",
+      "cards_touched": 3
+    },
+    {
+      "slug": "medicao-de-obra-publica-rejeitada",
+      "cards_touched": 2
+    },
+    {
+      "slug": "medicao-por-evento-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "mobilizacao-desmobilizacao-orcamento-obra",
+      "cards_touched": 3
+    },
+    {
+      "slug": "mudanca-metodo-construtivo-obra-publica-aditivo",
+      "cards_touched": 3
+    },
+    {
+      "slug": "multa-atraso-parcial-contrato-publico",
+      "cards_touched": 1
+    },
+    {
+      "slug": "multa-contrato-obra-publica-defesa",
+      "cards_touched": 3
+    },
+    {
+      "slug": "notas-fiscais-reequilibrio-contrato",
+      "cards_touched": 3
+    },
+    {
+      "slug": "notificacao-impacto-prazo-custo-obra",
+      "cards_touched": 3
+    },
+    {
+      "slug": "orcamento-incompleto-edital-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "orcamento-sigiloso-licitacao-obra",
+      "cards_touched": 4
+    },
+    {
+      "slug": "ordem-paralisacao-obra-publica-custos",
+      "cards_touched": 4
+    },
+    {
+      "slug": "pagamento-contrato-publico-certidao-vencida",
+      "cards_touched": 2
+    },
+    {
+      "slug": "pagamento-parcial-etapa-empreitada-global",
+      "cards_touched": 2
+    },
+    {
+      "slug": "parcela-incontroversa-medicao-contrato-publico",
+      "cards_touched": 2
+    },
+    {
+      "slug": "pedido-de-reequilibrio-negado",
+      "cards_touched": 4
+    },
+    {
+      "slug": "pedido-prorrogacao-prazo-antes-vencimento",
+      "cards_touched": 1
+    },
+    {
+      "slug": "plano-recuperacao-obra-atrasada",
+      "cards_touched": 4
+    },
+    {
+      "slug": "pleito-tecnico-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "prazo-vigencia-prazo-execucao-contrato-obra",
+      "cards_touched": 3
+    },
+    {
+      "slug": "preco-de-item-novo-aditivo-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "preco-unitario-acima-referencia-proposta-global",
+      "cards_touched": 2
+    },
+    {
+      "slug": "produtividade-sinapi-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "projeto-basico-incompleto-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "proposta-inexequivel-obra-publica-lei-14133",
+      "cards_touched": 3
+    },
+    {
+      "slug": "prorrogacao-prazo-obra-publica-documentos",
+      "cards_touched": 3
+    },
+    {
+      "slug": "prova-custos-adicionais-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "prova-de-medicao-diario-de-obra-fotos",
+      "cards_touched": 4
+    },
+    {
+      "slug": "quantitativo-insuficiente-planilha-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "reajuste-repactuacao-reequilibrio-diferenca",
+      "cards_touched": 3
+    },
+    {
+      "slug": "recuperar-contrato-obra-publica-problematico",
+      "cards_touched": 3
+    },
+    {
+      "slug": "recurso-inabilitacao-tecnica-licitacao",
+      "cards_touched": 3
+    },
+    {
+      "slug": "reequilibrio-antes-da-prorrogacao-contrato",
+      "cards_touched": 2
+    },
+    {
+      "slug": "reequilibrio-apos-fim-do-contrato",
+      "cards_touched": 3
+    },
+    {
+      "slug": "reequilibrio-economico-financeiro-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "reequilibrio-empreitada-preco-global",
+      "cards_touched": 1
+    },
+    {
+      "slug": "registro-contemporaneo-pleito-obra",
+      "cards_touched": 2
+    },
+    {
+      "slug": "reprogramacao-cronograma-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "rescisao-unilateral-contrato-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "resposta-notificacao-atraso-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "seguro-garantia-execucao-contrato-publico",
+      "cards_touched": 2
+    },
+    {
+      "slug": "servico-executado-sem-projeto-aprovado",
+      "cards_touched": 2
+    },
+    {
+      "slug": "servico-executado-sem-termo-aditivo",
+      "cards_touched": 3
+    },
+    {
+      "slug": "servico-nao-previsto-na-planilha-obra-publica",
+      "cards_touched": 3
+    },
+    {
+      "slug": "sinapi-desonerado-nao-desonerado",
+      "cards_touched": 0
+    },
+    {
+      "slug": "sinapi-ou-sicro-obra-publica",
+      "cards_touched": 1
+    },
+    {
+      "slug": "subcontratacao-obra-publica-autorizacao",
+      "cards_touched": 2
+    },
+    {
+      "slug": "suspensao-execucao-contrato-publico-contratado",
+      "cards_touched": 3
+    },
+    {
+      "slug": "tributos-bdi-obra-publica",
+      "cards_touched": 2
+    },
+    {
+      "slug": "troca-responsavel-tecnico-contrato-publico",
+      "cards_touched": 2
+    },
+    {
+      "slug": "visita-tecnica-licitacao-obra-publica",
+      "cards_touched": 3
+    }
+  ],
+  "still_bad_pages": [
+    "analise-edital-obra-publica-construtora",
+    "atraso-obra-culpa-administracao",
+    "atraso-pagamento-contrato-publico-suspender",
+    "atraso-projeto-executivo-obra-publica",
+    "auditoria-contrato-obra-publica-mensal",
+    "bdi-diferenciado-obra-publica",
+    "bdi-obra-publica",
+    "comprovacao-exequibilidade-proposta-obra",
+    "consultoria-b2g-engenharia-construtora",
+    "consultoria-contrato-obra-publica-construtora",
+    "contratacao-integrada-semi-integrada-obra",
+    "controle-mudancas-obra-publica",
+    "criterio-de-medicao-nao-previsto-contrato",
+    "curva-abc-orcamento-obra",
+    "demora-decisao-administracao-contrato-obra",
+    "desagio-licitacao-obra-publica",
+    "divergencia-quantitativo-medicao-as-built",
+    "documentos-reequilibrio-obra-publica",
+    "empreitada-preco-global-preco-unitario",
+    "erro-de-projeto-gera-aditivo-obra-publica",
+    "erros-comunicacao-contrato-publico-construtora",
+    "fiscal-mandou-executar-sem-aditivo",
+    "gestao-contrato-obra-publica-indicadores",
+    "glosa-de-medicao-obra-publica",
+    "jogo-de-planilha-aditivo-obra-publica",
+    "limite-aditivo-25-50-obra-publica",
+    "mobilizacao-desmobilizacao-orcamento-obra",
+    "notas-fiscais-reequilibrio-contrato",
+    "orcamento-sigiloso-licitacao-obra",
+    "pedido-de-reequilibrio-negado",
+    "prazo-vigencia-prazo-execucao-contrato-obra",
+    "preco-unitario-acima-referencia-proposta-global",
+    "quantitativo-insuficiente-planilha-obra-publica",
+    "reequilibrio-apos-fim-do-contrato",
+    "reequilibrio-empreitada-preco-global",
+    "seguro-garantia-execucao-contrato-publico",
+    "servico-nao-previsto-na-planilha-obra-publica",
+    "subcontratacao-obra-publica-autorizacao",
+    "suspensao-execucao-contrato-publico-contratado"
+  ]
+}
