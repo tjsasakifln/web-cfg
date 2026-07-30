@@ -1,21 +1,41 @@
 # Analytics (CONFENGE)
 
-O site ainda **não** inclui tag de analytics no HTML para não injetar ID inventado.
+O site **não** inclui ID de GA4/Plausible inventado. Há uma **camada desacoplada** em `script.js`:
 
-## Recomendado
+- `window.dataLayer.push({ event, ...params })`
+- `window.confengeTrack(eventName, params)`
+- Encaminha para `gtag` / `plausible` **somente se** já existirem na página
 
-1. **Plausible** (privacy-friendly) ou **GA4**
-2. Após criar a propriedade, inserir o snippet no `<head>` de:
-   - `index.html`
-   - e, se desejado, nos templates de artigo (ou um único `script.js` loader)
+## Eventos implementados
+
+| Evento | Trigger | Params (sem PII) |
+|--------|---------|------------------|
+| `whatsapp_click` | clique em `a[href*="wa.me"]` | `page_path`, `content_cluster`, `cta_position`, `cta_label`, `device_context`, `destination_type` |
+| `lead_form_start` | primeiro focus em campo do form | idem |
+| `lead_form_submit` | submit válido | + `cta_label` = valor do select `necessidade` |
+| `lead_form_error` | invalid / submit inválido | idem |
+| `service_cta_click` | clique para `#contato` / form com `?tema=` | idem |
+| `content_to_service_click` | clique de guia → página-pilar/serviço | idem |
+| `internal_search` | busca na biblioteca (≥3 chars) | `query_len`, `results_count` — **não** envia o termo cru |
+| `qualified_scroll` | 50% e 75% da página (uma vez cada) | `cta_position=scroll_50\|75` |
+
+## O que **não** é enviado
+
+- e-mail, telefone, nome, empresa, texto livre de `mensagem`
+- termo de busca em texto (apenas comprimento e contagem de resultados)
+
+## Como ligar GA4 ou Plausible
+
+1. Criar propriedade real
+2. Inserir snippet no `<head>` de `index.html` (e opcionalmente artigos)
+3. Ajustar CSP em `_headers` (`script-src`, `connect-src`)
+4. Validar no debug: `window.CONFENGE_DEBUG_ANALYTICS = true`
 
 ### Plausible (exemplo)
 
 ```html
-<script defer data-domain="confenge.com.br" src="https://plausible.io/js/script.js"></script>
+<script defer data-domain="confenge.com.br" src="https://plausible.io/js/script.tagged-events.js"></script>
 ```
-
-Atualizar CSP em `_headers` para permitir o host do script (`script-src` e `connect-src`).
 
 ### GA4 (exemplo)
 
@@ -29,12 +49,7 @@ Atualizar CSP em `_headers` para permitir o host do script (`script-src` e `conn
 </script>
 ```
 
-## Eventos de conversão sugeridos
+## Atribuição de lead
 
-| Evento | Trigger |
-|--------|---------|
-| `lead_form_submit` | submit do form `diagnostico-confenge` |
-| `whatsapp_click` | clique em `a[href*="wa.me"]` |
-| `cta_form_from_article` | clique em “Preferir formulário” com `?origem=` |
-
-O `script.js` já preenche `mensagem` e pode ler `origem`/`tema` da query string para atribuição de lead por URL.
+- Campo hidden `origem` no form
+- Prefill `?tema=` / `?origem=` (query ou hash legado) em `script.js`

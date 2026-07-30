@@ -114,6 +114,54 @@
   to = "/"
   status = 301
 
+
+# --- Section trailing-slash normalization ---
+
+[[redirects]]
+  from = "/medicoes-glosas-obras-publicas"
+  to = "/medicoes-glosas-obras-publicas/"
+  status = 301
+
+[[redirects]]
+  from = "/aditivos-obras-publicas"
+  to = "/aditivos-obras-publicas/"
+  status = 301
+
+[[redirects]]
+  from = "/reequilibrio-obras-publicas"
+  to = "/reequilibrio-obras-publicas/"
+  status = 301
+
+[[redirects]]
+  from = "/atrasos-prorrogacao-obras-publicas"
+  to = "/atrasos-prorrogacao-obras-publicas/"
+  status = 301
+
+[[redirects]]
+  from = "/defesa-tecnica-contratos-publicos"
+  to = "/defesa-tecnica-contratos-publicos/"
+  status = 301
+
+[[redirects]]
+  from = "/diagnostico-pre-licitacao"
+  to = "/diagnostico-pre-licitacao/"
+  status = 301
+
+[[redirects]]
+  from = "/acompanhamento-contratos-obras"
+  to = "/acompanhamento-contratos-obras/"
+  status = 301
+
+[[redirects]]
+  from = "/auditoria-orcamento-licitacao"
+  to = "/auditoria-orcamento-licitacao/"
+  status = 301
+
+[[redirects]]
+  from = "/especialista/tiago-jun-sasaki"
+  to = "/especialista/tiago-jun-sasaki/"
+  status = 301
+
 # Catch-all 404
 [[redirects]]
   from = "/*"
