@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://confenge.com.br/sitemap.xml

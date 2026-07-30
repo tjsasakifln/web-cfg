@@ -1,0 +1,20 @@
+CONFENGE — CHECKLIST DE PUBLICAÇÃO (SEO inbound 2026-07-30)
+
+1. Publique este diretório na Netlify (drag-and-drop ou repo GitHub web-cfg).
+2. Confirme no navegador:
+   https://confenge.com.br/sitemap.xml
+   https://confenge.com.br/robots.txt
+   https://confenge.com.br/llms.txt
+   https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/
+3. Teste redirects legados (devem ir a 301):
+   /servicos  /blog  /privacy-policy  /contato  /avcbclcb
+4. No Search Console:
+   - Envie/atualize apenas sitemap.xml
+   - Solicite indexação das 5 URLs Tier S reescritas
+   - Monitore queda de impressões em URLs fantasma
+5. Netlify Forms: confirme que o form "diagnostico-confenge" recebe o campo "origem".
+6. (Opcional) Configure analytics — ver seo/ANALYTICS.md
+7. Alternativa de diagnóstico de sitemap:
+   https://confenge.com.br/sitemap.txt
+
+O sitemap.xml permanece mínimo: loc + lastmod (sem extensões de imagem).

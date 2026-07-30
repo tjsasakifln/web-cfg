@@ -1,0 +1,121 @@
+[build]
+  publish = "."
+
+# --- Canonical path normalization ---
+[[redirects]]
+  from = "/conteudos"
+  to = "/conteudos/"
+  status = 301
+
+[[redirects]]
+  from = "/privacidade"
+  to = "/privacidade/"
+  status = 301
+
+[[redirects]]
+  from = "/privacidade.html"
+  to = "/privacidade/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/obrigado"
+  to = "/obrigado.html"
+  status = 200
+
+# --- Legacy / ghost URLs from previous site (GSC cleanup) ---
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/privacidade/"
+  status = 301
+
+[[redirects]]
+  from = "/privacy-policy/"
+  to = "/privacidade/"
+  status = 301
+
+[[redirects]]
+  from = "/terms-and-conditions"
+  to = "/privacidade/"
+  status = 301
+
+[[redirects]]
+  from = "/terms-and-conditions/"
+  to = "/privacidade/"
+  status = 301
+
+[[redirects]]
+  from = "/contato"
+  to = "/#contato"
+  status = 301
+
+[[redirects]]
+  from = "/contato/"
+  to = "/#contato"
+  status = 301
+
+[[redirects]]
+  from = "/blog"
+  to = "/conteudos/"
+  status = 301
+
+[[redirects]]
+  from = "/blog/"
+  to = "/conteudos/"
+  status = 301
+
+[[redirects]]
+  from = "/servicos"
+  to = "/#atuacao"
+  status = 301
+
+[[redirects]]
+  from = "/servicos/"
+  to = "/#atuacao"
+  status = 301
+
+[[redirects]]
+  from = "/vision"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/vision/"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/trabalhe-conosco"
+  to = "/#contato"
+  status = 301
+
+[[redirects]]
+  from = "/trabalhe-conosco/"
+  to = "/#contato"
+  status = 301
+
+[[redirects]]
+  from = "/nexgen"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/nexgen/"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/avcbclcb"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/avcbclcb/"
+  to = "/"
+  status = 301
+
+# Catch-all 404
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

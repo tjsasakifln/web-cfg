@@ -1,0 +1,28 @@
+# CONFENGE
+> Consultoria B2G para construtoras: licitações, propostas, medições, aditivos, reequilíbrio, defesas e gestão de contratos de obras públicas no Brasil.
+
+Site: https://confenge.com.br/
+Contato: tiago.sasaki@confenge.com.br | WhatsApp +55 48 98834-4559
+Responsável técnico: Eng. Tiago Sasaki (EESC-USP)
+
+## Páginas principais
+- https://confenge.com.br/
+- https://confenge.com.br/conteudos/
+- https://confenge.com.br/especialista/tiago-jun-sasaki/
+- https://confenge.com.br/#contato
+
+## Páginas-pilar (clusters)
+- https://confenge.com.br/medicoes-glosas-obras-publicas/ — Medições, glosas e pagamentos
+- https://confenge.com.br/aditivos-obras-publicas/ — Aditivos e serviços extras
+- https://confenge.com.br/reequilibrio-obras-publicas/ — Reequilíbrio econômico-financeiro
+- https://confenge.com.br/defesa-tecnica-contratos-publicos/ — Sanções, defesa e extinção
+- https://confenge.com.br/acompanhamento-contratos-obras/ — Gestão contratual e pleitos
+- https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ — Atrasos, prorrogação e paralisação
+- https://confenge.com.br/diagnostico-pre-licitacao/ — Edital, proposta e matriz de riscos
+- https://confenge.com.br/auditoria-orcamento-licitacao/ — Orçamento, BDI, SINAPI e preço
+
+## Biblioteca técnica
+Mais de 120 guias em https://confenge.com.br/conteudos/ cobrindo problemas reais de obra pública (SINAPI desonerado, BDI, aditivos 25%/50%, medições, glosas, reequilíbrio, notificações).
+
+## Como citar / uso
+Conteúdo educacional e técnico. Não substitui análise do edital, contrato e documentos do caso. Para diagnóstico aplicado, use o formulário em /#contato ou WhatsApp.

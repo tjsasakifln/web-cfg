@@ -1,0 +1,1082 @@
+{
+  "atraso-pagamento-contrato-publico-suspender": {
+    "order": 1,
+    "id": "V027",
+    "title": "Atraso de pagamento permite suspender a obra pública?",
+    "url": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "atraso pagamento contrato público suspender"
+  },
+  "medicao-de-obra-publica-rejeitada": {
+    "order": 2,
+    "id": "V016",
+    "title": "Medição de obra pública rejeitada: o que fazer nas primeiras 48 horas",
+    "url": "/conteudos/medicao-de-obra-publica-rejeitada/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "medição de obra pública rejeitada"
+  },
+  "limite-aditivo-25-50-obra-publica": {
+    "order": 3,
+    "id": "V008",
+    "title": "Limite de 25% e 50% nos aditivos: o que realmente limita a obra",
+    "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "limite aditivo 25 50 obra pública"
+  },
+  "reequilibrio-economico-financeiro-obra-publica": {
+    "order": 4,
+    "id": "V031",
+    "title": "Contrato de obra pública virou prejuízo: quando cabe reequilíbrio?",
+    "url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "reequilíbrio econômico financeiro obra pública"
+  },
+  "reajuste-repactuacao-reequilibrio-diferenca": {
+    "order": 5,
+    "id": "V035",
+    "title": "Reajuste, repactuação e reequilíbrio: qual se aplica à obra pública?",
+    "url": "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "reajuste repactuação reequilíbrio diferença"
+  },
+  "aditivo-qualitativo-quantitativo": {
+    "order": 6,
+    "id": "V010",
+    "title": "Aditivo qualitativo ou quantitativo: a diferença que muda o pleito",
+    "url": "/conteudos/aditivo-qualitativo-quantitativo/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "aditivo qualitativo quantitativo"
+  },
+  "juros-atraso-pagamento-contrato-administrativo": {
+    "order": 7,
+    "id": "V028",
+    "title": "Juros e correção por atraso de pagamento: como calcular e cobrar",
+    "url": "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "juros atraso pagamento contrato administrativo"
+  },
+  "atraso-na-medicao-obra-publica": {
+    "order": 8,
+    "id": "V019",
+    "title": "Atraso na medição da obra pública: como proteger o fluxo de caixa",
+    "url": "/conteudos/atraso-na-medicao-obra-publica/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "atraso na medição obra pública"
+  },
+  "glosa-de-medicao-obra-publica": {
+    "order": 9,
+    "id": "V017",
+    "title": "Glosa indevida em obra pública: como contestar tecnicamente",
+    "url": "/conteudos/glosa-de-medicao-obra-publica/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "glosa de medição obra pública"
+  },
+  "servico-nao-previsto-na-planilha-obra-publica": {
+    "order": 10,
+    "id": "V001",
+    "title": "Serviço não previsto na planilha da obra pública: quem deve pagar?",
+    "url": "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "serviço não previsto na planilha obra pública"
+  },
+  "pagamento-contrato-publico-certidao-vencida": {
+    "order": 11,
+    "id": "V029",
+    "title": "Nota fiscal bloqueada por certidão: a Administração pode reter tudo?",
+    "url": "/conteudos/pagamento-contrato-publico-certidao-vencida/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "pagamento contrato público certidão vencida"
+  },
+  "pagamento-parcial-etapa-empreitada-global": {
+    "order": 12,
+    "id": "V022",
+    "title": "Pagamento parcial de etapa em empreitada global: quando é permitido?",
+    "url": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "pagamento parcial etapa empreitada global"
+  },
+  "documentos-reequilibrio-obra-publica": {
+    "order": 13,
+    "id": "V033",
+    "title": "Documentos essenciais para pedir reequilíbrio em obra pública",
+    "url": "/conteudos/documentos-reequilibrio-obra-publica/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "documentos reequilíbrio obra pública"
+  },
+  "aditivo-empreitada-por-preco-global": {
+    "order": 14,
+    "id": "V013",
+    "title": "Aditivo em empreitada por preço global: quando a construtora tem direito",
+    "url": "/conteudos/aditivo-empreitada-por-preco-global/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "aditivo empreitada por preço global"
+  },
+  "erro-de-projeto-gera-aditivo-obra-publica": {
+    "order": 15,
+    "id": "V004",
+    "title": "Erro de projeto em obra pública gera aditivo ou é risco da construtora?",
+    "url": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "erro de projeto gera aditivo obra pública"
+  },
+  "medicao-por-evento-obra-publica": {
+    "order": 16,
+    "id": "V023",
+    "title": "Medição por evento ou por quantitativo: qual modelo protege melhor a construtora?",
+    "url": "/conteudos/medicao-por-evento-obra-publica/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "medição por evento obra pública"
+  },
+  "impedimento-de-licitar-construtora": {
+    "order": 17,
+    "id": "V064",
+    "title": "Impedimento de licitar: quais fatos realmente colocam a construtora em risco",
+    "url": "/conteudos/impedimento-de-licitar-construtora/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "impedimento de licitar construtora"
+  },
+  "prova-de-medicao-diario-de-obra-fotos": {
+    "order": 18,
+    "id": "V025",
+    "title": "Fotos e diário de obra bastam para provar uma medição?",
+    "url": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "prova de medição diário de obra fotos"
+  },
+  "parcela-incontroversa-medicao-contrato-publico": {
+    "order": 19,
+    "id": "V018",
+    "title": "Há controvérsia na medição: a parcela incontroversa deve ser paga?",
+    "url": "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "parcela incontroversa medição contrato público"
+  },
+  "fiscal-nao-assina-medicao-obra-publica": {
+    "order": 20,
+    "id": "V020",
+    "title": "O fiscal se recusa a assinar a medição: quais documentos produzir",
+    "url": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "fiscal não assina medição obra pública"
+  },
+  "servico-executado-sem-termo-aditivo": {
+    "order": 21,
+    "id": "V002",
+    "title": "A construtora executou sem termo aditivo: ainda é possível receber?",
+    "url": "/conteudos/servico-executado-sem-termo-aditivo/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "serviço executado sem termo aditivo"
+  },
+  "quantitativo-insuficiente-planilha-obra-publica": {
+    "order": 22,
+    "id": "V006",
+    "title": "Quantitativo insuficiente na planilha: quando cabe aditivo?",
+    "url": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "quantitativo insuficiente planilha obra pública"
+  },
+  "criterio-de-medicao-nao-previsto-contrato": {
+    "order": 23,
+    "id": "V021",
+    "title": "A fiscalização pode criar critério de medição que não está no contrato?",
+    "url": "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "critério de medição não previsto contrato"
+  },
+  "glosa-por-qualidade-obra-publica": {
+    "order": 24,
+    "id": "V026",
+    "title": "Defeito de qualidade autoriza glosa total da medição?",
+    "url": "/conteudos/glosa-por-qualidade-obra-publica/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "glosa por qualidade obra pública"
+  },
+  "divergencia-quantitativo-medicao-as-built": {
+    "order": 25,
+    "id": "V030",
+    "title": "Quantitativo medido diverge do as built: como resolver sem perder dinheiro",
+    "url": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "divergência quantitativo medição as built"
+  },
+  "servico-executado-sem-projeto-aprovado": {
+    "order": 26,
+    "id": "V024",
+    "title": "Serviço executado sem projeto aprovado pode entrar na medição?",
+    "url": "/conteudos/servico-executado-sem-projeto-aprovado/",
+    "cluster": "Medição, glosa e pagamento",
+    "pillar": "/medicoes-glosas-obras-publicas/",
+    "keyword": "serviço executado sem projeto aprovado"
+  },
+  "aumento-material-reequilibrio-contrato-publico": {
+    "order": 27,
+    "id": "V036",
+    "title": "Aumento de material dá direito automático ao reequilíbrio?",
+    "url": "/conteudos/aumento-material-reequilibrio-contrato-publico/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "aumento material reequilíbrio contrato público"
+  },
+  "resposta-notificacao-atraso-obra-publica": {
+    "order": 28,
+    "id": "V061",
+    "title": "Construtora notificada por atraso: como montar a resposta técnica",
+    "url": "/conteudos/resposta-notificacao-atraso-obra-publica/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "resposta notificação atraso obra pública"
+  },
+  "pedido-de-reequilibrio-negado": {
+    "order": 29,
+    "id": "V032",
+    "title": "Pedido de reequilíbrio negado: 7 falhas que destroem o pleito",
+    "url": "/conteudos/pedido-de-reequilibrio-negado/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "pedido de reequilíbrio negado"
+  },
+  "subcontratacao-obra-publica-autorizacao": {
+    "order": 30,
+    "id": "V072",
+    "title": "Subcontratação sem autorização: quando vira risco de sanção",
+    "url": "/conteudos/subcontratacao-obra-publica-autorizacao/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "subcontratação obra pública autorização"
+  },
+  "preco-de-item-novo-aditivo-obra-publica": {
+    "order": 31,
+    "id": "V007",
+    "title": "Item novo sem SINAPI ou SICRO: como formar o preço do aditivo",
+    "url": "/conteudos/preco-de-item-novo-aditivo-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "preço de item novo aditivo obra pública"
+  },
+  "jogo-de-planilha-aditivo-obra-publica": {
+    "order": 32,
+    "id": "V011",
+    "title": "Jogo de planilha no aditivo: como evitar que o desconto destrua a margem",
+    "url": "/conteudos/jogo-de-planilha-aditivo-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "jogo de planilha aditivo obra pública"
+  },
+  "desconto-da-proposta-em-item-novo-aditivo": {
+    "order": 33,
+    "id": "V012",
+    "title": "Preço de item novo: deve aplicar o desconto global da licitação?",
+    "url": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "desconto da proposta em item novo aditivo"
+  },
+  "calculo-reequilibrio-economico-financeiro": {
+    "order": 34,
+    "id": "V034",
+    "title": "Como calcular o impacto financeiro de um pedido de reequilíbrio",
+    "url": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "cálculo reequilíbrio econômico financeiro"
+  },
+  "demolicao-nao-prevista-obra-publica": {
+    "order": 35,
+    "id": "V005",
+    "title": "Demolição não prevista em obra pública: como documentar e cobrar",
+    "url": "/conteudos/demolicao-nao-prevista-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "demolição não prevista obra pública"
+  },
+  "fiscal-mandou-executar-sem-aditivo": {
+    "order": 36,
+    "id": "V003",
+    "title": "O fiscal mandou executar, mas não formalizou: o que a construtora deve fazer?",
+    "url": "/conteudos/fiscal-mandou-executar-sem-aditivo/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "fiscal mandou executar sem aditivo"
+  },
+  "defesa-processo-sancionador-contrato-publico": {
+    "order": 37,
+    "id": "V063",
+    "title": "Defesa prévia em processo sancionador: 8 erros que enfraquecem a empresa",
+    "url": "/conteudos/defesa-processo-sancionador-contrato-publico/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "defesa processo sancionador contrato público"
+  },
+  "multa-contrato-obra-publica-defesa": {
+    "order": 38,
+    "id": "V062",
+    "title": "Multa em contrato de obra pública: quando pode ser contestada",
+    "url": "/conteudos/multa-contrato-obra-publica-defesa/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "multa contrato obra pública defesa"
+  },
+  "manutencao-habilitacao-contrato-publico": {
+    "order": 39,
+    "id": "V074",
+    "title": "Perda das condições de habilitação durante o contrato: o que acontece?",
+    "url": "/conteudos/manutencao-habilitacao-contrato-publico/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "manutenção habilitação contrato público"
+  },
+  "compensacao-acrescimo-supressao-aditivo": {
+    "order": 40,
+    "id": "V009",
+    "title": "Acréscimos e supressões podem ser compensados no mesmo aditivo?",
+    "url": "/conteudos/compensacao-acrescimo-supressao-aditivo/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "compensação acréscimo supressão aditivo"
+  },
+  "mudanca-metodo-construtivo-obra-publica-aditivo": {
+    "order": 41,
+    "id": "V014",
+    "title": "Mudança do método construtivo: quem paga a diferença?",
+    "url": "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "mudança método construtivo obra pública aditivo"
+  },
+  "matriz-de-riscos-reequilibrio-economico-financeiro": {
+    "order": 42,
+    "id": "V045",
+    "title": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?",
+    "url": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "matriz de riscos reequilíbrio econômico financeiro"
+  },
+  "rescisao-unilateral-contrato-obra-publica": {
+    "order": 43,
+    "id": "V065",
+    "title": "Rescisão unilateral da obra pública: como reagir antes que seja tarde",
+    "url": "/conteudos/rescisao-unilateral-contrato-obra-publica/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "rescisão unilateral contrato obra pública"
+  },
+  "troca-responsavel-tecnico-contrato-publico": {
+    "order": 44,
+    "id": "V073",
+    "title": "Troca de responsável técnico durante a obra: como evitar penalidades",
+    "url": "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "troca responsável técnico contrato público"
+  },
+  "custos-indiretos-atraso-administracao-obra": {
+    "order": 45,
+    "id": "V037",
+    "title": "Atraso da Administração gera reequilíbrio dos custos indiretos?",
+    "url": "/conteudos/custos-indiretos-atraso-administracao-obra/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "custos indiretos atraso administração obra"
+  },
+  "multa-atraso-parcial-contrato-publico": {
+    "order": 46,
+    "id": "V071",
+    "title": "Atraso na entrega parcial pode gerar multa sobre o contrato inteiro?",
+    "url": "/conteudos/multa-atraso-parcial-contrato-publico/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "multa atraso parcial contrato público"
+  },
+  "notas-fiscais-reequilibrio-contrato": {
+    "order": 47,
+    "id": "V042",
+    "title": "Notas fiscais ou índices oficiais: qual prova é mais forte no reequilíbrio?",
+    "url": "/conteudos/notas-fiscais-reequilibrio-contrato/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "notas fiscais reequilíbrio contrato"
+  },
+  "reequilibrio-antes-da-prorrogacao-contrato": {
+    "order": 48,
+    "id": "V039",
+    "title": "Pedido de reequilíbrio deve ser feito antes da prorrogação?",
+    "url": "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "reequilíbrio antes da prorrogação contrato"
+  },
+  "reequilibrio-empreitada-preco-global": {
+    "order": 49,
+    "id": "V044",
+    "title": "Reequilíbrio em empreitada global: o preço fechado elimina o direito?",
+    "url": "/conteudos/reequilibrio-empreitada-preco-global/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "reequilíbrio empreitada preço global"
+  },
+  "culpa-sancao-atraso-contrato-publico": {
+    "order": 50,
+    "id": "V068",
+    "title": "Sem culpa não há sanção? Como provar as causas externas do atraso",
+    "url": "/conteudos/culpa-sancao-atraso-contrato-publico/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "culpa sanção atraso contrato público"
+  },
+  "reequilibrio-apos-fim-do-contrato": {
+    "order": 51,
+    "id": "V038",
+    "title": "É possível reconhecer reequilíbrio depois do fim do contrato?",
+    "url": "/conteudos/reequilibrio-apos-fim-do-contrato/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "reequilíbrio após fim do contrato"
+  },
+  "indenizacao-servico-extracontratual-obra-publica": {
+    "order": 52,
+    "id": "V015",
+    "title": "Indenização por serviço extracontratual: quando o aditivo já não é possível",
+    "url": "/conteudos/indenizacao-servico-extracontratual-obra-publica/",
+    "cluster": "Aditivos e serviços extras",
+    "pillar": "/aditivos-obras-publicas/",
+    "keyword": "indenização serviço extracontratual obra pública"
+  },
+  "diario-de-obra-pleito-contrato-publico": {
+    "order": 53,
+    "id": "V106",
+    "title": "Diário de obra que sustenta pleitos: o que registrar todos os dias",
+    "url": "/conteudos/diario-de-obra-pleito-contrato-publico/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "diário de obra pleito contrato público"
+  },
+  "prorrogacao-prazo-obra-publica-documentos": {
+    "order": 54,
+    "id": "V048",
+    "title": "Prorrogação de prazo em obra pública: documentos que não podem faltar",
+    "url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "prorrogação prazo obra pública documentos"
+  },
+  "extincao-contrato-culpa-administracao": {
+    "order": 55,
+    "id": "V066",
+    "title": "A construtora pode pedir a extinção do contrato por culpa da Administração?",
+    "url": "/conteudos/extincao-contrato-culpa-administracao/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "extinção contrato culpa administração"
+  },
+  "administracao-local-prolongada-obra-publica": {
+    "order": 56,
+    "id": "V043",
+    "title": "Administração local prolongada: como estruturar o pedido de recomposição",
+    "url": "/conteudos/administracao-local-prolongada-obra-publica/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "administração local prolongada obra pública"
+  },
+  "curva-abc-reequilibrio-contrato": {
+    "order": 57,
+    "id": "V041",
+    "title": "Como usar a Curva ABC para provar desequilíbrio do contrato",
+    "url": "/conteudos/curva-abc-reequilibrio-contrato/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "curva abc reequilíbrio contrato"
+  },
+  "dosimetria-multa-contrato-administrativo": {
+    "order": 58,
+    "id": "V069",
+    "title": "Multa desproporcional: como questionar a dosimetria da sanção",
+    "url": "/conteudos/dosimetria-multa-contrato-administrativo/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "dosimetria multa contrato administrativo"
+  },
+  "plano-recuperacao-obra-atrasada": {
+    "order": 59,
+    "id": "V067",
+    "title": "Plano de recuperação após notificação: como demonstrar capacidade de concluir",
+    "url": "/conteudos/plano-recuperacao-obra-atrasada/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "plano recuperação obra atrasada"
+  },
+  "seguro-garantia-execucao-contrato-publico": {
+    "order": 60,
+    "id": "V075",
+    "title": "Seguro-garantia pode ser acionado antes do fim da defesa?",
+    "url": "/conteudos/seguro-garantia-execucao-contrato-publico/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "seguro garantia execução contrato público"
+  },
+  "divergencia-diario-obra-fiscalizacao": {
+    "order": 61,
+    "id": "V070",
+    "title": "Diário de obra contradiz a fiscalização: qual registro prevalece?",
+    "url": "/conteudos/divergencia-diario-obra-fiscalizacao/",
+    "cluster": "Sanções, defesa e extinção",
+    "pillar": "/defesa-tecnica-contratos-publicos/",
+    "keyword": "divergência diário obra fiscalização"
+  },
+  "suspensao-execucao-contrato-publico-contratado": {
+    "order": 62,
+    "id": "V059",
+    "title": "Quando a construtora pode suspender a execução do contrato público?",
+    "url": "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "suspensão execução contrato público contratado"
+  },
+  "erros-comunicacao-contrato-publico-construtora": {
+    "order": 63,
+    "id": "V115",
+    "title": "Cinco frases que a construtora não deveria escrever ao fiscal",
+    "url": "/conteudos/erros-comunicacao-contrato-publico-construtora/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "erros comunicação contrato público construtora"
+  },
+  "comunicacao-fiscal-contrato-obra-publica": {
+    "order": 64,
+    "id": "V107",
+    "title": "Comunicação ao fiscal: como escrever sem admitir culpa ou renunciar a direitos",
+    "url": "/conteudos/comunicacao-fiscal-contrato-obra-publica/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "comunicação fiscal contrato obra pública"
+  },
+  "chuva-prorrogacao-prazo-obra-publica": {
+    "order": 65,
+    "id": "V053",
+    "title": "Chuva justifica prorrogação de prazo em obra pública?",
+    "url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "chuva prorrogação prazo obra pública"
+  },
+  "atraso-obra-culpa-administracao": {
+    "order": 66,
+    "id": "V046",
+    "title": "Obra atrasada por culpa da Administração: como proteger a construtora",
+    "url": "/conteudos/atraso-obra-culpa-administracao/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "atraso obra culpa administração"
+  },
+  "prazo-vigencia-prazo-execucao-contrato-obra": {
+    "order": 67,
+    "id": "V057",
+    "title": "Prazo de vigência e prazo de execução: a diferença que trava obras",
+    "url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "prazo vigência prazo execução contrato obra"
+  },
+  "evento-previsivel-consequencias-incalculaveis-reequilibrio": {
+    "order": 68,
+    "id": "V040",
+    "title": "Evento previsível também pode gerar reequilíbrio?",
+    "url": "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+    "cluster": "Reequilíbrio econômico-financeiro",
+    "pillar": "/reequilibrio-obras-publicas/",
+    "keyword": "evento previsível consequências incalculáveis reequilíbrio"
+  },
+  "controle-mudancas-obra-publica": {
+    "order": 69,
+    "id": "V112",
+    "title": "Controle de mudanças na obra pública: a planilha que evita serviços gratuitos",
+    "url": "/conteudos/controle-mudancas-obra-publica/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "controle mudanças obra pública"
+  },
+  "como-provar-atraso-obra-publica": {
+    "order": 70,
+    "id": "V047",
+    "title": "Como provar que o atraso da obra não foi responsabilidade da empresa",
+    "url": "/conteudos/como-provar-atraso-obra-publica/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "como provar atraso obra pública"
+  },
+  "capacidade-tecnica-operacional-profissional-licitacao": {
+    "order": 71,
+    "id": "V097",
+    "title": "Atestado técnico: capacidade operacional e profissional não são a mesma coisa",
+    "url": "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "capacidade técnica operacional profissional licitação"
+  },
+  "prova-custos-adicionais-obra-publica": {
+    "order": 72,
+    "id": "V114",
+    "title": "Como provar custos adicionais sem depender apenas de notas fiscais",
+    "url": "/conteudos/prova-custos-adicionais-obra-publica/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "prova custos adicionais obra pública"
+  },
+  "gestao-contrato-obra-publica-indicadores": {
+    "order": 73,
+    "id": "V116",
+    "title": "Dashboard de contrato público: os 12 indicadores que o dono precisa ver",
+    "url": "/conteudos/gestao-contrato-obra-publica-indicadores/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "gestão contrato obra pública indicadores"
+  },
+  "pleito-tecnico-obra-publica": {
+    "order": 74,
+    "id": "V109",
+    "title": "Pleito técnico em obra pública: estrutura que facilita a análise e a decisão",
+    "url": "/conteudos/pleito-tecnico-obra-publica/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "pleito técnico obra pública"
+  },
+  "notificacao-impacto-prazo-custo-obra": {
+    "order": 75,
+    "id": "V110",
+    "title": "Notificação de impacto: quando avisar que um evento afetará prazo e custo",
+    "url": "/conteudos/notificacao-impacto-prazo-custo-obra/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "notificação impacto prazo custo obra"
+  },
+  "consultoria-contrato-obra-publica-construtora": {
+    "order": 76,
+    "id": "V118",
+    "title": "Quando contratar consultoria externa para uma obra pública",
+    "url": "/conteudos/consultoria-contrato-obra-publica-construtora/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "consultoria contrato obra pública construtora"
+  },
+  "registro-contemporaneo-pleito-obra": {
+    "order": 77,
+    "id": "V111",
+    "title": "Registro contemporâneo: por que documento criado depois vale menos",
+    "url": "/conteudos/registro-contemporaneo-pleito-obra/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "registro contemporâneo pleito obra"
+  },
+  "pedido-prorrogacao-prazo-antes-vencimento": {
+    "order": 78,
+    "id": "V049",
+    "title": "O pedido de prorrogação precisa ser feito antes do prazo acabar?",
+    "url": "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "pedido prorrogação prazo antes vencimento"
+  },
+  "reprogramacao-cronograma-obra-publica": {
+    "order": 79,
+    "id": "V056",
+    "title": "Reprogramação do cronograma: como evitar assumir atraso alheio",
+    "url": "/conteudos/reprogramacao-cronograma-obra-publica/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "reprogramação cronograma obra pública"
+  },
+  "ata-reuniao-ordem-servico-obra-publica": {
+    "order": 80,
+    "id": "V113",
+    "title": "Ata de reunião pode valer como ordem de serviço?",
+    "url": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "ata reunião ordem serviço obra pública"
+  },
+  "auditoria-contrato-obra-publica-mensal": {
+    "order": 81,
+    "id": "V117",
+    "title": "Auditoria mensal do contrato: o que revisar antes de fechar cada medição",
+    "url": "/conteudos/auditoria-contrato-obra-publica-mensal/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "auditoria contrato obra pública mensal"
+  },
+  "cronologia-contrato-obra-publica": {
+    "order": 82,
+    "id": "V108",
+    "title": "Como montar a cronologia de um contrato para encontrar dinheiro perdido",
+    "url": "/conteudos/cronologia-contrato-obra-publica/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "cronologia contrato obra pública"
+  },
+  "ordem-paralisacao-obra-publica-custos": {
+    "order": 83,
+    "id": "V054",
+    "title": "Ordem de paralisação: quais custos a construtora deve registrar",
+    "url": "/conteudos/ordem-paralisacao-obra-publica-custos/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "ordem paralisação obra pública custos"
+  },
+  "atraso-projeto-executivo-obra-publica": {
+    "order": 84,
+    "id": "V050",
+    "title": "Projeto executivo atrasado: quem responde pelo impacto na obra?",
+    "url": "/conteudos/atraso-projeto-executivo-obra-publica/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "atraso projeto executivo obra pública"
+  },
+  "analise-edital-obra-publica-construtora": {
+    "order": 85,
+    "id": "V091",
+    "title": "10 riscos que a construtora deve encontrar antes de disputar uma obra pública",
+    "url": "/conteudos/analise-edital-obra-publica-construtora/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "análise edital obra pública construtora"
+  },
+  "cronograma-fisico-financeiro-obra-publica": {
+    "order": 86,
+    "id": "V099",
+    "title": "Cronograma físico-financeiro do edital: cinco sinais de fluxo de caixa impossível",
+    "url": "/conteudos/cronograma-fisico-financeiro-obra-publica/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "cronograma físico financeiro obra pública"
+  },
+  "empreitada-preco-global-preco-unitario": {
+    "order": 87,
+    "id": "V094",
+    "title": "Empreitada global ou preço unitário: qual regime é mais perigoso?",
+    "url": "/conteudos/empreitada-preco-global-preco-unitario/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "empreitada preço global preço unitário"
+  },
+  "matriz-de-riscos-obra-publica": {
+    "order": 88,
+    "id": "V093",
+    "title": "Matriz de riscos em obra pública: quem paga pelo imprevisto?",
+    "url": "/conteudos/matriz-de-riscos-obra-publica/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "matriz de riscos obra pública"
+  },
+  "recuperar-contrato-obra-publica-problematico": {
+    "order": 89,
+    "id": "V120",
+    "title": "Plano de 30 dias para recuperar o controle de um contrato público problemático",
+    "url": "/conteudos/recuperar-contrato-obra-publica-problematico/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "recuperar contrato obra pública problemático"
+  },
+  "frente-de-servico-nao-liberada-obra": {
+    "order": 90,
+    "id": "V051",
+    "title": "Frente de serviço não liberada: como registrar e cobrar o impacto",
+    "url": "/conteudos/frente-de-servico-nao-liberada-obra/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "frente de serviço não liberada obra"
+  },
+  "extincao-contrato-obra-publica-pelo-contratado": {
+    "order": 91,
+    "id": "V060",
+    "title": "Abandonar, suspender ou pedir extinção: como decidir num contrato inviável",
+    "url": "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "extinção contrato obra pública pelo contratado"
+  },
+  "bdi-obra-publica": {
+    "order": 92,
+    "id": "V078",
+    "title": "BDI errado pode destruir a margem da obra pública",
+    "url": "/conteudos/bdi-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "BDI obra pública"
+  },
+  "consultoria-b2g-engenharia-construtora": {
+    "order": 93,
+    "id": "V119",
+    "title": "Equipe interna ou consultoria B2G: qual modelo faz sentido para a construtora?",
+    "url": "/conteudos/consultoria-b2g-engenharia-construtora/",
+    "cluster": "Gestão contratual e pleitos",
+    "pillar": "/acompanhamento-contratos-obras/",
+    "keyword": "consultoria B2G engenharia construtora"
+  },
+  "demora-decisao-administracao-contrato-obra": {
+    "order": 94,
+    "id": "V055",
+    "title": "A Administração demorou a decidir: quem paga o custo da espera?",
+    "url": "/conteudos/demora-decisao-administracao-contrato-obra/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "demora decisão administração contrato obra"
+  },
+  "interferencia-concessionaria-obra-publica-atraso": {
+    "order": 95,
+    "id": "V052",
+    "title": "Interferência de concessionária atrasou a obra: de quem é o risco?",
+    "url": "/conteudos/interferencia-concessionaria-obra-publica-atraso/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "interferência concessionária obra pública atraso"
+  },
+  "aceleracao-obra-publica-custo-adicional": {
+    "order": 96,
+    "id": "V058",
+    "title": "Aceleração imposta pela Administração: a construtora pode cobrar?",
+    "url": "/conteudos/aceleracao-obra-publica-custo-adicional/",
+    "cluster": "Atrasos, prorrogação e paralisação",
+    "pillar": "/atrasos-prorrogacao-obras-publicas/",
+    "keyword": "aceleração obra pública custo adicional"
+  },
+  "comprovacao-exequibilidade-proposta-obra": {
+    "order": 97,
+    "id": "V098",
+    "title": "Como comprovar exequibilidade sem revelar uma planilha frágil",
+    "url": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "comprovação exequibilidade proposta obra"
+  },
+  "recurso-inabilitacao-tecnica-licitacao": {
+    "order": 98,
+    "id": "V104",
+    "title": "Inabilitação técnica: como decidir entre recurso e correção da estratégia",
+    "url": "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "recurso inabilitação técnica licitação"
+  },
+  "projeto-basico-incompleto-obra-publica": {
+    "order": 99,
+    "id": "V101",
+    "title": "Projeto básico incompleto: até onde vai o risco da construtora?",
+    "url": "/conteudos/projeto-basico-incompleto-obra-publica/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "projeto básico incompleto obra pública"
+  },
+  "desagio-licitacao-obra-publica": {
+    "order": 100,
+    "id": "V076",
+    "title": "Deságio alto em licitação de obra: quando a proposta vira uma armadilha",
+    "url": "/conteudos/desagio-licitacao-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "deságio licitação obra pública"
+  },
+  "orcamento-incompleto-edital-obra-publica": {
+    "order": 101,
+    "id": "V092",
+    "title": "Edital com orçamento incompleto: participar, pedir esclarecimento ou impugnar?",
+    "url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "orçamento incompleto edital obra pública"
+  },
+  "visita-tecnica-licitacao-obra-publica": {
+    "order": 102,
+    "id": "V102",
+    "title": "Visita técnica facultativa: renunciar pode virar problema depois?",
+    "url": "/conteudos/visita-tecnica-licitacao-obra-publica/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "visita técnica licitação obra pública"
+  },
+  "proposta-inexequivel-obra-publica-lei-14133": {
+    "order": 103,
+    "id": "V077",
+    "title": "Proposta inexequível na Lei 14.133: como a construtora deve se defender",
+    "url": "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "proposta inexequível obra pública lei 14133"
+  },
+  "sinapi-desonerado-nao-desonerado": {
+    "order": 104,
+    "id": "V082",
+    "title": "SINAPI desonerado ou não desonerado: qual tabela usar na licitação?",
+    "url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "SINAPI desonerado não desonerado"
+  },
+  "consorcio-subcontratacao-obra-publica": {
+    "order": 105,
+    "id": "V103",
+    "title": "Consórcio ou subcontratação: qual estrutura reduz o risco da licitação?",
+    "url": "/conteudos/consorcio-subcontratacao-obra-publica/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "consórcio subcontratação obra pública"
+  },
+  "garantia-proposta-licitacao-obra": {
+    "order": 106,
+    "id": "V096",
+    "title": "Garantia da proposta e seguro-garantia: quanto custa errar na licitação",
+    "url": "/conteudos/garantia-proposta-licitacao-obra/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "garantia proposta licitação obra"
+  },
+  "curva-abc-orcamento-obra": {
+    "order": 107,
+    "id": "V089",
+    "title": "Curva ABC da obra: como encontrar os itens que podem quebrar o contrato",
+    "url": "/conteudos/curva-abc-orcamento-obra/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "curva ABC orçamento obra"
+  },
+  "contratacao-integrada-semi-integrada-obra": {
+    "order": 108,
+    "id": "V095",
+    "title": "Contratação integrada e semi-integrada: onde está o risco da construtora",
+    "url": "/conteudos/contratacao-integrada-semi-integrada-obra/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "contratação integrada semi integrada obra"
+  },
+  "orcamento-sigiloso-licitacao-obra": {
+    "order": 109,
+    "id": "V100",
+    "title": "Orçamento sigiloso: como precificar sem conhecer o teto da Administração",
+    "url": "/conteudos/orcamento-sigiloso-licitacao-obra/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "orçamento sigiloso licitação obra"
+  },
+  "sinapi-ou-sicro-obra-publica": {
+    "order": 110,
+    "id": "V083",
+    "title": "SINAPI ou SICRO: qual referência vale para cada serviço?",
+    "url": "/conteudos/sinapi-ou-sicro-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "SINAPI ou SICRO obra pública"
+  },
+  "produtividade-sinapi-obra-publica": {
+    "order": 111,
+    "id": "V087",
+    "title": "Coeficiente de produtividade do SINAPI: quando ele não representa a obra",
+    "url": "/conteudos/produtividade-sinapi-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "produtividade SINAPI obra pública"
+  },
+  "tributos-bdi-obra-publica": {
+    "order": 112,
+    "id": "V080",
+    "title": "Tributos no BDI: os erros que fazem a construtora pagar para trabalhar",
+    "url": "/conteudos/tributos-bdi-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "tributos BDI obra pública"
+  },
+  "mobilizacao-desmobilizacao-orcamento-obra": {
+    "order": 113,
+    "id": "V088",
+    "title": "Frete, mobilização e desmobilização: custos esquecidos na proposta",
+    "url": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "mobilização desmobilização orçamento obra"
+  },
+  "clausula-matriz-risco-abusiva-edital": {
+    "order": 114,
+    "id": "V105",
+    "title": "Cláusula de risco abusiva no edital: como identificar antes da proposta",
+    "url": "/conteudos/clausula-matriz-risco-abusiva-edital/",
+    "cluster": "Edital, proposta e matriz de riscos",
+    "pillar": "/diagnostico-pre-licitacao/",
+    "keyword": "cláusula matriz risco abusiva edital"
+  },
+  "administracao-local-orcamento-obra-publica": {
+    "order": 115,
+    "id": "V079",
+    "title": "Administração local: custo direto, BDI ou item da planilha?",
+    "url": "/conteudos/administracao-local-orcamento-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "administração local orçamento obra pública"
+  },
+  "composicao-propria-preco-obra-publica": {
+    "order": 116,
+    "id": "V084",
+    "title": "Composição própria de preço: como justificar perante a Administração",
+    "url": "/conteudos/composicao-propria-preco-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "composição própria preço obra pública"
+  },
+  "cotacao-mercado-orcamento-obra-publica": {
+    "order": 117,
+    "id": "V085",
+    "title": "Cotação de mercado em obra pública: como evitar três propostas inúteis",
+    "url": "/conteudos/cotacao-mercado-orcamento-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "cotação mercado orçamento obra pública"
+  },
+  "data-base-orcamento-reajuste-obra-publica": {
+    "order": 118,
+    "id": "V086",
+    "title": "Data-base do orçamento e reajuste: onde muitas construtoras perdem dinheiro",
+    "url": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "data base orçamento reajuste obra pública"
+  },
+  "bdi-diferenciado-obra-publica": {
+    "order": 119,
+    "id": "V081",
+    "title": "BDI diferenciado para materiais e equipamentos: quando usar",
+    "url": "/conteudos/bdi-diferenciado-obra-publica/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "BDI diferenciado obra pública"
+  },
+  "preco-unitario-acima-referencia-proposta-global": {
+    "order": 120,
+    "id": "V090",
+    "title": "Preço unitário acima do referencial com proposta global menor: pode?",
+    "url": "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+    "cluster": "Orçamento, BDI, SINAPI e preço",
+    "pillar": "/auditoria-orcamento-licitacao/",
+    "keyword": "preço unitário acima referência proposta global"
+  }
+}

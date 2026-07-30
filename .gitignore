@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+.vscode/
+.idea/
+node_modules/
+.cache/
+.netlify/
+*.swp
+*~
