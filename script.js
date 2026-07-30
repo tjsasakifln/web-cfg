@@ -41,9 +41,13 @@
     filters.forEach((button) => button.addEventListener('click', () => { filters.forEach((b) => b.classList.remove('is-active')); button.classList.add('is-active'); activeFilter = button.dataset.filter || 'all'; apply(); }));
 
     // Lead attribution: ?tema= & ?origem= from article CTAs
-    const params = new URLSearchParams(window.location.search);
-    const tema = params.get('tema');
-    const origem = params.get('origem');
+    // Prefer real query string; also support legacy /#contato?tema=...
+    const searchParams = new URLSearchParams(window.location.search);
+    const hashParams = window.location.hash.includes('?')
+      ? new URLSearchParams(window.location.hash.split('?')[1] || '')
+      : new URLSearchParams();
+    const tema = searchParams.get('tema') || hashParams.get('tema');
+    const origem = searchParams.get('origem') || hashParams.get('origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-confenge"]');
     if (form && !form.querySelector('input[name="origem"]')) {
@@ -60,9 +64,11 @@
       mensagem.value = `Demanda relacionada a: ${tema}.\n\nContexto:\n`;
       mensagem.focus();
     }
-    if ((tema || origem) && window.location.hash !== '#contato') {
+    if (tema || origem || window.location.hash.startsWith('#contato')) {
       const contact = document.getElementById('contato');
-      if (contact) contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (contact && (tema || origem)) {
+        contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true }); else init();

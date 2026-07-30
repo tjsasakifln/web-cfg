@@ -1,0 +1,432 @@
+- generic [active] [ref=e1]:
+  - link "Pular para o conteúdo" [ref=e2] [cursor=pointer]:
+    - /url: "#conteudo"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "CONFENGE, página inicial" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "CONFENGE Inteligência Técnica" [ref=e6]
+      - navigation "Navegação principal" [ref=e7]:
+        - link "Atuação" [ref=e8] [cursor=pointer]:
+          - /url: /#atuacao
+        - link "Conteúdos" [ref=e9] [cursor=pointer]:
+          - /url: /conteudos/
+        - link "Diferenciais" [ref=e10] [cursor=pointer]:
+          - /url: /#diferenciais
+        - link "Método" [ref=e11] [cursor=pointer]:
+          - /url: /#metodo
+        - link "Dúvidas" [ref=e12] [cursor=pointer]:
+          - /url: /#faq
+      - link "Analisar meu cenário" [ref=e13] [cursor=pointer]:
+        - /url: /#contato
+  - main [ref=e14]:
+    - region [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - paragraph [ref=e18]: Consultoria B2G especializada em engenharia e construção
+          - heading "Vença licitações melhores. Proteja a margem na execução." [level=1] [ref=e20]:
+            - text: Vença licitações melhores.
+            - generic [ref=e21]: Proteja a margem na execução.
+          - paragraph [ref=e22]: Engenharia, experiência na Administração Pública e inteligência de dados para empresas que disputam licitações e executam contratos públicos.
+          - generic [ref=e23]:
+            - link "Analisar meu cenário" [ref=e24] [cursor=pointer]:
+              - /url: https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.
+            - link "Conhecer a atuação" [ref=e27] [cursor=pointer]:
+              - /url: "#atuacao"
+          - list "Credenciais principais" [ref=e30]:
+            - listitem [ref=e31]:
+              - generic [ref=e34]:
+                - strong [ref=e35]: Formação de base
+                - text: Engenharia Civil pela USP
+            - listitem [ref=e36]:
+              - generic [ref=e39]:
+                - strong [ref=e40]: Visão dos dois lados
+                - text: Experiência pública e privada
+            - listitem [ref=e41]:
+              - generic [ref=e44]:
+                - strong [ref=e45]: Onde sua obra estiver
+                - text: Atendimento em todo o Brasil
+        - img "A CONFENGE integra análise de licitações, gestão contratual e engenharia de obras para orientar decisões empresariais." [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e48]: CONFENGE / INTELIGÊNCIA TÉCNICA
+            - generic [ref=e49]: Visão integrada
+          - generic [ref=e67]:
+            - generic [ref=e68]: Decisão central
+            - strong [ref=e69]: Técnica que protege resultado
+            - generic [ref=e70]: Risco · prazo · margem · evidência
+          - generic [ref=e74]:
+            - generic [ref=e75]: Antes da proposta
+            - strong [ref=e76]: Risco mapeado
+          - generic [ref=e80]:
+            - generic [ref=e81]: Durante o contrato
+            - strong [ref=e82]: Direito preservado
+          - generic [ref=e86]:
+            - generic [ref=e87]: Diante da fiscalização
+            - strong [ref=e88]: Posição defensável
+          - generic [ref=e89]:
+            - generic [ref=e90]: Licitações
+            - generic [ref=e91]: Contratos
+            - generic [ref=e92]: Obras públicas
+    - region [ref=e93]:
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - paragraph [ref=e96]: Onde a decisão fica cara
+          - heading "Entre antes que o problema vire custo." [level=2] [ref=e97]
+        - generic [ref=e98]:
+          - article [ref=e99]:
+            - generic [ref=e100]: "01"
+            - heading "Edital e proposta" [level=3] [ref=e101]
+            - paragraph [ref=e102]: Riscos ocultos, exigências, composição de preço e estratégia de participação.
+          - article [ref=e103]:
+            - generic [ref=e104]: "02"
+            - heading "Contrato e medição" [level=3] [ref=e105]
+            - paragraph [ref=e106]: Obrigações, registros, produtividade, cronograma e preservação de direitos.
+          - article [ref=e107]:
+            - generic [ref=e108]: "03"
+            - heading "Aditivo e reequilíbrio" [level=3] [ref=e109]
+            - paragraph [ref=e110]: Base técnica, causalidade, quantificação e estruturação da reivindicação.
+          - article [ref=e111]:
+            - generic [ref=e112]: "04"
+            - heading "Notificação e defesa" [level=3] [ref=e113]
+            - paragraph [ref=e114]: Resposta consistente para fiscalização, gestão, jurídico e controle externo.
+    - region [ref=e115]:
+      - generic [ref=e116]:
+        - generic [ref=e117]:
+          - generic [ref=e118]:
+            - paragraph [ref=e119]: Frentes de atuação
+            - heading "Apoio técnico do edital à entrega final." [level=2] [ref=e120]
+          - paragraph [ref=e121]: Não vendemos um relatório genérico com capa bonita. Cada frente existe para reduzir incerteza, sustentar uma decisão ou proteger resultado.
+        - generic [ref=e122]:
+          - article [ref=e123]:
+            - generic [ref=e124]: "01"
+            - generic [ref=e127]:
+              - heading "Estratégia para licitações" [level=3] [ref=e128]
+              - paragraph [ref=e129]: Seleção de oportunidades, leitura crítica do edital, análise de riscos e definição da estratégia de participação.
+          - article [ref=e130]:
+            - generic [ref=e131]: "02"
+            - generic [ref=e134]:
+              - heading "Análise e elaboração de propostas" [level=3] [ref=e135]
+              - paragraph [ref=e136]: Planilhas, composições, BDI, cronogramas, exequibilidade e coerência entre documentos técnicos e comerciais.
+          - article [ref=e137]:
+            - generic [ref=e138]: "03"
+            - generic [ref=e141]:
+              - heading "Gestão técnica e contratual" [level=3] [ref=e142]
+              - paragraph [ref=e143]: Acompanhamento de obrigações, medições, prazos, registros, riscos e decisões ao longo da execução.
+          - article [ref=e144]:
+            - generic [ref=e145]: "04"
+            - generic [ref=e148]:
+              - heading "Pleitos, aditivos e reequilíbrios" [level=3] [ref=e149]
+              - paragraph [ref=e150]: Estruturação da tese técnica, nexo causal, memória de cálculo, evidências e documentação de suporte.
+          - article [ref=e151]:
+            - generic [ref=e152]: "05"
+            - generic [ref=e155]:
+              - heading "Interface com órgãos públicos" [level=3] [ref=e156]
+              - paragraph [ref=e157]: Comunicação técnica compatível com a lógica do fiscal, do gestor, do jurídico e dos órgãos de controle.
+          - article [ref=e158]:
+            - generic [ref=e159]: "06"
+            - generic [ref=e162]:
+              - heading "Inteligência de dados e tecnologia" [level=3] [ref=e163]
+              - paragraph [ref=e164]: Dados públicos, automações e IA aplicados à prospecção, análise documental e tomada de decisão.
+    - region [ref=e165]:
+      - generic [ref=e166]:
+        - generic [ref=e167]:
+          - paragraph [ref=e168]: O que chega à sua mesa
+          - heading "Material que a direção consegue decidir e a equipe consegue executar." [level=2] [ref=e169]
+          - paragraph [ref=e170]: A profundidade muda conforme o caso. A utilidade, não. A entrega precisa indicar o que está acontecendo, por que importa e qual ação faz sentido agora.
+          - link "Apresentar uma demanda" [ref=e171] [cursor=pointer]:
+            - /url: "#contato"
+        - generic [ref=e174]:
+          - generic [ref=e175]:
+            - generic [ref=e176]: "01"
+            - paragraph [ref=e177]:
+              - strong [ref=e178]: Diagnóstico executivo
+              - text: com riscos, oportunidades e prioridades.
+          - generic [ref=e179]:
+            - generic [ref=e180]: "02"
+            - paragraph [ref=e181]:
+              - strong [ref=e182]: Análise técnica e contratual
+              - text: baseada nos documentos do caso.
+          - generic [ref=e183]:
+            - generic [ref=e184]: "03"
+            - paragraph [ref=e185]:
+              - strong [ref=e186]: Plano de ação
+              - text: com responsáveis, sequência e pontos de controle.
+          - generic [ref=e187]:
+            - generic [ref=e188]: "04"
+            - paragraph [ref=e189]:
+              - strong [ref=e190]: Planilhas, memórias e pareceres
+              - text: prontos para instruir decisões.
+          - generic [ref=e191]:
+            - generic [ref=e192]: "05"
+            - paragraph [ref=e193]:
+              - strong [ref=e194]: Minutas e subsídios técnicos
+              - text: para ofícios, notificações, pleitos e defesas.
+          - generic [ref=e195]:
+            - generic [ref=e196]: "06"
+            - paragraph [ref=e197]:
+              - strong [ref=e198]: Acompanhamento continuado
+              - text: quando o problema não termina no documento.
+    - region [ref=e199]:
+      - generic [ref=e200]:
+        - generic [ref=e201]:
+          - paragraph [ref=e202]: Por que a CONFENGE
+          - heading "A vantagem está em compreender os dois lados da mesa." [level=2] [ref=e203]
+          - paragraph [ref=e204]: A empresa precisa defender margem, prazo e execução. A Administração Pública precisa decidir dentro de regras, evidências e responsabilidades. A CONFENGE traduz uma lógica na outra sem diluir a técnica.
+          - blockquote [ref=e205]: O objetivo não é produzir mais papel. É tornar a decisão tecnicamente defensável e empresarialmente inteligente.
+        - complementary "Responsável técnico pela consultoria" [ref=e206]:
+          - generic [ref=e207]: Liderança técnica
+          - heading "Engº Tiago Sasaki" [level=3] [ref=e208]
+          - paragraph [ref=e209]: Engenheiro Civil formado pela EESC-USP, com experiência na iniciativa privada e na Administração Pública.
+          - list [ref=e210]:
+            - listitem [ref=e211]: Fiscalização e gestão de contratos
+            - listitem [ref=e214]: Convênios, obras e processos administrativos
+            - listitem [ref=e217]: Orçamentação e referências oficiais
+            - listitem [ref=e220]: Tecnologia e IA aplicadas à engenharia
+    - region [ref=e223]:
+      - generic [ref=e224]:
+        - generic [ref=e225]:
+          - generic [ref=e226]:
+            - paragraph [ref=e227]: Como trabalhamos
+            - heading "Clareza antes de volume." [level=2] [ref=e228]
+          - paragraph [ref=e229]: O método organiza a complexidade em quatro movimentos. Sem teatro metodológico, sem documento inflado para parecer importante.
+        - list [ref=e230]:
+          - listitem [ref=e231]:
+            - generic [ref=e232]: "01"
+            - heading "Enquadrar" [level=3] [ref=e233]
+            - paragraph [ref=e234]: Objetivo, prazo, documentos, atores e decisão necessária.
+          - listitem [ref=e235]:
+            - generic [ref=e236]: "02"
+            - heading "Investigar" [level=3] [ref=e237]
+            - paragraph [ref=e238]: Edital, contrato, projetos, orçamento, registros e fatos relevantes.
+          - listitem [ref=e239]:
+            - generic [ref=e240]: "03"
+            - heading "Estruturar" [level=3] [ref=e241]
+            - paragraph [ref=e242]: Tese, cenários, cálculos, riscos e plano de ação.
+          - listitem [ref=e243]:
+            - generic [ref=e244]: "04"
+            - heading "Implementar" [level=3] [ref=e245]
+            - paragraph [ref=e246]: Entrega, alinhamento com a equipe e acompanhamento quando necessário.
+    - generic [ref=e248]:
+      - generic [ref=e249]:
+        - generic [ref=e250]:
+          - paragraph [ref=e251]: Biblioteca técnica CONFENGE
+          - heading "Conteúdo que começa onde a decisão fica cara." [level=2] [ref=e252]
+        - paragraph [ref=e253]: A biblioteca conecta oito páginas-pilar a 120 guias sobre problemas reais de licitação e execução contratual.
+      - generic [ref=e254]:
+        - generic [ref=e255]:
+          - link "Medições e pagamentos Medições, glosas e pagamentos em obras públicas Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido. 15 guias" [ref=e256] [cursor=pointer]:
+            - /url: /medicoes-glosas-obras-publicas/
+            - generic [ref=e257]: Medições e pagamentos
+            - heading "Medições, glosas e pagamentos em obras públicas" [level=3] [ref=e258]
+            - paragraph [ref=e259]: Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido.
+            - generic [ref=e260]: 15 guias
+          - link "Aditivos e serviços extras Aditivos e serviços não previstos em obras públicas Alterações quantitativas e qualitativas, erros de projeto, itens novos, serviços extracontratuais e limites que precisam ser analisados antes de a obra absorver custo sem cobertura. 15 guias" [ref=e263] [cursor=pointer]:
+            - /url: /aditivos-obras-publicas/
+            - generic [ref=e264]: Aditivos e serviços extras
+            - heading "Aditivos e serviços não previstos em obras públicas" [level=3] [ref=e265]
+            - paragraph [ref=e266]: Alterações quantitativas e qualitativas, erros de projeto, itens novos, serviços extracontratuais e limites que precisam ser analisados antes de a obra absorver custo sem cobertura.
+            - generic [ref=e267]: 15 guias
+          - link "Reequilíbrio contratual Reequilíbrio econômico-financeiro de contratos de obras Reajuste, revisão, matriz de riscos, fatos extraordinários, custos indiretos prolongados e memórias que demonstram quando a equação original deixou de existir. 15 guias" [ref=e270] [cursor=pointer]:
+            - /url: /reequilibrio-obras-publicas/
+            - generic [ref=e271]: Reequilíbrio contratual
+            - heading "Reequilíbrio econômico-financeiro de contratos de obras" [level=3] [ref=e272]
+            - paragraph [ref=e273]: Reajuste, revisão, matriz de riscos, fatos extraordinários, custos indiretos prolongados e memórias que demonstram quando a equação original deixou de existir.
+            - generic [ref=e274]: 15 guias
+          - link "Defesa e sanções Defesa técnica, sanções e extinção de contratos públicos Notificações, multas, impedimento de licitar, rescisão, subcontratação, habilitação e defesas que precisam separar fato, culpa, proporcionalidade e capacidade de recuperação. 15 guias" [ref=e277] [cursor=pointer]:
+            - /url: /defesa-tecnica-contratos-publicos/
+            - generic [ref=e278]: Defesa e sanções
+            - heading "Defesa técnica, sanções e extinção de contratos públicos" [level=3] [ref=e279]
+            - paragraph [ref=e280]: Notificações, multas, impedimento de licitar, rescisão, subcontratação, habilitação e defesas que precisam separar fato, culpa, proporcionalidade e capacidade de recuperação.
+            - generic [ref=e281]: 15 guias
+          - link "Gestão contratual Gestão contratual e pleitos em obras públicas Diário de obra, comunicações, controle de mudanças, indicadores e auditorias periódicas para encontrar desvios antes que virem perda financeira ou defesa tardia. 15 guias" [ref=e284] [cursor=pointer]:
+            - /url: /acompanhamento-contratos-obras/
+            - generic [ref=e285]: Gestão contratual
+            - heading "Gestão contratual e pleitos em obras públicas" [level=3] [ref=e286]
+            - paragraph [ref=e287]: Diário de obra, comunicações, controle de mudanças, indicadores e auditorias periódicas para encontrar desvios antes que virem perda financeira ou defesa tardia.
+            - generic [ref=e288]: 15 guias
+          - 'link "Atrasos e prorrogações Atrasos, prorrogação e paralisação em obras públicas Prorrogação, suspensão, chuva, projeto atrasado, frentes indisponíveis, interferências e aceleração exigida: o prazo só se protege quando causa e impacto são registrados em tempo real. 15 guias" [ref=e291] [cursor=pointer]':
+            - /url: /atrasos-prorrogacao-obras-publicas/
+            - generic [ref=e292]: Atrasos e prorrogações
+            - heading "Atrasos, prorrogação e paralisação em obras públicas" [level=3] [ref=e293]
+            - paragraph [ref=e294]: "Prorrogação, suspensão, chuva, projeto atrasado, frentes indisponíveis, interferências e aceleração exigida: o prazo só se protege quando causa e impacto são registrados em tempo real."
+            - generic [ref=e295]: 15 guias
+          - link "Edital e proposta Diagnóstico pré-licitação para obras públicas Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim. 15 guias" [ref=e298] [cursor=pointer]:
+            - /url: /diagnostico-pre-licitacao/
+            - generic [ref=e299]: Edital e proposta
+            - heading "Diagnóstico pré-licitação para obras públicas" [level=3] [ref=e300]
+            - paragraph [ref=e301]: Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim.
+            - generic [ref=e302]: 15 guias
+          - link "Orçamento e BDI Auditoria de orçamento, BDI, SINAPI e preço BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha. 15 guias" [ref=e305] [cursor=pointer]:
+            - /url: /auditoria-orcamento-licitacao/
+            - generic [ref=e306]: Orçamento e BDI
+            - heading "Auditoria de orçamento, BDI, SINAPI e preço" [level=3] [ref=e307]
+            - paragraph [ref=e308]: BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha.
+            - generic [ref=e309]: 15 guias
+        - complementary [ref=e312]:
+          - text: Em destaque
+          - heading "Guias para começar" [level=3] [ref=e313]
+          - link "01 Atraso de pagamento permite suspender a obra pública? Medições e pagamentos" [ref=e314] [cursor=pointer]:
+            - /url: /conteudos/atraso-pagamento-contrato-publico-suspender/
+            - generic [ref=e315]: "01"
+            - generic [ref=e316]:
+              - strong [ref=e317]: Atraso de pagamento permite suspender a obra pública?
+              - generic [ref=e318]: Medições e pagamentos
+          - 'link "02 Medição de obra pública rejeitada: o que fazer nas primeiras 48 horas Medições e pagamentos" [ref=e321] [cursor=pointer]':
+            - /url: /conteudos/medicao-de-obra-publica-rejeitada/
+            - generic [ref=e322]: "02"
+            - generic [ref=e323]:
+              - strong [ref=e324]: "Medição de obra pública rejeitada: o que fazer nas primeiras 48 horas"
+              - generic [ref=e325]: Medições e pagamentos
+          - 'link "03 Limite de 25% e 50% nos aditivos: o que realmente limita a obra Aditivos e serviços extras" [ref=e328] [cursor=pointer]':
+            - /url: /conteudos/limite-aditivo-25-50-obra-publica/
+            - generic [ref=e329]: "03"
+            - generic [ref=e330]:
+              - strong [ref=e331]: "Limite de 25% e 50% nos aditivos: o que realmente limita a obra"
+              - generic [ref=e332]: Aditivos e serviços extras
+          - 'link "04 Contrato de obra pública virou prejuízo: quando cabe reequilíbrio? Reequilíbrio contratual" [ref=e335] [cursor=pointer]':
+            - /url: /conteudos/reequilibrio-economico-financeiro-obra-publica/
+            - generic [ref=e336]: "04"
+            - generic [ref=e337]:
+              - strong [ref=e338]: "Contrato de obra pública virou prejuízo: quando cabe reequilíbrio?"
+              - generic [ref=e339]: Reequilíbrio contratual
+          - 'link "05 Reajuste, repactuação e reequilíbrio: qual se aplica à obra pública? Reequilíbrio contratual" [ref=e342] [cursor=pointer]':
+            - /url: /conteudos/reajuste-repactuacao-reequilibrio-diferenca/
+            - generic [ref=e343]: "05"
+            - generic [ref=e344]:
+              - strong [ref=e345]: "Reajuste, repactuação e reequilíbrio: qual se aplica à obra pública?"
+              - generic [ref=e346]: Reequilíbrio contratual
+          - 'link "06 Aditivo qualitativo ou quantitativo: a diferença que muda o pleito Aditivos e serviços extras" [ref=e349] [cursor=pointer]':
+            - /url: /conteudos/aditivo-qualitativo-quantitativo/
+            - generic [ref=e350]: "06"
+            - generic [ref=e351]:
+              - strong [ref=e352]: "Aditivo qualitativo ou quantitativo: a diferença que muda o pleito"
+              - generic [ref=e353]: Aditivos e serviços extras
+          - link "Explorar os 120 guias" [ref=e356] [cursor=pointer]:
+            - /url: /conteudos/
+    - region [ref=e357]:
+      - generic [ref=e358]:
+        - generic [ref=e359]:
+          - paragraph [ref=e360]: Dúvidas objetivas
+          - heading "Antes da primeira conversa." [level=2] [ref=e361]
+          - paragraph [ref=e362]: Não é preciso organizar um dossiê perfeito para entrar em contato. Basta explicar a decisão, o risco ou o impasse.
+        - generic [ref=e363]:
+          - group [ref=e364]:
+            - generic "A CONFENGE atende empresas de todo o Brasil? +" [ref=e365] [cursor=pointer]
+          - group [ref=e366]:
+            - generic "Em que momento vale acionar a consultoria? +" [ref=e367] [cursor=pointer]
+          - group [ref=e368]:
+            - generic "A consultoria substitui o jurídico ou a equipe técnica? +" [ref=e369] [cursor=pointer]
+          - group [ref=e370]:
+            - generic "É possível contratar uma análise pontual? +" [ref=e371] [cursor=pointer]
+          - group [ref=e372]:
+            - generic "Quais documentos devo enviar primeiro? +" [ref=e373] [cursor=pointer]
+    - region [ref=e374]:
+      - generic [ref=e375]:
+        - generic [ref=e376]:
+          - paragraph [ref=e377]: Próximo passo
+          - heading "Qual decisão precisa ficar mais segura?" [level=2] [ref=e378]
+          - paragraph [ref=e379]: Descreva o contexto em poucas linhas. O primeiro contato serve para entender a demanda, os documentos existentes e o formato de apoio adequado.
+          - generic [ref=e380]:
+            - link "WhatsApp (48) 98834-4559" [ref=e381] [cursor=pointer]:
+              - /url: https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.
+              - generic [ref=e384]:
+                - generic [ref=e385]: WhatsApp
+                - text: (48) 98834-4559
+            - link "E-mail tiago.sasaki@confenge.com.br" [ref=e386] [cursor=pointer]:
+              - /url: mailto:tiago.sasaki@confenge.com.br
+              - generic [ref=e389]:
+                - generic [ref=e390]: E-mail
+                - text: tiago.sasaki@confenge.com.br
+            - generic [ref=e394]:
+              - generic [ref=e395]: Atendimento
+              - text: Todo o Brasil
+        - generic [ref=e396]:
+          - paragraph [ref=e397]:
+            - text: Não preencha este campo
+            - textbox "Não preencha este campo" [ref=e398]
+          - generic [ref=e399]:
+            - generic [ref=e400]:
+              - generic [ref=e401]: Nome
+              - textbox "Nome" [ref=e402]
+            - generic [ref=e403]:
+              - generic [ref=e404]: Empresa
+              - textbox "Empresa" [ref=e405]
+          - generic [ref=e406]:
+            - generic [ref=e407]:
+              - generic [ref=e408]: E-mail
+              - textbox "E-mail" [ref=e409]
+            - generic [ref=e410]:
+              - generic [ref=e411]: WhatsApp opcional
+              - textbox "WhatsApp opcional" [ref=e412]
+          - generic [ref=e413]:
+            - generic [ref=e414]: Principal necessidade
+            - combobox "Principal necessidade" [ref=e415]:
+              - option "Selecione" [disabled] [selected]
+              - option "Estratégia para licitação"
+              - option "Análise ou elaboração de proposta"
+              - option "Gestão de contrato ou obra"
+              - option "Pleito, aditivo ou reequilíbrio"
+              - option "Notificação, defesa ou interface com órgão público"
+              - option "Inteligência de dados ou automação"
+              - option "Outra demanda técnica"
+          - generic [ref=e416]:
+            - generic [ref=e417]: Contexto da demanda
+            - textbox "Contexto da demanda" [ref=e418]:
+              - /placeholder: "Ex.: edital em análise, obra em execução, divergência identificada, prazo disponível e decisão necessária."
+          - generic [ref=e419]:
+            - checkbox "Autorizo o uso destes dados para retorno sobre a solicitação, conforme a Política de Privacidade." [ref=e420]
+            - generic [ref=e421]:
+              - text: Autorizo o uso destes dados para retorno sobre a solicitação, conforme a
+              - link "Política de Privacidade" [ref=e422] [cursor=pointer]:
+                - /url: /privacidade
+              - text: .
+          - button "Enviar para análise" [ref=e423] [cursor=pointer]
+          - paragraph [ref=e426]: Sem cadastro, lista de e-mails ou compartilhamento comercial dos seus dados.
+  - contentinfo [ref=e427]:
+    - generic [ref=e428]:
+      - generic [ref=e429]:
+        - img "CONFENGE" [ref=e430]
+        - paragraph [ref=e431]: Consultoria B2G especializada em engenharia, licitações, contratos e obras públicas.
+      - generic [ref=e432]:
+        - strong [ref=e433]: Navegação
+        - link "Início" [ref=e434] [cursor=pointer]:
+          - /url: /
+        - link "Atuação" [ref=e435] [cursor=pointer]:
+          - /url: /#atuacao
+        - link "Biblioteca técnica" [ref=e436] [cursor=pointer]:
+          - /url: /conteudos/
+        - link "Especialista" [ref=e437] [cursor=pointer]:
+          - /url: /especialista/tiago-jun-sasaki/
+        - link "Contato" [ref=e438] [cursor=pointer]:
+          - /url: /#contato
+      - generic [ref=e439]:
+        - strong [ref=e440]: Temas
+        - link "Medições e pagamentos" [ref=e441] [cursor=pointer]:
+          - /url: /medicoes-glosas-obras-publicas/
+        - link "Aditivos e serviços extras" [ref=e442] [cursor=pointer]:
+          - /url: /aditivos-obras-publicas/
+        - link "Reequilíbrio contratual" [ref=e443] [cursor=pointer]:
+          - /url: /reequilibrio-obras-publicas/
+        - link "Defesa e sanções" [ref=e444] [cursor=pointer]:
+          - /url: /defesa-tecnica-contratos-publicos/
+        - link "Gestão contratual" [ref=e445] [cursor=pointer]:
+          - /url: /acompanhamento-contratos-obras/
+        - link "Atrasos e prorrogações" [ref=e446] [cursor=pointer]:
+          - /url: /atrasos-prorrogacao-obras-publicas/
+        - link "Edital e proposta" [ref=e447] [cursor=pointer]:
+          - /url: /diagnostico-pre-licitacao/
+        - link "Orçamento e BDI" [ref=e448] [cursor=pointer]:
+          - /url: /auditoria-orcamento-licitacao/
+      - generic [ref=e449]:
+        - strong [ref=e450]: Contato
+        - link "tiago.sasaki@confenge.com.br" [ref=e451] [cursor=pointer]:
+          - /url: mailto:tiago.sasaki@confenge.com.br
+        - link "(48) 98834-4559" [ref=e452] [cursor=pointer]:
+          - /url: tel:+5548988344559
+        - generic [ref=e453]: Atendimento nacional
+    - generic [ref=e454]:
+      - generic [ref=e455]: © 2026 CONFENGE. CNPJ 52.407.089/0001-09.
+      - link "Política de Privacidade" [ref=e456] [cursor=pointer]:
+        - /url: /privacidade/
+  - link "Falar com a CONFENGE pelo WhatsApp" [ref=e457] [cursor=pointer]:
+    - /url: https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.
