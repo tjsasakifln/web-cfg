@@ -159,13 +159,11 @@ See `seo/pseo-operational-result.json`.
 - SHAs aligned: web_cfg HEAD = Netlify well-known = `5e573ec…`.
 
 
+
 ## SHA alignment (verifier)
 
-| Source | SHA |
-|--------|-----|
-| git HEAD | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
-| local `/.well-known/pseo-build.json` | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
-| live production well-known | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
-| `pseo-operational-result.json` web_cfg_sha / netlify_deployed_sha | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
+Both `web_cfg_sha` and `netlify_deployed_sha` in `seo/pseo-operational-result.json` are set from live:
 
-`npm run pseo:audit:production` → ok (0 critical). Seeds HTTP 200 + index,follow.
+`https://confenge.com.br/.well-known/pseo-build.json` → `0ee4e772d48b42a3d624a4592a6b52f02b0aecda`
+
+`/.well-known/pseo-build.json` is **generated at build/deploy** (`npm run build:site` / Netlify) and gitignored so the repo does not enter a self-hash commit loop. Production always serves the SHA of the deployed commit.
