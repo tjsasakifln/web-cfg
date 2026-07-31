@@ -1,6 +1,6 @@
 {
   "period": "2026-07",
-  "recommendation_count": 20,
+  "recommendation_count": 19,
   "policy": "recommendations_only_no_auto_publish",
   "recommendations": [
     {
@@ -266,10 +266,10 @@
     {
       "page_id": "radar-edificacoes-publicas-pr",
       "problems": [
-        "indexation_blocked_quality"
+        "indexation_pending_human_review"
       ],
       "actions": [
-        "fix_data_or_copy_before_reconsidering"
+        "run review.py audit and complete checklist if quality holds"
       ],
       "auto_mutate": false,
       "metrics": {
@@ -280,16 +280,16 @@
         "cta": 0.0,
         "form_submit": 0.0,
         "qualified_contact": 0.0,
-        "status": "reject"
+        "status": "noindex"
       }
     },
     {
       "page_id": "radar-edificacoes-publicas-rs",
       "problems": [
-        "indexation_blocked_quality"
+        "indexation_quality_below_threshold"
       ],
       "actions": [
-        "fix_data_or_copy_before_reconsidering"
+        "improve sample independence and editorial substance"
       ],
       "auto_mutate": false,
       "metrics": {
@@ -300,36 +300,16 @@
         "cta": 0.0,
         "form_submit": 0.0,
         "qualified_contact": 0.0,
-        "status": "reject"
-      }
-    },
-    {
-      "page_id": "radar-edificacoes-publicas-sc",
-      "problems": [
-        "indexation_blocked_quality"
-      ],
-      "actions": [
-        "fix_data_or_copy_before_reconsidering"
-      ],
-      "auto_mutate": false,
-      "metrics": {
-        "impressions": 0.0,
-        "clicks": 0.0,
-        "ctr": 0.0,
-        "sessions": 0.0,
-        "cta": 0.0,
-        "form_submit": 0.0,
-        "qualified_contact": 0.0,
-        "status": "reject"
+        "status": "noindex"
       }
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
       "problems": [
-        "indexation_blocked_quality"
+        "indexation_quality_below_threshold"
       ],
       "actions": [
-        "fix_data_or_copy_before_reconsidering"
+        "improve sample independence and editorial substance"
       ],
       "auto_mutate": false,
       "metrics": {
@@ -340,16 +320,16 @@
         "cta": 0.0,
         "form_submit": 0.0,
         "qualified_contact": 0.0,
-        "status": "reject"
+        "status": "noindex"
       }
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
       "problems": [
-        "indexation_blocked_quality"
+        "indexation_quality_below_threshold"
       ],
       "actions": [
-        "fix_data_or_copy_before_reconsidering"
+        "improve sample independence and editorial substance"
       ],
       "auto_mutate": false,
       "metrics": {
@@ -360,16 +340,16 @@
         "cta": 0.0,
         "form_submit": 0.0,
         "qualified_contact": 0.0,
-        "status": "reject"
+        "status": "noindex"
       }
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
       "problems": [
-        "indexation_blocked_quality"
+        "indexation_quality_below_threshold"
       ],
       "actions": [
-        "fix_data_or_copy_before_reconsidering"
+        "improve sample independence and editorial substance"
       ],
       "auto_mutate": false,
       "metrics": {
@@ -380,16 +360,16 @@
         "cta": 0.0,
         "form_submit": 0.0,
         "qualified_contact": 0.0,
-        "status": "reject"
+        "status": "noindex"
       }
     },
     {
       "page_id": "radar-saneamento-hidraulica-sc",
       "problems": [
-        "indexation_blocked_quality"
+        "indexation_quality_below_threshold"
       ],
       "actions": [
-        "fix_data_or_copy_before_reconsidering"
+        "improve sample independence and editorial substance"
       ],
       "auto_mutate": false,
       "metrics": {
@@ -400,7 +380,7 @@
         "cta": 0.0,
         "form_submit": 0.0,
         "qualified_contact": 0.0,
-        "status": "reject"
+        "status": "noindex"
       }
     }
   ]

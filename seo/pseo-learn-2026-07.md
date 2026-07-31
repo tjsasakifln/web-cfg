@@ -55,29 +55,25 @@ Somente recomendações — sem mutação automática de publish.
 - actions: fix_data_or_copy_before_reconsidering
 
 ## `radar-edificacoes-publicas-pr`
-- problems: indexation_blocked_quality
-- actions: fix_data_or_copy_before_reconsidering
+- problems: indexation_pending_human_review
+- actions: run review.py audit and complete checklist if quality holds
 
 ## `radar-edificacoes-publicas-rs`
-- problems: indexation_blocked_quality
-- actions: fix_data_or_copy_before_reconsidering
-
-## `radar-edificacoes-publicas-sc`
-- problems: indexation_blocked_quality
-- actions: fix_data_or_copy_before_reconsidering
+- problems: indexation_quality_below_threshold
+- actions: improve sample independence and editorial substance
 
 ## `radar-pavimentacao-infraestrutura-viaria-pr`
-- problems: indexation_blocked_quality
-- actions: fix_data_or_copy_before_reconsidering
+- problems: indexation_quality_below_threshold
+- actions: improve sample independence and editorial substance
 
 ## `radar-pavimentacao-infraestrutura-viaria-rs`
-- problems: indexation_blocked_quality
-- actions: fix_data_or_copy_before_reconsidering
+- problems: indexation_quality_below_threshold
+- actions: improve sample independence and editorial substance
 
 ## `radar-pavimentacao-infraestrutura-viaria-sc`
-- problems: indexation_blocked_quality
-- actions: fix_data_or_copy_before_reconsidering
+- problems: indexation_quality_below_threshold
+- actions: improve sample independence and editorial substance
 
 ## `radar-saneamento-hidraulica-sc`
-- problems: indexation_blocked_quality
-- actions: fix_data_or_copy_before_reconsidering
+- problems: indexation_quality_below_threshold
+- actions: improve sample independence and editorial substance

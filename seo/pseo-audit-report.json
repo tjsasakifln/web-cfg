@@ -13,14 +13,19 @@
       "publish_count": 0,
       "noindex_count": 6,
       "reject_count": 13,
-      "dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
       "editorial_audit": {
         "ok": true,
         "publish_fail_count": 0,
         "p0_issue_count": 14
       }
     },
-    "determinism": null,
+    "determinism": {
+      "first_hash": "46ce64323ff8de9a8fc446fa44b787077bd290a4b81de86f550ece5b5c28ded3",
+      "second_hash": "46ce64323ff8de9a8fc446fa44b787077bd290a4b81de86f550ece5b5c28ded3",
+      "deterministic": true,
+      "page_count": 26
+    },
     "tracking": {
       "events_declared_or_handled": [
         "pseo_cta_click",
@@ -329,7 +334,7 @@
           "human_review": "NEEDS_DATA_FIX",
           "decision": "pass",
           "sample": {
-            "observation_count": 11
+            "observation_count": 10
           },
           "independence": {},
           "duplication": {},
