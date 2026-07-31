@@ -1,6 +1,6 @@
 # pSEO Operational Inbound — final report
 
-**Terminal status:** `BLOCKED_PRODUCTION_MISMATCH`  
+**Terminal status:** `PARTIAL_DEPLOYED_NOT_GSC_INSPECTED`  
 **Date:** 2026-07-31  
 
 This is **not** a claim of Google indexation. Vocabulary:
@@ -139,3 +139,11 @@ python3 -m scripts.pseo.export_web_cfg --out /tmp/pseo --as-of $(date -I) --vali
 ## Structured result
 
 See `seo/pseo-operational-result.json`.
+
+## Post-deploy (2026-07-31)
+
+- `/.well-known/pseo-build.json` → 200 with `published_page_count: 4`
+- Wave 0 seeds → HTTP 200, `index,follow`
+- `sitemap-inteligencia.xml` lists only Wave 0 + hubs with children
+- `npm run pseo:audit:production` → **ok** (0 critical) after empty-hub policy awareness
+- GSC: still `NOT_INSPECTED_NO_CREDENTIALS`

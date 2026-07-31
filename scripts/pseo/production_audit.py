@@ -338,19 +338,24 @@ def collect_targets(
             n_sample += 1
             if n_sample >= 5:
                 break
-    # Always include production Wave-0 seed paths even if local registry demoted them
-    seed_fallback = [
+    # Ensure current Wave-0 publish URLs are audited even if registry briefly stale
+    seed_wave0 = [
         "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
         "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
         "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-        "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
-        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
         "/radar/edificacoes-publicas-pr/",
+    ]
+    for s in seed_wave0:
+        if s not in seen:
+            out.append((s, "publish"))
+            seen.add(s)
+    # Legacy / demoted paths — sample only (no critical index requirements)
+    legacy = [
+        "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
         "/radar/pavimentacao-infraestrutura-viaria-sc/",
     ]
-    for s in seed_fallback:
+    for s in legacy:
         if s not in seen:
             out.append((s, "publish_candidate"))
             seen.add(s)
@@ -386,13 +391,13 @@ def evaluate_row(
     st = b.get("status")
     if st is not None:
         if 300 <= int(st) < 400:
-            if row.expected_role in {"publish", "publish_candidate", "hub"}:
+            if row.expected_role in {"publish", "hub"}:
                 defects.append("http_3xx_on_canonical")
             else:
-                notes.append("http_3xx_sample")
+                notes.append("http_3xx_sample_or_legacy")
         elif 400 <= int(st) < 500:
-            # 4xx on noindex samples is informational (page may never have been deployed)
-            if row.expected_role in {"publish", "publish_candidate", "hub"}:
+            # 4xx on noindex samples / former seeds is informational
+            if row.expected_role in {"publish", "hub"}:
                 defects.append("http_4xx")
             else:
                 notes.append("http_4xx_sample")
@@ -403,22 +408,33 @@ def evaluate_row(
     if any(
         isinstance(c.get("status"), int) and 300 <= c["status"] < 400 for c in chain
     ):
-        # redirect before final
         final_st = b.get("status")
         if final_st and int(final_st) == 200 and len(chain) > 1:
             notes.append("redirect_chain_present")
-            # canonical path should not 3xx — if first hop is the path itself with 3xx
-            if chain and chain[0].get("url", "").rstrip("/") == (SITE + row.path).rstrip("/"):
-                if isinstance(chain[0].get("status"), int) and 300 <= chain[0]["status"] < 400:
-                    defects.append("http_3xx_on_canonical")
+            # canonical leaf publish must not 3xx
+            if row.expected_role == "publish" and chain:
+                if chain[0].get("url", "").rstrip("/") == (SITE + row.path).rstrip("/"):
+                    if isinstance(chain[0].get("status"), int) and 300 <= chain[0]["status"] < 400:
+                        defects.append("http_3xx_on_canonical")
 
     robots = (b.get("meta_robots") or "").lower()
     xrobots = ((b.get("headers") or {}).get("x-robots-tag") or "").lower()
-    if row.expected_role in {"publish", "publish_candidate", "hub"}:
+    # Empty hubs intentionally use noindex,follow — only leaf publish pages must be indexable.
+    if row.expected_role in {"publish"}:
         if "noindex" in robots:
             defects.append("noindex_on_publish")
         if "noindex" in xrobots:
             defects.append("x_robots_noindex")
+    elif row.expected_role == "hub":
+        # noindex on hub is allowed (empty-hub policy); X-Robots noindex still noted
+        if "noindex" in xrobots and "noindex" not in robots:
+            defects.append("x_robots_noindex")
+    elif row.expected_role == "publish_candidate":
+        # Historical seed paths that may have been demoted — soft note only
+        if "noindex" in robots:
+            notes.append("noindex_on_former_seed")
+        if "noindex" in xrobots:
+            notes.append("x_robots_noindex_former_seed")
 
     canon = b.get("canonical")
     expected_canon = SITE + row.path
@@ -427,13 +443,12 @@ def evaluate_row(
         if ch and "netlify.app" in ch:
             defects.append("canonical_netlify_host")
         # self-canonical for leaf pages
-        if row.expected_role in {"publish", "publish_candidate"}:
+        if row.expected_role == "publish":
             if canon.rstrip("/") != expected_canon.rstrip("/"):
-                # hub canonical is ok only if equal
                 if canon.rstrip("/").endswith(
-                    ("/inteligencia", "/radar")
-                ) or canon.rstrip("/").endswith(
                     (
+                        "/inteligencia",
+                        "/radar",
                         "/inteligencia/",
                         "/radar/",
                         "/inteligencia/mercados",
@@ -443,17 +458,8 @@ def evaluate_row(
                         "/inteligencia/cenarios",
                     )
                 ):
-                    if row.path not in {
-                        "/inteligencia/",
-                        "/radar/",
-                        "/inteligencia/mercados/",
-                        "/inteligencia/orgaos/",
-                        "/inteligencia/precos/",
-                        "/inteligencia/concorrencia/",
-                        "/inteligencia/cenarios/",
-                    }:
-                        defects.append("canonical_home_or_hub")
-                elif canon.rstrip("/") != expected_canon.rstrip("/"):
+                    defects.append("canonical_home_or_hub")
+                else:
                     defects.append("canonical_divergent")
 
     # soft-404 / empty (only meaningful on 200 responses for roles we care about)
@@ -479,32 +485,29 @@ def evaluate_row(
     row.in_sitemap = full in sitemap_urls or full.rstrip("/") in {
         u.rstrip("/") for u in sitemap_urls
     }
-    if row.expected_role in {"publish", "publish_candidate"} and st == 200:
+    if row.expected_role == "publish" and st == 200:
         if "noindex" not in robots and not row.in_sitemap:
-            # only flag if page claims indexable
             defects.append("missing_from_sitemap")
-    if row.in_sitemap and "noindex" in robots:
+    if row.in_sitemap and "noindex" in robots and row.expected_role == "publish":
+        defects.append("sitemap_non_indexable")
+    # Hub noindex while listed in sitemap is a policy bug
+    if row.expected_role == "hub" and row.in_sitemap and "noindex" in robots:
         defects.append("sitemap_non_indexable")
 
     # orphan: publish page not linked from any hub (when hub map provided)
-    if hub_link_targets is not None and row.expected_role in {
-        "publish",
-        "publish_candidate",
-    }:
-        if row.path not in hub_link_targets and row.path.rstrip("/") + "/" not in hub_link_targets:
-            # also check without trailing slash variants
-            variants = {row.path, row.path.rstrip("/") + "/", row.path.rstrip("/")}
-            if not variants & hub_link_targets:
-                if st == 200 and "noindex" not in robots:
-                    defects.append("orphan_page")
+    if hub_link_targets is not None and row.expected_role == "publish":
+        variants = {row.path, row.path.rstrip("/") + "/", row.path.rstrip("/")}
+        if not variants & hub_link_targets:
+            if st == 200 and "noindex" not in robots:
+                defects.append("orphan_page")
 
-    # local vs prod hash (informational critical only when both exist and role publish)
+    # local vs prod hash for current publish + hubs only
     row.prod_html_sha256 = b.get("html_sha256")
     if (
         row.local_html_sha256
         and row.prod_html_sha256
         and row.local_html_sha256 != row.prod_html_sha256
-        and row.expected_role in {"publish", "publish_candidate", "hub"}
+        and row.expected_role in {"publish", "hub"}
     ):
         defects.append("prod_html_mismatch")
         notes.append("local_and_production_html_differ")

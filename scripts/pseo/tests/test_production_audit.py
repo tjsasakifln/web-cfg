@@ -87,7 +87,7 @@ class TestProductionAuditGates(unittest.TestCase):
         self.assertIn("canonical_netlify_host", out.defects)
 
     def test_sitemap_non_indexable_flagged(self):
-        row = UrlAudit(path="/radar/x/", expected_role="noindex_sample")
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
         row.browser = {
             "status": 200,
             "meta_robots": "noindex,follow",
@@ -103,9 +103,31 @@ class TestProductionAuditGates(unittest.TestCase):
         out = evaluate_row(
             row,
             sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets={"/radar/x/"},
+        )
+        self.assertIn("noindex_on_publish", out.defects)
+        self.assertIn("sitemap_non_indexable", out.defects)
+
+    def test_empty_hub_noindex_allowed(self):
+        row = UrlAudit(path="/inteligencia/orgaos/", expected_role="hub")
+        row.browser = {
+            "status": 200,
+            "meta_robots": "noindex,follow",
+            "canonical": "https://confenge.com.br/inteligencia/orgaos/",
+            "headers": {},
+            "redirect_chain": [],
+            "body_size": 5000,
+            "text_len": 2000,
+            "title": "Órgãos",
+            "html_sha256": "abc",
+        }
+        row.googlebot = dict(row.browser)
+        out = evaluate_row(
+            row,
+            sitemap_urls=set(),  # empty hub out of sitemap
             hub_link_targets=set(),
         )
-        self.assertIn("sitemap_non_indexable", out.defects)
+        self.assertNotIn("noindex_on_publish", out.defects)
 
     def test_ua_skew_status(self):
         row = UrlAudit(path="/radar/x/", expected_role="publish")

@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "web_cfg_sha": "5340910952a4d9b0cb66875ae2c8eda5a78eebd7",
+  "web_cfg_sha": "affadab43490c0183e5f056c2aa17373458a0363",
   "manifest_public": ".well-known/pseo-build.json",
   "build_summary": {
     "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
