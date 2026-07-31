@@ -5,7 +5,7 @@ Date: 2026-07-31
 ## SHAs
 | Repo | Branch | SHA |
 |---|---|---|
-| web-cfg | main | `eb7da3af6991fcfeda25ff887fbaa68014f382c4` |
+| web-cfg | main | `13937505742e4c312afa3f3d9c4e6a740c1f6936` |
 | extra-cli | feat/pseo-semantic-sota | `66e78218e2ecae0b856fd5085c812598cf86e187` |
 
 ## Snapshot
