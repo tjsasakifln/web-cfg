@@ -1,49 +1,42 @@
-# Delivery summary — pSEO semantic SOTA
+# Delivery summary — pSEO semantic SOTA (reexport)
+
 Date: 2026-07-31
 
 ## HEADs
-- web-cfg: `ab8e1539f971afb93c15aeffc8f0e81bf02f0594` (main)
-- extra-cli worktree feat/pseo-semantic-sota: `b8b6c81b10fbb61ebc82a020996680c573f63f32`
+- web-cfg: `a3764b46e9e1b88de6b364dc1386b65b4d9a2a68` (main)
+- extra-cli: `07a55982858777c89b3b2f4311446b24c1f988c8` (feat/pseo-semantic-sota @ worktree `.worktrees/pseo-sota`)
 
-## Containment
-- All 8 previously APPROVED/publish pages revogadas (NEEDS_DATA_FIX / NEEDS_CONTENT_FIX).
-- After semantic gates: **publish_count = 0** (all quality-ineligible pages are `reject`).
-- Sitemap de inteligência: apenas hubs (sem as oito URLs).
+## Snapshot
+- dataset_hash: `cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad`
+- data_as_of: 2026-07-31
+- classified_aec_contracts: 214 (from 11931 raw; reajustes excluded as non-primary)
+- open_bids after filter: 36
+- agencies: 1 · prices: 2 · opportunities: 6 · markets: 4
 
-## Decisões finais (oito páginas)
-- `agency-88830609`: **reject** / NEEDS_DATA_FIX — agency_name_ingestion_prefix, suppliers<3, temporal_span_days<180, max_single_day_share>0.70
-- `price-manutencao-predial-engenharia-rs-manutencao-predial`: **reject** / NEEDS_DATA_FIX — buyers<3, temporal_span_days<90, max_buyer_share>0.60
-- `price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo`: **reject** / NEEDS_DATA_FIX — obs<15, primary_contracts<15, temporal_span_days<90
-- `radar-edificacoes-publicas-pr`: **reject** / NEEDS_DATA_FIX — contract_url_as_opportunity=7, zero_used_for_missing_value=1
-- `radar-pavimentacao-infraestrutura-viaria-sc`: **reject** / NEEDS_DATA_FIX — duplicate_items=2, duplicate_rate>0, contract_url_as_opportunity=4
-- `prob-orcamento-edital`: **reject** / NEEDS_CONTENT_FIX — no_direct_budget_edital_evidence, no_claim_specific_evidence
-- `prob-sinapi-sicro`: **reject** / NEEDS_CONTENT_FIX — no_direct_sinapi_sicro_evidence, no_claim_specific_evidence
-- `prob-aditivos-margem`: **reject** / NEEDS_CONTENT_FIX — no_direct_aditivo_evidence, no_claim_specific_evidence
+## Contenção + reexport
+- Aprovações antigas revogadas; **publish=0**
+- Caxias: 49→**36** contratos primários; nome **Prefeitura Municipal de Caxias do Sul** (sem MRS-)
+- Radars: sem `/app/contratos/`, sem R$ 0,00; SC Indaial deduped (7→5)
+- Labels: Paralelepípedo / Piauí / Manutenção Predial
 
-## Antes × depois
-| Item | Antes | Depois |
-|---|---|---|
-| Páginas publish indexáveis | 8 | **0** |
-| Score compensa falha semântica | sim (audit verde) | **não** (gates obrigatórios) |
-| Reajuste como contrato primário | possível | **bloqueado no produtor** |
-| Link /app/contratos/ em radar | presente | **gate reject** |
-| R$ 0,00 valor ausente | presente | **gate + money_or_ni** |
-| MRS- prefixo | visível | **humanize + gate** |
-| evidence_count genérico | sustentava cenário | **reject sem evidência direta** |
-| Bulk auto-approve | risco | **checklist obrigatório + audit PAGE_ID** |
-| Editorial audit | ausente | **seo/pseo-editorial-report.*** |
-| Learn loop | docs only | **scripts/pseo/learn.py + metrics/** |
+## Decisões (oito)
+| page_id | status | human_review | notes |
+|---|---|---|---|
+| agency-88830609 | reject | NEEDS_DATA_FIX | 1 fornecedor, span 0d, concentração 100% |
+| price-manutenção RS | reject | NEEDS_DATA_FIX | 1 buyer/supplier, span 0d |
+| price-paralelepípedo PI | reject | NEEDS_DATA_FIX | 12 obs < 15 |
+| radar-edif-PR | **noindex** | NEEDS_DATA_FIX | quality-eligible após dedup; aguarda review humana |
+| radar-pav-SC | **noindex** | NEEDS_DATA_FIX | quality-eligible após dedup; aguarda review humana |
+| 3 cenários | reject | NEEDS_CONTENT_FIX | sem evidência claim-específica |
 
-## Testes
-- extra-cli: `pytest tests/pseo` → **51 passed**
-- web-cfg: `npm run pseo:test` → **23 passed**
-- web-cfg: `npm run pseo:validate` → ok (0 publish)
-- web-cfg: `npm run test:analytics` → ANALYTICS_UNIT_OK
-- web-cfg: `npm run validate:seo` → VALIDATION_OK
+## Verificação
+- extra-cli pytest tests/pseo: 51 passed
+- web-cfg pseo:test: 23 passed
+- pseo:validate: ok (0 publish, editorial publish_fail=0)
+- Dataset/breadcrumb: humanizados; metodologia sem `— a —`
 
-## Pendências reais
-- Reexport completo do datalake (DB) com a nova identity layer para regenerar snapshot com métricas de independência nativas (hoje os gates já rejeitam no consumidor a partir do snapshot legado).
-- Playwright mobile/desktop: não executado end-to-end neste ambiente (fallback: unit + editorial_audit + HTML gerado).
-- Deploy Netlify: **não executar** enquanto zero páginas publish (estado desejado). Quando houver página aprovável individualmente, deploy manual com credencial Netlify.
-- Breadcrumb/slug de URL ainda usa path histórico `mrs-prefeitura-...` (identificador de URL estável); display humanizado no título/H1.
-- Páginas cenário: manter reject/consolidar até evidência claim-específica no datalake.
+## Pendências
+- Radars PR/SC quality-eligible mas **não aprovados** (sem bulk; checklist individual)
+- Snapshot source_commit no manifest ainda aponta export run em b8b6c81; código tip é 07a55982 (reexport opcional para alinhar SHA)
+- Playwright e2e não rodado neste ambiente
+- Deploy: não (publish=0 é o estado correto)
