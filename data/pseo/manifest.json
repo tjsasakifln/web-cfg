@@ -4,9 +4,9 @@
     "archetypes.json": "1e5da468756f8fc628bf0fe446640ba1a31e4d4aa78de9e84331acbcc559891b",
     "competition.json": "46c8d92e3f3dbd31daa8709b36152285595b6559980db15162141922ff016ac9",
     "icp_methodology.json": "3536db863151354966dd142461bd2b83865a0610d7bc02e86d46fa9d69ecce1a",
-    "markets.json": "07f11a6b0a9e5d0b54c49d4b4d6d481e1e2ad15199778a011531a87f817e651b",
+    "markets.json": "37fe11b136af4e1acbab50d68b79b1fbddeea53837e148cfd0f7bfd5f866096f",
     "opportunities.json": "cd6f9df18999a7ed9823cc1494182646eb313662151c190c924d61fcd601ca00",
-    "prices.json": "a5b30e43cab3a6293961260587d158c62f687420c31137fa724578e7aa1099ca",
+    "prices.json": "fd6290093056cebf03215ebdd5d722817a72a82cd7266030783d707aa263f31c",
     "problem_service.json": "c90dac62f1b1ab2210d0d89bba3dd399f2f74538f36f115f0a6c76ec92584917",
     "schema.json": "248523cee70cbdafc14d4488fadb0edbcc427d4e7a77398c3cb59e7a9e4465b2"
   },
@@ -42,7 +42,7 @@
     "sc_public_entities": 2085
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+  "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
   "denominators": {
     "aec_confirmed_bids": 355,
     "aec_confirmed_contracts": 214,
@@ -75,7 +75,7 @@
     "data_as_of": "2026-07-31",
     "data_period_end": "2026-10-07",
     "data_period_start": "2024-04-19",
-    "generated_at": "2026-07-31T15:32:04Z",
+    "generated_at": "2026-07-31T15:38:20Z",
     "max_age_days_policy": 180,
     "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
   },
@@ -95,7 +95,7 @@
       "policy_warning_days": 30
     }
   },
-  "generated_at": "2026-07-31T15:32:04Z",
+  "generated_at": "2026-07-31T15:38:20Z",
   "horizon": {
     "period_end": "2026-10-07",
     "period_start": "2024-04-19"
@@ -120,9 +120,9 @@
   },
   "schema_version": "1.1.0",
   "source_branch": "feat/pseo-semantic-sota",
-  "source_commit_sha": "b8b6c81b10fbb61ebc82a020996680c573f63f32",
+  "source_commit_sha": "66e78218e2ecae0b856fd5085c812598cf86e187",
   "source_repository": "extra-cli",
-  "source_run_id": "pseo-20260731T153204Z-56117a1f",
+  "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
   "sources": [
     {
       "role": "read_only_aggregate",

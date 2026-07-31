@@ -3,7 +3,7 @@
   "generated_from": "data/pseo/registry.json",
   "page_count": 19,
   "publish_fail_count": 0,
-  "p0_issue_count": 42,
+  "p0_issue_count": 14,
   "pages": [
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
@@ -30,20 +30,7 @@
         "intent": "mapa_mercado"
       },
       "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "pavimentacao-infraestrutura-viaria"
-        },
-        {
-          "code": "missing_accents",
-          "severity": "P1",
-          "message": "Termo técnico sem acentuação editorial",
-          "evidence": "pavimentacao"
-        }
-      ]
+      "issues": []
     },
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
@@ -71,12 +58,6 @@
       },
       "approval_recommendation": "reject_or_noindex",
       "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "pavimentacao-infraestrutura-viaria"
-        },
         {
           "code": "missing_accents",
           "severity": "P1",
@@ -110,20 +91,7 @@
         "intent": "mapa_mercado"
       },
       "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "edificacoes-publicas"
-        },
-        {
-          "code": "missing_accents",
-          "severity": "P1",
-          "message": "Termo técnico sem acentuação editorial",
-          "evidence": "edificacoes"
-        }
-      ]
+      "issues": []
     },
     {
       "page_id": "market-edificacoes-publicas-rs",
@@ -150,20 +118,7 @@
         "intent": "mapa_mercado"
       },
       "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "edificacoes-publicas"
-        },
-        {
-          "code": "missing_accents",
-          "severity": "P1",
-          "message": "Termo técnico sem acentuação editorial",
-          "evidence": "edificacoes"
-        }
-      ]
+      "issues": []
     },
     {
       "page_id": "agency-88830609",
@@ -232,12 +187,6 @@
       "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "manutencao-predial-engenharia"
-        },
-        {
           "code": "sample_concentration",
           "severity": "P0",
           "message": "Amostra concentrada/insuficiente: buyers<3",
@@ -283,12 +232,6 @@
       },
       "approval_recommendation": "reject_or_noindex",
       "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "pavimentacao-infraestrutura-viaria"
-        },
         {
           "code": "missing_accents",
           "severity": "P1",
@@ -364,7 +307,7 @@
       "page_type": "radar",
       "status": "noindex",
       "human_review": "NEEDS_DATA_FIX",
-      "decision": "fail_soft",
+      "decision": "pass",
       "sample": {
         "observation_count": 5
       },
@@ -382,21 +325,8 @@
         "label": "Analisar este edital antes da proposta",
         "intent": "analisar_edital"
       },
-      "approval_recommendation": "keep_noindex",
-      "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "pavimentacao-infraestrutura-viaria"
-        },
-        {
-          "code": "missing_accents",
-          "severity": "P1",
-          "message": "Termo técnico sem acentuação editorial",
-          "evidence": "pavimentacao"
-        }
-      ]
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": []
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
@@ -485,7 +415,7 @@
       "page_type": "radar",
       "status": "noindex",
       "human_review": "PENDING",
-      "decision": "fail_soft",
+      "decision": "pass",
       "sample": {
         "observation_count": 3
       },
@@ -503,21 +433,8 @@
         "label": "Analisar este edital antes da proposta",
         "intent": "analisar_edital"
       },
-      "approval_recommendation": "keep_noindex",
-      "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "edificacoes-publicas"
-        },
-        {
-          "code": "missing_accents",
-          "severity": "P1",
-          "message": "Termo técnico sem acentuação editorial",
-          "evidence": "edificacoes"
-        }
-      ]
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": []
     },
     {
       "page_id": "prob-orcamento-edital",
@@ -525,7 +442,7 @@
       "page_type": "problem_service",
       "status": "reject",
       "human_review": "NEEDS_CONTENT_FIX",
-      "decision": "fail_soft",
+      "decision": "pass",
       "sample": {
         "observation_count": 48
       },
@@ -544,7 +461,7 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "keep_noindex",
+      "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
           "code": "claim_without_evidence",
@@ -557,30 +474,6 @@
           "severity": "P0",
           "message": "no_claim_specific_evidence",
           "evidence": "no_claim_specific_evidence"
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
-          "evidence": "Conhecer a experiência Serviço Auditoria Orcamento Licitacao Consultoria B2G especializada em engenh"
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-medicao-glosa",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-aditivos-margem",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-reequilibrio",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
         }
       ]
     },
@@ -590,7 +483,7 @@
       "page_type": "problem_service",
       "status": "reject",
       "human_review": "NEEDS_CONTENT_FIX",
-      "decision": "fail_soft",
+      "decision": "pass",
       "sample": {
         "observation_count": 48
       },
@@ -609,7 +502,7 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "keep_noindex",
+      "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
           "code": "claim_without_evidence",
@@ -622,30 +515,6 @@
           "severity": "P0",
           "message": "no_claim_specific_evidence",
           "evidence": "no_claim_specific_evidence"
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-orcamento-edital",
-          "evidence": "Conhecer a experiência Serviço Auditoria Orcamento Licitacao Consultoria B2G especializada em engenh"
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-medicao-glosa",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-aditivos-margem",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-reequilibrio",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
         }
       ]
     },
@@ -655,7 +524,7 @@
       "page_type": "problem_service",
       "status": "reject",
       "human_review": "PENDING",
-      "decision": "fail_soft",
+      "decision": "pass",
       "sample": {
         "observation_count": 22
       },
@@ -673,37 +542,13 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "keep_noindex",
+      "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
           "code": "claim_without_evidence",
           "severity": "P0",
           "message": "no_claim_specific_evidence",
           "evidence": "no_claim_specific_evidence"
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-orcamento-edital",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-aditivos-margem",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-reequilibrio",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
         }
       ]
     },
@@ -713,7 +558,7 @@
       "page_type": "problem_service",
       "status": "reject",
       "human_review": "NEEDS_CONTENT_FIX",
-      "decision": "fail_soft",
+      "decision": "pass",
       "sample": {
         "observation_count": 48
       },
@@ -731,7 +576,7 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "keep_noindex",
+      "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
           "code": "claim_without_evidence",
@@ -744,30 +589,6 @@
           "severity": "P0",
           "message": "no_claim_specific_evidence",
           "evidence": "no_claim_specific_evidence"
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-orcamento-edital",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-medicao-glosa",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-reequilibrio",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
         }
       ]
     },
@@ -777,7 +598,7 @@
       "page_type": "problem_service",
       "status": "reject",
       "human_review": "PENDING",
-      "decision": "fail_soft",
+      "decision": "pass",
       "sample": {
         "observation_count": 27
       },
@@ -796,37 +617,13 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "keep_noindex",
+      "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
           "code": "claim_without_evidence",
           "severity": "P0",
           "message": "no_claim_specific_evidence",
           "evidence": "no_claim_specific_evidence"
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-orcamento-edital",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-medicao-glosa",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
-        },
-        {
-          "code": "generic_repeated_blocks",
-          "severity": "P0",
-          "message": "Blocos genéricos repetidos com prob-aditivos-margem",
-          "evidence": "Autor e responsável técnico pelo conteúdo Engº Tiago Sasaki Engenheiro Civil formado pela EESC-USP, "
         }
       ]
     }

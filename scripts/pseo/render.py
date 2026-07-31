@@ -25,6 +25,44 @@ from scripts.pseo.html_shell import (
 from scripts.pseo.score import Candidate
 
 
+def _scrub_criteria(items: list | None) -> list[str]:
+    out=[]
+    for raw in items or []:
+        s=str(raw)
+        if "archetype=" in s or re.search(r"\b[a-z]+(?:-[a-z]+)+\b", s) and "http" not in s and " " not in s.split("=")[0]:
+            # drop pure internal keys
+            if s.startswith("archetype="):
+                continue
+            s=re.sub(
+                r"\b(pavimentacao-infraestrutura-viaria|edificacoes-publicas|manutencao-predial-engenharia|climatizacao-instalacoes|saneamento-hidraulica)\b",
+                "segmento de engenharia",
+                s,
+            )
+        s=s.replace("typology=", "tipologia: ").replace("scope=", "escopo: ").replace("nature=", "natureza: ")
+        s=s.replace("manutencao", "manutenção").replace("paralelepipedo", "paralelepípedo")
+        s=s.replace("somente aec_confirmed", "somente objetos AEC confirmados")
+        s=s.replace("comparison_confidence>=", "confiança ≥ ")
+        s=re.sub(r"^n>=(\d+)", r"mínimo de \1 observações", s)
+        out.append(s)
+    return out
+
+def _scrub_limitations(items: list | None) -> list[str]:
+    """Never show internal archetype IDs in visitor-facing limitations."""
+    out = []
+    for raw in items or []:
+        s = str(raw)
+        s = re.sub(
+            r"\b(pavimentacao-infraestrutura-viaria|edificacoes-publicas|"
+            r"manutencao-predial-engenharia|climatizacao-instalacoes|saneamento-hidraulica)\b",
+            "deste segmento",
+            s,
+        )
+        s = re.sub(r"arquétipo primário\s+deste segmento", "segmento primário", s, flags=re.I)
+        out.append(s)
+    return out
+
+
+
 def humanize_agency(name: str | None) -> str:
     if not name:
         return ""
@@ -241,7 +279,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     "objetos compatíveis, riscos de planilha e roteiro de abordagem — sem ranking proprietário público.",
 )}
 {cta_block(meta, c.cta_label, wa, f"Mercado {m.get('segment')} {m.get('region')}")}
-{methodology_block(m.get("period_start"), m.get("period_end"), m.get("sources") or [], m.get("limitations") or [])}
+{methodology_block(m.get("period_start"), m.get("period_end"), m.get("sources") or [], _scrub_limitations(m.get("limitations")))}
 {author_box()}
 {related}
 </article>
@@ -425,7 +463,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     "riscos de edital e preparação documental da proposta.",
 )}
 {cta_block(meta, c.cta_label, wa, f"Órgão {agency_display}")}
-{methodology_block(a.get("period_start"), a.get("period_end"), a.get("sources") or [], a.get("limitations") or [])}
+{methodology_block(a.get("period_start"), a.get("period_end"), a.get("sources") or [], _scrub_limitations(a.get("limitations")))}
 {author_box()}
 {_related_section(c.related_urls)}
 </article>
@@ -545,8 +583,8 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
                 f'· não inventamos URL</small></li>'
             )
     example_links = "".join(example_link_items)
-    inc = "".join(f"<li>{e(x)}</li>" for x in (p.get("inclusion_criteria") or []))
-    exc = "".join(f"<li>{e(x)}</li>" for x in (p.get("exclusion_criteria") or []))
+    inc = "".join(f"<li>{e(x)}</li>" for x in _scrub_criteria(p.get("inclusion_criteria")))
+    exc = "".join(f"<li>{e(x)}</li>" for x in _scrub_criteria(p.get("exclusion_criteria")))
     crumbs = [
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
@@ -587,7 +625,7 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
     "Validamos se o preço de referência, a planilha e o deságio cabem no seu regime tributário e na obra real.",
 )}
 {cta_block(meta, c.cta_label, wa, f"Preço {p.get('object_label')} {p.get('region')}")}
-{methodology_block(p.get("period_start"), p.get("period_end"), p.get("sources") or [], p.get("limitations") or [])}
+{methodology_block(p.get("period_start"), p.get("period_end"), p.get("sources") or [], _scrub_limitations(p.get("limitations")))}
 {author_box()}
 {_related_section(c.related_urls)}
 </article>
@@ -1003,12 +1041,54 @@ sinal empírico direto no datalake.</p></section>
     )
 
 
+def _human_path_label(url: str) -> str:
+    """Editorial label from path — never expose raw multi-hyphen taxonomy IDs."""
+    parts = [p for p in (url or "").strip("/").split("/") if p]
+    if not parts:
+        return "Página relacionada"
+    last = parts[-1]
+    # Map known hubs
+    hubs = {
+        "inteligencia": "Inteligência",
+        "mercados": "Mercados",
+        "orgaos": "Órgãos",
+        "precos": "Valores contratuais",
+        "concorrencia": "Concorrência",
+        "cenarios": "Cenários",
+        "radar": "Radar",
+        "conteudos": "Conteúdos",
+    }
+    if last in hubs:
+        return hubs[last]
+    # Humanize last segment; drop archetype-id looking middle chunks
+    words = last.replace("-", " ").strip()
+    words = (
+        words.replace("pavimentacao infraestrutura viaria", "pavimentação e infraestrutura viária")
+        .replace("edificacoes publicas", "edificações públicas")
+        .replace("manutencao predial engenharia", "manutenção predial")
+        .replace("manutencao predial", "manutenção predial")
+        .replace("paralelepipedo", "paralelepípedo")
+        .replace("climatizacao instalacoes", "climatização e instalações")
+        .replace("saneamento hidraulica", "saneamento e hidráulica")
+    )
+    # Title-case carefully
+    small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o"}
+    out = []
+    for i, w in enumerate(words.split()):
+        wl = w.lower()
+        out.append(wl if i > 0 and wl in small else wl.capitalize())
+    label = " ".join(out)
+    if len(parts) >= 2 and parts[0] in hubs:
+        return f"{hubs[parts[0]]}: {label}"
+    return label or "Página relacionada"
+
+
 def _related_section(urls: list[str]) -> str:
     cards = []
     for u in (urls or [])[:8]:
         if not u:
             continue
-        label = u.strip("/").replace("/", " · ") or u
+        label = _human_path_label(u)
         cards.append(
             f'<a class="related-card" href="{e(u)}" data-pseo-event="pseo_related_page_click">'
             f"<span>Relacionado</span><strong>{e(label)}</strong><small>Link interno</small></a>"

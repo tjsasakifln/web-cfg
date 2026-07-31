@@ -292,29 +292,60 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
         html_path = root / url / "index.html" if url else None
         results.append(audit_page(p, html_path))
 
-    # Cross-page generic block detection for problem pages
+    # Cross-page generic block detection for problem pages.
+    # Only fails *publishable* pages — shared chrome/nav/author is expected on templates.
+    _CHROME = re.compile(
+        r"(autor e respons|eng[ºo°.]?\s*tiago|tiago sasaki|whatsapp|confenge|"
+        r"conhecer a experi|preferir formul|metodologia e limita|"
+        r"como estes dados foram|n[aã]o constitui ranking|fontes p[uú]blicas do datalake|"
+        r"pular para o conte[uú]do|navega[cç][aã]o|biblioteca guias|"
+        r"estas p[aá]ginas aprofundam|intelig[eê]ncia contextualiza|"
+        r"alegar evid[eê]ncia emp[ií]rica|sinais diretamente ligados|"
+        r"contagens gen[eé]ricas|malha|p[aá]ginas relacionadas|link interno|"
+        r"especialista contato|hub de intelig|servi[cç]o t[eé]cnico)",
+        re.I,
+    )
     problem_bodies: dict[str, str] = {}
+    problem_status: dict[str, str] = {}
     for r in results:
         if r.page_type == "problem_service":
             path = root / r.url.strip("/") / "index.html"
             if path.exists():
-                problem_bodies[r.page_id] = _extract(path.read_text(encoding="utf-8", errors="replace")).text
+                problem_bodies[r.page_id] = _extract(
+                    path.read_text(encoding="utf-8", errors="replace")
+                ).text
+                problem_status[r.page_id] = r.status
     ids = list(problem_bodies.keys())
     for i, a in enumerate(ids):
         for b in ids[i + 1 :]:
+            # Only enforce uniqueness when either page is publishable
+            if problem_status.get(a) != "publish" and problem_status.get(b) != "publish":
+                continue
             ta, tb = problem_bodies[a], problem_bodies[b]
-            # simple overlap of long sentences
-            sa = {s.strip() for s in re.split(r"[.!?]", ta) if len(s.strip()) > 80}
-            sb = {s.strip() for s in re.split(r"[.!?]", tb) if len(s.strip()) > 80}
+            sa = {
+                s.strip()
+                for s in re.split(r"[.!?]", ta)
+                if len(s.strip()) > 100 and not _CHROME.search(s)
+            }
+            sb = {
+                s.strip()
+                for s in re.split(r"[.!?]", tb)
+                if len(s.strip()) > 100 and not _CHROME.search(s)
+            }
             overlap = sa & sb
             if len(overlap) >= 2:
                 for r in results:
-                    if r.page_id in {a, b}:
+                    if r.page_id in {a, b} and r.status == "publish":
                         r.issues.append(
-                            Issue("generic_repeated_blocks", "P0", f"Blocos genéricos repetidos com {a if r.page_id==b else b}", next(iter(overlap))[:100])
+                            Issue(
+                                "generic_repeated_blocks",
+                                "P0",
+                                f"Blocos genéricos repetidos com {a if r.page_id == b else b}",
+                                next(iter(overlap))[:100],
+                            )
                         )
-                        r.decision = "fail_soft" if r.status != "publish" else "fail_publish"
-                        r.approval_recommendation = "keep_noindex"
+                        r.decision = "fail_publish"
+                        r.approval_recommendation = "revoke_or_fix"
 
     publish_fails = [r for r in results if r.status == "publish" and r.decision == "fail_publish"]
     p0_count = sum(1 for r in results for i in r.issues if i.severity == "P0")

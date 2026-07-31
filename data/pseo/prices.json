@@ -43,14 +43,14 @@
     ],
     "id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
     "inclusion_criteria": [
-      "typology=manutencao_predial",
-      "scope=manutencao",
-      "nature=obra",
-      "archetype=manutencao-predial-engenharia",
-      "uf=RS",
-      "n>=12",
-      "comparison_confidence>=0.55",
-      "somente aec_confirmed"
+      "tipologia: manutenção predial",
+      "escopo: manutencao",
+      "natureza: obra",
+      "UF: RS",
+      "mínimo de 12 contratos primários",
+      "confiança de comparabilidade ≥ 55%",
+      "somente objetos AEC confirmados",
+      "contratos integrais (não preço unitário)"
     ],
     "limitations": [
       "Observações são contratos integrais, não preços unitários.",
@@ -200,14 +200,14 @@
     ],
     "id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
     "inclusion_criteria": [
-      "typology=paralelepipedo",
-      "scope=execucao",
-      "nature=obra",
-      "archetype=pavimentacao-infraestrutura-viaria",
-      "uf=PI",
-      "n>=12",
-      "comparison_confidence>=0.55",
-      "somente aec_confirmed"
+      "tipologia: paralelepípedo",
+      "escopo: execucao",
+      "natureza: obra",
+      "UF: PI",
+      "mínimo de 12 contratos primários",
+      "confiança de comparabilidade ≥ 55%",
+      "somente objetos AEC confirmados",
+      "contratos integrais (não preço unitário)"
     ],
     "limitations": [
       "Observações são contratos integrais, não preços unitários.",

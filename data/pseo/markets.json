@@ -10,7 +10,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 7."
     ],
     "limitations": [
-      "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em SC; multi-rótulo entra só no primário.",
+      "Base: 13 contratos primários do segmento «Pavimentação e infraestrutura viária» em SC; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."
@@ -176,7 +176,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 0."
     ],
     "limitations": [
-      "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em PI; multi-rótulo entra só no primário.",
+      "Base: 13 contratos primários do segmento «Pavimentação e infraestrutura viária» em PI; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."
@@ -326,7 +326,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 0."
     ],
     "limitations": [
-      "Base: 12 contratos com arquétipo primário edificacoes-publicas em MG; multi-rótulo entra só no primário.",
+      "Base: 12 contratos primários do segmento «Edificações públicas» em MG; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."
@@ -492,7 +492,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 3."
     ],
     "limitations": [
-      "Base: 10 contratos com arquétipo primário edificacoes-publicas em RS; multi-rótulo entra só no primário.",
+      "Base: 10 contratos primários do segmento «Edificações públicas» em RS; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."

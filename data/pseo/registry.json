@@ -11,7 +11,7 @@
     "noindex": 6,
     "reject": 13
   },
-  "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+  "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
   "generated_at": "2026-07-31",
   "human_review_policy": {
     "indexable_states": [
@@ -27,7 +27,7 @@
       "canonical_related": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
       "evidences_checked": [
         "n=15 buyers=11"
@@ -66,7 +66,7 @@
         "service_cta": 4
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -80,7 +80,7 @@
       "canonical_related": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
       "evidences_checked": null,
       "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
@@ -117,7 +117,7 @@
         "service_cta": 4
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -131,7 +131,7 @@
       "canonical_related": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
       "evidences_checked": [
         "n=15 buyers=12"
@@ -170,7 +170,7 @@
         "service_cta": 4
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -184,7 +184,7 @@
       "canonical_related": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
       "evidences_checked": null,
       "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
@@ -221,7 +221,7 @@
         "service_cta": 4
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -235,7 +235,7 @@
       "canonical_related": null,
       "cta_intent": "estrategia_orgao",
       "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Dossiê de comprador: 36 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
       "evidences_checked": [
         "n=49"
@@ -265,7 +265,7 @@
       ],
       "region": "RS",
       "related_urls": [],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: nome público com prefixo MRS-; 49 registros concentrados em uma data e um fornecedor; 13 reajustes contados como contratos; base temporal insuficiente para sazonalidade; contagem de contratos primários não comprovada. Requer deduplicação e métricas de independência amostral no produtor.",
       "reviewer": "grok-build-editorial-audit",
@@ -281,7 +281,7 @@
         "service_cta": 4
       },
       "segment": null,
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -295,7 +295,7 @@
       "canonical_related": null,
       "cta_intent": "validar_preco_margem",
       "cta_label": "Validar preço, risco e margem",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Faixa de valores contratuais de Manutenção Predial em Rio Grande do Sul: mediana, P25 e P75 com 18 contratos primários. Tickets contratuais integrais —…",
       "evidences_checked": [
         "deep_links=5/5 group=manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS"
@@ -325,7 +325,7 @@
       ],
       "region": "RS",
       "related_urls": [],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: observações concentradas no mesmo órgão/fornecedor/data; taxonomia interna exposta (manutencao-predial-engenharia); sem diversidade de compradores/fornecedores/período; não qualifica como benchmark de mercado. Requer identidade primária e gates de diversidade.",
       "reviewer": "grok-build-editorial-audit",
@@ -341,7 +341,7 @@
         "service_cta": 5
       },
       "segment": "Manutenção Predial",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -355,7 +355,7 @@
       "canonical_related": null,
       "cta_intent": "validar_preco_margem",
       "cta_label": "Validar preço, risco e margem",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Faixa de valores contratuais de Paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
       "evidences_checked": [
         "deep_links=5/5 group=pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI"
@@ -383,7 +383,7 @@
       ],
       "region": "PI",
       "related_urls": [],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: expõe slug interno; termos sem normalização (Piaui, paralelepipedo); valores de contratos integrais apresentados como preço de pavimentação; independência das 12 observações não comprovada. Reposicionar como faixa de valores contratuais após dedup.",
       "reviewer": "grok-build-editorial-audit",
@@ -399,7 +399,7 @@
         "service_cta": 5
       },
       "segment": "Paralelepípedo",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -413,7 +413,7 @@
       "canonical_related": null,
       "cta_intent": "mapa_concorrencia",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 37 contratos no recorte público — sem juízo…",
       "evidences_checked": null,
       "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
@@ -451,7 +451,7 @@
         "service_cta": 4
       },
       "segment": "Manutenção predial e serviços de engenharia",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_contracts"
       ],
@@ -465,7 +465,7 @@
       "canonical_related": "/diagnostico-pre-licitacao/",
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Radar de Edificações públicas em Paraná: 12 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "evidences_checked": [
         "open=17"
@@ -492,7 +492,7 @@
         "/auditoria-orcamento-licitacao/",
         "/radar/"
       ],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: objetos/duplicatas (Mariópolis); valores quase idênticos; R$ 0,00 para valor ausente; projetos de estabilização no cluster de edificações; encerramento sem horário/timezone. Requer dedup de oportunidades e value_status.",
       "reviewer": "grok-build-editorial-audit",
@@ -508,7 +508,7 @@
         "service_cta": 5
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp"
       ],
@@ -522,7 +522,7 @@
       "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
       "evidences_checked": [
         "open=7"
@@ -548,7 +548,7 @@
         "/diagnostico-pre-licitacao/",
         "/auditoria-orcamento-licitacao/"
       ],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: duplicatas Indaial e R$ 9.034.155,84; muro classificado como pavimentação; links /app/contratos/ como oportunidade; mistura de tipos documentais. Requer classificação endurecida e source_url_type.",
       "reviewer": "grok-build-editorial-audit",
@@ -564,7 +564,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp"
       ],
@@ -578,7 +578,7 @@
       "canonical_related": "/diagnostico-pre-licitacao/",
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
@@ -618,7 +618,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp"
       ],
@@ -632,7 +632,7 @@
       "canonical_related": "/diagnostico-pre-licitacao/",
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Radar de Saneamento e hidráulica em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
@@ -672,7 +672,7 @@
         "service_cta": 5
       },
       "segment": "Saneamento e hidráulica",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp"
       ],
@@ -686,7 +686,7 @@
       "canonical_related": "/diagnostico-pre-licitacao/",
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Radar de Pavimentação e infraestrutura viária em Paraná: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Paraná",
@@ -726,7 +726,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp"
       ],
@@ -740,7 +740,7 @@
       "canonical_related": "/inteligencia/mercados/edificacoes-publicas-rs/",
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
@@ -780,7 +780,7 @@
         "service_cta": 5
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp"
       ],
@@ -794,7 +794,7 @@
       "canonical_related": null,
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão…",
       "evidences_checked": [
         "ev=63"
@@ -820,7 +820,7 @@
       ],
       "region": null,
       "related_urls": [],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: meta description truncada; slugs/caminhos internos na UI; blocos genéricos repetidos; evidence_count genérico não prova a alegação específica; risco doorway/canibalização de guias técnicos. Manter noindex até evidência direta e copy substancial.",
       "reviewer": "grok-build-editorial-audit",
@@ -836,7 +836,7 @@
         "service_cta": 5
       },
       "segment": "orcamento-edital",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_supplier_contracts",
         "site-confenge-guides"
@@ -851,7 +851,7 @@
       "canonical_related": null,
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a…",
       "evidences_checked": [
         "ev=53"
@@ -877,7 +877,7 @@
       ],
       "region": null,
       "related_urls": [],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: meta description truncada; slugs/caminhos internos na UI; blocos genéricos repetidos; evidence_count genérico não prova a alegação específica; risco doorway/canibalização de guias técnicos. Manter noindex até evidência direta e copy substancial.",
       "reviewer": "grok-build-editorial-audit",
@@ -893,7 +893,7 @@
         "service_cta": 5
       },
       "segment": "sinapi-sicro",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "site-confenge-guides",
         "pncp_supplier_contracts"
@@ -908,7 +908,7 @@
       "canonical_related": null,
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
       "evidences_checked": [
         "ev=38"
@@ -950,7 +950,7 @@
         "service_cta": 5
       },
       "segment": "medicao-glosa",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "site-confenge-guides"
       ],
@@ -964,7 +964,7 @@
       "canonical_related": null,
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
       "evidences_checked": [
         "ev=63"
@@ -990,7 +990,7 @@
       ],
       "region": null,
       "related_urls": [],
-      "review_dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "review_dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: meta description truncada; slugs/caminhos internos na UI; blocos genéricos repetidos; evidence_count genérico não prova a alegação específica; risco doorway/canibalização de guias técnicos. Manter noindex até evidência direta e copy substancial.",
       "reviewer": "grok-build-editorial-audit",
@@ -1006,7 +1006,7 @@
         "service_cta": 5
       },
       "segment": "aditivos",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "site-confenge-guides"
       ],
@@ -1020,7 +1020,7 @@
       "canonical_related": null,
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
-      "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
       "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
       "evidences_checked": [
         "ev=37"
@@ -1062,7 +1062,7 @@
         "service_cta": 5
       },
       "segment": "reequilibrio",
-      "source_run_id": "pseo-20260731T153204Z-56117a1f",
+      "source_run_id": "pseo-20260731T153820Z-2d07ca8c",
       "sources": [
         "pncp_supplier_contracts",
         "site-confenge-guides"
@@ -1072,5 +1072,5 @@
       "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
     }
   ],
-  "source_run_id": "pseo-20260731T153204Z-56117a1f"
+  "source_run_id": "pseo-20260731T153820Z-2d07ca8c"
 }
