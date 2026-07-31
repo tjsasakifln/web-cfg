@@ -31,23 +31,28 @@ KPI: contatos comerciais qualificados **sem** dados falsos/contaminados/não aud
 | Campo | Valor |
 |-------|-------|
 | Branch | `feat/pseo-durable-export` |
-| source_commit_sha | `d3a7f761674e87321905ae51f16c68423bb19b9f` |
-| export_entrypoint | `python -m scripts.pseo.cli_export` |
+| source_commit_sha | `4dda5065b6c3a54b3099e4e63db2377ac7d6375b` |
+| export_entrypoint | `python -m scripts.pseo.export_web_cfg` |
+| alias | `python -m scripts.pseo.cli_export` (same pipeline) |
 | dataset_hash | `65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52` |
 | data_as_of | `2026-07-31` |
-| hash recomposto | **True** |
+| hash recomposto | **True** (verify_snapshot_hashes = []) |
 | checksums | **True** |
+| validation warnings | **[]** |
 
 ```bash
 cd "/mnt/d/extra consultoria" && git checkout feat/pseo-durable-export
 set -a && source .env && set +a
-python3 -m scripts.pseo.cli_export --out /mnt/d/webcfg/data/pseo --as-of 2026-07-31 --validate
+# Canonical entry (plan name) — durable pipeline with --as-of/--validate
+python3 -m scripts.pseo.export_web_cfg --out /mnt/d/webcfg/data/pseo --as-of 2026-07-31 --validate
 python3 -m pytest tests/pseo -q --no-cov
 ```
 
 ```bash
 cd /mnt/d/webcfg
-python3 scripts/pseo/review.py set PAGE_ID APPROVED --reviewer tiago --notes "..."
+# Human review: ONE page at a time (never batch APPROVED without notes)
+python3 scripts/pseo/review.py report
+python3 scripts/pseo/review.py set PAGE_ID APPROVED --reviewer tiago --notes "editorial checks..."
 npm run pseo:build && npm run pseo:validate && npm run pseo:audit
 npm run pseo:test && npm run test:pseo-attribution && npm run test:analytics
 ```
@@ -60,6 +65,7 @@ npm run pseo:test && npm run test:pseo-attribution && npm run test:analytics
 - **sem instalação** não conta como install signal em compras
 - Gold **n=83** inclui itens **extraídos de aggregates live** (manutenção SP top_objects)
 - Métricas: P=1.0 R=1.0 F1=1.0 FP=0 (artefato `classifier-metrics.json`)
+- **Precisão por segmento indexável (aec_confirmed) ≥ 0.95**: todos os segmentos com pred aec_confirmed = **1.0** (pavimentacao, edificacoes, saneamento, climatizacao, manutencao)
 
 Contagens: `{"aec_confirmed": 233, "non_aec": 5154, "insufficient_context": 5832, "ambiguous": 655, "aec_probable": 57, "bid_status_aberta": 37}`
 

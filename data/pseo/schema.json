@@ -19,7 +19,7 @@
     "data_as_of"
   ],
   "description": "CONFENGE public pSEO evidence snapshot (ICP-Derived Evidence)",
-  "export_entrypoint": "python -m scripts.pseo.cli_export",
+  "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
   "export_version": "1.1.0",
   "files": [
     "archetypes.json",

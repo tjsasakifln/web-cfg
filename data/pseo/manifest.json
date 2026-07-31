@@ -8,7 +8,7 @@
     "opportunities.json": "695fde03635edff35084549d4f2856200e800d0f3307a4342786a33250cb6b60",
     "prices.json": "65f06426ea42fdefb69e18aa57d553a1a76f9626b349eed7d413d25ba6d1daeb",
     "problem_service.json": "c90dac62f1b1ab2210d0d89bba3dd399f2f74538f36f115f0a6c76ec92584917",
-    "schema.json": "8528a786a61975b2ff1178fc715b3a8e9ddf3108b69bf11cc7b2202f6c74377a"
+    "schema.json": "248523cee70cbdafc14d4488fadb0edbcc427d4e7a77398c3cb59e7a9e4465b2"
   },
   "classification_counts": {
     "aec_confirmed": 233,
@@ -51,9 +51,9 @@
     "contracts_total_loaded": 11931,
     "open_bids_after_status_filter": 37
   },
-  "export_entrypoint": "python -m scripts.pseo.cli_export",
+  "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
   "export_version": "1.1.0",
-  "exporter_entrypoint": "python -m scripts.pseo.cli_export",
+  "exporter_entrypoint": "python -m scripts.pseo.export_web_cfg",
   "exporter_version": "1.1.0",
   "freshness": {
     "by_dataset": {
@@ -75,7 +75,7 @@
     "data_as_of": "2026-07-31",
     "data_period_end": "2026-10-07",
     "data_period_start": "2024-04-19",
-    "generated_at": "2026-07-31T13:43:27Z",
+    "generated_at": "2026-07-31T13:47:30Z",
     "max_age_days_policy": 180,
     "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
   },
@@ -95,7 +95,7 @@
       "policy_warning_days": 30
     }
   },
-  "generated_at": "2026-07-31T13:43:27Z",
+  "generated_at": "2026-07-31T13:47:30Z",
   "horizon": {
     "period_end": "2026-10-07",
     "period_start": "2024-04-19"
@@ -120,9 +120,9 @@
   },
   "schema_version": "1.1.0",
   "source_branch": "feat/pseo-durable-export",
-  "source_commit_sha": "d3a7f761674e87321905ae51f16c68423bb19b9f",
+  "source_commit_sha": "4dda5065b6c3a54b3099e4e63db2377ac7d6375b",
   "source_repository": "extra-cli",
-  "source_run_id": "pseo-20260731T134327Z-61f8a1c0",
+  "source_run_id": "pseo-20260731T134730Z-fd3c853a",
   "sources": [
     {
       "role": "read_only_aggregate",
