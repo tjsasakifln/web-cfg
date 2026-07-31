@@ -1,9 +1,9 @@
 {
   "terminal_status": "PARTIAL_DEPLOYED_NOT_GSC_INSPECTED",
-  "web_cfg_sha": "0d5fd4db99420618b58505a527e01ca4fd6bb646",
+  "web_cfg_sha": "f12e10c3876692aa9d169086cb8829ceb3d2a1d4",
   "extra_cli_sha": "5b6cc7c136f4112b565f4e7e894607180f205fe2",
   "extra_cli_branch": "feat/pseo-export-isolated",
-  "netlify_deployed_sha": "0d5fd4db99420618b58505a527e01ca4fd6bb646",
+  "netlify_deployed_sha": "f12e10c3876692aa9d169086cb8829ceb3d2a1d4",
   "snapshot_hash": "40b2c85f58dca0154fb132f00a01b0e0db06d5d58a621b10fdd2acdc97fab060",
   "schema_version": "1.1.0",
   "production_audit": {
@@ -41,8 +41,7 @@
     "GSC credentials absent — NOT_INSPECTED_NO_CREDENTIALS"
   ],
   "next_wave_gate": {
-    "gsc_discovery_or_crawl_without_soft404": true,
-    "material_hash_stable_across_reexport": true
+    "gsc_discovery_or_crawl_without_soft404": true
   },
   "stages_reached": {
     "GENERATED_LOCAL": true,
@@ -55,10 +54,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "0d5fd4db99420618b58505a527e01ca4fd6bb646",
+    "web_cfg_sha": "f12e10c3876692aa9d169086cb8829ceb3d2a1d4",
     "snapshot_hash_short": "40b2c85f58dca015",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-07-31T21:50:01Z",
+    "generated_at": "2026-07-31T21:51:23Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "sitemap_urls": [
@@ -69,10 +68,10 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "sha_alignment": {
-    "git_head": "0d5fd4db99420618b58505a527e01ca4fd6bb646",
-    "local_well_known": "0d5fd4db99420618b58505a527e01ca4fd6bb646",
-    "live_well_known": "0d5fd4db99420618b58505a527e01ca4fd6bb646",
+    "git_head": "f12e10c3876692aa9d169086cb8829ceb3d2a1d4",
+    "local_well_known": "f12e10c3876692aa9d169086cb8829ceb3d2a1d4",
+    "live_well_known": "f12e10c3876692aa9d169086cb8829ceb3d2a1d4",
     "all_match": true
   },
-  "generated_at": "2026-07-31T21:50:21.072941+00:00"
+  "generated_at": "2026-07-31T21:51:41.343183+00:00"
 }
