@@ -225,6 +225,22 @@ def validate_all(data_dir: Path | None = None) -> dict:
         for loc in re.findall(r"<loc>([^<]+)</loc>", sm_text):
             if "?" in loc or "#" in loc:
                 errors.append(f"query-string or fragment URL in sitemap: {loc}")
+        # GSC rejects / poorly handles future lastmod
+        from datetime import date as _date
+
+        today = _date.today()
+        for lm in re.findall(r"<lastmod>([^<]+)</lastmod>", sm_text):
+            try:
+                d = _date.fromisoformat(lm.strip()[:10])
+            except ValueError:
+                errors.append(f"invalid lastmod in sitemap: {lm}")
+                continue
+            if d > today:
+                errors.append(f"future lastmod in sitemap (GSC rejects): {lm}")
+
+    idx = ROOT / "sitemap-index.xml"
+    if publish and not idx.exists():
+        warnings.append("sitemap-index.xml missing (recommended single GSC entrypoint)")
 
     # similarity among publish — compare answer-box + h1 (not full chrome/template)
     body_items = []

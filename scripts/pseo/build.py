@@ -142,6 +142,34 @@ def write_registry(
     return registry
 
 
+def _sitemap_lastmod(manifest: dict[str, Any]) -> str:
+    """W3C date for sitemap lastmod — never in the future (GSC hard-rejects that).
+
+    Prefer data_as_of (export verification date). Do NOT use data_period_end:
+    open-bid end dates often sit months ahead of as_of and poison lastmod.
+    """
+    today = date.today()
+    candidates: list[date] = []
+    for raw in (
+        manifest.get("data_as_of"),
+        (manifest.get("freshness") or {}).get("data_as_of"),
+        (manifest.get("freshness") or {}).get("generated_at"),
+        manifest.get("generated_at"),
+    ):
+        if not raw:
+            continue
+        s = str(raw)[:10]
+        try:
+            d = date.fromisoformat(s)
+        except ValueError:
+            continue
+        if d <= today:
+            candidates.append(d)
+    if candidates:
+        return max(candidates).isoformat()
+    return today.isoformat()
+
+
 def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
     """Sitemap only for publish (human-approved + quality gates)."""
     pubs = [c for c in cands if c.status == "publish"]
@@ -175,14 +203,41 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
     return path
 
 
+def write_sitemap_index(lastmod: str) -> Path:
+    """Single entry point for GSC: index of main + inteligência urlsets."""
+    # Use sitemapindex so one submit covers both files (recommended by Google)
+    parts = [
+        f"  <sitemap>\n    <loc>{SITE}/sitemap.xml</loc>\n    <lastmod>{lastmod}</lastmod>\n  </sitemap>",
+        f"  <sitemap>\n    <loc>{SITE}/sitemap-inteligencia.xml</loc>\n    <lastmod>{lastmod}</lastmod>\n  </sitemap>",
+    ]
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(parts)
+        + "\n</sitemapindex>\n"
+    )
+    path = ROOT / "sitemap-index.xml"
+    path.write_text(xml, encoding="utf-8")
+    return path
+
+
 def patch_main_sitemap_index() -> None:
     robots = ROOT / "robots.txt"
     text = robots.read_text(encoding="utf-8")
-    line = "Sitemap: https://confenge.com.br/sitemap-inteligencia.xml"
-    if line not in text:
-        if not text.endswith("\n"):
-            text += "\n"
-        text += line + "\n"
+    lines_needed = [
+        "Sitemap: https://confenge.com.br/sitemap-index.xml",
+        "Sitemap: https://confenge.com.br/sitemap.xml",
+        "Sitemap: https://confenge.com.br/sitemap-inteligencia.xml",
+    ]
+    changed = False
+    if not text.endswith("\n"):
+        text += "\n"
+        changed = True
+    for line in lines_needed:
+        if line not in text:
+            text += line + "\n"
+            changed = True
+    if changed:
         robots.write_text(text, encoding="utf-8")
 
 
@@ -351,14 +406,13 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
         )
 
     hubs = [] if dry_run else render_hubs(cands)
-    # lastmod from real data period, not generation clock alone
-    lastmod = (manifest.get("freshness") or {}).get("data_period_end") or manifest.get("data_as_of")
-    lastmod = lastmod or date.today().isoformat()
-    if isinstance(lastmod, str) and len(lastmod) > 10:
-        lastmod = lastmod[:10]
-    sm = None if dry_run else write_sitemap(cands, str(lastmod))
+    # lastmod = when the snapshot was verified — never use bid data_period_end
+    # (open-bid end dates can be months in the future and GSC rejects future lastmod).
+    lastmod = _sitemap_lastmod(manifest)
+    sm = None if dry_run else write_sitemap(cands, lastmod)
     if not dry_run:
         patch_main_sitemap_index()
+        write_sitemap_index(lastmod)
 
     summary = {
         "ok": True,
