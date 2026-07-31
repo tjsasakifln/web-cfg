@@ -11,17 +11,20 @@ System elevated to semantic/editorial/governance SOTA standard for containment p
 - Mariópolis missing-vs-known near-dup residual is **fixed on the shipped path**.
 - Human may individually audit-approve quality-eligible radars only; **no bulk approve**.
 
-## Verified SHAs (from `git rev-parse` + manifest)
+## Verified SHAs (from  + manifest)
 
-| Repo | Branch | SHA | Notes |
-|---|---|---|---|
-| web-cfg | main | `7c16f4e221543f23a497969c73a460ff91c7c688` | tip at delivery write |
-| extra-cli | feat/pseo-semantic-sota | `01123735ed0e240b0adf2233269ac947fa6d56c2` | producer near-dup clusterer |
-| dataset_hash | — | `faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333` | data/pseo/manifest.json |
-| source_commit | — | `01123735ed0e240b0adf2233269ac947fa6d56c2` | export pinned to extra-cli SHA |
-| data_as_of | — | 2026-07-31 | |
+| Artifact | Ref | SHA |
+|---|---|---|
+| web-cfg HEAD |  at delivery commit |  |
+| web-cfg Mariópolis fix |  (code+reexport) |  |
+| extra-cli HEAD |  |  |
+| dataset_hash | data/pseo/manifest.json |  |
+| source_commit | export pin |  |
+| data_as_of | manifest | 2026-07-31 |
 
-Registry: `{'reject': 13, 'noindex': 6}`
+Registry counts: reject=13, noindex=6, **publish=0**.
+
+Note: a git commit cannot embed its own final SHA without amend churn; **web-cfg HEAD above is c024d7f20677ab832b246dd2dae70577b75268cf after this delivery file's commit parent chain tip at write time. Verify with c024d7f20677ab832b246dd2dae70577b75268cf and c024d7f docs(pseo): final delivery with verified SHAs and publish=0 decisions.**
 
 ## Mariópolis residual (skeptic) — closed
 
