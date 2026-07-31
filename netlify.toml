@@ -4,6 +4,9 @@
 [build]
   command = "npm run build:site"
   publish = "."
+  # Skip publish when only campaign evidence / audit reports change so freezing
+  # deploy SHAs into JSON cannot advance live /.well-known/pseo-build.json.
+  ignore = "bash scripts/pseo/ignore_evidence_build.sh"
 
 [build.environment]
   NODE_VERSION = "20"
