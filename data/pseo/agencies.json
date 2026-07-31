@@ -1,0 +1,593 @@
+[
+  {
+    "agency_cnpj8": "76205640",
+    "agency_name": "PREFEITURA MUNICIPAL DE DOIS VIZINHOS - PR",
+    "archetype_mix": [
+      {
+        "archetype_id": "pavimentacao-infraestrutura-viaria",
+        "contract_count": 65
+      }
+    ],
+    "contract_count": 65,
+    "id": "agency-76205640",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 806.01,
+    "modalities": [],
+    "municipio": "Dois Vizinhos",
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [
+      {
+        "data_encerramento": "2026-07-07",
+        "link_pncp": null,
+        "modalidade": null,
+        "municipio": "Dois Vizinhos",
+        "objeto": "Construção de Restaurante Popular com a execução dos serviços preliminares e administração da obra; movimento de terra, drenagem e águas pluviais; fundações; estruturas; alvenaria, divisória, muros e fechos; cobertura; e",
+        "orgao_nome": "MUNICIPIO DE DOIS VIZINHOS",
+        "pncp_id": "76205640000108-1-000316/2026",
+        "source": "pncp",
+        "uf": "PR",
+        "valor_estimado": 3063881.89
+      },
+      {
+        "data_encerramento": "2026-07-07",
+        "link_pncp": null,
+        "modalidade": null,
+        "municipio": "Dois Vizinhos",
+        "objeto": "Construção de Centro de Desenvolvimento Econômico. O projeto prevê a construção de dois novos pavimentos, com salão, varanda, instalações sanitárias, hall, living e escada; bem como a reforma e ampliação de área existent",
+        "orgao_nome": "MUNICIPIO DE DOIS VIZINHOS",
+        "pncp_id": "76205640000108-1-000317/2026",
+        "source": "pncp",
+        "uf": "PR",
+        "valor_estimado": 2467439.6
+      }
+    ],
+    "p25_value": 241.65,
+    "p75_value": 1499.58,
+    "period_end": "2026-07-03",
+    "period_start": "2026-07-01",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "seasonality": [
+      {
+        "contract_count": 65,
+        "period": "2026-07"
+      }
+    ],
+    "slug": "prefeitura-municipal-de-dois-vizinhos-pr-pr",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 8,
+    "top_objects": [
+      {
+        "count": 53,
+        "example_objeto": "Credenciamento de empresas interessadas em fornecer peças,…",
+        "label": "Credenciamento de empresas interessadas em fornecer peças,…",
+        "median_value": null
+      },
+      {
+        "count": 12,
+        "example_objeto": "Credenciamento de empresas para prestação de serviços de manutenção…",
+        "label": "Credenciamento de empresas para prestação de serviços de manutenção…",
+        "median_value": null
+      }
+    ],
+    "total_value": 93702.1,
+    "uf": "PR"
+  },
+  {
+    "agency_cnpj8": "88830609",
+    "agency_name": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+    "archetype_mix": [
+      {
+        "archetype_id": "edificacoes-publicas",
+        "contract_count": 49
+      },
+      {
+        "archetype_id": "manutencao-predial-engenharia",
+        "contract_count": 49
+      }
+    ],
+    "contract_count": 49,
+    "id": "agency-88830609",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 2742.75,
+    "modalities": [],
+    "municipio": "Caxias do Sul",
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [],
+    "p25_value": 877.5,
+    "p75_value": 13773.38,
+    "period_end": "2026-07-03",
+    "period_start": "2026-07-03",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "seasonality": [
+      {
+        "contract_count": 49,
+        "period": "2026-07"
+      }
+    ],
+    "slug": "mrs-prefeitura-municipal-de-caxias-do-sul-rs",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 1,
+    "top_objects": [
+      {
+        "count": 36,
+        "example_objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
+        "label": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
+        "median_value": null
+      },
+      {
+        "count": 13,
+        "example_objeto": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
+        "label": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
+        "median_value": null
+      }
+    ],
+    "total_value": 403758.04,
+    "uf": "RS"
+  },
+  {
+    "agency_cnpj8": "45132495",
+    "agency_name": "PREFEITURA MUNICIPAL DE LIMEIRA",
+    "archetype_mix": [
+      {
+        "archetype_id": "edificacoes-publicas",
+        "contract_count": 22
+      }
+    ],
+    "contract_count": 22,
+    "id": "agency-45132495",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 7725.0,
+    "modalities": [],
+    "municipio": "Limeira",
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [],
+    "p25_value": 2728.0,
+    "p75_value": 27482.45,
+    "period_end": "2026-06-25",
+    "period_start": "2026-06-24",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "seasonality": [
+      {
+        "contract_count": 22,
+        "period": "2026-06"
+      }
+    ],
+    "slug": "prefeitura-municipal-de-limeira-sp",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 7,
+    "top_objects": [
+      {
+        "count": 22,
+        "example_objeto": "EVENTUAL AQUISICAO DE MATERIAL ESCOLA, E SCRITORIO E PAPELARIA",
+        "label": "EVENTUAL AQUISICAO DE MATERIAL ESCOLA, E SCRITORIO E PAPELARIA",
+        "median_value": null
+      }
+    ],
+    "total_value": 391564.8,
+    "uf": "SP"
+  },
+  {
+    "agency_cnpj8": "08083086",
+    "agency_name": "FMS BELA VISTA DE GOIAS",
+    "archetype_mix": [
+      {
+        "archetype_id": "edificacoes-publicas",
+        "contract_count": 16
+      },
+      {
+        "archetype_id": "climatizacao-instalacoes",
+        "contract_count": 2
+      }
+    ],
+    "contract_count": 18,
+    "id": "agency-08083086",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 627.9,
+    "modalities": [],
+    "municipio": "Bela Vista de Goiás",
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [],
+    "p25_value": 246.8,
+    "p75_value": 1447.2,
+    "period_end": "2026-07-07",
+    "period_start": "2026-07-07",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "seasonality": [
+      {
+        "contract_count": 18,
+        "period": "2026-07"
+      }
+    ],
+    "slug": "fms-bela-vista-de-goias-go",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 17,
+    "top_objects": [
+      {
+        "count": 14,
+        "example_objeto": "VALOR QUE SE EMPENHA PARA OCORRER DESPESAS COM FORNECIMENTO DE…",
+        "label": "VALOR QUE SE EMPENHA PARA OCORRER DESPESAS COM FORNECIMENTO DE…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "VALOR QUE SE EMPENHA P/ OCORRER DESPESA COM MANUTENÇÃO,INSTALAÇÃO E…",
+        "label": "VALOR QUE SE EMPENHA P/ OCORRER DESPESA COM MANUTENÇÃO,INSTALAÇÃO E…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "VALOR QUE SE EMPENHA PARA OCORRER DESPESA COM FORNECIMENTO DE…",
+        "label": "VALOR QUE SE EMPENHA PARA OCORRER DESPESA COM FORNECIMENTO DE…",
+        "median_value": null
+      }
+    ],
+    "total_value": 24165.39,
+    "uf": "GO"
+  },
+  {
+    "agency_cnpj8": "07954480",
+    "agency_name": "EEM CORONEL ALFREDO SILVANO",
+    "archetype_mix": [
+      {
+        "archetype_id": "edificacoes-publicas",
+        "contract_count": 14
+      },
+      {
+        "archetype_id": "climatizacao-instalacoes",
+        "contract_count": 4
+      },
+      {
+        "archetype_id": "manutencao-predial-engenharia",
+        "contract_count": 1
+      }
+    ],
+    "contract_count": 17,
+    "id": "agency-07954480",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 17635.67,
+    "modalities": [],
+    "municipio": "Reriutaba",
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [],
+    "p25_value": 8555.0,
+    "p75_value": 75099.0,
+    "period_end": "2026-07-07",
+    "period_start": "2026-06-02",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "seasonality": [
+      {
+        "contract_count": 16,
+        "period": "2026-06"
+      },
+      {
+        "contract_count": 1,
+        "period": "2026-07"
+      }
+    ],
+    "slug": "eem-coronel-alfredo-silvano-ce",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 17,
+    "top_objects": [
+      {
+        "count": 1,
+        "example_objeto": "REFORMA DA SALA DOS PROFESSORES E AEE NO ANTIGO PRÉDIO DA FRANCISCA…",
+        "label": "REFORMA DA SALA DOS PROFESSORES E AEE NO ANTIGO PRÉDIO DA FRANCISCA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "OUTROS SERVIÇOS DE TECNOLOGIA DA INFORMAÇÃO - ESCOLA INDIGENA DA…",
+        "label": "OUTROS SERVIÇOS DE TECNOLOGIA DA INFORMAÇÃO - ESCOLA INDIGENA DA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA DE SALAS DE AULA PARA CLIMATIZAÇÃO NA EEMTI MARIA DOLORES…",
+        "label": "REFORMA DE SALAS DE AULA PARA CLIMATIZAÇÃO NA EEMTI MARIA DOLORES…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "MANUTENÇÃO E CONSERVAÇÃO DE MÁQUINAS E EQUIPAMENTOS - MANUTENÇÃO…",
+        "label": "MANUTENÇÃO E CONSERVAÇÃO DE MÁQUINAS E EQUIPAMENTOS - MANUTENÇÃO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "MANUTENÇÃO E CONSERVAÇÃO DE BENS IMÓVEIS (REFORMA DO MURO EXTERNO DA…",
+        "label": "MANUTENÇÃO E CONSERVAÇÃO DE BENS IMÓVEIS (REFORMA DO MURO EXTERNO DA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Alimentação Escolar - ESCOLA INDÍGENA TREMEMBÉ MARIA VENÂNCIA -…",
+        "label": "Alimentação Escolar - ESCOLA INDÍGENA TREMEMBÉ MARIA VENÂNCIA -…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "A presente obra e serviços de engenharia para Manutenção Predial visa…",
+        "label": "A presente obra e serviços de engenharia para Manutenção Predial visa…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de Gás de Cozinha, para suprir a necessidade da escola - EEM…",
+        "label": "Aquisição de Gás de Cozinha, para suprir a necessidade da escola - EEM…",
+        "median_value": null
+      }
+    ],
+    "total_value": 2411634.06,
+    "uf": "CE"
+  },
+  {
+    "agency_cnpj8": "60509015",
+    "agency_name": "ESP-PRESTACAO DE SERVICOS FDE/SEE",
+    "archetype_mix": [
+      {
+        "archetype_id": "climatizacao-instalacoes",
+        "contract_count": 11
+      },
+      {
+        "archetype_id": "saneamento-hidraulica",
+        "contract_count": 3
+      },
+      {
+        "archetype_id": "pavimentacao-infraestrutura-viaria",
+        "contract_count": 1
+      },
+      {
+        "archetype_id": "edificacoes-publicas",
+        "contract_count": 1
+      }
+    ],
+    "contract_count": 15,
+    "id": "agency-60509015",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 459395.91,
+    "modalities": [],
+    "municipio": "São Paulo",
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [],
+    "p25_value": 167915.35,
+    "p75_value": 1468411.47,
+    "period_end": "2026-06-30",
+    "period_start": "2026-06-15",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "seasonality": [
+      {
+        "contract_count": 15,
+        "period": "2026-06"
+      }
+    ],
+    "slug": "esp-prestacao-de-servicos-fde-see-sp",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 4,
+    "top_objects": [
+      {
+        "count": 4,
+        "example_objeto": "EXECUÇÃO DE INFRAESTRUTURA ELÉTRICA E DE CLIMATIZAÇÃO.",
+        "label": "EXECUÇÃO DE INFRAESTRUTURA ELÉTRICA E DE CLIMATIZAÇÃO.",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "MANUTENÇÃO DA COBERTURA, DAS INSTALAÇÕES ELÉTRICAS, DO RESERVATÓRIO,…",
+        "label": "MANUTENÇÃO DA COBERTURA, DAS INSTALAÇÕES ELÉTRICAS, DO RESERVATÓRIO,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA GERAL DAS INSTALAÇÕES ELÉTRICAS, DA QUADRA DE ESPORTES,…",
+        "label": "REFORMA GERAL DAS INSTALAÇÕES ELÉTRICAS, DA QUADRA DE ESPORTES,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA GERAL DA COBERTURA, CDA COZINHA/DESPENSA, DOS SANITÁRIOS, DA…",
+        "label": "REFORMA GERAL DA COBERTURA, CDA COZINHA/DESPENSA, DOS SANITÁRIOS, DA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "EXECUÇÃO DE NOVA REDE DE ESGOTO E MANEJO ARBOREO",
+        "label": "EXECUÇÃO DE NOVA REDE DE ESGOTO E MANEJO ARBOREO",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA DA COBERTURA, DOS SANITARIOS, REVISÃO DA REDE DE DRENAGEM,…",
+        "label": "REFORMA DA COBERTURA, DOS SANITARIOS, REVISÃO DA REDE DE DRENAGEM,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA GERAL DA COBERTURA E INSTALAÇÕES ELÉTRICAS",
+        "label": "REFORMA GERAL DA COBERTURA E INSTALAÇÕES ELÉTRICAS",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA DA SALA DE INFORMÁTICA E LEITURA, DA QUADRA DE ESPORTES,…",
+        "label": "REFORMA DA SALA DE INFORMÁTICA E LEITURA, DA QUADRA DE ESPORTES,…",
+        "median_value": null
+      }
+    ],
+    "total_value": 11557794.08,
+    "uf": "SP"
+  },
+  {
+    "agency_cnpj8": "01414440",
+    "agency_name": "PROCURADORIA GERAL DO MUNICIPIO DE GOIÂNIA",
+    "archetype_mix": [
+      {
+        "archetype_id": "manutencao-predial-engenharia",
+        "contract_count": 13
+      }
+    ],
+    "contract_count": 13,
+    "id": "agency-01414440",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 756.0,
+    "modalities": [],
+    "municipio": "Goiânia",
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [],
+    "p25_value": 303.75,
+    "p75_value": 1440.0,
+    "period_end": "2026-07-07",
+    "period_start": "2026-07-07",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "seasonality": [
+      {
+        "contract_count": 13,
+        "period": "2026-07"
+      }
+    ],
+    "slug": "procuradoria-geral-do-municipio-de-goiania-go",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 11,
+    "top_objects": [
+      {
+        "count": 11,
+        "example_objeto": "Aquisição de ferramentas manuais e elétricas, materiais de manutenção…",
+        "label": "Aquisição de ferramentas manuais e elétricas, materiais de manutenção…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "aquisição de ferramentas manuais e elétricas, materiais de manutenção…",
+        "label": "aquisição de ferramentas manuais e elétricas, materiais de manutenção…",
+        "median_value": null
+      }
+    ],
+    "total_value": 28902.24,
+    "uf": "GO"
+  }
+]

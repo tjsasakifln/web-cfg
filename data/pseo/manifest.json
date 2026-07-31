@@ -1,0 +1,72 @@
+{
+  "checksums": {
+    "agencies.json": "048e6e3e7c7ebebecd992fab0b16dabbcc5d3e002af9912b2adddd931e71a19b",
+    "archetypes.json": "5883b89871f4e4f42ba56494d09836c9c3c9272fed227ff7ba12ddd3609e176c",
+    "competition.json": "3f63bcc613dc2c01c5d7553f4d8d1a5d37476b117206d0fe668a9ed8c4341d30",
+    "icp_methodology.json": "2f57a7a3139be56aa02d76c68bcad77ec18d31a0eec3f0f58dfb0e32eab68605",
+    "markets.json": "451d0dab0c07b336f1a8e7fd58690d928cd9b71ce36073080e6cd99fe314a023",
+    "opportunities.json": "e793eb7ae96999fe3696703686193952518b92fa349e95a216e32ab0f280f884",
+    "prices.json": "bf1ddce4c3c1d9530553a346747ef941493f79653be003586c6bba41357e7b1b",
+    "problem_service.json": "67f66caf9d56f165707c6ee039d28ca1486c63c045df82e8b6bf645c27dbbf46",
+    "schema.json": "a6812666006aabe356e8ffb16cc99b64851da8c3f37b0362b2ad9bbe5114e4d4"
+  },
+  "counts": {
+    "agencies": 7,
+    "archetypes": 5,
+    "classified_aec_bids": 553,
+    "classified_aec_contracts": 908,
+    "competition": 18,
+    "markets": 18,
+    "opportunities": 15,
+    "pncp_raw_bids": 1536,
+    "pncp_supplier_contracts": 11931,
+    "prices": 9,
+    "problem_service": 5,
+    "sc_public_entities": 2085
+  },
+  "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+  "denominators": {
+    "bids_total_loaded": 1536,
+    "classified_share_note": "Classified AEC share is pattern-matched objects only; not all public works are captured by keyword archetypes.",
+    "contracts_total_loaded": 11931
+  },
+  "freshness": {
+    "data_period_end": "2026-07-10",
+    "data_period_start": "2024-02-28",
+    "generated_at": "2026-07-31T11:43:36Z",
+    "max_age_days_policy": 180,
+    "note": "Not real-time. Snapshot at generated_at."
+  },
+  "generated_at": "2026-07-31T11:43:36Z",
+  "horizon": {
+    "period_end": "2026-07-10",
+    "period_start": "2024-02-28"
+  },
+  "limitations": [
+    "Export is aggregated and sanitized; no commercial pipeline fields.",
+    "Datalake coverage is incomplete relative to the national universe.",
+    "Do not interpret medians as unit prices.",
+    "Open opportunities are not guaranteed current after as_of."
+  ],
+  "methodology_notes": [
+    "ICP-Derived Evidence pSEO: archetypes from public objects + internal activity-class signature.",
+    "Allowlist sanitization applied; forbidden commercial fields stripped and asserted absent."
+  ],
+  "schema_version": "1.0.0",
+  "source_commit_sha": "a9c83cb1e671e4116c017aeb9e11ef6b4bd9864c",
+  "source_run_id": "pseo-wave1-20260731",
+  "sources": [
+    {
+      "role": "read_only_aggregate",
+      "table": "pncp_supplier_contracts"
+    },
+    {
+      "role": "read_only_aggregate",
+      "table": "pncp_raw_bids"
+    },
+    {
+      "role": "read_only_aggregate",
+      "table": "sc_public_entities"
+    }
+  ]
+}

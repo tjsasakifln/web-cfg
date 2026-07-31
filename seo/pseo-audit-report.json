@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "results": {
+    "snapshot": {
+      "ok": true
+    },
+    "validate": {
+      "ok": true,
+      "errors": [],
+      "warnings": [],
+      "publish_count": 24,
+      "noindex_count": 48,
+      "reject_count": 0,
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5"
+    },
+    "determinism": null,
+    "tracking": {
+      "events_declared_or_handled": [
+        "pseo_cta_click",
+        "pseo_whatsapp_click",
+        "pseo_related_page_click",
+        "pseo_source_open",
+        "pseo_table_interaction",
+        "pseo_form_start",
+        "pseo_form_submit"
+      ],
+      "missing_events": [],
+      "pii_filter_present": true,
+      "confengeTrack_exported": true
+    },
+    "regression": {
+      "conteudos_pages": 120,
+      "missing_pillars": [],
+      "main_sitemap_urls": 133,
+      "ok": true
+    },
+    "data_forbidden": {
+      "forbidden_found": [],
+      "ok": true
+    }
+  }
+}

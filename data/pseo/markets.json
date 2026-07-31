@@ -1,0 +1,2676 @@
+[
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 26,
+    "contract_count": 86,
+    "id": "market-edificacoes-publicas-rs",
+    "interpretation_hooks": [
+      "Concentração em 26 órgãos compradores distintos.",
+      "34 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 95."
+    ],
+    "limitations": [
+      "Base: 86 contratos classificados no arquétipo em RS; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 4563.0,
+    "modalities": [],
+    "open_opportunity_count": 95,
+    "p25_value": 775.13,
+    "p75_value": 23400.0,
+    "period_end": "2026-07-08",
+    "period_start": "2025-11-25",
+    "region": "RS",
+    "region_label": "Rio Grande do Sul",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-rs",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 34,
+    "top_buyers": [
+      {
+        "cnpj8": "88830609",
+        "contract_count": 49,
+        "municipio": "Caxias do Sul",
+        "name": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "total_value": 403758.04,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "01613067",
+        "contract_count": 4,
+        "municipio": "Turuçu",
+        "name": "EXECUTIVO MUNICIPAL",
+        "total_value": 938.5,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "92123926",
+        "contract_count": 4,
+        "municipio": "Alto Feliz",
+        "name": "PREFEITURA MUNICIPAL",
+        "total_value": 11038.16,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "88227764",
+        "contract_count": 2,
+        "municipio": "Tupanciretã",
+        "name": "PREFEITURA MUNICIPAL",
+        "total_value": 169072.0,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "88084942",
+        "contract_count": 2,
+        "municipio": "Pinheiro Machado",
+        "name": "PREFEITURA MUNICIPAL",
+        "total_value": 719204.02,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "88577416",
+        "contract_count": 2,
+        "municipio": "Canoas",
+        "name": "PREFEITURA MUNICIPAL DE CANOAS PREFEITURA MUNICIPAL DE CANOAS",
+        "total_value": 6481792.19,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "01611828",
+        "contract_count": 2,
+        "municipio": "Nova Ramada",
+        "name": "PREFEITURA MUNICIPAL",
+        "total_value": 900.0,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "97229181",
+        "contract_count": 2,
+        "municipio": "São Sepé",
+        "name": "PREFEITURA MUNICIPAL DE SAO SEPE/RS",
+        "total_value": 250900.0,
+        "uf": "RS"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 36,
+        "example_objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Professor Nandi, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, mater",
+        "label": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
+        "median_value": null
+      },
+      {
+        "count": 13,
+        "example_objeto": "Reajuste referente a prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Basílio Tcacenco, sob responsabilidade da SMED, com fornecimento de equi",
+        "label": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
+        "median_value": null
+      },
+      {
+        "count": 3,
+        "example_objeto": "CONTRATACAO DE EMPRESA PARA PRESTACAO DE SERVICOS DE HIGIENIZACAO E LIMPEZA EM ESPACOS PREDIOS PUBLICOS E EM EVENTOS DO MUNICIPIO DE ALTO FELIZ RS",
+        "label": "CONTRATACAO DE EMPRESA PARA PRESTACAO DE SERVICOS DE HIGIENIZACAO E…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Contratacao de empresa para realizar o conserto de parte da tubulacao do sistema de hidrante  PPCI  da Escola Municipal de Ensino Fundamental Dom Pedro I.",
+        "label": "Contratacao de empresa para realizar o conserto de parte da tubulacao…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Contratação de oficineiros para atuarem no Programa “Escola em Tempo Integral”, nas Escolas Municipais de Educação Infantil, Projeto do Programa AABB Comunidade e Centro Pedagógico Integrado Multiprof",
+        "label": "Contratação de oficineiros para atuarem no Programa “Escola em Tempo…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para elaboração dos Projetos de Prevenção e Proteção Contra Incêndio (PPCI) das edificações públicas do Município, é necessária para atender à legislação vigente e às exigências",
+        "label": "Contratação de empresa para elaboração dos Projetos de Prevenção e…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "A necessidade da contratacao decorre da demanda pela identificacao visual do Residencial 60  RS  das unidades habitacionais e do salao multiuso  mediante fornecimento de numeros metalicos com acabamen",
+        "label": "A necessidade da contratacao decorre da demanda pela identificacao…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratacao de empresa especializada em servicos de engenharia para a construcao de 4  quatro  salas de aula  em bloco anexo de 1  um  pavimento na EMEI Tania Cardoso  incluindo  demolicao parcial do ",
+        "label": "Contratacao de empresa especializada em servicos de engenharia para a…",
+        "median_value": null
+      }
+    ],
+    "total_value": 21139745.43,
+    "value_by_year": [
+      {
+        "contract_count": 2,
+        "total_value": 5380542.27,
+        "year": "2025"
+      },
+      {
+        "contract_count": 84,
+        "total_value": 15759203.16,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "pavimentacao-infraestrutura-viaria",
+    "buyer_count": 12,
+    "contract_count": 78,
+    "id": "market-pavimentacao-infraestrutura-viaria-pr",
+    "interpretation_hooks": [
+      "Concentração em 12 órgãos compradores distintos.",
+      "19 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 68."
+    ],
+    "limitations": [
+      "Base: 78 contratos classificados no arquétipo em PR; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 956.17,
+    "modalities": [],
+    "open_opportunity_count": 68,
+    "p25_value": 285.8,
+    "p75_value": 2900.68,
+    "period_end": "2026-07-08",
+    "period_start": "2026-01-26",
+    "region": "PR",
+    "region_label": "Paraná",
+    "segment": "Pavimentação e infraestrutura viária",
+    "slug": "pavimentacao-infraestrutura-viaria-pr",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 19,
+    "top_buyers": [
+      {
+        "cnpj8": "76205640",
+        "contract_count": 65,
+        "municipio": "Dois Vizinhos",
+        "name": "PREFEITURA MUNICIPAL DE DOIS VIZINHOS - PR",
+        "total_value": 93702.1,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "95587770",
+        "contract_count": 3,
+        "municipio": "Rio Bonito do Iguaçu",
+        "name": "PREFEITURA MUNICIPAL DE RIO BONITO DO IGUAÇU - PR",
+        "total_value": 448880.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "75743377",
+        "contract_count": 1,
+        "municipio": "Astorga",
+        "name": "Unidade administrativa",
+        "total_value": 91200.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "80670904",
+        "contract_count": 1,
+        "municipio": "Santa Isabel do Ivaí",
+        "name": "UNIDADE ADMINISTRATIVA",
+        "total_value": 23103.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "00944673",
+        "contract_count": 1,
+        "municipio": "Cascavel",
+        "name": "Unidade administrativa",
+        "total_value": 23000.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "76279975",
+        "contract_count": 1,
+        "municipio": "Uniflor",
+        "name": "Departamento de Assistencia Social",
+        "total_value": 92000.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "95594800",
+        "contract_count": 1,
+        "municipio": "Anahy",
+        "name": "DR Anahy-  Divisão de Maquinas e Equipamentos",
+        "total_value": 517000.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "75904524",
+        "contract_count": 1,
+        "municipio": "Campo Mourão",
+        "name": "Gabinete do Secretário de Mobilidade Urbana",
+        "total_value": 217200.0,
+        "uf": "PR"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 53,
+        "example_objeto": "Credenciamento de empresas interessadas em fornecer peças, componentes, acessórios e fluídos para manutenção dos veículos de passeio e utilitários, vans, ônibus, caminhões e máquinas rodoviárias e agr",
+        "label": "Credenciamento de empresas interessadas em fornecer peças,…",
+        "median_value": null
+      },
+      {
+        "count": 12,
+        "example_objeto": "Credenciamento de empresas para prestação de serviços de manutenção mecânica de veículos de passeio e utilitários, vans, ônibus, caminhões e máquinas rodoviárias e agrícolas da frota municipal.",
+        "label": "Credenciamento de empresas para prestação de serviços de manutenção…",
+        "median_value": null
+      },
+      {
+        "count": 3,
+        "example_objeto": "Aquisição de um veículo automotor tipo passeio com capacidade mínima de 7 (sete) ocupantes, por meio de adesão (carona) à Ata de Registro de Preços nº 031/2025, decorrente do Pregão Eletrônico nº 021/",
+        "label": "Aquisição de um veículo automotor tipo passeio com capacidade mínima…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de pessoa jurídica para serviços de locação de veículos, 2 (dois) tipo passeio e outros 3 (três) tipo van/minibus, com a finalidade de atender demandas do transporte sanitário do Município",
+        "label": "Contratação de pessoa jurídica para serviços de locação de veículos, 2…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "contratação de empresa especializada para aquisição de 300 (trezentas) caixas de proteção para hidrômetros em polipropileno (PP) de passeio, ovalada, tamanho grande, e 300 (trezentos) kits de conexão ",
+        "label": "contratação de empresa especializada para aquisição de 300 (trezentas)…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de serviço de transporte rodoviário (locação de ônibus) para a delegação de Secretários Municipais de Saúde e equipe técnica, participantes do Congresso CONASEMS em Porto Alegre – RS.",
+        "label": "Contratação de serviço de transporte rodoviário (locação de ônibus)…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA O FORNECIMENTO DE HOSPEDAGEM, ALIMENTAÇÃO E INGRESSO DE PASSEIOS COM A FINALIDADE DE REALIZAR VIAGENS VISANDO PROMOVER O TURISMO SOCIAL COM IDOSOS PARTICIPANT",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA O FORNECIMENTO DE…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de 01 (um) veículo automotor pesado novo - Caminhão Rodoviário 4x2 equipado com Caçamba Basculante de 5m3.",
+        "label": "Aquisição de 01 (um) veículo automotor pesado novo - Caminhão…",
+        "median_value": null
+      }
+    ],
+    "total_value": 2062577.45,
+    "value_by_year": [
+      {
+        "contract_count": 78,
+        "total_value": 2062577.45,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 33,
+    "contract_count": 66,
+    "id": "market-edificacoes-publicas-sc",
+    "interpretation_hooks": [
+      "Concentração em 33 órgãos compradores distintos.",
+      "23 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 87."
+    ],
+    "limitations": [
+      "Base: 66 contratos classificados no arquétipo em SC; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 750.0,
+    "modalities": [],
+    "open_opportunity_count": 87,
+    "p25_value": 282.0,
+    "p75_value": 5585.3,
+    "period_end": "2026-07-08",
+    "period_start": "2026-06-12",
+    "region": "SC",
+    "region_label": "Santa Catarina",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-sc",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 23,
+    "top_buyers": [
+      {
+        "cnpj8": "82821208",
+        "contract_count": 11,
+        "municipio": "Itapiranga",
+        "name": "MUNICÍPIO DE ITAPIRANGA",
+        "total_value": 97697.78,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "78486198",
+        "contract_count": 8,
+        "municipio": "Tunápolis",
+        "name": "MUNICÍPIO DE TUNÁPOLIS",
+        "total_value": 4803.09,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83102384",
+        "contract_count": 7,
+        "municipio": "Canoinhas",
+        "name": "MUNICÍPIO DE CANOINHAS",
+        "total_value": 4246.7,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83102293",
+        "contract_count": 3,
+        "municipio": "Camboriú",
+        "name": "MUNICÍPIO DE CAMBORIÚ",
+        "total_value": 1670.32,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "82821216",
+        "contract_count": 3,
+        "municipio": "Guaraciaba",
+        "name": "MUNICÍPIO DE GUARACIABA",
+        "total_value": 543.04,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "80637457",
+        "contract_count": 2,
+        "municipio": "Jardinópolis",
+        "name": "MUNICÍPIO DE JARDINÓPOLIS",
+        "total_value": 827.25,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "82939232",
+        "contract_count": 2,
+        "municipio": "Campos Novos",
+        "name": "MUNICÍPIO DE CAMPOS NOVOS",
+        "total_value": 521054.96,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "82804212",
+        "contract_count": 2,
+        "municipio": "Águas de Chapecó",
+        "name": "MUNICÍPIO DE ÁGUAS DE CHAPECÓ",
+        "total_value": 315300.0,
+        "uf": "SC"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 49,
+        "example_objeto": "MATERIAIS ELÉTRICOS PARA EDIFICAÇÕES - LEI 14.133/2021",
+        "label": "MATERIAIS ELÉTRICOS PARA EDIFICAÇÕES - LEI 14.133/2021",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Contratação de empresa especializada para execução de serviços de limpeza e desinfecção das caixas d'aguas e cisternas de vários prédios do TRE-SC (região1,2 e 4)",
+        "label": "Contratação de empresa especializada para execução de serviços de…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA FORNECIMENTO DE SOLUÇÃO INTEGRADA DE SEGURANÇA ELETRÔNICA, COMPREENDENDO O FORNECIMENTO, INSTALAÇÃO, CONFIGURAÇÃO, MONITORAMENTO REMOTO ININTERRUPTO (24 HORAS",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA FORNECIMENTO DE SOLUÇÃO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA NO RAMO DA CONSTRUÇÃO CIVIL PARA EXECUÇÃO DAS OBRAS DE AMPLIAÇÃO DA ESCOLA DE TEMPO INTEGRAL DO MUNICÍPIO DE ÁGUAS DE CHAPECÓ, INCLUINDO O FORNECIMENTO INTEGRAL DE",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA NO RAMO DA CONSTRUÇÃO CIVIL PARA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para a REFORMA DO ABRIGO\nDE MENORES RAIO DE LUZ, conforme projetos, memorial descritivo, planilha orçamentária,\ncronograma físico financeiro, ART e demais document",
+        "label": "Contratação de empresa especializada para a REFORMA DO ABRIGO DE…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Concessão de uso de espaço público a entidade sem fins lucrativos sediadas no município de Xanxerê-SC, com base na Lei Municipal nº 4553/2024 que autoriza ao Município de Xanxerê a conceder a cessão d",
+        "label": "Concessão de uso de espaço público a entidade sem fins lucrativos…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE ARQUIBANCADAS EM ESTRUTURA METÁLICA NO GINÁSIO DO BAIRRO NOVO HORIZONTE, INCLUINDO O FORNECIMENTO DE MATERIAIS, MÃO DE OBRA, EQUIPAMENTOS, MONTAGE",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE ARQUIBANCADAS EM…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA FORNECIMENTO DE MATERIAIS, MÃO DE OBRA E DEMAIS OBRIGAÇÕES NECESSÁRIAS PARA EXECUÇÃO DA OBRA DE REFORMA DO TELHADO DO CENTRO CULTURAL DR. GENÉSIO TURECK, LOCA",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA FORNECIMENTO DE MATERIAIS,…",
+        "median_value": null
+      }
+    ],
+    "total_value": 5669295.99,
+    "value_by_year": [
+      {
+        "contract_count": 66,
+        "total_value": 5669295.99,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "manutencao-predial-engenharia",
+    "buyer_count": 3,
+    "contract_count": 51,
+    "id": "market-manutencao-predial-engenharia-rs",
+    "interpretation_hooks": [
+      "Concentração em 3 órgãos compradores distintos.",
+      "3 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 7."
+    ],
+    "limitations": [
+      "Base: 51 contratos classificados no arquétipo em RS; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 2742.75,
+    "modalities": [],
+    "open_opportunity_count": 7,
+    "p25_value": 877.5,
+    "p75_value": 15151.5,
+    "period_end": "2026-07-03",
+    "period_start": "2026-07-01",
+    "region": "RS",
+    "region_label": "Rio Grande do Sul",
+    "segment": "Manutenção predial e serviços de engenharia",
+    "slug": "manutencao-predial-engenharia-rs",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 3,
+    "top_buyers": [
+      {
+        "cnpj8": "88830609",
+        "contract_count": 49,
+        "municipio": "Caxias do Sul",
+        "name": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "total_value": 403758.04,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "88084942",
+        "contract_count": 1,
+        "municipio": "Pinheiro Machado",
+        "name": "PREFEITURA MUNICIPAL",
+        "total_value": 186661.75,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "87990800",
+        "contract_count": 1,
+        "municipio": "Cachoeirinha",
+        "name": "SECRETARIA MUNICIPAL DE EDUCACAO",
+        "total_value": 2198.0,
+        "uf": "RS"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 36,
+        "example_objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Professor Nandi, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, mater",
+        "label": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
+        "median_value": null
+      },
+      {
+        "count": 13,
+        "example_objeto": "Reajuste referente a prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Basílio Tcacenco, sob responsabilidade da SMED, com fornecimento de equi",
+        "label": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratacao de empresa especializada em servicos de engenharia para a construcao de 4  quatro  salas de aula  em bloco anexo de 1  um  pavimento na EMEI Tania Cardoso  incluindo  demolicao parcial do ",
+        "label": "Contratacao de empresa especializada em servicos de engenharia para a…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para fornecimento de assinatura anual de ferramenta de pesquisa e elaboração de orçamentos para obras e serviços de engenharia, com fundamento no art. 74, inciso I",
+        "label": "Contratação de empresa especializada para fornecimento de assinatura…",
+        "median_value": null
+      }
+    ],
+    "total_value": 592617.79,
+    "value_by_year": [
+      {
+        "contract_count": 51,
+        "total_value": 592617.79,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 20,
+    "contract_count": 44,
+    "id": "market-edificacoes-publicas-go",
+    "interpretation_hooks": [
+      "Concentração em 20 órgãos compradores distintos.",
+      "43 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 44 contratos classificados no arquétipo em GO; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 2899.99,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 690.42,
+    "p75_value": 25000.0,
+    "period_end": "2026-07-08",
+    "period_start": "2026-06-18",
+    "region": "GO",
+    "region_label": "Goiás",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-go",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 43,
+    "top_buyers": [
+      {
+        "cnpj8": "08083086",
+        "contract_count": 16,
+        "municipio": "Bela Vista de Goiás",
+        "name": "FMS BELA VISTA DE GOIAS",
+        "total_value": 23548.89,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "01318898",
+        "contract_count": 4,
+        "municipio": "Araçu",
+        "name": "PODER EXECUTIVO",
+        "total_value": 220736.21,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "01005917",
+        "contract_count": 3,
+        "municipio": "Bela Vista de Goiás",
+        "name": "FMS BELA VISTA DE GOIAS",
+        "total_value": 2353.1,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "25107525",
+        "contract_count": 3,
+        "municipio": "Senador Canedo",
+        "name": "PREFEITURA MUNICIPAL DE SENADOR CANEDO",
+        "total_value": 27099.0,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "01165729",
+        "contract_count": 3,
+        "municipio": "Jataí",
+        "name": "SECRETARIA DE OBRAS E PLANEJAMENTO URBANO",
+        "total_value": 79296.17,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "02056729",
+        "contract_count": 1,
+        "municipio": "Rio Verde",
+        "name": "PREFEITURA MUNICIPAL DE RIO VERDE",
+        "total_value": 1137998.87,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "14507708",
+        "contract_count": 1,
+        "municipio": "Flores de Goiás",
+        "name": "FUNDO MUNICIPAL DE ASSISTENCIA SOCIAL",
+        "total_value": 276545.61,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "01138122",
+        "contract_count": 1,
+        "municipio": "Cristalina",
+        "name": "Prefeitura Municipal de Cristalina",
+        "total_value": 1045.49,
+        "uf": "GO"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 14,
+        "example_objeto": "VALOR QUE SE EMPENHA PARA OCORRER DESPESAS COM FORNECIMENTO DE MATERIAIS,INSUMOS E INSTRUMENTOS ODONTOLOGICOS ATENDENDO AS UBS  A PEDIDO DA SEC MUN DE SAÚDE,CONFORME PREGÃO ELETRÔNICO Nº 046/2025 DA A",
+        "label": "VALOR QUE SE EMPENHA PARA OCORRER DESPESAS COM FORNECIMENTO DE…",
+        "median_value": null
+      },
+      {
+        "count": 4,
+        "example_objeto": "Registro de preços para contratação de empresa para fornecimento de materiais elétricos de forma continua e fracionada conforme demanda para a prefeitura e manutenção das redes elétricas do município ",
+        "label": "Registro de preços para contratação de empresa para fornecimento de…",
+        "median_value": null
+      },
+      {
+        "count": 3,
+        "example_objeto": "AQUISIÇÃO DE MATERIAIS PERMANENTES PARA ATENDER ÀS NECESSIDADES DA ESCOLA MUNICIPAL PADRE JOSÉ, PERTENCENTE À REDE MUNICIPAL DE ENSINO DE SENADOR CANEDO – GO, COM RECURSOS ORIUNDOS DA EMENDA PARLAMENT",
+        "label": "AQUISIÇÃO DE MATERIAIS PERMANENTES PARA ATENDER ÀS NECESSIDADES DA…",
+        "median_value": null
+      },
+      {
+        "count": 3,
+        "example_objeto": "O objeto da presente licitação é a escolha da proposta mais vantajosa para aquisição de materiais destinados às manutenções das instalações elétricas e hidráulicas/ hidrossanitárias dos prédios públic",
+        "label": "O objeto da presente licitação é a escolha da proposta mais vantajosa…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "VALOR QUE SE EMPENHA PARA OCORRER DESPESA COM FORNECIMENTO DE MAT. DE EXPEDIENTE PARA ATENDER AS NECESSIDADES DA UBS I. A PEDIDO DA SEC MUN DE SAÚDE,CONF. PREGÃO ELETRÔNICO Nº 020/2025 DA ATA DE REGIS",
+        "label": "VALOR QUE SE EMPENHA PARA OCORRER DESPESA COM FORNECIMENTO DE MAT. DE…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "VALOR QUE SE EMPENHA PARA OCORRER DESPESA COM FORNECIMENTO DE EQUIPAMENTOS ODONTOLÓGICOS ATENDENDO AS NECESSIDADES DA UBS BARCELONA A PEDIDO DA SEC MUN DE SAÚDE,CONFORME PREGÃO ELETRÔNICO Nº 041/2025 ",
+        "label": "VALOR QUE SE EMPENHA PARA OCORRER DESPESA COM FORNECIMENTO DE…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATO 153/2026 PROTOCOLO 8865/2026 CONCORRÊNCIA 90.004/2026, CÓDIGO DE OBRA 936,TEM COMO OBJETO  A CONTRATAÇÃO DE EMPRESA ESPECIALIZADA EM SERVIÇOS DE ENGENHARIA CIVIL, MEDIANTE O REGIME DE EMPREIT",
+        "label": "CONTRATO 153/2026 PROTOCOLO 8865/2026 CONCORRÊNCIA 90.004/2026, CÓDIGO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DAS OBRAS E SERVIÇOS DE REFORMA DO CENTRO DE REFERÊNCIA DE ASSISTÊNCIA SOCIAL - CRAS DE FLORES DE GOIÁS",
+        "label": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DAS OBRAS E SERVIÇOS DE REFORMA…",
+        "median_value": null
+      }
+    ],
+    "total_value": 4421976.29,
+    "value_by_year": [
+      {
+        "contract_count": 44,
+        "total_value": 4421976.29,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 21,
+    "contract_count": 43,
+    "id": "market-edificacoes-publicas-sp",
+    "interpretation_hooks": [
+      "Concentração em 21 órgãos compradores distintos.",
+      "28 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 43 contratos classificados no arquétipo em SP; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 10756.8,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 2728.0,
+    "p75_value": 41522.75,
+    "period_end": "2026-07-08",
+    "period_start": "2024-02-28",
+    "region": "SP",
+    "region_label": "São Paulo",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-sp",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 28,
+    "top_buyers": [
+      {
+        "cnpj8": "45132495",
+        "contract_count": 22,
+        "municipio": "Limeira",
+        "name": "PREFEITURA MUNICIPAL DE LIMEIRA",
+        "total_value": 391564.8,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "46179958",
+        "contract_count": 2,
+        "municipio": "Cândido Mota",
+        "name": "PREFEITURA MUNICIPAL DE CÂNDIDO MOTA",
+        "total_value": 33960.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "46523080",
+        "contract_count": 1,
+        "municipio": "Franco da Rocha",
+        "name": "Prefeitura de Franco da Rocha",
+        "total_value": 23520.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "45358249",
+        "contract_count": 1,
+        "municipio": "São Carlos",
+        "name": "PREFEITURA MUNICIPAL DE SÃO CARLOS",
+        "total_value": 10154.95,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "45352267",
+        "contract_count": 1,
+        "municipio": "Pontal",
+        "name": "PREFEITURA MUNICIPAL DE PONTAL - SP",
+        "total_value": 6320000.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "46634499",
+        "contract_count": 1,
+        "municipio": "Boituva",
+        "name": "PREFEITURA MUNICIPAL",
+        "total_value": 216590.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "63025530",
+        "contract_count": 1,
+        "municipio": "Ribeirão Preto",
+        "name": "ESP-FACULDADE DE MEDICINA RIBERÃO PRETO - USP",
+        "total_value": 2450.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "65694846",
+        "contract_count": 1,
+        "municipio": "Embu-Guaçu",
+        "name": "CAMARA MUNICIPAL DE EMBU-GUACU",
+        "total_value": 32230.0,
+        "uf": "SP"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 22,
+        "example_objeto": "EVENTUAL AQUISICAO DE MATERIAL ESCOLA, E SCRITORIO E PAPELARIA",
+        "label": "EVENTUAL AQUISICAO DE MATERIAL ESCOLA, E SCRITORIO E PAPELARIA",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "REALIZAÇÃO DE PALESTRA COM O TEMA: “ESCOLA COMO TERRITÓRIO  DE DIREITOS: INCLUSÃO, EQUIDADE E CONVIVÊNCIAREALIZAÇÃO DE DUAS PALESTRAS COM OS TEMAS: PALESTRA 1 -“ENSINAR COM EQUIDADE: PRÁTICAS PEDAGÓGI",
+        "label": "REALIZAÇÃO DE PALESTRA COM O TEMA: “ESCOLA COMO TERRITÓRIO DE…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CREDENCIAMENTO DE PRESTADORES DE SERVIÇOS NAS OFICINAS ESPORTIVAS PARA O PROGRAMA ESCOLA ABERTA",
+        "label": "CREDENCIAMENTO DE PRESTADORES DE SERVIÇOS NAS OFICINAS ESPORTIVAS PARA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "O PROCON de São Carlos solicita a aquisição de 05 aparelhos de ar condicionado 12000 BTUS, por meio de ata de registro de preço, para atender as necessidades do Departamento de Defesa do Consumidor, a",
+        "label": "O PROCON de São Carlos solicita a aquisição de 05 aparelhos de ar…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DE OBRA DE CONSTRUÇÃO DE 50 CASAS DO PROGRAMA MINHA CASA, MINHA VIDA (RECURSO FEDERAL).",
+        "label": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DE OBRA DE CONSTRUÇÃO DE 50 CASAS…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratacao de empresa especializada para executar a reforma do predio para implantacao do FAB LAB BOITUVA  localizado na Rua Joao Marcon  291   Boituva SP  incluindo todos os servicos  materiais  mao",
+        "label": "Contratacao de empresa especializada para executar a reforma do predio…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "SUPORTE PARA REGULARIZAÇÃO DO AUTO DE VISTORIA DO CORPO DE BOMBEIROS (AVCB) DOS PRÉDIOS DO DEPTO DE CIÊNCIAS DA SAÚDE E BLOCO DIDÁTICO DA FMRP-USP",
+        "label": "SUPORTE PARA REGULARIZAÇÃO DO AUTO DE VISTORIA DO CORPO DE BOMBEIROS…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "FORNECIMENTO DE ENERGIA ELETRICA PARA O PREDIO PRINCIPAL DO LEGISLATIVO PREDIO D",
+        "label": "FORNECIMENTO DE ENERGIA ELETRICA PARA O PREDIO PRINCIPAL DO…",
+        "median_value": null
+      }
+    ],
+    "total_value": 12082868.68,
+    "value_by_year": [
+      {
+        "contract_count": 1,
+        "total_value": 32230.0,
+        "year": "2024"
+      },
+      {
+        "contract_count": 42,
+        "total_value": 12050638.68,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "climatizacao-instalacoes",
+    "buyer_count": 15,
+    "contract_count": 36,
+    "id": "market-climatizacao-instalacoes-sp",
+    "interpretation_hooks": [
+      "Concentração em 15 órgãos compradores distintos.",
+      "23 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 36 contratos classificados no arquétipo em SP; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 5450.0,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 1264.46,
+    "p75_value": 152080.29,
+    "period_end": "2026-07-08",
+    "period_start": "2026-04-01",
+    "region": "SP",
+    "region_label": "São Paulo",
+    "segment": "Climatização e instalações prediais",
+    "slug": "climatizacao-instalacoes-sp",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 23,
+    "top_buyers": [
+      {
+        "cnpj8": "60509015",
+        "contract_count": 11,
+        "municipio": "São Paulo",
+        "name": "ESP-PRESTACAO DE SERVICOS FDE/SEE",
+        "total_value": 8640018.02,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "01576782",
+        "contract_count": 5,
+        "municipio": "Pratânia",
+        "name": "ADMINISTRAÇÃO GERAL",
+        "total_value": 14327.53,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "46384111",
+        "contract_count": 3,
+        "municipio": "Sumaré",
+        "name": "ESP-DIR.ENS.-REG.SUMARE",
+        "total_value": 12643.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "48031918",
+        "contract_count": 3,
+        "municipio": "Jaboticabal",
+        "name": "ESP-UNESP-FAC CIENCIAS AGR E VETER.-C.JABOTIC",
+        "total_value": 4218.92,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "04691691",
+        "contract_count": 2,
+        "municipio": "São José do Rio Preto",
+        "name": "SERVICO MUNICIPAL AUTONOMO DE AGUA E ESGOTO",
+        "total_value": 1810.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "60746179",
+        "contract_count": 2,
+        "municipio": "São Paulo",
+        "name": "CONSELHO REG. DOS REP.COMERCIAIS ESTADO DE SP",
+        "total_value": 5725.39,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "48986798",
+        "contract_count": 2,
+        "municipio": "Salto",
+        "name": "CÂMARA MUNICIPAL DA ESTÂNCIA TURISTICA DE SALTO",
+        "total_value": 2494.46,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "45358249",
+        "contract_count": 1,
+        "municipio": "São Carlos",
+        "name": "PREFEITURA MUNICIPAL DE SÃO CARLOS",
+        "total_value": 10154.95,
+        "uf": "SP"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 5,
+        "example_objeto": "Registro de preços de prestação de serviços de manutenção preventiva e corretiva de veículos automotores leves, médios, pesados e maquinários, sem fornecimento de peças, por demanda, por serviço execu",
+        "label": "Registro de preços de prestação de serviços de manutenção preventiva e…",
+        "median_value": null
+      },
+      {
+        "count": 4,
+        "example_objeto": "EXECUÇÃO DE INFRAESTRUTURA ELÉTRICA E DE CLIMATIZAÇÃO.",
+        "label": "EXECUÇÃO DE INFRAESTRUTURA ELÉTRICA E DE CLIMATIZAÇÃO.",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Aquisição e instalação de aparelhos de ar-condicionado, purificadores de água, refrigeradores, freezers, eletrodomésticos e refis de filtro.",
+        "label": "Aquisição e instalação de aparelhos de ar-condicionado, purificadores…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de um motor do ventilador (chavetado) do condensador do equipamento ar condicionado 58.000 BTU/hsPACE – CARRIER Pat. 6508.",
+        "label": "Aquisição de um motor do ventilador (chavetado) do condensador do…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de uma turbina para ar condicionado tipo split hi-wall inverter frio 12.000 btu/h – 220v Philco modelo: PAC12000ITFM9W.",
+        "label": "Aquisição de uma turbina para ar condicionado tipo split hi-wall…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "O PROCON de São Carlos solicita a aquisição de 05 aparelhos de ar condicionado 12000 BTUS, por meio de ata de registro de preço, para atender as necessidades do Departamento de Defesa do Consumidor, a",
+        "label": "O PROCON de São Carlos solicita a aquisição de 05 aparelhos de ar…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de profissional especializado para a execução dos serviços de desinstalação e instalação de 10 aparelhos de ar-condicionado, compreendendo unidades condensadoras e evaporadoras.",
+        "label": "Contratação de profissional especializado para a execução dos serviços…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATACAO DE SERVICO DE CLIMATIZACAO COM FORNECIMENTO DE MATERIAL E MAO DE OBRA PARA CRECHES E PRE ESCOLAS",
+        "label": "CONTRATACAO DE SERVICO DE CLIMATIZACAO COM FORNECIMENTO DE MATERIAL E…",
+        "median_value": null
+      }
+    ],
+    "total_value": 10142645.02,
+    "value_by_year": [
+      {
+        "contract_count": 36,
+        "total_value": 10142645.02,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "saneamento-hidraulica",
+    "buyer_count": 15,
+    "contract_count": 28,
+    "id": "market-saneamento-hidraulica-sp",
+    "interpretation_hooks": [
+      "Concentração em 15 órgãos compradores distintos.",
+      "26 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 28 contratos classificados no arquétipo em SP; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 40830.0,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 8255.25,
+    "p75_value": 197799.69,
+    "period_end": "2026-07-08",
+    "period_start": "2024-09-11",
+    "region": "SP",
+    "region_label": "São Paulo",
+    "segment": "Saneamento e hidráulica",
+    "slug": "saneamento-hidraulica-sp",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 26,
+    "top_buyers": [
+      {
+        "cnpj8": "05211356",
+        "contract_count": 7,
+        "municipio": "São Pedro",
+        "name": "SAAESP",
+        "total_value": 300910.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "07750478",
+        "contract_count": 3,
+        "municipio": "Sertãozinho",
+        "name": "SERVIÇO AUTÔNOMO DE ÁGUA, ESGOTO E MEIO AMBIENTE DE SERTÃOZINHO - SAEMAS",
+        "total_value": 553959.5,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "60509015",
+        "contract_count": 3,
+        "municipio": "São Paulo",
+        "name": "ESP-PRESTACAO DE SERVICOS FDE/SEE",
+        "total_value": 2827756.89,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "46711362",
+        "contract_count": 2,
+        "municipio": "Mogi Mirim",
+        "name": "SERVIÇO AUT.DE Á?GUA E ESGOTO DE MOGI-MIRIM",
+        "total_value": 23148.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "96291141",
+        "contract_count": 2,
+        "municipio": "Praia Grande",
+        "name": "ESP-CTO.DET.PROV.\"ASP CHARLES D.TEIXEIRA\" PG",
+        "total_value": 70199.34,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "44919918",
+        "contract_count": 2,
+        "municipio": "Lucélia",
+        "name": "FUNDO MUNICIPAL DE SAÚDE",
+        "total_value": 1120.2,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "46363933",
+        "contract_count": 1,
+        "municipio": "Louveira",
+        "name": "Louveira",
+        "total_value": 2054899.92,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "45352267",
+        "contract_count": 1,
+        "municipio": "Pontal",
+        "name": "PREFEITURA MUNICIPAL DE PONTAL - SP",
+        "total_value": 469470.0,
+        "uf": "SP"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 3,
+        "example_objeto": "Contratacao de empresa especializada para prestacao de servicos de engenharia consultiva  visando assessoria tecnica junto ao Servico Autonomo de Agua e Esgoto de Sao Pedro   SAAESP  atraves do criter",
+        "label": "Contratacao de empresa especializada para prestacao de servicos de…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "AQUISIÇÃO DE SELINS AUTOAJUSTÁVEIS PARA REDES DE ESGOTOS FABRICADOS EM PVC E PP, PARA REPOSIÇÃO DE ESTOQUE DO ALMOXARIFADO DO SAAE MOGI MIRIM",
+        "label": "AQUISIÇÃO DE SELINS AUTOAJUSTÁVEIS PARA REDES DE ESGOTOS FABRICADOS EM…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Aquisição de 1 alavanca de aço 1\" x 1.800mm destinada ao uso pelo setor para atividades de abertura, movimentação, ajuste e remoção de componentes e estruturas utilizadas nas intervenções operacionais",
+        "label": "Aquisição de 1 alavanca de aço 1\" x 1.800mm destinada ao uso pelo…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Registro de preços pelo prazo de 12 (doze) meses para aquisição de medicamentos (genéricos, similares ou éticos), de acordo com a requisição da secretaria municipal de saúde e saneamento, cujas quanti",
+        "label": "Registro de preços pelo prazo de 12 (doze) meses para aquisição de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para implantação do sistema de desidratação do lodo da estação de tratamento de água - ETA do Município de Louveira.",
+        "label": "Contratação de empresa especializada para implantação do sistema de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisicao de uniformes operacionais para os funcionarios do Servico Autonomo de Agua e Esgoto de Sao Pedro   SAAESP",
+        "label": "Aquisicao de uniformes operacionais para os funcionarios do Servico…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratacao de empresa especializada para execucao de servicos tecnicos de levantamento topografico  estudo de concepcao e alternativas e elaboracao de projeto executivo de redes coletoras e sistema d",
+        "label": "Contratacao de empresa especializada para execucao de servicos…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratacao de empresa para prestacao de servicos de organizacao e realizacao de concurso publico. Para provimento de vagas  de emprego dos seguintes cargos     Servicos Gerais   Pedreiro   Almoxarife",
+        "label": "Contratacao de empresa para prestacao de servicos de organizacao e…",
+        "median_value": null
+      }
+    ],
+    "total_value": 10347510.04,
+    "value_by_year": [
+      {
+        "contract_count": 1,
+        "total_value": 10955.04,
+        "year": "2024"
+      },
+      {
+        "contract_count": 27,
+        "total_value": 10336555.0,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 22,
+    "contract_count": 27,
+    "id": "market-edificacoes-publicas-mg",
+    "interpretation_hooks": [
+      "Concentração em 22 órgãos compradores distintos.",
+      "26 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 27 contratos classificados no arquétipo em MG; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 419998.0,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 71974.8,
+    "p75_value": 1850000.0,
+    "period_end": "2026-07-08",
+    "period_start": "2025-10-28",
+    "region": "MG",
+    "region_label": "Minas Gerais",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-mg",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 26,
+    "top_buyers": [
+      {
+        "cnpj8": "20356747",
+        "contract_count": 2,
+        "municipio": "Entre Rios de Minas",
+        "name": "PREFEITURA MUNICIPAL DE ENTRE RIOS DE MINAS",
+        "total_value": 1604955.41,
+        "uf": "MG"
+      },
+      {
+        "cnpj8": "24212862",
+        "contract_count": 2,
+        "municipio": "Rio Pardo de Minas",
+        "name": "Prefeitura Municipal de Rio Pardo de Minas",
+        "total_value": 847894.54,
+        "uf": "MG"
+      },
+      {
+        "cnpj8": "18677591",
+        "contract_count": 2,
+        "municipio": "Extrema",
+        "name": "Unidade Única",
+        "total_value": 2221236.98,
+        "uf": "MG"
+      },
+      {
+        "cnpj8": "17724162",
+        "contract_count": 2,
+        "municipio": "Maripá de Minas",
+        "name": "MUNICIPIO DE MARIPA DE MINAS",
+        "total_value": 68000.0,
+        "uf": "MG"
+      },
+      {
+        "cnpj8": "18298174",
+        "contract_count": 2,
+        "municipio": "Córrego Danta",
+        "name": "MUNICÍPIO DE CÓRREGO DANTA-MG",
+        "total_value": 832898.0,
+        "uf": "MG"
+      },
+      {
+        "cnpj8": "18313825",
+        "contract_count": 1,
+        "municipio": "Igaratinga",
+        "name": "Unidade Única",
+        "total_value": 2739368.56,
+        "uf": "MG"
+      },
+      {
+        "cnpj8": "18715425",
+        "contract_count": 1,
+        "municipio": "Vespasiano",
+        "name": "Unidade Única",
+        "total_value": 8718990.04,
+        "uf": "MG"
+      },
+      {
+        "cnpj8": "18314609",
+        "contract_count": 1,
+        "municipio": "Ribeirão das Neves",
+        "name": "Unidade Única",
+        "total_value": 803230.93,
+        "uf": "MG"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 2,
+        "example_objeto": "Contratação de empresa especializada para execução de obra de engenharia destinada à ampliação do prédio da Escola Municipal Pedacinho do Céu, compreendendo o fornecimento de materiais, mão de obra, e",
+        "label": "Contratação de empresa especializada para execução de obra de…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "[LICITANET] - [LICITANET] - Contratação de empresa especializada para execução de obra de prevenção contra incêndio e combate ao pânico da Escola Municipal Helena Eustáquia de Souza, sede do Centro de",
+        "label": "[LICITANET] - [LICITANET] - Contratação de empresa especializada para…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Aquisição de materiais para construção da primeira etapa da ampliação da Escola Municipal Antônio Ferreira Martins.",
+        "label": "Aquisição de materiais para construção da primeira etapa da ampliação…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para execução das obras de Construção de Habitações de Interesse Social – FNHIS – Padrão Popular (20 unidades habitacionais) no município de Igaratinga, Programa: 5600020240048 ",
+        "label": "Contratação de empresa para execução das obras de Construção de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATACAO, SOB O REGIME SEMI-INTEGRADO, DE EMPRESA ESPECIALIZADA OU CONSORCIO ESPECIALIZADO PARA CONFECCIONAR O PROJETO EXECUTIVO E EXECUTAR A OBRA REFERENTE A CONSTRUCAO DA UBS PADRAO SES TIPO I, E",
+        "label": "CONTRATACAO, SOB O REGIME SEMI-INTEGRADO, DE EMPRESA ESPECIALIZADA OU…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATACAO DE PESSOAS JURIDICAS E/OU FISICAS PARA PRESTAREM SERVICOS EM SHOWS ARTISTICOS (BANDAS, DUPLAS E/OU ARTISTAS) DESTINADOS A APRESENTACOES MUSICAIS EM DIFERENTES ESTILOS PARA ATENDER EVENTOS/",
+        "label": "CONTRATACAO DE PESSOAS JURIDICAS E/OU FISICAS PARA PRESTAREM SERVICOS…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE CONSTRUÇÃO DE ESCOLA EM TEMPO INTEGRAL – FNDE – PROJETO PRÓPRIO NO BAIRRO GÁVEA, COM RECURSOS PROVENIENTES DO TERMO DE COMPROMISSO nº 1096502-67/2",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE CONSTRUÇÃO DE…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "PRESTAÇÃO DE SERVIÇO DE CONSTRUÇÃO DE ALAMBRADOS E OBRAS COMPLEMENTARES, COM FORNECIMENTO DE MATERIAIS, NOS CAMPOS DE VÁRZEA LOCALIZADOS NOS BAIRROS KÁTIA E ROSANEVES, NOS TERMOS DO ANEXO II – PROJETO",
+        "label": "PRESTAÇÃO DE SERVIÇO DE CONSTRUÇÃO DE ALAMBRADOS E OBRAS…",
+        "median_value": null
+      }
+    ],
+    "total_value": 33693947.35,
+    "value_by_year": [
+      {
+        "contract_count": 2,
+        "total_value": 68000.0,
+        "year": "2025"
+      },
+      {
+        "contract_count": 25,
+        "total_value": 33625947.35,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "pavimentacao-infraestrutura-viaria",
+    "buyer_count": 17,
+    "contract_count": 24,
+    "id": "market-pavimentacao-infraestrutura-viaria-sp",
+    "interpretation_hooks": [
+      "Concentração em 17 órgãos compradores distintos.",
+      "22 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 24 contratos classificados no arquétipo em SP; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 94130.0,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 20900.0,
+    "p75_value": 209883.69,
+    "period_end": "2026-07-08",
+    "period_start": "2026-04-15",
+    "region": "SP",
+    "region_label": "São Paulo",
+    "segment": "Pavimentação e infraestrutura viária",
+    "slug": "pavimentacao-infraestrutura-viaria-sp",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 22,
+    "top_buyers": [
+      {
+        "cnpj8": "47970769",
+        "contract_count": 3,
+        "municipio": "Franca",
+        "name": "SECRETARIA MUN. DE DESENVOLVIMENTO",
+        "total_value": 328726.2,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "44229813",
+        "contract_count": 3,
+        "municipio": "Serrana",
+        "name": "PREFEITURA MUNICIPAL DE SERRANA - SP",
+        "total_value": 77499.99,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "45781176",
+        "contract_count": 2,
+        "municipio": "Americana",
+        "name": "PREFEITURA MUNICIPAL DE AMERICANA",
+        "total_value": 1694.9,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "00394502",
+        "contract_count": 2,
+        "municipio": "São Paulo",
+        "name": "CENTRO DE INTENDÊNCIA TECNO.DA MARINHA SP",
+        "total_value": 29931.2,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "46316600",
+        "contract_count": 2,
+        "municipio": "Itaquaquecetuba",
+        "name": "Prefeitura Municipal de Itaquaquecetuba",
+        "total_value": 420124.41,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "05211356",
+        "contract_count": 1,
+        "municipio": "São Pedro",
+        "name": "SAAESP",
+        "total_value": 12000.0,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "00394452",
+        "contract_count": 1,
+        "municipio": "Pirassununga",
+        "name": "13 REGIMENTO DE CAVALARIA MECANIZADO",
+        "total_value": 98788.2,
+        "uf": "SP"
+      },
+      {
+        "cnpj8": "10979446",
+        "contract_count": 1,
+        "municipio": "São Paulo",
+        "name": "ESP-CASA CIVIL",
+        "total_value": 104000.0,
+        "uf": "SP"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 3,
+        "example_objeto": "Contratação direta, por inexigibilidade de licitação, para outorga de concessão de uso de bem público, dos boxes/guichês localizados no Terminal Rodoviário de Franca “Antônio Pereira Lima”, destinados",
+        "label": "Contratação direta, por inexigibilidade de licitação, para outorga de…",
+        "median_value": null
+      },
+      {
+        "count": 3,
+        "example_objeto": "AQUISIÇÃO DE EQUIPAMENTOS AGRÍCOLAS/RODOVIÁRIOS, NOVOS, DE PRIMEIRO USO, SEM NENHUM TIPO DE AVARIA OU REMANUFATURA, DESTINADOS À MANUTENÇÃO E CONSERVAÇÃO DAS ATIVIDADES DA SECRETARIA MUNICIPAL DE INFR",
+        "label": "AQUISIÇÃO DE EQUIPAMENTOS AGRÍCOLAS/RODOVIÁRIOS, NOVOS, DE PRIMEIRO…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "SERVIÇO E AQUISIÇÃO DE PEÇAS PARA MANUTENÇÃO DE VEÍCULO CAMINHÃO FORD F14000, PLACA DBA6038 A SERVIÇO DO SETOR DE ASFALTO LOTADA NA SECRETARIA DE OBRAS",
+        "label": "SERVIÇO E AQUISIÇÃO DE PEÇAS PARA MANUTENÇÃO DE VEÍCULO CAMINHÃO FORD…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE SERVIÇO DE TRANSPORTE DE BAGAGEM POR VIA RODOVIÁRIA, PORTA A PORTA, EM CAMINHÃO FECHADO (TIPO BAÚ), COMPREENDENDO A DESMONTAGEM E MONTAGEM DE BENS MÓVEIS; COM ORIGEM NO ESTADO DE SÃO PA",
+        "label": "CONTRATAÇÃO DE SERVIÇO DE TRANSPORTE DE BAGAGEM POR VIA RODOVIÁRIA,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisicao de 01  um  Compactador de Solo Eletrico tipo percussao  novo  sem uso  para utilizacao em servicos de compactacao de solos  valas  bases e sub bases em obras de saneamento  pavimentacao e ma",
+        "label": "Aquisicao de 01 um Compactador de Solo Eletrico tipo percussao novo…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "C. E. E. PARA OBRAS DE PAVIMENTACAO ASFALTICA",
+        "label": "C. E. E. PARA OBRAS DE PAVIMENTACAO ASFALTICA",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "C. E. E. PARA OBRAS DE DRENAGEM E PAVIMENTACAO",
+        "label": "C. E. E. PARA OBRAS DE DRENAGEM E PAVIMENTACAO",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de serviço de transporte de bagagem por via rodoviária, porta a porta, em caminhão fechado (tipo baú), compreendendo a desmontagem e montagem de bens móveis; com origem no Estado de São Pa",
+        "label": "Contratação de serviço de transporte de bagagem por via rodoviária,…",
+        "median_value": null
+      }
+    ],
+    "total_value": 8126736.27,
+    "value_by_year": [
+      {
+        "contract_count": 24,
+        "total_value": 8126736.27,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "climatizacao-instalacoes",
+    "buyer_count": 20,
+    "contract_count": 23,
+    "id": "market-climatizacao-instalacoes-sc",
+    "interpretation_hooks": [
+      "Concentração em 20 órgãos compradores distintos.",
+      "21 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 16."
+    ],
+    "limitations": [
+      "Base: 23 contratos classificados no arquétipo em SC; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 2629.99,
+    "modalities": [],
+    "open_opportunity_count": 16,
+    "p25_value": 1269.99,
+    "p75_value": 17470.14,
+    "period_end": "2026-07-08",
+    "period_start": "2026-05-28",
+    "region": "SC",
+    "region_label": "Santa Catarina",
+    "segment": "Climatização e instalações prediais",
+    "slug": "climatizacao-instalacoes-sc",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 21,
+    "top_buyers": [
+      {
+        "cnpj8": "83102285",
+        "contract_count": 2,
+        "municipio": "Balneário Camboriú",
+        "name": "MUNICÍPIO DE BALNEÁRIO CAMBORIÚ",
+        "total_value": 4582.99,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "01566620",
+        "contract_count": 2,
+        "municipio": "Tigrinhos",
+        "name": "MUNICÍPIO DE TIGRINHOS",
+        "total_value": 3059.19,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "82916800",
+        "contract_count": 2,
+        "municipio": "Içara",
+        "name": "FUNDO MUNICIPAL DE SAUDE DE IÇARA",
+        "total_value": 3236.44,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "07854402",
+        "contract_count": 1,
+        "municipio": "Balneário Camboriú",
+        "name": "EMASA - Empresa Municipal de Água e Saneamento de Balneário Camboriú",
+        "total_value": 41000.0,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83169623",
+        "contract_count": 1,
+        "municipio": "Joinville",
+        "name": "MUNICÍPIO DE JOINVILLE - SECRETARIA DE SAÚDE",
+        "total_value": 17470.14,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "30649011",
+        "contract_count": 1,
+        "municipio": "São José do Cedro",
+        "name": "SERVIÇO MUNICIPAL DE ÁGUA E ESGOTO - SEMAE",
+        "total_value": 349.0,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83026781",
+        "contract_count": 1,
+        "municipio": "São José do Cedro",
+        "name": "MUNICÍPIO DE SÃO JOSÉ DO CEDRO",
+        "total_value": 1813.19,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "82940776",
+        "contract_count": 1,
+        "municipio": "Caibi",
+        "name": "MUNICÍPIO DE CAIBI",
+        "total_value": 180.0,
+        "uf": "SC"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 9,
+        "example_objeto": "EQUIPAMENTOS DE INFORMÁTICA, PROCESSAMENTO DE DADOS, AR CONDICIONADO E CORRELATOS",
+        "label": "EQUIPAMENTOS DE INFORMÁTICA, PROCESSAMENTO DE DADOS, AR CONDICIONADO E…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "APARELHOS DE AR-CONDICIONADO E CORRELATOS - LEI 14.133/2021",
+        "label": "APARELHOS DE AR-CONDICIONADO E CORRELATOS - LEI 14.133/2021",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "PRESTAÇÃO DE SERVIÇOS DE SEGURO TOTAL PARA VEÍCULOS PERTENCENTES À FROTA DA SECRETARIA MUNICIPAL DE SAÚDE DE IÇARA, COM COBERTURA CONTRA DANOS MATERIAIS DECORRENTES DE SINISTROS COMO ROUBO, FURTO, COL",
+        "label": "PRESTAÇÃO DE SERVIÇOS DE SEGURO TOTAL PARA VEÍCULOS PERTENCENTES À…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA(S) DE ENGENHARIA E/OU ARQUITETURA PARA ELABORAÇÃO DE DOIS PROJETOS EXECUTIVOS COMPLETOS E DEVIDAMENTE APROVADOS: DE GALPÃO PRÉ-FABRICADO EM CONCRETO ARMADO PARA SERVIR COMO ALMO",
+        "label": "CONTRATAÇÃO DE EMPRESA(S) DE ENGENHARIA E/OU ARQUITETURA PARA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Prestação de serviços continuados de manutenção preventiva, corretiva e emergencial, com fornecimento integral de mão de obras e peças, em elevador e plataformas elevatórias de acessibilidade.",
+        "label": "Prestação de serviços continuados de manutenção preventiva, corretiva…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de 02 (dois) aparelhos de Ar condicionado Split HW 12.000BTUs.",
+        "label": "Aquisição de 02 (dois) aparelhos de Ar condicionado Split HW 12.000BTUs.",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Fornecimento e instalação de Elevador de Acessibilidade Comercial, conforme ABNT NBR ISO 9386-1, ABNT NM 313 e PNE NBR 12892, de acordo com as especificações e condições descritas no Termo de Referênc",
+        "label": "Fornecimento e instalação de Elevador de Acessibilidade Comercial,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "O OBJETO DO PRESENTE INSTRUMENTO É A CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA A PRESTAÇÃO DE SERVIÇOS DE ASSISTÊNCIA TÉCNICA E MANUTENÇÃO PREVENTIVA E CORRETIVA DE ELEVADORES DE PASSAGEIROS E PLATAFO",
+        "label": "O OBJETO DO PRESENTE INSTRUMENTO É A CONTRATAÇÃO DE EMPRESA…",
+        "median_value": null
+      }
+    ],
+    "total_value": 876040.75,
+    "value_by_year": [
+      {
+        "contract_count": 23,
+        "total_value": 876040.75,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "pavimentacao-infraestrutura-viaria",
+    "buyer_count": 15,
+    "contract_count": 23,
+    "id": "market-pavimentacao-infraestrutura-viaria-sc",
+    "interpretation_hooks": [
+      "Concentração em 15 órgãos compradores distintos.",
+      "20 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 113."
+    ],
+    "limitations": [
+      "Base: 23 contratos classificados no arquétipo em SC; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 224135.0,
+    "modalities": [],
+    "open_opportunity_count": 113,
+    "p25_value": 52157.79,
+    "p75_value": 635000.0,
+    "period_end": "2026-07-08",
+    "period_start": "2026-01-09",
+    "region": "SC",
+    "region_label": "Santa Catarina",
+    "segment": "Pavimentação e infraestrutura viária",
+    "slug": "pavimentacao-infraestrutura-viaria-sc",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 20,
+    "top_buyers": [
+      {
+        "cnpj8": "83102285",
+        "contract_count": 4,
+        "municipio": "Balneário Camboriú",
+        "name": "Prefeitura Municipal de Balneário Camboriú",
+        "total_value": 466699.64,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "11402887",
+        "contract_count": 3,
+        "municipio": "Florianópolis",
+        "name": "INSTITUTO FEDERAL DE EDUC.CIENC.E TEC.DE SC",
+        "total_value": 2103984.07,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "01612528",
+        "contract_count": 2,
+        "municipio": "Bandeirante",
+        "name": "MUNICÍPIO DE BANDEIRANTE",
+        "total_value": 1356.18,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83102277",
+        "contract_count": 2,
+        "municipio": "Itajaí",
+        "name": "PREFEITURA MUNICIPAL DE ITAJAÍ - SC",
+        "total_value": 3466025.53,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83039842",
+        "contract_count": 2,
+        "municipio": "Videira",
+        "name": "OBRAS E PROJETOS",
+        "total_value": 365962.87,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83102574",
+        "contract_count": 1,
+        "municipio": "Rio do Sul",
+        "name": "MUNICÍPIO DE RIO DO SUL",
+        "total_value": 4082.5,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "82892365",
+        "contract_count": 1,
+        "municipio": "Paulo Lopes",
+        "name": "MUNICÍPIO DE PAULO LOPES",
+        "total_value": 1086043.29,
+        "uf": "SC"
+      },
+      {
+        "cnpj8": "83102517",
+        "contract_count": 1,
+        "municipio": "Itaiópolis",
+        "name": "DEPARTAMENTO DE OBRAS E URBANISMO",
+        "total_value": 2590000.0,
+        "uf": "SC"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 3,
+        "example_objeto": "SINALIZAÇÃO VIÁRIA",
+        "label": "SINALIZAÇÃO VIÁRIA",
+        "median_value": null
+      },
+      {
+        "count": 3,
+        "example_objeto": "Registro de preços de pavimentação asfáltica e fresagem, conforme condições, quantidades e exigências estabelecidas neste edital e seus anexos.\nFORNECEDOR: FJ CONSTRUTORA LTDA (27.743.102/0001-53)",
+        "label": "Registro de preços de pavimentação asfáltica e fresagem, conforme…",
+        "median_value": null
+      },
+      {
+        "count": 3,
+        "example_objeto": "SERVIÇOS CONTÍNUOS DE TRANSPORTE RODOVIÁRIO DE PASSAGEIROS, SOB REGIME DE FRETAMENTO EVENTUAL (ÔNIBUS E MICRO- ÔNIBUS E VANS).",
+        "label": "SERVIÇOS CONTÍNUOS DE TRANSPORTE RODOVIÁRIO DE PASSAGEIROS, SOB REGIME…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "SERVIÇOS DE CONTROLE TECNOLÓGICO DE ASFALTO - LEI 14.133/2021",
+        "label": "SERVIÇOS DE CONTROLE TECNOLÓGICO DE ASFALTO - LEI 14.133/2021",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada, no regime de empreitada por preço unitário (material + mão-de-obra), para execução de obra de PAVIMENTAÇÃO INTERTRAVADA, DRENAGEM E SINALIZAÇÃO VIÁRIA DA RUA NICO",
+        "label": "Contratação de empresa especializada, no regime de empreitada por…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para execução de obras de pavimentação asfáltica em vias urbanas localizadas no Bairro Bom Jesus, no Município de Itaiópolis/SC, compreendendo as seguintes vias: R",
+        "label": "Contratação de empresa especializada para execução de obras de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "SERVIÇOS COMUNS DE ENGENHARIA PARA DRENAGEM PLUVIAL NAS RUAS SOLDADO ABELARDO MENDONÇA SOBRINHO E EMANUEL DOS SANTOS - BAIRRO CARVALHO",
+        "label": "SERVIÇOS COMUNS DE ENGENHARIA PARA DRENAGEM PLUVIAL NAS RUAS SOLDADO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Serviços de pavimentação asfáltica e fresagem, incluindo fornecimento de materiais, pessoal e equipamentos para manutenção e conservação de vias já consolidadas, da Rua Dom Carlos - trecho entre a Rua",
+        "label": "Serviços de pavimentação asfáltica e fresagem, incluindo fornecimento…",
+        "median_value": null
+      }
+    ],
+    "total_value": 20599651.68,
+    "value_by_year": [
+      {
+        "contract_count": 23,
+        "total_value": 20599651.68,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 12,
+    "contract_count": 23,
+    "id": "market-edificacoes-publicas-pr",
+    "interpretation_hooks": [
+      "Concentração em 12 órgãos compradores distintos.",
+      "23 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 97."
+    ],
+    "limitations": [
+      "Base: 23 contratos classificados no arquétipo em PR; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 32346.0,
+    "modalities": [],
+    "open_opportunity_count": 97,
+    "p25_value": 14500.0,
+    "p75_value": 149300.0,
+    "period_end": "2026-07-08",
+    "period_start": "2026-04-02",
+    "region": "PR",
+    "region_label": "Paraná",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-pr",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 23,
+    "top_buyers": [
+      {
+        "cnpj8": "01609843",
+        "contract_count": 9,
+        "municipio": "Pontal do Paraná",
+        "name": "Unidade administrativa",
+        "total_value": 354045.55,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "95587770",
+        "contract_count": 3,
+        "municipio": "Rio Bonito do Iguaçu",
+        "name": "PREFEITURA MUNICIPAL DE RIO BONITO DO IGUAÇU - PR",
+        "total_value": 2395553.74,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "76205665",
+        "contract_count": 2,
+        "municipio": "Marmeleiro",
+        "name": "Divisão de Ensino Fundamental - FUNDEB",
+        "total_value": 163800.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "78200482",
+        "contract_count": 1,
+        "municipio": "Sarandi",
+        "name": "UNIDADE ADMINISTRATIVA",
+        "total_value": 78000.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "76167733",
+        "contract_count": 1,
+        "municipio": "Sapopema",
+        "name": "EDUCACAO",
+        "total_value": 13997.04,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "78103884",
+        "contract_count": 1,
+        "municipio": "Nova Prata do Iguaçu",
+        "name": "DEPARTAMENTO DE ADMINISTRAÇÃO DE NOVA PRATA DO IGUAÇU",
+        "total_value": 333425.5,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "76205806",
+        "contract_count": 1,
+        "municipio": "Toledo",
+        "name": "GABINETE  SECRETARIA MEIO AMBIENTE",
+        "total_value": 72000.0,
+        "uf": "PR"
+      },
+      {
+        "cnpj8": "77703114",
+        "contract_count": 1,
+        "municipio": "Ibiporã",
+        "name": "CAMARA MUNICIPAL DE IBIPORÃ - PR",
+        "total_value": 57000.0,
+        "uf": "PR"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 8,
+        "example_objeto": "Contratação de empresa especializada no fornecimento de equipamentos, mobiliários e materiais, para a Superintendência de Comunicação, Escola de Governo e Secretaria Municipal de Turismo e Desenvolvim",
+        "label": "Contratação de empresa especializada no fornecimento de equipamentos,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para EXECUÇÃO DE OBRA DE REFORMA E AMPLIAÇÃO DO ARMAZÉM DA FAMÍLIA – IPANEMA III, localizado no Município de Pontal do Paraná.",
+        "label": "Contratação de empresa especializada para EXECUÇÃO DE OBRA DE REFORMA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para prestação de serviço de substituição do telhado da Escola Municipal Dom Pedro I, atendendo as necessidades do Departamento de Educação e Cultura, observadas as característi",
+        "label": "Contratação de empresa para prestação de serviço de substituição do…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para fornecimento de material e mão de obra, para construção de um banheiro público no Parque Meu Campinho, atendendo as necessidades do Departamento de Urbanismo.",
+        "label": "Contratação de empresa para fornecimento de material e mão de obra,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Credenciamento de Pessoa Jurídica para prestação de serviços complementares na saúde pública, contemplando consultas nas especialidades de CLÍNICO GERAL, PEDIATRIA, GINECOLOGIA e OBSTETRÍCIA, para atu",
+        "label": "Credenciamento de Pessoa Jurídica para prestação de serviços…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "AQUISIÇÃO DE CERÂMICA E DEMAIS MATERIAIS PARA INSTALAÇÃO DE PISO CERÂMICO NA ESCOLA MUNICIPAL PROFESSORA MARIA ELIAS FADEL, PARA ATENDIMENTO DA SECRETARIA MUNICIPAL DE EDUCAÇÃO DO MUNICÍPIO DE SAPOPEM",
+        "label": "AQUISIÇÃO DE CERÂMICA E DEMAIS MATERIAIS PARA INSTALAÇÃO DE PISO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de aparelhos de ar condicionado, peças de ar condicionado para reposição em manutenções e consertos e contratação de empresa para prestação de serviços de instalação, remoção, manutenção, li",
+        "label": "Aquisição de aparelhos de ar condicionado, peças de ar condicionado…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de uniforme es\r\nportivo, para atender a demanda dos atletas da escola de futebol Furacão vinculada a fundação CLUB ATHLÉTICO PARANAENSE",
+        "label": "Aquisição de uniforme es portivo, para atender a demanda dos atletas…",
+        "median_value": null
+      }
+    ],
+    "total_value": 4927341.07,
+    "value_by_year": [
+      {
+        "contract_count": 23,
+        "total_value": 4927341.07,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 7,
+    "contract_count": 21,
+    "id": "market-edificacoes-publicas-ce",
+    "interpretation_hooks": [
+      "Concentração em 7 órgãos compradores distintos.",
+      "20 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 21 contratos classificados no arquétipo em CE; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 42790.0,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 17635.67,
+    "p75_value": 92000.0,
+    "period_end": "2026-07-07",
+    "period_start": "2026-06-02",
+    "region": "CE",
+    "region_label": "Ceará",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-ce",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 20,
+    "top_buyers": [
+      {
+        "cnpj8": "07954480",
+        "contract_count": 14,
+        "municipio": "Reriutaba",
+        "name": "EEM CORONEL ALFREDO SILVANO",
+        "total_value": 2387983.06,
+        "uf": "CE"
+      },
+      {
+        "cnpj8": "07569205",
+        "contract_count": 2,
+        "municipio": "Guaraciaba do Norte",
+        "name": "SECRETARIA DA PROTEÇÃO SOCIAL",
+        "total_value": 126957.0,
+        "uf": "CE"
+      },
+      {
+        "cnpj8": "03204421",
+        "contract_count": 1,
+        "municipio": "Fortaleza",
+        "name": "INCRA/SUPER. ESTADUAL/SR - CEARA",
+        "total_value": 20258.83,
+        "uf": "CE"
+      },
+      {
+        "cnpj8": "07744303",
+        "contract_count": 1,
+        "municipio": "Quixeramobim",
+        "name": "PREFEITURA MUNICIPAL DE QUIXERAMOBIM - CE",
+        "total_value": 911148.06,
+        "uf": "CE"
+      },
+      {
+        "cnpj8": "07683188",
+        "contract_count": 1,
+        "municipio": "Irauçuba",
+        "name": "SECRETARIA DO DESENVOLVIMENTO RURAL, MEIO AMBIENTE E RECURSOS HÍDRICOS",
+        "total_value": 1417499.51,
+        "uf": "CE"
+      },
+      {
+        "cnpj8": "07387343",
+        "contract_count": 1,
+        "municipio": "Baturité",
+        "name": "Baturité",
+        "total_value": 5295727.35,
+        "uf": "CE"
+      },
+      {
+        "cnpj8": "07442981",
+        "contract_count": 1,
+        "municipio": "Jaguaribara",
+        "name": "FUNDO MUNICIPAL DE SAUDE",
+        "total_value": 24300.0,
+        "uf": "CE"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 2,
+        "example_objeto": "CONTRATAÇÃO DE SERVIÇOS DE INSTALAÇÃO, MANUTENÇÃO PREVENTIVA E CORRETIVA DOS APARELHOS DE AR-CONDICIONADOS, PARA ATENDER ÀS NECESSIDADES DOS DIVERSOS PRÉDIOS VINCULADOS À SECRETARIA DE PROTEÇÃO SOCIAL",
+        "label": "CONTRATAÇÃO DE SERVIÇOS DE INSTALAÇÃO, MANUTENÇÃO PREVENTIVA E…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA DA SALA DOS PROFESSORES E AEE NO ANTIGO PRÉDIO DA FRANCISCA CASTRO - CREDE 6",
+        "label": "REFORMA DA SALA DOS PROFESSORES E AEE NO ANTIGO PRÉDIO DA FRANCISCA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "OUTROS SERVIÇOS DE TECNOLOGIA DA INFORMAÇÃO - ESCOLA INDIGENA DA ALDEIA CAJUEIRO DE PORANGA - CREDE 13",
+        "label": "OUTROS SERVIÇOS DE TECNOLOGIA DA INFORMAÇÃO - ESCOLA INDIGENA DA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "REFORMA DE SALAS DE AULA PARA CLIMATIZAÇÃO NA EEMTI MARIA DOLORES ALCÂNTARA E SILVA - CREDE 9",
+        "label": "REFORMA DE SALAS DE AULA PARA CLIMATIZAÇÃO NA EEMTI MARIA DOLORES…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "MANUTENÇÃO E CONSERVAÇÃO DE BENS IMÓVEIS (REFORMA DO MURO EXTERNO DA ESCOLA) EEMTI ALFREDO MACHADO - MADALENA - CREDE 12",
+        "label": "MANUTENÇÃO E CONSERVAÇÃO DE BENS IMÓVEIS (REFORMA DO MURO EXTERNO DA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Alimentação Escolar - ESCOLA INDÍGENA TREMEMBÉ MARIA VENÂNCIA - ITAREMA - CREDE 3 -",
+        "label": "Alimentação Escolar - ESCOLA INDÍGENA TREMEMBÉ MARIA VENÂNCIA -…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "A presente obra e serviços de engenharia para Manutenção Predial visa promover melhorias na estrutura do prédio da EEEP Jaime da Cunha Rebouças. ICAPUI - CREDE 10 -",
+        "label": "A presente obra e serviços de engenharia para Manutenção Predial visa…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de Gás de Cozinha, para suprir a necessidade da escola - EEM OLÍMPIO SAMPAIO DA SILVA - URUOCA - CREDE 4 -",
+        "label": "Aquisição de Gás de Cozinha, para suprir a necessidade da escola - EEM…",
+        "median_value": null
+      }
+    ],
+    "total_value": 10183873.81,
+    "value_by_year": [
+      {
+        "contract_count": 21,
+        "total_value": 10183873.81,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "climatizacao-instalacoes",
+    "buyer_count": 13,
+    "contract_count": 19,
+    "id": "market-climatizacao-instalacoes-rs",
+    "interpretation_hooks": [
+      "Concentração em 13 órgãos compradores distintos.",
+      "17 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 11."
+    ],
+    "limitations": [
+      "Base: 19 contratos classificados no arquétipo em RS; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 23850.0,
+    "modalities": [],
+    "open_opportunity_count": 11,
+    "p25_value": 2987.8,
+    "p75_value": 113800.0,
+    "period_end": "2026-07-08",
+    "period_start": "2026-06-24",
+    "region": "RS",
+    "region_label": "Rio Grande do Sul",
+    "segment": "Climatização e instalações prediais",
+    "slug": "climatizacao-instalacoes-rs",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 17,
+    "top_buyers": [
+      {
+        "cnpj8": "94704004",
+        "contract_count": 3,
+        "municipio": "Barra Funda",
+        "name": "Prefeitura Municipal de Barra Funda",
+        "total_value": 410147.5,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "87838330",
+        "contract_count": 3,
+        "municipio": "Feliz",
+        "name": "Prefeitura Municipal de Feliz",
+        "total_value": 658.15,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "88756879",
+        "contract_count": 2,
+        "municipio": "São Francisco de Paula",
+        "name": "Prefeitura Municipal de São Francisco de Paula",
+        "total_value": 18182.46,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "87896874",
+        "contract_count": 2,
+        "municipio": "Alegrete",
+        "name": "Prefeitura Municipal",
+        "total_value": 93896.89,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "87488938",
+        "contract_count": 1,
+        "municipio": "Dona Francisca",
+        "name": "PREFEITURA MUNICIPAL DE DONA FRANCISCA",
+        "total_value": 23850.0,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "88084942",
+        "contract_count": 1,
+        "municipio": "Pinheiro Machado",
+        "name": "PREFEITURA MUNICIPAL",
+        "total_value": 186661.75,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "87612883",
+        "contract_count": 1,
+        "municipio": "Vicente Dutra",
+        "name": "Manutencao do Fundo Municipal de Saúde",
+        "total_value": 80651.67,
+        "uf": "RS"
+      },
+      {
+        "cnpj8": "87568911",
+        "contract_count": 1,
+        "municipio": "Candelária",
+        "name": "Prefeitura Municipal de Candelária",
+        "total_value": 84117.0,
+        "uf": "RS"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 3,
+        "example_objeto": "CREDENCIAMENTO de empresas para a prestação de serviços de mão de obra de manutenção preventiva e corretiva, por hora técnica, nas áreas de mecânica, auto elétrica, ar-condicionado veicular e solda. D",
+        "label": "CREDENCIAMENTO de empresas para a prestação de serviços de mão de obra…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "Aquisicao de itens   pecas para veiculo caminhao MB L1113 IHM7526   manutencao preventiva por conta de quilometragem. Este veiculo pertence ao corpo de bombeiros e presta assistencia a comunidade no c",
+        "label": "Aquisicao de itens pecas para veiculo caminhao MB L1113 IHM7526…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para elaboração dos Projetos de Prevenção e Proteção Contra Incêndio (PPCI) das edificações públicas do Município, é necessária para atender à legislação vigente e às exigências",
+        "label": "Contratação de empresa para elaboração dos Projetos de Prevenção e…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratacao de empresa especializada em servicos de engenharia para a construcao de 4  quatro  salas de aula  em bloco anexo de 1  um  pavimento na EMEI Tania Cardoso  incluindo  demolicao parcial do ",
+        "label": "Contratacao de empresa especializada em servicos de engenharia para a…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para a elaboração do projeto executivo de escada metálica de emergência destinado à EMEB Presidente Castelo Branco, em atendimento ao seu Plano de Prevenção e Prot",
+        "label": "Contratação de empresa especializada para a elaboração do projeto…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para a execução de projeto de engenharia referente ao Plano de Prevenção e Proteção Contra Incêndio - PPCI do Pronto Atendimento de Urgência (PADU) do Município de",
+        "label": "Contratação de empresa especializada para a execução de projeto de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para a execução de Projeto de Prevenção e Proteção Contra Incêndio (PPCI) da Escola Municipal de Ensino Fundamental – EMEF Christiano A. Graeff.",
+        "label": "Contratação de empresa para a execução de Projeto de Prevenção e…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Prestacao de servicos de limpeza de 08 ar condicionados e manutencao conserto de 02 ar condicionados",
+        "label": "Prestacao de servicos de limpeza de 08 ar condicionados e manutencao…",
+        "median_value": null
+      }
+    ],
+    "total_value": 5192894.35,
+    "value_by_year": [
+      {
+        "contract_count": 19,
+        "total_value": 5192894.35,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 13,
+    "contract_count": 16,
+    "id": "market-edificacoes-publicas-ba",
+    "interpretation_hooks": [
+      "Concentração em 13 órgãos compradores distintos.",
+      "14 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 16 contratos classificados no arquétipo em BA; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 1379391.31,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 318500.0,
+    "p75_value": 2722057.14,
+    "period_end": "2026-07-08",
+    "period_start": "2026-04-13",
+    "region": "BA",
+    "region_label": "Bahia",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-ba",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 14,
+    "top_buyers": [
+      {
+        "cnpj8": "13988316",
+        "contract_count": 3,
+        "municipio": "Jaguarari",
+        "name": "SECRETARIA MUNICIPAL DE PLANEJAMENTO E ADMINISTRAÇÃO",
+        "total_value": 11867917.84,
+        "uf": "BA"
+      },
+      {
+        "cnpj8": "14216238",
+        "contract_count": 2,
+        "municipio": "Pedro Alexandre",
+        "name": "Prefeitura Municipal de Pedro Alexandre",
+        "total_value": 2758782.62,
+        "uf": "BA"
+      },
+      {
+        "cnpj8": "11480871",
+        "contract_count": 1,
+        "municipio": "Caravelas",
+        "name": "FUNDO MUNICIPAL DE SAUDE - FMS",
+        "total_value": 299022.9,
+        "uf": "BA"
+      },
+      {
+        "cnpj8": "13761689",
+        "contract_count": 1,
+        "municipio": "Caravelas",
+        "name": "Prefeitura Municipal de Caravelas",
+        "total_value": 320400.0,
+        "uf": "BA"
+      },
+      {
+        "cnpj8": "13675491",
+        "contract_count": 1,
+        "municipio": "Paramirim",
+        "name": "MUNICIPIO DE PARAMIRIM",
+        "total_value": 285000.0,
+        "uf": "BA"
+      },
+      {
+        "cnpj8": "13894878",
+        "contract_count": 1,
+        "municipio": "Jequié",
+        "name": "FUNDO MUNICIPAL DE EDUCAÇÃO",
+        "total_value": 6271639.0,
+        "uf": "BA"
+      },
+      {
+        "cnpj8": "14060602",
+        "contract_count": 1,
+        "municipio": "São Gonçalo dos Campos",
+        "name": "Prefeitura Municipal de São Gonçalo dos Campos",
+        "total_value": 455000.0,
+        "uf": "BA"
+      },
+      {
+        "cnpj8": "13752993",
+        "contract_count": 1,
+        "municipio": "Itororó",
+        "name": "MUNICIPIO ITORORÓ LICITAÇÕES",
+        "total_value": 2319035.8,
+        "uf": "BA"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 2,
+        "example_objeto": "REFERENTE AO SERVIÇOS DE MANUTENÇÃO PREDIAL, REPAROS E ADEQUAÇÕES EM EDIFICAÇÕES PÚBLICAS, DESTINADOS AO ATENDIMENTO DAS DEMANDAS ESTRUTURAIS E OPERACIONAIS DO MUNICÍPIO DE PEDRO ALEXANDRE - BA.",
+        "label": "REFERENTE AO SERVIÇOS DE MANUTENÇÃO PREDIAL, REPAROS E ADEQUAÇÕES EM…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Aquisição de Medicamentos para atender às demandas da Secretaria Municipal de Saúde, Hospital Municipal, UBS e Atenção Básica do Município de Caravelas.",
+        "label": "Aquisição de Medicamentos para atender às demandas da Secretaria…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "contratação de empresa especializada na prestação de serviços de telecomunicações, compreendendo a implementação, fornecimento, instalação, ativação, configuração e manutenção mensal de pontos de aces",
+        "label": "contratação de empresa especializada na prestação de serviços de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Construção de praça na comunidade do Mateus, localizada na zona rural deste Município de Paramirim, Ba",
+        "label": "Construção de praça na comunidade do Mateus, localizada na zona rural…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA CONSTRUÇÃO DA NOVA SEDE DA ESCOLA MUNICIPAL DR. CELI DE FREITAS, NO BAIRRO JEQUIEZINHO, NA CIDADE DE JEQUIÉ – BA.",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA CONSTRUÇÃO DA NOVA SEDE DA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "- Constitui objeto do presente contrato a Construção de 02 salas nas unidades escolares Escola Municipal \r\nJosé Antônio dos Santos e Escola Municipal Marcelino Crisóstomo, sendo 01 destinada à implant",
+        "label": "- Constitui objeto do presente contrato a Construção de 02 salas nas…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Constitui Objeto do presente contrato a CONTRATAÇÃO DE EMPRESA ESPECIALIZADA EM ENGENHARIA \r\nCIVIL PARA A EXECUÇÃO DE SERVIÇOS DE IMPLANTAÇÃO DE COBERTURA EM REFEITÓRIOS DAS \r\nUNIDADES ESCOLARES: ESCO",
+        "label": "Constitui Objeto do presente contrato a CONTRATAÇÃO DE EMPRESA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "PRESTAÇÃO DE SERVIÇOS DE ENGENHARIA,\r\nVISANDO A REFORMA E AMPLIAÇÃO DA CRECHE DO GRAVATÁ, ATENDENDO AS DEMANDAS DA\r\nSECRETARIA MUNICIPAL DE EDUCAÇÃO DO MUNICÍPIO DE SÃO GONÇALO DOS CAMPOS –\r\nBAHIA.",
+        "label": "PRESTAÇÃO DE SERVIÇOS DE ENGENHARIA, VISANDO A REFORMA E AMPLIAÇÃO DA…",
+        "median_value": null
+      }
+    ],
+    "total_value": 37912355.3,
+    "value_by_year": [
+      {
+        "contract_count": 16,
+        "total_value": 37912355.3,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "manutencao-predial-engenharia",
+    "buyer_count": 3,
+    "contract_count": 15,
+    "id": "market-manutencao-predial-engenharia-go",
+    "interpretation_hooks": [
+      "Concentração em 3 órgãos compradores distintos.",
+      "13 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 15 contratos classificados no arquétipo em GO; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 1025.8,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 380.0,
+    "p75_value": 1896.5,
+    "period_end": "2026-07-07",
+    "period_start": "2026-06-24",
+    "region": "GO",
+    "region_label": "Goiás",
+    "segment": "Manutenção predial e serviços de engenharia",
+    "slug": "manutencao-predial-engenharia-go",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 13,
+    "top_buyers": [
+      {
+        "cnpj8": "01414440",
+        "contract_count": 13,
+        "municipio": "Goiânia",
+        "name": "PROCURADORIA GERAL DO MUNICIPIO DE GOIÂNIA",
+        "total_value": 28902.24,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "02056729",
+        "contract_count": 1,
+        "municipio": "Rio Verde",
+        "name": "PREFEITURA MUNICIPAL DE RIO VERDE",
+        "total_value": 1137998.87,
+        "uf": "GO"
+      },
+      {
+        "cnpj8": "01743335",
+        "contract_count": 1,
+        "municipio": "Posse",
+        "name": "MUNICIPIO DE POSSE",
+        "total_value": 343800.0,
+        "uf": "GO"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 11,
+        "example_objeto": "Aquisição de ferramentas manuais e elétricas, materiais de manutenção predial, elétrica, hidráulica e rede lógica, destinados às adequações e conservação das instalações físicas da Procuradoria-Geral ",
+        "label": "Aquisição de ferramentas manuais e elétricas, materiais de manutenção…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "aquisição de ferramentas manuais e elétricas, materiais de manutenção predial, elétrica, hidráulica e rede lógica, destinados às adequações e conservação das instalações físicas da Procuradoria-Geral ",
+        "label": "aquisição de ferramentas manuais e elétricas, materiais de manutenção…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATO 153/2026 PROTOCOLO 8865/2026 CONCORRÊNCIA 90.004/2026, CÓDIGO DE OBRA 936,TEM COMO OBJETO  A CONTRATAÇÃO DE EMPRESA ESPECIALIZADA EM SERVIÇOS DE ENGENHARIA CIVIL, MEDIANTE O REGIME DE EMPREIT",
+        "label": "CONTRATO 153/2026 PROTOCOLO 8865/2026 CONCORRÊNCIA 90.004/2026, CÓDIGO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "A CONTRATAÇÃO DE EMPRESA ESPECIALIZADA EM EXECUÇÃO DE SERVIÇOS DE ENGENHARIA PARA REFORMA DA UNIDADE DE ATENÇÃO ESPECIALIZADA EM SAÚDE – CENTRO DE SAÚDE, NO MUNICÍPIO DE POSSE/GO DE ACORDO COM AS ESPE",
+        "label": "A CONTRATAÇÃO DE EMPRESA ESPECIALIZADA EM EXECUÇÃO DE SERVIÇOS DE…",
+        "median_value": null
+      }
+    ],
+    "total_value": 1510701.11,
+    "value_by_year": [
+      {
+        "contract_count": 15,
+        "total_value": 1510701.11,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 8,
+    "contract_count": 15,
+    "id": "market-edificacoes-publicas-pi",
+    "interpretation_hooks": [
+      "Concentração em 8 órgãos compradores distintos.",
+      "14 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 15 contratos classificados no arquétipo em PI; não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 663062.17,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 410079.8,
+    "p75_value": 1418396.52,
+    "period_end": "2026-07-08",
+    "period_start": "2026-04-07",
+    "region": "PI",
+    "region_label": "Piauí",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-pi",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 14,
+    "top_buyers": [
+      {
+        "cnpj8": "06554042",
+        "contract_count": 5,
+        "municipio": "Canto do Buriti",
+        "name": "Prefeitura Municipal De Canto Do Buriti",
+        "total_value": 5985015.77,
+        "uf": "PI"
+      },
+      {
+        "cnpj8": "08767094",
+        "contract_count": 4,
+        "municipio": "Teresina",
+        "name": "Secretaria de Estado das Cidades do Piaui",
+        "total_value": 3771434.81,
+        "uf": "PI"
+      },
+      {
+        "cnpj8": "05699457",
+        "contract_count": 1,
+        "municipio": "Teresina",
+        "name": "EPI-SECRETARIA ESTADUAL DE TRANSPORTES",
+        "total_value": 1728973.32,
+        "uf": "PI"
+      },
+      {
+        "cnpj8": "06554455",
+        "contract_count": 1,
+        "municipio": "Buriti dos Lopes",
+        "name": "PREFEITURA MUNICIPAL DE BURITI DOS LOPES",
+        "total_value": 82380.0,
+        "uf": "PI"
+      },
+      {
+        "cnpj8": "06553671",
+        "contract_count": 1,
+        "municipio": "Socorro do Piauí",
+        "name": "Prefeitura Municipal de Socorro do Piauí- PI",
+        "total_value": 14919.59,
+        "uf": "PI"
+      },
+      {
+        "cnpj8": "09034960",
+        "contract_count": 1,
+        "municipio": "Teresina",
+        "name": "EPI-INSTITUTO DE DESENVOLVIMENTO DO PIAUI",
+        "total_value": 2105520.72,
+        "uf": "PI"
+      },
+      {
+        "cnpj8": "06554828",
+        "contract_count": 1,
+        "municipio": "São Gonçalo do Piauí",
+        "name": "Prefeitura Municipal de São Gonçalo do Piauí",
+        "total_value": 359115.42,
+        "uf": "PI"
+      },
+      {
+        "cnpj8": "33691623",
+        "contract_count": 1,
+        "municipio": "Teresina",
+        "name": "EPI-SECRETARIA DO AGRO.E EMPREEND.RURAL",
+        "total_value": 507979.94,
+        "uf": "PI"
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para execução de construção de um complexo esportivo no Município de Porto Alegre do Piauí – PI.",
+        "label": "Contratação de empresa para execução de construção de um complexo…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "contratação de empresa especializada para execução de reforma de calçadão, na Avenida Mestre Dezinho, no Bairro Morada Nova, no Município de Teresina/PI (OPA).",
+        "label": "contratação de empresa especializada para execução de reforma de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para construção de um Centro Esportivo Tipo A, com quadra coberta e vestiário, com área total de 1.024,14 m², na zona urbana do município de Pimenteiras-PI.",
+        "label": "Contratação de empresa para construção de um Centro Esportivo Tipo A,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "contratação de empresa especializada para construção de um campo society na zona urbana do Município de Teresina/PI, com área total de 618,09 m².",
+        "label": "contratação de empresa especializada para construção de um campo…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para execução dos serviços de Reforma de uma quadra poliesportiva coberta, no bairro Tabuleiro, na zona urbana no município de Parnaíba, com uma área total de 545,77m².",
+        "label": "Contratação de empresa para execução dos serviços de Reforma de uma…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA PARA FORNECIMENTO DE PONTOS DE ACESSO A INTERNET EM FIBRA ÓTICA PARA USO DOS PRÉDIOS PÚBLICOS NA ZONA URBANA E RURAL DO MUNICIPIO DE BURITI DOS LOPES-PI.",
+        "label": "CONTRATAÇÃO DE EMPRESA PARA FORNECIMENTO DE PONTOS DE ACESSO A…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Construção de passagem molhada no município de Socorro do  Piauí/PI, referente ao Convênio n° 983174 celebrado entre a Prefeitura de Socorro do  Piauí e o Ministério da Integração e do Desenvolvimento",
+        "label": "Construção de passagem molhada no município de Socorro do Piauí/PI,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONSTRUÇÃO DE UM ESPAÇO ESPORTIVO COMUNITÁRIO NO MUNICÍPIO DE CANTO DO BURITI-PI.",
+        "label": "CONSTRUÇÃO DE UM ESPAÇO ESPORTIVO COMUNITÁRIO NO MUNICÍPIO DE CANTO DO…",
+        "median_value": null
+      }
+    ],
+    "total_value": 14555339.57,
+    "value_by_year": [
+      {
+        "contract_count": 15,
+        "total_value": 14555339.57,
+        "year": "2026"
+      }
+    ]
+  }
+]

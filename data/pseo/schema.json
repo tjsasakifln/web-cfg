@@ -1,0 +1,16 @@
+{
+  "description": "CONFENGE public pSEO evidence snapshot",
+  "files": [
+    "archetypes.json",
+    "markets.json",
+    "agencies.json",
+    "prices.json",
+    "competition.json",
+    "opportunities.json",
+    "problem_service.json",
+    "icp_methodology.json",
+    "manifest.json"
+  ],
+  "forbidden_fields_policy": "scripts/pseo/allowlist.py FORBIDDEN_KEYS",
+  "schema_version": "1.0.0"
+}

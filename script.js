@@ -243,6 +243,106 @@
       });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+
+    // pSEO intelligence pages — attribution + events without PII
+    const pseoRoot = document.body;
+    const isPseo = !!(pseoRoot && (pseoRoot.getAttribute('data-pseo-page-id')
+      || pseoRoot.getAttribute('data-pseo-page-type')
+      || pagePath.includes('/inteligencia/')
+      || pagePath.includes('/radar/')));
+    if (isPseo) {
+      const pseoBase = {
+        page_path: pagePath,
+        content_cluster: 'pseo',
+        page_type: pseoRoot.getAttribute('data-pseo-page-type') || 'unknown',
+        pseo_page_id: pseoRoot.getAttribute('data-pseo-page-id') || '',
+        device_context: deviceContext,
+      };
+      // Prefill hidden attribution fields on contact form when landing from pSEO
+      const pseoParams = [
+        'pseo_page_id', 'page_type', 'archetype', 'segment', 'region',
+        'agency_id', 'intent', 'source_run_id', 'dataset_hash', 'cta_position', 'origem',
+      ];
+      if (form) {
+        pseoParams.forEach((name) => {
+          const fromUrl = searchParams.get(name) || hashParams.get(name);
+          const fromBody = name === 'pseo_page_id'
+            ? pseoRoot.getAttribute('data-pseo-page-id')
+            : (name === 'page_type' ? pseoRoot.getAttribute('data-pseo-page-type') : null);
+          const val = fromUrl || fromBody;
+          if (!val) return;
+          let input = form.querySelector(`input[name="${name}"]`);
+          if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            form.appendChild(input);
+          }
+          if (!input.value) input.value = String(val).slice(0, 180);
+        });
+      }
+      document.querySelectorAll('[data-pseo-event]').forEach((el) => {
+        el.addEventListener('click', () => {
+          const eventName = el.getAttribute('data-pseo-event') || 'pseo_cta_click';
+          // Allow only known pseo_* events
+          const allowed = {
+            pseo_cta_click: 1,
+            pseo_table_interaction: 1,
+            pseo_source_open: 1,
+            pseo_related_page_click: 1,
+            pseo_form_start: 1,
+            pseo_form_submit: 1,
+            pseo_whatsapp_click: 1,
+          };
+          if (!allowed[eventName]) return;
+          track(eventName, {
+            ...pseoBase,
+            cta_position: el.getAttribute('data-cta-position') || 'inline',
+            destination_type: (el.getAttribute('href') || '').includes('wa.me') ? 'whatsapp' : 'link',
+            // never send free text / href full query with PII
+          });
+        });
+      });
+      document.querySelectorAll('[data-pseo-table]').forEach((table) => {
+        table.addEventListener('click', () => {
+          track('pseo_table_interaction', {
+            ...pseoBase,
+            cta_position: 'table',
+          });
+        }, { once: true });
+      });
+      // WhatsApp on pSEO pages also emit pseo_whatsapp_click (in addition to whatsapp_click)
+      document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
+        link.addEventListener('click', () => {
+          track('pseo_whatsapp_click', {
+            ...pseoBase,
+            cta_position: link.getAttribute('data-cta-position') || 'inline',
+            destination_type: 'whatsapp',
+          });
+        });
+      });
+      if (form) {
+        let pseoFormStarted = false;
+        const markPseoStart = () => {
+          if (pseoFormStarted) return;
+          pseoFormStarted = true;
+          track('pseo_form_start', { ...pseoBase, destination_type: 'form' });
+        };
+        form.querySelectorAll('input, select, textarea').forEach((el) => {
+          el.addEventListener('focus', markPseoStart, { once: true });
+        });
+        form.addEventListener('submit', () => {
+          if (form.checkValidity()) {
+            track('pseo_form_submit', {
+              ...pseoBase,
+              destination_type: 'form',
+              // controlled enum only
+              cta_label: (form.querySelector('#necessidade')?.value || '').slice(0, 80),
+            });
+          }
+        });
+      }
+    }
   };
 
   window.confengeTrack = track;

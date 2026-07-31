@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://confenge.com.br/sitemap.xml
+Sitemap: https://confenge.com.br/sitemap-inteligencia.xml

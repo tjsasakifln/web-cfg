@@ -1,0 +1,3389 @@
+{
+  "by_type": {
+    "agency": 7,
+    "competition": 18,
+    "market": 18,
+    "price": 9,
+    "problem_service": 5,
+    "radar": 15
+  },
+  "counts": {
+    "noindex": 48,
+    "publish": 24
+  },
+  "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+  "generated_at": "2026-07-31",
+  "pages": [
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/precos/edificacoes-publicas-rs/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 86 contratos, 26 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 86,
+      "page_id": "market-edificacoes-publicas-rs",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/precos/edificacoes-publicas-rs/",
+        "/inteligencia/concorrencia/edificacoes-publicas-rs/",
+        "/radar/edificacoes-publicas-rs/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Edificações públicas em Rio Grande do Sul: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 78 contratos, 12 órgãos em Paraná. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 78,
+      "page_id": "market-pavimentacao-infraestrutura-viaria-pr",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
+        "/radar/pavimentacao-infraestrutura-viaria-pr/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Pavimentação e infraestrutura viária em Paraná: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/concorrencia/edificacoes-publicas-sc/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 66 contratos, 33 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 66,
+      "page_id": "market-edificacoes-publicas-sc",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/concorrencia/edificacoes-publicas-sc/",
+        "/radar/edificacoes-publicas-sc/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Edificações públicas em Santa Catarina: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 51 contratos, 3 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 94,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 51,
+      "page_id": "market-manutencao-predial-engenharia-rs",
+      "page_type": "market",
+      "publication_decision_reason": "score=94; gates_ok_high_score",
+      "reasons": [
+        "score=94",
+        "gates_ok_high_score"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+        "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+        "/radar/manutencao-predial-engenharia-rs/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 18,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Manutenção predial e serviços de engenharia em Rio Grande do Sul: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/manutencao-predial-engenharia-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/precos/edificacoes-publicas-go/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 44 contratos, 20 órgãos em Goiás. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Goiás",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 44,
+      "page_id": "market-edificacoes-publicas-go",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "GO",
+      "related_urls": [
+        "/inteligencia/precos/edificacoes-publicas-go/",
+        "/inteligencia/concorrencia/edificacoes-publicas-go/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Edificações públicas em Goiás: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-go/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/precos/edificacoes-publicas-sp/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 43 contratos, 21 órgãos em São Paulo. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 43,
+      "page_id": "market-edificacoes-publicas-sp",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/precos/edificacoes-publicas-sp/",
+        "/inteligencia/concorrencia/edificacoes-publicas-sp/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Edificações públicas em São Paulo: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/concorrencia/climatizacao-instalacoes-sp/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 36 contratos, 15 órgãos em São Paulo. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Climatização e instalações prediais — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 36,
+      "page_id": "market-climatizacao-instalacoes-sp",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/concorrencia/climatizacao-instalacoes-sp/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Climatização e instalações prediais em São Paulo: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/climatizacao-instalacoes-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "saneamento-hidraulica",
+      "canonical_related": "/inteligencia/precos/saneamento-hidraulica-sp/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 28 contratos, 15 órgãos em São Paulo. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Saneamento e hidráulica — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 28,
+      "page_id": "market-saneamento-hidraulica-sp",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/precos/saneamento-hidraulica-sp/",
+        "/inteligencia/concorrencia/saneamento-hidraulica-sp/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Saneamento e hidráulica",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Saneamento e hidráulica em São Paulo: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/saneamento-hidraulica-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/precos/edificacoes-publicas-mg/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 27 contratos, 22 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 27,
+      "page_id": "market-edificacoes-publicas-mg",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "MG",
+      "related_urls": [
+        "/inteligencia/precos/edificacoes-publicas-mg/",
+        "/inteligencia/concorrencia/edificacoes-publicas-mg/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Edificações públicas em Minas Gerais: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-mg/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 24 contratos, 17 órgãos em São Paulo. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 24,
+      "page_id": "market-pavimentacao-infraestrutura-viaria-sp",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp/",
+        "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Pavimentação e infraestrutura viária em São Paulo: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/concorrencia/climatizacao-instalacoes-sc/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 23 contratos, 20 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Climatização e instalações prediais — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 96,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 23,
+      "page_id": "market-climatizacao-instalacoes-sc",
+      "page_type": "market",
+      "publication_decision_reason": "score=96; gates_ok_high_score",
+      "reasons": [
+        "score=96",
+        "gates_ok_high_score"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/concorrencia/climatizacao-instalacoes-sc/",
+        "/radar/climatizacao-instalacoes-sc/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Mercado de Climatização e instalações prediais em Santa Catarina: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/climatizacao-instalacoes-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 23 contratos, 15 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 95,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 23,
+      "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
+      "page_type": "market",
+      "publication_decision_reason": "score=95; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=95",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
+        "/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 19,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Pavimentação e infraestrutura viária em Santa Catarina: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/precos/edificacoes-publicas-pr/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 23 contratos, 12 órgãos em Paraná. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 23,
+      "page_id": "market-edificacoes-publicas-pr",
+      "page_type": "market",
+      "publication_decision_reason": "score=92; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=92",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/precos/edificacoes-publicas-pr/",
+        "/inteligencia/concorrencia/edificacoes-publicas-pr/",
+        "/radar/edificacoes-publicas-pr/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 16,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Edificações públicas em Paraná: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/concorrencia/edificacoes-publicas-ce/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 21 contratos, 7 órgãos em Ceará. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Ceará",
+      "human_review": "PENDING",
+      "indexability_score": 88,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 21,
+      "page_id": "market-edificacoes-publicas-ce",
+      "page_type": "market",
+      "publication_decision_reason": "score=88; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=88",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "CE",
+      "related_urls": [
+        "/inteligencia/concorrencia/edificacoes-publicas-ce/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 12,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Edificações públicas em Ceará: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-ce/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/concorrencia/climatizacao-instalacoes-rs/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 19 contratos, 13 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Climatização e instalações prediais — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 19,
+      "page_id": "market-climatizacao-instalacoes-rs",
+      "page_type": "market",
+      "publication_decision_reason": "score=92; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=92",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/concorrencia/climatizacao-instalacoes-rs/",
+        "/radar/climatizacao-instalacoes-rs/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 16,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Climatização e instalações prediais em Rio Grande do Sul: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/climatizacao-instalacoes-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/concorrencia/edificacoes-publicas-ba/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 16 contratos, 13 órgãos em Bahia. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Bahia",
+      "human_review": "PENDING",
+      "indexability_score": 91,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 16,
+      "page_id": "market-edificacoes-publicas-ba",
+      "page_type": "market",
+      "publication_decision_reason": "score=91; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=91",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "BA",
+      "related_urls": [
+        "/inteligencia/concorrencia/edificacoes-publicas-ba/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 15,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Edificações públicas em Bahia: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-ba/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/inteligencia/concorrencia/manutencao-predial-engenharia-go/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 15 contratos, 3 órgãos em Goiás. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Manutenção predial e serviços de engenharia — Goiás",
+      "human_review": "PENDING",
+      "indexability_score": 83,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 15,
+      "page_id": "market-manutencao-predial-engenharia-go",
+      "page_type": "market",
+      "publication_decision_reason": "score=83; gates_ok_high_score; demoted_over_cap_24",
+      "reasons": [
+        "score=83",
+        "gates_ok_high_score",
+        "demoted_over_cap_24"
+      ],
+      "region": "GO",
+      "related_urls": [
+        "/inteligencia/concorrencia/manutencao-predial-engenharia-go/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 7,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Manutenção predial e serviços de engenharia em Goiás: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/manutencao-predial-engenharia-go/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/concorrencia/edificacoes-publicas-pi/",
+      "cta_intent": "mapa_mercado",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Inteligência de mercado: 15 contratos, 8 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
+      "h1": "Quanto o poder público contratou em Edificações públicas — Piauí",
+      "human_review": "PENDING",
+      "indexability_score": 87,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 15,
+      "page_id": "market-edificacoes-publicas-pi",
+      "page_type": "market",
+      "publication_decision_reason": "score=87; gates_ok_high_score; diversity_cap_market_2",
+      "reasons": [
+        "score=87",
+        "gates_ok_high_score",
+        "diversity_cap_market_2"
+      ],
+      "region": "PI",
+      "related_urls": [
+        "/inteligencia/concorrencia/edificacoes-publicas-pi/",
+        "/inteligencia/mercados/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 8,
+        "evidence": 11,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Mercado de Edificações públicas em Piauí: contratos e órgãos | CONFENGE",
+      "url": "/inteligencia/mercados/edificacoes-publicas-pi/"
+    },
+    {
+      "agency_id": "76205640",
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+      "cta_intent": "estrategia_orgao",
+      "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Dossiê de comprador: 65 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "h1": "Contratação de engenharia em PREFEITURA MUNICIPAL DE DOIS VIZINHOS - PR: o que os dados públicos mostram",
+      "human_review": "PENDING",
+      "indexability_score": 93,
+      "intent": "avaliar_orgao_comprador",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 65,
+      "page_id": "agency-76205640",
+      "page_type": "agency",
+      "publication_decision_reason": "gates_ok; score=93",
+      "reasons": [
+        "gates_ok",
+        "score=93"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+        "/radar/pavimentacao-infraestrutura-viaria-pr/",
+        "/inteligencia/orgaos/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 9
+      },
+      "segment": null,
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "PREFEITURA MUNICIPAL DE DOIS VIZINHOS - PR: histórico de contratação em engenharia | CONFENGE",
+      "url": "/inteligencia/orgaos/prefeitura-municipal-de-dois-vizinhos-pr-pr/engenharia/"
+    },
+    {
+      "agency_id": "88830609",
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "cta_intent": "estrategia_orgao",
+      "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Dossiê de comprador: 49 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "h1": "Contratação de engenharia em MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL: o que os dados públicos mostram",
+      "human_review": "PENDING",
+      "indexability_score": 93,
+      "intent": "avaliar_orgao_comprador",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 49,
+      "page_id": "agency-88830609",
+      "page_type": "agency",
+      "publication_decision_reason": "gates_ok; score=93",
+      "reasons": [
+        "gates_ok",
+        "score=93"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "/radar/edificacoes-publicas-rs/",
+        "/inteligencia/orgaos/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 9
+      },
+      "segment": null,
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL: histórico de contratação em engenharia | CONFENGE",
+      "url": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/"
+    },
+    {
+      "agency_id": "45132495",
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-sp/",
+      "cta_intent": "estrategia_orgao",
+      "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Dossiê de comprador: 22 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "h1": "Contratação de engenharia em PREFEITURA MUNICIPAL DE LIMEIRA: o que os dados públicos mostram",
+      "human_review": "PENDING",
+      "indexability_score": 88,
+      "intent": "avaliar_orgao_comprador",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 22,
+      "page_id": "agency-45132495",
+      "page_type": "agency",
+      "publication_decision_reason": "gates_ok; score=88; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=88",
+        "demoted_over_cap_24"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-sp/",
+        "/inteligencia/orgaos/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 15,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 9
+      },
+      "segment": null,
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "PREFEITURA MUNICIPAL DE LIMEIRA: histórico de contratação em engenharia | CONFENGE",
+      "url": "/inteligencia/orgaos/prefeitura-municipal-de-limeira-sp/engenharia/"
+    },
+    {
+      "agency_id": "08083086",
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-go/",
+      "cta_intent": "estrategia_orgao",
+      "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Dossiê de comprador: 18 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "h1": "Contratação de engenharia em FMS BELA VISTA DE GOIAS: o que os dados públicos mostram",
+      "human_review": "PENDING",
+      "indexability_score": 85,
+      "intent": "avaliar_orgao_comprador",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 18,
+      "page_id": "agency-08083086",
+      "page_type": "agency",
+      "publication_decision_reason": "gates_ok; score=85; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=85",
+        "demoted_over_cap_24"
+      ],
+      "region": "GO",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-go/",
+        "/inteligencia/orgaos/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 12,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 9
+      },
+      "segment": null,
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "FMS BELA VISTA DE GOIAS: histórico de contratação em engenharia | CONFENGE",
+      "url": "/inteligencia/orgaos/fms-bela-vista-de-goias-go/engenharia/"
+    },
+    {
+      "agency_id": "07954480",
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-ce/",
+      "cta_intent": "estrategia_orgao",
+      "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Dossiê de comprador: 17 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "h1": "Contratação de engenharia em EEM CORONEL ALFREDO SILVANO: o que os dados públicos mostram",
+      "human_review": "PENDING",
+      "indexability_score": 84,
+      "intent": "avaliar_orgao_comprador",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 17,
+      "page_id": "agency-07954480",
+      "page_type": "agency",
+      "publication_decision_reason": "gates_ok; score=84; diversity_cap_agency_3",
+      "reasons": [
+        "gates_ok",
+        "score=84",
+        "diversity_cap_agency_3"
+      ],
+      "region": "CE",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-ce/",
+        "/inteligencia/orgaos/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 11,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 9
+      },
+      "segment": null,
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "EEM CORONEL ALFREDO SILVANO: histórico de contratação em engenharia | CONFENGE",
+      "url": "/inteligencia/orgaos/eem-coronel-alfredo-silvano-ce/engenharia/"
+    },
+    {
+      "agency_id": "60509015",
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/mercados/climatizacao-instalacoes-sp/",
+      "cta_intent": "estrategia_orgao",
+      "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Dossiê de comprador: 15 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "h1": "Contratação de engenharia em ESP-PRESTACAO DE SERVICOS FDE/SEE: o que os dados públicos mostram",
+      "human_review": "PENDING",
+      "indexability_score": 83,
+      "intent": "avaliar_orgao_comprador",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 15,
+      "page_id": "agency-60509015",
+      "page_type": "agency",
+      "publication_decision_reason": "gates_ok; score=83; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=83",
+        "demoted_over_cap_24"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/climatizacao-instalacoes-sp/",
+        "/inteligencia/orgaos/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 10,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 9
+      },
+      "segment": null,
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "ESP-PRESTACAO DE SERVICOS FDE/SEE: histórico de contratação em engenharia | CONFENGE",
+      "url": "/inteligencia/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/"
+    },
+    {
+      "agency_id": "01414440",
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/inteligencia/mercados/manutencao-predial-engenharia-go/",
+      "cta_intent": "estrategia_orgao",
+      "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Dossiê de comprador: 13 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "h1": "Contratação de engenharia em PROCURADORIA GERAL DO MUNICIPIO DE GOIÂNIA: o que os dados públicos mostram",
+      "human_review": "PENDING",
+      "indexability_score": 82,
+      "intent": "avaliar_orgao_comprador",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 13,
+      "page_id": "agency-01414440",
+      "page_type": "agency",
+      "publication_decision_reason": "gates_ok; score=82; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=82",
+        "demoted_over_cap_24"
+      ],
+      "region": "GO",
+      "related_urls": [
+        "/inteligencia/mercados/manutencao-predial-engenharia-go/",
+        "/inteligencia/orgaos/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 9,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 9
+      },
+      "segment": null,
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "PROCURADORIA GERAL DO MUNICIPIO DE GOIÂNIA: histórico de contratação em engenharia | CONFENGE",
+      "url": "/inteligencia/orgaos/procuradoria-geral-do-municipio-de-goiania-go/engenharia/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Edificações públicas em Rio Grande do Sul: mediana, P25 e P75 com 40 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Edificações públicas (Rio Grande do Sul)",
+      "human_review": "PENDING",
+      "indexability_score": 97,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 40,
+      "page_id": "price-edificacoes-publicas-rs",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=97",
+      "reasons": [
+        "gates_ok",
+        "score=97"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "/inteligencia/concorrencia/edificacoes-publicas-rs/",
+        "/radar/edificacoes-publicas-rs/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Benchmark de valores: Edificações públicas em Rio Grande do Sul | CONFENGE",
+      "url": "/inteligencia/precos/edificacoes-publicas-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-sp/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Edificações públicas em São Paulo: mediana, P25 e P75 com 28 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Edificações públicas (São Paulo)",
+      "human_review": "PENDING",
+      "indexability_score": 93,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 28,
+      "page_id": "price-edificacoes-publicas-sp",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=93",
+      "reasons": [
+        "gates_ok",
+        "score=93"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-sp/",
+        "/inteligencia/concorrencia/edificacoes-publicas-sp/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 16,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Benchmark de valores: Edificações públicas em São Paulo | CONFENGE",
+      "url": "/inteligencia/precos/edificacoes-publicas-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-mg/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Edificações públicas em Minas Gerais: mediana, P25 e P75 com 27 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Edificações públicas (Minas Gerais)",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 27,
+      "page_id": "price-edificacoes-publicas-mg",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_price_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_price_2"
+      ],
+      "region": "MG",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-mg/",
+        "/inteligencia/concorrencia/edificacoes-publicas-mg/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 15,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Benchmark de valores: Edificações públicas em Minas Gerais | CONFENGE",
+      "url": "/inteligencia/precos/edificacoes-publicas-mg/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "saneamento-hidraulica",
+      "canonical_related": "/inteligencia/mercados/saneamento-hidraulica-sp/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Saneamento e hidráulica em São Paulo: mediana, P25 e P75 com 22 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Saneamento e hidráulica (São Paulo)",
+      "human_review": "PENDING",
+      "indexability_score": 90,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 22,
+      "page_id": "price-saneamento-hidraulica-sp",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=90; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=90",
+        "demoted_over_cap_24"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/saneamento-hidraulica-sp/",
+        "/inteligencia/concorrencia/saneamento-hidraulica-sp/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 13,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Saneamento e hidráulica",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Benchmark de valores: Saneamento e hidráulica em São Paulo | CONFENGE",
+      "url": "/inteligencia/precos/saneamento-hidraulica-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Pavimentação e infraestrutura viária em São Paulo: mediana, P25 e P75 com 22 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Pavimentação e infraestrutura viária (São Paulo)",
+      "human_review": "PENDING",
+      "indexability_score": 90,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 22,
+      "page_id": "price-pavimentacao-infraestrutura-viaria-sp",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=90; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=90",
+        "demoted_over_cap_24"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+        "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 13,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Benchmark de valores: Pavimentação e infraestrutura viária em São Paulo | CONFENGE",
+      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-pr/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Edificações públicas em Paraná: mediana, P25 e P75 com 21 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Edificações públicas (Paraná)",
+      "human_review": "PENDING",
+      "indexability_score": 89,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 21,
+      "page_id": "price-edificacoes-publicas-pr",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=89; diversity_cap_price_2",
+      "reasons": [
+        "gates_ok",
+        "score=89",
+        "diversity_cap_price_2"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-pr/",
+        "/inteligencia/concorrencia/edificacoes-publicas-pr/",
+        "/radar/edificacoes-publicas-pr/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 12,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Benchmark de valores: Edificações públicas em Paraná | CONFENGE",
+      "url": "/inteligencia/precos/edificacoes-publicas-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-go/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Edificações públicas em Goiás: mediana, P25 e P75 com 20 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Edificações públicas (Goiás)",
+      "human_review": "PENDING",
+      "indexability_score": 88,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 20,
+      "page_id": "price-edificacoes-publicas-go",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=88; diversity_cap_price_2",
+      "reasons": [
+        "gates_ok",
+        "score=88",
+        "diversity_cap_price_2"
+      ],
+      "region": "GO",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-go/",
+        "/inteligencia/concorrencia/edificacoes-publicas-go/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 11,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Benchmark de valores: Edificações públicas em Goiás | CONFENGE",
+      "url": "/inteligencia/precos/edificacoes-publicas-go/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/inteligencia/mercados/manutencao-predial-engenharia-rs/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Manutenção predial e serviços de engenharia em Rio Grande do Sul: mediana, P25 e P75 com 20 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Manutenção predial e serviços de engenharia (Rio Grande do Sul)",
+      "human_review": "PENDING",
+      "indexability_score": 88,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 20,
+      "page_id": "price-manutencao-predial-engenharia-rs",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=88; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=88",
+        "demoted_over_cap_24"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/manutencao-predial-engenharia-rs/",
+        "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+        "/radar/manutencao-predial-engenharia-rs/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 11,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Benchmark de valores: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+      "url": "/inteligencia/precos/manutencao-predial-engenharia-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "cta_intent": "validar_preco_margem",
+      "cta_label": "Validar preço, risco e margem",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Benchmark Pavimentação e infraestrutura viária em Santa Catarina: mediana, P25 e P75 com 20 observações públicas. Não use como preço unitário cego.",
+      "h1": "Dispersão de valores contratados — Pavimentação e infraestrutura viária (Santa Catarina)",
+      "human_review": "PENDING",
+      "indexability_score": 88,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 20,
+      "page_id": "price-pavimentacao-infraestrutura-viaria-sc",
+      "page_type": "price",
+      "publication_decision_reason": "gates_ok; score=88; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=88",
+        "demoted_over_cap_24"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
+        "/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/precos/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 9,
+        "evidence": 11,
+        "freshness": 15,
+        "icp_adherence": 25,
+        "service_cta": 9
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Benchmark de valores: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Rio Grande do Sul): 34 fornecedores e 86 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 86,
+      "page_id": "comp-edificacoes-publicas-rs",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92",
+      "reasons": [
+        "gates_ok",
+        "score=92"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "/inteligencia/precos/edificacoes-publicas-rs/",
+        "/radar/edificacoes-publicas-rs/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Concorrência observada: Edificações públicas em Rio Grande do Sul | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Pavimentação e infraestrutura viária (Paraná): 19 fornecedores e 78 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Pavimentação e infraestrutura viária — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 78,
+      "page_id": "comp-pavimentacao-infraestrutura-viaria-pr",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92",
+      "reasons": [
+        "gates_ok",
+        "score=92"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+        "/radar/pavimentacao-infraestrutura-viaria-pr/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Concorrência observada: Pavimentação e infraestrutura viária em Paraná | CONFENGE",
+      "url": "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-sc/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Santa Catarina): 23 fornecedores e 66 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 66,
+      "page_id": "comp-edificacoes-publicas-sc",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92",
+      "reasons": [
+        "gates_ok",
+        "score=92"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-sc/",
+        "/radar/edificacoes-publicas-sc/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "publish",
+      "title": "Concorrência observada: Edificações públicas em Santa Catarina | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/inteligencia/mercados/manutencao-predial-engenharia-rs/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 3 fornecedores e 51 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 88,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 51,
+      "page_id": "comp-manutencao-predial-engenharia-rs",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=88; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=88",
+        "demoted_over_cap_24"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/manutencao-predial-engenharia-rs/",
+        "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+        "/radar/manutencao-predial-engenharia-rs/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 16,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+      "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-go/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Goiás): 43 fornecedores e 44 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Goiás",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 44,
+      "page_id": "comp-edificacoes-publicas-go",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "GO",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-go/",
+        "/inteligencia/precos/edificacoes-publicas-go/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Edificações públicas em Goiás | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-go/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-sp/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (São Paulo): 28 fornecedores e 43 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 43,
+      "page_id": "comp-edificacoes-publicas-sp",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-sp/",
+        "/inteligencia/precos/edificacoes-publicas-sp/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Edificações públicas em São Paulo | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/mercados/climatizacao-instalacoes-sp/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Climatização e instalações prediais (São Paulo): 23 fornecedores e 36 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Climatização e instalações prediais — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 36,
+      "page_id": "comp-climatizacao-instalacoes-sp",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/climatizacao-instalacoes-sp/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Climatização e instalações prediais em São Paulo | CONFENGE",
+      "url": "/inteligencia/concorrencia/climatizacao-instalacoes-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "saneamento-hidraulica",
+      "canonical_related": "/inteligencia/mercados/saneamento-hidraulica-sp/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Saneamento e hidráulica (São Paulo): 26 fornecedores e 28 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Saneamento e hidráulica — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 28,
+      "page_id": "comp-saneamento-hidraulica-sp",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/saneamento-hidraulica-sp/",
+        "/inteligencia/precos/saneamento-hidraulica-sp/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Saneamento e hidráulica",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Saneamento e hidráulica em São Paulo | CONFENGE",
+      "url": "/inteligencia/concorrencia/saneamento-hidraulica-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-mg/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Minas Gerais): 26 fornecedores e 27 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Minas Gerais",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 27,
+      "page_id": "comp-edificacoes-publicas-mg",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "MG",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-mg/",
+        "/inteligencia/precos/edificacoes-publicas-mg/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Edificações públicas em Minas Gerais | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-mg/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Pavimentação e infraestrutura viária (São Paulo): 22 fornecedores e 24 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Pavimentação e infraestrutura viária — São Paulo",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 24,
+      "page_id": "comp-pavimentacao-infraestrutura-viaria-sp",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "SP",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Pavimentação e infraestrutura viária em São Paulo | CONFENGE",
+      "url": "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sp/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/mercados/climatizacao-instalacoes-sc/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Climatização e instalações prediais (Santa Catarina): 21 fornecedores e 23 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Climatização e instalações prediais — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 23,
+      "page_id": "comp-climatizacao-instalacoes-sc",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/climatizacao-instalacoes-sc/",
+        "/radar/climatizacao-instalacoes-sc/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Climatização e instalações prediais em Santa Catarina | CONFENGE",
+      "url": "/inteligencia/concorrencia/climatizacao-instalacoes-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Pavimentação e infraestrutura viária (Santa Catarina): 20 fornecedores e 23 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Pavimentação e infraestrutura viária — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 23,
+      "page_id": "comp-pavimentacao-infraestrutura-viaria-sc",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+        "/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+      "url": "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-pr/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Paraná): 23 fornecedores e 23 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 23,
+      "page_id": "comp-edificacoes-publicas-pr",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-pr/",
+        "/inteligencia/precos/edificacoes-publicas-pr/",
+        "/radar/edificacoes-publicas-pr/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Edificações públicas em Paraná | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-ce/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Ceará): 20 fornecedores e 21 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Ceará",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 21,
+      "page_id": "comp-edificacoes-publicas-ce",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "CE",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-ce/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Edificações públicas em Ceará | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-ce/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/mercados/climatizacao-instalacoes-rs/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Climatização e instalações prediais (Rio Grande do Sul): 17 fornecedores e 19 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Climatização e instalações prediais — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 19,
+      "page_id": "comp-climatizacao-instalacoes-rs",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/climatizacao-instalacoes-rs/",
+        "/radar/climatizacao-instalacoes-rs/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Climatização e instalações prediais em Rio Grande do Sul | CONFENGE",
+      "url": "/inteligencia/concorrencia/climatizacao-instalacoes-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-ba/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Bahia): 14 fornecedores e 16 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Bahia",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 16,
+      "page_id": "comp-edificacoes-publicas-ba",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_competition_2"
+      ],
+      "region": "BA",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-ba/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Edificações públicas em Bahia | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-ba/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/inteligencia/mercados/manutencao-predial-engenharia-go/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Goiás): 13 fornecedores e 15 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Goiás",
+      "human_review": "PENDING",
+      "indexability_score": 87,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 15,
+      "page_id": "comp-manutencao-predial-engenharia-go",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=87; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=87",
+        "demoted_over_cap_24"
+      ],
+      "region": "GO",
+      "related_urls": [
+        "/inteligencia/mercados/manutencao-predial-engenharia-go/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 15,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Manutenção predial e serviços de engenharia em Goiás | CONFENGE",
+      "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-go/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-pi/",
+      "cta_intent": "mapa_concorrencia",
+      "cta_label": "Solicitar um mapa aplicado à minha empresa",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Concorrência observada em Edificações públicas (Piauí): 14 fornecedores e 15 contratos no recorte público — sem juízo de qualidade.",
+      "h1": "Fornecedores observados em Edificações públicas — Piauí",
+      "human_review": "PENDING",
+      "indexability_score": 90,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 15,
+      "page_id": "comp-edificacoes-publicas-pi",
+      "page_type": "competition",
+      "publication_decision_reason": "gates_ok; score=90; diversity_cap_competition_2",
+      "reasons": [
+        "gates_ok",
+        "score=90",
+        "diversity_cap_competition_2"
+      ],
+      "region": "PI",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-pi/",
+        "/inteligencia/concorrencia/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "differentiation": 9,
+        "evidence": 18,
+        "freshness": 15,
+        "icp_adherence": 22,
+        "service_cta": 8
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_contracts"
+      ],
+      "status": "noindex",
+      "title": "Concorrência observada: Edificações públicas em Piauí | CONFENGE",
+      "url": "/inteligencia/concorrencia/edificacoes-publicas-pi/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 113 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 113,
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92",
+      "reasons": [
+        "gates_ok",
+        "score=92"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "publish",
+      "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+      "url": "/radar/pavimentacao-infraestrutura-viaria-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-pr/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Edificações públicas em Paraná: 97 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Edificações públicas — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 97,
+      "page_id": "radar-edificacoes-publicas-pr",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92",
+      "reasons": [
+        "gates_ok",
+        "score=92"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-pr/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "publish",
+      "title": "Radar de oportunidades: Edificações públicas em Paraná | CONFENGE",
+      "url": "/radar/edificacoes-publicas-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Edificações públicas em Rio Grande do Sul: 95 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 95,
+      "page_id": "radar-edificacoes-publicas-rs",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92",
+      "reasons": [
+        "gates_ok",
+        "score=92"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "publish",
+      "title": "Radar de oportunidades: Edificações públicas em Rio Grande do Sul | CONFENGE",
+      "url": "/radar/edificacoes-publicas-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/inteligencia/mercados/edificacoes-publicas-sc/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Edificações públicas em Santa Catarina: 87 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Edificações públicas — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 87,
+      "page_id": "radar-edificacoes-publicas-sc",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_radar_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_radar_2"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-sc/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Edificações públicas",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Edificações públicas em Santa Catarina | CONFENGE",
+      "url": "/radar/edificacoes-publicas-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Pavimentação e infraestrutura viária em Paraná: 68 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 68,
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92",
+      "reasons": [
+        "gates_ok",
+        "score=92"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "publish",
+      "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Paraná | CONFENGE",
+      "url": "/radar/pavimentacao-infraestrutura-viaria-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/diagnostico-pre-licitacao/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 66 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 66,
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_radar_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_radar_2"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Pavimentação e infraestrutura viária",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Rio Grande do Sul | CONFENGE",
+      "url": "/radar/pavimentacao-infraestrutura-viaria-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "saneamento-hidraulica",
+      "canonical_related": "/diagnostico-pre-licitacao/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 37 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 37,
+      "page_id": "radar-saneamento-hidraulica-sc",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Saneamento e hidráulica",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Saneamento e hidráulica em Santa Catarina | CONFENGE",
+      "url": "/radar/saneamento-hidraulica-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/diagnostico-pre-licitacao/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Manutenção predial e serviços de engenharia em Santa Catarina: 22 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Manutenção predial e serviços de engenharia — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 22,
+      "page_id": "radar-manutencao-predial-engenharia-sc",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Manutenção predial e serviços de engenharia em Santa Catarina | CONFENGE",
+      "url": "/radar/manutencao-predial-engenharia-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/diagnostico-pre-licitacao/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Climatização e instalações prediais em Paraná: 19 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Climatização e instalações prediais — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 19,
+      "page_id": "radar-climatizacao-instalacoes-pr",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Climatização e instalações prediais em Paraná | CONFENGE",
+      "url": "/radar/climatizacao-instalacoes-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/mercados/climatizacao-instalacoes-sc/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Climatização e instalações prediais em Santa Catarina: 16 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Climatização e instalações prediais — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 16,
+      "page_id": "radar-climatizacao-instalacoes-sc",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/climatizacao-instalacoes-sc/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Climatização e instalações prediais em Santa Catarina | CONFENGE",
+      "url": "/radar/climatizacao-instalacoes-sc/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "saneamento-hidraulica",
+      "canonical_related": "/diagnostico-pre-licitacao/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Saneamento e hidráulica em Rio Grande do Sul: 15 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Saneamento e hidráulica — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 15,
+      "page_id": "radar-saneamento-hidraulica-rs",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Saneamento e hidráulica",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Saneamento e hidráulica em Rio Grande do Sul | CONFENGE",
+      "url": "/radar/saneamento-hidraulica-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "climatizacao-instalacoes",
+      "canonical_related": "/inteligencia/mercados/climatizacao-instalacoes-rs/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Climatização e instalações prediais em Rio Grande do Sul: 11 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Climatização e instalações prediais — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 11,
+      "page_id": "radar-climatizacao-instalacoes-rs",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; diversity_cap_radar_2",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "diversity_cap_radar_2"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/climatizacao-instalacoes-rs/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Climatização e instalações prediais",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Climatização e instalações prediais em Rio Grande do Sul | CONFENGE",
+      "url": "/radar/climatizacao-instalacoes-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/diagnostico-pre-licitacao/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Manutenção predial e serviços de engenharia em Paraná: 9 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Manutenção predial e serviços de engenharia — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 92,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 9,
+      "page_id": "radar-manutencao-predial-engenharia-pr",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=92; demoted_over_cap_24",
+      "reasons": [
+        "gates_ok",
+        "score=92",
+        "demoted_over_cap_24"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 20,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Manutenção predial e serviços de engenharia em Paraná | CONFENGE",
+      "url": "/radar/manutencao-predial-engenharia-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/inteligencia/mercados/manutencao-predial-engenharia-rs/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Manutenção predial e serviços de engenharia em Rio Grande do Sul: 7 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 90,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 7,
+      "page_id": "radar-manutencao-predial-engenharia-rs",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=90; diversity_cap_radar_2",
+      "reasons": [
+        "gates_ok",
+        "score=90",
+        "diversity_cap_radar_2"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/manutencao-predial-engenharia-rs/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 18,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Manutenção predial e serviços de engenharia",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+      "url": "/radar/manutencao-predial-engenharia-rs/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "saneamento-hidraulica",
+      "canonical_related": "/diagnostico-pre-licitacao/",
+      "cta_intent": "analisar_edital",
+      "cta_label": "Analisar este edital antes da proposta",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Radar de Saneamento e hidráulica em Paraná: 4 oportunidades classificadas (atualizado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "h1": "Oportunidades abertas em Saneamento e hidráulica — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 82,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 4,
+      "page_id": "radar-saneamento-hidraulica-pr",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=82; diversity_cap_radar_2",
+      "reasons": [
+        "gates_ok",
+        "score=82",
+        "diversity_cap_radar_2"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 20,
+        "differentiation": 7,
+        "evidence": 10,
+        "freshness": 15,
+        "icp_adherence": 20,
+        "service_cta": 10
+      },
+      "segment": "Saneamento e hidráulica",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp"
+      ],
+      "status": "noindex",
+      "title": "Radar de oportunidades: Saneamento e hidráulica em Paraná | CONFENGE",
+      "url": "/radar/saneamento-hidraulica-pr/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "cta_intent": "organizar_documentos",
+      "cta_label": "Organizar documentos e próximos passos",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em ",
+      "h1": "Inconsistência entre orçamento de referência e edital",
+      "human_review": "PENDING",
+      "indexability_score": 95,
+      "intent": "proteger_margem_proposta_contrato",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 494,
+      "page_id": "prob-orcamento-edital",
+      "page_type": "problem_service",
+      "publication_decision_reason": "gates_ok; score=95",
+      "reasons": [
+        "gates_ok",
+        "score=95"
+      ],
+      "region": null,
+      "related_urls": [
+        "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/analise-edital-obra-publica-construtora/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 10,
+        "evidence": 20,
+        "freshness": 14,
+        "icp_adherence": 22,
+        "service_cta": 10
+      },
+      "segment": "orcamento-edital",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_supplier_contracts",
+        "site-confenge-guides"
+      ],
+      "status": "publish",
+      "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
+      "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "cta_intent": "organizar_documentos",
+      "cta_label": "Organizar documentos e próximos passos",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatu",
+      "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
+      "human_review": "PENDING",
+      "indexability_score": 95,
+      "intent": "proteger_margem_proposta_contrato",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 466,
+      "page_id": "prob-sinapi-sicro",
+      "page_type": "problem_service",
+      "publication_decision_reason": "gates_ok; score=95",
+      "reasons": [
+        "gates_ok",
+        "score=95"
+      ],
+      "region": null,
+      "related_urls": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/produtividade-sinapi-obra-publica/",
+        "/conteudos/bdi-obra-publica/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 10,
+        "evidence": 20,
+        "freshness": 14,
+        "icp_adherence": 22,
+        "service_cta": 10
+      },
+      "segment": "sinapi-sicro",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "site-confenge-guides",
+        "pncp_supplier_contracts"
+      ],
+      "status": "publish",
+      "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
+      "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "manutencao-predial-engenharia",
+      "canonical_related": "/conteudos/glosa-de-medicao-obra-publica/",
+      "cta_intent": "organizar_documentos",
+      "cta_label": "Organizar documentos e próximos passos",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+      "h1": "Medição e glosa em contratos com execução contínua",
+      "human_review": "PENDING",
+      "indexability_score": 95,
+      "intent": "proteger_margem_proposta_contrato",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 407,
+      "page_id": "prob-medicao-glosa",
+      "page_type": "problem_service",
+      "publication_decision_reason": "gates_ok; score=95",
+      "reasons": [
+        "gates_ok",
+        "score=95"
+      ],
+      "region": null,
+      "related_urls": [
+        "/conteudos/glosa-de-medicao-obra-publica/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "/medicoes-glosas-obras-publicas/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 10,
+        "evidence": 20,
+        "freshness": 14,
+        "icp_adherence": 22,
+        "service_cta": 10
+      },
+      "segment": "medicao-glosa",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "site-confenge-guides"
+      ],
+      "status": "publish",
+      "title": "Medição e glosa em contratos com execução contínua | CONFENGE",
+      "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "edificacoes-publicas",
+      "canonical_related": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "cta_intent": "organizar_documentos",
+      "cta_label": "Organizar documentos e próximos passos",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+      "h1": "Aditivos, serviços extras e erosão de margem",
+      "human_review": "PENDING",
+      "indexability_score": 95,
+      "intent": "proteger_margem_proposta_contrato",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 494,
+      "page_id": "prob-aditivos-margem",
+      "page_type": "problem_service",
+      "publication_decision_reason": "gates_ok; score=95",
+      "reasons": [
+        "gates_ok",
+        "score=95"
+      ],
+      "region": null,
+      "related_urls": [
+        "/conteudos/aditivo-qualitativo-quantitativo/",
+        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/aditivos-obras-publicas/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 10,
+        "evidence": 20,
+        "freshness": 14,
+        "icp_adherence": 22,
+        "service_cta": 10
+      },
+      "segment": "aditivos",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "site-confenge-guides"
+      ],
+      "status": "publish",
+      "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
+      "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
+    },
+    {
+      "agency_id": null,
+      "archetype": "pavimentacao-infraestrutura-viaria",
+      "canonical_related": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "cta_intent": "organizar_documentos",
+      "cta_label": "Organizar documentos e próximos passos",
+      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar prepar",
+      "h1": "Reequilíbrio diante de dispersão de preços e insumos",
+      "human_review": "PENDING",
+      "indexability_score": 95,
+      "intent": "proteger_margem_proposta_contrato",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 156,
+      "page_id": "prob-reequilibrio",
+      "page_type": "problem_service",
+      "publication_decision_reason": "gates_ok; score=95",
+      "reasons": [
+        "gates_ok",
+        "score=95"
+      ],
+      "region": null,
+      "related_urls": [
+        "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "/conteudos/documentos-reequilibrio-obra-publica/",
+        "/reequilibrio-obras-publicas/"
+      ],
+      "score_breakdown": {
+        "commercial_intent": 19,
+        "differentiation": 10,
+        "evidence": 20,
+        "freshness": 14,
+        "icp_adherence": 22,
+        "service_cta": 10
+      },
+      "segment": "reequilibrio",
+      "source_run_id": "pseo-wave1-20260731",
+      "sources": [
+        "pncp_supplier_contracts",
+        "site-confenge-guides"
+      ],
+      "status": "publish",
+      "title": "Reequilíbrio diante de dispersão de preços e insumos | CONFENGE",
+      "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
+    }
+  ],
+  "source_run_id": "pseo-wave1-20260731"
+}

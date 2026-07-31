@@ -1,0 +1,855 @@
+"""Render intelligence pages from scored candidates + snapshot data."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from scripts.pseo.html_shell import (
+    ORG_JSONLD,
+    PERSON_JSONLD,
+    SITE,
+    author_box,
+    breadcrumb_jsonld,
+    breadcrumbs_html,
+    confenge_help,
+    cta_block,
+    e,
+    indicators_html,
+    money,
+    methodology_block,
+    page_shell,
+    table_html,
+)
+from scripts.pseo.score import Candidate
+
+
+def _meta(c: Candidate, manifest: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "pseo_page_id": c.page_id,
+        "page_type": c.page_type,
+        "archetype": c.archetype or "",
+        "segment": c.segment or "",
+        "region": c.region or "",
+        "agency_id": c.agency_id or "",
+        "intent": c.intent,
+        "source_run_id": manifest.get("source_run_id", ""),
+        "dataset_hash": (manifest.get("dataset_hash") or "")[:16],
+        "origem": c.url,
+        "url": c.url,
+    }
+
+
+def _robots(status: str) -> str:
+    if status == "publish":
+        return "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    return "noindex,follow"
+
+
+def _exec_summary(text: str, max_words: int = 80) -> str:
+    words = text.split()
+    if len(words) <= max_words:
+        return text
+    return " ".join(words[:max_words]) + "…"
+
+
+def render_candidate(c: Candidate, manifest: dict[str, Any]) -> str:
+    if c.page_type == "market":
+        return _render_market(c, manifest)
+    if c.page_type == "agency":
+        return _render_agency(c, manifest)
+    if c.page_type == "price":
+        return _render_price(c, manifest)
+    if c.page_type == "competition":
+        return _render_competition(c, manifest)
+    if c.page_type == "radar":
+        return _render_radar(c, manifest)
+    if c.page_type == "problem_service":
+        return _render_problem(c, manifest)
+    raise ValueError(f"unknown page_type {c.page_type}")
+
+
+def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
+    m = c.data_ref
+    meta = _meta(c, manifest)
+    summary = _exec_summary(
+        f"No recorte público analisado, {m.get('segment')} em {m.get('region_label')} "
+        f"reúne {m.get('contract_count')} contratos de engenharia/obras junto a "
+        f"{m.get('buyer_count')} órgãos, com valor total de {money(m.get('total_value'))}. "
+        f"A mediana contratual é {money(m.get('median_value'))} (P25 {money(m.get('p25_value'))}, "
+        f"P75 {money(m.get('p75_value'))}). Para uma empresa do ICP, o dado serve para "
+        f"priorizar órgãos, calibrar ticket e preparar proposta — não como preço unitário."
+    )
+    inds = indicators_html(
+        [
+            ("Contratos", str(m.get("contract_count")), "classificados no arquétipo"),
+            ("Órgãos", str(m.get("buyer_count")), "compradores distintos"),
+            ("Mediana", money(m.get("median_value")), "valor contratual"),
+            ("P25–P75", f"{money(m.get('p25_value'))} – {money(m.get('p75_value'))}", "dispersão"),
+            ("Fornecedores", str(m.get("supplier_count")), "observados"),
+            ("Oportunidades", str(m.get("open_opportunity_count")), "no radar (mesmo recorte)"),
+        ]
+    )
+    buyer_rows = [
+        [
+            b.get("name") or "—",
+            b.get("municipio") or "—",
+            b.get("contract_count"),
+            money(b.get("total_value")),
+        ]
+        for b in (m.get("top_buyers") or [])[:8]
+    ]
+    buyer_table = table_html(
+        ["Órgão", "Município", "Contratos", "Valor total"],
+        buyer_rows,
+        caption="Principais órgãos compradores no recorte",
+    )
+    obj_rows = [
+        [o.get("label"), o.get("count"), (o.get("example_objeto") or "")[:80]]
+        for o in (m.get("top_objects") or [])[:6]
+    ]
+    obj_table = table_html(
+        ["Objeto (rótulo)", "N", "Exemplo público"],
+        obj_rows,
+        caption="Objetos mais recorrentes",
+    )
+    year_rows = [
+        [y.get("year"), y.get("contract_count"), money(y.get("total_value"))]
+        for y in (m.get("value_by_year") or [])
+    ]
+    year_table = table_html(["Ano", "Contratos", "Valor"], year_rows, caption="Evolução temporal") if year_rows else ""
+
+    top_buyer = (m.get("top_buyers") or [{}])[0]
+    top_obj = (m.get("top_objects") or [{}])[0]
+    years = m.get("value_by_year") or []
+    year_note = (
+        f"A série anual cobre {years[0].get('year')}–{years[-1].get('year')} "
+        f"({len(years)} anos com registro)."
+        if len(years) >= 2
+        else "A série anual é curta no recorte exportado."
+    )
+    p25, p75 = m.get("p25_value"), m.get("p75_value")
+    ratio = None
+    try:
+        if p25 and p75 and float(p25) > 0:
+            ratio = float(p75) / float(p25)
+    except (TypeError, ValueError):
+        ratio = None
+    disp = (
+        f"P75/P25 ≈ {ratio:.1f}× — dispersão alta; misturar portes distorce qualquer 'preço médio'."
+        if ratio and ratio >= 3
+        else "Dispersão moderada no recorte; ainda assim objetos não são unitariamente comparáveis."
+    )
+    interpretation = (
+        f"Em {m.get('region_label')}, o arquétipo {m.get('segment')} concentra "
+        f"{m.get('contract_count')} contratos e {m.get('buyer_count')} órgãos. "
+        f"O comprador mais frequente no recorte é {top_buyer.get('name') or 'não identificado'} "
+        f"({top_buyer.get('contract_count') or 0} contratos, {money(top_buyer.get('total_value'))}). "
+        f"Objeto recorrente de referência: «{top_obj.get('label') or '—'}» "
+        f"({top_obj.get('count') or 0} ocorrências). {year_note} {disp}"
+    )
+    implications = (
+        f"Para atuar em {m.get('region')}: (1) priorize órgãos com frequência ≥3 no recorte; "
+        f"(2) ancore porte pela mediana {money(m.get('median_value'))}, nunca por média; "
+        f"(3) cruze {m.get('open_opportunity_count')} oportunidades do radar com capacidade "
+        f"técnica e de documentação; (4) rode auditoria de planilha antes de deságio agressivo."
+    )
+    related = _related_section(c.related_urls)
+    crumbs = [
+        ("Início", "/"),
+        ("Inteligência", "/inteligencia/"),
+        ("Mercados", "/inteligencia/mercados/"),
+        (f"{m.get('segment')} — {m.get('region')}", None),
+    ]
+    wa = (
+        f"Olá, Tiago. Vi a página de inteligência de mercado de {m.get('segment')} "
+        f"em {m.get('region_label')} e gostaria de um mapa aplicado à minha empresa."
+    )
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Inteligência de mercado</p>
+<h1>{e(c.h1)}</h1>
+<p class="content-lead">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
+<div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
+<span>Dados: <time datetime="{e(m.get('period_start'))}">{e(m.get('period_start'))}</time> – <time datetime="{e(m.get('period_end'))}">{e(m.get('period_end'))}</time></span>
+<span>Escopo: {e(m.get('region_label'))}</span></div>
+</div></div></header>
+<div class="container article-layout">
+<article class="article-main">
+<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Números do recorte</h2>{inds}</section>
+<section id="compradores"><p class="eyebrow">Demanda</p><h2>Órgãos que concentram contratação</h2>{buyer_table}</section>
+<section id="objetos"><p class="eyebrow">Objetos</p><h2>O que mais se contrata</h2>{obj_table}</section>
+<section id="evolucao"><p class="eyebrow">Temporal</p><h2>Evolução no período</h2>{year_table or '<p>Série anual insuficiente no recorte.</p>'}</section>
+<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>O que os dados indicam</h2><p>{e(interpretation)}</p>
+<p>{e(implications)}</p></section>
+{confenge_help(
+    ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
+    "A CONFENGE transforma este recorte em mapa aplicado à sua carteira: órgãos prioritários, "
+    "objetos compatíveis, riscos de planilha e roteiro de abordagem — sem ranking proprietário público.",
+)}
+{cta_block(meta, c.cta_label, wa, f"Mercado {m.get('segment')} {m.get('region')}")}
+{methodology_block(m.get("period_start"), m.get("period_end"), m.get("sources") or [], m.get("limitations") or [])}
+{author_box()}
+{related}
+</article>
+<aside class="article-aside">
+<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<p>Leve o recorte de {e(m.get('region'))} para uma conversa objetiva.</p>
+<a class="button button-primary" data-cta-position="aside" data-pseo-event="pseo_whatsapp_click" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
+<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/mercados/">Todos os mercados</a></div>
+</aside>
+</div>
+"""
+    dataset = {
+        "@type": "Dataset",
+        "@id": f"{SITE}{c.url}#dataset",
+        "name": c.h1,
+        "description": c.description,
+        "creator": {"@id": f"{SITE}/#organization"},
+        "isBasedOn": "https://pncp.gov.br/",
+        "temporalCoverage": f"{m.get('period_start')}/{m.get('period_end')}",
+        "variableMeasured": ["contract_count", "median_value", "buyer_count"],
+    }
+    graph = [
+        ORG_JSONLD,
+        PERSON_JSONLD,
+        {
+            "@type": "WebPage",
+            "@id": f"{SITE}{c.url}#webpage",
+            "url": f"{SITE}{c.url}",
+            "name": c.title,
+            "description": c.description,
+            "isPartOf": {"@id": f"{SITE}/#website"},
+            "about": dataset,
+            "author": {"@id": f"{SITE}/#tiago"},
+        },
+        dataset,
+        breadcrumb_jsonld(crumbs),
+    ]
+    return page_shell(
+        title=c.title,
+        description=c.description,
+        canonical_path=c.url,
+        robots=_robots(c.status),
+        jsonld_graph=graph,
+        body_main=body,
+        wa_message=wa,
+        data_attrs={
+            "pseo-page-id": c.page_id,
+            "pseo-page-type": c.page_type,
+            "content-cluster": "pseo",
+        },
+    )
+
+
+def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
+    a = c.data_ref
+    meta = _meta(c, manifest)
+    summary = _exec_summary(
+        f"{a.get('agency_name')} ({a.get('municipio') or '—'}, {a.get('uf') or '—'}) "
+        f"aparece com {a.get('contract_count')} contratos classificados em engenharia/obras "
+        f"no datalake, totalizando {money(a.get('total_value'))}. Mediana {money(a.get('median_value'))}. "
+        f"{a.get('supplier_count')} fornecedores distintos foram observados. "
+        f"Use o histórico para preparar estratégia de disputa — não como garantia de demanda futura."
+    )
+    inds = indicators_html(
+        [
+            ("Contratos", str(a.get("contract_count")), "no histórico classificado"),
+            ("Valor total", money(a.get("total_value")), "nominal"),
+            ("Mediana", money(a.get("median_value")), None),
+            ("Fornecedores", str(a.get("supplier_count")), "distintos"),
+            ("UF", str(a.get("uf") or "—"), a.get("municipio")),
+            ("Oportunidades abertas", str(len(a.get("open_opportunities") or [])), "no snapshot"),
+        ]
+    )
+    mix_rows = [[x.get("archetype_id"), x.get("contract_count")] for x in (a.get("archetype_mix") or [])]
+    mix_table = table_html(["Arquétipo", "Contratos"], mix_rows, "Mix de segmentos")
+    obj_rows = [[o.get("label"), o.get("count")] for o in (a.get("top_objects") or [])[:8]]
+    obj_table = table_html(["Objeto", "N"], obj_rows, "Objetos frequentes")
+    season_rows = [[s.get("period"), s.get("contract_count")] for s in (a.get("seasonality") or [])[-12:]]
+    season_table = table_html(["Mês", "Contratos"], season_rows, "Sazonalidade (publicação)") if season_rows else ""
+    open_rows = [
+        [
+            (o.get("objeto") or "")[:60],
+            money(o.get("valor_estimado")),
+            o.get("modalidade") or "—",
+            o.get("data_encerramento") or "—",
+        ]
+        for o in (a.get("open_opportunities") or [])[:6]
+    ]
+    open_table = (
+        table_html(["Objeto", "Valor est.", "Modalidade", "Encerramento"], open_rows, "Oportunidades abertas")
+        if open_rows
+        else "<p>Sem oportunidades abertas vinculadas a este órgão no snapshot.</p>"
+    )
+    notes = "".join(f"<li>{e(n)}</li>" for n in (a.get("practical_notes") or []))
+    channels = "".join(
+        f'<li><a href="{e(ch.get("url"))}" rel="noopener" target="_blank" data-pseo-event="pseo_source_open">{e(ch.get("name"))}</a></li>'
+        for ch in (a.get("official_channels") or [])
+    )
+    crumbs = [
+        ("Início", "/"),
+        ("Inteligência", "/inteligencia/"),
+        ("Órgãos", "/inteligencia/orgaos/"),
+        (a.get("agency_name") or c.page_id, None),
+    ]
+    wa = (
+        f"Olá, Tiago. Quero avaliar estratégia para disputar contratos de "
+        f"{a.get('agency_name')} (página de inteligência CONFENGE)."
+    )
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Dossiê de comprador público</p>
+<h1>{e(c.h1)}</h1>
+<p class="content-lead">Histórico de contratação em engenharia — evidência pública, sem score comercial.</p>
+<div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
+<span>{e(a.get('municipio'))} / {e(a.get('uf'))}</span>
+<span><time datetime="{e(a.get('period_start'))}">{e(a.get('period_start'))}</time> – <time datetime="{e(a.get('period_end'))}">{e(a.get('period_end'))}</time></span>
+</div></div></div></header>
+<div class="container article-layout"><article class="article-main">
+<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Retrato do órgão no recorte</h2>{inds}</section>
+<section id="segmentos"><p class="eyebrow">Segmentos</p><h2>Mix de arquétipos</h2>{mix_table}</section>
+<section id="objetos"><p class="eyebrow">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
+<section id="sazonalidade"><p class="eyebrow">Temporal</p><h2>Sazonalidade</h2>{season_table or '<p>Sem série mensal suficiente.</p>'}</section>
+<section id="oportunidades"><p class="eyebrow">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}</section>
+<section id="cuidados"><p class="eyebrow">Prática</p><h2>Cuidados para empresas interessadas</h2><ul>{notes}</ul>
+<p>Canais oficiais:</p><ul>{channels}</ul></section>
+{confenge_help(
+    ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
+    "Ajudamos a montar a estratégia por órgão: leitura de histórico, enquadramento de objeto, "
+    "riscos de edital e preparação documental da proposta.",
+)}
+{cta_block(meta, c.cta_label, wa, f"Órgão {a.get('agency_name')}")}
+{methodology_block(a.get("period_start"), a.get("period_end"), a.get("sources") or [], a.get("limitations") or [])}
+{author_box()}
+{_related_section(c.related_urls)}
+</article>
+<aside class="article-aside">
+<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<a class="button button-primary" data-cta-position="aside" href="{e('https://wa.me/5548988344559')}" rel="noopener" target="_blank">Conversar</a></div>
+<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/orgaos/">Todos os órgãos</a></div>
+</aside></div>
+"""
+    graph = [
+        ORG_JSONLD,
+        PERSON_JSONLD,
+        {
+            "@type": "WebPage",
+            "@id": f"{SITE}{c.url}#webpage",
+            "url": f"{SITE}{c.url}",
+            "name": c.title,
+            "description": c.description,
+            "author": {"@id": f"{SITE}/#tiago"},
+        },
+        {
+            "@type": "Dataset",
+            "@id": f"{SITE}{c.url}#dataset",
+            "name": f"Histórico de contratos — {a.get('agency_name')}",
+            "creator": {"@id": f"{SITE}/#organization"},
+            "isBasedOn": "https://pncp.gov.br/",
+        },
+        breadcrumb_jsonld(crumbs),
+    ]
+    return page_shell(
+        title=c.title,
+        description=c.description,
+        canonical_path=c.url,
+        robots=_robots(c.status),
+        jsonld_graph=graph,
+        body_main=body,
+        wa_message=wa,
+        data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "agency", "content-cluster": "pseo"},
+    )
+
+
+def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
+    p = c.data_ref
+    meta = _meta(c, manifest)
+    summary = _exec_summary(
+        f"Para {p.get('object_label')} em {p.get('region_label')}, com {p.get('observation_count')} "
+        f"observações comparáveis (valor ≥ piso amostral), a mediana contratual é "
+        f"{money(p.get('median_value'))}, com P25 {money(p.get('p25_value'))} e P75 "
+        f"{money(p.get('p75_value'))}. IQR = {money(p.get('dispersion_iqr'))}. "
+        f"Estes números descrevem contratos integrais, não preços unitários de serviço."
+    )
+    inds = indicators_html(
+        [
+            ("Observações", str(p.get("observation_count")), "após filtros"),
+            ("Mediana", money(p.get("median_value")), "não é preço unitário"),
+            ("P25", money(p.get("p25_value")), None),
+            ("P75", money(p.get("p75_value")), None),
+            ("IQR", money(p.get("dispersion_iqr")), "dispersão"),
+            ("Máximo", money(p.get("max_value")), "no recorte"),
+        ]
+    )
+    ex_rows = [
+        [
+            (x.get("objeto") or "")[:70],
+            money(x.get("valor")),
+            x.get("municipio") or "—",
+            x.get("orgao_nome") or "—",
+            x.get("data_publicacao") or "—",
+        ]
+        for x in (p.get("public_examples") or [])[:5]
+    ]
+    ex_table = table_html(
+        ["Objeto", "Valor", "Município", "Órgão", "Data"],
+        ex_rows,
+        "Exemplos públicos (maior valor no recorte)",
+    )
+    inc = "".join(f"<li>{e(x)}</li>" for x in (p.get("inclusion_criteria") or []))
+    exc = "".join(f"<li>{e(x)}</li>" for x in (p.get("exclusion_criteria") or []))
+    crumbs = [
+        ("Início", "/"),
+        ("Inteligência", "/inteligencia/"),
+        ("Preços", "/inteligencia/precos/"),
+        (f"{p.get('object_label')} — {p.get('region')}", None),
+    ]
+    wa = (
+        f"Olá, Tiago. Quero validar preço, risco e margem com base no benchmark de "
+        f"{p.get('object_label')} em {p.get('region_label')}."
+    )
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Benchmark de contratação</p>
+<h1>{e(c.h1)}</h1>
+<p class="content-lead">Mediana, quartis e dispersão — com advertência explícita contra comparação cega.</p>
+<div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
+<span>{e(p.get('period_start'))} – {e(p.get('period_end'))}</span></div>
+</div></div></header>
+<div class="container article-layout"><article class="article-main">
+<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<section class="article-callout"><svg class="icon"><use href="#i-shield"></use></svg>
+<div><strong>Advertência</strong><p>{e(p.get('warning'))}</p></div></section>
+<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}</section>
+<section id="exemplos"><p class="eyebrow">Evidência</p><h2>Exemplos públicos verificáveis</h2>{ex_table}</section>
+<section id="criterios"><p class="eyebrow">Critérios</p><h2>Inclusão e exclusão</h2>
+<p><strong>Inclusão</strong></p><ul>{inc}</ul>
+<p><strong>Exclusão</strong></p><ul>{exc}</ul></section>
+<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>Implicações para margem</h2>
+<p>Dispersão elevada (IQR) costuma refletir mistura de portes e escopos. Antes da proposta,
+decomponha quantitativos, produtividade, BDI e logística. A CONFENGE apoia auditoria de planilha
+e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></section>
+{confenge_help(
+    ["/auditoria-orcamento-licitacao/", "/conteudos/sinapi-ou-sicro-obra-publica/", "/conteudos/bdi-obra-publica/"],
+    "Validamos se o preço de referência, a planilha e o deságio cabem no seu regime tributário e na obra real.",
+)}
+{cta_block(meta, c.cta_label, wa, f"Preço {p.get('object_label')} {p.get('region')}")}
+{methodology_block(p.get("period_start"), p.get("period_end"), p.get("sources") or [], p.get("limitations") or [])}
+{author_box()}
+{_related_section(c.related_urls)}
+</article>
+<aside class="article-aside">
+<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
+<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/precos/">Todos os benchmarks</a></div>
+</aside></div>
+"""
+    graph = [
+        ORG_JSONLD,
+        PERSON_JSONLD,
+        {
+            "@type": "WebPage",
+            "@id": f"{SITE}{c.url}#webpage",
+            "url": f"{SITE}{c.url}",
+            "name": c.title,
+            "description": c.description,
+            "author": {"@id": f"{SITE}/#tiago"},
+        },
+        {
+            "@type": "Dataset",
+            "@id": f"{SITE}{c.url}#dataset",
+            "name": c.h1,
+            "variableMeasured": ["median_value", "p25_value", "p75_value", "observation_count"],
+            "creator": {"@id": f"{SITE}/#organization"},
+            "isBasedOn": "https://pncp.gov.br/",
+        },
+        breadcrumb_jsonld(crumbs),
+    ]
+    return page_shell(
+        title=c.title,
+        description=c.description,
+        canonical_path=c.url,
+        robots=_robots(c.status),
+        jsonld_graph=graph,
+        body_main=body,
+        wa_message=wa,
+        data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "price", "content-cluster": "pseo"},
+    )
+
+
+def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
+    d = c.data_ref
+    meta = _meta(c, manifest)
+    summary = _exec_summary(
+        f"Em {d.get('segment')} ({d.get('region_label')}), {d.get('supplier_count')} fornecedores "
+        f"foram observados em {d.get('contract_count')} contratos públicos classificados. "
+        f"Os três mais frequentes concentram {float(d.get('concentration_top3_share') or 0)*100:.1f}% "
+        f"dos contratos do recorte. Linguagem neutra: frequência observada, não qualidade."
+    )
+    inds = indicators_html(
+        [
+            ("Fornecedores", str(d.get("supplier_count")), "observados"),
+            ("Contratos", str(d.get("contract_count")), None),
+            ("Top-3 share", f"{float(d.get('concentration_top3_share') or 0)*100:.1f}%", "contratos"),
+            ("Órgãos", str(d.get("agencies_with_activity")), "com atividade"),
+        ]
+    )
+    sup_rows = [
+        [
+            s.get("display_name"),
+            s.get("contract_count"),
+            money(s.get("total_value")),
+            s.get("agencies_count"),
+            s.get("value_band"),
+        ]
+        for s in (d.get("observed_suppliers") or [])[:12]
+    ]
+    sup_table = table_html(
+        ["Fornecedor (público)", "Contratos", "Valor", "Órgãos", "Faixa"],
+        sup_rows,
+        "Fornecedores observados",
+    )
+    bands = table_html(
+        ["Faixa", "Contratos"],
+        [[b.get("band"), b.get("contract_count")] for b in (d.get("value_bands") or [])],
+        "Faixas de valor contratual",
+    )
+    changes = "".join(f"<li>{e(x)}</li>" for x in (d.get("recent_changes") or []))
+    crumbs = [
+        ("Início", "/"),
+        ("Inteligência", "/inteligencia/"),
+        ("Concorrência", "/inteligencia/concorrencia/"),
+        (f"{d.get('segment')} — {d.get('region')}", None),
+    ]
+    wa = (
+        f"Olá, Tiago. Vi a página de concorrência observada em {d.get('segment')} "
+        f"({d.get('region_label')}) e quero um mapa aplicado à minha empresa."
+    )
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Concorrência observada</p>
+<h1>{e(c.h1)}</h1>
+<p class="content-lead">{e(d.get('language_note'))}</p>
+<div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
+<span>{e(d.get('period_start'))} – {e(d.get('period_end'))}</span></div>
+</div></div></header>
+<div class="container article-layout"><article class="article-main">
+<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Concentração e escala</h2>{inds}</section>
+<section id="fornecedores"><p class="eyebrow">Observado</p><h2>Fornecedores no recorte</h2>{sup_table}</section>
+<section id="faixas"><p class="eyebrow">Valores</p><h2>Faixas de contratos</h2>{bands}</section>
+<section id="mudancas"><p class="eyebrow">Dinâmica</p><h2>Mudanças recentes</h2><ul>{changes}</ul></section>
+<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>Uso legítimo desta página</h2>
+<p>Serve para mapear quem já aparece em contratos públicos do segmento/UF e em quantos órgãos.
+Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco reputacional.</p></section>
+{confenge_help(
+    ["/diagnostico-pre-licitacao/", "/inteligencia/mercados/"],
+    "Ajudamos a posicionar sua empresa em relação ao recorte público — com estratégia de objeto e órgão, não com lista fria de cold call.",
+)}
+{cta_block(meta, c.cta_label, wa, f"Concorrência {d.get('segment')} {d.get('region')}")}
+{methodology_block(d.get("period_start"), d.get("period_end"), d.get("sources") or [], d.get("limitations") or [])}
+{author_box()}
+{_related_section(c.related_urls)}
+</article>
+<aside class="article-aside">
+<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
+<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/concorrencia/">Concorrência</a></div>
+</aside></div>
+"""
+    graph = [
+        ORG_JSONLD,
+        PERSON_JSONLD,
+        {
+            "@type": "WebPage",
+            "@id": f"{SITE}{c.url}#webpage",
+            "url": f"{SITE}{c.url}",
+            "name": c.title,
+            "description": c.description,
+            "author": {"@id": f"{SITE}/#tiago"},
+        },
+        breadcrumb_jsonld(crumbs),
+    ]
+    return page_shell(
+        title=c.title,
+        description=c.description,
+        canonical_path=c.url,
+        robots=_robots(c.status),
+        jsonld_graph=graph,
+        body_main=body,
+        wa_message=wa,
+        data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "competition", "content-cluster": "pseo"},
+    )
+
+
+def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
+    o = c.data_ref
+    meta = _meta(c, manifest)
+    summary = _exec_summary(
+        f"Radar evergreen de {o.get('segment')} em {o.get('region_label')}: "
+        f"{o.get('open_count')} oportunidades classificadas no snapshot de {o.get('as_of')}. "
+        f"Esta URL não representa um edital individual; editais entram e saem da lista. "
+        f"Confirme sempre no portal de origem antes de precificar."
+    )
+    inds = indicators_html(
+        [
+            ("Abertas", str(o.get("open_count")), f"as of {o.get('as_of')}"),
+            ("Segmento", str(o.get("segment")), None),
+            ("UF", str(o.get("region")), o.get("region_label")),
+            ("Itens listados", str(len(o.get("items") or [])), "no HTML"),
+        ]
+    )
+    rows = [
+        [
+            (i.get("objeto") or "")[:70],
+            money(i.get("valor_estimado")),
+            i.get("modalidade") or "—",
+            i.get("municipio") or "—",
+            i.get("orgao_nome") or "—",
+            i.get("data_encerramento") or "—",
+        ]
+        for i in (o.get("items") or [])[:20]
+    ]
+    tbl = table_html(
+        ["Objeto", "Valor est.", "Modalidade", "Município", "Órgão", "Encerramento"],
+        rows,
+        f"Oportunidades no snapshot {o.get('as_of')}",
+    )
+    # links to PNCP
+    links = "".join(
+        f'<li><a href="{e(i.get("link_pncp") or "https://pncp.gov.br/")}" rel="noopener" target="_blank" data-pseo-event="pseo_source_open">{e((i.get("objeto") or "")[:80])}</a></li>'
+        for i in (o.get("items") or [])[:8]
+        if i.get("link_pncp")
+    )
+    crumbs = [
+        ("Início", "/"),
+        ("Radar", "/radar/"),
+        (f"{o.get('segment')} — {o.get('region')}", None),
+    ]
+    wa = (
+        f"Olá, Tiago. Quero analisar um edital do radar de {o.get('segment')} "
+        f"em {o.get('region_label')} antes da proposta."
+    )
+    market_link = o.get("related_market_slug")
+    market_html = (
+        f'<p>Mercado correspondente: <a href="/inteligencia/mercados/{e(market_link)}/" data-pseo-event="pseo_related_page_click">ver inteligência de mercado</a>.</p>'
+        if market_link
+        else ""
+    )
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Radar de oportunidades</p>
+<h1>{e(c.h1)}</h1>
+<p class="content-lead">Página rolante (evergreen). Atualizado em <time datetime="{e(o.get('as_of'))}">{e(o.get('as_of'))}</time>.</p>
+</div></div></header>
+<div class="container article-layout"><article class="article-main">
+<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Snapshot</h2>{inds}</section>
+{market_html}
+<section id="lista"><p class="eyebrow">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
+<ul class="document-list">{links}</ul></section>
+<section id="historico"><p class="eyebrow">Histórico</p><h2>Separação histórico × vigente</h2>
+<p>Itens encerrados saem desta lista na próxima exportação. Não mantemos URL indexável por edital.
+Contagem histórica no snapshot: {e(o.get('historical_count'))}.</p></section>
+{confenge_help(
+    ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/conteudos/analise-edital-obra-publica-construtora/"],
+    "Antes de precificar: lemos edital, planilha, riscos e documentos mínimos para decidir se vale entrar.",
+)}
+{cta_block(meta, c.cta_label, wa, f"Radar {o.get('segment')} {o.get('region')}")}
+{methodology_block(o.get("as_of"), o.get("as_of"), o.get("sources") or [], o.get("limitations") or [])}
+{author_box()}
+{_related_section(c.related_urls)}
+</article>
+<aside class="article-aside">
+<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
+<div class="aside-card aside-compact"><strong>Hub</strong><a href="/radar/">Radar</a></div>
+</aside></div>
+"""
+    graph = [
+        ORG_JSONLD,
+        PERSON_JSONLD,
+        {
+            "@type": "WebPage",
+            "@id": f"{SITE}{c.url}#webpage",
+            "url": f"{SITE}{c.url}",
+            "name": c.title,
+            "description": c.description,
+            "author": {"@id": f"{SITE}/#tiago"},
+            "dateModified": o.get("as_of"),
+        },
+        breadcrumb_jsonld(crumbs),
+    ]
+    return page_shell(
+        title=c.title,
+        description=c.description,
+        canonical_path=c.url,
+        robots=_robots(c.status),
+        jsonld_graph=graph,
+        body_main=body,
+        wa_message=wa,
+        data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "radar", "content-cluster": "pseo"},
+    )
+
+
+def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
+    p = c.data_ref
+    meta = _meta(c, manifest)
+    summary = _exec_summary(
+        f"{p.get('problem_label')}: {p.get('observed_pattern')} "
+        f"Evidência agregada vinculada: {p.get('evidence_count')} contratos/mercados relacionados. "
+        f"Serviço CONFENGE: /{p.get('confenge_service_slug')}/."
+    )
+    guides = "".join(
+        f'<li><a href="{e(g)}" data-pseo-event="pseo_related_page_click">{e(g)}</a></li>'
+        for g in (p.get("technical_guide_paths") or [])
+    )
+    arches = ", ".join(p.get("related_archetypes") or [])
+    crumbs = [
+        ("Início", "/"),
+        ("Inteligência", "/inteligencia/"),
+        ("Cenários", "/inteligencia/cenarios/"),
+        (p.get("problem_label") or c.page_id, None),
+    ]
+    wa = (
+        f"Olá, Tiago. Preciso organizar documentos e próximos passos em um cenário de "
+        f"{p.get('problem_label')}."
+    )
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Dados → problema → serviço</p>
+<h1>{e(c.h1)}</h1>
+<p class="content-lead">Cruza padrões públicos de contratação com o cluster técnico da CONFENGE.</p>
+<div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
+<span>Arquétipos: {e(arches)}</span></div>
+</div></div></header>
+<div class="container article-layout"><article class="article-main">
+<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<section id="padrao"><p class="eyebrow">Padrão</p><h2>O que se observa nos dados e documentos</h2>
+<p>{e(p.get('observed_pattern'))}</p>
+<p>Contratos/mercados relacionados na base exportada: <strong>{e(p.get('evidence_count'))}</strong>.</p></section>
+<section id="guias"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos (sem canibalizar)</h2>
+<p>Estas páginas aprofundam o critério; a página de inteligência contextualiza o mercado.</p>
+<ul>{guides}</ul></section>
+<section id="implicacoes"><p class="eyebrow">ICP</p><h2>Implicações práticas</h2>
+<p>Empresas com portfólio multi-órgão e objetos de engenharia devem tratar este tema como
+risco de margem e de prazo — não como checklist genérico. Organize cronologia, planilha e
+comunicação com a fiscalização antes de escalar conflito.</p></section>
+{confenge_help(
+    [f"/{p.get('confenge_service_slug')}/"] + list(p.get("technical_guide_paths") or [])[:2],
+    "Do diagnóstico do problema à trilha documental e ao próximo passo contratual ou de proposta.",
+)}
+{cta_block(meta, c.cta_label, wa, p.get("problem_label") or "Cenário técnico")}
+{methodology_block(None, None, p.get("sources") or [], p.get("limitations") or [])}
+{author_box()}
+{_related_section(c.related_urls)}
+</article>
+<aside class="article-aside">
+<div class="aside-card"><span>Serviço</span><h2><a href="/{e(p.get('confenge_service_slug'))}/">{e(p.get('confenge_service_slug'))}</a></h2></div>
+</aside></div>
+"""
+    graph = [
+        ORG_JSONLD,
+        PERSON_JSONLD,
+        {
+            "@type": "WebPage",
+            "@id": f"{SITE}{c.url}#webpage",
+            "url": f"{SITE}{c.url}",
+            "name": c.title,
+            "description": c.description,
+            "author": {"@id": f"{SITE}/#tiago"},
+        },
+        breadcrumb_jsonld(crumbs),
+    ]
+    return page_shell(
+        title=c.title,
+        description=c.description,
+        canonical_path=c.url,
+        robots=_robots(c.status),
+        jsonld_graph=graph,
+        body_main=body,
+        wa_message=wa,
+        data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "problem_service", "content-cluster": "pseo"},
+    )
+
+
+def _related_section(urls: list[str]) -> str:
+    cards = []
+    for u in (urls or [])[:8]:
+        if not u:
+            continue
+        label = u.strip("/").replace("/", " · ") or u
+        cards.append(
+            f'<a class="related-card" href="{e(u)}" data-pseo-event="pseo_related_page_click">'
+            f"<span>Relacionado</span><strong>{e(label)}</strong><small>Link interno</small></a>"
+        )
+    if not cards:
+        return ""
+    return f"""<section class="related-section"><p class="eyebrow">Malha</p><h2>Páginas relacionadas</h2>
+<div class="related-grid">{"".join(cards)}</div></section>"""
+
+
+def render_hub(
+    *,
+    title: str,
+    h1: str,
+    description: str,
+    path: str,
+    intro: str,
+    items: list[tuple[str, str, str]],
+    crumbs: list[tuple[str, str | None]],
+) -> str:
+    cards = "".join(
+        f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
+        f"<small>{e(meta)}</small></a>"
+        for url, kind, label, meta in [(i[0], i[1], i[2], i[3] if len(i) > 3 else "") for i in _pad_items(items)]
+    )
+    # fix: items are (url, kind, label, meta?)
+    cards = ""
+    for it in items:
+        url, kind, label = it[0], it[1], it[2]
+        meta = it[3] if len(it) > 3 else ""
+        cards += (
+            f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
+            f"<small>{e(meta)}</small></a>"
+        )
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero"><div class="container"><p class="eyebrow">Inteligência CONFENGE</p>
+<h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p></div></header>
+<div class="container"><div class="related-grid" style="margin:2rem 0">{cards or "<p>Nenhum item publicado nesta onda.</p>"}</div>
+<p><a class="text-link" href="/inteligencia/">Voltar ao hub de inteligência</a></p></div>
+"""
+    graph = [
+        ORG_JSONLD,
+        {
+            "@type": "CollectionPage",
+            "@id": f"{SITE}{path}#webpage",
+            "url": f"{SITE}{path}",
+            "name": title,
+            "description": description,
+        },
+        breadcrumb_jsonld(crumbs),
+    ]
+    return page_shell(
+        title=title,
+        description=description,
+        canonical_path=path,
+        robots="index,follow",
+        jsonld_graph=graph,
+        body_main=body,
+        wa_message="Olá, Tiago. Quero explorar a inteligência de mercado da CONFENGE.",
+        data_attrs={"content-cluster": "pseo", "pseo-page-type": "hub"},
+    )
+
+
+def _pad_items(items):
+    return items

@@ -1,0 +1,30 @@
+{
+  "internal_signature_aggregates": {
+    "activity_class_histogram": {
+      "ENGINEERING_SERVICE_PROVIDER": 19,
+      "TECHNICAL_DESIGN_PROVIDER": 1
+    },
+    "available": true,
+    "n_accounts_internal": 20,
+    "note": "Internal ICP signature only. No company identifiers, scores, ranks, or pipeline states are retained in the public export.",
+    "public_signal_frequency": {
+      "agency_concentration": 11,
+      "concurrent_portfolio": 20,
+      "contract_concentration": 14,
+      "diversity_increase": 16,
+      "near_expiry": 19,
+      "new_agency": 20,
+      "new_object_category": 18,
+      "new_region": 17,
+      "quantity_growth": 9,
+      "ticket_above_history": 17,
+      "value_growth": 19,
+      "win_recurrence": 20
+    },
+    "sector_fit_histogram": {
+      "CONFIRMED_ENGINEERING": 20
+    }
+  },
+  "methodology": "Top 20 comercial usado apenas para calibrar classes de atividade e sinais públicos de portfólio. Nenhuma conta, score, rank ou estado de pipeline é exportado.",
+  "schema_version": "1.0.0"
+}

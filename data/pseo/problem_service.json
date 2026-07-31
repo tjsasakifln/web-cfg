@@ -1,0 +1,127 @@
+[
+  {
+    "confenge_service_slug": "auditoria-orcamento-licitacao",
+    "evidence_count": 494,
+    "id": "prob-orcamento-edital",
+    "limitations": [
+      "Página de enquadramento problema→serviço; não substitui análise do edital concreto."
+    ],
+    "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
+    "problem_label": "Inconsistência entre orçamento de referência e edital",
+    "related_archetypes": [
+      "edificacoes-publicas",
+      "pavimentacao-infraestrutura-viaria",
+      "saneamento-hidraulica"
+    ],
+    "slug": "inconsistencia-orcamento-edital",
+    "sources": [
+      "pncp_supplier_contracts",
+      "site-confenge-guides"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "/conteudos/analise-edital-obra-publica-construtora/"
+    ],
+    "theme": "orcamento-edital"
+  },
+  {
+    "confenge_service_slug": "auditoria-orcamento-licitacao",
+    "evidence_count": 466,
+    "id": "prob-sinapi-sicro",
+    "limitations": [
+      "Não publica coeficientes proprietários; orienta critério de escolha da referência."
+    ],
+    "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
+    "problem_label": "Referência SINAPI/SICRO e risco de margem na proposta",
+    "related_archetypes": [
+      "pavimentacao-infraestrutura-viaria",
+      "edificacoes-publicas"
+    ],
+    "slug": "referencia-sinapi-sicro-margem",
+    "sources": [
+      "site-confenge-guides",
+      "pncp_supplier_contracts"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "/conteudos/produtividade-sinapi-obra-publica/",
+      "/conteudos/bdi-obra-publica/"
+    ],
+    "theme": "sinapi-sicro"
+  },
+  {
+    "confenge_service_slug": "medicoes-glosas-obras-publicas",
+    "evidence_count": 407,
+    "id": "prob-medicao-glosa",
+    "limitations": [
+      "Padrão qualitativo cruzado com densidade de contratos recorrentes no datalake."
+    ],
+    "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+    "problem_label": "Medição e glosa em contratos com execução contínua",
+    "related_archetypes": [
+      "manutencao-predial-engenharia",
+      "edificacoes-publicas"
+    ],
+    "slug": "medicao-glosa-contratos-recorrentes",
+    "sources": [
+      "site-confenge-guides"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/glosa-de-medicao-obra-publica/",
+      "/conteudos/medicao-de-obra-publica-rejeitada/",
+      "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+    ],
+    "theme": "medicao-glosa"
+  },
+  {
+    "confenge_service_slug": "aditivos-obras-publicas",
+    "evidence_count": 494,
+    "id": "prob-aditivos-margem",
+    "limitations": [
+      "Não estima taxa de aditivo por órgão sem denominador documental completo."
+    ],
+    "observed_pattern": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+    "problem_label": "Aditivos, serviços extras e erosão de margem",
+    "related_archetypes": [
+      "edificacoes-publicas",
+      "saneamento-hidraulica",
+      "pavimentacao-infraestrutura-viaria"
+    ],
+    "slug": "aditivos-e-risco-de-margem",
+    "sources": [
+      "site-confenge-guides"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/aditivo-qualitativo-quantitativo/",
+      "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+      "/conteudos/limite-aditivo-25-50-obra-publica/"
+    ],
+    "theme": "aditivos"
+  },
+  {
+    "confenge_service_slug": "reequilibrio-obras-publicas",
+    "evidence_count": 156,
+    "id": "prob-reequilibrio",
+    "limitations": [
+      "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
+    ],
+    "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+    "problem_label": "Reequilíbrio diante de dispersão de preços e insumos",
+    "related_archetypes": [
+      "pavimentacao-infraestrutura-viaria",
+      "saneamento-hidraulica"
+    ],
+    "slug": "reequilibrio-e-dispersao-de-precos",
+    "sources": [
+      "pncp_supplier_contracts",
+      "site-confenge-guides"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "/conteudos/documentos-reequilibrio-obra-publica/"
+    ],
+    "theme": "reequilibrio"
+  }
+]
