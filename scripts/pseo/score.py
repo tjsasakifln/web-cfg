@@ -7,6 +7,8 @@ score alone never indexes a page.
 
 from __future__ import annotations
 
+import re
+
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -26,11 +28,11 @@ W_CANNIBAL = 5
 # Sample minima by type
 MIN_MARKET_CONTRACTS = 15
 MIN_MARKET_BUYERS = 3
-MIN_PRICE_OBS = 12
+MIN_PRICE_OBS = 15
 MIN_PRICE_COMPARISON_CONF = 0.55
 MIN_AGENCY_CONTRACTS = 12
 MIN_RADAR_OPEN = 3
-MIN_PROBLEM_EVIDENCE = 15
+MIN_PROBLEM_EVIDENCE = 15  # not generic contract count
 
 PUBLISH_MIN = 80
 PREVIEW_MIN = 65
@@ -46,6 +48,183 @@ FRESHNESS_POLICY = {
     "price": {"warning_days": 90, "fail_days": 180},
     "problem_service": {"warning_days": 90, "fail_days": 180},
 }
+
+
+
+# ---------------------------------------------------------------------------
+# Semantic mandatory gates (score cannot compensate)
+# ---------------------------------------------------------------------------
+
+INGESTION_PREFIX_RE = re.compile(
+    r"^(MRS|TCE|TCM|PNCP|SIASG|COMPRASNET|BEC|BLL|LICITANET)\s*[-–:|/]",
+    re.I,
+)
+
+
+def _sample_metrics(ref: dict) -> dict:
+    return dict(ref.get("sample_metrics") or {})
+
+
+def semantic_agency_fails(a: dict) -> list[str]:
+    fails: list[str] = []
+    name = str(a.get("agency_name") or "")
+    if INGESTION_PREFIX_RE.search(name) or name.upper().startswith("MRS-"):
+        fails.append("agency_name_ingestion_prefix")
+    sm = _sample_metrics(a)
+    primary = int(sm.get("primary_contract_count") or a.get("primary_contract_count") or a.get("contract_count") or 0)
+    if primary < MIN_AGENCY_CONTRACTS:
+        fails.append(f"primary_contracts<{MIN_AGENCY_CONTRACTS}")
+    suppliers = int(sm.get("unique_supplier_count") or a.get("supplier_count") or 0)
+    if suppliers < 3:
+        fails.append("suppliers<3")
+    span = int(sm.get("temporal_span_days") or 0)
+    # derive span from period if missing
+    if span <= 0 and a.get("period_start") and a.get("period_end"):
+        try:
+            from datetime import date as _d
+            span = (_d.fromisoformat(str(a["period_end"])[:10]) - _d.fromisoformat(str(a["period_start"])[:10])).days
+        except ValueError:
+            span = 0
+    if span < 180:
+        fails.append("temporal_span_days<180")
+    exercises = int(sm.get("exercise_count") or 0)
+    if exercises and exercises < 2 and span < 365:
+        fails.append("exercises<2")
+    day_share = float(sm.get("max_single_day_share") or 0)
+    if day_share <= 0 and a.get("seasonality"):
+        # approximate from seasonality if single month dominates
+        seasons = a.get("seasonality") or []
+        total = sum(int(s.get("contract_count") or 0) for s in seasons) or 1
+        if seasons:
+            day_share = max(int(s.get("contract_count") or 0) for s in seasons) / total
+    if day_share > 0.70:
+        fails.append("max_single_day_share>0.70")
+    if a.get("seasonality") and not a.get("seasonality_eligible", True) and span < 60:
+        fails.append("seasonality_without_temporal_base")
+    return fails
+
+
+def semantic_price_fails(pr: dict) -> list[str]:
+    fails: list[str] = []
+    denom = pr.get("denominator_type") or (pr.get("sample_metrics") or {}).get("denominator_type") or "contrato_integral"
+    sm = _sample_metrics(pr)
+    primary = int(sm.get("primary_contract_count") or pr.get("primary_contract_count") or pr.get("observation_count") or 0)
+    buyers = int(sm.get("unique_buyer_count") or pr.get("unique_buyer_count") or 0)
+    suppliers = int(sm.get("unique_supplier_count") or pr.get("unique_supplier_count") or 0)
+    span = int(sm.get("temporal_span_days") or pr.get("temporal_span_days") or 0)
+    if span <= 0 and pr.get("period_start") and pr.get("period_end"):
+        try:
+            from datetime import date as _d
+            span = (_d.fromisoformat(str(pr["period_end"])[:10]) - _d.fromisoformat(str(pr["period_start"])[:10])).days
+        except ValueError:
+            span = 0
+    max_buyer = float(sm.get("max_buyer_share") or pr.get("max_buyer_share") or 0)
+    # Heuristic: if examples all same orgao, concentration is high
+    examples = pr.get("public_examples") or []
+    if max_buyer <= 0 and examples:
+        from collections import Counter
+        names = Counter((e.get("orgao_nome") or "?") for e in examples)
+        # only a sample of examples — if all same, flag
+        if len(names) == 1 and len(examples) >= 3:
+            max_buyer = 1.0
+    if denom == "contrato_integral":
+        if primary < 15:
+            fails.append("primary_contracts<15")
+        if buyers and buyers < 3:
+            fails.append("buyers<3")
+        if buyers == 0 and max_buyer >= 1.0:
+            fails.append("buyers<3")
+        if suppliers and suppliers < 3:
+            fails.append("suppliers<3")
+        if suppliers == 0 and len({(e.get("orgao_nome"), e.get("valor")) for e in examples}) <= 1:
+            # cannot prove diversity
+            fails.append("sample_independence_unproven")
+        if span < 90:
+            fails.append("temporal_span_days<90")
+        if max_buyer > 0.60:
+            fails.append("max_buyer_share>0.60")
+    elif denom == "preco_unitario":
+        unit_n = int(pr.get("unit_observation_count") or 0)
+        if unit_n < 10:
+            fails.append("unit_obs<10")
+        for req in ("unit", "quantity_field", "base_date", "locality"):
+            if not pr.get(req):
+                fails.append(f"unit_price_missing_{req}")
+    else:
+        fails.append(f"unknown_denominator:{denom}")
+    # Label must not promise unit price for integral contracts
+    label = f"{pr.get('object_label') or ''} {pr.get('slug') or ''}".lower()
+    if denom == "contrato_integral" and re.search(r"pre[cç]o\s+por\s+m|pre[cç]o\s+unit|r\$/m", label):
+        fails.append("unit_price_language_on_integral")
+    return fails
+
+
+def semantic_radar_fails(o: dict) -> list[str]:
+    fails: list[str] = []
+    items = o.get("items") or []
+    open_n = int(o.get("open_count") or len(items) or 0)
+    if open_n < MIN_RADAR_OPEN:
+        fails.append(f"open<{MIN_RADAR_OPEN}")
+    dup_rate = float(o.get("duplicate_rate") if o.get("duplicate_rate") is not None else (o.get("sample_metrics") or {}).get("duplicate_rate") or 0)
+    if dup_rate > 0:
+        fails.append("duplicate_rate>0")
+    # Detect duplicate objects in items
+    seen = set()
+    dups = 0
+    contract_links = 0
+    zero_as_missing = 0
+    for it in items:
+        key = (
+            (it.get("objeto") or "")[:120].lower().strip(),
+            str(it.get("orgao_nome") or "").lower(),
+            str(it.get("data_encerramento") or it.get("closing_at") or "")[:10],
+            str(it.get("valor_estimado")),
+        )
+        if key in seen:
+            dups += 1
+        seen.add(key)
+        url = str(it.get("link_pncp") or it.get("link_oficial") or it.get("canonical_source_url") or "")
+        ut = it.get("source_url_type") or ""
+        if ut == "contract" or "/app/contratos/" in url:
+            contract_links += 1
+        vs = it.get("value_status")
+        if it.get("valor_estimado") in (0, 0.0) and vs not in {"zero_valid", "known"}:
+            zero_as_missing += 1
+    if dups:
+        fails.append(f"duplicate_items={dups}")
+        fails.append("duplicate_rate>0")
+    if contract_links:
+        fails.append(f"contract_url_as_opportunity={contract_links}")
+    if zero_as_missing:
+        fails.append(f"zero_used_for_missing_value={zero_as_missing}")
+    fr = o.get("freshness") or {}
+    if fr.get("status") == "fail":
+        fails.append("radar_freshness_fail")
+    return fails
+
+
+def semantic_problem_fails(pr: dict) -> list[str]:
+    """Problem pages need claim-specific evidence, not generic contract counts."""
+    fails: list[str] = []
+    theme = (pr.get("theme") or pr.get("id") or "").lower()
+    evidence_count = int(pr.get("evidence_count") or 0)
+    specific = pr.get("claim_evidence") or pr.get("direct_evidence") or pr.get("evidence_signals") or []
+    # If only generic evidence_count without typed signals → fail for publish eligibility
+    if not specific:
+        if "aditiv" in theme:
+            if not pr.get("amendment_count") and not pr.get("amendment_incidence"):
+                fails.append("no_direct_aditivo_evidence")
+        elif "sinapi" in theme or "sicro" in theme:
+            if not pr.get("reference_mentions") and not pr.get("document_signals"):
+                fails.append("no_direct_sinapi_sicro_evidence")
+        elif "orcamento" in theme or "edital" in theme:
+            if not pr.get("document_divergence_count") and not pr.get("budget_signals"):
+                fails.append("no_direct_budget_edital_evidence")
+        else:
+            if evidence_count and not pr.get("evidence_kind"):
+                fails.append("generic_evidence_count_only")
+    return fails
+
 
 
 @dataclass
@@ -305,6 +484,29 @@ def freshness_quality(
     return 0.85, []
 
 
+def _humanize_agency_name(name: str | None) -> str:
+    if not name:
+        return ""
+    n = re.sub(r"^(MRS|TCE|TCM|PNCP|SIASG|COMPRASNET)\s*[-–:|/]\s*", "", str(name), flags=re.I)
+    if n == n.upper() and len(n) > 4:
+        small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o", "as", "os"}
+        parts = []
+        for i, w in enumerate(n.split()):
+            wl = w.lower()
+            parts.append(wl if i > 0 and wl in small else wl.capitalize())
+        n = " ".join(parts)
+    return n
+
+
+def _clean_price_label(label: str | None) -> str:
+    s = str(label or "")
+    s = re.sub(r"\s*\([a-z0-9]+(?:-[a-z0-9]+)+\)", "", s)
+    s = s.replace("paralelepipedo", "paralelepípedo").replace("Paralelepipedo", "Paralelepípedo")
+    s = s.replace("manutencao", "manutenção").replace("Manutencao", "Manutenção")
+    s = s.replace("pavimentacao", "pavimentação").replace("Piaui", "Piauí")
+    return s.strip()
+
+
 def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Candidate]:
     archetypes = {a["id"]: a for a in data.get("archetypes") or []}
     markets = data.get("markets") or []
@@ -401,6 +603,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             fails.append(f"contracts<{MIN_AGENCY_CONTRACTS}")
         if not a.get("sources"):
             fails.append("no_sources")
+        fails.extend(semantic_agency_fails(a))
         mix = a.get("archetype_mix") or []
         primary = mix[0]["archetype_id"] if mix else None
         obs_norm = min(1.0, a.get("contract_count", 0) / 40)
@@ -435,10 +638,10 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=a["id"],
                 page_type="agency",
                 url=url,
-                title=f"{a['agency_name']}: histórico de contratação em engenharia | CONFENGE",
-                h1=f"Contratação de engenharia em {a['agency_name']}: o que os dados públicos mostram",
+                title=f"{_humanize_agency_name(a.get('agency_name'))}: histórico de contratação em engenharia | CONFENGE",
+                h1=f"Contratação de engenharia em {_humanize_agency_name(a.get('agency_name'))}: o que os dados públicos mostram",
                 description=(
-                    f"Dossiê de comprador: {a['contract_count']} contratos classificados, "
+                    f"Dossiê de comprador: {a.get('primary_contract_count') or a['contract_count']} contratos primários classificados, "
                     f"objetos, valores e cuidados para disputar contratos deste órgão."
                 ),
                 archetype=primary,
@@ -466,6 +669,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
         fails = []
         if p.get("observation_count", 0) < MIN_PRICE_OBS:
             fails.append(f"obs<{MIN_PRICE_OBS}")
+        fails.extend(semantic_price_fails(p))
         if p.get("median_value") is None:
             fails.append("no_median")
         if not p.get("warning"):
@@ -513,15 +717,15 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=p["id"],
                 page_type="price",
                 url=url,
-                title=f"Benchmark de valores: {p['object_label']} em {p['region_label']} | CONFENGE",
-                h1=f"Dispersão de valores contratados — {p['object_label']} ({p['region_label']})",
+                title=f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))} | CONFENGE",
+                h1=f"Valores de contratos — {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
                 description=(
-                    f"Benchmark {p['object_label']} em {p['region_label']}: "
-                    f"mediana, P25 e P75 com {p['observation_count']} observações públicas. "
-                    f"Não use como preço unitário cego."
+                    f"Faixa de valores contratuais de {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))}: "
+                    f"mediana, P25 e P75 com {p['observation_count']} contratos primários. "
+                    f"Tickets contratuais integrais — não são preços unitários."
                 ),
                 archetype=arch,
-                segment=p.get("object_label"),
+                segment=_clean_price_label(p.get("object_label")),
                 region=p.get("region"),
                 agency_id=None,
                 intent="estimar_valores_dispersao",
@@ -625,6 +829,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
         open_n = int(o.get("open_count") or 0)
         if open_n < MIN_RADAR_OPEN:
             fails.append(f"open<{MIN_RADAR_OPEN}")
+        fails.extend(semantic_radar_fails(o))
         if not o.get("as_of") and not o.get("verified_at"):
             fails.append("no_as_of")
         # Never treat historical as open
@@ -713,9 +918,22 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
 
     for p in problems:
         fails = []
+        fails.extend(semantic_problem_fails(p))
         ev = p.get("evidence_count") or 0
-        if ev < MIN_PROBLEM_EVIDENCE:
+        # Generic evidence_count alone never proves a specific claim.
+        # Keep a soft observation floor only when direct signals exist.
+        has_direct = bool(
+            p.get("claim_evidence")
+            or p.get("direct_evidence")
+            or p.get("evidence_signals")
+            or p.get("amendment_count")
+            or p.get("reference_mentions")
+            or p.get("document_divergence_count")
+        )
+        if has_direct and ev < MIN_PROBLEM_EVIDENCE:
             fails.append(f"evidence<{MIN_PROBLEM_EVIDENCE}")
+        if not has_direct:
+            fails.append("no_claim_specific_evidence")
         if not p.get("technical_guide_paths"):
             fails.append("no_guides")
         if not p.get("confenge_service_slug"):

@@ -7,18 +7,20 @@
     "validate": {
       "ok": true,
       "errors": [],
-      "warnings": [],
-      "publish_count": 8,
-      "noindex_count": 7,
-      "reject_count": 5,
-      "dataset_hash": "65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52"
+      "warnings": [
+        "zero publish pages — expected during containment until human review"
+      ],
+      "publish_count": 0,
+      "noindex_count": 0,
+      "reject_count": 20,
+      "dataset_hash": "65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52",
+      "editorial_audit": {
+        "ok": true,
+        "publish_fail_count": 0,
+        "p0_issue_count": 71
+      }
     },
-    "determinism": {
-      "first_hash": "486c1a649d2d0e64a6c060f6cddf02007e5358129319cdb3bd38c33a577c47e2",
-      "second_hash": "486c1a649d2d0e64a6c060f6cddf02007e5358129319cdb3bd38c33a577c47e2",
-      "deterministic": true,
-      "page_count": 22
-    },
+    "determinism": null,
     "tracking": {
       "events_declared_or_handled": [
         "pseo_cta_click",
@@ -42,6 +44,1154 @@
     "data_forbidden": {
       "forbidden_found": [],
       "ok": true
+    },
+    "editorial": {
+      "ok": true,
+      "generated_from": "data/pseo/registry.json",
+      "page_count": 20,
+      "publish_fail_count": 0,
+      "p0_issue_count": 71,
+      "pages": [
+        {
+          "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
+          "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+          "page_type": "market",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 13
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 96,
+            "meta_desc_len": 132
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Solicitar um mapa aplicado à minha empresa",
+            "intent": "mapa_mercado"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "pavimentacao-infraestrutura-viaria"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "pavimentacao"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem identifier",
+              "evidence": "identifier"
+            }
+          ]
+        },
+        {
+          "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
+          "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+          "page_type": "market",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 13
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 87,
+            "meta_desc_len": 122
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Solicitar um mapa aplicado à minha empresa",
+            "intent": "mapa_mercado"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "pavimentacao-infraestrutura-viaria"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "Piaui"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem identifier",
+              "evidence": "identifier"
+            }
+          ]
+        },
+        {
+          "page_id": "market-edificacoes-publicas-mg",
+          "url": "/inteligencia/mercados/edificacoes-publicas-mg/",
+          "page_type": "market",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 12
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 78,
+            "meta_desc_len": 130
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Solicitar um mapa aplicado à minha empresa",
+            "intent": "mapa_mercado"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "edificacoes-publicas"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "edificacoes"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem identifier",
+              "evidence": "identifier"
+            }
+          ]
+        },
+        {
+          "page_id": "market-edificacoes-publicas-rs",
+          "url": "/inteligencia/mercados/edificacoes-publicas-rs/",
+          "page_type": "market",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 10
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 83,
+            "meta_desc_len": 135
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Solicitar um mapa aplicado à minha empresa",
+            "intent": "mapa_mercado"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "edificacoes-publicas"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "edificacoes"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem identifier",
+              "evidence": "identifier"
+            }
+          ]
+        },
+        {
+          "page_id": "agency-88830609",
+          "url": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+          "page_type": "agency",
+          "status": "reject",
+          "human_review": "NEEDS_DATA_FIX",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 49
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 88,
+            "meta_desc_len": 123
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Avaliar estratégia para disputar contratos deste órgão",
+            "intent": "estrategia_orgao"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "manutencao-predial-engenharia"
+            },
+            {
+              "code": "ingestion_prefix_name",
+              "severity": "P0",
+              "message": "Nome de órgão com prefixo de ingestão",
+              "evidence": "MRS-PREFEITURA"
+            },
+            {
+              "code": "sample_concentration",
+              "severity": "P0",
+              "message": "Amostra concentrada/insuficiente: suppliers<3",
+              "evidence": "suppliers<3"
+            },
+            {
+              "code": "sample_concentration",
+              "severity": "P0",
+              "message": "Amostra concentrada/insuficiente: max_single_day_share>0.70",
+              "evidence": "max_single_day_share>0.70"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem identifier",
+              "evidence": "identifier"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem temporalCoverage",
+              "evidence": "temporalCoverage"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem variableMeasured",
+              "evidence": "variableMeasured"
+            }
+          ]
+        },
+        {
+          "page_id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
+          "url": "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+          "page_type": "price",
+          "status": "reject",
+          "human_review": "NEEDS_DATA_FIX",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 19
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 81,
+            "meta_desc_len": 177
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Validar preço, risco e margem",
+            "intent": "validar_preco_margem"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "manutencao-predial-engenharia"
+            },
+            {
+              "code": "ingestion_prefix_name",
+              "severity": "P0",
+              "message": "Nome de órgão com prefixo de ingestão",
+              "evidence": "MRS-PREFEITURA"
+            },
+            {
+              "code": "sample_concentration",
+              "severity": "P0",
+              "message": "Amostra concentrada/insuficiente: buyers<3",
+              "evidence": "buyers<3"
+            },
+            {
+              "code": "sample_concentration",
+              "severity": "P0",
+              "message": "Amostra concentrada/insuficiente: max_buyer_share>0.60",
+              "evidence": "max_buyer_share>0.60"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "manutencao predial"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem identifier",
+              "evidence": "identifier"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem temporalCoverage",
+              "evidence": "temporalCoverage"
+            }
+          ]
+        },
+        {
+          "page_id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
+          "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+          "page_type": "price",
+          "status": "reject",
+          "human_review": "NEEDS_DATA_FIX",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 12
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 65,
+            "meta_desc_len": 161
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Validar preço, risco e margem",
+            "intent": "validar_preco_margem"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "pavimentacao-infraestrutura-viaria"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "paralelepipedo"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem identifier",
+              "evidence": "identifier"
+            },
+            {
+              "code": "dataset_missing_prop",
+              "severity": "P1",
+              "message": "Dataset JSON-LD sem temporalCoverage",
+              "evidence": "temporalCoverage"
+            }
+          ]
+        },
+        {
+          "page_id": "comp-manutencao-predial-engenharia-rs",
+          "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+          "page_type": "competition",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 50
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 99,
+            "meta_desc_len": 165
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Solicitar um mapa aplicado à minha empresa",
+            "intent": "mapa_concorrencia"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "sample_concentration",
+              "severity": "P0",
+              "message": "Amostra concentrada/insuficiente: suppliers<3",
+              "evidence": "suppliers<3"
+            }
+          ]
+        },
+        {
+          "page_id": "radar-edificacoes-publicas-pr",
+          "url": "/radar/edificacoes-publicas-pr/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "NEEDS_DATA_FIX",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 15
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 65,
+            "meta_desc_len": 134
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "zero_for_missing_value",
+              "severity": "P0",
+              "message": "R$ 0,00 usado (possível valor ausente)",
+              "evidence": "R$ 0,00"
+            },
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "contract_url_as_opportunity=7",
+              "evidence": "contract_url_as_opportunity=7"
+            },
+            {
+              "code": "contract_link_as_opportunity",
+              "severity": "P0",
+              "message": "Link de contrato em radar",
+              "evidence": "/app/contratos/"
+            }
+          ]
+        },
+        {
+          "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
+          "url": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "NEEDS_DATA_FIX",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 7
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 89,
+            "meta_desc_len": 157
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "table_duplicates",
+              "severity": "P0",
+              "message": "Linhas duplicadas na tabela (2)",
+              "evidence": "Contratação de Empresa Especializada Para Pavimentação em paralelepípe | R$ 730.738,47 | Concorrência - Eletrônica | Ind"
+            },
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "duplicate_rate>0",
+              "evidence": "duplicate_rate>0"
+            },
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "contract_url_as_opportunity=4",
+              "evidence": "contract_url_as_opportunity=4"
+            },
+            {
+              "code": "contract_link_as_opportunity",
+              "severity": "P0",
+              "message": "Link de contrato em radar",
+              "evidence": "/app/contratos/"
+            }
+          ]
+        },
+        {
+          "page_id": "radar-saneamento-hidraulica-sc",
+          "url": "/radar/saneamento-hidraulica-sc/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 5
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 76,
+            "meta_desc_len": 144
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "contract_url_as_opportunity=2",
+              "evidence": "contract_url_as_opportunity=2"
+            },
+            {
+              "code": "contract_link_as_opportunity",
+              "severity": "P0",
+              "message": "Link de contrato em radar",
+              "evidence": "/app/contratos/"
+            }
+          ]
+        },
+        {
+          "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
+          "url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 4
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 92,
+            "meta_desc_len": 160
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "contract_url_as_opportunity=2",
+              "evidence": "contract_url_as_opportunity=2"
+            },
+            {
+              "code": "contract_link_as_opportunity",
+              "severity": "P0",
+              "message": "Link de contrato em radar",
+              "evidence": "/app/contratos/"
+            }
+          ]
+        },
+        {
+          "page_id": "radar-edificacoes-publicas-sc",
+          "url": "/radar/edificacoes-publicas-sc/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 4
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 73,
+            "meta_desc_len": 141
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "contract_url_as_opportunity=2",
+              "evidence": "contract_url_as_opportunity=2"
+            },
+            {
+              "code": "contract_link_as_opportunity",
+              "severity": "P0",
+              "message": "Link de contrato em radar",
+              "evidence": "/app/contratos/"
+            }
+          ]
+        },
+        {
+          "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
+          "url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 4
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 81,
+            "meta_desc_len": 149
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "contract_url_as_opportunity=4",
+              "evidence": "contract_url_as_opportunity=4"
+            },
+            {
+              "code": "contract_link_as_opportunity",
+              "severity": "P0",
+              "message": "Link de contrato em radar",
+              "evidence": "/app/contratos/"
+            }
+          ]
+        },
+        {
+          "page_id": "radar-edificacoes-publicas-rs",
+          "url": "/radar/edificacoes-publicas-rs/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 3
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 76,
+            "meta_desc_len": 144
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [
+            {
+              "code": "data_quality_gate",
+              "severity": "P0",
+              "message": "contract_url_as_opportunity=1",
+              "evidence": "contract_url_as_opportunity=1"
+            },
+            {
+              "code": "contract_link_as_opportunity",
+              "severity": "P0",
+              "message": "Link de contrato em radar",
+              "evidence": "/app/contratos/"
+            }
+          ]
+        },
+        {
+          "page_id": "prob-orcamento-edital",
+          "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+          "page_type": "problem_service",
+          "status": "reject",
+          "human_review": "NEEDS_CONTENT_FIX",
+          "decision": "fail_soft",
+          "sample": {
+            "observation_count": 48
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_supplier_contracts",
+            "site-confenge-guides"
+          ],
+          "copy_quality": {
+            "title_len": 64,
+            "meta_desc_len": 160
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Organizar documentos e próximos passos",
+            "intent": "organizar_documentos"
+          },
+          "approval_recommendation": "keep_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "edificacoes-publicas"
+            },
+            {
+              "code": "meta_desc_truncated",
+              "severity": "P0",
+              "message": "Meta description truncada no meio da frase/palavra",
+              "evidence": " antes da proposta. O padrão aparece em "
+            },
+            {
+              "code": "meta_desc_incomplete",
+              "severity": "P1",
+              "message": "Meta description sem frase completa",
+              "evidence": "omposições antes da proposta. O padrão aparece em "
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_direct_budget_edital_evidence",
+              "evidence": "no_direct_budget_edital_evidence"
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_claim_specific_evidence",
+              "evidence": "no_claim_specific_evidence"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "edificacoes"
+            },
+            {
+              "code": "empty_period",
+              "severity": "P0",
+              "message": "Metodologia com período — a —",
+              "evidence": "— a —"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-medicao-glosa",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-aditivos-margem",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-reequilibrio",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            }
+          ]
+        },
+        {
+          "page_id": "prob-sinapi-sicro",
+          "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+          "page_type": "problem_service",
+          "status": "reject",
+          "human_review": "NEEDS_CONTENT_FIX",
+          "decision": "fail_soft",
+          "sample": {
+            "observation_count": 48
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "site-confenge-guides",
+            "pncp_supplier_contracts"
+          ],
+          "copy_quality": {
+            "title_len": 64,
+            "meta_desc_len": 160
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Organizar documentos e próximos passos",
+            "intent": "organizar_documentos"
+          },
+          "approval_recommendation": "keep_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "pavimentacao-infraestrutura-viaria"
+            },
+            {
+              "code": "meta_desc_incomplete",
+              "severity": "P1",
+              "message": "Meta description sem frase completa",
+              "evidence": "ou produtividade vira deságio real após a assinatu"
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_direct_sinapi_sicro_evidence",
+              "evidence": "no_direct_sinapi_sicro_evidence"
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_claim_specific_evidence",
+              "evidence": "no_claim_specific_evidence"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "pavimentacao"
+            },
+            {
+              "code": "empty_period",
+              "severity": "P0",
+              "message": "Metodologia com período — a —",
+              "evidence": "— a —"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-orcamento-edital",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-medicao-glosa",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-aditivos-margem",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-reequilibrio",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            }
+          ]
+        },
+        {
+          "page_id": "prob-medicao-glosa",
+          "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+          "page_type": "problem_service",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "fail_soft",
+          "sample": {
+            "observation_count": 22
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "site-confenge-guides"
+          ],
+          "copy_quality": {
+            "title_len": 61,
+            "meta_desc_len": 142
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Organizar documentos e próximos passos",
+            "intent": "organizar_documentos"
+          },
+          "approval_recommendation": "keep_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "manutencao-predial-engenharia"
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_claim_specific_evidence",
+              "evidence": "no_claim_specific_evidence"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "edificacoes"
+            },
+            {
+              "code": "empty_period",
+              "severity": "P0",
+              "message": "Metodologia com período — a —",
+              "evidence": "— a —"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-orcamento-edital",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-aditivos-margem",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-reequilibrio",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            }
+          ]
+        },
+        {
+          "page_id": "prob-aditivos-margem",
+          "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+          "page_type": "problem_service",
+          "status": "reject",
+          "human_review": "NEEDS_CONTENT_FIX",
+          "decision": "fail_soft",
+          "sample": {
+            "observation_count": 48
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "site-confenge-guides"
+          ],
+          "copy_quality": {
+            "title_len": 55,
+            "meta_desc_len": 142
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Organizar documentos e próximos passos",
+            "intent": "organizar_documentos"
+          },
+          "approval_recommendation": "keep_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "edificacoes-publicas"
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_direct_aditivo_evidence",
+              "evidence": "no_direct_aditivo_evidence"
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_claim_specific_evidence",
+              "evidence": "no_claim_specific_evidence"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "edificacoes"
+            },
+            {
+              "code": "empty_period",
+              "severity": "P0",
+              "message": "Metodologia com período — a —",
+              "evidence": "— a —"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-orcamento-edital",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-medicao-glosa",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-reequilibrio",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            }
+          ]
+        },
+        {
+          "page_id": "prob-reequilibrio",
+          "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
+          "page_type": "problem_service",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "fail_soft",
+          "sample": {
+            "observation_count": 27
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp_supplier_contracts",
+            "site-confenge-guides"
+          ],
+          "copy_quality": {
+            "title_len": 63,
+            "meta_desc_len": 160
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Organizar documentos e próximos passos",
+            "intent": "organizar_documentos"
+          },
+          "approval_recommendation": "keep_noindex",
+          "issues": [
+            {
+              "code": "internal_slug_visible",
+              "severity": "P0",
+              "message": "Slug/taxonomia interna no texto",
+              "evidence": "pavimentacao-infraestrutura-viaria"
+            },
+            {
+              "code": "service_path_visible",
+              "severity": "P0",
+              "message": "Caminho de serviço no conteúdo",
+              "evidence": "/reequilibrio-economico-financeiro-obra-publica/"
+            },
+            {
+              "code": "meta_desc_incomplete",
+              "severity": "P1",
+              "message": "Meta description sem frase completa",
+              "evidence": "quilíbrio e matriz de riscos precisam estar prepar"
+            },
+            {
+              "code": "claim_without_evidence",
+              "severity": "P0",
+              "message": "no_claim_specific_evidence",
+              "evidence": "no_claim_specific_evidence"
+            },
+            {
+              "code": "missing_accents",
+              "severity": "P1",
+              "message": "Termo técnico sem acentuação editorial",
+              "evidence": "pavimentacao"
+            },
+            {
+              "code": "empty_period",
+              "severity": "P0",
+              "message": "Metodologia com período — a —",
+              "evidence": "— a —"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-orcamento-edital",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-sinapi-sicro",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-medicao-glosa",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            },
+            {
+              "code": "generic_repeated_blocks",
+              "severity": "P0",
+              "message": "Blocos genéricos repetidos com prob-aditivos-margem",
+              "evidence": "Organize cronologia, planilha e comunicação com a fiscalização antes de escalar conflito"
+            }
+          ]
+        }
+      ]
     }
   }
 }

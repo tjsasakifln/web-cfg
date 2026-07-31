@@ -261,6 +261,25 @@ def validate_all(data_dir: Path | None = None) -> dict:
     if sim:
         errors.append(f"high similarity publish pairs: {sim[:5]}")
 
+    # Editorial audit — must not leave publishable pages with P0/P1 defects
+    try:
+        from scripts.pseo.editorial_audit import run_editorial_audit
+
+        ed = run_editorial_audit(root=ROOT)
+        result_ed = {
+            "ok": ed.get("ok"),
+            "publish_fail_count": ed.get("publish_fail_count"),
+            "p0_issue_count": ed.get("p0_issue_count"),
+        }
+        if not ed.get("ok"):
+            errors.append(
+                f"editorial_audit_failed: publish_fails={ed.get('publish_fail_count')} "
+                f"p0={ed.get('p0_issue_count')} (see seo/pseo-editorial-report.md)"
+            )
+    except Exception as exc:  # noqa: BLE001 — surface as validation error
+        errors.append(f"editorial_audit_error: {exc}")
+        result_ed = {"ok": False, "error": str(exc)}
+
     result = {
         "ok": len(errors) == 0,
         "errors": errors,
@@ -269,6 +288,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
         "noindex_count": len(noindex),
         "reject_count": sum(1 for p in pages if p.get("status") == "reject"),
         "dataset_hash": snap["manifest"].get("dataset_hash"),
+        "editorial_audit": result_ed,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return result

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from typing import Any
 
 from scripts.pseo.html_shell import (
@@ -21,6 +23,56 @@ from scripts.pseo.html_shell import (
     table_html,
 )
 from scripts.pseo.score import Candidate
+
+
+def humanize_agency(name: str | None) -> str:
+    if not name:
+        return ""
+    n = re.sub(r"^(MRS|TCE|TCM|PNCP|SIASG|COMPRASNET)\s*[-–:|/]\s*", "", str(name), flags=re.I)
+    if n == n.upper() and len(n) > 4:
+        small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o", "as", "os"}
+        parts = []
+        for i, w in enumerate(n.split()):
+            wl = w.lower()
+            parts.append(wl if i > 0 and wl in small else wl.capitalize())
+        n = " ".join(parts)
+    return n
+
+
+def money_or_ni(v, value_status: str | None = None) -> str:
+    """Format money; never show R$ 0,00 for unknown values."""
+    if value_status in {"not_informed", "confidential"}:
+        return "não informado" if value_status == "not_informed" else "sigiloso"
+    if v is None:
+        return "não informado"
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return "não informado"
+    if f == 0 and value_status != "zero_valid":
+        return "não informado"
+    return money(v)
+
+
+def accent_region(label: str | None) -> str:
+    if not label:
+        return ""
+    fixes = {
+        "Piaui": "Piauí", "Sao Paulo": "São Paulo", "Parana": "Paraná",
+        "Goias": "Goiás", "Ceara": "Ceará", "Para": "Pará",
+        "Espirito Santo": "Espírito Santo", "Rondonia": "Rondônia",
+        "Amapa": "Amapá",
+    }
+    s = str(label)
+    for a, b in fixes.items():
+        s = s.replace(a, b)
+    s = s.replace("paralelepipedo", "paralelepípedo").replace("Paralelepipedo", "Paralelepípedo")
+    s = s.replace("manutencao", "manutenção").replace("Manutencao", "Manutenção")
+    s = s.replace("pavimentacao", "pavimentação").replace("Pavimentacao", "Pavimentação")
+    # strip archetype slug in parentheses e.g. "foo (manutencao-predial-engenharia)"
+    s = re.sub(r"\s*\([a-z0-9]+(?:-[a-z0-9]+)+\)", "", s)
+    return s
+
 
 
 def _meta(c: Candidate, manifest: dict[str, Any]) -> dict[str, Any]:
@@ -245,9 +297,10 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 
 def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     a = c.data_ref
+    agency_display = humanize_agency(a.get('agency_name')) or a.get('agency_name') or ''
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"{a.get('agency_name')} ({a.get('municipio') or '—'}, {a.get('uf') or '—'}) "
+        f"{agency_display} ({a.get('municipio') or '—'}, {a.get('uf') or '—'}) "
         f"aparece com {a.get('contract_count')} contratos classificados em engenharia/obras "
         f"no datalake, totalizando {money(a.get('total_value'))}. Mediana {money(a.get('median_value'))}. "
         f"{a.get('supplier_count')} fornecedores distintos foram observados. "
@@ -329,11 +382,11 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
         ("Órgãos", "/inteligencia/orgaos/"),
-        (a.get("agency_name") or c.page_id, None),
+        (agency_display or c.page_id, None),
     ]
     wa = (
         f"Olá, Tiago. Quero avaliar estratégia para disputar contratos de "
-        f"{a.get('agency_name')} (página de inteligência CONFENGE)."
+        f"{agency_display} (página de inteligência CONFENGE)."
     )
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -362,7 +415,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     "Ajudamos a montar a estratégia por órgão: leitura de histórico, enquadramento de objeto, "
     "riscos de edital e preparação documental da proposta.",
 )}
-{cta_block(meta, c.cta_label, wa, f"Órgão {a.get('agency_name')}")}
+{cta_block(meta, c.cta_label, wa, f"Órgão {agency_display}")}
 {methodology_block(a.get("period_start"), a.get("period_end"), a.get("sources") or [], a.get("limitations") or [])}
 {author_box()}
 {_related_section(c.related_urls)}
@@ -387,7 +440,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         {
             "@type": "Dataset",
             "@id": f"{SITE}{c.url}#dataset",
-            "name": f"Histórico de contratos — {a.get('agency_name')}",
+            "name": f"Histórico de contratos — {agency_display}",
             "creator": {"@id": f"{SITE}/#organization"},
             "isBasedOn": "https://pncp.gov.br/",
         },
@@ -407,6 +460,8 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 
 def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     p = c.data_ref
+    obj_label = accent_region(p.get('object_label'))
+    region_label = accent_region(p.get('region_label') or p.get('region'))
     meta = _meta(c, manifest)
     summary = _exec_summary(
         f"Para {p.get('object_label')} em {p.get('region_label')}, com {p.get('observation_count')} "
@@ -806,7 +861,7 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     summary = _exec_summary(
         f"{p.get('problem_label')}: {p.get('observed_pattern')} "
         f"Evidência agregada vinculada: {p.get('evidence_count')} contratos/mercados relacionados. "
-        f"Serviço CONFENGE: /{p.get('confenge_service_slug')}/."
+        f"Serviço CONFENGE: {p.get('confenge_service_slug')}/."
     )
     guides = "".join(
         f'<li><a href="{e(g)}" data-pseo-event="pseo_related_page_click">{e(g)}</a></li>'
@@ -870,7 +925,7 @@ Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
 risco de margem e de prazo — não como checklist genérico. Organize cronologia, planilha e
 comunicação com a fiscalização antes de escalar conflito.</p></section>
 {confenge_help(
-    [f"/{p.get('confenge_service_slug')}/"] + list(p.get("technical_guide_paths") or [])[:2],
+    [((p.get('confenge_service_slug') or '').replace('-', ' ').title() or 'serviço técnico CONFENGE')] + list(p.get("technical_guide_paths") or [])[:2],
     "Do diagnóstico do problema à trilha documental e ao próximo passo contratual ou de proposta.",
 )}
 {cta_block(meta, c.cta_label, wa, p.get("problem_label") or "Cenário técnico")}

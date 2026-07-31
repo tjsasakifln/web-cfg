@@ -60,6 +60,16 @@ def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
                 "review_notes": p.get("review_notes"),
                 "review_dataset_hash": p.get("review_dataset_hash") or p.get("dataset_hash"),
                 "evidences_checked": p.get("evidences_checked"),
+                "review_checklist": p.get("review_checklist"),
+                "data_quality_metrics": p.get("data_quality_metrics"),
+                "evidence_sample": p.get("evidence_sample"),
+                "claims_checked": p.get("claims_checked"),
+                "source_links_checked": p.get("source_links_checked"),
+                "cannibalization_checked": p.get("cannibalization_checked"),
+                "editorial_issues": p.get("editorial_issues"),
+                "approval_rationale": p.get("approval_rationale"),
+                "approver": p.get("approver"),
+                "reviewed_render_hash": p.get("reviewed_render_hash"),
             }
     return out
 
@@ -389,9 +399,14 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                 except OSError:
                     pass
     for c in cands:
-        if c.status == "reject":
-            continue
-        html = render_candidate(c, manifest)
+        # Write HTML for all candidates (reject/noindex use robots noindex).
+        # Only status=publish enters the intelligence sitemap.
+        try:
+            html = render_candidate(c, manifest)
+        except Exception as exc:  # noqa: BLE001
+            if c.status == "reject":
+                continue
+            raise
         path = url_to_path(c.url)
         if not dry_run:
             path.parent.mkdir(parents=True, exist_ok=True)

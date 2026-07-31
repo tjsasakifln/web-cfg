@@ -1,0 +1,13 @@
+{
+  "period": "2026-07",
+  "source": "crm_export",
+  "pages": {
+    "agency-88830609": {
+      "qualified_contact": 0,
+      "meeting": 0,
+      "proposal": 0,
+      "contract": 0,
+      "revenue": 0
+    }
+  }
+}

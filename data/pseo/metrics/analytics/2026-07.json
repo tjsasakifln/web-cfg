@@ -1,0 +1,16 @@
+{
+  "period": "2026-07",
+  "source": "analytics_export",
+  "pages": {
+    "agency-88830609": {
+      "sessions": 0,
+      "scroll": 0,
+      "table_interaction": 0,
+      "source_open": 0,
+      "cta": 0,
+      "whatsapp": 0,
+      "form_start": 0,
+      "form_submit": 0
+    }
+  }
+}

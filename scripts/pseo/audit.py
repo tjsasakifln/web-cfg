@@ -17,6 +17,7 @@ if str(ROOT) not in sys.path:
 from scripts.pseo.build import build  # noqa: E402
 from scripts.pseo.schema import validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
+from scripts.pseo.editorial_audit import run_editorial_audit  # noqa: E402
 
 
 def hash_tree(paths: list[Path]) -> str:
@@ -139,6 +140,7 @@ def main(argv=None) -> int:
         results["snapshot"] = {"ok": False, "error": str(e)}
 
     results["validate"] = validate_all()
+    results["editorial"] = run_editorial_audit()
 
     if not args.skip_determinism:
         results["determinism"] = audit_determinism()
@@ -146,6 +148,7 @@ def main(argv=None) -> int:
     ok = (
         results["snapshot"].get("ok")
         and results["validate"].get("ok")
+        and results["editorial"].get("ok")
         and results["regression"].get("ok")
         and results["data_forbidden"].get("ok")
         and (args.skip_determinism or results["determinism"].get("deterministic"))

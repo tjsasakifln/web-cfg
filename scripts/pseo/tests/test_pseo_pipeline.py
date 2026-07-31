@@ -227,16 +227,24 @@ class TestResolveRelatedUrls(unittest.TestCase):
         self.assertEqual(len(descs), len(set(descs)), "price descriptions must be unique")
         for c in prices:
             # description must name the object/segment and be specific (not obs-count-only mold)
-            self.assertIn("Benchmark", c.description)
+            self.assertTrue(
+                "Faixa de valores" in c.description or "Benchmark" in c.description,
+                c.description,
+            )
+            import unicodedata
+            def _fold(s: str) -> str:
+                s = unicodedata.normalize("NFKD", s.lower())
+                return "".join(ch for ch in s if not unicodedata.combining(ch))
+            desc_f = _fold(c.description)
             self.assertTrue(
                 c.segment and any(
-                    tok.lower() in c.description.lower()
-                    for tok in str(c.segment).split()
+                    _fold(tok) in desc_f
+                    for tok in str(c.segment).replace("—", " ").replace("-", " ").split()
                     if len(tok) > 3
                 ),
-                msg=f"segment tokens missing from: {c.description}",
+                msg=f"segment tokens missing from: {c.description} segment={c.segment}",
             )
-            self.assertRegex(c.description, r"\d+\s+observaç")
+            self.assertRegex(c.description, r"\d+\s+(observaç|contratos)")
 
 
 if __name__ == "__main__":

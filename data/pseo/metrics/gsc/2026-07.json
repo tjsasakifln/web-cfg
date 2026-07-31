@@ -1,0 +1,20 @@
+{
+  "period": "2026-07",
+  "source": "search_console_export",
+  "pages": {
+    "agency-88830609": {
+      "impressions": 0,
+      "clicks": 0,
+      "ctr": 0,
+      "position": null,
+      "queries": []
+    },
+    "radar-edificacoes-publicas-pr": {
+      "impressions": 0,
+      "clicks": 0,
+      "ctr": 0,
+      "position": null,
+      "queries": []
+    }
+  }
+}

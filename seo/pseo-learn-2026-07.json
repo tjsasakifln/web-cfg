@@ -1,0 +1,407 @@
+{
+  "period": "2026-07",
+  "recommendation_count": 20,
+  "policy": "recommendations_only_no_auto_publish",
+  "recommendations": [
+    {
+      "page_id": "agency-88830609",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "comp-manutencao-predial-engenharia-rs",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "market-edificacoes-publicas-mg",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "market-edificacoes-publicas-rs",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "prob-aditivos-margem",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "prob-medicao-glosa",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "prob-orcamento-edital",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "prob-reequilibrio",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "prob-sinapi-sicro",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "radar-edificacoes-publicas-pr",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "radar-edificacoes-publicas-rs",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "radar-edificacoes-publicas-sc",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    },
+    {
+      "page_id": "radar-saneamento-hidraulica-sc",
+      "problems": [
+        "indexation_blocked_quality"
+      ],
+      "actions": [
+        "fix_data_or_copy_before_reconsidering"
+      ],
+      "auto_mutate": false,
+      "metrics": {
+        "impressions": 0.0,
+        "clicks": 0.0,
+        "ctr": 0.0,
+        "sessions": 0.0,
+        "cta": 0.0,
+        "form_submit": 0.0,
+        "qualified_contact": 0.0,
+        "status": "reject"
+      }
+    }
+  ]
+}
