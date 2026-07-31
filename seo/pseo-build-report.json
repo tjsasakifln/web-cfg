@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1",
-  "source_run_id": "pseo-20260731T133428Z-c571e679",
+  "dataset_hash": "65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52",
+  "source_run_id": "pseo-20260731T134327Z-61f8a1c0",
   "counts": {
-    "reject": 6,
-    "publish": 9,
-    "noindex": 6
+    "reject": 5,
+    "publish": 8,
+    "noindex": 7
   },
   "publishable": [
     "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
@@ -15,15 +15,15 @@
     "/radar/pavimentacao-infraestrutura-viaria-sc/",
     "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-    "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
   ],
   "noindex": [
-    "/radar/pavimentacao-infraestrutura-viaria-pr/",
     "/radar/saneamento-hidraulica-sc/",
     "/radar/pavimentacao-infraestrutura-viaria-rs/",
     "/radar/edificacoes-publicas-sc/",
+    "/radar/pavimentacao-infraestrutura-viaria-pr/",
     "/radar/edificacoes-publicas-rs/",
+    "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
     "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
   ],
   "rejected": [
@@ -47,13 +47,6 @@
         "contracts<15"
       ],
       "score": 77
-    },
-    {
-      "url": "/inteligencia/mercados/manutencao-predial-engenharia-sp/",
-      "reasons": [
-        "contracts<15"
-      ],
-      "score": 75
     },
     {
       "url": "/inteligencia/mercados/edificacoes-publicas-rs/",

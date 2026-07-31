@@ -1,7 +1,7 @@
 [
   {
     "as_of": "2026-07-31",
-    "closed_recent_count": 50,
+    "closed_recent_count": 48,
     "freshness": {
       "age_hours": 0.0,
       "data_as_of": "2026-07-31",
@@ -13,7 +13,7 @@
       "status": "ok",
       "warning_hours": 24
     },
-    "historical_count": 50,
+    "historical_count": 48,
     "id": "radar-edificacoes-publicas-pr",
     "items": [
       {
@@ -31,23 +31,6 @@
         "uf": "PR",
         "uncertainty": true,
         "valor_estimado": 111304.87,
-        "verified_at": "2026-07-31"
-      },
-      {
-        "data_encerramento": "2026-08-31",
-        "link_oficial": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra?compra=98748903000062026",
-        "link_pncp": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra?compra=98748903000062026",
-        "modalidade": "Concorrência - Eletrônica",
-        "municipio": "Capitão Leônidas Marques",
-        "objeto": "Construção da Casa da Mulher Paranaense (Projeto Padrão do Estado), com execução dos serviços de: serviços preliminares e administração da obra; movimento de terra, drenagem e águas pluviais; fundações; estruturas; alven",
-        "orgao_nome": "MUNICIPIO DE CAPITAO LEONIDAS MARQUES",
-        "pncp_id": "76208834000159-1-000202/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 2327563.12,
         "verified_at": "2026-07-31"
       },
       {
@@ -287,23 +270,6 @@
         "uncertainty": true,
         "valor_estimado": 2287105.22,
         "verified_at": "2026-07-31"
-      },
-      {
-        "data_encerramento": "2026-08-21",
-        "link_oficial": "https://pncp.gov.br/app/contratos/75924290000169/2026/21",
-        "link_pncp": "https://pncp.gov.br/app/contratos/75924290000169/2026/21",
-        "modalidade": "Concorrência - Presencial",
-        "municipio": "Pérola d'Oeste",
-        "objeto": "Construção de barracão industrial, contendo: indústria, escritórios, sanitárias feminino e masculino e PCD, casa de reservatórios, calçadas e grama. Construção de barracão industrial, compreendendo: serviços preliminares",
-        "orgao_nome": "MUNICIPIO DE PEROLA D'OESTE",
-        "pncp_id": "75924290000169-1-000021/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 3594792.33,
-        "verified_at": "2026-07-31"
       }
     ],
     "limitations": [
@@ -312,7 +278,7 @@
       "Pagina evergreen: nao indexa um edital por URL.",
       "historical_count NAO entra em open_count."
     ],
-    "open_count": 17,
+    "open_count": 15,
     "region": "PR",
     "region_label": "Parana",
     "related_market_slug": null,
@@ -322,9 +288,9 @@
       "pncp"
     ],
     "status_breakdown": {
-      "abertas": 17,
-      "encerradas_recentes": 50,
-      "historico": 50,
+      "abertas": 15,
+      "encerradas_recentes": 48,
+      "historico": 48,
       "suspensas": 0
     },
     "suspended_count": 0,
@@ -333,7 +299,7 @@
   },
   {
     "as_of": "2026-07-31",
-    "closed_recent_count": 81,
+    "closed_recent_count": 80,
     "freshness": {
       "age_hours": 0.0,
       "data_as_of": "2026-07-31",
@@ -345,7 +311,7 @@
       "status": "ok",
       "warning_hours": 24
     },
-    "historical_count": 81,
+    "historical_count": 80,
     "id": "radar-pavimentacao-infraestrutura-viaria-sc",
     "items": [
       {
@@ -485,8 +451,8 @@
     ],
     "status_breakdown": {
       "abertas": 7,
-      "encerradas_recentes": 81,
-      "historico": 81,
+      "encerradas_recentes": 80,
+      "historico": 80,
       "suspensas": 0
     },
     "suspended_count": 0,
@@ -495,7 +461,7 @@
   },
   {
     "as_of": "2026-07-31",
-    "closed_recent_count": 49,
+    "closed_recent_count": 21,
     "freshness": {
       "age_hours": 0.0,
       "data_as_of": "2026-07-31",
@@ -507,152 +473,7 @@
       "status": "ok",
       "warning_hours": 24
     },
-    "historical_count": 49,
-    "id": "radar-pavimentacao-infraestrutura-viaria-pr",
-    "items": [
-      {
-        "data_encerramento": "2026-08-12",
-        "link_oficial": "https://pncp.gov.br/app/contratos/76105535000199/2026/240",
-        "link_pncp": "https://pncp.gov.br/app/contratos/76105535000199/2026/240",
-        "modalidade": "Concorrência - Eletrônica",
-        "municipio": "Araucária",
-        "objeto": "Contratação de empresa especializada para execução de obras e serviços de engenharia destinados à construção do Espaço Esportivo Comunitário - Arena Brasil, Módulo Tipo A, no Município de Araucária/PR, contemplando a imp",
-        "orgao_nome": "MUNICIPIO DE ARAUCARIA",
-        "pncp_id": "76105535000199-1-000240/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 3392955.19,
-        "verified_at": "2026-07-31"
-      },
-      {
-        "data_encerramento": "2026-08-31",
-        "link_oficial": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra?compra=98748903000062026",
-        "link_pncp": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra?compra=98748903000062026",
-        "modalidade": "Concorrência - Eletrônica",
-        "municipio": "Capitão Leônidas Marques",
-        "objeto": "Construção da Casa da Mulher Paranaense (Projeto Padrão do Estado), com execução dos serviços de: serviços preliminares e administração da obra; movimento de terra, drenagem e águas pluviais; fundações; estruturas; alven",
-        "orgao_nome": "MUNICIPIO DE CAPITAO LEONIDAS MARQUES",
-        "pncp_id": "76208834000159-1-000202/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 2327563.12,
-        "verified_at": "2026-07-31"
-      },
-      {
-        "data_encerramento": "2026-08-04",
-        "link_oficial": "https://pncp.gov.br/app/contratos/76161199000100/2026/50",
-        "link_pncp": "https://pncp.gov.br/app/contratos/76161199000100/2026/50",
-        "modalidade": "Concorrência - Eletrônica",
-        "municipio": "Clevelândia",
-        "objeto": "Construção de um Centro de Convivência (Equipamento Público) voltado ao acolhimento e assistência da pessoa idosa no Bairro Aeroporto, em Clevelândia - PR (Rua Tapajós, Lote 27, Quadra 03), abrangendo uma área construída",
-        "orgao_nome": "MUNICIPIO DE CLEVELANDIA",
-        "pncp_id": "76161199000100-1-000050/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 1350635.92,
-        "verified_at": "2026-07-31"
-      },
-      {
-        "data_encerramento": "2026-08-04",
-        "link_oficial": "https://pncp.gov.br/app/contratos/80888688000127/2026/40",
-        "link_pncp": "https://pncp.gov.br/app/contratos/80888688000127/2026/40",
-        "modalidade": "Concorrência - Eletrônica",
-        "municipio": "Luiziana",
-        "objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA NO RAMO DE ENGENHARIA PARA EXECUÇÃO DA OBRA DE CONSTRUÇÃO DA PONTE CHICO KAISER, SOBRE O RIO SÃO DOMINGOS, NO MUNICÍPIO DE LUIZIANA/PR, COMPREENDENDO O FORNECIMENTO DE MATERIAIS, MÃO ",
-        "orgao_nome": "MUNICIPIO DE LUIZIANA",
-        "pncp_id": "80888688000127-1-000040/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 522568.04,
-        "verified_at": "2026-07-31"
-      },
-      {
-        "data_encerramento": "2026-08-11",
-        "link_oficial": "https://pncp.gov.br/app/contratos/76920800000192/2026/67",
-        "link_pncp": "https://pncp.gov.br/app/contratos/76920800000192/2026/67",
-        "modalidade": "Concorrência - Eletrônica",
-        "municipio": "Wenceslau Braz",
-        "objeto": "Contratação de empresa especializada para execução de serviços de pavimentação asfáltica e serviços complementares de drenagem e sinalização viária na Estrada Rural São Miguel, no Município de Wenceslau Braz/PR",
-        "orgao_nome": "MUNICIPIO DE WENCESLAU BRAZ",
-        "pncp_id": "76920800000192-1-000067/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 5483076.28,
-        "verified_at": "2026-07-31"
-      },
-      {
-        "data_encerramento": "2026-08-21",
-        "link_oficial": "https://pncp.gov.br/app/contratos/75924290000169/2026/21",
-        "link_pncp": "https://pncp.gov.br/app/contratos/75924290000169/2026/21",
-        "modalidade": "Concorrência - Presencial",
-        "municipio": "Pérola d'Oeste",
-        "objeto": "Construção de barracão industrial, contendo: indústria, escritórios, sanitárias feminino e masculino e PCD, casa de reservatórios, calçadas e grama. Construção de barracão industrial, compreendendo: serviços preliminares",
-        "orgao_nome": "MUNICIPIO DE PEROLA D'OESTE",
-        "pncp_id": "75924290000169-1-000021/2026",
-        "source": "pncp",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": 3594792.33,
-        "verified_at": "2026-07-31"
-      }
-    ],
-    "limitations": [
-      "Somente oportunidades com data_encerramento >= as_of e status compativel.",
-      "Nao e monitoramento em tempo real; verifique no portal oficial.",
-      "Pagina evergreen: nao indexa um edital por URL.",
-      "historical_count NAO entra em open_count."
-    ],
-    "open_count": 6,
-    "region": "PR",
-    "region_label": "Parana",
-    "related_market_slug": null,
-    "segment": "Pavimentação e infraestrutura viária",
-    "slug": "pavimentacao-infraestrutura-viaria-pr",
-    "sources": [
-      "pncp"
-    ],
-    "status_breakdown": {
-      "abertas": 6,
-      "encerradas_recentes": 49,
-      "historico": 49,
-      "suspensas": 0
-    },
-    "suspended_count": 0,
-    "timezone": "America/Sao_Paulo",
-    "verified_at": "2026-07-31"
-  },
-  {
-    "as_of": "2026-07-31",
-    "closed_recent_count": 23,
-    "freshness": {
-      "age_hours": 0.0,
-      "data_as_of": "2026-07-31",
-      "evaluated_at": "2026-07-31",
-      "fail_hours": 72,
-      "now_source": "provided_date",
-      "reason": "age_hours=0.0",
-      "source_unavailable": false,
-      "status": "ok",
-      "warning_hours": 24
-    },
-    "historical_count": 23,
+    "historical_count": 21,
     "id": "radar-saneamento-hidraulica-sc",
     "items": [
       {
@@ -758,8 +579,8 @@
     ],
     "status_breakdown": {
       "abertas": 5,
-      "encerradas_recentes": 23,
-      "historico": 23,
+      "encerradas_recentes": 21,
+      "historico": 21,
       "suspensas": 0
     },
     "suspended_count": 0,
@@ -768,7 +589,7 @@
   },
   {
     "as_of": "2026-07-31",
-    "closed_recent_count": 43,
+    "closed_recent_count": 42,
     "freshness": {
       "age_hours": 0.0,
       "data_as_of": "2026-07-31",
@@ -780,7 +601,7 @@
       "status": "ok",
       "warning_hours": 24
     },
-    "historical_count": 43,
+    "historical_count": 42,
     "id": "radar-pavimentacao-infraestrutura-viaria-rs",
     "items": [
       {
@@ -869,8 +690,8 @@
     ],
     "status_breakdown": {
       "abertas": 4,
-      "encerradas_recentes": 43,
-      "historico": 43,
+      "encerradas_recentes": 42,
+      "historico": 42,
       "suspensas": 0
     },
     "suspended_count": 0,
@@ -982,6 +803,117 @@
       "abertas": 4,
       "encerradas_recentes": 56,
       "historico": 56,
+      "suspensas": 0
+    },
+    "suspended_count": 0,
+    "timezone": "America/Sao_Paulo",
+    "verified_at": "2026-07-31"
+  },
+  {
+    "as_of": "2026-07-31",
+    "closed_recent_count": 47,
+    "freshness": {
+      "age_hours": 0.0,
+      "data_as_of": "2026-07-31",
+      "evaluated_at": "2026-07-31",
+      "fail_hours": 72,
+      "now_source": "provided_date",
+      "reason": "age_hours=0.0",
+      "source_unavailable": false,
+      "status": "ok",
+      "warning_hours": 24
+    },
+    "historical_count": 47,
+    "id": "radar-pavimentacao-infraestrutura-viaria-pr",
+    "items": [
+      {
+        "data_encerramento": "2026-08-12",
+        "link_oficial": "https://pncp.gov.br/app/contratos/76105535000199/2026/240",
+        "link_pncp": "https://pncp.gov.br/app/contratos/76105535000199/2026/240",
+        "modalidade": "Concorrência - Eletrônica",
+        "municipio": "Araucária",
+        "objeto": "Contratação de empresa especializada para execução de obras e serviços de engenharia destinados à construção do Espaço Esportivo Comunitário - Arena Brasil, Módulo Tipo A, no Município de Araucária/PR, contemplando a imp",
+        "orgao_nome": "MUNICIPIO DE ARAUCARIA",
+        "pncp_id": "76105535000199-1-000240/2026",
+        "source": "pncp",
+        "status_bucket": "aberta",
+        "status_raw": null,
+        "uf": "PR",
+        "uncertainty": true,
+        "valor_estimado": 3392955.19,
+        "verified_at": "2026-07-31"
+      },
+      {
+        "data_encerramento": "2026-08-04",
+        "link_oficial": "https://pncp.gov.br/app/contratos/76161199000100/2026/50",
+        "link_pncp": "https://pncp.gov.br/app/contratos/76161199000100/2026/50",
+        "modalidade": "Concorrência - Eletrônica",
+        "municipio": "Clevelândia",
+        "objeto": "Construção de um Centro de Convivência (Equipamento Público) voltado ao acolhimento e assistência da pessoa idosa no Bairro Aeroporto, em Clevelândia - PR (Rua Tapajós, Lote 27, Quadra 03), abrangendo uma área construída",
+        "orgao_nome": "MUNICIPIO DE CLEVELANDIA",
+        "pncp_id": "76161199000100-1-000050/2026",
+        "source": "pncp",
+        "status_bucket": "aberta",
+        "status_raw": null,
+        "uf": "PR",
+        "uncertainty": true,
+        "valor_estimado": 1350635.92,
+        "verified_at": "2026-07-31"
+      },
+      {
+        "data_encerramento": "2026-08-04",
+        "link_oficial": "https://pncp.gov.br/app/contratos/80888688000127/2026/40",
+        "link_pncp": "https://pncp.gov.br/app/contratos/80888688000127/2026/40",
+        "modalidade": "Concorrência - Eletrônica",
+        "municipio": "Luiziana",
+        "objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA NO RAMO DE ENGENHARIA PARA EXECUÇÃO DA OBRA DE CONSTRUÇÃO DA PONTE CHICO KAISER, SOBRE O RIO SÃO DOMINGOS, NO MUNICÍPIO DE LUIZIANA/PR, COMPREENDENDO O FORNECIMENTO DE MATERIAIS, MÃO ",
+        "orgao_nome": "MUNICIPIO DE LUIZIANA",
+        "pncp_id": "80888688000127-1-000040/2026",
+        "source": "pncp",
+        "status_bucket": "aberta",
+        "status_raw": null,
+        "uf": "PR",
+        "uncertainty": true,
+        "valor_estimado": 522568.04,
+        "verified_at": "2026-07-31"
+      },
+      {
+        "data_encerramento": "2026-08-11",
+        "link_oficial": "https://pncp.gov.br/app/contratos/76920800000192/2026/67",
+        "link_pncp": "https://pncp.gov.br/app/contratos/76920800000192/2026/67",
+        "modalidade": "Concorrência - Eletrônica",
+        "municipio": "Wenceslau Braz",
+        "objeto": "Contratação de empresa especializada para execução de serviços de pavimentação asfáltica e serviços complementares de drenagem e sinalização viária na Estrada Rural São Miguel, no Município de Wenceslau Braz/PR",
+        "orgao_nome": "MUNICIPIO DE WENCESLAU BRAZ",
+        "pncp_id": "76920800000192-1-000067/2026",
+        "source": "pncp",
+        "status_bucket": "aberta",
+        "status_raw": null,
+        "uf": "PR",
+        "uncertainty": true,
+        "valor_estimado": 5483076.28,
+        "verified_at": "2026-07-31"
+      }
+    ],
+    "limitations": [
+      "Somente oportunidades com data_encerramento >= as_of e status compativel.",
+      "Nao e monitoramento em tempo real; verifique no portal oficial.",
+      "Pagina evergreen: nao indexa um edital por URL.",
+      "historical_count NAO entra em open_count."
+    ],
+    "open_count": 4,
+    "region": "PR",
+    "region_label": "Parana",
+    "related_market_slug": null,
+    "segment": "Pavimentação e infraestrutura viária",
+    "slug": "pavimentacao-infraestrutura-viaria-pr",
+    "sources": [
+      "pncp"
+    ],
+    "status_breakdown": {
+      "abertas": 4,
+      "encerradas_recentes": 47,
+      "historico": 47,
       "suspensas": 0
     },
     "suspended_count": 0,

@@ -8,14 +8,14 @@
       "ok": true,
       "errors": [],
       "warnings": [],
-      "publish_count": 9,
-      "noindex_count": 6,
-      "reject_count": 6,
-      "dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1"
+      "publish_count": 8,
+      "noindex_count": 7,
+      "reject_count": 5,
+      "dataset_hash": "65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52"
     },
     "determinism": {
-      "first_hash": "dbdaaf37336dd6df032652cf4d9c71fef5b6df17f67f1615a0e4fd629da2b047",
-      "second_hash": "dbdaaf37336dd6df032652cf4d9c71fef5b6df17f67f1615a0e4fd629da2b047",
+      "first_hash": "c621152e3696cda2a6f3640ac9a77edfe69739a1172e244a00d6da1c7b2d6375",
+      "second_hash": "c621152e3696cda2a6f3640ac9a77edfe69739a1172e244a00d6da1c7b2d6375",
       "deterministic": true,
       "page_count": 22
     },

@@ -367,15 +367,15 @@
   {
     "buyer_types_observed": [
       {
-        "contract_count": 64,
+        "contract_count": 57,
         "type": "municipal"
       },
       {
-        "contract_count": 10,
+        "contract_count": 5,
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 4,
+        "contract_count": 3,
         "type": "estadual"
       },
       {
@@ -389,8 +389,8 @@
       "defesa-tecnica-contratos-publicos"
     ],
     "description": "Manutenção predial contínua e serviços técnicos de engenharia para órgãos públicos — contratos recorrentes com medição mensal.",
-    "evidence_buyer_count": 28,
-    "evidence_contract_count": 79,
+    "evidence_buyer_count": 16,
+    "evidence_contract_count": 66,
     "id": "manutencao-predial-engenharia",
     "label": "Manutenção predial e serviços de engenharia",
     "limitations": [
@@ -414,16 +414,16 @@
         "uf": "RS"
       },
       {
-        "contract_count": 11,
+        "contract_count": 5,
         "uf": "SP"
       },
       {
         "contract_count": 4,
-        "uf": "BA"
+        "uf": "SC"
       },
       {
-        "contract_count": 4,
-        "uf": "SC"
+        "contract_count": 2,
+        "uf": "BA"
       },
       {
         "contract_count": 1,
@@ -435,23 +435,11 @@
       },
       {
         "contract_count": 1,
-        "uf": "RN"
-      },
-      {
-        "contract_count": 1,
         "uf": "AM"
       },
       {
         "contract_count": 1,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 1,
         "uf": "MT"
-      },
-      {
-        "contract_count": 1,
-        "uf": "MG"
       },
       {
         "contract_count": 1,
@@ -460,10 +448,10 @@
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 13773.38,
-      "n": 79,
-      "p25": 1696.5,
-      "p75": 47700.0
+      "median": 4829.63,
+      "n": 66,
+      "p25": 1053.0,
+      "p75": 23400.0
     }
   }
 ]

@@ -11,34 +11,32 @@ KPI: contatos comerciais qualificados **sem** dados falsos/contaminados/não aud
 | Métrica | Wave1 (defeitos) | Agora |
 |--------|-----------------:|------:|
 | Contratos brutos | 11931 | 11931 |
-| Classificados AEC / aec_confirmed | 908 (regex) | **243** (multi-camada) |
-| Bids “abertos” | histórico misturado | **39** vigentes |
-| Publish com PENDING | 24 | **0** |
-| Publish APPROVED | 0 real | **9** |
-| noindex / reject | 48 / 0 | **6 / 6** |
+| aec_confirmed | 908 (regex) | **233** (multi-camada, precision-first) |
+| Bids abertos | histórico misturado | **37** vigentes |
+| Publish PENDING | 24 | **0** |
+| Publish APPROVED | 0 | **8** |
+| noindex / reject | — | **7 / 5** |
 | MAX_PUBLISH | 24 | **removido** |
-| Precision gold aec_confirmed | n/d | **1.00** (n=77, fp=0) |
+| Gold aec_confirmed | n/d | **n=83 P=1.0 R=1.0 FP=0** |
+| limpeza+asseio+conservação predial → AEC | sim | **non_aec** |
+| engenharia de segurança do trabalho → AEC | sim | **non_aec** |
+| multi-rótulo mercado | contaminava top_objects | **primary_archetype** |
 | Benchmarks CBUQ+paralelepípedo | mistos | **tipologias separadas** |
-| Multi-rótulo mercado (edificações+pavimentação) | contaminava top_objects | **primary_archetype** |
-| Compra equipamento / SaaS / locação máquinas → AEC | sim | **non_aec** (testado) |
-| Links oficiais em preços | ausentes | **PNCP deep-link 5/5** |
-| Links oficiais em radar | search-only / vazio | **portal ou PNCP via ID** |
-| problem_service fontes | só nomes de dataset | **Lei 14.133 / SINAPI / SICRO / TCU / PNCP** |
-| pseo_form_start + submit + WhatsApp | não coberto | **e2e sem PII** |
-| source_commit com exportador | não | **sim** |
+| Preços links oficiais | ausentes | **PNCP deep-link 5/5** |
+| problem_service fontes | nomes de dataset | **Lei 14.133 / SINAPI / SICRO / TCU / PNCP** |
+| form_start/submit + WhatsApp | não | **e2e sem PII** |
 
 ## Proveniência
 
 | Campo | Valor |
 |-------|-------|
 | Branch | `feat/pseo-durable-export` |
-| source_commit_sha | `702a17fbb077c69012b263eb52f4af07f746c16e` |
+| source_commit_sha | `d3a7f761674e87321905ae51f16c68423bb19b9f` |
 | export_entrypoint | `python -m scripts.pseo.cli_export` |
-| dataset_hash | `ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1` |
+| dataset_hash | `65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52` |
 | data_as_of | `2026-07-31` |
 | hash recomposto | **True** |
 | checksums | **True** |
-| entrypoint no commit | **True** |
 
 ```bash
 cd "/mnt/d/extra consultoria" && git checkout feat/pseo-durable-export
@@ -54,95 +52,77 @@ npm run pseo:build && npm run pseo:validate && npm run pseo:audit
 npm run pseo:test && npm run test:pseo-attribution && npm run test:analytics
 ```
 
-## Classificador
+## Classificador (skeptic FPs fechados)
 
-- Labels: aec_confirmed | aec_probable | non_aec | ambiguous | insufficient_context
-- Gold **n=77** estratificado: **P=1.0, R=1.0, F1=1.0, FP=0** (artefato: classifier-metrics.json)
-- `primary_archetype()`: multi-rótulo retido para recall, mas markets/competition usam **primário** (material-specific vence “obra de engenharia” genérica)
-- Contagens: `{"aec_confirmed": 243, "aec_probable": 57, "ambiguous": 666, "bid_status_aberta": 39, "bid_status_closed_total": 328, "insufficient_context": 5942, "non_aec": 5023}`
+- **limpeza/asseio/copeiragem** + conservação predial → `non_aec` (facility package vence manut_predial)
+- **engenharia de segurança do trabalho / SESMT** → `non_aec`
+- **serv_engenharia** exige co-sinal de obra/fiscalização/empreitada
+- **sem instalação** não conta como install signal em compras
+- Gold **n=83** inclui itens **extraídos de aggregates live** (manutenção SP top_objects)
+- Métricas: P=1.0 R=1.0 F1=1.0 FP=0 (artefato `classifier-metrics.json`)
 
-## Páginas indexáveis (9) — auditadas limpas
+Contagens: `{"aec_confirmed": 233, "non_aec": 5154, "insufficient_context": 5832, "ambiguous": 655, "aec_probable": 57, "bid_status_aberta": 37}`
 
-| URL | Tipo | Score | Review |
-|-----|------|------:|--------|
-| `/inteligencia/cenarios/aditivos-e-risco-de-margem/` | problem_service | 86 | APPROVED |
-| `/inteligencia/cenarios/inconsistencia-orcamento-edital/` | problem_service | 86 | APPROVED |
-| `/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/` | problem_service | 80 | APPROVED |
-| `/inteligencia/cenarios/referencia-sinapi-sicro-margem/` | problem_service | 86 | APPROVED |
-| `/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/` | agency | 85 | APPROVED |
-| `/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/` | price | 84 | APPROVED |
-| `/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/` | price | 80 | APPROVED |
-| `/radar/edificacoes-publicas-pr/` | radar | 87 | APPROVED |
-| `/radar/pavimentacao-infraestrutura-viaria-sc/` | radar | 80 | APPROVED |
+## Páginas indexáveis (8)
 
-Todas: `robots=index,follow…`, presentes no `sitemap-inteligencia.xml`, com fontes oficiais ou deep-links conforme tipo.
+| URL | Tipo | Score |
+|-----|------|------:|
+| `/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/` | agency | 85 |
+| `/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/` | price | 84 |
+| `/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/` | price | 80 |
+| `/radar/edificacoes-publicas-pr/` | radar | 87 |
+| `/radar/pavimentacao-infraestrutura-viaria-sc/` | radar | 80 |
+| `/inteligencia/cenarios/inconsistencia-orcamento-edital/` | problem_service | 86 |
+| `/inteligencia/cenarios/referencia-sinapi-sicro-margem/` | problem_service | 86 |
+| `/inteligencia/cenarios/aditivos-e-risco-de-margem/` | problem_service | 86 |
 
-### Links oficiais
+Todas: `robots=index,follow`, no sitemap, fontes oficiais/deep-links. **0** limpeza/SESMT em top_objects de markets.
 
-| Superfície | Resultado |
-|------------|-----------|
-| Preços (2) | **5/5** deep-link PNCP `/app/contratos/{cnpj}/{ano}/{seq}` |
-| Radar publish (2) | **100%** itens com HTTP (portal real ou PNCP do `pncp_id`) |
-| problem_service (4) | Referências oficiais (Planalto / SINAPI / SICRO / TCU / PNCP) + guias |
-| Agency | Portais de consulta rotulados (não ficha de contrato) |
+Mercado `manutencao-predial-engenharia-sp` **deixou de existir** após remoção dos FPs (massa insuficiente).
 
-## Não indexados (honesto)
+## Não indexados
 
-- human_review após re-export: APPROVED=9 quality-eligible; demais PENDING ou reject por massa
-- `edificacoes-publicas-mg`: contaminação de pavimentação **corrigida** via primary_archetype; caiu para **reject** (`contracts<15` após pureza)
-- `prob-reequilibrio`: score 77 / quality_eligible=false → **noindex** (não forçamos APPROVED)
-- Sem bulk-APPROVED; cada mudança de `dataset_hash` invalida APPROVED
+- Markets: reject `contracts<15` (purity > volume)
+- problem_service medicao/reequilibrio: quality insuficiente → noindex
+- PENDING quality-ineligible radars → noindex
+- Sem bulk-APPROVED
 
 ## Testes
 
 | Suite | Resultado |
 |-------|-----------|
-| extra-cli pytest | **30 passed** |
-| gold metrics | **P=1.0 n=77 FP=0** |
-| web-cfg validate | **ok** publish=9 |
-| web-cfg audit | **ok** determinístico |
-| web-cfg pseo:test | **13 passed** |
+| extra-cli pytest | **34 passed** |
+| gold | **n=83 P=1.0 FP=0** exact match 83/83 |
+| web-cfg validate | **ok** publish=8 |
+| web-cfg audit | **ok** |
+| web-cfg unit | **13 passed** |
 | attribution e2e | form_start + form_submit |
-| WhatsApp e2e | pseo_whatsapp_click, sem PII |
-| publish audit | **EVIDENCE_OK** |
+| WhatsApp e2e | sem PII |
+| publish evidence | **EVIDENCE_OK** |
+| market purity | **MARKET_PURITY_OK** |
 
 ## Riscos residuais
 
-1. Deep-link PNCP de bid (`/app/contratos/…` a partir de compra) **pode 404** — preferimos portal real → PNCP tentativo → indisponível.
-2. Freshness radar com `as_of=hoje` → age≈0 com wall-clock; hard-fail >72h só se as_of atrasar.
-3. Datalake ≠ censo; vários markets em reject por massa após pureza.
-4. Branch durable: manter `feat/pseo-durable-export`.
-5. Re-export sempre re-exige revisão humana (hash gate).
-6. `prob-reequilibrio` permanece noindex até elevar quality ou evidência.
+1. Deep-link PNCP de bid pode 404; portais reais preferidos.
+2. Freshness radar com as_of=hoje → age≈0 (wall-clock correto).
+3. Datalake ≠ censo; massa regional limita markets indexáveis.
+4. Re-export invalida APPROVED (hash gate).
+5. Multi-rótulo residual em contratos edge — primary_archetype mitiga markets, gold não cobre 100% do universo.
+6. Classificador baseado em objeto textual; códigos de item/CNAE ainda não usados quando ausentes no snapshot.
 
-## Contagens
+## Contagens export
 
 ```json
 {
-  "after_classification_aec_confirmed": 243,
-  "after_open_filter": 39,
+  "after_classification_aec_confirmed": 233,
+  "after_open_filter": 37,
   "agencies": 1,
-  "archetypes": 5,
-  "classified_aec_bids": 367,
-  "classified_aec_contracts": 243,
-  "closed_bids": 328,
-  "competition": 1,
-  "markets": 5,
-  "open_bids": 39,
-  "opportunities": 7,
-  "pncp_raw_bids": 1536,
-  "pncp_supplier_contracts": 11931,
+  "markets": 4,
   "prices": 2,
+  "competition": 1,
+  "opportunities": 7,
+  "open_bids": 37,
   "problem_service": 5,
-  "raw_contracts": 11931,
-  "sc_public_entities": 2085
+  "raw_contracts": 11931
 }
 ```
-
-## Política de indexação
-
-- Sem `MAX_PUBLISH` numérico.
-- `publish` exige APPROVED/APPROVED_WITH_NOTES **e** quality gates.
-- Sitemap só `publish`.
-- Related market só se HTML existir.
-- Atribuição sessionStorage + query; eventos `pseo_*` sem PII.

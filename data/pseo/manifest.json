@@ -1,38 +1,38 @@
 {
   "checksums": {
     "agencies.json": "15de19bdae5725c1b60de607d07383902c1143fcb6ffc0fd73d7f114dcfa4970",
-    "archetypes.json": "88a91c5b6347423c72085e76b22d1e24ebde5de62133f6feabd76613ff61e624",
+    "archetypes.json": "b5ba7011a32c41b4b197148bbb192719e10f38eb1801a5105f8aa4f5105a5b0e",
     "competition.json": "1547bf27156c39402fc3ffc422177d3191c7105ff0b03defaae6864458a6a89a",
     "icp_methodology.json": "3536db863151354966dd142461bd2b83865a0610d7bc02e86d46fa9d69ecce1a",
-    "markets.json": "b7b7ebaf610c7be4f7eb4f83331cd73cb446f4639ff47551fd9c998568f9f46b",
-    "opportunities.json": "fefbfd2c3ba8ae53be1874bb2b94278b24b2813d489d461baa975e247444ee39",
+    "markets.json": "ad262c8dadd1df92dffe34b9c2abbb93c1a6f08c40024f78b1956571594a254d",
+    "opportunities.json": "695fde03635edff35084549d4f2856200e800d0f3307a4342786a33250cb6b60",
     "prices.json": "65f06426ea42fdefb69e18aa57d553a1a76f9626b349eed7d413d25ba6d1daeb",
-    "problem_service.json": "b5638e4b50efe783d6e1eaa8a6bfc409b1787472f2445688915fe58ed422d045",
+    "problem_service.json": "c90dac62f1b1ab2210d0d89bba3dd399f2f74538f36f115f0a6c76ec92584917",
     "schema.json": "8528a786a61975b2ff1178fc715b3a8e9ddf3108b69bf11cc7b2202f6c74377a"
   },
   "classification_counts": {
-    "aec_confirmed": 243,
+    "aec_confirmed": 233,
     "aec_probable": 57,
-    "ambiguous": 666,
-    "bid_status_aberta": 39,
-    "bid_status_closed_total": 328,
-    "bid_status_encerrada": 327,
+    "ambiguous": 655,
+    "bid_status_aberta": 37,
+    "bid_status_closed_total": 319,
+    "bid_status_encerrada": 318,
     "bid_status_historico": 1,
-    "bid_status_open_total": 39,
-    "insufficient_context": 5942,
-    "non_aec": 5023
+    "bid_status_open_total": 37,
+    "insufficient_context": 5832,
+    "non_aec": 5154
   },
   "counts": {
-    "after_classification_aec_confirmed": 243,
-    "after_open_filter": 39,
+    "after_classification_aec_confirmed": 233,
+    "after_open_filter": 37,
     "agencies": 1,
     "archetypes": 5,
-    "classified_aec_bids": 367,
-    "classified_aec_contracts": 243,
-    "closed_bids": 328,
+    "classified_aec_bids": 356,
+    "classified_aec_contracts": 233,
+    "closed_bids": 319,
     "competition": 1,
-    "markets": 5,
-    "open_bids": 39,
+    "markets": 4,
+    "open_bids": 37,
     "opportunities": 7,
     "pncp_raw_bids": 1536,
     "pncp_supplier_contracts": 11931,
@@ -42,14 +42,14 @@
     "sc_public_entities": 2085
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1",
+  "dataset_hash": "65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52",
   "denominators": {
-    "aec_confirmed_bids": 367,
-    "aec_confirmed_contracts": 243,
+    "aec_confirmed_bids": 356,
+    "aec_confirmed_contracts": 233,
     "bids_total_loaded": 1536,
     "classified_share_note": "Only multi-layer aec_confirmed objects enter public aggregates.",
     "contracts_total_loaded": 11931,
-    "open_bids_after_status_filter": 39
+    "open_bids_after_status_filter": 37
   },
   "export_entrypoint": "python -m scripts.pseo.cli_export",
   "export_version": "1.1.0",
@@ -59,15 +59,15 @@
     "by_dataset": {
       "bids_radar": {
         "as_of": "2026-07-31",
-        "n_classified": 367,
-        "n_open": 39,
+        "n_classified": 356,
+        "n_open": 37,
         "policy_fail_hours": 72,
         "policy_warning_hours": 24
       },
       "contracts": {
         "max_date": "2026-07-09",
         "min_date": "2024-04-19",
-        "n": 243,
+        "n": 233,
         "policy_fail_days": 90,
         "policy_warning_days": 30
       }
@@ -75,27 +75,27 @@
     "data_as_of": "2026-07-31",
     "data_period_end": "2026-10-07",
     "data_period_start": "2024-04-19",
-    "generated_at": "2026-07-31T13:34:28Z",
+    "generated_at": "2026-07-31T13:43:27Z",
     "max_age_days_policy": 180,
     "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
   },
   "freshness_by_dataset": {
     "bids_radar": {
       "as_of": "2026-07-31",
-      "n_classified": 367,
-      "n_open": 39,
+      "n_classified": 356,
+      "n_open": 37,
       "policy_fail_hours": 72,
       "policy_warning_hours": 24
     },
     "contracts": {
       "max_date": "2026-07-09",
       "min_date": "2024-04-19",
-      "n": 243,
+      "n": 233,
       "policy_fail_days": 90,
       "policy_warning_days": 30
     }
   },
-  "generated_at": "2026-07-31T13:34:28Z",
+  "generated_at": "2026-07-31T13:43:27Z",
   "horizon": {
     "period_end": "2026-10-07",
     "period_start": "2024-04-19"
@@ -120,9 +120,9 @@
   },
   "schema_version": "1.1.0",
   "source_branch": "feat/pseo-durable-export",
-  "source_commit_sha": "702a17fbb077c69012b263eb52f4af07f746c16e",
+  "source_commit_sha": "d3a7f761674e87321905ae51f16c68423bb19b9f",
   "source_repository": "extra-cli",
-  "source_run_id": "pseo-20260731T133428Z-c571e679",
+  "source_run_id": "pseo-20260731T134327Z-61f8a1c0",
   "sources": [
     {
       "role": "read_only_aggregate",
