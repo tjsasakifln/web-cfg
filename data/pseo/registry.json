@@ -94,7 +94,7 @@
         "service_cta": 4
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -173,7 +173,7 @@
         "service_cta": 4
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -254,7 +254,7 @@
         "service_cta": 4
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -333,7 +333,7 @@
         "service_cta": 4
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -435,7 +435,7 @@
         "service_cta": 4
       },
       "segment": null,
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -526,7 +526,7 @@
         "service_cta": 5
       },
       "segment": "Manutenção Predial",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -614,7 +614,7 @@
         "service_cta": 5
       },
       "segment": "Paralelepípedo",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -686,7 +686,7 @@
         "service_cta": 4
       },
       "segment": "Manutenção predial e serviços de engenharia",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_contracts"
       ],
@@ -768,7 +768,7 @@
         "service_cta": 5
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp"
       ],
@@ -849,7 +849,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp"
       ],
@@ -928,7 +928,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp"
       ],
@@ -1007,7 +1007,7 @@
         "service_cta": 5
       },
       "segment": "Saneamento e hidráulica",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp"
       ],
@@ -1086,7 +1086,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp"
       ],
@@ -1165,7 +1165,7 @@
         "service_cta": 5
       },
       "segment": "Edificações públicas",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp"
       ],
@@ -1243,7 +1243,7 @@
         "service_cta": 5
       },
       "segment": "orcamento-edital",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_supplier_contracts",
         "site-confenge-guides"
@@ -1322,7 +1322,7 @@
         "service_cta": 5
       },
       "segment": "sinapi-sicro",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "site-confenge-guides",
         "pncp_supplier_contracts"
@@ -1400,7 +1400,7 @@
         "service_cta": 5
       },
       "segment": "medicao-glosa",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "site-confenge-guides"
       ],
@@ -1477,7 +1477,7 @@
         "service_cta": 5
       },
       "segment": "aditivos",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "site-confenge-guides"
       ],
@@ -1555,7 +1555,7 @@
         "service_cta": 5
       },
       "segment": "reequilibrio",
-      "source_run_id": "pseo-20260731T155233Z-973cf745",
+      "source_run_id": "pseo-20260731T155451Z-cd964a4f",
       "sources": [
         "pncp_supplier_contracts",
         "site-confenge-guides"
@@ -1565,5 +1565,5 @@
       "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
     }
   ],
-  "source_run_id": "pseo-20260731T155233Z-973cf745"
+  "source_run_id": "pseo-20260731T155451Z-cd964a4f"
 }
