@@ -157,3 +157,15 @@ See `seo/pseo-operational-result.json`.
 - Production audit records `in_hub` (null count 0).
 - Unit tests: orphan, soft-404, redirect, prod_html_mismatch, guide labels.
 - SHAs aligned: web_cfg HEAD = Netlify well-known = `5e573ec…`.
+
+
+## SHA alignment (verifier)
+
+| Source | SHA |
+|--------|-----|
+| git HEAD | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
+| local `/.well-known/pseo-build.json` | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
+| live production well-known | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
+| `pseo-operational-result.json` web_cfg_sha / netlify_deployed_sha | `59d5d2376e922ace2d10d0d17db73365b5c8dd2c` |
+
+`npm run pseo:audit:production` → ok (0 critical). Seeds HTTP 200 + index,follow.
