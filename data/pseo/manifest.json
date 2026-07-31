@@ -7,7 +7,7 @@
     "markets.json": "37fe11b136af4e1acbab50d68b79b1fbddeea53837e148cfd0f7bfd5f866096f",
     "opportunities.json": "00e4548bea6843f57d42ed8e2f3548a0e913d9489bb8a7937816fd975c34427b",
     "prices.json": "fd6290093056cebf03215ebdd5d722817a72a82cd7266030783d707aa263f31c",
-    "problem_service.json": "c90dac62f1b1ab2210d0d89bba3dd399f2f74538f36f115f0a6c76ec92584917",
+    "problem_service.json": "76e1b05e83af2fed9c8e1689b1fd47bac3bb1bc4a0cd05789bf81610e2b385c8",
     "schema.json": "248523cee70cbdafc14d4488fadb0edbcc427d4e7a77398c3cb59e7a9e4465b2"
   },
   "classification_counts": {
@@ -42,7 +42,7 @@
     "sc_public_entities": 2085
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+  "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
   "denominators": {
     "aec_confirmed_bids": 355,
     "aec_confirmed_contracts": 214,

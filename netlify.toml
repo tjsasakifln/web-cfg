@@ -1,7 +1,13 @@
-# Build only. Redirect rules live in `_redirects` (publish root) so Deploy
-# summary always processes them. Do not duplicate path redirects here.
+# Single deterministic build: validate snapshot → generate pSEO pages/hubs/sitemaps
+# → public manifest → SEO/attribution gates. Netlify must not call the private DB.
+# Redirect rules live in `_redirects` (publish root).
 [build]
+  command = "npm run build:site"
   publish = "."
+
+[build.environment]
+  NODE_VERSION = "20"
+  PYTHON_VERSION = "3.12"
 
 # Optional: keep host rule here as belt-and-suspenders for domain-level match.
 # _redirects already contains the same rule first (processed before toml).

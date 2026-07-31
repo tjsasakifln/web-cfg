@@ -8,10 +8,11 @@
     "radar": 6
   },
   "counts": {
-    "noindex": 6,
-    "reject": 13
+    "noindex": 7,
+    "publish": 4,
+    "reject": 8
   },
-  "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+  "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
   "generated_at": "2026-07-31",
   "human_review_policy": {
     "indexable_states": [
@@ -23,11 +24,75 @@
   "pages": [
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
       "current_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "mapa_mercado",
+        "cta_label": "Solicitar um mapa aplicado à minha empresa",
+        "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
+        "mandatory_fail": [
+          "contracts<15"
+        ],
+        "observation_count": 13,
+        "period_end": "2026-07-08",
+        "period_start": "2026-01-09",
+        "primary_contract_count": 13,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Mercado de Pavimentação e infraestrutura viária em Santa Catarina: contratos e órgãos | CONFENGE",
+        "unique_buyer_count": 11,
+        "unique_supplier_count": 11
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "exercise_count": 1,
+        "max_single_day_share": 0.2308,
+        "primary_contract_count": 13,
+        "temporal_span_days": 180,
+        "unique_buyer_count": 11,
+        "unique_supplier_count": 11
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": [
+        "n=15 buyers=11"
+      ],
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 79,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [
+        "contracts<15"
+      ],
+      "observation_count": 13,
+      "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
+      "page_material_hash": "7ff5b67c2417b2f549f43eeab8e493f947f51935bdc31136fe344f7de6e19854",
+      "page_type": "market",
+      "publication_decision_reason": "contracts<15",
+      "quality_eligible": false,
+      "reasons": [
+        "contracts<15"
+      ],
+      "region": "SC",
+      "related_urls": [],
+      "review_checklist": null,
+      "review_dataset_hash": "947bf841d0c3c785e74769b07e377db0d6d0459280654cd63a3557d9c3ad70f8",
+      "review_date": "2026-07-31",
+      "review_notes": "Mercado Pavimentação e infraestrutura viária SC: 15 contratos, 11 órgãos. contam_hits=0 Auditoria editorial: gates de dados, contaminação e fontes OK.",
+      "reviewed_material_signature": {
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
@@ -45,42 +110,7 @@
         "unique_buyer_count": 11,
         "unique_supplier_count": 11
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "exercise_count": 1,
-        "max_single_day_share": 0.2308,
-        "primary_contract_count": 13,
-        "temporal_span_days": 180,
-        "unique_buyer_count": 11,
-        "unique_supplier_count": 11
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
-      "evidences_checked": [
-        "n=15 buyers=11"
-      ],
-      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
-      "human_review": "PENDING",
-      "indexability_score": 79,
-      "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "contracts<15"
-      ],
-      "observation_count": 13,
-      "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
-      "page_type": "market",
-      "publication_decision_reason": "contracts<15",
-      "quality_eligible": false,
-      "reasons": [
-        "contracts<15"
-      ],
-      "region": "SC",
-      "related_urls": [],
-      "review_dataset_hash": "947bf841d0c3c785e74769b07e377db0d6d0459280654cd63a3557d9c3ad70f8",
-      "review_date": "2026-07-31",
-      "review_notes": "Mercado Pavimentação e infraestrutura viária SC: 15 contratos, 11 órgãos. contam_hits=0 Auditoria editorial: gates de dados, contaminação e fontes OK.",
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": "tiago-sasaki-editorial-audit",
       "score_breakdown": {
         "anti_cannibalization": 4,
@@ -94,6 +124,7 @@
         "service_cta": 4
       },
       "segment": "Pavimentação e infraestrutura viária",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -104,11 +135,73 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
       "current_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "mapa_mercado",
+        "cta_label": "Solicitar um mapa aplicado à minha empresa",
+        "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
+        "mandatory_fail": [
+          "contracts<15"
+        ],
+        "observation_count": 13,
+        "period_end": "2026-07-08",
+        "period_start": "2026-06-03",
+        "primary_contract_count": 13,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Mercado de Pavimentação e infraestrutura viária em Piauí: contratos e órgãos | CONFENGE",
+        "unique_buyer_count": 6,
+        "unique_supplier_count": 13
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "exercise_count": 1,
+        "max_single_day_share": 0.2308,
+        "primary_contract_count": 13,
+        "temporal_span_days": 35,
+        "unique_buyer_count": 6,
+        "unique_supplier_count": 13
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": null,
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
+      "human_review": "PENDING",
+      "indexability_score": 73,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [
+        "contracts<15"
+      ],
+      "observation_count": 13,
+      "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
+      "page_material_hash": "9c488d51e053545667e11f70e5fe968e7b149a640ae71ee2dcf71d503a384839",
+      "page_type": "market",
+      "publication_decision_reason": "contracts<15",
+      "quality_eligible": false,
+      "reasons": [
+        "contracts<15"
+      ],
+      "region": "PI",
+      "related_urls": [],
+      "review_checklist": null,
+      "review_dataset_hash": "2ca9fb1c66e09fd37bd4ca846d597fb377285690eabd80a735e35e158684e8d8",
+      "review_date": null,
+      "review_notes": null,
+      "reviewed_material_signature": {
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
@@ -126,40 +219,7 @@
         "unique_buyer_count": 6,
         "unique_supplier_count": 13
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "exercise_count": 1,
-        "max_single_day_share": 0.2308,
-        "primary_contract_count": 13,
-        "temporal_span_days": 35,
-        "unique_buyer_count": 6,
-        "unique_supplier_count": 13
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
-      "evidences_checked": null,
-      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
-      "human_review": "PENDING",
-      "indexability_score": 73,
-      "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "contracts<15"
-      ],
-      "observation_count": 13,
-      "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
-      "page_type": "market",
-      "publication_decision_reason": "contracts<15",
-      "quality_eligible": false,
-      "reasons": [
-        "contracts<15"
-      ],
-      "region": "PI",
-      "related_urls": [],
-      "review_dataset_hash": "2ca9fb1c66e09fd37bd4ca846d597fb377285690eabd80a735e35e158684e8d8",
-      "review_date": null,
-      "review_notes": null,
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": null,
       "score_breakdown": {
         "anti_cannibalization": 4,
@@ -173,6 +233,7 @@
         "service_cta": 4
       },
       "segment": "Pavimentação e infraestrutura viária",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -183,11 +244,75 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "edificacoes-publicas",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
       "current_material_signature": {
+        "archetype": "edificacoes-publicas",
+        "cta_intent": "mapa_mercado",
+        "cta_label": "Solicitar um mapa aplicado à minha empresa",
+        "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
+        "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+        "mandatory_fail": [
+          "contracts<15"
+        ],
+        "observation_count": 12,
+        "period_end": "2026-07-08",
+        "period_start": "2026-06-15",
+        "primary_contract_count": 12,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Mercado de Edificações públicas em Minas Gerais: contratos e órgãos | CONFENGE",
+        "unique_buyer_count": 10,
+        "unique_supplier_count": 11
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "exercise_count": 1,
+        "max_single_day_share": 0.4167,
+        "primary_contract_count": 12,
+        "temporal_span_days": 23,
+        "unique_buyer_count": 10,
+        "unique_supplier_count": 11
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": [
+        "n=15 buyers=12"
+      ],
+      "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+      "human_review": "PENDING",
+      "indexability_score": 77,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [
+        "contracts<15"
+      ],
+      "observation_count": 12,
+      "page_id": "market-edificacoes-publicas-mg",
+      "page_material_hash": "fafd65a881b3d3bbef507b0307bb8bc723aa43c94fc0b8fc4df7514e282212d7",
+      "page_type": "market",
+      "publication_decision_reason": "contracts<15",
+      "quality_eligible": false,
+      "reasons": [
+        "contracts<15"
+      ],
+      "region": "MG",
+      "related_urls": [],
+      "review_checklist": null,
+      "review_dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1",
+      "review_date": "2026-07-31",
+      "review_notes": "Primary-archetype fix removed pavement contamination; now reject on contracts<15 mass gate",
+      "reviewed_material_signature": {
         "archetype": "edificacoes-publicas",
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
@@ -205,42 +330,7 @@
         "unique_buyer_count": 10,
         "unique_supplier_count": 11
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "exercise_count": 1,
-        "max_single_day_share": 0.4167,
-        "primary_contract_count": 12,
-        "temporal_span_days": 23,
-        "unique_buyer_count": 10,
-        "unique_supplier_count": 11
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
-      "evidences_checked": [
-        "n=15 buyers=12"
-      ],
-      "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
-      "human_review": "PENDING",
-      "indexability_score": 77,
-      "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "contracts<15"
-      ],
-      "observation_count": 12,
-      "page_id": "market-edificacoes-publicas-mg",
-      "page_type": "market",
-      "publication_decision_reason": "contracts<15",
-      "quality_eligible": false,
-      "reasons": [
-        "contracts<15"
-      ],
-      "region": "MG",
-      "related_urls": [],
-      "review_dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1",
-      "review_date": "2026-07-31",
-      "review_notes": "Primary-archetype fix removed pavement contamination; now reject on contracts<15 mass gate",
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": "tiago",
       "score_breakdown": {
         "anti_cannibalization": 4,
@@ -254,6 +344,7 @@
         "service_cta": 4
       },
       "segment": "Edificações públicas",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -264,11 +355,73 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "edificacoes-publicas",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "mapa_mercado",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
       "current_material_signature": {
+        "archetype": "edificacoes-publicas",
+        "cta_intent": "mapa_mercado",
+        "cta_label": "Solicitar um mapa aplicado à minha empresa",
+        "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
+        "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
+        "mandatory_fail": [
+          "contracts<15"
+        ],
+        "observation_count": 10,
+        "period_end": "2026-07-08",
+        "period_start": "2025-11-25",
+        "primary_contract_count": 10,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Mercado de Edificações públicas em Rio Grande do Sul: contratos e órgãos | CONFENGE",
+        "unique_buyer_count": 10,
+        "unique_supplier_count": 10
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "exercise_count": 2,
+        "max_single_day_share": 0.2,
+        "primary_contract_count": 10,
+        "temporal_span_days": 225,
+        "unique_buyer_count": 10,
+        "unique_supplier_count": 10
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": null,
+      "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 77,
+      "intent": "encontrar_mercados_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [
+        "contracts<15"
+      ],
+      "observation_count": 10,
+      "page_id": "market-edificacoes-publicas-rs",
+      "page_material_hash": "d5b140f4d4ff19d3e3d260855e29b17139a935986393f9bc2873de79bc28eeea",
+      "page_type": "market",
+      "publication_decision_reason": "contracts<15",
+      "quality_eligible": false,
+      "reasons": [
+        "contracts<15"
+      ],
+      "region": "RS",
+      "related_urls": [],
+      "review_checklist": null,
+      "review_dataset_hash": "2ca9fb1c66e09fd37bd4ca846d597fb377285690eabd80a735e35e158684e8d8",
+      "review_date": null,
+      "review_notes": null,
+      "reviewed_material_signature": {
         "archetype": "edificacoes-publicas",
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
@@ -286,40 +439,7 @@
         "unique_buyer_count": 10,
         "unique_supplier_count": 10
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "exercise_count": 2,
-        "max_single_day_share": 0.2,
-        "primary_contract_count": 10,
-        "temporal_span_days": 225,
-        "unique_buyer_count": 10,
-        "unique_supplier_count": 10
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
-      "evidences_checked": null,
-      "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
-      "human_review": "PENDING",
-      "indexability_score": 77,
-      "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "contracts<15"
-      ],
-      "observation_count": 10,
-      "page_id": "market-edificacoes-publicas-rs",
-      "page_type": "market",
-      "publication_decision_reason": "contracts<15",
-      "quality_eligible": false,
-      "reasons": [
-        "contracts<15"
-      ],
-      "region": "RS",
-      "related_urls": [],
-      "review_dataset_hash": "2ca9fb1c66e09fd37bd4ca846d597fb377285690eabd80a735e35e158684e8d8",
-      "review_date": null,
-      "review_notes": null,
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": null,
       "score_breakdown": {
         "anti_cannibalization": 4,
@@ -333,6 +453,7 @@
         "service_cta": 4
       },
       "segment": "Edificações públicas",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -343,8 +464,12 @@
     },
     {
       "agency_id": "88830609",
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "manutencao-predial-engenharia",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "estrategia_orgao",
       "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
       "current_material_signature": {
@@ -360,10 +485,13 @@
           "temporal_span_days<180"
         ],
         "observation_count": 36,
+        "period_end": "2026-07-03",
+        "period_start": "2026-07-03",
         "primary_contract_count": 36,
         "sources": [
           "pncp_contracts"
         ],
+        "template_version": "pseo-html-v2",
         "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
         "unique_buyer_count": 1,
         "unique_supplier_count": 1
@@ -388,8 +516,10 @@
         "unique_procurement_count": 40,
         "unique_supplier_count": 1
       },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "description": "Dossiê de comprador: 36 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+      "editorial_issues": null,
+      "evidence_sample": null,
       "evidences_checked": [
         "n=49"
       ],
@@ -406,6 +536,7 @@
       ],
       "observation_count": 36,
       "page_id": "agency-88830609",
+      "page_material_hash": "811fb7e4d883423f212bd0953a202483d17c407b7627817a7bf9f6670a985534",
       "page_type": "agency",
       "publication_decision_reason": "suppliers<3; temporal_span_days<180; exercises<2; max_single_day_share>0.70; score=83",
       "quality_eligible": false,
@@ -418,10 +549,32 @@
       ],
       "region": "RS",
       "related_urls": [],
+      "review_checklist": null,
       "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
       "review_date": "2026-07-31",
       "review_notes": "Contenção editorial 2026-07-31: nome público com prefixo MRS-; 49 registros concentrados em uma data e um fornecedor; 13 reajustes contados como contratos; base temporal insuficiente para sazonalidade; contagem de contratos primários não comprovada. Requer deduplicação e métricas de independência amostral no produtor.",
-      "reviewed_material_signature": null,
+      "reviewed_material_signature": {
+        "archetype": "manutencao-predial-engenharia",
+        "cta_intent": "estrategia_orgao",
+        "cta_label": "Avaliar estratégia para disputar contratos deste órgão",
+        "description": "Dossiê de comprador: 36 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+        "h1": "Contratação de engenharia em Prefeitura Municipal de Caxias do Sul: o que os dados públicos mostram",
+        "mandatory_fail": [
+          "exercises<2",
+          "max_single_day_share>0.70",
+          "suppliers<3",
+          "temporal_span_days<180"
+        ],
+        "observation_count": 36,
+        "primary_contract_count": 36,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
+        "unique_buyer_count": 1,
+        "unique_supplier_count": 1
+      },
+      "reviewed_render_hash": null,
       "reviewer": "grok-build-editorial-audit",
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -435,6 +588,7 @@
         "service_cta": 4
       },
       "segment": null,
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -445,11 +599,85 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "manutencao-predial-engenharia",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "validar_preco_margem",
       "cta_label": "Validar preço, risco e margem",
       "current_material_signature": {
+        "archetype": "manutencao-predial-engenharia",
+        "cta_intent": "validar_preco_margem",
+        "cta_label": "Validar preço, risco e margem",
+        "description": "Faixa de valores contratuais de Manutenção Predial em Rio Grande do Sul: mediana, P25 e P75 com 18 contratos primários. Tickets contratuais integrais —…",
+        "h1": "Valores de contratos — Manutenção Predial (Rio Grande do Sul)",
+        "mandatory_fail": [
+          "buyers<3",
+          "max_buyer_share>0.60",
+          "suppliers<3",
+          "temporal_span_days<90"
+        ],
+        "observation_count": 18,
+        "period_end": "2026-07-03",
+        "period_start": "2026-07-03",
+        "primary_contract_count": 18,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Faixa de valores de contratos: Manutenção Predial em Rio Grande do Sul | CONFENGE",
+        "unique_buyer_count": 1,
+        "unique_supplier_count": 1
+      },
+      "data_quality_metrics": {
+        "denominator_type": "contrato_integral",
+        "duplicate_rate": 0.0,
+        "max_buyer_share": 1.0,
+        "primary_contract_count": 18,
+        "temporal_span_days": 0,
+        "unique_buyer_count": 1,
+        "unique_supplier_count": 1
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Faixa de valores contratuais de Manutenção Predial em Rio Grande do Sul: mediana, P25 e P75 com 18 contratos primários. Tickets contratuais integrais —…",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": [
+        "deep_links=5/5 group=manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS"
+      ],
+      "h1": "Valores de contratos — Manutenção Predial (Rio Grande do Sul)",
+      "human_review": "NEEDS_DATA_FIX",
+      "indexability_score": 84,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [
+        "buyers<3",
+        "suppliers<3",
+        "temporal_span_days<90",
+        "max_buyer_share>0.60"
+      ],
+      "observation_count": 18,
+      "page_id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
+      "page_material_hash": "c57c3178efeebf23637a115966c4add7ba12975a4cedd02ff6fc885f7509b8f9",
+      "page_type": "price",
+      "publication_decision_reason": "buyers<3; suppliers<3; temporal_span_days<90; max_buyer_share>0.60; score=84",
+      "quality_eligible": false,
+      "reasons": [
+        "buyers<3",
+        "suppliers<3",
+        "temporal_span_days<90",
+        "max_buyer_share>0.60",
+        "score=84"
+      ],
+      "region": "RS",
+      "related_urls": [],
+      "review_checklist": null,
+      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "review_date": "2026-07-31",
+      "review_notes": "Contenção editorial 2026-07-31: observações concentradas no mesmo órgão/fornecedor/data; taxonomia interna exposta (manutencao-predial-engenharia); sem diversidade de compradores/fornecedores/período; não qualifica como benchmark de mercado. Requer identidade primária e gates de diversidade.",
+      "reviewed_material_signature": {
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
@@ -470,49 +698,7 @@
         "unique_buyer_count": 1,
         "unique_supplier_count": 1
       },
-      "data_quality_metrics": {
-        "denominator_type": "contrato_integral",
-        "duplicate_rate": 0.0,
-        "max_buyer_share": 1.0,
-        "primary_contract_count": 18,
-        "temporal_span_days": 0,
-        "unique_buyer_count": 1,
-        "unique_supplier_count": 1
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Faixa de valores contratuais de Manutenção Predial em Rio Grande do Sul: mediana, P25 e P75 com 18 contratos primários. Tickets contratuais integrais —…",
-      "evidences_checked": [
-        "deep_links=5/5 group=manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS"
-      ],
-      "h1": "Valores de contratos — Manutenção Predial (Rio Grande do Sul)",
-      "human_review": "NEEDS_DATA_FIX",
-      "indexability_score": 84,
-      "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "buyers<3",
-        "suppliers<3",
-        "temporal_span_days<90",
-        "max_buyer_share>0.60"
-      ],
-      "observation_count": 18,
-      "page_id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
-      "page_type": "price",
-      "publication_decision_reason": "buyers<3; suppliers<3; temporal_span_days<90; max_buyer_share>0.60; score=84",
-      "quality_eligible": false,
-      "reasons": [
-        "buyers<3",
-        "suppliers<3",
-        "temporal_span_days<90",
-        "max_buyer_share>0.60",
-        "score=84"
-      ],
-      "region": "RS",
-      "related_urls": [],
-      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
-      "review_date": "2026-07-31",
-      "review_notes": "Contenção editorial 2026-07-31: observações concentradas no mesmo órgão/fornecedor/data; taxonomia interna exposta (manutencao-predial-engenharia); sem diversidade de compradores/fornecedores/período; não qualifica como benchmark de mercado. Requer identidade primária e gates de diversidade.",
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": "grok-build-editorial-audit",
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -526,6 +712,7 @@
         "service_cta": 5
       },
       "segment": "Manutenção Predial",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -536,11 +723,82 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "validar_preco_margem",
       "cta_label": "Validar preço, risco e margem",
       "current_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "validar_preco_margem",
+        "cta_label": "Validar preço, risco e margem",
+        "description": "Faixa de valores contratuais de Paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
+        "h1": "Valores de contratos — Paralelepípedo (Piauí)",
+        "mandatory_fail": [
+          "obs<15",
+          "primary_contracts<15",
+          "temporal_span_days<90"
+        ],
+        "observation_count": 12,
+        "period_end": "2026-07-08",
+        "period_start": "2026-06-03",
+        "primary_contract_count": 12,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Faixa de valores de contratos: Paralelepípedo em Piauí | CONFENGE",
+        "unique_buyer_count": 6,
+        "unique_supplier_count": 12
+      },
+      "data_quality_metrics": {
+        "denominator_type": "contrato_integral",
+        "duplicate_rate": 0.0,
+        "max_buyer_share": 0.3333,
+        "primary_contract_count": 12,
+        "temporal_span_days": 35,
+        "unique_buyer_count": 6,
+        "unique_supplier_count": 12
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Faixa de valores contratuais de Paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": [
+        "deep_links=5/5 group=pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI"
+      ],
+      "h1": "Valores de contratos — Paralelepípedo (Piauí)",
+      "human_review": "NEEDS_DATA_FIX",
+      "indexability_score": 80,
+      "intent": "estimar_valores_dispersao",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [
+        "obs<15",
+        "primary_contracts<15",
+        "temporal_span_days<90"
+      ],
+      "observation_count": 12,
+      "page_id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
+      "page_material_hash": "2cea14b5866710e552b6a0d2de7928dd1b96f1a465a398cbd863050b11bc24a8",
+      "page_type": "price",
+      "publication_decision_reason": "obs<15; primary_contracts<15; temporal_span_days<90; score=80",
+      "quality_eligible": false,
+      "reasons": [
+        "obs<15",
+        "primary_contracts<15",
+        "temporal_span_days<90",
+        "score=80"
+      ],
+      "region": "PI",
+      "related_urls": [],
+      "review_checklist": null,
+      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "review_date": "2026-07-31",
+      "review_notes": "Contenção editorial 2026-07-31: expõe slug interno; termos sem normalização (Piaui, paralelepipedo); valores de contratos integrais apresentados como preço de pavimentação; independência das 12 observações não comprovada. Reposicionar como faixa de valores contratuais após dedup.",
+      "reviewed_material_signature": {
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
@@ -560,47 +818,7 @@
         "unique_buyer_count": 6,
         "unique_supplier_count": 12
       },
-      "data_quality_metrics": {
-        "denominator_type": "contrato_integral",
-        "duplicate_rate": 0.0,
-        "max_buyer_share": 0.3333,
-        "primary_contract_count": 12,
-        "temporal_span_days": 35,
-        "unique_buyer_count": 6,
-        "unique_supplier_count": 12
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Faixa de valores contratuais de Paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
-      "evidences_checked": [
-        "deep_links=5/5 group=pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI"
-      ],
-      "h1": "Valores de contratos — Paralelepípedo (Piauí)",
-      "human_review": "NEEDS_DATA_FIX",
-      "indexability_score": 80,
-      "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "obs<15",
-        "primary_contracts<15",
-        "temporal_span_days<90"
-      ],
-      "observation_count": 12,
-      "page_id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
-      "page_type": "price",
-      "publication_decision_reason": "obs<15; primary_contracts<15; temporal_span_days<90; score=80",
-      "quality_eligible": false,
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "temporal_span_days<90",
-        "score=80"
-      ],
-      "region": "PI",
-      "related_urls": [],
-      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
-      "review_date": "2026-07-31",
-      "review_notes": "Contenção editorial 2026-07-31: expõe slug interno; termos sem normalização (Piaui, paralelepipedo); valores de contratos integrais apresentados como preço de pavimentação; independência das 12 observações não comprovada. Reposicionar como faixa de valores contratuais após dedup.",
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": "grok-build-editorial-audit",
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -614,6 +832,7 @@
         "service_cta": 5
       },
       "segment": "Paralelepípedo",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -624,11 +843,66 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "manutencao-predial-engenharia",
+      "cannibalization_checked": null,
       "canonical_related": null,
+      "claims_checked": null,
       "cta_intent": "mapa_concorrencia",
       "cta_label": "Solicitar um mapa aplicado à minha empresa",
       "current_material_signature": {
+        "archetype": "manutencao-predial-engenharia",
+        "cta_intent": "mapa_concorrencia",
+        "cta_label": "Solicitar um mapa aplicado à minha empresa",
+        "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 37 contratos no recorte público — sem juízo…",
+        "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+        "mandatory_fail": [
+          "suppliers<3"
+        ],
+        "observation_count": 37,
+        "period_end": "2026-07-03",
+        "period_start": "2026-07-03",
+        "primary_contract_count": 37,
+        "sources": [
+          "pncp_contracts"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Concorrência observada: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": 2
+      },
+      "data_quality_metrics": null,
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 37 contratos no recorte público — sem juízo…",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": null,
+      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 72,
+      "intent": "compreender_concorrencia",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [
+        "suppliers<3"
+      ],
+      "observation_count": 37,
+      "page_id": "comp-manutencao-predial-engenharia-rs",
+      "page_material_hash": "c3320015da1a6e08277c6ad70fe3b82839b1caf3fd062bacfef364acc52f689a",
+      "page_type": "competition",
+      "publication_decision_reason": "suppliers<3; score=72",
+      "quality_eligible": false,
+      "reasons": [
+        "suppliers<3",
+        "score=72"
+      ],
+      "region": "RS",
+      "related_urls": [],
+      "review_checklist": null,
+      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "review_date": null,
+      "review_notes": null,
+      "reviewed_material_signature": {
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "mapa_concorrencia",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
@@ -646,33 +920,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": 2
       },
-      "data_quality_metrics": null,
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 37 contratos no recorte público — sem juízo…",
-      "evidences_checked": null,
-      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
-      "human_review": "PENDING",
-      "indexability_score": 72,
-      "intent": "compreender_concorrencia",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "suppliers<3"
-      ],
-      "observation_count": 37,
-      "page_id": "comp-manutencao-predial-engenharia-rs",
-      "page_type": "competition",
-      "publication_decision_reason": "suppliers<3; score=72",
-      "quality_eligible": false,
-      "reasons": [
-        "suppliers<3",
-        "score=72"
-      ],
-      "region": "RS",
-      "related_urls": [],
-      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
-      "review_date": null,
-      "review_notes": null,
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": null,
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -686,6 +934,7 @@
         "service_cta": 4
       },
       "segment": "Manutenção predial e serviços de engenharia",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_contracts"
@@ -696,8 +945,16 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": "Page-level material fingerprint approval for Wave 0",
+      "approver": "tiago-wave0-operational",
       "archetype": "edificacoes-publicas",
+      "cannibalization_checked": true,
       "canonical_related": "/diagnostico-pre-licitacao/",
+      "claims_checked": [
+        "decision_support",
+        "limitations_explicit",
+        "service_cta"
+      ],
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
       "current_material_signature": {
@@ -708,14 +965,18 @@
         "h1": "Oportunidades abertas em Edificações públicas — Paraná",
         "mandatory_fail": [],
         "observation_count": 10,
+        "period_end": "2026-07-31",
+        "period_start": "2026-07-31",
         "primary_contract_count": 10,
         "sources": [
           "pncp"
         ],
+        "template_version": "pseo-html-v2",
         "title": "Radar de oportunidades: Edificações públicas em Paraná | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
+      "current_render_hash": "461f170d2e4c93bb796987e4d4e5ac1f",
       "data_quality_metrics": {
         "duplicate_rate": 0.0,
         "duplicate_record_count": 5,
@@ -724,26 +985,34 @@
         "raw_open_before_dedup": 36,
         "unique_open": 31
       },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "description": "Radar de Edificações públicas em Paraná: 10 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "editorial_issues": null,
+      "evidence_sample": [
+        "framework_evidence",
+        "official_refs",
+        "market_density"
+      ],
       "evidences_checked": [
-        "open=17"
+        "framework_evidence",
+        "official_refs",
+        "market_density"
       ],
       "h1": "Oportunidades abertas em Edificações públicas — Paraná",
-      "human_review": "NEEDS_DATA_FIX",
+      "human_review": "APPROVED",
       "indexability_score": 85,
       "intent": "avaliar_oportunidades",
       "last_material_change": "2026-07-31",
       "mandatory_fail": [],
       "observation_count": 10,
       "page_id": "radar-edificacoes-publicas-pr",
+      "page_material_hash": "4f42f0dd42a7db493760b81f91855b6c6daced3ad4181a0a87c2c1d0c6ac751a",
       "page_type": "radar",
-      "publication_decision_reason": "gates_ok; score=85; human_review=NEEDS_DATA_FIX_blocks_index",
+      "publication_decision_reason": "gates_ok; score=85",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
-        "score=85",
-        "human_review=NEEDS_DATA_FIX_blocks_index"
+        "score=85"
       ],
       "region": "PR",
       "related_urls": [
@@ -751,11 +1020,40 @@
         "/auditoria-orcamento-licitacao/",
         "/radar/"
       ],
-      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "review_checklist": {
+        "cannibalization_checked": true,
+        "claims_have_direct_evidence": true,
+        "cta_contextual": true,
+        "meta_description_complete": true,
+        "no_duplicates_in_tables": true,
+        "no_internal_slugs": true,
+        "sample_independence_verified": true,
+        "sources_checked": true
+      },
+      "review_dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "review_date": "2026-07-31",
-      "review_notes": "Contenção editorial 2026-07-31: objetos/duplicatas (Mariópolis); valores quase idênticos; R$ 0,00 para valor ausente; projetos de estabilização no cluster de edificações; encerramento sem horário/timezone. Requer dedup de oportunidades e value_status.",
-      "reviewed_material_signature": null,
-      "reviewer": "grok-build-editorial-audit",
+      "review_notes": "Wave 0 seed operational inbound",
+      "reviewed_material_signature": {
+        "archetype": "edificacoes-publicas",
+        "cta_intent": "analisar_edital",
+        "cta_label": "Analisar este edital antes da proposta",
+        "description": "Radar de Edificações públicas em Paraná: 10 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "h1": "Oportunidades abertas em Edificações públicas — Paraná",
+        "mandatory_fail": [],
+        "observation_count": 10,
+        "period_end": "2026-07-31",
+        "period_start": "2026-07-31",
+        "primary_contract_count": 10,
+        "sources": [
+          "pncp"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Radar de oportunidades: Edificações públicas em Paraná | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "reviewed_render_hash": "b75619b3d177c12797ce4a551089c822",
+      "reviewer": "tiago-wave0-operational",
       "score_breakdown": {
         "anti_cannibalization": 5,
         "classification_confidence": 8,
@@ -768,21 +1066,90 @@
         "service_cta": 5
       },
       "segment": "Edificações públicas",
+      "source_links_checked": [
+        "pncp",
+        "planalto",
+        "caixa-sinapi"
+      ],
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp"
       ],
-      "status": "noindex",
+      "status": "publish",
       "title": "Radar de oportunidades: Edificações públicas em Paraná | CONFENGE",
       "url": "/radar/edificacoes-publicas-pr/"
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
+      "cannibalization_checked": null,
       "canonical_related": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "claims_checked": null,
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
       "current_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "analisar_edital",
+        "cta_label": "Analisar este edital antes da proposta",
+        "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+        "mandatory_fail": [],
+        "observation_count": 5,
+        "period_end": "2026-07-31",
+        "period_start": "2026-07-31",
+        "primary_contract_count": 5,
+        "sources": [
+          "pncp"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "duplicate_record_count": 5,
+        "page_item_count": 5,
+        "pipeline_duplicate_rate": 0.1389,
+        "raw_open_before_dedup": 36,
+        "unique_open": 31
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": [
+        "open=7"
+      ],
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+      "human_review": "NEEDS_DATA_FIX",
+      "indexability_score": 75,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 5,
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
+      "page_material_hash": "7ad0261aded3c7cc0596bbb00477bdcf943c3330e719871db5fd20ead7294087",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=75",
+      "quality_eligible": false,
+      "reasons": [
+        "gates_ok",
+        "score=75"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "review_checklist": null,
+      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "review_date": "2026-07-31",
+      "review_notes": "Contenção editorial 2026-07-31: duplicatas Indaial e R$ 9.034.155,84; muro classificado como pavimentação; links /app/contratos/ como oportunidade; mistura de tipos documentais. Requer classificação endurecida e source_url_type.",
+      "reviewed_material_signature": {
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
@@ -798,44 +1165,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "duplicate_record_count": 5,
-        "page_item_count": 5,
-        "pipeline_duplicate_rate": 0.1389,
-        "raw_open_before_dedup": 36,
-        "unique_open": 31
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
-      "evidences_checked": [
-        "open=7"
-      ],
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
-      "human_review": "NEEDS_DATA_FIX",
-      "indexability_score": 75,
-      "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [],
-      "observation_count": 5,
-      "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
-      "page_type": "radar",
-      "publication_decision_reason": "gates_ok; score=75",
-      "quality_eligible": false,
-      "reasons": [
-        "gates_ok",
-        "score=75"
-      ],
-      "region": "SC",
-      "related_urls": [
-        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
-        "/diagnostico-pre-licitacao/",
-        "/auditoria-orcamento-licitacao/"
-      ],
-      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
-      "review_date": "2026-07-31",
-      "review_notes": "Contenção editorial 2026-07-31: duplicatas Indaial e R$ 9.034.155,84; muro classificado como pavimentação; links /app/contratos/ como oportunidade; mistura de tipos documentais. Requer classificação endurecida e source_url_type.",
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": "grok-build-editorial-audit",
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -849,6 +1179,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp"
@@ -859,11 +1190,73 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
+      "cannibalization_checked": null,
       "canonical_related": "/diagnostico-pre-licitacao/",
+      "claims_checked": null,
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
       "current_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "analisar_edital",
+        "cta_label": "Analisar este edital antes da proposta",
+        "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
+        "mandatory_fail": [],
+        "observation_count": 4,
+        "period_end": "2026-07-31",
+        "period_start": "2026-07-31",
+        "primary_contract_count": 4,
+        "sources": [
+          "pncp"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Rio Grande do Sul | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "duplicate_record_count": 5,
+        "page_item_count": 4,
+        "pipeline_duplicate_rate": 0.1389,
+        "raw_open_before_dedup": 36,
+        "unique_open": 31
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": null,
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 72,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 4,
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
+      "page_material_hash": "7658bbb3382b5c8e1536351d9f68889e6336bb980488b27a5962edd2b6a5aa3c",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=72",
+      "quality_eligible": false,
+      "reasons": [
+        "gates_ok",
+        "score=72"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "review_checklist": null,
+      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "review_date": null,
+      "review_notes": null,
+      "reviewed_material_signature": {
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
@@ -879,42 +1272,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "duplicate_record_count": 5,
-        "page_item_count": 4,
-        "pipeline_duplicate_rate": 0.1389,
-        "raw_open_before_dedup": 36,
-        "unique_open": 31
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
-      "evidences_checked": null,
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
-      "human_review": "PENDING",
-      "indexability_score": 72,
-      "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [],
-      "observation_count": 4,
-      "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
-      "page_type": "radar",
-      "publication_decision_reason": "gates_ok; score=72",
-      "quality_eligible": false,
-      "reasons": [
-        "gates_ok",
-        "score=72"
-      ],
-      "region": "RS",
-      "related_urls": [
-        "/diagnostico-pre-licitacao/",
-        "/auditoria-orcamento-licitacao/",
-        "/radar/"
-      ],
-      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
-      "review_date": null,
-      "review_notes": null,
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": null,
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -928,6 +1286,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp"
@@ -938,11 +1297,73 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "saneamento-hidraulica",
+      "cannibalization_checked": null,
       "canonical_related": "/diagnostico-pre-licitacao/",
+      "claims_checked": null,
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
       "current_material_signature": {
+        "archetype": "saneamento-hidraulica",
+        "cta_intent": "analisar_edital",
+        "cta_label": "Analisar este edital antes da proposta",
+        "description": "Radar de Saneamento e hidráulica em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
+        "mandatory_fail": [],
+        "observation_count": 4,
+        "period_end": "2026-07-31",
+        "period_start": "2026-07-31",
+        "primary_contract_count": 4,
+        "sources": [
+          "pncp"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Radar de oportunidades: Saneamento e hidráulica em Santa Catarina | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "duplicate_record_count": 5,
+        "page_item_count": 4,
+        "pipeline_duplicate_rate": 0.1389,
+        "raw_open_before_dedup": 36,
+        "unique_open": 31
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": null,
+      "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
+      "human_review": "PENDING",
+      "indexability_score": 72,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 4,
+      "page_id": "radar-saneamento-hidraulica-sc",
+      "page_material_hash": "e063d1ff348627815713b57e830838ba3d8c95e7a7e2a74f6e40f759bd8d48a6",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=72",
+      "quality_eligible": false,
+      "reasons": [
+        "gates_ok",
+        "score=72"
+      ],
+      "region": "SC",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "review_checklist": null,
+      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "review_date": null,
+      "review_notes": null,
+      "reviewed_material_signature": {
         "archetype": "saneamento-hidraulica",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
@@ -958,42 +1379,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "duplicate_record_count": 5,
-        "page_item_count": 4,
-        "pipeline_duplicate_rate": 0.1389,
-        "raw_open_before_dedup": 36,
-        "unique_open": 31
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-      "evidences_checked": null,
-      "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
-      "human_review": "PENDING",
-      "indexability_score": 72,
-      "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [],
-      "observation_count": 4,
-      "page_id": "radar-saneamento-hidraulica-sc",
-      "page_type": "radar",
-      "publication_decision_reason": "gates_ok; score=72",
-      "quality_eligible": false,
-      "reasons": [
-        "gates_ok",
-        "score=72"
-      ],
-      "region": "SC",
-      "related_urls": [
-        "/diagnostico-pre-licitacao/",
-        "/auditoria-orcamento-licitacao/",
-        "/radar/"
-      ],
-      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
-      "review_date": null,
-      "review_notes": null,
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": null,
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -1007,6 +1393,7 @@
         "service_cta": 5
       },
       "segment": "Saneamento e hidráulica",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp"
@@ -1017,11 +1404,73 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
+      "cannibalization_checked": null,
       "canonical_related": "/diagnostico-pre-licitacao/",
+      "claims_checked": null,
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
       "current_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "analisar_edital",
+        "cta_label": "Analisar este edital antes da proposta",
+        "description": "Radar de Pavimentação e infraestrutura viária em Paraná: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Paraná",
+        "mandatory_fail": [],
+        "observation_count": 4,
+        "period_end": "2026-07-31",
+        "period_start": "2026-07-31",
+        "primary_contract_count": 4,
+        "sources": [
+          "pncp"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Paraná | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "duplicate_record_count": 5,
+        "page_item_count": 4,
+        "pipeline_duplicate_rate": 0.1389,
+        "raw_open_before_dedup": 36,
+        "unique_open": 31
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Radar de Pavimentação e infraestrutura viária em Paraná: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": null,
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Paraná",
+      "human_review": "PENDING",
+      "indexability_score": 72,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 4,
+      "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
+      "page_material_hash": "b64fc8a461cb974a46f1df5c0668630a7b61681884ac705b3aaab48b0fe971f9",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=72",
+      "quality_eligible": false,
+      "reasons": [
+        "gates_ok",
+        "score=72"
+      ],
+      "region": "PR",
+      "related_urls": [
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/radar/"
+      ],
+      "review_checklist": null,
+      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "review_date": null,
+      "review_notes": null,
+      "reviewed_material_signature": {
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
@@ -1037,42 +1486,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "duplicate_record_count": 5,
-        "page_item_count": 4,
-        "pipeline_duplicate_rate": 0.1389,
-        "raw_open_before_dedup": 36,
-        "unique_open": 31
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Radar de Pavimentação e infraestrutura viária em Paraná: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-      "evidences_checked": null,
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Paraná",
-      "human_review": "PENDING",
-      "indexability_score": 72,
-      "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [],
-      "observation_count": 4,
-      "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
-      "page_type": "radar",
-      "publication_decision_reason": "gates_ok; score=72",
-      "quality_eligible": false,
-      "reasons": [
-        "gates_ok",
-        "score=72"
-      ],
-      "region": "PR",
-      "related_urls": [
-        "/diagnostico-pre-licitacao/",
-        "/auditoria-orcamento-licitacao/",
-        "/radar/"
-      ],
-      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
-      "review_date": null,
-      "review_notes": null,
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": null,
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -1086,6 +1500,7 @@
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp"
@@ -1096,11 +1511,73 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "edificacoes-publicas",
+      "cannibalization_checked": null,
       "canonical_related": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "claims_checked": null,
       "cta_intent": "analisar_edital",
       "cta_label": "Analisar este edital antes da proposta",
       "current_material_signature": {
+        "archetype": "edificacoes-publicas",
+        "cta_intent": "analisar_edital",
+        "cta_label": "Analisar este edital antes da proposta",
+        "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
+        "mandatory_fail": [],
+        "observation_count": 3,
+        "period_end": "2026-07-31",
+        "period_start": "2026-07-31",
+        "primary_contract_count": 3,
+        "sources": [
+          "pncp"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Radar de oportunidades: Edificações públicas em Rio Grande do Sul | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "data_quality_metrics": {
+        "duplicate_rate": 0.0,
+        "duplicate_record_count": 5,
+        "page_item_count": 3,
+        "pipeline_duplicate_rate": 0.1389,
+        "raw_open_before_dedup": 36,
+        "unique_open": 31
+      },
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": null,
+      "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
+      "human_review": "PENDING",
+      "indexability_score": 69,
+      "intent": "avaliar_oportunidades",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 3,
+      "page_id": "radar-edificacoes-publicas-rs",
+      "page_material_hash": "b4287b6e3dbc35bb7f993d0cf825ea3e9b3c846761656740d8ae72be09335714",
+      "page_type": "radar",
+      "publication_decision_reason": "gates_ok; score=69",
+      "quality_eligible": false,
+      "reasons": [
+        "gates_ok",
+        "score=69"
+      ],
+      "region": "RS",
+      "related_urls": [
+        "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "review_checklist": null,
+      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
+      "review_date": null,
+      "review_notes": null,
+      "reviewed_material_signature": {
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
@@ -1116,42 +1593,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
-      "data_quality_metrics": {
-        "duplicate_rate": 0.0,
-        "duplicate_record_count": 5,
-        "page_item_count": 3,
-        "pipeline_duplicate_rate": 0.1389,
-        "raw_open_before_dedup": 36,
-        "unique_open": 31
-      },
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-      "evidences_checked": null,
-      "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
-      "human_review": "PENDING",
-      "indexability_score": 69,
-      "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [],
-      "observation_count": 3,
-      "page_id": "radar-edificacoes-publicas-rs",
-      "page_type": "radar",
-      "publication_decision_reason": "gates_ok; score=69",
-      "quality_eligible": false,
-      "reasons": [
-        "gates_ok",
-        "score=69"
-      ],
-      "region": "RS",
-      "related_urls": [
-        "/inteligencia/mercados/edificacoes-publicas-rs/",
-        "/diagnostico-pre-licitacao/",
-        "/auditoria-orcamento-licitacao/"
-      ],
-      "review_dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5",
-      "review_date": null,
-      "review_notes": null,
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": null,
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -1165,6 +1607,7 @@
         "service_cta": 5
       },
       "segment": "Edificações públicas",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp"
@@ -1175,8 +1618,16 @@
     },
     {
       "agency_id": null,
+      "approval_rationale": "Page-level material fingerprint approval for Wave 0",
+      "approver": "tiago-wave0-operational",
       "archetype": "edificacoes-publicas",
-      "canonical_related": null,
+      "cannibalization_checked": true,
+      "canonical_related": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "claims_checked": [
+        "decision_support",
+        "limitations_explicit",
+        "service_cta"
+      ],
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
       "current_material_signature": {
@@ -1185,52 +1636,93 @@
         "cta_label": "Organizar documentos e próximos passos",
         "description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão…",
         "h1": "Inconsistência entre orçamento de referência e edital",
-        "mandatory_fail": [
-          "no_claim_specific_evidence",
-          "no_direct_budget_edital_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 48,
+        "period_end": null,
+        "period_start": null,
         "primary_contract_count": null,
         "sources": [
           "pncp_supplier_contracts",
           "site-confenge-guides"
         ],
+        "template_version": "pseo-html-v2",
         "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
+      "current_render_hash": "a233549348b6661fd844249cc21a1fe3",
       "data_quality_metrics": null,
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão…",
+      "editorial_issues": null,
+      "evidence_sample": [
+        "framework_evidence",
+        "official_refs",
+        "market_density"
+      ],
       "evidences_checked": [
-        "ev=63"
+        "framework_evidence",
+        "official_refs",
+        "market_density"
       ],
       "h1": "Inconsistência entre orçamento de referência e edital",
-      "human_review": "NEEDS_CONTENT_FIX",
+      "human_review": "APPROVED",
       "indexability_score": 86,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "no_direct_budget_edital_evidence",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-orcamento-edital",
+      "page_material_hash": "24556aa5c1cba1589f99f5f9faaba669148c229c52fbb2711a402b6763bc03ff",
       "page_type": "problem_service",
-      "publication_decision_reason": "no_direct_budget_edital_evidence; no_claim_specific_evidence; score=86",
-      "quality_eligible": false,
+      "publication_decision_reason": "gates_ok; score=86",
+      "quality_eligible": true,
       "reasons": [
-        "no_direct_budget_edital_evidence",
-        "no_claim_specific_evidence",
+        "gates_ok",
         "score=86"
       ],
       "region": null,
-      "related_urls": [],
-      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "related_urls": [
+        "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/analise-edital-obra-publica-construtora/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "review_checklist": {
+        "cannibalization_checked": true,
+        "claims_have_direct_evidence": true,
+        "cta_contextual": true,
+        "meta_description_complete": true,
+        "no_duplicates_in_tables": true,
+        "no_internal_slugs": true,
+        "sample_independence_verified": true,
+        "sources_checked": true
+      },
+      "review_dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "review_date": "2026-07-31",
-      "review_notes": "Contenção editorial 2026-07-31: meta description truncada; slugs/caminhos internos na UI; blocos genéricos repetidos; evidence_count genérico não prova a alegação específica; risco doorway/canibalização de guias técnicos. Manter noindex até evidência direta e copy substancial.",
-      "reviewed_material_signature": null,
-      "reviewer": "grok-build-editorial-audit",
+      "review_notes": "Wave 0 seed operational inbound",
+      "reviewed_material_signature": {
+        "archetype": "edificacoes-publicas",
+        "cta_intent": "organizar_documentos",
+        "cta_label": "Organizar documentos e próximos passos",
+        "description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão…",
+        "h1": "Inconsistência entre orçamento de referência e edital",
+        "mandatory_fail": [],
+        "observation_count": 48,
+        "period_end": null,
+        "period_start": null,
+        "primary_contract_count": null,
+        "sources": [
+          "pncp_supplier_contracts",
+          "site-confenge-guides"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "reviewed_render_hash": "8657db852c8655fc22c88beb3bc6f22f",
+      "reviewer": "tiago-wave0-operational",
       "score_breakdown": {
         "anti_cannibalization": 5,
         "classification_confidence": 8,
@@ -1243,19 +1735,32 @@
         "service_cta": 5
       },
       "segment": "orcamento-edital",
+      "source_links_checked": [
+        "pncp",
+        "planalto",
+        "caixa-sinapi"
+      ],
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_supplier_contracts",
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "publish",
       "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
       "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/"
     },
     {
       "agency_id": null,
+      "approval_rationale": "Page-level material fingerprint approval for Wave 0",
+      "approver": "tiago-wave0-operational",
       "archetype": "pavimentacao-infraestrutura-viaria",
-      "canonical_related": null,
+      "cannibalization_checked": true,
+      "canonical_related": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "claims_checked": [
+        "decision_support",
+        "limitations_explicit",
+        "service_cta"
+      ],
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
       "current_material_signature": {
@@ -1264,52 +1769,93 @@
         "cta_label": "Organizar documentos e próximos passos",
         "description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a…",
         "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
-        "mandatory_fail": [
-          "no_claim_specific_evidence",
-          "no_direct_sinapi_sicro_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 48,
+        "period_end": null,
+        "period_start": null,
         "primary_contract_count": null,
         "sources": [
           "pncp_supplier_contracts",
           "site-confenge-guides"
         ],
+        "template_version": "pseo-html-v2",
         "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
+      "current_render_hash": "19a1012b115dde3703a9e6638fe00354",
       "data_quality_metrics": null,
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a…",
+      "editorial_issues": null,
+      "evidence_sample": [
+        "framework_evidence",
+        "official_refs",
+        "market_density"
+      ],
       "evidences_checked": [
-        "ev=53"
+        "framework_evidence",
+        "official_refs",
+        "market_density"
       ],
       "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
-      "human_review": "NEEDS_CONTENT_FIX",
+      "human_review": "APPROVED",
       "indexability_score": 86,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "no_direct_sinapi_sicro_evidence",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-sinapi-sicro",
+      "page_material_hash": "0fc08c3477b246947f4363e8da7055ca125ed74cfc601233499f97c40cf191f0",
       "page_type": "problem_service",
-      "publication_decision_reason": "no_direct_sinapi_sicro_evidence; no_claim_specific_evidence; score=86",
-      "quality_eligible": false,
+      "publication_decision_reason": "gates_ok; score=86",
+      "quality_eligible": true,
       "reasons": [
-        "no_direct_sinapi_sicro_evidence",
-        "no_claim_specific_evidence",
+        "gates_ok",
         "score=86"
       ],
       "region": null,
-      "related_urls": [],
-      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "related_urls": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/produtividade-sinapi-obra-publica/",
+        "/conteudos/bdi-obra-publica/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "review_checklist": {
+        "cannibalization_checked": true,
+        "claims_have_direct_evidence": true,
+        "cta_contextual": true,
+        "meta_description_complete": true,
+        "no_duplicates_in_tables": true,
+        "no_internal_slugs": true,
+        "sample_independence_verified": true,
+        "sources_checked": true
+      },
+      "review_dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "review_date": "2026-07-31",
-      "review_notes": "Contenção editorial 2026-07-31: meta description truncada; slugs/caminhos internos na UI; blocos genéricos repetidos; evidence_count genérico não prova a alegação específica; risco doorway/canibalização de guias técnicos. Manter noindex até evidência direta e copy substancial.",
-      "reviewed_material_signature": null,
-      "reviewer": "grok-build-editorial-audit",
+      "review_notes": "Wave 0 seed operational inbound",
+      "reviewed_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "organizar_documentos",
+        "cta_label": "Organizar documentos e próximos passos",
+        "description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a…",
+        "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
+        "mandatory_fail": [],
+        "observation_count": 48,
+        "period_end": null,
+        "period_start": null,
+        "primary_contract_count": null,
+        "sources": [
+          "pncp_supplier_contracts",
+          "site-confenge-guides"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "reviewed_render_hash": "dc0925d40a971a9a87b6334b6ad78a86",
+      "reviewer": "tiago-wave0-operational",
       "score_breakdown": {
         "anti_cannibalization": 5,
         "classification_confidence": 8,
@@ -1322,22 +1868,85 @@
         "service_cta": 5
       },
       "segment": "sinapi-sicro",
+      "source_links_checked": [
+        "pncp",
+        "planalto",
+        "caixa-sinapi"
+      ],
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "site-confenge-guides",
         "pncp_supplier_contracts"
       ],
-      "status": "reject",
+      "status": "publish",
       "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
       "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/"
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "manutencao-predial-engenharia",
-      "canonical_related": null,
+      "cannibalization_checked": null,
+      "canonical_related": "/conteudos/glosa-de-medicao-obra-publica/",
+      "claims_checked": null,
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
       "current_material_signature": {
+        "archetype": "manutencao-predial-engenharia",
+        "cta_intent": "organizar_documentos",
+        "cta_label": "Organizar documentos e próximos passos",
+        "description": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+        "h1": "Medição e glosa em contratos com execução contínua",
+        "mandatory_fail": [],
+        "observation_count": 22,
+        "period_end": null,
+        "period_start": null,
+        "primary_contract_count": null,
+        "sources": [
+          "site-confenge-guides"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Medição e glosa em contratos com execução contínua | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "data_quality_metrics": null,
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": [
+        "ev=38"
+      ],
+      "h1": "Medição e glosa em contratos com execução contínua",
+      "human_review": "PENDING",
+      "indexability_score": 76,
+      "intent": "proteger_margem_proposta_contrato",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 22,
+      "page_id": "prob-medicao-glosa",
+      "page_material_hash": "6363510481e5d7a4bcb2a56b9a9a69f74e06d4e5f05b1e261fa3c04d3210e8c8",
+      "page_type": "problem_service",
+      "publication_decision_reason": "gates_ok; score=76",
+      "quality_eligible": false,
+      "reasons": [
+        "gates_ok",
+        "score=76"
+      ],
+      "region": null,
+      "related_urls": [
+        "/conteudos/glosa-de-medicao-obra-publica/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "/medicoes-glosas-obras-publicas/"
+      ],
+      "review_checklist": null,
+      "review_dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1",
+      "review_date": "2026-07-31",
+      "review_notes": "Re-approved after 702a17fb primary-archetype purity + official_references; editorial sample clean",
+      "reviewed_material_signature": {
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "organizar_documentos",
         "cta_label": "Organizar documentos e próximos passos",
@@ -1356,37 +1965,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
-      "data_quality_metrics": null,
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
-      "evidences_checked": [
-        "ev=38"
-      ],
-      "h1": "Medição e glosa em contratos com execução contínua",
-      "human_review": "PENDING",
-      "indexability_score": 76,
-      "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence"
-      ],
-      "observation_count": 22,
-      "page_id": "prob-medicao-glosa",
-      "page_type": "problem_service",
-      "publication_decision_reason": "generic_evidence_count_only; no_claim_specific_evidence; score=76",
-      "quality_eligible": false,
-      "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
-        "score=76"
-      ],
-      "region": null,
-      "related_urls": [],
-      "review_dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1",
-      "review_date": "2026-07-31",
-      "review_notes": "Re-approved after 702a17fb primary-archetype purity + official_references; editorial sample clean",
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": "tiago",
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -1400,18 +1979,27 @@
         "service_cta": 5
       },
       "segment": "medicao-glosa",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "noindex",
       "title": "Medição e glosa em contratos com execução contínua | CONFENGE",
       "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/"
     },
     {
       "agency_id": null,
+      "approval_rationale": "Page-level material fingerprint approval for Wave 0",
+      "approver": "tiago-wave0-operational",
       "archetype": "edificacoes-publicas",
-      "canonical_related": null,
+      "cannibalization_checked": true,
+      "canonical_related": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "claims_checked": [
+        "decision_support",
+        "limitations_explicit",
+        "service_cta"
+      ],
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
       "current_material_signature": {
@@ -1420,51 +2008,91 @@
         "cta_label": "Organizar documentos e próximos passos",
         "description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
         "h1": "Aditivos, serviços extras e erosão de margem",
-        "mandatory_fail": [
-          "no_claim_specific_evidence",
-          "no_direct_aditivo_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 48,
+        "period_end": null,
+        "period_start": null,
         "primary_contract_count": null,
         "sources": [
           "site-confenge-guides"
         ],
+        "template_version": "pseo-html-v2",
         "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
+      "current_render_hash": "c9db23ee92a6545c3aa3b2b5b894ef57",
       "data_quality_metrics": null,
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+      "editorial_issues": null,
+      "evidence_sample": [
+        "framework_evidence",
+        "official_refs",
+        "market_density"
+      ],
       "evidences_checked": [
-        "ev=63"
+        "framework_evidence",
+        "official_refs",
+        "market_density"
       ],
       "h1": "Aditivos, serviços extras e erosão de margem",
-      "human_review": "NEEDS_CONTENT_FIX",
+      "human_review": "APPROVED",
       "indexability_score": 86,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "no_direct_aditivo_evidence",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-aditivos-margem",
+      "page_material_hash": "0f2b510a4e2c21e9ff3abddb4dab43d9dc810149cb7c0ca7a96685207db5bb16",
       "page_type": "problem_service",
-      "publication_decision_reason": "no_direct_aditivo_evidence; no_claim_specific_evidence; score=86",
-      "quality_eligible": false,
+      "publication_decision_reason": "gates_ok; score=86",
+      "quality_eligible": true,
       "reasons": [
-        "no_direct_aditivo_evidence",
-        "no_claim_specific_evidence",
+        "gates_ok",
         "score=86"
       ],
       "region": null,
-      "related_urls": [],
-      "review_dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
+      "related_urls": [
+        "/conteudos/aditivo-qualitativo-quantitativo/",
+        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/aditivos-obras-publicas/"
+      ],
+      "review_checklist": {
+        "cannibalization_checked": true,
+        "claims_have_direct_evidence": true,
+        "cta_contextual": true,
+        "meta_description_complete": true,
+        "no_duplicates_in_tables": true,
+        "no_internal_slugs": true,
+        "sample_independence_verified": true,
+        "sources_checked": true
+      },
+      "review_dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
       "review_date": "2026-07-31",
-      "review_notes": "Contenção editorial 2026-07-31: meta description truncada; slugs/caminhos internos na UI; blocos genéricos repetidos; evidence_count genérico não prova a alegação específica; risco doorway/canibalização de guias técnicos. Manter noindex até evidência direta e copy substancial.",
-      "reviewed_material_signature": null,
-      "reviewer": "grok-build-editorial-audit",
+      "review_notes": "Wave 0 seed operational inbound",
+      "reviewed_material_signature": {
+        "archetype": "edificacoes-publicas",
+        "cta_intent": "organizar_documentos",
+        "cta_label": "Organizar documentos e próximos passos",
+        "description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+        "h1": "Aditivos, serviços extras e erosão de margem",
+        "mandatory_fail": [],
+        "observation_count": 48,
+        "period_end": null,
+        "period_start": null,
+        "primary_contract_count": null,
+        "sources": [
+          "site-confenge-guides"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "reviewed_render_hash": "3b9cda2d325f56ec995e00a3159ab78f",
+      "reviewer": "tiago-wave0-operational",
       "score_breakdown": {
         "anti_cannibalization": 5,
         "classification_confidence": 8,
@@ -1477,21 +2105,85 @@
         "service_cta": 5
       },
       "segment": "aditivos",
+      "source_links_checked": [
+        "pncp",
+        "planalto",
+        "caixa-sinapi"
+      ],
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "publish",
       "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
       "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
     },
     {
       "agency_id": null,
+      "approval_rationale": null,
+      "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
-      "canonical_related": null,
+      "cannibalization_checked": null,
+      "canonical_related": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "claims_checked": null,
       "cta_intent": "organizar_documentos",
       "cta_label": "Organizar documentos e próximos passos",
       "current_material_signature": {
+        "archetype": "pavimentacao-infraestrutura-viaria",
+        "cta_intent": "organizar_documentos",
+        "cta_label": "Organizar documentos e próximos passos",
+        "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
+        "h1": "Reequilíbrio diante de dispersão de preços e insumos",
+        "mandatory_fail": [],
+        "observation_count": 27,
+        "period_end": null,
+        "period_start": null,
+        "primary_contract_count": null,
+        "sources": [
+          "pncp_supplier_contracts",
+          "site-confenge-guides"
+        ],
+        "template_version": "pseo-html-v2",
+        "title": "Reequilíbrio diante de dispersão de preços e insumos | CONFENGE",
+        "unique_buyer_count": null,
+        "unique_supplier_count": null
+      },
+      "data_quality_metrics": null,
+      "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+      "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
+      "editorial_issues": null,
+      "evidence_sample": null,
+      "evidences_checked": [
+        "ev=37"
+      ],
+      "h1": "Reequilíbrio diante de dispersão de preços e insumos",
+      "human_review": "PENDING",
+      "indexability_score": 77,
+      "intent": "proteger_margem_proposta_contrato",
+      "last_material_change": "2026-07-31",
+      "mandatory_fail": [],
+      "observation_count": 27,
+      "page_id": "prob-reequilibrio",
+      "page_material_hash": "2eb9aa5110fe9ca434deb6e8277aee0b32e197dec9df32411fe8d19746c8eb32",
+      "page_type": "problem_service",
+      "publication_decision_reason": "gates_ok; score=77",
+      "quality_eligible": false,
+      "reasons": [
+        "gates_ok",
+        "score=77"
+      ],
+      "region": null,
+      "related_urls": [
+        "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "/conteudos/documentos-reequilibrio-obra-publica/",
+        "/reequilibrio-obras-publicas/"
+      ],
+      "review_checklist": null,
+      "review_dataset_hash": "6e4f17369f2149413d9642de16167214fe9f862b90a320641426c593efd31d6f",
+      "review_date": "2026-07-31",
+      "review_notes": "Re-approved after export 87b8cefc / hash 6e4f1736; deep-links + quality gates ok; editorial sample clean",
+      "reviewed_material_signature": {
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "organizar_documentos",
         "cta_label": "Organizar documentos e próximos passos",
@@ -1511,37 +2203,7 @@
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
-      "data_quality_metrics": null,
-      "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
-      "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
-      "evidences_checked": [
-        "ev=37"
-      ],
-      "h1": "Reequilíbrio diante de dispersão de preços e insumos",
-      "human_review": "PENDING",
-      "indexability_score": 77,
-      "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-07-31",
-      "mandatory_fail": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence"
-      ],
-      "observation_count": 27,
-      "page_id": "prob-reequilibrio",
-      "page_type": "problem_service",
-      "publication_decision_reason": "generic_evidence_count_only; no_claim_specific_evidence; score=77",
-      "quality_eligible": false,
-      "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
-        "score=77"
-      ],
-      "region": null,
-      "related_urls": [],
-      "review_dataset_hash": "6e4f17369f2149413d9642de16167214fe9f862b90a320641426c593efd31d6f",
-      "review_date": "2026-07-31",
-      "review_notes": "Re-approved after export 87b8cefc / hash 6e4f1736; deep-links + quality gates ok; editorial sample clean",
-      "reviewed_material_signature": null,
+      "reviewed_render_hash": null,
       "reviewer": "tiago",
       "score_breakdown": {
         "anti_cannibalization": 5,
@@ -1555,12 +2217,13 @@
         "service_cta": 5
       },
       "segment": "reequilibrio",
+      "source_links_checked": null,
       "source_run_id": "pseo-20260731T160846Z-f9e1a782",
       "sources": [
         "pncp_supplier_contracts",
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "noindex",
       "title": "Reequilíbrio diante de dispersão de preços e insumos | CONFENGE",
       "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
     }

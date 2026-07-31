@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "web_cfg_sha": "662ee7fca0c36942f3f2b23fc00dab1f31991e4b",
+  "manifest_public": ".well-known/pseo-build.json",
+  "build_summary": {
+    "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+    "counts": {
+      "reject": 8,
+      "publish": 4,
+      "noindex": 7
+    },
+    "publishable": [
+      "/radar/edificacoes-publicas-pr/",
+      "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
+    ],
+    "pages_written": 19
+  },
+  "validate": {
+    "ok": true,
+    "error_count": 0
+  },
+  "errors": []
+}

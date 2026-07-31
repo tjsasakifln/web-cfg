@@ -70,7 +70,9 @@ def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
                 "approval_rationale": p.get("approval_rationale"),
                 "approver": p.get("approver"),
                 "reviewed_render_hash": p.get("reviewed_render_hash"),
-                "reviewed_material_signature": p.get("reviewed_material_signature") or p.get("current_material_signature"),
+                "reviewed_material_signature": p.get("reviewed_material_signature")
+                or p.get("current_material_signature"),
+                "page_material_hash": p.get("page_material_hash"),
             }
     return out
 
@@ -99,23 +101,30 @@ def apply_similarity_gate(cands: list[Candidate]) -> list[Candidate]:
 
 
 def _attach_review_signatures(registry: dict, cands: list, root: Path) -> None:
-    """Persist material signatures and optional render hashes for approval invalidation."""
+    """Persist material signatures. Render-hash alone must not wipe approval.
+
+    Invalidation is driven by page_material_hash (see apply_human_review_gate).
+    Rebuilds that only change non-material chrome keep APPROVED_UNCHANGED.
+    """
     import hashlib
-    from scripts.pseo.score import _material_signature
+    from scripts.pseo.score import _material_signature, page_material_hash
+
     by_id = {c.page_id: c for c in cands}
     for p in registry.get("pages") or []:
         c = by_id.get(p.get("page_id"))
         if not c:
             continue
-        p["reviewed_material_signature"] = p.get("reviewed_material_signature")  # keep prior if approved
-        # Always store current material signature for next build comparison via prev
-        p["current_material_signature"] = _material_signature(c)
-        # If still approved, compare and invalidate
+        # Keep prior reviewed signature if approved
+        p["reviewed_material_signature"] = p.get("reviewed_material_signature")
+        cur = _material_signature(c)
+        p["current_material_signature"] = cur
+        p["page_material_hash"] = page_material_hash(cur)
         if p.get("human_review") in {"APPROVED", "APPROVED_WITH_NOTES"}:
             prev_sig = p.get("reviewed_material_signature") or {}
-            cur = p["current_material_signature"]
             if prev_sig:
                 for k, v in cur.items():
+                    if k not in prev_sig:
+                        continue
                     if prev_sig.get(k) is not None and prev_sig.get(k) != v:
                         p["human_review"] = "PENDING"
                         p.setdefault("reasons", [])
@@ -123,17 +132,15 @@ def _attach_review_signatures(registry: dict, cands: list, root: Path) -> None:
                             p["reasons"].append(f"approval_invalidated_material:{k}")
                         p["status"] = "noindex" if p.get("status") == "publish" else p.get("status")
                         break
-            # render hash
+            # Record current render hash for diagnostics only — do not demote
             url = (p.get("url") or "").strip("/")
             hp = root / url / "index.html"
             if hp.exists():
-                rh = hashlib.sha256(hp.read_bytes()).hexdigest()[:32]
-                if p.get("reviewed_render_hash") and p.get("reviewed_render_hash") != rh:
-                    p["human_review"] = "PENDING"
-                    p["status"] = "noindex" if p.get("status") == "publish" else p.get("status")
-                # do not overwrite reviewed_render_hash unless approving
+                p["current_render_hash"] = hashlib.sha256(hp.read_bytes()).hexdigest()[:32]
         # Always expose quality metrics
-        p["data_quality_metrics"] = (c.data_ref or {}).get("sample_metrics") or p.get("data_quality_metrics")
+        p["data_quality_metrics"] = (c.data_ref or {}).get("sample_metrics") or p.get(
+            "data_quality_metrics"
+        )
 
 
 
@@ -147,24 +154,29 @@ def write_registry(
     existing_reviews = existing_reviews or {}
     dataset_hash = manifest.get("dataset_hash")
     rows = []
+    from scripts.pseo.score import (  # local import avoids cycles at module load
+        _material_signature,
+        page_material_hash,
+    )
+
     for c in cands:
         prev = existing_reviews.get(c.page_id) or {}
-        human = prev.get("human_review") or "PENDING"
-        # Invalidate approval if dataset changed materially
-        if (
-            human in APPROVED_REVIEWS
-            and prev.get("review_dataset_hash")
-            and dataset_hash
-            and prev.get("review_dataset_hash") != dataset_hash
-        ):
-            human = "PENDING"
-            c.reasons.append("approval_invalidated_dataset_changed")
+        # human_review already resolved by apply_human_review_gate on the candidate
+        human = getattr(c, "human_review", None) or prev.get("human_review") or "PENDING"
+        cur_sig = _material_signature(c)
+        cur_hash = page_material_hash(cur_sig)
+        prev_hash = prev.get("page_material_hash") or page_material_hash(
+            prev.get("reviewed_material_signature") or {}
+        )
+        material_changed = bool(prev_hash and prev_hash != cur_hash and prev.get("reviewed_material_signature"))
         rows.append(
             {
                 **c.as_dict(),
                 "dataset_hash": dataset_hash,
                 "source_run_id": manifest.get("source_run_id"),
-                "last_material_change": material_date,
+                "last_material_change": material_date if material_changed else (
+                    prev.get("last_material_change") or material_date
+                ),
                 "canonical_related": (c.related_urls or [None])[0],
                 "human_review": human,
                 "reviewer": prev.get("reviewer"),
@@ -173,6 +185,20 @@ def write_registry(
                 "review_dataset_hash": prev.get("review_dataset_hash"),
                 "evidences_checked": prev.get("evidences_checked"),
                 "publication_decision_reason": "; ".join(c.reasons),
+                "page_material_hash": cur_hash,
+                "current_material_signature": cur_sig,
+                "reviewed_material_signature": prev.get("reviewed_material_signature"),
+                "reviewed_render_hash": prev.get("reviewed_render_hash"),
+                "review_checklist": prev.get("review_checklist"),
+                "approval_rationale": prev.get("approval_rationale"),
+                "approver": prev.get("approver"),
+                "data_quality_metrics": prev.get("data_quality_metrics")
+                or (c.data_ref or {}).get("sample_metrics"),
+                "evidence_sample": prev.get("evidence_sample"),
+                "claims_checked": prev.get("claims_checked"),
+                "source_links_checked": prev.get("source_links_checked"),
+                "cannibalization_checked": prev.get("cannibalization_checked"),
+                "editorial_issues": prev.get("editorial_issues"),
             }
         )
     registry = {
@@ -221,24 +247,57 @@ def _sitemap_lastmod(manifest: dict[str, Any]) -> str:
     return today.isoformat()
 
 
+def _hub_lastmod_for_page(c: Candidate, default: str) -> str:
+    """Prefer per-page material last change over deploy clock."""
+    ref = c.data_ref or {}
+    for key in ("as_of", "period_end", "period_start", "verified_at"):
+        raw = ref.get(key)
+        if not raw:
+            continue
+        s = str(raw)[:10]
+        try:
+            d = date.fromisoformat(s)
+        except ValueError:
+            continue
+        if d <= date.today():
+            return d.isoformat()
+    return default
+
+
 def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
-    """Sitemap only for publish (human-approved + quality gates)."""
+    """Sitemap only for publish URLs + hubs that have ≥1 publish child.
+
+    Empty hubs stay out of the sitemap (they are rendered noindex,follow).
+    """
     pubs = [c for c in cands if c.status == "publish"]
-    urls = [
-        f"  <url>\n    <loc>{SITE}{c.url}</loc>\n    <lastmod>{lastmod}</lastmod>\n  </url>"
-        for c in sorted(pubs, key=lambda x: x.url)
+    urls: list[str] = []
+    for c in sorted(pubs, key=lambda x: x.url):
+        lm = _hub_lastmod_for_page(c, lastmod)
+        urls.append(
+            f"  <url>\n    <loc>{SITE}{c.url}</loc>\n    <lastmod>{lm}</lastmod>\n  </url>"
+        )
+
+    hub_defs = [
+        ("/inteligencia/", None),  # root hub always if any publish or own editorial
+        ("/inteligencia/mercados/", "market"),
+        ("/inteligencia/orgaos/", "agency"),
+        ("/inteligencia/precos/", "price"),
+        ("/inteligencia/concorrencia/", "competition"),
+        ("/inteligencia/cenarios/", "problem_service"),
+        ("/radar/", "radar"),
     ]
-    hubs = [
-        "/inteligencia/",
-        "/inteligencia/mercados/",
-        "/inteligencia/orgaos/",
-        "/inteligencia/precos/",
-        "/inteligencia/concorrencia/",
-        "/inteligencia/cenarios/",
-        "/radar/",
-    ]
-    for h in hubs:
-        urls.insert(0, f"  <url>\n    <loc>{SITE}{h}</loc>\n    <lastmod>{lastmod}</lastmod>\n  </url>")
+    for hpath, ptype in hub_defs:
+        if ptype is None:
+            if not pubs:
+                continue
+        else:
+            children = [c for c in pubs if c.page_type == ptype]
+            if not children:
+                continue
+        urls.insert(
+            0,
+            f"  <url>\n    <loc>{SITE}{hpath}</loc>\n    <lastmod>{lastmod}</lastmod>\n  </url>",
+        )
     seen = set()
     final = []
     for u in urls:
@@ -294,16 +353,23 @@ def patch_main_sitemap_index() -> None:
 
 def render_hubs(cands: list[Candidate]) -> list[str]:
     pubs = [c for c in cands if c.status in {"publish", "noindex"}]
+    publish_types = {c.page_type for c in cands if c.status == "publish"}
 
     def items_for(ptype: str) -> list[tuple]:
         out = []
         for c in sorted(pubs, key=lambda x: -x.score):
             if c.page_type != ptype:
                 continue
-            badge = "indexável" if c.status == "publish" else "preview (revisão)"
+            badge = "publicada" if c.status == "publish" else "preview (revisão)"
             meta = f"{c.page_type} · {badge}"
             out.append((c.url, c.page_type, c.h1[:90], meta))
         return out
+
+    def hub_robots(ptype: str | None) -> str:
+        """Empty hubs: noindex,follow. Hubs with publish children: index,follow."""
+        if ptype is None:
+            return "index,follow" if publish_types else "noindex,follow"
+        return "index,follow" if ptype in publish_types else "noindex,follow"
 
     written = []
     hubs = [
@@ -313,7 +379,10 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Inteligência decisória para obras e contratos públicos",
             "Mercados, órgãos, preços, concorrência e radar — evidência pública, sem ranking proprietário.",
             "Hub de páginas de inteligência orientadas a decisão comercial e técnica. "
-            "Páginas-filha só entram no índice após gates de qualidade, evidência e revisão humana.",
+            "Cada página-filha responde a uma decisão de mercado ou contrato e só entra no "
+            "sitemap após gates de qualidade, evidência e revisão humana. "
+            "Metodologia: agregados sanitizados do datalake público (PNCP e correlatos), "
+            "sem ranking comercial proprietário.",
             [
                 ("/inteligencia/mercados/", "hub", "Mercados", "Demanda e órgãos"),
                 ("/inteligencia/orgaos/", "hub", "Órgãos compradores", "Dossiês"),
@@ -323,63 +392,74 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
                 ("/inteligencia/cenarios/", "hub", "Cenários problema→serviço", "Clusters técnicos"),
             ],
             [("Início", "/"), ("Inteligência", None)],
+            None,
         ),
         (
             "/inteligencia/mercados/",
             "Mercados públicos de engenharia | CONFENGE",
             "Mercados por segmento e região",
             "Contratos, órgãos e evolução — para priorizar onde atuar.",
-            "Lista de mercados",
+            "Lista de mercados com massa mínima de contratos e compradores. "
+            "Use para decidir em quais UFs e segmentos alocar esforço comercial.",
             items_for("market"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Mercados", None)],
+            "market",
         ),
         (
             "/inteligencia/orgaos/",
             "Órgãos compradores de engenharia | CONFENGE",
             "Dossiês de órgãos compradores",
             "Histórico de contratação em engenharia com massa crítica.",
-            "Lista de órgãos",
+            "Dossiês de órgãos com contratos primários, fornecedores e limitações explícitas. "
+            "Útil para mapear aderência antes de precificar.",
             items_for("agency"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Órgãos", None)],
+            "agency",
         ),
         (
             "/inteligencia/precos/",
             "Benchmarks de valores contratados | CONFENGE",
             "Preços e dispersão contratual",
             "Medianas e quartis com critérios de inclusão — sem média cega.",
-            "Lista de benchmarks",
+            "Benchmarks de contratos integrais comparáveis. Não são preços unitários SINAPI/SICRO.",
             items_for("price"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Preços", None)],
+            "price",
         ),
         (
             "/inteligencia/concorrencia/",
             "Concorrência observada em obras públicas | CONFENGE",
             "Concorrência observada",
             "Fornecedores e concentração no recorte público.",
-            "Lista",
+            "Frequência neutra de fornecedores no recorte — sem ranking proprietário de 'melhores'.",
             items_for("competition"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Concorrência", None)],
+            "competition",
         ),
         (
             "/inteligencia/cenarios/",
             "Cenários: dados, problema e serviço | CONFENGE",
             "Do padrão público ao serviço CONFENGE",
             "Páginas que ligam evidência a clusters técnicos existentes.",
-            "Lista de cenários",
+            "Cenários evergreen (aditivos, SINAPI/SICRO, orçamento×edital, medição/glosa) "
+            "com limitações, fontes oficiais e CTA para o serviço correspondente.",
             items_for("problem_service"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Cenários", None)],
+            "problem_service",
         ),
         (
             "/radar/",
             "Radar de oportunidades de engenharia | CONFENGE",
             "Radar evergreen de oportunidades",
             "Listas rolantes por segmento e região — não uma URL por edital.",
-            "Lista radar",
+            "Radar evergreen: oportunidades abertas agregadas por segmento e UF. "
+            "Cada item aponta para o link oficial PNCP/Comprasnet quando disponível.",
             items_for("radar"),
             [("Início", "/"), ("Radar", None)],
+            "radar",
         ),
     ]
-    for path, title, h1, desc, intro, items, crumbs in hubs:
+    for path, title, h1, desc, intro, items, crumbs, ptype in hubs:
         html = render_hub(
             title=title,
             h1=h1,
@@ -387,6 +467,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             path=path,
             intro=intro,
             items=items,
+            robots=hub_robots(ptype),
             crumbs=crumbs,
         )
         out = url_to_path(path)

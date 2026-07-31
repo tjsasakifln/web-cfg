@@ -1,0 +1,1482 @@
+{
+  "ok": false,
+  "generated_at": "2026-07-31T21:29:57.778373+00:00",
+  "base_url": "https://confenge.com.br",
+  "web_cfg_sha": "662ee7fca0c36942f3f2b23fc00dab1f31991e4b",
+  "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+  "vocabulary_note": "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build never mean 'indexado'.",
+  "sitemap": {
+    "url_count": 15,
+    "urls": [
+      "https://confenge.com.br/inteligencia/",
+      "https://confenge.com.br/inteligencia/cenarios/",
+      "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "https://confenge.com.br/inteligencia/concorrencia/",
+      "https://confenge.com.br/inteligencia/mercados/",
+      "https://confenge.com.br/inteligencia/orgaos/",
+      "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+      "https://confenge.com.br/inteligencia/precos/",
+      "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+      "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+      "https://confenge.com.br/radar/",
+      "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+      "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/"
+    ],
+    "defects": [],
+    "source": "production"
+  },
+  "counts": {
+    "urls_audited": 20,
+    "critical_defects": 27,
+    "crawlable_production": 15,
+    "deployed_only": 5
+  },
+  "critical": [
+    "/inteligencia/:prod_html_mismatch",
+    "/inteligencia/mercados/:prod_html_mismatch",
+    "/inteligencia/orgaos/:prod_html_mismatch",
+    "/inteligencia/precos/:prod_html_mismatch",
+    "/inteligencia/concorrencia/:prod_html_mismatch",
+    "/inteligencia/cenarios/:prod_html_mismatch",
+    "/radar/:prod_html_mismatch",
+    "/radar/edificacoes-publicas-pr/:prod_html_mismatch",
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/:prod_html_mismatch",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/:prod_html_mismatch",
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/:prod_html_mismatch",
+    "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/:empty_or_soft404",
+    "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/:http_4xx",
+    "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/:empty_or_soft404",
+    "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/:http_4xx",
+    "/inteligencia/mercados/edificacoes-publicas-mg/:empty_or_soft404",
+    "/inteligencia/mercados/edificacoes-publicas-mg/:http_4xx",
+    "/inteligencia/mercados/edificacoes-publicas-rs/:empty_or_soft404",
+    "/inteligencia/mercados/edificacoes-publicas-rs/:http_4xx",
+    "/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/:empty_or_soft404",
+    "/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/:http_4xx",
+    "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/:orphan_page",
+    "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/:orphan_page",
+    "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/:prod_html_mismatch",
+    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/:orphan_page",
+    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/:prod_html_mismatch",
+    "/radar/pavimentacao-infraestrutura-viaria-sc/:prod_html_mismatch"
+  ],
+  "rows": [
+    {
+      "path": "/inteligencia/",
+      "expected_role": "hub",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/",
+        "final_url": "https://confenge.com.br/inteligencia/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535205"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 8169,
+        "html_sha256": "33fa70c09d1c913141c851afd647e8e7901f8b4954dd9bf74b86a1cb54a7e5be",
+        "title": "Inteligência de mercado e contratação pública | CONFENGE",
+        "h1": "Inteligência decisória para obras e contratos públicos",
+        "meta_robots": "index,follow",
+        "meta_description": "Mercados, órgãos, preços, concorrência e radar — evidência pública, sem ranking proprietário.",
+        "canonical": "https://confenge.com.br/inteligencia/",
+        "text_len": 1097
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/",
+        "final_url": "https://confenge.com.br/inteligencia/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 8169,
+        "html_sha256": "33fa70c09d1c913141c851afd647e8e7901f8b4954dd9bf74b86a1cb54a7e5be",
+        "title": "Inteligência de mercado e contratação pública | CONFENGE",
+        "h1": "Inteligência decisória para obras e contratos públicos",
+        "meta_robots": "index,follow",
+        "meta_description": "Mercados, órgãos, preços, concorrência e radar — evidência pública, sem ranking proprietário.",
+        "canonical": "https://confenge.com.br/inteligencia/",
+        "text_len": 1097
+      },
+      "local_html_sha256": "aebfd075787542deac4102e2de39ecb9988074a45cd8fae45b01747324a9f385",
+      "prod_html_sha256": "33fa70c09d1c913141c851afd647e8e7901f8b4954dd9bf74b86a1cb54a7e5be",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/mercados/",
+      "expected_role": "hub",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7239,
+        "html_sha256": "1b8076e8266901f7955f36d396d3938b3d7e22ac8699395373f470e3710c9228",
+        "title": "Mercados públicos de engenharia | CONFENGE",
+        "h1": "Mercados por segmento e região",
+        "meta_robots": "index,follow",
+        "meta_description": "Contratos, órgãos e evolução — para priorizar onde atuar.",
+        "canonical": "https://confenge.com.br/inteligencia/mercados/",
+        "text_len": 727
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7239,
+        "html_sha256": "1b8076e8266901f7955f36d396d3938b3d7e22ac8699395373f470e3710c9228",
+        "title": "Mercados públicos de engenharia | CONFENGE",
+        "h1": "Mercados por segmento e região",
+        "meta_robots": "index,follow",
+        "meta_description": "Contratos, órgãos e evolução — para priorizar onde atuar.",
+        "canonical": "https://confenge.com.br/inteligencia/mercados/",
+        "text_len": 727
+      },
+      "local_html_sha256": "845fcc46b56ba534244bd8abb66816423f1c5bfbcafb4c5875fe90f6a56cda59",
+      "prod_html_sha256": "1b8076e8266901f7955f36d396d3938b3d7e22ac8699395373f470e3710c9228",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/orgaos/",
+      "expected_role": "hub",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/orgaos/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7469,
+        "html_sha256": "0a68bb5509970c68edc4e2c1d6014f31e1037a041d0317b361d91cb7d7c17a8f",
+        "title": "Órgãos compradores de engenharia | CONFENGE",
+        "h1": "Dossiês de órgãos compradores",
+        "meta_robots": "index,follow",
+        "meta_description": "Histórico de contratação em engenharia com massa crítica.",
+        "canonical": "https://confenge.com.br/inteligencia/orgaos/",
+        "text_len": 806
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/orgaos/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7469,
+        "html_sha256": "0a68bb5509970c68edc4e2c1d6014f31e1037a041d0317b361d91cb7d7c17a8f",
+        "title": "Órgãos compradores de engenharia | CONFENGE",
+        "h1": "Dossiês de órgãos compradores",
+        "meta_robots": "index,follow",
+        "meta_description": "Histórico de contratação em engenharia com massa crítica.",
+        "canonical": "https://confenge.com.br/inteligencia/orgaos/",
+        "text_len": 806
+      },
+      "local_html_sha256": "14930bbd956b056f00a9fd042dffe2df42be27a726f22aab6862a63cc64782cb",
+      "prod_html_sha256": "0a68bb5509970c68edc4e2c1d6014f31e1037a041d0317b361d91cb7d7c17a8f",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/precos/",
+      "expected_role": "hub",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/precos/",
+        "final_url": "https://confenge.com.br/inteligencia/precos/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/precos/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7749,
+        "html_sha256": "04202366eb529ad340f44c6afeace3001a3a51aaaa17d90029d619491f80e5e4",
+        "title": "Benchmarks de valores contratados | CONFENGE",
+        "h1": "Preços e dispersão contratual",
+        "meta_robots": "index,follow",
+        "meta_description": "Medianas e quartis com critérios de inclusão — sem média cega.",
+        "canonical": "https://confenge.com.br/inteligencia/precos/",
+        "text_len": 924
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/precos/",
+        "final_url": "https://confenge.com.br/inteligencia/precos/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/precos/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7749,
+        "html_sha256": "04202366eb529ad340f44c6afeace3001a3a51aaaa17d90029d619491f80e5e4",
+        "title": "Benchmarks de valores contratados | CONFENGE",
+        "h1": "Preços e dispersão contratual",
+        "meta_robots": "index,follow",
+        "meta_description": "Medianas e quartis com critérios de inclusão — sem média cega.",
+        "canonical": "https://confenge.com.br/inteligencia/precos/",
+        "text_len": 924
+      },
+      "local_html_sha256": "3abc169918bd839182c93e8b50ddcf2506176699db7e2cfdcdc180b8bf47657f",
+      "prod_html_sha256": "04202366eb529ad340f44c6afeace3001a3a51aaaa17d90029d619491f80e5e4",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/concorrencia/",
+      "expected_role": "hub",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/concorrencia/",
+        "final_url": "https://confenge.com.br/inteligencia/concorrencia/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/concorrencia/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7236,
+        "html_sha256": "739d76ce58e60a2fffa7bfe055291e75f260f719a8c33b6c727a3d54d2b5e378",
+        "title": "Concorrência observada em obras públicas | CONFENGE",
+        "h1": "Concorrência observada",
+        "meta_robots": "index,follow",
+        "meta_description": "Fornecedores e concentração no recorte público.",
+        "canonical": "https://confenge.com.br/inteligencia/concorrencia/",
+        "text_len": 720
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/concorrencia/",
+        "final_url": "https://confenge.com.br/inteligencia/concorrencia/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/concorrencia/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 7236,
+        "html_sha256": "739d76ce58e60a2fffa7bfe055291e75f260f719a8c33b6c727a3d54d2b5e378",
+        "title": "Concorrência observada em obras públicas | CONFENGE",
+        "h1": "Concorrência observada",
+        "meta_robots": "index,follow",
+        "meta_description": "Fornecedores e concentração no recorte público.",
+        "canonical": "https://confenge.com.br/inteligencia/concorrencia/",
+        "text_len": 720
+      },
+      "local_html_sha256": "85d1ec46668f80c8e0c11e2deaa708bf1a6106b3cccc8b43e1f24e4e09edfd6f",
+      "prod_html_sha256": "739d76ce58e60a2fffa7bfe055291e75f260f719a8c33b6c727a3d54d2b5e378",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/cenarios/",
+      "expected_role": "hub",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 8406,
+        "html_sha256": "d7a49b0f697572226af49738efdeee3408f4d3012f501ca7a877ce6620006c30",
+        "title": "Cenários: dados, problema e serviço | CONFENGE",
+        "h1": "Do padrão público ao serviço CONFENGE",
+        "meta_robots": "index,follow",
+        "meta_description": "Páginas que ligam evidência a clusters técnicos existentes.",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/",
+        "text_len": 1197
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 8406,
+        "html_sha256": "d7a49b0f697572226af49738efdeee3408f4d3012f501ca7a877ce6620006c30",
+        "title": "Cenários: dados, problema e serviço | CONFENGE",
+        "h1": "Do padrão público ao serviço CONFENGE",
+        "meta_robots": "index,follow",
+        "meta_description": "Páginas que ligam evidência a clusters técnicos existentes.",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/",
+        "text_len": 1197
+      },
+      "local_html_sha256": "403584d5e55017dcebe2537e4172687d059ea473039ebdd58493235d47e7d322",
+      "prod_html_sha256": "d7a49b0f697572226af49738efdeee3408f4d3012f501ca7a877ce6620006c30",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/radar/",
+      "expected_role": "hub",
+      "browser": {
+        "request_url": "https://confenge.com.br/radar/",
+        "final_url": "https://confenge.com.br/radar/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/radar/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 8503,
+        "html_sha256": "b43f4b695bde63627946dadd267766d7d6e3da8346adda7c6bc59b6ccc7a6285",
+        "title": "Radar de oportunidades de engenharia | CONFENGE",
+        "h1": "Radar evergreen de oportunidades",
+        "meta_robots": "index,follow",
+        "meta_description": "Listas rolantes por segmento e região — não uma URL por edital.",
+        "canonical": "https://confenge.com.br/radar/",
+        "text_len": 1366
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/radar/",
+        "final_url": "https://confenge.com.br/radar/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/radar/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 8503,
+        "html_sha256": "b43f4b695bde63627946dadd267766d7d6e3da8346adda7c6bc59b6ccc7a6285",
+        "title": "Radar de oportunidades de engenharia | CONFENGE",
+        "h1": "Radar evergreen de oportunidades",
+        "meta_robots": "index,follow",
+        "meta_description": "Listas rolantes por segmento e região — não uma URL por edital.",
+        "canonical": "https://confenge.com.br/radar/",
+        "text_len": 1366
+      },
+      "local_html_sha256": "e22ceef045ce9ef01a1a1b37d426b6a796967b99326574179ca3b2b894572729",
+      "prod_html_sha256": "b43f4b695bde63627946dadd267766d7d6e3da8346adda7c6bc59b6ccc7a6285",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/radar/edificacoes-publicas-pr/",
+      "expected_role": "publish",
+      "browser": {
+        "request_url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+        "final_url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535239"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 21076,
+        "html_sha256": "e134541d9a34ade9ce9911e21beccb8a4d1d5103f2530074c9780c3fe36bbbe3",
+        "title": "Radar de oportunidades: Edificações públicas em Parana | CONFENGE",
+        "h1": "Oportunidades abertas em Edificações públicas — Parana",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "canonical": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+        "text_len": 6612
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+        "final_url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535238"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 21076,
+        "html_sha256": "e134541d9a34ade9ce9911e21beccb8a4d1d5103f2530074c9780c3fe36bbbe3",
+        "title": "Radar de oportunidades: Edificações públicas em Parana | CONFENGE",
+        "h1": "Oportunidades abertas em Edificações públicas — Parana",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "canonical": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+        "text_len": 6612
+      },
+      "local_html_sha256": "461f170d2e4c93bb796987e4d4e5ac1f5c8979f848138b1760b28815068a5fce",
+      "prod_html_sha256": "e134541d9a34ade9ce9911e21beccb8a4d1d5103f2530074c9780c3fe36bbbe3",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "expected_role": "publish",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535235"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 16877,
+        "html_sha256": "ee96def5c23317893bdd41402dd1dc531f39b67b25632f80f21fa4ed9199cb75",
+        "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
+        "h1": "Inconsistência entre orçamento de referência e edital",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "text_len": 4118
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535235"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 16877,
+        "html_sha256": "ee96def5c23317893bdd41402dd1dc531f39b67b25632f80f21fa4ed9199cb75",
+        "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
+        "h1": "Inconsistência entre orçamento de referência e edital",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "text_len": 4118
+      },
+      "local_html_sha256": "a233549348b6661fd844249cc21a1fe3b7f0e57aa42591b6d156d330d9a83072",
+      "prod_html_sha256": "ee96def5c23317893bdd41402dd1dc531f39b67b25632f80f21fa4ed9199cb75",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "expected_role": "publish",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535235"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 16682,
+        "html_sha256": "b8d14b971cc89e5786994fe03bcf89b1a26ede30ee1133da986d7005dd2448e2",
+        "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
+        "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatu",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "text_len": 3899
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535234"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 16682,
+        "html_sha256": "b8d14b971cc89e5786994fe03bcf89b1a26ede30ee1133da986d7005dd2448e2",
+        "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
+        "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatu",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "text_len": 3899
+      },
+      "local_html_sha256": "19a1012b115dde3703a9e6638fe0035408eef338d601f69db17fb91a312e15e7",
+      "prod_html_sha256": "b8d14b971cc89e5786994fe03bcf89b1a26ede30ee1133da986d7005dd2448e2",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "expected_role": "publish",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 16456,
+        "html_sha256": "1dc457709fd8bb99f04a63a9a80201ba2bb3750500808217cd0e3a82fc6d9d8a",
+        "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
+        "h1": "Aditivos, serviços extras e erosão de margem",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "text_len": 3874
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "final_url": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 16456,
+        "html_sha256": "1dc457709fd8bb99f04a63a9a80201ba2bb3750500808217cd0e3a82fc6d9d8a",
+        "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
+        "h1": "Aditivos, serviços extras e erosão de margem",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+        "canonical": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "text_len": 3874
+      },
+      "local_html_sha256": "c9db23ee92a6545c3aa3b2b5b894ef57517b2961e61f8cce36abf1b77e33180e",
+      "prod_html_sha256": "1dc457709fd8bb99f04a63a9a80201ba2bb3750500808217cd0e3a82fc6d9d8a",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "expected_role": "noindex_sample",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "local_html_sha256": "2e67c8f9f2be29a4441a00e9c95220ce72956bce0c3dfa541b5223511a1453ce",
+      "prod_html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+      "in_sitemap": false,
+      "in_hub": null,
+      "defects": [
+        "empty_or_soft404",
+        "http_4xx"
+      ],
+      "notes": [],
+      "stage_reached": "DEPLOYED_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+      "expected_role": "noindex_sample",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "local_html_sha256": "5d3a02ae1422cd44cb5a5d4f7919d20bd8700d8d46e772e33e1c8eeba320efcf",
+      "prod_html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+      "in_sitemap": false,
+      "in_hub": null,
+      "defects": [
+        "empty_or_soft404",
+        "http_4xx"
+      ],
+      "notes": [],
+      "stage_reached": "DEPLOYED_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/mercados/edificacoes-publicas-mg/",
+      "expected_role": "noindex_sample",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "local_html_sha256": "6421e5fabf2203fb392b92b84df225146c69c86a38a958d098570fa49276298c",
+      "prod_html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+      "in_sitemap": false,
+      "in_hub": null,
+      "defects": [
+        "empty_or_soft404",
+        "http_4xx"
+      ],
+      "notes": [],
+      "stage_reached": "DEPLOYED_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "expected_role": "noindex_sample",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535236"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535236"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "local_html_sha256": "9f14ab220e60a02779161005021d7cca1994b40c0c110d05d9042784009bb3a2",
+      "prod_html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+      "in_sitemap": false,
+      "in_hub": null,
+      "defects": [
+        "empty_or_soft404",
+        "http_4xx"
+      ],
+      "notes": [],
+      "stage_reached": "DEPLOYED_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+      "expected_role": "noindex_sample",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "status": 404,
+        "error": "HTTPError 404",
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+            "status": 404,
+            "location": null,
+            "content_type": "text/html; charset=utf-8"
+          }
+        ],
+        "body_size": 4437,
+        "html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+        "title": "Página não encontrada | CONFENGE",
+        "h1": "Esta página não existe ou não está mais disponível.",
+        "meta_robots": "noindex,nofollow",
+        "meta_description": "A página solicitada não foi encontrada no site da CONFENGE.",
+        "canonical": null,
+        "text_len": 974
+      },
+      "local_html_sha256": "87ad77065e8cf7d9d235269296378e7a448cb6b86cf8078faf5e99103e4d9f5b",
+      "prod_html_sha256": "de6bcd389cd0cc71204bd736121fe27bf825dc952dadd7708d15e4ec3d0b93bc",
+      "in_sitemap": false,
+      "in_hub": null,
+      "defects": [
+        "empty_or_soft404",
+        "http_4xx"
+      ],
+      "notes": [],
+      "stage_reached": "DEPLOYED_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+      "expected_role": "publish_candidate",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535231"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 18127,
+        "html_sha256": "593fe18960dbf2c705f94a224b1adc16c9f668c77931161191a4eb8a469bd83c",
+        "title": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL: histórico de contratação em engenharia | CONFENGE",
+        "h1": "Contratação de engenharia em MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL: o que os dados públicos mostram",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Dossiê de comprador: 49 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+        "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "text_len": 4221
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535231"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 18127,
+        "html_sha256": "593fe18960dbf2c705f94a224b1adc16c9f668c77931161191a4eb8a469bd83c",
+        "title": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL: histórico de contratação em engenharia | CONFENGE",
+        "h1": "Contratação de engenharia em MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL: o que os dados públicos mostram",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Dossiê de comprador: 49 contratos classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+        "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "text_len": 4221
+      },
+      "local_html_sha256": null,
+      "prod_html_sha256": "593fe18960dbf2c705f94a224b1adc16c9f668c77931161191a4eb8a469bd83c",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "orphan_page"
+      ],
+      "notes": [],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+      "expected_role": "publish_candidate",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+        "final_url": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535231"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 21060,
+        "html_sha256": "6d858236eb0663cdfc6551b490abeb1abc8cc7fca4d06a7b388e1653c4190444",
+        "title": "Benchmark de valores: manutencao predial (manutencao-predial-engenharia) em Rio Grande do Sul | CONFENGE",
+        "h1": "Dispersão de valores contratados — manutencao predial (manutencao-predial-engenharia) (Rio Grande do Sul)",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Benchmark manutencao predial (manutencao-predial-engenharia) em Rio Grande do Sul: mediana, P25 e P75 com 19 observações públicas. Não use como preço unitário cego.",
+        "canonical": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+        "text_len": 5868
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+        "final_url": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535232"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 21060,
+        "html_sha256": "6d858236eb0663cdfc6551b490abeb1abc8cc7fca4d06a7b388e1653c4190444",
+        "title": "Benchmark de valores: manutencao predial (manutencao-predial-engenharia) em Rio Grande do Sul | CONFENGE",
+        "h1": "Dispersão de valores contratados — manutencao predial (manutencao-predial-engenharia) (Rio Grande do Sul)",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Benchmark manutencao predial (manutencao-predial-engenharia) em Rio Grande do Sul: mediana, P25 e P75 com 19 observações públicas. Não use como preço unitário cego.",
+        "canonical": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
+        "text_len": 5868
+      },
+      "local_html_sha256": "3c62a7ad8a88275d1e70716e6a684a9c38e6b719cf26b009d7df035baa95bb33",
+      "prod_html_sha256": "6d858236eb0663cdfc6551b490abeb1abc8cc7fca4d06a7b388e1653c4190444",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "orphan_page",
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+      "expected_role": "publish_candidate",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+        "final_url": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535232"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 20953,
+        "html_sha256": "d63b236d69536d0f238ddce57d5de3b04641e525c42b6d3d2a103e63855a315a",
+        "title": "Benchmark de valores: paralelepipedo (pavimentacao-infraestrutura-viaria) em Piaui | CONFENGE",
+        "h1": "Dispersão de valores contratados — paralelepipedo (pavimentacao-infraestrutura-viaria) (Piaui)",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Benchmark paralelepipedo (pavimentacao-infraestrutura-viaria) em Piaui: mediana, P25 e P75 com 12 observações públicas. Não use como preço unitário cego.",
+        "canonical": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+        "text_len": 5856
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+        "final_url": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535232"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 20953,
+        "html_sha256": "d63b236d69536d0f238ddce57d5de3b04641e525c42b6d3d2a103e63855a315a",
+        "title": "Benchmark de valores: paralelepipedo (pavimentacao-infraestrutura-viaria) em Piaui | CONFENGE",
+        "h1": "Dispersão de valores contratados — paralelepipedo (pavimentacao-infraestrutura-viaria) (Piaui)",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Benchmark paralelepipedo (pavimentacao-infraestrutura-viaria) em Piaui: mediana, P25 e P75 com 12 observações públicas. Não use como preço unitário cego.",
+        "canonical": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+        "text_len": 5856
+      },
+      "local_html_sha256": "5d52d7cd248e5c0163294306d9f6d670cea1c7093b1087a02d2007399eff6dc9",
+      "prod_html_sha256": "d63b236d69536d0f238ddce57d5de3b04641e525c42b6d3d2a103e63855a315a",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "orphan_page",
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    },
+    {
+      "path": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+      "expected_role": "publish_candidate",
+      "browser": {
+        "request_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "final_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 19214,
+        "html_sha256": "509fa3e4ab52aaf881e0eb5d3da478bee2211cd251a050a89d5aa502a443416c",
+        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "canonical": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "text_len": 5125
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "final_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535233"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 19214,
+        "html_sha256": "509fa3e4ab52aaf881e0eb5d3da478bee2211cd251a050a89d5aa502a443416c",
+        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+        "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "meta_description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+        "canonical": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "text_len": 5125
+      },
+      "local_html_sha256": "c353ce8d53e981b8320192f55f95d54a1464c1326e3f246fa886381a6e11738b",
+      "prod_html_sha256": "509fa3e4ab52aaf881e0eb5d3da478bee2211cd251a050a89d5aa502a443416c",
+      "in_sitemap": true,
+      "in_hub": null,
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
+      "stage_reached": "CRAWLABLE_PRODUCTION"
+    }
+  ]
+}

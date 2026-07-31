@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.1.0",
+  "export_version": "1.1.0",
+  "web_cfg_sha": "662ee7fca0c36942f3f2b23fc00dab1f31991e4b",
+  "snapshot_hash_short": "bd131ff10842afe8",
+  "source_run_id": "pseo-20260731T160846Z-f9e1a782",
+  "generated_at": "2026-07-31T21:31:28Z",
+  "data_as_of": "2026-07-31",
+  "published_page_count": 4,
+  "sitemap_urls": [
+    "https://confenge.com.br/sitemap-index.xml",
+    "https://confenge.com.br/sitemap.xml",
+    "https://confenge.com.br/sitemap-inteligencia.xml"
+  ],
+  "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
+}

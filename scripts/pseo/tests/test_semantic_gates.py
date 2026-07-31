@@ -91,19 +91,59 @@ class TestSemanticGates(unittest.TestCase):
         fails = semantic_problem_fails({"theme": "aditivos", "evidence_count": 48})
         self.assertTrue(any("aditivo" in f or "evidence" in f for f in fails))
 
-    def test_approval_invalidated_on_dataset_change(self):
+    def test_approval_preserved_when_only_dataset_hash_changes(self):
+        """Global snapshot churn must NOT wipe approval if material is unchanged."""
+        from scripts.pseo.score import _material_signature
+
         c = Candidate(
             page_id="x", page_type="market", url="/x/", title="t", h1="h",
             description="d " * 20, archetype=None, segment=None, region="SC",
             agency_id=None, intent="y", score=95, status="publish",
+            sources=["pncp"], observation_count=20,
         )
+        sig = _material_signature(c)
         out = apply_human_review_gate(
             [c],
-            {"x": {"human_review": "APPROVED", "review_dataset_hash": "old"}},
+            {
+                "x": {
+                    "human_review": "APPROVED",
+                    "review_dataset_hash": "old",
+                    "reviewed_material_signature": sig,
+                }
+            },
             dataset_hash="new",
         )
+        self.assertEqual(out[0].status, "publish")
+        self.assertEqual(out[0].human_review, "APPROVED")
+        self.assertTrue(
+            any("dataset_hash_changed_approval_preserved" in r for r in out[0].reasons)
+        )
+
+    def test_approval_invalidated_on_material_change_only(self):
+        from scripts.pseo.score import _material_signature
+
+        c = Candidate(
+            page_id="x", page_type="market", url="/x/", title="NEW", h1="h",
+            description="d " * 20, archetype=None, segment=None, region="SC",
+            agency_id=None, intent="y", score=95, status="publish",
+            sources=["pncp"], observation_count=20,
+        )
+        prev = _material_signature(c)
+        prev = dict(prev)
+        prev["title"] = "OLD"
+        out = apply_human_review_gate(
+            [c],
+            {
+                "x": {
+                    "human_review": "APPROVED",
+                    "review_dataset_hash": "same",
+                    "reviewed_material_signature": prev,
+                }
+            },
+            dataset_hash="same",
+        )
         self.assertEqual(out[0].status, "noindex")
-        self.assertTrue(any("dataset_changed" in r for r in out[0].reasons))
+        self.assertTrue(any("approval_invalidated_material:title" in r for r in out[0].reasons))
 
 
 class TestEditorialAudit(unittest.TestCase):

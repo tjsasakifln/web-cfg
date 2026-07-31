@@ -293,13 +293,33 @@ Não é monitoramento em tempo real.</p>
 </section>"""
 
 
+_SERVICE_LABELS = {
+    "aditivos-obras-publicas": "Aditivos e serviços extras em obras públicas",
+    "auditoria-orcamento-licitacao": "Auditoria de orçamento, BDI e referências",
+    "medicoes-glosas-obras-publicas": "Medições, glosas e pagamentos",
+    "reequilibrio-obras-publicas": "Reequilíbrio econômico-financeiro",
+    "diagnostico-pre-licitacao": "Diagnóstico pré-licitação e edital",
+    "defesa-tecnica-contratos-publicos": "Defesa técnica e sanções",
+    "acompanhamento-contratos-obras": "Gestão e acompanhamento contratual",
+    "atrasos-prorrogacao-obras-publicas": "Atrasos e prorrogações",
+}
+
+
 def _service_label(path_or_slug: str) -> str:
     s = (path_or_slug or "").strip().strip("/")
     if not s:
         return "Serviço CONFENGE"
-    # last path segment as words
     slug = s.split("/")[-1] if "/" in s else s
-    return slug.replace("-", " ").strip().title() or "Serviço CONFENGE"
+    if slug in _SERVICE_LABELS:
+        return _SERVICE_LABELS[slug]
+    # Humanize without crude Title Case on Portuguese particles
+    words = slug.replace("-", " ").split()
+    small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o", "as", "os"}
+    out = []
+    for i, w in enumerate(words):
+        wl = w.lower()
+        out.append(wl if i > 0 and wl in small else wl.capitalize())
+    return " ".join(out) or "Serviço CONFENGE"
 
 
 def confenge_help(service_paths: list[str], text: str) -> str:

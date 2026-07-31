@@ -3,7 +3,7 @@
   "generated_from": "data/pseo/registry.json",
   "page_count": 19,
   "publish_fail_count": 0,
-  "p0_issue_count": 14,
+  "p0_issue_count": 6,
   "pages": [
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
@@ -278,8 +278,8 @@
       "page_id": "radar-edificacoes-publicas-pr",
       "url": "/radar/edificacoes-publicas-pr/",
       "page_type": "radar",
-      "status": "noindex",
-      "human_review": "NEEDS_DATA_FIX",
+      "status": "publish",
+      "human_review": "APPROVED",
       "decision": "pass",
       "sample": {
         "observation_count": 10
@@ -440,8 +440,8 @@
       "page_id": "prob-orcamento-edital",
       "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
       "page_type": "problem_service",
-      "status": "reject",
-      "human_review": "NEEDS_CONTENT_FIX",
+      "status": "publish",
+      "human_review": "APPROVED",
       "decision": "pass",
       "sample": {
         "observation_count": 48
@@ -461,28 +461,15 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_direct_budget_edital_evidence",
-          "evidence": "no_direct_budget_edital_evidence"
-        },
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ]
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": []
     },
     {
       "page_id": "prob-sinapi-sicro",
       "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
       "page_type": "problem_service",
-      "status": "reject",
-      "human_review": "NEEDS_CONTENT_FIX",
+      "status": "publish",
+      "human_review": "APPROVED",
       "decision": "pass",
       "sample": {
         "observation_count": 48
@@ -502,27 +489,14 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_direct_sinapi_sicro_evidence",
-          "evidence": "no_direct_sinapi_sicro_evidence"
-        },
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ]
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": []
     },
     {
       "page_id": "prob-medicao-glosa",
       "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
       "page_type": "problem_service",
-      "status": "reject",
+      "status": "noindex",
       "human_review": "PENDING",
       "decision": "pass",
       "sample": {
@@ -542,22 +516,15 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ]
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": []
     },
     {
       "page_id": "prob-aditivos-margem",
       "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
       "page_type": "problem_service",
-      "status": "reject",
-      "human_review": "NEEDS_CONTENT_FIX",
+      "status": "publish",
+      "human_review": "APPROVED",
       "decision": "pass",
       "sample": {
         "observation_count": 48
@@ -576,27 +543,14 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_direct_aditivo_evidence",
-          "evidence": "no_direct_aditivo_evidence"
-        },
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ]
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": []
     },
     {
       "page_id": "prob-reequilibrio",
       "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
       "page_type": "problem_service",
-      "status": "reject",
+      "status": "noindex",
       "human_review": "PENDING",
       "decision": "pass",
       "sample": {
@@ -617,15 +571,8 @@
         "label": "Organizar documentos e próximos passos",
         "intent": "organizar_documentos"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ]
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": []
     }
   ]
 }

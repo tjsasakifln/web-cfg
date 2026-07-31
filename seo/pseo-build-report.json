@@ -1,19 +1,26 @@
 {
   "ok": true,
-  "dataset_hash": "faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333",
+  "dataset_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
   "source_run_id": "pseo-20260731T160846Z-f9e1a782",
   "counts": {
-    "reject": 13,
-    "noindex": 6
+    "reject": 8,
+    "publish": 4,
+    "noindex": 7
   },
-  "publishable": [],
-  "noindex": [
+  "publishable": [
     "/radar/edificacoes-publicas-pr/",
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
+  ],
+  "noindex": [
     "/radar/pavimentacao-infraestrutura-viaria-sc/",
     "/radar/pavimentacao-infraestrutura-viaria-rs/",
     "/radar/saneamento-hidraulica-sc/",
     "/radar/pavimentacao-infraestrutura-viaria-pr/",
-    "/radar/edificacoes-publicas-rs/"
+    "/radar/edificacoes-publicas-rs/",
+    "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+    "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
   ],
   "rejected": [
     {
@@ -83,51 +90,6 @@
         "score=72"
       ],
       "score": 72
-    },
-    {
-      "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-      "reasons": [
-        "no_direct_budget_edital_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
-      ],
-      "score": 86
-    },
-    {
-      "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-      "reasons": [
-        "no_direct_sinapi_sicro_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
-      ],
-      "score": 86
-    },
-    {
-      "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
-      "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
-        "score=76"
-      ],
-      "score": 76
-    },
-    {
-      "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
-      "reasons": [
-        "no_direct_aditivo_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
-      ],
-      "score": 86
-    },
-    {
-      "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
-      "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
-        "score=77"
-      ],
-      "score": 77
     }
   ],
   "pages_written": 19,

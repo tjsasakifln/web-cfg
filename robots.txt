@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 
+# Primary entry for crawlers — index of main + inteligência urlsets
+Sitemap: https://confenge.com.br/sitemap-index.xml
 Sitemap: https://confenge.com.br/sitemap.xml
 Sitemap: https://confenge.com.br/sitemap-inteligencia.xml
-Sitemap: https://confenge.com.br/sitemap-index.xml

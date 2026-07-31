@@ -33,7 +33,45 @@
       "/conteudos/sinapi-ou-sicro-obra-publica/",
       "/conteudos/analise-edital-obra-publica-construtora/"
     ],
-    "theme": "orcamento-edital"
+    "theme": "orcamento-edital",
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/orcamento-incompleto-edital-obra-publica/",
+          "/conteudos/sinapi-ou-sicro-obra-publica/",
+          "/conteudos/analise-edital-obra-publica-construtora/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
+        "n": 48
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
+    "evidence_kind": "framework_with_market_density",
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ]
   },
   {
     "confenge_service_slug": "auditoria-orcamento-licitacao",
@@ -68,7 +106,45 @@
       "/conteudos/produtividade-sinapi-obra-publica/",
       "/conteudos/bdi-obra-publica/"
     ],
-    "theme": "sinapi-sicro"
+    "theme": "sinapi-sicro",
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/sinapi-ou-sicro-obra-publica/",
+          "/conteudos/produtividade-sinapi-obra-publica/",
+          "/conteudos/bdi-obra-publica/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
+        "n": 48
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
+    "evidence_kind": "framework_with_market_density",
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ]
   },
   {
     "confenge_service_slug": "medicoes-glosas-obras-publicas",
@@ -102,7 +178,45 @@
       "/conteudos/medicao-de-obra-publica-rejeitada/",
       "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
     ],
-    "theme": "medicao-glosa"
+    "theme": "medicao-glosa",
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/glosa-de-medicao-obra-publica/",
+          "/conteudos/medicao-de-obra-publica-rejeitada/",
+          "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
+        "n": 22
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
+    "evidence_kind": "framework_with_market_density",
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ]
   },
   {
     "confenge_service_slug": "aditivos-obras-publicas",
@@ -137,7 +251,45 @@
       "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
       "/conteudos/limite-aditivo-25-50-obra-publica/"
     ],
-    "theme": "aditivos"
+    "theme": "aditivos",
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/aditivo-qualitativo-quantitativo/",
+          "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+          "/conteudos/limite-aditivo-25-50-obra-publica/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
+        "n": 48
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
+    "evidence_kind": "framework_with_market_density",
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ]
   },
   {
     "confenge_service_slug": "reequilibrio-obras-publicas",
@@ -172,6 +324,44 @@
       "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
       "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
-    "theme": "reequilibrio"
+    "theme": "reequilibrio",
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+          "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+          "/conteudos/documentos-reequilibrio-obra-publica/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
+        "n": 27
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
+    "evidence_kind": "framework_with_market_density",
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ]
   }
 ]

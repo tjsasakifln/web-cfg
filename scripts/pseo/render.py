@@ -100,6 +100,149 @@ def humanize_agency(name: str | None) -> str:
     return n
 
 
+def _service_label_public(slug: str | None) -> str:
+    from scripts.pseo.html_shell import _service_label
+
+    return _service_label(slug or "")
+
+
+def _problem_decision_copy(p: dict) -> str:
+    """Theme-specific decision the visitor is trying to make (unique per page)."""
+    theme = (p.get("theme") or p.get("id") or "").lower()
+    label = p.get("problem_label") or "este cenário"
+    if "aditiv" in theme:
+        return (
+            f"Em {label}, a decisão é se a empresa documenta alteração de projeto/quantitativo "
+            "em tempo real (diário, comunicação formal, medições) ou absorve custo sem cobertura. "
+            "Os dados públicos mostram densidade de obras nos arquétipos relacionados; "
+            "não estimam taxa de aditivo por órgão."
+        )
+    if "sinapi" in theme or "sicro" in theme:
+        return (
+            f"Em {label}, a decisão é qual referência de custo (e produtividade) usar na proposta "
+            "e como justificar desvios. SINAPI e SICRO cobrem naturezas distintas; erro de base "
+            "vira deságio real após a assinatura."
+        )
+    if "orcamento" in theme or "edital" in theme:
+        return (
+            f"Em {label}, a decisão é participar, pedir esclarecimento/impugnação ou recusar o edital "
+            "quando planilha e texto não batem. A massa de contratos no recorte indica mercados "
+            "onde o problema aparece com frequência — não prova inconsistência no edital X."
+        )
+    if "medicao" in theme or "glosa" in theme:
+        return (
+            f"Em {label}, a decisão é como reagir a glosa ou medição rejeitada nas primeiras 48h: "
+            "critério, diário de obra, parcela incontroversa e trilha de comunicação."
+        )
+    if "reequilibr" in theme:
+        return (
+            f"Em {label}, a decisão é se cabe reajuste, repactuação ou reequilíbrio e qual memória "
+            "de cálculo sustenta a equação econômico-financeira."
+        )
+    return (
+        f"Em {label}, a decisão é qual ação comercial/técnica tomar com base em evidência "
+        "documental específica — não em contagem genérica de contratos."
+    )
+
+
+def _problem_action_copy(p: dict) -> str:
+    theme = (p.get("theme") or p.get("id") or "").lower()
+    if "aditiv" in theme:
+        return (
+            "Organize o dossiê de alteração (projeto, quantitativos, comunicações e medições) "
+            "antes de executar o serviço extra. Se o volume for material, acione a trilha de "
+            "aditivos e serviços extras da CONFENGE."
+        )
+    if "sinapi" in theme or "sicro" in theme:
+        return (
+            "Confronte a referência do edital com a natureza do serviço, a data-base e a "
+            "produtividade local. Monte memória de BDI e itens críticos antes de fechar deságio."
+        )
+    if "orcamento" in theme or "edital" in theme:
+        return (
+            "Liste divergências planilha×memorial×caderno, quantifique materialidade e defina "
+            "se o caminho é esclarecimento, impugnação ou proposta com ressalvas documentadas."
+        )
+    if "medicao" in theme or "glosa" in theme:
+        return (
+            "Registre o critério da glosa, separe o incontroverso e reúna diário/fotos/medição "
+            "parcial nas primeiras 48 horas."
+        )
+    if "reequilibr" in theme:
+        return (
+            "Separe o que é reajuste contratual do que é revisão por fato extraordinário e "
+            "prepare memória de impacto com índices e cronograma."
+        )
+    return (
+        "Reúna o edital/contrato, a planilha e a trilha de comunicações; defina a decisão "
+        "e o prazo antes de precificar ou executar."
+    )
+
+
+def _problem_help_copy(p: dict) -> str:
+    theme = (p.get("theme") or p.get("id") or "").lower()
+    svc = _service_label_public(p.get("confenge_service_slug"))
+    if "aditiv" in theme:
+        return (
+            f"A CONFENGE estrutura o dossiê de alteração e a narrativa técnica para {svc.lower()}, "
+            "sem substituir o jurídico da empresa."
+        )
+    if "sinapi" in theme or "sicro" in theme:
+        return (
+            f"A CONFENGE revisa planilha, BDI e referências ({svc}) para reduzir risco de margem "
+            "na proposta."
+        )
+    if "orcamento" in theme or "edital" in theme:
+        return (
+            f"A CONFENGE faz o diagnóstico de inconsistência edital×orçamento e o caminho "
+            f"documental via {svc.lower()}."
+        )
+    return (
+        f"A CONFENGE conecta o problema observado à trilha documental e ao serviço {svc.lower()}."
+    )
+
+
+def _problem_mass_copy(p: dict) -> str:
+    """Unique density sentence per theme (avoids cross-page generic block fail)."""
+    n = p.get("evidence_count") or 0
+    theme = (p.get("theme") or p.get("id") or "").lower()
+    _ARCH_LABEL = {
+        "edificacoes-publicas": "edificações públicas",
+        "pavimentacao-infraestrutura-viaria": "pavimentação e infraestrutura viária",
+        "manutencao-predial-engenharia": "manutenção predial e engenharia",
+        "climatizacao-instalacoes": "climatização e instalações",
+        "saneamento-hidraulica": "saneamento e hidráulica",
+    }
+    arches = ", ".join(
+        _ARCH_LABEL.get(str(a), str(a).replace("-", " "))
+        for a in (p.get("related_archetypes") or [])[:3]
+    ) or "engenharia pública"
+    if "aditiv" in theme:
+        return (
+            f"No recorte exportado há {n} contratos ligados a {arches} — densidade de obras "
+            "onde alterações de projeto costumam aparecer, sem medir incidência de aditivo."
+        )
+    if "sinapi" in theme or "sicro" in theme:
+        return (
+            f"O snapshot associa {n} contratos de {arches} a mercados que usam referências "
+            "oficiais de custo; isso contextualiza o problema de base, não o preço unitário da sua planilha."
+        )
+    if "orcamento" in theme or "edital" in theme:
+        return (
+            f"Há {n} contratos classificados em {arches} no datalake sanitizado — sinal de "
+            "mercados onde a consistência edital×planilha costuma ser crítica na disputa."
+        )
+    if "medicao" in theme or "glosa" in theme:
+        return (
+            f"Base de {n} contratos em {arches} com execução recorrente — útil para discutir "
+            "medição/glosa, sem provar glosa no contrato da sua empresa."
+        )
+    return (
+        f"Massa de {n} registros em {arches} no export público; use como contexto de mercado, "
+        "não como prova do caso concreto."
+    )
+
+
 def money_or_ni(v, value_status: str | None = None) -> str:
     """Format money; never show R$ 0,00 for unknown values."""
     if value_status in {"not_informed", "confidential"}:
@@ -1003,8 +1146,16 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
             "consulte os guias técnicos internos e a legislação aplicável.</small></li>"
         )
     refs_html = "".join(ref_items)
+    _ARCH_LABEL = {
+        "edificacoes-publicas": "edificações públicas",
+        "pavimentacao-infraestrutura-viaria": "pavimentação e infraestrutura viária",
+        "manutencao-predial-engenharia": "manutenção predial e engenharia",
+        "climatizacao-instalacoes": "climatização e instalações",
+        "saneamento-hidraulica": "saneamento e hidráulica",
+    }
     arches = ", ".join(
-        str(a).replace("-", " ").strip().title() for a in (p.get("related_archetypes") or [])
+        _ARCH_LABEL.get(str(a), str(a).replace("-", " ").strip())
+        for a in (p.get("related_archetypes") or [])
     )
     crumbs = [
         ("Início", "/"),
@@ -1037,14 +1188,16 @@ Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
 <section id="guias"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos (sem canibalizar)</h2>
 <p>Estas páginas aprofundam o critério; a página de inteligência contextualiza o mercado.</p>
 <ul>{guides}</ul></section>
-<section id="implicacoes"><p class="eyebrow">ICP</p><h2>Implicações práticas</h2>
-<p>Para <strong>{e(p.get("problem_label") or "este cenário")}</strong>, a decisão comercial e técnica
-depende de evidência documental específica do problema — não de contagens genéricas de contratos
-ou mercados. Use os guias técnicos abaixo para o critério; use esta página só quando houver
-sinal empírico direto no datalake.</p></section>
+<section id="implicacoes"><p class="eyebrow">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
+<p>{e(_problem_decision_copy(p))}</p>
+<p>{e(_problem_mass_copy(p))}</p>
+<p><strong>Limites da conclusão:</strong> {(e((p.get('limitations') or ['Sem limitações declaradas.'])[0]))}</p>
+</section>
+<section id="acao"><p class="eyebrow">Ação</p><h2>Próximo passo prático</h2>
+<p>{e(_problem_action_copy(p))}</p></section>
 {confenge_help(
-    [((p.get('confenge_service_slug') or '').replace('-', ' ').title() or 'serviço técnico CONFENGE')] + list(p.get("technical_guide_paths") or [])[:2],
-    "Do diagnóstico do problema à trilha documental e ao próximo passo contratual ou de proposta.",
+    [p.get('confenge_service_slug') or ''] + list(p.get("technical_guide_paths") or [])[:2],
+    _problem_help_copy(p),
 )}
 {cta_block(meta, c.cta_label, wa, p.get("problem_label") or "Cenário técnico")}
 {methodology_block(None, None, p.get("sources") or [], p.get("limitations") or [])}
@@ -1052,7 +1205,7 @@ sinal empírico direto no datalake.</p></section>
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>Serviço</span><h2><a href="/{e((p.get('confenge_service_slug') or '').strip('/'))}/">{e(((p.get('confenge_service_slug') or '').replace('-', ' ').title()) or 'Serviço CONFENGE')}</a></h2></div>
+<div class="aside-card"><span>Serviço</span><h2><a href="/{e((p.get('confenge_service_slug') or '').strip('/'))}/">{e(_service_label_public(p.get('confenge_service_slug')))}</a></h2></div>
 </aside></div>
 """
     graph = [
@@ -1147,6 +1300,7 @@ def render_hub(
     intro: str,
     items: list[tuple[str, str, str]],
     crumbs: list[tuple[str, str | None]],
+    robots: str = "index,follow",
 ) -> str:
     cards = "".join(
         f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
@@ -1184,7 +1338,7 @@ def render_hub(
         title=title,
         description=description,
         canonical_path=path,
-        robots="index,follow",
+        robots=robots or "index,follow",
         jsonld_graph=graph,
         body_main=body,
         wa_message="Olá, Tiago. Quero explorar a inteligência de mercado da CONFENGE.",

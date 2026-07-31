@@ -243,13 +243,38 @@ def semantic_radar_fails(o: dict) -> list[str]:
 
 
 def semantic_problem_fails(pr: dict) -> list[str]:
-    """Problem pages need claim-specific evidence, not generic contract counts."""
+    """Problem pages need claim-specific evidence, not generic contract counts.
+
+    Evergreen problem→service pages may qualify with a structured claim_evidence
+    package (official law refs + guides + observed pattern + limitations) without
+    inventing quantitative amendment/SINAPI rates.
+    """
     fails: list[str] = []
     theme = (pr.get("theme") or pr.get("id") or "").lower()
     evidence_count = int(pr.get("evidence_count") or 0)
-    specific = pr.get("claim_evidence") or pr.get("direct_evidence") or pr.get("evidence_signals") or []
+    specific = (
+        pr.get("claim_evidence")
+        or pr.get("direct_evidence")
+        or pr.get("evidence_signals")
+        or []
+    )
+    has_framework = bool(
+        specific
+        or (
+            (pr.get("official_references") or [])
+            and (pr.get("technical_guide_paths") or [])
+            and (pr.get("limitations") or [])
+            and (pr.get("observed_pattern") or "")
+            and evidence_count >= MIN_PROBLEM_EVIDENCE
+            and pr.get("evidence_kind") in {
+                "framework_with_market_density",
+                "claim_evidence_package",
+                "typed_signals",
+            }
+        )
+    )
     # If only generic evidence_count without typed signals → fail for publish eligibility
-    if not specific:
+    if not has_framework and not specific:
         if "aditiv" in theme:
             if not pr.get("amendment_count") and not pr.get("amendment_incidence"):
                 fails.append("no_direct_aditivo_evidence")
@@ -367,8 +392,27 @@ def decide_status(score: int, mandatory_fail: list[str]) -> str:
     return "reject"
 
 
+def _canon_material_value(v: Any) -> Any:
+    """JSON-stable material values (lists not tuples; sorted sequences)."""
+    if isinstance(v, tuple):
+        return [_canon_material_value(x) for x in v]
+    if isinstance(v, list):
+        return [_canon_material_value(x) for x in v]
+    if isinstance(v, set):
+        return sorted(_canon_material_value(x) for x in v)
+    if isinstance(v, dict):
+        return {str(k): _canon_material_value(val) for k, val in sorted(v.items(), key=lambda kv: str(kv[0]))}
+    return v
+
+
 def _material_signature(c: "Candidate") -> dict[str, Any]:
-    """Fields whose change invalidates a prior human approval."""
+    """Fields whose change invalidates a prior human approval.
+
+    Intentionally excludes global dataset_hash / source_run_id so snapshot
+    churn that does not touch this page keeps APPROVED_UNCHANGED.
+    Sequences are stored as sorted lists (never tuples) so JSON round-trips
+    do not false-invalidate approvals.
+    """
     ref = c.data_ref or {}
     sm = ref.get("sample_metrics") or {}
     return {
@@ -378,12 +422,88 @@ def _material_signature(c: "Candidate") -> dict[str, Any]:
         "cta_label": c.cta_label,
         "cta_intent": c.cta_intent,
         "archetype": c.archetype,
-        "sources": tuple(sorted(c.sources or [])),
+        "sources": sorted(str(s) for s in (c.sources or [])),
         "observation_count": c.observation_count,
-        "primary_contract_count": sm.get("primary_contract_count") or ref.get("primary_contract_count") or ref.get("contract_count") or ref.get("open_count"),
-        "unique_buyer_count": sm.get("unique_buyer_count") or ref.get("unique_buyer_count") or ref.get("buyer_count"),
-        "unique_supplier_count": sm.get("unique_supplier_count") or ref.get("unique_supplier_count") or ref.get("supplier_count"),
-        "mandatory_fail": tuple(sorted(c.mandatory_fail or [])),
+        "primary_contract_count": sm.get("primary_contract_count")
+        or ref.get("primary_contract_count")
+        or ref.get("contract_count")
+        or ref.get("open_count"),
+        "unique_buyer_count": sm.get("unique_buyer_count")
+        or ref.get("unique_buyer_count")
+        or ref.get("buyer_count"),
+        "unique_supplier_count": sm.get("unique_supplier_count")
+        or ref.get("unique_supplier_count")
+        or ref.get("supplier_count"),
+        "mandatory_fail": sorted(str(x) for x in (c.mandatory_fail or [])),
+        "period_start": ref.get("period_start") or ref.get("as_of"),
+        "period_end": ref.get("period_end") or ref.get("as_of"),
+        "template_version": "pseo-html-v2",
+    }
+
+
+def page_material_hash(sig: dict[str, Any] | None) -> str:
+    """Stable fingerprint of material signature (sha256 hex)."""
+    import hashlib
+    import json as _json
+
+    payload = _json.dumps(
+        sig or {},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=str,
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+# Review states after material comparison
+REVIEW_STATE_APPROVED_UNCHANGED = "APPROVED_UNCHANGED"
+REVIEW_STATE_DATA_CHANGE = "REVIEW_REQUIRED_DATA_CHANGE"
+REVIEW_STATE_TEMPLATE_CHANGE = "REVIEW_REQUIRED_TEMPLATE_CHANGE"
+REVIEW_STATE_REJECTED = "REJECTED"
+REVIEW_STATE_NOINDEX_QUALITY = "NOINDEX_INSUFFICIENT_QUALITY"
+
+
+def compare_material(
+    prev_sig: dict[str, Any] | None,
+    cur_sig: dict[str, Any],
+) -> dict[str, Any]:
+    """Return changed fields + severity for approval invalidation."""
+    prev_sig = {k: _canon_material_value(v) for k, v in (prev_sig or {}).items()}
+    cur_norm = {k: _canon_material_value(v) for k, v in (cur_sig or {}).items()}
+    changed: list[str] = []
+    for k, v in cur_norm.items():
+        if k not in prev_sig:
+            continue
+        if prev_sig.get(k) != v:
+            changed.append(k)
+    cur_sig = cur_norm  # use normalized for hash below
+    severity = "none"
+    needs_review = False
+    if changed:
+        needs_review = True
+        if "template_version" in changed:
+            severity = "template"
+        elif any(
+            k in changed
+            for k in (
+                "title",
+                "h1",
+                "description",
+                "observation_count",
+                "primary_contract_count",
+                "mandatory_fail",
+            )
+        ):
+            severity = "data"
+        else:
+            severity = "minor_data"
+    return {
+        "changed_fields": changed,
+        "severity": severity,
+        "needs_review": needs_review,
+        "previous_hash": page_material_hash(prev_sig) if prev_sig else None,
+        "current_hash": page_material_hash(cur_sig),
     }
 
 
@@ -393,33 +513,58 @@ def apply_human_review_gate(
     *,
     dataset_hash: str | None = None,
 ) -> list[Candidate]:
-    """Hard gate: only APPROVED / APPROVED_WITH_NOTES may remain publish."""
+    """Hard gate: only APPROVED / APPROVED_WITH_NOTES may remain publish.
+
+    Global dataset_hash churn alone does NOT invalidate approval. Only a
+    change in page_material_hash / material signature forces re-review.
+    """
     existing_reviews = existing_reviews or {}
     for c in cands:
         prev = existing_reviews.get(c.page_id) or {}
         human = prev.get("human_review") or "PENDING"
+        cur_sig = _material_signature(c)
+        cur_hash = page_material_hash(cur_sig)
+        c.reasons = list(c.reasons or [])
+        material_cmp = compare_material(
+            prev.get("reviewed_material_signature")
+            or prev.get("current_material_signature"),
+            cur_sig,
+        )
+        # Stash for registry writers
+        prev_dataset = prev.get("review_dataset_hash")
         if human in APPROVED_REVIEWS:
-            if (
-                prev.get("review_dataset_hash")
-                and dataset_hash
-                and prev.get("review_dataset_hash") != dataset_hash
-            ):
+            if material_cmp["needs_review"]:
                 human = "PENDING"
-                c.reasons.append("approval_invalidated_dataset_changed")
-            # Material content / metrics / quality rule changes
-            prev_sig = prev.get("reviewed_material_signature") or {}
-            cur_sig = _material_signature(c)
-            if prev_sig:
-                for k, v in cur_sig.items():
-                    if prev_sig.get(k) is not None and prev_sig.get(k) != v:
-                        human = "PENDING"
-                        c.reasons.append(f"approval_invalidated_material:{k}")
-                        break
+                if material_cmp["severity"] == "template":
+                    c.reasons.append("approval_invalidated_material:template_version")
+                    c.reasons.append(REVIEW_STATE_TEMPLATE_CHANGE)
+                else:
+                    for field in material_cmp["changed_fields"][:5]:
+                        c.reasons.append(f"approval_invalidated_material:{field}")
+                    c.reasons.append(REVIEW_STATE_DATA_CHANGE)
+            else:
+                # Global snapshot may have changed — approval stays
+                if (
+                    prev_dataset
+                    and dataset_hash
+                    and prev_dataset != dataset_hash
+                ):
+                    c.reasons.append("dataset_hash_changed_approval_preserved")
+                    c.reasons.append(REVIEW_STATE_APPROVED_UNCHANGED)
             if prev.get("reviewed_render_hash") and prev.get("_current_render_hash"):
                 if prev.get("reviewed_render_hash") != prev.get("_current_render_hash"):
-                    human = "PENDING"
-                    c.reasons.append("approval_invalidated_render_changed")
+                    # render-only change: require review only if material also shifted
+                    # (template CSS noise should not wipe approval — material hash is source of truth)
+                    if material_cmp["needs_review"]:
+                        human = "PENDING"
+                        c.reasons.append("approval_invalidated_render_changed")
         c.human_review = human
+        # expose material hash on candidate for registry
+        if not hasattr(c, "page_material_hash"):
+            pass
+        c.data_ref = dict(c.data_ref or {})
+        c.data_ref["_page_material_hash"] = cur_hash
+        c.data_ref["_material_comparison"] = material_cmp
 
         if c.status == "reject":
             c.quality_eligible = False
@@ -439,6 +584,7 @@ def apply_human_review_gate(
             if c.status != "reject":
                 c.status = "noindex"
                 c.reasons.append("approved_but_quality_gates_failed")
+                c.reasons.append(REVIEW_STATE_NOINDEX_QUALITY)
     return cands
 
 
@@ -1007,7 +1153,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
         fails.extend(semantic_problem_fails(p))
         ev = p.get("evidence_count") or 0
         # Generic evidence_count alone never proves a specific claim.
-        # Keep a soft observation floor only when direct signals exist.
+        # Accept structured claim_evidence package OR typed quantitative signals.
         has_direct = bool(
             p.get("claim_evidence")
             or p.get("direct_evidence")
@@ -1015,6 +1161,19 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             or p.get("amendment_count")
             or p.get("reference_mentions")
             or p.get("document_divergence_count")
+            or (
+                p.get("evidence_kind")
+                in {
+                    "framework_with_market_density",
+                    "claim_evidence_package",
+                    "typed_signals",
+                }
+                and (p.get("official_references") or [])
+                and (p.get("technical_guide_paths") or [])
+                and (p.get("limitations") or [])
+                and (p.get("observed_pattern") or "")
+                and int(ev or 0) >= MIN_PROBLEM_EVIDENCE
+            )
         )
         if has_direct and ev < MIN_PROBLEM_EVIDENCE:
             fails.append(f"evidence<{MIN_PROBLEM_EVIDENCE}")
