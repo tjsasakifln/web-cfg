@@ -4,129 +4,104 @@ Date: 2026-07-31
 
 ## Verdict
 
-System elevated to semantic/editorial/governance SOTA standard for containment phase.
-
-- **publish=0** (intentional). No page is indexable by inertia from the old eight approvals.
-- **No deploy** (nothing to index).
+- **publish=0** intentional; old eight approvals revoked; nothing indexable by inertia.
+- **No deploy** (publish=0).
 - Mariópolis missing-vs-known near-dup residual is **fixed on the shipped path**.
-- Human may individually audit-approve quality-eligible radars only; **no bulk approve**.
+- Quality-eligible radars remain noindex until **individual** human APPROVED (no bulk).
 
-## Verified SHAs (from  + manifest)
+## Verified SHAs
 
-| Artifact | Ref | SHA |
+Captured with git rev-parse and data/pseo/manifest.json at write time.
+
+| Artifact | Branch/path | SHA |
 |---|---|---|
-| web-cfg HEAD |  at delivery commit |  |
-| web-cfg Mariópolis fix |  (code+reexport) |  |
-| extra-cli HEAD |  |  |
-| dataset_hash | data/pseo/manifest.json |  |
-| source_commit | export pin |  |
+| web-cfg HEAD (before this docs commit) | main | 943ed540c92c4c063f17a058dad4476b0225dc81 |
+| web-cfg Mariópolis code+reexport | main | 57b5d3a19623356267b9549ad7bc98f3dcc97b23 |
+| extra-cli HEAD | feat/pseo-semantic-sota | 01123735ed0e240b0adf2233269ac947fa6d56c2 |
+| dataset_hash | data/pseo/manifest.json | faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333 |
+| source_commit | export pin | 01123735ed0e240b0adf2233269ac947fa6d56c2 |
 | data_as_of | manifest | 2026-07-31 |
 
-Registry counts: reject=13, noindex=6, **publish=0**.
+Registry: {'reject': 13, 'noindex': 6}
 
-Note: a git commit cannot embed its own final SHA without amend churn; **web-cfg HEAD above is c024d7f20677ab832b246dd2dae70577b75268cf after this delivery file's commit parent chain tip at write time. Verify with c024d7f20677ab832b246dd2dae70577b75268cf and c024d7f docs(pseo): final delivery with verified SHAs and publish=0 decisions.**
+After committing this file, verify tip with: git rev-parse HEAD
 
-## Mariópolis residual (skeptic) — closed
+## Mariópolis residual — closed
 
-| Check | Observation |
+| Check | Result |
 |---|---|
-| Rows for Reforma Centro / Mariópolis | **1** |
-| Kept | `76995323000124-1-000119/2026` valor=1230482.04 known |
-| open_count radar-edificacoes-publicas-pr | **10** (was 11) |
-| Producer | `_cluster_near_duplicates`: missing valor merges into sole known bucket; keep prefers known |
-| Consumer | `semantic_radar_fails` base key omits valor; missing+known → duplicate_items if present |
-| Render | radar table uses `money_or_ni(valor, value_status)` → "não informado" (not `money()` em-dash) |
-| Live HTML | single Mariópolis mention; R$ 1.230.482,04 shown; no …000118 |
+| Rows | **1** |
+| Kept | 76995323000124-1-000119/2026 valor=1230482.04 known |
+| open_count | **10** (was 11) |
+| Producer | cluster missing into sole known bucket; keep prefers known |
+| Consumer gate | base key omits valor; missing+known fails if both present |
+| Render | radar uses money_or_ni (not money em-dash) |
+| HTML | single Mariopolis mention; R$ 1.230.482,04 |
 
-## Acceptance suite (re-run this session; exit 0)
+## Acceptance suite (this session, all exit 0)
 
-| Command | Exit | Evidence log |
-|---|---|---|
-| npm run pseo:build | 0 | scratch npm-pseo-build.log |
-| npm run pseo:validate | 0 publish=0 editorial_pf=0 | npm-pseo-validate.log |
-| npm run pseo:audit | 0 publish_fail=0 | npm-pseo-audit.log |
-| npm run pseo:test | 0 **28 passed** | npm-pseo-test.log |
-| npm run test:analytics | 0 | npm-test-analytics.log |
-| npm run validate:seo | 0 VALIDATION_OK | npm-validate-seo.log |
-| extra-cli pytest tests/pseo | 0 **52 passed** | extra-cli-pytest.log |
-| Playwright 390×844 + 1440×900 | 16/16 OK | playwright-results.json |
+| Command | Result |
+|---|---|
+| npm run pseo:build | 0 |
+| npm run pseo:validate | 0; publish=0; editorial publish_fail=0 |
+| npm run pseo:audit | 0; publish_fail_count=0 |
+| npm run pseo:test | 0; 28 passed |
+| npm run test:analytics | 0 |
+| npm run validate:seo | 0; VALIDATION_OK |
+| extra-cli pytest tests/pseo | 0; 52 passed |
+| Playwright 390x844 + 1440x900 | 16/16 OK |
 
-Scratch: `/tmp/grok-goal-c61c87a5a926/implementer/`
+Logs: /tmp/grok-goal-c61c87a5a926/implementer/
 
 ## Artifacts
 
-| Artifact | Status |
-|---|---|
-| seo/pseo-query-map.csv | present |
-| seo/pseo-cannibalization-report.md | present |
-| scripts/pseo/learn.py | present; recommendations only (auto_mutate=false) |
-| data/pseo/metrics/gsc|analytics|crm | present (2026-07) |
-| scripts/pseo/editorial_audit.py | present; wired validate+audit |
-| .github/workflows/pseo.yml | present |
+- seo/pseo-query-map.csv
+- seo/pseo-cannibalization-report.md
+- scripts/pseo/learn.py (recommendations only, auto_mutate=false)
+- data/pseo/metrics/gsc|analytics|crm/2026-07.json
+- scripts/pseo/editorial_audit.py + CI .github/workflows/pseo.yml
 
 ## Final decisions — original eight
 
 | page_id | status | human_review | qe | reasons |
 |---|---|---|---|---|
-| `agency-88830609` | reject | NEEDS_DATA_FIX | qe=False | suppliers<3, temporal_span_days<180, exercises<2, max_single_day_share>0.70, score=83 |
-| `price-manutencao-predial-engenharia-rs-manutencao-predial` | reject | NEEDS_DATA_FIX | qe=False | buyers<3, suppliers<3, temporal_span_days<90, max_buyer_share>0.60, score=84 |
-| `price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo` | reject | NEEDS_DATA_FIX | qe=False | obs<15, primary_contracts<15, temporal_span_days<90, score=80 |
-| `radar-edificacoes-publicas-pr` | noindex | NEEDS_DATA_FIX | qe=True | gates_ok, score=85, human_review=NEEDS_DATA_FIX_blocks_index |
-| `radar-pavimentacao-infraestrutura-viaria-sc` | noindex | NEEDS_DATA_FIX | qe=False | gates_ok, score=75 |
-| `prob-orcamento-edital` | reject | NEEDS_CONTENT_FIX | qe=False | no_direct_budget_edital_evidence, no_claim_specific_evidence, score=86 |
-| `prob-sinapi-sicro` | reject | NEEDS_CONTENT_FIX | qe=False | no_direct_sinapi_sicro_evidence, no_claim_specific_evidence, score=86 |
-| `prob-aditivos-margem` | reject | NEEDS_CONTENT_FIX | qe=False | no_direct_aditivo_evidence, no_claim_specific_evidence, score=86 |
+| agency-88830609 | reject | NEEDS_DATA_FIX | qe=False | suppliers<3, temporal_span_days<180, exercises<2, max_single_day_share>0.70, score=83 |
+| price-manutencao-predial-engenharia-rs-manutencao-predial | reject | NEEDS_DATA_FIX | qe=False | buyers<3, suppliers<3, temporal_span_days<90, max_buyer_share>0.60, score=84 |
+| price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo | reject | NEEDS_DATA_FIX | qe=False | obs<15, primary_contracts<15, temporal_span_days<90, score=80 |
+| radar-edificacoes-publicas-pr | noindex | NEEDS_DATA_FIX | qe=True | gates_ok, score=85, human_review=NEEDS_DATA_FIX_blocks_index |
+| radar-pavimentacao-infraestrutura-viaria-sc | noindex | NEEDS_DATA_FIX | qe=False | gates_ok, score=75 |
+| prob-orcamento-edital | reject | NEEDS_CONTENT_FIX | qe=False | no_direct_budget_edital_evidence, no_claim_specific_evidence, score=86 |
+| prob-sinapi-sicro | reject | NEEDS_CONTENT_FIX | qe=False | no_direct_sinapi_sicro_evidence, no_claim_specific_evidence, score=86 |
+| prob-aditivos-margem | reject | NEEDS_CONTENT_FIX | qe=False | no_direct_aditivo_evidence, no_claim_specific_evidence, score=86 |
 
-### Policy on quality-eligible radar
+### Quality-eligible radar policy
 
-`radar-edificacoes-publicas-pr` is **quality_eligible=True** and **status=noindex** because human_review remains `NEEDS_DATA_FIX` from containment §1. Gates are OK after Mariópolis collapse. **Not auto-approved.** A human must run:
+radar-edificacoes-publicas-pr: quality_eligible=True, status=noindex, human_review=NEEDS_DATA_FIX.
+Gates OK after Mariopolis collapse. Not auto-approved. Human must run review.py audit then set APPROVED individually.
 
-```bash
-python3 scripts/pseo/review.py audit radar-edificacoes-publicas-pr
-# then only if checklist passes:
-python3 scripts/pseo/review.py set radar-edificacoes-publicas-pr APPROVED --reviewer <human> --notes "..."
-```
+### Other noindex radars
 
-No bulk approval exists or was used.
-
-### Other live noindex radars
-
-| page_id | status | human_review | qe | sample reasons |
+| page_id | status | human_review | qe | reasons |
 |---|---|---|---|---|
-| `radar-pavimentacao-infraestrutura-viaria-rs` | noindex | PENDING | qe=False | gates_ok, score=72 |
-| `radar-saneamento-hidraulica-sc` | noindex | PENDING | qe=False | gates_ok, score=72 |
-| `radar-pavimentacao-infraestrutura-viaria-pr` | noindex | PENDING | qe=False | gates_ok, score=72 |
-| `radar-edificacoes-publicas-rs` | noindex | PENDING | qe=False | gates_ok, score=69 |
+| radar-pavimentacao-infraestrutura-viaria-rs | noindex | PENDING | qe=False | gates_ok, score=72 |
+| radar-saneamento-hidraulica-sc | noindex | PENDING | qe=False | gates_ok, score=72 |
+| radar-pavimentacao-infraestrutura-viaria-pr | noindex | PENDING | qe=False | gates_ok, score=72 |
+| radar-edificacoes-publicas-rs | noindex | PENDING | qe=False | gates_ok, score=69 |
 
-## What shipped
+## Pendencias
 
-### extra-cli (`01123735ed0e`)
-- Contract identity typology; primary vs reajuste/aditivo metrics
-- Opportunity identity + official-ID dedupe + near-dup second pass
-- Missing↔known valor clustering with known-value keep preference
-- Classifiers; humanized names; §3.2 export fields; page-level duplicate_rate
+1. Individual human APPROVED for quality-eligible radars only.
+2. Scenario pages reject until claim-specific evidence.
+3. Agency/price need more independent primary contracts.
+4. Playwright not in package.json (scratch smoke only).
+5. No deploy while publish=0.
+6. extra-cli feat/pseo-semantic-sota merge when ready.
 
-### web-cfg (`0883cc8fd19e`)
-- Semantic gates (score cannot override mandatory fails)
-- editorial_audit P0/P1; review invalidation (dataset/material/render)
-- money_or_ni on radar; BR dates; soft_meta; Dataset JSON-LD honesty
-- Intent/cannibalization maps; metrics importers; learn.py; CI; tests
+## Manual deploy (only if publish>0 later)
 
-## Pendências reais
+    git push origin main
+    # host deploy
+    node seo/scripts/playwright_prod_checklist.mjs
 
-1. Individual human APPROVED for quality-eligible radars only (start: `radar-edificacoes-publicas-pr`).
-2. Scenario pages stay reject until claim-specific evidence or consolidation with guides.
-3. Agency/price rejects need more independent primary contracts — do not lower gates.
-4. Playwright not in package.json; candidate smoke ran via scratch install.
-5. **Deploy blocked** while publish=0.
-6. extra-cli branch `feat/pseo-semantic-sota` merge when ready.
+No production credentials → no deploy performed.
 
-## Manual deploy (only after publish>0 and green validate)
-
-```text
-git push origin main
-# host deploy
-node seo/scripts/playwright_prod_checklist.mjs
-```
-
-No production credentials in session → **no deploy performed**.
