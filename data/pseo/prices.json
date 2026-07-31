@@ -1,749 +1,286 @@
 [
   {
-    "dispersion_iqr": 176728.5,
+    "comparison_confidence": 0.9,
+    "comparison_group": "manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS",
+    "comparison_meta": {
+      "comparison_confidence": 0.9,
+      "comparison_group": "manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS",
+      "exclusion_criteria": [
+        "locacao_imovel",
+        "credenciamento",
+        "limpeza_sem_obra",
+        "fornecimento_material_isolado",
+        "classes_semanticas_conflitantes"
+      ],
+      "heterogeneity_flags": [
+        "regime_unknown"
+      ],
+      "inclusion_criteria": [
+        "typology=manutencao_predial",
+        "scope=manutencao",
+        "nature=obra",
+        "archetype=manutencao-predial-engenharia",
+        "uf=RS"
+      ],
+      "nature": "obra",
+      "regime": "nao_informado",
+      "scope": "manutencao",
+      "typology": "manutencao_predial"
+    },
+    "dispersion_iqr": 17433.0,
     "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
+      "locacao_imovel",
+      "credenciamento",
+      "limpeza_sem_obra",
+      "fornecimento_material_isolado",
+      "classes_semanticas_conflitantes",
+      "grupos com naturezas conflitantes",
+      "confiança abaixo do limiar"
     ],
-    "id": "price-edificacoes-publicas-rs",
+    "heterogeneity_flags": [
+      "regime_unknown"
+    ],
+    "id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
     "inclusion_criteria": [
-      "Objeto classificado no arquétipo Edificações públicas",
-      "UF = RS",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
+      "typology=manutencao_predial",
+      "scope=manutencao",
+      "nature=obra",
+      "archetype=manutencao-predial-engenharia",
+      "uf=RS",
+      "n>=12",
+      "comparison_confidence>=0.55",
+      "somente aec_confirmed"
     ],
     "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
+      "Observações são contratos integrais, não preços unitários.",
+      "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+      "Outliers identificados por regra IQR 1.5×."
     ],
-    "max_value": 5897969.07,
-    "median_value": 30051.0,
+    "max_value": 47759.63,
+    "median_value": 15268.5,
+    "mesh_slug": "manutencao-predial-engenharia-rs",
     "min_value": 5366.25,
-    "object_label": "Edificações públicas",
-    "object_pattern": "edificacoes-publicas",
-    "observation_count": 40,
-    "p25_value": 15151.5,
-    "p75_value": 191880.0,
-    "period_end": "2026-07-08",
-    "period_start": "2025-11-25",
-    "public_examples": [
-      {
-        "data_publicacao": "2026-07-01",
-        "municipio": "Canoas",
-        "objeto": "Contratação de pessoa jurídica da área de arquitetura e/ou engenharia para produção dos\r\nprojetos executivos, bem como para a execução da UBS Boa Saúde, em atendimento à demanda\r\nda Secretaria Municip",
-        "orgao_nome": "PREFEITURA MUNICIPAL DE CANOAS PREFEITURA MUNICIPAL DE CANOAS",
-        "source": "pncp_contracts",
-        "uf": "RS",
-        "valor": 5897969.07
-      },
-      {
-        "data_publicacao": "2025-11-25",
-        "municipio": "Ivoti",
-        "objeto": "Contratação, por empreitada global, de empresa especializada para a construção de 25 unidades habitacionais, no âmbito do Convênio nº MCidades 974221/2025, firmado entre o Município de Ivoti e o Minis",
-        "orgao_nome": "MUNICIPIO DE IVOTI",
-        "source": "pncp_contracts",
-        "uf": "RS",
-        "valor": 4848000.0
-      },
-      {
-        "data_publicacao": "2026-07-03",
-        "municipio": "Porto Alegre",
-        "objeto": "Contratação, em regime de empreitada por preços unitários, de serviços de reforma do sistema de climatização do Foro Regional do Alto Petrópolis.",
-        "orgao_nome": "TRIBUNAL DE JUSTIÇA DO ESTADO DO RIO G.DO SUL",
-        "source": "pncp_contracts",
-        "uf": "RS",
-        "valor": 4161856.87
-      },
-      {
-        "data_publicacao": "2026-07-03",
-        "municipio": "Porto Alegre",
-        "objeto": "EDITAL DE CREDECIAMENTO PARA SELEÇÃO DE ESCOLAS PRIVADAS DE EDUCAÇÃO INFANTIL LOCALIZADAS NO MUNICÍPIO DE PORTO ALEGRE/RS PARA OFERTA DE VAGAS NA ETAPA DA CRECHE, EM TEMPO INTEGRAL, PARA CRIANÇAS DE 0",
-        "orgao_nome": "SMED - Secretaria Municipal de Educação",
-        "source": "pncp_contracts",
-        "uf": "RS",
-        "valor": 1034332.92
-      },
-      {
-        "data_publicacao": "2026-07-03",
-        "municipio": "Rio Grande",
-        "objeto": "Locação de prédio situado na Av. Presidente Vargas, Nº 912, para alocar os núcleos de materiais, infraestrutura e patrimônio da SMED.",
-        "orgao_nome": "PREFEITURA MUNICIPAL DO RIO GRANDE - RS",
-        "source": "pncp_contracts",
-        "uf": "RS",
-        "valor": 900000.0
-      }
-    ],
-    "region": "RS",
-    "region_label": "Rio Grande do Sul",
-    "slug": "edificacoes-publicas-rs",
-    "sources": [
-      "pncp_contracts"
-    ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
-  },
-  {
-    "dispersion_iqr": 77904.05,
-    "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
-    ],
-    "id": "price-edificacoes-publicas-sp",
-    "inclusion_criteria": [
-      "Objeto classificado no arquétipo Edificações públicas",
-      "UF = SP",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
-    ],
-    "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
-    ],
-    "max_value": 6320000.0,
-    "median_value": 32230.0,
-    "min_value": 6180.0,
-    "object_label": "Edificações públicas",
-    "object_pattern": "edificacoes-publicas",
-    "observation_count": 28,
-    "p25_value": 13446.0,
-    "p75_value": 91350.05,
-    "period_end": "2026-07-08",
-    "period_start": "2024-02-28",
-    "public_examples": [
-      {
-        "data_publicacao": "2026-07-01",
-        "municipio": "Pontal",
-        "objeto": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DE OBRA DE CONSTRUÇÃO DE 50 CASAS DO PROGRAMA MINHA CASA, MINHA VIDA (RECURSO FEDERAL).",
-        "orgao_nome": "PREFEITURA MUNICIPAL DE PONTAL - SP",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 6320000.0
-      },
-      {
-        "data_publicacao": "2026-07-01",
-        "municipio": "Piracicaba",
-        "objeto": "CONTRATAÇÃO DE FORNECIMENTO DE ENERGIA ELÉTRICA PARA OS PRÉDIOS ADMINISTRATIVOS DA SECRETARIA ESTADUAL DA EDUCAÇÃO CLASSIFICADOS NO GRUPO B, PARA O EXERCÍCIO DE 2026, NO ÂMBITO DESTA UNIDADE REGIONAL ",
-        "orgao_nome": "ESP-DIR.ENS.-REG.PIRACICABA",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 3352065.26
-      },
-      {
-        "data_publicacao": "2026-06-29",
-        "municipio": "São Paulo",
-        "objeto": "REFORMA DA SALA DE INFORMÁTICA E LEITURA, DA QUADRA DE ESPORTES, DEMOLIÇÃO E RECONSTRUÇÃO DE MURO E MANEJO ARBOREO",
-        "orgao_nome": "ESP-PRESTACAO DE SERVICOS FDE/SEE",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 792168.99
-      },
-      {
-        "data_publicacao": "2026-06-12",
-        "municipio": "Itaquaquecetuba",
-        "objeto": "C. E. E. PARA MANUTENCAO E ADEQUACAO DE ESPACO E EDIFICACOES",
-        "orgao_nome": "Prefeitura Municipal de Itaquaquecetuba",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 405617.89
-      },
-      {
-        "data_publicacao": "2026-07-07",
-        "municipio": "Leme",
-        "objeto": "REFORMA UNIDADE DE SAUDE DA FAMILIA UBS VANESSA.",
-        "orgao_nome": "Leme",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 249493.84
-      }
-    ],
-    "region": "SP",
-    "region_label": "São Paulo",
-    "slug": "edificacoes-publicas-sp",
-    "sources": [
-      "pncp_contracts"
-    ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
-  },
-  {
-    "dispersion_iqr": 1778025.2,
-    "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
-    ],
-    "id": "price-edificacoes-publicas-mg",
-    "inclusion_criteria": [
-      "Objeto classificado no arquétipo Edificações públicas",
-      "UF = MG",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
-    ],
-    "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
-    ],
-    "max_value": 8718990.04,
-    "median_value": 419998.0,
-    "min_value": 11200.0,
-    "object_label": "Edificações públicas",
-    "object_pattern": "edificacoes-publicas",
-    "observation_count": 27,
-    "p25_value": 71974.8,
-    "p75_value": 1850000.0,
-    "period_end": "2026-07-08",
-    "period_start": "2025-10-28",
-    "public_examples": [
-      {
-        "data_publicacao": "2026-07-03",
-        "municipio": "Vespasiano",
-        "objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE CONSTRUÇÃO DE ESCOLA EM TEMPO INTEGRAL – FNDE – PROJETO PRÓPRIO NO BAIRRO GÁVEA, COM RECURSOS PROVENIENTES DO TERMO DE COMPROMISSO nº 1096502-67/2",
-        "orgao_nome": "Unidade Única",
-        "source": "pncp_contracts",
-        "uf": "MG",
-        "valor": 8718990.04
-      },
-      {
-        "data_publicacao": "2026-07-08",
-        "municipio": "Santa Luzia",
-        "objeto": "Contratação da empresa OTOCLÍNICA SAÚDE LTDA, para atender as demandas já existentes quanto aos procedimentos de Avaliação Auditiva na Infância, Reabilitação Auditiva Ambulatorial e a ampliação dos no",
-        "orgao_nome": "SECRETARIA MUNICIPAL DE SAUDE",
-        "source": "pncp_contracts",
-        "uf": "MG",
-        "valor": 6665701.53
-      },
-      {
-        "data_publicacao": "2026-07-03",
-        "municipio": "Igaratinga",
-        "objeto": "Contratação de empresa para execução das obras de Construção de Habitações de Interesse Social – FNHIS – Padrão Popular (20 unidades habitacionais) no município de Igaratinga, Programa: 5600020240048 ",
-        "orgao_nome": "Unidade Única",
-        "source": "pncp_contracts",
-        "uf": "MG",
-        "valor": 2739368.56
-      },
-      {
-        "data_publicacao": "2026-06-26",
-        "municipio": "Extrema",
-        "objeto": "CONTRATAÇÃO DE EMPRESA PARA FORNECIMENTO DE MATERIAL E MÃO DE OBRA PARA INSTALAÇÃO DE SISTEMA DE COMPARTIMENTAÇÃO VERTICAL PARA OBTENÇÃO DO AVCB DO PRÉDIO DA FÁBRICA DE CULTURA.",
-        "orgao_nome": "Unidade Única",
-        "source": "pncp_contracts",
-        "uf": "MG",
-        "valor": 2179000.0
-      },
-      {
-        "data_publicacao": "2026-05-27",
-        "municipio": "Juiz de Fora",
-        "objeto": "Contratação de empresa especializada para execução de obra para  Reforma da UBS do bairro Marumbi, conforme especificações do Edital, Termo de Referência e Anexos",
-        "orgao_nome": "Subsecretaria de Licitações e Compras - SSLICOM",
-        "source": "pncp_contracts",
-        "uf": "MG",
-        "valor": 2087099.31
-      }
-    ],
-    "region": "MG",
-    "region_label": "Minas Gerais",
-    "slug": "edificacoes-publicas-mg",
-    "sources": [
-      "pncp_contracts"
-    ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
-  },
-  {
-    "dispersion_iqr": 446645.91,
-    "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
-    ],
-    "id": "price-saneamento-hidraulica-sp",
-    "inclusion_criteria": [
-      "Objeto classificado no arquétipo Saneamento e hidráulica",
-      "UF = SP",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
-    ],
-    "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
-    ],
-    "max_value": 3690000.0,
-    "median_value": 61900.0,
-    "min_value": 7999.0,
-    "object_label": "Saneamento e hidráulica",
-    "object_pattern": "saneamento-hidraulica",
-    "observation_count": 22,
-    "p25_value": 12750.0,
-    "p75_value": 459395.91,
-    "period_end": "2026-07-08",
-    "period_start": "2024-09-11",
-    "public_examples": [
-      {
-        "data_publicacao": "2026-07-02",
-        "municipio": "Rafard",
-        "objeto": "EXECUÇÃO DE PAVIMENTAÇÃO ASFÁLTICA, GUIAS, SARJETAS E DRENAGEM PLUVIAL",
-        "orgao_nome": "DIRETORIA DE OBRAS PUBLICAS E INFRAESTRUTURA",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 3690000.0
-      },
-      {
-        "data_publicacao": "2026-06-26",
-        "municipio": "São Paulo",
-        "objeto": "REFORMA GERAL DA COBERTURA, DA COZINHA/DESPENSA, DOS SANITÁRIOS, REDE ELÉTRICA, REDE DE ESGOTO, SPDA,",
-        "orgao_nome": "ESP-PRESTACAO DE SERVICOS FDE/SEE",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 2170561.29
-      },
-      {
-        "data_publicacao": "2026-07-03",
-        "municipio": "Louveira",
-        "objeto": "Contratação de empresa especializada para implantação do sistema de desidratação do lodo da estação de tratamento de água - ETA do Município de Louveira.",
-        "orgao_nome": "Louveira",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 2054899.92
-      },
-      {
-        "data_publicacao": "2026-06-09",
-        "municipio": "Sertãozinho",
-        "objeto": "Contratacao de empresa especializada para prestacao de servicos de licenciamento mensal de software especializado de gestao comercial e operacional para saneamento basico, gestao de ordem de servico, ",
-        "orgao_nome": "SERVIÇO AUTÔNOMO DE ÁGUA, ESGOTO E MEIO AMBIENTE DE SERTÃOZINHO - SAEMAS",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 553800.0
-      },
-      {
-        "data_publicacao": "2026-07-03",
-        "municipio": "Pontal",
-        "objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA A PRESTAÇÃO DE SERVIÇOS CONTÍNUOS DE OPERAÇÃO, MONITORAMENTO, \nMANUTENÇÃO PREVENTIVA E CORRETIVA DA ESTAÇÃO DE TRATAMENTO DE ESGOTO (ETE) DO MUNICÍPIO DE PONT",
-        "orgao_nome": "PREFEITURA MUNICIPAL DE PONTAL - SP",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 469470.0
-      }
-    ],
-    "region": "SP",
-    "region_label": "São Paulo",
-    "slug": "saneamento-hidraulica-sp",
-    "sources": [
-      "pncp_contracts"
-    ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
-  },
-  {
-    "dispersion_iqr": 186053.23,
-    "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
-    ],
-    "id": "price-pavimentacao-infraestrutura-viaria-sp",
-    "inclusion_criteria": [
-      "Objeto classificado no arquétipo Pavimentação e infraestrutura viária",
-      "UF = SP",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
-    ],
-    "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
-    ],
-    "max_value": 3690000.0,
-    "median_value": 94130.0,
-    "min_value": 12000.0,
-    "object_label": "Pavimentação e infraestrutura viária",
-    "object_pattern": "pavimentacao-infraestrutura-viaria",
-    "observation_count": 22,
-    "p25_value": 23999.99,
-    "p75_value": 210053.22,
-    "period_end": "2026-07-08",
-    "period_start": "2026-04-15",
-    "public_examples": [
-      {
-        "data_publicacao": "2026-07-02",
-        "municipio": "Rafard",
-        "objeto": "EXECUÇÃO DE PAVIMENTAÇÃO ASFÁLTICA, GUIAS, SARJETAS E DRENAGEM PLUVIAL",
-        "orgao_nome": "DIRETORIA DE OBRAS PUBLICAS E INFRAESTRUTURA",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 3690000.0
-      },
-      {
-        "data_publicacao": "2026-06-15",
-        "municipio": "São Paulo",
-        "objeto": "REFORMA DA COBERTURA, DOS SANITARIOS, REVISÃO DA REDE DE DRENAGEM, TRATAMENTO DE JUNTAS DE DILATAÇÃO",
-        "orgao_nome": "ESP-PRESTACAO DE SERVICOS FDE/SEE",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 1468411.47
-      },
-      {
-        "data_publicacao": "2026-07-08",
-        "municipio": "São Paulo",
-        "objeto": "CONTRATAÇÃO DE SERVIÇOS DE PAVIMENTAÇÃO DE CALÇADAS NA CIDADE DE SÃO PAULO, INSERIDAS NO PLANO EMERGENCIAL DE CALÇADAS - PEC, SUBMETIDAS EXCLUSIVAMENTE AO TRÁFEGO DE PEDESTRES OU TRÁFEGO LEVE DE VEÍCU",
-        "orgao_nome": "PMSP - SECRETARIA DAS PREFEITURAS REGIONAIS",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 741629.69
-      },
-      {
-        "data_publicacao": "2026-06-25",
-        "municipio": "Arujá",
-        "objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA EM SERVIÇOS DE ENGENHARIA PARA SERVIÇOS DE REVITALIZAÇÃO DAS CALÇADAS LOCALIZADA NA AV. JOÃO MANOEL - JARDIM VITÓRIA, ARUJÁ - SP",
-        "orgao_nome": "Secretaria de Serviços",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 734381.76
-      },
-      {
-        "data_publicacao": "2026-06-15",
-        "municipio": "Itaquaquecetuba",
-        "objeto": "C. E. E. PARA OBRAS DE PAVIMENTACAO ASFALTICA",
-        "orgao_nome": "Prefeitura Municipal de Itaquaquecetuba",
-        "source": "pncp_contracts",
-        "uf": "SP",
-        "valor": 210071.19
-      }
-    ],
-    "region": "SP",
-    "region_label": "São Paulo",
-    "slug": "pavimentacao-infraestrutura-viaria-sp",
-    "sources": [
-      "pncp_contracts"
-    ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
-  },
-  {
-    "dispersion_iqr": 144089.24,
-    "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
-    ],
-    "id": "price-edificacoes-publicas-pr",
-    "inclusion_criteria": [
-      "Objeto classificado no arquétipo Edificações públicas",
-      "UF = PR",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
-    ],
-    "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
-    ],
-    "max_value": 1972971.25,
-    "median_value": 57000.0,
-    "min_value": 7200.0,
-    "object_label": "Edificações públicas",
-    "object_pattern": "edificacoes-publicas",
-    "observation_count": 21,
-    "p25_value": 17230.0,
-    "p75_value": 161319.24,
-    "period_end": "2026-07-08",
-    "period_start": "2026-04-02",
-    "public_examples": [
-      {
-        "data_publicacao": "2026-05-20",
-        "municipio": "Rio Bonito do Iguaçu",
-        "objeto": "CONTRATAÇÃO DE SERVIÇOS E OBRAS COMUNS DE ENGENHARIA PARA A EXECUÇÃO DE EDIFICAÇÃO TÉRREA COM 540,84 M², CONFORME PROJETO BÁSICO PADRÃO E CARACTERISTICAS ESPECIFICAS, PARA ATENDIMENTO DOS SERVIÇOS DA ",
-        "orgao_nome": "PREFEITURA MUNICIPAL DE RIO BONITO DO IGUAÇU - PR",
-        "source": "pncp_contracts",
-        "uf": "PR",
-        "valor": 1972971.25
-      },
-      {
-        "data_publicacao": "2026-07-07",
-        "municipio": "Santo Antônio da Platina",
-        "objeto": "Construção da Unidade Básica de Saúde (UBS) Centro, visando garantir melhores condições de acesso da população ao atendimento da atenção primária em saúde, com maior eficiência, segurança e qualidade ",
-        "orgao_nome": "Gabinete Secretaria Municipal de Saúde",
-        "source": "pncp_contracts",
-        "uf": "PR",
-        "valor": 1246000.0
-      },
-      {
-        "data_publicacao": "2026-05-22",
-        "municipio": "Rio Bonito do Iguaçu",
-        "objeto": "Execução de obra de reforma e recuperação e ampliação da cobertura da edificação pública denominada Clínica da Mulher.",
-        "orgao_nome": "PREFEITURA MUNICIPAL DE RIO BONITO DO IGUAÇU - PR",
-        "source": "pncp_contracts",
-        "uf": "PR",
-        "valor": 342282.49
-      },
-      {
-        "data_publicacao": "2026-07-02",
-        "municipio": "Nova Prata do Iguaçu",
-        "objeto": "Aquisição de aparelhos de ar condicionado, peças de ar condicionado para reposição em manutenções e consertos e contratação de empresa para prestação de serviços de instalação, remoção, manutenção, li",
-        "orgao_nome": "DEPARTAMENTO DE ADMINISTRAÇÃO DE NOVA PRATA DO IGUAÇU",
-        "source": "pncp_contracts",
-        "uf": "PR",
-        "valor": 333425.5
-      },
-      {
-        "data_publicacao": "2026-07-06",
-        "municipio": "Pontal do Paraná",
-        "objeto": "Contratação de empresa especializada para EXECUÇÃO DE OBRA DE REFORMA E AMPLIAÇÃO DO ARMAZÉM DA FAMÍLIA – IPANEMA III, localizado no Município de Pontal do Paraná.",
-        "orgao_nome": "Unidade administrativa",
-        "source": "pncp_contracts",
-        "uf": "PR",
-        "valor": 251217.17
-      }
-    ],
-    "region": "PR",
-    "region_label": "Paraná",
-    "slug": "edificacoes-publicas-pr",
-    "sources": [
-      "pncp_contracts"
-    ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
-  },
-  {
-    "dispersion_iqr": 167127.15,
-    "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
-    ],
-    "id": "price-edificacoes-publicas-go",
-    "inclusion_criteria": [
-      "Objeto classificado no arquétipo Edificações públicas",
-      "UF = GO",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
-    ],
-    "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
-    ],
-    "max_value": 1388401.67,
-    "median_value": 36000.0,
-    "min_value": 5072.3,
-    "object_label": "Edificações públicas",
-    "object_pattern": "edificacoes-publicas",
-    "observation_count": 20,
-    "p25_value": 20352.0,
-    "p75_value": 187479.15,
-    "period_end": "2026-07-08",
-    "period_start": "2026-06-18",
-    "public_examples": [
-      {
-        "data_publicacao": "2026-07-07",
-        "municipio": "Formosa",
-        "objeto": "CONTRATACAO DE EMPRESA ESPECIALIZADA PARA CONSTRUCAO DE COMPLEXO ESPORTIVO CONTENDO, 2 QUADRAS SOCIETY, 2 QUADRAS DE AREIA E VESTIARIO COMPLETO NO SETOR JARDIM DAS AMERICAS PARA ATENDER A EMENDA PARLA",
-        "orgao_nome": "PODER EXECUTIVO",
-        "source": "pncp_contracts",
-        "uf": "GO",
-        "valor": 1388401.67
-      },
-      {
-        "data_publicacao": "2026-06-24",
-        "municipio": "Rio Verde",
-        "objeto": "CONTRATO 153/2026 PROTOCOLO 8865/2026 CONCORRÊNCIA 90.004/2026, CÓDIGO DE OBRA 936,TEM COMO OBJETO  A CONTRATAÇÃO DE EMPRESA ESPECIALIZADA EM SERVIÇOS DE ENGENHARIA CIVIL, MEDIANTE O REGIME DE EMPREIT",
-        "orgao_nome": "PREFEITURA MUNICIPAL DE RIO VERDE",
-        "source": "pncp_contracts",
-        "uf": "GO",
-        "valor": 1137998.87
-      },
-      {
-        "data_publicacao": "2026-07-06",
-        "municipio": "Senador Canedo",
-        "objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE OBRA DE ENGENHARIA DESTINADA À CONSTRUÇÃO DE SALA DE AULA, ESPAÇO DE CONVIVÊNCIA PARA O PROJETO BOMBEIRO MIRIM E CENTRO DE ASSEPSIA PARA VIATURAS ",
-        "orgao_nome": "FEMBOM - FUNDO ESPECIAL MUN. PARA FRACAO CORPO DE BOMBEIRO",
-        "source": "pncp_contracts",
-        "uf": "GO",
-        "valor": 630200.0
-      },
-      {
-        "data_publicacao": "2026-06-29",
-        "municipio": "Ivolândia",
-        "objeto": "CONTRATO N° 078/2026, REFERENTE AO PROCEDIMENTO LICITATÓRIO NA MODALIDADE CONCORRÊNCIA ELETRÔNICA N° 002/2026 PARA A CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA A PRESTAÇÃO DE SERVIÇOS DE REFORMA DO CRA",
-        "orgao_nome": "FUNDO MUN ASSISTENCIA SOCIAL FMAS",
-        "source": "pncp_contracts",
-        "uf": "GO",
-        "valor": 427500.0
-      },
-      {
-        "data_publicacao": "2026-07-07",
-        "municipio": "Flores de Goiás",
-        "objeto": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DAS OBRAS E SERVIÇOS DE REFORMA DO CENTRO DE REFERÊNCIA DE ASSISTÊNCIA SOCIAL - CRAS DE FLORES DE GOIÁS",
-        "orgao_nome": "FUNDO MUNICIPAL DE ASSISTENCIA SOCIAL",
-        "source": "pncp_contracts",
-        "uf": "GO",
-        "valor": 276545.61
-      }
-    ],
-    "region": "GO",
-    "region_label": "Goiás",
-    "slug": "edificacoes-publicas-go",
-    "sources": [
-      "pncp_contracts"
-    ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
-  },
-  {
-    "dispersion_iqr": 12011.62,
-    "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
-    ],
-    "id": "price-manutencao-predial-engenharia-rs",
-    "inclusion_criteria": [
-      "Objeto classificado no arquétipo Manutenção predial e serviços de engenharia",
-      "UF = RS",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
-    ],
-    "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
-    ],
-    "max_value": 186661.75,
-    "median_value": 17608.5,
-    "min_value": 5366.25,
-    "object_label": "Manutenção predial e serviços de engenharia",
+    "object_label": "manutencao predial (manutencao-predial-engenharia)",
     "object_pattern": "manutencao-predial-engenharia",
-    "observation_count": 20,
-    "p25_value": 11388.38,
+    "observation_count": 19,
+    "outlier_count": 0,
+    "p25_value": 5967.0,
     "p75_value": 23400.0,
     "period_end": "2026-07-03",
-    "period_start": "2026-07-01",
+    "period_start": "2026-07-03",
     "public_examples": [
       {
-        "data_publicacao": "2026-07-01",
-        "municipio": "Pinheiro Machado",
-        "objeto": "Contratacao de empresa especializada em servicos de engenharia para a construcao de 4  quatro  salas de aula  em bloco anexo de 1  um  pavimento na EMEI Tania Cardoso  incluindo  demolicao parcial do ",
-        "orgao_nome": "PREFEITURA MUNICIPAL",
-        "source": "pncp_contracts",
-        "uf": "RS",
-        "valor": 186661.75
-      },
-      {
+        "contrato_id": "88830609000139-2-002361/2026",
         "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2361",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Engenheiro Dario Granja Sant'anna, sob responsabilidade da SMED, com fornecimento de equipame",
         "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
         "valor": 47759.63
       },
       {
+        "contrato_id": "88830609000139-2-002344/2026",
         "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2344",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Governador Roberto Silveira, sob responsabilidade da SMED, com fornecimento de equipamentos, ",
         "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
         "valor": 47700.0
       },
       {
+        "contrato_id": "88830609000139-2-002369/2026",
         "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2369",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF São Vitor, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, materiais e",
         "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
         "valor": 30110.63
       },
       {
+        "contrato_id": "88830609000139-2-002336/2026",
         "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2336",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Giuseppe Garibaldi, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, ma",
         "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
         "valor": 30051.0
+      },
+      {
+        "contrato_id": "88830609000139-2-002343/2026",
+        "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2343",
+        "municipio": "Caxias do Sul",
+        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Presidente Tancredo de Almeida Neves, sob responsabilidade da SMED, com fornecimento de equip",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "RS",
+        "valor": 23400.0
       }
     ],
     "region": "RS",
     "region_label": "Rio Grande do Sul",
-    "slug": "manutencao-predial-engenharia-rs",
+    "scope_distribution": {
+      "manutencao": 19
+    },
+    "slug": "manutencao-predial-engenharia-rs-manutencao-predial",
     "sources": [
       "pncp_contracts"
     ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
+    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade. Este benchmark não substitui orçamento técnico."
   },
   {
-    "dispersion_iqr": 703517.85,
+    "comparison_confidence": 0.9,
+    "comparison_group": "pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI",
+    "comparison_meta": {
+      "comparison_confidence": 0.9,
+      "comparison_group": "pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI",
+      "exclusion_criteria": [
+        "locacao_imovel",
+        "credenciamento",
+        "limpeza_sem_obra",
+        "fornecimento_material_isolado",
+        "classes_semanticas_conflitantes"
+      ],
+      "heterogeneity_flags": [
+        "regime_unknown"
+      ],
+      "inclusion_criteria": [
+        "typology=paralelepipedo",
+        "scope=execucao",
+        "nature=obra",
+        "archetype=pavimentacao-infraestrutura-viaria",
+        "uf=PI"
+      ],
+      "nature": "obra",
+      "regime": "nao_informado",
+      "scope": "execucao",
+      "typology": "paralelepipedo"
+    },
+    "dispersion_iqr": 540190.4,
     "exclusion_criteria": [
-      "Contratos com valor nulo, zero ou abaixo do piso amostral",
-      "Objetos sem classificação de arquétipo AEC",
-      "Média aritmética não é publicada como referência"
+      "locacao_imovel",
+      "credenciamento",
+      "limpeza_sem_obra",
+      "fornecimento_material_isolado",
+      "classes_semanticas_conflitantes",
+      "grupos com naturezas conflitantes",
+      "confiança abaixo do limiar"
     ],
-    "id": "price-pavimentacao-infraestrutura-viaria-sc",
+    "heterogeneity_flags": [
+      "regime_unknown"
+    ],
+    "id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
     "inclusion_criteria": [
-      "Objeto classificado no arquétipo Pavimentação e infraestrutura viária",
-      "UF = SC",
-      "valor_total >= 5000 BRL",
-      "Fonte pública no datalake CONFENGE/extra-cli"
+      "typology=paralelepipedo",
+      "scope=execucao",
+      "nature=obra",
+      "archetype=pavimentacao-infraestrutura-viaria",
+      "uf=PI",
+      "n>=12",
+      "comparison_confidence>=0.55",
+      "somente aec_confirmed"
     ],
     "limitations": [
-      "Observações são contratos integrais, não preços unitários de serviço.",
-      "Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis."
+      "Observações são contratos integrais, não preços unitários.",
+      "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+      "Outliers identificados por regra IQR 1.5×."
     ],
-    "max_value": 8782202.6,
-    "median_value": 310910.94,
-    "min_value": 24060.0,
-    "object_label": "Pavimentação e infraestrutura viária",
+    "max_value": 1526304.17,
+    "median_value": 996225.26,
+    "mesh_slug": "pavimentacao-infraestrutura-viaria-pi",
+    "min_value": 410836.92,
+    "object_label": "paralelepipedo (pavimentacao-infraestrutura-viaria)",
     "object_pattern": "pavimentacao-infraestrutura-viaria",
-    "observation_count": 20,
-    "p25_value": 59377.61,
-    "p75_value": 762895.46,
+    "observation_count": 12,
+    "outlier_count": 0,
+    "p25_value": 744003.0,
+    "p75_value": 1284193.4,
     "period_end": "2026-07-08",
-    "period_start": "2026-01-09",
+    "period_start": "2026-06-03",
     "public_examples": [
       {
-        "data_publicacao": "2026-06-10",
-        "municipio": "Garopaba",
-        "objeto": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DE OBRAS DE PAVIMENTAÇÃO DA ROD. GRP 030 E LEONILDO PEIRÃO NO MUNICÍPIO DE GAROPABA/SC.",
-        "orgao_nome": "SECRETARIA DE INFRA-ESTRUTURA",
-        "source": "pncp_contracts",
-        "uf": "SC",
-        "valor": 8782202.6
-      },
-      {
-        "data_publicacao": "2026-07-08",
-        "municipio": "Itajaí",
-        "objeto": "FORNECIMENTO E EXECUÇÃO DE BASE, FRESAGEM E PAVIMENTAÇÃO ASFÁLTICA - Rua Poeta Bento Nascimento: R$ 122.605,05; Rua Silvestro Moser: R$ 288.168,24;  Rua Osvaldo Cruz e Rio Grande do Norte: R$ 527.508,",
-        "orgao_nome": "PREFEITURA MUNICIPAL DE ITAJAÍ - SC",
-        "source": "pncp_contracts",
-        "uf": "SC",
-        "valor": 3120493.0
-      },
-      {
-        "data_publicacao": "2026-07-07",
-        "municipio": "Itaiópolis",
-        "objeto": "Contratação de empresa especializada para execução de obras de pavimentação asfáltica em vias urbanas localizadas no Bairro Bom Jesus, no Município de Itaiópolis/SC, compreendendo as seguintes vias: R",
-        "orgao_nome": "DEPARTAMENTO DE OBRAS E URBANISMO",
-        "source": "pncp_contracts",
-        "uf": "SC",
-        "valor": 2590000.0
-      },
-      {
+        "contrato_id": "09034960000147-2-000096/2026",
         "data_publicacao": "2026-07-02",
-        "municipio": "Florianópolis",
-        "objeto": "SERVIÇOS CONTÍNUOS DE TRANSPORTE RODOVIÁRIO DE PASSAGEIROS, SOB REGIME DE FRETAMENTO EVENTUAL (ÔNIBUS E MICRO- ÔNIBUS E VANS).",
-        "orgao_nome": "INSTITUTO FEDERAL DE EDUC.CIENC.E TEC.DE SC",
+        "link_oficial": "https://pncp.gov.br/app/contratos/09034960000147/2026/96",
+        "municipio": "Teresina",
+        "objeto": "EXECUÇÃO DOS SERVIÇOS DE PAVIMENTAÇÃO DE VIAS PÚBLICAS EM PARALELEPÍPEDO NO MUNICÍPIO DE TERESINA – PI",
+        "orgao_nome": "EPI-INSTITUTO DE DESENVOLVIMENTO DO PIAUI",
+        "portal_origem": "pncp",
         "source": "pncp_contracts",
-        "uf": "SC",
-        "valor": 1281711.0
+        "uf": "PI",
+        "valor": 1526304.17
       },
       {
-        "data_publicacao": "2026-01-09",
-        "municipio": "Paulo Lopes",
-        "objeto": "Contratação de empresa especializada, no regime de empreitada por preço unitário (material + mão-de-obra), para execução de obra de PAVIMENTAÇÃO INTERTRAVADA, DRENAGEM E SINALIZAÇÃO VIÁRIA DA RUA NICO",
-        "orgao_nome": "MUNICÍPIO DE PAULO LOPES",
+        "contrato_id": "05699457000150-2-000081/2026",
+        "data_publicacao": "2026-07-06",
+        "link_oficial": "https://pncp.gov.br/app/contratos/05699457000150/2026/81",
+        "municipio": "Teresina",
+        "objeto": "Contratação de empresa para execução de 10.000,00 m² de pavimentação em paralelepípedo no município de Nazária-PI",
+        "orgao_nome": "EPI-SECRETARIA ESTADUAL DE TRANSPORTES",
+        "portal_origem": "pncp",
         "source": "pncp_contracts",
-        "uf": "SC",
-        "valor": 1086043.29
+        "uf": "PI",
+        "valor": 1488689.1
+      },
+      {
+        "contrato_id": "08767094000130-2-000042/2026",
+        "data_publicacao": "2026-07-08",
+        "link_oficial": "https://pncp.gov.br/app/contratos/08767094000130/2026/42",
+        "municipio": "Teresina",
+        "objeto": "Contratação de empresa especializada para execução de serviços de pavimentação em paralelepípedo em vias públicas da zona urbana do Município de Cajazeiras – PI, totalizando 9.666,00 m² de área pavime",
+        "orgao_nome": "Secretaria de Estado das Cidades do Piaui",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1463918.41
+      },
+      {
+        "contrato_id": "08767094000130-2-000038/2026",
+        "data_publicacao": "2026-07-06",
+        "link_oficial": "https://pncp.gov.br/app/contratos/08767094000130/2026/38",
+        "municipio": "Teresina",
+        "objeto": "Contratação de empresa especializada para a pavimentação em paralelepípedo em vias públicas, na zona rural, no povoado Ave Verde no município de Teresina - PI, com uma área total de 8.049,50m². (OPA)",
+        "orgao_nome": "Secretaria de Estado das Cidades do Piaui",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1284193.4
+      },
+      {
+        "contrato_id": "49502868000189-2-000111/2026",
+        "data_publicacao": "2026-07-06",
+        "link_oficial": "https://pncp.gov.br/app/contratos/49502868000189/2026/111",
+        "municipio": "Teresina",
+        "objeto": "PAVIMENTAÇÃO EM PARALELEPÍPEDO NO MUNICIPIO DE TAMBORIL DO PIAUÍ – PI. TOTALIZANDO 6.813,07 m².",
+        "orgao_nome": "Coordenadoria de Desenvolvimento dos Territórios - CDTER - PI",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1159266.96
       }
     ],
-    "region": "SC",
-    "region_label": "Santa Catarina",
-    "slug": "pavimentacao-infraestrutura-viaria-sc",
+    "region": "PI",
+    "region_label": "Piaui",
+    "scope_distribution": {
+      "execucao": 12
+    },
+    "slug": "pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
     "sources": [
       "pncp_contracts"
     ],
-    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade antes de qualquer decisão de proposta."
+    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade. Este benchmark não substitui orçamento técnico."
   }
 ]

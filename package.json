@@ -8,11 +8,14 @@
     "audit:migration": "node scripts/audit-migration.mjs",
     "validate:seo": "python3 seo/scripts/validate_seo.py",
     "test:analytics": "node seo/scripts/test_analytics_pii.mjs",
+    "test:pseo-attribution": "node seo/scripts/test_pseo_attribution.mjs",
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "pseo:build": "python3 scripts/pseo/build.py",
     "pseo:validate": "python3 scripts/pseo/validate.py",
     "pseo:audit": "python3 scripts/pseo/audit.py",
-    "pseo:test": "python3 -m pytest scripts/pseo/tests -q"
+    "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
+    "pseo:review": "python3 scripts/pseo/review.py",
+    "test": "npm run pseo:test && npm run test:analytics && npm run test:pseo-attribution"
   },
   "engines": {
     "node": ">=18"

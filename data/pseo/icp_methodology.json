@@ -1,4 +1,14 @@
 {
+  "classifier": {
+    "indexable_class": "aec_confirmed",
+    "labels": [
+      "aec_confirmed",
+      "aec_probable",
+      "non_aec",
+      "ambiguous",
+      "insufficient_context"
+    ]
+  },
   "internal_signature_aggregates": {
     "activity_class_histogram": {
       "ENGINEERING_SERVICE_PROVIDER": 19,
@@ -25,6 +35,6 @@
       "CONFIRMED_ENGINEERING": 20
     }
   },
-  "methodology": "Top 20 comercial usado apenas para calibrar classes de atividade e sinais públicos de portfólio. Nenhuma conta, score, rank ou estado de pipeline é exportado.",
-  "schema_version": "1.0.0"
+  "methodology": "Top 20 comercial so calibra classes de atividade. Classificador multi-camada: so aec_confirmed alimenta indicadores indexaveis.",
+  "schema_version": "1.1.0"
 }

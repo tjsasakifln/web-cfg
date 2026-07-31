@@ -53,7 +53,15 @@ class TestSchemaFailClosed(unittest.TestCase):
 class TestScore(unittest.TestCase):
     def test_weights_sum_range(self):
         b = score_components(
-            icp_fit=1, intent_clarity=1, evidence_strength=1, freshness=1, differentiation=1, service_cta=1
+            icp_fit=1,
+            intent_clarity=1,
+            evidence_strength=1,
+            class_confidence=1,
+            comparability=1,
+            freshness=1,
+            differentiation=1,
+            service_cta=1,
+            anti_cannibal=1,
         )
         self.assertEqual(total_from_breakdown(b), 100)
 
@@ -63,17 +71,75 @@ class TestScore(unittest.TestCase):
         self.assertEqual(decide_status(50, []), "reject")
         self.assertEqual(decide_status(99, ["fail"]), "reject")
 
+    def test_human_review_blocks_publish(self):
+        from scripts.pseo.score import Candidate, apply_human_review_gate
+
+        c = Candidate(
+            page_id="x",
+            page_type="market",
+            url="/inteligencia/mercados/x/",
+            title="t",
+            h1="h",
+            description="d " * 20,
+            archetype="edificacoes-publicas",
+            segment="s",
+            region="SC",
+            agency_id=None,
+            intent="y",
+            score=95,
+            status="publish",
+        )
+        out = apply_human_review_gate([c], {"x": {"human_review": "PENDING"}})
+        self.assertEqual(out[0].status, "noindex")
+        out2 = apply_human_review_gate(
+            [
+                Candidate(
+                    page_id="y",
+                    page_type="market",
+                    url="/inteligencia/mercados/y/",
+                    title="t",
+                    h1="h",
+                    description="d " * 20,
+                    archetype="edificacoes-publicas",
+                    segment="s",
+                    region="SC",
+                    agency_id=None,
+                    intent="y",
+                    score=95,
+                    status="publish",
+                )
+            ],
+            {
+                "y": {
+                    "human_review": "APPROVED",
+                    "review_dataset_hash": "abc",
+                }
+            },
+            dataset_hash="abc",
+        )
+        self.assertEqual(out2[0].status, "publish")
+
+    def test_no_max_publish_constant(self):
+        import scripts.pseo.build as build_mod
+
+        self.assertFalse(hasattr(build_mod, "MAX_PUBLISH"))
+        self.assertFalse(hasattr(build_mod, "cap_publish"))
+
     def test_build_candidates_from_real_snapshot(self):
         snap = validate_snapshot(ROOT / "data" / "pseo")
         cands = build_candidates(snap["data"], snap["manifest"])
-        self.assertGreater(len(cands), 5)
-        pubs = [c for c in cands if c.status == "publish"]
-        # raw publish before diversity may be many
+        self.assertGreater(len(cands), 3)
         self.assertTrue(any(c.page_type == "market" for c in cands))
-        # no proprietary keys in as_dict
+        # scores must vary — not decorative constants
+        scores = {c.score for c in cands}
+        self.assertGreater(len(scores), 1)
         blob = json.dumps([c.as_dict() for c in cands])
         self.assertNotIn("score_total", blob)
         self.assertNotIn("commercial_state", blob)
+        # breakdown must include new ICP features
+        for c in cands:
+            self.assertIn("icp_adherence", c.score_breakdown)
+            self.assertIn("classification_confidence", c.score_breakdown)
 
 
 class TestSimilarity(unittest.TestCase):

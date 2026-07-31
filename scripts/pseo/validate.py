@@ -47,10 +47,19 @@ def validate_all(data_dir: Path | None = None) -> dict:
     publish = [p for p in pages if p.get("status") == "publish"]
     noindex = [p for p in pages if p.get("status") == "noindex"]
 
-    if len(publish) > 24:
-        errors.append(f"too many publish pages: {len(publish)}")
+    # No artificial numeric cap on publish count.
+    # Human review hard gate: publish requires APPROVED | APPROVED_WITH_NOTES
+    approved_states = {"APPROVED", "APPROVED_WITH_NOTES"}
+    for p in publish:
+        hr = p.get("human_review") or "PENDING"
+        if hr not in approved_states:
+            errors.append(
+                f"publish page without human approval: {p.get('url')} human_review={hr}"
+            )
     if len(publish) < 1:
-        warnings.append("zero publish pages — check gates/data")
+        warnings.append(
+            "zero publish pages — expected during containment until human review"
+        )
 
     # uniqueness + content gates
     titles, h1s, canons, descs = [], [], [], []
@@ -158,6 +167,9 @@ def validate_all(data_dir: Path | None = None) -> dict:
             rob = robots_m.group(1) if robots_m else ""
             if "noindex" in rob:
                 errors.append(f"publish page has noindex: {url}")
+            hr = p.get("human_review") or "PENDING"
+            if hr not in {"APPROVED", "APPROVED_WITH_NOTES"}:
+                errors.append(f"publish HTML but human_review={hr}: {url}")
         # author
         if "Tiago Sasaki" not in html:
             errors.append(f"missing author: {url}")

@@ -1,29 +1,51 @@
-"""indexability_score (0–100) and publication gates for pSEO candidates."""
+"""indexability_score (0–100) and publication gates for pSEO candidates.
+
+Score components are measurable features (not fixed archetype constants).
+Human review is applied separately in build.apply_human_review_gate —
+score alone never indexes a page.
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
 # Weights (sum 100)
-W_ICP = 25
-W_INTENT = 20
-W_EVIDENCE = 20
-W_FRESHNESS = 15
+W_ICP = 20
+W_INTENT = 15
+W_EVIDENCE = 15
+W_CLASS_CONF = 10
+W_COMPARABILITY = 10
+W_FRESHNESS = 10
 W_DIFF = 10
-W_SERVICE = 10
+W_SERVICE = 5
+W_CANNIBAL = 5
 
 # Sample minima by type
 MIN_MARKET_CONTRACTS = 15
 MIN_MARKET_BUYERS = 3
-MIN_PRICE_OBS = 20
+MIN_PRICE_OBS = 12
+MIN_PRICE_COMPARISON_CONF = 0.55
 MIN_AGENCY_CONTRACTS = 12
 MIN_RADAR_OPEN = 3
 MIN_PROBLEM_EVIDENCE = 15
 
 PUBLISH_MIN = 80
 PREVIEW_MIN = 65
+
+APPROVED_REVIEWS = frozenset({"APPROVED", "APPROVED_WITH_NOTES"})
+
+# Freshness policy by page type (days unless noted)
+FRESHNESS_POLICY = {
+    "radar": {"warning_hours": 24, "fail_hours": 72},
+    "market": {"warning_days": 30, "fail_days": 90},
+    "competition": {"warning_days": 30, "fail_days": 90},
+    "agency": {"warning_days": 45, "fail_days": 120},
+    "price": {"warning_days": 90, "fail_days": 180},
+    "problem_service": {"warning_days": 90, "fail_days": 180},
+}
 
 
 @dataclass
@@ -40,7 +62,7 @@ class Candidate:
     agency_id: str | None
     intent: str
     score: int
-    status: str  # publish | noindex | reject
+    status: str  # publish | noindex | reject (eligible demoted by human gate)
     reasons: list[str] = field(default_factory=list)
     score_breakdown: dict[str, int] = field(default_factory=dict)
     observation_count: int = 0
@@ -49,8 +71,10 @@ class Candidate:
     cta_intent: str = ""
     related_urls: list[str] = field(default_factory=list)
     data_ref: dict[str, Any] = field(default_factory=dict)
-    body_text: str = ""  # for similarity
+    body_text: str = ""
     mandatory_fail: list[str] = field(default_factory=list)
+    quality_eligible: bool = False  # passed score gates before human review
+    human_review: str = "PENDING"
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -75,6 +99,8 @@ class Candidate:
             "cta_intent": self.cta_intent,
             "related_urls": self.related_urls,
             "mandatory_fail": self.mandatory_fail,
+            "quality_eligible": self.quality_eligible,
+            "human_review": self.human_review,
         }
 
 
@@ -87,18 +113,24 @@ def score_components(
     icp_fit: float,
     intent_clarity: float,
     evidence_strength: float,
+    class_confidence: float,
+    comparability: float,
     freshness: float,
     differentiation: float,
     service_cta: float,
+    anti_cannibal: float = 1.0,
 ) -> dict[str, int]:
-    """Each input 0.0–1.0."""
+    """Each input 0.0–1.0; returns named component points that sum ≤ 100."""
     return {
         "icp_adherence": int(round(icp_fit * W_ICP)),
         "commercial_intent": int(round(intent_clarity * W_INTENT)),
         "evidence": int(round(evidence_strength * W_EVIDENCE)),
+        "classification_confidence": int(round(class_confidence * W_CLASS_CONF)),
+        "comparability": int(round(comparability * W_COMPARABILITY)),
         "freshness": int(round(freshness * W_FRESHNESS)),
         "differentiation": int(round(differentiation * W_DIFF)),
         "service_cta": int(round(service_cta * W_SERVICE)),
+        "anti_cannibalization": int(round(anti_cannibal * W_CANNIBAL)),
     }
 
 
@@ -107,17 +139,173 @@ def total_from_breakdown(b: dict[str, int]) -> int:
 
 
 def decide_status(score: int, mandatory_fail: list[str]) -> str:
+    """Quality status before human review. publish here means quality-eligible."""
     if mandatory_fail:
         return "reject"
     if score >= PUBLISH_MIN:
-        return "publish"
+        return "publish"  # provisional; human gate may demote
     if score >= PREVIEW_MIN:
         return "noindex"
     return "reject"
 
 
+def apply_human_review_gate(
+    cands: list[Candidate],
+    existing_reviews: dict[str, dict[str, Any]] | None = None,
+    *,
+    dataset_hash: str | None = None,
+) -> list[Candidate]:
+    """Hard gate: only APPROVED / APPROVED_WITH_NOTES may remain publish."""
+    existing_reviews = existing_reviews or {}
+    for c in cands:
+        prev = existing_reviews.get(c.page_id) or {}
+        human = prev.get("human_review") or "PENDING"
+        if (
+            human in APPROVED_REVIEWS
+            and prev.get("review_dataset_hash")
+            and dataset_hash
+            and prev.get("review_dataset_hash") != dataset_hash
+        ):
+            human = "PENDING"
+            c.reasons.append("approval_invalidated_dataset_changed")
+        c.human_review = human
+
+        if c.status == "reject":
+            c.quality_eligible = False
+            continue
+
+        quality_ok = c.status == "publish" and not c.mandatory_fail
+        c.quality_eligible = quality_ok
+
+        if human not in APPROVED_REVIEWS:
+            if c.status == "publish":
+                c.status = "noindex"
+                c.reasons.append(f"human_review={human}_blocks_index")
+            continue
+
+        # Approved: keep publish only if quality ok
+        if not quality_ok:
+            if c.status != "reject":
+                c.status = "noindex"
+                c.reasons.append("approved_but_quality_gates_failed")
+    return cands
+
+
+def icp_similarity(
+    candidate_features: dict[str, float],
+    signature: dict[str, Any] | None,
+) -> float:
+    """Cosine-like similarity to sanitized ICP signature histograms (0–1)."""
+    if not signature or not signature.get("available"):
+        # fallback: use archetype presence density if any
+        return candidate_features.get("archetype_known", 0.5)
+
+    # Build vectors from overlapping keys
+    acts = signature.get("activity_class_histogram") or {}
+    fits = signature.get("sector_fit_histogram") or {}
+    sigs = signature.get("public_signal_frequency") or {}
+
+    # Candidate features we can map without proprietary data
+    score = 0.0
+    weight = 0.0
+
+    # Sector fit: engineering confirmed boosts
+    eng = float(fits.get("CONFIRMED_ENGINEERING") or fits.get("engineering") or 0)
+    total_fit = sum(float(v) for v in fits.values()) or 1.0
+    eng_share = eng / total_fit
+    score += eng_share * candidate_features.get("archetype_known", 0.5) * 0.4
+    weight += 0.4
+
+    # Activity class diversity signal
+    n_acts = len(acts) or 1
+    act_align = min(1.0, candidate_features.get("observation_norm", 0.5) * (1.0 + 0.1 * min(n_acts, 5)))
+    score += min(1.0, act_align) * 0.3
+    weight += 0.3
+
+    # Public signals present
+    n_sig = len(sigs)
+    sig_align = min(1.0, 0.4 + 0.1 * min(n_sig, 6)) * candidate_features.get("multi_buyer", 0.5)
+    score += sig_align * 0.3
+    weight += 0.3
+
+    return max(0.0, min(1.0, score / weight if weight else 0.5))
+
+
+def _record_age_days(manifest: dict[str, Any], page_type: str, data_ref: dict[str, Any]) -> float | None:
+    """Age of underlying data (not generated_at alone)."""
+    today = date.today()
+    # Prefer record-level period_end / as_of
+    candidates = [
+        data_ref.get("period_end"),
+        data_ref.get("as_of"),
+        data_ref.get("verified_at"),
+        (manifest.get("freshness") or {}).get("data_period_end"),
+        manifest.get("data_as_of"),
+    ]
+    for c in candidates:
+        if not c:
+            continue
+        try:
+            d = date.fromisoformat(str(c)[:10])
+            return float((today - d).days)
+        except ValueError:
+            continue
+    # last resort: generated_at (penalized by caller)
+    gen = manifest.get("generated_at")
+    if gen:
+        try:
+            d = date.fromisoformat(str(gen)[:10])
+            return float((today - d).days)
+        except ValueError:
+            return None
+    return None
+
+
+def freshness_quality(
+    manifest: dict[str, Any],
+    page_type: str,
+    data_ref: dict[str, Any] | None = None,
+) -> tuple[float, list[str]]:
+    """Return (0–1 quality, fail reasons). Uses real record ages per type policy."""
+    data_ref = data_ref or {}
+    fails: list[str] = []
+    age_days = _record_age_days(manifest, page_type, data_ref)
+
+    if page_type == "radar":
+        pol = FRESHNESS_POLICY["radar"]
+        # as_of age in hours approx days*24
+        if age_days is None:
+            fails.append("radar_missing_as_of")
+            return 0.0, fails
+        age_hours = age_days * 24.0
+        # Also hard-fail if open items have stale verification relative to policy
+        fr = data_ref.get("freshness") or {}
+        if fr.get("status") == "fail":
+            fails.append("radar_freshness_fail")
+            return 0.0, fails
+        if age_hours > pol["fail_hours"]:
+            fails.append(f"radar_stale_hours>{pol['fail_hours']}")
+            return 0.0, fails
+        if age_hours > pol["warning_hours"]:
+            return 0.5, []
+        return 1.0, []
+
+    pol = FRESHNESS_POLICY.get(page_type) or FRESHNESS_POLICY["market"]
+    warn = pol.get("warning_days", 30)
+    fail = pol.get("fail_days", 90)
+    if age_days is None:
+        return 0.4, []
+    if age_days > fail:
+        fails.append(f"data_age_days>{fail}")
+        return 0.0, fails
+    if age_days > warn:
+        return 0.6, []
+    if age_days <= warn / 2:
+        return 1.0, []
+    return 0.85, []
+
+
 def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Candidate]:
-    """Turn snapshot tables into scored page candidates."""
     archetypes = {a["id"]: a for a in data.get("archetypes") or []}
     markets = data.get("markets") or []
     agencies = data.get("agencies") or []
@@ -125,14 +313,13 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
     competition = data.get("competition") or []
     opportunities = data.get("opportunities") or []
     problems = data.get("problem_service") or []
+    icp_sig = ((data.get("icp_methodology") or {}).get("internal_signature_aggregates")) or {}
 
-    freshness_q = _freshness_quality(manifest)
     cands: list[Candidate] = []
-
     market_by_slug = {m["slug"]: m for m in markets}
 
     for m in markets:
-        fails = []
+        fails: list[str] = []
         if m.get("contract_count", 0) < MIN_MARKET_CONTRACTS:
             fails.append(f"contracts<{MIN_MARKET_CONTRACTS}")
         if m.get("buyer_count", 0) < MIN_MARKET_BUYERS:
@@ -140,25 +327,40 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
         if not m.get("sources"):
             fails.append("no_sources")
         arch = m.get("archetype_id")
-        icp = 1.0 if arch in archetypes else 0.5
-        evidence = min(1.0, (m.get("contract_count", 0) / 40) * 0.6 + (m.get("buyer_count", 0) / 10) * 0.4)
+        obs_norm = min(1.0, (m.get("contract_count", 0) / 80))
+        multi_buyer = min(1.0, (m.get("buyer_count", 0) / 12))
+        icp = icp_similarity(
+            {
+                "archetype_known": 1.0 if arch in archetypes else 0.3,
+                "observation_norm": obs_norm,
+                "multi_buyer": multi_buyer,
+            },
+            icp_sig,
+        )
+        evidence = min(1.0, (m.get("contract_count", 0) / 40) * 0.55 + (m.get("buyer_count", 0) / 10) * 0.45)
+        # differentiation from concrete top objects / buyers
+        n_obj = len(m.get("top_objects") or [])
+        n_buy = len(m.get("top_buyers") or [])
+        diff = min(1.0, 0.35 + 0.08 * n_obj + 0.07 * n_buy + 0.1 * min(3, len(m.get("value_by_year") or [])))
+        fresh, fresh_fails = freshness_quality(manifest, "market", m)
+        fails.extend(fresh_fails)
+        class_conf = 0.95 if arch in archetypes else 0.4
         breakdown = score_components(
             icp_fit=icp,
-            intent_clarity=0.95,
+            intent_clarity=min(1.0, 0.7 + 0.05 * multi_buyer + 0.1 * obs_norm),
             evidence_strength=evidence,
-            freshness=freshness_q,
-            differentiation=0.85,
+            class_confidence=class_conf,
+            comparability=0.7,  # markets are demand aggregates
+            freshness=fresh,
+            differentiation=diff,
             service_cta=0.9 if arch and archetypes.get(arch, {}).get("confenge_service_slugs") else 0.4,
+            anti_cannibal=0.9,
         )
         score = total_from_breakdown(breakdown)
         status = decide_status(score, fails)
         reasons = list(fails) if fails else [f"score={score}"]
         if status == "publish":
-            reasons.append("gates_ok_high_score")
-        elif status == "noindex":
-            reasons.append("preview_band")
-        else:
-            reasons.append("below_threshold_or_gate")
+            reasons.append("quality_gates_ok")
         url = f"/inteligencia/mercados/{m['slug']}/"
         cands.append(
             Candidate(
@@ -189,6 +391,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 data_ref=m,
                 body_text=_market_body_fingerprint(m),
                 mandatory_fail=fails,
+                quality_eligible=status == "publish",
             )
         )
 
@@ -198,17 +401,30 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             fails.append(f"contracts<{MIN_AGENCY_CONTRACTS}")
         if not a.get("sources"):
             fails.append("no_sources")
-        # need archetype mix
         mix = a.get("archetype_mix") or []
         primary = mix[0]["archetype_id"] if mix else None
-        icp = 0.9 if primary in archetypes else 0.55
+        obs_norm = min(1.0, a.get("contract_count", 0) / 40)
+        icp = icp_similarity(
+            {
+                "archetype_known": 1.0 if primary in archetypes else 0.35,
+                "observation_norm": obs_norm,
+                "multi_buyer": 0.6,
+            },
+            icp_sig,
+        )
         evidence = min(1.0, a.get("contract_count", 0) / 30)
+        n_obj = len(a.get("top_objects") or [])
+        diff = min(1.0, 0.4 + 0.1 * n_obj + (0.15 if a.get("municipio") else 0))
+        fresh, fresh_fails = freshness_quality(manifest, "agency", a)
+        fails.extend(fresh_fails)
         breakdown = score_components(
             icp_fit=icp,
-            intent_clarity=0.92,
+            intent_clarity=min(1.0, 0.75 + 0.1 * obs_norm),
             evidence_strength=evidence,
-            freshness=freshness_q,
-            differentiation=0.9,
+            class_confidence=0.85 if primary in archetypes else 0.45,
+            comparability=0.65,
+            freshness=fresh,
+            differentiation=diff,
             service_cta=0.88,
         )
         score = total_from_breakdown(breakdown)
@@ -242,6 +458,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 data_ref=a,
                 body_text=_agency_body_fingerprint(a),
                 mandatory_fail=fails,
+                quality_eligible=status == "publish",
             )
         )
 
@@ -253,14 +470,39 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             fails.append("no_median")
         if not p.get("warning"):
             fails.append("no_warning")
+        conf = float(p.get("comparison_confidence") or 0)
+        if conf and conf < MIN_PRICE_COMPARISON_CONF:
+            fails.append(f"comparison_confidence<{MIN_PRICE_COMPARISON_CONF}")
+        if not p.get("comparison_group") and conf == 0:
+            # legacy snapshot without comparison keys — require explicit warning + enough obs
+            if p.get("observation_count", 0) < 20:
+                fails.append("no_comparison_group")
+        flags = p.get("heterogeneity_flags") or []
+        if any("contaminated" in str(f) or "mixed" in str(f) for f in flags):
+            fails.append("heterogeneous_comparison_group")
         arch = p.get("object_pattern")
         evidence = min(1.0, p.get("observation_count", 0) / 35)
+        comparability = conf if conf else (0.5 if p.get("observation_count", 0) >= 20 else 0.2)
+        fresh, fresh_fails = freshness_quality(manifest, "price", p)
+        fails.extend(fresh_fails)
+        n_ex = len(p.get("public_examples") or [])
+        diff = min(1.0, 0.3 + 0.15 * n_ex + (0.2 if p.get("dispersion_iqr") else 0))
+        icp = icp_similarity(
+            {
+                "archetype_known": 1.0 if arch in archetypes else 0.35,
+                "observation_norm": min(1.0, p.get("observation_count", 0) / 40),
+                "multi_buyer": 0.5,
+            },
+            icp_sig,
+        )
         breakdown = score_components(
-            icp_fit=1.0 if arch in archetypes else 0.5,
-            intent_clarity=0.97,
+            icp_fit=icp,
+            intent_clarity=0.9,
             evidence_strength=evidence,
-            freshness=freshness_q,
-            differentiation=0.88,
+            class_confidence=0.9 if arch in archetypes else 0.4,
+            comparability=comparability,
+            freshness=fresh,
+            differentiation=diff,
             service_cta=0.92,
         )
         score = total_from_breakdown(breakdown)
@@ -292,15 +534,14 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 cta_label="Validar preço, risco e margem",
                 cta_intent="validar_preco_margem",
                 related_urls=[
-                    f"/inteligencia/mercados/{p['slug']}/",
-                    f"/inteligencia/concorrencia/{p['slug']}/",
-                    f"/radar/{p['slug']}/",
                     "/inteligencia/precos/",
                     "/auditoria-orcamento-licitacao/",
+                    "/diagnostico-pre-licitacao/",
                 ],
                 data_ref=p,
                 body_text=_price_body_fingerprint(p),
                 mandatory_fail=fails,
+                quality_eligible=status == "publish",
             )
         )
 
@@ -317,12 +558,26 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             + (c.get("agencies_with_activity", 0) / 8) * 0.15,
         )
         arch = _arch_from_slug(c.get("slug"), archetypes)
+        fresh, fresh_fails = freshness_quality(manifest, "competition", c)
+        fails.extend(fresh_fails)
+        n_sup = len(c.get("observed_suppliers") or [])
+        diff = min(1.0, 0.35 + 0.08 * n_sup)
+        icp = icp_similarity(
+            {
+                "archetype_known": 0.9 if arch in archetypes else 0.35,
+                "observation_norm": min(1.0, c.get("contract_count", 0) / 40),
+                "multi_buyer": min(1.0, (c.get("agencies_with_activity") or 0) / 8),
+            },
+            icp_sig,
+        )
         breakdown = score_components(
-            icp_fit=0.9 if arch in archetypes else 0.5,
-            intent_clarity=0.92,
+            icp_fit=icp,
+            intent_clarity=0.88,
             evidence_strength=evidence,
-            freshness=freshness_q,
-            differentiation=0.88,
+            class_confidence=0.85 if arch in archetypes else 0.4,
+            comparability=0.6,
+            freshness=fresh,
+            differentiation=diff,
             service_cta=0.85,
         )
         score = total_from_breakdown(breakdown)
@@ -355,31 +610,59 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 cta_intent="mapa_concorrencia",
                 related_urls=[
                     f"/inteligencia/mercados/{c['slug']}/",
-                    f"/inteligencia/precos/{c['slug']}/",
-                    f"/radar/{c['slug']}/",
                     "/inteligencia/concorrencia/",
                     "/diagnostico-pre-licitacao/",
                 ],
                 data_ref=c,
                 body_text=_comp_body_fingerprint(c),
                 mandatory_fail=fails,
+                quality_eligible=status == "publish",
             )
         )
 
     for o in opportunities:
         fails = []
-        if o.get("open_count", 0) < MIN_RADAR_OPEN:
+        open_n = int(o.get("open_count") or 0)
+        if open_n < MIN_RADAR_OPEN:
             fails.append(f"open<{MIN_RADAR_OPEN}")
-        if not o.get("as_of"):
+        if not o.get("as_of") and not o.get("verified_at"):
             fails.append("no_as_of")
+        # Never treat historical as open
+        hist = int(o.get("historical_count") or 0)
+        if open_n > 0 and hist > 0 and open_n == hist:
+            # suspicious: open equals full history
+            fails.append("open_equals_historical_suspect")
         arch = _arch_from_slug(o.get("slug"), archetypes)
-        evidence = min(1.0, o.get("open_count", 0) / 8)
+        evidence = min(1.0, open_n / 8)
+        fresh, fresh_fails = freshness_quality(manifest, "radar", o)
+        fails.extend(fresh_fails)
+        # Validate items have end dates >= as_of when present
+        as_of = o.get("as_of") or o.get("verified_at")
+        bad_items = 0
+        for it in o.get("items") or []:
+            end = it.get("data_encerramento")
+            if end and as_of and str(end)[:10] < str(as_of)[:10]:
+                bad_items += 1
+        if bad_items:
+            fails.append(f"stale_items_in_open_list={bad_items}")
+        n_items = len(o.get("items") or [])
+        diff = min(1.0, 0.3 + 0.05 * n_items)
+        icp = icp_similarity(
+            {
+                "archetype_known": 0.8 if arch in archetypes else 0.3,
+                "observation_norm": min(1.0, open_n / 10),
+                "multi_buyer": 0.5,
+            },
+            icp_sig,
+        )
         breakdown = score_components(
-            icp_fit=0.8 if arch in archetypes else 0.45,
-            intent_clarity=0.98,
+            icp_fit=icp,
+            intent_clarity=0.95,
             evidence_strength=evidence,
-            freshness=min(1.0, freshness_q + 0.1),
-            differentiation=0.7,
+            class_confidence=0.8 if arch in archetypes else 0.35,
+            comparability=0.5,
+            freshness=fresh,
+            differentiation=diff,
             service_cta=0.95,
         )
         score = total_from_breakdown(breakdown)
@@ -394,8 +677,8 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 h1=f"Oportunidades abertas em {o['segment']} — {o['region_label']}",
                 description=(
                     f"Radar de {o['segment']} em {o['region_label']}: "
-                    f"{o['open_count']} oportunidades classificadas "
-                    f"(atualizado em {o.get('as_of')}). Página evergreen — não é URL por edital."
+                    f"{open_n} oportunidades abertas "
+                    f"(verificado em {as_of}). Página evergreen — não é URL por edital."
                 ),
                 archetype=arch,
                 segment=o.get("segment"),
@@ -406,18 +689,25 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 status=status,
                 reasons=[*(fails or ["gates_ok"]), f"score={score}"],
                 score_breakdown=breakdown,
-                observation_count=int(o.get("open_count") or 0),
+                observation_count=open_n,
                 sources=list(o.get("sources") or []),
                 cta_label="Analisar este edital antes da proposta",
                 cta_intent="analisar_edital",
-                related_urls=[
-                    f"/inteligencia/mercados/{o.get('related_market_slug') or o['slug']}/",
-                    "/diagnostico-pre-licitacao/",
-                    "/auditoria-orcamento-licitacao/",
-                ],
+                related_urls=(
+                    (
+                        [f"/inteligencia/mercados/{o['related_market_slug']}/"]
+                        if o.get("related_market_slug")
+                        else []
+                    )
+                    + [
+                        "/diagnostico-pre-licitacao/",
+                        "/auditoria-orcamento-licitacao/",
+                    ]
+                ),
                 data_ref=o,
                 body_text=_radar_body_fingerprint(o),
                 mandatory_fail=fails,
+                quality_eligible=status == "publish",
             )
         )
 
@@ -431,14 +721,25 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
         if not p.get("confenge_service_slug"):
             fails.append("no_service")
         arches = p.get("related_archetypes") or []
-        icp = 0.9 if any(a in archetypes for a in arches) else 0.4
+        icp = icp_similarity(
+            {
+                "archetype_known": 0.9 if any(a in archetypes for a in arches) else 0.3,
+                "observation_norm": min(1.0, (ev or 0) / 60),
+                "multi_buyer": 0.5,
+            },
+            icp_sig,
+        )
         evidence = min(1.0, (ev or 0) / 50)
+        fresh, fresh_fails = freshness_quality(manifest, "problem_service", p)
+        fails.extend(fresh_fails)
         breakdown = score_components(
             icp_fit=icp,
-            intent_clarity=0.93,
+            intent_clarity=0.9,
             evidence_strength=evidence,
-            freshness=freshness_q * 0.9,
-            differentiation=0.95,
+            class_confidence=0.75,
+            comparability=0.5,
+            freshness=fresh * 0.9,
+            differentiation=0.95,  # unique problem themes
             service_cta=1.0,
         )
         score = total_from_breakdown(breakdown)
@@ -470,40 +771,16 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 data_ref=p,
                 body_text=(p.get("observed_pattern") or "") + " " + (p.get("problem_label") or ""),
                 mandatory_fail=fails,
+                quality_eligible=status == "publish",
             )
         )
 
     return cands
 
 
-def _freshness_quality(manifest: dict[str, Any]) -> float:
-    fr = manifest.get("freshness") or {}
-    # If we have a recent period_end within ~1 year of generated_at, good
-    end = fr.get("data_period_end") or ""
-    gen = (manifest.get("generated_at") or "")[:10]
-    if end and gen:
-        try:
-            from datetime import date
-
-            d_end = date.fromisoformat(str(end)[:10])
-            d_gen = date.fromisoformat(gen)
-            delta = abs((d_gen - d_end).days)
-            if delta <= 60:
-                return 1.0
-            if delta <= 180:
-                return 0.85
-            if delta <= 365:
-                return 0.65
-            return 0.4
-        except Exception:
-            return 0.6
-    return 0.5
-
-
 def _arch_from_slug(slug: str | None, archetypes: dict[str, Any]) -> str | None:
     if not slug:
         return None
-    # try longest archetype id prefix
     best = None
     for aid in archetypes:
         if slug.startswith(aid + "-") or slug == aid:
@@ -513,14 +790,19 @@ def _arch_from_slug(slug: str | None, archetypes: dict[str, Any]) -> str | None:
 
 
 def _market_related(m, market_by_slug, prices, competition, opportunities) -> list[str]:
-    """Candidate sibling URLs — filtered later by build.resolve_related_urls against live pages."""
     slug = m["slug"]
-    price_slugs = {p.get("slug") for p in (prices or [])}
+    # Map mesh_slug → real price slug (comparison groups may differ from market slug)
+    price_by_mesh = {}
+    for p in prices or []:
+        if p.get("slug"):
+            price_by_mesh[p["slug"]] = p["slug"]
+        if p.get("mesh_slug"):
+            price_by_mesh[p["mesh_slug"]] = p["slug"]
     comp_slugs = {c.get("slug") for c in (competition or [])}
     opp_slugs = {o.get("slug") for o in (opportunities or [])}
     urls: list[str] = []
-    if slug in price_slugs:
-        urls.append(f"/inteligencia/precos/{slug}/")
+    if slug in price_by_mesh:
+        urls.append(f"/inteligencia/precos/{price_by_mesh[slug]}/")
     if slug in comp_slugs:
         urls.append(f"/inteligencia/concorrencia/{slug}/")
     if slug in opp_slugs:
@@ -536,7 +818,6 @@ def _market_related(m, market_by_slug, prices, competition, opportunities) -> li
 
 
 def _agency_related(a, markets) -> list[str]:
-    """Candidate sibling URLs — filtered later by build.resolve_related_urls."""
     urls = [
         "/inteligencia/orgaos/",
         "/diagnostico-pre-licitacao/",
@@ -549,7 +830,7 @@ def _agency_related(a, markets) -> list[str]:
         slug = f"{mix[0]['archetype_id']}-{str(uf).lower()}"
         if slug in market_slugs:
             urls.insert(0, f"/inteligencia/mercados/{slug}/")
-        urls.insert(1, f"/radar/{slug}/")  # may be stripped if not written
+        urls.insert(1, f"/radar/{slug}/")
     return urls[:8]
 
 
@@ -558,10 +839,6 @@ def resolve_related_urls(
     *,
     site_root: Path | None = None,
 ) -> list[Candidate]:
-    """Keep only related URLs that exist on disk or will be written this build.
-
-    Prevents dead mesh links to sibling price/radar pages that failed gates.
-    """
     from pathlib import Path as _Path
 
     root = _Path(site_root) if site_root else None
@@ -589,7 +866,6 @@ def resolve_related_urls(
     def exists(url: str) -> bool:
         if not url or not url.startswith("/"):
             return False
-        # strip query/hash for existence
         path_only = url.split("?", 1)[0].split("#", 1)[0]
         if not path_only.endswith("/"):
             path_only = path_only + "/"
@@ -597,7 +873,6 @@ def resolve_related_urls(
             return True
         if root is None:
             return path_only in hubs
-        # filesystem: directory index or direct file
         rel = path_only.strip("/")
         if (root / rel / "index.html").exists():
             return True
@@ -620,20 +895,14 @@ def resolve_related_urls(
             continue
         kept: list[str] = []
         for u in c.related_urls or []:
-            # normalize
             u0 = u.split("?", 1)[0].split("#", 1)[0]
-            if not u0.endswith("/") and u0.startswith("/"):
-                # keep guide paths that already end without slash if file exists
-                pass
             if exists(u0):
-                nu = u0 if u0.endswith("/") or not u0.startswith("/") else u0
-                # prefer trailing slash form for dirs
+                nu = u0
                 if nu.startswith("/") and not nu.endswith("/") and not nu.endswith(".html"):
                     if exists(nu + "/"):
                         nu = nu + "/"
                 if nu not in kept:
                     kept.append(nu)
-        # ensure minimum mesh via hubs/services
         fallbacks = [
             type_hub.get(c.page_type, "/inteligencia/"),
             "/inteligencia/",
@@ -684,6 +953,7 @@ def _price_body_fingerprint(p: dict[str, Any]) -> str:
             str(p.get("median_value")),
             str(p.get("p25_value")),
             str(p.get("p75_value")),
+            p.get("comparison_group") or "",
             p.get("warning") or "",
             " ".join(x.get("objeto", "")[:40] for x in (p.get("public_examples") or [])[:3]),
         ]

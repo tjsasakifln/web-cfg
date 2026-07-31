@@ -2,19 +2,19 @@
   {
     "buyer_types_observed": [
       {
-        "contract_count": 134,
+        "contract_count": 38,
         "type": "municipal"
       },
       {
-        "contract_count": 64,
+        "contract_count": 26,
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 18,
+        "contract_count": 13,
         "type": "estadual"
       },
       {
-        "contract_count": 8,
+        "contract_count": 1,
         "type": "autarquia_fundacao"
       }
     ],
@@ -25,8 +25,8 @@
       "aditivos-obras-publicas"
     ],
     "description": "Contratos públicos de pavimentação, asfalto, vias urbanas, drenagem e obras de arte correntes — típicos de prefeituras e departamentos de infraestrutura.",
-    "evidence_buyer_count": 116,
-    "evidence_contract_count": 224,
+    "evidence_buyer_count": 65,
+    "evidence_contract_count": 78,
     "id": "pavimentacao-infraestrutura-viaria",
     "label": "Pavimentação e infraestrutura viária",
     "limitations": [
@@ -52,78 +52,78 @@
     "slug": "pavimentacao-infraestrutura-viaria",
     "ufs_observed": [
       {
-        "contract_count": 78,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 24,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 23,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 14,
-        "uf": "GO"
-      },
-      {
         "contract_count": 13,
-        "uf": "RS"
+        "uf": "SC"
       },
       {
         "contract_count": 13,
         "uf": "PI"
       },
       {
-        "contract_count": 12,
+        "contract_count": 7,
         "uf": "MG"
       },
       {
         "contract_count": 7,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 7,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 6,
-        "uf": "PA"
+        "uf": "SP"
       },
       {
         "contract_count": 5,
-        "uf": "RO"
+        "uf": "CE"
+      },
+      {
+        "contract_count": 5,
+        "uf": "BA"
+      },
+      {
+        "contract_count": 4,
+        "uf": "GO"
       },
       {
         "contract_count": 4,
         "uf": "MT"
+      },
+      {
+        "contract_count": 3,
+        "uf": "RO"
+      },
+      {
+        "contract_count": 3,
+        "uf": "PA"
+      },
+      {
+        "contract_count": 3,
+        "uf": "PR"
+      },
+      {
+        "contract_count": 2,
+        "uf": "RN"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 39200.0,
-      "n": 224,
-      "p25": 1023.41,
-      "p75": 517000.0
+      "median": 733493.2,
+      "n": 78,
+      "p25": 279900.0,
+      "p75": 2330000.0
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 219,
+        "contract_count": 46,
         "type": "municipal"
       },
       {
-        "contract_count": 176,
+        "contract_count": 25,
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 28,
+        "contract_count": 6,
         "type": "estadual"
       },
       {
-        "contract_count": 11,
+        "contract_count": 1,
         "type": "autarquia_fundacao"
       }
     ],
@@ -134,8 +134,8 @@
       "atrasos-prorrogacao-obras-publicas"
     ],
     "description": "Construção, reforma e ampliação de edificações públicas (escolas, saúde, equipamentos comunitários e prédio administrativo).",
-    "evidence_buyer_count": 223,
-    "evidence_contract_count": 434,
+    "evidence_buyer_count": 70,
+    "evidence_contract_count": 78,
     "id": "edificacoes-publicas",
     "label": "Edificações públicas",
     "limitations": [
@@ -161,79 +161,71 @@
     "slug": "edificacoes-publicas",
     "ufs_observed": [
       {
-        "contract_count": 86,
-        "uf": "RS"
-      },
-      {
-        "contract_count": 66,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 44,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 43,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 27,
+        "contract_count": 15,
         "uf": "MG"
       },
       {
-        "contract_count": 23,
+        "contract_count": 12,
+        "uf": "RS"
+      },
+      {
+        "contract_count": 8,
+        "uf": "SC"
+      },
+      {
+        "contract_count": 7,
         "uf": "PR"
       },
       {
-        "contract_count": 21,
-        "uf": "CE"
+        "contract_count": 6,
+        "uf": "GO"
       },
       {
-        "contract_count": 16,
-        "uf": "BA"
+        "contract_count": 4,
+        "uf": "PA"
       },
       {
-        "contract_count": 15,
+        "contract_count": 4,
+        "uf": "MT"
+      },
+      {
+        "contract_count": 3,
         "uf": "PI"
       },
       {
-        "contract_count": 12,
-        "uf": "PE"
+        "contract_count": 3,
+        "uf": "SP"
       },
       {
-        "contract_count": 11,
-        "uf": "RO"
+        "contract_count": 3,
+        "uf": "PB"
       },
       {
-        "contract_count": 11,
-        "uf": "PA"
+        "contract_count": 2,
+        "uf": "BA"
+      },
+      {
+        "contract_count": 2,
+        "uf": "RJ"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 18006.75,
-      "n": 434,
-      "p25": 1813.5,
-      "p75": 276545.61
+      "median": 504997.83,
+      "n": 78,
+      "p25": 249493.84,
+      "p75": 2578827.3
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 54,
+        "contract_count": 16,
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 25,
+        "contract_count": 9,
         "type": "municipal"
-      },
-      {
-        "contract_count": 3,
-        "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 2,
-        "type": "estadual"
       }
     ],
     "confenge_service_slugs": [
@@ -243,8 +235,8 @@
       "acompanhamento-contratos-obras"
     ],
     "description": "Redes de água e esgoto, drenagem pluvial estrutural, ETAs/ETEs e adutoras — contratos com maior complexidade técnica e risco de quantitativo.",
-    "evidence_buyer_count": 54,
-    "evidence_contract_count": 84,
+    "evidence_buyer_count": 22,
+    "evidence_contract_count": 25,
     "id": "saneamento-hidraulica",
     "label": "Saneamento e hidráulica",
     "limitations": [
@@ -268,79 +260,55 @@
     "slug": "saneamento-hidraulica",
     "ufs_observed": [
       {
-        "contract_count": 28,
+        "contract_count": 10,
         "uf": "SP"
       },
       {
-        "contract_count": 13,
+        "contract_count": 6,
         "uf": "SC"
       },
       {
-        "contract_count": 12,
+        "contract_count": 3,
         "uf": "MG"
       },
       {
-        "contract_count": 6,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 4,
+        "contract_count": 2,
         "uf": "RS"
       },
       {
-        "contract_count": 3,
+        "contract_count": 1,
+        "uf": "PB"
+      },
+      {
+        "contract_count": 1,
         "uf": "CE"
       },
       {
-        "contract_count": 3,
+        "contract_count": 1,
         "uf": "RJ"
       },
       {
-        "contract_count": 3,
-        "uf": "AP"
-      },
-      {
-        "contract_count": 2,
+        "contract_count": 1,
         "uf": "PR"
-      },
-      {
-        "contract_count": 2,
-        "uf": "AC"
-      },
-      {
-        "contract_count": 1,
-        "uf": "TO"
-      },
-      {
-        "contract_count": 1,
-        "uf": "ES"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 50000.0,
-      "n": 84,
-      "p25": 4500.0,
-      "p75": 202175.65
+      "median": 310910.94,
+      "n": 25,
+      "p25": 112000.0,
+      "p75": 911148.06
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 78,
+        "contract_count": 9,
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 52,
+        "contract_count": 4,
         "type": "municipal"
-      },
-      {
-        "contract_count": 16,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 6,
-        "type": "autarquia_fundacao"
       }
     ],
     "confenge_service_slugs": [
@@ -349,8 +317,8 @@
       "medicoes-glosas-obras-publicas"
     ],
     "description": "Climatização, instalações elétricas e hidráulicas prediais, SPDA e sistemas prediais em equipamentos públicos.",
-    "evidence_buyer_count": 100,
-    "evidence_contract_count": 152,
+    "evidence_buyer_count": 8,
+    "evidence_contract_count": 13,
     "id": "climatizacao-instalacoes",
     "label": "Climatização e instalações prediais",
     "limitations": [
@@ -372,74 +340,42 @@
     "slug": "climatizacao-instalacoes",
     "ufs_observed": [
       {
-        "contract_count": 36,
+        "contract_count": 7,
         "uf": "SP"
       },
       {
-        "contract_count": 23,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 19,
+        "contract_count": 3,
         "uf": "RS"
       },
       {
-        "contract_count": 12,
-        "uf": "CE"
+        "contract_count": 2,
+        "uf": "SC"
       },
       {
-        "contract_count": 11,
+        "contract_count": 1,
         "uf": "MG"
-      },
-      {
-        "contract_count": 7,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 7,
-        "uf": "RJ"
-      },
-      {
-        "contract_count": 6,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 5,
-        "uf": "DF"
-      },
-      {
-        "contract_count": 4,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 3,
-        "uf": "RN"
-      },
-      {
-        "contract_count": 3,
-        "uf": "RO"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 11337.0,
-      "n": 152,
-      "p25": 2290.0,
-      "p75": 77736.89
+      "median": 121999.76,
+      "n": 13,
+      "p25": 44844.0,
+      "p75": 527298.15
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 88,
+        "contract_count": 64,
         "type": "municipal"
       },
       {
-        "contract_count": 24,
+        "contract_count": 10,
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 12,
+        "contract_count": 4,
         "type": "estadual"
       },
       {
@@ -453,8 +389,8 @@
       "defesa-tecnica-contratos-publicos"
     ],
     "description": "Manutenção predial contínua e serviços técnicos de engenharia para órgãos públicos — contratos recorrentes com medição mensal.",
-    "evidence_buyer_count": 51,
-    "evidence_contract_count": 125,
+    "evidence_buyer_count": 28,
+    "evidence_contract_count": 79,
     "id": "manutencao-predial-engenharia",
     "label": "Manutenção predial e serviços de engenharia",
     "limitations": [
@@ -474,60 +410,60 @@
     "slug": "manutencao-predial-engenharia",
     "ufs_observed": [
       {
-        "contract_count": 51,
+        "contract_count": 50,
         "uf": "RS"
       },
       {
-        "contract_count": 15,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 13,
+        "contract_count": 11,
         "uf": "SP"
       },
       {
-        "contract_count": 7,
-        "uf": "DF"
-      },
-      {
-        "contract_count": 6,
+        "contract_count": 4,
         "uf": "BA"
       },
       {
-        "contract_count": 5,
-        "uf": "RO"
-      },
-      {
-        "contract_count": 5,
+        "contract_count": 4,
         "uf": "SC"
       },
       {
-        "contract_count": 5,
-        "uf": "MG"
+        "contract_count": 1,
+        "uf": "CE"
       },
       {
-        "contract_count": 4,
-        "uf": "PB"
+        "contract_count": 1,
+        "uf": "AP"
       },
       {
-        "contract_count": 3,
+        "contract_count": 1,
+        "uf": "RN"
+      },
+      {
+        "contract_count": 1,
+        "uf": "AM"
+      },
+      {
+        "contract_count": 1,
+        "uf": "PR"
+      },
+      {
+        "contract_count": 1,
         "uf": "MT"
       },
       {
-        "contract_count": 2,
-        "uf": "PE"
+        "contract_count": 1,
+        "uf": "MG"
       },
       {
-        "contract_count": 2,
-        "uf": "AC"
+        "contract_count": 1,
+        "uf": "DF"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 15151.5,
-      "n": 125,
+      "median": 13773.38,
+      "n": 79,
       "p25": 1696.5,
-      "p75": 129625.08
+      "p75": 47700.0
     }
   }
 ]

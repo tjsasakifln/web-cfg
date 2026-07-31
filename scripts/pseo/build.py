@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Build static pSEO pages from data/pseo snapshot. Fail-closed on bad data."""
+"""Build static pSEO pages from data/pseo snapshot. Fail-closed on bad data.
+
+Indexation policy (no artificial page cap):
+  if mandatory_fail -> reject
+  elif human_review not in APPROVED|APPROVED_WITH_NOTES -> noindex
+  elif quality_gates_passed (score/status eligible) -> publish
+  else -> noindex | reject | consolidated
+"""
 
 from __future__ import annotations
 
@@ -17,47 +24,50 @@ if str(ROOT) not in sys.path:
 
 from scripts.pseo.render import render_candidate, render_hub  # noqa: E402
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
-from scripts.pseo.score import Candidate, build_candidates, resolve_related_urls  # noqa: E402
+from scripts.pseo.score import (  # noqa: E402
+    APPROVED_REVIEWS,
+    Candidate,
+    apply_human_review_gate,
+    build_candidates,
+    resolve_related_urls,
+)
 from scripts.pseo.similarity import find_similar_pairs  # noqa: E402
 
 SITE = "https://confenge.com.br"
-MAX_PUBLISH = 24
 SIM_THRESHOLD = 0.88
 
 
 def url_to_path(url: str) -> Path:
-    # /inteligencia/mercados/foo/ -> inteligencia/mercados/foo/index.html
     rel = url.strip("/")
     return ROOT / rel / "index.html"
 
 
+def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
+    if not registry_path.exists():
+        return {}
+    try:
+        reg = json.loads(registry_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out: dict[str, dict[str, Any]] = {}
+    for p in reg.get("pages") or []:
+        pid = p.get("page_id")
+        if pid:
+            out[pid] = {
+                "human_review": p.get("human_review") or "PENDING",
+                "reviewer": p.get("reviewer"),
+                "review_date": p.get("review_date"),
+                "review_notes": p.get("review_notes"),
+                "review_dataset_hash": p.get("review_dataset_hash") or p.get("dataset_hash"),
+                "evidences_checked": p.get("evidences_checked"),
+            }
+    return out
+
+
 def apply_similarity_gate(cands: list[Candidate]) -> list[Candidate]:
-    """Downgrade near-duplicates and cap per archetype×type for diversity."""
+    """Consolidate near-duplicates (similarity only — no numeric publish cap)."""
     by_id = {c.page_id: c for c in cands}
-
-    # Diversity: at most 2 publish-eligible pages per (page_type, archetype)
-    # Prefer higher observation_count then score.
-    groups: dict[tuple[str, str], list[Candidate]] = {}
-    for c in cands:
-        if c.status == "reject":
-            continue
-        key = (c.page_type, c.archetype or c.region or c.page_id)
-        groups.setdefault(key, []).append(c)
-    for key, group in groups.items():
-        ranked = sorted(group, key=lambda x: (-x.observation_count, -x.score, x.page_id))
-        # hubs of problem_service are intentionally distinct themes — allow all 5
-        limit = 5 if key[0] == "problem_service" else 2
-        if key[0] == "agency":
-            limit = 3
-        for loser in ranked[limit:]:
-            if loser.status == "reject":
-                continue
-            # demote to noindex rather than hard reject if still useful preview
-            if loser.status == "publish":
-                loser.status = "noindex"
-            loser.reasons.append(f"diversity_cap_{key[0]}_{limit}")
-
-    publishable = [c for c in cands if c.status in {"publish", "noindex"}]
+    publishable = [c for c in cands if c.status in {"publish", "noindex", "eligible"}]
     pairs = find_similar_pairs(
         [(c.page_id, c.body_text + " " + c.h1) for c in publishable],
         threshold=SIM_THRESHOLD,
@@ -76,41 +86,54 @@ def apply_similarity_gate(cands: list[Candidate]) -> list[Candidate]:
     return cands
 
 
-def cap_publish(cands: list[Candidate]) -> list[Candidate]:
-    """Keep at most MAX_PUBLISH indexable pages by score; demote rest to noindex."""
-    pubs = sorted(
-        [c for c in cands if c.status == "publish"],
-        key=lambda c: (-c.score, -c.observation_count, c.page_id),
-    )
-    if len(pubs) <= MAX_PUBLISH:
-        return cands
-    for c in pubs[MAX_PUBLISH:]:
-        c.status = "noindex"
-        c.reasons.append(f"demoted_over_cap_{MAX_PUBLISH}")
-    return cands
-
-
-def write_registry(cands: list[Candidate], manifest: dict[str, Any], out: Path) -> dict[str, Any]:
+def write_registry(
+    cands: list[Candidate],
+    manifest: dict[str, Any],
+    out: Path,
+    existing_reviews: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     material_date = date.today().isoformat()
+    existing_reviews = existing_reviews or {}
+    dataset_hash = manifest.get("dataset_hash")
     rows = []
     for c in cands:
+        prev = existing_reviews.get(c.page_id) or {}
+        human = prev.get("human_review") or "PENDING"
+        # Invalidate approval if dataset changed materially
+        if (
+            human in APPROVED_REVIEWS
+            and prev.get("review_dataset_hash")
+            and dataset_hash
+            and prev.get("review_dataset_hash") != dataset_hash
+        ):
+            human = "PENDING"
+            c.reasons.append("approval_invalidated_dataset_changed")
         rows.append(
             {
                 **c.as_dict(),
-                "dataset_hash": manifest.get("dataset_hash"),
+                "dataset_hash": dataset_hash,
                 "source_run_id": manifest.get("source_run_id"),
                 "last_material_change": material_date,
                 "canonical_related": (c.related_urls or [None])[0],
-                "human_review": "PENDING",
+                "human_review": human,
+                "reviewer": prev.get("reviewer"),
+                "review_date": prev.get("review_date"),
+                "review_notes": prev.get("review_notes"),
+                "review_dataset_hash": prev.get("review_dataset_hash"),
+                "evidences_checked": prev.get("evidences_checked"),
                 "publication_decision_reason": "; ".join(c.reasons),
             }
         )
     registry = {
         "generated_at": material_date,
-        "dataset_hash": manifest.get("dataset_hash"),
+        "dataset_hash": dataset_hash,
         "source_run_id": manifest.get("source_run_id"),
         "counts": dict(Counter(c.status for c in cands)),
         "by_type": dict(Counter(c.page_type for c in cands)),
+        "human_review_policy": {
+            "indexable_states": sorted(APPROVED_REVIEWS),
+            "note": "Only APPROVED and APPROVED_WITH_NOTES may be published/indexed.",
+        },
         "pages": rows,
     }
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -120,9 +143,12 @@ def write_registry(cands: list[Candidate], manifest: dict[str, Any], out: Path) 
 
 
 def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
+    """Sitemap only for publish (human-approved + quality gates)."""
     pubs = [c for c in cands if c.status == "publish"]
-    urls = [f"  <url>\n    <loc>{SITE}{c.url}</loc>\n    <lastmod>{lastmod}</lastmod>\n  </url>" for c in sorted(pubs, key=lambda x: x.url)]
-    # hubs
+    urls = [
+        f"  <url>\n    <loc>{SITE}{c.url}</loc>\n    <lastmod>{lastmod}</lastmod>\n  </url>"
+        for c in sorted(pubs, key=lambda x: x.url)
+    ]
     hubs = [
         "/inteligencia/",
         "/inteligencia/mercados/",
@@ -134,7 +160,6 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
     ]
     for h in hubs:
         urls.insert(0, f"  <url>\n    <loc>{SITE}{h}</loc>\n    <lastmod>{lastmod}</lastmod>\n  </url>")
-    # dedupe preserving order
     seen = set()
     final = []
     for u in urls:
@@ -151,7 +176,6 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
 
 
 def patch_main_sitemap_index() -> None:
-    """Ensure robots.txt references intelligence sitemap; keep main sitemap untouched for pre-existing URLs."""
     robots = ROOT / "robots.txt"
     text = robots.read_text(encoding="utf-8")
     line = "Sitemap: https://confenge.com.br/sitemap-inteligencia.xml"
@@ -164,13 +188,12 @@ def patch_main_sitemap_index() -> None:
 
 def render_hubs(cands: list[Candidate]) -> list[str]:
     pubs = [c for c in cands if c.status in {"publish", "noindex"}]
-    # main hub: only publish listed as primary; previews marked
+
     def items_for(ptype: str) -> list[tuple]:
         out = []
         for c in sorted(pubs, key=lambda x: -x.score):
             if c.page_type != ptype:
                 continue
-            # Never expose internal indexability_score in public hub UI
             badge = "indexável" if c.status == "publish" else "preview (revisão)"
             meta = f"{c.page_type} · {badge}"
             out.append((c.url, c.page_type, c.h1[:90], meta))
@@ -183,7 +206,8 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Inteligência de mercado e contratação pública | CONFENGE",
             "Inteligência decisória para obras e contratos públicos",
             "Mercados, órgãos, preços, concorrência e radar — evidência pública, sem ranking proprietário.",
-            "Hub de páginas de inteligência orientadas a decisão comercial e técnica.",
+            "Hub de páginas de inteligência orientadas a decisão comercial e técnica. "
+            "Páginas-filha só entram no índice após gates de qualidade, evidência e revisão humana.",
             [
                 ("/inteligencia/mercados/", "hub", "Mercados", "Demanda e órgãos"),
                 ("/inteligencia/orgaos/", "hub", "Órgãos compradores", "Dossiês"),
@@ -276,24 +300,24 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
 
     manifest = snap["manifest"]
     data = snap["data"]
+    registry_path = data_dir / "registry.json"
+    existing_reviews = load_existing_reviews(registry_path)
+
     cands = build_candidates(data, manifest)
     cands = apply_similarity_gate(cands)
-    cands = cap_publish(cands)
-    # Filter related mesh to URLs that exist or will be written (no dead sibling links)
+    # Human review is a hard gate — never publish PENDING
+    cands = apply_human_review_gate(cands, existing_reviews, dataset_hash=manifest.get("dataset_hash"))
     cands = resolve_related_urls(cands, site_root=ROOT)
 
-    registry_path = data_dir / "registry.json"
     if not dry_run:
-        write_registry(cands, manifest, registry_path)
+        write_registry(cands, manifest, registry_path, existing_reviews)
 
     written_pages = []
     if not dry_run:
-        # Remove previously generated leaf pages so rejects/demotions don't linger
         for base in (ROOT / "inteligencia", ROOT / "radar"):
             if not base.exists():
                 continue
             for index in base.rglob("index.html"):
-                # keep hub index files rewritten later; delete deep leaves first
                 rel = index.relative_to(ROOT).as_posix()
                 if rel in {
                     "inteligencia/index.html",
@@ -317,10 +341,19 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
         if not dry_run:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(html, encoding="utf-8")
-        written_pages.append({"url": c.url, "status": c.status, "score": c.score, "path": str(path.relative_to(ROOT))})
+        written_pages.append(
+            {
+                "url": c.url,
+                "status": c.status,
+                "score": c.score,
+                "path": str(path.relative_to(ROOT)),
+            }
+        )
 
     hubs = [] if dry_run else render_hubs(cands)
-    lastmod = (manifest.get("freshness") or {}).get("data_period_end") or date.today().isoformat()
+    # lastmod from real data period, not generation clock alone
+    lastmod = (manifest.get("freshness") or {}).get("data_period_end") or manifest.get("data_as_of")
+    lastmod = lastmod or date.today().isoformat()
     if isinstance(lastmod, str) and len(lastmod) > 10:
         lastmod = lastmod[:10]
     sm = None if dry_run else write_sitemap(cands, str(lastmod))
@@ -343,6 +376,11 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
         "hubs": hubs,
         "sitemap": str(sm.relative_to(ROOT)) if sm else None,
         "registry": str(registry_path.relative_to(ROOT)),
+        "policy": {
+            "max_publish_pages": None,
+            "human_review_required": True,
+            "indexable_reviews": sorted(APPROVED_REVIEWS),
+        },
     }
     report_path = ROOT / "seo" / "pseo-build-report.json"
     if not dry_run:

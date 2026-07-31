@@ -284,9 +284,46 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         else "<p>Sem oportunidades abertas vinculadas a este órgão no snapshot.</p>"
     )
     notes = "".join(f"<li>{e(n)}</li>" for n in (a.get("practical_notes") or []))
-    channels = "".join(
-        f'<li><a href="{e(ch.get("url"))}" rel="noopener" target="_blank" data-pseo-event="pseo_source_open">{e(ch.get("name"))}</a></li>'
-        for ch in (a.get("official_channels") or [])
+    # Portal homes are navigation aids — not per-contract deep-links
+    channel_items = []
+    for ch in a.get("official_channels") or []:
+        url = ch.get("url") or ""
+        name = ch.get("name") or "Portal"
+        if url.startswith("http"):
+            channel_items.append(
+                f'<li><a href="{e(url)}" rel="nofollow noopener noreferrer" target="_blank" '
+                f'data-pseo-event="pseo_source_open">{e(name)}</a> '
+                f"<small>(portal de consulta — não é ficha de contrato individual)</small></li>"
+            )
+        else:
+            channel_items.append(
+                f"<li><span>{e(name)}</span> "
+                f"<small>(fonte oficial indisponível no snapshot — não inventamos URL)</small></li>"
+            )
+    if not channel_items:
+        channel_items.append(
+            "<li><small>Fonte oficial indisponível no snapshot — não inventamos URL de órgão.</small></li>"
+        )
+    channels = "".join(channel_items)
+    # Open opportunities: deep-link when present, else explicit unavailable
+    open_link_items = []
+    for o in (a.get("open_opportunities") or [])[:6]:
+        href = o.get("link_oficial") or o.get("link_pncp")
+        label = (o.get("objeto") or "")[:80]
+        oid = o.get("pncp_id") or o.get("contrato_id") or ""
+        if href and str(href).startswith("http"):
+            open_link_items.append(
+                f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
+                f'data-pseo-event="pseo_source_open">{e(label)}</a>'
+                f'{" <small>ID " + e(oid) + "</small>" if oid else ""}</li>'
+            )
+        else:
+            open_link_items.append(
+                f'<li><span>{e(label) or "Oportunidade"}</span> '
+                f'<small>(fonte oficial indisponível — ID {e(oid) or "n/d"})</small></li>'
+            )
+    open_links_html = (
+        f'<ul class="document-list">{"".join(open_link_items)}</ul>' if open_link_items else ""
     )
     crumbs = [
         ("Início", "/"),
@@ -314,9 +351,12 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 <section id="segmentos"><p class="eyebrow">Segmentos</p><h2>Mix de arquétipos</h2>{mix_table}</section>
 <section id="objetos"><p class="eyebrow">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
 <section id="sazonalidade"><p class="eyebrow">Temporal</p><h2>Sazonalidade</h2>{season_table or '<p>Sem série mensal suficiente.</p>'}</section>
-<section id="oportunidades"><p class="eyebrow">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}</section>
+<section id="oportunidades"><p class="eyebrow">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}
+{open_links_html}
+<p><small>Links de oportunidade são deep-links de portal quando o snapshot traz URL; caso contrário registramos indisponibilidade sem inventar endereço.</small></p>
+</section>
 <section id="cuidados"><p class="eyebrow">Prática</p><h2>Cuidados para empresas interessadas</h2><ul>{notes}</ul>
-<p>Canais oficiais:</p><ul>{channels}</ul></section>
+<p>Portais de consulta (não substituem ficha de contrato):</p><ul>{channels}</ul></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
     "Ajudamos a montar a estratégia por órgão: leitura de histórico, enquadramento de objeto, "
@@ -387,19 +427,47 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     )
     ex_rows = [
         [
-            (x.get("objeto") or "")[:70],
+            x.get("contrato_id") or "—",
+            (x.get("objeto") or "")[:60],
             money(x.get("valor")),
             x.get("municipio") or "—",
             x.get("orgao_nome") or "—",
             x.get("data_publicacao") or "—",
+            x.get("source") or "—",
         ]
         for x in (p.get("public_examples") or [])[:5]
     ]
     ex_table = table_html(
-        ["Objeto", "Valor", "Município", "Órgão", "Data"],
+        ["ID", "Objeto", "Valor", "Município", "Órgão", "Data", "Fonte"],
         ex_rows,
-        "Exemplos públicos (maior valor no recorte)",
+        "Exemplos públicos auditáveis (maior valor no recorte)",
     )
+    conf = p.get("comparison_confidence")
+    conf_note = (
+        f"<p><strong>Comparabilidade:</strong> grupo <code>{e(p.get('comparison_group') or 'n/d')}</code> "
+        f"· confiança {e(conf) if conf is not None else 'n/d'} · "
+        f"outliers IQR: {e(p.get('outlier_count') if p.get('outlier_count') is not None else 'n/d')}.</p>"
+        if p.get("comparison_group") or conf is not None
+        else ""
+    )
+    example_link_items = []
+    for x in (p.get("public_examples") or [])[:5]:
+        href = x.get("link_oficial") or x.get("link_pncp")
+        label = (x.get("objeto") or x.get("contrato_id") or "exemplo")[:60]
+        cid = x.get("contrato_id") or ""
+        if href and str(href).startswith("http"):
+            example_link_items.append(
+                f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
+                f'data-pseo-event="pseo_source_open">Fonte oficial · {e(label)}</a>'
+                f'{" <small>ID " + e(cid) + "</small>" if cid else ""}</li>'
+            )
+        else:
+            example_link_items.append(
+                f'<li><span>Fonte oficial indisponível no snapshot</span> '
+                f'<small>— ID {e(cid) or "n/d"} · órgão {e((x.get("orgao_nome") or "n/d")[:40])} '
+                f'· não inventamos URL</small></li>'
+            )
+    example_links = "".join(example_link_items)
     inc = "".join(f"<li>{e(x)}</li>" for x in (p.get("inclusion_criteria") or []))
     exc = "".join(f"<li>{e(x)}</li>" for x in (p.get("exclusion_criteria") or []))
     crumbs = [
@@ -425,8 +493,11 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
 <div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
 <section class="article-callout"><svg class="icon"><use href="#i-shield"></use></svg>
 <div><strong>Advertência</strong><p>{e(p.get('warning'))}</p></div></section>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}</section>
-<section id="exemplos"><p class="eyebrow">Evidência</p><h2>Exemplos públicos verificáveis</h2>{ex_table}</section>
+<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}{conf_note}</section>
+<section id="exemplos"><p class="eyebrow">Evidência</p><h2>Exemplos públicos verificáveis</h2>{ex_table}
+<ul class="document-list">{example_links}</ul>
+<p><small>Links apontam para a ficha pública do contrato no PNCP quando o ID permite deep-link; caso contrário registramos indisponibilidade sem inventar URL.</small></p>
+<p><strong>Este benchmark não substitui orçamento técnico.</strong></p></section>
 <section id="criterios"><p class="eyebrow">Critérios</p><h2>Inclusão e exclusão</h2>
 <p><strong>Inclusão</strong></p><ul>{inc}</ul>
 <p><strong>Exclusão</strong></p><ul>{exc}</ul></section>
@@ -621,12 +692,34 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         rows,
         f"Oportunidades no snapshot {o.get('as_of')}",
     )
-    # links to PNCP
-    links = "".join(
-        f'<li><a href="{e(i.get("link_pncp") or "https://pncp.gov.br/")}" rel="noopener" target="_blank" data-pseo-event="pseo_source_open">{e((i.get("objeto") or "")[:80])}</a></li>'
-        for i in (o.get("items") or [])[:8]
-        if i.get("link_pncp")
-    )
+    # Official links only when present — never invent portal home URLs
+    link_items = []
+    unavailable = 0
+    for i in (o.get("items") or [])[:8]:
+        href = i.get("link_oficial") or i.get("link_pncp")
+        label = (i.get("objeto") or "")[:80]
+        item_meta = (
+            f"{e(i.get('status_bucket') or 'aberta')} · encerra {e(i.get('data_encerramento') or '—')}"
+        )
+        if href and str(href).startswith("http"):
+            link_items.append(
+                f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
+                f'data-pseo-event="pseo_source_open">{e(label)}</a>'
+                f' <small>({item_meta})</small></li>'
+            )
+        else:
+            unavailable += 1
+            link_items.append(
+                f'<li><span>{e(label) or "Oportunidade sem link no snapshot"}</span> '
+                f'<small>({item_meta} · fonte oficial indisponível — não inventamos URL; confira no portal com o ID '
+                f'{e(i.get("pncp_id") or "n/d")})</small></li>'
+            )
+    links = "".join(link_items)
+    if unavailable:
+        links += (
+            f'<li class="muted"><small>{unavailable} item(ns) sem deep-link no snapshot; '
+            f"listados com ID/órgão para verificação manual.</small></li>"
+        )
     crumbs = [
         ("Início", "/"),
         ("Radar", "/radar/"),
@@ -637,17 +730,25 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         f"em {o.get('region_label')} antes da proposta."
     )
     market_link = o.get("related_market_slug")
-    market_html = (
-        f'<p>Mercado correspondente: <a href="/inteligencia/mercados/{e(market_link)}/" data-pseo-event="pseo_related_page_click">ver inteligência de mercado</a>.</p>'
-        if market_link
-        else ""
-    )
+    # Only link to market pages that exist on disk (reject/no-build siblings omitted)
+    market_html = ""
+    if market_link:
+        from pathlib import Path as _Path
+
+        _root = _Path(__file__).resolve().parents[2]
+        _idx = _root / "inteligencia" / "mercados" / str(market_link) / "index.html"
+        if _idx.exists():
+            market_html = (
+                f'<p>Mercado correspondente: <a href="/inteligencia/mercados/{e(market_link)}/" '
+                f'data-pseo-event="pseo_related_page_click">ver inteligência de mercado</a>.</p>'
+            )
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
 <p class="eyebrow">Radar de oportunidades</p>
 <h1>{e(c.h1)}</h1>
-<p class="content-lead">Página rolante (evergreen). Atualizado em <time datetime="{e(o.get('as_of'))}">{e(o.get('as_of'))}</time>.</p>
+<p class="content-lead">Página rolante (evergreen). Verificado em <time datetime="{e(o.get('verified_at') or o.get('as_of'))}">{e(o.get('verified_at') or o.get('as_of'))}</time>
+ ({e(o.get('timezone') or 'America/Sao_Paulo')}). Somente status aberto com data limite ≥ data de verificação.</p>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
@@ -711,6 +812,27 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
         f'<li><a href="{e(g)}" data-pseo-event="pseo_related_page_click">{e(g)}</a></li>'
         for g in (p.get("technical_guide_paths") or [])
     )
+    # Official normative/methodology references — auditável, not invented contract deep-links
+    ref_items = []
+    for ref in p.get("official_references") or []:
+        href = ref.get("url") if isinstance(ref, dict) else None
+        name = (ref.get("name") if isinstance(ref, dict) else None) or "Referência oficial"
+        if href and str(href).startswith("http"):
+            ref_items.append(
+                f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
+                f'data-pseo-event="pseo_source_open">{e(name)}</a></li>'
+            )
+        else:
+            ref_items.append(
+                f"<li><span>{e(name)}</span> "
+                f"<small>(fonte oficial indisponível no snapshot — não inventamos URL)</small></li>"
+            )
+    if not ref_items:
+        ref_items.append(
+            "<li><small>Referências normativas não listadas neste snapshot; "
+            "consulte os guias técnicos internos e a legislação aplicável.</small></li>"
+        )
+    refs_html = "".join(ref_items)
     arches = ", ".join(p.get("related_archetypes") or [])
     crumbs = [
         ("Início", "/"),
@@ -736,6 +858,10 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
 <section id="padrao"><p class="eyebrow">Padrão</p><h2>O que se observa nos dados e documentos</h2>
 <p>{e(p.get('observed_pattern'))}</p>
 <p>Contratos/mercados relacionados na base exportada: <strong>{e(p.get('evidence_count'))}</strong>.</p></section>
+<section id="fontes"><p class="eyebrow">Fontes auditáveis</p><h2>Referências oficiais e normativos</h2>
+<ul class="document-list">{refs_html}</ul>
+<p><small>Links apontam para textos oficiais ou portais públicos; não são fichas de contrato individual.
+Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
 <section id="guias"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos (sem canibalizar)</h2>
 <p>Estas páginas aprofundam o critério; a página de inteligência contextualiza o mercado.</p>
 <ul>{guides}</ul></section>

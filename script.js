@@ -96,32 +96,92 @@
     search?.addEventListener('input', apply);
     filters.forEach((button) => button.addEventListener('click', () => { filters.forEach((b) => b.classList.remove('is-active')); button.classList.add('is-active'); activeFilter = button.dataset.filter || 'all'; apply(); }));
 
-    // Lead attribution: ?tema= & ?origem= from article CTAs
+    // Lead attribution: ?tema= & ?origem= + pSEO context (URL → sessionStorage)
     const searchParams = new URLSearchParams((window.location && window.location.search) || '');
     const hashParams = window.location.hash.includes('?')
       ? new URLSearchParams(window.location.hash.split('?')[1] || '')
       : new URLSearchParams();
+    const PSEO_ATTR_KEYS = [
+      'pseo_page_id', 'page_type', 'archetype', 'segment', 'region',
+      'agency_id', 'intent', 'source_run_id', 'dataset_hash', 'cta_position',
+      'origem', 'origin_url', 'landing_url',
+    ];
+    const PSEO_STORAGE_KEY = 'confenge_pseo_attribution';
+    const sanitizeAttr = (val) => {
+      if (val == null) return '';
+      const s = String(val).slice(0, 180);
+      // block PII-looking values from attribution store
+      if (/@|\+?\d{10,}/.test(s)) return '';
+      return s;
+    };
+    const readStoredPseo = () => {
+      try {
+        const raw = sessionStorage.getItem(PSEO_STORAGE_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+      } catch (_) { return {}; }
+    };
+    const writeStoredPseo = (obj) => {
+      try {
+        const clean = {};
+        Object.keys(obj || {}).forEach((k) => {
+          if (!PSEO_ATTR_KEYS.includes(k) && k !== 'tema' && k !== 'saved_at') return;
+          const v = sanitizeAttr(obj[k]);
+          if (v) clean[k] = v;
+        });
+        if (Object.keys(clean).length) {
+          clean.saved_at = String(Date.now());
+          sessionStorage.setItem(PSEO_STORAGE_KEY, JSON.stringify(clean));
+        }
+      } catch (_) { /* private mode */ }
+    };
+    // Capture attribution from URL into sessionStorage (survives home form landing)
+    const fromUrl = {};
+    PSEO_ATTR_KEYS.forEach((name) => {
+      const v = searchParams.get(name) || hashParams.get(name);
+      if (v) fromUrl[name] = sanitizeAttr(v);
+    });
     const tema = searchParams.get('tema') || hashParams.get('tema');
-    const origem = searchParams.get('origem') || hashParams.get('origem');
+    if (tema) fromUrl.tema = sanitizeAttr(tema);
+    if (fromUrl.pseo_page_id || fromUrl.origem || fromUrl.page_type) {
+      fromUrl.landing_url = sanitizeAttr(window.location.pathname || '/');
+      if (!fromUrl.origin_url && fromUrl.origem) fromUrl.origin_url = fromUrl.origem;
+      writeStoredPseo({ ...readStoredPseo(), ...fromUrl });
+    }
+    const storedPseo = readStoredPseo();
+    const origem = fromUrl.origem || storedPseo.origem
+      || searchParams.get('origem') || hashParams.get('origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-confenge"]');
-    if (form && !form.querySelector('input[name="origem"]')) {
-      const hidden = document.createElement('input');
-      hidden.type = 'hidden';
-      hidden.name = 'origem';
-      hidden.value = origem || window.location.pathname || '/';
-      form.appendChild(hidden);
-    } else if (form) {
-      const origemInput = form.querySelector('input[name="origem"]');
-      if (origemInput && origem) origemInput.value = origem;
+    const ensureHidden = (fname, fval) => {
+      if (!form || !fval) return;
+      let input = form.querySelector(`input[name="${fname}"]`);
+      if (!input) {
+        input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = fname;
+        form.appendChild(input);
+      }
+      // never duplicate origem with conflicting values; prefer first non-empty pSEO source
+      if (!input.value) input.value = String(fval).slice(0, 180);
+    };
+    if (form) {
+      ensureHidden('origem', origem || storedPseo.origem || window.location.pathname || '/');
+      PSEO_ATTR_KEYS.forEach((name) => {
+        const val = fromUrl[name] || storedPseo[name];
+        if (val) ensureHidden(name, val);
+      });
     }
-    if (mensagem && tema && !mensagem.value) {
-      mensagem.value = `Demanda relacionada a: ${tema}.\n\nContexto:\n`;
+    if (mensagem && (tema || storedPseo.tema) && !mensagem.value) {
+      const t = tema || storedPseo.tema;
+      mensagem.value = `Demanda relacionada a: ${t}.\n\nContexto:\n`;
       mensagem.focus();
     }
-    if (tema || origem || window.location.hash.startsWith('#contato')) {
+    if (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
+      || window.location.hash.startsWith('#contato')) {
       const contact = document.getElementById('contato');
-      if (contact && (tema || origem)) {
+      if (contact && (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id)) {
         contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
@@ -244,47 +304,57 @@
     };
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // pSEO intelligence pages — attribution + events without PII
+    // pSEO intelligence pages + home form with stored attribution
     const pseoRoot = document.body;
-    const isPseo = !!(pseoRoot && (pseoRoot.getAttribute('data-pseo-page-id')
+    const isPseoPage = !!(pseoRoot && (pseoRoot.getAttribute('data-pseo-page-id')
       || pseoRoot.getAttribute('data-pseo-page-type')
       || pagePath.includes('/inteligencia/')
       || pagePath.includes('/radar/')));
-    if (isPseo) {
-      const pseoBase = {
-        page_path: pagePath,
-        content_cluster: 'pseo',
-        page_type: pseoRoot.getAttribute('data-pseo-page-type') || 'unknown',
+    const storedAttr = readStoredPseo();
+    const hasPseoContext = isPseoPage
+      || !!(storedAttr.pseo_page_id || storedAttr.page_type || fromUrl.pseo_page_id);
+
+    const pseoBase = {
+      page_path: pagePath,
+      content_cluster: 'pseo',
+      page_type: (pseoRoot && pseoRoot.getAttribute('data-pseo-page-type'))
+        || storedAttr.page_type || fromUrl.page_type || 'unknown',
+      pseo_page_id: (pseoRoot && pseoRoot.getAttribute('data-pseo-page-id'))
+        || storedAttr.pseo_page_id || fromUrl.pseo_page_id || '',
+      device_context: deviceContext,
+      archetype: storedAttr.archetype || fromUrl.archetype || '',
+      segment: storedAttr.segment || fromUrl.segment || '',
+      region: storedAttr.region || fromUrl.region || '',
+      intent: storedAttr.intent || fromUrl.intent || '',
+      source_run_id: storedAttr.source_run_id || fromUrl.source_run_id || '',
+      dataset_hash: storedAttr.dataset_hash || fromUrl.dataset_hash || '',
+    };
+
+    // Persist body-level pSEO markers when on a leaf page
+    if (isPseoPage && pseoRoot) {
+      const bodyAttr = {
         pseo_page_id: pseoRoot.getAttribute('data-pseo-page-id') || '',
-        device_context: deviceContext,
+        page_type: pseoRoot.getAttribute('data-pseo-page-type') || '',
+        origem: pagePath,
+        origin_url: pagePath,
       };
-      // Prefill hidden attribution fields on contact form when landing from pSEO
-      const pseoParams = [
-        'pseo_page_id', 'page_type', 'archetype', 'segment', 'region',
-        'agency_id', 'intent', 'source_run_id', 'dataset_hash', 'cta_position', 'origem',
-      ];
+      writeStoredPseo({ ...storedAttr, ...bodyAttr });
+    }
+
+    if (hasPseoContext) {
+      // Prefill hidden fields (home form after CTA or native pSEO form)
       if (form) {
-        pseoParams.forEach((name) => {
-          const fromUrl = searchParams.get(name) || hashParams.get(name);
+        PSEO_ATTR_KEYS.forEach((name) => {
           const fromBody = name === 'pseo_page_id'
-            ? pseoRoot.getAttribute('data-pseo-page-id')
-            : (name === 'page_type' ? pseoRoot.getAttribute('data-pseo-page-type') : null);
-          const val = fromUrl || fromBody;
-          if (!val) return;
-          let input = form.querySelector(`input[name="${name}"]`);
-          if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = name;
-            form.appendChild(input);
-          }
-          if (!input.value) input.value = String(val).slice(0, 180);
+            ? (pseoRoot && pseoRoot.getAttribute('data-pseo-page-id'))
+            : (name === 'page_type' ? (pseoRoot && pseoRoot.getAttribute('data-pseo-page-type')) : null);
+          const val = fromUrl[name] || storedAttr[name] || fromBody;
+          if (val) ensureHidden(name, val);
         });
       }
       document.querySelectorAll('[data-pseo-event]').forEach((el) => {
         el.addEventListener('click', () => {
           const eventName = el.getAttribute('data-pseo-event') || 'pseo_cta_click';
-          // Allow only known pseo_* events
           const allowed = {
             pseo_cta_click: 1,
             pseo_table_interaction: 1,
@@ -295,38 +365,66 @@
             pseo_whatsapp_click: 1,
           };
           if (!allowed[eventName]) return;
-          track(eventName, {
+          // Persist CTA click context before navigation
+          const ctaPos = el.getAttribute('data-cta-position') || 'inline';
+          writeStoredPseo({
+            ...readStoredPseo(),
             ...pseoBase,
-            cta_position: el.getAttribute('data-cta-position') || 'inline',
+            cta_position: ctaPos,
+            origem: pseoBase.pseo_page_id ? pagePath : (storedAttr.origem || pagePath),
+          });
+          track(eventName, {
+            page_path: pseoBase.page_path,
+            content_cluster: 'pseo',
+            page_type: pseoBase.page_type,
+            pseo_page_id: pseoBase.pseo_page_id,
+            device_context: deviceContext,
+            cta_position: ctaPos,
             destination_type: (el.getAttribute('href') || '').includes('wa.me') ? 'whatsapp' : 'link',
-            // never send free text / href full query with PII
           });
         });
       });
       document.querySelectorAll('[data-pseo-table]').forEach((table) => {
         table.addEventListener('click', () => {
           track('pseo_table_interaction', {
-            ...pseoBase,
+            page_path: pseoBase.page_path,
+            content_cluster: 'pseo',
+            page_type: pseoBase.page_type,
+            pseo_page_id: pseoBase.pseo_page_id,
+            device_context: deviceContext,
             cta_position: 'table',
           });
         }, { once: true });
       });
-      // WhatsApp on pSEO pages also emit pseo_whatsapp_click (in addition to whatsapp_click)
       document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
         link.addEventListener('click', () => {
           track('pseo_whatsapp_click', {
-            ...pseoBase,
+            page_path: pseoBase.page_path,
+            content_cluster: 'pseo',
+            page_type: pseoBase.page_type,
+            pseo_page_id: pseoBase.pseo_page_id,
+            device_context: deviceContext,
             cta_position: link.getAttribute('data-cta-position') || 'inline',
             destination_type: 'whatsapp',
           });
         });
       });
-      if (form) {
+      // Form start/submit on home OR pSEO when attribution present — not pathname-bound
+      if (form && (pseoBase.pseo_page_id || storedAttr.pseo_page_id || fromUrl.pseo_page_id)) {
         let pseoFormStarted = false;
         const markPseoStart = () => {
           if (pseoFormStarted) return;
           pseoFormStarted = true;
-          track('pseo_form_start', { ...pseoBase, destination_type: 'form' });
+          track('pseo_form_start', {
+            page_path: pagePath,
+            content_cluster: 'pseo',
+            page_type: pseoBase.page_type,
+            pseo_page_id: pseoBase.pseo_page_id || storedAttr.pseo_page_id,
+            device_context: deviceContext,
+            destination_type: 'form',
+            source_run_id: pseoBase.source_run_id || storedAttr.source_run_id || '',
+            dataset_hash: pseoBase.dataset_hash || storedAttr.dataset_hash || '',
+          });
         };
         form.querySelectorAll('input, select, textarea').forEach((el) => {
           el.addEventListener('focus', markPseoStart, { once: true });
@@ -334,10 +432,15 @@
         form.addEventListener('submit', () => {
           if (form.checkValidity()) {
             track('pseo_form_submit', {
-              ...pseoBase,
+              page_path: pagePath,
+              content_cluster: 'pseo',
+              page_type: pseoBase.page_type,
+              pseo_page_id: pseoBase.pseo_page_id || storedAttr.pseo_page_id,
+              device_context: deviceContext,
               destination_type: 'form',
-              // controlled enum only
               cta_label: (form.querySelector('#necessidade')?.value || '').slice(0, 80),
+              source_run_id: pseoBase.source_run_id || storedAttr.source_run_id || '',
+              dataset_hash: pseoBase.dataset_hash || storedAttr.dataset_hash || '',
             });
           }
         });

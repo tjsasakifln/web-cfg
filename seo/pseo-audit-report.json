@@ -8,12 +8,17 @@
       "ok": true,
       "errors": [],
       "warnings": [],
-      "publish_count": 24,
-      "noindex_count": 48,
-      "reject_count": 0,
-      "dataset_hash": "5f334858d8cfe1dec53d11ccfca3694171acf9f64f51920a1da14dcbc9210ea5"
+      "publish_count": 9,
+      "noindex_count": 6,
+      "reject_count": 6,
+      "dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1"
     },
-    "determinism": null,
+    "determinism": {
+      "first_hash": "dbdaaf37336dd6df032652cf4d9c71fef5b6df17f67f1615a0e4fd629da2b047",
+      "second_hash": "dbdaaf37336dd6df032652cf4d9c71fef5b6df17f67f1615a0e4fd629da2b047",
+      "deterministic": true,
+      "page_count": 22
+    },
     "tracking": {
       "events_declared_or_handled": [
         "pseo_cta_click",
