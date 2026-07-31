@@ -1,7 +1,7 @@
 {
   "terminal_status": "BLOCKED_PRODUCTION_MISMATCH",
-  "web_cfg_sha": "662ee7fca0c36942f3f2b23fc00dab1f31991e4b",
-  "extra_cli_sha": "fc28c82c9f576465565e9ec4ae099e2a86153a7a",
+  "web_cfg_sha": "5340910952a4d9b0cb66875ae2c8eda5a78eebd7",
+  "extra_cli_sha": "c1fc8347401649fa33de476aafa63a31e3422834",
   "extra_cli_branch": "feat/pseo-export-isolated",
   "netlify_deployed_sha": null,
   "snapshot_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
@@ -10,7 +10,7 @@
     "ok": false,
     "critical_count": 27,
     "crawlable_production": 15,
-    "note": "Local build differs from production HTML; deploy required. Auditor correctly fails on prod_html_mismatch."
+    "note": "Local build differs from production HTML until Netlify deploys this commit. Auditor fails closed on prod_html_mismatch."
   },
   "seed_urls": [
     "https://confenge.com.br/radar/edificacoes-publicas-pr/",
@@ -40,18 +40,24 @@
     "extra_cli_pseo_pytest": "48 passed on feat/pseo-export-isolated"
   },
   "unresolved_risks": [
-    "Netlify deploy of current main not executed in this session (no Netlify token / push may be pending)",
-    "extra-cli exporter not merged to main (PR #187 OPEN on feat/pseo-export-isolated)",
-    "GSC credentials absent — indexation ledger honest NOT_INSPECTED_NO_CREDENTIALS",
-    "Agency/price pages remain reject for sample quality — correctly excluded from Wave 0",
-    "Production still serves older 8-URL sitemap including quality-fail pages until re-deploy"
+    "Push/deploy of web-cfg main required for production HTML match",
+    "extra-cli PR #187 not merged to main",
+    "GSC credentials absent",
+    "Prior production seed included quality-fail agency/price pages until re-deploy"
   ],
   "next_wave_gate": {
     "deploy_current_build": true,
     "production_audit_ok_without_mismatch": true,
     "gsc_submit_sitemap_index": true,
-    "stable_material_hash_across_reexport": true,
-    "no_expansion_while_crawled_not_indexed_majority": true
+    "stable_material_hash_across_reexport": true
   },
-  "generated_at": "2026-07-31T21:31:01.757958+00:00"
+  "generated_at": "2026-07-31T21:32:30.460976+00:00",
+  "stages_reached_local": {
+    "GENERATED_LOCAL": true,
+    "QUALITY_ELIGIBLE": true,
+    "EDITORIALLY_APPROVED": true,
+    "DEPLOYED_PRODUCTION": false,
+    "CRAWLABLE_PRODUCTION": "partial_stale_production_only",
+    "INDEXED_BY_GOOGLE": false
+  }
 }
