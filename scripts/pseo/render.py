@@ -100,6 +100,84 @@ def humanize_agency(name: str | None) -> str:
     return n
 
 
+def safe_http_url(url: str | None) -> str | None:
+    """Normalize public hrefs; reject/fix malformed schemes like https:///host."""
+    if not url:
+        return None
+    s = str(url).strip()
+    if not s:
+        return None
+    # Collapse https:///host → https://host (common PNCP/state portal corruption)
+    s = re.sub(r"^(https?:)/{3,}", r"\1//", s, flags=re.I)
+    s = re.sub(r"^(https?:)///*", r"\1//", s, flags=re.I)
+    low = s.lower()
+    if low.startswith(("javascript:", "data:", "file:", "vbscript:")):
+        return None
+    if not low.startswith("https://") and not low.startswith("http://"):
+        return None
+    # Still broken if host empty after scheme
+    try:
+        from urllib.parse import urlparse
+
+        p = urlparse(s)
+        if not p.netloc or p.netloc.startswith("."):
+            return None
+    except Exception:  # noqa: BLE001
+        return None
+    return s
+
+
+def guide_path_label(path: str | None) -> str:
+    """Human PT-BR label for /conteudos/… and service paths (no crude Title Case)."""
+    from scripts.pseo.html_shell import _service_label
+
+    raw = (path or "").strip()
+    if not raw:
+        return "Conteúdo relacionado"
+    # Prefer known service map
+    slug = raw.strip("/").split("/")[-1]
+    known = {
+        "aditivo-qualitativo-quantitativo": "Aditivo qualitativo ou quantitativo",
+        "servico-nao-previsto-na-planilha-obra-publica": "Serviço não previsto na planilha",
+        "limite-aditivo-25-50-obra-publica": "Limite de 25% e 50% nos aditivos",
+        "sinapi-ou-sicro-obra-publica": "SINAPI ou SICRO: qual referência usar",
+        "produtividade-sinapi-obra-publica": "Produtividade SINAPI na proposta",
+        "bdi-obra-publica": "BDI em obras públicas",
+        "orcamento-incompleto-edital-obra-publica": "Edital com orçamento incompleto",
+        "analise-edital-obra-publica-construtora": "Análise de edital para a construtora",
+        "glosa-de-medicao-obra-publica": "Glosa de medição em obra pública",
+        "medicao-de-obra-publica-rejeitada": "Medição de obra pública rejeitada",
+        "parcela-incontroversa-medicao-contrato-publico": "Parcela incontroversa na medição",
+    }
+    if slug in known:
+        return known[slug]
+    # Service pages
+    if raw.strip("/").count("/") == 0 or not raw.startswith("/conteudos/"):
+        return _service_label(raw)
+    # Generic humanize with accents for common stems
+    s = slug.replace("-", " ")
+    repl = (
+        ("publica", "pública"),
+        ("publico", "público"),
+        ("servico", "serviço"),
+        ("nao ", "não "),
+        ("medicao", "medição"),
+        ("orcamento", "orçamento"),
+        ("licitacao", "licitação"),
+        ("aditivo", "aditivo"),
+        ("obra", "obra"),
+        ("planilha", "planilha"),
+    )
+    for a, b in repl:
+        s = re.sub(rf"\b{a}\b", b, s, flags=re.I)
+    small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o", "as", "os", "na", "no"}
+    parts = []
+    for i, w in enumerate(s.split()):
+        wl = w.lower()
+        parts.append(wl if i > 0 and wl in small else wl.capitalize())
+    return " ".join(parts) or "Conteúdo relacionado"
+
+
 def _service_label_public(slug: str | None) -> str:
     from scripts.pseo.html_shell import _service_label
 
@@ -1005,12 +1083,12 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     link_items = []
     unavailable = 0
     for i in (o.get("items") or [])[:8]:
-        href = i.get("link_oficial") or i.get("link_pncp")
+        href = safe_http_url(i.get("link_oficial") or i.get("link_pncp"))
         label = (i.get("objeto") or "")[:80]
         item_meta = (
             f"{e(i.get('status_bucket') or 'aberta')} · encerra {e(br_date(i.get('closing_at') or i.get('data_encerramento')))}"
         )
-        if href and str(href).startswith("http"):
+        if href:
             link_items.append(
                 f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
                 f'data-pseo-event="pseo_source_open">{e(label)}</a>'
@@ -1112,7 +1190,7 @@ Contagem histórica no snapshot: {e(o.get('historical_count'))}.</p></section>
 def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     p = c.data_ref
     meta = _meta(c, manifest)
-    svc_label = (p.get("confenge_service_slug") or "").replace("-", " ").strip().title() or "serviço técnico CONFENGE"
+    svc_label = _service_label_public(p.get("confenge_service_slug")) or "serviço técnico CONFENGE"
     summary = _exec_summary(
         f"{p.get('problem_label')}: {p.get('observed_pattern')} "
         f"Esta página só deve alegar evidência empírica quando o datalake trouxer sinais "
@@ -1122,15 +1200,15 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     guides = "".join(
         f'<li><a href="{e(g if str(g).startswith("/") else "/" + str(g).strip("/") + "/")}" '
         f'data-pseo-event="pseo_related_page_click">'
-        f'{e(str(g).strip("/").split("/")[-1].replace("-", " ").title())}</a></li>'
+        f'{e(guide_path_label(str(g)))}</a></li>'
         for g in (p.get("technical_guide_paths") or [])
     )
     # Official normative/methodology references — auditável, not invented contract deep-links
     ref_items = []
     for ref in p.get("official_references") or []:
-        href = ref.get("url") if isinstance(ref, dict) else None
+        href = safe_http_url(ref.get("url") if isinstance(ref, dict) else None)
         name = (ref.get("name") if isinstance(ref, dict) else None) or "Referência oficial"
-        if href and str(href).startswith("http"):
+        if href:
             ref_items.append(
                 f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
                 f'data-pseo-event="pseo_source_open">{e(name)}</a></li>'
@@ -1252,7 +1330,10 @@ def _human_path_label(url: str) -> str:
     }
     if last in hubs:
         return hubs[last]
-    # Humanize last segment; drop archetype-id looking middle chunks
+    # Conteúdos + service pages: shared PT-BR labeler (no crude Title Case)
+    if parts[0] == "conteudos" or len(parts) == 1:
+        return guide_path_label(url)
+    # Humanize last segment for inteligencia/* leaves
     words = last.replace("-", " ").strip()
     words = (
         words.replace("pavimentacao infraestrutura viaria", "pavimentação e infraestrutura viária")
@@ -1262,13 +1343,16 @@ def _human_path_label(url: str) -> str:
         .replace("paralelepipedo", "paralelepípedo")
         .replace("climatizacao instalacoes", "climatização e instalações")
         .replace("saneamento hidraulica", "saneamento e hidráulica")
+        .replace("inconsistencia orcamento edital", "inconsistência orçamento × edital")
+        .replace("referencia sinapi sicro margem", "referência SINAPI/SICRO e margem")
+        .replace("aditivos e risco de margem", "aditivos e risco de margem")
     )
-    # Title-case carefully
-    small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o"}
+    small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o", "na", "no"}
     out = []
     for i, w in enumerate(words.split()):
         wl = w.lower()
-        out.append(wl if i > 0 and wl in small else wl.capitalize())
+        parts_w = wl if i > 0 and wl in small else wl.capitalize()
+        out.append(parts_w)
     label = " ".join(out)
     if len(parts) >= 2 and parts[0] in hubs:
         return f"{hubs[parts[0]]}: {label}"

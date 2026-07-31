@@ -494,10 +494,16 @@ def evaluate_row(
     if row.expected_role == "hub" and row.in_sitemap and "noindex" in robots:
         defects.append("sitemap_non_indexable")
 
+    # hub membership (inbound from hub HTML mesh)
+    variants = {row.path, row.path.rstrip("/") + "/", row.path.rstrip("/")}
+    if hub_link_targets is not None:
+        row.in_hub = bool(variants & hub_link_targets)
+    else:
+        row.in_hub = None
+
     # orphan: publish page not linked from any hub (when hub map provided)
     if hub_link_targets is not None and row.expected_role == "publish":
-        variants = {row.path, row.path.rstrip("/") + "/", row.path.rstrip("/")}
-        if not variants & hub_link_targets:
+        if not row.in_hub:
             if st == 200 and "noindex" not in robots:
                 defects.append("orphan_page")
 

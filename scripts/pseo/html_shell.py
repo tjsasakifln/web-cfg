@@ -324,12 +324,17 @@ def _service_label(path_or_slug: str) -> str:
 
 def confenge_help(service_paths: list[str], text: str) -> str:
     items = []
+    # Prefer shared editorial labeler (conteúdos + services) when available
+    try:
+        from scripts.pseo.render import guide_path_label as _labeler
+    except Exception:  # noqa: BLE001
+        _labeler = _service_label
     for p in service_paths[:4]:
         raw = (p or "").strip()
         if not raw:
             continue
         href = raw if raw.startswith("/") else f"/{raw.strip('/')}/"
-        label = _service_label(raw)
+        label = _labeler(raw)
         items.append(
             f'<li><a href="{e(href)}" data-pseo-event="pseo_related_page_click">{e(label)}</a></li>'
         )

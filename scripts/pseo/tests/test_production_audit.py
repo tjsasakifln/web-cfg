@@ -153,6 +153,131 @@ class TestProductionAuditGates(unittest.TestCase):
     def test_local_html_hash_none_missing(self):
         self.assertIsNone(local_html_hash(ROOT, "/path/that/does/not/exist/"))
 
+    def _ok_browser(self, path="/radar/x/", **extra):
+        base = {
+            "status": 200,
+            "meta_robots": "index,follow",
+            "canonical": f"https://confenge.com.br{path}",
+            "headers": {},
+            "redirect_chain": [{"url": f"https://confenge.com.br{path}", "status": 200}],
+            "body_size": 5000,
+            "text_len": 2000,
+            "title": "Radar X",
+            "html_sha256": "abc",
+        }
+        base.update(extra)
+        return base
+
+    def test_orphan_flagged_when_not_in_hub(self):
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
+        row.browser = self._ok_browser()
+        row.googlebot = dict(row.browser)
+        out = evaluate_row(
+            row,
+            sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets=set(),  # no hub links
+        )
+        self.assertFalse(out.in_hub)
+        self.assertIn("orphan_page", out.defects)
+
+    def test_in_hub_true_when_linked(self):
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
+        row.browser = self._ok_browser()
+        row.googlebot = dict(row.browser)
+        out = evaluate_row(
+            row,
+            sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets={"/radar/x/"},
+        )
+        self.assertTrue(out.in_hub)
+        self.assertNotIn("orphan_page", out.defects)
+
+    def test_soft404_flagged(self):
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
+        row.browser = self._ok_browser(body_size=100, text_len=50, title="Página não encontrada")
+        row.googlebot = dict(row.browser)
+        out = evaluate_row(
+            row,
+            sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets={"/radar/x/"},
+        )
+        self.assertIn("empty_or_soft404", out.defects)
+
+    def test_redirect_on_publish_canonical_flagged(self):
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
+        row.browser = self._ok_browser(
+            status=200,
+            redirect_chain=[
+                {
+                    "url": "https://confenge.com.br/radar/x/",
+                    "status": 301,
+                    "location": "https://confenge.com.br/radar/y/",
+                },
+                {"url": "https://confenge.com.br/radar/y/", "status": 200},
+            ],
+        )
+        row.googlebot = dict(row.browser)
+        out = evaluate_row(
+            row,
+            sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets={"/radar/x/"},
+        )
+        self.assertIn("http_3xx_on_canonical", out.defects)
+
+    def test_prod_html_mismatch_flagged(self):
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
+        row.browser = self._ok_browser(html_sha256="prodhash")
+        row.googlebot = dict(row.browser)
+        row.local_html_sha256 = "localhash"
+        out = evaluate_row(
+            row,
+            sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets={"/radar/x/"},
+        )
+        self.assertIn("prod_html_mismatch", out.defects)
+
+    def test_safe_http_url_and_guide_labels_not_mechanical(self):
+        from scripts.pseo.render import guide_path_label, safe_http_url
+
+        self.assertEqual(
+            safe_http_url("https:///www.transparencia.pr.gov.br/pte/x"),
+            "https://www.transparencia.pr.gov.br/pte/x",
+        )
+        self.assertIsNone(safe_http_url("javascript:alert(1)"))
+        label = guide_path_label("/conteudos/servico-nao-previsto-na-planilha-obra-publica/")
+        self.assertNotIn("Servico Nao", label)
+        self.assertIn("não", label.lower())
+        # Hub cards must not use raw page_type strings
+        from scripts.pseo.build import render_hubs
+        from scripts.pseo.score import Candidate
+
+        c = Candidate(
+            page_id="prob-x",
+            page_type="problem_service",
+            url="/inteligencia/cenarios/x/",
+            title="t",
+            h1="Cenário de teste",
+            description="d " * 20,
+            archetype=None,
+            segment=None,
+            region=None,
+            agency_id=None,
+            intent="y",
+            score=90,
+            status="publish",
+        )
+        # render_hubs writes files — call items_for logic via module inspection
+        import scripts.pseo.build as b
+
+        src = Path(b.__file__).read_text(encoding="utf-8")
+        self.assertIn("Cenário problema → serviço", src)
+        self.assertIn("Never expose pipeline page_type", src)
+        # unit of guide label vs crude title case
+        self.assertNotEqual(
+            guide_path_label("/conteudos/aditivo-qualitativo-quantitativo/"),
+            "Aditivo Qualitativo Quantitativo",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

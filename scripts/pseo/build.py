@@ -355,14 +355,25 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
     pubs = [c for c in cands if c.status in {"publish", "noindex"}]
     publish_types = {c.page_type for c in cands if c.status == "publish"}
 
+    type_labels = {
+        "market": "Mercado",
+        "agency": "Órgão comprador",
+        "price": "Benchmark de preços",
+        "competition": "Concorrência observada",
+        "radar": "Radar de oportunidades",
+        "problem_service": "Cenário problema → serviço",
+    }
+
     def items_for(ptype: str) -> list[tuple]:
         out = []
+        kind = type_labels.get(ptype, "Inteligência")
         for c in sorted(pubs, key=lambda x: -x.score):
             if c.page_type != ptype:
                 continue
             badge = "publicada" if c.status == "publish" else "preview (revisão)"
-            meta = f"{c.page_type} · {badge}"
-            out.append((c.url, c.page_type, c.h1[:90], meta))
+            # Never expose pipeline page_type as visitor copy
+            meta = badge
+            out.append((c.url, kind, c.h1[:90], meta))
         return out
 
     def hub_robots(ptype: str | None) -> str:

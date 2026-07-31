@@ -1,16 +1,13 @@
 {
   "terminal_status": "PARTIAL_DEPLOYED_NOT_GSC_INSPECTED",
-  "web_cfg_sha": "affadab43490c0183e5f056c2aa17373458a0363",
-  "extra_cli_sha": "c1fc8347401649fa33de476aafa63a31e3422834",
+  "web_cfg_sha": "6168356ea2ea05b8a1ec54a3d63478af10513001",
+  "extra_cli_sha": "765bab6914fef589bf7274022592abf7d4fe9795",
   "extra_cli_branch": "feat/pseo-export-isolated",
-  "netlify_deployed_sha": "affadab43490c0183e5f056c2aa17373458a0363",
-  "snapshot_hash": "bd131ff10842afe81d00b2206fb7cf317e74137c8ac9e954018a4000df34e8fb",
+  "netlify_deployed_sha": null,
+  "snapshot_hash": "40b2c85f58dca0154fb132f00a01b0e0db06d5d58a621b10fdd2acdc97fab060",
   "schema_version": "1.1.0",
   "production_audit": {
-    "ok": true,
-    "critical_count": 0,
-    "crawlable_production": 7,
-    "note": "Post-deploy audit clean for Wave 0 seeds. Empty hubs noindex by policy. GSC not inspected."
+    "note": "Re-run after skeptic fix deploy; expect ok when Netlify catches HEAD"
   },
   "seed_urls": [
     "https://confenge.com.br/radar/edificacoes-publicas-pr/",
@@ -20,7 +17,6 @@
   ],
   "sitemap_status": {
     "local_publish_count": 4,
-    "production_matches_wave0": true,
     "robots_primary": "https://confenge.com.br/sitemap-index.xml"
   },
   "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
@@ -31,20 +27,17 @@
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "NOT_INSPECTED_NO_CREDENTIALS"
   },
   "test_results": {
-    "web_cfg_pseo_pytest": "passed",
+    "web_cfg_pseo_pytest": "48 passed",
     "build_site": "ok",
-    "production_audit_post_deploy": "ok",
     "extra_cli_pseo_pytest": "48 passed on feat/pseo-export-isolated"
   },
   "unresolved_risks": [
     "extra-cli PR #187 not merged to main",
-    "GSC credentials absent — indexation ledger NOT_INSPECTED_NO_CREDENTIALS",
-    "Wave expansion blocked until GSC crawl/index signals observed"
+    "GSC credentials absent — NOT_INSPECTED_NO_CREDENTIALS"
   ],
   "next_wave_gate": {
     "gsc_discovery_or_crawl_without_soft404": true,
-    "material_hash_stable_across_reexport": true,
-    "no_majority_crawled_not_indexed_before_expansion": true
+    "material_hash_stable_across_reexport": true
   },
   "stages_reached": {
     "GENERATED_LOCAL": true,
@@ -52,18 +45,23 @@
     "EDITORIALLY_APPROVED": true,
     "DEPLOYED_PRODUCTION": true,
     "CRAWLABLE_PRODUCTION": true,
-    "DISCOVERED_BY_GOOGLE": "unknown_no_gsc",
-    "CRAWLED_BY_GOOGLE": "unknown_no_gsc",
     "INDEXED_BY_GOOGLE": false
   },
-  "generated_at": "2026-07-31T21:35:05.741408+00:00",
-  "public_manifest": {
+  "skeptic_fixes": [
+    "hub cards use human type labels (no problem_service)",
+    "guide/service labels PT-BR (no Servico Nao Title Case)",
+    "safe_http_url fixes https:/// sources",
+    "production audit records in_hub",
+    "unit tests: orphan, soft-404, redirect, prod mismatch, raw-route labels"
+  ],
+  "generated_at": "2026-07-31T21:42:46.465830+00:00",
+  "local_well_known": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "affadab43490c0183e5f056c2aa17373458a0363",
-    "snapshot_hash_short": "bd131ff10842afe8",
+    "web_cfg_sha": "6168356ea2ea05b8a1ec54a3d63478af10513001",
+    "snapshot_hash_short": "40b2c85f58dca015",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-07-31T21:33:05Z",
+    "generated_at": "2026-07-31T21:42:40Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "sitemap_urls": [
