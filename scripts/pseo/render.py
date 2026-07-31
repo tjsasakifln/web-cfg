@@ -259,9 +259,13 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         "name": c.h1,
         "description": c.description,
         "creator": {"@id": f"{SITE}/#organization"},
+        "identifier": c.page_id,
         "isBasedOn": "https://pncp.gov.br/",
-        "temporalCoverage": f"{m.get('period_start')}/{m.get('period_end')}",
-        "variableMeasured": ["contract_count", "median_value", "buyer_count"],
+        "temporalCoverage": f"{m.get('period_start') or ''}/{m.get('period_end') or ''}".strip("/"),
+        "spatialCoverage": m.get("region_label") or m.get("region") or "BR",
+        "variableMeasured": ["contract_count", "median_value", "buyer_count", "primary_contract_count"],
+        "license": "https://opendefinition.org/od/2.1/pt/",
+        "dateModified": (manifest.get("data_as_of") or manifest.get("generated_at") or "")[:10],
     }
     graph = [
         ORG_JSONLD,
@@ -316,8 +320,13 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
             ("Oportunidades abertas", str(len(a.get("open_opportunities") or [])), "no snapshot"),
         ]
     )
-    mix_rows = [[x.get("archetype_id"), x.get("contract_count")] for x in (a.get("archetype_mix") or [])]
-    mix_table = table_html(["Arquétipo", "Contratos"], mix_rows, "Mix de segmentos")
+    def _arch_label(aid: str | None) -> str:
+        if not aid:
+            return "—"
+        return str(aid).replace("-", " ").strip().title()
+
+    mix_rows = [[_arch_label(x.get("archetype_id")), x.get("contract_count")] for x in (a.get("archetype_mix") or [])]
+    mix_table = table_html(["Segmento", "Contratos"], mix_rows, "Mix de segmentos")
     obj_rows = [[o.get("label"), o.get("count")] for o in (a.get("top_objects") or [])[:8]]
     obj_table = table_html(["Objeto", "N"], obj_rows, "Objetos frequentes")
     season_rows = [[s.get("period"), s.get("contract_count")] for s in (a.get("seasonality") or [])[-12:]]
@@ -441,8 +450,20 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
             "@type": "Dataset",
             "@id": f"{SITE}{c.url}#dataset",
             "name": f"Histórico de contratos — {agency_display}",
+            "description": c.description,
             "creator": {"@id": f"{SITE}/#organization"},
+            "identifier": c.page_id,
+            "temporalCoverage": f"{a.get('period_start') or ''}/{a.get('period_end') or ''}".strip("/"),
+            "spatialCoverage": f"{a.get('municipio') or ''}, {a.get('uf') or 'BR'}".strip(", "),
+            "variableMeasured": [
+                "primary_contract_count",
+                "median_value",
+                "supplier_count",
+                "total_value",
+            ],
             "isBasedOn": "https://pncp.gov.br/",
+            "license": "https://opendefinition.org/od/2.1/pt/",
+            "dateModified": (manifest.get("data_as_of") or manifest.get("generated_at") or "")[:10],
         },
         breadcrumb_jsonld(crumbs),
     ]
@@ -464,8 +485,8 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     region_label = accent_region(p.get('region_label') or p.get('region'))
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"Para {p.get('object_label')} em {p.get('region_label')}, com {p.get('observation_count')} "
-        f"observações comparáveis (valor ≥ piso amostral), a mediana contratual é "
+        f"Para {obj_label} em {region_label}, com {p.get('observation_count')} "
+        f"contratos primários comparáveis (ticket integral, não preço unitário), a mediana contratual é "
         f"{money(p.get('median_value'))}, com P25 {money(p.get('p25_value'))} e P75 "
         f"{money(p.get('p75_value'))}. IQR = {money(p.get('dispersion_iqr'))}. "
         f"Estes números descrevem contratos integrais, não preços unitários de serviço."
@@ -499,10 +520,11 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     )
     conf = p.get("comparison_confidence")
     conf_note = (
-        f"<p><strong>Comparabilidade:</strong> grupo <code>{e(p.get('comparison_group') or 'n/d')}</code> "
-        f"· confiança {e(conf) if conf is not None else 'n/d'} · "
-        f"outliers IQR: {e(p.get('outlier_count') if p.get('outlier_count') is not None else 'n/d')}.</p>"
-        if p.get("comparison_group") or conf is not None
+        f"<p><strong>Comparabilidade:</strong> recorte semântico de contratos integrais "
+        f"· confiança {e(conf) if conf is not None else 'não informada'} · "
+        f"outliers IQR: {e(p.get('outlier_count') if p.get('outlier_count') is not None else 'n/d')}. "
+        f"Denominador: ticket contratual (não preço unitário).</p>"
+        if conf is not None or p.get("denominator_type")
         else ""
     )
     example_link_items = []
@@ -590,9 +612,21 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
             "@type": "Dataset",
             "@id": f"{SITE}{c.url}#dataset",
             "name": c.h1,
-            "variableMeasured": ["median_value", "p25_value", "p75_value", "observation_count"],
+            "description": c.description,
+            "identifier": c.page_id,
+            "temporalCoverage": f"{p.get('period_start') or ''}/{p.get('period_end') or ''}".strip("/"),
+            "spatialCoverage": region_label or p.get("region") or "BR",
+            "variableMeasured": [
+                "median_value",
+                "p25_value",
+                "p75_value",
+                "observation_count",
+                "primary_contract_count",
+            ],
             "creator": {"@id": f"{SITE}/#organization"},
             "isBasedOn": "https://pncp.gov.br/",
+            "license": "https://opendefinition.org/od/2.1/pt/",
+            "dateModified": (manifest.get("data_as_of") or manifest.get("generated_at") or "")[:10],
         },
         breadcrumb_jsonld(crumbs),
     ]
@@ -858,13 +892,17 @@ Contagem histórica no snapshot: {e(o.get('historical_count'))}.</p></section>
 def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     p = c.data_ref
     meta = _meta(c, manifest)
+    svc_label = (p.get("confenge_service_slug") or "").replace("-", " ").strip().title() or "serviço técnico CONFENGE"
     summary = _exec_summary(
         f"{p.get('problem_label')}: {p.get('observed_pattern')} "
-        f"Evidência agregada vinculada: {p.get('evidence_count')} contratos/mercados relacionados. "
-        f"Serviço CONFENGE: {p.get('confenge_service_slug')}/."
+        f"Esta página só deve alegar evidência empírica quando o datalake trouxer sinais "
+        f"diretamente ligados ao problema — não contagens genéricas de contratos. "
+        f"Trilha CONFENGE relacionada: {svc_label}."
     )
     guides = "".join(
-        f'<li><a href="{e(g)}" data-pseo-event="pseo_related_page_click">{e(g)}</a></li>'
+        f'<li><a href="{e(g if str(g).startswith("/") else "/" + str(g).strip("/") + "/")}" '
+        f'data-pseo-event="pseo_related_page_click">'
+        f'{e(str(g).strip("/").split("/")[-1].replace("-", " ").title())}</a></li>'
         for g in (p.get("technical_guide_paths") or [])
     )
     # Official normative/methodology references — auditável, not invented contract deep-links
@@ -888,7 +926,9 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
             "consulte os guias técnicos internos e a legislação aplicável.</small></li>"
         )
     refs_html = "".join(ref_items)
-    arches = ", ".join(p.get("related_archetypes") or [])
+    arches = ", ".join(
+        str(a).replace("-", " ").strip().title() for a in (p.get("related_archetypes") or [])
+    )
     crumbs = [
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
@@ -921,9 +961,10 @@ Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
 <p>Estas páginas aprofundam o critério; a página de inteligência contextualiza o mercado.</p>
 <ul>{guides}</ul></section>
 <section id="implicacoes"><p class="eyebrow">ICP</p><h2>Implicações práticas</h2>
-<p>Empresas com portfólio multi-órgão e objetos de engenharia devem tratar este tema como
-risco de margem e de prazo — não como checklist genérico. Organize cronologia, planilha e
-comunicação com a fiscalização antes de escalar conflito.</p></section>
+<p>Para <strong>{e(p.get("problem_label") or "este cenário")}</strong>, a decisão comercial e técnica
+depende de evidência documental específica do problema — não de contagens genéricas de contratos
+ou mercados. Use os guias técnicos abaixo para o critério; use esta página só quando houver
+sinal empírico direto no datalake.</p></section>
 {confenge_help(
     [((p.get('confenge_service_slug') or '').replace('-', ' ').title() or 'serviço técnico CONFENGE')] + list(p.get("technical_guide_paths") or [])[:2],
     "Do diagnóstico do problema à trilha documental e ao próximo passo contratual ou de proposta.",
@@ -934,7 +975,7 @@ comunicação com a fiscalização antes de escalar conflito.</p></section>
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>Serviço</span><h2><a href="/{e(p.get('confenge_service_slug'))}/">{e(p.get('confenge_service_slug'))}</a></h2></div>
+<div class="aside-card"><span>Serviço</span><h2><a href="/{e((p.get('confenge_service_slug') or '').strip('/'))}/">{e(((p.get('confenge_service_slug') or '').replace('-', ' ').title()) or 'Serviço CONFENGE')}</a></h2></div>
 </aside></div>
 """
     graph = [

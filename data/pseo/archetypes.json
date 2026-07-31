@@ -10,7 +10,7 @@
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 13,
+        "contract_count": 11,
         "type": "estadual"
       },
       {
@@ -25,8 +25,8 @@
       "aditivos-obras-publicas"
     ],
     "description": "Contratos públicos de pavimentação, asfalto, vias urbanas, drenagem e obras de arte correntes — típicos de prefeituras e departamentos de infraestrutura.",
-    "evidence_buyer_count": 65,
-    "evidence_contract_count": 78,
+    "evidence_buyer_count": 64,
+    "evidence_contract_count": 76,
     "id": "pavimentacao-infraestrutura-viaria",
     "label": "Pavimentação e infraestrutura viária",
     "limitations": [
@@ -80,10 +80,6 @@
         "uf": "GO"
       },
       {
-        "contract_count": 4,
-        "uf": "MT"
-      },
-      {
         "contract_count": 3,
         "uf": "RO"
       },
@@ -98,14 +94,18 @@
       {
         "contract_count": 2,
         "uf": "RN"
+      },
+      {
+        "contract_count": 2,
+        "uf": "RS"
       }
     ],
     "value_band": {
       "currency": "BRL",
       "median": 733493.2,
-      "n": 78,
+      "n": 76,
       "p25": 279900.0,
-      "p75": 2330000.0
+      "p75": 1968171.77
     }
   },
   {
@@ -115,11 +115,11 @@
         "type": "municipal"
       },
       {
-        "contract_count": 25,
+        "contract_count": 24,
         "type": "outro_ou_nao_classificado"
       },
       {
-        "contract_count": 6,
+        "contract_count": 4,
         "type": "estadual"
       },
       {
@@ -134,8 +134,8 @@
       "atrasos-prorrogacao-obras-publicas"
     ],
     "description": "Construção, reforma e ampliação de edificações públicas (escolas, saúde, equipamentos comunitários e prédio administrativo).",
-    "evidence_buyer_count": 70,
-    "evidence_contract_count": 78,
+    "evidence_buyer_count": 68,
+    "evidence_contract_count": 75,
     "id": "edificacoes-publicas",
     "label": "Edificações públicas",
     "limitations": [
@@ -185,10 +185,6 @@
         "uf": "PA"
       },
       {
-        "contract_count": 4,
-        "uf": "MT"
-      },
-      {
         "contract_count": 3,
         "uf": "PI"
       },
@@ -206,21 +202,25 @@
       },
       {
         "contract_count": 2,
-        "uf": "RJ"
+        "uf": "ES"
+      },
+      {
+        "contract_count": 2,
+        "uf": "MT"
       }
     ],
     "value_band": {
       "currency": "BRL",
       "median": 504997.83,
-      "n": 78,
+      "n": 75,
       "p25": 249493.84,
-      "p75": 2578827.3
+      "p75": 2087000.0
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 16,
+        "contract_count": 15,
         "type": "outro_ou_nao_classificado"
       },
       {
@@ -235,8 +235,8 @@
       "acompanhamento-contratos-obras"
     ],
     "description": "Redes de água e esgoto, drenagem pluvial estrutural, ETAs/ETEs e adutoras — contratos com maior complexidade técnica e risco de quantitativo.",
-    "evidence_buyer_count": 22,
-    "evidence_contract_count": 25,
+    "evidence_buyer_count": 21,
+    "evidence_contract_count": 24,
     "id": "saneamento-hidraulica",
     "label": "Saneamento e hidráulica",
     "limitations": [
@@ -260,7 +260,7 @@
     "slug": "saneamento-hidraulica",
     "ufs_observed": [
       {
-        "contract_count": 10,
+        "contract_count": 9,
         "uf": "SP"
       },
       {
@@ -295,7 +295,7 @@
     "value_band": {
       "currency": "BRL",
       "median": 310910.94,
-      "n": 25,
+      "n": 24,
       "p25": 112000.0,
       "p75": 911148.06
     }
@@ -367,11 +367,11 @@
   {
     "buyer_types_observed": [
       {
-        "contract_count": 57,
+        "contract_count": 44,
         "type": "municipal"
       },
       {
-        "contract_count": 5,
+        "contract_count": 3,
         "type": "outro_ou_nao_classificado"
       },
       {
@@ -389,8 +389,8 @@
       "defesa-tecnica-contratos-publicos"
     ],
     "description": "Manutenção predial contínua e serviços técnicos de engenharia para órgãos públicos — contratos recorrentes com medição mensal.",
-    "evidence_buyer_count": 16,
-    "evidence_contract_count": 66,
+    "evidence_buyer_count": 14,
+    "evidence_contract_count": 51,
     "id": "manutencao-predial-engenharia",
     "label": "Manutenção predial e serviços de engenharia",
     "limitations": [
@@ -410,7 +410,7 @@
     "slug": "manutencao-predial-engenharia",
     "ufs_observed": [
       {
-        "contract_count": 50,
+        "contract_count": 37,
         "uf": "RS"
       },
       {
@@ -435,23 +435,15 @@
       },
       {
         "contract_count": 1,
-        "uf": "AM"
-      },
-      {
-        "contract_count": 1,
         "uf": "MT"
-      },
-      {
-        "contract_count": 1,
-        "uf": "DF"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 4829.63,
-      "n": 66,
-      "p25": 1053.0,
-      "p75": 23400.0
+      "median": 11388.38,
+      "n": 51,
+      "p25": 2691.0,
+      "p75": 30110.63
     }
   }
 ]

@@ -1,12 +1,20 @@
 {
   "ok": true,
-  "dataset_hash": "65927f2034db594e3144de147309fa5fe8fb51bb35e5576a91b4f692b4c24d52",
-  "source_run_id": "pseo-20260731T134730Z-fd3c853a",
+  "dataset_hash": "cf1ba390e871cf5e16c9873d8a65f60c7b4af393c1bc92e1fa93731b2486d4ad",
+  "source_run_id": "pseo-20260731T153204Z-56117a1f",
   "counts": {
-    "reject": 20
+    "reject": 13,
+    "noindex": 6
   },
   "publishable": [],
-  "noindex": [],
+  "noindex": [
+    "/radar/edificacoes-publicas-pr/",
+    "/radar/pavimentacao-infraestrutura-viaria-sc/",
+    "/radar/pavimentacao-infraestrutura-viaria-rs/",
+    "/radar/saneamento-hidraulica-sc/",
+    "/radar/pavimentacao-infraestrutura-viaria-pr/",
+    "/radar/edificacoes-publicas-rs/"
+  ],
   "rejected": [
     {
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
@@ -37,20 +45,21 @@
       "score": 77
     },
     {
-      "url": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+      "url": "/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
       "reasons": [
-        "agency_name_ingestion_prefix",
         "suppliers<3",
         "temporal_span_days<180",
+        "exercises<2",
         "max_single_day_share>0.70",
-        "score=85"
+        "score=83"
       ],
-      "score": 85
+      "score": 83
     },
     {
       "url": "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
       "reasons": [
         "buyers<3",
+        "suppliers<3",
         "temporal_span_days<90",
         "max_buyer_share>0.60",
         "score=84"
@@ -71,68 +80,9 @@
       "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
       "reasons": [
         "suppliers<3",
-        "score=75"
-      ],
-      "score": 75
-    },
-    {
-      "url": "/radar/edificacoes-publicas-pr/",
-      "reasons": [
-        "contract_url_as_opportunity=7",
-        "zero_used_for_missing_value=1",
-        "score=87"
-      ],
-      "score": 87
-    },
-    {
-      "url": "/radar/pavimentacao-infraestrutura-viaria-sc/",
-      "reasons": [
-        "duplicate_items=2",
-        "duplicate_rate>0",
-        "contract_url_as_opportunity=4",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/radar/saneamento-hidraulica-sc/",
-      "reasons": [
-        "contract_url_as_opportunity=2",
-        "score=75"
-      ],
-      "score": 75
-    },
-    {
-      "url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
-      "reasons": [
-        "contract_url_as_opportunity=2",
         "score=72"
       ],
       "score": 72
-    },
-    {
-      "url": "/radar/edificacoes-publicas-sc/",
-      "reasons": [
-        "contract_url_as_opportunity=2",
-        "score=72"
-      ],
-      "score": 72
-    },
-    {
-      "url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
-      "reasons": [
-        "contract_url_as_opportunity=4",
-        "score=72"
-      ],
-      "score": 72
-    },
-    {
-      "url": "/radar/edificacoes-publicas-rs/",
-      "reasons": [
-        "contract_url_as_opportunity=1",
-        "score=69"
-      ],
-      "score": 69
     },
     {
       "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
@@ -180,7 +130,7 @@
       "score": 77
     }
   ],
-  "pages_written": 20,
+  "pages_written": 19,
   "hubs": [
     "inteligencia/index.html",
     "inteligencia/mercados/index.html",

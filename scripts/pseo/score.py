@@ -262,7 +262,7 @@ class Candidate:
             "url": self.url,
             "title": self.title,
             "h1": self.h1,
-            "description": self.description,
+            "description": _soft_meta(self.description) if "_soft_meta" in globals() else self.description,
             "archetype": self.archetype,
             "segment": self.segment,
             "region": self.region,
@@ -506,6 +506,20 @@ def _clean_price_label(label: str | None) -> str:
     s = s.replace("pavimentacao", "pavimentação").replace("Piaui", "Piauí")
     return s.strip()
 
+
+
+def _soft_meta(text: str, max_len: int = 155) -> str:
+    """Truncate meta description on word boundary; never mid-word."""
+    text = " ".join((text or "").split())
+    if len(text) <= max_len:
+        return text
+    cut = text[: max_len - 1]
+    if " " in cut:
+        cut = cut.rsplit(" ", 1)[0]
+    cut = cut.rstrip(" ,;:-")
+    if not cut.endswith((".", "!", "?", "…")):
+        cut += "…"
+    return cut
 
 def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Candidate]:
     archetypes = {a["id"]: a for a in data.get("archetypes") or []}
@@ -992,6 +1006,9 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 quality_eligible=status == "publish",
             )
         )
+
+    for c in cands:
+        c.description = _soft_meta(c.description)
 
     return cands
 

@@ -258,10 +258,23 @@ def methodology_block(
 ) -> str:
     src = "".join(f"<li>{e(s)}</li>" for s in sources) or "<li>Fontes públicas do datalake CONFENGE</li>"
     lim = "".join(f"<li>{e(s)}</li>" for s in limitations)
+    if period_start and period_end:
+        period_html = (
+            f'Período dos dados: <strong><time datetime="{e(period_start)}">{e(period_start)}</time></strong> '
+            f'a <strong><time datetime="{e(period_end)}">{e(period_end)}</time></strong>.'
+        )
+    elif period_start or period_end:
+        one = period_start or period_end
+        period_html = f'Período dos dados (referência): <strong><time datetime="{e(one)}">{e(one)}</time></strong>.'
+    else:
+        period_html = (
+            "Período dos dados: <strong>não informado neste recorte</strong> "
+            "(página conceitual ou sem janela temporal aplicável)."
+        )
     return f"""<section class="sources-section" id="metodologia">
 <p class="eyebrow">Metodologia e limitações</p>
 <h2>Como estes dados foram produzidos</h2>
-<p>Período dos dados: <strong>{e(period_start or '—')}</strong> a <strong>{e(period_end or '—')}</strong>.
+<p>{period_html}
 Agregação read-only a partir de exportações sanitizadas do datalake (sem conexão do Netlify ao banco de produção).
 Não é monitoramento em tempo real.</p>
 {extra}
@@ -271,11 +284,27 @@ Não é monitoramento em tempo real.</p>
 </section>"""
 
 
+def _service_label(path_or_slug: str) -> str:
+    s = (path_or_slug or "").strip().strip("/")
+    if not s:
+        return "Serviço CONFENGE"
+    # last path segment as words
+    slug = s.split("/")[-1] if "/" in s else s
+    return slug.replace("-", " ").strip().title() or "Serviço CONFENGE"
+
+
 def confenge_help(service_paths: list[str], text: str) -> str:
-    links = "".join(
-        f'<li><a href="{e(p)}" data-pseo-event="pseo_related_page_click">{e(p.strip("/").replace("-", " "))}</a></li>'
-        for p in service_paths[:4]
-    )
+    items = []
+    for p in service_paths[:4]:
+        raw = (p or "").strip()
+        if not raw:
+            continue
+        href = raw if raw.startswith("/") else f"/{raw.strip('/')}/"
+        label = _service_label(raw)
+        items.append(
+            f'<li><a href="{e(href)}" data-pseo-event="pseo_related_page_click">{e(label)}</a></li>'
+        )
+    links = "".join(items)
     return f"""<section id="como-ajudamos">
 <p class="eyebrow">Oferta coerente</p>
 <h2>Como a CONFENGE pode ajudar neste cenário</h2>

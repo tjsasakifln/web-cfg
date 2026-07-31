@@ -2,7 +2,7 @@
   {
     "agencies_with_activity": 2,
     "concentration_top3_share": 1.0,
-    "contract_count": 50,
+    "contract_count": 37,
     "id": "comp-manutencao-predial-engenharia-rs",
     "language_note": "Linguagem neutra e verificável. Não se atribui competência, qualidade, risco, intenção ou probabilidade de compra a qualquer fornecedor.",
     "limitations": [
@@ -12,9 +12,9 @@
     "observed_suppliers": [
       {
         "agencies_count": 1,
-        "contract_count": 49,
+        "contract_count": 36,
         "display_name": "FORZA VERTRE ENGENHARIA E OBRAS LTDA",
-        "total_value": 403758.04,
+        "total_value": 389838.41,
         "value_band": "100k_1m"
       },
       {
@@ -41,7 +41,7 @@
     "value_bands": [
       {
         "band": "ate_100k",
-        "contract_count": 50
+        "contract_count": 37
       },
       {
         "band": "100k_1m",

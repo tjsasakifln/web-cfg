@@ -22,8 +22,18 @@
     "p75_value": 635000.0,
     "period_end": "2026-07-08",
     "period_start": "2026-01-09",
+    "primary_contract_count": 13,
     "region": "SC",
     "region_label": "Santa Catarina",
+    "sample_metrics": {
+      "duplicate_rate": 0.0,
+      "exercise_count": 1,
+      "max_single_day_share": 0.2308,
+      "primary_contract_count": 13,
+      "temporal_span_days": 180,
+      "unique_buyer_count": 11,
+      "unique_supplier_count": 11
+    },
     "segment": "Pavimentação e infraestrutura viária",
     "slug": "pavimentacao-infraestrutura-viaria-sc",
     "sources": [
@@ -43,7 +53,7 @@
         "cnpj8": "83102574",
         "contract_count": 1,
         "municipio": "Rio do Sul",
-        "name": "MUNICÍPIO DE RIO DO SUL",
+        "name": "Município de Rio do Sul",
         "total_value": 4082.5,
         "uf": "SC"
       },
@@ -51,7 +61,7 @@
         "cnpj8": "82892365",
         "contract_count": 1,
         "municipio": "Paulo Lopes",
-        "name": "MUNICÍPIO DE PAULO LOPES",
+        "name": "Município de Paulo Lopes",
         "total_value": 1086043.29,
         "uf": "SC"
       },
@@ -59,7 +69,7 @@
         "cnpj8": "83102517",
         "contract_count": 1,
         "municipio": "Itaiópolis",
-        "name": "DEPARTAMENTO DE OBRAS E URBANISMO",
+        "name": "Departamento de Obras e Urbanismo",
         "total_value": 2590000.0,
         "uf": "SC"
       },
@@ -67,7 +77,7 @@
         "cnpj8": "83102277",
         "contract_count": 1,
         "municipio": "Itajaí",
-        "name": "PREFEITURA MUNICIPAL DE ITAJAÍ - SC",
+        "name": "Prefeitura Municipal de Itajaí - Sc",
         "total_value": 345532.53,
         "uf": "SC"
       },
@@ -75,7 +85,7 @@
         "cnpj8": "95780458",
         "contract_count": 1,
         "municipio": "Sangão",
-        "name": "PREFEITURA MUNICIPAL DE SANGÃO",
+        "name": "Prefeitura Municipal de Sangão",
         "total_value": 205000.0,
         "uf": "SC"
       },
@@ -83,7 +93,7 @@
         "cnpj8": "82777301",
         "contract_count": 1,
         "municipio": "Lages",
-        "name": "MUNICÍPIO DE LAGES",
+        "name": "Município de Lages",
         "total_value": 605900.0,
         "uf": "SC"
       },
@@ -178,8 +188,18 @@
     "p75_value": 1463918.41,
     "period_end": "2026-07-08",
     "period_start": "2026-06-03",
+    "primary_contract_count": 13,
     "region": "PI",
     "region_label": "Piauí",
+    "sample_metrics": {
+      "duplicate_rate": 0.0,
+      "exercise_count": 1,
+      "max_single_day_share": 0.2308,
+      "primary_contract_count": 13,
+      "temporal_span_days": 35,
+      "unique_buyer_count": 6,
+      "unique_supplier_count": 13
+    },
     "segment": "Pavimentação e infraestrutura viária",
     "slug": "pavimentacao-infraestrutura-viaria-pi",
     "sources": [
@@ -207,7 +227,7 @@
         "cnpj8": "14862788",
         "contract_count": 2,
         "municipio": "Teresina",
-        "name": "SECRETARIA DE DESEN.REG.A.M.E ENER.RENOVAVEIS",
+        "name": "Secretaria de Desen.reg.a.m.e Ener.renovaveis",
         "total_value": 14971498.28,
         "uf": "PI"
       },
@@ -215,7 +235,7 @@
         "cnpj8": "05699457",
         "contract_count": 1,
         "municipio": "Teresina",
-        "name": "EPI-SECRETARIA ESTADUAL DE TRANSPORTES",
+        "name": "Epi-secretaria Estadual de Transportes",
         "total_value": 1488689.1,
         "uf": "PI"
       },
@@ -223,7 +243,7 @@
         "cnpj8": "09034960",
         "contract_count": 1,
         "municipio": "Teresina",
-        "name": "EPI-INSTITUTO DE DESENVOLVIMENTO DO PIAUI",
+        "name": "Epi-instituto de Desenvolvimento do Piaui",
         "total_value": 1526304.17,
         "uf": "PI"
       },
@@ -231,7 +251,7 @@
         "cnpj8": "33691623",
         "contract_count": 1,
         "municipio": "Teresina",
-        "name": "EPI-SECRETARIA DO AGRO.E EMPREEND.RURAL",
+        "name": "Epi-secretaria do Agro.e Empreend.rural",
         "total_value": 572980.0,
         "uf": "PI"
       }
@@ -318,8 +338,18 @@
     "p75_value": 1300000.0,
     "period_end": "2026-07-08",
     "period_start": "2026-06-15",
+    "primary_contract_count": 12,
     "region": "MG",
     "region_label": "Minas Gerais",
+    "sample_metrics": {
+      "duplicate_rate": 0.0,
+      "exercise_count": 1,
+      "max_single_day_share": 0.4167,
+      "primary_contract_count": 12,
+      "temporal_span_days": 23,
+      "unique_buyer_count": 10,
+      "unique_supplier_count": 11
+    },
     "segment": "Edificações públicas",
     "slug": "edificacoes-publicas-mg",
     "sources": [
@@ -339,7 +369,7 @@
         "cnpj8": "18298174",
         "contract_count": 2,
         "municipio": "Córrego Danta",
-        "name": "MUNICÍPIO DE CÓRREGO DANTA-MG",
+        "name": "Município de Córrego Danta-mg",
         "total_value": 731399.99,
         "uf": "MG"
       },
@@ -347,7 +377,7 @@
         "cnpj8": "20356747",
         "contract_count": 1,
         "municipio": "Entre Rios de Minas",
-        "name": "PREFEITURA MUNICIPAL DE ENTRE RIOS DE MINAS",
+        "name": "Prefeitura Municipal de Entre Rios de Minas",
         "total_value": 1593755.41,
         "uf": "MG"
       },
@@ -371,7 +401,7 @@
         "cnpj8": "22680672",
         "contract_count": 1,
         "municipio": "Coração de Jesus",
-        "name": "SECRETARIA MUNICIPAL DE SAÚDE",
+        "name": "Secretaria Municipal de Saúde",
         "total_value": 1300000.0,
         "uf": "MG"
       },
@@ -387,7 +417,7 @@
         "cnpj8": "01613121",
         "contract_count": 1,
         "municipio": "São Félix de Minas",
-        "name": "PREFEITURA MUNICIPAL DE SÃO FÉLIX DE MINAS",
+        "name": "Prefeitura Municipal de São Félix de Minas",
         "total_value": 599500.0,
         "uf": "MG"
       }
@@ -474,8 +504,18 @@
     "p75_value": 1390000.0,
     "period_end": "2026-07-08",
     "period_start": "2025-11-25",
+    "primary_contract_count": 10,
     "region": "RS",
     "region_label": "Rio Grande do Sul",
+    "sample_metrics": {
+      "duplicate_rate": 0.0,
+      "exercise_count": 2,
+      "max_single_day_share": 0.2,
+      "primary_contract_count": 10,
+      "temporal_span_days": 225,
+      "unique_buyer_count": 10,
+      "unique_supplier_count": 10
+    },
     "segment": "Edificações públicas",
     "slug": "edificacoes-publicas-rs",
     "sources": [
@@ -487,7 +527,7 @@
         "cnpj8": "88084942",
         "contract_count": 1,
         "municipio": "Pinheiro Machado",
-        "name": "PREFEITURA MUNICIPAL",
+        "name": "Prefeitura Municipal",
         "total_value": 532542.27,
         "uf": "RS"
       },
@@ -495,7 +535,7 @@
         "cnpj8": "87612826",
         "contract_count": 1,
         "municipio": "Independência",
-        "name": "MUNICIPIO DE INDEPENDECIA/RS",
+        "name": "Municipio de Independecia/rs",
         "total_value": 199500.0,
         "uf": "RS"
       },
@@ -503,7 +543,7 @@
         "cnpj8": "87564381",
         "contract_count": 1,
         "municipio": "Ibirubá",
-        "name": "MUNICÍPIO DE IBIRUBÁ - RS",
+        "name": "Município de Ibirubá - Rs",
         "total_value": 415499.99,
         "uf": "RS"
       },
@@ -511,7 +551,7 @@
         "cnpj8": "88363189",
         "contract_count": 1,
         "municipio": "Triunfo",
-        "name": "PREFEITURA MUNICIPAL",
+        "name": "Prefeitura Municipal",
         "total_value": 1390000.0,
         "uf": "RS"
       },
@@ -519,7 +559,7 @@
         "cnpj8": "88566872",
         "contract_count": 1,
         "municipio": "Rio Grande",
-        "name": "PREFEITURA MUNICIPAL DO RIO GRANDE - RS",
+        "name": "Prefeitura Municipal do Rio Grande - Rs",
         "total_value": 300879.55,
         "uf": "RS"
       },
@@ -527,7 +567,7 @@
         "cnpj8": "87366159",
         "contract_count": 1,
         "municipio": "Sapiranga",
-        "name": "SECRETARIA MUNICIPAL DE EDUCAÇÃO",
+        "name": "Secretaria Municipal de Educação",
         "total_value": 278900.0,
         "uf": "RS"
       },
@@ -535,7 +575,7 @@
         "cnpj8": "89522064",
         "contract_count": 1,
         "municipio": "Porto Alegre",
-        "name": "TRIBUNAL DE JUSTIÇA DO ESTADO DO RIO G.DO SUL",
+        "name": "Tribunal de Justiça do Estado do Rio G.do Sul",
         "total_value": 4161856.87,
         "uf": "RS"
       },
@@ -543,7 +583,7 @@
         "cnpj8": "13677970",
         "contract_count": 1,
         "municipio": "Alto Alegre",
-        "name": "CÂMARA MUNICIPAL DE ALTO ALEGRE",
+        "name": "Câmara Municipal de Alto Alegre",
         "total_value": 6000.0,
         "uf": "RS"
       }

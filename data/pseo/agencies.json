@@ -1,20 +1,23 @@
 [
   {
     "agency_cnpj8": "88830609",
-    "agency_name": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+    "agency_name": "Prefeitura Municipal de Caxias do Sul",
+    "agency_name_raw": null,
     "archetype_mix": [
       {
         "archetype_id": "manutencao-predial-engenharia",
-        "contract_count": 49
+        "contract_count": 36
       }
     ],
-    "contract_count": 49,
+    "contract_count": 36,
     "id": "agency-88830609",
     "limitations": [
-      "Histórico restrito aos contratos ingeridos no datalake.",
-      "Nome do órgão conforme fonte; pode haver variação cadastral."
+      "Histórico restrito a contratos primários deduplicados no datalake.",
+      "Reajustes, aditivos e apostilamentos não entram na contagem primária.",
+      "Nome do órgão humanizado a partir da fonte; pode haver variação cadastral.",
+      "Sazonalidade não publicada: base temporal insuficiente (menos de 60 dias ou um único mês)."
     ],
-    "median_value": 2742.75,
+    "median_value": 5425.88,
     "modalities": [],
     "municipio": "Caxias do Sul",
     "official_channels": [
@@ -28,8 +31,8 @@
       }
     ],
     "open_opportunities": [],
-    "p25_value": 877.5,
-    "p75_value": 13773.38,
+    "p25_value": 1813.5,
+    "p75_value": 15268.5,
     "period_end": "2026-07-03",
     "period_start": "2026-07-03",
     "practical_notes": [
@@ -37,13 +40,23 @@
       "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
       "Documente premissas de produtividade e BDI para o órgão específico."
     ],
-    "seasonality": [
-      {
-        "contract_count": 49,
-        "period": "2026-07"
-      }
-    ],
-    "slug": "mrs-prefeitura-municipal-de-caxias-do-sul-rs",
+    "primary_contract_count": 36,
+    "sample_metrics": {
+      "amendment_count": 0,
+      "derived_record_count": 0,
+      "duplicate_rate": 0.0,
+      "exercise_count": 1,
+      "max_single_day_share": 1.0,
+      "price_adjustment_count": 0,
+      "primary_contract_count": 36,
+      "source_system_count": 1,
+      "temporal_span_days": 0,
+      "unique_buyer_count": 1,
+      "unique_supplier_count": 1
+    },
+    "seasonality": [],
+    "seasonality_eligible": false,
+    "slug": "prefeitura-municipal-de-caxias-do-sul-rs",
     "sources": [
       "pncp_contracts"
     ],
@@ -54,15 +67,9 @@
         "example_objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
         "label": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
         "median_value": null
-      },
-      {
-        "count": 13,
-        "example_objeto": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
-        "label": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
-        "median_value": null
       }
     ],
-    "total_value": 403758.04,
+    "total_value": 389838.41,
     "uf": "RS"
   }
 ]
