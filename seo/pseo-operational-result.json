@@ -1,9 +1,10 @@
 {
   "terminal_status": "PARTIAL_DEPLOYED_NOT_GSC_INSPECTED",
-  "web_cfg_sha": "5e573ec306911d5ea463e7306224c676fddaa814",
+  "web_cfg_sha": "5652219a5cf101d34db760d839fae5926c40614e",
   "extra_cli_sha": "765bab6914fef589bf7274022592abf7d4fe9795",
   "extra_cli_branch": "feat/pseo-export-isolated",
-  "netlify_deployed_sha": "5e573ec306911d5ea463e7306224c676fddaa814",
+  "netlify_deployed_sha": "5652219a5cf101d34db760d839fae5926c40614e",
+  "content_audit_sha": "5e573ec306911d5ea463e7306224c676fddaa814",
   "snapshot_hash": "40b2c85f58dca0154fb132f00a01b0e0db06d5d58a621b10fdd2acdc97fab060",
   "schema_version": "1.1.0",
   "production_audit": {
@@ -55,10 +56,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "5e573ec306911d5ea463e7306224c676fddaa814",
+    "web_cfg_sha": "5652219a5cf101d34db760d839fae5926c40614e",
     "snapshot_hash_short": "40b2c85f58dca015",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-07-31T21:43:07Z",
+    "generated_at": "2026-07-31T21:43:59Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "sitemap_urls": [
@@ -68,5 +69,5 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "generated_at": "2026-07-31T21:43:34.045278+00:00"
+  "generated_at": "2026-07-31T21:44:33.717115+00:00"
 }
