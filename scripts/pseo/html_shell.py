@@ -249,6 +249,15 @@ def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> s
 </div></section>"""
 
 
+def _br(iso: str | None) -> str:
+    if not iso:
+        return "—"
+    d = str(iso)[:10]
+    if len(d) == 10 and d[4] == "-" and d[7] == "-":
+        return f"{d[8:10]}/{d[5:7]}/{d[0:4]}"
+    return str(iso)
+
+
 def methodology_block(
     period_start: str | None,
     period_end: str | None,
@@ -260,8 +269,8 @@ def methodology_block(
     lim = "".join(f"<li>{e(s)}</li>" for s in limitations)
     if period_start and period_end:
         period_html = (
-            f'Período dos dados: <strong><time datetime="{e(period_start)}">{e(period_start)}</time></strong> '
-            f'a <strong><time datetime="{e(period_end)}">{e(period_end)}</time></strong>.'
+            f'Período dos dados: <strong><time datetime="{e(period_start)}">{e(_br(period_start))}</time></strong> '
+            f'a <strong><time datetime="{e(period_end)}">{e(_br(period_end))}</time></strong>.' 
         )
     elif period_start or period_end:
         one = period_start or period_end

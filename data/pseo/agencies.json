@@ -3,6 +3,7 @@
     "agency_cnpj8": "88830609",
     "agency_name": "Prefeitura Municipal de Caxias do Sul",
     "agency_name_raw": null,
+    "amendment_count": 0,
     "archetype_mix": [
       {
         "archetype_id": "manutencao-predial-engenharia",
@@ -10,12 +11,14 @@
       }
     ],
     "contract_count": 36,
+    "derived_record_count": 13,
     "id": "agency-88830609",
     "limitations": [
       "Histórico restrito a contratos primários deduplicados no datalake.",
       "Reajustes, aditivos e apostilamentos não entram na contagem primária.",
       "Nome do órgão humanizado a partir da fonte; pode haver variação cadastral.",
-      "Sazonalidade não publicada: base temporal insuficiente (menos de 60 dias ou um único mês)."
+      "Sazonalidade não publicada: base temporal insuficiente (menos de 60 dias ou um único mês).",
+      "Tipologia no recorte bruto: 13 reajustes, 0 aditivos — não contados como contratos primários."
     ],
     "median_value": 5425.88,
     "modalities": [],
@@ -40,18 +43,26 @@
       "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
       "Documente premissas de produtividade e BDI para o órgão específico."
     ],
+    "price_adjustment_count": 13,
     "primary_contract_count": 36,
     "sample_metrics": {
       "amendment_count": 0,
-      "derived_record_count": 0,
+      "derived_record_count": 13,
       "duplicate_rate": 0.0,
+      "duplicate_record_count": 0,
       "exercise_count": 1,
       "max_single_day_share": 1.0,
-      "price_adjustment_count": 0,
+      "price_adjustment_count": 13,
       "primary_contract_count": 36,
+      "raw_record_count": 53,
+      "record_type_distribution": {
+        "contrato_original": 40,
+        "reajuste": 13
+      },
       "source_system_count": 1,
       "temporal_span_days": 0,
       "unique_buyer_count": 1,
+      "unique_procurement_count": 40,
       "unique_supplier_count": 1
     },
     "seasonality": [],

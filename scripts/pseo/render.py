@@ -24,6 +24,29 @@ from scripts.pseo.html_shell import (
 )
 from scripts.pseo.score import Candidate
 
+def br_date(iso: str | None) -> str:
+    """Visible Brazilian date; empty if missing."""
+    if not iso:
+        return "—"
+    s = str(iso).strip()
+    d = s[:10]
+    if len(d) == 10 and d[4] == "-" and d[7] == "-":
+        return f"{d[8:10]}/{d[5:7]}/{d[0:4]}"
+    return s
+
+
+def br_datetime(iso: str | None) -> str:
+    if not iso:
+        return "—"
+    s = str(iso).strip()
+    date_part = br_date(s)
+    if "T" in s:
+        time = s.split("T", 1)[1][:5]
+        if time and time != "23:59":
+            return f"{date_part} {time}"
+    return date_part
+
+
 
 def _scrub_criteria(items: list | None) -> list[str]:
     out=[]
@@ -261,7 +284,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 <h1>{e(c.h1)}</h1>
 <p class="content-lead">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
-<span>Dados: <time datetime="{e(m.get('period_start'))}">{e(m.get('period_start'))}</time> – <time datetime="{e(m.get('period_end'))}">{e(m.get('period_end'))}</time></span>
+<span>Dados: <time datetime="{e(m.get('period_start'))}">{e(br_date(m.get('period_start')))}</time> – <time datetime="{e(m.get('period_end'))}">{e(br_date(m.get('period_end')))}</time></span>
 <span>Escopo: {e(m.get('region_label'))}</span></div>
 </div></div></header>
 <div class="container article-layout">
@@ -361,7 +384,23 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     def _arch_label(aid: str | None) -> str:
         if not aid:
             return "—"
-        return str(aid).replace("-", " ").strip().title()
+        s = str(aid).replace("-", " ").strip().lower()
+        s = (
+            s.replace("manutencao predial engenharia", "manutenção predial e engenharia")
+            .replace("manutencao predial", "manutenção predial")
+            .replace("pavimentacao infraestrutura viaria", "pavimentação e infraestrutura viária")
+            .replace("edificacoes publicas", "edificações públicas")
+            .replace("climatizacao instalacoes", "climatização e instalações")
+            .replace("saneamento hidraulica", "saneamento e hidráulica")
+            .replace("manutencao", "manutenção")
+            .replace("pavimentacao", "pavimentação")
+            .replace("edificacoes", "edificações")
+        )
+        small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o"}
+        parts = []
+        for i, w in enumerate(s.split()):
+            parts.append(w if i > 0 and w in small else w.capitalize())
+        return " ".join(parts)
 
     mix_rows = [[_arch_label(x.get("archetype_id")), x.get("contract_count")] for x in (a.get("archetype_mix") or [])]
     mix_table = table_html(["Segmento", "Contratos"], mix_rows, "Mix de segmentos")
@@ -374,7 +413,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
             (o.get("objeto") or "")[:60],
             money(o.get("valor_estimado")),
             o.get("modalidade") or "—",
-            o.get("data_encerramento") or "—",
+            br_date(o.get("data_encerramento") or o.get("closing_at")),
         ]
         for o in (a.get("open_opportunities") or [])[:6]
     ]
@@ -443,7 +482,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 <p class="content-lead">Histórico de contratação em engenharia — evidência pública, sem score comercial.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(a.get('municipio'))} / {e(a.get('uf'))}</span>
-<span><time datetime="{e(a.get('period_start'))}">{e(a.get('period_start'))}</time> – <time datetime="{e(a.get('period_end'))}">{e(a.get('period_end'))}</time></span>
+<span><time datetime="{e(a.get('period_start'))}">{e(br_date(a.get('period_start')))}</time> – <time datetime="{e(a.get('period_end'))}">{e(br_date(a.get('period_end')))}</time></span>
 </div></div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
@@ -546,7 +585,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
             money(x.get("valor")),
             x.get("municipio") or "—",
             x.get("orgao_nome") or "—",
-            x.get("data_publicacao") or "—",
+            br_date(x.get("data_publicacao")),
             x.get("source") or "—",
         ]
         for x in (p.get("public_examples") or [])[:5]
@@ -810,7 +849,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
             i.get("modalidade") or "—",
             i.get("municipio") or "—",
             i.get("orgao_nome") or "—",
-            i.get("data_encerramento") or "—",
+            br_date(i.get("closing_at") or i.get("data_encerramento")),
         ]
         for i in (o.get("items") or [])[:20]
     ]
@@ -826,7 +865,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         href = i.get("link_oficial") or i.get("link_pncp")
         label = (i.get("objeto") or "")[:80]
         item_meta = (
-            f"{e(i.get('status_bucket') or 'aberta')} · encerra {e(i.get('data_encerramento') or '—')}"
+            f"{e(i.get('status_bucket') or 'aberta')} · encerra {e(br_date(i.get('closing_at') or i.get('data_encerramento')))}"
         )
         if href and str(href).startswith("http"):
             link_items.append(

@@ -70,6 +70,7 @@ def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
                 "approval_rationale": p.get("approval_rationale"),
                 "approver": p.get("approver"),
                 "reviewed_render_hash": p.get("reviewed_render_hash"),
+                "reviewed_material_signature": p.get("reviewed_material_signature") or p.get("current_material_signature"),
             }
     return out
 
@@ -94,6 +95,46 @@ def apply_similarity_gate(cands: list[Candidate]) -> list[Candidate]:
         loser.mandatory_fail.append(f"similar_to:{winner.page_id}:{s}")
         loser.reasons.append(f"consolidated_similar_to={winner.page_id}")
     return cands
+
+
+
+def _attach_review_signatures(registry: dict, cands: list, root: Path) -> None:
+    """Persist material signatures and optional render hashes for approval invalidation."""
+    import hashlib
+    from scripts.pseo.score import _material_signature
+    by_id = {c.page_id: c for c in cands}
+    for p in registry.get("pages") or []:
+        c = by_id.get(p.get("page_id"))
+        if not c:
+            continue
+        p["reviewed_material_signature"] = p.get("reviewed_material_signature")  # keep prior if approved
+        # Always store current material signature for next build comparison via prev
+        p["current_material_signature"] = _material_signature(c)
+        # If still approved, compare and invalidate
+        if p.get("human_review") in {"APPROVED", "APPROVED_WITH_NOTES"}:
+            prev_sig = p.get("reviewed_material_signature") or {}
+            cur = p["current_material_signature"]
+            if prev_sig:
+                for k, v in cur.items():
+                    if prev_sig.get(k) is not None and prev_sig.get(k) != v:
+                        p["human_review"] = "PENDING"
+                        p.setdefault("reasons", [])
+                        if isinstance(p.get("reasons"), list):
+                            p["reasons"].append(f"approval_invalidated_material:{k}")
+                        p["status"] = "noindex" if p.get("status") == "publish" else p.get("status")
+                        break
+            # render hash
+            url = (p.get("url") or "").strip("/")
+            hp = root / url / "index.html"
+            if hp.exists():
+                rh = hashlib.sha256(hp.read_bytes()).hexdigest()[:32]
+                if p.get("reviewed_render_hash") and p.get("reviewed_render_hash") != rh:
+                    p["human_review"] = "PENDING"
+                    p["status"] = "noindex" if p.get("status") == "publish" else p.get("status")
+                # do not overwrite reviewed_render_hash unless approving
+        # Always expose quality metrics
+        p["data_quality_metrics"] = (c.data_ref or {}).get("sample_metrics") or p.get("data_quality_metrics")
+
 
 
 def write_registry(
@@ -375,7 +416,9 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
     cands = resolve_related_urls(cands, site_root=ROOT)
 
     if not dry_run:
-        write_registry(cands, manifest, registry_path, existing_reviews)
+        registry = write_registry(cands, manifest, registry_path, existing_reviews)
+    else:
+        registry = {"pages": []}
 
     written_pages = []
     if not dry_run:
@@ -418,6 +461,14 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                 "score": c.score,
                 "path": str(path.relative_to(ROOT)),
             }
+        )
+
+    if not dry_run:
+        # After HTML is on disk, attach signatures / invalidate approvals on render change
+        _attach_review_signatures(registry, cands, ROOT)
+        registry_path.write_text(
+            json.dumps(registry, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
         )
 
     hubs = [] if dry_run else render_hubs(cands)

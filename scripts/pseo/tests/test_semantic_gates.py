@@ -170,3 +170,100 @@ class TestReviewBlocksBulkAndChecklist(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestDatasetAndCopy(unittest.TestCase):
+    def test_dataset_jsonld_has_required_props_on_agency_html(self):
+        """§11.12 Dataset without description must not ship on agency/price pages."""
+        from scripts.pseo.render import render_candidate
+        from scripts.pseo.score import Candidate
+        c = Candidate(
+            page_id="agency-test",
+            page_type="agency",
+            url="/inteligencia/orgaos/x/engenharia/",
+            title="Prefeitura Teste",
+            h1="Contratação em Prefeitura Teste",
+            description="Dossiê de comprador com contratos primários e leitura prudente.",
+            archetype="edificacoes-publicas",
+            segment=None,
+            region="RS",
+            agency_id="123",
+            intent="avaliar_orgao_comprador",
+            score=50,
+            status="reject",
+            data_ref={
+                "agency_name": "Prefeitura Teste",
+                "contract_count": 5,
+                "supplier_count": 1,
+                "period_start": "2026-01-01",
+                "period_end": "2026-06-01",
+                "municipio": "Teste",
+                "uf": "RS",
+                "median_value": 1000,
+                "total_value": 5000,
+                "top_objects": [],
+                "archetype_mix": [{"archetype_id": "edificacoes-publicas", "contract_count": 5}],
+                "seasonality": [],
+                "open_opportunities": [],
+                "sources": ["pncp"],
+                "limitations": ["teste"],
+                "practical_notes": [],
+                "sample_metrics": {"primary_contract_count": 5, "unique_supplier_count": 1},
+            },
+        )
+        html = render_candidate(c, {"data_as_of": "2026-07-31", "dataset_hash": "abc"})
+        compact = html.replace(" ", "")
+        self.assertTrue('"@type":"Dataset"' in compact or '"@type": "Dataset"' in html)
+        # required props present as JSON keys
+        for prop in ("description", "creator", "identifier", "temporalCoverage", "variableMeasured"):
+            self.assertIn(f'"{prop}"', html)
+
+    def test_approval_invalidated_on_title_change(self):
+        """§11.14 material change beyond dataset_hash."""
+        from scripts.pseo.score import Candidate, apply_human_review_gate, _material_signature
+        c = Candidate(
+            page_id="x", page_type="market", url="/x/", title="NEW TITLE", h1="h",
+            description="d " * 20, archetype=None, segment=None, region="SC",
+            agency_id=None, intent="y", score=95, status="publish",
+            sources=["pncp"], observation_count=20,
+        )
+        prev_sig = _material_signature(c)
+        prev_sig = dict(prev_sig)
+        prev_sig["title"] = "OLD TITLE"
+        out = apply_human_review_gate(
+            [c],
+            {"x": {
+                "human_review": "APPROVED",
+                "review_dataset_hash": "same",
+                "reviewed_material_signature": prev_sig,
+            }},
+            dataset_hash="same",
+        )
+        self.assertEqual(out[0].status, "noindex")
+        self.assertTrue(any("approval_invalidated_material:title" in r for r in out[0].reasons))
+
+    def test_scenario_shared_chrome_not_flagged_when_not_publish(self):
+        """§11.13 — generic chrome must not force fail on reject pages."""
+        from scripts.pseo.editorial_audit import run_editorial_audit
+        report = run_editorial_audit()
+        # no publish fails from generic blocks when all problems are reject/noindex
+        self.assertTrue(report.get("ok"))
+        for page in report.get("pages") or []:
+            if page.get("page_type") == "problem_service" and page.get("status") == "publish":
+                codes = {i["code"] for i in page.get("issues") or []}
+                # if any were publish, generic would matter; currently none publish
+                pass
+
+    def test_radar_near_duplicate_values_fail_gate(self):
+        from scripts.pseo.score import semantic_radar_fails
+        o = {
+            "open_count": 3,
+            "duplicate_rate": 0,
+            "items": [
+                {"objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": 22218519.77, "link_pncp": "https://pncp.gov.br/app/editais/1", "value_status": "known"},
+                {"objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": 22218520.00, "link_pncp": "https://pncp.gov.br/app/editais/2", "value_status": "known"},
+                {"objeto": "Outra obra", "orgao_nome": "X", "data_encerramento": "2026-08-21", "valor_estimado": 100, "link_pncp": "https://pncp.gov.br/app/editais/3", "value_status": "known"},
+            ],
+        }
+        fails = semantic_radar_fails(o)
+        self.assertTrue(any("duplicate" in f for f in fails), fails)

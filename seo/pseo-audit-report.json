@@ -13,7 +13,7 @@
       "publish_count": 0,
       "noindex_count": 6,
       "reject_count": 13,
-      "dataset_hash": "ae0ba7dd06a469910454e41b12f0d5c8ad1dc1900ccd08161d495270ac8e996a",
+      "dataset_hash": "423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae",
       "editorial_audit": {
         "ok": true,
         "publish_fail_count": 0,
@@ -329,7 +329,7 @@
           "human_review": "NEEDS_DATA_FIX",
           "decision": "pass",
           "sample": {
-            "observation_count": 12
+            "observation_count": 11
           },
           "independence": {},
           "duplication": {},

@@ -168,17 +168,28 @@ def semantic_radar_fails(o: dict) -> list[str]:
     dup_rate = float(o.get("duplicate_rate") if o.get("duplicate_rate") is not None else (o.get("sample_metrics") or {}).get("duplicate_rate") or 0)
     if dup_rate > 0:
         fails.append("duplicate_rate>0")
-    # Detect duplicate objects in items
+    # Detect duplicate / version-like rows (accent/case + value tolerance)
+    import unicodedata
+    def _fold(s: str) -> str:
+        s = unicodedata.normalize("NFKD", (s or "").lower())
+        return "".join(ch for ch in s if not unicodedata.combining(ch))
+    def _near_val(v) -> str:
+        try:
+            f = float(v)
+        except (TypeError, ValueError):
+            return ""
+        step = 100.0 if abs(f) >= 100_000 else (10.0 if abs(f) >= 1000 else 1.0)
+        return f"{round(f / step) * step:.2f}"
     seen = set()
     dups = 0
     contract_links = 0
     zero_as_missing = 0
     for it in items:
         key = (
-            (it.get("objeto") or "")[:120].lower().strip(),
-            str(it.get("orgao_nome") or "").lower(),
+            _fold((it.get("objeto") or "")[:160]),
+            _fold(str(it.get("orgao_nome") or "")),
             str(it.get("data_encerramento") or it.get("closing_at") or "")[:10],
-            str(it.get("valor_estimado")),
+            _near_val(it.get("valor_estimado")),
         )
         if key in seen:
             dups += 1
@@ -328,6 +339,26 @@ def decide_status(score: int, mandatory_fail: list[str]) -> str:
     return "reject"
 
 
+def _material_signature(c: "Candidate") -> dict[str, Any]:
+    """Fields whose change invalidates a prior human approval."""
+    ref = c.data_ref or {}
+    sm = ref.get("sample_metrics") or {}
+    return {
+        "title": c.title,
+        "h1": c.h1,
+        "description": (c.description or "")[:200],
+        "cta_label": c.cta_label,
+        "cta_intent": c.cta_intent,
+        "archetype": c.archetype,
+        "sources": tuple(sorted(c.sources or [])),
+        "observation_count": c.observation_count,
+        "primary_contract_count": sm.get("primary_contract_count") or ref.get("primary_contract_count") or ref.get("contract_count") or ref.get("open_count"),
+        "unique_buyer_count": sm.get("unique_buyer_count") or ref.get("unique_buyer_count") or ref.get("buyer_count"),
+        "unique_supplier_count": sm.get("unique_supplier_count") or ref.get("unique_supplier_count") or ref.get("supplier_count"),
+        "mandatory_fail": tuple(sorted(c.mandatory_fail or [])),
+    }
+
+
 def apply_human_review_gate(
     cands: list[Candidate],
     existing_reviews: dict[str, dict[str, Any]] | None = None,
@@ -339,14 +370,27 @@ def apply_human_review_gate(
     for c in cands:
         prev = existing_reviews.get(c.page_id) or {}
         human = prev.get("human_review") or "PENDING"
-        if (
-            human in APPROVED_REVIEWS
-            and prev.get("review_dataset_hash")
-            and dataset_hash
-            and prev.get("review_dataset_hash") != dataset_hash
-        ):
-            human = "PENDING"
-            c.reasons.append("approval_invalidated_dataset_changed")
+        if human in APPROVED_REVIEWS:
+            if (
+                prev.get("review_dataset_hash")
+                and dataset_hash
+                and prev.get("review_dataset_hash") != dataset_hash
+            ):
+                human = "PENDING"
+                c.reasons.append("approval_invalidated_dataset_changed")
+            # Material content / metrics / quality rule changes
+            prev_sig = prev.get("reviewed_material_signature") or {}
+            cur_sig = _material_signature(c)
+            if prev_sig:
+                for k, v in cur_sig.items():
+                    if prev_sig.get(k) is not None and prev_sig.get(k) != v:
+                        human = "PENDING"
+                        c.reasons.append(f"approval_invalidated_material:{k}")
+                        break
+            if prev.get("reviewed_render_hash") and prev.get("_current_render_hash"):
+                if prev.get("reviewed_render_hash") != prev.get("_current_render_hash"):
+                    human = "PENDING"
+                    c.reasons.append("approval_invalidated_render_changed")
         c.human_review = human
 
         if c.status == "reject":

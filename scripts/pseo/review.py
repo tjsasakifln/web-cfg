@@ -117,6 +117,19 @@ def cmd_set(args: argparse.Namespace) -> int:
             hp = ROOT / url / "index.html" if url else None
             if hp and hp.exists():
                 p["reviewed_render_hash"] = hashlib.sha256(hp.read_bytes()).hexdigest()[:32]
+            # Snapshot material signature for future invalidation
+            p["reviewed_material_signature"] = {
+                "title": p.get("title"),
+                "h1": p.get("h1"),
+                "description": (p.get("description") or "")[:200],
+                "cta_label": p.get("cta_label"),
+                "cta_intent": p.get("cta_intent"),
+                "archetype": p.get("archetype"),
+                "sources": tuple(sorted(p.get("sources") or [])),
+                "observation_count": p.get("observation_count"),
+                "mandatory_fail": tuple(sorted(p.get("mandatory_fail") or [])),
+            }
+            p["data_quality_metrics"] = p.get("data_quality_metrics") or {}
         p["human_review"] = args.state
         p["reviewer"] = args.reviewer
         p["review_date"] = date.today().isoformat()

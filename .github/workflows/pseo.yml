@@ -1,0 +1,34 @@
+name: pSEO quality gates
+on:
+  push:
+    paths:
+      - "scripts/pseo/**"
+      - "data/pseo/**"
+      - "package.json"
+      - ".github/workflows/pseo.yml"
+  pull_request:
+    paths:
+      - "scripts/pseo/**"
+      - "data/pseo/**"
+      - "package.json"
+      - ".github/workflows/pseo.yml"
+jobs:
+  pseo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test deps
+        run: pip install pytest
+      - name: pSEO unit tests
+        run: npm run pseo:test
+      - name: pSEO build
+        run: npm run pseo:build
+      - name: pSEO validate (includes editorial audit)
+        run: npm run pseo:validate
+      - name: pSEO audit (no determinism rebuild loop)
+        run: python3 scripts/pseo/audit.py --skip-determinism
+      - name: analytics PII
+        run: npm run test:analytics
