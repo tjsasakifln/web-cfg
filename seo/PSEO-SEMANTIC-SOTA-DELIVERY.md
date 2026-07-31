@@ -2,7 +2,7 @@
 Date: 2026-07-31
 
 ## HEADs
-- web-cfg: `8a01a94a339183bf000fd82ae056afdd1686c194` (branch main / commit pending)
+- web-cfg: `ab8e1539f971afb93c15aeffc8f0e81bf02f0594` (main)
 - extra-cli worktree feat/pseo-semantic-sota: `b8b6c81b10fbb61ebc82a020996680c573f63f32`
 
 ## Containment
