@@ -1,8 +1,8 @@
 # pSEO production audit
 
-- generated_at: `2026-07-31T21:36:03.792535+00:00`
+- generated_at: `2026-07-31T21:43:33.758069+00:00`
 - base_url: `https://confenge.com.br`
-- web_cfg_sha: `6168356ea2ea05b8a1ec54a3d63478af10513001`
+- web_cfg_sha: `5e573ec306911d5ea463e7306224c676fddaa814`
 - ok: **True**
 - critical_defects: `0`
 - crawlable_production: `7`

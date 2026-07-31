@@ -147,3 +147,13 @@ See `seo/pseo-operational-result.json`.
 - `sitemap-inteligencia.xml` lists only Wave 0 + hubs with children
 - `npm run pseo:audit:production` → **ok** (0 critical) after empty-hub policy awareness
 - GSC: still `NOT_INSPECTED_NO_CREDENTIALS`
+
+
+## Skeptic fixes (post-deploy)
+
+- Hub cards: human labels (`Cenário problema → serviço`), no `problem_service` copy.
+- Guide/service anchors: PT-BR (`Serviço não previsto…`), no crude Title Case.
+- Official sources: `safe_http_url` fixes `https:///` → usable HTTPS.
+- Production audit records `in_hub` (null count 0).
+- Unit tests: orphan, soft-404, redirect, prod_html_mismatch, guide labels.
+- SHAs aligned: web_cfg HEAD = Netlify well-known = `5e573ec…`.

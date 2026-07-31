@@ -1,13 +1,17 @@
 {
   "terminal_status": "PARTIAL_DEPLOYED_NOT_GSC_INSPECTED",
-  "web_cfg_sha": "6168356ea2ea05b8a1ec54a3d63478af10513001",
+  "web_cfg_sha": "5e573ec306911d5ea463e7306224c676fddaa814",
   "extra_cli_sha": "765bab6914fef589bf7274022592abf7d4fe9795",
   "extra_cli_branch": "feat/pseo-export-isolated",
-  "netlify_deployed_sha": null,
+  "netlify_deployed_sha": "5e573ec306911d5ea463e7306224c676fddaa814",
   "snapshot_hash": "40b2c85f58dca0154fb132f00a01b0e0db06d5d58a621b10fdd2acdc97fab060",
   "schema_version": "1.1.0",
   "production_audit": {
-    "note": "Re-run after skeptic fix deploy; expect ok when Netlify catches HEAD"
+    "ok": true,
+    "critical_count": 0,
+    "crawlable_production": 7,
+    "in_hub_true_count": 12,
+    "in_hub_null_count": 0
   },
   "seed_urls": [
     "https://confenge.com.br/radar/edificacoes-publicas-pr/",
@@ -29,6 +33,7 @@
   "test_results": {
     "web_cfg_pseo_pytest": "48 passed",
     "build_site": "ok",
+    "production_audit": "ok",
     "extra_cli_pseo_pytest": "48 passed on feat/pseo-export-isolated"
   },
   "unresolved_risks": [
@@ -47,21 +52,13 @@
     "CRAWLABLE_PRODUCTION": true,
     "INDEXED_BY_GOOGLE": false
   },
-  "skeptic_fixes": [
-    "hub cards use human type labels (no problem_service)",
-    "guide/service labels PT-BR (no Servico Nao Title Case)",
-    "safe_http_url fixes https:/// sources",
-    "production audit records in_hub",
-    "unit tests: orphan, soft-404, redirect, prod mismatch, raw-route labels"
-  ],
-  "generated_at": "2026-07-31T21:42:46.465830+00:00",
-  "local_well_known": {
+  "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "6168356ea2ea05b8a1ec54a3d63478af10513001",
+    "web_cfg_sha": "5e573ec306911d5ea463e7306224c676fddaa814",
     "snapshot_hash_short": "40b2c85f58dca015",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-07-31T21:42:40Z",
+    "generated_at": "2026-07-31T21:43:07Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "sitemap_urls": [
@@ -70,5 +67,6 @@
       "https://confenge.com.br/sitemap-inteligencia.xml"
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
-  }
+  },
+  "generated_at": "2026-07-31T21:43:34.045278+00:00"
 }
