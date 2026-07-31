@@ -282,7 +282,7 @@
       "human_review": "NEEDS_DATA_FIX",
       "decision": "pass",
       "sample": {
-        "observation_count": 11
+        "observation_count": 10
       },
       "independence": {},
       "duplication": {},

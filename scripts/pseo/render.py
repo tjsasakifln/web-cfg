@@ -845,7 +845,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     rows = [
         [
             (i.get("objeto") or "")[:70],
-            money(i.get("valor_estimado")),
+            money_or_ni(i.get("valor_estimado"), i.get("value_status")),
             i.get("modalidade") or "—",
             i.get("municipio") or "—",
             i.get("orgao_nome") or "—",

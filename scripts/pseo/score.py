@@ -178,22 +178,50 @@ def semantic_radar_fails(o: dict) -> list[str]:
             f = float(v)
         except (TypeError, ValueError):
             return ""
+        if f == 0:
+            return ""  # treat zero/missing-like as empty for near-dup
         step = 100.0 if abs(f) >= 100_000 else (10.0 if abs(f) >= 1000 else 1.0)
         return f"{round(f / step) * step:.2f}"
-    seen = set()
-    dups = 0
-    contract_links = 0
-    zero_as_missing = 0
-    for it in items:
-        key = (
+
+    def _base_key(it) -> tuple:
+        # Valor intentionally omitted: missing vs known (retificação) is a near-dup.
+        return (
             _fold((it.get("objeto") or "")[:160]),
             _fold(str(it.get("orgao_nome") or "")),
             str(it.get("data_encerramento") or it.get("closing_at") or "")[:10],
-            _near_val(it.get("valor_estimado")),
         )
-        if key in seen:
-            dups += 1
-        seen.add(key)
+
+    # Cluster by base; within base, missing/not_informed merges into a sole known
+    # value bucket (version/retificação). Multiple distinct known values stay separate.
+    from collections import Counter
+    by_base: dict = {}
+    for it in items:
+        by_base.setdefault(_base_key(it), []).append(it)
+    dups = 0
+    for members in by_base.values():
+        known_vals: set[str] = set()
+        missing_n = 0
+        for it in members:
+            vs = it.get("value_status")
+            tok = _near_val(it.get("valor_estimado"))
+            if tok == "" or vs in {"not_informed", "confidential"}:
+                missing_n += 1
+            else:
+                known_vals.add(tok)
+        if len(known_vals) == 0:
+            dups += max(0, missing_n - 1)
+        elif len(known_vals) == 1:
+            dups += max(0, len(members) - 1)
+        else:
+            c: Counter = Counter()
+            for it in members:
+                tok = _near_val(it.get("valor_estimado"))
+                if tok and it.get("value_status") not in {"not_informed", "confidential"}:
+                    c[tok] += 1
+            dups += sum(n - 1 for n in c.values() if n > 1)
+    contract_links = 0
+    zero_as_missing = 0
+    for it in items:
         url = str(it.get("link_pncp") or it.get("link_oficial") or it.get("canonical_source_url") or "")
         ut = it.get("source_url_type") or ""
         if ut == "contract" or "/app/contratos/" in url:

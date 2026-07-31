@@ -267,3 +267,20 @@ class TestDatasetAndCopy(unittest.TestCase):
         }
         fails = semantic_radar_fails(o)
         self.assertTrue(any("duplicate" in f for f in fails), fails)
+
+
+    def test_radar_missing_vs_known_valor_near_dup(self):
+        """Missing valor vs known valor same org/objeto/closing is a near-dup fail."""
+        from scripts.pseo.score import semantic_radar_fails
+        o = {
+            "open_count": 3,
+            "duplicate_rate": 0,
+            "items": [
+                {"objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": None, "value_status": "not_informed", "link_pncp": "https://pncp.gov.br/app/editais/1"},
+                {"objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": 1230482.04, "value_status": "known", "link_pncp": "https://pncp.gov.br/app/editais/2"},
+                {"objeto": "Outra obra", "orgao_nome": "X", "data_encerramento": "2026-08-21", "valor_estimado": 100, "value_status": "known", "link_pncp": "https://pncp.gov.br/app/editais/3"},
+            ],
+        }
+        fails = semantic_radar_fails(o)
+        self.assertTrue(any("duplicate" in f for f in fails), fails)
+

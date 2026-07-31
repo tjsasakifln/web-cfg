@@ -1,47 +1,42 @@
-# pSEO Semantic SOTA — Delivery (post-skeptic final)
+# pSEO Semantic SOTA — Delivery (post-Mariópolis near-dup)
 
 Date: 2026-07-31
 
 ## SHAs
 | Repo | Branch | SHA |
 |---|---|---|
-| web-cfg | main | `c18d1009255da228d1494232247e80431c6d962f` |
-| extra-cli | feat/pseo-semantic-sota | `6108210312d587d108a29464e4edafefc9d5cb15` |
+| web-cfg | main | `(see git HEAD after commit)` |
+| extra-cli | feat/pseo-semantic-sota | `01123735ed0e240b0adf2233269ac947fa6d56c2` |
 
 ## Snapshot
-- dataset_hash: `423c6e379c3127bc3d2c5ae243375686e8b04ae4c22e7ffbb6dcfe49f76591ae`
-- source_commit: `6108210312d587d108a29464e4edafefc9d5cb15`
+- dataset_hash: `faf85d953e46b6c39c20a649cba4adb7d23a754df0048151bb68dc14a4c1c333`
+- source_commit: `01123735ed0e240b0adf2233269ac947fa6d56c2`
 - data_as_of: 2026-07-31
-- registry counts: {'noindex': 6, 'reject': 13}
+- registry counts: {'reject': 13, 'noindex': 6}
 
-## Skeptic resolutions
-1. Near-dup opportunities collapsed via rounded near_duplicate_key.
+## Mariópolis residual fix
+1. **Producer** `_cluster_near_duplicates`: missing/not_informed valor merges into sole known-value bucket under same org|objeto|closing; keep prefers `value_status=known`.
+2. **Consumer** `semantic_radar_fails`: base key omits valor; missing+known same base → `duplicate_items`.
+3. **Render** radar table uses `money_or_ni(valor, value_status)` → "não informado" instead of "—".
+4. **Evidence**: `radar-edificacoes-publicas-pr` open=10 (was 11); single Mariópolis row `…000119` valor `1230482.04` known; `semantic_radar_fails=[]`; quality_eligible=True; status=noindex (awaits individual human approval).
+
+## Skeptic resolutions (cumulative)
+1. Near-dup opportunities collapsed (rounded valor + missing↔known).
 2. Opportunity items export full section 3.2 fields.
-3. Agency sample_metrics include price_adjustment_count=13 + record_type_distribution.
+3. Agency sample_metrics include price_adjustment_count + record_type_distribution.
 4. Approval invalidation: dataset_hash + material signature + render hash.
 5. Registry populates data_quality_metrics + current_material_signature.
-6. UI: accented labels, BR dates in tables, no MRS- prefix.
+6. UI: accented labels, BR dates, money_or_ni on radar, no MRS- prefix.
 7. Radar near-dup semantic gate; CI workflow pseo.yml; Dataset/material tests.
-8. Muro SC item is legitimate pavement (recomposicao asfaltica in full object).
-
-## Decisions (eight)
-| page_id | status | human_review | fails |
-|---|---|---|---|
-| `agency-88830609` | reject | NEEDS_DATA_FIX | suppliers<3, temporal_span_days<180, exercises<2 |
-| `price-manutencao-predial-engenharia-rs-manutencao-predial` | reject | NEEDS_DATA_FIX | buyers<3, suppliers<3, temporal_span_days<90 |
-| `price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo` | reject | NEEDS_DATA_FIX | obs<15, primary_contracts<15, temporal_span_days<90 |
-| `radar-edificacoes-publicas-pr` | noindex | NEEDS_DATA_FIX | — |
-| `radar-pavimentacao-infraestrutura-viaria-sc` | noindex | NEEDS_DATA_FIX | — |
-| `prob-orcamento-edital` | reject | NEEDS_CONTENT_FIX | no_direct_budget_edital_evidence, no_claim_specific_evidence |
-| `prob-sinapi-sicro` | reject | NEEDS_CONTENT_FIX | no_direct_sinapi_sicro_evidence, no_claim_specific_evidence |
-| `prob-aditivos-margem` | reject | NEEDS_CONTENT_FIX | no_direct_aditivo_evidence, no_claim_specific_evidence |
+8. Muro SC item is legitimate pavement.
 
 ## Verification
-- extra-cli pytest: 51 passed
-- web-cfg pseo:test: 27 passed
-- pseo:validate: ok publish=0 editorial_pf=0
+- extra-cli pytest tests/pseo: **52 passed**
+- web-cfg scripts/pseo/tests: **28 passed**
+- export validate: ok
+- build: publish=0, noindex=6, reject=13
 - No deploy (publish=0).
 
 ## Pendencias
-1. Individual human approval for quality-eligible radars PR/SC.
+1. Individual human approval for quality-eligible radars (no bulk).
 2. Optional Playwright browser install in CI.

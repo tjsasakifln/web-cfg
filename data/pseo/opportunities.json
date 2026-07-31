@@ -76,35 +76,6 @@
         "verified_at": "2026-07-31"
       },
       {
-        "canonical_opportunity_id": "pncp:pncp_id:76995323000124-1-000118/2026",
-        "canonical_source_url": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra",
-        "classification_confidence": 0.8,
-        "classification_reasons": [],
-        "closing_at": "2026-07-31T23:59:59",
-        "closing_timezone": "America/Sao_Paulo",
-        "data_encerramento": "2026-07-31",
-        "document_type": "opportunity",
-        "duplicate_group_id": "pncp:pncp_id:76995323000124-1-000118/2026",
-        "exclusion_reasons": [],
-        "link_oficial": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra",
-        "link_pncp": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra",
-        "modalidade": "Concorrência - Eletrônica",
-        "municipio": "Mariópolis",
-        "objeto": "Reforma e Ampliação Centro de Desenvolvimento Econômico, contendo: contendo depósito, palco, dois camarins e uma instalação sanitária em cada camarim, duas instalações sanitárias, uma feminina e outra masculina.",
-        "official_status": "aberta",
-        "orgao_nome": "MUNICIPIO DE MARIOPOLIS",
-        "pncp_id": "76995323000124-1-000118/2026",
-        "source": "pncp",
-        "source_url_type": "notice",
-        "status_bucket": "aberta",
-        "status_raw": null,
-        "uf": "PR",
-        "uncertainty": true,
-        "valor_estimado": null,
-        "value_status": "not_informed",
-        "verified_at": "2026-07-31"
-      },
-      {
         "canonical_opportunity_id": "pncp:pncp_id:76995323000124-1-000119/2026",
         "canonical_source_url": "https://cnetmobile.estaleiro.serpro.gov.br/comprasnet-web/public/compras/acompanhamento-compra",
         "classification_confidence": 0.8,
@@ -343,17 +314,17 @@
       "Pagina evergreen: nao indexa um edital por URL.",
       "historical_count NAO entra em open_count."
     ],
-    "open_count": 11,
+    "open_count": 10,
     "region": "PR",
     "region_label": "Paraná",
     "related_market_slug": null,
     "sample_metrics": {
       "duplicate_rate": 0.0,
-      "duplicate_record_count": 4,
-      "page_item_count": 11,
-      "pipeline_duplicate_rate": 0.1111,
+      "duplicate_record_count": 5,
+      "page_item_count": 10,
+      "pipeline_duplicate_rate": 0.1389,
       "raw_open_before_dedup": 36,
-      "unique_open": 32
+      "unique_open": 31
     },
     "segment": "Edificações públicas",
     "slug": "edificacoes-publicas-pr",
@@ -361,7 +332,7 @@
       "pncp"
     ],
     "status_breakdown": {
-      "abertas": 11,
+      "abertas": 10,
       "encerradas_recentes": 48,
       "historico": 48,
       "suspensas": 0
@@ -546,11 +517,11 @@
     "related_market_slug": "pavimentacao-infraestrutura-viaria-sc",
     "sample_metrics": {
       "duplicate_rate": 0.0,
-      "duplicate_record_count": 4,
+      "duplicate_record_count": 5,
       "page_item_count": 5,
-      "pipeline_duplicate_rate": 0.1111,
+      "pipeline_duplicate_rate": 0.1389,
       "raw_open_before_dedup": 36,
-      "unique_open": 32
+      "unique_open": 31
     },
     "segment": "Pavimentação e infraestrutura viária",
     "slug": "pavimentacao-infraestrutura-viaria-sc",
@@ -714,11 +685,11 @@
     "related_market_slug": null,
     "sample_metrics": {
       "duplicate_rate": 0.0,
-      "duplicate_record_count": 4,
+      "duplicate_record_count": 5,
       "page_item_count": 4,
-      "pipeline_duplicate_rate": 0.1111,
+      "pipeline_duplicate_rate": 0.1389,
       "raw_open_before_dedup": 36,
-      "unique_open": 32
+      "unique_open": 31
     },
     "segment": "Pavimentação e infraestrutura viária",
     "slug": "pavimentacao-infraestrutura-viaria-rs",
@@ -882,11 +853,11 @@
     "related_market_slug": null,
     "sample_metrics": {
       "duplicate_rate": 0.0,
-      "duplicate_record_count": 4,
+      "duplicate_record_count": 5,
       "page_item_count": 4,
-      "pipeline_duplicate_rate": 0.1111,
+      "pipeline_duplicate_rate": 0.1389,
       "raw_open_before_dedup": 36,
-      "unique_open": 32
+      "unique_open": 31
     },
     "segment": "Saneamento e hidráulica",
     "slug": "saneamento-hidraulica-sc",
@@ -1050,11 +1021,11 @@
     "related_market_slug": null,
     "sample_metrics": {
       "duplicate_rate": 0.0,
-      "duplicate_record_count": 4,
+      "duplicate_record_count": 5,
       "page_item_count": 4,
-      "pipeline_duplicate_rate": 0.1111,
+      "pipeline_duplicate_rate": 0.1389,
       "raw_open_before_dedup": 36,
-      "unique_open": 32
+      "unique_open": 31
     },
     "segment": "Pavimentação e infraestrutura viária",
     "slug": "pavimentacao-infraestrutura-viaria-pr",
@@ -1189,11 +1160,11 @@
     "related_market_slug": "edificacoes-publicas-rs",
     "sample_metrics": {
       "duplicate_rate": 0.0,
-      "duplicate_record_count": 4,
+      "duplicate_record_count": 5,
       "page_item_count": 3,
-      "pipeline_duplicate_rate": 0.1111,
+      "pipeline_duplicate_rate": 0.1389,
       "raw_open_before_dedup": 36,
-      "unique_open": 32
+      "unique_open": 31
     },
     "segment": "Edificações públicas",
     "slug": "edificacoes-publicas-rs",
