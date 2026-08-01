@@ -6,31 +6,29 @@
     "status": "REVIEW_REQUIRED"
   },
   "checksums": {
-    "agencies.json": "d1f06c3809b871a3c398ae64d03359b1f10e98d04e0b52280ce24797dc5d40d9",
-    "archetypes.json": "be90df3d3b05bbd4f5fb42344b238d1a3bbbda12eeb134da3f290be6403b021c",
-    "competition.json": "b3fb0709fb1711c02fa0f21af82b1f24492caa8b9613c249cdc91149626bdf2b",
+    "agencies.json": "5d67f65379ffb1cd69ec9fea1c8372da12d124f7416ed553548876b0b22c89a8",
+    "archetypes.json": "00cffd81f106c2baf0a7ccd8cebc2f5aaa359bf27d1b09d4e64ec3cfe865c1dc",
+    "competition.json": "5889ff35b76ec7bb84af55ce78b85fe153ebc08abdb23637521fea4465d03bd4",
     "export-descriptor.json": "3bb2c0ae455f25be9ce95bca53241ca3299c3299416397b80b00df11862d08ca",
     "icp_methodology.json": "8884e6d8d8aa6e57bd66c0174a3a1b9e9834a847d59a8c8dc40c88cc177b72e1",
-    "markets.json": "60785b2a583ac1453b3ccacc0d900d83248b07e4df1e3881852cfc0f647c0f03",
-    "opportunities.json": "e444714af219207ea7ffa6d56587ebddb20412e688185bc3196a0d01f952782b",
-    "prices.json": "75a07bf18f3baf80ea9ccb345f4f9fb7ec43c16da5742117bc924081462d4ab8",
-    "problem_service.json": "3dac4f6b85e297c116ff93ae440b194901d38eaae92353f3d91e405efeeb06ff",
+    "markets.json": "ee00b94b2eec62676322bbf86a11838dfeaadd8f5708467c17af781b4735b501",
+    "opportunities.json": "bde4166c6152f4a5782fc81aa280e06e22f1ef978a633f9e7234de84685d8bdc",
+    "prices.json": "34a04ae9298be2c5e8950207ab693a075910f39272191337c78fd4e2c91b70cb",
+    "problem_service.json": "e3a897b6798bc4f4d1005194b714a36ea8f27a941a5fc433f0e3ab8610519ace",
     "schema.json": "77de5b81ae331f38d03150fae556caa0bb987268b8618689855e00abc4e1dc8e"
   },
   "classification_counts": {
-    "aec_confirmed": 233,
-    "aec_probable": 57,
-    "ambiguous": 655,
-    "bid_status_aberta": 37,
-    "bid_status_closed_total": 319,
-    "bid_status_encerrada": 318,
-    "bid_status_historico": 1,
-    "bid_status_open_total": 37,
-    "insufficient_context": 5832,
-    "non_aec": 5154
+    "aec_confirmed": 54055,
+    "aec_probable": 12797,
+    "ambiguous": 57003,
+    "bid_status_aberta": 287,
+    "bid_status_closed_total": 0,
+    "bid_status_open_total": 287,
+    "insufficient_context": 21498,
+    "non_aec": 69277
   },
   "classifier_gate": {
-    "gold_path": "/tmp/grok-goal-8142f21fb008/implementer/extra-cli-main/tests/pseo/fixtures/gold_classification.json",
+    "gold_path": "/mnt/d/extra consultoria/.worktrees/pseo-national-engine/tests/pseo/fixtures/gold_classification.json",
     "metrics": {
       "by_segment": {
         "alimentacao": {
@@ -81,10 +79,34 @@
           "recall": 1.0,
           "tp": 0
         },
+        "estruturas": {
+          "fn": 0,
+          "fp": 0,
+          "n": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1
+        },
+        "fase_preparatoria": {
+          "fn": 0,
+          "fp": 0,
+          "n": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1
+        },
+        "fiscalizacao": {
+          "fn": 0,
+          "fp": 0,
+          "n": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1
+        },
         "fornecimento": {
           "fn": 0,
           "fp": 0,
-          "n": 4,
+          "n": 5,
           "precision": 1.0,
           "recall": 1.0,
           "tp": 0
@@ -92,7 +114,7 @@
         "limpeza": {
           "fn": 0,
           "fp": 0,
-          "n": 5,
+          "n": 6,
           "precision": 1.0,
           "recall": 1.0,
           "tp": 0
@@ -100,7 +122,7 @@
         "locacao": {
           "fn": 0,
           "fp": 0,
-          "n": 5,
+          "n": 6,
           "precision": 1.0,
           "recall": 1.0,
           "tp": 0
@@ -129,6 +151,14 @@
           "recall": 1.0,
           "tp": 0
         },
+        "reformas": {
+          "fn": 0,
+          "fp": 0,
+          "n": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1
+        },
         "saneamento": {
           "fn": 0,
           "fp": 0,
@@ -148,7 +178,7 @@
         "software": {
           "fn": 0,
           "fp": 0,
-          "n": 4,
+          "n": 5,
           "precision": 1.0,
           "recall": 1.0,
           "tp": 0
@@ -180,7 +210,7 @@
       },
       "confusion": {
         "aec_confirmed": {
-          "aec_confirmed": 35
+          "aec_confirmed": 39
         },
         "ambiguous": {
           "ambiguous": 4
@@ -189,7 +219,7 @@
           "insufficient_context": 4
         },
         "non_aec": {
-          "non_aec": 40
+          "non_aec": 44
         }
       },
       "f1_aec_confirmed": 1.0,
@@ -208,56 +238,68 @@
         "segment_precision_ok": true,
         "segment_precision_threshold": 0.95
       },
-      "n": 83,
+      "n": 91,
       "precision_aec_confirmed": 1.0,
       "recall_aec_confirmed": 1.0,
-      "tn": 48,
-      "tp": 35
+      "tn": 52,
+      "tp": 39
     },
     "ok": true,
     "reason": null
   },
   "counts": {
-    "aec_bids_kept": 356,
-    "after_classification_aec_confirmed": 233,
-    "after_open_filter": 37,
-    "agencies": 1,
-    "archetypes": 5,
+    "aec_bids_kept": 287,
+    "aec_prefilter": true,
+    "after_classification_aec_confirmed": 54055,
+    "after_open_filter": 287,
+    "agencies": 1218,
+    "archetypes": 10,
+    "bid_source": "opportunity_intel",
     "chunk_size": 5000,
-    "classified_aec_bids": 356,
-    "classified_aec_contracts": 233,
-    "classified_kept": 233,
-    "closed_bids": 319,
-    "competition": 1,
+    "classified_aec_bids": 287,
+    "classified_aec_contracts": 54055,
+    "classified_kept": 54055,
+    "closed_bids": 0,
+    "competition": 154,
+    "contract_version_history": 319249,
+    "export_filter": "valor_gt0_and_aec_keyword_prefilter",
     "fetch_mode": "server_side_cursor_fetchmany_sqlite_staging",
     "linear_full_list": false,
-    "markets": 4,
+    "markets": 159,
     "max_public_samples": 25,
     "memory_mode": "sqlite_staging_sequential",
     "n_batches_bids": 1,
-    "n_batches_contracts": 3,
-    "open_bids": 37,
-    "opportunities": 6,
-    "pncp_raw_bids": 1536,
-    "pncp_supplier_contracts": 11931,
-    "prices": 2,
+    "n_batches_contracts": 43,
+    "national_mode": true,
+    "national_records_available": 4479442,
+    "national_records_considered": 4402632,
+    "national_records_considered_over_available": 0.982853,
+    "open_bids": 287,
+    "opportunities": 10,
+    "opportunity_intel": 1713,
+    "pncp_supplier_contracts": 214630,
+    "prices": 911,
     "problem_service": 5,
-    "raw_contracts": 11931,
+    "raw_contracts": 214630,
     "raw_materialized": false,
     "sc_public_entities": 2085,
     "snapshot_isolation": "REPEATABLE READ",
     "staging": true,
-    "staging_path": "/tmp/pseo-staging-vg8rm3mt.sqlite"
+    "staging_path": "/tmp/pseo-staging-nju4dmdc.sqlite"
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
+  "dataset_hash": "c4b8b017f4f819e596ff083958ddd34f70db95cc1c0b344ef1f02a9374061a08",
   "denominators": {
-    "aec_confirmed_bids": 356,
-    "aec_confirmed_contracts": 233,
-    "bids_total_loaded": 1536,
+    "aec_confirmed_bids": 287,
+    "aec_confirmed_contracts": 54055,
+    "bids_total_loaded": 1713,
     "classified_share_note": "Only multi-layer aec_confirmed objects enter public aggregates.",
-    "contracts_total_loaded": 11931,
-    "open_bids_after_status_filter": 37
+    "contracts_total_loaded": 214630,
+    "export_filter": "valor_gt0_and_aec_keyword_prefilter",
+    "national_records_available": 4479442,
+    "national_records_considered": 4402632,
+    "national_records_considered_over_available": 0.982853,
+    "open_bids_after_status_filter": 287
   },
   "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
   "export_version": "1.1.0",
@@ -267,51 +309,51 @@
     "by_dataset": {
       "bids_radar": {
         "as_of": "2026-07-31",
-        "n_classified": 356,
-        "n_open": 37,
+        "n_classified": 287,
+        "n_open": 287,
         "policy_fail_hours": 72,
         "policy_warning_hours": 24
       },
       "contracts": {
-        "max_date": "2026-07-09",
-        "min_date": "2024-04-19",
-        "n": 233,
+        "max_date": "2026-07-31",
+        "min_date": "2023-07-20",
+        "n": 54055,
         "policy_fail_days": 90,
         "policy_warning_days": 30
       }
     },
     "data_as_of": "2026-07-31",
-    "data_period_end": "2026-10-07",
-    "data_period_start": "2024-04-19",
-    "generated_at": "2026-08-01T01:16:00Z",
+    "data_period_end": "2026-08-28",
+    "data_period_start": "2023-07-20",
+    "generated_at": "2026-08-01T03:12:06Z",
     "max_age_days_policy": 180,
     "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
   },
   "freshness_by_dataset": {
     "bids_radar": {
       "as_of": "2026-07-31",
-      "n_classified": 356,
-      "n_open": 37,
+      "n_classified": 287,
+      "n_open": 287,
       "policy_fail_hours": 72,
       "policy_warning_hours": 24
     },
     "contracts": {
-      "max_date": "2026-07-09",
-      "min_date": "2024-04-19",
-      "n": 233,
+      "max_date": "2026-07-31",
+      "min_date": "2023-07-20",
+      "n": 54055,
       "policy_fail_days": 90,
       "policy_warning_days": 30
     }
   },
-  "generated_at": "2026-08-01T01:16:00Z",
+  "generated_at": "2026-08-01T03:12:06Z",
   "horizon": {
-    "period_end": "2026-10-07",
-    "period_start": "2024-04-19"
+    "period_end": "2026-08-28",
+    "period_start": "2023-07-20"
   },
   "indexable": false,
   "limitations": [
     "Export is aggregated and sanitized; no commercial pipeline fields.",
-    "Datalake coverage is incomplete relative to the national universe.",
+    "National denominators recorded in counts.national_records_*; export filter documented in counts.export_filter.",
     "Do not interpret medians as unit prices.",
     "Only aec_confirmed records feed market/price/competition aggregates.",
     "Open opportunities require data_encerramento >= data_as_of and compatible status.",
@@ -320,22 +362,24 @@
   "methodology_notes": [
     "ICP-Derived Evidence pSEO: multi-layer AEC classifier + public aggregates.",
     "Only aec_confirmed feeds indexable market/price/competition pages.",
-    "dataset_hash = sha256(canonical_json of ordered body keys).",
-    "editorial_enrichment:evidence_kind+claim_evidence+language (web-cfg Wave0)",
-    "wave0_freeze:dropped_new_opportunity_radar-edificacoes-publicas-sc (no new public paths)"
+    "dataset_hash = sha256(canonical_json of ordered body keys)."
   ],
   "publish_status": "REVIEW_REQUIRED",
   "query_versions": {
+    "contract_version_history": "v1_count_only",
+    "national_available": "v1_count_all",
+    "national_considered": "v1_valor_total_gt_0",
+    "opportunity_intel": "v1_status_open_upcoming_active",
     "pncp_raw_bids": "v2_with_encerramento_and_status",
-    "pncp_supplier_contracts": "v2_public_fields_valor_gt_0",
+    "pncp_supplier_contracts": "v3_national_valor_gt0_optional_aec_prefilter",
     "sc_public_entities": "v1_count_only"
   },
   "schema_version": "1.1.0",
   "snapshot_status": "CANDIDATE",
-  "source_branch": "main",
-  "source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+  "source_branch": "feat/pseo-national-acquisition-engine",
+  "source_commit_sha": "3dc7bb77f9206b205f2d902458281360a9799836",
   "source_repository": "extra-cli",
-  "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
+  "source_run_id": "pseo-20260801T031206Z-ee4311a9",
   "sources": [
     {
       "role": "read_only_aggregate",
@@ -347,13 +391,23 @@
     },
     {
       "role": "read_only_aggregate",
+      "table": "opportunity_intel"
+    },
+    {
+      "role": "read_only_aggregate",
       "table": "sc_public_entities"
+    },
+    {
+      "role": "read_only_aggregate",
+      "table": "contract_version_history"
     }
   ],
   "tables": [
     "pncp_supplier_contracts",
     "pncp_raw_bids",
-    "sc_public_entities"
+    "opportunity_intel",
+    "sc_public_entities",
+    "contract_version_history"
   ],
   "timezone": "UTC"
 }

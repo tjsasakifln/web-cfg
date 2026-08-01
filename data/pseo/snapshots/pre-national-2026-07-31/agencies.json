@@ -1,0 +1,73 @@
+[
+  {
+    "agency_cnpj8": "88830609",
+    "agency_name": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+    "archetype_ids": [],
+    "archetype_mix": [
+      {
+        "archetype_id": "manutencao-predial-engenharia",
+        "contract_count": 49
+      }
+    ],
+    "cnpj8": null,
+    "contract_count": 49,
+    "id": "agency-88830609",
+    "limitations": [
+      "Histórico restrito aos contratos ingeridos no datalake.",
+      "Nome do órgão conforme fonte; pode haver variação cadastral."
+    ],
+    "median_value": 2742.75,
+    "modalities": [],
+    "municipio": "Caxias do Sul",
+    "name": null,
+    "official_channels": [
+      {
+        "name": "PNCP",
+        "url": "https://pncp.gov.br/"
+      },
+      {
+        "name": "Portal Nacional de Contratações Públicas — consultas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "open_opportunities": [],
+    "orgao_nome": null,
+    "p25_value": 877.5,
+    "p75_value": 13773.38,
+    "period_end": "2026-07-03",
+    "period_start": "2026-07-03",
+    "practical_notes": [
+      "Verifique edital vigente e anexos no portal oficial antes de precificar.",
+      "Compare objetos e regimes semelhantes; evite extrapolar ticket mediano.",
+      "Documente premissas de produtividade e BDI para o órgão específico."
+    ],
+    "related_archetypes": [],
+    "seasonality": [
+      {
+        "contract_count": 49,
+        "period": "2026-07"
+      }
+    ],
+    "slug": "mrs-prefeitura-municipal-de-caxias-do-sul-rs",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 1,
+    "top_objects": [
+      {
+        "count": 36,
+        "example_objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
+        "label": "Prestação de serviços, sob demanda, de manutenção predial corretiva e…",
+        "median_value": null
+      },
+      {
+        "count": 13,
+        "example_objeto": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
+        "label": "Reajuste referente a prestação de serviços, sob demanda, de manutenção…",
+        "median_value": null
+      }
+    ],
+    "total_value": 403758.04,
+    "uf": "RS"
+  }
+]

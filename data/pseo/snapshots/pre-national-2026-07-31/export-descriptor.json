@@ -1,0 +1,40 @@
+{
+  "classification_labels": [
+    "aec_confirmed",
+    "aec_probable",
+    "non_aec",
+    "ambiguous",
+    "insufficient_context"
+  ],
+  "dataset_hash_algorithm": "sha256(canonical_json(ordered body keys))",
+  "dates": [
+    "data_coleta",
+    "data_publicacao",
+    "data_assinatura",
+    "data_encerramento_proposta",
+    "data_inicio_vigencia",
+    "data_fim_vigencia",
+    "data_atualizacao_fonte",
+    "generated_at",
+    "data_as_of"
+  ],
+  "description": "CONFENGE public pSEO evidence snapshot (ICP-Derived Evidence)",
+  "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
+  "export_version": "1.1.0",
+  "files": [
+    "archetypes.json",
+    "markets.json",
+    "agencies.json",
+    "prices.json",
+    "competition.json",
+    "opportunities.json",
+    "problem_service.json",
+    "icp_methodology.json",
+    "manifest.json"
+  ],
+  "forbidden_fields_policy": "scripts/pseo/allowlist.py FORBIDDEN_KEYS",
+  "indexable_requires": "aec_confirmed + human_review APPROVED|APPROVED_WITH_NOTES",
+  "note": "Machine-readable JSON Schema is schema.json; this file is a human descriptor.",
+  "schema_version": "1.1.0",
+  "timezone_default": "UTC"
+}

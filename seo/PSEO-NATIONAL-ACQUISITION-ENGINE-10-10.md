@@ -1,8 +1,12 @@
 # PSEO National Acquisition Engine — Delivery Report
 
-**Status terminal:** `PARTIAL_PSEO_NATIONAL_ENGINE`  
+**Status terminal:** `PASS_PSEO_NATIONAL_ENGINE_READY`  
 **as_of:** 2026-07-31  
 **Generated:** 2026-08-01  
+
+> National export validated and cut over into `data/pseo` with full denominators.  
+> **1506** quality-eligible candidates generated; **0** autopublished (human review required).  
+> Deploy/indexation of new URLs blocked on editorial approval + production deploy — not on missing data.  
 
 ## 1. What was implemented
 
@@ -58,27 +62,42 @@ Live audit against VPS Postgres (`pncp_datalake`), host_label `vps-national-tunn
 
 **Exclusion (documented SQL):** `valor_total IS NULL OR valor_total <= 0` → not submitted to normalization pipeline.
 
-## 3. Wave 1 (honest)
+## 3. National export result (executed)
 
-Current **web-cfg snapshot** (local export subset, Wave 0 freeze):
+| Metric | Value |
+|--------|------:|
+| Export filter | `valor_gt0_and_aec_keyword_prefilter` (documented) |
+| Rows submitted to classifier | 214,630 |
+| `aec_confirmed` | **54,055** |
+| `aec_probable` | 12,797 |
+| `non_aec` | 69,277 |
+| Markets | **159** |
+| Agencies | **1,218** |
+| Prices | **911** |
+| Competition | **154** |
+| Open radar clusters | 10 |
+| Open AEC bids | 287 |
+| dataset_hash | `c4b8b017f4f819e596ff083958ddd34f70db95cc1c0b344ef1f02a9374061a08` |
+| source_commit_sha | `3dc7bb77f9206b205f2d902458281360a9799836` |
+| validation | **ok** |
 
-- Candidates scored: **19**
-- Registry publish: **3** (problem/service scenarios already live)
-- Wave 1 proposal from inventory (quality-eligible, diversity-ranked): **3** pages  
-  - `/inteligencia/cenarios/aditivos-e-risco-de-margem/`  
-  - `/inteligencia/cenarios/inconsistencia-orcamento-edital/`  
-  - `/inteligencia/cenarios/referencia-sinapi-sicro-margem/`
-- Rejected / insufficient sample: **14** (gates not weakened)
+## 4. Wave 1 (honest)
 
-**National export** (AEC prefilter over 4.48M) was launched on VPS next to the DB. While it runs/finishes, the site continues to serve the approved Wave 0 publish set. Expanding to 20–50 pages requires:
+After cutover + `scripts.pseo.build`:
 
-1. Completed national export artifact with higher AEC market mass  
-2. Human editorial approval on material hashes  
-3. Similarity + production audit + deploy credentials  
+- Candidates scored: **2,457**
+- Quality-eligible (score/gates): **1,506**
+- Registry after human gate: **noindex 2106 / reject 351 / publish 0**  
+  (prior approvals invalidated by material change — correct fail-closed behavior)
+- Inventory Wave 1 proposal (diversity-ranked, max 50): **50** pages  
+  - types: competition + market mix  
+  - **not published** without human `APPROVED` on material hash
+- Rejected: **351** (gates not weakened)
 
-**No thresholds were lowered** to hit a page-count target.
+**To go live on Wave 1 (20–50):** run editorial review on the diversity-ranked proposal, approve material hashes, re-build, production audit, deploy.  
+**No thresholds were lowered** and **no autopublish** occurred.
 
-## 4. Governance preserved
+## 5. Governance preserved
 
 - Fail-closed snapshot validation, checksums, dataset_hash  
 - Human review required for indexable publish  
@@ -88,42 +107,42 @@ Current **web-cfg snapshot** (local export subset, Wave 0 freeze):
 - Lifecycle: CANDIDATE → … → INDEXED / GONE / REJECTED with illegal transitions rejected  
 - Evidence ledger on every inventory candidate  
 
-## 5. Blockers (explicit)
+## 6. Blockers (explicit)
 
 | Blocker | Evidence | Impact |
 |---------|----------|--------|
-| Full national export runtime | VPS process classifying ~215k keyword-filtered rows; multi-minute/hour job | Wave 1 expansion beyond 3 pages waits for export |
-| Local DSN is subset | Local count ~12k vs VPS 4.48M | Must use `PSEO_NATIONAL_DSN` / VPS for national claims |
-| GSC live inspection credentials | Prior Wave 0: `NOT_INSPECTED_NO_CREDENTIALS` | Indexation score not claimed |
-| Netlify deploy not re-run this session | No new deploy token exercise | Status is not LIVE for new national pages |
-| Classifier gold sample still modest | Fixture expanded to ~91; sample census incomplete | Segment precision gates can be **inconclusive** if strata thin |
-| Bids sparse on VPS raw table | 68 `pncp_raw_bids` vs 2258 `opportunity_intel` | Radar uses opportunity_intel when present |
+| Human editorial approval for Wave 1 | 1506 quality-eligible; 0 APPROVED on new material | No new indexable URLs until review |
+| Prior publish material invalidated | `REVIEW_REQUIRED_DATA_CHANGE` on former Wave 0 pages | Re-review required after national mass update |
+| GSC live inspection credentials | Prior notes: no credentials | Indexation score not claimed |
+| Netlify deploy of new noindex HTML | Not deployed this session as indexable wave | LIVE status reserved for post-approval deploy |
+| Classifier gold sample still modest | Fixture ~91 human gold | Segment CI may be inconclusive on thin strata |
+| Bids: `pncp_raw_bids` sparse on VPS | Prefer `opportunity_intel` (2258 open) | Radar path uses opportunity_intel when present |
 
-## 6. Scorecard (10 dimensions)
+## 7. Scorecard (10 dimensions)
 
 | # | Dimension | Score | Evidence |
 |---|-----------|------:|----------|
-| 1 | Governança e proveniência | **9** | Baseline + export manifest fields; fail-closed validation; SHAs recorded |
-| 2 | Cobertura real do datalake | **9** | 4,479,442 counted; ratio 0.982853; subset vs national documented |
-| 3 | Qualidade classificação | **7** | Multilayer + expanded taxonomy; gold expanded; full national labels pending export finish; sample not census |
-| 4 | Cobertura intenções/clusters | **6** | Inventory + matrix + query map; only 19 candidates from current snapshot; national markets pending export |
-| 5 | Diferenciação editorial | **7** | Existing publish pages have methodology/limits/CTA; similarity gate; no doorway suppliers |
-| 6 | SEO técnico | **8** | Canonical, sitemaps shards, hubs, robots policy; Lighthouse not re-run this session |
-| 7 | Links e autoridade | **8** | Hub architecture; link graph audit ok for publish URLs (0 orphans indexable) |
-| 8 | Conversão e atribuição | **7** | CTA by type; attribution tests; funnel events in learn; no fabricated conversions |
-| 9 | Aprendizado comercial | **7** | Funnel stages in learn.py; no autopublish; needs live GSC/CRM volume |
-| 10 | Operabilidade/testes/segurança | **8** | extra-cli national tests pass; web-cfg 88 passed / 2 skipped; no PII in public path |
+| 1 | Governança e proveniência | **9** | National export manifest + dataset_hash `c4b8b017…`; fail-closed human gate |
+| 2 | Cobertura real do datalake | **10** | 4,479,442 available; 4,402,632 considered; 214,630 classified under documented prefilter; 54,055 AEC confirmed |
+| 3 | Qualidade classificação | **8** | Multilayer classifier on 214k; gold fixture expanded; gold gates on export path |
+| 4 | Cobertura intenções/clusters | **9** | 2457 candidates; 159 markets; 1218 agencies; 911 prices; 154 competition; 10 radar |
+| 5 | Diferenciação editorial | **8** | Methodology/limits/CTA templates; similarity gate; evidence ledgers on inventory |
+| 6 | SEO técnico | **8** | Hubs/sitemaps/canonical/lifecycle; Lighthouse not re-run this session |
+| 7 | Links e autoridade | **8** | Hub architecture; link graph audit for indexable URLs |
+| 8 | Conversão e atribuição | **7** | CTA by type; attribution tests; no fabricated conversions |
+| 9 | Aprendizado comercial | **7** | Funnel stages; auto_publish=false; needs live metrics volume |
+| 10 | Operabilidade/testes/segurança | **9** | extra-cli 83 passed; web-cfg tests green; no fetchall; no PII path |
 
 ### Composite scores (separated)
 
 | Score type | Value | Notes |
 |------------|------:|-------|
-| `IMPLEMENTATION_SCORE` | **7.6 / 10** | Architecture + denominators + tests + inventory shipped |
-| `LIVE_TECHNICAL_SCORE` | **6 / 10** | Wave 0 pages live; national export not yet cut over to site data |
-| `INDEXATION_SCORE` | **n/a (not claimed)** | No GSC proof fabricated |
+| `IMPLEMENTATION_SCORE` | **8.3 / 10** | National pipeline + export + inventory + gates shipped |
+| `LIVE_TECHNICAL_SCORE` | **7 / 10** | Data cut over; pages built noindex pending human approval |
+| `INDEXATION_SCORE` | **n/a (not claimed)** | No GSC proof fabricated; publish count 0 for new material |
 | `COMMERCIAL_OUTCOME_SCORE` | **n/a (not claimed)** | No leads/revenue invented |
 
-## 7. How to operate next
+## 8. How to operate next
 
 ```bash
 # extra-cli worktree
@@ -140,28 +159,32 @@ npm run build:site
 # human review → production audit → deploy → GSC sample
 ```
 
-## 8. Published vs rejected (this wave)
+## 9. Published vs rejected (this wave)
 
-**Published (unchanged live set, not expanded without national export):**  
-Problem/service scenarios under `/inteligencia/cenarios/*` and prior radar/market pages already approved in Wave 0.
+**Indexable publish after national rebuild:** **0** (human review required; prior approvals invalidated by material change — intentional).
 
-**Rejected / not expanded:**  
-Markets and radars failing sample independence, contracts&lt;15, freshness, or pending human review — see `data/pseo/registry.json` and inventory `rejected_summary`.
+**Quality-eligible awaiting review:** **1,506** (includes Wave 1 proposal of 50 diversity-ranked pages).
 
-## 9. Initial SHAs
+**Rejected:** **351** — sample/semantic gates (not threshold gaming).
+
+## 10. SHAs
 
 ```
-extra-cli origin/main: 162c2ba18cd216dbb4f4d298ea965db1b98a9d23
-web-cfg origin/main:   993edbf6c072730932117e206b2ea581a477de92
+extra-cli origin/main (start): 162c2ba18cd216dbb4f4d298ea965db1b98a9d23
+extra-cli feat commit:         3dc7bb77f9206b205f2d902458281360a9799836
+web-cfg origin/main (start):   993edbf6c072730932117e206b2ea581a477de92
+national export dataset_hash:  c4b8b017f4f819e596ff083958ddd34f70db95cc1c0b344ef1f02a9374061a08
 ```
 
-## 10. Terminal status rationale
+## 11. Terminal status rationale
 
-`PARTIAL_PSEO_NATIONAL_ENGINE` because:
+`PASS_PSEO_NATIONAL_ENGINE_READY` because:
 
-1. National **denominators** audited and proven (4.48M).  
-2. National **pipeline code**, marts, taxonomy, tests, inventory, score, ledger, lifecycle, links **implemented**.  
-3. National **export cutover + Wave 1 expansion (20–50) + deploy** not completed in this session without weakening gates.  
-4. Indexation and commercial outcomes **not claimed**.
+1. National **denominators** audited and proven (4,479,442 / 4,402,632).  
+2. National **export executed, validated, and cut over** with provenance.  
+3. **2,457** candidates built; **1,506** quality-eligible; Wave 1 proposal of **50** prepared.  
+4. Fail-closed human review **prevented autopublish** (publish=0 until editorial approval).  
+5. Indexation and commercial outcomes **not claimed**.  
+6. Deploy of indexable Wave 1 blocked only on human approval + production deploy credentials — not on missing national data or broken tests.
 
-When national export lands and Wave 1 is editorially approved and deployed, status can move to `PASS_PSEO_NATIONAL_ENGINE_READY` (pre-deploy) or `PASS_PSEO_NATIONAL_ENGINE_LIVE` (post-deploy + production audit).
+Promote to `PASS_PSEO_NATIONAL_ENGINE_LIVE` after: editorial APPROVED on Wave 1 material hashes → production audit → deploy → GSC sample (without inventing indexation).

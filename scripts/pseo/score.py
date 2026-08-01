@@ -960,7 +960,17 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             )
         )
 
+    # National export can emit duplicate price ids when typology collisions occur;
+    # keep the highest-observation row per id so page_ids and meta stay unique.
+    prices_by_id: dict[str, dict[str, Any]] = {}
     for p in prices:
+        pid = str(p.get("id") or p.get("slug") or "")
+        if not pid:
+            continue
+        prev = prices_by_id.get(pid)
+        if prev is None or int(p.get("observation_count") or 0) > int(prev.get("observation_count") or 0):
+            prices_by_id[pid] = p
+    for p in prices_by_id.values():
         fails = []
         if p.get("observation_count", 0) < MIN_PRICE_OBS:
             fails.append(f"obs<{MIN_PRICE_OBS}")
@@ -1015,9 +1025,12 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 title=f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))} | CONFENGE",
                 h1=f"Valores de contratos — {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
                 description=(
-                    f"Faixa de valores contratuais de {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))}: "
-                    f"mediana, P25 e P75 com {p['observation_count']} contratos primários. "
-                    f"Tickets contratuais integrais — não são preços unitários."
+                    f"Faixa de valores: {_clean_price_label(p.get('object_label'))} em "
+                    f"{_clean_price_label(p.get('region_label'))} "
+                    f"({p['observation_count']} contratos; "
+                    f"{_clean_price_label(arch) if arch else 'padrão'} "
+                    f"· {p.get('slug') or p.get('id') or 'price'}). "
+                    f"Mediana/P25/P75 de tickets integrais."
                 ),
                 archetype=arch,
                 segment=_clean_price_label(p.get("object_label")),

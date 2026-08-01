@@ -1,0 +1,459 @@
+[
+  {
+    "archetype_id": "pavimentacao-infraestrutura-viaria",
+    "buyer_count": 11,
+    "contract_count": 13,
+    "id": "market-pavimentacao-infraestrutura-viaria-sc",
+    "interpretation_hooks": [
+      "Concentração em 11 órgãos compradores distintos.",
+      "11 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 7."
+    ],
+    "limitations": [
+      "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em SC; multi-rótulo entra só no primário.",
+      "Não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 310910.94,
+    "modalities": [],
+    "open_opportunity_count": 7,
+    "p25_value": 205000.0,
+    "p75_value": 635000.0,
+    "period_end": "2026-07-08",
+    "period_start": "2026-01-09",
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 8,
+        "suppressed_contract_count": 10
+      },
+      "top_suppliers": null
+    },
+    "region": "SC",
+    "region_label": "Santa Catarina",
+    "segment": "Pavimentação e infraestrutura viária",
+    "slug": "pavimentacao-infraestrutura-viaria-sc",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 11,
+    "top_buyers": [
+      {
+        "cnpj8": null,
+        "contract_count": 10,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 8,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 3,
+        "example_objeto": "Registro de preços de pavimentação asfáltica e fresagem, conforme condições, quantidades e exigências estabelecidas neste edital e seus anexos.\nFORNECEDOR: FJ CONSTRUTORA LTDA (27.743.102/0001-53)",
+        "label": "Registro de preços de pavimentação asfáltica e fresagem, conforme…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "SERVIÇOS DE CONTROLE TECNOLÓGICO DE ASFALTO - LEI 14.133/2021",
+        "label": "SERVIÇOS DE CONTROLE TECNOLÓGICO DE ASFALTO - LEI 14.133/2021",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada, no regime de empreitada por preço unitário (material + mão-de-obra), para execução de obra de PAVIMENTAÇÃO INTERTRAVADA, DRENAGEM E SINALIZAÇÃO VIÁRIA DA RUA NICO",
+        "label": "Contratação de empresa especializada, no regime de empreitada por…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para execução de obras de pavimentação asfáltica em vias urbanas localizadas no Bairro Bom Jesus, no Município de Itaiópolis/SC, compreendendo as seguintes vias: R",
+        "label": "Contratação de empresa especializada para execução de obras de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "SERVIÇOS COMUNS DE ENGENHARIA PARA DRENAGEM PLUVIAL NAS RUAS SOLDADO ABELARDO MENDONÇA SOBRINHO E EMANUEL DOS SANTOS - BAIRRO CARVALHO",
+        "label": "SERVIÇOS COMUNS DE ENGENHARIA PARA DRENAGEM PLUVIAL NAS RUAS SOLDADO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "O presente instrumento contratual tem como objeto a contratação de empresa especializada em engenharia para a execução de pavimentação em lajotas, drenagem pluvial e sinalização viárias das Ruas Apoli",
+        "label": "O presente instrumento contratual tem como objeto a contratação de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Execução dos serviços de terraplanagem, drenagem e obras correntes, pavimentação em ASFALTO, urbanísticos e sinalização para RUA DUARTE DA COSTA – BAIRRO GUARUJÁ, no município de Lages-SC, Conforme Pl",
+        "label": "Execução dos serviços de terraplanagem, drenagem e obras correntes,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para a execução (fornecimento, instalação e mão de obra) de serviços de sinalização viária vertical e horizontal, nos espaços públicos, rodovias, estradas, ruas e",
+        "label": "Contratação de empresa especializada para a execução (fornecimento,…",
+        "median_value": null
+      }
+    ],
+    "total_value": 15206416.82,
+    "value_by_year": [
+      {
+        "contract_count": 13,
+        "total_value": 15206416.82,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "pavimentacao-infraestrutura-viaria",
+    "buyer_count": 6,
+    "contract_count": 13,
+    "id": "market-pavimentacao-infraestrutura-viaria-pi",
+    "interpretation_hooks": [
+      "Concentração em 6 órgãos compradores distintos.",
+      "13 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em PI; multi-rótulo entra só no primário.",
+      "Não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 996225.26,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 744003.0,
+    "p75_value": 1463918.41,
+    "period_end": "2026-07-08",
+    "period_start": "2026-06-03",
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 6,
+        "suppressed_contract_count": 13
+      },
+      "top_suppliers": null
+    },
+    "region": "PI",
+    "region_label": "Piauí",
+    "segment": "Pavimentação e infraestrutura viária",
+    "slug": "pavimentacao-infraestrutura-viaria-pi",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 13,
+    "top_buyers": [
+      {
+        "cnpj8": null,
+        "contract_count": 13,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 6,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 2,
+        "example_objeto": "Contratação de empresa especializada para pavimentação em paralelepípedo em vias públicas, na zona urbana, no bairro Criolli no município de Piripiri - PI, com uma área total de 5.078,97m². (OPA)",
+        "label": "Contratação de empresa especializada para pavimentação em…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para a pavimentação em paralelepípedo em vias públicas, na zona rural, no povoado Ave Verde no município de Teresina - PI, com uma área total de 8.049,50m². (OPA)",
+        "label": "Contratação de empresa especializada para a pavimentação em…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para execução de 10.000,00 m² de pavimentação em paralelepípedo no município de Nazária-PI",
+        "label": "Contratação de empresa para execução de 10.000,00 m² de pavimentação…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada para execução de serviços de pavimentação em paralelepípedo em vias públicas da zona urbana do Município de Cajazeiras – PI, totalizando 9.666,00 m² de área pavime",
+        "label": "Contratação de empresa especializada para execução de serviços de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Pavimentação Asfáltica em CBUQ DE 122.132,00 M² no município de Teresina/PI - Zona Urbana (ID: 1335, 1337, 1574, 1597, 1734, 1777, 1789, 1829, 1832, 1873, 2101, 2176, 2201, 2397, 2483 – OPA.",
+        "label": "Pavimentação Asfáltica em CBUQ DE 122.132,00 M² no município de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "PAVIMENTAÇÃO EM PARALELEPÍPEDO NO MUNICIPIO DE TAMBORIL DO PIAUÍ – PI. TOTALIZANDO 6.813,07 m².",
+        "label": "PAVIMENTAÇÃO EM PARALELEPÍPEDO NO MUNICIPIO DE TAMBORIL DO PIAUÍ – PI.…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "EXECUÇÃO DE PAVIMENTAÇÃO EM PARALELEPÍPEDO NO MUNICÍPIO DE CANTO DO BURITI - PI, COM ÁREA TOTAL DE: 5.376,30 M².",
+        "label": "EXECUÇÃO DE PAVIMENTAÇÃO EM PARALELEPÍPEDO NO MUNICÍPIO DE CANTO DO…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "EXECUÇÃO DE PAVIMENTAÇÃO EM PARALELEPÍPEDO EM TERESINA - PI COM ÁREA DE 2.938,00 METROS QUADRADOS.",
+        "label": "EXECUÇÃO DE PAVIMENTAÇÃO EM PARALELEPÍPEDO EM TERESINA - PI COM ÁREA…",
+        "median_value": null
+      }
+    ],
+    "total_value": 26172058.65,
+    "value_by_year": [
+      {
+        "contract_count": 13,
+        "total_value": 26172058.65,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 10,
+    "contract_count": 12,
+    "id": "market-edificacoes-publicas-mg",
+    "interpretation_hooks": [
+      "Concentração em 10 órgãos compradores distintos.",
+      "11 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 0."
+    ],
+    "limitations": [
+      "Base: 12 contratos com arquétipo primário edificacoes-publicas em MG; multi-rótulo entra só no primário.",
+      "Não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 545585.4,
+    "modalities": [],
+    "open_opportunity_count": 0,
+    "p25_value": 412900.0,
+    "p75_value": 1300000.0,
+    "period_end": "2026-07-08",
+    "period_start": "2026-06-15",
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 8,
+        "suppressed_contract_count": 10
+      },
+      "top_suppliers": null
+    },
+    "region": "MG",
+    "region_label": "Minas Gerais",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-mg",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 11,
+    "top_buyers": [
+      {
+        "cnpj8": null,
+        "contract_count": 10,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 8,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 2,
+        "example_objeto": "Contratação de empresa especializada para execução de obra de engenharia destinada à ampliação do prédio da Escola Municipal Pedacinho do Céu, compreendendo o fornecimento de materiais, mão de obra, e",
+        "label": "Contratação de empresa especializada para execução de obra de…",
+        "median_value": null
+      },
+      {
+        "count": 2,
+        "example_objeto": "[LICITANET] - [LICITANET] - Contratação de empresa especializada para execução da obra da 3ª etapa da reforma do parque de exposições Ely Chagas de Carvalho do município de Córrego Danta/MG",
+        "label": "[LICITANET] - [LICITANET] - Contratação de empresa especializada para…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATACAO, SOB O REGIME SEMI-INTEGRADO, DE EMPRESA ESPECIALIZADA OU CONSORCIO ESPECIALIZADO PARA CONFECCIONAR O PROJETO EXECUTIVO E EXECUTAR A OBRA REFERENTE A CONSTRUCAO DA UBS PADRAO SES TIPO I, E",
+        "label": "CONTRATACAO, SOB O REGIME SEMI-INTEGRADO, DE EMPRESA ESPECIALIZADA OU…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE CONSTRUÇÃO DE ESCOLA EM TEMPO INTEGRAL – FNDE – PROJETO PRÓPRIO NO BAIRRO GÁVEA, COM RECURSOS PROVENIENTES DO TERMO DE COMPROMISSO nº 1096502-67/2",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DE CONSTRUÇÃO DE…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de pessoa física ou jurídica para a prestação dos serviços de Engenheiro Civil de Obra, com vistas ao assessoramento/consultoria no planejamento e acompanhamento da contratação de empresa",
+        "label": "Contratação de pessoa física ou jurídica para a prestação dos serviços…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DO REMANESCENTE DA OBRA DE CONSTRUÇÃO DE UNIDADE BÁSICA DE SAÚDE - UBS PORTE I",
+        "label": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA EXECUÇÃO DO REMANESCENTE DA…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa, por menor preço global e sob regime de empreitada global, com medições unitárias, com fornecimento de mão-de-obra, materiais, equipamentos, para Reconstrução da Ponte localizad",
+        "label": "Contratação de empresa, por menor preço global e sob regime de…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATACAO DE EMPRESA ESPECIALIZADA PARA EXECUCAO DA OBRA DE CONSTRUCAO DE QUADRA DE ESPORTES, NO MUNICIPIO DE SAO FELIX DE MINAS, CONFORME CONTRATO DE REPASSE NO 964354/2024/MESP/CAIXA, QUE ENTRE SI",
+        "label": "CONTRATACAO DE EMPRESA ESPECIALIZADA PARA EXECUCAO DA OBRA DE…",
+        "median_value": null
+      }
+    ],
+    "total_value": 16767654.94,
+    "value_by_year": [
+      {
+        "contract_count": 12,
+        "total_value": 16767654.94,
+        "year": "2026"
+      }
+    ]
+  },
+  {
+    "archetype_id": "edificacoes-publicas",
+    "buyer_count": 10,
+    "contract_count": 10,
+    "id": "market-edificacoes-publicas-rs",
+    "interpretation_hooks": [
+      "Concentração em 10 órgãos compradores distintos.",
+      "10 fornecedores observados no recorte.",
+      "Oportunidades abertas no radar (mesmo recorte): 3."
+    ],
+    "limitations": [
+      "Base: 10 contratos com arquétipo primário edificacoes-publicas em RS; multi-rótulo entra só no primário.",
+      "Não representa o universo total de contratações.",
+      "Valores nominais sem deflacionamento.",
+      "Objetos heterogêneos; mediana não é preço unitário."
+    ],
+    "median_value": 300879.55,
+    "modalities": [],
+    "open_opportunity_count": 3,
+    "p25_value": 199500.0,
+    "p75_value": 1390000.0,
+    "period_end": "2026-07-08",
+    "period_start": "2025-11-25",
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 8,
+        "suppressed_contract_count": 8
+      },
+      "top_suppliers": null
+    },
+    "region": "RS",
+    "region_label": "Rio Grande do Sul",
+    "segment": "Edificações públicas",
+    "slug": "edificacoes-publicas-rs",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "supplier_count": 10,
+    "top_buyers": [
+      {
+        "cnpj8": null,
+        "contract_count": 8,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 8,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
+      }
+    ],
+    "top_objects": [
+      {
+        "count": 1,
+        "example_objeto": "Contratacao de empresa  em regime de EMPREITADA GLOBAL  para a construcao de cobertura de quadra poliesportiva existente  reforma de quadra e revitalizacao de praca.",
+        "label": "Contratacao de empresa em regime de EMPREITADA GLOBAL para a…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DE REFORMA PARCIAL DO CRAS, para Secretaria de Assistência Social, conforme descrito no Anexo I - Termo de Referência deste Edital, através do Processo de Licitaçã",
+        "label": "CONTRATAÇÃO DE EMPRESA PARA EXECUÇÃO DE REFORMA PARCIAL DO CRAS, para…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para execução em regime de empreitada integral, (material e mão de obra) destinada a execução de implantação de infraestrutura esportiva com área total de 1.050,00 m², no bairro",
+        "label": "Contratação de empresa para execução em regime de empreitada integral,…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "CONTRATACAO DE EMPRESA PARA REALIZACAO DE SERVICOS  COM APLICACAO DE MATERIAL  PARA EXECUCAO DA OBRA DE IMPLANTACAO DO CERCAMENTO PERIMETRAL E GUARITA  A SER REALIZADO JUNTO PARQUE DE EXPOSICOES CAMBO",
+        "label": "CONTRATACAO DE EMPRESA PARA REALIZACAO DE SERVICOS COM APLICACAO DE…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa especializada em prestação de serviço de obra de engenharia para implantação de quadra de qrama sintética do rincão da Cebola.",
+        "label": "Contratação de empresa especializada em prestação de serviço de obra…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de empresa para a prestação dos serviços de mão de obra com o fornecimento de todos os materiais necessários a serem empregados, sob o regime de empreitada por preço global, na execução da",
+        "label": "Contratação de empresa para a prestação dos serviços de mão de obra…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação, em regime de empreitada por preços unitários, de serviços de reforma do sistema de climatização do Foro Regional do Alto Petrópolis.",
+        "label": "Contratação, em regime de empreitada por preços unitários, de serviços…",
+        "median_value": null
+      },
+      {
+        "count": 1,
+        "example_objeto": "Contratação de profissional ou empresa devidamente habilitado para a prestação de serviços técnicos de elaboração do projeto básico, projeto executivo, memorial descritivo, planilha orçamentária, cron",
+        "label": "Contratação de profissional ou empresa devidamente habilitado para a…",
+        "median_value": null
+      }
+    ],
+    "total_value": 12146242.83,
+    "value_by_year": [
+      {
+        "contract_count": 2,
+        "total_value": 5380542.27,
+        "year": "2025"
+      },
+      {
+        "contract_count": 8,
+        "total_value": 6765700.56,
+        "year": "2026"
+      }
+    ]
+  }
+]

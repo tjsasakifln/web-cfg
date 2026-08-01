@@ -1,0 +1,314 @@
+[
+  {
+    "archetype_id": null,
+    "comparison_confidence": 0.9,
+    "comparison_group": "manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS",
+    "comparison_meta": {
+      "comparison_confidence": 0.9,
+      "comparison_group": "manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS",
+      "exclusion": [],
+      "exclusion_criteria": [
+        "locacao_imovel",
+        "credenciamento",
+        "limpeza_sem_obra",
+        "fornecimento_material_isolado",
+        "classes_semanticas_conflitantes"
+      ],
+      "heterogeneity_flags": [
+        "regime_unknown"
+      ],
+      "inclusion": [],
+      "inclusion_criteria": [
+        "typology=manutencao_predial",
+        "scope=manutencao",
+        "nature=obra",
+        "archetype=manutencao-predial-engenharia",
+        "uf=RS"
+      ],
+      "nature": "obra",
+      "regime": "nao_informado",
+      "scope": "manutencao",
+      "typology": "manutencao_predial"
+    },
+    "dispersion_iqr": 17433.0,
+    "exclusion_criteria": [
+      "locacao_imovel",
+      "credenciamento",
+      "limpeza_sem_obra",
+      "fornecimento_material_isolado",
+      "classes_semanticas_conflitantes",
+      "grupos com naturezas conflitantes",
+      "confiança abaixo do limiar"
+    ],
+    "heterogeneity_flags": [
+      "regime_unknown"
+    ],
+    "id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
+    "inclusion_criteria": [
+      "typology=manutencao_predial",
+      "scope=manutencao",
+      "nature=obra",
+      "archetype=manutencao-predial-engenharia",
+      "uf=RS",
+      "n>=12",
+      "comparison_confidence>=0.55",
+      "somente aec_confirmed"
+    ],
+    "limitations": [
+      "Observações são contratos integrais, não preços unitários.",
+      "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+      "Outliers identificados por regra IQR 1.5×."
+    ],
+    "max": null,
+    "max_value": 47759.63,
+    "median_value": 15268.5,
+    "mediana": null,
+    "mesh_slug": "manutencao-predial-engenharia-rs",
+    "min": null,
+    "min_value": 5366.25,
+    "n": 0,
+    "object_label": "manutencao predial (manutencao-predial-engenharia)",
+    "object_pattern": "manutencao-predial-engenharia",
+    "observation_count": 19,
+    "outlier_count": 0,
+    "p25": null,
+    "p25_value": 5967.0,
+    "p75": null,
+    "p75_value": 23400.0,
+    "period_end": "2026-07-03",
+    "period_start": "2026-07-03",
+    "public_examples": [
+      {
+        "contrato_id": "88830609000139-2-002361/2026",
+        "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2361",
+        "municipio": "Caxias do Sul",
+        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Engenheiro Dario Granja Sant'anna, sob responsabilidade da SMED, com fornecimento de equipame",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "RS",
+        "valor": 47759.63
+      },
+      {
+        "contrato_id": "88830609000139-2-002344/2026",
+        "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2344",
+        "municipio": "Caxias do Sul",
+        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Governador Roberto Silveira, sob responsabilidade da SMED, com fornecimento de equipamentos,",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "RS",
+        "valor": 47700.0
+      },
+      {
+        "contrato_id": "88830609000139-2-002369/2026",
+        "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2369",
+        "municipio": "Caxias do Sul",
+        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF São Vitor, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, materiais e",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "RS",
+        "valor": 30110.63
+      },
+      {
+        "contrato_id": "88830609000139-2-002336/2026",
+        "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2336",
+        "municipio": "Caxias do Sul",
+        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Giuseppe Garibaldi, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, ma",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "RS",
+        "valor": 30051.0
+      },
+      {
+        "contrato_id": "88830609000139-2-002343/2026",
+        "data_publicacao": "2026-07-03",
+        "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2343",
+        "municipio": "Caxias do Sul",
+        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Presidente Tancredo de Almeida Neves, sob responsabilidade da SMED, com fornecimento de equip",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "RS",
+        "valor": 23400.0
+      }
+    ],
+    "region": "RS",
+    "region_label": "Rio Grande do Sul",
+    "scope_distribution": [
+      {
+        "count": 19,
+        "scope": "manutencao"
+      }
+    ],
+    "segment": null,
+    "slug": "manutencao-predial-engenharia-rs-manutencao-predial",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "unit": null,
+    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade. Este benchmark não substitui orçamento técnico."
+  },
+  {
+    "archetype_id": null,
+    "comparison_confidence": 0.9,
+    "comparison_group": "pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI",
+    "comparison_meta": {
+      "comparison_confidence": 0.9,
+      "comparison_group": "pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI",
+      "exclusion": [],
+      "exclusion_criteria": [
+        "locacao_imovel",
+        "credenciamento",
+        "limpeza_sem_obra",
+        "fornecimento_material_isolado",
+        "classes_semanticas_conflitantes"
+      ],
+      "heterogeneity_flags": [
+        "regime_unknown"
+      ],
+      "inclusion": [],
+      "inclusion_criteria": [
+        "typology=paralelepipedo",
+        "scope=execucao",
+        "nature=obra",
+        "archetype=pavimentacao-infraestrutura-viaria",
+        "uf=PI"
+      ],
+      "nature": "obra",
+      "regime": "nao_informado",
+      "scope": "execucao",
+      "typology": "paralelepipedo"
+    },
+    "dispersion_iqr": 540190.4,
+    "exclusion_criteria": [
+      "locacao_imovel",
+      "credenciamento",
+      "limpeza_sem_obra",
+      "fornecimento_material_isolado",
+      "classes_semanticas_conflitantes",
+      "grupos com naturezas conflitantes",
+      "confiança abaixo do limiar"
+    ],
+    "heterogeneity_flags": [
+      "regime_unknown"
+    ],
+    "id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
+    "inclusion_criteria": [
+      "typology=paralelepipedo",
+      "scope=execucao",
+      "nature=obra",
+      "archetype=pavimentacao-infraestrutura-viaria",
+      "uf=PI",
+      "n>=12",
+      "comparison_confidence>=0.55",
+      "somente aec_confirmed"
+    ],
+    "limitations": [
+      "Observações são contratos integrais, não preços unitários.",
+      "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+      "Outliers identificados por regra IQR 1.5×."
+    ],
+    "max": null,
+    "max_value": 1526304.17,
+    "median_value": 996225.26,
+    "mediana": null,
+    "mesh_slug": "pavimentacao-infraestrutura-viaria-pi",
+    "min": null,
+    "min_value": 410836.92,
+    "n": 0,
+    "object_label": "paralelepipedo (pavimentacao-infraestrutura-viaria)",
+    "object_pattern": "pavimentacao-infraestrutura-viaria",
+    "observation_count": 12,
+    "outlier_count": 0,
+    "p25": null,
+    "p25_value": 744003.0,
+    "p75": null,
+    "p75_value": 1284193.4,
+    "period_end": "2026-07-08",
+    "period_start": "2026-06-03",
+    "public_examples": [
+      {
+        "contrato_id": "09034960000147-2-000096/2026",
+        "data_publicacao": "2026-07-02",
+        "link_oficial": "https://pncp.gov.br/app/contratos/09034960000147/2026/96",
+        "municipio": "Teresina",
+        "objeto": "EXECUÇÃO DOS SERVIÇOS DE PAVIMENTAÇÃO DE VIAS PÚBLICAS EM PARALELEPÍPEDO NO MUNICÍPIO DE TERESINA – PI",
+        "orgao_nome": "EPI-INSTITUTO DE DESENVOLVIMENTO DO PIAUI",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1526304.17
+      },
+      {
+        "contrato_id": "05699457000150-2-000081/2026",
+        "data_publicacao": "2026-07-06",
+        "link_oficial": "https://pncp.gov.br/app/contratos/05699457000150/2026/81",
+        "municipio": "Teresina",
+        "objeto": "Contratação de empresa para execução de 10.000,00 m² de pavimentação em paralelepípedo no município de Nazária-PI",
+        "orgao_nome": "EPI-SECRETARIA ESTADUAL DE TRANSPORTES",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1488689.1
+      },
+      {
+        "contrato_id": "08767094000130-2-000042/2026",
+        "data_publicacao": "2026-07-08",
+        "link_oficial": "https://pncp.gov.br/app/contratos/08767094000130/2026/42",
+        "municipio": "Teresina",
+        "objeto": "Contratação de empresa especializada para execução de serviços de pavimentação em paralelepípedo em vias públicas da zona urbana do Município de Cajazeiras – PI, totalizando 9.666,00 m² de área pavime",
+        "orgao_nome": "Secretaria de Estado das Cidades do Piaui",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1463918.41
+      },
+      {
+        "contrato_id": "08767094000130-2-000038/2026",
+        "data_publicacao": "2026-07-06",
+        "link_oficial": "https://pncp.gov.br/app/contratos/08767094000130/2026/38",
+        "municipio": "Teresina",
+        "objeto": "Contratação de empresa especializada para a pavimentação em paralelepípedo em vias públicas, na zona rural, no povoado Ave Verde no município de Teresina - PI, com uma área total de 8.049,50m². (OPA)",
+        "orgao_nome": "Secretaria de Estado das Cidades do Piaui",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1284193.4
+      },
+      {
+        "contrato_id": "49502868000189-2-000111/2026",
+        "data_publicacao": "2026-07-06",
+        "link_oficial": "https://pncp.gov.br/app/contratos/49502868000189/2026/111",
+        "municipio": "Teresina",
+        "objeto": "PAVIMENTAÇÃO EM PARALELEPÍPEDO NO MUNICIPIO DE TAMBORIL DO PIAUÍ – PI. TOTALIZANDO 6.813,07 m².",
+        "orgao_nome": "Coordenadoria de Desenvolvimento dos Territórios - CDTER - PI",
+        "portal_origem": "pncp",
+        "source": "pncp_contracts",
+        "uf": "PI",
+        "valor": 1159266.96
+      }
+    ],
+    "region": "PI",
+    "region_label": "Piaui",
+    "scope_distribution": [
+      {
+        "count": 12,
+        "scope": "execucao"
+      }
+    ],
+    "segment": null,
+    "slug": "pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
+    "sources": [
+      "pncp_contracts"
+    ],
+    "unit": null,
+    "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade. Este benchmark não substitui orçamento técnico."
+  }
+]

@@ -1,0 +1,359 @@
+{
+  "approval": {
+    "indexable": false,
+    "publish_ready": false,
+    "reason": "human approval artifact missing",
+    "status": "REVIEW_REQUIRED"
+  },
+  "checksums": {
+    "agencies.json": "d1f06c3809b871a3c398ae64d03359b1f10e98d04e0b52280ce24797dc5d40d9",
+    "archetypes.json": "be90df3d3b05bbd4f5fb42344b238d1a3bbbda12eeb134da3f290be6403b021c",
+    "competition.json": "b3fb0709fb1711c02fa0f21af82b1f24492caa8b9613c249cdc91149626bdf2b",
+    "export-descriptor.json": "3bb2c0ae455f25be9ce95bca53241ca3299c3299416397b80b00df11862d08ca",
+    "icp_methodology.json": "8884e6d8d8aa6e57bd66c0174a3a1b9e9834a847d59a8c8dc40c88cc177b72e1",
+    "markets.json": "60785b2a583ac1453b3ccacc0d900d83248b07e4df1e3881852cfc0f647c0f03",
+    "opportunities.json": "e444714af219207ea7ffa6d56587ebddb20412e688185bc3196a0d01f952782b",
+    "prices.json": "75a07bf18f3baf80ea9ccb345f4f9fb7ec43c16da5742117bc924081462d4ab8",
+    "problem_service.json": "3dac4f6b85e297c116ff93ae440b194901d38eaae92353f3d91e405efeeb06ff",
+    "schema.json": "77de5b81ae331f38d03150fae556caa0bb987268b8618689855e00abc4e1dc8e"
+  },
+  "classification_counts": {
+    "aec_confirmed": 233,
+    "aec_probable": 57,
+    "ambiguous": 655,
+    "bid_status_aberta": 37,
+    "bid_status_closed_total": 319,
+    "bid_status_encerrada": 318,
+    "bid_status_historico": 1,
+    "bid_status_open_total": 37,
+    "insufficient_context": 5832,
+    "non_aec": 5154
+  },
+  "classifier_gate": {
+    "gold_path": "/tmp/grok-goal-8142f21fb008/implementer/extra-cli-main/tests/pseo/fixtures/gold_classification.json",
+    "metrics": {
+      "by_segment": {
+        "alimentacao": {
+          "fn": 0,
+          "fp": 0,
+          "n": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "climatizacao": {
+          "fn": 0,
+          "fp": 0,
+          "n": 5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 5
+        },
+        "edge": {
+          "fn": 0,
+          "fp": 0,
+          "n": 8,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "edificacoes": {
+          "fn": 0,
+          "fp": 0,
+          "n": 7,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 7
+        },
+        "educacao": {
+          "fn": 0,
+          "fp": 0,
+          "n": 3,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "equipamento": {
+          "fn": 0,
+          "fp": 0,
+          "n": 6,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "fornecimento": {
+          "fn": 0,
+          "fp": 0,
+          "n": 4,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "limpeza": {
+          "fn": 0,
+          "fp": 0,
+          "n": 5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "locacao": {
+          "fn": 0,
+          "fp": 0,
+          "n": 5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "manutencao": {
+          "fn": 0,
+          "fp": 0,
+          "n": 5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 5
+        },
+        "pavimentacao": {
+          "fn": 0,
+          "fp": 0,
+          "n": 14,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 14
+        },
+        "publicidade": {
+          "fn": 0,
+          "fp": 0,
+          "n": 2,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "saneamento": {
+          "fn": 0,
+          "fp": 0,
+          "n": 4,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 4
+        },
+        "saude": {
+          "fn": 0,
+          "fp": 0,
+          "n": 2,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "software": {
+          "fn": 0,
+          "fp": 0,
+          "n": 4,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "transporte": {
+          "fn": 0,
+          "fp": 0,
+          "n": 5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "treinamento": {
+          "fn": 0,
+          "fp": 0,
+          "n": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        },
+        "vigilancia": {
+          "fn": 0,
+          "fp": 0,
+          "n": 2,
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 0
+        }
+      },
+      "confusion": {
+        "aec_confirmed": {
+          "aec_confirmed": 35
+        },
+        "ambiguous": {
+          "ambiguous": 4
+        },
+        "insufficient_context": {
+          "insufficient_context": 4
+        },
+        "non_aec": {
+          "non_aec": 40
+        }
+      },
+      "f1_aec_confirmed": 1.0,
+      "false_negative_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gates": {
+        "fp_ok": true,
+        "min_gold_n": 30,
+        "n_ok": true,
+        "precision_global_ok": true,
+        "precision_threshold": 0.97,
+        "publish_ok": true,
+        "segment_failures": [],
+        "segment_precision_ok": true,
+        "segment_precision_threshold": 0.95
+      },
+      "n": 83,
+      "precision_aec_confirmed": 1.0,
+      "recall_aec_confirmed": 1.0,
+      "tn": 48,
+      "tp": 35
+    },
+    "ok": true,
+    "reason": null
+  },
+  "counts": {
+    "aec_bids_kept": 356,
+    "after_classification_aec_confirmed": 233,
+    "after_open_filter": 37,
+    "agencies": 1,
+    "archetypes": 5,
+    "chunk_size": 5000,
+    "classified_aec_bids": 356,
+    "classified_aec_contracts": 233,
+    "classified_kept": 233,
+    "closed_bids": 319,
+    "competition": 1,
+    "fetch_mode": "server_side_cursor_fetchmany_sqlite_staging",
+    "linear_full_list": false,
+    "markets": 4,
+    "max_public_samples": 25,
+    "memory_mode": "sqlite_staging_sequential",
+    "n_batches_bids": 1,
+    "n_batches_contracts": 3,
+    "open_bids": 37,
+    "opportunities": 6,
+    "pncp_raw_bids": 1536,
+    "pncp_supplier_contracts": 11931,
+    "prices": 2,
+    "problem_service": 5,
+    "raw_contracts": 11931,
+    "raw_materialized": false,
+    "sc_public_entities": 2085,
+    "snapshot_isolation": "REPEATABLE READ",
+    "staging": true,
+    "staging_path": "/tmp/pseo-staging-vg8rm3mt.sqlite"
+  },
+  "data_as_of": "2026-07-31",
+  "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
+  "denominators": {
+    "aec_confirmed_bids": 356,
+    "aec_confirmed_contracts": 233,
+    "bids_total_loaded": 1536,
+    "classified_share_note": "Only multi-layer aec_confirmed objects enter public aggregates.",
+    "contracts_total_loaded": 11931,
+    "open_bids_after_status_filter": 37
+  },
+  "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
+  "export_version": "1.1.0",
+  "exporter_entrypoint": "python -m scripts.pseo.export_web_cfg",
+  "exporter_version": "1.1.0",
+  "freshness": {
+    "by_dataset": {
+      "bids_radar": {
+        "as_of": "2026-07-31",
+        "n_classified": 356,
+        "n_open": 37,
+        "policy_fail_hours": 72,
+        "policy_warning_hours": 24
+      },
+      "contracts": {
+        "max_date": "2026-07-09",
+        "min_date": "2024-04-19",
+        "n": 233,
+        "policy_fail_days": 90,
+        "policy_warning_days": 30
+      }
+    },
+    "data_as_of": "2026-07-31",
+    "data_period_end": "2026-10-07",
+    "data_period_start": "2024-04-19",
+    "generated_at": "2026-08-01T01:16:00Z",
+    "max_age_days_policy": 180,
+    "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
+  },
+  "freshness_by_dataset": {
+    "bids_radar": {
+      "as_of": "2026-07-31",
+      "n_classified": 356,
+      "n_open": 37,
+      "policy_fail_hours": 72,
+      "policy_warning_hours": 24
+    },
+    "contracts": {
+      "max_date": "2026-07-09",
+      "min_date": "2024-04-19",
+      "n": 233,
+      "policy_fail_days": 90,
+      "policy_warning_days": 30
+    }
+  },
+  "generated_at": "2026-08-01T01:16:00Z",
+  "horizon": {
+    "period_end": "2026-10-07",
+    "period_start": "2024-04-19"
+  },
+  "indexable": false,
+  "limitations": [
+    "Export is aggregated and sanitized; no commercial pipeline fields.",
+    "Datalake coverage is incomplete relative to the national universe.",
+    "Do not interpret medians as unit prices.",
+    "Only aec_confirmed records feed market/price/competition aggregates.",
+    "Open opportunities require data_encerramento >= data_as_of and compatible status.",
+    "Freshness uses record dates, not only generated_at."
+  ],
+  "methodology_notes": [
+    "ICP-Derived Evidence pSEO: multi-layer AEC classifier + public aggregates.",
+    "Only aec_confirmed feeds indexable market/price/competition pages.",
+    "dataset_hash = sha256(canonical_json of ordered body keys).",
+    "editorial_enrichment:evidence_kind+claim_evidence+language (web-cfg Wave0)",
+    "wave0_freeze:dropped_new_opportunity_radar-edificacoes-publicas-sc (no new public paths)"
+  ],
+  "publish_status": "REVIEW_REQUIRED",
+  "query_versions": {
+    "pncp_raw_bids": "v2_with_encerramento_and_status",
+    "pncp_supplier_contracts": "v2_public_fields_valor_gt_0",
+    "sc_public_entities": "v1_count_only"
+  },
+  "schema_version": "1.1.0",
+  "snapshot_status": "CANDIDATE",
+  "source_branch": "main",
+  "source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+  "source_repository": "extra-cli",
+  "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
+  "sources": [
+    {
+      "role": "read_only_aggregate",
+      "table": "pncp_supplier_contracts"
+    },
+    {
+      "role": "read_only_aggregate",
+      "table": "pncp_raw_bids"
+    },
+    {
+      "role": "read_only_aggregate",
+      "table": "sc_public_entities"
+    }
+  ],
+  "tables": [
+    "pncp_supplier_contracts",
+    "pncp_raw_bids",
+    "sc_public_entities"
+  ],
+  "timezone": "UTC"
+}

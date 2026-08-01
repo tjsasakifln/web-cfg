@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://confenge.com.br/inteligencia/cenarios/</loc>
-    <lastmod>2026-07-31</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/inteligencia/</loc>
-    <lastmod>2026-07-31</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/</loc>
-    <lastmod>2026-07-31</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/</loc>
-    <lastmod>2026-07-31</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/</loc>
-    <lastmod>2026-07-31</lastmod>
-  </url>
+
 </urlset>

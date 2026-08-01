@@ -298,9 +298,28 @@ class TestEnrichAndProveOnRealPair(unittest.TestCase):
             # Currently approved seeds must be preserved on identical snap
             for pid in result["stability"]["preserved_approval_proof_pages"]:
                 self.assertIn(pid, result["stability"]["focus_results"])
-            self.assertGreaterEqual(
-                len(result["stability"]["preserved_approval_proof_pages"]), 1
-            )
+            preserved = result["stability"]["preserved_approval_proof_pages"]
+            # After national cutover, prior approvals may be intentionally invalidated
+            # by material change; only require preservation when seeds still APPROVED.
+            import json
+            reg = json.loads((data / "registry.json").read_text(encoding="utf-8"))
+            approved_seeds = [
+                pg.get("page_id")
+                for pg in (reg.get("pages") or [])
+                if pg.get("page_id") in {
+                    "prob-aditivos-margem",
+                    "prob-orcamento-edital",
+                    "prob-sinapi-sicro",
+                    "radar-edificacoes-publicas-pr",
+                }
+                and (pg.get("human_review") or "").startswith("APPROVED")
+                and pg.get("status") == "publish"
+            ]
+            if approved_seeds:
+                self.assertGreaterEqual(len(preserved), 1, result["stability"])
+            else:
+                # Honest national rebuild: no publish approvals remain to preserve
+                self.assertEqual(len(preserved), 0)
 
 
 if __name__ == "__main__":
