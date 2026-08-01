@@ -1,10 +1,10 @@
 {
   "campaign": "WEB-CFG-PSEO-WAVE0-FINAL-ACTIVATION-03",
   "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
-  "web_cfg_head": "7a565a7d125a210e4a8589e75d313ffc79d637af",
+  "web_cfg_head": "edc279ebead5148f10ffb5a323fc035bf31ed545",
   "extra_cli_main_head": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "old_snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
-  "new_snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "new_snapshot_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
   "snapshot_source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "snapshot_source_branch": "main",
   "snapshot_source_commit_on_main": true,
@@ -117,6 +117,7 @@
   },
   "published_page_count": 3,
   "new_pages_published": 0,
+  "pages_added": [],
   "published_urls": [
     "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
@@ -128,8 +129,9 @@
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
     "/radar/edificacoes-publicas-pr/"
   ],
-  "netlify_deployed_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-  "production_audit_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
+  "radar_sc_removed": true,
+  "netlify_deployed_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "production_audit_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
   "production_audit_is_current": true,
   "public_directory": "_site",
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
@@ -138,6 +140,64 @@
     "/inteligencia/cenarios/inconsistencia-orcamento-edital/": "INDEXED",
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": "INDEXED",
     "/radar/edificacoes-publicas-pr/": "INDEXED"
+  },
+  "gsc_inspection_by_url": {
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": {
+      "state": "DISCOVERED_NOT_CRAWLED",
+      "inspection_source": "url_inspection_api",
+      "inspection_timestamp": "2026-08-01T01:26:16Z",
+      "verdict": "NEUTRAL",
+      "coverage_state": "Discovered - currently not indexed",
+      "indexing_state": "INDEXING_STATE_UNSPECIFIED",
+      "last_crawl_time": null,
+      "robots_txt_state": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "page_fetch_state": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "user_canonical": null,
+      "google_canonical": null,
+      "referring_urls": []
+    },
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": {
+      "state": "INDEXED",
+      "inspection_source": "url_inspection_api",
+      "inspection_timestamp": "2026-08-01T01:26:16Z",
+      "verdict": "PASS",
+      "coverage_state": "Submitted and indexed",
+      "indexing_state": "INDEXING_ALLOWED",
+      "last_crawl_time": "2026-07-31T16:06:47Z",
+      "robots_txt_state": "ALLOWED",
+      "page_fetch_state": "SUCCESSFUL",
+      "user_canonical": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "google_canonical": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "referring_urls": []
+    },
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": {
+      "state": "INDEXED",
+      "inspection_source": "url_inspection_api",
+      "inspection_timestamp": "2026-08-01T01:26:16Z",
+      "verdict": "PASS",
+      "coverage_state": "Submitted and indexed",
+      "indexing_state": "INDEXING_ALLOWED",
+      "last_crawl_time": "2026-07-31T16:36:13Z",
+      "robots_txt_state": "ALLOWED",
+      "page_fetch_state": "SUCCESSFUL",
+      "user_canonical": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "google_canonical": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "referring_urls": []
+    },
+    "/radar/edificacoes-publicas-pr/": {
+      "state": "INDEXED",
+      "inspection_source": "url_inspection_api",
+      "inspection_timestamp": "2026-08-01T01:26:16Z",
+      "verdict": "PASS",
+      "coverage_state": "Submitted and indexed",
+      "indexing_state": "INDEXING_ALLOWED",
+      "last_crawl_time": "2026-08-01T00:14:51Z",
+      "robots_txt_state": "ALLOWED",
+      "page_fetch_state": "SUCCESSFUL",
+      "user_canonical": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+      "google_canonical": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+      "referring_urls": []
+    }
   },
   "gsc_inspected_seeds": 4,
   "discovered_or_crawled_or_indexed": 4,
@@ -148,29 +208,26 @@
   "next_wave_gate_reasons": [],
   "unresolved_risks": [
     "Radar PR demoted (quality on main reexport); GSC may still list INDEXED until recrawl",
-    "next_wave_gate is technical authorization only — do not expand content without Wave 1 campaign"
+    "next_wave_gate is technical authorization only — no Wave 1 content expansion without explicit campaign"
   ],
   "test_results": {
-    "pseo_pytest": "76+ passed",
+    "pseo_pytest": "80 passed",
     "build_site": "ok",
     "audit_public_artifact": "ok",
-    "pseo_validate": "ok",
-    "pseo_audit": "ok",
     "prove_approval_stability": "ok",
-    "gsc_ingest": "ok 4/4 url_inspection_api",
+    "gsc_ingest": "ok full fields 4/4",
     "production_audit": "ok critical=0 current",
     "verify_release": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
-    "forbidden_live_404": true,
-    "dual_ua_parity": true,
-    "extra_cli_pr_188": "MERGED"
+    "new_path_radar_sc_live": "404",
+    "pages_added": []
   },
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-    "snapshot_hash_short": "a2f6ee9b62ffc313",
+    "web_cfg_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+    "snapshot_hash_short": "137528d496ee5678",
     "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
-    "generated_at": "2026-08-01T01:35:54Z",
+    "generated_at": "2026-08-01T01:49:06Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 3,
     "public_directory": "_site",
@@ -181,5 +238,5 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "generated_at": "2026-08-01T01:37:19Z"
+  "generated_at": "2026-08-01T01:50:34Z"
 }

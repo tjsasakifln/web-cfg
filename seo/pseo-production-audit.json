@@ -4,19 +4,19 @@
   "production_audit_is_current": true,
   "stale_code": null,
   "identity_mismatches": [],
-  "audit_generated_at": "2026-08-01T01:36:55Z",
-  "audit_target_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-  "live_manifest_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-  "snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
-  "public_artifact_hash": "0ff4e455be0be7279f36796e905d62424b45f2858c6d7e9a72a71f833bedff95",
+  "audit_generated_at": "2026-08-01T01:50:06Z",
+  "audit_target_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "live_manifest_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "snapshot_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
+  "public_artifact_hash": "7ce200fcfdec04234446c7db7da50cd43ffccd78aac205b12c1804bca7c734d9",
   "seed_set_hash": "23072bad91cb4d285a471f3cb682f4de7ea827652c4eed01b0fdc9626a9a4952",
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-01T01:36:55.330639+00:00",
+  "generated_at": "2026-08-01T01:50:06.429828+00:00",
   "base_url": "https://confenge.com.br",
-  "web_cfg_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-  "git_head": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-  "netlify_deployed_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-  "dataset_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "web_cfg_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "git_head": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "netlify_deployed_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
   "vocabulary_note": "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build never mean 'indexado'. ok=true only when technical audit passes AND identities match live deploy.",
   "sitemap": {
     "url_count": 5,
@@ -50,7 +50,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535965"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
         },
         "redirect_chain": [
           {
@@ -78,7 +78,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535966"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535967"
         },
         "redirect_chain": [
           {
@@ -117,7 +117,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535966"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
         },
         "redirect_chain": [
           {
@@ -145,7 +145,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535966"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
         },
         "redirect_chain": [
           {
@@ -184,7 +184,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535967"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
         },
         "redirect_chain": [
           {
@@ -212,7 +212,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535966"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
         },
         "redirect_chain": [
           {
@@ -251,7 +251,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535967"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
         },
         "redirect_chain": [
           {
@@ -279,7 +279,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535967"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
         },
         "redirect_chain": [
           {
@@ -318,7 +318,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
         },
         "redirect_chain": [
           {
@@ -346,7 +346,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
         },
         "redirect_chain": [
           {
@@ -385,7 +385,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535967"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
         },
         "redirect_chain": [
           {
@@ -413,7 +413,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
         },
         "redirect_chain": [
           {
@@ -452,7 +452,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
         },
         "redirect_chain": [
           {
@@ -480,7 +480,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
         },
         "redirect_chain": [
           {
@@ -519,7 +519,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535968"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
         },
         "redirect_chain": [
           {
@@ -530,7 +530,7 @@
           }
         ],
         "body_size": 17507,
-        "html_sha256": "5eb258ff7090bcd18674d0c79b1caef91762992b45a483da70ea19f917c97372",
+        "html_sha256": "236489916af558d22cda3a8c6dbbfc938e4aceb151f6630b2089138015a49c7e",
         "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
         "h1": "Inconsistência entre orçamento de referência e edital",
         "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
@@ -547,7 +547,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
         },
         "redirect_chain": [
           {
@@ -558,7 +558,7 @@
           }
         ],
         "body_size": 17507,
-        "html_sha256": "5eb258ff7090bcd18674d0c79b1caef91762992b45a483da70ea19f917c97372",
+        "html_sha256": "236489916af558d22cda3a8c6dbbfc938e4aceb151f6630b2089138015a49c7e",
         "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
         "h1": "Inconsistência entre orçamento de referência e edital",
         "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
@@ -566,8 +566,8 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
         "text_len": 4774
       },
-      "local_html_sha256": "5eb258ff7090bcd18674d0c79b1caef91762992b45a483da70ea19f917c97372",
-      "prod_html_sha256": "5eb258ff7090bcd18674d0c79b1caef91762992b45a483da70ea19f917c97372",
+      "local_html_sha256": "236489916af558d22cda3a8c6dbbfc938e4aceb151f6630b2089138015a49c7e",
+      "prod_html_sha256": "236489916af558d22cda3a8c6dbbfc938e4aceb151f6630b2089138015a49c7e",
       "in_sitemap": true,
       "in_hub": true,
       "defects": [],
@@ -586,7 +586,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
         },
         "redirect_chain": [
           {
@@ -597,7 +597,7 @@
           }
         ],
         "body_size": 17250,
-        "html_sha256": "c13fad2dc28a9ffe67b6d47d9c8e1e3ed15754b91e9c63e866c15594897797bd",
+        "html_sha256": "9d4378f68c8b99449db8cf58fd922724177d9f7af4244431c41e4d135490d29c",
         "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
         "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
         "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
@@ -614,7 +614,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
         },
         "redirect_chain": [
           {
@@ -625,7 +625,7 @@
           }
         ],
         "body_size": 17250,
-        "html_sha256": "c13fad2dc28a9ffe67b6d47d9c8e1e3ed15754b91e9c63e866c15594897797bd",
+        "html_sha256": "9d4378f68c8b99449db8cf58fd922724177d9f7af4244431c41e4d135490d29c",
         "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
         "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
         "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
@@ -633,8 +633,8 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
         "text_len": 4497
       },
-      "local_html_sha256": "c13fad2dc28a9ffe67b6d47d9c8e1e3ed15754b91e9c63e866c15594897797bd",
-      "prod_html_sha256": "c13fad2dc28a9ffe67b6d47d9c8e1e3ed15754b91e9c63e866c15594897797bd",
+      "local_html_sha256": "9d4378f68c8b99449db8cf58fd922724177d9f7af4244431c41e4d135490d29c",
+      "prod_html_sha256": "9d4378f68c8b99449db8cf58fd922724177d9f7af4244431c41e4d135490d29c",
       "in_sitemap": true,
       "in_hub": true,
       "defects": [],
@@ -653,7 +653,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535956"
         },
         "redirect_chain": [
           {
@@ -664,7 +664,7 @@
           }
         ],
         "body_size": 17305,
-        "html_sha256": "00a5a9d138381708bf6eb3b2ae804d5ab8258af1b390e20a7dfb64d3d1efea62",
+        "html_sha256": "1faa5c3ad0a90de870bb06ba8ea75375d6eef6adcf2cd5f72610d782eedc288d",
         "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
         "h1": "Aditivos, serviços extras e erosão de margem",
         "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
@@ -681,7 +681,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535969"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
         },
         "redirect_chain": [
           {
@@ -692,7 +692,7 @@
           }
         ],
         "body_size": 17305,
-        "html_sha256": "00a5a9d138381708bf6eb3b2ae804d5ab8258af1b390e20a7dfb64d3d1efea62",
+        "html_sha256": "1faa5c3ad0a90de870bb06ba8ea75375d6eef6adcf2cd5f72610d782eedc288d",
         "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
         "h1": "Aditivos, serviços extras e erosão de margem",
         "meta_robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
@@ -700,8 +700,8 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
         "text_len": 4661
       },
-      "local_html_sha256": "00a5a9d138381708bf6eb3b2ae804d5ab8258af1b390e20a7dfb64d3d1efea62",
-      "prod_html_sha256": "00a5a9d138381708bf6eb3b2ae804d5ab8258af1b390e20a7dfb64d3d1efea62",
+      "local_html_sha256": "1faa5c3ad0a90de870bb06ba8ea75375d6eef6adcf2cd5f72610d782eedc288d",
+      "prod_html_sha256": "1faa5c3ad0a90de870bb06ba8ea75375d6eef6adcf2cd5f72610d782eedc288d",
       "in_sitemap": true,
       "in_hub": true,
       "defects": [],
@@ -720,7 +720,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
         },
         "redirect_chain": [
           {
@@ -731,7 +731,7 @@
           }
         ],
         "body_size": 19999,
-        "html_sha256": "c6948dda1bfe2be939a51a1ac532edfd2dd4ebe6346433c2a09b0d1cf260e969",
+        "html_sha256": "ae8d4059d16e9ec1a213cd8c15c7b7367cffd45e4512c374192f8c5bcb012942",
         "title": "Mercado de Pavimentação e infraestrutura viária em Santa Catarina: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
         "meta_robots": "noindex,follow",
@@ -748,7 +748,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535973"
         },
         "redirect_chain": [
           {
@@ -759,7 +759,7 @@
           }
         ],
         "body_size": 19999,
-        "html_sha256": "c6948dda1bfe2be939a51a1ac532edfd2dd4ebe6346433c2a09b0d1cf260e969",
+        "html_sha256": "ae8d4059d16e9ec1a213cd8c15c7b7367cffd45e4512c374192f8c5bcb012942",
         "title": "Mercado de Pavimentação e infraestrutura viária em Santa Catarina: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
         "meta_robots": "noindex,follow",
@@ -767,8 +767,8 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
         "text_len": 5211
       },
-      "local_html_sha256": "c6948dda1bfe2be939a51a1ac532edfd2dd4ebe6346433c2a09b0d1cf260e969",
-      "prod_html_sha256": "c6948dda1bfe2be939a51a1ac532edfd2dd4ebe6346433c2a09b0d1cf260e969",
+      "local_html_sha256": "ae8d4059d16e9ec1a213cd8c15c7b7367cffd45e4512c374192f8c5bcb012942",
+      "prod_html_sha256": "ae8d4059d16e9ec1a213cd8c15c7b7367cffd45e4512c374192f8c5bcb012942",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
@@ -787,7 +787,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535973"
         },
         "redirect_chain": [
           {
@@ -798,7 +798,7 @@
           }
         ],
         "body_size": 19883,
-        "html_sha256": "785f0972d28afdbc289b1e2bef325be48b22168272c739a00c5c943b343ded49",
+        "html_sha256": "d7c0d65d102e5ceaddb067e87464ddab567e35a2562e1fb47f0185de7770a5c1",
         "title": "Mercado de Pavimentação e infraestrutura viária em Piauí: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
         "meta_robots": "noindex,follow",
@@ -815,7 +815,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535973"
         },
         "redirect_chain": [
           {
@@ -826,7 +826,7 @@
           }
         ],
         "body_size": 19883,
-        "html_sha256": "785f0972d28afdbc289b1e2bef325be48b22168272c739a00c5c943b343ded49",
+        "html_sha256": "d7c0d65d102e5ceaddb067e87464ddab567e35a2562e1fb47f0185de7770a5c1",
         "title": "Mercado de Pavimentação e infraestrutura viária em Piauí: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
         "meta_robots": "noindex,follow",
@@ -834,8 +834,8 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
         "text_len": 5168
       },
-      "local_html_sha256": "785f0972d28afdbc289b1e2bef325be48b22168272c739a00c5c943b343ded49",
-      "prod_html_sha256": "785f0972d28afdbc289b1e2bef325be48b22168272c739a00c5c943b343ded49",
+      "local_html_sha256": "d7c0d65d102e5ceaddb067e87464ddab567e35a2562e1fb47f0185de7770a5c1",
+      "prod_html_sha256": "d7c0d65d102e5ceaddb067e87464ddab567e35a2562e1fb47f0185de7770a5c1",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
@@ -854,7 +854,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535970"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535973"
         },
         "redirect_chain": [
           {
@@ -865,7 +865,7 @@
           }
         ],
         "body_size": 19530,
-        "html_sha256": "50791fabc8365f38f3843c2b09c7be1dc1c1e48a5e647a8acede5bf259b08a8c",
+        "html_sha256": "f5ea618d4dd41620dcb3741ad345a7cb08ff540e2c2940601c4ede9c3b6dbc84",
         "title": "Mercado de Edificações públicas em Minas Gerais: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
         "meta_robots": "noindex,follow",
@@ -882,7 +882,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535973"
         },
         "redirect_chain": [
           {
@@ -893,7 +893,7 @@
           }
         ],
         "body_size": 19530,
-        "html_sha256": "50791fabc8365f38f3843c2b09c7be1dc1c1e48a5e647a8acede5bf259b08a8c",
+        "html_sha256": "f5ea618d4dd41620dcb3741ad345a7cb08ff540e2c2940601c4ede9c3b6dbc84",
         "title": "Mercado de Edificações públicas em Minas Gerais: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
         "meta_robots": "noindex,follow",
@@ -901,8 +901,8 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
         "text_len": 5158
       },
-      "local_html_sha256": "50791fabc8365f38f3843c2b09c7be1dc1c1e48a5e647a8acede5bf259b08a8c",
-      "prod_html_sha256": "50791fabc8365f38f3843c2b09c7be1dc1c1e48a5e647a8acede5bf259b08a8c",
+      "local_html_sha256": "f5ea618d4dd41620dcb3741ad345a7cb08ff540e2c2940601c4ede9c3b6dbc84",
+      "prod_html_sha256": "f5ea618d4dd41620dcb3741ad345a7cb08ff540e2c2940601c4ede9c3b6dbc84",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
@@ -921,7 +921,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535971"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535974"
         },
         "redirect_chain": [
           {
@@ -932,7 +932,7 @@
           }
         ],
         "body_size": 19671,
-        "html_sha256": "c698d7da09559132314d7ec279efb7de6ec62cc58f3685af73f6d40cba8090db",
+        "html_sha256": "9ea30c742ce86d56852f2324bddd1d6b2e832dd1f4101d7aa2496d78714a8685",
         "title": "Mercado de Edificações públicas em Rio Grande do Sul: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
         "meta_robots": "noindex,follow",
@@ -949,7 +949,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535973"
         },
         "redirect_chain": [
           {
@@ -960,7 +960,7 @@
           }
         ],
         "body_size": 19671,
-        "html_sha256": "c698d7da09559132314d7ec279efb7de6ec62cc58f3685af73f6d40cba8090db",
+        "html_sha256": "9ea30c742ce86d56852f2324bddd1d6b2e832dd1f4101d7aa2496d78714a8685",
         "title": "Mercado de Edificações públicas em Rio Grande do Sul: contratos e órgãos | CONFENGE",
         "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
         "meta_robots": "noindex,follow",
@@ -968,8 +968,8 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
         "text_len": 5203
       },
-      "local_html_sha256": "c698d7da09559132314d7ec279efb7de6ec62cc58f3685af73f6d40cba8090db",
-      "prod_html_sha256": "c698d7da09559132314d7ec279efb7de6ec62cc58f3685af73f6d40cba8090db",
+      "local_html_sha256": "9ea30c742ce86d56852f2324bddd1d6b2e832dd1f4101d7aa2496d78714a8685",
+      "prod_html_sha256": "9ea30c742ce86d56852f2324bddd1d6b2e832dd1f4101d7aa2496d78714a8685",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
@@ -988,7 +988,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535974"
         },
         "redirect_chain": [
           {
@@ -999,7 +999,7 @@
           }
         ],
         "body_size": 17767,
-        "html_sha256": "818343b05352e9eba8c49a8148730cc2fc1d9d48e7cac75b8519ea5fb93c94bb",
+        "html_sha256": "73297e448d8dd5185ec35818da761c450616520c0b79ad7fbbf76fb3cdf2ae4c",
         "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
         "h1": "Contratação de engenharia em Prefeitura Municipal de Caxias do Sul: o que os dados públicos mostram",
         "meta_robots": "noindex,follow",
@@ -1016,7 +1016,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535974"
         },
         "redirect_chain": [
           {
@@ -1027,7 +1027,7 @@
           }
         ],
         "body_size": 17767,
-        "html_sha256": "818343b05352e9eba8c49a8148730cc2fc1d9d48e7cac75b8519ea5fb93c94bb",
+        "html_sha256": "73297e448d8dd5185ec35818da761c450616520c0b79ad7fbbf76fb3cdf2ae4c",
         "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
         "h1": "Contratação de engenharia em Prefeitura Municipal de Caxias do Sul: o que os dados públicos mostram",
         "meta_robots": "noindex,follow",
@@ -1035,8 +1035,8 @@
         "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
         "text_len": 4067
       },
-      "local_html_sha256": "818343b05352e9eba8c49a8148730cc2fc1d9d48e7cac75b8519ea5fb93c94bb",
-      "prod_html_sha256": "818343b05352e9eba8c49a8148730cc2fc1d9d48e7cac75b8519ea5fb93c94bb",
+      "local_html_sha256": "73297e448d8dd5185ec35818da761c450616520c0b79ad7fbbf76fb3cdf2ae4c",
+      "prod_html_sha256": "73297e448d8dd5185ec35818da761c450616520c0b79ad7fbbf76fb3cdf2ae4c",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
@@ -1055,7 +1055,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535974"
         },
         "redirect_chain": [
           {
@@ -1066,7 +1066,7 @@
           }
         ],
         "body_size": 20560,
-        "html_sha256": "ee6e8eb77593309f466c17003261da68ad5a2b184d9a7cf5a876992bc942d541",
+        "html_sha256": "7e5c4428b8ab5d76fbe899f2b7b36b2a25d618abc006ed0c3dd39e9a755abaa7",
         "title": "Radar de oportunidades: Edificações públicas em Parana | CONFENGE",
         "h1": "Oportunidades abertas em Edificações públicas — Parana",
         "meta_robots": "noindex,follow",
@@ -1083,7 +1083,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535975"
         },
         "redirect_chain": [
           {
@@ -1094,7 +1094,7 @@
           }
         ],
         "body_size": 20560,
-        "html_sha256": "ee6e8eb77593309f466c17003261da68ad5a2b184d9a7cf5a876992bc942d541",
+        "html_sha256": "7e5c4428b8ab5d76fbe899f2b7b36b2a25d618abc006ed0c3dd39e9a755abaa7",
         "title": "Radar de oportunidades: Edificações públicas em Parana | CONFENGE",
         "h1": "Oportunidades abertas em Edificações públicas — Parana",
         "meta_robots": "noindex,follow",
@@ -1102,8 +1102,8 @@
         "canonical": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
         "text_len": 6703
       },
-      "local_html_sha256": "ee6e8eb77593309f466c17003261da68ad5a2b184d9a7cf5a876992bc942d541",
-      "prod_html_sha256": "ee6e8eb77593309f466c17003261da68ad5a2b184d9a7cf5a876992bc942d541",
+      "local_html_sha256": "7e5c4428b8ab5d76fbe899f2b7b36b2a25d618abc006ed0c3dd39e9a755abaa7",
+      "prod_html_sha256": "7e5c4428b8ab5d76fbe899f2b7b36b2a25d618abc006ed0c3dd39e9a755abaa7",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
@@ -1122,7 +1122,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535973"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535975"
         },
         "redirect_chain": [
           {
@@ -1133,7 +1133,7 @@
           }
         ],
         "body_size": 20448,
-        "html_sha256": "836d73807c67a62ad23402eef661cfa85965012d2b245f11d0f590aa2ca1b898",
+        "html_sha256": "8d3d4e224a28eaf7d82fa30e4d248a42f70b6aadfd385ae9b1936d5ae097f991",
         "title": "Faixa de valores de contratos: manutenção predial em Rio Grande do Sul | CONFENGE",
         "h1": "Valores de contratos — manutenção predial (Rio Grande do Sul)",
         "meta_robots": "noindex,follow",
@@ -1150,7 +1150,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535974"
         },
         "redirect_chain": [
           {
@@ -1161,7 +1161,7 @@
           }
         ],
         "body_size": 20448,
-        "html_sha256": "836d73807c67a62ad23402eef661cfa85965012d2b245f11d0f590aa2ca1b898",
+        "html_sha256": "8d3d4e224a28eaf7d82fa30e4d248a42f70b6aadfd385ae9b1936d5ae097f991",
         "title": "Faixa de valores de contratos: manutenção predial em Rio Grande do Sul | CONFENGE",
         "h1": "Valores de contratos — manutenção predial (Rio Grande do Sul)",
         "meta_robots": "noindex,follow",
@@ -1169,8 +1169,8 @@
         "canonical": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
         "text_len": 5640
       },
-      "local_html_sha256": "836d73807c67a62ad23402eef661cfa85965012d2b245f11d0f590aa2ca1b898",
-      "prod_html_sha256": "836d73807c67a62ad23402eef661cfa85965012d2b245f11d0f590aa2ca1b898",
+      "local_html_sha256": "8d3d4e224a28eaf7d82fa30e4d248a42f70b6aadfd385ae9b1936d5ae097f991",
+      "prod_html_sha256": "8d3d4e224a28eaf7d82fa30e4d248a42f70b6aadfd385ae9b1936d5ae097f991",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
@@ -1191,7 +1191,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535975"
         },
         "redirect_chain": [
           {
@@ -1202,7 +1202,7 @@
           }
         ],
         "body_size": 18854,
-        "html_sha256": "774f9f9f5fe14f5dcfb1584866c022f894d9ed92fcf0d33a2848148a1e0ca2c7",
+        "html_sha256": "38288ab3fb0015c369726f9d3494b577b8dadb90efb89a625138fcea6a130fb6",
         "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
         "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
         "meta_robots": "noindex,follow",
@@ -1219,7 +1219,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535972"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535975"
         },
         "redirect_chain": [
           {
@@ -1230,7 +1230,7 @@
           }
         ],
         "body_size": 18854,
-        "html_sha256": "774f9f9f5fe14f5dcfb1584866c022f894d9ed92fcf0d33a2848148a1e0ca2c7",
+        "html_sha256": "38288ab3fb0015c369726f9d3494b577b8dadb90efb89a625138fcea6a130fb6",
         "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
         "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
         "meta_robots": "noindex,follow",
@@ -1238,8 +1238,8 @@
         "canonical": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
         "text_len": 5264
       },
-      "local_html_sha256": "774f9f9f5fe14f5dcfb1584866c022f894d9ed92fcf0d33a2848148a1e0ca2c7",
-      "prod_html_sha256": "774f9f9f5fe14f5dcfb1584866c022f894d9ed92fcf0d33a2848148a1e0ca2c7",
+      "local_html_sha256": "38288ab3fb0015c369726f9d3494b577b8dadb90efb89a625138fcea6a130fb6",
+      "prod_html_sha256": "38288ab3fb0015c369726f9d3494b577b8dadb90efb89a625138fcea6a130fb6",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],

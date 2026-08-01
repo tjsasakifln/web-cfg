@@ -1,13 +1,13 @@
 {
   "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
-  "web_cfg_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
+  "web_cfg_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
   "extra_cli_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-  "snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "netlify_deployed_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "snapshot_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
   "public_directory": "_site",
-  "public_artifact_hash": "0ff4e455be0be7279f36796e905d62424b45f2858c6d7e9a72a71f833bedff95",
+  "public_artifact_hash": "7ce200fcfdec04234446c7db7da50cd43ffccd78aac205b12c1804bca7c734d9",
   "seed_urls": [
     "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
     "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
@@ -20,8 +20,8 @@
     "production_audit_is_current": true,
     "stale_code": null,
     "critical_count": 0,
-    "audit_target_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-    "live_manifest_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af"
+    "audit_target_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+    "live_manifest_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545"
   },
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
   "gsc_status_by_url": {
@@ -58,10 +58,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
-    "snapshot_hash_short": "a2f6ee9b62ffc313",
+    "web_cfg_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+    "snapshot_hash_short": "137528d496ee5678",
     "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
-    "generated_at": "2026-08-01T01:35:54Z",
+    "generated_at": "2026-08-01T01:49:06Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 3,
     "public_directory": "_site",
@@ -73,6 +73,6 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "unresolved_risks": [],
-  "generated_at": "2026-08-01T01:36:57Z",
+  "generated_at": "2026-08-01T01:50:08Z",
   "auditor_version": "wave0-closure-02"
 }
