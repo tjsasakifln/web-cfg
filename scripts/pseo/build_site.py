@@ -115,6 +115,11 @@ def main(argv: list[str] | None = None) -> int:
 
     man_path = write_public_manifest(summary, snap)
 
+    # Assemble _site BEFORE validate/editorial so audits see the public artifact
+    artifact = assemble_public_artifact(ROOT)
+    if not artifact.get("ok"):
+        errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
+
     v = validate_all()
     if not v.get("ok"):
         errors.extend(v.get("errors") or ["validate_all failed"])
@@ -132,10 +137,6 @@ def main(argv: list[str] | None = None) -> int:
         if not gate["ok"]:
             errors.append(f"gate failed: {script} rc={gate['returncode']}")
 
-    # Isolated public artifact for Netlify publish = _site
-    artifact = assemble_public_artifact(ROOT)
-    if not artifact.get("ok"):
-        errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
     audit = audit_public_artifact(ROOT)
     if not audit.get("ok"):
         errors.extend(audit.get("errors") or ["audit_public_artifact failed"])

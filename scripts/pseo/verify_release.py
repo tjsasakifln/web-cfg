@@ -43,6 +43,83 @@ from scripts.pseo.gsc_gate import (  # noqa: E402
     load_indexation_status,
     seed_paths_from_registry,
 )
+
+
+def snapshot_source_on_extra_cli_main(root: Path | None = None) -> dict[str, Any]:
+    """Honest check: published snapshot source_commit_sha must be in extra-cli main history.
+
+    Does not invent membership. Returns on_main=False when commit unknown/missing.
+    """
+    root = root or ROOT
+    man_path = root / "data" / "pseo" / "manifest.json"
+    if not man_path.exists():
+        return {
+            "on_main": False,
+            "source_commit_sha": None,
+            "source_branch": None,
+            "reason": "manifest_missing",
+        }
+    man = json.loads(man_path.read_text(encoding="utf-8"))
+    sha = man.get("source_commit_sha")
+    branch = man.get("source_branch")
+    if not sha:
+        return {
+            "on_main": False,
+            "source_commit_sha": None,
+            "source_branch": branch,
+            "reason": "source_commit_sha_missing",
+        }
+    # Prefer GitHub API (authoritative for remote main)
+    try:
+        # 1) commit must exist
+        subprocess.check_output(
+            ["gh", "api", f"repos/tjsasakifln/extra-cli/commits/{sha}", "--jq", ".sha"],
+            text=True,
+            timeout=30,
+            stderr=subprocess.DEVNULL,
+        )
+        # 2) must be ancestor of main: compare main...sha; if sha is on main history,
+        #    `gh api repos/.../compare/main...{sha}` status is ahead/identical/diverged —
+        #    use `git merge-base --is-ancestor` via temporary clone when available.
+        # Compare API: if commit is on main, ahead_by can be 0 and base is sha.
+        cmp_out = subprocess.check_output(
+            [
+                "gh",
+                "api",
+                f"repos/tjsasakifln/extra-cli/compare/main...{sha}",
+                "--jq",
+                "{status:.status,ahead:.ahead_by,behind:.behind_by}",
+            ],
+            text=True,
+            timeout=30,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        info = json.loads(cmp_out) if cmp_out.startswith("{") else {}
+        # identical or behind means sha is an ancestor of (or is) main tip
+        status = (info.get("status") or "").lower()
+        on_main = status in {"identical", "behind"} or (
+            status == "ahead" and int(info.get("ahead") or 0) == 0
+        )
+        # Some SHAs not on main return "diverged" or "ahead" with ahead>0 from feature branch
+        if status == "ahead" and int(info.get("ahead") or 0) > 0:
+            on_main = False
+        if status == "diverged":
+            on_main = False
+        return {
+            "on_main": bool(on_main),
+            "source_commit_sha": sha,
+            "source_branch": branch,
+            "compare_status": status,
+            "reason": None if on_main else "source_commit_not_ancestor_of_main",
+        }
+    except (subprocess.SubprocessError, OSError, FileNotFoundError, json.JSONDecodeError):
+        # Fail closed: unknown → not on main
+        return {
+            "on_main": False,
+            "source_commit_sha": sha,
+            "source_branch": branch,
+            "reason": "source_commit_lookup_failed_or_missing",
+        }
 from scripts.pseo.production_audit import (  # noqa: E402
     SITE,
     UA_BROWSER,
@@ -196,6 +273,7 @@ def verify_release(
         }
 
     extra = extra_cli_on_main(extra_cli_path)
+    snap_src = snapshot_source_on_extra_cli_main(ROOT)
     gsc = load_indexation_status()
     if not gsc.get("urls"):
         # ensure honest NOT_INSPECTED file
@@ -214,6 +292,7 @@ def verify_release(
         production_audit_is_current=bool(prod_audit.get("production_audit_is_current")),
         extra_cli_on_main=bool(extra.get("on_main")),
         reexport_without_undue_invalidation=False,
+        snapshot_source_on_main=bool(snap_src.get("on_main")),
     )
 
     # Terminal status (honest; never PASS without GSC + current deploy audit)
@@ -247,6 +326,7 @@ def verify_release(
         "web_cfg_head": head,
         "extra_cli_head": extra.get("sha"),
         "extra_cli_main_integration": extra,
+        "snapshot_source_provenance": snap_src,
         "netlify_deployed_sha": live_sha,
         "production_audit_sha": prod_audit.get("audit_target_sha") or prod_audit.get("web_cfg_sha"),
         "production_audit_is_current": prod_audit.get("production_audit_is_current"),

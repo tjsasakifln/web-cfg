@@ -32,8 +32,8 @@ INTERNAL_SLUG_RE = re.compile(
 # Governance / pipeline language that must never appear in visitor-facing HTML
 FORBIDDEN_PUBLIC_PHRASES = [
     re.compile(r"Esta p[aá]gina s[oó] deve alegar evid[eê]ncia emp[ií]rica", re.I),
-    re.compile(r"n[aã]o contagens gen[eé]ricas de contratos", re.I),
-    re.compile(r"contagens gen[eé]ricas de contratos", re.I),
+    re.compile(r"n[aã]o contagens? gen[eé]ricas? de contratos", re.I),
+    re.compile(r"contagens? gen[eé]ricas? de contratos", re.I),
     re.compile(r"problema\s*→\s*servi[cç]o", re.I),
     re.compile(r"quality\s*gate", re.I),
     re.compile(r"dataset[_\s-]*hash", re.I),
@@ -46,6 +46,17 @@ FORBIDDEN_PUBLIC_PHRASES = [
     re.compile(r"sem conex[aã]o do Netlify ao banco", re.I),
     re.compile(r"PUBLISH_DIRECT_EVIDENCE|NOINDEX_EVIDENCE_INSUFFICIENT|REJECT_DUPLICATE", re.I),
     re.compile(r"framework_with_market_density", re.I),
+    # English pipeline UI
+    re.compile(r"\bas of\b", re.I),
+    # snake_case field leakage from export/snapshot
+    re.compile(
+        r"\b("
+        r"historical_count|open_count|data_encerramento|as_of|verified_at|"
+        r"value_status|status_bucket|link_pncp|page_material_hash|mandatory_fail|"
+        r"source_run_id|source_commit_sha"
+        r")\b",
+        re.I,
+    ),
 ]
 SERVICE_PATH_RE = re.compile(r"Servi[cç]o\s+CONFENGE:\s*/[a-z0-9\-/]+/?", re.I)
 INGESTION_NAME_RE = re.compile(r"\bMRS-PREFEITURA|\bMRS-[A-Z]", re.I)
@@ -341,7 +352,9 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
         url = (p.get("url") or "").strip("/")
         html_path = None
         if url:
-            for base in (root / "_site", root):
+            # Prefer repo root (fresh generator output) over _site (may be stale
+            # until assemble_public_artifact runs after validate in build:site).
+            for base in (root, root / "_site"):
                 cand = base / url / "index.html"
                 if cand.exists():
                     html_path = cand

@@ -88,6 +88,7 @@ class TestGscGate(unittest.TestCase):
             production_audit_is_current=True,
             extra_cli_on_main=True,
             reexport_without_undue_invalidation=True,
+            snapshot_source_on_main=True,
         )
         self.assertFalse(gate["allowed"])
         self.assertFalse(gate["next_wave_gate"])
@@ -112,6 +113,7 @@ class TestGscGate(unittest.TestCase):
             production_audit_is_current=True,
             extra_cli_on_main=True,
             reexport_without_undue_invalidation=True,
+            snapshot_source_on_main=True,
         )
         self.assertFalse(gate["allowed"])
         self.assertTrue(any("blocking" in r for r in gate["reasons"]))
@@ -250,6 +252,27 @@ class TestEvidenceKindAndPublicCopy(unittest.TestCase):
             ):
                 self.assertNotIn(bad.lower(), low, f"{c.page_id} contains {bad}")
 
+    def test_render_radar_strips_pipeline_field_names(self):
+        from scripts.pseo.schema import validate_snapshot
+        from scripts.pseo.score import build_candidates
+        from scripts.pseo.render import render_candidate
+
+        snap = validate_snapshot(ROOT / "data" / "pseo")
+        cands = build_candidates(snap["data"], snap["manifest"])
+        radars = [c for c in cands if c.page_type == "radar"]
+        self.assertTrue(radars)
+        for c in radars:
+            html = render_candidate(c, snap["manifest"])
+            for bad in (
+                "historical_count",
+                "open_count",
+                "data_encerramento",
+                "as_of",
+                "as of",
+                "verified_at",
+            ):
+                self.assertNotIn(bad, html, f"{c.page_id} leaked {bad}")
+
     def test_netlify_publish_is_site(self):
         text = (ROOT / "netlify.toml").read_text(encoding="utf-8")
         self.assertIn('publish = "_site"', text)
@@ -275,6 +298,29 @@ class TestForbiddenPhraseDetector(unittest.TestCase):
                 "status": "publish",
                 "human_review": "APPROVED",
                 "title": "Test",
+            }
+            result = audit_page(reg, p)
+            codes = {i.code for i in result.issues}
+            self.assertIn("internal_language_public", codes)
+
+    def test_editorial_flags_snake_case_fields_and_as_of(self):
+        from scripts.pseo.editorial_audit import audit_page
+
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "index.html"
+            p.write_text(
+                "<html><body><p>as of 2026-07-31</p>"
+                "<ul><li>historical_count NAO entra em open_count.</li>"
+                "<li>Somente data_encerramento >= as_of</li></ul></body></html>",
+                encoding="utf-8",
+            )
+            reg = {
+                "page_id": "radar-x",
+                "url": "/radar/x/",
+                "page_type": "radar",
+                "status": "publish",
+                "human_review": "APPROVED",
+                "title": "Radar",
             }
             result = audit_page(reg, p)
             codes = {i.code for i in result.issues}

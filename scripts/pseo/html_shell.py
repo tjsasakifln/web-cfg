@@ -110,7 +110,7 @@ def attribution_query(meta: dict[str, Any], cta_position: str) -> str:
         ("region", "region"),
         ("agency_id", "agency_id"),
         ("intent", "intent"),
-        ("source_run_id", "source_run_id"),
+        # deliberately omit source_run_id / dataset_hash (pipeline provenance)
         ("origem", "origem"),
     )
     for src, pub in key_map:
@@ -284,7 +284,77 @@ def public_source_label(raw: str | None) -> str:
     # slug-like internal keys → humanize without exposing pipeline jargon
     if re.fullmatch(r"[a-z][a-z0-9_]{2,}", s) and "_" in s:
         return s.replace("_", " ").capitalize()
+    # bare short source keys (e.g. "pncp")
+    if re.fullmatch(r"[a-z]{2,12}", s):
+        return {
+            "pncp": "Portal Nacional de Contratações Públicas (PNCP)",
+            "sinapi": "SINAPI (Caixa)",
+            "sicro": "SICRO (DNIT)",
+        }.get(s, s.upper() if len(s) <= 5 else s.capitalize())
     return s
+
+
+# Internal field / pipeline tokens that must never appear in visitor-facing copy
+_INTERNAL_FIELD_RE = re.compile(
+    r"\b("
+    r"historical_count|open_count|data_encerramento|as_of|verified_at|"
+    r"value_status|status_bucket|link_pncp|link_oficial|pncp_id|"
+    r"dataset_hash|source_run_id|page_material_hash|mandatory_fail|"
+    r"quality_gates?|human_review|claim_evidence|evidence_kind|"
+    r"framework_with_market_density|PUBLISH_READY|NOINDEX_"
+    r")\b",
+    re.I,
+)
+
+_LIMITATION_REPLACEMENTS = (
+    (
+        re.compile(
+            r"Somente oportunidades com data_encerramento\s*>=\s*as_of e status compativel\.?",
+            re.I,
+        ),
+        "Somente oportunidades ainda abertas na data de verificação, com status compatível.",
+    ),
+    (
+        re.compile(
+            r"historical_count\s+N[AÃ]O\s+entra\s+em\s+open_count\.?",
+            re.I,
+        ),
+        "A contagem histórica não se confunde com o total de oportunidades abertas.",
+    ),
+    (
+        re.compile(r"Nao e monitoramento em tempo real; verifique no portal oficial\.?", re.I),
+        "Não é monitoramento em tempo real; confira sempre no portal oficial.",
+    ),
+    (
+        re.compile(r"Pagina evergreen:\s*nao indexa um edital por URL\.?", re.I),
+        "Página evergreen: não indexa um edital individual por URL.",
+    ),
+    (re.compile(r"\bdata_encerramento\b", re.I), "data de encerramento"),
+    (re.compile(r"\bas_of\b", re.I), "data de verificação"),
+    (re.compile(r"\bhistorical_count\b", re.I), "contagem histórica"),
+    (re.compile(r"\bopen_count\b", re.I), "total de abertas"),
+    (re.compile(r"\bverified_at\b", re.I), "data de verificação"),
+    (re.compile(r"\bstatus_bucket\b", re.I), "status"),
+    (re.compile(r"\bvalue_status\b", re.I), "status do valor"),
+)
+
+
+def scrub_public_limitation(text: str | None) -> str:
+    """Rewrite snapshot limitations so pipeline field names never reach HTML."""
+    s = str(text or "").strip()
+    if not s:
+        return s
+    for pat, repl in _LIMITATION_REPLACEMENTS:
+        s = pat.sub(repl, s)
+    # Final safety: any remaining snake_case internal tokens → neutral wording
+    s = _INTERNAL_FIELD_RE.sub("critério interno omitido", s)
+    s = s.replace("problema→serviço", "problema e serviço")
+    s = re.sub(r"\bdatalake\b", "base pública de contratos", s, flags=re.I)
+    return s
+
+
+def scrub_public_limitations(items: list | None) -> list[str]:
+    return [scrub_public_limitation(x) for x in (items or []) if str(x).strip()]
 
 
 def methodology_block(
@@ -298,14 +368,7 @@ def methodology_block(
     src = "".join(f"<li>{e(s)}</li>" for s in labels) or (
         "<li>Fontes públicas oficiais de contratações e biblioteca técnica CONFENGE</li>"
     )
-    lim_items = []
-    for raw in limitations or []:
-        t = str(raw)
-        # Scrub residual internal phrasing if still present in snapshot limitations
-        t = t.replace("problema→serviço", "problema e serviço")
-        t = t.replace("problema->servico", "problema e serviço")
-        t = re.sub(r"\bdatalake\b", "base pública de contratos", t, flags=re.I)
-        lim_items.append(t)
+    lim_items = scrub_public_limitations(limitations)
     lim = "".join(f"<li>{e(s)}</li>" for s in lim_items)
     if period_start and period_end:
         period_html = (

@@ -160,6 +160,7 @@ def compute_next_wave_gate(
     production_audit_is_current: bool,
     extra_cli_on_main: bool,
     reexport_without_undue_invalidation: bool = False,
+    snapshot_source_on_main: bool = False,
     min_discovered_ratio: float = 0.75,
 ) -> dict[str, Any]:
     """Return {allowed: bool, reasons: [...], metrics: {...}} — never invent true."""
@@ -210,6 +211,8 @@ def compute_next_wave_gate(
         reasons.append("production_audit_stale_or_mismatch")
     if not extra_cli_on_main:
         reasons.append("extra_cli_exporter_not_on_main")
+    if not snapshot_source_on_main:
+        reasons.append("snapshot_source_commit_not_on_extra_cli_main")
     if not reexport_without_undue_invalidation:
         reasons.append("reexport_without_undue_invalidation_not_proven")
 

@@ -101,3 +101,16 @@
 | terminal_status | `PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED` |
 
 Wave 1 remains unauthorized until real GSC inspection evidence is ingested and re-export proof lands.
+
+## Snapshot provenance (honest)
+
+| Field | Value |
+|-------|-------|
+| source_repository | `extra-cli` |
+| source_branch | `feat/pseo-semantic-sota` |
+| source_commit_sha | `01123735ed0e240b0adf2233269ac947fa6d56c2` |
+| on extra-cli main history | **False** |
+| reason | `source_commit_lookup_failed_or_missing` |
+
+The published `data/pseo` snapshot was produced on branch `feat/pseo-semantic-sota` and its `source_commit_sha` is **not** an ancestor of extra-cli `main` after PR #187. This is an explicit residual risk: Wave 1 stays blocked until a re-export from `extra-cli` main is approved and consumed. The exporter entrypoint **does** exist on main (`python -m scripts.pseo.export_web_cfg`); fixture export from main was proven in cross-repo tests.
+

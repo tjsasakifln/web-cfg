@@ -1104,20 +1104,26 @@ Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco
 
 
 def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
+    from scripts.pseo.html_shell import scrub_public_limitations
+
     o = c.data_ref
     meta = _meta(c, manifest)
+    as_of = o.get("as_of") or o.get("verified_at") or ""
+    as_of_br = br_date(as_of) if as_of else "—"
+    open_n = o.get("open_count")
+    hist_n = o.get("historical_count")
     summary = _exec_summary(
         f"Radar evergreen de {o.get('segment')} em {o.get('region_label')}: "
-        f"{o.get('open_count')} oportunidades classificadas no snapshot de {o.get('as_of')}. "
+        f"{open_n} oportunidades classificadas no recorte de {as_of_br}. "
         f"Esta URL não representa um edital individual; editais entram e saem da lista. "
         f"Confirme sempre no portal de origem antes de precificar."
     )
     inds = indicators_html(
         [
-            ("Abertas", str(o.get("open_count")), f"as of {o.get('as_of')}"),
+            ("Abertas", str(open_n), f"referência {as_of_br}"),
             ("Segmento", str(o.get("segment")), None),
             ("UF", str(o.get("region")), o.get("region_label")),
-            ("Itens listados", str(len(o.get("items") or [])), "no HTML"),
+            ("Itens listados", str(len(o.get("items") or [])), "nesta página"),
         ]
     )
     rows = [
@@ -1134,7 +1140,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     tbl = table_html(
         ["Objeto", "Valor est.", "Modalidade", "Município", "Órgão", "Encerramento"],
         rows,
-        f"Oportunidades no snapshot {o.get('as_of')}",
+        f"Oportunidades no recorte {as_of_br}",
     )
     # Official links only when present — never invent portal home URLs
     link_items = []
@@ -1186,29 +1192,39 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
                 f'<p>Mercado correspondente: <a href="/inteligencia/mercados/{e(market_link)}/" '
                 f'data-pseo-event="pseo_related_page_click">ver inteligência de mercado</a>.</p>'
             )
+    verified = o.get("verified_at") or as_of
+    verified_br = br_date(verified) if verified else "—"
+    # Historical count is contextual market mass — never as causal field-name dump
+    hist_sentence = (
+        f"No recorte há registro de {e(hist_n)} oportunidades históricas no mesmo "
+        f"segmento/UF; essa massa contextualiza o radar e não se confunde com as abertas listadas."
+        if hist_n not in (None, "", 0, "0")
+        else "Itens encerrados deixam de figurar na lista aberta na próxima atualização."
+    )
+    pub_limits = scrub_public_limitations(o.get("limitations") or [])
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
 <p class="eyebrow">Radar de oportunidades</p>
 <h1>{e(c.h1)}</h1>
-<p class="content-lead">Página rolante (evergreen). Verificado em <time datetime="{e(o.get('verified_at') or o.get('as_of'))}">{e(o.get('verified_at') or o.get('as_of'))}</time>
- ({e(o.get('timezone') or 'America/Sao_Paulo')}). Somente status aberto com data limite ≥ data de verificação.</p>
+<p class="content-lead">Página rolante (evergreen). Verificado em <time datetime="{e(verified)}">{e(verified_br)}</time>
+ (horário de Brasília). Somente status aberto com data limite igual ou posterior à data de verificação.</p>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Snapshot</h2>{inds}</section>
+<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Recorte atual</h2>{inds}</section>
 {market_html}
 <section id="lista"><p class="eyebrow">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
 <ul class="document-list">{links}</ul></section>
 <section id="historico"><p class="eyebrow">Histórico</p><h2>Separação histórico × vigente</h2>
-<p>Itens encerrados saem desta lista na próxima exportação. Não mantemos URL indexável por edital.
-Contagem histórica no snapshot: {e(o.get('historical_count'))}.</p></section>
+<p>Itens encerrados saem desta lista na próxima atualização. Não mantemos URL indexável por edital.
+{hist_sentence}</p></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/conteudos/analise-edital-obra-publica-construtora/"],
     "Antes de precificar: lemos edital, planilha, riscos e documentos mínimos para decidir se vale entrar.",
 )}
 {cta_block(meta, c.cta_label, wa, f"Radar {o.get('segment')} {o.get('region')}")}
-{methodology_block(o.get("as_of"), o.get("as_of"), o.get("sources") or [], o.get("limitations") or [])}
+{methodology_block(as_of, as_of, o.get("sources") or [], pub_limits)}
 {author_box()}
 {_related_section(c.related_urls)}
 </article>
