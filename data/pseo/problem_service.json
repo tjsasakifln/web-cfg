@@ -8,7 +8,7 @@
     "document_divergence_count": null,
     "document_signals": [],
     "evidence_count": 39296,
-    "evidence_kind": null,
+    "evidence_kind": "direct_problem_evidence",
     "evidence_signals": [],
     "id": "prob-orcamento-edital",
     "limitations": [
@@ -55,7 +55,7 @@
     "document_divergence_count": null,
     "document_signals": [],
     "evidence_count": 37812,
-    "evidence_kind": null,
+    "evidence_kind": "direct_problem_evidence",
     "evidence_signals": [],
     "id": "prob-sinapi-sicro",
     "limitations": [
@@ -101,7 +101,7 @@
     "document_divergence_count": null,
     "document_signals": [],
     "evidence_count": 21938,
-    "evidence_kind": null,
+    "evidence_kind": "direct_problem_evidence",
     "evidence_signals": [],
     "id": "prob-medicao-glosa",
     "limitations": [
@@ -146,7 +146,7 @@
     "document_divergence_count": null,
     "document_signals": [],
     "evidence_count": 39296,
-    "evidence_kind": null,
+    "evidence_kind": "direct_problem_evidence",
     "evidence_signals": [],
     "id": "prob-aditivos-margem",
     "limitations": [
@@ -192,7 +192,7 @@
     "document_divergence_count": null,
     "document_signals": [],
     "evidence_count": 23412,
-    "evidence_kind": null,
+    "evidence_kind": "direct_problem_evidence",
     "evidence_signals": [],
     "id": "prob-reequilibrio",
     "limitations": [

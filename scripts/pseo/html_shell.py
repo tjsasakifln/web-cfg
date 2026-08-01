@@ -5,11 +5,65 @@ from __future__ import annotations
 import html
 import json
 import re
+import sys
+from pathlib import Path
 from typing import Any
 from urllib.parse import quote
 
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+try:
+    from scripts.site.brand import footer_blurb as _footer_blurb
+    from scripts.site.brand import load_brand as _load_brand
+    from scripts.site.brand import org_description as _org_description
+except Exception:  # noqa: BLE001 — keep pSEO build resilient
+    _load_brand = None  # type: ignore[assignment]
+    _org_description = None  # type: ignore[assignment]
+    _footer_blurb = None  # type: ignore[assignment]
+
 SITE = "https://confenge.com.br"
 WA_BASE = "https://wa.me/5548988344559"
+
+_ORG_DESC_FALLBACK = (
+    "Diretoria B2G fracionada para construtoras e empresas de engenharia: "
+    "inteligência de mercado, decisão de participação, proposta, proteção de "
+    "margem e riscos em contratos públicos."
+)
+_FOOTER_FALLBACK = (
+    "Diretoria B2G fracionada para construtoras: decisão de participação, "
+    "proposta, proteção de margem e gestão de riscos em contratos públicos."
+)
+
+
+def _brand_safe() -> dict[str, Any]:
+    if _load_brand is None:
+        return {}
+    try:
+        return _load_brand()
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def _org_desc() -> str:
+    if _org_description is None:
+        return _ORG_DESC_FALLBACK
+    try:
+        return _org_description() or _ORG_DESC_FALLBACK
+    except Exception:  # noqa: BLE001
+        return _ORG_DESC_FALLBACK
+
+
+def _footer_text() -> str:
+    if _footer_blurb is None:
+        return _FOOTER_FALLBACK
+    try:
+        return _footer_blurb() or _FOOTER_FALLBACK
+    except Exception:  # noqa: BLE001
+        return _FOOTER_FALLBACK
+
+
 ORG_JSONLD = {
     "@type": "Organization",
     "@id": f"{SITE}/#organization",
@@ -18,10 +72,7 @@ ORG_JSONLD = {
     "url": f"{SITE}/",
     "logo": f"{SITE}/assets/logo-confenge.png",
     "image": f"{SITE}/assets/og-confenge.jpg",
-    "description": (
-        "Consultoria B2G especializada em licitações, propostas, contratos e "
-        "obras públicas para empresas de engenharia e construção."
-    ),
+    "description": _org_desc(),
     "email": "tiago.sasaki@confenge.com.br",
     "telephone": "+55-48-98834-4559",
     "taxID": "52.407.089/0001-09",
@@ -32,7 +83,7 @@ PERSON_JSONLD = {
     "name": "Engº Tiago Sasaki",
     "image": f"{SITE}/assets/tiago-sasaki-foto-v11-sem-fundo.png",
     "url": f"{SITE}/especialista/tiago-jun-sasaki/",
-    "jobTitle": "Engenheiro Civil e consultor B2G",
+    "jobTitle": "Engenheiro Civil e Diretoria B2G fracionada",
     "worksFor": {"@id": f"{SITE}/#organization"},
 }
 
@@ -48,36 +99,65 @@ SVG_SPRITE = """<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
 <symbol id="i-whatsapp" viewbox="0 0 24 24"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.6Z"></path></symbol>
 </svg>"""
 
-HEADER = """<header class="site-header" id="inicio">
+
+def _build_header() -> str:
+    brand = _brand_safe()
+    nav = (brand.get("navigation") or {}).get("desktop") or [
+        {"label": "Como atuamos", "href": "/#como-atuamos"},
+        {"label": "Diretoria B2G", "href": "/diretoria-b2g/"},
+        {"label": "Inteligência", "href": "/inteligencia/"},
+        {"label": "Conteúdos", "href": "/conteudos/"},
+        {"label": "Especialista", "href": "/especialista/tiago-jun-sasaki/"},
+    ]
+    cta = (brand.get("navigation") or {}).get("cta") or {
+        "label": "Diagnosticar operação",
+        "href": "/#contato",
+    }
+    links = "\n".join(f'<a href="{n["href"]}">{n["label"]}</a>' for n in nav)
+    mobile = "".join(f'<a href="{n["href"]}">{n["label"]}</a>' for n in nav)
+    return f"""<header class="site-header" id="inicio">
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
-<a href="/#atuacao">Atuação</a>
-<a href="/conteudos/">Conteúdos</a>
-<a href="/inteligencia/">Inteligência</a>
-<a href="/#metodo">Método</a>
-<a href="/#faq">Dúvidas</a>
+{links}
 </nav>
-<a class="button button-primary header-cta" href="/#contato">Analisar meu cenário</a>
+<a class="button button-primary header-cta" href="{cta['href']}">{cta['label']}</a>
 <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
 <svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
 </button>
 </div>
 <nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
-<a href="/#atuacao">Atuação</a><a href="/conteudos/">Conteúdos</a><a href="/inteligencia/">Inteligência</a><a href="/#metodo">Método</a><a href="/#faq">Dúvidas</a>
-<a class="button button-primary" href="/#contato">Analisar meu cenário</a>
+{mobile}
+<a class="button button-primary" href="{cta['href']}">{cta['label']}</a>
 </nav>
 </header>"""
 
-FOOTER = """<footer class="site-footer">
+
+def _build_footer() -> str:
+    blurb = _footer_text()
+    brand = _brand_safe()
+    offers = brand.get("offers") or []
+    offer_links = "".join(
+        f'<a href="{o.get("url")}">{html.escape(o.get("name") or "")}</a>' for o in offers
+    ) or (
+        '<a href="/diagnostico-b2g-360/">Diagnóstico B2G 360°</a>'
+        '<a href="/diretoria-b2g/">Diretoria B2G</a>'
+        '<a href="/bid-room-licitacoes-obras/">Bid Room</a>'
+        '<a href="/defesa-margem-contratos-publicos/">Defesa de margem</a>'
+    )
+    return f"""<footer class="site-footer">
 <div class="container footer-top">
-<div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>Consultoria B2G especializada em engenharia, licitações, contratos e obras públicas.</p></div>
-<div class="footer-links"><strong>Navegação</strong><a href="/">Início</a><a href="/conteudos/">Biblioteca técnica</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="/#contato">Contato</a></div>
-<div class="footer-links footer-clusters"><strong>Inteligência</strong><a href="/inteligencia/mercados/">Mercados</a><a href="/inteligencia/orgaos/">Órgãos</a><a href="/inteligencia/precos/">Preços</a><a href="/inteligencia/concorrencia/">Concorrência</a><a href="/radar/">Radar</a></div>
-<div class="footer-links"><strong>Contato</strong><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+<div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>{html.escape(blurb)}</p></div>
+<div class="footer-links"><strong>Ofertas</strong>{offer_links}</div>
+<div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
+<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
 </div>
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
 </footer>"""
+
+
+HEADER = _build_header()
+FOOTER = _build_footer()
 
 
 def e(s: Any) -> str:
@@ -244,14 +324,23 @@ def author_box() -> str:
 
 
 def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> str:
+    """Commercial CTA for pSEO pages — decision/consequence language, not pipeline jargon."""
     wa = wa_link(wa_message)
     form = form_href(meta, tema, "inline_cta")
     attr = attribution_query(meta, "inline_cta")
-    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Diagnóstico CONFENGE" data-pseo-cta="1" data-pseo-attr="{e(attr)}">
-<div class="lead-inline-copy"><span>Próximo passo</span><strong>{e(label)}</strong>
-<p>Contexto desta página de inteligência já vai na mensagem — sem cadastro em lista.</p></div>
+    # Prefer economic framing when label is generic
+    display = label
+    if not display or "oferta coerente" in display.lower() or "organizar documentos" in display.lower():
+        display = "O edital parece atraente. A planilha pode dizer o contrário."
+    body = (
+        "Antes de imobilizar a equipe, confronte edital, preço, cronograma e risco de execução "
+        "com a capacidade real da empresa."
+    )
+    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo comercial" data-pseo-cta="1" data-pseo-attr="{e(attr)}">
+<div class="lead-inline-copy"><span>Próximo passo</span><strong>{e(display)}</strong>
+<p>{e(body)}</p></div>
 <div class="lead-inline-actions">
-<a class="button button-primary" data-cta-position="inline_cta" data-content-cluster="pseo" data-pseo-event="pseo_whatsapp_click" href="{e(wa)}" rel="noopener" target="_blank">WhatsApp</a>
+<a class="button button-primary" data-cta-position="inline_cta" data-content-cluster="pseo" data-pseo-event="pseo_whatsapp_click" href="{e(wa)}" rel="noopener" target="_blank">Revisar esta oportunidade</a>
 <a class="button button-secondary" data-cta-position="form" data-content-cluster="pseo" data-pseo-event="pseo_cta_click" href="{e(form)}">Preferir formulário</a>
 </div></section>"""
 

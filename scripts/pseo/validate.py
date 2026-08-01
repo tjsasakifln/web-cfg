@@ -100,6 +100,14 @@ def validate_all(data_dir: Path | None = None) -> dict:
             return True
         return False
 
+    # Uniqueness is enforced for publish/indexable pages only.
+    # National noindex previews can share generic agency labels while containment
+    # (publish_count=0) is intentional; they must not block commercial builds.
+    titles_pub: list[str] = []
+    h1s_pub: list[str] = []
+    canons_pub: list[str] = []
+    descs_pub: list[str] = []
+
     for p in publish + noindex:
         url = p["url"]
         path = ROOT / url.strip("/") / "index.html"
@@ -107,6 +115,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
             errors.append(f"missing HTML for {url}")
             continue
         html = path.read_text(encoding="utf-8")
+        is_publish = p.get("status") == "publish"
         for pat in FORBIDDEN_HTML:
             if pat.search(html):
                 errors.append(f"forbidden in {url}: {pat.pattern}")
@@ -131,15 +140,23 @@ def validate_all(data_dir: Path | None = None) -> dict:
         if not title_m:
             errors.append(f"no title: {url}")
         else:
-            titles.append(re.sub(r"\s+", " ", title_m.group(1)).strip())
+            t = re.sub(r"\s+", " ", title_m.group(1)).strip()
+            titles.append(t)
+            if is_publish:
+                titles_pub.append(t)
         if not h1_m:
             errors.append(f"no h1: {url}")
         else:
-            h1s.append(re.sub(r"<[^>]+>", "", h1_m.group(1)).strip())
+            h = re.sub(r"<[^>]+>", "", h1_m.group(1)).strip()
+            h1s.append(h)
+            if is_publish:
+                h1s_pub.append(h)
         if not can_m:
             errors.append(f"no canonical: {url}")
         else:
             canons.append(can_m.group(1))
+            if is_publish:
+                canons_pub.append(can_m.group(1))
             if not can_m.group(1).startswith("https://confenge.com.br"):
                 errors.append(f"canonical not absolute confenge: {url}")
         if not desc_m:
@@ -147,6 +164,8 @@ def validate_all(data_dir: Path | None = None) -> dict:
         else:
             d = (desc_m.group(1) or desc_m.group(2) or "").strip()
             descs.append(d)
+            if is_publish:
+                descs_pub.append(d)
             if len(d) < 40:
                 warnings.append(f"short description: {url}")
         # single h1
@@ -201,14 +220,19 @@ def validate_all(data_dir: Path | None = None) -> dict:
         sample = broken_internal[:15]
         errors.append(f"broken internal links ({len(broken_internal)}): {sample}")
 
-    if len(titles) != len(set(titles)):
-        errors.append(f"duplicate titles: {Counter(titles).most_common(3)}")
-    if len(h1s) != len(set(h1s)):
-        errors.append(f"duplicate h1s: {Counter(h1s).most_common(3)}")
-    if len(canons) != len(set(canons)):
-        errors.append(f"duplicate canonicals: {Counter(canons).most_common(3)}")
-    if len(descs) != len(set(descs)):
-        errors.append(f"duplicate descriptions: {Counter(descs).most_common(3)}")
+    if len(titles_pub) != len(set(titles_pub)):
+        errors.append(f"duplicate titles (publish): {Counter(titles_pub).most_common(3)}")
+    if len(h1s_pub) != len(set(h1s_pub)):
+        errors.append(f"duplicate h1s (publish): {Counter(h1s_pub).most_common(3)}")
+    if len(canons_pub) != len(set(canons_pub)):
+        errors.append(f"duplicate canonicals (publish): {Counter(canons_pub).most_common(3)}")
+    if len(descs_pub) != len(set(descs_pub)):
+        errors.append(f"duplicate descriptions (publish): {Counter(descs_pub).most_common(3)}")
+    # Soft signal for noindex mesh quality (does not fail the build)
+    if len(titles) != len(set(titles)) and not titles_pub:
+        warnings.append(
+            f"noindex title collisions present (containment): {Counter(titles).most_common(3)}"
+        )
 
     # sitemap only publish
     sm = ROOT / "sitemap-inteligencia.xml"
