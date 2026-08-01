@@ -1,54 +1,59 @@
 {
-  "terminal_status": "PARTIAL_DEPLOYED_NOT_GSC_INSPECTED",
-  "web_cfg_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-  "extra_cli_sha": "5b6cc7c136f4112b565f4e7e894607180f205fe2",
-  "extra_cli_branch": "feat/pseo-export-isolated",
+  "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
+  "web_cfg_sha": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
+  "extra_cli_sha": "6f35c69f25276b55871767fd668cd019dd1bfb56",
+  "extra_cli_branch": "main",
+  "extra_cli_main_integration": true,
   "netlify_deployed_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-  "snapshot_hash": "40b2c85f58dca0154fb132f00a01b0e0db06d5d58a621b10fdd2acdc97fab060",
-  "schema_version": "1.1.0",
-  "production_audit": {
-    "ok": true,
-    "critical_count": 0,
-    "crawlable_production": 7,
-    "in_hub_true_count": 12,
-    "in_hub_null_count": 0
-  },
+  "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
+  "public_directory": "_site",
+  "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
   "seed_urls": [
-    "https://confenge.com.br/radar/edificacoes-publicas-pr/",
+    "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
     "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
     "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-    "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/"
+    "https://confenge.com.br/radar/edificacoes-publicas-pr/"
   ],
-  "sitemap_status": {
-    "local_publish_count": 4,
-    "robots_primary": "https://confenge.com.br/sitemap-index.xml"
+  "indexable_seed_count": 4,
+  "production_audit": {
+    "ok": false,
+    "technical_ok": false,
+    "production_audit_is_current": false,
+    "stale_code": "STALE_AUDIT_DEPLOY_MISMATCH",
+    "critical_count": 0,
+    "audit_target_sha": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
+    "live_manifest_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e"
   },
   "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
   "gsc_status_by_url": {
-    "/radar/edificacoes-publicas-pr/": "NOT_INSPECTED_NO_CREDENTIALS",
-    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": "NOT_INSPECTED_NO_CREDENTIALS",
-    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": "NOT_INSPECTED_NO_CREDENTIALS",
-    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "NOT_INSPECTED_NO_CREDENTIALS"
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "NOT_INSPECTED",
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": "NOT_INSPECTED",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": "NOT_INSPECTED",
+    "/radar/edificacoes-publicas-pr/": "NOT_INSPECTED"
   },
-  "test_results": {
-    "web_cfg_pseo_pytest": "48 passed",
-    "build_site": "ok",
-    "production_audit": "ok",
-    "extra_cli_pseo_pytest": "48 passed on feat/pseo-export-isolated"
-  },
-  "unresolved_risks": [
-    "extra-cli PR #187 not merged to main",
-    "GSC credentials absent — NOT_INSPECTED_NO_CREDENTIALS"
-  ],
   "next_wave_gate": {
-    "gsc_discovery_or_crawl_without_soft404": true
+    "allowed": false,
+    "gsc_discovery_or_crawl_without_soft404": false,
+    "reasons": [
+      "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
+      "uninspected_seeds=4",
+      "discovered_or_crawled=0<3",
+      "production_audit_not_ok",
+      "production_audit_stale_or_mismatch",
+      "reexport_without_undue_invalidation_not_proven"
+    ]
+  },
+  "forbidden_public_urls_status": {
+    "ok": null,
+    "statuses": {},
+    "note": "skipped"
   },
   "stages_reached": {
     "GENERATED_LOCAL": true,
     "QUALITY_ELIGIBLE": true,
     "EDITORIALLY_APPROVED": true,
     "DEPLOYED_PRODUCTION": true,
-    "CRAWLABLE_PRODUCTION": true,
+    "CRAWLABLE_PRODUCTION": false,
     "INDEXED_BY_GOOGLE": false
   },
   "public_manifest": {
@@ -67,15 +72,15 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "sha_alignment": {
-    "web_cfg_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-    "netlify_deployed_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-    "git_head": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-    "all_match": true,
-    "report_commit_may_lag": false,
-    "source": "https://confenge.com.br/.well-known/pseo-build.json",
-    "generated_at": "2026-07-31T22:04:49.689573+00:00",
-    "note": "web_cfg_sha and netlify_deployed_sha are always the live well-known SHA. all_match is true only when git HEAD equals that live SHA at freeze time. Evidence-only commits should not redeploy (netlify.toml ignore)."
-  },
-  "generated_at": "2026-07-31T22:04:49.689573+00:00"
+  "unresolved_risks": [
+    "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
+    "uninspected_seeds=4",
+    "discovered_or_crawled=0<3",
+    "production_audit_not_ok",
+    "production_audit_stale_or_mismatch",
+    "reexport_without_undue_invalidation_not_proven",
+    "GSC credentials absent — NOT_INSPECTED"
+  ],
+  "generated_at": "2026-08-01T00:20:13Z",
+  "auditor_version": "wave0-closure-02"
 }

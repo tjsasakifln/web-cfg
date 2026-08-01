@@ -192,8 +192,8 @@ def _problem_decision_copy(p: dict) -> str:
         return (
             f"Em {label}, a decisão é se a empresa documenta alteração de projeto/quantitativo "
             "em tempo real (diário, comunicação formal, medições) ou absorve custo sem cobertura. "
-            "Os dados públicos mostram densidade de obras nos arquétipos relacionados; "
-            "não estimam taxa de aditivo por órgão."
+            "O recorte público ajuda a enxergar onde a exposição é maior; "
+            "não estima taxa de aditivo por órgão."
         )
     if "sinapi" in theme or "sicro" in theme:
         return (
@@ -280,9 +280,33 @@ def _problem_help_copy(p: dict) -> str:
     )
 
 
+def _normalize_evidence_kind(p: dict) -> str:
+    """Canonical evidence_kind for scenario pages."""
+    raw = (p.get("evidence_kind") or "").strip()
+    allowed = {
+        "direct_problem_evidence",
+        "contextual_market_evidence",
+        "normative_editorial",
+    }
+    if raw in allowed:
+        return raw
+    # Legacy export labels → canonical
+    if raw in {"framework_with_market_density", "claim_evidence_package", "typed_signals"}:
+        # Decorative market density is not direct problem evidence
+        if raw == "framework_with_market_density":
+            return "normative_editorial"
+        if raw == "typed_signals":
+            return "direct_problem_evidence"
+        return "normative_editorial"
+    if p.get("amendment_count") or p.get("document_divergence_count") or p.get("reference_mentions"):
+        return "direct_problem_evidence"
+    return "normative_editorial"
+
+
 def _problem_mass_copy(p: dict) -> str:
-    """Unique density sentence per theme (avoids cross-page generic block fail)."""
-    n = p.get("evidence_count") or 0
+    """Theme-specific context. Never present generic contract counts as causal proof."""
+    kind = _normalize_evidence_kind(p)
+    n = int(p.get("evidence_count") or 0)
     theme = (p.get("theme") or p.get("id") or "").lower()
     _ARCH_LABEL = {
         "edificacoes-publicas": "edificações públicas",
@@ -295,29 +319,62 @@ def _problem_mass_copy(p: dict) -> str:
         _ARCH_LABEL.get(str(a), str(a).replace("-", " "))
         for a in (p.get("related_archetypes") or [])[:3]
     ) or "engenharia pública"
+
+    # Direct evidence may cite observed counts tied to the problem
+    if kind == "direct_problem_evidence" and n > 0:
+        if "aditiv" in theme:
+            return (
+                f"Foram observados {n} registros documentais de alteração/aditivo "
+                f"em {arches} no recorte analisado."
+            )
+        if "sinapi" in theme or "sicro" in theme:
+            return (
+                f"Foram identificados {n} sinais documentais de referência de custo "
+                f"(SINAPI/SICRO ou correlatos) em {arches}."
+            )
+        if "orcamento" in theme or "edital" in theme:
+            return (
+                f"Foram identificadas {n} divergências documentais entre orçamento e edital "
+                f"em {arches}."
+            )
+        return f"Evidência direta: {n} ocorrências ligadas ao problema em {arches}."
+
+    # Contextual market evidence may show market size with explicit non-causal framing
+    if kind == "contextual_market_evidence" and n > 0:
+        return (
+            f"O mercado relacionado em {arches} concentra atividade contratual relevante "
+            f"({n} contratos no recorte). Esse número contextualiza exposição de mercado e "
+            f"não mede a frequência do problema nesta página."
+        )
+
+    # normative_editorial — no decorative contract counts
     if "aditiv" in theme:
         return (
-            f"No recorte exportado há {n} contratos ligados a {arches} — densidade de obras "
-            "onde alterações de projeto costumam aparecer, sem medir incidência de aditivo."
+            f"Em {arches}, alterações de projeto e quantitativo são o ponto em que a margem "
+            "se perde quando o registro contemporâneo falha — a orientação abaixo é "
+            "normativa e documental, não uma taxa de aditivo."
         )
     if "sinapi" in theme or "sicro" in theme:
         return (
-            f"O snapshot associa {n} contratos de {arches} a mercados que usam referências "
-            "oficiais de custo; isso contextualiza o problema de base, não o preço unitário da sua planilha."
+            f"Em {arches}, a escolha da referência de custo (e da produtividade) define "
+            "deságio real após a assinatura; a página orienta o critério, não o preço unitário "
+            "da sua planilha."
         )
     if "orcamento" in theme or "edital" in theme:
         return (
-            f"Há {n} contratos classificados em {arches} no datalake sanitizado — sinal de "
-            "mercados onde a consistência edital×planilha costuma ser crítica na disputa."
+            f"Em {arches}, inconsistência entre planilha de referência e edital costuma "
+            "aparecer antes da proposta; a orientação é documental e legal, sem extrapolar "
+            "frequência estatística do problema."
         )
     if "medicao" in theme or "glosa" in theme:
         return (
-            f"Base de {n} contratos em {arches} com execução recorrente — útil para discutir "
-            "medição/glosa, sem provar glosa no contrato da sua empresa."
+            f"Em contratos de {arches} com execução recorrente, disputas de critério de "
+            "medição e glosa se resolvem com diário, memória de cálculo e parcela "
+            "incontroversa — não com contagem genérica de contratos."
         )
     return (
-        f"Massa de {n} registros em {arches} no export público; use como contexto de mercado, "
-        "não como prova do caso concreto."
+        f"Orientação técnica para {arches} com base em legislação, guias e prática "
+        "profissional — sem usar contagem genérica de contratos como prova do problema."
     )
 
 
@@ -367,7 +424,7 @@ def _meta(c: Candidate, manifest: dict[str, Any]) -> dict[str, Any]:
         "agency_id": c.agency_id or "",
         "intent": c.intent,
         "source_run_id": manifest.get("source_run_id", ""),
-        "dataset_hash": (manifest.get("dataset_hash") or "")[:16],
+        "snapshot": (manifest.get("dataset_hash") or "")[:16],
         "origem": c.url,
         "url": c.url,
     }
@@ -588,7 +645,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     summary = _exec_summary(
         f"{agency_display} ({a.get('municipio') or '—'}, {a.get('uf') or '—'}) "
         f"aparece com {a.get('contract_count')} contratos classificados em engenharia/obras "
-        f"no datalake, totalizando {money(a.get('total_value'))}. Mediana {money(a.get('median_value'))}. "
+        f"no recorte público, totalizando {money(a.get('total_value'))}. Mediana {money(a.get('median_value'))}. "
         f"{a.get('supplier_count')} fornecedores distintos foram observados. "
         f"Use o histórico para preparar estratégia de disputa — não como garantia de demanda futura."
     )
@@ -1191,10 +1248,9 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     p = c.data_ref
     meta = _meta(c, manifest)
     svc_label = _service_label_public(p.get("confenge_service_slug")) or "serviço técnico CONFENGE"
+    kind = _normalize_evidence_kind(p)
     summary = _exec_summary(
         f"{p.get('problem_label')}: {p.get('observed_pattern')} "
-        f"Esta página só deve alegar evidência empírica quando o datalake trouxer sinais "
-        f"diretamente ligados ao problema — não contagens genéricas de contratos. "
         f"Trilha CONFENGE relacionada: {svc_label}."
     )
     guides = "".join(
@@ -1245,31 +1301,53 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
         f"Olá, Tiago. Preciso organizar documentos e próximos passos em um cenário de "
         f"{p.get('problem_label')}."
     )
+    # Scrub limitations for public display
+    pub_limits = []
+    for lim in p.get("limitations") or ["Sem limitações declaradas."]:
+        t = str(lim).replace("problema→serviço", "problema e serviço")
+        t = re.sub(r"\bdatalake\b", "base pública de contratos", t, flags=re.I)
+        pub_limits.append(t)
+    limit0 = pub_limits[0] if pub_limits else "Sem limitações declaradas."
+
+    # Evidence section: only show quantitative n when kind allows
+    if kind == "direct_problem_evidence" and p.get("evidence_count"):
+        mass_extra = (
+            f"<p>Ocorrências documentais ligadas ao problema no recorte: "
+            f"<strong>{e(p.get('evidence_count'))}</strong>.</p>"
+        )
+    elif kind == "contextual_market_evidence" and p.get("evidence_count"):
+        mass_extra = (
+            f"<p>Dimensão de mercado relacionada (contexto, não prova do problema): "
+            f"<strong>{e(p.get('evidence_count'))}</strong> contratos no recorte.</p>"
+        )
+    else:
+        mass_extra = ""
+
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Dados → problema → serviço</p>
+<p class="eyebrow">Cenário técnico</p>
 <h1>{e(c.h1)}</h1>
-<p class="content-lead">Cruza padrões públicos de contratação com o cluster técnico da CONFENGE.</p>
+<p class="content-lead">Orientação para decidir com base em padrões de contratação pública e no serviço técnico da CONFENGE.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
-<span>Arquétipos: {e(arches)}</span></div>
+<span>Segmentos: {e(arches)}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
-<section id="padrao"><p class="eyebrow">Padrão</p><h2>O que se observa nos dados e documentos</h2>
+<section id="padrao"><p class="eyebrow">Padrão</p><h2>O que se observa nos documentos e na prática</h2>
 <p>{e(p.get('observed_pattern'))}</p>
-<p>Contratos/mercados relacionados na base exportada: <strong>{e(p.get('evidence_count'))}</strong>.</p></section>
+{mass_extra}</section>
 <section id="fontes"><p class="eyebrow">Fontes auditáveis</p><h2>Referências oficiais e normativos</h2>
 <ul class="document-list">{refs_html}</ul>
 <p><small>Links apontam para textos oficiais ou portais públicos; não são fichas de contrato individual.
 Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
-<section id="guias"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos (sem canibalizar)</h2>
-<p>Estas páginas aprofundam o critério; a página de inteligência contextualiza o mercado.</p>
+<section id="guias"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos relacionados</h2>
+<p>Estas páginas aprofundam o critério; esta página de inteligência organiza a decisão do cenário.</p>
 <ul>{guides}</ul></section>
 <section id="implicacoes"><p class="eyebrow">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
 <p>{e(_problem_decision_copy(p))}</p>
 <p>{e(_problem_mass_copy(p))}</p>
-<p><strong>Limites da conclusão:</strong> {(e((p.get('limitations') or ['Sem limitações declaradas.'])[0]))}</p>
+<p><strong>Limites da conclusão:</strong> {e(limit0)}</p>
 </section>
 <section id="acao"><p class="eyebrow">Ação</p><h2>Próximo passo prático</h2>
 <p>{e(_problem_action_copy(p))}</p></section>
@@ -1278,7 +1356,7 @@ Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
     _problem_help_copy(p),
 )}
 {cta_block(meta, c.cta_label, wa, p.get("problem_label") or "Cenário técnico")}
-{methodology_block(None, None, p.get("sources") or [], p.get("limitations") or [])}
+{methodology_block(None, None, p.get("sources") or [], pub_limits)}
 {author_box()}
 {_related_section(c.related_urls)}
 </article>

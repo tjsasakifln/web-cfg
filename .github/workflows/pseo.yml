@@ -1,17 +1,7 @@
 name: pSEO quality gates
 on:
   push:
-    paths:
-      - "scripts/pseo/**"
-      - "data/pseo/**"
-      - "package.json"
-      - ".github/workflows/pseo.yml"
   pull_request:
-    paths:
-      - "scripts/pseo/**"
-      - "data/pseo/**"
-      - "package.json"
-      - ".github/workflows/pseo.yml"
 jobs:
   pseo:
     runs-on: ubuntu-latest
@@ -20,15 +10,145 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
       - name: Install test deps
         run: pip install pytest
-      - name: pSEO unit tests
-        run: npm run pseo:test
-      - name: pSEO build
-        run: npm run pseo:build
-      - name: pSEO validate (includes editorial audit)
+      - name: npm ci (when lockfile present) or npm install
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - name: Netlify publish must equal _site
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, sys
+          text = Path("netlify.toml").read_text(encoding="utf-8")
+          m = re.search(r'publish\s*=\s*"([^"]+)"', text)
+          if not m or m.group(1) != "_site":
+              print("FAIL: netlify.toml publish must be _site, got", m.group(1) if m else None)
+              sys.exit(1)
+          if 'command = "npm run build:site"' not in text and "command = 'npm run build:site'" not in text:
+              # allow whitespace variants
+              if not re.search(r'command\s*=\s*"npm run build:site"', text):
+                  print("FAIL: netlify build command must be npm run build:site")
+                  sys.exit(1)
+          print("ok: netlify publish=_site command=build:site")
+          PY
+      - name: Build site (exact production command)
+        run: npm run build:site
+      - name: Audit public artifact
+        run: npm run audit:public-artifact
+      - name: pSEO validate
         run: npm run pseo:validate
-      - name: pSEO audit (no determinism rebuild loop)
-        run: python3 scripts/pseo/audit.py --skip-determinism
-      - name: analytics PII
-        run: npm run test:analytics
+      - name: pSEO audit
+        run: npm run pseo:audit
+      - name: Full test suite
+        run: npm test
+      - name: HTTP smoke on _site artifact
+        run: |
+          python3 - <<'PY'
+          import json, re, sys, threading
+          from functools import partial
+          from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+          from pathlib import Path
+          from urllib.request import urlopen, Request
+
+          root = Path(".").resolve()
+          site = root / "_site"
+          if not site.is_dir():
+              print("FAIL: _site missing after build:site")
+              sys.exit(1)
+
+          # Align netlify publish dir with artifact
+          toml = (root / "netlify.toml").read_text(encoding="utf-8")
+          m = re.search(r'publish\s*=\s*"([^"]+)"', toml)
+          if not m or m.group(1) != "_site":
+              print("FAIL: publish dir mismatch")
+              sys.exit(1)
+
+          reg = json.loads((root / "data/pseo/registry.json").read_text(encoding="utf-8"))
+          seeds = [p["url"] for p in reg.get("pages") or [] if p.get("status") == "publish"]
+          hubs = [
+              "/",
+              "/inteligencia/",
+              "/radar/",
+              "/inteligencia/cenarios/",
+          ]
+          must_200 = hubs + seeds + [
+              "/sitemap-index.xml",
+              "/sitemap-inteligencia.xml",
+              "/robots.txt",
+              "/.well-known/pseo-build.json",
+          ]
+          must_not_200 = [
+              "/data/pseo/manifest.json",
+              "/data/pseo/registry.json",
+              "/seo/pseo-operational-result.json",
+              "/scripts/pseo/build.py",
+              "/package.json",
+              "/.git/config",
+              "/.github/workflows/pseo.yml",
+          ]
+
+          handler = partial(SimpleHTTPRequestHandler, directory=str(site))
+          httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+          port = httpd.server_address[1]
+          t = threading.Thread(target=httpd.serve_forever, daemon=True)
+          t.start()
+          base = f"http://127.0.0.1:{port}"
+          errors = []
+
+          def get(path):
+              try:
+                  req = Request(base + path, method="GET")
+                  with urlopen(req, timeout=10) as r:
+                      return r.status, r.read()
+              except Exception as e:
+                  code = getattr(getattr(e, "code", None), "real", None) or getattr(e, "code", None)
+                  return code, str(e).encode()
+
+          for path in must_200:
+              # static server maps /foo/ to /foo/index.html when present
+              st, body = get(path)
+              if st != 200:
+                  # try index.html fallback path form
+                  if path.endswith("/"):
+                      st2, body2 = get(path + "index.html")
+                      if st2 == 200:
+                          st, body = st2, body2
+              if st != 200:
+                  errors.append(f"expected 200 for {path}, got {st}")
+              else:
+                  if path.endswith(".html") or path.endswith("/") or path == "/":
+                      text = body.decode("utf-8", errors="replace")
+                      for bad in (
+                          "pncp_supplier_contracts",
+                          "site-confenge-guides",
+                          "datalake",
+                          "contagens genéricas",
+                          "Esta página só deve alegar",
+                      ):
+                          if bad.lower() in text.lower() and path.rstrip("/").startswith(
+                              ("/inteligencia", "/radar")
+                          ) or (path in seeds or path.rstrip("/") in [s.rstrip("/") for s in seeds]):
+                              if bad.lower() in text.lower():
+                                  errors.append(f"forbidden phrase {bad!r} in {path}")
+
+          for path in must_not_200:
+              st, _ = get(path)
+              if st == 200:
+                  errors.append(f"internal path leaked (200): {path}")
+
+          # 404 page present
+          if not (site / "404.html").exists():
+              errors.append("404.html missing from _site")
+
+          httpd.shutdown()
+          if errors:
+              print("SMOKE FAIL:")
+              for e in errors:
+                  print(" -", e)
+              sys.exit(1)
+          print(f"SMOKE OK: {len(must_200)} paths 200; {len(must_not_200)} internal not 200")
+          PY

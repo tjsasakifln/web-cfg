@@ -391,8 +391,8 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Mercados, órgãos, preços, concorrência e radar — evidência pública, sem ranking proprietário.",
             "Hub de páginas de inteligência orientadas a decisão comercial e técnica. "
             "Cada página-filha responde a uma decisão de mercado ou contrato e só entra no "
-            "sitemap após gates de qualidade, evidência e revisão humana. "
-            "Metodologia: agregados sanitizados do datalake público (PNCP e correlatos), "
+            "sitemap após critérios de evidência, revisão editorial e aprovação. "
+            "Metodologia: agregados a partir de registros públicos de contratação (PNCP e correlatos), "
             "sem ranking comercial proprietário.",
             [
                 ("/inteligencia/mercados/", "hub", "Mercados", "Demanda e órgãos"),
@@ -400,7 +400,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
                 ("/inteligencia/precos/", "hub", "Benchmarks de preços", "Medianas e quartis"),
                 ("/inteligencia/concorrencia/", "hub", "Concorrência observada", "Frequência neutra"),
                 ("/radar/", "hub", "Radar de oportunidades", "Evergreen"),
-                ("/inteligencia/cenarios/", "hub", "Cenários problema→serviço", "Clusters técnicos"),
+                ("/inteligencia/cenarios/", "hub", "Cenários técnicos", "Problema e serviço"),
             ],
             [("Início", "/"), ("Inteligência", None)],
             None,

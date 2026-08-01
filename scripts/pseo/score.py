@@ -242,37 +242,71 @@ def semantic_radar_fails(o: dict) -> list[str]:
     return fails
 
 
+# Canonical evidence kinds for scenario (problem_service) pages
+EVIDENCE_KINDS = frozenset(
+    {
+        "direct_problem_evidence",
+        "contextual_market_evidence",
+        "normative_editorial",
+    }
+)
+# Accepted legacy labels from older exports (mapped at render time)
+LEGACY_EVIDENCE_KINDS = frozenset(
+    {
+        "framework_with_market_density",
+        "claim_evidence_package",
+        "typed_signals",
+    }
+)
+
+
 def semantic_problem_fails(pr: dict) -> list[str]:
     """Problem pages need claim-specific evidence, not generic contract counts.
 
-    Evergreen problem→service pages may qualify with a structured claim_evidence
+    Evergreen problem/service pages may qualify with a structured claim_evidence
     package (official law refs + guides + observed pattern + limitations) without
     inventing quantitative amendment/SINAPI rates.
     """
     fails: list[str] = []
     theme = (pr.get("theme") or pr.get("id") or "").lower()
     evidence_count = int(pr.get("evidence_count") or 0)
+    kind = (pr.get("evidence_kind") or "").strip()
     specific = (
         pr.get("claim_evidence")
         or pr.get("direct_evidence")
         or pr.get("evidence_signals")
         or []
     )
+    has_editorial_package = bool(
+        (pr.get("official_references") or [])
+        and (pr.get("technical_guide_paths") or [])
+        and (pr.get("limitations") or [])
+        and (pr.get("observed_pattern") or "")
+    )
     has_framework = bool(
         specific
         or (
-            (pr.get("official_references") or [])
-            and (pr.get("technical_guide_paths") or [])
-            and (pr.get("limitations") or [])
-            and (pr.get("observed_pattern") or "")
-            and evidence_count >= MIN_PROBLEM_EVIDENCE
-            and pr.get("evidence_kind") in {
-                "framework_with_market_density",
-                "claim_evidence_package",
-                "typed_signals",
-            }
+            has_editorial_package
+            and (
+                kind in EVIDENCE_KINDS
+                or kind in LEGACY_EVIDENCE_KINDS
+                or (
+                    evidence_count >= MIN_PROBLEM_EVIDENCE
+                    and kind in LEGACY_EVIDENCE_KINDS
+                )
+            )
         )
     )
+    # normative_editorial / contextual may publish without quantitative n
+    if kind in {"normative_editorial", "contextual_market_evidence"} and has_editorial_package:
+        has_framework = True
+    if kind == "direct_problem_evidence" and not (
+        specific
+        or pr.get("amendment_count")
+        or pr.get("reference_mentions")
+        or pr.get("document_divergence_count")
+    ):
+        fails.append("direct_problem_evidence_without_signals")
     # If only generic evidence_count without typed signals → fail for publish eligibility
     if not has_framework and not specific:
         if "aditiv" in theme:
@@ -1154,6 +1188,13 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
         ev = p.get("evidence_count") or 0
         # Generic evidence_count alone never proves a specific claim.
         # Accept structured claim_evidence package OR typed quantitative signals.
+        kind = (p.get("evidence_kind") or "").strip()
+        has_editorial_package = bool(
+            (p.get("official_references") or [])
+            and (p.get("technical_guide_paths") or [])
+            and (p.get("limitations") or [])
+            and (p.get("observed_pattern") or "")
+        )
         has_direct = bool(
             p.get("claim_evidence")
             or p.get("direct_evidence")
@@ -1162,20 +1203,24 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             or p.get("reference_mentions")
             or p.get("document_divergence_count")
             or (
-                p.get("evidence_kind")
+                kind
                 in {
                     "framework_with_market_density",
                     "claim_evidence_package",
                     "typed_signals",
+                    "direct_problem_evidence",
+                    "contextual_market_evidence",
+                    "normative_editorial",
                 }
-                and (p.get("official_references") or [])
-                and (p.get("technical_guide_paths") or [])
-                and (p.get("limitations") or [])
-                and (p.get("observed_pattern") or "")
-                and int(ev or 0) >= MIN_PROBLEM_EVIDENCE
+                and has_editorial_package
             )
         )
-        if has_direct and ev < MIN_PROBLEM_EVIDENCE:
+        # Quantitative floor only for kinds that rely on market mass counts
+        if (
+            has_direct
+            and kind in {"framework_with_market_density", "contextual_market_evidence"}
+            and int(ev or 0) < MIN_PROBLEM_EVIDENCE
+        ):
             fails.append(f"evidence<{MIN_PROBLEM_EVIDENCE}")
         if not has_direct:
             fails.append("no_claim_specific_evidence")

@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "audit:migration": "node scripts/audit-migration.mjs",
+    "audit:public-artifact": "python3 scripts/pseo/public_artifact.py audit",
     "validate:seo": "python3 seo/scripts/validate_seo.py",
     "test:analytics": "node seo/scripts/test_analytics_pii.mjs",
     "test:pseo-attribution": "node seo/scripts/test_pseo_attribution.mjs",
@@ -15,6 +16,8 @@
     "pseo:validate": "python3 scripts/pseo/validate.py",
     "pseo:audit": "python3 scripts/pseo/audit.py && python3 scripts/pseo/editorial_audit.py",
     "pseo:audit:production": "python3 scripts/pseo/production_audit.py",
+    "pseo:verify:release": "python3 scripts/pseo/verify_release.py",
+    "pseo:gsc:ingest": "python3 scripts/pseo/gsc_ingest.py",
     "pseo:evidence:freeze-shas": "python3 scripts/pseo/freeze_shas.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",

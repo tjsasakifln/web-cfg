@@ -1,90 +1,115 @@
 {
-  "generated_at": "2026-07-31T22:00:00Z",
+  "schema_version": "2.0.0",
   "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
-  "gsc_runbook": {
-    "property": "https://confenge.com.br/",
-    "steps": [
-      "Search Console → Sitemaps → submit https://confenge.com.br/sitemap-index.xml if not present",
-      "URL Inspection for each seed URL below",
-      "Record verdict, coverage state, last crawl, robots, Google-selected canonical",
-      "Update this file fields per URL — never invent INDEXED"
-    ]
-  },
-  "urls": [
-    {
-      "url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
-      "deployed_at": null,
-      "first_submitted_at": null,
-      "first_discovered_at": null,
-      "first_crawled_at": null,
-      "first_indexed_at": null,
-      "last_inspected_at": null,
-      "gsc_state": "NOT_INSPECTED_NO_CREDENTIALS",
-      "impressions_7d": null,
-      "clicks_7d": null,
-      "cta_events": null,
-      "qualified_leads": null,
-      "notes": "Wave 0 seed; production had prior deploy of older HTML — re-deploy required for material match"
+  "note": "No URL Inspection API credentials or validated ingest evidence. States are NOT_INSPECTED. next_wave_gate cannot be true.",
+  "urls": {
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": {
+      "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
     },
-    {
-      "url": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-      "deployed_at": null,
-      "first_submitted_at": null,
-      "first_discovered_at": null,
-      "first_crawled_at": null,
-      "first_indexed_at": null,
-      "last_inspected_at": null,
-      "gsc_state": "NOT_INSPECTED_NO_CREDENTIALS",
-      "impressions_7d": null,
-      "clicks_7d": null,
-      "cta_events": null,
-      "qualified_leads": null,
-      "notes": "Wave 0 seed"
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": {
+      "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
     },
-    {
-      "url": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-      "deployed_at": null,
-      "first_submitted_at": null,
-      "first_discovered_at": null,
-      "first_crawled_at": null,
-      "first_indexed_at": null,
-      "last_inspected_at": null,
-      "gsc_state": "NOT_INSPECTED_NO_CREDENTIALS",
-      "impressions_7d": null,
-      "clicks_7d": null,
-      "cta_events": null,
-      "qualified_leads": null,
-      "notes": "Wave 0 seed"
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": {
+      "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
     },
-    {
-      "url": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
-      "deployed_at": null,
-      "first_submitted_at": null,
-      "first_discovered_at": null,
-      "first_crawled_at": null,
-      "first_indexed_at": null,
-      "last_inspected_at": null,
-      "gsc_state": "NOT_INSPECTED_NO_CREDENTIALS",
-      "impressions_7d": null,
-      "clicks_7d": null,
-      "cta_events": null,
-      "qualified_leads": null,
-      "notes": "Wave 0 seed"
-    },
-    {
-      "url": "https://confenge.com.br/inteligencia/",
-      "deployed_at": null,
-      "first_submitted_at": null,
-      "first_discovered_at": null,
-      "first_crawled_at": null,
-      "first_indexed_at": null,
-      "last_inspected_at": null,
-      "gsc_state": "NOT_INSPECTED_NO_CREDENTIALS",
-      "impressions_7d": null,
-      "clicks_7d": null,
-      "cta_events": null,
-      "qualified_leads": null,
-      "notes": "Hub with editorial methodology; indexable when publish children exist"
+    "/radar/edificacoes-publicas-pr/": {
+      "url": "/radar/edificacoes-publicas-pr/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
     }
-  ]
+  },
+  "gsc_state_by_url": {
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": {
+      "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
+    },
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": {
+      "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
+    },
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": {
+      "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
+    },
+    "/radar/edificacoes-publicas-pr/": {
+      "url": "/radar/edificacoes-publicas-pr/",
+      "state": "NOT_INSPECTED",
+      "evidence_origin": null,
+      "captured_at": null,
+      "declared_canonical": null,
+      "google_canonical": null,
+      "last_crawl_at": null,
+      "coverage": null,
+      "verdict": null,
+      "notes": [],
+      "evidence_id": null
+    }
+  },
+  "generated_at": "2026-08-01T00:16:58Z",
+  "auditor_version": "wave0-closure-02"
 }

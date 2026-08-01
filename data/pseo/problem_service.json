@@ -4,7 +4,7 @@
     "evidence_count": 48,
     "id": "prob-orcamento-edital",
     "limitations": [
-      "Página de enquadramento problema→serviço; não substitui análise do edital concreto."
+      "Página de enquadramento problema e serviço; não substitui análise do edital concreto."
     ],
     "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
     "official_references": [
@@ -55,8 +55,9 @@
       },
       {
         "kind": "market_density",
-        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
-        "n": 48
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 48,
+        "role": "contextual_only"
       },
       {
         "kind": "explicit_limitations",
@@ -64,14 +65,15 @@
         "n": 1
       }
     ],
-    "evidence_kind": "framework_with_market_density",
+    "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
       "technical_guide",
       "observed_pattern",
       "market_density",
       "explicit_limitations"
-    ]
+    ],
+    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
     "confenge_service_slug": "auditoria-orcamento-licitacao",
@@ -128,8 +130,9 @@
       },
       {
         "kind": "market_density",
-        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
-        "n": 48
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 48,
+        "role": "contextual_only"
       },
       {
         "kind": "explicit_limitations",
@@ -137,21 +140,22 @@
         "n": 1
       }
     ],
-    "evidence_kind": "framework_with_market_density",
+    "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
       "technical_guide",
       "observed_pattern",
       "market_density",
       "explicit_limitations"
-    ]
+    ],
+    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
     "confenge_service_slug": "medicoes-glosas-obras-publicas",
     "evidence_count": 22,
     "id": "prob-medicao-glosa",
     "limitations": [
-      "Padrão qualitativo cruzado com densidade de contratos recorrentes no datalake."
+      "Padrão qualitativo cruzado com densidade de contratos recorrentes no base pública de contratos."
     ],
     "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
     "official_references": [
@@ -200,8 +204,9 @@
       },
       {
         "kind": "market_density",
-        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
-        "n": 22
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 22,
+        "role": "contextual_only"
       },
       {
         "kind": "explicit_limitations",
@@ -209,14 +214,15 @@
         "n": 1
       }
     ],
-    "evidence_kind": "framework_with_market_density",
+    "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
       "technical_guide",
       "observed_pattern",
       "market_density",
       "explicit_limitations"
-    ]
+    ],
+    "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT"
   },
   {
     "confenge_service_slug": "aditivos-obras-publicas",
@@ -273,8 +279,9 @@
       },
       {
         "kind": "market_density",
-        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
-        "n": 48
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 48,
+        "role": "contextual_only"
       },
       {
         "kind": "explicit_limitations",
@@ -282,14 +289,15 @@
         "n": 1
       }
     ],
-    "evidence_kind": "framework_with_market_density",
+    "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
       "technical_guide",
       "observed_pattern",
       "market_density",
       "explicit_limitations"
-    ]
+    ],
+    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
     "confenge_service_slug": "reequilibrio-obras-publicas",
@@ -346,8 +354,9 @@
       },
       {
         "kind": "market_density",
-        "summary": "Contratos AEC confirmados no recorte do datalake associados aos arquétipos do tema (densidade de mercado, não taxa de aditivo).",
-        "n": 27
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 27,
+        "role": "contextual_only"
       },
       {
         "kind": "explicit_limitations",
@@ -355,13 +364,14 @@
         "n": 1
       }
     ],
-    "evidence_kind": "framework_with_market_density",
+    "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
       "technical_guide",
       "observed_pattern",
       "market_density",
       "explicit_limitations"
-    ]
+    ],
+    "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT"
   }
 ]

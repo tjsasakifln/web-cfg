@@ -30,7 +30,18 @@
         "intent": "mapa_mercado"
       },
       "approval_recommendation": "reject_or_noindex",
-      "issues": []
+      "issues": [],
+      "intent": "encontrar_mercados_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Solicitar um mapa aplicado à minha empresa",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": "tiago-sasaki-editorial-audit",
+      "page_material_hash": "7ff5b67c2417b2f549f43eeab8e493f947f51935bdc31136fe344f7de6e19854"
     },
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
@@ -64,7 +75,18 @@
           "message": "Termo técnico sem acentuação editorial",
           "evidence": "Piaui"
         }
-      ]
+      ],
+      "intent": "encontrar_mercados_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Solicitar um mapa aplicado à minha empresa",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": null,
+      "page_material_hash": "9c488d51e053545667e11f70e5fe968e7b149a640ae71ee2dcf71d503a384839"
     },
     {
       "page_id": "market-edificacoes-publicas-mg",
@@ -91,7 +113,18 @@
         "intent": "mapa_mercado"
       },
       "approval_recommendation": "reject_or_noindex",
-      "issues": []
+      "issues": [],
+      "intent": "encontrar_mercados_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Solicitar um mapa aplicado à minha empresa",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": "tiago",
+      "page_material_hash": "fafd65a881b3d3bbef507b0307bb8bc723aa43c94fc0b8fc4df7514e282212d7"
     },
     {
       "page_id": "market-edificacoes-publicas-rs",
@@ -118,7 +151,18 @@
         "intent": "mapa_mercado"
       },
       "approval_recommendation": "reject_or_noindex",
-      "issues": []
+      "issues": [],
+      "intent": "encontrar_mercados_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Solicitar um mapa aplicado à minha empresa",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": null,
+      "page_material_hash": "d5b140f4d4ff19d3e3d260855e29b17139a935986393f9bc2873de79bc28eeea"
     },
     {
       "page_id": "agency-88830609",
@@ -158,7 +202,18 @@
           "message": "Amostra concentrada/insuficiente: max_single_day_share>0.70",
           "evidence": "max_single_day_share>0.70"
         }
-      ]
+      ],
+      "intent": "avaliar_orgao_comprador",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Avaliar estratégia para disputar contratos deste órgão",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": "grok-build-editorial-audit",
+      "page_material_hash": "811fb7e4d883423f212bd0953a202483d17c407b7627817a7bf9f6670a985534"
     },
     {
       "page_id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
@@ -204,7 +259,18 @@
           "message": "Amostra concentrada/insuficiente: max_buyer_share>0.60",
           "evidence": "max_buyer_share>0.60"
         }
-      ]
+      ],
+      "intent": "estimar_valores_dispersao",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Validar preço, risco e margem",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": "grok-build-editorial-audit",
+      "page_material_hash": "c57c3178efeebf23637a115966c4add7ba12975a4cedd02ff6fc885f7509b8f9"
     },
     {
       "page_id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
@@ -238,7 +304,18 @@
           "message": "Termo técnico sem acentuação editorial",
           "evidence": "Piaui"
         }
-      ]
+      ],
+      "intent": "estimar_valores_dispersao",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Validar preço, risco e margem",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": "grok-build-editorial-audit",
+      "page_material_hash": "2cea14b5866710e552b6a0d2de7928dd1b96f1a465a398cbd863050b11bc24a8"
     },
     {
       "page_id": "comp-manutencao-predial-engenharia-rs",
@@ -272,7 +349,18 @@
           "message": "Amostra concentrada/insuficiente: suppliers<3",
           "evidence": "suppliers<3"
         }
-      ]
+      ],
+      "intent": "compreender_concorrencia",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Solicitar um mapa aplicado à minha empresa",
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "indexability": "reject",
+      "reviewer": null,
+      "page_material_hash": "c3320015da1a6e08277c6ad70fe3b82839b1caf3fd062bacfef364acc52f689a"
     },
     {
       "page_id": "radar-edificacoes-publicas-pr",
@@ -299,7 +387,18 @@
         "intent": "analisar_edital"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "avaliar_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Analisar este edital antes da proposta",
+      "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
+      "indexability": "publish",
+      "reviewer": "tiago-wave0-operational",
+      "page_material_hash": "4f42f0dd42a7db493760b81f91855b6c6daced3ad4181a0a87c2c1d0c6ac751a"
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
@@ -326,7 +425,18 @@
         "intent": "analisar_edital"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "avaliar_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Analisar este edital antes da proposta",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
+      "reviewer": "grok-build-editorial-audit",
+      "page_material_hash": "7ad0261aded3c7cc0596bbb00477bdcf943c3330e719871db5fd20ead7294087"
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
@@ -353,7 +463,18 @@
         "intent": "analisar_edital"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "avaliar_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Analisar este edital antes da proposta",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
+      "reviewer": null,
+      "page_material_hash": "7658bbb3382b5c8e1536351d9f68889e6336bb980488b27a5962edd2b6a5aa3c"
     },
     {
       "page_id": "radar-saneamento-hidraulica-sc",
@@ -380,7 +501,18 @@
         "intent": "analisar_edital"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "avaliar_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Analisar este edital antes da proposta",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
+      "reviewer": null,
+      "page_material_hash": "e063d1ff348627815713b57e830838ba3d8c95e7a7e2a74f6e40f759bd8d48a6"
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
@@ -407,7 +539,18 @@
         "intent": "analisar_edital"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "avaliar_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Analisar este edital antes da proposta",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
+      "reviewer": null,
+      "page_material_hash": "b64fc8a461cb974a46f1df5c0668630a7b61681884ac705b3aaab48b0fe971f9"
     },
     {
       "page_id": "radar-edificacoes-publicas-rs",
@@ -434,7 +577,18 @@
         "intent": "analisar_edital"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "avaliar_oportunidades",
+      "evidence_kind": null,
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "Analisar este edital antes da proposta",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
+      "reviewer": null,
+      "page_material_hash": "b4287b6e3dbc35bb7f993d0cf825ea3e9b3c846761656740d8ae72be09335714"
     },
     {
       "page_id": "prob-orcamento-edital",
@@ -462,7 +616,18 @@
         "intent": "organizar_documentos"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "proteger_margem_proposta_contrato",
+      "evidence_kind": "normative_editorial",
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "auditoria-orcamento-licitacao",
+      "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
+      "indexability": "publish",
+      "reviewer": "tiago-wave0-operational",
+      "page_material_hash": "24556aa5c1cba1589f99f5f9faaba669148c229c52fbb2711a402b6763bc03ff"
     },
     {
       "page_id": "prob-sinapi-sicro",
@@ -490,7 +655,18 @@
         "intent": "organizar_documentos"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "proteger_margem_proposta_contrato",
+      "evidence_kind": "normative_editorial",
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "auditoria-orcamento-licitacao",
+      "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
+      "indexability": "publish",
+      "reviewer": "tiago-wave0-operational",
+      "page_material_hash": "0fc08c3477b246947f4363e8da7055ca125ed74cfc601233499f97c40cf191f0"
     },
     {
       "page_id": "prob-medicao-glosa",
@@ -517,7 +693,18 @@
         "intent": "organizar_documentos"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "proteger_margem_proposta_contrato",
+      "evidence_kind": "normative_editorial",
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "medicoes-glosas-obras-publicas",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
+      "reviewer": "tiago",
+      "page_material_hash": "6363510481e5d7a4bcb2a56b9a9a69f74e06d4e5f05b1e261fa3c04d3210e8c8"
     },
     {
       "page_id": "prob-aditivos-margem",
@@ -544,7 +731,18 @@
         "intent": "organizar_documentos"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "proteger_margem_proposta_contrato",
+      "evidence_kind": "normative_editorial",
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "aditivos-obras-publicas",
+      "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
+      "indexability": "publish",
+      "reviewer": "tiago-wave0-operational",
+      "page_material_hash": "0f2b510a4e2c21e9ff3abddb4dab43d9dc810149cb7c0ca7a96685207db5bb16"
     },
     {
       "page_id": "prob-reequilibrio",
@@ -572,7 +770,39 @@
         "intent": "organizar_documentos"
       },
       "approval_recommendation": "eligible_for_human_review",
-      "issues": []
+      "issues": [],
+      "intent": "proteger_margem_proposta_contrato",
+      "evidence_kind": "normative_editorial",
+      "direct_evidence_count": 0,
+      "contextual_evidence_count": 0,
+      "editorial_unique_ratio": null,
+      "similarity_max": null,
+      "commercial_offer": "reequilibrio-obras-publicas",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
+      "reviewer": "tiago",
+      "page_material_hash": "2eb9aa5110fe9ca434deb6e8277aee0b32e197dec9df32411fe8d19746c8eb32"
     }
-  ]
+  ],
+  "editorial_decisions": {
+    "market-pavimentacao-infraestrutura-viaria-sc": "REJECT_DUPLICATE_OR_WEAK",
+    "market-pavimentacao-infraestrutura-viaria-pi": "REJECT_DUPLICATE_OR_WEAK",
+    "market-edificacoes-publicas-mg": "REJECT_DUPLICATE_OR_WEAK",
+    "market-edificacoes-publicas-rs": "REJECT_DUPLICATE_OR_WEAK",
+    "agency-88830609": "REJECT_DUPLICATE_OR_WEAK",
+    "price-manutencao-predial-engenharia-rs-manutencao-predial": "REJECT_DUPLICATE_OR_WEAK",
+    "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo": "REJECT_DUPLICATE_OR_WEAK",
+    "comp-manutencao-predial-engenharia-rs": "REJECT_DUPLICATE_OR_WEAK",
+    "radar-edificacoes-publicas-pr": "PUBLISH_EDITORIAL_VALUE",
+    "radar-pavimentacao-infraestrutura-viaria-sc": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "radar-pavimentacao-infraestrutura-viaria-rs": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "radar-saneamento-hidraulica-sc": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "radar-pavimentacao-infraestrutura-viaria-pr": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "radar-edificacoes-publicas-rs": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "prob-orcamento-edital": "PUBLISH_EDITORIAL_VALUE",
+    "prob-sinapi-sicro": "PUBLISH_EDITORIAL_VALUE",
+    "prob-medicao-glosa": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "prob-aditivos-margem": "PUBLISH_EDITORIAL_VALUE",
+    "prob-reequilibrio": "NOINDEX_EVIDENCE_INSUFFICIENT"
+  }
 }

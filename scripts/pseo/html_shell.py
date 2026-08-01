@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 from typing import Any
 from urllib.parse import quote
 
@@ -98,22 +99,28 @@ def wa_link(message: str) -> str:
 
 
 def attribution_query(meta: dict[str, Any], cta_position: str) -> str:
+    """Public CTA attribution query. Never expose pipeline field names."""
     parts = []
-    for k in (
-        "pseo_page_id",
-        "page_type",
-        "archetype",
-        "segment",
-        "region",
-        "agency_id",
-        "intent",
-        "source_run_id",
-        "dataset_hash",
-        "origem",
-    ):
-        v = meta.get(k)
+    # Map internal keys → public-safe query keys (no dataset_hash / pipeline jargon)
+    key_map = (
+        ("pseo_page_id", "pseo_page_id"),
+        ("page_type", "page_type"),
+        ("archetype", "segment_key"),
+        ("segment", "segment"),
+        ("region", "region"),
+        ("agency_id", "agency_id"),
+        ("intent", "intent"),
+        ("source_run_id", "source_run_id"),
+        ("origem", "origem"),
+    )
+    for src, pub in key_map:
+        v = meta.get(src)
         if v:
-            parts.append(f"{k}={quote(str(v)[:120])}")
+            parts.append(f"{pub}={quote(str(v)[:120])}")
+    # Short snapshot fingerprint without the name "dataset_hash"
+    snap = meta.get("snapshot") or meta.get("dataset_hash")
+    if snap:
+        parts.append(f"snap={quote(str(snap)[:16])}")
     parts.append(f"cta_position={quote(cta_position)}")
     return "&".join(parts)
 
@@ -258,6 +265,28 @@ def _br(iso: str | None) -> str:
     return str(iso)
 
 
+# Internal source keys → visitor-facing labels (never emit raw pipeline names)
+_SOURCE_PUBLIC_LABELS = {
+    "pncp_supplier_contracts": "Contratos públicos (PNCP e portais correlatos)",
+    "site-confenge-guides": "Biblioteca técnica CONFENGE",
+    "pncp_raw_bids": "Editais e avisos públicos (PNCP)",
+    "sc_public_entities": "Cadastros públicos de entes e órgãos",
+}
+
+
+def public_source_label(raw: str | None) -> str:
+    """Map internal dataset keys to public labels; leave already-human text as-is."""
+    s = (raw or "").strip()
+    if not s:
+        return "Fontes públicas oficiais"
+    if s in _SOURCE_PUBLIC_LABELS:
+        return _SOURCE_PUBLIC_LABELS[s]
+    # slug-like internal keys → humanize without exposing pipeline jargon
+    if re.fullmatch(r"[a-z][a-z0-9_]{2,}", s) and "_" in s:
+        return s.replace("_", " ").capitalize()
+    return s
+
+
 def methodology_block(
     period_start: str | None,
     period_end: str | None,
@@ -265,12 +294,23 @@ def methodology_block(
     limitations: list[str],
     extra: str = "",
 ) -> str:
-    src = "".join(f"<li>{e(s)}</li>" for s in sources) or "<li>Fontes públicas do datalake CONFENGE</li>"
-    lim = "".join(f"<li>{e(s)}</li>" for s in limitations)
+    labels = [public_source_label(s) for s in (sources or [])]
+    src = "".join(f"<li>{e(s)}</li>" for s in labels) or (
+        "<li>Fontes públicas oficiais de contratações e biblioteca técnica CONFENGE</li>"
+    )
+    lim_items = []
+    for raw in limitations or []:
+        t = str(raw)
+        # Scrub residual internal phrasing if still present in snapshot limitations
+        t = t.replace("problema→serviço", "problema e serviço")
+        t = t.replace("problema->servico", "problema e serviço")
+        t = re.sub(r"\bdatalake\b", "base pública de contratos", t, flags=re.I)
+        lim_items.append(t)
+    lim = "".join(f"<li>{e(s)}</li>" for s in lim_items)
     if period_start and period_end:
         period_html = (
             f'Período dos dados: <strong><time datetime="{e(period_start)}">{e(_br(period_start))}</time></strong> '
-            f'a <strong><time datetime="{e(period_end)}">{e(_br(period_end))}</time></strong>.' 
+            f'a <strong><time datetime="{e(period_end)}">{e(_br(period_end))}</time></strong>.'
         )
     elif period_start or period_end:
         one = period_start or period_end
@@ -284,8 +324,8 @@ def methodology_block(
 <p class="eyebrow">Metodologia e limitações</p>
 <h2>Como estes dados foram produzidos</h2>
 <p>{period_html}
-Agregação read-only a partir de exportações sanitizadas do datalake (sem conexão do Netlify ao banco de produção).
-Não é monitoramento em tempo real.</p>
+Síntese a partir de registros públicos de contratação e da biblioteca técnica CONFENGE.
+Não é monitoramento em tempo real nem censo nacional.</p>
 {extra}
 <p><strong>Fontes</strong></p><ul>{src}</ul>
 <p><strong>Limitações</strong></p><ul>{lim}</ul>

@@ -1,0 +1,369 @@
+#!/usr/bin/env python3
+"""Verify a release against the live public manifest and built artifact.
+
+Steps:
+  1. Read live /.well-known/pseo-build.json
+  2. Identify deployed SHA
+  3. Run dual-UA production audit (identity-bound)
+  4. Compare production with local _site where possible
+  5. Validate sitemap/robots/canonical/internal forbidden URLs
+  6. Write SHA-bound report
+  7. Update operational result only when identities match
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import ssl
+import subprocess
+import sys
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.pseo.audit_identity import (  # noqa: E402
+    AUDITOR_VERSION,
+    STALE_CODE,
+    evaluate_audit_currency,
+    git_sha,
+    public_artifact_hash,
+    seed_set_hash,
+    snapshot_hash_from_manifest,
+)
+from scripts.pseo.gsc_gate import (  # noqa: E402
+    GSC_ACCESS_NO_CREDS,
+    compute_next_wave_gate,
+    default_not_inspected_status,
+    load_indexation_status,
+    seed_paths_from_registry,
+)
+from scripts.pseo.production_audit import (  # noqa: E402
+    SITE,
+    UA_BROWSER,
+    fetch_url,
+    run_audit,
+)
+from scripts.pseo.public_artifact import (  # noqa: E402
+    PUBLIC_DIR_NAME,
+    audit_public_artifact,
+)
+
+FORBIDDEN_LIVE_PATHS = [
+    "/data/pseo/manifest.json",
+    "/data/pseo/registry.json",
+    "/seo/pseo-operational-result.json",
+    "/scripts/pseo/build.py",
+    "/package.json",
+    "/.git/config",
+    "/.github/workflows/pseo.yml",
+]
+
+
+def _fetch_json(url: str) -> dict[str, Any] | None:
+    ctx = ssl.create_default_context()
+    req = urllib.request.Request(url, headers={"User-Agent": UA_BROWSER})
+    try:
+        with urllib.request.urlopen(req, timeout=25, context=ctx) as resp:
+            return json.loads(resp.read().decode("utf-8", errors="replace"))
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def check_forbidden_live(base_url: str) -> dict[str, Any]:
+    statuses: dict[str, Any] = {}
+    ok = True
+    for path in FORBIDDEN_LIVE_PATHS:
+        res = fetch_url(base_url.rstrip("/") + path, UA_BROWSER)
+        st = res.get("status")
+        statuses[path] = st
+        if st == 200:
+            ok = False
+    return {"ok": ok, "statuses": statuses}
+
+
+def extra_cli_on_main(extra_cli_path: Path | None = None) -> dict[str, Any]:
+    """Probe whether export entrypoint exists on extra-cli main (prefer remote truth)."""
+    # Remote probe via gh is authoritative for "on main" (local may be PR branch)
+    try:
+        out = subprocess.check_output(
+            [
+                "gh",
+                "api",
+                "repos/tjsasakifln/extra-cli/contents/scripts/pseo/export_web_cfg.py?ref=main",
+                "--jq",
+                ".sha",
+            ],
+            text=True,
+            timeout=30,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        if out:
+            main_sha = subprocess.check_output(
+                ["gh", "api", "repos/tjsasakifln/extra-cli/commits/main", "--jq", ".sha"],
+                text=True,
+                timeout=30,
+                stderr=subprocess.DEVNULL,
+            ).strip()
+            return {
+                "on_main": True,
+                "branch": "main",
+                "sha": main_sha,
+                "entrypoint": "scripts.pseo.export_web_cfg",
+                "source": "github_main",
+                "blob_sha": out,
+            }
+    except (subprocess.SubprocessError, OSError, FileNotFoundError):
+        pass
+    # Fallback: local clone only if it is already on main
+    if extra_cli_path and (extra_cli_path / "scripts" / "pseo" / "export_web_cfg.py").exists():
+        try:
+            branch = subprocess.check_output(
+                ["git", "-C", str(extra_cli_path), "rev-parse", "--abbrev-ref", "HEAD"],
+                text=True,
+                timeout=10,
+            ).strip()
+            sha = subprocess.check_output(
+                ["git", "-C", str(extra_cli_path), "rev-parse", "HEAD"],
+                text=True,
+                timeout=10,
+            ).strip()
+            on_main = branch == "main"
+            return {
+                "on_main": on_main,
+                "branch": branch,
+                "sha": sha,
+                "entrypoint": "scripts.pseo.export_web_cfg",
+                "source": str(extra_cli_path),
+                "status": None if on_main else "BLOCKED_EXTRA_CLI_NOT_MERGED",
+            }
+        except (subprocess.SubprocessError, OSError):
+            pass
+    return {
+        "on_main": False,
+        "branch": None,
+        "sha": None,
+        "entrypoint": "scripts.pseo.export_web_cfg",
+        "source": "not_found_on_main",
+        "status": "BLOCKED_EXTRA_CLI_NOT_MERGED",
+    }
+
+
+def write_operational_result(payload: dict[str, Any]) -> Path:
+    out = ROOT / "seo" / "pseo-operational-result.json"
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return out
+
+
+def verify_release(
+    *,
+    base_url: str = SITE,
+    skip_network_audit: bool = False,
+    extra_cli_path: Path | None = None,
+    update_operational: bool = True,
+) -> dict[str, Any]:
+    head = git_sha(ROOT)
+    live = _fetch_json(f"{base_url.rstrip('/')}/.well-known/pseo-build.json")
+    live_sha = (live or {}).get("web_cfg_sha")
+    live_snap = (live or {}).get("snapshot_hash_short")
+
+    art = audit_public_artifact(ROOT)
+    seeds = seed_paths_from_registry()
+    # absolute seed URLs for gate
+    seed_urls = [
+        s if s.startswith("http") else base_url.rstrip("/") + s for s in seeds
+    ]
+
+    forbidden = {"ok": None, "statuses": {}, "note": "skipped"}
+    prod_audit: dict[str, Any] = {}
+    if not skip_network_audit:
+        forbidden = check_forbidden_live(base_url)
+        prod_audit = run_audit(root=ROOT, base_url=base_url.rstrip("/"))
+    else:
+        prod_audit = {
+            "ok": False,
+            "technical_ok": False,
+            "production_audit_is_current": False,
+            "stale_code": STALE_CODE,
+            "note": "network audit skipped",
+            "audit_target_sha": head,
+            "live_manifest_sha": live_sha,
+        }
+
+    extra = extra_cli_on_main(extra_cli_path)
+    gsc = load_indexation_status()
+    if not gsc.get("urls"):
+        # ensure honest NOT_INSPECTED file
+        status_doc = default_not_inspected_status(seeds)
+        (ROOT / "seo" / "pseo-indexation-status.json").write_text(
+            json.dumps(status_doc, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        gsc = load_indexation_status()
+
+    gate = compute_next_wave_gate(
+        seed_urls=seeds,
+        gsc_access=gsc.get("gsc_access") or GSC_ACCESS_NO_CREDS,
+        gsc_by_url=gsc.get("urls") or {},
+        production_audit_ok=bool(prod_audit.get("ok")),
+        production_audit_is_current=bool(prod_audit.get("production_audit_is_current")),
+        extra_cli_on_main=bool(extra.get("on_main")),
+        reexport_without_undue_invalidation=False,
+    )
+
+    # Terminal status (honest; never PASS without GSC + current deploy audit)
+    gsc_missing = gsc.get("gsc_access") in {
+        GSC_ACCESS_NO_CREDS,
+        "NOT_INSPECTED_NO_CREDENTIALS",
+    }
+    if not art.get("ok"):
+        terminal = "BLOCKED_PUBLICATION_BOUNDARY"
+    elif not extra.get("on_main"):
+        terminal = "BLOCKED_EXTRA_CLI_NOT_MERGED"
+    elif gsc_missing:
+        # Hardening complete path: GSC absence is the primary residual blocker
+        terminal = "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED"
+    elif (
+        prod_audit.get("stale_code") == STALE_CODE
+        and not prod_audit.get("production_audit_is_current")
+        and live_sha
+        and live_sha != head
+    ):
+        terminal = "BLOCKED_PRODUCTION_AUDIT_STALE"
+    elif gate.get("allowed") and prod_audit.get("ok") and prod_audit.get(
+        "production_audit_is_current"
+    ):
+        terminal = "PASS_WAVE0_HARDENED_GSC_OBSERVED"
+    else:
+        terminal = "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED"
+
+    result = {
+        "terminal_status": terminal,
+        "web_cfg_head": head,
+        "extra_cli_head": extra.get("sha"),
+        "extra_cli_main_integration": extra,
+        "netlify_deployed_sha": live_sha,
+        "production_audit_sha": prod_audit.get("audit_target_sha") or prod_audit.get("web_cfg_sha"),
+        "production_audit_is_current": prod_audit.get("production_audit_is_current"),
+        "public_directory": PUBLIC_DIR_NAME,
+        "public_artifact_hash": art.get("public_artifact_hash")
+        or public_artifact_hash(ROOT),
+        "forbidden_public_urls_status": forbidden,
+        "snapshot_hash": snapshot_hash_from_manifest(ROOT),
+        "live_snapshot_hash_short": live_snap,
+        "seed_urls": seeds,
+        "indexable_seed_count": len(seeds),
+        "gsc_access": gsc.get("gsc_access"),
+        "gsc_state_by_url": {
+            k: v.get("state") for k, v in (gsc.get("urls") or {}).items()
+        },
+        "next_wave_gate": gate.get("next_wave_gate"),
+        "next_wave_gate_reasons": gate.get("reasons"),
+        "next_wave_gate_detail": gate,
+        "production_audit": {
+            "ok": prod_audit.get("ok"),
+            "technical_ok": prod_audit.get("technical_ok"),
+            "critical_count": len(prod_audit.get("critical") or []),
+            "stale_code": prod_audit.get("stale_code"),
+            "counts": prod_audit.get("counts"),
+        },
+        "public_artifact_audit_ok": art.get("ok"),
+        "live_manifest": live,
+        "auditor_version": AUDITOR_VERSION,
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+
+    report_path = ROOT / "seo" / "pseo-verify-release.json"
+    report_path.write_text(
+        json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+    if update_operational:
+        # Only write production_audit.ok true when identities match — never copy stale ok
+        op = {
+            "terminal_status": terminal,
+            "web_cfg_sha": head,
+            "extra_cli_sha": extra.get("sha"),
+            "extra_cli_branch": extra.get("branch"),
+            "extra_cli_main_integration": extra.get("on_main"),
+            "netlify_deployed_sha": live_sha,
+            "snapshot_hash": snapshot_hash_from_manifest(ROOT),
+            "public_directory": PUBLIC_DIR_NAME,
+            "public_artifact_hash": result["public_artifact_hash"],
+            "seed_urls": [base_url.rstrip("/") + s for s in seeds],
+            "indexable_seed_count": len(seeds),
+            "production_audit": {
+                "ok": bool(prod_audit.get("ok")),
+                "technical_ok": prod_audit.get("technical_ok"),
+                "production_audit_is_current": prod_audit.get(
+                    "production_audit_is_current"
+                ),
+                "stale_code": prod_audit.get("stale_code"),
+                "critical_count": len(prod_audit.get("critical") or []),
+                "audit_target_sha": prod_audit.get("audit_target_sha"),
+                "live_manifest_sha": prod_audit.get("live_manifest_sha"),
+            },
+            "gsc_access": gsc.get("gsc_access") or GSC_ACCESS_NO_CREDS,
+            "gsc_status_by_url": result["gsc_state_by_url"],
+            "next_wave_gate": {
+                # Calculated only — never hand-edit true under NOT_INSPECTED
+                "allowed": gate.get("allowed"),
+                "gsc_discovery_or_crawl_without_soft404": gate.get(
+                    "gsc_discovery_or_crawl_without_soft404"
+                ),
+                "reasons": gate.get("reasons"),
+            },
+            "forbidden_public_urls_status": forbidden,
+            "stages_reached": {
+                "GENERATED_LOCAL": True,
+                "QUALITY_ELIGIBLE": True,
+                "EDITORIALLY_APPROVED": True,
+                "DEPLOYED_PRODUCTION": bool(live_sha),
+                "CRAWLABLE_PRODUCTION": bool(
+                    prod_audit.get("technical_ok")
+                    and (prod_audit.get("counts") or {}).get("crawlable_production", 0)
+                    > 0
+                ),
+                "INDEXED_BY_GOOGLE": False,
+            },
+            "public_manifest": live,
+            "unresolved_risks": list(gate.get("reasons") or []),
+            "generated_at": result["generated_at"],
+            "auditor_version": AUDITOR_VERSION,
+        }
+        if not extra.get("on_main"):
+            op["unresolved_risks"].append("BLOCKED_EXTRA_CLI_NOT_MERGED")
+        if gsc.get("gsc_access") in {GSC_ACCESS_NO_CREDS, "NOT_INSPECTED_NO_CREDENTIALS"}:
+            op["unresolved_risks"].append("GSC credentials absent — NOT_INSPECTED")
+        write_operational_result(op)
+
+    return result
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description="Verify release vs live deploy")
+    ap.add_argument("--base-url", default=SITE)
+    ap.add_argument("--skip-network-audit", action="store_true")
+    ap.add_argument("--extra-cli", type=Path, default=None)
+    ap.add_argument("--no-operational", action="store_true")
+    args = ap.parse_args(argv)
+    result = verify_release(
+        base_url=args.base_url,
+        skip_network_audit=args.skip_network_audit,
+        extra_cli_path=args.extra_cli,
+        update_operational=not args.no_operational,
+    )
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    # Non-zero only on publication boundary failure
+    if result.get("terminal_status") == "BLOCKED_PUBLICATION_BOUNDARY":
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

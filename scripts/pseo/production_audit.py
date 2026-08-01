@@ -294,10 +294,12 @@ def load_sitemap_urls(path: Path) -> set[str]:
 
 def local_html_hash(root: Path, path: str) -> str | None:
     rel = path.strip("/")
-    fp = root / rel / "index.html"
-    if not fp.exists():
-        return None
-    return _sha256_bytes(fp.read_bytes())
+    # Prefer isolated public artifact when present (Netlify publish = _site)
+    for base in (root / "_site", root):
+        fp = base / rel / "index.html"
+        if fp.exists():
+            return _sha256_bytes(fp.read_bytes())
+    return None
 
 
 def collect_targets(
@@ -643,15 +645,75 @@ def run_audit(
 
     # global: netlify host as canonical anywhere
     web_cfg_sha = _git_sha(root)
+    technical_ok = len(critical) == 0
+
+    # Deploy-bound identity (never copy ok from a prior SHA)
+    from scripts.pseo.audit_identity import (
+        bind_ok_to_identity,
+        evaluate_audit_currency,
+        identity_block,
+        public_artifact_hash,
+        seed_set_hash,
+        snapshot_hash_from_manifest,
+    )
+
+    seed_urls = [p for p, role in targets if role == "publish"]
+    live_manifest_sha = None
+    live_snapshot_short = None
+    try:
+        man_res = fetch_url(f"{base_url}/.well-known/pseo-build.json", UA_BROWSER)
+        if man_res.get("status") == 200 and man_res.get("html_snippet"):
+            # body may be full JSON in snippet if small; re-fetch full
+            req = urllib.request.Request(
+                f"{base_url}/.well-known/pseo-build.json",
+                headers={"User-Agent": UA_BROWSER},
+            )
+            with urllib.request.urlopen(req, timeout=25) as r:
+                live_man = json.loads(r.read().decode("utf-8", errors="replace"))
+            live_manifest_sha = live_man.get("web_cfg_sha")
+            live_snapshot_short = live_man.get("snapshot_hash_short")
+    except Exception:  # noqa: BLE001
+        pass
+
+    snap_hash = snapshot_hash_from_manifest(root) or reg.get("dataset_hash")
+    art_hash = public_artifact_hash(root, "_site")
+    identity = identity_block(
+        audit_target_sha=web_cfg_sha or "unknown",
+        live_manifest_sha=live_manifest_sha,
+        snapshot_hash=snap_hash,
+        public_artifact_hash_value=art_hash,
+        seed_urls=seed_urls,
+    )
+    currency = evaluate_audit_currency(
+        identity,
+        netlify_deployed_sha=live_manifest_sha,
+        live_snapshot_hash=live_snapshot_short,
+        current_seed_set_hash=seed_set_hash(seed_urls),
+    )
+    bound = bind_ok_to_identity(technical_ok, identity, currency)
+
     result = {
-        "ok": len(critical) == 0,
+        "ok": bound["ok"],
+        "technical_ok": technical_ok,
+        "production_audit_is_current": bound["production_audit_is_current"],
+        "stale_code": bound.get("stale_code"),
+        "identity_mismatches": bound.get("mismatches") or [],
+        "audit_generated_at": identity["audit_generated_at"],
+        "audit_target_sha": identity["audit_target_sha"],
+        "live_manifest_sha": identity["live_manifest_sha"],
+        "snapshot_hash": identity["snapshot_hash"],
+        "public_artifact_hash": identity["public_artifact_hash"],
+        "seed_set_hash": identity["seed_set_hash"],
+        "auditor_version": identity["auditor_version"],
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "base_url": base_url,
         "web_cfg_sha": web_cfg_sha,
+        "netlify_deployed_sha": live_manifest_sha,
         "dataset_hash": reg.get("dataset_hash"),
         "vocabulary_note": (
             "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. "
-            "index,follow / sitemap / local build never mean 'indexado'."
+            "index,follow / sitemap / local build never mean 'indexado'. "
+            "ok=true only when technical audit passes AND identities match live deploy."
         ),
         "sitemap": {
             "url_count": len(sitemap_urls),

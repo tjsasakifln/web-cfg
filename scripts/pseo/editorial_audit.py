@@ -28,6 +28,25 @@ INTERNAL_SLUG_RE = re.compile(
     r"comparison_group|object_pattern|archetype_id)\b",
     re.I,
 )
+
+# Governance / pipeline language that must never appear in visitor-facing HTML
+FORBIDDEN_PUBLIC_PHRASES = [
+    re.compile(r"Esta p[aá]gina s[oó] deve alegar evid[eê]ncia emp[ií]rica", re.I),
+    re.compile(r"n[aã]o contagens gen[eé]ricas de contratos", re.I),
+    re.compile(r"contagens gen[eé]ricas de contratos", re.I),
+    re.compile(r"problema\s*→\s*servi[cç]o", re.I),
+    re.compile(r"quality\s*gate", re.I),
+    re.compile(r"dataset[_\s-]*hash", re.I),
+    re.compile(r"\bpipeline\b", re.I),
+    re.compile(r"datalake\s+sanitizado", re.I),
+    re.compile(r"\bdatalake\b", re.I),
+    re.compile(r"pncp_supplier_contracts", re.I),
+    re.compile(r"site-confenge-guides", re.I),
+    re.compile(r"exporta[cç][oõ]es sanitizadas do datalake", re.I),
+    re.compile(r"sem conex[aã]o do Netlify ao banco", re.I),
+    re.compile(r"PUBLISH_DIRECT_EVIDENCE|NOINDEX_EVIDENCE_INSUFFICIENT|REJECT_DUPLICATE", re.I),
+    re.compile(r"framework_with_market_density", re.I),
+]
 SERVICE_PATH_RE = re.compile(r"Servi[cç]o\s+CONFENGE:\s*/[a-z0-9\-/]+/?", re.I)
 INGESTION_NAME_RE = re.compile(r"\bMRS-PREFEITURA|\bMRS-[A-Z]", re.I)
 ZERO_MONEY_RE = re.compile(r"R\$\s*0,00")
@@ -193,6 +212,37 @@ def audit_page(reg: dict[str, Any], html_path: Path | None) -> PageAudit:
     if ZERO_MONEY_RE.search(text) and ptype == "radar":
         issues.append(Issue("zero_for_missing_value", "P0", "R$ 0,00 usado (possível valor ausente)", "R$ 0,00"))
 
+    # Internal governance / pipeline language on public HTML (visible + source)
+    for pat in FORBIDDEN_PUBLIC_PHRASES:
+        m = pat.search(text) or pat.search(html)
+        if m:
+            issues.append(
+                Issue(
+                    "internal_language_public",
+                    "P0",
+                    "Linguagem interna de governança/pipeline no HTML público",
+                    m.group(0)[:120],
+                )
+            )
+            break
+
+    # Decorative generic contract count presented as causal evidence on problem pages
+    if ptype == "problem_service" and status == "publish":
+        if re.search(
+            r"(taxa de aditivo|prova de glosa|frequ[eê]ncia do problema).{0,40}\d+\s*contratos"
+            r"|\d+\s*contratos.{0,40}(taxa de aditivo|prova|incid[eê]ncia do problema)",
+            text,
+            re.I,
+        ):
+            issues.append(
+                Issue(
+                    "decorative_count_as_causal",
+                    "P0",
+                    "Contagem genérica apresentada como evidência causal",
+                    "contract_count_causal",
+                )
+            )
+
     # Duplicates in tables
     if table_rows:
         c = Counter(table_rows)
@@ -289,7 +339,13 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
     results: list[PageAudit] = []
     for p in pages:
         url = (p.get("url") or "").strip("/")
-        html_path = root / url / "index.html" if url else None
+        html_path = None
+        if url:
+            for base in (root / "_site", root):
+                cand = base / url / "index.html"
+                if cand.exists():
+                    html_path = cand
+                    break
         results.append(audit_page(p, html_path))
 
     # Cross-page generic block detection for problem pages.
@@ -351,19 +407,66 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
     p0_count = sum(1 for r in results for i in r.issues if i.severity == "P0")
     ok = len(publish_fails) == 0
 
+    # Enrich with evidence_kind / editorial decision fields (Frente G)
+    ps_by_id: dict[str, dict] = {}
+    ps_path = root / "data" / "pseo" / "problem_service.json"
+    if ps_path.exists():
+        try:
+            for row in json.loads(ps_path.read_text(encoding="utf-8")):
+                if row.get("id"):
+                    ps_by_id[row["id"]] = row
+        except (OSError, json.JSONDecodeError):
+            pass
+    reg_by_id = {p.get("page_id"): p for p in pages}
+
+    enriched_pages = []
+    for r in results:
+        base = {k: v for k, v in asdict(r).items() if k != "issues"}
+        base["issues"] = [asdict(i) for i in r.issues]
+        reg = reg_by_id.get(r.page_id) or {}
+        ps = ps_by_id.get(r.page_id) or {}
+        kind = ps.get("evidence_kind") or reg.get("evidence_kind")
+        ed = ps.get("editorial_decision")
+        if not ed:
+            if r.status == "publish" and kind == "direct_problem_evidence":
+                ed = "PUBLISH_DIRECT_EVIDENCE"
+            elif r.status == "publish":
+                ed = "PUBLISH_EDITORIAL_VALUE"
+            elif r.status == "reject":
+                ed = "REJECT_DUPLICATE_OR_WEAK"
+            else:
+                ed = "NOINDEX_EVIDENCE_INSUFFICIENT"
+        base["intent"] = reg.get("intent") or reg.get("cta_intent")
+        base["evidence_kind"] = kind
+        base["direct_evidence_count"] = (
+            1
+            if kind == "direct_problem_evidence"
+            else 0
+        )
+        base["contextual_evidence_count"] = (
+            1
+            if kind == "contextual_market_evidence"
+            else 0
+        )
+        base["editorial_unique_ratio"] = None
+        base["similarity_max"] = None
+        base["commercial_offer"] = ps.get("confenge_service_slug") or reg.get("cta_label")
+        base["editorial_decision"] = ed
+        base["indexability"] = r.status
+        base["reviewer"] = reg.get("reviewer") or reg.get("approver")
+        base["page_material_hash"] = reg.get("page_material_hash")
+        enriched_pages.append(base)
+
     report = {
         "ok": ok,
         "generated_from": str(reg_path.relative_to(root)),
         "page_count": len(results),
         "publish_fail_count": len(publish_fails),
         "p0_issue_count": p0_count,
-        "pages": [
-            {
-                **{k: v for k, v in asdict(r).items() if k != "issues"},
-                "issues": [asdict(i) for i in r.issues],
-            }
-            for r in results
-        ],
+        "pages": enriched_pages,
+        "editorial_decisions": {
+            p["page_id"]: p.get("editorial_decision") for p in enriched_pages
+        },
     }
 
     out_json = root / "seo" / "pseo-editorial-report.json"

@@ -24,6 +24,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.pseo.build import build  # noqa: E402
+from scripts.pseo.public_artifact import (  # noqa: E402
+    PUBLIC_DIR_NAME,
+    assemble_public_artifact,
+    audit_public_artifact,
+)
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
 
@@ -54,6 +59,7 @@ def write_public_manifest(summary: dict, snap: dict) -> Path:
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "data_as_of": manifest.get("data_as_of"),
         "published_page_count": len(pubs),
+        "public_directory": PUBLIC_DIR_NAME,
         "sitemap_urls": [
             "https://confenge.com.br/sitemap-index.xml",
             "https://confenge.com.br/sitemap.xml",
@@ -121,16 +127,25 @@ def main(argv: list[str] | None = None) -> int:
         sp = ROOT / script
         if not sp.exists():
             continue
-        gate = run_node_gate(str(sp.relative_to(ROOT)) if False else str(sp))
         # node scripts may use paths relative to cwd
         gate = run_node_gate(script)
         if not gate["ok"]:
             errors.append(f"gate failed: {script} rc={gate['returncode']}")
 
+    # Isolated public artifact for Netlify publish = _site
+    artifact = assemble_public_artifact(ROOT)
+    if not artifact.get("ok"):
+        errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
+    audit = audit_public_artifact(ROOT)
+    if not audit.get("ok"):
+        errors.extend(audit.get("errors") or ["audit_public_artifact failed"])
+
     report = {
         "ok": len(errors) == 0,
         "web_cfg_sha": _git_sha(),
         "manifest_public": str(man_path.relative_to(ROOT)),
+        "public_directory": PUBLIC_DIR_NAME,
+        "public_artifact_hash": artifact.get("public_artifact_hash") or audit.get("public_artifact_hash"),
         "build_summary": {
             "dataset_hash": summary.get("dataset_hash"),
             "counts": summary.get("counts"),
@@ -138,6 +153,12 @@ def main(argv: list[str] | None = None) -> int:
             "pages_written": summary.get("pages_written"),
         },
         "validate": {"ok": v.get("ok"), "error_count": len(v.get("errors") or [])},
+        "public_artifact": {
+            "assembled": True,
+            "audit_ok": audit.get("ok"),
+            "file_count": audit.get("file_count"),
+            "finding_count": len(audit.get("findings") or []),
+        },
         "errors": errors,
     }
     out = ROOT / "seo" / "pseo-site-build-report.json"

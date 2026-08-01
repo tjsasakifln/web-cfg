@@ -1,9 +1,10 @@
 # Single deterministic build: validate snapshot → generate pSEO pages/hubs/sitemaps
-# → public manifest → SEO/attribution gates. Netlify must not call the private DB.
-# Redirect rules live in `_redirects` (publish root).
+# → public manifest → assemble isolated _site → SEO/attribution gates.
+# Netlify must not call the private DB. Publish ONLY the public artifact.
+# Redirect rules live in `_redirects` (copied into _site).
 [build]
   command = "npm run build:site"
-  publish = "."
+  publish = "_site"
   # Skip publish when only campaign evidence / audit reports change so freezing
   # deploy SHAs into JSON cannot advance live /.well-known/pseo-build.json.
   ignore = "bash scripts/pseo/ignore_evidence_build.sh"
