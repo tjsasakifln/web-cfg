@@ -4,17 +4,17 @@
   "production_audit_is_current": true,
   "stale_code": null,
   "identity_mismatches": [],
-  "audit_generated_at": "2026-08-01T00:38:03Z",
-  "audit_target_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
-  "live_manifest_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
+  "audit_generated_at": "2026-08-01T00:49:12Z",
+  "audit_target_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+  "live_manifest_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
   "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
-  "public_artifact_hash": "e3c45b6fa4b9166e8fa41532c9a7e59afe387911d0c3fcb3c6176a63d84937fe",
+  "public_artifact_hash": "a4ea2776862932d0a3bca108e3137c67430d10b7553ecc4edb8db05ab0293c80",
   "seed_set_hash": "ebd147bc09eb30255889c5c37b449679abd2720833ed223d0dcd8f3ba44666c4",
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-01T00:38:03.859609+00:00",
+  "generated_at": "2026-08-01T00:49:12.290081+00:00",
   "base_url": "https://confenge.com.br",
-  "web_cfg_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
-  "netlify_deployed_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
+  "web_cfg_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+  "netlify_deployed_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
   "dataset_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "vocabulary_note": "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build never mean 'indexado'. ok=true only when technical audit passes AND identities match live deploy.",
   "sitemap": {
@@ -146,7 +146,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -252,7 +252,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -319,7 +319,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -414,7 +414,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -481,7 +481,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -520,7 +520,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535981"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -615,7 +615,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -654,7 +654,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -682,7 +682,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -749,7 +749,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -816,7 +816,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -855,7 +855,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -883,7 +883,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -950,7 +950,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -1017,7 +1017,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -1056,7 +1056,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {

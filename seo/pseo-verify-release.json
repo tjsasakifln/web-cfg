@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "12a80737284b05d1e05f399c091ccc9cd44b5888",
+  "web_cfg_head": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "on_main": true,
@@ -16,11 +16,11 @@
     "source_branch": "feat/pseo-semantic-sota",
     "reason": "source_commit_lookup_failed_or_missing"
   },
-  "netlify_deployed_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
-  "production_audit_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
+  "netlify_deployed_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+  "production_audit_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
   "production_audit_is_current": true,
   "public_directory": "_site",
-  "public_artifact_hash": "e3c45b6fa4b9166e8fa41532c9a7e59afe387911d0c3fcb3c6176a63d84937fe",
+  "public_artifact_hash": "a4ea2776862932d0a3bca108e3137c67430d10b7553ecc4edb8db05ab0293c80",
   "forbidden_public_urls_status": {
     "ok": true,
     "statuses": {
@@ -81,7 +81,7 @@
       ],
       "blocking": []
     },
-    "computed_at": "2026-08-01T00:38:05Z",
+    "computed_at": "2026-08-01T00:49:13Z",
     "auditor_version": "wave0-closure-02"
   },
   "production_audit": {
@@ -100,10 +100,10 @@
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
+    "web_cfg_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
     "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:37:26Z",
+    "generated_at": "2026-08-01T00:48:23Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "public_directory": "_site",
@@ -115,5 +115,5 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-01T00:38:05Z"
+  "generated_at": "2026-08-01T00:49:13Z"
 }
