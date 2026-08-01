@@ -1,0 +1,7 @@
+post-build:site verification 2026-08-01
+inteligencia H1: O mercado público deixa rastros...
+radar CTA: Configurar meu radar de oportunidades
+scenario inconsistencia: no Oferta coerente / organizar documentos / enquadramento problema
+brand tests: 15/15 OK
+wave0+semantic: 33 passed
+build:site: ok true

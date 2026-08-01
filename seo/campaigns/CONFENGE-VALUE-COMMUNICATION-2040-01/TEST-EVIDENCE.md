@@ -34,3 +34,15 @@ npm run audit:public-artifact
 ## Snapshot integrity fix
 
 Filled missing `evidence_kind` on 5 problem_service rows; recomputed `dataset_hash` / checksums / registry alignment (required for fail-closed snapshot).
+
+
+## Skeptic remediation (hub regeneration)
+
+After initial PR, `build:site` overwrote hand-edited hubs. Fixed at source:
+
+- `scripts/pseo/build.py` — decision-first inteligência + durable radar empty state
+- `scripts/pseo/render.py` — `render_hub` empty CTA; problem_service WA/limit scrub
+- `scripts/pseo/html_shell.py` — confenge_help eyebrow “Atuação adequada”
+- `scripts/pseo/score.py` — cta_label “Revisar esta oportunidade”
+
+Re-verified: brand 15/15, wave0+semantic 33 passed, build:site ok.
