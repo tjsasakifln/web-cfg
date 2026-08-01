@@ -32,8 +32,10 @@ INTERNAL_SLUG_RE = re.compile(
 # Governance / pipeline language that must never appear in visitor-facing HTML
 FORBIDDEN_PUBLIC_PHRASES = [
     re.compile(r"Esta p[aá]gina s[oó] deve alegar evid[eê]ncia emp[ií]rica", re.I),
-    re.compile(r"n[aã]o contagens? gen[eé]ricas? de contratos", re.I),
-    re.compile(r"contagens? gen[eé]ricas? de contratos", re.I),
+    # contagem (singular) / contagens (plural): shared stem is contage + m|ns
+    # (contagens? is wrong — it matches contagen/contagens, never contagem)
+    re.compile(r"n[aã]o\s+contage(?:m|ns)\s+gen[eé]ric[ao]s?\s+de\s+contratos", re.I),
+    re.compile(r"contage(?:m|ns)\s+gen[eé]ric[ao]s?\s+de\s+contratos", re.I),
     re.compile(r"problema\s*→\s*servi[cç]o", re.I),
     re.compile(r"quality\s*gate", re.I),
     re.compile(r"dataset[_\s-]*hash", re.I),

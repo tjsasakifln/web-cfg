@@ -326,6 +326,62 @@ class TestForbiddenPhraseDetector(unittest.TestCase):
             codes = {i.code for i in result.issues}
             self.assertIn("internal_language_public", codes)
 
+    def test_editorial_flags_singular_contagem_generica(self):
+        """Regex must match singular contagem (not only plural contagens)."""
+        from scripts.pseo.editorial_audit import FORBIDDEN_PUBLIC_PHRASES, audit_page
+
+        singular = "não com contagem genérica de contratos"
+        self.assertTrue(
+            any(p.search(singular) for p in FORBIDDEN_PUBLIC_PHRASES),
+            "FORBIDDEN_PUBLIC_PHRASES must match singular contagem genérica",
+        )
+        plural = "não contagens genéricas de contratos"
+        self.assertTrue(
+            any(p.search(plural) for p in FORBIDDEN_PUBLIC_PHRASES),
+            "FORBIDDEN_PUBLIC_PHRASES must match plural contagens genéricas",
+        )
+
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "index.html"
+            p.write_text(
+                f"<html><body><p>Disputas se resolvem com diário — {singular}.</p></body></html>",
+                encoding="utf-8",
+            )
+            reg = {
+                "page_id": "prob-medicao-glosa",
+                "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+                "page_type": "problem_service",
+                "status": "noindex",
+                "human_review": "PENDING",
+                "title": "Medição e glosa",
+            }
+            result = audit_page(reg, p)
+            codes = {i.code for i in result.issues}
+            self.assertIn("internal_language_public", codes)
+
+    def test_rendered_problem_pages_have_no_contagem_generica(self):
+        """Shipped render path must not emit singular/plural contagem genérica."""
+        from scripts.pseo.render import render_candidate
+        from scripts.pseo.schema import validate_snapshot
+        from scripts.pseo.score import build_candidates
+
+        snap = validate_snapshot(ROOT / "data" / "pseo")
+        cands = build_candidates(snap["data"], snap["manifest"])
+        problems = [c for c in cands if c.page_type == "problem_service"]
+        self.assertTrue(problems)
+        for c in problems:
+            html = render_candidate(c, snap["manifest"])
+            self.assertNotIn(
+                "contagem genérica",
+                html.lower(),
+                f"{c.page_id} still contains contagem genérica",
+            )
+            self.assertNotIn(
+                "contagens genéricas",
+                html.lower(),
+                f"{c.page_id} still contains contagens genéricas",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

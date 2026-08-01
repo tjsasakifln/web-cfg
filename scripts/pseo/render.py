@@ -219,7 +219,7 @@ def _problem_decision_copy(p: dict) -> str:
         )
     return (
         f"Em {label}, a decisão é qual ação comercial/técnica tomar com base em evidência "
-        "documental específica — não em contagem genérica de contratos."
+        "documental específica — não em volume de mercado sem vínculo ao caso."
     )
 
 
@@ -370,11 +370,11 @@ def _problem_mass_copy(p: dict) -> str:
         return (
             f"Em contratos de {arches} com execução recorrente, disputas de critério de "
             "medição e glosa se resolvem com diário, memória de cálculo e parcela "
-            "incontroversa — não com contagem genérica de contratos."
+            "incontroversa — não com volume de mercado sem vínculo ao caso."
         )
     return (
         f"Orientação técnica para {arches} com base em legislação, guias e prática "
-        "profissional — sem usar contagem genérica de contratos como prova do problema."
+        "profissional — sem usar volume de mercado como prova do problema concreto."
     )
 
 
