@@ -3,7 +3,7 @@
     "indexable": false,
     "publish_ready": false,
     "reason": "human approval artifact missing",
-    "status": "REVIEW_REQUIRED"
+    "status": "CLASSIFIER_GATE_INCONCLUSIVE"
   },
   "checksums": {
     "agencies.json": "5d67f65379ffb1cd69ec9fea1c8372da12d124f7416ed553548876b0b22c89a8",
@@ -13,8 +13,8 @@
     "icp_methodology.json": "8884e6d8d8aa6e57bd66c0174a3a1b9e9834a847d59a8c8dc40c88cc177b72e1",
     "markets.json": "ee00b94b2eec62676322bbf86a11838dfeaadd8f5708467c17af781b4735b501",
     "opportunities.json": "bde4166c6152f4a5782fc81aa280e06e22f1ef978a633f9e7234de84685d8bdc",
-    "prices.json": "34a04ae9298be2c5e8950207ab693a075910f39272191337c78fd4e2c91b70cb",
-    "problem_service.json": "e3a897b6798bc4f4d1005194b714a36ea8f27a941a5fc433f0e3ab8610519ace",
+    "prices.json": "00f3f45b4d94e89ed64bc8d0c65bd28e7c37c52452266f5a6657656a1a5e112c",
+    "problem_service.json": "68a2210b233df93175eec526bce99db9c0eb136193636aabd5866f83ffa88abf",
     "schema.json": "77de5b81ae331f38d03150fae556caa0bb987268b8618689855e00abc4e1dc8e"
   },
   "classification_counts": {
@@ -29,14 +29,21 @@
   },
   "classifier_gate": {
     "gold_path": "/mnt/d/extra consultoria/.worktrees/pseo-national-engine/tests/pseo/fixtures/gold_classification.json",
+    "inconclusive": true,
     "metrics": {
       "by_segment": {
         "alimentacao": {
           "fn": 0,
           "fp": 0,
           "n": 1,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "climatizacao": {
@@ -44,15 +51,27 @@
           "fp": 0,
           "n": 5,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.5655,
+            "n": 5
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 5
         },
         "edge": {
           "fn": 0,
           "fp": 0,
           "n": 8,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "edificacoes": {
@@ -60,23 +79,41 @@
           "fp": 0,
           "n": 7,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.6457,
+            "n": 7
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 7
         },
         "educacao": {
           "fn": 0,
           "fp": 0,
           "n": 3,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "equipamento": {
           "fn": 0,
           "fp": 0,
           "n": 6,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "estruturas": {
@@ -84,7 +121,13 @@
           "fp": 0,
           "n": 1,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.2065,
+            "n": 1
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 1
         },
         "fase_preparatoria": {
@@ -92,7 +135,13 @@
           "fp": 0,
           "n": 1,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.2065,
+            "n": 1
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 1
         },
         "fiscalizacao": {
@@ -100,31 +149,55 @@
           "fp": 0,
           "n": 1,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.2065,
+            "n": 1
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 1
         },
         "fornecimento": {
           "fn": 0,
           "fp": 0,
           "n": 5,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "limpeza": {
           "fn": 0,
           "fp": 0,
           "n": 6,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "locacao": {
           "fn": 0,
           "fp": 0,
           "n": 6,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "manutencao": {
@@ -132,7 +205,13 @@
           "fp": 0,
           "n": 5,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.5655,
+            "n": 5
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 5
         },
         "pavimentacao": {
@@ -140,15 +219,27 @@
           "fp": 0,
           "n": 14,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.7847,
+            "n": 14
+          },
           "recall": 1.0,
+          "sample_status": "wide_ci",
           "tp": 14
         },
         "publicidade": {
           "fn": 0,
           "fp": 0,
           "n": 2,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "reformas": {
@@ -156,7 +247,13 @@
           "fp": 0,
           "n": 1,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.2065,
+            "n": 1
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 1
         },
         "saneamento": {
@@ -164,62 +261,84 @@
           "fp": 0,
           "n": 4,
           "precision": 1.0,
+          "precision_ci95": {
+            "high": 1.0,
+            "low": 0.5101,
+            "n": 4
+          },
           "recall": 1.0,
+          "sample_status": "insufficient_sample",
           "tp": 4
         },
         "saude": {
           "fn": 0,
           "fp": 0,
           "n": 2,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "software": {
           "fn": 0,
           "fp": 0,
           "n": 5,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "transporte": {
           "fn": 0,
           "fp": 0,
           "n": 5,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "treinamento": {
           "fn": 0,
           "fp": 0,
           "n": 1,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
         },
         "vigilancia": {
           "fn": 0,
           "fp": 0,
           "n": 2,
-          "precision": 1.0,
-          "recall": 1.0,
+          "precision": null,
+          "precision_ci95": {
+            "high": null,
+            "low": null,
+            "n": 0
+          },
+          "recall": null,
+          "sample_status": "insufficient_sample",
           "tp": 0
-        }
-      },
-      "confusion": {
-        "aec_confirmed": {
-          "aec_confirmed": 39
-        },
-        "ambiguous": {
-          "ambiguous": 4
-        },
-        "insufficient_context": {
-          "insufficient_context": 4
-        },
-        "non_aec": {
-          "non_aec": 44
         }
       },
       "f1_aec_confirmed": 1.0,
@@ -229,23 +348,72 @@
       "fp": 0,
       "gates": {
         "fp_ok": true,
-        "min_gold_n": 30,
+        "inconclusive": true,
+        "inconclusive_reasons": [
+          "segments_insufficient_sample=['alimentacao', 'climatizacao', 'edge', 'edificacoes', 'educacao', 'equipamento', 'estruturas', 'fase_preparatoria', 'fiscalizacao', 'fornecimento', 'limpeza', 'locacao', 'manutencao', 'publicidade', 'reformas', 'saneamento', 'saude', 'software', 'transporte', 'treinamento', 'vigilancia']",
+          "segments_wide_ci=['pavimentacao:ci_low=0.7847,n=14']"
+        ],
+        "insufficient_segments": [
+          "alimentacao",
+          "climatizacao",
+          "edge",
+          "edificacoes",
+          "educacao",
+          "equipamento",
+          "estruturas",
+          "fase_preparatoria",
+          "fiscalizacao",
+          "fornecimento",
+          "limpeza",
+          "locacao",
+          "manutencao",
+          "publicidade",
+          "reformas",
+          "saneamento",
+          "saude",
+          "software",
+          "transporte",
+          "treinamento",
+          "vigilancia"
+        ],
+        "min_global_exp_pos": 30,
+        "min_global_pred_pos": 30,
+        "min_gold_n": 50,
+        "min_seg_n": 10,
         "n_ok": true,
+        "note": "publish_ok requires adequate sample sizes with Wilson CI; perfect point estimates on thin fixtures are inconclusive, not pass",
         "precision_global_ok": true,
         "precision_threshold": 0.97,
-        "publish_ok": true,
+        "publish_ok": false,
+        "recall_global_ok": true,
+        "recall_threshold": 0.9,
         "segment_failures": [],
         "segment_precision_ok": true,
-        "segment_precision_threshold": 0.95
+        "segment_precision_threshold": 0.95,
+        "status": "inconclusive",
+        "wide_ci_segments": [
+          "pavimentacao:ci_low=0.7847,n=14"
+        ]
       },
       "n": 91,
       "precision_aec_confirmed": 1.0,
+      "precision_ci95": {
+        "high": 1.0,
+        "low": 0.9103,
+        "n": 39
+      },
       "recall_aec_confirmed": 1.0,
+      "recall_ci95": {
+        "high": 1.0,
+        "low": 0.9103,
+        "n": 39
+      },
       "tn": 52,
       "tp": 39
     },
-    "ok": true,
-    "reason": null
+    "ok": false,
+    "reason": "segments_insufficient_sample=['alimentacao', 'climatizacao', 'edge', 'edificacoes', 'educacao', 'equipamento', 'estruturas', 'fase_preparatoria', 'fiscalizacao', 'fornecimento', 'limpeza', 'locacao', 'manutencao', 'publicidade', 'reformas', 'saneamento', 'saude', 'software', 'transporte', 'treinamento', 'vigilancia']; segments_wide_ci=['pavimentacao:ci_low=0.7847,n=14']",
+    "status": "inconclusive"
   },
   "counts": {
     "aec_bids_kept": 287,
@@ -278,17 +446,17 @@
     "opportunities": 10,
     "opportunity_intel": 1713,
     "pncp_supplier_contracts": 214630,
-    "prices": 911,
+    "prices": 503,
     "problem_service": 5,
     "raw_contracts": 214630,
     "raw_materialized": false,
     "sc_public_entities": 2085,
     "snapshot_isolation": "REPEATABLE READ",
     "staging": true,
-    "staging_path": "/tmp/pseo-staging-nju4dmdc.sqlite"
+    "staging_path": "/tmp/pseo-staging-rpmwyj3d.sqlite"
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "c4b8b017f4f819e596ff083958ddd34f70db95cc1c0b344ef1f02a9374061a08",
+  "dataset_hash": "1fa346d1a68506bfdfd9eb191a11d09fb8e354ab58b720989ad3ddd607bd4668",
   "denominators": {
     "aec_confirmed_bids": 287,
     "aec_confirmed_contracts": 54055,
@@ -325,7 +493,7 @@
     "data_as_of": "2026-07-31",
     "data_period_end": "2026-08-28",
     "data_period_start": "2023-07-20",
-    "generated_at": "2026-08-01T03:12:06Z",
+    "generated_at": "2026-08-01T03:50:51Z",
     "max_age_days_policy": 180,
     "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
   },
@@ -345,7 +513,7 @@
       "policy_warning_days": 30
     }
   },
-  "generated_at": "2026-08-01T03:12:06Z",
+  "generated_at": "2026-08-01T03:50:51Z",
   "horizon": {
     "period_end": "2026-08-28",
     "period_start": "2023-07-20"
@@ -377,9 +545,9 @@
   "schema_version": "1.1.0",
   "snapshot_status": "CANDIDATE",
   "source_branch": "feat/pseo-national-acquisition-engine",
-  "source_commit_sha": "3dc7bb77f9206b205f2d902458281360a9799836",
+  "source_commit_sha": "6fc5adcf6929d908b8e4c10aab4ca2566c20a8be",
   "source_repository": "extra-cli",
-  "source_run_id": "pseo-20260801T031206Z-ee4311a9",
+  "source_run_id": "pseo-20260801T035051Z-9d2d9627",
   "sources": [
     {
       "role": "read_only_aggregate",

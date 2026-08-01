@@ -145,40 +145,123 @@ def build_inventory(
             }
         )
 
-    # Wave 1 proposal: top diversity-aware candidates that are quality-eligible
+    # Wave 1 proposal: diversity across page_type × segment × UF × intent
+    # Target mix (when eligible candidates exist for each type).
+    WAVE1_TYPE_QUOTAS = {
+        "market": 10,
+        "competition": 8,
+        "agency": 8,
+        "price": 8,
+        "radar": 6,
+        "problem_service": 5,
+    }
+    WAVE1_MAX = 50
     eligible = [
         it
         for it in items
         if it.get("quality_eligible")
         and not it.get("mandatory_fail")
-        and it.get("page_value_score", 0) >= 65
+        and int(it.get("page_value_score") or 0) >= 65
+        and (it.get("status") or "") != "reject"
     ]
-    eligible.sort(key=lambda x: (-int(x.get("page_value_score") or 0), x["page_id"]))
-    # Diversity: pick up to 50 across types/regions
-    wave1: list[dict[str, Any]] = []
-    seen_type_uf: set[tuple[str, str]] = set()
-    for it in eligible:
-        key = (str(it.get("page_type")), str(it.get("region") or it.get("archetype")))
-        if key in seen_type_uf and len(wave1) >= 10:
-            # still allow later if under 50 and score high
-            if len(wave1) >= 40:
-                continue
-        seen_type_uf.add(key)
-        wave1.append(
-            {
-                "page_id": it["page_id"],
-                "url": it["url"],
-                "page_type": it["page_type"],
-                "page_value_score": it["page_value_score"],
-                "lifecycle_state": it["lifecycle_state"],
-                "status": it["status"],
-                "mandatory_fail": it.get("mandatory_fail"),
-                "reason": "diversity_ranked_eligible",
-            }
-        )
-        if len(wave1) >= 50:
-            break
+    eligible.sort(
+        key=lambda x: (-int(x.get("page_value_score") or 0), str(x.get("page_id") or ""))
+    )
 
+    def _wave1_entry(it: dict[str, Any], reason: str) -> dict[str, Any]:
+        return {
+            "page_id": it["page_id"],
+            "url": it["url"],
+            "page_type": it["page_type"],
+            "segment": it.get("archetype") or it.get("segment"),
+            "region": it.get("region"),
+            "intent": it.get("intent"),
+            "page_value_score": it["page_value_score"],
+            "lifecycle_state": it["lifecycle_state"],
+            "status": it["status"],
+            "mandatory_fail": it.get("mandatory_fail"),
+            "reason": reason,
+        }
+
+    wave1: list[dict[str, Any]] = []
+    selected_ids: set[str] = set()
+    type_counts: Counter = Counter()
+    # Keys: (page_type, segment, region, intent) for fine diversity
+    seen_combo: set[tuple[str, str, str, str]] = set()
+    seen_type_seg_uf: set[tuple[str, str, str]] = set()
+
+    def _try_add(it: dict[str, Any], reason: str, *, force_type_quota: bool = False) -> bool:
+        if len(wave1) >= WAVE1_MAX:
+            return False
+        pid = str(it.get("page_id") or "")
+        if not pid or pid in selected_ids:
+            return False
+        ptype = str(it.get("page_type") or "")
+        seg = str(it.get("archetype") or it.get("segment") or "_")
+        uf = str(it.get("region") or "_")
+        intent = str(it.get("intent") or "_")
+        combo = (ptype, seg, uf, intent)
+        tsu = (ptype, seg, uf)
+        # Prefer unique type×segment×UF; allow only if quota not filled for type
+        if tsu in seen_type_seg_uf and not force_type_quota:
+            return False
+        if combo in seen_combo:
+            return False
+        quota = WAVE1_TYPE_QUOTAS.get(ptype)
+        if quota is not None and type_counts[ptype] >= quota and not force_type_quota:
+            return False
+        wave1.append(_wave1_entry(it, reason))
+        selected_ids.add(pid)
+        type_counts[ptype] += 1
+        seen_combo.add(combo)
+        seen_type_seg_uf.add(tsu)
+        return True
+
+    # Pass 1: fill type quotas round-robin by score within each type
+    by_type: dict[str, list] = defaultdict(list)
+    for it in eligible:
+        by_type[str(it.get("page_type") or "")].append(it)
+    # Round-robin across types that have quotas first
+    ordered_types = list(WAVE1_TYPE_QUOTAS.keys()) + sorted(
+        t for t in by_type if t not in WAVE1_TYPE_QUOTAS
+    )
+    progressed = True
+    while progressed and len(wave1) < WAVE1_MAX:
+        progressed = False
+        for ptype in ordered_types:
+            pool = by_type.get(ptype) or []
+            for it in pool:
+                if _try_add(it, "diversity_quota_pass"):
+                    progressed = True
+                    break
+
+    # Pass 2: fill remaining slots with best remaining scores, still avoiding
+    # exact type×segment×UF duplicates. Soft cap: no type exceeds 2× its quota
+    # (or 12 if unlisted) so competition cannot dominate Wave 1.
+    soft_caps = {t: max(q * 2, q + 4) for t, q in WAVE1_TYPE_QUOTAS.items()}
+    for it in eligible:
+        if len(wave1) >= WAVE1_MAX:
+            break
+        ptype = str(it.get("page_type") or "")
+        cap = soft_caps.get(ptype, 12)
+        if type_counts.get(ptype, 0) >= cap:
+            continue
+        _try_add(it, "diversity_fill_pass", force_type_quota=True)
+    wave1_diversity = {
+        "type_counts": dict(type_counts),
+        "quotas": dict(WAVE1_TYPE_QUOTAS),
+        "unique_type_segment_uf": len(seen_type_seg_uf),
+        "types_present": sorted(type_counts.keys()),
+        "missing_quota_types": sorted(
+            t
+            for t, q in WAVE1_TYPE_QUOTAS.items()
+            if type_counts.get(t, 0) == 0 and (by_type.get(t) or [])
+        ),
+        "note": (
+            "Wave 1 ranks by page_value_score with hard diversity across "
+            "page_type × segment × UF × intent; not competition-only."
+        ),
+    }
     # Reject thin / non-diverse doorway types
     rejected = [
         {
@@ -208,9 +291,12 @@ def build_inventory(
         "wave1_proposal": {
             "n": len(wave1),
             "pages": wave1,
+            "diversity": wave1_diversity,
             "note": (
                 "Proposal only — publish still requires human approval, "
-                "similarity, and production gates. Never autopublish."
+                "similarity, and production gates. Never autopublish. "
+                "Diversity quotas across market/competition/agency/price/radar/"
+                "problem_service when eligible candidates exist."
             ),
         },
         "rejected_summary": {

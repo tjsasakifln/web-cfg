@@ -10,12 +10,12 @@
       "BA": {
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "CE": {
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "DF": {
         "agency": 1,
@@ -41,7 +41,7 @@
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 1
       },
       "MS": {
         "competition": 1,
@@ -66,7 +66,7 @@
       "PR": {
         "competition": 1,
         "market": 1,
-        "price": 7
+        "price": 3
       },
       "RJ": {
         "competition": 1,
@@ -86,13 +86,13 @@
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 2
       },
       "SC": {
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 3,
+        "price": 1,
         "radar": 1
       },
       "SE": {
@@ -103,7 +103,7 @@
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 9
+        "price": 4
       },
       "TO": {
         "agency": 1,
@@ -121,13 +121,13 @@
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "AM": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "AP": {
         "competition": 1,
@@ -137,103 +137,103 @@
         "agency": 32,
         "competition": 1,
         "market": 1,
-        "price": 14
+        "price": 7
       },
       "CE": {
         "agency": 18,
         "competition": 1,
         "market": 1,
-        "price": 10
+        "price": 4
       },
       "DF": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 1
       },
       "ES": {
         "agency": 8,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "GO": {
         "agency": 29,
         "competition": 1,
         "market": 1,
-        "price": 16
+        "price": 6
       },
       "MA": {
         "agency": 13,
         "competition": 1,
         "market": 1,
-        "price": 8
+        "price": 3
       },
       "MG": {
         "agency": 34,
         "competition": 1,
         "market": 1,
-        "price": 18
+        "price": 8
       },
       "MS": {
         "agency": 8,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "MT": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "PA": {
         "agency": 9,
         "competition": 1,
         "market": 1,
-        "price": 7
+        "price": 3
       },
       "PB": {
         "agency": 12,
         "competition": 1,
         "market": 1,
-        "price": 8
+        "price": 3
       },
       "PE": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 2
       },
       "PI": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 7
+        "price": 3
       },
       "PR": {
         "agency": 42,
         "competition": 1,
         "market": 1,
-        "price": 19
+        "price": 10
       },
       "RJ": {
         "agency": 8,
         "competition": 1,
         "market": 1,
-        "price": 8
+        "price": 4
       },
       "RN": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 2
       },
       "RO": {
         "agency": 6,
         "competition": 1,
         "market": 1,
-        "price": 7
+        "price": 4
       },
       "RR": {
         "agency": 2,
@@ -245,32 +245,32 @@
         "agency": 83,
         "competition": 1,
         "market": 1,
-        "price": 25
+        "price": 11
       },
       "SC": {
         "agency": 18,
         "competition": 1,
         "market": 1,
-        "price": 17,
+        "price": 9,
         "radar": 1
       },
       "SE": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "SP": {
         "agency": 34,
         "competition": 1,
         "market": 1,
-        "price": 18
+        "price": 6
       },
       "TO": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "_": {
         "problem_service": 2
@@ -286,17 +286,17 @@
       "ES": {
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "GO": {
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 2
       },
       "MG": {
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 3
       },
       "MS": {
         "competition": 1,
@@ -306,28 +306,28 @@
         "price": 1
       },
       "PA": {
-        "price": 3
+        "price": 2
       },
       "PR": {
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 3
       },
       "RS": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 8
+        "price": 4
       },
       "SC": {
-        "price": 5,
+        "price": 3,
         "radar": 1
       },
       "SP": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 2
       }
     },
     "gestao-fiscalizacao-contratos-publicos": {
@@ -350,7 +350,7 @@
       "MG": {
         "agency": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "PA": {
         "price": 1
@@ -386,135 +386,135 @@
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "AM": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "AP": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "BA": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "CE": {
         "agency": 7,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "DF": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "ES": {
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "GO": {
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "MA": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "MG": {
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 3
       },
       "MS": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "MT": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "PA": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "PB": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "PE": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "PI": {
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "PR": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "RJ": {
         "agency": 7,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "RN": {
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "RO": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "RR": {
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "RS": {
         "agency": 6,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "SC": {
         "agency": 7,
         "competition": 1,
         "market": 1,
-        "price": 4,
+        "price": 3,
         "radar": 1
       },
       "SE": {
@@ -526,12 +526,12 @@
         "agency": 14,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "TO": {
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "_": {
         "problem_service": 1
@@ -548,7 +548,7 @@
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 2
       },
       "AM": {
         "competition": 1,
@@ -563,55 +563,55 @@
         "agency": 10,
         "competition": 1,
         "market": 1,
-        "price": 8
+        "price": 4
       },
       "CE": {
         "agency": 31,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 4
       },
       "DF": {
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "ES": {
         "agency": 14,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 4
       },
       "GO": {
         "agency": 20,
         "competition": 1,
         "market": 1,
-        "price": 13
+        "price": 6
       },
       "MA": {
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "MG": {
         "agency": 44,
         "competition": 1,
         "market": 1,
-        "price": 24
+        "price": 8
       },
       "MS": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 3
       },
       "MT": {
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "PA": {
         "agency": 6,
@@ -623,31 +623,31 @@
         "agency": 16,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 3
       },
       "PE": {
         "agency": 13,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 4
       },
       "PI": {
         "agency": 17,
         "competition": 1,
         "market": 1,
-        "price": 7
+        "price": 4
       },
       "PR": {
         "agency": 108,
         "competition": 1,
         "market": 1,
-        "price": 21
+        "price": 9
       },
       "RJ": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 4
       },
       "RN": {
         "agency": 9,
@@ -670,26 +670,26 @@
         "agency": 93,
         "competition": 1,
         "market": 1,
-        "price": 28
+        "price": 11
       },
       "SC": {
         "agency": 96,
         "competition": 1,
         "market": 1,
-        "price": 18,
+        "price": 9,
         "radar": 1
       },
       "SE": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "SP": {
         "agency": 68,
         "competition": 1,
         "market": 1,
-        "price": 22
+        "price": 6
       },
       "TO": {
         "agency": 1,
@@ -718,7 +718,7 @@
         "price": 1
       },
       "MG": {
-        "price": 4
+        "price": 3
       },
       "MT": {
         "price": 1
@@ -751,7 +751,7 @@
         "price": 3
       },
       "CE": {
-        "price": 4
+        "price": 3
       },
       "DF": {
         "price": 1
@@ -760,10 +760,10 @@
         "price": 2
       },
       "GO": {
-        "price": 4
+        "price": 3
       },
       "MA": {
-        "price": 3
+        "price": 2
       },
       "MG": {
         "price": 4
@@ -825,7 +825,7 @@
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "DF": {
         "competition": 1,
@@ -852,7 +852,7 @@
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 13
+        "price": 6
       },
       "MS": {
         "competition": 1,
@@ -889,7 +889,7 @@
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "RN": {
         "agency": 1,
@@ -904,20 +904,20 @@
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 11
+        "price": 6
       },
       "SC": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 11,
+        "price": 6,
         "radar": 1
       },
       "SP": {
         "agency": 4,
         "competition": 1,
         "market": 1,
-        "price": 11
+        "price": 4
       }
     },
     "servicos-tecnicos-fase-preparatoria": {
@@ -925,7 +925,7 @@
         "agency": 1,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "AL": {
         "agency": 1,
@@ -937,7 +937,7 @@
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 3
       },
       "AP": {
         "agency": 1,
@@ -947,31 +947,31 @@
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 9
+        "price": 4
       },
       "CE": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 7
+        "price": 2
       },
       "DF": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 9
+        "price": 4
       },
       "ES": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "GO": {
         "agency": 11,
         "competition": 1,
         "market": 1,
-        "price": 8
+        "price": 3
       },
       "MA": {
         "agency": 1,
@@ -983,66 +983,66 @@
         "agency": 17,
         "competition": 1,
         "market": 1,
-        "price": 15
+        "price": 8
       },
       "MS": {
         "agency": 8,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "MT": {
         "agency": 5,
         "competition": 1,
         "market": 1,
-        "price": 5
+        "price": 2
       },
       "PA": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "PB": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 1
       },
       "PE": {
         "agency": 10,
         "competition": 1,
         "market": 1,
-        "price": 6
+        "price": 3
       },
       "PI": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 4
+        "price": 3
       },
       "PR": {
         "agency": 8,
         "competition": 1,
         "market": 1,
-        "price": 11
+        "price": 6
       },
       "RJ": {
         "agency": 6,
         "competition": 1,
         "market": 1,
-        "price": 10
+        "price": 3
       },
       "RN": {
         "agency": 2,
         "competition": 1,
         "market": 1,
-        "price": 2
+        "price": 1
       },
       "RO": {
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "RR": {
         "competition": 1,
@@ -1052,26 +1052,26 @@
         "agency": 10,
         "competition": 1,
         "market": 1,
-        "price": 14
+        "price": 6
       },
       "SC": {
         "agency": 15,
         "competition": 1,
         "market": 1,
-        "price": 17,
+        "price": 8,
         "radar": 1
       },
       "SE": {
         "agency": 3,
         "competition": 1,
         "market": 1,
-        "price": 3
+        "price": 2
       },
       "SP": {
         "agency": 15,
         "competition": 1,
         "market": 1,
-        "price": 16
+        "price": 8
       },
       "TO": {
         "agency": 2,
@@ -1082,15 +1082,15 @@
     }
   },
   "status_counts": {
-    "noindex": 601,
-    "publish": 1516,
-    "reject": 340
+    "noindex": 592,
+    "publish": 1221,
+    "reject": 236
   },
   "type_counts": {
     "agency": 1218,
     "competition": 154,
     "market": 159,
-    "price": 911,
+    "price": 503,
     "problem_service": 5,
     "radar": 10
   }
