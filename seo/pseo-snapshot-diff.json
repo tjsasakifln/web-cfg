@@ -1,6 +1,6 @@
 {
   "old_snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
-  "new_snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "new_snapshot_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
   "old_source_commit_sha": "01123735ed0e240b0adf2233269ac947fa6d56c2",
   "new_source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "old_source_branch": "feat/pseo-semantic-sota",
@@ -8,9 +8,7 @@
   "schema_version_changed": false,
   "old_schema_version": "1.1.0",
   "new_schema_version": "1.1.0",
-  "pages_added": [
-    "radar-edificacoes-publicas-sc"
-  ],
+  "pages_added": [],
   "pages_removed": [],
   "pages_materially_changed": [
     "agency-88830609",
@@ -326,24 +324,6 @@
       "page_type": "radar",
       "status_after_gate": "reject"
     },
-    "radar-edificacoes-publicas-sc": {
-      "previous_page_material_hash": null,
-      "new_page_material_hash": "71c13e67a39a911cc69b82cc7d3491ef4e8dea552017914894cd2604fc6cc263",
-      "previous_approval": "PENDING",
-      "new_approval": "PENDING",
-      "material_change": false,
-      "change_class": "no_prior_approval_baseline",
-      "changed_fields": [],
-      "unclassifiable_fields": [],
-      "approval_preserved": false,
-      "approval_invalidated": false,
-      "approval_invalidation_reasons": [],
-      "severity": "none",
-      "page_id": "radar-edificacoes-publicas-sc",
-      "url": "/radar/edificacoes-publicas-sc/",
-      "page_type": "radar",
-      "status_after_gate": "reject"
-    },
     "radar-pavimentacao-infraestrutura-viaria-pr": {
       "previous_page_material_hash": "b64fc8a461cb974a46f1df5c0668630a7b61681884ac705b3aaab48b0fe971f9",
       "new_page_material_hash": "f886ef51975adef0d090fc09ac1d9c15921dcb9c0da469a0aa8c121a6bdfc2cf",
@@ -487,5 +467,5 @@
       "status_after_gate": "noindex"
     }
   },
-  "generated_at": "2026-08-01T01:20:47Z"
+  "generated_at": "2026-08-01T01:45:02Z"
 }

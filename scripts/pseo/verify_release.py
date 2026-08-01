@@ -299,6 +299,28 @@ def verify_release(
     # Prefer gsc_state_by_url when present (full records under urls or state_by_url)
     gsc_by = gsc.get("gsc_state_by_url") or gsc.get("urls") or {}
 
+    # Campaign new-page freeze: load structured snapshot diff when present
+    pages_added: list[str] = []
+    new_pages_published = 0
+    diff_path = ROOT / "seo" / "pseo-snapshot-diff.json"
+    if diff_path.exists():
+        try:
+            snap_diff = json.loads(diff_path.read_text(encoding="utf-8"))
+            pages_added = list(snap_diff.get("pages_added") or [])
+            # Any non-empty pages_added means campaign introduced candidate paths
+            # (even if later demoted) — gate stays closed until diff is clean.
+        except (OSError, json.JSONDecodeError):
+            pages_added = []
+    # Live indexable count vs prior campaign baseline (4 Wave0 seeds max)
+    # new_pages_published: only count publish URLs not in the frozen seed set
+    wave0_seed_urls = {
+        "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "/radar/edificacoes-publicas-pr/",
+    }
+    new_pages_published = sum(1 for s in seeds if s not in wave0_seed_urls)
+
     gate = compute_next_wave_gate(
         seed_urls=seeds,
         gsc_access=gsc.get("gsc_access") or GSC_ACCESS_NO_CREDS,
@@ -308,6 +330,8 @@ def verify_release(
         extra_cli_on_main=bool(extra.get("on_main")),
         reexport_without_undue_invalidation=reexport_ok,
         snapshot_source_on_main=bool(snap_src.get("on_main")),
+        new_pages_published=new_pages_published,
+        pages_added=pages_added,
     )
 
     # Terminal status (honest; never PASS without GSC + current deploy audit)

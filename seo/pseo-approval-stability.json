@@ -109,11 +109,11 @@
     }
   },
   "old_snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
-  "new_snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "new_snapshot_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
   "old_source_commit_sha": "01123735ed0e240b0adf2233269ac947fa6d56c2",
   "new_source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "new_source_branch": "main",
-  "generated_at": "2026-08-01T01:20:47Z",
+  "generated_at": "2026-08-01T01:45:02Z",
   "notes": [
     "Materiality is defined by scripts.pseo.score._material_signature / page_material_hash.",
     "Global dataset_hash / generated_at / source_run_id are non-material for approvals."

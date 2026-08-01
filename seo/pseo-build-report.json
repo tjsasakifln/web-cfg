@@ -1,9 +1,9 @@
 {
   "ok": true,
-  "dataset_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
   "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
   "counts": {
-    "reject": 15,
+    "reject": 14,
     "publish": 3,
     "noindex": 2
   },
@@ -122,14 +122,6 @@
       "score": 72
     },
     {
-      "url": "/radar/edificacoes-publicas-sc/",
-      "reasons": [
-        "contract_url_as_opportunity=2",
-        "score=72"
-      ],
-      "score": 72
-    },
-    {
       "url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
       "reasons": [
         "contract_url_as_opportunity=4",
@@ -146,7 +138,7 @@
       "score": 69
     }
   ],
-  "pages_written": 20,
+  "pages_written": 19,
   "hubs": [
     "inteligencia/index.html",
     "inteligencia/mercados/index.html",

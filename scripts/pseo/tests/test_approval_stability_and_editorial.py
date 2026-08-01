@@ -42,6 +42,99 @@ class TestGscDeriveState(unittest.TestCase):
         )
 
 
+class TestGateBlocksNewPages(unittest.TestCase):
+    def test_pages_added_blocks_gate(self):
+        from scripts.pseo.gsc_gate import compute_next_wave_gate
+
+        seeds = ["/inteligencia/cenarios/aditivos-e-risco-de-margem/"]
+        by = {
+            seeds[0]: {
+                "url": seeds[0],
+                "state": "INDEXED",
+            }
+        }
+        gate = compute_next_wave_gate(
+            seed_urls=seeds,
+            gsc_access="INSPECTED_WITH_EVIDENCE",
+            gsc_by_url=by,
+            production_audit_ok=True,
+            production_audit_is_current=True,
+            extra_cli_on_main=True,
+            reexport_without_undue_invalidation=True,
+            snapshot_source_on_main=True,
+            pages_added=["radar-edificacoes-publicas-sc"],
+            new_pages_published=0,
+        )
+        self.assertFalse(gate["next_wave_gate"])
+        self.assertTrue(any("pages_added" in r for r in gate["reasons"]))
+
+    def test_clean_pages_added_allows_when_other_ok(self):
+        from scripts.pseo.gsc_gate import compute_next_wave_gate
+
+        seeds = ["/inteligencia/cenarios/aditivos-e-risco-de-margem/"]
+        by = {seeds[0]: {"url": seeds[0], "state": "INDEXED"}}
+        gate = compute_next_wave_gate(
+            seed_urls=seeds,
+            gsc_access="INSPECTED_WITH_EVIDENCE",
+            gsc_by_url=by,
+            production_audit_ok=True,
+            production_audit_is_current=True,
+            extra_cli_on_main=True,
+            reexport_without_undue_invalidation=True,
+            snapshot_source_on_main=True,
+            pages_added=[],
+            new_pages_published=0,
+        )
+        self.assertTrue(gate["next_wave_gate"], gate["reasons"])
+
+
+class TestGscIngestFullFields(unittest.TestCase):
+    def test_ingest_persists_required_inspection_fields(self):
+        import tempfile
+        from pathlib import Path
+
+        from scripts.pseo.gsc_ingest import ingest
+
+        payload = {
+            "evidence_origin": "url_inspection_api",
+            "inspection_timestamp": "2026-08-01T01:26:16Z",
+            "urls": [
+                {
+                    "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+                    "inspection_source": "url_inspection_api",
+                    "inspection_timestamp": "2026-08-01T01:26:16Z",
+                    "verdict": "NEUTRAL",
+                    "coverage": "Discovered - currently not indexed",
+                    "indexing_state": "INDEXING_STATE_UNSPECIFIED",
+                    "last_crawl_time": None,
+                    "robots_txt_state": "ROBOTS_TXT_STATE_UNSPECIFIED",
+                    "page_fetch_state": "PAGE_FETCH_STATE_UNSPECIFIED",
+                    "user_canonical": None,
+                    "google_canonical": None,
+                    "referring_urls": [],
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td) / "idx.json"
+            result = ingest(payload, seed_urls=[payload["urls"][0]["url"]], out_path=out)
+            row = result["urls"][payload["urls"][0]["url"]]
+            for key in (
+                "inspection_source",
+                "inspection_timestamp",
+                "coverage_state",
+                "indexing_state",
+                "last_crawl_time",
+                "robots_txt_state",
+                "page_fetch_state",
+                "user_canonical",
+                "referring_urls",
+            ):
+                self.assertIn(key, row, key)
+            self.assertEqual(row["inspection_source"], "url_inspection_api")
+            self.assertEqual(row["state"], "DISCOVERED_NOT_CRAWLED")
+
+
 class TestIcpHistogramCompat(unittest.TestCase):
     def test_list_and_dict_histograms(self):
         from scripts.pseo.score import _histogram_as_dict, icp_similarity

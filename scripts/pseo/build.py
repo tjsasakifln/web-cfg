@@ -534,7 +534,21 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                 except OSError:
                     pass
     for c in cands:
-        # Write HTML for all candidates (reject/noindex use robots noindex).
+        # Write HTML for publish + existing noindex/reject paths.
+        # Never create brand-new public paths for reject-only candidates
+        # (Wave 0 freeze: "não criar novas páginas").
+        path = url_to_path(c.url)
+        if c.status == "reject" and not path.exists():
+            written_pages.append(
+                {
+                    "url": c.url,
+                    "status": c.status,
+                    "score": c.score,
+                    "path": str(path.relative_to(ROOT)),
+                    "skipped_new_reject_path": True,
+                }
+            )
+            continue
         # Only status=publish enters the intelligence sitemap.
         try:
             html = render_candidate(c, manifest)
@@ -542,7 +556,6 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
             if c.status == "reject":
                 continue
             raise
-        path = url_to_path(c.url)
         if not dry_run:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(html, encoding="utf-8")

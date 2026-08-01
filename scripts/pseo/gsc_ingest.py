@@ -197,20 +197,45 @@ def ingest(
             if not path.endswith("/"):
                 path += "/"
         state = derive_state(flat)
+        ts = (
+            flat.get("inspection_timestamp")
+            or flat.get("captured_at")
+            or flat.get("capture_date")
+            or payload.get("inspection_timestamp")
+            or payload.get("captured_at")
+        )
         rec = normalize_url_record(
             {
                 "url": path,
                 "state": state,
                 "evidence_origin": origin,
-                "captured_at": flat.get("captured_at")
-                or flat.get("capture_date")
-                or payload.get("captured_at"),
+                "inspection_source": flat.get("inspection_source") or origin,
+                "inspection_timestamp": ts,
+                "captured_at": ts,
                 "declared_canonical": flat.get("declared_canonical")
+                or flat.get("user_canonical")
+                or flat.get("userCanonical"),
+                "user_canonical": flat.get("user_canonical")
+                or flat.get("declared_canonical")
                 or flat.get("userCanonical"),
                 "google_canonical": flat.get("google_canonical")
                 or flat.get("googleCanonical"),
-                "last_crawl_at": flat.get("last_crawl_at") or flat.get("lastCrawlTime"),
-                "coverage": flat.get("coverage") or flat.get("coverageState"),
+                "last_crawl_at": flat.get("last_crawl_at")
+                or flat.get("last_crawl_time")
+                or flat.get("lastCrawlTime"),
+                "last_crawl_time": flat.get("last_crawl_time")
+                or flat.get("last_crawl_at")
+                or flat.get("lastCrawlTime"),
+                "coverage": flat.get("coverage") or flat.get("coverage_state") or flat.get("coverageState"),
+                "coverage_state": flat.get("coverage_state")
+                or flat.get("coverage")
+                or flat.get("coverageState"),
+                "indexing_state": flat.get("indexing_state") or flat.get("indexingState"),
+                "robots_txt_state": flat.get("robots_txt_state")
+                or flat.get("robots")
+                or flat.get("robotsTxtState"),
+                "page_fetch_state": flat.get("page_fetch_state") or flat.get("pageFetchState"),
+                "referring_urls": flat.get("referring_urls") or flat.get("referringUrls") or [],
                 "verdict": flat.get("verdict") or flat.get("index_status_verdict"),
                 "notes": flat.get("notes") or flat.get("evidence_notes") or [],
                 "evidence_id": flat.get("evidence_id")

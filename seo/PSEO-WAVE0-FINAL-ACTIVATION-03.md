@@ -116,3 +116,11 @@ Computed only. Requires simultaneous satisfaction of provenance, approval stabil
 - `seo/pseo-indexation-status.json`
 - `seo/pseo-production-audit.json`
 - `seo/pseo-editorial-report.json`
+
+## Skeptic remediation (new-page freeze)
+
+- Removed accidental public path `/radar/edificacoes-publicas-sc/` introduced by main reexport opportunity list (reject-only HTML was still a new page).
+- Dropped opportunity `radar-edificacoes-publicas-sc` from snapshot; rehashed with methodology note.
+- Build no longer creates brand-new paths for reject-only candidates.
+- `compute_next_wave_gate` now fails closed on `pages_added` / `new_pages_published`.
+- GSC ingest persists full inspection fields (`inspection_source`, `inspection_timestamp`, `coverage_state`, `indexing_state`, `last_crawl_time`, `robots_txt_state`, `page_fetch_state`, `user_canonical`, `referring_urls`).

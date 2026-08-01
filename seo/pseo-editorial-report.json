@@ -1,9 +1,9 @@
 {
   "ok": true,
   "generated_from": "data/pseo/registry.json",
-  "page_count": 20,
+  "page_count": 19,
   "publish_fail_count": 0,
-  "p0_issue_count": 25,
+  "p0_issue_count": 13,
   "pages": [
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
@@ -235,18 +235,6 @@
       "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "manutencao-predial-engenharia"
-        },
-        {
-          "code": "ingestion_prefix_name",
-          "severity": "P0",
-          "message": "Nome de órgão com prefixo de ingestão",
-          "evidence": "MRS-PREFEITURA"
-        },
-        {
           "code": "sample_concentration",
           "severity": "P0",
           "message": "Amostra concentrada/insuficiente: buyers<3",
@@ -257,12 +245,6 @@
           "severity": "P0",
           "message": "Amostra concentrada/insuficiente: max_buyer_share>0.60",
           "evidence": "max_buyer_share>0.60"
-        },
-        {
-          "code": "missing_accents",
-          "severity": "P1",
-          "message": "Termo técnico sem acentuação editorial",
-          "evidence": "manutencao predial"
         }
       ],
       "intent": "estimar_valores_dispersao",
@@ -302,20 +284,7 @@
         "intent": "validar_preco_margem"
       },
       "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "internal_slug_visible",
-          "severity": "P0",
-          "message": "Slug/taxonomia interna no texto",
-          "evidence": "pavimentacao-infraestrutura-viaria"
-        },
-        {
-          "code": "missing_accents",
-          "severity": "P1",
-          "message": "Termo técnico sem acentuação editorial",
-          "evidence": "paralelepipedo"
-        }
-      ],
+      "issues": [],
       "intent": "estimar_valores_dispersao",
       "evidence_kind": null,
       "direct_evidence_count": 0,
@@ -410,12 +379,6 @@
           "severity": "P0",
           "message": "contract_url_as_opportunity=7",
           "evidence": "contract_url_as_opportunity=7"
-        },
-        {
-          "code": "contract_link_as_opportunity",
-          "severity": "P0",
-          "message": "Link de contrato em radar",
-          "evidence": "/app/contratos/"
         }
       ],
       "intent": "avaliar_oportunidades",
@@ -457,12 +420,6 @@
       "approval_recommendation": "reject_or_noindex",
       "issues": [
         {
-          "code": "table_duplicates",
-          "severity": "P0",
-          "message": "Linhas duplicadas na tabela (2)",
-          "evidence": "Contratação de Empresa Especializada Para Pavimentação em paralelepípe | R$ 730.738,47 | Concorrência - Eletrônica | Ind"
-        },
-        {
           "code": "data_quality_gate",
           "severity": "P0",
           "message": "duplicate_rate>0",
@@ -473,12 +430,6 @@
           "severity": "P0",
           "message": "contract_url_as_opportunity=4",
           "evidence": "contract_url_as_opportunity=4"
-        },
-        {
-          "code": "contract_link_as_opportunity",
-          "severity": "P0",
-          "message": "Link de contrato em radar",
-          "evidence": "/app/contratos/"
         }
       ],
       "intent": "avaliar_oportunidades",
@@ -524,12 +475,6 @@
           "severity": "P0",
           "message": "contract_url_as_opportunity=2",
           "evidence": "contract_url_as_opportunity=2"
-        },
-        {
-          "code": "contract_link_as_opportunity",
-          "severity": "P0",
-          "message": "Link de contrato em radar",
-          "evidence": "/app/contratos/"
         }
       ],
       "intent": "avaliar_oportunidades",
@@ -575,12 +520,6 @@
           "severity": "P0",
           "message": "contract_url_as_opportunity=2",
           "evidence": "contract_url_as_opportunity=2"
-        },
-        {
-          "code": "contract_link_as_opportunity",
-          "severity": "P0",
-          "message": "Link de contrato em radar",
-          "evidence": "/app/contratos/"
         }
       ],
       "intent": "avaliar_oportunidades",
@@ -594,57 +533,6 @@
       "indexability": "reject",
       "reviewer": null,
       "page_material_hash": "48fcd1fb675c59a8f73b520f121d5c3e9075fdef0cfaeaeb310c85e6b1924cd4"
-    },
-    {
-      "page_id": "radar-edificacoes-publicas-sc",
-      "url": "/radar/edificacoes-publicas-sc/",
-      "page_type": "radar",
-      "status": "reject",
-      "human_review": "PENDING",
-      "decision": "pass",
-      "sample": {
-        "observation_count": 4
-      },
-      "independence": {},
-      "duplication": {},
-      "sources_checked": [
-        "pncp"
-      ],
-      "copy_quality": {
-        "title_len": 73,
-        "meta_desc_len": 141
-      },
-      "cannibalization": {},
-      "cta": {
-        "label": "Analisar este edital antes da proposta",
-        "intent": "analisar_edital"
-      },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "data_quality_gate",
-          "severity": "P0",
-          "message": "contract_url_as_opportunity=2",
-          "evidence": "contract_url_as_opportunity=2"
-        },
-        {
-          "code": "contract_link_as_opportunity",
-          "severity": "P0",
-          "message": "Link de contrato em radar",
-          "evidence": "/app/contratos/"
-        }
-      ],
-      "intent": "avaliar_oportunidades",
-      "evidence_kind": null,
-      "direct_evidence_count": 0,
-      "contextual_evidence_count": 0,
-      "editorial_unique_ratio": null,
-      "similarity_max": null,
-      "commercial_offer": "Analisar este edital antes da proposta",
-      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-      "indexability": "reject",
-      "reviewer": null,
-      "page_material_hash": "71c13e67a39a911cc69b82cc7d3491ef4e8dea552017914894cd2604fc6cc263"
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
@@ -677,12 +565,6 @@
           "severity": "P0",
           "message": "contract_url_as_opportunity=4",
           "evidence": "contract_url_as_opportunity=4"
-        },
-        {
-          "code": "contract_link_as_opportunity",
-          "severity": "P0",
-          "message": "Link de contrato em radar",
-          "evidence": "/app/contratos/"
         }
       ],
       "intent": "avaliar_oportunidades",
@@ -728,12 +610,6 @@
           "severity": "P0",
           "message": "contract_url_as_opportunity=1",
           "evidence": "contract_url_as_opportunity=1"
-        },
-        {
-          "code": "contract_link_as_opportunity",
-          "severity": "P0",
-          "message": "Link de contrato em radar",
-          "evidence": "/app/contratos/"
         }
       ],
       "intent": "avaliar_oportunidades",
@@ -955,7 +831,6 @@
     "radar-pavimentacao-infraestrutura-viaria-sc": "REJECT_DUPLICATE_OR_WEAK",
     "radar-saneamento-hidraulica-sc": "REJECT_DUPLICATE_OR_WEAK",
     "radar-pavimentacao-infraestrutura-viaria-rs": "REJECT_DUPLICATE_OR_WEAK",
-    "radar-edificacoes-publicas-sc": "REJECT_DUPLICATE_OR_WEAK",
     "radar-pavimentacao-infraestrutura-viaria-pr": "REJECT_DUPLICATE_OR_WEAK",
     "radar-edificacoes-publicas-rs": "REJECT_DUPLICATE_OR_WEAK",
     "prob-orcamento-edital": "PUBLISH_EDITORIAL_VALUE",

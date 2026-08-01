@@ -12,7 +12,7 @@
     "export-descriptor.json": "3bb2c0ae455f25be9ce95bca53241ca3299c3299416397b80b00df11862d08ca",
     "icp_methodology.json": "8884e6d8d8aa6e57bd66c0174a3a1b9e9834a847d59a8c8dc40c88cc177b72e1",
     "markets.json": "60785b2a583ac1453b3ccacc0d900d83248b07e4df1e3881852cfc0f647c0f03",
-    "opportunities.json": "9389b4161f3a234e55a86d2db0e4bd624f2ffd4c5e9e59cd62e7c43c83e29f02",
+    "opportunities.json": "e444714af219207ea7ffa6d56587ebddb20412e688185bc3196a0d01f952782b",
     "prices.json": "75a07bf18f3baf80ea9ccb345f4f9fb7ec43c16da5742117bc924081462d4ab8",
     "problem_service.json": "3dac4f6b85e297c116ff93ae440b194901d38eaae92353f3d91e405efeeb06ff",
     "schema.json": "77de5b81ae331f38d03150fae556caa0bb987268b8618689855e00abc4e1dc8e"
@@ -237,7 +237,7 @@
     "n_batches_bids": 1,
     "n_batches_contracts": 3,
     "open_bids": 37,
-    "opportunities": 7,
+    "opportunities": 6,
     "pncp_raw_bids": 1536,
     "pncp_supplier_contracts": 11931,
     "prices": 2,
@@ -250,7 +250,7 @@
     "staging_path": "/tmp/pseo-staging-vg8rm3mt.sqlite"
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
   "denominators": {
     "aec_confirmed_bids": 356,
     "aec_confirmed_contracts": 233,
@@ -321,7 +321,8 @@
     "ICP-Derived Evidence pSEO: multi-layer AEC classifier + public aggregates.",
     "Only aec_confirmed feeds indexable market/price/competition pages.",
     "dataset_hash = sha256(canonical_json of ordered body keys).",
-    "editorial_enrichment:evidence_kind+claim_evidence+language (web-cfg Wave0)"
+    "editorial_enrichment:evidence_kind+claim_evidence+language (web-cfg Wave0)",
+    "wave0_freeze:dropped_new_opportunity_radar-edificacoes-publicas-sc (no new public paths)"
   ],
   "publish_status": "REVIEW_REQUIRED",
   "query_versions": {
