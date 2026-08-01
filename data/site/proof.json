@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-08-01",
+  "claims": [
+    {
+      "id": "proof-usp-civil",
+      "claim": "Engenharia Civil pela USP (EESC-USP)",
+      "status": "VERIFIED",
+      "source": "perfil-publico-especialista",
+      "public_allowed": true,
+      "last_verified_at": "2026-08-01",
+      "notes": "Publicado em especialista/tiago-jun-sasaki e materiais institucionais."
+    },
+    {
+      "id": "proof-private-public",
+      "claim": "Experiência na iniciativa privada e na Administração Pública",
+      "status": "VERIFIED",
+      "source": "perfil-publico-especialista",
+      "public_allowed": true,
+      "last_verified_at": "2026-08-01",
+      "notes": "Fato biográfico já publicado no site."
+    },
+    {
+      "id": "proof-fiscalizacao-gestao",
+      "claim": "Visão de fiscalização, gestão e execução contratual",
+      "status": "VERIFIED",
+      "source": "perfil-publico-especialista",
+      "public_allowed": true,
+      "last_verified_at": "2026-08-01",
+      "notes": "Experiência em fiscalização e gestão de contratos públicos."
+    },
+    {
+      "id": "proof-nacional",
+      "claim": "Atendimento nacional",
+      "status": "VERIFIED",
+      "source": "operacao-remota-declarada",
+      "public_allowed": true,
+      "last_verified_at": "2026-08-01",
+      "notes": "Atuação remota nacional declarada no site e formulários."
+    },
+    {
+      "id": "proof-lei-14133",
+      "claim": "Atuação com referência à Lei nº 14.133/2021",
+      "status": "VERIFIED",
+      "source": "conteudo-tecnico-publicado",
+      "public_allowed": true,
+      "last_verified_at": "2026-08-01",
+      "notes": "Biblioteca técnica e páginas-pilar tratam a Lei 14.133."
+    },
+    {
+      "id": "proof-orcamentacao",
+      "claim": "Experiência em orçamentação e referências oficiais (SINAPI/SICRO/BDI)",
+      "status": "VERIFIED",
+      "source": "conteudo-tecnico-publicado",
+      "public_allowed": true,
+      "last_verified_at": "2026-08-01",
+      "notes": "Cluster auditoria-orcamento e guias técnicos publicados."
+    },
+    {
+      "id": "proof-tech-infra",
+      "claim": "Tecnologia aplicada como infraestrutura de inteligência e evidência",
+      "status": "VERIFIED",
+      "source": "operacao-interna",
+      "public_allowed": true,
+      "last_verified_at": "2026-08-01",
+      "notes": "Pode ser descrito como sistema proprietário de inteligência; não expor nome extra-cli ao público."
+    },
+    {
+      "id": "claim-blocked-client-names",
+      "claim": "Nomes de clientes e contratos",
+      "status": "PRIVATE_ONLY",
+      "source": "n/a",
+      "public_allowed": false,
+      "last_verified_at": "2026-08-01",
+      "notes": "Bloqueado sem autorização formal do cliente."
+    },
+    {
+      "id": "claim-blocked-financial-results",
+      "claim": "Percentuais de economia, vitória ou resultado financeiro",
+      "status": "PENDING_EVIDENCE",
+      "source": "n/a",
+      "public_allowed": false,
+      "last_verified_at": "2026-08-01",
+      "notes": "Exige evidência e aprovação editorial antes de qualquer publicação."
+    },
+    {
+      "id": "claim-blocked-work-values",
+      "claim": "Valores de obras e quantidade de portarias",
+      "status": "PENDING_EVIDENCE",
+      "source": "n/a",
+      "public_allowed": false,
+      "last_verified_at": "2026-08-01",
+      "notes": "Não publicar sem evidência verificável e autorização."
+    }
+  ]
+}
