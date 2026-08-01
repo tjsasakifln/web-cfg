@@ -1,22 +1,17 @@
 {
   "ok": true,
-  "web_cfg_sha": "003f473ebcb85679a5b55ee9f36dee34b88b851d",
+  "web_cfg_sha": "ff8d6ddff7e02c69272192aee3563b3bfcf0e14e",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "7ce200fcfdec04234446c7db7da50cd43ffccd78aac205b12c1804bca7c734d9",
+  "public_artifact_hash": "452193a2fc87f8593a1e07dfce91748126318625c7be018674d93633b922aaf3",
   "build_summary": {
-    "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
+    "dataset_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
     "counts": {
-      "reject": 14,
-      "publish": 3,
-      "noindex": 2
+      "noindex": 1804,
+      "reject": 245
     },
-    "publishable": [
-      "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-      "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-      "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
-    ],
-    "pages_written": 19
+    "publishable": [],
+    "pages_written": 2049
   },
   "validate": {
     "ok": true,
@@ -25,7 +20,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 314,
+    "file_count": 2241,
     "finding_count": 0
   },
   "errors": []

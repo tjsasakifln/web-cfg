@@ -1,0 +1,71 @@
+{
+  "campaign": "CONFENGE-VALUE-COMMUNICATION-2040-01",
+  "status": "IMPLEMENTED_DEPLOY_BLOCKED",
+  "branch": "feat/confenge-value-communication-2040",
+  "sha_initial": "ff8d6ddff7e02c69272192aee3563b3bfcf0e14e",
+  "sha_final": null,
+  "pages_created": [
+    "/diagnostico-b2g-360/",
+    "/diretoria-b2g/",
+    "/bid-room-licitacoes-obras/",
+    "/defesa-margem-contratos-publicos/",
+    "/metodologia-inteligencia/"
+  ],
+  "pages_updated": [
+    "/",
+    "/inteligencia/",
+    "/radar/",
+    "/obrigado",
+    "/llms.txt",
+    "eight_pillar_pages",
+    "sitewide_org_footer_description"
+  ],
+  "claims_published": [
+    "proof-usp-civil",
+    "proof-private-public",
+    "proof-fiscalizacao-gestao",
+    "proof-nacional",
+    "proof-lei-14133",
+    "proof-orcamentacao",
+    "proof-tech-infra"
+  ],
+  "claims_blocked": [
+    "claim-blocked-client-names",
+    "claim-blocked-financial-results",
+    "claim-blocked-work-values"
+  ],
+  "tests": {
+    "npm_test": "PASS",
+    "pseo": "91 passed, 2 skipped",
+    "analytics": "PASS",
+    "attribution": "PASS",
+    "brand": "14/14 PASS",
+    "build_site": "PASS",
+    "audit_public_artifact": "PASS",
+    "validate_seo": "PASS_WITH_WARNINGS"
+  },
+  "build": {
+    "ok": true,
+    "public_directory": "_site",
+    "file_count": 2241,
+    "public_artifact_hash": "452193a2fc87f8593a1e07dfce91748126318625c7be018674d93633b922aaf3"
+  },
+  "deploy": {
+    "status": "DEPLOY_BLOCKED",
+    "reason": "No Netlify auth / production deploy in this session"
+  },
+  "risks": [
+    "Netlify form renamed to diagnostico-b2g — configure dashboard if needed",
+    "No live analytics property ID",
+    "Zero approved cases",
+    "National pSEO noindex title collisions (warn-only)",
+    "Prices not published without authorization"
+  ],
+  "next_steps": [
+    "Open PR and review commercial home + four offers",
+    "Netlify preview deploy of _site",
+    "Configure form notification for diagnostico-b2g",
+    "Optional: set CONFENGE_ANALYTICS_PROVIDER when ready",
+    "Approve sanitized cases before publishing outcomes"
+  ]
+}

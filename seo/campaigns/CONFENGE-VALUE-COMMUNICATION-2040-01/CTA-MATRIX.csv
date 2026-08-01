@@ -1,0 +1,14 @@
+page,intent,primary_cta,secondary_cta,whatsapp_theme
+home,diagnose,Diagnosticar minha operação B2G,Tenho uma decisão crítica agora,critical_decision
+diretoria-b2g,retainer,Conhecer a Diretoria B2G,Diagnosticar operação,diretoria_b2g
+diagnostico-b2g-360,entry,Solicitar diagnóstico B2G,Formulário,diagnostico_360
+bid-room-licitacoes-obras,opportunity,Avaliar uma oportunidade,Formulário,bid_room
+defesa-margem-contratos-publicos,contract,Enquadrar um risco contratual,Formulário,contract_defense
+diagnostico-pre-licitacao,pre_bid,Avaliar uma oportunidade,Conhecer a Diretoria B2G,bid_room
+auditoria-orcamento-licitacao,price,Revisar esta oportunidade,Operação B2G,bid_room
+medicoes-glosas-obras-publicas,execution,Enquadrar um risco contratual,Diretoria B2G,contract_defense
+aditivos-obras-publicas,amendment,Enquadrar o evento contratual,Diagnóstico B2G,contract_defense
+reequilibrio-obras-publicas,reequilibrium,Enquadrar o reequilíbrio,Diretoria B2G,contract_defense
+defesa-tecnica-contratos-publicos,defense,Organizar a posição técnica,Diagnóstico,contract_defense
+inteligencia,apply_data,Aplicar estes dados à minha empresa,Diretoria B2G,intelligence
+radar,configure,Configurar meu radar de oportunidades,Diagnóstico B2G,radar

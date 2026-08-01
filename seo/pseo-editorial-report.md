@@ -1,9 +1,9 @@
 # pSEO Editorial Audit
 
 - ok: **True**
-- pages: 2457
+- pages: 2049
 - publish fails: 0
-- P0 issues: 958
+- P0 issues: 629
 
 | page_id | status | decision | P0 | P1 | recommendation |
 |---|---|---|---:|---:|---|
@@ -552,7 +552,7 @@
 | `agency-16886871` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-88254883` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-24850216` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `agency-75740811` | noindex | pass | 0 | 0 | eligible_for_human_review |
+| `agency-75740811` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `agency-95583571` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-95954509` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-87612750` | noindex | pass | 0 | 0 | eligible_for_human_review |
@@ -1303,7 +1303,7 @@
 | `agency-46634614` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-43052497` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-75352062` | reject | pass | 0 | 0 | reject_or_noindex |
-| `agency-76208818` | reject | pass | 0 | 0 | reject_or_noindex |
+| `agency-76208818` | reject | pass | 0 | 1 | reject_or_noindex |
 | `agency-10764307` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-88141460` | reject | pass | 0 | 0 | reject_or_noindex |
 | `agency-11323261` | noindex | pass | 0 | 0 | eligible_for_human_review |
@@ -1312,7 +1312,7 @@
 | `agency-01218643` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-92401553` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-04071106` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `agency-76178029` | reject | pass | 0 | 0 | reject_or_noindex |
+| `agency-76178029` | reject | pass | 0 | 1 | reject_or_noindex |
 | `agency-88756879` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-46634069` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `agency-08096604` | noindex | pass | 0 | 0 | eligible_for_human_review |
@@ -1387,12 +1387,11 @@
 | `price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
+| `price-edificacoes-publicas-rs-edificacoes-publicas` | noindex | fail_soft | 2 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
@@ -1402,18 +1401,13 @@
 | `price-edificacoes-publicas-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-sp-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-sp-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sc-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rs-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-go-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
@@ -1421,18 +1415,15 @@
 | `price-saneamento-hidraulica-sc-cbuq-asfalto` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-climatizacao-instalacoes-sp-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-reformas-ampliacoes-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ba-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pb-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ba-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-rs-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ms-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ce-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-ce-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-sc-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-ce-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-es-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-ce-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ce-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
@@ -1440,35 +1431,26 @@
 | `price-edificacoes-publicas-pr-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pb-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-df-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-sp-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-reformas-ampliacoes-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pe-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-ba-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rn-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sp-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ba-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mg-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-mt-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rn-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-climatizacao-instalacoes-sc-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-manutencao-predial-engenharia-rs-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-manutencao-predial-engenharia-ma-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ba-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-mg-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rn-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-es-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-sc-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rj-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-df-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-sc-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-sp-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-manutencao-predial-engenharia-pr-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ma-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pa-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
@@ -1480,29 +1462,22 @@
 | `price-reformas-ampliacoes-ma-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rs-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-mg-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sc-cbuq-asfalto` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-ba-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-rj-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-mt-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-es-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-rj-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pi-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-pe-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-pb-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-ma-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-es-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-sc-intertravado` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-mg-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-pa-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-go-pavimentacao-generica` | reject | pass | 2 | 0 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-go-pavimentacao-generica` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-pi-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ma-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ce-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pr-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-mg-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
@@ -1515,285 +1490,159 @@
 | `price-pavimentacao-infraestrutura-viaria-pa-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-rs-cbuq-asfalto` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pr-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pe-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-mg-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ce-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-pr-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ro-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ms-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rj-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-sp-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-mt-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pr-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ba-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pr-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-df-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ba-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sp-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-pi-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pa-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-mg-manutencao-predial` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-reformas-ampliacoes-es-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-pr-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-manutencao-predial-engenharia-sc-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-go-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pa-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-sc-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-go-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-ma-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-ma-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-pb-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-rj-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ce-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-pa-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-pe-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mt-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ce-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-manutencao-predial-engenharia-go-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-ce-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-rs-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-ba-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-ba-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-saneamento-hidraulica-mg-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-pe-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-sp-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-am-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-projetos-fiscalizacao-supervisao-ce-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-sc-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-mt-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-am-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-mg-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mg-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pr-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rs-cbuq-asfalto` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-manutencao-predial-engenharia-am-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sp-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-manutencao-predial-engenharia-ce-gestao-fiscalizacao-contratos-publicos` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-pa-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pr-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pb-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-mg-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-rn-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-climatizacao-instalacoes-rs-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-climatizacao-instalacoes-sp-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-pa-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-rs-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pi-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sc-pavimentacao-generica` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-edificacoes-publicas-sp-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-se-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-rn-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mt-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ce-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ms-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sc-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-pb-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pi-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-ma-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-go-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ba-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ms-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mt-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mg-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pr-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-sc-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-manutencao-predial-engenharia-go-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ba-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-rs-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mg-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-ba-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-mg-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-sp-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mg-pavimentacao-generica` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-rs-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-climatizacao-instalacoes-rs-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-se-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-go-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-sp-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-go-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-sp-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-se-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-se-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ro-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-sp-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-ce-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-edificacoes-publicas-sc-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-estruturas-contencoes-obras-especiais-rs-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-saneamento-hidraulica-sc-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-mg-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-mt-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pe-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-se-pavimentacao-generica` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-rn-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pe-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mg-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pe-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-ms-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-saneamento-hidraulica-rs-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-pb-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-sp-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-ma-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sp-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-go-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pa-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pr-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-pe-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-manutencao-predial-engenharia-pe-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sc-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-rj-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-ro-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sc-climatizacao-instalacao` | reject | pass | 2 | 0 | reject_or_noindex |
 | `price-manutencao-predial-engenharia-ro-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sc-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-rs-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-sp-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sp-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-pr-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-pb-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-sp-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-ro-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-rs-pavimentacao-generica` | reject | pass | 2 | 0 | reject_or_noindex |
+| `price-servicos-tecnicos-fase-preparatoria-rs-pavimentacao-generica` | reject | pass | 2 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rj-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ba-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-df-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-sp-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-climatizacao-instalacoes-pr-climatizacao-instalacoes` | reject | pass | 3 | 0 | reject_or_noindex |
 | `price-reformas-ampliacoes-rn-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pa-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-mg-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-go-cbuq-asfalto` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sp-pavimentacao-generica` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-rj-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-go-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ma-educacao-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-estruturas-contencoes-obras-especiais-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-sc-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-rs-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-ro-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-pr-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-gestao-fiscalizacao-contratos-publicos-ba-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-al-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-es-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-ce-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ce-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pi-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pr-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-edificacoes-publicas-al-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-saneamento-hidraulica-mg-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-rs-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-rn-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-mg-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-climatizacao-instalacoes-pr-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-saneamento-hidraulica-rs-intertravado` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pr-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sp-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-pi-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rj-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-sp-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-saneamento-hidraulica-sp-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-sc-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sp-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-mg-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-am-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-pr-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-sc-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-mg-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-projetos-fiscalizacao-supervisao-ba-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-climatizacao-instalacoes-sp-saude-edificacao` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-go-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sp-cbuq-asfalto` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-manutencao-predial-engenharia-pa-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mt-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-df-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-sp-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-saneamento-hidraulica-rs-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-ro-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ms-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-go-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mg-cbuq-asfalto` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rr-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-pr-cbuq-asfalto` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-gestao-fiscalizacao-contratos-publicos-mg-gestao-fiscalizacao-contratos-publicos` | reject | pass | 2 | 0 | reject_or_noindex |
 | `price-manutencao-predial-engenharia-mg-gestao-fiscalizacao-contratos-publicos` | reject | pass | 3 | 0 | reject_or_noindex |
@@ -1804,279 +1653,142 @@
 | `price-pavimentacao-infraestrutura-viaria-mt-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-edificacoes-publicas-sc-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-ma-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-se-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-climatizacao-instalacoes-mg-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-to-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pb-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pr-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-es-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-ba-gestao-fiscalizacao-contratos-publicos` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-pi-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-reformas-ampliacoes-pi-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
+| `price-reformas-ampliacoes-pi-educacao-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ba-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-df-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-ba-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-sp-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-reformas-ampliacoes-pr-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-am-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-estruturas-contencoes-obras-especiais-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-pr-cbuq-asfalto` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-pb-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-df-manutencao-predial` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-pb-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
+| `price-climatizacao-instalacoes-df-manutencao-predial` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-saneamento-hidraulica-rs-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ms-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-ac-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-gestao-fiscalizacao-contratos-publicos-mg-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-pa-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-rs-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-pi-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-sc-saneamento-rede` | reject | pass | 2 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-sc-saneamento-rede` | reject | pass | 3 | 0 | reject_or_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pe-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pr-climatizacao-instalacoes` | reject | pass | 3 | 0 | reject_or_noindex |
+| `price-edificacoes-publicas-pr-climatizacao-instalacoes` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-edificacoes-publicas-ba-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ac-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rj-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ba-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-sc-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-climatizacao-instalacoes-rj-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-climatizacao-instalacoes-mg-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-projetos-fiscalizacao-supervisao-mg-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-pr-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-saneamento-hidraulica-mg-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mg-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ms-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-mg-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-mg-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-sp-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-saneamento-hidraulica-sc-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-to-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-pa-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sp-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-go-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rn-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sp-saneamento-rede` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-pb-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pi-educacao-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-pavimentacao-infraestrutura-viaria-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-to-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pi-paralelepipedo` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
+| `price-edificacoes-publicas-pi-paralelepipedo` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sp-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-ba-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-sp-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-mt-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-mg-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-saneamento-hidraulica-rn-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-go-cbuq-asfalto` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-to-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rn-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ma-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-to-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-go-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-pa-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-saneamento-hidraulica-mg-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-climatizacao-instalacoes-pr-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-mg-estruturas-contencoes-obras-especiais` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pe-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ba-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-am-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pi-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-edificacoes-publicas-es-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-mg-gestao-fiscalizacao-contratos-publicos` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-rs-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-to-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pa-estruturas-contencoes-obras-especiais` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-sc-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-am-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-df-cbuq-asfalto` | reject | pass | 2 | 0 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-df-cbuq-asfalto` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-edificacoes-publicas-rn-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-ms-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-to-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-projetos-fiscalizacao-supervisao-mt-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rs-saneamento-rede` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-sc-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-rs-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-pr-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-saneamento-hidraulica-mg-intertravado` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-saneamento-hidraulica-sc-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-projetos-fiscalizacao-supervisao-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-ro-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-ce-saude-edificacao` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-pr-manutencao-predial` | reject | pass | 2 | 0 | reject_or_noindex |
+| `price-edificacoes-publicas-pr-manutencao-predial` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-edificacoes-publicas-mt-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-am-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-am-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-manutencao-predial-engenharia-ap-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-rs-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-estruturas-contencoes-obras-especiais-sc-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-pr-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-es-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-rs-saneamento-rede` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-estruturas-contencoes-obras-especiais-go-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-estruturas-contencoes-obras-especiais-rs-pavimentacao-generica` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-estruturas-contencoes-obras-especiais` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ms-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pe-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rj-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-mg-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sc-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-sc-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-go-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-mt-cbuq-asfalto` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-sc-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-manutencao-predial-engenharia-al-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-sc-saneamento-rede` | reject | pass | 2 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mg-saneamento-rede` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-se-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-climatizacao-instalacao` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-climatizacao-instalacoes-sp-climatizacao-instalacao` | reject | pass | 2 | 0 | reject_or_noindex |
+| `price-climatizacao-instalacoes-sp-climatizacao-instalacao` | reject | pass | 3 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ro-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sp-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-df-cbuq-asfalto` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-go-estruturas-contencoes-obras-especiais` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ba-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
+| `price-pavimentacao-infraestrutura-viaria-go-estruturas-contencoes-obras-especiais` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-pavimentacao-infraestrutura-viaria-sc-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ce-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-se-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-se-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-sp-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rj-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-rs-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-manutencao-predial-engenharia-to-manutencao-predial` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-rs-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-al-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
+| `price-pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pb-servicos-tecnicos-fase-preparatoria` | reject | pass | 2 | 0 | reject_or_noindex |
 | `price-saneamento-hidraulica-ba-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pr-pavimentacao-generica` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-sp-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-ms-cbuq-asfalto` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-ba-paralelepipedo` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-rs-saneamento-rede` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sc-intertravado` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-reformas-ampliacoes-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-pavimentacao-infraestrutura-viaria-pr-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-rj-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-pr-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-es-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-saneamento-hidraulica-go-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rs-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-go-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-pavimentacao-infraestrutura-viaria-rn-intertravado` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-mt-edificacoes-publicas` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ro-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-saneamento-hidraulica-sp-cbuq-asfalto` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-am-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-ce-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-projetos-fiscalizacao-supervisao-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-saneamento-hidraulica-pr-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pb-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-sc-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-projetos-fiscalizacao-supervisao-sc-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-ms-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-mt-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-climatizacao-instalacoes-rs-educacao-edificacao` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-climatizacao-instalacoes-rs-climatizacao-instalacoes` | reject | pass | 3 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pr-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pi-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-df-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-sp-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-saneamento-hidraulica-ce-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-rn-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-projetos-fiscalizacao-supervisao-rn-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-ma-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-projetos-fiscalizacao-supervisao-ma-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-ba-saneamento-rede` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pb-paralelepipedo` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-ms-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-saneamento-rede` | noindex | pass | 0 | 0 | eligible_for_human_review |
+| `price-manutencao-predial-engenharia-ba-saneamento-rede` | reject | pass | 3 | 0 | reject_or_noindex |
 | `price-saneamento-hidraulica-ro-cbuq-asfalto` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pb-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-pb-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sc-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-ce-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-climatizacao-instalacoes-sp-saneamento-rede` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-am-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
+| `price-climatizacao-instalacoes-sp-saneamento-rede` | reject | pass | 3 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pr-manutencao-predial` | noindex | fail_soft | 0 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-al-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-ac-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-reformas-ampliacoes-am-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pb-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-mg-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-manutencao-predial-engenharia-go-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-go-gestao-fiscalizacao-contratos-publicos` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-projetos-fiscalizacao-supervisao-go-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
 | `price-saneamento-hidraulica-df-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-es-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
@@ -2085,216 +1797,96 @@
 | `price-manutencao-predial-engenharia-sc-gestao-fiscalizacao-contratos-publicos` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-saneamento-hidraulica-rj-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-saneamento-hidraulica-rj-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-es-drenagem` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-saneamento-hidraulica-es-drenagem` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rj-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rn-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-climatizacao-instalacoes-mg-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-rs-estruturas-contencoes-obras-especiais` | reject | pass | 2 | 0 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-es-drenagem` | reject | pass | 3 | 1 | reject_or_noindex |
+| `price-saneamento-hidraulica-es-drenagem` | reject | pass | 3 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mg-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-rs-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-rs-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-manutencao-predial-engenharia-ma-gestao-fiscalizacao-contratos-publicos` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-ms-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-manutencao-predial-engenharia-pe-saude-edificacao` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-rs-saneamento-hidraulica` | noindex | fail_soft | 1 | 0 | keep_noindex |
+| `price-manutencao-predial-engenharia-pe-saude-edificacao` | reject | pass | 3 | 0 | reject_or_noindex |
 | `price-manutencao-predial-engenharia-al-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-al-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-sp-saude-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-servicos-tecnicos-fase-preparatoria-es-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-es-educacao-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-al-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pi-cbuq-asfalto` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-saneamento-hidraulica-sp-saneamento-rede` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-mg-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-pi-paralelepipedo` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-saneamento-hidraulica-sp-drenagem` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `price-edificacoes-publicas-ro-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-reformas-ampliacoes-al-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-pr-pavimentacao-generica` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-sp-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-servicos-tecnicos-fase-preparatoria-es-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-climatizacao-instalacoes-ba-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-edificacoes-publicas-go-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-pa-gestao-fiscalizacao-contratos-publicos` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-projetos-fiscalizacao-supervisao-pa-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
 | `price-climatizacao-instalacoes-go-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-edificacoes-publicas-sc-edificacoes-publicas` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-rs-climatizacao-instalacoes` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-drenagem` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-estruturas-contencoes-obras-especiais-pr-estruturas-contencoes-obras-especiais` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `price-pavimentacao-infraestrutura-viaria-pr-recape-asfaltico` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rn-educacao-edificacao` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-reformas-ampliacoes-rn-educacao-edificacao` | reject | pass | 2 | 0 | reject_or_noindex |
 | `price-projetos-fiscalizacao-supervisao-mg-pavimentacao-generica` | noindex | fail_soft | 0 | 1 | keep_noindex |
-| `price-edificacoes-publicas-rs-cbuq-asfalto` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-climatizacao-instalacoes-ce-climatizacao-instalacoes` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ba-educacao-edificacao` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `price-edificacoes-publicas-rj-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
 | `price-edificacoes-publicas-pa-saude-edificacao` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-pavimentacao-infraestrutura-viaria-df-intertravado` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria` | noindex | fail_soft | 1 | 1 | keep_noindex |
-| `price-saneamento-hidraulica-mg-intertravado` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `price-manutencao-predial-engenharia-rr-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-df-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-df-intertravado` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pi-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-rs-climatizacao-instalacoes` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ac-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ms-cbuq-asfalto` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-saneamento-hidraulica-sc-drenagem` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-se-cbuq-asfalto` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-se-cbuq-asfalto` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-mg-saude-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-sp-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-saneamento-hidraulica-sc-saneamento-rede` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-go-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-ce-manutencao-predial` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-sp-saneamento-rede` | reject | pass | 1 | 0 | reject_or_noindex |
+| `price-edificacoes-publicas-go-saneamento-rede` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-ce-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-se-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-climatizacao-instalacoes-sc-climatizacao-instalacoes` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-estruturas-contencoes-obras-especiais-es-estruturas-contencoes-obras-especiais` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-pa-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-saneamento-hidraulica-rs-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-pa-gestao-fiscalizacao-contratos-publicos` | reject | pass | 1 | 0 | reject_or_noindex |
+| `price-saneamento-hidraulica-rs-saneamento-rede` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-rn-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-sc-saneamento-rede` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-drenagem` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-saneamento-hidraulica-mg-drenagem` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-reformas-ampliacoes-sp-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-rs-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-mg-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-sp-saneamento-rede` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-es-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-am-manutencao-predial` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-df-pavimentacao-generica` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-saneamento-hidraulica-ce-saneamento-hidraulica` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-ma-saude-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ba-paralelepipedo` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-estruturas-contencoes-obras-especiais-go-estruturas-contencoes-obras-especiais` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-manutencao-predial` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-al-educacao-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-rs-saneamento-rede` | reject | pass | 1 | 0 | reject_or_noindex |
+| `price-servicos-tecnicos-fase-preparatoria-am-manutencao-predial` | reject | pass | 0 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-ma-saude-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-rs-manutencao-predial` | reject | pass | 3 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-al-educacao-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ba-saneamento-rede` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ba-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-saneamento-hidraulica-rs-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-ms-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-edificacoes-publicas-ac-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-saneamento-hidraulica-rj-saneamento-hidraulica` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pe-manutencao-predial` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-rs-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-estruturas-contencoes-obras-especiais-es-estruturas-contencoes-obras-especiais` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mg-manutencao-predial` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-servicos-tecnicos-fase-preparatoria-pe-manutencao-predial` | reject | pass | 0 | 1 | reject_or_noindex |
+| `price-servicos-tecnicos-fase-preparatoria-mg-manutencao-predial` | reject | pass | 0 | 1 | reject_or_noindex |
 | `price-reformas-ampliacoes-mg-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-mt-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-rn-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ce-manutencao-predial` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-ma-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-reformas-ampliacoes-ma-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-servicos-tecnicos-fase-preparatoria-ce-manutencao-predial` | reject | pass | 0 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ma-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
 | `price-climatizacao-instalacoes-rn-climatizacao-instalacoes` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-reformas-ampliacoes-ce-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-pr-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pi-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-go-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-pr-drenagem` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-pr-saneamento-rede` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pe-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-go-recape-asfaltico` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-projetos-fiscalizacao-supervisao-es-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-reformas-ampliacoes-es-educacao-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-saneamento-hidraulica-sc-drenagem` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-go-cbuq-asfalto` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-ba-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-gestao-fiscalizacao-contratos-publicos-mg-pavimentacao-generica` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-se-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-es-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-se-educacao-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-estruturas-contencoes-obras-especiais-rs-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-gestao-fiscalizacao-contratos-publicos-mg-pavimentacao-generica` | reject | pass | 0 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-df-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-mg-manutencao-predial` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-rn-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-go-estruturas-contencoes-obras-especiais` | reject | pass | 3 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-pr-intertravado` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-pb-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-estruturas-contencoes-obras-especiais-pa-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-ma-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-ro-educacao-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-edificacoes-publicas-pr-intertravado` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-ro-educacao-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-climatizacao-instalacoes-es-climatizacao-instalacoes` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-climatizacao-instalacoes-mg-climatizacao-instalacoes` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-drenagem` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-se-pavimentacao-generica` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-projetos-fiscalizacao-supervisao-se-pavimentacao-generica` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-se-pavimentacao-generica` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-go-cbuq-asfalto` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-climatizacao-instalacoes-ce-climatizacao-instalacoes` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rj-paralelepipedo` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-ro-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-ro-saude-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-edificacoes-publicas-se-pavimentacao-generica` | reject | pass | 3 | 1 | reject_or_noindex |
+| `price-projetos-fiscalizacao-supervisao-se-pavimentacao-generica` | reject | pass | 2 | 1 | reject_or_noindex |
+| `price-servicos-tecnicos-fase-preparatoria-se-pavimentacao-generica` | reject | pass | 2 | 1 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-rj-paralelepipedo` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-ro-saude-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-reformas-ampliacoes-pb-saude-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pr-saneamento-rede` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-ro-educacao-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-ap-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-drenagem` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-saneamento-hidraulica-mg-saneamento-hidraulica` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-rs-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-rs-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-rs-gestao-fiscalizacao-contratos-publicos` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-projetos-fiscalizacao-supervisao-rs-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-saneamento-hidraulica-pr-drenagem` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-saneamento-hidraulica-pr-drenagem` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-gestao-fiscalizacao-contratos-publicos-pb-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sp-recape-asfaltico` | reject | pass | 3 | 1 | reject_or_noindex |
 | `price-estruturas-contencoes-obras-especiais-sc-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-al-paralelepipedo` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-al-paralelepipedo` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-servicos-tecnicos-fase-preparatoria-pa-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-al-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-am-pavimentacao-generica` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-estruturas-contencoes-obras-especiais-am-pavimentacao-generica` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-mg-drenagem` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-saneamento-hidraulica-mg-drenagem` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-estruturas-contencoes-obras-especiais-mg-pavimentacao-generica` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-edificacoes-publicas-am-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-estruturas-contencoes-obras-especiais-am-pavimentacao-generica` | reject | pass | 0 | 1 | reject_or_noindex |
+| `price-estruturas-contencoes-obras-especiais-mg-pavimentacao-generica` | reject | pass | 0 | 1 | reject_or_noindex |
 | `price-estruturas-contencoes-obras-especiais-rs-saneamento-rede` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-rn-recape-asfaltico` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-mg-pavimentacao-generica` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-pi-manutencao-predial` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-rn-recape-asfaltico` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-mg-pavimentacao-generica` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-estruturas-contencoes-obras-especiais-pr-cbuq-asfalto` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-sc-drenagem` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pi-intertravado` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-rs-saude-edificacao` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-sc-drenagem` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-pi-intertravado` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-reformas-ampliacoes-rj-saude-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-rn-gestao-fiscalizacao-contratos-publicos` | reject | pass | 0 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-rn-gestao-fiscalizacao-contratos-publicos` | reject | pass | 1 | 0 | reject_or_noindex |
 | `price-saneamento-hidraulica-pa-saneamento-hidraulica` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pa-drenagem` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-climatizacao-instalacoes-ba-climatizacao-instalacoes` | reject | pass | 1 | 0 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-pa-drenagem` | reject | pass | 1 | 1 | reject_or_noindex |
 | `price-estruturas-contencoes-obras-especiais-ce-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-climatizacao-instalacoes-pr-climatizacao-instalacoes` | reject | pass | 1 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-am-educacao-edificacao` | reject | pass | 0 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-sp-manutencao-predial` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-sp-manutencao-predial` | reject | pass | 3 | 1 | reject_or_noindex |
 | `comp-pavimentacao-infraestrutura-viaria-rs` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `comp-pavimentacao-infraestrutura-viaria-sc` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `comp-pavimentacao-infraestrutura-viaria-pr` | noindex | fail_soft | 1 | 0 | keep_noindex |
@@ -2443,7 +2035,7 @@
 | `comp-manutencao-predial-engenharia-se` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `comp-saneamento-hidraulica-pe` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `comp-pavimentacao-infraestrutura-viaria-ap` | noindex | fail_soft | 1 | 0 | keep_noindex |
-| `comp-estruturas-contencoes-obras-especiais-ms` | reject | pass | 0 | 0 | reject_or_noindex |
+| `comp-estruturas-contencoes-obras-especiais-ms` | reject | pass | 1 | 0 | reject_or_noindex |
 | `comp-saneamento-hidraulica-ba` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `comp-climatizacao-instalacoes-se` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `comp-saneamento-hidraulica-ms` | noindex | fail_soft | 1 | 0 | keep_noindex |
@@ -2451,19 +2043,19 @@
 | `comp-estruturas-contencoes-obras-especiais-go` | noindex | fail_soft | 1 | 0 | keep_noindex |
 | `radar-servicos-tecnicos-fase-preparatoria-sc` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `radar-pavimentacao-infraestrutura-viaria-sc` | reject | pass | 2 | 0 | reject_or_noindex |
-| `radar-edificacoes-publicas-sc` | reject | pass | 1 | 0 | reject_or_noindex |
+| `radar-edificacoes-publicas-sc` | reject | pass | 2 | 0 | reject_or_noindex |
 | `radar-saneamento-hidraulica-sc` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `radar-reformas-ampliacoes-sc` | reject | pass | 1 | 0 | reject_or_noindex |
+| `radar-reformas-ampliacoes-sc` | reject | pass | 2 | 0 | reject_or_noindex |
 | `radar-manutencao-predial-engenharia-sc` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `radar-estruturas-contencoes-obras-especiais-sc` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `radar-climatizacao-instalacoes-sc` | reject | pass | 1 | 0 | reject_or_noindex |
+| `radar-climatizacao-instalacoes-sc` | reject | pass | 2 | 0 | reject_or_noindex |
 | `radar-gestao-fiscalizacao-contratos-publicos-sc` | noindex | pass | 0 | 0 | eligible_for_human_review |
 | `radar-projetos-fiscalizacao-supervisao-sc` | noindex | pass | 0 | 0 | eligible_for_human_review |
-| `prob-orcamento-edital` | reject | pass | 2 | 0 | reject_or_noindex |
-| `prob-sinapi-sicro` | reject | pass | 2 | 0 | reject_or_noindex |
-| `prob-medicao-glosa` | reject | pass | 1 | 0 | reject_or_noindex |
-| `prob-aditivos-margem` | reject | pass | 2 | 0 | reject_or_noindex |
-| `prob-reequilibrio` | reject | pass | 1 | 0 | reject_or_noindex |
+| `prob-orcamento-edital` | reject | pass | 0 | 0 | reject_or_noindex |
+| `prob-sinapi-sicro` | reject | pass | 0 | 0 | reject_or_noindex |
+| `prob-medicao-glosa` | reject | pass | 0 | 0 | reject_or_noindex |
+| `prob-aditivos-margem` | reject | pass | 0 | 0 | reject_or_noindex |
+| `prob-reequilibrio` | reject | pass | 0 | 0 | reject_or_noindex |
 
 ## market-pavimentacao-infraestrutura-viaria-pi
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2546,6 +2138,9 @@
 ## agency-75927582
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
+## agency-75740811
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
 ## agency-18243220
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: suppliers<3
 
@@ -2622,6 +2217,12 @@
 ## agency-45731650
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_single_day_share>0.70
 
+## agency-76208818
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
+## agency-76178029
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
 ## agency-00675468
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: suppliers<3
 
@@ -2642,6 +2243,7 @@
 
 ## price-edificacoes-publicas-rs-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+- **P0** `ingestion_prefix_name`: Nome de órgão com prefixo de ingestão
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica
@@ -2657,10 +2259,6 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -2702,10 +2300,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mg-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-rs-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2722,18 +2316,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-sp-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-sc-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2743,10 +2325,6 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sc-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -2776,10 +2354,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-ba-paralelepipedo
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2804,10 +2378,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-rs-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2817,10 +2387,6 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-manutencao-predial-engenharia-sc-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-ce-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -2852,9 +2418,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-climatizacao-instalacoes-sp-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-reformas-ampliacoes-go-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2875,14 +2438,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ba-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-mg-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2895,10 +2450,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-rn-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2906,15 +2457,7 @@
 ## price-climatizacao-instalacoes-sc-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-manutencao-predial-engenharia-rs-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-manutencao-predial-engenharia-ma-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ba-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -2938,10 +2481,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rj-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-df-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -2949,9 +2488,6 @@
 ## price-saneamento-hidraulica-sc-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-sp-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-manutencao-predial-engenharia-pr-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -2993,10 +2529,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mg-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-ba-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -3014,14 +2546,6 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-mt-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-es-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-rj-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3048,23 +2572,17 @@
 ## price-saneamento-hidraulica-sc-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-edificacoes-publicas-mg-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-reformas-ampliacoes-pa-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-go-pavimentacao-generica
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-edificacoes-publicas-pi-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ma-edificacoes-publicas
+## price-edificacoes-publicas-pi-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3106,27 +2624,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-pe-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-manutencao-predial-engenharia-mg-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ce-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-pr-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3162,26 +2660,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-sc-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-df-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ba-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-reformas-ampliacoes-pi-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -3190,37 +2668,15 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-manutencao-predial-engenharia-mg-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-reformas-ampliacoes-es-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-manutencao-predial-engenharia-sc-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-go-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pa-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-sc-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-go-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ma-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3252,10 +2708,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ce-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-manutencao-predial-engenharia-go-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -3276,30 +2728,14 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-estruturas-contencoes-obras-especiais-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-sp-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-sp-recape-asfaltico
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-manutencao-predial-engenharia-am-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-sc-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3315,19 +2751,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-mg-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-am-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3337,10 +2761,6 @@
 ## price-manutencao-predial-engenharia-ce-gestao-fiscalizacao-contratos-publicos
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-edificacoes-publicas-pa-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -3349,28 +2769,13 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-pb-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-mg-drenagem
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-rn-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-climatizacao-instalacoes-rs-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-climatizacao-instalacoes-sp-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-pavimentacao-infraestrutura-viaria-rs-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pi-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3389,23 +2794,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mt-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-ce-intertravado
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ms-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3413,19 +2802,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pb-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-pi-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-ma-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3437,15 +2814,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ba-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-ms-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mt-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3457,14 +2826,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-manutencao-predial-engenharia-go-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ba-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-rs-drenagem
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
@@ -3472,24 +2833,9 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mg-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-ba-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-mg-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sp-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -3498,21 +2844,12 @@
 ## price-servicos-tecnicos-fase-preparatoria-mg-pavimentacao-generica
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-climatizacao-instalacoes-rs-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-pavimentacao-infraestrutura-viaria-se-paralelepipedo
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-sp-saude-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas
@@ -3531,22 +2868,12 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ce-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-sc-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-saneamento-hidraulica-sc-drenagem
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-mg-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-reformas-ampliacoes-mt-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -3556,22 +2883,12 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-pe-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-se-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-mg-edificacoes-publicas
@@ -3586,33 +2903,11 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mg-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pe-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-reformas-ampliacoes-ms-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-rs-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-edificacoes-publicas-pb-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sp-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-ma-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3623,33 +2918,11 @@
 ## price-servicos-tecnicos-fase-preparatoria-pa-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-pr-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-manutencao-predial-engenharia-pe-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sc-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rj-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3662,18 +2935,6 @@
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
 ## price-manutencao-predial-engenharia-ro-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sc-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3692,6 +2953,7 @@
 ## price-servicos-tecnicos-fase-preparatoria-rs-pavimentacao-generica
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-rj-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -3703,18 +2965,6 @@
 ## price-servicos-tecnicos-fase-preparatoria-df-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-climatizacao-instalacoes-pr-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
@@ -3724,59 +2974,15 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-pa-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-estruturas-contencoes-obras-especiais-sc-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-go-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-servicos-tecnicos-fase-preparatoria-sp-pavimentacao-generica
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rj-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-go-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ma-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-estruturas-contencoes-obras-especiais-mg-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-sc-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-rs-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-ro-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-pr-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-pavimentacao-infraestrutura-viaria-al-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -3786,15 +2992,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ce-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-ce-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pi-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3815,27 +3013,11 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-rn-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3844,10 +3026,6 @@
 
 ## price-saneamento-hidraulica-rs-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-pr-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -3878,24 +3056,9 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-sp-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-am-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-sc-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-edificacoes-publicas-mg-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -3903,14 +3066,6 @@
 
 ## price-climatizacao-instalacoes-sp-saude-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-go-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-pa-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-mt-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -3920,34 +3075,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-df-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sp-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-saneamento-hidraulica-rs-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-ro-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-ms-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-go-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -3997,26 +3125,10 @@
 ## price-saneamento-hidraulica-ma-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-edificacoes-publicas-se-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-climatizacao-instalacoes-mg-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-edificacoes-publicas-to-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pb-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-recape-asfaltico
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4043,13 +3155,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-climatizacao-instalacoes-sp-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-estruturas-contencoes-obras-especiais-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-pr-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
@@ -4062,23 +3167,13 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-climatizacao-instalacoes-df-manutencao-predial
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-edificacoes-publicas-pb-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-saneamento-hidraulica-rs-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-ms-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4088,19 +3183,12 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-pa-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-manutencao-predial-engenharia-sc-saneamento-rede
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
@@ -4112,6 +3200,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-ba-saude-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4121,56 +3210,19 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-estruturas-contencoes-obras-especiais-pr-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-rj-pavimentacao-infraestrutura-viaria
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ba-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-climatizacao-instalacoes-rj-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-climatizacao-instalacoes-mg-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-pr-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-mg-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-mg-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4180,29 +3232,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-climatizacao-instalacoes-mg-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-edificacoes-publicas-mg-intertravado
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-mg-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sp-saneamento-hidraulica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-saneamento-hidraulica-sc-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-to-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4211,14 +3241,6 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-estruturas-contencoes-obras-especiais-pa-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4234,18 +3256,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-pb-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pi-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-go-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -4255,33 +3265,12 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-pi-paralelepipedo
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-sp-intertravado
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-sp-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-mt-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4289,15 +3278,8 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-mg-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-saneamento-hidraulica-rn-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-mg-intertravado
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-mg-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4307,15 +3289,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rn-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-ma-intertravado
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4323,21 +3297,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-mg-saneamento-hidraulica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-climatizacao-instalacoes-pr-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-pavimentacao-infraestrutura-viaria-mg-estruturas-contencoes-obras-especiais
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pe-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4356,13 +3316,6 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-manutencao-predial-engenharia-mg-gestao-fiscalizacao-contratos-publicos
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-rs-recape-asfaltico
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -4371,21 +3324,15 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-estruturas-contencoes-obras-especiais-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-pa-estruturas-contencoes-obras-especiais
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-sc-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-df-cbuq-asfalto
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-rn-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4395,15 +3342,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-to-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4413,24 +3352,8 @@
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sp-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-servicos-tecnicos-fase-preparatoria-pr-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-sc-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-rs-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-saneamento-hidraulica-mg-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4446,28 +3369,16 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-manutencao-predial-engenharia-ce-saude-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-edificacoes-publicas-pr-manutencao-predial
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-edificacoes-publicas-mt-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-am-edificacoes-publicas
+## price-edificacoes-publicas-mt-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4475,34 +3386,14 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-rs-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-pr-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-es-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-estruturas-contencoes-obras-especiais-rs-pavimentacao-generica
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-mg-estruturas-contencoes-obras-especiais
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-ms-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pe-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4511,21 +3402,6 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-mg-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sc-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rs-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sc-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-go-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4544,18 +3420,12 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-servicos-tecnicos-fase-preparatoria-sc-climatizacao-instalacao
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
 ## price-climatizacao-instalacoes-sp-climatizacao-instalacao
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
 ## price-servicos-tecnicos-fase-preparatoria-ro-manutencao-predial
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-servicos-tecnicos-fase-preparatoria-sp-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-df-cbuq-asfalto
@@ -4566,35 +3436,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-ba-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-sc-recape-asfaltico
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ce-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-se-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4602,25 +3444,7 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-climatizacao-instalacoes-rs-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-manutencao-predial-engenharia-to-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-rs-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-al-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4635,28 +3459,6 @@
 ## price-servicos-tecnicos-fase-preparatoria-pr-pavimentacao-generica
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-ms-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-recape-asfaltico
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-ba-paralelepipedo
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -4665,71 +3467,24 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-reformas-ampliacoes-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-pr-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rj-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-pr-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-saneamento-hidraulica-go-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-servicos-tecnicos-fase-preparatoria-rs-manutencao-predial
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-rn-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mt-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-sp-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-sc-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-am-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ce-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-projetos-fiscalizacao-supervisao-mg-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4738,73 +3493,31 @@
 ## price-saneamento-hidraulica-pr-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ms-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-climatizacao-instalacoes-rs-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-climatizacao-instalacoes-rs-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-pavimentacao-infraestrutura-viaria-pr-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pi-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-reformas-ampliacoes-df-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-sp-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-saneamento-hidraulica-ce-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-manutencao-predial-engenharia-ba-saneamento-rede
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
-## price-pavimentacao-infraestrutura-viaria-pb-paralelepipedo
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ms-saude-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-saneamento-hidraulica-ro-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-pb-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-sc-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-climatizacao-instalacoes-sp-saneamento-rede
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-edificacoes-publicas-am-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-pr-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
@@ -4817,12 +3530,8 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-mg-saneamento-rede
+## price-manutencao-predial-engenharia-go-gestao-fiscalizacao-contratos-publicos
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-servicos-tecnicos-fase-preparatoria-mg-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-saneamento-hidraulica-df-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4848,43 +3557,16 @@
 ## price-saneamento-hidraulica-rj-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-pavimentacao-infraestrutura-viaria-es-drenagem
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-saneamento-hidraulica-es-drenagem
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-rj-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rn-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-mg-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-estruturas-contencoes-obras-especiais-rs-estruturas-contencoes-obras-especiais
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-pavimentacao-infraestrutura-viaria-rs-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-rs-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-manutencao-predial-engenharia-ma-gestao-fiscalizacao-contratos-publicos
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -4894,69 +3576,19 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-manutencao-predial-engenharia-pe-saude-edificacao
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-rs-saneamento-hidraulica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-manutencao-predial-engenharia-al-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-al-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-es-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-al-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pi-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sp-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-mg-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pi-paralelepipedo
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-saneamento-hidraulica-sp-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-edificacoes-publicas-ro-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-reformas-ampliacoes-al-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -4967,33 +3599,11 @@
 ## price-climatizacao-instalacoes-ba-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-edificacoes-publicas-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-climatizacao-instalacoes-go-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-edificacoes-publicas-sc-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-rs-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sc-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-recape-asfaltico
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-rn-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-reformas-ampliacoes-rn-educacao-edificacao
@@ -5003,18 +3613,8 @@
 ## price-projetos-fiscalizacao-supervisao-mg-pavimentacao-generica
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rs-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-climatizacao-instalacoes-ce-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-rj-saude-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
@@ -5025,162 +3625,80 @@
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-df-intertravado
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-mg-intertravado
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-manutencao-predial-engenharia-rr-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-df-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-pi-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rs-climatizacao-instalacoes
+## price-pavimentacao-infraestrutura-viaria-se-cbuq-asfalto
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-sc-drenagem
+## price-manutencao-predial-engenharia-sp-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sc-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-sc-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-sc-saneamento-rede
+## price-edificacoes-publicas-go-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-mg-drenagem
+## price-edificacoes-publicas-ce-manutencao-predial
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-mg-drenagem
+## price-manutencao-predial-engenharia-pa-gestao-fiscalizacao-contratos-publicos
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto
+## price-saneamento-hidraulica-rs-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+
+## price-manutencao-predial-engenharia-rs-saneamento-rede
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+
+## price-servicos-tecnicos-fase-preparatoria-am-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mg-edificacoes-publicas
+## price-edificacoes-publicas-ma-saude-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-sp-saneamento-rede
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-es-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-df-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-ce-saneamento-hidraulica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-ba-paralelepipedo
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-estruturas-contencoes-obras-especiais-go-estruturas-contencoes-obras-especiais
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
 ## price-pavimentacao-infraestrutura-viaria-rs-manutencao-predial
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
+## price-edificacoes-publicas-al-educacao-edificacao
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-ba-saneamento-rede
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
-## price-pavimentacao-infraestrutura-viaria-mg-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-ms-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-ac-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-rj-saneamento-hidraulica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-rs-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+## price-servicos-tecnicos-fase-preparatoria-pe-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-mt-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+## price-servicos-tecnicos-fase-preparatoria-mg-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-manutencao-predial-engenharia-rn-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-ma-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-reformas-ampliacoes-ma-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+## price-servicos-tecnicos-fase-preparatoria-ce-manutencao-predial
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-climatizacao-instalacoes-rn-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-reformas-ampliacoes-ce-edificacoes-publicas
+## price-manutencao-predial-engenharia-pr-saneamento-rede
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pr-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-pe-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-go-recape-asfaltico
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -5188,109 +3706,49 @@
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-sc-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-go-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-servicos-tecnicos-fase-preparatoria-ba-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-es-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-se-educacao-edificacao
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-estruturas-contencoes-obras-especiais-rs-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+## price-gestao-fiscalizacao-contratos-publicos-mg-pavimentacao-generica
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-df-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica
+## price-edificacoes-publicas-pr-intertravado
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-go-estruturas-contencoes-obras-especiais
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-edificacoes-publicas-pb-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-estruturas-contencoes-obras-especiais-pa-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-ma-pavimentacao-generica
+## price-edificacoes-publicas-ro-educacao-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-climatizacao-instalacoes-es-climatizacao-instalacoes
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-climatizacao-instalacoes-mg-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sp-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
 ## price-edificacoes-publicas-se-pavimentacao-generica
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-projetos-fiscalizacao-supervisao-se-pavimentacao-generica
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-se-pavimentacao-generica
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica
+## price-pavimentacao-infraestrutura-viaria-rj-paralelepipedo
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-go-cbuq-asfalto
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-climatizacao-instalacoes-ce-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-edificacoes-publicas-ro-edificacoes-publicas
+## price-edificacoes-publicas-ro-saude-edificacao
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
@@ -5298,73 +3756,64 @@
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
-## price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-manutencao-predial-engenharia-ap-manutencao-predial
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sp-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-saneamento-hidraulica-mg-saneamento-hidraulica
+## price-manutencao-predial-engenharia-rs-gestao-fiscalizacao-contratos-publicos
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-pavimentacao-infraestrutura-viaria-sp-recape-asfaltico
+## price-saneamento-hidraulica-pr-drenagem
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
-- **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
+
+## price-pavimentacao-infraestrutura-viaria-al-paralelepipedo
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-servicos-tecnicos-fase-preparatoria-pa-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-manutencao-predial-engenharia-al-manutencao-predial
+## price-edificacoes-publicas-am-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-pavimentacao-infraestrutura-viaria-mg-drenagem
+## price-estruturas-contencoes-obras-especiais-am-pavimentacao-generica
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
+## price-estruturas-contencoes-obras-especiais-mg-pavimentacao-generica
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
+## price-pavimentacao-infraestrutura-viaria-rn-recape-asfaltico
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-saneamento-hidraulica-mg-drenagem
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
-## price-manutencao-predial-engenharia-pi-manutencao-predial
+## price-manutencao-predial-engenharia-mg-pavimentacao-generica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-edificacoes-publicas-rs-saude-edificacao
+## price-edificacoes-publicas-sc-drenagem
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
+## price-pavimentacao-infraestrutura-viaria-pi-intertravado
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
+
+## price-manutencao-predial-engenharia-rn-gestao-fiscalizacao-contratos-publicos
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
 ## price-saneamento-hidraulica-pa-saneamento-hidraulica
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 
-## price-climatizacao-instalacoes-ba-climatizacao-instalacoes
+## price-pavimentacao-infraestrutura-viaria-pa-drenagem
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
+- **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-estruturas-contencoes-obras-especiais-ce-edificacoes-publicas
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
-## price-climatizacao-instalacoes-pr-climatizacao-instalacoes
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-
 ## price-edificacoes-publicas-sp-manutencao-predial
+- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
-
-## price-servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas
-- **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## comp-pavimentacao-infraestrutura-viaria-rs
@@ -5811,6 +4260,9 @@
 ## comp-pavimentacao-infraestrutura-viaria-ap
 - **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
 
+## comp-estruturas-contencoes-obras-especiais-ms
+- **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
+
 ## comp-saneamento-hidraulica-ba
 - **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
 
@@ -5831,29 +4283,14 @@
 - **P0** `data_quality_gate`: duplicate_rate>0
 
 ## radar-edificacoes-publicas-sc
+- **P0** `table_duplicates`: Linhas duplicadas na tabela (1)
 - **P0** `data_quality_gate`: duplicate_rate>0
 
 ## radar-reformas-ampliacoes-sc
+- **P0** `table_duplicates`: Linhas duplicadas na tabela (2)
 - **P0** `data_quality_gate`: duplicate_rate>0
 
 ## radar-climatizacao-instalacoes-sc
+- **P0** `table_duplicates`: Linhas duplicadas na tabela (1)
 - **P0** `data_quality_gate`: duplicate_rate>0
-
-## prob-orcamento-edital
-- **P0** `claim_without_evidence`: no_direct_budget_edital_evidence
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-sinapi-sicro
-- **P0** `claim_without_evidence`: no_direct_sinapi_sicro_evidence
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-medicao-glosa
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-aditivos-margem
-- **P0** `claim_without_evidence`: no_direct_aditivo_evidence
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-reequilibrio
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
 

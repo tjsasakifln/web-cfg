@@ -1,0 +1,20 @@
+{
+  "campaign": "CONFENGE-VALUE-COMMUNICATION-2040-01",
+  "source": "data/site/proof.json",
+  "published_claims": [
+    "proof-usp-civil",
+    "proof-private-public",
+    "proof-fiscalizacao-gestao",
+    "proof-nacional",
+    "proof-lei-14133",
+    "proof-orcamentacao",
+    "proof-tech-infra"
+  ],
+  "blocked_claims": [
+    "claim-blocked-client-names",
+    "claim-blocked-financial-results",
+    "claim-blocked-work-values"
+  ],
+  "approved_cases": 0,
+  "policy": "Only VERIFIED + public_allowed claims may ship. Cases require APPROVED + client_authorized."
+}

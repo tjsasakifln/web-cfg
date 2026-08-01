@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "dataset_hash": "1fa346d1a68506bfdfd9eb191a11d09fb8e354ab58b720989ad3ddd607bd4668",
+  "dataset_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
   "source_run_id": "pseo-20260801T035051Z-9d2d9627",
   "counts": {
     "noindex": 1804,
@@ -3886,8 +3886,7 @@
     {
       "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
       "reasons": [
-        "no_direct_budget_edital_evidence",
-        "no_claim_specific_evidence",
+        "direct_problem_evidence_without_signals",
         "score=87"
       ],
       "score": 87
@@ -3895,8 +3894,7 @@
     {
       "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
       "reasons": [
-        "no_direct_sinapi_sicro_evidence",
-        "no_claim_specific_evidence",
+        "direct_problem_evidence_without_signals",
         "score=87"
       ],
       "score": 87
@@ -3904,8 +3902,7 @@
     {
       "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
       "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
+        "direct_problem_evidence_without_signals",
         "score=87"
       ],
       "score": 87
@@ -3913,8 +3910,7 @@
     {
       "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
       "reasons": [
-        "no_direct_aditivo_evidence",
-        "no_claim_specific_evidence",
+        "direct_problem_evidence_without_signals",
         "score=87"
       ],
       "score": 87
@@ -3922,8 +3918,7 @@
     {
       "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
       "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
+        "direct_problem_evidence_without_signals",
         "score=87"
       ],
       "score": 87
