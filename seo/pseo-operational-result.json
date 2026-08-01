@@ -1,10 +1,10 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
+  "web_cfg_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
   "extra_cli_sha": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
+  "netlify_deployed_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
   "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "public_directory": "_site",
   "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
@@ -21,8 +21,8 @@
     "production_audit_is_current": true,
     "stale_code": null,
     "critical_count": 0,
-    "audit_target_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
-    "live_manifest_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc"
+    "audit_target_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
+    "live_manifest_sha": "698ba4b117b79d0476b4d615828513c714bb60cd"
   },
   "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
   "gsc_status_by_url": {
@@ -46,7 +46,7 @@
     "statuses": {
       "/data/pseo/manifest.json": 404,
       "/data/pseo/registry.json": 404,
-      "/seo/pseo-operational-result.json": null,
+      "/seo/pseo-operational-result.json": 404,
       "/scripts/pseo/build.py": 404,
       "/package.json": 404,
       "/.git/config": 404,
@@ -64,10 +64,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
+    "web_cfg_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
     "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:22:14Z",
+    "generated_at": "2026-08-01T00:24:10Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "public_directory": "_site",
@@ -85,6 +85,6 @@
     "reexport_without_undue_invalidation_not_proven",
     "GSC credentials absent — NOT_INSPECTED"
   ],
-  "generated_at": "2026-08-01T00:23:40Z",
+  "generated_at": "2026-08-01T00:25:05Z",
   "auditor_version": "wave0-closure-02"
 }

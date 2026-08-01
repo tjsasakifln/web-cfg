@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
+  "web_cfg_head": "698ba4b117b79d0476b4d615828513c714bb60cd",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "merged": true,
@@ -10,8 +10,8 @@
     "on_main": true,
     "source": "github_main"
   },
-  "netlify_deployed_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
-  "production_audit_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
+  "netlify_deployed_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
+  "production_audit_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
   "production_audit_is_current": true,
   "public_directory": "_site",
   "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
@@ -20,7 +20,7 @@
     "statuses": {
       "/data/pseo/manifest.json": 404,
       "/data/pseo/registry.json": 404,
-      "/seo/pseo-operational-result.json": null,
+      "/seo/pseo-operational-result.json": 404,
       "/scripts/pseo/build.py": 404,
       "/package.json": 404,
       "/.git/config": 404,
@@ -76,7 +76,6 @@
     "audit_public_artifact": "ok",
     "production_audit": "ok+current",
     "forbidden_live_404": true,
-    "dual_ua_same_content": true,
     "extra_cli_pr_187": "MERGED"
   },
   "unresolved_risks": [
@@ -98,10 +97,10 @@
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "a7bed7c9edabe1fa1fd2e01713eec3ceada2c2dc",
+    "web_cfg_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
     "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:22:14Z",
+    "generated_at": "2026-08-01T00:24:10Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "public_directory": "_site",
@@ -112,6 +111,6 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "generated_at": "2026-08-01T00:23:52Z",
+  "generated_at": "2026-08-01T00:25:05Z",
   "campaign": "WEB-CFG-PSEO-WAVE0-CLOSURE-02"
 }
