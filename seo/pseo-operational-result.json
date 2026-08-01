@@ -1,13 +1,13 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
+  "web_cfg_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
   "extra_cli_sha": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
+  "netlify_deployed_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
   "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "public_directory": "_site",
-  "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
+  "public_artifact_hash": "e3c45b6fa4b9166e8fa41532c9a7e59afe387911d0c3fcb3c6176a63d84937fe",
   "seed_urls": [
     "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
     "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
@@ -21,8 +21,8 @@
     "production_audit_is_current": true,
     "stale_code": null,
     "critical_count": 0,
-    "audit_target_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
-    "live_manifest_sha": "698ba4b117b79d0476b4d615828513c714bb60cd"
+    "audit_target_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
+    "live_manifest_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888"
   },
   "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
   "gsc_status_by_url": {
@@ -38,6 +38,7 @@
       "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
       "uninspected_seeds=4",
       "discovered_or_crawled=0<3",
+      "snapshot_source_commit_not_on_extra_cli_main",
       "reexport_without_undue_invalidation_not_proven"
     ]
   },
@@ -64,10 +65,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
+    "web_cfg_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
     "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:24:10Z",
+    "generated_at": "2026-08-01T00:37:26Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "public_directory": "_site",
@@ -82,9 +83,10 @@
     "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
     "uninspected_seeds=4",
     "discovered_or_crawled=0<3",
+    "snapshot_source_commit_not_on_extra_cli_main",
     "reexport_without_undue_invalidation_not_proven",
     "GSC credentials absent — NOT_INSPECTED"
   ],
-  "generated_at": "2026-08-01T00:25:05Z",
+  "generated_at": "2026-08-01T00:38:05Z",
   "auditor_version": "wave0-closure-02"
 }

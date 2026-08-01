@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "698ba4b117b79d0476b4d615828513c714bb60cd",
+  "web_cfg_head": "12a80737284b05d1e05f399c091ccc9cd44b5888",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "merged": true,
@@ -10,11 +10,17 @@
     "on_main": true,
     "source": "github_main"
   },
-  "netlify_deployed_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
-  "production_audit_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
+  "snapshot_source_provenance": {
+    "on_main": false,
+    "source_commit_sha": "01123735ed0e240b0adf2233269ac947fa6d56c2",
+    "source_branch": "feat/pseo-semantic-sota",
+    "reason": "source_commit_lookup_failed_or_missing"
+  },
+  "netlify_deployed_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
+  "production_audit_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
   "production_audit_is_current": true,
   "public_directory": "_site",
-  "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
+  "public_artifact_hash": "e3c45b6fa4b9166e8fa41532c9a7e59afe387911d0c3fcb3c6176a63d84937fe",
   "forbidden_public_urls_status": {
     "ok": true,
     "statuses": {
@@ -68,18 +74,22 @@
     "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
     "uninspected_seeds=4",
     "discovered_or_crawled=0<3",
+    "snapshot_source_commit_not_on_extra_cli_main",
     "reexport_without_undue_invalidation_not_proven"
   ],
   "test_results": {
-    "pseo_pytest": "66 passed",
+    "pseo_pytest": "67 passed",
+    "cross_repo_integration": "2 passed (fixture export + consumer path)",
     "build_site": "ok",
     "audit_public_artifact": "ok",
+    "http_smoke": "ok",
     "production_audit": "ok+current",
-    "forbidden_live_404": true,
+    "live_radar_field_scrub": true,
     "extra_cli_pr_187": "MERGED"
   },
   "unresolved_risks": [
     "GSC credentials absent — all seeds NOT_INSPECTED",
+    "Published snapshot source_commit_sha not on extra-cli main (pre-#187 branch feat/pseo-semantic-sota); re-export from main required for PASS",
     "reexport_without_undue_invalidation not proven against live PG"
   ],
   "production_audit": {
@@ -97,10 +107,10 @@
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "698ba4b117b79d0476b4d615828513c714bb60cd",
+    "web_cfg_sha": "12a80737284b05d1e05f399c091ccc9cd44b5888",
     "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:24:10Z",
+    "generated_at": "2026-08-01T00:37:26Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "public_directory": "_site",
@@ -111,6 +121,6 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "generated_at": "2026-08-01T00:25:05Z",
+  "generated_at": "2026-08-01T00:38:20Z",
   "campaign": "WEB-CFG-PSEO-WAVE0-CLOSURE-02"
 }
