@@ -33,6 +33,10 @@
 
   const clusterFromPath = (path) => {
     const p = path || '';
+    if (p.includes('/diretoria-b2g')) return 'offer-diretoria-b2g';
+    if (p.includes('/diagnostico-b2g-360')) return 'offer-diagnostico-b2g';
+    if (p.includes('/bid-room-licitacoes-obras')) return 'offer-bid-room';
+    if (p.includes('/defesa-margem-contratos-publicos')) return 'offer-contract-defense';
     if (p.includes('/medicoes-glosas') || /medicao|glosa|pagamento|parcela-incontroversa|fiscal-nao-assina/.test(p)) return 'medicoes-pagamentos';
     if (p.includes('/aditivos') || /aditivo|demolicao|servico-nao-previsto|item-novo|jogo-de-planilha/.test(p)) return 'aditivos';
     if (p.includes('/reequilibrio') || /reequilibrio|reajuste|repactuacao|curva-abc-reequilibrio/.test(p)) return 'reequilibrio';
@@ -43,6 +47,7 @@
     if (p.includes('/auditoria-orcamento') || /sinapi|sicro|bdi|orcamento|composicao|exequibilidade|mobilizacao|administracao-local|desagio|curva-abc-orcamento/.test(p)) return 'orcamento-bdi';
     if (p === '/' || p === '') return 'home';
     if (p.includes('/conteudos')) return 'conteudos';
+    if (p.includes('/inteligencia') || p.includes('/radar')) return 'pseo';
     return 'other';
   };
 
@@ -153,7 +158,7 @@
     const origem = fromUrl.origem || storedPseo.origem
       || searchParams.get('origem') || hashParams.get('origem');
     const mensagem = document.getElementById('mensagem');
-    const form = document.querySelector('form[name="diagnostico-confenge"]');
+    const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
     const ensureHidden = (fname, fval) => {
       if (!form || !fval) return;
       let input = form.querySelector(`input[name="${fname}"]`);
@@ -211,21 +216,80 @@
     document.querySelectorAll('a[href]').forEach((link) => {
       const href = link.getAttribute('href') || '';
       if (!href.startsWith('/')) return;
+      const isOffer = /\/(diretoria-b2g|diagnostico-b2g-360|bid-room-licitacoes-obras|defesa-margem-contratos-publicos)\/?/.test(href);
       const isService = /\/(auditoria-orcamento-licitacao|medicoes-glosas-obras-publicas|aditivos-obras-publicas|reequilibrio-obras-publicas|atrasos-prorrogacao-obras-publicas|defesa-tecnica-contratos-publicos|diagnostico-pre-licitacao|acompanhamento-contratos-obras)\/?/.test(href);
       const isContact = href.includes('#contato') || href.startsWith('/?tema=');
-      if (!isService && !isContact) return;
+      if (!isService && !isContact && !isOffer) return;
       link.addEventListener('click', () => {
-        const eventName = isContact ? 'service_cta_click' : 'content_to_service_click';
+        const eventName = isContact
+          ? 'service_cta_click'
+          : (isOffer ? 'offer_cta_click' : 'content_to_service_click');
         track(eventName, {
           page_path: pagePath,
           content_cluster: link.getAttribute('data-content-cluster') || defaultCluster,
           cta_position: link.getAttribute('data-cta-position') || 'inline',
           cta_label: (link.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
           device_context: deviceContext,
-          destination_type: isContact ? 'form' : 'service',
+          destination_type: isContact ? 'form' : (isOffer ? 'offer' : 'service'),
+          offer_id: link.getAttribute('data-offer-id') || '',
+          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
         });
       });
     });
+
+    // Named commercial CTA events (hero / final / diagnostic)
+    document.querySelectorAll('[data-event-name]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const eventName = el.getAttribute('data-event-name');
+        const allowed = {
+          diagnostic_cta_click: 1,
+          critical_decision_cta_click: 1,
+          offer_cta_click: 1,
+          offer_view: 1,
+          proof_expand: 1,
+          comparison_view: 1,
+        };
+        if (!eventName || !allowed[eventName]) return;
+        track(eventName, {
+          page_path: pagePath,
+          content_cluster: el.getAttribute('data-content-cluster') || defaultCluster,
+          cta_position: el.getAttribute('data-cta-position') || 'inline',
+          cta_label: (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+          device_context: deviceContext,
+          offer_id: el.getAttribute('data-offer-id')
+            || document.body?.getAttribute('data-offer-id')
+            || '',
+          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
+        });
+      });
+    });
+
+    // Offer page view + comparison section view (once)
+    if (document.body?.getAttribute('data-offer-id')) {
+      track('offer_view', {
+        page_path: pagePath,
+        content_cluster: defaultCluster,
+        device_context: deviceContext,
+        offer_id: document.body.getAttribute('data-offer-id'),
+        source_page_type: 'offer',
+      });
+    }
+    const comparison = document.querySelector('[data-comparison-view]');
+    if (comparison && 'IntersectionObserver' in window) {
+      const compObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          track('comparison_view', {
+            page_path: pagePath,
+            content_cluster: defaultCluster,
+            device_context: deviceContext,
+            cta_position: 'comparison',
+          });
+          compObs.disconnect();
+        });
+      }, { threshold: 0.35 });
+      compObs.observe(comparison);
+    }
 
     // Form funnel
     if (form) {
@@ -243,6 +307,29 @@
       form.querySelectorAll('input, select, textarea').forEach((el) => {
         el.addEventListener('focus', markStart, { once: true });
       });
+      // Controlled selects only — enum categories, never free text
+      const estagioEl = form.querySelector('#estagio');
+      const urgenciaEl = form.querySelector('#urgencia');
+      estagioEl?.addEventListener('change', () => {
+        const v = (estagioEl.value || '').slice(0, 80);
+        if (!v) return;
+        track('qualification_stage_select', {
+          page_path: pagePath,
+          content_cluster: defaultCluster,
+          device_context: deviceContext,
+          stage_category: v,
+        });
+      });
+      urgenciaEl?.addEventListener('change', () => {
+        const v = (urgenciaEl.value || '').slice(0, 80);
+        if (!v) return;
+        track('qualification_urgency_select', {
+          page_path: pagePath,
+          content_cluster: defaultCluster,
+          device_context: deviceContext,
+          urgency_category: v,
+        });
+      });
       form.addEventListener('submit', (event) => {
         if (!form.checkValidity()) {
           track('lead_form_error', {
@@ -258,8 +345,12 @@
           content_cluster: defaultCluster,
           device_context: deviceContext,
           destination_type: 'form',
-          // necessidade is a controlled select — safe enum-like value
-          cta_label: (form.querySelector('#necessidade')?.value || '').slice(0, 80),
+          // controlled selects only — safe enum-like values
+          stage_category: (form.querySelector('#estagio')?.value || '').slice(0, 80),
+          urgency_category: (form.querySelector('#urgencia')?.value || '').slice(0, 80),
+          cta_label: (form.querySelector('#necessidade')?.value
+            || form.querySelector('#estagio')?.value
+            || '').slice(0, 80),
         });
       });
       form.addEventListener('invalid', () => {
