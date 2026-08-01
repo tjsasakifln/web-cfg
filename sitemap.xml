@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://confenge.com.br/</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-01</lastmod>
   </url>
   <url>
     <loc>https://confenge.com.br/acompanhamento-contratos-obras/</loc>
@@ -531,5 +531,25 @@
   <url>
     <loc>https://confenge.com.br/reequilibrio-obras-publicas/</loc>
     <lastmod>2026-07-15</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/diagnostico-b2g-360/</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/diretoria-b2g/</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/bid-room-licitacoes-obras/</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/defesa-margem-contratos-publicos/</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/metodologia-inteligencia/</loc>
+    <lastmod>2026-08-01</lastmod>
   </url>
 </urlset>

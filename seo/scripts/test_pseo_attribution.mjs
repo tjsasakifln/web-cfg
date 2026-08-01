@@ -72,7 +72,14 @@ function makeDoc(formFields = {}) {
       return { type: "", name: "", value: "", tagName: String(tag).toUpperCase() };
     },
     querySelector(sel) {
-      if (sel === 'form[name="diagnostico-confenge"]') return form;
+      // Match script.js: form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]
+      if (
+        sel === 'form[name="diagnostico-b2g"]'
+        || sel === 'form[name="diagnostico-confenge"]'
+        || sel === 'form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]'
+      ) {
+        return form;
+      }
       if (sel === ".menu-toggle" || sel === ".mobile-nav") return null;
       return null;
     },
