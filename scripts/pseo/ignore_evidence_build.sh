@@ -23,6 +23,10 @@ is_evidence() {
   case "$f" in
     seo/pseo-operational-result.json|\
     seo/PSEO-OPERATIONAL-INBOUND-FINAL.md|\
+    seo/PSEO-WAVE0-CLOSURE-02-FINAL.md|\
+    seo/pseo-wave0-closure-result.json|\
+    seo/pseo-verify-release.json|\
+    seo/PUBLIC-ARTIFACT-MANIFEST.json|\
     seo/pseo-production-audit.json|\
     seo/pseo-production-audit.md|\
     seo/pseo-indexation-status.json|\
@@ -33,6 +37,12 @@ is_evidence() {
     seo/pseo-editorial-report.json|\
     seo/pseo-editorial-report.md|\
     seo/pseo-audit-report.json)
+      return 0
+      ;;
+  esac
+  # Any other pure report under seo/*.md or seo/*.json that does not affect HTML
+  case "$f" in
+    seo/*.md|seo/*.json)
       return 0
       ;;
   esac
