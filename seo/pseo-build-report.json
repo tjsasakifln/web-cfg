@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "dataset_hash": "c4b8b017f4f819e596ff083958ddd34f70db95cc1c0b344ef1f02a9374061a08",
-  "source_run_id": "pseo-20260801T031206Z-ee4311a9",
+  "dataset_hash": "1fa346d1a68506bfdfd9eb191a11d09fb8e354ab58b720989ad3ddd607bd4668",
+  "source_run_id": "pseo-20260801T035051Z-9d2d9627",
   "counts": {
-    "noindex": 2106,
-    "reject": 351
+    "noindex": 1804,
+    "reject": 245
   },
   "publishable": [],
   "noindex": [
@@ -1264,7 +1264,6 @@
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica/",
     "/inteligencia/precos/edificacoes-publicas-sp-edificacoes-publicas/",
@@ -1273,18 +1272,13 @@
     "/inteligencia/precos/edificacoes-publicas-mg-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-sc-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-mg-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-rs-cbuq-asfalto/",
     "/inteligencia/precos/reformas-ampliacoes-rs-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-sp-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-sp-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-pr-edificacoes-publicas/",
-    "/inteligencia/precos/manutencao-predial-engenharia-sp-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-intertravado/",
     "/inteligencia/precos/reformas-ampliacoes-sc-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-go-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-sc-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-intertravado/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-cbuq-asfalto/",
     "/inteligencia/precos/reformas-ampliacoes-mg-edificacoes-publicas/",
@@ -1292,18 +1286,15 @@
     "/inteligencia/precos/saneamento-hidraulica-sc-cbuq-asfalto/",
     "/inteligencia/precos/climatizacao-instalacoes-sp-climatizacao-instalacoes/",
     "/inteligencia/precos/reformas-ampliacoes-pr-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-go-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ba-paralelepipedo/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pb-paralelepipedo/",
     "/inteligencia/precos/edificacoes-publicas-ba-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ms-cbuq-asfalto/",
     "/inteligencia/precos/edificacoes-publicas-ce-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto/",
     "/inteligencia/precos/edificacoes-publicas-rs-pavimentacao-generica/",
     "/inteligencia/precos/manutencao-predial-engenharia-ce-manutencao-predial/",
     "/inteligencia/precos/manutencao-predial-engenharia-sc-manutencao-predial/",
-    "/inteligencia/precos/manutencao-predial-engenharia-ce-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-es-pavimentacao-generica/",
     "/inteligencia/precos/reformas-ampliacoes-ce-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ce-cbuq-asfalto/",
@@ -1311,35 +1302,26 @@
     "/inteligencia/precos/edificacoes-publicas-pr-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pb-pavimentacao-generica/",
     "/inteligencia/precos/manutencao-predial-engenharia-df-manutencao-predial/",
-    "/inteligencia/precos/climatizacao-instalacoes-sp-climatizacao-instalacoes/",
     "/inteligencia/precos/reformas-ampliacoes-go-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pe-paralelepipedo/",
     "/inteligencia/precos/manutencao-predial-engenharia-ba-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rn-pavimentacao-generica/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-recape-asfaltico/",
-    "/inteligencia/precos/edificacoes-publicas-ba-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-intertravado/",
     "/inteligencia/precos/manutencao-predial-engenharia-mt-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-sp-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-rn-edificacoes-publicas/",
     "/inteligencia/precos/climatizacao-instalacoes-sc-climatizacao-instalacoes/",
-    "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/manutencao-predial-engenharia-ma-manutencao-predial/",
-    "/inteligencia/precos/edificacoes-publicas-ba-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-mg-pavimentacao-generica/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rn-paralelepipedo/",
     "/inteligencia/precos/edificacoes-publicas-es-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-sc-cbuq-asfalto/",
-    "/inteligencia/precos/edificacoes-publicas-rj-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-df-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-sc-pavimentacao-generica/",
-    "/inteligencia/precos/climatizacao-instalacoes-sp-climatizacao-instalacoes/",
     "/inteligencia/precos/manutencao-predial-engenharia-pr-manutencao-predial/",
     "/inteligencia/precos/edificacoes-publicas-ma-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-pa-edificacoes-publicas/",
@@ -1351,28 +1333,21 @@
     "/inteligencia/precos/reformas-ampliacoes-ma-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-paralelepipedo/",
     "/inteligencia/precos/edificacoes-publicas-mg-cbuq-asfalto/",
-    "/inteligencia/precos/edificacoes-publicas-mg-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ba-cbuq-asfalto/",
     "/inteligencia/precos/edificacoes-publicas-rs-educacao-edificacao/",
     "/inteligencia/precos/manutencao-predial-engenharia-rj-manutencao-predial/",
     "/inteligencia/precos/edificacoes-publicas-rs-saneamento-rede/",
     "/inteligencia/precos/edificacoes-publicas-mt-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-es-edificacoes-publicas/",
-    "/inteligencia/precos/manutencao-predial-engenharia-rj-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-pavimentacao-generica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-pe-edificacoes-publicas/",
     "/inteligencia/precos/reformas-ampliacoes-pb-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ma-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-es-intertravado/",
     "/inteligencia/precos/saneamento-hidraulica-sc-intertravado/",
-    "/inteligencia/precos/edificacoes-publicas-mg-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-pa-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-pi-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-ma-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-ce-educacao-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-pr-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-mg-educacao-edificacao/",
@@ -1385,134 +1360,77 @@
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pa-pavimentacao-generica/",
     "/inteligencia/precos/saneamento-hidraulica-rs-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-paralelepipedo/",
-    "/inteligencia/precos/edificacoes-publicas-pe-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-pr-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-mg-manutencao-predial/",
-    "/inteligencia/precos/edificacoes-publicas-ce-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-rs-educacao-edificacao/",
-    "/inteligencia/precos/manutencao-predial-engenharia-pr-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ro-cbuq-asfalto/",
     "/inteligencia/precos/edificacoes-publicas-ms-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rj-pavimentacao-generica/",
     "/inteligencia/precos/edificacoes-publicas-rs-intertravado/",
     "/inteligencia/precos/edificacoes-publicas-sp-cbuq-asfalto/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mt-cbuq-asfalto/",
     "/inteligencia/precos/edificacoes-publicas-pr-pavimentacao-generica/",
     "/inteligencia/precos/edificacoes-publicas-ba-educacao-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-sc-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-pr-educacao-edificacao/",
-    "/inteligencia/precos/manutencao-predial-engenharia-df-manutencao-predial/",
-    "/inteligencia/precos/edificacoes-publicas-ba-educacao-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-sp-educacao-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/reformas-ampliacoes-pi-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-pa-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-es-edificacoes-publicas/",
     "/inteligencia/precos/reformas-ampliacoes-pr-educacao-edificacao/",
-    "/inteligencia/precos/manutencao-predial-engenharia-sc-manutencao-predial/",
     "/inteligencia/precos/edificacoes-publicas-go-educacao-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-pa-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-sc-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-go-educacao-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-ma-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-ma-educacao-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pb-cbuq-asfalto/",
     "/inteligencia/precos/reformas-ampliacoes-rj-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ce-paralelepipedo/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pa-cbuq-asfalto/",
     "/inteligencia/precos/reformas-ampliacoes-pe-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mt-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-ce-educacao-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/manutencao-predial-engenharia-go-manutencao-predial/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-ce-gestao-fiscalizacao-contratos-publicos/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-rs-saude-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/reformas-ampliacoes-ba-educacao-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-ba-manutencao-predial/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/saneamento-hidraulica-mg-pavimentacao-generica/",
     "/inteligencia/precos/manutencao-predial-engenharia-pe-manutencao-predial/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-rs-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-rs-saude-edificacao/",
     "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-rede/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-recape-asfaltico/",
     "/inteligencia/precos/manutencao-predial-engenharia-am-manutencao-predial/",
     "/inteligencia/precos/projetos-fiscalizacao-supervisao-ce-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/edificacoes-publicas-sc-educacao-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto/",
     "/inteligencia/precos/edificacoes-publicas-mt-pavimentacao-generica/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-am-pavimentacao-generica/",
     "/inteligencia/precos/edificacoes-publicas-mg-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-go-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-drenagem/",
-    "/inteligencia/precos/edificacoes-publicas-pr-educacao-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-cbuq-asfalto/",
-    "/inteligencia/precos/manutencao-predial-engenharia-am-manutencao-predial/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-climatizacao-instalacoes/",
     "/inteligencia/precos/manutencao-predial-engenharia-ce-gestao-fiscalizacao-contratos-publicos/",
-    "/inteligencia/precos/edificacoes-publicas-pa-educacao-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-recape-asfaltico/",
-    "/inteligencia/precos/edificacoes-publicas-pb-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-mg-drenagem/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-rn-edificacoes-publicas/",
     "/inteligencia/precos/climatizacao-instalacoes-rs-climatizacao-instalacoes/",
-    "/inteligencia/precos/climatizacao-instalacoes-sp-climatizacao-instalacoes/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/reformas-ampliacoes-pa-educacao-edificacao/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-drenagem/",
-    "/inteligencia/precos/edificacoes-publicas-pi-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-pavimentacao-generica/",
     "/inteligencia/precos/edificacoes-publicas-sp-saneamento-rede/",
     "/inteligencia/precos/edificacoes-publicas-se-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-rn-paralelepipedo/",
-    "/inteligencia/precos/edificacoes-publicas-mt-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-rs-saneamento-rede/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ce-intertravado/",
-    "/inteligencia/precos/edificacoes-publicas-ms-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-drenagem/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pb-pavimentacao-generica/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-cbuq-asfalto/",
-    "/inteligencia/precos/manutencao-predial-engenharia-ma-manutencao-predial/",
     "/inteligencia/precos/edificacoes-publicas-go-saude-edificacao/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/edificacoes-publicas-ba-educacao-edificacao/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ms-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mt-pavimentacao-generica/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-recape-asfaltico/",
     "/inteligencia/precos/edificacoes-publicas-pr-drenagem/",
     "/inteligencia/precos/reformas-ampliacoes-sc-educacao-edificacao/",
-    "/inteligencia/precos/manutencao-predial-engenharia-go-manutencao-predial/",
-    "/inteligencia/precos/edificacoes-publicas-ba-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-rs-drenagem/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-sc-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-mg-saude-edificacao/",
-    "/inteligencia/precos/manutencao-predial-engenharia-ba-manutencao-predial/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto/",
     "/inteligencia/precos/saneamento-hidraulica-mg-cbuq-asfalto/",
-    "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-rede/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-pavimentacao-generica/",
     "/inteligencia/precos/reformas-ampliacoes-rs-educacao-edificacao/",
-    "/inteligencia/precos/climatizacao-instalacoes-rs-climatizacao-instalacoes/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-se-paralelepipedo/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/reformas-ampliacoes-go-saude-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-sp-saude-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-go-educacao-edificacao/",
@@ -1525,43 +1443,26 @@
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-rs-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/saneamento-hidraulica-sc-drenagem/",
-    "/inteligencia/precos/edificacoes-publicas-mg-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-mt-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-rs-manutencao-predial/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pe-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-rn-manutencao-predial/",
     "/inteligencia/precos/edificacoes-publicas-pe-educacao-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-mg-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-pe-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-ms-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/saneamento-hidraulica-rs-drenagem/",
     "/inteligencia/precos/edificacoes-publicas-pb-educacao-edificacao/",
-    "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-rede/",
-    "/inteligencia/precos/edificacoes-publicas-ma-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-sp-educacao-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-go-cbuq-asfalto/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pa-manutencao-predial/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-intertravado/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/reformas-ampliacoes-pe-educacao-edificacao/",
-    "/inteligencia/precos/manutencao-predial-engenharia-pe-manutencao-predial/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-drenagem/",
-    "/inteligencia/precos/edificacoes-publicas-rj-edificacoes-publicas/",
     "/inteligencia/precos/reformas-ampliacoes-ro-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-ro-manutencao-predial/",
-    "/inteligencia/precos/edificacoes-publicas-sc-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-rs-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-sp-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-rs-edificacoes-publicas/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-mg-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-drenagem/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-pr-saude-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-pb-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-sp-saude-edificacao/",
@@ -1569,338 +1470,164 @@
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-manutencao-predial/",
     "/inteligencia/precos/edificacoes-publicas-ba-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-manutencao-predial/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/edificacoes-publicas-go-edificacoes-publicas/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-sp-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/reformas-ampliacoes-rn-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-pa-edificacoes-publicas/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-sc-edificacoes-publicas/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-mg-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/edificacoes-publicas-pr-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-go-cbuq-asfalto/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-pavimentacao-generica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-cbuq-asfalto/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-mg-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-sc-saneamento-rede/",
-    "/inteligencia/precos/climatizacao-instalacoes-rs-climatizacao-instalacoes/",
-    "/inteligencia/precos/edificacoes-publicas-ro-edificacoes-publicas/",
-    "/inteligencia/precos/climatizacao-instalacoes-pr-climatizacao-instalacoes/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-ba-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-al-pavimentacao-generica/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-es-cbuq-asfalto/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-ce-educacao-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-ce-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-pi-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-al-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/saneamento-hidraulica-mg-saneamento-hidraulica/",
     "/inteligencia/precos/edificacoes-publicas-rs-paralelepipedo/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto/",
     "/inteligencia/precos/saneamento-hidraulica-rn-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/reformas-ampliacoes-mg-saude-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto/",
-    "/inteligencia/precos/edificacoes-publicas-rs-edificacoes-publicas/",
     "/inteligencia/precos/climatizacao-instalacoes-pr-drenagem/",
     "/inteligencia/precos/saneamento-hidraulica-rs-intertravado/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-pr-saneamento-rede/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-manutencao-predial/",
     "/inteligencia/precos/manutencao-predial-engenharia-pi-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rj-cbuq-asfalto/",
     "/inteligencia/precos/saneamento-hidraulica-sp-drenagem/",
     "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-hidraulica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-paralelepipedo/",
     "/inteligencia/precos/edificacoes-publicas-rs-drenagem/",
-    "/inteligencia/precos/edificacoes-publicas-sp-saude-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-mg-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-am-educacao-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-pr-saude-edificacao/",
-    "/inteligencia/precos/climatizacao-instalacoes-sc-climatizacao-instalacoes/",
     "/inteligencia/precos/edificacoes-publicas-mg-saneamento-rede/",
     "/inteligencia/precos/projetos-fiscalizacao-supervisao-ba-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/climatizacao-instalacoes-sp-saude-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-go-saude-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-cbuq-asfalto/",
-    "/inteligencia/precos/manutencao-predial-engenharia-pa-manutencao-predial/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mt-edificacoes-publicas/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-sp-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-df-edificacoes-publicas/",
-    "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-rede/",
     "/inteligencia/precos/saneamento-hidraulica-rs-pavimentacao-generica/",
-    "/inteligencia/precos/manutencao-predial-engenharia-ro-manutencao-predial/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ms-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-go-educacao-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-cbuq-asfalto/",
-    "/inteligencia/precos/edificacoes-publicas-sp-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-edificacoes-publicas/",
     "/inteligencia/precos/climatizacao-instalacoes-pr-pavimentacao-generica/",
     "/inteligencia/precos/edificacoes-publicas-sc-saude-edificacao/",
     "/inteligencia/precos/saneamento-hidraulica-ma-saneamento-hidraulica/",
-    "/inteligencia/precos/edificacoes-publicas-se-edificacoes-publicas/",
     "/inteligencia/precos/climatizacao-instalacoes-mg-climatizacao-instalacoes/",
     "/inteligencia/precos/edificacoes-publicas-to-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-pb-educacao-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-recape-asfaltico/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/manutencao-predial-engenharia-es-manutencao-predial/",
     "/inteligencia/precos/manutencao-predial-engenharia-ba-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/edificacoes-publicas-pi-educacao-edificacao/",
-    "/inteligencia/precos/reformas-ampliacoes-pi-educacao-edificacao/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ba-intertravado/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-df-pavimentacao-generica/",
     "/inteligencia/precos/saneamento-hidraulica-ba-paralelepipedo/",
-    "/inteligencia/precos/climatizacao-instalacoes-sp-climatizacao-instalacoes/",
     "/inteligencia/precos/reformas-ampliacoes-pr-saude-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-am-educacao-edificacao/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-sp-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-pr-cbuq-asfalto/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-pr-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-pb-manutencao-predial/",
-    "/inteligencia/precos/edificacoes-publicas-pb-educacao-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-rs-saneamento-hidraulica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ce-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ms-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-ac-manutencao-predial/",
-    "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-mg-gestao-fiscalizacao-contratos-publicos/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-pa-educacao-edificacao/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-rs-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pi-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pe-intertravado/",
     "/inteligencia/precos/edificacoes-publicas-ba-saude-edificacao/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ac-pavimentacao-generica/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-pr-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rj-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/edificacoes-publicas-ba-saude-edificacao/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/reformas-ampliacoes-sc-saude-edificacao/",
     "/inteligencia/precos/climatizacao-instalacoes-rj-climatizacao-instalacoes/",
-    "/inteligencia/precos/climatizacao-instalacoes-mg-climatizacao-instalacoes/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/saneamento-hidraulica-mg-saneamento-rede/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto/",
-    "/inteligencia/precos/edificacoes-publicas-mg-saneamento-rede/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ms-recape-asfaltico/",
-    "/inteligencia/precos/climatizacao-instalacoes-mg-climatizacao-instalacoes/",
     "/inteligencia/precos/edificacoes-publicas-mg-intertravado/",
-    "/inteligencia/precos/edificacoes-publicas-mg-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica/",
-    "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-hidraulica/",
-    "/inteligencia/precos/saneamento-hidraulica-sc-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-to-edificacoes-publicas/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-go-edificacoes-publicas/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-pa-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-sp-saneamento-rede/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-recape-asfaltico/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rn-cbuq-asfalto/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-saneamento-rede/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas/",
-    "/inteligencia/precos/manutencao-predial-engenharia-pb-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-to-cbuq-asfalto/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-intertravado/",
     "/inteligencia/precos/reformas-ampliacoes-ba-saude-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/climatizacao-instalacoes-sp-climatizacao-instalacoes/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas/",
-    "/inteligencia/precos/manutencao-predial-engenharia-mt-manutencao-predial/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas/",
-    "/inteligencia/precos/saneamento-hidraulica-mg-saneamento-rede/",
     "/inteligencia/precos/saneamento-hidraulica-rn-saneamento-hidraulica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-intertravado/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-cbuq-asfalto/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-edificacoes-publicas/",
     "/inteligencia/precos/reformas-ampliacoes-to-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-rn-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ma-intertravado/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-to-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-go-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-pa-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/saneamento-hidraulica-mg-saneamento-hidraulica/",
-    "/inteligencia/precos/climatizacao-instalacoes-pr-climatizacao-instalacoes/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/edificacoes-publicas-pe-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-ba-saneamento-rede/",
     "/inteligencia/precos/edificacoes-publicas-am-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pi-manutencao-predial/",
     "/inteligencia/precos/edificacoes-publicas-es-pavimentacao-generica/",
-    "/inteligencia/precos/manutencao-predial-engenharia-mg-gestao-fiscalizacao-contratos-publicos/",
-    "/inteligencia/precos/edificacoes-publicas-sp-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-recape-asfaltico/",
     "/inteligencia/precos/manutencao-predial-engenharia-to-manutencao-predial/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-go-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pa-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-sc-educacao-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-am-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/edificacoes-publicas-rn-educacao-edificacao/",
     "/inteligencia/precos/manutencao-predial-engenharia-ms-manutencao-predial/",
-    "/inteligencia/precos/edificacoes-publicas-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-to-pavimentacao-generica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pe-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-drenagem/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-saneamento-rede/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/saneamento-hidraulica-sc-saneamento-hidraulica/",
-    "/inteligencia/precos/edificacoes-publicas-rs-educacao-edificacao/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-pr-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/saneamento-hidraulica-mg-intertravado/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/saneamento-hidraulica-sc-saneamento-rede/",
     "/inteligencia/precos/projetos-fiscalizacao-supervisao-rs-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ro-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica/",
     "/inteligencia/precos/manutencao-predial-engenharia-ce-saude-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-mt-educacao-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-am-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-am-edificacoes-publicas/",
     "/inteligencia/precos/manutencao-predial-engenharia-ap-manutencao-predial/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-drenagem/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-sc-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-drenagem/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-es-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/reformas-ampliacoes-rs-saneamento-rede/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-go-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/estruturas-contencoes-obras-especiais-rs-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/edificacoes-publicas-ms-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-pe-educacao-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-rj-educacao-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-mg-drenagem/",
-    "/inteligencia/precos/edificacoes-publicas-sc-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-rs-saneamento-rede/",
-    "/inteligencia/precos/saneamento-hidraulica-sc-saneamento-rede/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-cbuq-asfalto/",
     "/inteligencia/precos/saneamento-hidraulica-mt-cbuq-asfalto/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-sc-estruturas-contencoes-obras-especiais/",
     "/inteligencia/precos/manutencao-predial-engenharia-al-manutencao-predial/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ms-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-saneamento-rede/",
     "/inteligencia/precos/edificacoes-publicas-se-educacao-edificacao/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ro-manutencao-predial/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-manutencao-predial/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/edificacoes-publicas-ba-edificacoes-publicas/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-recape-asfaltico/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/edificacoes-publicas-ce-saude-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/edificacoes-publicas-se-educacao-edificacao/",
     "/inteligencia/precos/reformas-ampliacoes-se-educacao-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto/",
-    "/inteligencia/precos/edificacoes-publicas-sp-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-rj-saneamento-rede/",
-    "/inteligencia/precos/climatizacao-instalacoes-rs-climatizacao-instalacoes/",
-    "/inteligencia/precos/manutencao-predial-engenharia-to-manutencao-predial/",
-    "/inteligencia/precos/saneamento-hidraulica-rs-drenagem/",
-    "/inteligencia/precos/edificacoes-publicas-al-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto/",
     "/inteligencia/precos/saneamento-hidraulica-ba-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-edificacoes-publicas/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-sp-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-recape-asfaltico/",
     "/inteligencia/precos/edificacoes-publicas-ba-paralelepipedo/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-saneamento-rede/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-intertravado/",
-    "/inteligencia/precos/reformas-ampliacoes-go-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-rj-educacao-edificacao/",
-    "/inteligencia/precos/climatizacao-instalacoes-pr-climatizacao-instalacoes/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-es-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/saneamento-hidraulica-go-saneamento-hidraulica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-manutencao-predial/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-go-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rn-intertravado/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ro-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/saneamento-hidraulica-sp-cbuq-asfalto/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-drenagem/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/edificacoes-publicas-am-educacao-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-ce-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-edificacoes-publicas/",
     "/inteligencia/precos/projetos-fiscalizacao-supervisao-mg-edificacoes-publicas/",
     "/inteligencia/precos/saneamento-hidraulica-pr-saneamento-hidraulica/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pb-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-sc-gestao-fiscalizacao-contratos-publicos/",
-    "/inteligencia/precos/edificacoes-publicas-ms-edificacoes-publicas/",
     "/inteligencia/precos/reformas-ampliacoes-mt-educacao-edificacao/",
     "/inteligencia/precos/climatizacao-instalacoes-rs-educacao-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto/",
     "/inteligencia/precos/reformas-ampliacoes-df-edificacoes-publicas/",
-    "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-rede/",
     "/inteligencia/precos/saneamento-hidraulica-ce-saneamento-hidraulica/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-rn-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-ma-gestao-fiscalizacao-contratos-publicos/",
-    "/inteligencia/precos/edificacoes-publicas-ms-saude-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-saneamento-rede/",
     "/inteligencia/precos/saneamento-hidraulica-ro-cbuq-asfalto/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pb-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-pb-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-manutencao-predial/",
     "/inteligencia/precos/reformas-ampliacoes-ce-saude-edificacao/",
-    "/inteligencia/precos/edificacoes-publicas-am-edificacoes-publicas/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-manutencao-predial/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-al-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ac-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/reformas-ampliacoes-am-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-pb-saude-edificacao/",
-    "/inteligencia/precos/saneamento-hidraulica-mg-saneamento-rede/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria/",
     "/inteligencia/precos/saneamento-hidraulica-df-saneamento-hidraulica/",
     "/inteligencia/precos/edificacoes-publicas-es-educacao-edificacao/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-estruturas-contencoes-obras-especiais/",
@@ -1908,53 +1635,24 @@
     "/inteligencia/precos/manutencao-predial-engenharia-sc-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/saneamento-hidraulica-rj-saneamento-rede/",
     "/inteligencia/precos/saneamento-hidraulica-rj-saneamento-hidraulica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-edificacoes-publicas/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rj-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-rn-educacao-edificacao/",
-    "/inteligencia/precos/climatizacao-instalacoes-mg-climatizacao-instalacoes/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-educacao-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-drenagem/",
-    "/inteligencia/precos/saneamento-hidraulica-rs-drenagem/",
     "/inteligencia/precos/manutencao-predial-engenharia-ma-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/edificacoes-publicas-ms-educacao-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ba-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/saneamento-hidraulica-rs-saneamento-hidraulica/",
     "/inteligencia/precos/manutencao-predial-engenharia-al-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-al-pavimentacao-generica/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-saude-edificacao/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-es-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-es-educacao-edificacao/",
-    "/inteligencia/precos/saneamento-hidraulica-sp-saneamento-rede/",
-    "/inteligencia/precos/edificacoes-publicas-mg-edificacoes-publicas/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/saneamento-hidraulica-sp-drenagem/",
     "/inteligencia/precos/edificacoes-publicas-ro-cbuq-asfalto/",
     "/inteligencia/precos/reformas-ampliacoes-al-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-go-edificacoes-publicas/",
-    "/inteligencia/precos/edificacoes-publicas-pr-pavimentacao-generica/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-sp-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-es-edificacoes-publicas/",
     "/inteligencia/precos/climatizacao-instalacoes-ba-climatizacao-instalacoes/",
-    "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rs-servicos-tecnicos-fase-preparatoria/",
-    "/inteligencia/precos/edificacoes-publicas-go-edificacoes-publicas/",
     "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-pa-gestao-fiscalizacao-contratos-publicos/",
     "/inteligencia/precos/climatizacao-instalacoes-go-climatizacao-instalacoes/",
-    "/inteligencia/precos/edificacoes-publicas-sc-edificacoes-publicas/",
     "/inteligencia/precos/edificacoes-publicas-rs-climatizacao-instalacoes/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-drenagem/",
-    "/inteligencia/precos/estruturas-contencoes-obras-especiais-pr-estruturas-contencoes-obras-especiais/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-recape-asfaltico/",
     "/inteligencia/precos/projetos-fiscalizacao-supervisao-mg-pavimentacao-generica/",
-    "/inteligencia/precos/edificacoes-publicas-rs-cbuq-asfalto/",
     "/inteligencia/precos/climatizacao-instalacoes-ce-climatizacao-instalacoes/",
     "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ba-educacao-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-rj-saude-edificacao/",
     "/inteligencia/precos/edificacoes-publicas-pa-saude-edificacao/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-infraestrutura-viaria/",
-    "/inteligencia/precos/saneamento-hidraulica-mg-intertravado/",
     "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
     "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
     "/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
@@ -3180,51 +2878,6 @@
       "score": 94
     },
     {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-mg-manutencao-predial/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=94"
-      ],
-      "score": 94
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-sp-edificacoes-publicas/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=94"
-      ],
-      "score": 94
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-ce-edificacoes-publicas/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=93"
-      ],
-      "score": 93
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-se-pavimentacao-generica/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=94"
-      ],
-      "score": 94
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-sc-edificacoes-publicas/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=94"
-      ],
-      "score": 94
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-climatizacao-instalacao/",
       "reasons": [
         "buyers<3",
@@ -3250,24 +2903,6 @@
         "sample_independence_unproven",
         "max_buyer_share>0.60",
         "score=94"
-      ],
-      "score": 94
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-rj-edificacoes-publicas/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=94"
-      ],
-      "score": 94
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-ma-educacao-edificacao/",
-      "reasons": [
-        "gates_ok",
-        "score=94",
-        "consolidated_similar_to=price-reformas-ampliacoes-ma-educacao-edificacao"
       ],
       "score": 94
     },
@@ -3335,6 +2970,15 @@
       "score": 92
     },
     {
+      "url": "/inteligencia/precos/reformas-ampliacoes-pi-educacao-edificacao/",
+      "reasons": [
+        "gates_ok",
+        "score=91",
+        "consolidated_similar_to=price-edificacoes-publicas-pi-educacao-edificacao"
+      ],
+      "score": 91
+    },
+    {
       "url": "/inteligencia/precos/climatizacao-instalacoes-df-manutencao-predial/",
       "reasons": [
         "buyers<3",
@@ -3361,33 +3005,6 @@
         "score=90"
       ],
       "score": 90
-    },
-    {
-      "url": "/inteligencia/precos/projetos-fiscalizacao-supervisao-mg-gestao-fiscalizacao-contratos-publicos/",
-      "reasons": [
-        "gates_ok",
-        "score=88",
-        "consolidated_similar_to=price-gestao-fiscalizacao-contratos-publicos-mg-gestao-fiscalizacao-contratos-publicos"
-      ],
-      "score": 88
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-pr-edificacoes-publicas/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=87"
-      ],
-      "score": 87
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-pi-educacao-edificacao/",
-      "reasons": [
-        "gates_ok",
-        "score=84",
-        "consolidated_similar_to=price-reformas-ampliacoes-pi-educacao-edificacao"
-      ],
-      "score": 84
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-pi-paralelepipedo/",
@@ -3417,15 +3034,6 @@
       "score": 86
     },
     {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-infraestrutura-viaria/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
       "url": "/inteligencia/precos/edificacoes-publicas-pr-manutencao-predial/",
       "reasons": [
         "buyers<3",
@@ -3442,16 +3050,6 @@
         "score=84"
       ],
       "score": 84
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-climatizacao-instalacao/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "data_age_days>180",
-        "score=74"
-      ],
-      "score": 74
     },
     {
       "url": "/inteligencia/precos/climatizacao-instalacoes-sp-climatizacao-instalacao/",
@@ -3473,6 +3071,24 @@
       "score": 74
     },
     {
+      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-estruturas-contencoes-obras-especiais/",
+      "reasons": [
+        "gates_ok",
+        "score=81",
+        "consolidated_similar_to=price-estruturas-contencoes-obras-especiais-go-estruturas-contencoes-obras-especiais"
+      ],
+      "score": 81
+    },
+    {
+      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais/",
+      "reasons": [
+        "gates_ok",
+        "score=80",
+        "consolidated_similar_to=price-estruturas-contencoes-obras-especiais-sc-estruturas-contencoes-obras-especiais"
+      ],
+      "score": 80
+    },
+    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pb-servicos-tecnicos-fase-preparatoria/",
       "reasons": [
         "buyers<3",
@@ -3482,44 +3098,7 @@
       "score": 82
     },
     {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-estruturas-contencoes-obras-especiais/",
-      "reasons": [
-        "gates_ok",
-        "score=83",
-        "consolidated_similar_to=price-estruturas-contencoes-obras-especiais-sc-estruturas-contencoes-obras-especiais"
-      ],
-      "score": 83
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ms-cbuq-asfalto/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "data_age_days>180",
-        "score=74"
-      ],
-      "score": 74
-    },
-    {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-edificacoes-publicas/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rj-edificacoes-publicas/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-mt-edificacoes-publicas/",
       "reasons": [
         "buyers<3",
         "max_buyer_share>0.60",
@@ -3535,15 +3114,6 @@
         "consolidated_similar_to=price-gestao-fiscalizacao-contratos-publicos-sc-gestao-fiscalizacao-contratos-publicos"
       ],
       "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/climatizacao-instalacoes-rs-climatizacao-instalacoes/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=79"
-      ],
-      "score": 79
     },
     {
       "url": "/inteligencia/precos/projetos-fiscalizacao-supervisao-rn-gestao-fiscalizacao-contratos-publicos/",
@@ -3571,14 +3141,6 @@
         "score=83"
       ],
       "score": 83
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pb-paralelepipedo/",
-      "reasons": [
-        "data_age_days>180",
-        "score=73"
-      ],
-      "score": 73
     },
     {
       "url": "/inteligencia/precos/climatizacao-instalacoes-sp-saneamento-rede/",
@@ -3630,15 +3192,6 @@
       "score": 73
     },
     {
-      "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-rs-estruturas-contencoes-obras-especiais/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
       "url": "/inteligencia/precos/manutencao-predial-engenharia-pe-saude-edificacao/",
       "reasons": [
         "buyers<3",
@@ -3646,33 +3199,6 @@
         "score=81"
       ],
       "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-al-pavimentacao-generica/",
-      "reasons": [
-        "gates_ok",
-        "score=80",
-        "consolidated_similar_to=price-manutencao-predial-engenharia-al-pavimentacao-generica"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-cbuq-asfalto/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-pi-paralelepipedo/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
     },
     {
       "url": "/inteligencia/precos/projetos-fiscalizacao-supervisao-pa-gestao-fiscalizacao-contratos-publicos/",
@@ -3684,15 +3210,6 @@
       "score": 81
     },
     {
-      "url": "/inteligencia/precos/edificacoes-publicas-rn-educacao-edificacao/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
       "url": "/inteligencia/precos/reformas-ampliacoes-rn-educacao-edificacao/",
       "reasons": [
         "buyers<3",
@@ -3700,15 +3217,6 @@
         "score=82"
       ],
       "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-estruturas-contencoes-obras-especiais/",
-      "reasons": [
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=78"
-      ],
-      "score": 78
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-df-intertravado/",
@@ -3721,24 +3229,6 @@
       "score": 72
     },
     {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-rr-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-df-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pi-edificacoes-publicas/",
       "reasons": [
         "obs<15",
@@ -3748,24 +3238,6 @@
       "score": 80
     },
     {
-      "url": "/inteligencia/precos/edificacoes-publicas-rs-climatizacao-instalacoes/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ac-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ms-cbuq-asfalto/",
       "reasons": [
         "obs<15",
@@ -3773,15 +3245,6 @@
         "score=82"
       ],
       "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-sc-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-se-cbuq-asfalto/",
@@ -3802,34 +3265,7 @@
       "score": 82
     },
     {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ba-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
       "url": "/inteligencia/precos/manutencao-predial-engenharia-sp-saneamento-rede/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-sc-saneamento-rede/",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
@@ -3863,36 +3299,6 @@
         "score=82"
       ],
       "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "data_age_days>180",
-        "score=72"
-      ],
-      "score": 72
-    },
-    {
-      "url": "/inteligencia/precos/climatizacao-instalacoes-sc-climatizacao-instalacoes/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
     },
     {
       "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-es-estruturas-contencoes-obras-especiais/",
@@ -3931,42 +3337,6 @@
       "score": 77
     },
     {
-      "url": "/inteligencia/precos/edificacoes-publicas-sc-saneamento-rede/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-mg-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
       "url": "/inteligencia/precos/reformas-ampliacoes-sp-saneamento-rede/",
       "reasons": [
         "obs<15",
@@ -3986,34 +3356,6 @@
       "score": 72
     },
     {
-      "url": "/inteligencia/precos/edificacoes-publicas-mg-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-sp-saneamento-rede/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "data_age_days>180",
-        "score=72"
-      ],
-      "score": 72
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-es-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-am-manutencao-predial/",
       "reasons": [
         "obs<15",
@@ -4023,37 +3365,6 @@
       "score": 82
     },
     {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "data_age_days>180",
-        "score=72"
-      ],
-      "score": 72
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-df-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-ce-saneamento-hidraulica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "data_age_days>180",
-        "score=72"
-      ],
-      "score": 72
-    },
-    {
       "url": "/inteligencia/precos/edificacoes-publicas-ma-saude-edificacao/",
       "reasons": [
         "obs<15",
@@ -4061,26 +3372,6 @@
         "score=79"
       ],
       "score": 79
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ba-paralelepipedo/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
-    },
-    {
-      "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-go-estruturas-contencoes-obras-especiais/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=82"
-      ],
-      "score": 82
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-manutencao-predial/",
@@ -4114,51 +3405,6 @@
       "score": 82
     },
     {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pa-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ba-saneamento-rede/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-rs-saneamento-rede/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-ms-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
       "url": "/inteligencia/precos/edificacoes-publicas-ac-edificacoes-publicas/",
       "reasons": [
         "obs<15",
@@ -4168,15 +3414,6 @@
       "score": 81
     },
     {
-      "url": "/inteligencia/precos/saneamento-hidraulica-rj-saneamento-hidraulica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pe-manutencao-predial/",
       "reasons": [
         "obs<15",
@@ -4184,24 +3421,6 @@
         "score=79"
       ],
       "score": 79
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-rs-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-es-estruturas-contencoes-obras-especiais/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
     },
     {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-manutencao-predial/",
@@ -4222,43 +3441,7 @@
       "score": 79
     },
     {
-      "url": "/inteligencia/precos/edificacoes-publicas-mt-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-rn-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ce-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-ma-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/reformas-ampliacoes-ma-edificacoes-publicas/",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
@@ -4285,33 +3468,6 @@
       "score": 80
     },
     {
-      "url": "/inteligencia/precos/reformas-ampliacoes-ce-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mt-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
       "url": "/inteligencia/precos/manutencao-predial-engenharia-pr-saneamento-rede/",
       "reasons": [
         "obs<15",
@@ -4321,51 +3477,6 @@
       "score": 77
     },
     {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pi-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=79"
-      ],
-      "score": 79
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-go-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sc-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-ce-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-pr-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pe-edificacoes-publicas/",
       "reasons": [
         "obs<15",
@@ -4373,15 +3484,6 @@
         "score=81"
       ],
       "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-recape-asfaltico/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=76"
-      ],
-      "score": 76
     },
     {
       "url": "/inteligencia/precos/projetos-fiscalizacao-supervisao-es-edificacoes-publicas/",
@@ -4394,33 +3496,6 @@
     },
     {
       "url": "/inteligencia/precos/reformas-ampliacoes-es-educacao-edificacao/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-go-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-sc-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-cbuq-asfalto/",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
@@ -4447,51 +3522,6 @@
       "score": 79
     },
     {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-infraestrutura-viaria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-se-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-es-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-se-educacao-edificacao/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-rs-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
       "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-df-edificacoes-publicas/",
       "reasons": [
         "obs<15",
@@ -4501,46 +3531,6 @@
       "score": 79
     },
     {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-mg-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-rn-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "temporal_span_days<90",
-        "data_age_days>180",
-        "score=71"
-      ],
-      "score": 71
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-go-estruturas-contencoes-obras-especiais/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=81"
-      ],
-      "score": 81
-    },
-    {
       "url": "/inteligencia/precos/edificacoes-publicas-pr-intertravado/",
       "reasons": [
         "obs<15",
@@ -4548,51 +3538,6 @@
         "score=78"
       ],
       "score": 78
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-pb-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-cbuq-asfalto/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
-    },
-    {
-      "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-pa-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-ma-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-ro-educacao-edificacao/",
@@ -4611,33 +3556,6 @@
         "score=79"
       ],
       "score": 79
-    },
-    {
-      "url": "/inteligencia/precos/climatizacao-instalacoes-mg-climatizacao-instalacoes/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=79"
-      ],
-      "score": 79
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-se-pavimentacao-generica/",
@@ -4673,33 +3591,6 @@
       "score": 78
     },
     {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pe-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-go-cbuq-asfalto/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/climatizacao-instalacoes-ce-climatizacao-instalacoes/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=79"
-      ],
-      "score": 79
-    },
-    {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rj-paralelepipedo/",
       "reasons": [
         "obs<15",
@@ -4707,15 +3598,6 @@
         "score=80"
       ],
       "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-ro-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=79"
-      ],
-      "score": 79
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-ro-saude-edificacao/",
@@ -4746,61 +3628,6 @@
         "score=70"
       ],
       "score": 70
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-ro-educacao-edificacao/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-ap-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-pavimentacao-infraestrutura-viaria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "data_age_days>180",
-        "score=70"
-      ],
-      "score": 70
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=79"
-      ],
-      "score": 79
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-mg-saneamento-hidraulica/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
     },
     {
       "url": "/inteligencia/precos/gestao-fiscalizacao-contratos-publicos-rs-gestao-fiscalizacao-contratos-publicos/",
@@ -4848,26 +3675,6 @@
       "score": 77
     },
     {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-pr-servicos-tecnicos-fase-preparatoria/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-recape-asfaltico/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "buyers<3",
-        "max_buyer_share>0.60",
-        "score=79"
-      ],
-      "score": 79
-    },
-    {
       "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-sc-saneamento-rede/",
       "reasons": [
         "obs<15",
@@ -4895,15 +3702,6 @@
       "score": 76
     },
     {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-al-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=78"
-      ],
-      "score": 78
-    },
-    {
       "url": "/inteligencia/precos/edificacoes-publicas-am-pavimentacao-generica/",
       "reasons": [
         "obs<15",
@@ -4920,24 +3718,6 @@
         "score=78"
       ],
       "score": 78
-    },
-    {
-      "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/saneamento-hidraulica-mg-drenagem/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=77"
-      ],
-      "score": 77
     },
     {
       "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-mg-pavimentacao-generica/",
@@ -4977,15 +3757,6 @@
       "score": 78
     },
     {
-      "url": "/inteligencia/precos/manutencao-predial-engenharia-pi-manutencao-predial/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
-    },
-    {
       "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-pr-cbuq-asfalto/",
       "reasons": [
         "obs<15",
@@ -5011,16 +3782,6 @@
         "score=80"
       ],
       "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/edificacoes-publicas-rs-saude-edificacao/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "data_age_days>180",
-        "score=69"
-      ],
-      "score": 69
     },
     {
       "url": "/inteligencia/precos/reformas-ampliacoes-rj-saude-edificacao/",
@@ -5059,15 +3820,6 @@
       "score": 80
     },
     {
-      "url": "/inteligencia/precos/climatizacao-instalacoes-ba-climatizacao-instalacoes/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=76"
-      ],
-      "score": 76
-    },
-    {
       "url": "/inteligencia/precos/estruturas-contencoes-obras-especiais-ce-edificacoes-publicas/",
       "reasons": [
         "obs<15",
@@ -5075,24 +3827,6 @@
         "score=77"
       ],
       "score": 77
-    },
-    {
-      "url": "/inteligencia/precos/climatizacao-instalacoes-pr-climatizacao-instalacoes/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=76"
-      ],
-      "score": 76
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-am-educacao-edificacao/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=80"
-      ],
-      "score": 80
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-sp-manutencao-predial/",
@@ -5104,15 +3838,6 @@
         "score=80"
       ],
       "score": 80
-    },
-    {
-      "url": "/inteligencia/precos/servicos-tecnicos-fase-preparatoria-sp-edificacoes-publicas/",
-      "reasons": [
-        "obs<15",
-        "primary_contracts<15",
-        "score=79"
-      ],
-      "score": 79
     },
     {
       "url": "/inteligencia/concorrencia/estruturas-contencoes-obras-especiais-ms/",
@@ -5163,10 +3888,7 @@
       "reasons": [
         "no_direct_budget_edital_evidence",
         "no_claim_specific_evidence",
-        "score=87",
-        "approval_invalidated_material:observation_count",
-        "approval_invalidated_material:mandatory_fail",
-        "REVIEW_REQUIRED_DATA_CHANGE"
+        "score=87"
       ],
       "score": 87
     },
@@ -5175,10 +3897,7 @@
       "reasons": [
         "no_direct_sinapi_sicro_evidence",
         "no_claim_specific_evidence",
-        "score=87",
-        "approval_invalidated_material:observation_count",
-        "approval_invalidated_material:mandatory_fail",
-        "REVIEW_REQUIRED_DATA_CHANGE"
+        "score=87"
       ],
       "score": 87
     },
@@ -5196,11 +3915,7 @@
       "reasons": [
         "no_direct_aditivo_evidence",
         "no_claim_specific_evidence",
-        "score=87",
-        "approval_invalidated_material:description",
-        "approval_invalidated_material:observation_count",
-        "approval_invalidated_material:mandatory_fail",
-        "REVIEW_REQUIRED_DATA_CHANGE"
+        "score=87"
       ],
       "score": 87
     },
@@ -5214,7 +3929,7 @@
       "score": 87
     }
   ],
-  "pages_written": 2457,
+  "pages_written": 2049,
   "hubs": [
     "inteligencia/index.html",
     "inteligencia/mercados/index.html",

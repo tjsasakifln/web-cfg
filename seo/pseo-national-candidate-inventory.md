@@ -1,6 +1,6 @@
 # pSEO National Candidate Inventory
 
-- generated_at: `2026-08-01T03:52:00Z`
+- generated_at: `2026-08-01T04:00:55Z`
 - dataset_hash: `1fa346d1a68506bfdfd9eb191a11d09fb8e354ab58b720989ad3ddd607bd4668`
 - n_candidates: **2049**
 - wave1_proposal: **50**

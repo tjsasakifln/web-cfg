@@ -121,7 +121,7 @@ After cutover + `scripts.pseo.build`:
 
 | # | Dimension | Score | Evidence |
 |---|-----------|------:|----------|
-| 1 | Governança e proveniência | **9** | National export manifest + dataset_hash `c4b8b017…`; fail-closed human gate |
+| 1 | Governança e proveniência | **9** | National export/registry/inventory dataset_hash `1fa346d1…` (aligned post-rebuild); fail-closed human gate |
 | 2 | Cobertura real do datalake | **9** | 4,479,442 available; 4,402,632 considered; 214,630 classified; 54,055 AEC; prefilter documented |
 | 3 | Qualidade classificação | **7** | Multilayer on 214k; gold gate **inconclusive** (CI/thin strata) — not false perfect pass |
 | 4 | Cobertura intenções/clusters | **8** | Markets/agencies/prices/competition/radar; Wave1 multi-type; problem_service not QE yet |
