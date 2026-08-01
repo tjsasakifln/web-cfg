@@ -1,23 +1,22 @@
 {
   "ok": true,
-  "web_cfg_sha": "c8daf217e495c01ad07415e950f085de87b20c42",
+  "web_cfg_sha": "e7c8dfb42b3f2021b502407ee03ffcba54d89541",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "a4ea2776862932d0a3bca108e3137c67430d10b7553ecc4edb8db05ab0293c80",
+  "public_artifact_hash": "0ff4e455be0be7279f36796e905d62424b45f2858c6d7e9a72a71f833bedff95",
   "build_summary": {
-    "dataset_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
+    "dataset_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
     "counts": {
-      "reject": 8,
-      "publish": 4,
-      "noindex": 7
+      "reject": 15,
+      "publish": 3,
+      "noindex": 2
     },
     "publishable": [
-      "/radar/edificacoes-publicas-pr/",
       "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
       "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
       "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
     ],
-    "pages_written": 19
+    "pages_written": 20
   },
   "validate": {
     "ok": true,
@@ -26,7 +25,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 314,
+    "file_count": 315,
     "finding_count": 0
   },
   "errors": []

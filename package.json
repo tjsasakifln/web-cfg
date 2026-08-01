@@ -19,6 +19,8 @@
     "pseo:verify:release": "python3 scripts/pseo/verify_release.py",
     "pseo:gsc:ingest": "python3 scripts/pseo/gsc_ingest.py",
     "pseo:evidence:freeze-shas": "python3 scripts/pseo/freeze_shas.py",
+    "pseo:prove-approval-stability": "python3 scripts/pseo/prove_approval_stability.py",
+    "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
     "test": "npm run pseo:test && npm run test:analytics && npm run test:pseo-attribution",

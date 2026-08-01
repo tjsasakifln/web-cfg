@@ -1,10 +1,12 @@
 [
   {
+    "archetype_id": null,
     "comparison_confidence": 0.9,
     "comparison_group": "manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS",
     "comparison_meta": {
       "comparison_confidence": 0.9,
       "comparison_group": "manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS",
+      "exclusion": [],
       "exclusion_criteria": [
         "locacao_imovel",
         "credenciamento",
@@ -15,6 +17,7 @@
       "heterogeneity_flags": [
         "regime_unknown"
       ],
+      "inclusion": [],
       "inclusion_criteria": [
         "typology=manutencao_predial",
         "scope=manutencao",
@@ -27,8 +30,7 @@
       "scope": "manutencao",
       "typology": "manutencao_predial"
     },
-    "denominator_type": "contrato_integral",
-    "dispersion_iqr": 12011.62,
+    "dispersion_iqr": 17433.0,
     "exclusion_criteria": [
       "locacao_imovel",
       "credenciamento",
@@ -43,34 +45,38 @@
     ],
     "id": "price-manutencao-predial-engenharia-rs-manutencao-predial",
     "inclusion_criteria": [
-      "tipologia: manutenção predial",
-      "escopo: manutencao",
-      "natureza: obra",
-      "UF: RS",
-      "mínimo de 12 contratos primários",
-      "confiança de comparabilidade ≥ 55%",
-      "somente objetos AEC confirmados",
-      "contratos integrais (não preço unitário)"
+      "typology=manutencao_predial",
+      "scope=manutencao",
+      "nature=obra",
+      "archetype=manutencao-predial-engenharia",
+      "uf=RS",
+      "n>=12",
+      "comparison_confidence>=0.55",
+      "somente aec_confirmed"
     ],
     "limitations": [
       "Observações são contratos integrais, não preços unitários.",
       "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
       "Outliers identificados por regra IQR 1.5×."
     ],
-    "max_buyer_share": 1.0,
+    "max": null,
     "max_value": 47759.63,
     "median_value": 15268.5,
+    "mediana": null,
     "mesh_slug": "manutencao-predial-engenharia-rs",
-    "min_value": 5425.88,
-    "object_label": "Manutenção Predial",
+    "min": null,
+    "min_value": 5366.25,
+    "n": 0,
+    "object_label": "manutencao predial (manutencao-predial-engenharia)",
     "object_pattern": "manutencao-predial-engenharia",
-    "observation_count": 18,
-    "outlier_count": 2,
-    "p25_value": 11388.38,
+    "observation_count": 19,
+    "outlier_count": 0,
+    "p25": null,
+    "p25_value": 5967.0,
+    "p75": null,
     "p75_value": 23400.0,
     "period_end": "2026-07-03",
     "period_start": "2026-07-03",
-    "primary_contract_count": 18,
     "public_examples": [
       {
         "contrato_id": "88830609000139-2-002361/2026",
@@ -78,7 +84,7 @@
         "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2361",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Engenheiro Dario Granja Sant'anna, sob responsabilidade da SMED, com fornecimento de equipame",
-        "orgao_nome": "Prefeitura Municipal de Caxias do Sul",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
         "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
@@ -89,8 +95,8 @@
         "data_publicacao": "2026-07-03",
         "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2344",
         "municipio": "Caxias do Sul",
-        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Governador Roberto Silveira, sob responsabilidade da SMED, com fornecimento de equipamentos, ",
-        "orgao_nome": "Prefeitura Municipal de Caxias do Sul",
+        "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Governador Roberto Silveira, sob responsabilidade da SMED, com fornecimento de equipamentos,",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
         "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
@@ -102,7 +108,7 @@
         "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2369",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF São Vitor, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, materiais e",
-        "orgao_nome": "Prefeitura Municipal de Caxias do Sul",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
         "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
@@ -114,7 +120,7 @@
         "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2336",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Giuseppe Garibaldi, sob responsabilidade da SMED, com fornecimento de equipamentos, peças, ma",
-        "orgao_nome": "Prefeitura Municipal de Caxias do Sul",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
         "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
@@ -126,7 +132,7 @@
         "link_oficial": "https://pncp.gov.br/app/contratos/88830609000139/2026/2343",
         "municipio": "Caxias do Sul",
         "objeto": "Prestação de serviços, sob demanda, de manutenção predial corretiva e pequenas reformas, no prédio da EMEF Presidente Tancredo de Almeida Neves, sob responsabilidade da SMED, com fornecimento de equip",
-        "orgao_nome": "Prefeitura Municipal de Caxias do Sul",
+        "orgao_nome": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
         "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "RS",
@@ -135,33 +141,28 @@
     ],
     "region": "RS",
     "region_label": "Rio Grande do Sul",
-    "sample_metrics": {
-      "denominator_type": "contrato_integral",
-      "duplicate_rate": 0.0,
-      "max_buyer_share": 1.0,
-      "primary_contract_count": 18,
-      "temporal_span_days": 0,
-      "unique_buyer_count": 1,
-      "unique_supplier_count": 1
-    },
-    "scope_distribution": {
-      "manutencao": 18
-    },
+    "scope_distribution": [
+      {
+        "count": 19,
+        "scope": "manutencao"
+      }
+    ],
+    "segment": null,
     "slug": "manutencao-predial-engenharia-rs-manutencao-predial",
     "sources": [
       "pncp_contracts"
     ],
-    "temporal_span_days": 0,
-    "unique_buyer_count": 1,
-    "unique_supplier_count": 1,
+    "unit": null,
     "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade. Este benchmark não substitui orçamento técnico."
   },
   {
+    "archetype_id": null,
     "comparison_confidence": 0.9,
     "comparison_group": "pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI",
     "comparison_meta": {
       "comparison_confidence": 0.9,
       "comparison_group": "pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI",
+      "exclusion": [],
       "exclusion_criteria": [
         "locacao_imovel",
         "credenciamento",
@@ -172,6 +173,7 @@
       "heterogeneity_flags": [
         "regime_unknown"
       ],
+      "inclusion": [],
       "inclusion_criteria": [
         "typology=paralelepipedo",
         "scope=execucao",
@@ -184,7 +186,6 @@
       "scope": "execucao",
       "typology": "paralelepipedo"
     },
-    "denominator_type": "contrato_integral",
     "dispersion_iqr": 540190.4,
     "exclusion_criteria": [
       "locacao_imovel",
@@ -200,34 +201,38 @@
     ],
     "id": "price-pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
     "inclusion_criteria": [
-      "tipologia: paralelepípedo",
-      "escopo: execucao",
-      "natureza: obra",
-      "UF: PI",
-      "mínimo de 12 contratos primários",
-      "confiança de comparabilidade ≥ 55%",
-      "somente objetos AEC confirmados",
-      "contratos integrais (não preço unitário)"
+      "typology=paralelepipedo",
+      "scope=execucao",
+      "nature=obra",
+      "archetype=pavimentacao-infraestrutura-viaria",
+      "uf=PI",
+      "n>=12",
+      "comparison_confidence>=0.55",
+      "somente aec_confirmed"
     ],
     "limitations": [
       "Observações são contratos integrais, não preços unitários.",
       "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
       "Outliers identificados por regra IQR 1.5×."
     ],
-    "max_buyer_share": 0.3333,
+    "max": null,
     "max_value": 1526304.17,
     "median_value": 996225.26,
+    "mediana": null,
     "mesh_slug": "pavimentacao-infraestrutura-viaria-pi",
+    "min": null,
     "min_value": 410836.92,
-    "object_label": "Paralelepípedo",
+    "n": 0,
+    "object_label": "paralelepipedo (pavimentacao-infraestrutura-viaria)",
     "object_pattern": "pavimentacao-infraestrutura-viaria",
     "observation_count": 12,
     "outlier_count": 0,
+    "p25": null,
     "p25_value": 744003.0,
+    "p75": null,
     "p75_value": 1284193.4,
     "period_end": "2026-07-08",
     "period_start": "2026-06-03",
-    "primary_contract_count": 12,
     "public_examples": [
       {
         "contrato_id": "09034960000147-2-000096/2026",
@@ -235,7 +240,7 @@
         "link_oficial": "https://pncp.gov.br/app/contratos/09034960000147/2026/96",
         "municipio": "Teresina",
         "objeto": "EXECUÇÃO DOS SERVIÇOS DE PAVIMENTAÇÃO DE VIAS PÚBLICAS EM PARALELEPÍPEDO NO MUNICÍPIO DE TERESINA – PI",
-        "orgao_nome": "Epi-instituto de Desenvolvimento do Piaui",
+        "orgao_nome": "EPI-INSTITUTO DE DESENVOLVIMENTO DO PIAUI",
         "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "PI",
@@ -247,7 +252,7 @@
         "link_oficial": "https://pncp.gov.br/app/contratos/05699457000150/2026/81",
         "municipio": "Teresina",
         "objeto": "Contratação de empresa para execução de 10.000,00 m² de pavimentação em paralelepípedo no município de Nazária-PI",
-        "orgao_nome": "Epi-secretaria Estadual de Transportes",
+        "orgao_nome": "EPI-SECRETARIA ESTADUAL DE TRANSPORTES",
         "portal_origem": "pncp",
         "source": "pncp_contracts",
         "uf": "PI",
@@ -291,26 +296,19 @@
       }
     ],
     "region": "PI",
-    "region_label": "Piauí",
-    "sample_metrics": {
-      "denominator_type": "contrato_integral",
-      "duplicate_rate": 0.0,
-      "max_buyer_share": 0.3333,
-      "primary_contract_count": 12,
-      "temporal_span_days": 35,
-      "unique_buyer_count": 6,
-      "unique_supplier_count": 12
-    },
-    "scope_distribution": {
-      "execucao": 12
-    },
+    "region_label": "Piaui",
+    "scope_distribution": [
+      {
+        "count": 12,
+        "scope": "execucao"
+      }
+    ],
+    "segment": null,
     "slug": "pavimentacao-infraestrutura-viaria-pi-paralelepipedo",
     "sources": [
       "pncp_contracts"
     ],
-    "temporal_span_days": 35,
-    "unique_buyer_count": 6,
-    "unique_supplier_count": 12,
+    "unit": null,
     "warning": "Não use a mediana como preço de referência aplicável a qualquer caso. Compare escopo, quantitativos, regime, data-base e localidade. Este benchmark não substitui orçamento técnico."
   }
 ]

@@ -1,39 +1,8 @@
 [
   {
-    "confenge_service_slug": "auditoria-orcamento-licitacao",
-    "evidence_count": 48,
-    "id": "prob-orcamento-edital",
-    "limitations": [
-      "Página de enquadramento problema e serviço; não substitui análise do edital concreto."
-    ],
-    "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
-    "official_references": [
-      {
-        "name": "Lei nº 14.133/2021 — licitações e contratos (Planalto)",
-        "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
-      },
-      {
-        "name": "PNCP — Portal Nacional de Contratações Públicas",
-        "url": "https://www.gov.br/pncp/pt-br"
-      }
-    ],
-    "problem_label": "Inconsistência entre orçamento de referência e edital",
-    "related_archetypes": [
-      "edificacoes-publicas",
-      "pavimentacao-infraestrutura-viaria",
-      "saneamento-hidraulica"
-    ],
-    "slug": "inconsistencia-orcamento-edital",
-    "sources": [
-      "pncp_supplier_contracts",
-      "site-confenge-guides"
-    ],
-    "technical_guide_paths": [
-      "/conteudos/orcamento-incompleto-edital-obra-publica/",
-      "/conteudos/sinapi-ou-sicro-obra-publica/",
-      "/conteudos/analise-edital-obra-publica-construtora/"
-    ],
-    "theme": "orcamento-edital",
+    "amendment_count": null,
+    "archetype_ids": [],
+    "budget_signals": [],
     "claim_evidence": [
       {
         "kind": "regulatory_reference",
@@ -65,6 +34,10 @@
         "n": 1
       }
     ],
+    "confenge_service_slug": "auditoria-orcamento-licitacao",
+    "document_divergence_count": null,
+    "document_signals": [],
+    "evidence_count": 48,
     "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
@@ -73,42 +46,47 @@
       "market_density",
       "explicit_limitations"
     ],
+    "id": "prob-orcamento-edital",
+    "limitations": [
+      "Página de enquadramento problema→serviço; não substitui análise do edital concreto."
+    ],
+    "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
+    "official_references": [
+      {
+        "name": "Lei nº 14.133/2021 — licitações e contratos (Planalto)",
+        "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+      },
+      {
+        "name": "PNCP — Portal Nacional de Contratações Públicas",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "problem": null,
+    "problem_label": "Inconsistência entre orçamento de referência e edital",
+    "reference_mentions": null,
+    "related_archetypes": [
+      "edificacoes-publicas",
+      "pavimentacao-infraestrutura-viaria",
+      "saneamento-hidraulica"
+    ],
+    "service": null,
+    "slug": "inconsistencia-orcamento-edital",
+    "sources": [
+      "pncp_supplier_contracts",
+      "site-confenge-guides"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "/conteudos/analise-edital-obra-publica-construtora/"
+    ],
+    "theme": "orcamento-edital",
     "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
-    "confenge_service_slug": "auditoria-orcamento-licitacao",
-    "evidence_count": 48,
-    "id": "prob-sinapi-sicro",
-    "limitations": [
-      "Não publica coeficientes proprietários; orienta critério de escolha da referência."
-    ],
-    "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
-    "official_references": [
-      {
-        "name": "SINAPI — Caixa Econômica Federal",
-        "url": "https://www.caixa.gov.br/poder-publico/modernizacao-gestao/sinapi/Paginas/default.aspx"
-      },
-      {
-        "name": "SICRO — DNIT (sistemas de custos rodoviários)",
-        "url": "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-e-pagamentos/custos-e-pagamentos-dnit/sistemas-de-custos/sicro"
-      }
-    ],
-    "problem_label": "Referência SINAPI/SICRO e risco de margem na proposta",
-    "related_archetypes": [
-      "pavimentacao-infraestrutura-viaria",
-      "edificacoes-publicas"
-    ],
-    "slug": "referencia-sinapi-sicro-margem",
-    "sources": [
-      "site-confenge-guides",
-      "pncp_supplier_contracts"
-    ],
-    "technical_guide_paths": [
-      "/conteudos/sinapi-ou-sicro-obra-publica/",
-      "/conteudos/produtividade-sinapi-obra-publica/",
-      "/conteudos/bdi-obra-publica/"
-    ],
-    "theme": "sinapi-sicro",
+    "amendment_count": null,
+    "archetype_ids": [],
+    "budget_signals": [],
     "claim_evidence": [
       {
         "kind": "regulatory_reference",
@@ -140,6 +118,10 @@
         "n": 1
       }
     ],
+    "confenge_service_slug": "auditoria-orcamento-licitacao",
+    "document_divergence_count": null,
+    "document_signals": [],
+    "evidence_count": 48,
     "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
@@ -148,41 +130,46 @@
       "market_density",
       "explicit_limitations"
     ],
+    "id": "prob-sinapi-sicro",
+    "limitations": [
+      "Não publica coeficientes proprietários; orienta critério de escolha da referência."
+    ],
+    "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
+    "official_references": [
+      {
+        "name": "SINAPI — Caixa Econômica Federal",
+        "url": "https://www.caixa.gov.br/poder-publico/modernizacao-gestao/sinapi/Paginas/default.aspx"
+      },
+      {
+        "name": "SICRO — DNIT (sistemas de custos rodoviários)",
+        "url": "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-e-pagamentos/custos-e-pagamentos-dnit/sistemas-de-custos/sicro"
+      }
+    ],
+    "problem": null,
+    "problem_label": "Referência SINAPI/SICRO e risco de margem na proposta",
+    "reference_mentions": null,
+    "related_archetypes": [
+      "pavimentacao-infraestrutura-viaria",
+      "edificacoes-publicas"
+    ],
+    "service": null,
+    "slug": "referencia-sinapi-sicro-margem",
+    "sources": [
+      "site-confenge-guides",
+      "pncp_supplier_contracts"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "/conteudos/produtividade-sinapi-obra-publica/",
+      "/conteudos/bdi-obra-publica/"
+    ],
+    "theme": "sinapi-sicro",
     "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
-    "confenge_service_slug": "medicoes-glosas-obras-publicas",
-    "evidence_count": 22,
-    "id": "prob-medicao-glosa",
-    "limitations": [
-      "Padrão qualitativo cruzado com densidade de contratos recorrentes no base pública de contratos."
-    ],
-    "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
-    "official_references": [
-      {
-        "name": "Lei nº 14.133/2021 — execução e pagamento (Planalto)",
-        "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
-      },
-      {
-        "name": "TCU — licitações e contratos (orientação)",
-        "url": "https://portal.tcu.gov.br/licitacoes-e-contratos/"
-      }
-    ],
-    "problem_label": "Medição e glosa em contratos com execução contínua",
-    "related_archetypes": [
-      "manutencao-predial-engenharia",
-      "edificacoes-publicas"
-    ],
-    "slug": "medicao-glosa-contratos-recorrentes",
-    "sources": [
-      "site-confenge-guides"
-    ],
-    "technical_guide_paths": [
-      "/conteudos/glosa-de-medicao-obra-publica/",
-      "/conteudos/medicao-de-obra-publica-rejeitada/",
-      "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
-    ],
-    "theme": "medicao-glosa",
+    "amendment_count": null,
+    "archetype_ids": [],
+    "budget_signals": [],
     "claim_evidence": [
       {
         "kind": "regulatory_reference",
@@ -200,7 +187,7 @@
       },
       {
         "kind": "observed_pattern",
-        "summary": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa."
+        "summary": "Arquétipos de manutenção predial e edificações com múltiplas medições estão sujeitos a disputas de critério, diário de obra e parcela incontroversa."
       },
       {
         "kind": "market_density",
@@ -214,6 +201,10 @@
         "n": 1
       }
     ],
+    "confenge_service_slug": "medicoes-glosas-obras-publicas",
+    "document_divergence_count": null,
+    "document_signals": [],
+    "evidence_count": 22,
     "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
@@ -222,42 +213,45 @@
       "market_density",
       "explicit_limitations"
     ],
-    "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT"
-  },
-  {
-    "confenge_service_slug": "aditivos-obras-publicas",
-    "evidence_count": 48,
-    "id": "prob-aditivos-margem",
+    "id": "prob-medicao-glosa",
     "limitations": [
-      "Não estima taxa de aditivo por órgão sem denominador documental completo."
+      "Padrão qualitativo cruzado com densidade de contratos recorrentes no datalake."
     ],
-    "observed_pattern": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+    "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições estão sujeitos a disputas de critério, diário de obra e parcela incontroversa.",
     "official_references": [
       {
-        "name": "Lei nº 14.133/2021 — alterações contratuais (Planalto)",
+        "name": "Lei nº 14.133/2021 — execução e pagamento (Planalto)",
         "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
       },
       {
-        "name": "TCU — licitações e contratos",
+        "name": "TCU — licitações e contratos (orientação)",
         "url": "https://portal.tcu.gov.br/licitacoes-e-contratos/"
       }
     ],
-    "problem_label": "Aditivos, serviços extras e erosão de margem",
+    "problem": null,
+    "problem_label": "Medição e glosa em contratos com execução contínua",
+    "reference_mentions": null,
     "related_archetypes": [
-      "edificacoes-publicas",
-      "saneamento-hidraulica",
-      "pavimentacao-infraestrutura-viaria"
+      "manutencao-predial-engenharia",
+      "edificacoes-publicas"
     ],
-    "slug": "aditivos-e-risco-de-margem",
+    "service": null,
+    "slug": "medicao-glosa-contratos-recorrentes",
     "sources": [
       "site-confenge-guides"
     ],
     "technical_guide_paths": [
-      "/conteudos/aditivo-qualitativo-quantitativo/",
-      "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
-      "/conteudos/limite-aditivo-25-50-obra-publica/"
+      "/conteudos/glosa-de-medicao-obra-publica/",
+      "/conteudos/medicao-de-obra-publica-rejeitada/",
+      "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
     ],
-    "theme": "aditivos",
+    "theme": "medicao-glosa",
+    "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT"
+  },
+  {
+    "amendment_count": null,
+    "archetype_ids": [],
+    "budget_signals": [],
     "claim_evidence": [
       {
         "kind": "regulatory_reference",
@@ -275,7 +269,7 @@
       },
       {
         "kind": "observed_pattern",
-        "summary": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido."
+        "summary": "Obras de edificações e saneamento estão particularmente sujeitas a alterações de projeto e quantitativos durante a execução. Sem registro contemporâneo, o aditivo vira custo absorvido."
       },
       {
         "kind": "market_density",
@@ -289,6 +283,10 @@
         "n": 1
       }
     ],
+    "confenge_service_slug": "aditivos-obras-publicas",
+    "document_divergence_count": null,
+    "document_signals": [],
+    "evidence_count": 48,
     "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
@@ -297,42 +295,46 @@
       "market_density",
       "explicit_limitations"
     ],
-    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
-  },
-  {
-    "confenge_service_slug": "reequilibrio-obras-publicas",
-    "evidence_count": 27,
-    "id": "prob-reequilibrio",
+    "id": "prob-aditivos-margem",
     "limitations": [
-      "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
+      "Não estima taxa de aditivo por órgão sem denominador documental completo."
     ],
-    "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+    "observed_pattern": "Obras de edificações e saneamento estão particularmente sujeitas a alterações de projeto e quantitativos durante a execução. Sem registro contemporâneo, o aditivo vira custo absorvido.",
     "official_references": [
       {
-        "name": "Lei nº 14.133/2021 — reequilíbrio e álea (Planalto)",
+        "name": "Lei nº 14.133/2021 — alterações contratuais (Planalto)",
         "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
       },
       {
-        "name": "PNCP — consultas públicas de contratações",
-        "url": "https://www.gov.br/pncp/pt-br"
+        "name": "TCU — licitações e contratos",
+        "url": "https://portal.tcu.gov.br/licitacoes-e-contratos/"
       }
     ],
-    "problem_label": "Reequilíbrio diante de dispersão de preços e insumos",
+    "problem": null,
+    "problem_label": "Aditivos, serviços extras e erosão de margem",
+    "reference_mentions": null,
     "related_archetypes": [
-      "pavimentacao-infraestrutura-viaria",
-      "saneamento-hidraulica"
+      "edificacoes-publicas",
+      "saneamento-hidraulica",
+      "pavimentacao-infraestrutura-viaria"
     ],
-    "slug": "reequilibrio-e-dispersao-de-precos",
+    "service": null,
+    "slug": "aditivos-e-risco-de-margem",
     "sources": [
-      "pncp_supplier_contracts",
       "site-confenge-guides"
     ],
     "technical_guide_paths": [
-      "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
-      "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
-      "/conteudos/documentos-reequilibrio-obra-publica/"
+      "/conteudos/aditivo-qualitativo-quantitativo/",
+      "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+      "/conteudos/limite-aditivo-25-50-obra-publica/"
     ],
-    "theme": "reequilibrio",
+    "theme": "aditivos",
+    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
+  },
+  {
+    "amendment_count": null,
+    "archetype_ids": [],
+    "budget_signals": [],
     "claim_evidence": [
       {
         "kind": "regulatory_reference",
@@ -364,6 +366,10 @@
         "n": 1
       }
     ],
+    "confenge_service_slug": "reequilibrio-obras-publicas",
+    "document_divergence_count": null,
+    "document_signals": [],
+    "evidence_count": 27,
     "evidence_kind": "normative_editorial",
     "evidence_signals": [
       "regulatory_reference",
@@ -372,6 +378,40 @@
       "market_density",
       "explicit_limitations"
     ],
+    "id": "prob-reequilibrio",
+    "limitations": [
+      "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
+    ],
+    "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+    "official_references": [
+      {
+        "name": "Lei nº 14.133/2021 — reequilíbrio e álea (Planalto)",
+        "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+      },
+      {
+        "name": "PNCP — consultas públicas de contratações",
+        "url": "https://www.gov.br/pncp/pt-br"
+      }
+    ],
+    "problem": null,
+    "problem_label": "Reequilíbrio diante de dispersão de preços e insumos",
+    "reference_mentions": null,
+    "related_archetypes": [
+      "pavimentacao-infraestrutura-viaria",
+      "saneamento-hidraulica"
+    ],
+    "service": null,
+    "slug": "reequilibrio-e-dispersao-de-precos",
+    "sources": [
+      "pncp_supplier_contracts",
+      "site-confenge-guides"
+    ],
+    "technical_guide_paths": [
+      "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "/conteudos/documentos-reequilibrio-obra-publica/"
+    ],
+    "theme": "reequilibrio",
     "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT"
   }
 ]

@@ -256,6 +256,51 @@ def audit_page(reg: dict[str, Any], html_path: Path | None) -> PageAudit:
                 )
             )
 
+    # evidence_kind language compatibility (normative must not claim comparative incidence)
+    evidence_kind = (reg.get("evidence_kind") or "").strip()
+    if not evidence_kind and ptype == "problem_service":
+        # allow data_ref / nested fields from registry enrichers
+        evidence_kind = str(
+            (reg.get("data_ref") or {}).get("evidence_kind")
+            or reg.get("data_quality_metrics", {})  # never use; placeholder
+            or ""
+        )
+        if evidence_kind in ("", "{}") or not isinstance(
+            (reg.get("data_ref") or {}).get("evidence_kind"), str
+        ):
+            evidence_kind = str((reg.get("data_ref") or {}).get("evidence_kind") or "")
+    if ptype == "problem_service" and evidence_kind == "normative_editorial":
+        blob = f"{title} {meta_desc} {text}"
+        for rx in (
+            r"\bconcentram\b",
+            r"\bocorre com maior frequ[eê]ncia\b",
+            r"\bos dados mostram\b",
+            r"\bo recorte comprova\b",
+            r"\bcomprovam que\b",
+        ):
+            m = re.search(rx, blob, re.I)
+            if m:
+                issues.append(
+                    Issue(
+                        "evidence_kind_language_mismatch",
+                        "P0",
+                        "Linguagem causal/comparativa incompatível com evidence_kind=normative_editorial",
+                        m.group(0),
+                    )
+                )
+                break
+    if ptype == "problem_service" and evidence_kind == "contextual_market_evidence":
+        blob = f"{title} {meta_desc} {text}".lower()
+        if re.search(r"frequ[eê]ncia do problema|incid[eê]ncia do problema|prova que", blob):
+            issues.append(
+                Issue(
+                    "contextual_sold_as_incidence",
+                    "P0",
+                    "Evidência de mercado contextual apresentada como incidência do problema",
+                    "contextual_market_evidence",
+                )
+            )
+
     # Duplicates in tables
     if table_rows:
         c = Counter(table_rows)

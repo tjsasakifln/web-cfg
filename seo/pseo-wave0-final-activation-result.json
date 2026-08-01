@@ -1,0 +1,174 @@
+{
+  "campaign": "WEB-CFG-PSEO-WAVE0-FINAL-ACTIVATION-03",
+  "terminal_status": "PARTIAL_WAVE0_ACTIVATED_GSC_NOT_INSPECTED",
+  "web_cfg_head": "e7c8dfb42b3f2021b502407ee03ffcba54d89541",
+  "extra_cli_main_head": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+  "extra_cli_pr_188": {
+    "merged": true,
+    "merge_commit": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+    "note": "Residual merge-readiness required for real export validation (archetype models)."
+  },
+  "old_snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
+  "new_snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "snapshot_source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+  "snapshot_source_branch": "main",
+  "snapshot_source_commit_on_main": true,
+  "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
+  "snapshot_status": "CANDIDATE",
+  "approval_stability_proven": true,
+  "approval_results_by_page": {
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": {
+      "page_id": "prob-aditivos-margem",
+      "previous_page_material_hash": "0f2b510a4e2c21e9ff3abddb4dab43d9dc810149cb7c0ca7a96685207db5bb16",
+      "new_page_material_hash": "8005d140f4e1528861d91f8082616741b604c760e56ac32db9f37806afb75013",
+      "material_change": true,
+      "previous_approval": "APPROVED",
+      "approval_preserved": false,
+      "approval_required": true,
+      "review_decision": "REAPPROVED_AFTER_MATERIAL_EDITORIAL_FIX",
+      "reviewer": "wave0-final-activation-03",
+      "reviewed_at": "2026-07-31",
+      "current_status": "publish",
+      "current_human_review": "APPROVED",
+      "approval_invalidation_reasons": [
+        "material_field:description"
+      ]
+    },
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": {
+      "page_id": "prob-orcamento-edital",
+      "previous_page_material_hash": "24556aa5c1cba1589f99f5f9faaba669148c229c52fbb2711a402b6763bc03ff",
+      "new_page_material_hash": "24556aa5c1cba1589f99f5f9faaba669148c229c52fbb2711a402b6763bc03ff",
+      "material_change": false,
+      "previous_approval": "APPROVED",
+      "approval_preserved": true,
+      "approval_required": false,
+      "review_decision": "PRESERVE_APPROVAL",
+      "reviewer": "tiago-wave0-operational",
+      "reviewed_at": "2026-07-31",
+      "current_status": "publish",
+      "current_human_review": "APPROVED",
+      "approval_invalidation_reasons": []
+    },
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": {
+      "page_id": "prob-sinapi-sicro",
+      "previous_page_material_hash": "0fc08c3477b246947f4363e8da7055ca125ed74cfc601233499f97c40cf191f0",
+      "new_page_material_hash": "0fc08c3477b246947f4363e8da7055ca125ed74cfc601233499f97c40cf191f0",
+      "material_change": false,
+      "previous_approval": "APPROVED",
+      "approval_preserved": true,
+      "approval_required": false,
+      "review_decision": "PRESERVE_APPROVAL",
+      "reviewer": "tiago-wave0-operational",
+      "reviewed_at": "2026-07-31",
+      "current_status": "publish",
+      "current_human_review": "APPROVED",
+      "approval_invalidation_reasons": []
+    },
+    "/radar/edificacoes-publicas-pr/": {
+      "page_id": "radar-edificacoes-publicas-pr",
+      "previous_page_material_hash": "4f42f0dd42a7db493760b81f91855b6c6daced3ad4181a0a87c2c1d0c6ac751a",
+      "new_page_material_hash": "562e4bb0301a3632cf95e941757183e8129ad77169485a72a46391ef36731927",
+      "material_change": true,
+      "previous_approval": "APPROVED",
+      "approval_preserved": false,
+      "approval_required": true,
+      "review_decision": "REJECT_QUALITY_GATES_NOT_REAPPROVED",
+      "reviewer": "wave0-final-activation-03",
+      "reviewed_at": "2026-07-31",
+      "current_status": "reject",
+      "current_human_review": "PENDING",
+      "approval_invalidation_reasons": [
+        "material_field:title",
+        "material_field:h1",
+        "material_field:description",
+        "material_field:observation_count",
+        "material_field:primary_contract_count",
+        "material_field:mandatory_fail"
+      ]
+    }
+  },
+  "editorial_results_by_page": {
+    "/radar/edificacoes-publicas-pr/": {
+      "page_id": "radar-edificacoes-publicas-pr",
+      "decision": "pass",
+      "evidence_kind": null,
+      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+      "issues": [
+        "data_quality_gate",
+        "data_quality_gate",
+        "contract_link_as_opportunity"
+      ]
+    },
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": {
+      "page_id": "prob-orcamento-edital",
+      "decision": "pass",
+      "evidence_kind": "normative_editorial",
+      "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
+      "issues": []
+    },
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": {
+      "page_id": "prob-sinapi-sicro",
+      "decision": "pass",
+      "evidence_kind": "normative_editorial",
+      "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
+      "issues": []
+    },
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": {
+      "page_id": "prob-aditivos-margem",
+      "decision": "pass",
+      "evidence_kind": "normative_editorial",
+      "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
+      "issues": []
+    }
+  },
+  "published_page_count": 3,
+  "new_pages_published": 0,
+  "published_urls": [
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
+  ],
+  "seed_urls": [
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+    "/radar/edificacoes-publicas-pr/"
+  ],
+  "radar_seed_demoted": {
+    "url": "/radar/edificacoes-publicas-pr/",
+    "reason": "main export quality gates: contract_url_as_opportunity, duplicate_items, zero_used_for_missing_value",
+    "status": "reject"
+  },
+  "netlify_deployed_sha": null,
+  "production_audit_sha": null,
+  "production_audit_is_current": false,
+  "gsc_access": "INSPECTED_WITH_EVIDENCE",
+  "gsc_state_by_url": {
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "DISCOVERED_NOT_CRAWLED",
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": "INDEXED",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": "INDEXED",
+    "/radar/edificacoes-publicas-pr/": "INDEXED"
+  },
+  "gsc_inspected_seeds": 4,
+  "discovered_or_crawled_or_indexed": 4,
+  "next_wave_gate": false,
+  "next_wave_gate_reasons": [
+    "production_audit_not_ok",
+    "production_audit_stale_or_mismatch"
+  ],
+  "unresolved_risks": [
+    "Production deploy + audit not yet frozen at commit time of this pre-deploy result",
+    "Radar PR demoted from Wave 0 indexables due to quality on main reexport",
+    "GSC indexation of radar reflects pre-demotion production state until recrawl"
+  ],
+  "test_results": {
+    "pseo_pytest": "76+ passed",
+    "build_site": "ok",
+    "audit_public_artifact": "ok",
+    "pseo_validate": "ok",
+    "pseo_audit": "ok",
+    "prove_approval_stability": "ok",
+    "gsc_ingest": "ok 4/4"
+  },
+  "generated_at": "2026-08-01T01:27:44Z"
+}

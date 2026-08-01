@@ -1,0 +1,121 @@
+{
+  "ok": true,
+  "approval_stability_proven": true,
+  "errors": [],
+  "preserved_approval_proof_pages": [
+    "prob-orcamento-edital",
+    "prob-sinapi-sicro"
+  ],
+  "material_invalidation_proof_pages": [
+    "prob-aditivos-margem",
+    "radar-edificacoes-publicas-pr"
+  ],
+  "focus_page_ids": [
+    "prob-aditivos-margem",
+    "prob-orcamento-edital",
+    "prob-sinapi-sicro",
+    "radar-edificacoes-publicas-pr"
+  ],
+  "focus_results": {
+    "prob-aditivos-margem": {
+      "previous_page_material_hash": "0f2b510a4e2c21e9ff3abddb4dab43d9dc810149cb7c0ca7a96685207db5bb16",
+      "new_page_material_hash": "8005d140f4e1528861d91f8082616741b604c760e56ac32db9f37806afb75013",
+      "previous_approval": "APPROVED",
+      "new_approval": "PENDING",
+      "material_change": true,
+      "change_class": "material",
+      "changed_fields": [
+        "description"
+      ],
+      "unclassifiable_fields": [],
+      "approval_preserved": false,
+      "approval_invalidated": true,
+      "approval_invalidation_reasons": [
+        "material_field:description"
+      ],
+      "severity": "data",
+      "page_id": "prob-aditivos-margem",
+      "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "page_type": "problem_service",
+      "status_after_gate": "noindex"
+    },
+    "prob-orcamento-edital": {
+      "previous_page_material_hash": "24556aa5c1cba1589f99f5f9faaba669148c229c52fbb2711a402b6763bc03ff",
+      "new_page_material_hash": "24556aa5c1cba1589f99f5f9faaba669148c229c52fbb2711a402b6763bc03ff",
+      "previous_approval": "APPROVED",
+      "new_approval": "APPROVED",
+      "material_change": false,
+      "change_class": "non_material",
+      "changed_fields": [],
+      "unclassifiable_fields": [],
+      "approval_preserved": true,
+      "approval_invalidated": false,
+      "approval_invalidation_reasons": [],
+      "severity": "none",
+      "page_id": "prob-orcamento-edital",
+      "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "page_type": "problem_service",
+      "status_after_gate": "publish"
+    },
+    "prob-sinapi-sicro": {
+      "previous_page_material_hash": "0fc08c3477b246947f4363e8da7055ca125ed74cfc601233499f97c40cf191f0",
+      "new_page_material_hash": "0fc08c3477b246947f4363e8da7055ca125ed74cfc601233499f97c40cf191f0",
+      "previous_approval": "APPROVED",
+      "new_approval": "APPROVED",
+      "material_change": false,
+      "change_class": "non_material",
+      "changed_fields": [],
+      "unclassifiable_fields": [],
+      "approval_preserved": true,
+      "approval_invalidated": false,
+      "approval_invalidation_reasons": [],
+      "severity": "none",
+      "page_id": "prob-sinapi-sicro",
+      "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "page_type": "problem_service",
+      "status_after_gate": "publish"
+    },
+    "radar-edificacoes-publicas-pr": {
+      "previous_page_material_hash": "4f42f0dd42a7db493760b81f91855b6c6daced3ad4181a0a87c2c1d0c6ac751a",
+      "new_page_material_hash": "562e4bb0301a3632cf95e941757183e8129ad77169485a72a46391ef36731927",
+      "previous_approval": "APPROVED",
+      "new_approval": "PENDING",
+      "material_change": true,
+      "change_class": "material",
+      "changed_fields": [
+        "title",
+        "h1",
+        "description",
+        "observation_count",
+        "primary_contract_count",
+        "mandatory_fail"
+      ],
+      "unclassifiable_fields": [],
+      "approval_preserved": false,
+      "approval_invalidated": true,
+      "approval_invalidation_reasons": [
+        "material_field:title",
+        "material_field:h1",
+        "material_field:description",
+        "material_field:observation_count",
+        "material_field:primary_contract_count",
+        "material_field:mandatory_fail"
+      ],
+      "severity": "data",
+      "page_id": "radar-edificacoes-publicas-pr",
+      "url": "/radar/edificacoes-publicas-pr/",
+      "page_type": "radar",
+      "status_after_gate": "reject"
+    }
+  },
+  "old_snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
+  "new_snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
+  "old_source_commit_sha": "01123735ed0e240b0adf2233269ac947fa6d56c2",
+  "new_source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+  "new_source_branch": "main",
+  "generated_at": "2026-08-01T01:20:47Z",
+  "notes": [
+    "Materiality is defined by scripts.pseo.score._material_signature / page_material_hash.",
+    "Global dataset_hash / generated_at / source_run_id are non-material for approvals."
+  ]
+}

@@ -622,6 +622,34 @@ def apply_human_review_gate(
     return cands
 
 
+def _histogram_as_dict(raw: Any) -> dict[str, float]:
+    """Normalize ICP histograms: accept dict or list[{key,count}] (extra-cli ≥1.1 residual)."""
+    if not raw:
+        return {}
+    if isinstance(raw, dict):
+        out: dict[str, float] = {}
+        for k, v in raw.items():
+            try:
+                out[str(k)] = float(v)
+            except (TypeError, ValueError):
+                continue
+        return out
+    if isinstance(raw, list):
+        out = {}
+        for item in raw:
+            if not isinstance(item, dict):
+                continue
+            key = item.get("key") if item.get("key") is not None else item.get("name")
+            if key is None:
+                continue
+            try:
+                out[str(key)] = float(item.get("count") or item.get("value") or 0)
+            except (TypeError, ValueError):
+                continue
+        return out
+    return {}
+
+
 def icp_similarity(
     candidate_features: dict[str, float],
     signature: dict[str, Any] | None,
@@ -631,10 +659,10 @@ def icp_similarity(
         # fallback: use archetype presence density if any
         return candidate_features.get("archetype_known", 0.5)
 
-    # Build vectors from overlapping keys
-    acts = signature.get("activity_class_histogram") or {}
-    fits = signature.get("sector_fit_histogram") or {}
-    sigs = signature.get("public_signal_frequency") or {}
+    # Build vectors from overlapping keys (dict or list-of-{key,count})
+    acts = _histogram_as_dict(signature.get("activity_class_histogram"))
+    fits = _histogram_as_dict(signature.get("sector_fit_histogram"))
+    sigs = _histogram_as_dict(signature.get("public_signal_frequency"))
 
     # Candidate features we can map without proprietary data
     score = 0.0

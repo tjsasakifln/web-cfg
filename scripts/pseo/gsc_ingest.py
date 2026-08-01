@@ -46,23 +46,43 @@ def derive_state(row: dict[str, Any]) -> str:
         return row["state"]
     verdict = str(row.get("verdict") or row.get("index_status_verdict") or "").upper()
     coverage = str(row.get("coverage") or row.get("coverage_state") or "").upper()
+    # Normalize spaces/hyphens so API phrases match compact tokens
+    cov_compact = coverage.replace(" ", "_").replace("-", "_")
     robots = str(row.get("robots") or row.get("robots_txt_state") or "").upper()
     indexing = str(row.get("indexing_state") or "").upper()
     page_fetch = str(row.get("page_fetch_state") or "").upper()
+    user_can = str(row.get("user_canonical") or row.get("declared_canonical") or "")
+    google_can = str(row.get("google_canonical") or "")
 
     if "SOFT_404" in coverage or "SOFT_404" in verdict or row.get("soft_404") is True:
         return "SOFT_404"
     if "BLOCKED" in robots or "BLOCKED_BY_ROBOTS" in coverage:
         return "BLOCKED_BY_ROBOTS"
-    if row.get("noindex") is True or "NOINDEX" in coverage:
+    if row.get("noindex") is True or "NOINDEX" in coverage or "EXCLUDED_BY_NOINDEX" in cov_compact:
         return "NOINDEX_DETECTED"
     if "DUPLICATE" in coverage or "GOOGLE_CHOSE_DIFFERENT" in str(row.get("canonical_state") or "").upper():
         return "DUPLICATE_GOOGLE_CANONICAL"
-    if "INDEXED" in verdict or indexing == "INDEXING_ALLOWED" and "SUBMITTED_AND_INDEXED" in coverage:
+    if user_can and google_can and user_can.rstrip("/") != google_can.rstrip("/"):
+        return "DUPLICATE_GOOGLE_CANONICAL"
+    # API: "Submitted and indexed" / SUBMITTED_AND_INDEXED; verdict PASS with INDEXING_ALLOWED
+    if (
+        "SUBMITTED_AND_INDEXED" in cov_compact
+        or "SUBMITTED AND INDEXED" in coverage
+        or (
+            verdict == "PASS"
+            and indexing in {"INDEXING_ALLOWED", "INDEXING_STATE_UNSPECIFIED", ""}
+            and "INDEXED" in coverage
+        )
+        or (verdict == "PASS" and "INDEXED" in coverage and "NOT_INDEXED" not in cov_compact)
+    ):
         return "INDEXED"
-    if "CRAWLED" in coverage or "CRAWLED_CURRENTLY_NOT_INDEXED" in coverage:
+    if "INDEXED" in verdict and "NOT" not in verdict:
+        return "INDEXED"
+    if "CRAWLED" in coverage and "NOT_INDEXED" in cov_compact:
         return "CRAWLED_NOT_INDEXED"
-    if "DISCOVERED" in coverage or "DISCOVERED_CURRENTLY_NOT_INDEXED" in coverage:
+    if "CRAWLED_CURRENTLY_NOT_INDEXED" in cov_compact:
+        return "CRAWLED_NOT_INDEXED"
+    if "DISCOVERED" in coverage or "DISCOVERED_CURRENTLY_NOT_INDEXED" in cov_compact:
         return "DISCOVERED_NOT_CRAWLED"
     if page_fetch and "SUCCESS" not in page_fetch and page_fetch not in {"", "UNSPECIFIED"}:
         return "UNKNOWN_ERROR"

@@ -10,7 +10,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 7."
     ],
     "limitations": [
-      "Base: 13 contratos primários do segmento «Pavimentação e infraestrutura viária» em SC; multi-rótulo entra só no primário.",
+      "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em SC; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."
@@ -22,18 +22,19 @@
     "p75_value": 635000.0,
     "period_end": "2026-07-08",
     "period_start": "2026-01-09",
-    "primary_contract_count": 13,
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 8,
+        "suppressed_contract_count": 10
+      },
+      "top_suppliers": null
+    },
     "region": "SC",
     "region_label": "Santa Catarina",
-    "sample_metrics": {
-      "duplicate_rate": 0.0,
-      "exercise_count": 1,
-      "max_single_day_share": 0.2308,
-      "primary_contract_count": 13,
-      "temporal_span_days": 180,
-      "unique_buyer_count": 11,
-      "unique_supplier_count": 11
-    },
     "segment": "Pavimentação e infraestrutura viária",
     "slug": "pavimentacao-infraestrutura-viaria-sc",
     "sources": [
@@ -42,68 +43,14 @@
     "supplier_count": 11,
     "top_buyers": [
       {
-        "cnpj8": "83102285",
-        "contract_count": 3,
-        "municipio": "Balneário Camboriú",
-        "name": "Prefeitura Municipal de Balneário Camboriú",
-        "total_value": 417609.96,
-        "uf": "SC"
-      },
-      {
-        "cnpj8": "83102574",
-        "contract_count": 1,
-        "municipio": "Rio do Sul",
-        "name": "Município de Rio do Sul",
-        "total_value": 4082.5,
-        "uf": "SC"
-      },
-      {
-        "cnpj8": "82892365",
-        "contract_count": 1,
-        "municipio": "Paulo Lopes",
-        "name": "Município de Paulo Lopes",
-        "total_value": 1086043.29,
-        "uf": "SC"
-      },
-      {
-        "cnpj8": "83102517",
-        "contract_count": 1,
-        "municipio": "Itaiópolis",
-        "name": "Departamento de Obras e Urbanismo",
-        "total_value": 2590000.0,
-        "uf": "SC"
-      },
-      {
-        "cnpj8": "83102277",
-        "contract_count": 1,
-        "municipio": "Itajaí",
-        "name": "Prefeitura Municipal de Itajaí - Sc",
-        "total_value": 345532.53,
-        "uf": "SC"
-      },
-      {
-        "cnpj8": "95780458",
-        "contract_count": 1,
-        "municipio": "Sangão",
-        "name": "Prefeitura Municipal de Sangão",
-        "total_value": 205000.0,
-        "uf": "SC"
-      },
-      {
-        "cnpj8": "82777301",
-        "contract_count": 1,
-        "municipio": "Lages",
-        "name": "Município de Lages",
-        "total_value": 605900.0,
-        "uf": "SC"
-      },
-      {
-        "cnpj8": "83102244",
-        "contract_count": 1,
-        "municipio": "Gaspar",
-        "name": "Prefeitura de Gaspar - SC",
-        "total_value": 224135.0,
-        "uf": "SC"
+        "cnpj8": null,
+        "contract_count": 10,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 8,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
       }
     ],
     "top_objects": [
@@ -151,7 +98,7 @@
       },
       {
         "count": 1,
-        "example_objeto": "Contratação de empresa especializada para a execução (fornecimento, instalação e mão de obra) de serviços de sinalização viária vertical e horizontal, nos espaços públicos, rodovias, estradas, ruas e ",
+        "example_objeto": "Contratação de empresa especializada para a execução (fornecimento, instalação e mão de obra) de serviços de sinalização viária vertical e horizontal, nos espaços públicos, rodovias, estradas, ruas e",
         "label": "Contratação de empresa especializada para a execução (fornecimento,…",
         "median_value": null
       }
@@ -176,7 +123,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 0."
     ],
     "limitations": [
-      "Base: 13 contratos primários do segmento «Pavimentação e infraestrutura viária» em PI; multi-rótulo entra só no primário.",
+      "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em PI; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."
@@ -188,18 +135,19 @@
     "p75_value": 1463918.41,
     "period_end": "2026-07-08",
     "period_start": "2026-06-03",
-    "primary_contract_count": 13,
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 6,
+        "suppressed_contract_count": 13
+      },
+      "top_suppliers": null
+    },
     "region": "PI",
     "region_label": "Piauí",
-    "sample_metrics": {
-      "duplicate_rate": 0.0,
-      "exercise_count": 1,
-      "max_single_day_share": 0.2308,
-      "primary_contract_count": 13,
-      "temporal_span_days": 35,
-      "unique_buyer_count": 6,
-      "unique_supplier_count": 13
-    },
     "segment": "Pavimentação e infraestrutura viária",
     "slug": "pavimentacao-infraestrutura-viaria-pi",
     "sources": [
@@ -208,52 +156,14 @@
     "supplier_count": 13,
     "top_buyers": [
       {
-        "cnpj8": "08767094",
-        "contract_count": 4,
-        "municipio": "Teresina",
-        "name": "Secretaria de Estado das Cidades do Piaui",
-        "total_value": 4354612.26,
-        "uf": "PI"
-      },
-      {
-        "cnpj8": "49502868",
-        "contract_count": 4,
-        "municipio": "Teresina",
-        "name": "Coordenadoria de Desenvolvimento dos Territórios - CDTER - PI",
-        "total_value": 3257974.84,
-        "uf": "PI"
-      },
-      {
-        "cnpj8": "14862788",
-        "contract_count": 2,
-        "municipio": "Teresina",
-        "name": "Secretaria de Desen.reg.a.m.e Ener.renovaveis",
-        "total_value": 14971498.28,
-        "uf": "PI"
-      },
-      {
-        "cnpj8": "05699457",
-        "contract_count": 1,
-        "municipio": "Teresina",
-        "name": "Epi-secretaria Estadual de Transportes",
-        "total_value": 1488689.1,
-        "uf": "PI"
-      },
-      {
-        "cnpj8": "09034960",
-        "contract_count": 1,
-        "municipio": "Teresina",
-        "name": "Epi-instituto de Desenvolvimento do Piaui",
-        "total_value": 1526304.17,
-        "uf": "PI"
-      },
-      {
-        "cnpj8": "33691623",
-        "contract_count": 1,
-        "municipio": "Teresina",
-        "name": "Epi-secretaria do Agro.e Empreend.rural",
-        "total_value": 572980.0,
-        "uf": "PI"
+        "cnpj8": null,
+        "contract_count": 13,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 6,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
       }
     ],
     "top_objects": [
@@ -326,7 +236,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 0."
     ],
     "limitations": [
-      "Base: 12 contratos primários do segmento «Edificações públicas» em MG; multi-rótulo entra só no primário.",
+      "Base: 12 contratos com arquétipo primário edificacoes-publicas em MG; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."
@@ -338,18 +248,19 @@
     "p75_value": 1300000.0,
     "period_end": "2026-07-08",
     "period_start": "2026-06-15",
-    "primary_contract_count": 12,
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 8,
+        "suppressed_contract_count": 10
+      },
+      "top_suppliers": null
+    },
     "region": "MG",
     "region_label": "Minas Gerais",
-    "sample_metrics": {
-      "duplicate_rate": 0.0,
-      "exercise_count": 1,
-      "max_single_day_share": 0.4167,
-      "primary_contract_count": 12,
-      "temporal_span_days": 23,
-      "unique_buyer_count": 10,
-      "unique_supplier_count": 11
-    },
     "segment": "Edificações públicas",
     "slug": "edificacoes-publicas-mg",
     "sources": [
@@ -358,68 +269,14 @@
     "supplier_count": 11,
     "top_buyers": [
       {
-        "cnpj8": "24212862",
-        "contract_count": 2,
-        "municipio": "Rio Pardo de Minas",
-        "name": "Prefeitura Municipal de Rio Pardo de Minas",
-        "total_value": 847894.54,
-        "uf": "MG"
-      },
-      {
-        "cnpj8": "18298174",
-        "contract_count": 2,
-        "municipio": "Córrego Danta",
-        "name": "Município de Córrego Danta-mg",
-        "total_value": 731399.99,
-        "uf": "MG"
-      },
-      {
-        "cnpj8": "20356747",
-        "contract_count": 1,
-        "municipio": "Entre Rios de Minas",
-        "name": "Prefeitura Municipal de Entre Rios de Minas",
-        "total_value": 1593755.41,
-        "uf": "MG"
-      },
-      {
-        "cnpj8": "18715425",
-        "contract_count": 1,
-        "municipio": "Vespasiano",
-        "name": "Unidade Única",
-        "total_value": 8718990.04,
-        "uf": "MG"
-      },
-      {
-        "cnpj8": "19380914",
-        "contract_count": 1,
-        "municipio": "Conselheiro Lafaiete",
-        "name": "Câmara Municipal de Conselheiro Lafaiete",
-        "total_value": 545585.4,
-        "uf": "MG"
-      },
-      {
-        "cnpj8": "22680672",
-        "contract_count": 1,
-        "municipio": "Coração de Jesus",
-        "name": "Secretaria Municipal de Saúde",
-        "total_value": 1300000.0,
-        "uf": "MG"
-      },
-      {
-        "cnpj8": "19875046",
-        "contract_count": 1,
-        "municipio": "Coronel Fabriciano",
-        "name": "Unidade Única",
-        "total_value": 486229.57,
-        "uf": "MG"
-      },
-      {
-        "cnpj8": "01613121",
-        "contract_count": 1,
-        "municipio": "São Félix de Minas",
-        "name": "Prefeitura Municipal de São Félix de Minas",
-        "total_value": 599500.0,
-        "uf": "MG"
+        "cnpj8": null,
+        "contract_count": 10,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 8,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
       }
     ],
     "top_objects": [
@@ -449,7 +306,7 @@
       },
       {
         "count": 1,
-        "example_objeto": "Contratação de pessoa física ou jurídica para a prestação dos serviços de Engenheiro Civil de Obra, com vistas ao assessoramento/consultoria no planejamento e acompanhamento da contratação de empresa ",
+        "example_objeto": "Contratação de pessoa física ou jurídica para a prestação dos serviços de Engenheiro Civil de Obra, com vistas ao assessoramento/consultoria no planejamento e acompanhamento da contratação de empresa",
         "label": "Contratação de pessoa física ou jurídica para a prestação dos serviços…",
         "median_value": null
       },
@@ -492,7 +349,7 @@
       "Oportunidades abertas no radar (mesmo recorte): 3."
     ],
     "limitations": [
-      "Base: 10 contratos primários do segmento «Edificações públicas» em RS; multi-rótulo entra só no primário.",
+      "Base: 10 contratos com arquétipo primário edificacoes-publicas em RS; multi-rótulo entra só no primário.",
       "Não representa o universo total de contratações.",
       "Valores nominais sem deflacionamento.",
       "Objetos heterogêneos; mediana não é preço unitário."
@@ -504,18 +361,19 @@
     "p75_value": 1390000.0,
     "period_end": "2026-07-08",
     "period_start": "2025-11-25",
-    "primary_contract_count": 10,
+    "privacy": {
+      "min_cell_count": null,
+      "policy": null,
+      "top_buyers": {
+        "min_cell_count": 5,
+        "policy": "cells with count < min_cell_count are bucketed as 'outros'",
+        "suppressed_cells": 8,
+        "suppressed_contract_count": 8
+      },
+      "top_suppliers": null
+    },
     "region": "RS",
     "region_label": "Rio Grande do Sul",
-    "sample_metrics": {
-      "duplicate_rate": 0.0,
-      "exercise_count": 2,
-      "max_single_day_share": 0.2,
-      "primary_contract_count": 10,
-      "temporal_span_days": 225,
-      "unique_buyer_count": 10,
-      "unique_supplier_count": 10
-    },
     "segment": "Edificações públicas",
     "slug": "edificacoes-publicas-rs",
     "sources": [
@@ -524,68 +382,14 @@
     "supplier_count": 10,
     "top_buyers": [
       {
-        "cnpj8": "88084942",
-        "contract_count": 1,
-        "municipio": "Pinheiro Machado",
-        "name": "Prefeitura Municipal",
-        "total_value": 532542.27,
-        "uf": "RS"
-      },
-      {
-        "cnpj8": "87612826",
-        "contract_count": 1,
-        "municipio": "Independência",
-        "name": "Municipio de Independecia/rs",
-        "total_value": 199500.0,
-        "uf": "RS"
-      },
-      {
-        "cnpj8": "87564381",
-        "contract_count": 1,
-        "municipio": "Ibirubá",
-        "name": "Município de Ibirubá - Rs",
-        "total_value": 415499.99,
-        "uf": "RS"
-      },
-      {
-        "cnpj8": "88363189",
-        "contract_count": 1,
-        "municipio": "Triunfo",
-        "name": "Prefeitura Municipal",
-        "total_value": 1390000.0,
-        "uf": "RS"
-      },
-      {
-        "cnpj8": "88566872",
-        "contract_count": 1,
-        "municipio": "Rio Grande",
-        "name": "Prefeitura Municipal do Rio Grande - Rs",
-        "total_value": 300879.55,
-        "uf": "RS"
-      },
-      {
-        "cnpj8": "87366159",
-        "contract_count": 1,
-        "municipio": "Sapiranga",
-        "name": "Secretaria Municipal de Educação",
-        "total_value": 278900.0,
-        "uf": "RS"
-      },
-      {
-        "cnpj8": "89522064",
-        "contract_count": 1,
-        "municipio": "Porto Alegre",
-        "name": "Tribunal de Justiça do Estado do Rio G.do Sul",
-        "total_value": 4161856.87,
-        "uf": "RS"
-      },
-      {
-        "cnpj8": "13677970",
-        "contract_count": 1,
-        "municipio": "Alto Alegre",
-        "name": "Câmara Municipal de Alto Alegre",
-        "total_value": 6000.0,
-        "uf": "RS"
+        "cnpj8": null,
+        "contract_count": 8,
+        "municipio": null,
+        "name": "outros (células suprimidas)",
+        "original_cells": 8,
+        "suppressed": true,
+        "total_value": 0.0,
+        "uf": null
       }
     ],
     "top_objects": [

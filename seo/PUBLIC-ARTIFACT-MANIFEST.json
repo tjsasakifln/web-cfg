@@ -36,7 +36,7 @@
     "sitemap.xml",
     "styles.css"
   ],
-  "html_route_count": 159,
+  "html_route_count": 160,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -182,7 +182,7 @@
     "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
     "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
     "/inteligencia/orgaos/",
-    "/inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+    "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
     "/inteligencia/precos/",
     "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
     "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
@@ -190,6 +190,7 @@
     "/privacidade/",
     "/radar/edificacoes-publicas-pr/",
     "/radar/edificacoes-publicas-rs/",
+    "/radar/edificacoes-publicas-sc/",
     "/radar/",
     "/radar/pavimentacao-infraestrutura-viaria-pr/",
     "/radar/pavimentacao-infraestrutura-viaria-rs/",
@@ -198,8 +199,8 @@
     "/reequilibrio-obras-publicas/",
     "/termos-de-uso/"
   ],
-  "generated_at": "2026-08-01T00:47:44Z",
-  "public_artifact_hash": "a4ea2776862932d0a3bca108e3137c67430d10b7553ecc4edb8db05ab0293c80",
+  "generated_at": "2026-08-01T01:28:39Z",
+  "public_artifact_hash": "0ff4e455be0be7279f36796e905d62424b45f2858c6d7e9a72a71f833bedff95",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",

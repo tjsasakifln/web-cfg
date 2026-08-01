@@ -1,39 +1,4567 @@
 {
-  "classification_labels": [
-    "aec_confirmed",
-    "aec_probable",
-    "non_aec",
-    "ambiguous",
-    "insufficient_context"
+  "$defs": {
+    "Agency": {
+      "$defs": {
+        "ArchetypeMixEntry": {
+          "additionalProperties": false,
+          "properties": {
+            "archetype_id": {
+              "maxLength": 80,
+              "title": "Archetype Id",
+              "type": "string"
+            },
+            "contract_count": {
+              "minimum": 0,
+              "title": "Contract Count",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "archetype_id",
+            "contract_count"
+          ],
+          "title": "ArchetypeMixEntry",
+          "type": "object"
+        },
+        "Modality": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "name": {
+              "maxLength": 200,
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "count"
+          ],
+          "title": "Modality",
+          "type": "object"
+        },
+        "ObjectCell": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "example_objeto": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Example Objeto"
+            },
+            "label": {
+              "maxLength": 300,
+              "title": "Label",
+              "type": "string"
+            },
+            "median_value": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Median Value"
+            }
+          },
+          "required": [
+            "label",
+            "count"
+          ],
+          "title": "ObjectCell",
+          "type": "object"
+        },
+        "OfficialChannel": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "maxLength": 200,
+              "title": "Name",
+              "type": "string"
+            },
+            "url": {
+              "anyOf": [
+                {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Url"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "title": "OfficialChannel",
+          "type": "object"
+        },
+        "OpportunityItem": {
+          "additionalProperties": false,
+          "properties": {
+            "archetype_ids": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 20,
+              "title": "Archetype Ids",
+              "type": "array"
+            },
+            "data_encerramento": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Data Encerramento"
+            },
+            "data_publicacao": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Data Publicacao"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Id"
+            },
+            "link_oficial": {
+              "anyOf": [
+                {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Link Oficial"
+            },
+            "link_pncp": {
+              "anyOf": [
+                {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Link Pncp"
+            },
+            "modalidade": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Modalidade"
+            },
+            "municipio": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Municipio"
+            },
+            "objeto": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Objeto"
+            },
+            "orgao_cnpj8": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Orgao Cnpj8"
+            },
+            "orgao_nome": {
+              "anyOf": [
+                {
+                  "maxLength": 300,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Orgao Nome"
+            },
+            "pncp_id": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Pncp Id"
+            },
+            "source": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source"
+            },
+            "status": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Status"
+            },
+            "status_bucket": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Status Bucket"
+            },
+            "status_raw": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Status Raw"
+            },
+            "title": {
+              "anyOf": [
+                {
+                  "maxLength": 400,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Title"
+            },
+            "uf": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Uf"
+            },
+            "uncertainty": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Uncertainty"
+            },
+            "valor_estimado": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Valor Estimado"
+            },
+            "verified_at": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Verified At"
+            }
+          },
+          "title": "OpportunityItem",
+          "type": "object"
+        },
+        "SeasonalityPoint": {
+          "additionalProperties": false,
+          "properties": {
+            "contract_count": {
+              "minimum": 0,
+              "title": "Contract Count",
+              "type": "integer"
+            },
+            "period": {
+              "maxLength": 7,
+              "title": "Period",
+              "type": "string"
+            }
+          },
+          "required": [
+            "period",
+            "contract_count"
+          ],
+          "title": "SeasonalityPoint",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "agency_cnpj8": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agency Cnpj8"
+        },
+        "agency_name": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agency Name"
+        },
+        "archetype_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Archetype Ids",
+          "type": "array"
+        },
+        "archetype_mix": {
+          "items": {
+            "$ref": "#/$defs/ArchetypeMixEntry"
+          },
+          "maxItems": 40,
+          "title": "Archetype Mix",
+          "type": "array"
+        },
+        "cnpj8": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cnpj8"
+        },
+        "contract_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Contract Count",
+          "type": "integer"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "median_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median Value"
+        },
+        "modalities": {
+          "items": {
+            "$ref": "#/$defs/Modality"
+          },
+          "maxItems": 30,
+          "title": "Modalities",
+          "type": "array"
+        },
+        "municipio": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Municipio"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "official_channels": {
+          "items": {
+            "$ref": "#/$defs/OfficialChannel"
+          },
+          "maxItems": 20,
+          "title": "Official Channels",
+          "type": "array"
+        },
+        "open_opportunities": {
+          "items": {
+            "$ref": "#/$defs/OpportunityItem"
+          },
+          "maxItems": 20,
+          "title": "Open Opportunities",
+          "type": "array"
+        },
+        "orgao_nome": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orgao Nome"
+        },
+        "p25_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P25 Value"
+        },
+        "p75_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P75 Value"
+        },
+        "period_end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period End"
+        },
+        "period_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period Start"
+        },
+        "practical_notes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Practical Notes",
+          "type": "array"
+        },
+        "related_archetypes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Related Archetypes",
+          "type": "array"
+        },
+        "seasonality": {
+          "items": {
+            "$ref": "#/$defs/SeasonalityPoint"
+          },
+          "maxItems": 36,
+          "title": "Seasonality",
+          "type": "array"
+        },
+        "slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Slug"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sources",
+          "type": "array"
+        },
+        "supplier_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Supplier Count",
+          "type": "integer"
+        },
+        "top_objects": {
+          "items": {
+            "$ref": "#/$defs/ObjectCell"
+          },
+          "maxItems": 20,
+          "title": "Top Objects",
+          "type": "array"
+        },
+        "total_value": {
+          "default": 0,
+          "title": "Total Value",
+          "type": "number"
+        },
+        "uf": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uf"
+        }
+      },
+      "title": "Agency",
+      "type": "object"
+    },
+    "Archetype": {
+      "$defs": {
+        "BuyerTypeObservation": {
+          "additionalProperties": false,
+          "properties": {
+            "contract_count": {
+              "minimum": 0,
+              "title": "Contract Count",
+              "type": "integer"
+            },
+            "type": {
+              "maxLength": 80,
+              "title": "Type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "contract_count"
+          ],
+          "title": "BuyerTypeObservation",
+          "type": "object"
+        },
+        "Modality": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "name": {
+              "maxLength": 200,
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "count"
+          ],
+          "title": "Modality",
+          "type": "object"
+        },
+        "UfObservation": {
+          "additionalProperties": false,
+          "properties": {
+            "contract_count": {
+              "minimum": 0,
+              "title": "Contract Count",
+              "type": "integer"
+            },
+            "uf": {
+              "title": "Uf",
+              "type": "string"
+            }
+          },
+          "required": [
+            "uf",
+            "contract_count"
+          ],
+          "title": "UfObservation",
+          "type": "object"
+        },
+        "ValueBand": {
+          "additionalProperties": false,
+          "description": "Percentile band for archetype/market value distributions.",
+          "properties": {
+            "currency": {
+              "default": "BRL",
+              "maxLength": 8,
+              "title": "Currency",
+              "type": "string"
+            },
+            "median": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Median"
+            },
+            "n": {
+              "default": 0,
+              "minimum": 0,
+              "title": "N",
+              "type": "integer"
+            },
+            "p25": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "P25"
+            },
+            "p75": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "P75"
+            }
+          },
+          "title": "ValueBand",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "buyer_types_observed": {
+          "items": {
+            "$ref": "#/$defs/BuyerTypeObservation"
+          },
+          "maxItems": 30,
+          "title": "Buyer Types Observed",
+          "type": "array"
+        },
+        "confenge_service_slugs": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Confenge Service Slugs",
+          "type": "array"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "evidence_buyer_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Evidence Buyer Count",
+          "type": "integer"
+        },
+        "evidence_contract_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Evidence Contract Count",
+          "type": "integer"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "methodology": {
+          "anyOf": [
+            {
+              "maxLength": 4000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Methodology"
+        },
+        "modalities_observed": {
+          "items": {
+            "$ref": "#/$defs/Modality"
+          },
+          "maxItems": 30,
+          "title": "Modalities Observed",
+          "type": "array"
+        },
+        "object_patterns_public": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "title": "Object Patterns Public",
+          "type": "array"
+        },
+        "related_services": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Related Services",
+          "type": "array"
+        },
+        "slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Slug"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sources",
+          "type": "array"
+        },
+        "theme": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Theme"
+        },
+        "ufs_observed": {
+          "items": {
+            "$ref": "#/$defs/UfObservation"
+          },
+          "maxItems": 30,
+          "title": "Ufs Observed",
+          "type": "array"
+        },
+        "value_band": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ValueBand"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Archetype",
+      "type": "object"
+    },
+    "BudgetSignal": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Amount"
+        },
+        "count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 400,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "signal": {
+          "maxLength": 120,
+          "title": "Signal",
+          "type": "string"
+        }
+      },
+      "required": [
+        "signal"
+      ],
+      "title": "BudgetSignal",
+      "type": "object"
+    },
+    "ClaimEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "claim": {
+          "maxLength": 500,
+          "title": "Claim",
+          "type": "string"
+        },
+        "count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Count"
+        },
+        "evidence_kind": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Kind"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        }
+      },
+      "required": [
+        "claim"
+      ],
+      "title": "ClaimEvidence",
+      "type": "object"
+    },
+    "ClassifierMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "indexable_class": {
+          "default": "aec_confirmed",
+          "maxLength": 40,
+          "title": "Indexable Class",
+          "type": "string"
+        },
+        "labels": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Labels",
+          "type": "array"
+        }
+      },
+      "title": "ClassifierMetadata",
+      "type": "object"
+    },
+    "Competition": {
+      "$defs": {
+        "PrivacyCellMeta": {
+          "additionalProperties": false,
+          "properties": {
+            "min_cell_count": {
+              "minimum": 0,
+              "title": "Min Cell Count",
+              "type": "integer"
+            },
+            "policy": {
+              "maxLength": 400,
+              "title": "Policy",
+              "type": "string"
+            },
+            "suppressed_cells": {
+              "minimum": 0,
+              "title": "Suppressed Cells",
+              "type": "integer"
+            },
+            "suppressed_contract_count": {
+              "minimum": 0,
+              "title": "Suppressed Contract Count",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "min_cell_count",
+            "suppressed_cells",
+            "suppressed_contract_count",
+            "policy"
+          ],
+          "title": "PrivacyCellMeta",
+          "type": "object"
+        },
+        "PrivacyMetadata": {
+          "additionalProperties": false,
+          "description": "Small-cell privacy suppression metadata attached to markets/competition.",
+          "properties": {
+            "min_cell_count": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Min Cell Count"
+            },
+            "policy": {
+              "anyOf": [
+                {
+                  "maxLength": 400,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Policy"
+            },
+            "top_buyers": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PrivacyCellMeta"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "top_suppliers": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PrivacyCellMeta"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "title": "PrivacyMetadata",
+          "type": "object"
+        },
+        "SupplierObservation": {
+          "additionalProperties": false,
+          "properties": {
+            "agencies_count": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Agencies Count",
+              "type": "integer"
+            },
+            "contract_count": {
+              "minimum": 0,
+              "title": "Contract Count",
+              "type": "integer"
+            },
+            "display_name": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Display Name"
+            },
+            "total_value": {
+              "default": 0,
+              "title": "Total Value",
+              "type": "number"
+            },
+            "value_band": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Value Band"
+            }
+          },
+          "required": [
+            "contract_count"
+          ],
+          "title": "SupplierObservation",
+          "type": "object"
+        },
+        "ValueBandLabel": {
+          "additionalProperties": false,
+          "description": "Competition value-band histogram entry (label + count).",
+          "properties": {
+            "band": {
+              "maxLength": 40,
+              "title": "Band",
+              "type": "string"
+            },
+            "contract_count": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Contract Count"
+            },
+            "count": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "band"
+          ],
+          "title": "ValueBandLabel",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "agencies_with_activity": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Agencies With Activity",
+          "type": "integer"
+        },
+        "archetype_id": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Archetype Id"
+        },
+        "buyer_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Buyer Count",
+          "type": "integer"
+        },
+        "concentration_top3_share": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Concentration Top3 Share"
+        },
+        "contract_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Contract Count",
+          "type": "integer"
+        },
+        "hhi_proxy": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hhi Proxy"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "language_note": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language Note"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "observed_suppliers": {
+          "items": {
+            "$ref": "#/$defs/SupplierObservation"
+          },
+          "maxItems": 20,
+          "title": "Observed Suppliers",
+          "type": "array"
+        },
+        "period_end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period End"
+        },
+        "period_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period Start"
+        },
+        "privacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PrivacyMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "recent_changes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Recent Changes",
+          "type": "array"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "region_label": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region Label"
+        },
+        "segment": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Segment"
+        },
+        "slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Slug"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sources",
+          "type": "array"
+        },
+        "supplier_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Supplier Count",
+          "type": "integer"
+        },
+        "value_bands": {
+          "items": {
+            "$ref": "#/$defs/ValueBandLabel"
+          },
+          "maxItems": 20,
+          "title": "Value Bands",
+          "type": "array"
+        }
+      },
+      "title": "Competition",
+      "type": "object"
+    },
+    "DocumentSignal": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 400,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "signal": {
+          "maxLength": 120,
+          "title": "Signal",
+          "type": "string"
+        }
+      },
+      "required": [
+        "signal"
+      ],
+      "title": "DocumentSignal",
+      "type": "object"
+    },
+    "Freshness": {
+      "additionalProperties": false,
+      "description": "Radar / dataset freshness evaluation.",
+      "properties": {
+        "age_hours": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age Hours"
+        },
+        "data_as_of": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data As Of"
+        },
+        "evaluated_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evaluated At"
+        },
+        "fail_hours": {
+          "default": 72,
+          "minimum": 0,
+          "title": "Fail Hours",
+          "type": "integer"
+        },
+        "now_source": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Now Source"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "maxLength": 400,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "source_unavailable": {
+          "default": false,
+          "title": "Source Unavailable",
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "warning",
+            "fail"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "warning_hours": {
+          "default": 24,
+          "minimum": 0,
+          "title": "Warning Hours",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "Freshness",
+      "type": "object"
+    },
+    "ICPMethodology": {
+      "$defs": {
+        "ClassifierMetadata": {
+          "additionalProperties": false,
+          "properties": {
+            "indexable_class": {
+              "default": "aec_confirmed",
+              "maxLength": 40,
+              "title": "Indexable Class",
+              "type": "string"
+            },
+            "labels": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 20,
+              "title": "Labels",
+              "type": "array"
+            }
+          },
+          "title": "ClassifierMetadata",
+          "type": "object"
+        },
+        "HistogramBin": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "key": {
+              "maxLength": 120,
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "count"
+          ],
+          "title": "HistogramBin",
+          "type": "object"
+        },
+        "InternalSignatureAggregates": {
+          "additionalProperties": false,
+          "properties": {
+            "activity_class_histogram": {
+              "items": {
+                "$ref": "#/$defs/HistogramBin"
+              },
+              "maxItems": 50,
+              "title": "Activity Class Histogram",
+              "type": "array"
+            },
+            "available": {
+              "default": false,
+              "title": "Available",
+              "type": "boolean"
+            },
+            "n_accounts_internal": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "N Accounts Internal"
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "maxLength": 800,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Note"
+            },
+            "public_signal_frequency": {
+              "items": {
+                "$ref": "#/$defs/HistogramBin"
+              },
+              "maxItems": 80,
+              "title": "Public Signal Frequency",
+              "type": "array"
+            },
+            "sector_fit_histogram": {
+              "items": {
+                "$ref": "#/$defs/HistogramBin"
+              },
+              "maxItems": 50,
+              "title": "Sector Fit Histogram",
+              "type": "array"
+            }
+          },
+          "title": "InternalSignatureAggregates",
+          "type": "object"
+        },
+        "MethodologyMetadata": {
+          "additionalProperties": false,
+          "description": "Structured methodology block when not a plain string.",
+          "properties": {
+            "notes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "title": "Notes",
+              "type": "array"
+            },
+            "steps": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "title": "Steps",
+              "type": "array"
+            },
+            "summary": {
+              "anyOf": [
+                {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Summary"
+            }
+          },
+          "title": "MethodologyMetadata",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Methodology document — structured nested models, no free Any bags.",
+      "properties": {
+        "classifier": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ClassifierMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "description": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "internal_signature_aggregates": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InternalSignatureAggregates"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "methodology": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/MethodologyMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Methodology"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "maxLength": 20,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Sources",
+          "type": "array"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "maxLength": 20,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "title": "ICPMethodology",
+      "type": "object"
+    },
+    "InternalSignatureAggregates": {
+      "$defs": {
+        "HistogramBin": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "key": {
+              "maxLength": 120,
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "count"
+          ],
+          "title": "HistogramBin",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "activity_class_histogram": {
+          "items": {
+            "$ref": "#/$defs/HistogramBin"
+          },
+          "maxItems": 50,
+          "title": "Activity Class Histogram",
+          "type": "array"
+        },
+        "available": {
+          "default": false,
+          "title": "Available",
+          "type": "boolean"
+        },
+        "n_accounts_internal": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Accounts Internal"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 800,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "public_signal_frequency": {
+          "items": {
+            "$ref": "#/$defs/HistogramBin"
+          },
+          "maxItems": 80,
+          "title": "Public Signal Frequency",
+          "type": "array"
+        },
+        "sector_fit_histogram": {
+          "items": {
+            "$ref": "#/$defs/HistogramBin"
+          },
+          "maxItems": 50,
+          "title": "Sector Fit Histogram",
+          "type": "array"
+        }
+      },
+      "title": "InternalSignatureAggregates",
+      "type": "object"
+    },
+    "Market": {
+      "$defs": {
+        "BuyerCell": {
+          "additionalProperties": false,
+          "properties": {
+            "cnpj8": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Cnpj8"
+            },
+            "contract_count": {
+              "minimum": 0,
+              "title": "Contract Count",
+              "type": "integer"
+            },
+            "municipio": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Municipio"
+            },
+            "name": {
+              "anyOf": [
+                {
+                  "maxLength": 300,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Name"
+            },
+            "original_cells": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Original Cells"
+            },
+            "suppressed": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Suppressed"
+            },
+            "total_value": {
+              "default": 0,
+              "title": "Total Value",
+              "type": "number"
+            },
+            "uf": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Uf"
+            }
+          },
+          "required": [
+            "contract_count"
+          ],
+          "title": "BuyerCell",
+          "type": "object"
+        },
+        "Modality": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "name": {
+              "maxLength": 200,
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "count"
+          ],
+          "title": "Modality",
+          "type": "object"
+        },
+        "ObjectCell": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "example_objeto": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Example Objeto"
+            },
+            "label": {
+              "maxLength": 300,
+              "title": "Label",
+              "type": "string"
+            },
+            "median_value": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Median Value"
+            }
+          },
+          "required": [
+            "label",
+            "count"
+          ],
+          "title": "ObjectCell",
+          "type": "object"
+        },
+        "PrivacyCellMeta": {
+          "additionalProperties": false,
+          "properties": {
+            "min_cell_count": {
+              "minimum": 0,
+              "title": "Min Cell Count",
+              "type": "integer"
+            },
+            "policy": {
+              "maxLength": 400,
+              "title": "Policy",
+              "type": "string"
+            },
+            "suppressed_cells": {
+              "minimum": 0,
+              "title": "Suppressed Cells",
+              "type": "integer"
+            },
+            "suppressed_contract_count": {
+              "minimum": 0,
+              "title": "Suppressed Contract Count",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "min_cell_count",
+            "suppressed_cells",
+            "suppressed_contract_count",
+            "policy"
+          ],
+          "title": "PrivacyCellMeta",
+          "type": "object"
+        },
+        "PrivacyMetadata": {
+          "additionalProperties": false,
+          "description": "Small-cell privacy suppression metadata attached to markets/competition.",
+          "properties": {
+            "min_cell_count": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Min Cell Count"
+            },
+            "policy": {
+              "anyOf": [
+                {
+                  "maxLength": 400,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Policy"
+            },
+            "top_buyers": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PrivacyCellMeta"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "top_suppliers": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PrivacyCellMeta"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "title": "PrivacyMetadata",
+          "type": "object"
+        },
+        "YearValue": {
+          "additionalProperties": false,
+          "properties": {
+            "contract_count": {
+              "minimum": 0,
+              "title": "Contract Count",
+              "type": "integer"
+            },
+            "total_value": {
+              "default": 0,
+              "title": "Total Value",
+              "type": "number"
+            },
+            "year": {
+              "maxLength": 4,
+              "minLength": 4,
+              "title": "Year",
+              "type": "string"
+            }
+          },
+          "required": [
+            "year",
+            "contract_count"
+          ],
+          "title": "YearValue",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "archetype_id": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Archetype Id"
+        },
+        "buyer_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Buyer Count",
+          "type": "integer"
+        },
+        "contract_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Contract Count",
+          "type": "integer"
+        },
+        "id": {
+          "maxLength": 120,
+          "title": "Id",
+          "type": "string"
+        },
+        "interpretation_hooks": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Interpretation Hooks",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "median_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median Value"
+        },
+        "modalities": {
+          "items": {
+            "$ref": "#/$defs/Modality"
+          },
+          "maxItems": 30,
+          "title": "Modalities",
+          "type": "array"
+        },
+        "open_opportunity_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Open Opportunity Count",
+          "type": "integer"
+        },
+        "p25_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P25 Value"
+        },
+        "p75_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P75 Value"
+        },
+        "period_end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period End"
+        },
+        "period_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period Start"
+        },
+        "privacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PrivacyMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "region_label": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region Label"
+        },
+        "segment": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Segment"
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sources",
+          "type": "array"
+        },
+        "supplier_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Supplier Count",
+          "type": "integer"
+        },
+        "top_buyers": {
+          "items": {
+            "$ref": "#/$defs/BuyerCell"
+          },
+          "maxItems": 20,
+          "title": "Top Buyers",
+          "type": "array"
+        },
+        "top_objects": {
+          "items": {
+            "$ref": "#/$defs/ObjectCell"
+          },
+          "maxItems": 20,
+          "title": "Top Objects",
+          "type": "array"
+        },
+        "total_value": {
+          "default": 0,
+          "title": "Total Value",
+          "type": "number"
+        },
+        "value_by_year": {
+          "items": {
+            "$ref": "#/$defs/YearValue"
+          },
+          "maxItems": 40,
+          "title": "Value By Year",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "slug"
+      ],
+      "title": "Market",
+      "type": "object"
+    },
+    "MethodologyMetadata": {
+      "additionalProperties": false,
+      "description": "Structured methodology block when not a plain string.",
+      "properties": {
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Notes",
+          "type": "array"
+        },
+        "steps": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Steps",
+          "type": "array"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        }
+      },
+      "title": "MethodologyMetadata",
+      "type": "object"
+    },
+    "Modality": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "name": {
+          "maxLength": 200,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "count"
+      ],
+      "title": "Modality",
+      "type": "object"
+    },
+    "OfficialReference": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 300,
+          "title": "Name",
+          "type": "string"
+        },
+        "url": {
+          "maxLength": 2000,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "url"
+      ],
+      "title": "OfficialReference",
+      "type": "object"
+    },
+    "Opportunity": {
+      "$defs": {
+        "Freshness": {
+          "additionalProperties": false,
+          "description": "Radar / dataset freshness evaluation.",
+          "properties": {
+            "age_hours": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Age Hours"
+            },
+            "data_as_of": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Data As Of"
+            },
+            "evaluated_at": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Evaluated At"
+            },
+            "fail_hours": {
+              "default": 72,
+              "minimum": 0,
+              "title": "Fail Hours",
+              "type": "integer"
+            },
+            "now_source": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Now Source"
+            },
+            "reason": {
+              "anyOf": [
+                {
+                  "maxLength": 400,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Reason"
+            },
+            "source_unavailable": {
+              "default": false,
+              "title": "Source Unavailable",
+              "type": "boolean"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "warning",
+                "fail"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "warning_hours": {
+              "default": 24,
+              "minimum": 0,
+              "title": "Warning Hours",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "title": "Freshness",
+          "type": "object"
+        },
+        "OpportunityItem": {
+          "additionalProperties": false,
+          "properties": {
+            "archetype_ids": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 20,
+              "title": "Archetype Ids",
+              "type": "array"
+            },
+            "data_encerramento": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Data Encerramento"
+            },
+            "data_publicacao": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Data Publicacao"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Id"
+            },
+            "link_oficial": {
+              "anyOf": [
+                {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Link Oficial"
+            },
+            "link_pncp": {
+              "anyOf": [
+                {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Link Pncp"
+            },
+            "modalidade": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Modalidade"
+            },
+            "municipio": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Municipio"
+            },
+            "objeto": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Objeto"
+            },
+            "orgao_cnpj8": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Orgao Cnpj8"
+            },
+            "orgao_nome": {
+              "anyOf": [
+                {
+                  "maxLength": 300,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Orgao Nome"
+            },
+            "pncp_id": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Pncp Id"
+            },
+            "source": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source"
+            },
+            "status": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Status"
+            },
+            "status_bucket": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Status Bucket"
+            },
+            "status_raw": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Status Raw"
+            },
+            "title": {
+              "anyOf": [
+                {
+                  "maxLength": 400,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Title"
+            },
+            "uf": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Uf"
+            },
+            "uncertainty": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Uncertainty"
+            },
+            "valor_estimado": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Valor Estimado"
+            },
+            "verified_at": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Verified At"
+            }
+          },
+          "title": "OpportunityItem",
+          "type": "object"
+        },
+        "StatusBreakdown": {
+          "additionalProperties": false,
+          "properties": {
+            "abertas": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Abertas",
+              "type": "integer"
+            },
+            "encerradas_recentes": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Encerradas Recentes",
+              "type": "integer"
+            },
+            "historico": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Historico",
+              "type": "integer"
+            },
+            "suspensas": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Suspensas",
+              "type": "integer"
+            }
+          },
+          "title": "StatusBreakdown",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "archetype_id": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Archetype Id"
+        },
+        "as_of": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "As Of"
+        },
+        "closed_recent_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Closed Recent Count",
+          "type": "integer"
+        },
+        "freshness": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Freshness"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "historical_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Historical Count",
+          "type": "integer"
+        },
+        "id": {
+          "maxLength": 120,
+          "title": "Id",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/OpportunityItem"
+          },
+          "maxItems": 200,
+          "title": "Items",
+          "type": "array"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "open_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Open Count",
+          "type": "integer"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "region_label": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region Label"
+        },
+        "related_market_slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Related Market Slug"
+        },
+        "segment": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Segment"
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sources",
+          "type": "array"
+        },
+        "status_breakdown": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StatusBreakdown"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "suspended_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Suspended Count",
+          "type": "integer"
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "enum": [
+                    "America/Sao_Paulo",
+                    "UTC"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "America/Sao_Paulo",
+          "title": "Timezone"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "verified_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified At"
+        }
+      },
+      "required": [
+        "id",
+        "slug"
+      ],
+      "title": "Opportunity",
+      "type": "object"
+    },
+    "Price": {
+      "$defs": {
+        "ComparisonMeta": {
+          "additionalProperties": false,
+          "properties": {
+            "comparison_confidence": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Comparison Confidence"
+            },
+            "comparison_group": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Comparison Group"
+            },
+            "exclusion": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "title": "Exclusion",
+              "type": "array"
+            },
+            "exclusion_criteria": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "title": "Exclusion Criteria",
+              "type": "array"
+            },
+            "heterogeneity_flags": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 20,
+              "title": "Heterogeneity Flags",
+              "type": "array"
+            },
+            "inclusion": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "title": "Inclusion",
+              "type": "array"
+            },
+            "inclusion_criteria": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "title": "Inclusion Criteria",
+              "type": "array"
+            },
+            "nature": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Nature"
+            },
+            "regime": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Regime"
+            },
+            "scope": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Scope"
+            },
+            "typology": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Typology"
+            }
+          },
+          "title": "ComparisonMeta",
+          "type": "object"
+        },
+        "PublicPriceExample": {
+          "additionalProperties": false,
+          "properties": {
+            "contrato_id": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Contrato Id"
+            },
+            "data_publicacao": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Data Publicacao"
+            },
+            "link_oficial": {
+              "anyOf": [
+                {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Link Oficial"
+            },
+            "municipio": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Municipio"
+            },
+            "objeto": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Objeto"
+            },
+            "orgao_nome": {
+              "anyOf": [
+                {
+                  "maxLength": 300,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Orgao Nome"
+            },
+            "portal_origem": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Portal Origem"
+            },
+            "source": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source"
+            },
+            "uf": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Uf"
+            },
+            "valor": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Valor"
+            }
+          },
+          "title": "PublicPriceExample",
+          "type": "object"
+        },
+        "ScopeCount": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "scope": {
+              "maxLength": 80,
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          "required": [
+            "scope",
+            "count"
+          ],
+          "title": "ScopeCount",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "archetype_id": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Archetype Id"
+        },
+        "comparison_confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comparison Confidence"
+        },
+        "comparison_group": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comparison Group"
+        },
+        "comparison_meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ComparisonMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dispersion_iqr": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dispersion Iqr"
+        },
+        "exclusion_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Exclusion Criteria",
+          "type": "array"
+        },
+        "heterogeneity_flags": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Heterogeneity Flags",
+          "type": "array"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "inclusion_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Inclusion Criteria",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max"
+        },
+        "max_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Value"
+        },
+        "median_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median Value"
+        },
+        "mediana": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mediana"
+        },
+        "mesh_slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mesh Slug"
+        },
+        "min": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min"
+        },
+        "min_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Value"
+        },
+        "n": {
+          "default": 0,
+          "minimum": 0,
+          "title": "N",
+          "type": "integer"
+        },
+        "object_label": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Object Label"
+        },
+        "object_pattern": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Object Pattern"
+        },
+        "observation_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Observation Count",
+          "type": "integer"
+        },
+        "outlier_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Outlier Count",
+          "type": "integer"
+        },
+        "p25": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P25"
+        },
+        "p25_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P25 Value"
+        },
+        "p75": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P75"
+        },
+        "p75_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P75 Value"
+        },
+        "period_end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period End"
+        },
+        "period_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period Start"
+        },
+        "public_examples": {
+          "items": {
+            "$ref": "#/$defs/PublicPriceExample"
+          },
+          "maxItems": 10,
+          "title": "Public Examples",
+          "type": "array"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "region_label": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region Label"
+        },
+        "scope_distribution": {
+          "items": {
+            "$ref": "#/$defs/ScopeCount"
+          },
+          "maxItems": 20,
+          "title": "Scope Distribution",
+          "type": "array"
+        },
+        "segment": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Segment"
+        },
+        "slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Slug"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sources",
+          "type": "array"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "warning": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warning"
+        }
+      },
+      "title": "Price",
+      "type": "object"
+    },
+    "PrivacyMetadata": {
+      "$defs": {
+        "PrivacyCellMeta": {
+          "additionalProperties": false,
+          "properties": {
+            "min_cell_count": {
+              "minimum": 0,
+              "title": "Min Cell Count",
+              "type": "integer"
+            },
+            "policy": {
+              "maxLength": 400,
+              "title": "Policy",
+              "type": "string"
+            },
+            "suppressed_cells": {
+              "minimum": 0,
+              "title": "Suppressed Cells",
+              "type": "integer"
+            },
+            "suppressed_contract_count": {
+              "minimum": 0,
+              "title": "Suppressed Contract Count",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "min_cell_count",
+            "suppressed_cells",
+            "suppressed_contract_count",
+            "policy"
+          ],
+          "title": "PrivacyCellMeta",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Small-cell privacy suppression metadata attached to markets/competition.",
+      "properties": {
+        "min_cell_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Cell Count"
+        },
+        "policy": {
+          "anyOf": [
+            {
+              "maxLength": 400,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy"
+        },
+        "top_buyers": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PrivacyCellMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "top_suppliers": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PrivacyCellMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "PrivacyMetadata",
+      "type": "object"
+    },
+    "ProblemService": {
+      "$defs": {
+        "BudgetSignal": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Amount"
+            },
+            "count": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "maxLength": 400,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Note"
+            },
+            "signal": {
+              "maxLength": 120,
+              "title": "Signal",
+              "type": "string"
+            }
+          },
+          "required": [
+            "signal"
+          ],
+          "title": "BudgetSignal",
+          "type": "object"
+        },
+        "ClaimEvidence": {
+          "additionalProperties": false,
+          "properties": {
+            "claim": {
+              "maxLength": 500,
+              "title": "Claim",
+              "type": "string"
+            },
+            "count": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Count"
+            },
+            "evidence_kind": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Evidence Kind"
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Note"
+            },
+            "source": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source"
+            }
+          },
+          "required": [
+            "claim"
+          ],
+          "title": "ClaimEvidence",
+          "type": "object"
+        },
+        "DocumentSignal": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Count",
+              "type": "integer"
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "maxLength": 400,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Note"
+            },
+            "signal": {
+              "maxLength": 120,
+              "title": "Signal",
+              "type": "string"
+            }
+          },
+          "required": [
+            "signal"
+          ],
+          "title": "DocumentSignal",
+          "type": "object"
+        },
+        "OfficialReference": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "maxLength": 300,
+              "title": "Name",
+              "type": "string"
+            },
+            "url": {
+              "maxLength": 2000,
+              "title": "Url",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "url"
+          ],
+          "title": "OfficialReference",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "amendment_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Amendment Count"
+        },
+        "archetype_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Archetype Ids",
+          "type": "array"
+        },
+        "budget_signals": {
+          "items": {
+            "$ref": "#/$defs/BudgetSignal"
+          },
+          "maxItems": 40,
+          "title": "Budget Signals",
+          "type": "array"
+        },
+        "claim_evidence": {
+          "items": {
+            "$ref": "#/$defs/ClaimEvidence"
+          },
+          "maxItems": 50,
+          "title": "Claim Evidence",
+          "type": "array"
+        },
+        "confenge_service_slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confenge Service Slug"
+        },
+        "document_divergence_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Divergence Count"
+        },
+        "document_signals": {
+          "items": {
+            "$ref": "#/$defs/DocumentSignal"
+          },
+          "maxItems": 40,
+          "title": "Document Signals",
+          "type": "array"
+        },
+        "evidence_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Count"
+        },
+        "evidence_kind": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Kind"
+        },
+        "evidence_signals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Evidence Signals",
+          "type": "array"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "observed_pattern": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Pattern"
+        },
+        "official_references": {
+          "items": {
+            "$ref": "#/$defs/OfficialReference"
+          },
+          "maxItems": 30,
+          "title": "Official References",
+          "type": "array"
+        },
+        "problem": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Problem"
+        },
+        "problem_label": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Problem Label"
+        },
+        "reference_mentions": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reference Mentions"
+        },
+        "related_archetypes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Related Archetypes",
+          "type": "array"
+        },
+        "service": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Service"
+        },
+        "slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Slug"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sources",
+          "type": "array"
+        },
+        "technical_guide_paths": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Technical Guide Paths",
+          "type": "array"
+        },
+        "theme": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Theme"
+        }
+      },
+      "title": "ProblemService",
+      "type": "object"
+    },
+    "StatusBreakdown": {
+      "additionalProperties": false,
+      "properties": {
+        "abertas": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Abertas",
+          "type": "integer"
+        },
+        "encerradas_recentes": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Encerradas Recentes",
+          "type": "integer"
+        },
+        "historico": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Historico",
+          "type": "integer"
+        },
+        "suspensas": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Suspensas",
+          "type": "integer"
+        }
+      },
+      "title": "StatusBreakdown",
+      "type": "object"
+    },
+    "ValueBand": {
+      "additionalProperties": false,
+      "description": "Percentile band for archetype/market value distributions.",
+      "properties": {
+        "currency": {
+          "default": "BRL",
+          "maxLength": 8,
+          "title": "Currency",
+          "type": "string"
+        },
+        "median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median"
+        },
+        "n": {
+          "default": 0,
+          "minimum": 0,
+          "title": "N",
+          "type": "integer"
+        },
+        "p25": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P25"
+        },
+        "p75": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P75"
+        }
+      },
+      "title": "ValueBand",
+      "type": "object"
+    }
+  },
+  "$id": "https://extra-cli.local/schemas/pseo-public-export.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agencies": {
+      "items": {
+        "$ref": "#/$defs/Agency"
+      },
+      "type": "array"
+    },
+    "archetypes": {
+      "items": {
+        "$ref": "#/$defs/Archetype"
+      },
+      "type": "array"
+    },
+    "competition": {
+      "items": {
+        "$ref": "#/$defs/Competition"
+      },
+      "type": "array"
+    },
+    "icp_methodology": {
+      "$ref": "#/$defs/ICPMethodology"
+    },
+    "manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "dataset_hash": {
+          "type": "string"
+        },
+        "export_entrypoint": {
+          "type": "string"
+        },
+        "indexable": {
+          "type": "boolean"
+        },
+        "publish_status": {
+          "type": "string"
+        },
+        "schema_version": {
+          "type": "string"
+        },
+        "snapshot_status": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "markets": {
+      "items": {
+        "$ref": "#/$defs/Market"
+      },
+      "type": "array"
+    },
+    "opportunities": {
+      "items": {
+        "$ref": "#/$defs/Opportunity"
+      },
+      "type": "array"
+    },
+    "prices": {
+      "items": {
+        "$ref": "#/$defs/Price"
+      },
+      "type": "array"
+    },
+    "problem_service": {
+      "items": {
+        "$ref": "#/$defs/ProblemService"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "archetypes",
+    "markets",
+    "agencies",
+    "prices",
+    "competition",
+    "opportunities",
+    "problem_service",
+    "icp_methodology",
+    "manifest"
   ],
-  "dataset_hash_algorithm": "sha256(canonical_json(ordered body keys))",
-  "dates": [
-    "data_coleta",
-    "data_publicacao",
-    "data_assinatura",
-    "data_encerramento_proposta",
-    "data_inicio_vigencia",
-    "data_fim_vigencia",
-    "data_atualizacao_fonte",
-    "generated_at",
-    "data_as_of"
-  ],
-  "description": "CONFENGE public pSEO evidence snapshot (ICP-Derived Evidence)",
-  "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
-  "export_version": "1.1.0",
-  "files": [
-    "archetypes.json",
-    "markets.json",
-    "agencies.json",
-    "prices.json",
-    "competition.json",
-    "opportunities.json",
-    "problem_service.json",
-    "icp_methodology.json",
-    "manifest.json"
-  ],
-  "forbidden_fields_policy": "scripts/pseo/allowlist.py FORBIDDEN_KEYS",
-  "indexable_requires": "aec_confirmed + human_review APPROVED|APPROVED_WITH_NOTES",
-  "schema_version": "1.1.0",
-  "timezone_default": "UTC"
+  "title": "CONFENGE public pSEO export",
+  "type": "object"
 }
