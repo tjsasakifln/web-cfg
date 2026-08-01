@@ -1,0 +1,66 @@
+{
+  "by_segment_uf_type": {
+    "edificacoes-publicas": {
+      "MG": {
+        "market": 1
+      },
+      "PR": {
+        "radar": 1
+      },
+      "RS": {
+        "market": 1,
+        "radar": 1
+      },
+      "_": {
+        "problem_service": 2
+      }
+    },
+    "manutencao-predial-engenharia": {
+      "RS": {
+        "agency": 1,
+        "competition": 1,
+        "price": 1
+      },
+      "_": {
+        "problem_service": 1
+      }
+    },
+    "pavimentacao-infraestrutura-viaria": {
+      "PI": {
+        "market": 1,
+        "price": 1
+      },
+      "PR": {
+        "radar": 1
+      },
+      "RS": {
+        "radar": 1
+      },
+      "SC": {
+        "market": 1,
+        "radar": 1
+      },
+      "_": {
+        "problem_service": 2
+      }
+    },
+    "saneamento-hidraulica": {
+      "SC": {
+        "radar": 1
+      }
+    }
+  },
+  "status_counts": {
+    "noindex": 2,
+    "publish": 3,
+    "reject": 14
+  },
+  "type_counts": {
+    "agency": 1,
+    "competition": 1,
+    "market": 4,
+    "price": 2,
+    "problem_service": 5,
+    "radar": 6
+  }
+}

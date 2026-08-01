@@ -16,6 +16,71 @@ ROOT = Path(__file__).resolve().parents[2]
 METRICS = ROOT / "data" / "pseo" / "metrics"
 
 
+FUNNEL_STAGES = (
+    "not_discovered",
+    "discovered_not_crawled",
+    "crawled_not_indexed",
+    "indexed_no_impression",
+    "impression_no_click",
+    "click_no_interaction",
+    "interaction_no_cta",
+    "cta_no_submit",
+    "submit_no_qualification",
+    "qualified_no_meeting",
+    "meeting_no_proposal",
+    "proposal_no_contract",
+    "cluster_winner",
+    "cluster_with_revenue",
+)
+
+
+def classify_funnel_stage(
+    *,
+    indexation_status: str | None,
+    impressions: float,
+    clicks: float,
+    sessions: float,
+    interactions: float,
+    cta: float,
+    form_submit: float,
+    qualified: float,
+    meeting: float,
+    proposal: float,
+    contract: float,
+    revenue: float,
+) -> str:
+    """Map metrics to funnel problem class — observational only."""
+    idx = (indexation_status or "").upper()
+    if revenue > 0:
+        return "cluster_with_revenue"
+    if contract > 0:
+        return "cluster_winner"
+    if proposal > 0 and contract <= 0:
+        return "proposal_no_contract"
+    if meeting > 0 and proposal <= 0:
+        return "meeting_no_proposal"
+    if qualified > 0 and meeting <= 0:
+        return "qualified_no_meeting"
+    if form_submit > 0 and qualified <= 0:
+        return "submit_no_qualification"
+    if cta > 0 and form_submit <= 0:
+        return "cta_no_submit"
+    if interactions > 0 and cta <= 0:
+        return "interaction_no_cta"
+    if clicks > 0 and sessions > 0 and interactions <= 0 and cta <= 0:
+        return "click_no_interaction"
+    if impressions > 0 and clicks <= 0:
+        return "impression_no_click"
+    if idx in {"INDEXED", "PASS"} and impressions <= 0:
+        return "indexed_no_impression"
+    if idx in {"CRAWLED", "CRAWLED_CURRENTLY_NOT_INDEXED"}:
+        return "crawled_not_indexed"
+    if idx in {"DISCOVERED", "DISCOVERED_CURRENTLY_NOT_INDEXED"}:
+        return "discovered_not_crawled"
+    return "not_discovered"
+
+
+
 def load_month(kind: str, yyyymm: str) -> dict[str, Any]:
     path = METRICS / kind / f"{yyyymm}.json"
     if not path.exists():
@@ -72,11 +137,28 @@ def classify_recommendation(page_id: str, gsc: dict, ana: dict, crm: dict, reg_p
         problems.append("insufficient_signal")
         actions.append("wait for minimum traffic before cluster expansion")
 
+    funnel = classify_funnel_stage(
+        indexation_status=(reg_page or {}).get("indexation_status")
+        or (reg_page or {}).get("gsc_verdict"),
+        impressions=impressions,
+        clicks=clicks,
+        sessions=sessions,
+        interactions=float(ana.get("table_interact") or ana.get("related_click") or 0),
+        cta=cta,
+        form_submit=form_submit,
+        qualified=qualified,
+        meeting=float(crm.get("meeting") or 0),
+        proposal=float(crm.get("proposal") or 0),
+        contract=float(crm.get("contract") or 0),
+        revenue=float(crm.get("revenue") or 0),
+    )
     return {
         "page_id": page_id,
         "problems": problems,
         "actions": actions,
+        "funnel_stage": funnel,
         "auto_mutate": False,
+        "auto_publish": False,
         "metrics": {
             "impressions": impressions,
             "clicks": clicks,

@@ -378,6 +378,7 @@ class Candidate:
             "mandatory_fail": self.mandatory_fail,
             "quality_eligible": self.quality_eligible,
             "human_review": self.human_review,
+            "indexability_score_alias": self.score,  # legacy name
         }
 
 

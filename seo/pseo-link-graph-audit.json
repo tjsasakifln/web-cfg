@@ -1,0 +1,21 @@
+{
+  "n_pages": 159,
+  "n_audit_urls": 10,
+  "n_internal_edges": 6275,
+  "hubs_present": [
+    "/inteligencia/",
+    "/inteligencia/cenarios/",
+    "/inteligencia/concorrencia/",
+    "/inteligencia/mercados/",
+    "/inteligencia/orgaos/",
+    "/inteligencia/precos/",
+    "/radar/"
+  ],
+  "orphans_unreachable_from_hub": [],
+  "depth_gt_3": [],
+  "zero_indegree": [],
+  "broken_internal": [],
+  "n_broken": 0,
+  "ok": true,
+  "note": "Depth measured from editorial hubs for indexable (publish) URLs only; reject HTML left on disk is not treated as an orphan crawl target"
+}
