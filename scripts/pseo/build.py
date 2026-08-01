@@ -386,21 +386,19 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
     hubs = [
         (
             "/inteligencia/",
-            "Inteligência de mercado e contratação pública | CONFENGE",
-            "Inteligência decisória para obras e contratos públicos",
-            "Mercados, órgãos, preços, concorrência e radar — evidência pública, sem ranking proprietário.",
-            "Hub de páginas de inteligência orientadas a decisão comercial e técnica. "
-            "Cada página-filha responde a uma decisão de mercado ou contrato e só entra no "
-            "sitemap após critérios de evidência, revisão editorial e aprovação. "
-            "Metodologia: agregados a partir de registros públicos de contratação (PNCP e correlatos), "
-            "sem ranking comercial proprietário.",
+            "Inteligência aplicada à decisão B2G | CONFENGE",
+            "O mercado público deixa rastros. Nós transformamos esses rastros em decisão.",
+            "Mercados, órgãos, preços e concorrência como evidência para decisões de participação, preço e proteção de margem.",
+            "Contratos, órgãos, preços, concorrência e oportunidades só criam valor quando são confrontados "
+            "com a capacidade, o risco e a estratégia da empresa. Esta área organiza evidências públicas "
+            "para apoiar decisões comerciais e técnicas — sem confundir frequência histórica com certeza futura.",
             [
-                ("/inteligencia/mercados/", "hub", "Mercados", "Demanda e órgãos"),
-                ("/inteligencia/orgaos/", "hub", "Órgãos compradores", "Dossiês"),
-                ("/inteligencia/precos/", "hub", "Benchmarks de preços", "Medianas e quartis"),
-                ("/inteligencia/concorrencia/", "hub", "Concorrência observada", "Frequência neutra"),
-                ("/radar/", "hub", "Radar de oportunidades", "Evergreen"),
-                ("/inteligencia/cenarios/", "hub", "Cenários técnicos", "Problema e serviço"),
+                ("/inteligencia/mercados/", "Mercados", "Onde a demanda se concentra", "Demanda e órgãos"),
+                ("/inteligencia/orgaos/", "Órgãos", "Quem contrata o que importa", "Dossiês compradores"),
+                ("/inteligencia/precos/", "Preços", "Referências antes de precificar", "Medianas e faixas"),
+                ("/inteligencia/concorrencia/", "Concorrência", "Quem aparece com frequência", "Observado, não ranking"),
+                ("/inteligencia/cenarios/", "Cenários", "Problema + decisão técnica", "Enquadramento aplicado"),
+                ("/metodologia-inteligencia/", "Método", "Como lemos as evidências", "Limites e fontes"),
             ],
             [("Início", "/"), ("Inteligência", None)],
             None,
@@ -442,35 +440,64 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Concorrência observada em obras públicas | CONFENGE",
             "Concorrência observada",
             "Fornecedores e concentração no recorte público.",
-            "Frequência neutra de fornecedores no recorte — sem ranking proprietário de 'melhores'.",
+            "Frequência neutra de fornecedores no recorte — observação pública, não ranking comercial.",
             items_for("competition"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Concorrência", None)],
             "competition",
         ),
         (
             "/inteligencia/cenarios/",
-            "Cenários: dados, problema e serviço | CONFENGE",
-            "Do padrão público ao serviço CONFENGE",
-            "Páginas que ligam evidência a clusters técnicos existentes.",
+            "Cenários técnicos para decisão | CONFENGE",
+            "Do padrão público à decisão da construtora",
+            "Cenários que ligam evidência pública a decisões de proposta, preço e contrato.",
             "Cenários evergreen (aditivos, SINAPI/SICRO, orçamento×edital, medição/glosa) "
-            "com limitações, fontes oficiais e CTA para o serviço correspondente.",
+            "com limitações, fontes oficiais e próximo passo comercial concreto.",
             items_for("problem_service"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Cenários", None)],
             "problem_service",
         ),
         (
             "/radar/",
-            "Radar de oportunidades de engenharia | CONFENGE",
-            "Radar evergreen de oportunidades",
-            "Listas rolantes por segmento e região — não uma URL por edital.",
-            "Radar evergreen: oportunidades abertas agregadas por segmento e UF. "
-            "Cada item aponta para o link oficial PNCP/Comprasnet quando disponível.",
-            items_for("radar"),
+            "Radar de oportunidades B2G | CONFENGE",
+            "Radar de oportunidades para a sua operação — não para o mercado inteiro.",
+            "Monitoramento estruturado do mercado público calibrado ao perfil da construtora.",
+            "O radar da CONFENGE não é um feed genérico de editais. Ele precisa do perfil da empresa "
+            "— capacidade, acervo, órgãos-alvo, faixas de valor e apetite de risco — para filtrar o que "
+            "merece atenção. Sem cobertura integral prometida. Sem fingir disponibilidade quando o "
+            "recorte ainda não está publicado para o visitante.",
+            # Only list publish radar children publicly; noindex previews stay out of hub promo
+            [it for it in items_for("radar") if it[3] == "publicada"],
             [("Início", "/"), ("Radar", None)],
             "radar",
         ),
     ]
+    from scripts.pseo.html_shell import wa_link as _wa_link
+
     for path, title, h1, desc, intro, items, crumbs, ptype in hubs:
+        empty_cta = None
+        eyebrow = "Inteligência aplicada à decisão"
+        wa = (
+            "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE "
+            "à decisão da minha empresa."
+        )
+        if path == "/radar/":
+            eyebrow = "Monitoramento estruturado"
+            wa = (
+                "Olá, Tiago. Quero configurar o radar de oportunidades com o perfil "
+                "da minha construtora."
+            )
+            if not items:
+                empty_cta = {
+                    "title": "Sem perfil da empresa, o radar vira ruído.",
+                    "body": (
+                        "Se você já disputa ou executa contratos públicos, o caminho certo é "
+                        "calibrar o recorte — não assinar mais um alerta genérico."
+                    ),
+                    "primary_label": "Configurar meu radar de oportunidades",
+                    "primary_href": _wa_link(wa),
+                    "secondary_label": "Começar pelo diagnóstico B2G",
+                    "secondary_href": "/diagnostico-b2g-360/",
+                }
         html = render_hub(
             title=title,
             h1=h1,
@@ -480,6 +507,9 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             items=items,
             robots=hub_robots(ptype),
             crumbs=crumbs,
+            eyebrow=eyebrow,
+            wa_message=wa,
+            empty_cta=empty_cta,
         )
         out = url_to_path(path)
         out.parent.mkdir(parents=True, exist_ok=True)

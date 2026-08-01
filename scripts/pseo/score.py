@@ -1314,8 +1314,8 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 score_breakdown=breakdown,
                 observation_count=int(ev or 0),
                 sources=list(p.get("sources") or []),
-                cta_label="Organizar documentos e próximos passos",
-                cta_intent="organizar_documentos",
+                cta_label="Revisar esta oportunidade",
+                cta_intent="avaliar_oportunidade",
                 related_urls=list(p.get("technical_guide_paths") or [])[:4]
                 + [f"/{p['confenge_service_slug']}/"],
                 data_ref=p,

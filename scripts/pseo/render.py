@@ -1314,14 +1314,23 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
         (p.get("problem_label") or c.page_id, None),
     ]
     wa = (
-        f"Olá, Tiago. Preciso organizar documentos e próximos passos em um cenário de "
-        f"{p.get('problem_label')}."
+        f"Olá, Tiago. Preciso enquadrar risco e decisão em um cenário de "
+        f"{p.get('problem_label')} e proteger a margem da operação."
     )
-    # Scrub limitations for public display
+    # Scrub limitations for public display — never ship pipeline template phrases
     pub_limits = []
     for lim in p.get("limitations") or ["Sem limitações declaradas."]:
-        t = str(lim).replace("problema→serviço", "problema e serviço")
+        t = str(lim)
+        t = re.sub(
+            r"P[áa]gina de enquadramento problema\s*[→e]\s*servi[cç]o;?\s*",
+            "Enquadramento técnico-público; ",
+            t,
+            flags=re.I,
+        )
+        t = t.replace("problema→serviço", "problema e decisão")
+        t = t.replace("problema e serviço", "problema e decisão")
         t = re.sub(r"\bdatalake\b", "base pública de contratos", t, flags=re.I)
+        t = re.sub(r"\boferta coerente\b", "atuação adequada", t, flags=re.I)
         pub_limits.append(t)
     limit0 = pub_limits[0] if pub_limits else "Sem limitações declaradas."
 
@@ -1479,27 +1488,62 @@ def render_hub(
     items: list[tuple[str, str, str]],
     crumbs: list[tuple[str, str | None]],
     robots: str = "index,follow",
+    eyebrow: str = "Inteligência aplicada à decisão",
+    wa_message: str | None = None,
+    empty_cta: dict[str, str] | None = None,
 ) -> str:
-    cards = "".join(
-        f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
-        f"<small>{e(meta)}</small></a>"
-        for url, kind, label, meta in [(i[0], i[1], i[2], i[3] if len(i) > 3 else "") for i in _pad_items(items)]
-    )
-    # fix: items are (url, kind, label, meta?)
+    """Render a pSEO hub. Never ship pipeline empty-wave messages to the public."""
     cards = ""
-    for it in items:
+    for it in items or []:
         url, kind, label = it[0], it[1], it[2]
         meta = it[3] if len(it) > 3 else ""
         cards += (
             f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
             f"<small>{e(meta)}</small></a>"
         )
+    if cards:
+        grid = f'<div class="related-grid" style="margin:2rem 0">{cards}</div>'
+    elif empty_cta:
+        primary_href = empty_cta.get("primary_href") or "/#contato"
+        secondary = ""
+        if empty_cta.get("secondary_label") and empty_cta.get("secondary_href"):
+            secondary = (
+                f'<a class="button button-secondary" href="{e(empty_cta["secondary_href"])}">'
+                f'{e(empty_cta["secondary_label"])}</a>'
+            )
+        is_wa = "wa.me" in primary_href
+        target = ' rel="noopener" target="_blank"' if is_wa else ""
+        grid = f"""<div class="commercial-bridge" style="margin:2rem 0">
+<h2>{e(empty_cta.get("title") or "Configure o recorte da sua operação")}</h2>
+<p>{e(empty_cta.get("body") or "")}</p>
+<div class="hero-actions">
+<a class="button button-primary" href="{e(primary_href)}"{target}>{e(empty_cta.get("primary_label") or "Próximo passo")}</a>
+{secondary}
+</div>
+</div>"""
+    else:
+        # Durable fallback — never "nenhum item publicado nesta onda"
+        grid = (
+            '<div class="commercial-bridge" style="margin:2rem 0">'
+            "<h2>Evidência pública só vira valor com a capacidade da empresa.</h2>"
+            "<p>Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
+            "Até lá, o próximo passo é aplicar os dados à sua operação B2G.</p>"
+            '<div class="hero-actions">'
+            '<a class="button button-primary" href="/diretoria-b2g/">Conhecer a Diretoria B2G</a>'
+            '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico B2G</a>'
+            "</div></div>"
+        )
+    back = (
+        '<p><a class="text-link" href="/">Voltar ao início</a></p>'
+        if path.rstrip("/") == "/inteligencia"
+        else '<p><a class="text-link" href="/inteligencia/">Voltar ao hub de inteligência</a></p>'
+    )
     body = f"""
 {breadcrumbs_html(crumbs)}
-<header class="content-hero"><div class="container"><p class="eyebrow">Inteligência CONFENGE</p>
+<header class="content-hero"><div class="container"><p class="eyebrow">{e(eyebrow)}</p>
 <h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p></div></header>
-<div class="container"><div class="related-grid" style="margin:2rem 0">{cards or "<p>Nenhum item publicado nesta onda.</p>"}</div>
-<p><a class="text-link" href="/inteligencia/">Voltar ao hub de inteligência</a></p></div>
+<div class="container" style="padding-bottom:3rem">{grid}
+{back}</div>
 """
     graph = [
         ORG_JSONLD,
@@ -1519,7 +1563,8 @@ def render_hub(
         robots=robots or "index,follow",
         jsonld_graph=graph,
         body_main=body,
-        wa_message="Olá, Tiago. Quero explorar a inteligência de mercado da CONFENGE.",
+        wa_message=wa_message
+        or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa.",
         data_attrs={"content-cluster": "pseo", "pseo-page-type": "hub"},
     )
 

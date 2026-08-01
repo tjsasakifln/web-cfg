@@ -1,9 +1,9 @@
 {
   "ok": true,
-  "web_cfg_sha": "ff8d6ddff7e02c69272192aee3563b3bfcf0e14e",
+  "web_cfg_sha": "935dc5f39269a1e855d98568bf8311e4b5669947",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "452193a2fc87f8593a1e07dfce91748126318625c7be018674d93633b922aaf3",
+  "public_artifact_hash": "53d4340d257fddf1e8a2843446607c13cfc279ed5743c655a1ef729493aa5c7f",
   "build_summary": {
     "dataset_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
     "counts": {

@@ -122,6 +122,23 @@ def test_radar_not_empty_wave_message():
     assert "nenhum item publicado nesta onda" not in html.lower()
     assert "noindex" in html
     assert "Configurar meu radar" in html or "configurar meu radar" in html.lower()
+    assert "preview (revisão)" not in html.lower()
+    # Must survive build:site — source template in build.py
+    build_src = (ROOT / "scripts" / "pseo" / "build.py").read_text(encoding="utf-8")
+    assert "Configurar meu radar de oportunidades" in build_src
+    assert "Radar evergreen de oportunidades" not in build_src
+
+
+def test_inteligencia_hub_decision_copy():
+    html = (ROOT / "inteligencia" / "index.html").read_text(encoding="utf-8")
+    assert "O mercado público deixa rastros" in html
+    assert "critérios de evidência" not in html.lower()
+    assert "revisão editorial" not in html.lower()
+    assert "sem ranking proprietário" not in html.lower()
+    build_src = (ROOT / "scripts" / "pseo" / "build.py").read_text(encoding="utf-8")
+    assert "O mercado público deixa rastros" in build_src
+    assert "critérios de evidência" not in build_src
+    assert "sem ranking proprietário" not in build_src
 
 
 def test_llms_positioning():

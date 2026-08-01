@@ -84301,8 +84301,8 @@
       },
       "cannibalization": {},
       "cta": {
-        "label": "Organizar documentos e próximos passos",
-        "intent": "organizar_documentos"
+        "label": "Revisar esta oportunidade",
+        "intent": "avaliar_oportunidade"
       },
       "approval_recommendation": "reject_or_noindex",
       "issues": [],
@@ -84316,7 +84316,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago-wave0-operational",
-      "page_material_hash": "54db587bc416b6beafde215aa884ba1707be6459c65699d87e07e0433b98c779"
+      "page_material_hash": "2b70ec1e805c6091ca352cdb5ff345eeed492a490c64d4350938f9fe10d91a62"
     },
     {
       "page_id": "prob-sinapi-sicro",
@@ -84340,8 +84340,8 @@
       },
       "cannibalization": {},
       "cta": {
-        "label": "Organizar documentos e próximos passos",
-        "intent": "organizar_documentos"
+        "label": "Revisar esta oportunidade",
+        "intent": "avaliar_oportunidade"
       },
       "approval_recommendation": "reject_or_noindex",
       "issues": [],
@@ -84355,7 +84355,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago-wave0-operational",
-      "page_material_hash": "c0960f683a1996883d7d8e8d8d178161838a8a8c6c78dcd6260ca8a7f388fdba"
+      "page_material_hash": "34b230f0e9eec2a0bd2c16945946603f43f318913c69719d36448b626f4e46ee"
     },
     {
       "page_id": "prob-medicao-glosa",
@@ -84378,8 +84378,8 @@
       },
       "cannibalization": {},
       "cta": {
-        "label": "Organizar documentos e próximos passos",
-        "intent": "organizar_documentos"
+        "label": "Revisar esta oportunidade",
+        "intent": "avaliar_oportunidade"
       },
       "approval_recommendation": "reject_or_noindex",
       "issues": [],
@@ -84393,7 +84393,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago",
-      "page_material_hash": "d1cf6bd90253450db29f907782676701f1fcef62bd60ab65a89cc40a47f7c934"
+      "page_material_hash": "74d26eeece82ca9e426709cbb5bb01626838d7cfbe4fc1c1f2f474a796c439ad"
     },
     {
       "page_id": "prob-aditivos-margem",
@@ -84416,8 +84416,8 @@
       },
       "cannibalization": {},
       "cta": {
-        "label": "Organizar documentos e próximos passos",
-        "intent": "organizar_documentos"
+        "label": "Revisar esta oportunidade",
+        "intent": "avaliar_oportunidade"
       },
       "approval_recommendation": "reject_or_noindex",
       "issues": [],
@@ -84431,7 +84431,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "wave0-final-activation-03",
-      "page_material_hash": "840b370b029c582874b1ed79f51c7896c5266c4e0504fde8302d245b7925217b"
+      "page_material_hash": "b5c0de93d8e200323b486d91d8a039bde6dbb0e2003c6a8110ea723dcf3c499f"
     },
     {
       "page_id": "prob-reequilibrio",
@@ -84455,8 +84455,8 @@
       },
       "cannibalization": {},
       "cta": {
-        "label": "Organizar documentos e próximos passos",
-        "intent": "organizar_documentos"
+        "label": "Revisar esta oportunidade",
+        "intent": "avaliar_oportunidade"
       },
       "approval_recommendation": "reject_or_noindex",
       "issues": [],
@@ -84470,7 +84470,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago",
-      "page_material_hash": "81ffe7f253fb11fc17123b45d5a7cee535a812f48f40ec1f2147fa42c98b8f97"
+      "page_material_hash": "2346f633be126120084c839428bf3c9c740dbcc59367b9bd7ba904ab3a58a21f"
     }
   ],
   "editorial_decisions": {
