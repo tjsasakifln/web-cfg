@@ -88,3 +88,14 @@
 - No inbound operational claim
 - No invented GSC or merge success
 - Snapshot provenance gap recorded, not papered over
+
+## Final post-deploy pin
+
+| Field | Value |
+|-------|-------|
+| live web_cfg_sha | `8bfd24fcd98f62998e60c63a10254e81147717ed` |
+| production_audit_is_current | true |
+| next_wave_gate | false |
+| terminal_status | PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED |
+| contagem genérica on live noindex pages | absent |
+| snapshot re-export from main | **not done** (honest residual) |

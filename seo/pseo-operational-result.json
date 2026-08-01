@@ -1,9 +1,10 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_sha": "b7e9b59e07068171e793824aaace652985abbd55",
+  "web_cfg_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
   "extra_cli_sha": "6f35c69f25276b55871767fd668cd019dd1bfb56",
+  "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+  "netlify_deployed_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
   "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "public_directory": "_site",
   "public_artifact_hash": "a4ea2776862932d0a3bca108e3137c67430d10b7553ecc4edb8db05ab0293c80",
@@ -20,8 +21,8 @@
     "production_audit_is_current": true,
     "stale_code": null,
     "critical_count": 0,
-    "audit_target_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
-    "live_manifest_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+    "audit_target_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
+    "live_manifest_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
     "auditor_version": "wave0-closure-02"
   },
   "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
@@ -41,12 +42,6 @@
       "snapshot_source_commit_not_on_extra_cli_main",
       "reexport_without_undue_invalidation_not_proven"
     ]
-  },
-  "snapshot_source_provenance": {
-    "on_main": false,
-    "source_commit_sha": "01123735ed0e240b0adf2233269ac947fa6d56c2",
-    "source_branch": "feat/pseo-semantic-sota",
-    "reason": "source_commit_lookup_failed_or_missing"
   },
   "forbidden_public_urls_status": {
     "ok": true,
@@ -71,10 +66,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+    "web_cfg_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
     "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:48:23Z",
+    "generated_at": "2026-08-01T00:53:27Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "public_directory": "_site",
@@ -86,10 +81,16 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "unresolved_risks": [
-    "GSC credentials absent — all seeds NOT_INSPECTED (blocks Wave 1)",
-    "Published snapshot source_commit_sha is from feat/pseo-semantic-sota (01123735…), not on extra-cli main history after #187; re-export from main required for PASS",
+    "GSC credentials absent — all seeds NOT_INSPECTED",
+    "Published snapshot source_commit_sha not on extra-cli main (feat/pseo-semantic-sota); re-export from main required for PASS — not invented",
     "reexport_without_undue_invalidation not proven against live PG"
   ],
-  "generated_at": "2026-08-01T00:52:49Z",
-  "auditor_version": "wave0-closure-02"
+  "generated_at": "2026-08-01T00:54:27Z",
+  "auditor_version": "wave0-closure-02",
+  "snapshot_source_provenance": {
+    "on_main": false,
+    "source_commit_sha": "01123735ed0e240b0adf2233269ac947fa6d56c2",
+    "source_branch": "feat/pseo-semantic-sota",
+    "reason": "source_commit_lookup_failed_or_missing"
+  }
 }

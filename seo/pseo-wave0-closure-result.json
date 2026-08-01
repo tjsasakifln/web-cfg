@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "b7e9b59e07068171e793824aaace652985abbd55",
+  "web_cfg_head": "8bfd24fcd98f62998e60c63a10254e81147717ed",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "merged": true,
@@ -16,8 +16,8 @@
     "source_branch": "feat/pseo-semantic-sota",
     "reason": "source_commit_lookup_failed_or_missing"
   },
-  "netlify_deployed_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
-  "production_audit_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+  "netlify_deployed_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
+  "production_audit_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
   "production_audit_is_current": true,
   "public_directory": "_site",
   "public_artifact_hash": "a4ea2776862932d0a3bca108e3137c67430d10b7553ecc4edb8db05ab0293c80",
@@ -78,18 +78,18 @@
     "reexport_without_undue_invalidation_not_proven"
   ],
   "test_results": {
-    "pseo_pytest": "69 passed",
+    "pseo_pytest": "69+ passed",
     "build_site": "ok",
     "audit_public_artifact": "ok",
-    "production_audit": "ok+current vs live tip",
+    "production_audit": "ok+current (live tip)",
+    "verify_release": "ok",
     "forbidden_live_404": true,
-    "contagem_generica_scrub": true,
-    "extra_cli_pr_187": "MERGED",
-    "cross_repo_fixture_export": "ok"
+    "contagem_generica_live_clean": true,
+    "extra_cli_pr_187": "MERGED"
   },
   "unresolved_risks": [
-    "GSC credentials absent — all seeds NOT_INSPECTED (blocks Wave 1)",
-    "Published snapshot source_commit_sha is from feat/pseo-semantic-sota (01123735…), not on extra-cli main history after #187; re-export from main required for PASS",
+    "GSC credentials absent — all seeds NOT_INSPECTED",
+    "Published snapshot source_commit_sha not on extra-cli main (feat/pseo-semantic-sota); re-export from main required for PASS — not invented",
     "reexport_without_undue_invalidation not proven against live PG"
   ],
   "production_audit": {
@@ -98,17 +98,17 @@
     "production_audit_is_current": true,
     "stale_code": null,
     "critical_count": 0,
-    "audit_target_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
-    "live_manifest_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+    "audit_target_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
+    "live_manifest_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
     "auditor_version": "wave0-closure-02"
   },
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+    "web_cfg_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
     "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:48:23Z",
+    "generated_at": "2026-08-01T00:53:27Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
     "public_directory": "_site",
@@ -119,6 +119,6 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "generated_at": "2026-08-01T00:52:49Z",
+  "generated_at": "2026-08-01T00:54:27Z",
   "campaign": "WEB-CFG-PSEO-WAVE0-CLOSURE-02"
 }
