@@ -677,8 +677,12 @@ def run_audit(
 
     snap_hash = snapshot_hash_from_manifest(root) or reg.get("dataset_hash")
     art_hash = public_artifact_hash(root, "_site")
+    # audit_target_sha is the deploy under audit (live tip), NOT local git HEAD.
+    # Evidence-only commits may advance HEAD without redeploying HTML; binding to
+    # git HEAD falsely yields STALE_AUDIT_DEPLOY_MISMATCH against a healthy live tip.
+    audit_target = live_manifest_sha or web_cfg_sha or "unknown"
     identity = identity_block(
-        audit_target_sha=web_cfg_sha or "unknown",
+        audit_target_sha=audit_target,
         live_manifest_sha=live_manifest_sha,
         snapshot_hash=snap_hash,
         public_artifact_hash_value=art_hash,
@@ -708,6 +712,7 @@ def run_audit(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "base_url": base_url,
         "web_cfg_sha": web_cfg_sha,
+        "git_head": web_cfg_sha,
         "netlify_deployed_sha": live_manifest_sha,
         "dataset_hash": reg.get("dataset_hash"),
         "vocabulary_note": (

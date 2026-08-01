@@ -1,54 +1,57 @@
 # PSEO Wave 0 Closure 02 — Final Report
 
 **Campaign:** WEB-CFG-PSEO-WAVE0-CLOSURE-02  
-**Generated:** 2026-08-01T00:18:16Z  
+**Generated:** 2026-08-01T00:52:49Z  
 **Terminal status:** `PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED`
 
-## HEADs (discovered at start / end)
+## HEADs
 
-| Repo | Value |
+| Item | Value |
 |------|-------|
-| web-cfg start HEAD | `387db28b76fa062d34fed9086a3fc3e493fcffe1` |
-| web-cfg this report | `387db28b76fa062d34fed9086a3fc3e493fcffe1` |
-| extra-cli PR #187 tip (pre-merge) | `f25be1035be54eb18024852b929dc9dce7a14e25` |
-| extra-cli main (post-merge) | `6f35c69f25276b55871767fd668cd019dd1bfb56` |
-| live well-known (pre-deploy) | `51213f32b11db8423f1b49802a9d1e3750ab143e` |
+| web-cfg git HEAD (report write) | `b7e9b59e07068171e793824aaace652985abbd55` |
+| netlify_deployed_sha (live) | `f35c00dcf1f5084a052df8437664fe5f14e7ac58` |
+| production_audit_sha (audit target) | `f35c00dcf1f5084a052df8437664fe5f14e7ac58` |
+| production_audit_is_current | **True** |
+| extra-cli main (PR #187 merge) | `6f35c69f25276b55871767fd668cd019dd1bfb56` |
+| snapshot source_commit_sha | `01123735ed0e240b0adf2233269ac947fa6d56c2` (`feat/pseo-semantic-sota`) |
+| snapshot on extra-cli main? | **False** |
 
-## What was fixed
+## What was implemented
 
 ### A — Isolated public artifact
-- Netlify `publish = "_site"`; build command remains `npm run build:site`
-- `scripts/pseo/public_artifact.py` assembles allowlisted public routes only
-- `npm run audit:public-artifact` fails closed on internal dirs/extensions/secrets
-- Inventory: `seo/PUBLIC-ARTIFACT-MANIFEST.json`
+- Netlify `publish = "_site"`, command `npm run build:site`
+- `scripts/pseo/public_artifact.py` + `npm run audit:public-artifact`
+- Live internal paths return **404** (`/data/pseo/*`, `/package.json`, `/seo/*`, `/.git/*`, …)
 
 ### B — Editorial hardening
-- Removed governance language from public HTML (no datalake / pncp_supplier_contracts / “só deve alegar…”)
-- Canonical `evidence_kind`: `direct_problem_evidence` | `contextual_market_evidence` | `normative_editorial`
-- Wave 0 scenario pages: `normative_editorial` + `PUBLISH_EDITORIAL_VALUE` (no decorative “48 contratos” as proof)
-- Adversarial checks in `editorial_audit.py` + `test_wave0_closure.py`
+- Governance language removed from public HTML (including singular **contagem genérica**)
+- Typed `evidence_kind` ∈ {direct_problem_evidence, contextual_market_evidence, normative_editorial}
+- Wave 0 scenario pages: `normative_editorial` + `PUBLISH_EDITORIAL_VALUE`
+- Radar limitations scrubbed of snake_case pipeline fields
+- FORBIDDEN regex uses `contage(?:m|ns)` (fixes contagens?-only bug)
 
 ### C — Honest GSC gate
-- Typed per-URL states in `gsc_gate.py`
-- `next_wave_gate` **calculated only** — false under `NOT_INSPECTED_NO_CREDENTIALS`
+- Typed per-URL states; `next_wave_gate` **calculated only**
+- `next_wave_gate = false` under `NOT_INSPECTED_NO_CREDENTIALS`
 - `npm run pseo:gsc:ingest` rejects bare `indexed=true`
 
 ### D — Deploy-bound audit
-- Identity fields on production audit; `STALE_AUDIT_DEPLOY_MISMATCH` when SHA diverges
+- Identity fields on production audit; `STALE_AUDIT_DEPLOY_MISMATCH` on true mismatch
+- `audit_target_sha` binds to **live deploy tip** (not evidence-only git HEAD)
 - `npm run pseo:verify:release`
 
 ### E — CI parity
-- Workflow runs exact `npm run build:site` → `audit:public-artifact` → validate → audit → test + HTTP smoke on `_site`
+- Workflow runs exact `build:site` → artifact audit → validate → audit → test + HTTP smoke
 
-### F — extra-cli integration
-- PR **#187 squash-merged** to `main` at `6f35c69f25276b55871767fd668cd019dd1bfb56`
-- Entrypoint on main: `python -m scripts.pseo.export_web_cfg`
-- Cross-repo consumer tests in `test_cross_repo_integration.py`
+### F — extra-cli
+- PR **#187 squash-merged** to main; entrypoint `python -m scripts.pseo.export_web_cfg` on main
+- Cross-repo fixture export test green
+- **Honest residual:** published snapshot `source_commit_sha` is still from pre-merge branch — **not** claimed as main history
 
-### G — Editorial adversarial report
-- Per-page fields in `seo/pseo-editorial-report.json` (intent, evidence_kind, decision, indexability, …)
+### G / H
+- Adversarial editorial report fields; dual-UA live checks; no Wave 1 auth
 
-## Indexable seeds (unchanged count ≤ 4)
+## Indexable seeds (≤ 4)
 
 - `/inteligencia/cenarios/aditivos-e-risco-de-margem/`
 - `/inteligencia/cenarios/inconsistencia-orcamento-edital/`
@@ -64,8 +67,7 @@
     "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
     "uninspected_seeds=4",
     "discovered_or_crawled=0<3",
-    "production_audit_not_ok",
-    "production_audit_stale_or_mismatch",
+    "snapshot_source_commit_not_on_extra_cli_main",
     "reexport_without_undue_invalidation_not_proven"
   ]
 }
@@ -73,44 +75,16 @@
 
 **Wave 1 is NOT authorized.**
 
-## Remaining blockers for PASS_WAVE0_HARDENED_GSC_OBSERVED
+## Required for PASS_WAVE0_HARDENED_GSC_OBSERVED
 
-1. Deploy this commit so live `/.well-known/pseo-build.json` matches git HEAD and publish is `_site`
-2. Confirm live internal URLs return 404/410
-3. Ingest real GSC URL Inspection evidence for 100% of seeds
-4. Prove at least one re-export without undue approval invalidation
-5. Re-run `npm run pseo:verify:release` with matching identities
+1. Ingest real GSC URL Inspection evidence for 100% of seeds
+2. Re-export snapshot from extra-cli **main** and promote with valid approval
+3. Prove re-export without undue approval invalidation
+4. Keep production audit current with live tip
 
 ## Non-claims
 
-- No Google indexation claimed
-- No inbound operational claim (impressions/clicks)
-- No Wave 1 authorization
-
-
-## Post-deploy verification
-
-| Check | Result |
-|-------|--------|
-| live `web_cfg_sha` | `bcdff0d514d7b1c946d1373dc5e86180978b7037` |
-| `public_directory` | `_site` |
-| production_audit.ok | **true** (technical + identity current) |
-| forbidden internal URLs | all **404** |
-| dual-UA seed content | identical |
-| next_wave_gate | **false** (calculated) |
-| terminal_status | `PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED` |
-
-Wave 1 remains unauthorized until real GSC inspection evidence is ingested and re-export proof lands.
-
-## Snapshot provenance (honest)
-
-| Field | Value |
-|-------|-------|
-| source_repository | `extra-cli` |
-| source_branch | `feat/pseo-semantic-sota` |
-| source_commit_sha | `01123735ed0e240b0adf2233269ac947fa6d56c2` |
-| on extra-cli main history | **False** |
-| reason | `source_commit_lookup_failed_or_missing` |
-
-The published `data/pseo` snapshot was produced on branch `feat/pseo-semantic-sota` and its `source_commit_sha` is **not** an ancestor of extra-cli `main` after PR #187. This is an explicit residual risk: Wave 1 stays blocked until a re-export from `extra-cli` main is approved and consumed. The exporter entrypoint **does** exist on main (`python -m scripts.pseo.export_web_cfg`); fixture export from main was proven in cross-repo tests.
-
+- No Google indexation
+- No inbound operational claim
+- No invented GSC or merge success
+- Snapshot provenance gap recorded, not papered over

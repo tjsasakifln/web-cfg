@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+  "web_cfg_head": "b7e9b59e07068171e793824aaace652985abbd55",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "on_main": true,
@@ -81,7 +81,7 @@
       ],
       "blocking": []
     },
-    "computed_at": "2026-08-01T00:49:13Z",
+    "computed_at": "2026-08-01T00:52:15Z",
     "auditor_version": "wave0-closure-02"
   },
   "production_audit": {
@@ -115,5 +115,5 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-01T00:49:13Z"
+  "generated_at": "2026-08-01T00:52:15Z"
 }

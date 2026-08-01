@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+  "web_cfg_head": "b7e9b59e07068171e793824aaace652985abbd55",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "merged": true,
@@ -79,28 +79,28 @@
   ],
   "test_results": {
     "pseo_pytest": "69 passed",
-    "contagem_generica_singular_regex": "ok",
-    "live_medicao_reequilibrio_no_contagem": true,
     "build_site": "ok",
     "audit_public_artifact": "ok",
-    "extra_cli_pr_187": "MERGED"
+    "production_audit": "ok+current vs live tip",
+    "forbidden_live_404": true,
+    "contagem_generica_scrub": true,
+    "extra_cli_pr_187": "MERGED",
+    "cross_repo_fixture_export": "ok"
   },
   "unresolved_risks": [
-    "GSC credentials absent — all seeds NOT_INSPECTED",
-    "Published snapshot source_commit_sha not on extra-cli main; re-export from main required for PASS",
+    "GSC credentials absent — all seeds NOT_INSPECTED (blocks Wave 1)",
+    "Published snapshot source_commit_sha is from feat/pseo-semantic-sota (01123735…), not on extra-cli main history after #187; re-export from main required for PASS",
     "reexport_without_undue_invalidation not proven against live PG"
   ],
   "production_audit": {
     "ok": true,
     "technical_ok": true,
-    "critical_count": 0,
+    "production_audit_is_current": true,
     "stale_code": null,
-    "counts": {
-      "urls_audited": 19,
-      "critical_defects": 0,
-      "crawlable_production": 7,
-      "deployed_only": 12
-    }
+    "critical_count": 0,
+    "audit_target_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+    "live_manifest_sha": "f35c00dcf1f5084a052df8437664fe5f14e7ac58",
+    "auditor_version": "wave0-closure-02"
   },
   "live_manifest": {
     "schema_version": "1.1.0",
@@ -119,6 +119,6 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "generated_at": "2026-08-01T00:49:13Z",
+  "generated_at": "2026-08-01T00:52:49Z",
   "campaign": "WEB-CFG-PSEO-WAVE0-CLOSURE-02"
 }

@@ -215,6 +215,32 @@ class TestAuditIdentity(unittest.TestCase):
         self.assertTrue(currency["production_audit_is_current"])
         bound = bind_ok_to_identity(True, identity, currency)
         self.assertTrue(bound["ok"])
+    def test_audit_target_binds_to_live_not_git_head(self):
+        """Evidence-only HEAD must not stale a healthy live deploy audit."""
+        from scripts.pseo.audit_identity import (
+            bind_ok_to_identity,
+            evaluate_audit_currency,
+            identity_block,
+            seed_set_hash,
+        )
+        seeds = ["/radar/edificacoes-publicas-pr/"]
+        live = "f35c00dcf1f5084a052df8437664fe5f14e7ac58"
+        identity = identity_block(
+            audit_target_sha=live,  # live tip under audit
+            live_manifest_sha=live,
+            snapshot_hash="0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
+            public_artifact_hash_value="art",
+            seed_urls=seeds,
+        )
+        currency = evaluate_audit_currency(
+            identity,
+            netlify_deployed_sha=live,
+            live_snapshot_hash="0a67cf804cb0a26a",
+            current_seed_set_hash=seed_set_hash(seeds),
+        )
+        bound = bind_ok_to_identity(True, identity, currency)
+        self.assertTrue(bound["ok"])
+        self.assertTrue(bound["production_audit_is_current"])
 
 
 class TestEvidenceKindAndPublicCopy(unittest.TestCase):
