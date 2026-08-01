@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
+  "web_cfg_head": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "merged": true,
@@ -10,19 +10,22 @@
     "on_main": true,
     "source": "github_main"
   },
-  "netlify_deployed_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-  "production_audit_sha": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
-  "production_audit_is_current": false,
+  "netlify_deployed_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+  "production_audit_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+  "production_audit_is_current": true,
   "public_directory": "_site",
   "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
   "forbidden_public_urls_status": {
-    "pre_deploy_live": {
-      "/data/pseo/manifest.json": 200,
-      "/package.json": 200,
-      "/seo/pseo-operational-result.json": 200,
-      "note": "Live still on publish=. until this deploy; expect 404 after _site publish"
-    },
-    "local_artifact": "absent_from__site"
+    "ok": true,
+    "statuses": {
+      "/data/pseo/manifest.json": 404,
+      "/data/pseo/registry.json": 404,
+      "/seo/pseo-operational-result.json": 404,
+      "/scripts/pseo/build.py": 404,
+      "/package.json": 404,
+      "/.git/config": 404,
+      "/.github/workflows/pseo.yml": 404
+    }
   },
   "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "seed_urls": [
@@ -65,22 +68,51 @@
     "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
     "uninspected_seeds=4",
     "discovered_or_crawled=0<3",
-    "production_audit_not_ok",
-    "production_audit_stale_or_mismatch",
     "reexport_without_undue_invalidation_not_proven"
   ],
   "test_results": {
     "pseo_pytest": "66 passed",
+    "wave0_closure_tests": "15 passed",
     "build_site": "ok",
     "audit_public_artifact": "ok",
-    "extra_cli_pr_187": "MERGED"
+    "production_audit": "ok technical+identity",
+    "dual_ua_same_content": true,
+    "extra_cli_pr_187": "MERGED 6f35c69f",
+    "forbidden_live_404": true
   },
   "unresolved_risks": [
-    "GSC credentials absent — all seeds NOT_INSPECTED",
-    "Live deploy not yet on _site isolation (pending push of this commit)",
-    "reexport_without_undue_invalidation not proven against live PG",
-    "production audit not current until Netlify redeploy of this HEAD"
+    "GSC credentials absent — all seeds NOT_INSPECTED (blocks Wave 1)",
+    "reexport_without_undue_invalidation not proven against live PG"
   ],
-  "generated_at": "2026-08-01T00:18:16Z",
+  "production_audit": {
+    "ok": true,
+    "technical_ok": true,
+    "critical_count": 0,
+    "stale_code": null,
+    "counts": {
+      "urls_audited": 19,
+      "critical_defects": 0,
+      "crawlable_production": 7,
+      "deployed_only": 12
+    }
+  },
+  "live_manifest": {
+    "schema_version": "1.1.0",
+    "export_version": "1.1.0",
+    "web_cfg_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+    "snapshot_hash_short": "0a67cf804cb0a26a",
+    "source_run_id": "pseo-20260731T160846Z-f9e1a782",
+    "generated_at": "2026-08-01T00:20:58Z",
+    "data_as_of": "2026-07-31",
+    "published_page_count": 4,
+    "public_directory": "_site",
+    "sitemap_urls": [
+      "https://confenge.com.br/sitemap-index.xml",
+      "https://confenge.com.br/sitemap.xml",
+      "https://confenge.com.br/sitemap-inteligencia.xml"
+    ],
+    "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
+  },
+  "generated_at": "2026-08-01T00:21:53Z",
   "campaign": "WEB-CFG-PSEO-WAVE0-CLOSURE-02"
 }

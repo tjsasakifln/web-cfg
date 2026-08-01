@@ -1,6 +1,6 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
+  "web_cfg_head": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
   "extra_cli_head": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_main_integration": {
     "on_main": true,
@@ -10,18 +10,25 @@
     "source": "github_main",
     "blob_sha": "daa6dc17a3094104f6e62640e8c8bac5454dcfad"
   },
-  "netlify_deployed_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-  "production_audit_sha": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
-  "production_audit_is_current": false,
+  "netlify_deployed_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+  "production_audit_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+  "production_audit_is_current": true,
   "public_directory": "_site",
   "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
   "forbidden_public_urls_status": {
-    "ok": null,
-    "statuses": {},
-    "note": "skipped"
+    "ok": true,
+    "statuses": {
+      "/data/pseo/manifest.json": 404,
+      "/data/pseo/registry.json": 404,
+      "/seo/pseo-operational-result.json": 404,
+      "/scripts/pseo/build.py": 404,
+      "/package.json": 404,
+      "/.git/config": 404,
+      "/.github/workflows/pseo.yml": 404
+    }
   },
   "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
-  "live_snapshot_hash_short": "40b2c85f58dca015",
+  "live_snapshot_hash_short": "0a67cf804cb0a26a",
   "seed_urls": [
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
     "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
@@ -41,8 +48,6 @@
     "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
     "uninspected_seeds=4",
     "discovered_or_crawled=0<3",
-    "production_audit_not_ok",
-    "production_audit_stale_or_mismatch",
     "reexport_without_undue_invalidation_not_proven"
   ],
   "next_wave_gate_detail": {
@@ -53,8 +58,6 @@
       "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
       "uninspected_seeds=4",
       "discovered_or_crawled=0<3",
-      "production_audit_not_ok",
-      "production_audit_stale_or_mismatch",
       "reexport_without_undue_invalidation_not_proven"
     ],
     "metrics": {
@@ -70,26 +73,32 @@
       ],
       "blocking": []
     },
-    "computed_at": "2026-08-01T00:20:13Z",
+    "computed_at": "2026-08-01T00:21:41Z",
     "auditor_version": "wave0-closure-02"
   },
   "production_audit": {
-    "ok": false,
-    "technical_ok": false,
+    "ok": true,
+    "technical_ok": true,
     "critical_count": 0,
-    "stale_code": "STALE_AUDIT_DEPLOY_MISMATCH",
-    "counts": null
+    "stale_code": null,
+    "counts": {
+      "urls_audited": 19,
+      "critical_defects": 0,
+      "crawlable_production": 7,
+      "deployed_only": 12
+    }
   },
   "public_artifact_audit_ok": true,
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-    "snapshot_hash_short": "40b2c85f58dca015",
+    "web_cfg_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+    "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-07-31T22:04:20Z",
+    "generated_at": "2026-08-01T00:20:58Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
+    "public_directory": "_site",
     "sitemap_urls": [
       "https://confenge.com.br/sitemap-index.xml",
       "https://confenge.com.br/sitemap.xml",
@@ -98,5 +107,5 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-01T00:20:13Z"
+  "generated_at": "2026-08-01T00:21:41Z"
 }

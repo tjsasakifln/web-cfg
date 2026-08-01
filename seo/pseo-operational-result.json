@@ -1,10 +1,10 @@
 {
   "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_sha": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
+  "web_cfg_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
   "extra_cli_sha": "6f35c69f25276b55871767fd668cd019dd1bfb56",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
+  "netlify_deployed_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
   "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "public_directory": "_site",
   "public_artifact_hash": "6f77a345dde1d9759d17bc1cd245ca02a3a979a243358b4793df45e33b736b54",
@@ -16,13 +16,13 @@
   ],
   "indexable_seed_count": 4,
   "production_audit": {
-    "ok": false,
-    "technical_ok": false,
-    "production_audit_is_current": false,
-    "stale_code": "STALE_AUDIT_DEPLOY_MISMATCH",
+    "ok": true,
+    "technical_ok": true,
+    "production_audit_is_current": true,
+    "stale_code": null,
     "critical_count": 0,
-    "audit_target_sha": "387db28b76fa062d34fed9086a3fc3e493fcffe1",
-    "live_manifest_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e"
+    "audit_target_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+    "live_manifest_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037"
   },
   "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
   "gsc_status_by_url": {
@@ -38,33 +38,39 @@
       "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
       "uninspected_seeds=4",
       "discovered_or_crawled=0<3",
-      "production_audit_not_ok",
-      "production_audit_stale_or_mismatch",
       "reexport_without_undue_invalidation_not_proven"
     ]
   },
   "forbidden_public_urls_status": {
-    "ok": null,
-    "statuses": {},
-    "note": "skipped"
+    "ok": true,
+    "statuses": {
+      "/data/pseo/manifest.json": 404,
+      "/data/pseo/registry.json": 404,
+      "/seo/pseo-operational-result.json": 404,
+      "/scripts/pseo/build.py": 404,
+      "/package.json": 404,
+      "/.git/config": 404,
+      "/.github/workflows/pseo.yml": 404
+    }
   },
   "stages_reached": {
     "GENERATED_LOCAL": true,
     "QUALITY_ELIGIBLE": true,
     "EDITORIALLY_APPROVED": true,
     "DEPLOYED_PRODUCTION": true,
-    "CRAWLABLE_PRODUCTION": false,
+    "CRAWLABLE_PRODUCTION": true,
     "INDEXED_BY_GOOGLE": false
   },
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "51213f32b11db8423f1b49802a9d1e3750ab143e",
-    "snapshot_hash_short": "40b2c85f58dca015",
+    "web_cfg_sha": "bcdff0d514d7b1c946d1373dc5e86180978b7037",
+    "snapshot_hash_short": "0a67cf804cb0a26a",
     "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-07-31T22:04:20Z",
+    "generated_at": "2026-08-01T00:20:58Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 4,
+    "public_directory": "_site",
     "sitemap_urls": [
       "https://confenge.com.br/sitemap-index.xml",
       "https://confenge.com.br/sitemap.xml",
@@ -76,11 +82,9 @@
     "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
     "uninspected_seeds=4",
     "discovered_or_crawled=0<3",
-    "production_audit_not_ok",
-    "production_audit_stale_or_mismatch",
     "reexport_without_undue_invalidation_not_proven",
     "GSC credentials absent — NOT_INSPECTED"
   ],
-  "generated_at": "2026-08-01T00:20:13Z",
+  "generated_at": "2026-08-01T00:21:41Z",
   "auditor_version": "wave0-closure-02"
 }

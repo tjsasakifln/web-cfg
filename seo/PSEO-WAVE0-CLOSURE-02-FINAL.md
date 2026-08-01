@@ -86,3 +86,18 @@
 - No Google indexation claimed
 - No inbound operational claim (impressions/clicks)
 - No Wave 1 authorization
+
+
+## Post-deploy verification
+
+| Check | Result |
+|-------|--------|
+| live `web_cfg_sha` | `bcdff0d514d7b1c946d1373dc5e86180978b7037` |
+| `public_directory` | `_site` |
+| production_audit.ok | **true** (technical + identity current) |
+| forbidden internal URLs | all **404** |
+| dual-UA seed content | identical |
+| next_wave_gate | **false** (calculated) |
+| terminal_status | `PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED` |
+
+Wave 1 remains unauthorized until real GSC inspection evidence is ingested and re-export proof lands.
