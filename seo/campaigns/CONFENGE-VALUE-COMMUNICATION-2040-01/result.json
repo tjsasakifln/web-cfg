@@ -3,7 +3,7 @@
   "status": "IMPLEMENTED_DEPLOY_BLOCKED",
   "branch": "feat/confenge-value-communication-2040",
   "sha_initial": "ff8d6ddff7e02c69272192aee3563b3bfcf0e14e",
-  "sha_final": null,
+  "sha_final": "be9f6d8a3ccc8892d280acb730c513310ed8ddee",
   "pages_created": [
     "/diagnostico-b2g-360/",
     "/diretoria-b2g/",
