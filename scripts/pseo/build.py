@@ -501,6 +501,26 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
     registry_path = data_dir / "registry.json"
     existing_reviews = load_existing_reviews(registry_path)
 
+    # Baseline URLs known BEFORE registry rewrite / HTML wipe — freeze new reject paths.
+    prior_urls: set[str] = set()
+    if registry_path.exists():
+        try:
+            prior_reg = json.loads(registry_path.read_text(encoding="utf-8"))
+            for p in prior_reg.get("pages") or []:
+                if p.get("url"):
+                    prior_urls.add(str(p["url"]))
+        except (OSError, json.JSONDecodeError):
+            pass
+    for base in (ROOT / "inteligencia", ROOT / "radar"):
+        if not base.exists():
+            continue
+        for index in base.rglob("index.html"):
+            try:
+                url_guess = "/" + str(index.parent.relative_to(ROOT)).replace("\\", "/") + "/"
+                prior_urls.add(url_guess)
+            except ValueError:
+                pass
+
     cands = build_candidates(data, manifest)
     cands = apply_similarity_gate(cands)
     # Human review is a hard gate — never publish PENDING
@@ -529,16 +549,20 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                     "radar/index.html",
                 }:
                     continue
+                # Record path as prior URL before wipe
+                url_guess = "/" + str(index.parent.relative_to(ROOT)).replace("\\", "/") + "/"
+                prior_urls.add(url_guess)
                 try:
                     index.unlink()
                 except OSError:
                     pass
     for c in cands:
-        # Write HTML for publish + existing noindex/reject paths.
+        # Write HTML for publish + previously known noindex/reject paths.
         # Never create brand-new public paths for reject-only candidates
         # (Wave 0 freeze: "não criar novas páginas").
         path = url_to_path(c.url)
-        if c.status == "reject" and not path.exists():
+        is_new_path = c.url not in prior_urls
+        if c.status == "reject" and is_new_path:
             written_pages.append(
                 {
                     "url": c.url,
