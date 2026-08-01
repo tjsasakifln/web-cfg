@@ -1,12 +1,12 @@
 {
   "campaign": "WEB-CFG-PSEO-WAVE0-FINAL-ACTIVATION-03",
-  "terminal_status": "PARTIAL_WAVE0_ACTIVATED_GSC_NOT_INSPECTED",
-  "web_cfg_head": "e7c8dfb42b3f2021b502407ee03ffcba54d89541",
+  "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
+  "web_cfg_head": "7d594d542f959d4853eda05316659814f7e1ddd2",
   "extra_cli_main_head": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "extra_cli_pr_188": {
     "merged": true,
     "merge_commit": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
-    "note": "Residual merge-readiness required for real export validation (archetype models)."
+    "title": "residual merge-readiness after #187"
   },
   "old_snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "new_snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
@@ -14,7 +14,6 @@
   "snapshot_source_branch": "main",
   "snapshot_source_commit_on_main": true,
   "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
-  "snapshot_status": "CANDIDATE",
   "approval_stability_proven": true,
   "approval_results_by_page": {
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/": {
@@ -93,7 +92,7 @@
       "decision": "pass",
       "evidence_kind": null,
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-      "issues": [
+      "issue_codes": [
         "data_quality_gate",
         "data_quality_gate",
         "contract_link_as_opportunity"
@@ -104,21 +103,21 @@
       "decision": "pass",
       "evidence_kind": "normative_editorial",
       "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
-      "issues": []
+      "issue_codes": []
     },
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": {
       "page_id": "prob-sinapi-sicro",
       "decision": "pass",
       "evidence_kind": "normative_editorial",
       "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
-      "issues": []
+      "issue_codes": []
     },
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/": {
       "page_id": "prob-aditivos-margem",
       "decision": "pass",
       "evidence_kind": "normative_editorial",
       "editorial_decision": "PUBLISH_EDITORIAL_VALUE",
-      "issues": []
+      "issue_codes": []
     }
   },
   "published_page_count": 3,
@@ -136,12 +135,14 @@
   ],
   "radar_seed_demoted": {
     "url": "/radar/edificacoes-publicas-pr/",
-    "reason": "main export quality gates: contract_url_as_opportunity, duplicate_items, zero_used_for_missing_value",
-    "status": "reject"
+    "reason": "quality gates on main reexport: contract_url_as_opportunity, duplicate_items, zero_used_for_missing_value",
+    "status": "reject",
+    "human_review": "PENDING"
   },
-  "netlify_deployed_sha": null,
-  "production_audit_sha": null,
-  "production_audit_is_current": false,
+  "netlify_deployed_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "production_audit_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "production_audit_is_current": true,
+  "public_directory": "_site",
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
   "gsc_state_by_url": {
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "DISCOVERED_NOT_CRAWLED",
@@ -151,15 +152,14 @@
   },
   "gsc_inspected_seeds": 4,
   "discovered_or_crawled_or_indexed": 4,
-  "next_wave_gate": false,
-  "next_wave_gate_reasons": [
-    "production_audit_not_ok",
-    "production_audit_stale_or_mismatch"
-  ],
+  "soft_404_count": 0,
+  "canonical_conflict_count": 0,
+  "critical_count": 0,
+  "next_wave_gate": true,
+  "next_wave_gate_reasons": [],
   "unresolved_risks": [
-    "Production deploy + audit not yet frozen at commit time of this pre-deploy result",
-    "Radar PR demoted from Wave 0 indexables due to quality on main reexport",
-    "GSC indexation of radar reflects pre-demotion production state until recrawl"
+    "Radar PR demoted from Wave 0 indexables; GSC still shows INDEXED until recrawl after noindex",
+    "Wave 1 content expansion still requires commercial decision; gate is technical only"
   ],
   "test_results": {
     "pseo_pytest": "76+ passed",
@@ -168,7 +168,28 @@
     "pseo_validate": "ok",
     "pseo_audit": "ok",
     "prove_approval_stability": "ok",
-    "gsc_ingest": "ok 4/4"
+    "gsc_ingest": "ok 4/4 url_inspection_api",
+    "production_audit": "ok critical=0 current",
+    "verify_release": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
+    "forbidden_live_404": true,
+    "dual_ua_parity": true
   },
-  "generated_at": "2026-08-01T01:27:44Z"
+  "live_manifest": {
+    "schema_version": "1.1.0",
+    "export_version": "1.1.0",
+    "web_cfg_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+    "snapshot_hash_short": "a2f6ee9b62ffc313",
+    "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
+    "generated_at": "2026-08-01T01:29:21Z",
+    "data_as_of": "2026-07-31",
+    "published_page_count": 3,
+    "public_directory": "_site",
+    "sitemap_urls": [
+      "https://confenge.com.br/sitemap-index.xml",
+      "https://confenge.com.br/sitemap.xml",
+      "https://confenge.com.br/sitemap-inteligencia.xml"
+    ],
+    "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
+  },
+  "generated_at": "2026-08-01T01:34:25Z"
 }

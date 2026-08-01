@@ -284,14 +284,29 @@ def verify_release(
         )
         gsc = load_indexation_status()
 
+    # Approval stability proof (real snapshot pair) — never invent True
+    approval_stab: dict[str, Any] = {}
+    stab_path = ROOT / "seo" / "pseo-approval-stability.json"
+    if stab_path.exists():
+        try:
+            approval_stab = json.loads(stab_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            approval_stab = {}
+    reexport_ok = bool(approval_stab.get("approval_stability_proven")) and bool(
+        approval_stab.get("ok")
+    )
+
+    # Prefer gsc_state_by_url when present (full records under urls or state_by_url)
+    gsc_by = gsc.get("gsc_state_by_url") or gsc.get("urls") or {}
+
     gate = compute_next_wave_gate(
         seed_urls=seeds,
         gsc_access=gsc.get("gsc_access") or GSC_ACCESS_NO_CREDS,
-        gsc_by_url=gsc.get("urls") or {},
+        gsc_by_url=gsc_by,
         production_audit_ok=bool(prod_audit.get("ok")),
         production_audit_is_current=bool(prod_audit.get("production_audit_is_current")),
         extra_cli_on_main=bool(extra.get("on_main")),
-        reexport_without_undue_invalidation=False,
+        reexport_without_undue_invalidation=reexport_ok,
         snapshot_source_on_main=bool(snap_src.get("on_main")),
     )
 
@@ -299,27 +314,36 @@ def verify_release(
     gsc_missing = gsc.get("gsc_access") in {
         GSC_ACCESS_NO_CREDS,
         "NOT_INSPECTED_NO_CREDENTIALS",
+        None,
+        "",
     }
     if not art.get("ok"):
         terminal = "BLOCKED_PUBLICATION_BOUNDARY"
+    elif not snap_src.get("on_main"):
+        terminal = "BLOCKED_SNAPSHOT_PROVENANCE"
+    elif not reexport_ok:
+        terminal = "BLOCKED_APPROVAL_STABILITY"
     elif not extra.get("on_main"):
         terminal = "BLOCKED_EXTRA_CLI_NOT_MERGED"
     elif gsc_missing:
         # Hardening complete path: GSC absence is the primary residual blocker
-        terminal = "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED"
+        terminal = "PARTIAL_WAVE0_ACTIVATED_GSC_NOT_INSPECTED"
     elif (
         prod_audit.get("stale_code") == STALE_CODE
         and not prod_audit.get("production_audit_is_current")
         and live_sha
         and live_sha != head
     ):
-        terminal = "BLOCKED_PRODUCTION_AUDIT_STALE"
+        terminal = "BLOCKED_PRODUCTION_AUDIT"
+    elif not prod_audit.get("ok") or int(prod_audit.get("critical_count") or 0) > 0:
+        terminal = "BLOCKED_PRODUCTION_AUDIT"
     elif gate.get("allowed") and prod_audit.get("ok") and prod_audit.get(
         "production_audit_is_current"
     ):
-        terminal = "PASS_WAVE0_HARDENED_GSC_OBSERVED"
+        terminal = "PASS_WAVE0_ACTIVATED_GSC_OBSERVED"
     else:
-        terminal = "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED"
+        # GSC observed but gate still closed (crawl pending, demoted seeds, etc.)
+        terminal = "PARTIAL_WAVE0_GSC_CRAWL_PENDING"
 
     result = {
         "terminal_status": terminal,
@@ -340,8 +364,21 @@ def verify_release(
         "indexable_seed_count": len(seeds),
         "gsc_access": gsc.get("gsc_access"),
         "gsc_state_by_url": {
-            k: v.get("state") for k, v in (gsc.get("urls") or {}).items()
+            k: (v.get("state") if isinstance(v, dict) else v)
+            for k, v in gsc_by.items()
         },
+        "approval_stability_proven": reexport_ok,
+        "approval_stability": {
+            "ok": approval_stab.get("ok"),
+            "approval_stability_proven": approval_stab.get("approval_stability_proven"),
+            "preserved_approval_proof_pages": approval_stab.get(
+                "preserved_approval_proof_pages"
+            ),
+            "material_invalidation_proof_pages": approval_stab.get(
+                "material_invalidation_proof_pages"
+            ),
+        },
+        "snapshot_source_commit_on_main": bool(snap_src.get("on_main")),
         "next_wave_gate": gate.get("next_wave_gate"),
         "next_wave_gate_reasons": gate.get("reasons"),
         "next_wave_gate_detail": gate,
@@ -351,6 +388,9 @@ def verify_release(
             "critical_count": len(prod_audit.get("critical") or []),
             "stale_code": prod_audit.get("stale_code"),
             "counts": prod_audit.get("counts"),
+            "production_audit_is_current": prod_audit.get("production_audit_is_current"),
+            "audit_target_sha": prod_audit.get("audit_target_sha"),
+            "live_manifest_sha": prod_audit.get("live_manifest_sha"),
         },
         "public_artifact_audit_ok": art.get("ok"),
         "live_manifest": live,

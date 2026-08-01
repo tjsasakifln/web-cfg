@@ -1,47 +1,39 @@
 {
-  "terminal_status": "PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED",
-  "web_cfg_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
-  "extra_cli_sha": "6f35c69f25276b55871767fd668cd019dd1bfb56",
+  "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
+  "web_cfg_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "extra_cli_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
-  "snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
+  "netlify_deployed_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
   "public_directory": "_site",
-  "public_artifact_hash": "a4ea2776862932d0a3bca108e3137c67430d10b7553ecc4edb8db05ab0293c80",
+  "public_artifact_hash": "0ff4e455be0be7279f36796e905d62424b45f2858c6d7e9a72a71f833bedff95",
   "seed_urls": [
     "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
     "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-    "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-    "https://confenge.com.br/radar/edificacoes-publicas-pr/"
+    "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/"
   ],
-  "indexable_seed_count": 4,
+  "indexable_seed_count": 3,
   "production_audit": {
     "ok": true,
     "technical_ok": true,
     "production_audit_is_current": true,
     "stale_code": null,
     "critical_count": 0,
-    "audit_target_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
-    "live_manifest_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
-    "auditor_version": "wave0-closure-02"
+    "audit_target_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+    "live_manifest_sha": "7d594d542f959d4853eda05316659814f7e1ddd2"
   },
-  "gsc_access": "NOT_INSPECTED_NO_CREDENTIALS",
+  "gsc_access": "INSPECTED_WITH_EVIDENCE",
   "gsc_status_by_url": {
-    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "NOT_INSPECTED",
-    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": "NOT_INSPECTED",
-    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": "NOT_INSPECTED",
-    "/radar/edificacoes-publicas-pr/": "NOT_INSPECTED"
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "DISCOVERED_NOT_CRAWLED",
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/": "INDEXED",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/": "INDEXED",
+    "/radar/edificacoes-publicas-pr/": "INDEXED"
   },
   "next_wave_gate": {
-    "allowed": false,
-    "gsc_discovery_or_crawl_without_soft404": false,
-    "reasons": [
-      "gsc_access_NOT_INSPECTED_NO_CREDENTIALS",
-      "uninspected_seeds=4",
-      "discovered_or_crawled=0<3",
-      "snapshot_source_commit_not_on_extra_cli_main",
-      "reexport_without_undue_invalidation_not_proven"
-    ]
+    "allowed": true,
+    "gsc_discovery_or_crawl_without_soft404": true,
+    "reasons": []
   },
   "forbidden_public_urls_status": {
     "ok": true,
@@ -66,12 +58,12 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
-    "snapshot_hash_short": "0a67cf804cb0a26a",
-    "source_run_id": "pseo-20260731T160846Z-f9e1a782",
-    "generated_at": "2026-08-01T00:53:27Z",
+    "web_cfg_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+    "snapshot_hash_short": "a2f6ee9b62ffc313",
+    "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
+    "generated_at": "2026-08-01T01:29:21Z",
     "data_as_of": "2026-07-31",
-    "published_page_count": 4,
+    "published_page_count": 3,
     "public_directory": "_site",
     "sitemap_urls": [
       "https://confenge.com.br/sitemap-index.xml",
@@ -80,17 +72,7 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "unresolved_risks": [
-    "GSC credentials absent — all seeds NOT_INSPECTED",
-    "Published snapshot source_commit_sha not on extra-cli main (feat/pseo-semantic-sota); re-export from main required for PASS — not invented",
-    "reexport_without_undue_invalidation not proven against live PG"
-  ],
-  "generated_at": "2026-08-01T00:54:27Z",
-  "auditor_version": "wave0-closure-02",
-  "snapshot_source_provenance": {
-    "on_main": false,
-    "source_commit_sha": "01123735ed0e240b0adf2233269ac947fa6d56c2",
-    "source_branch": "feat/pseo-semantic-sota",
-    "reason": "source_commit_lookup_failed_or_missing"
-  }
+  "unresolved_risks": [],
+  "generated_at": "2026-08-01T01:33:50Z",
+  "auditor_version": "wave0-closure-02"
 }

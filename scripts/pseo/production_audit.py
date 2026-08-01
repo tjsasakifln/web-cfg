@@ -340,17 +340,31 @@ def collect_targets(
             n_sample += 1
             if n_sample >= 5:
                 break
-    # Ensure current Wave-0 publish URLs are audited even if registry briefly stale
+    # Ensure Wave-0 seed URLs are audited even if not among the noindex sample.
+    # Role follows registry status when known — never force demoted seeds to "publish".
     seed_wave0 = [
         "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
         "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
         "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
         "/radar/edificacoes-publicas-pr/",
     ]
+    status_by_url = {
+        (p.get("url") or ""): (p.get("status") or "")
+        for p in pages
+        if p.get("url")
+    }
     for s in seed_wave0:
-        if s not in seen:
-            out.append((s, "publish"))
-            seen.add(s)
+        if s in seen:
+            continue
+        st = status_by_url.get(s, "publish")
+        if st == "publish":
+            role = "publish"
+        elif st in {"noindex", "reject"}:
+            role = "noindex_sample"
+        else:
+            role = "publish_candidate"
+        out.append((s, role))
+        seen.add(s)
     # Legacy / demoted paths — sample only (no critical index requirements)
     legacy = [
         "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
@@ -536,7 +550,12 @@ def evaluate_row(
 
 
 def audit_sitemap_lastmod(sitemap_text: str, today: date | None = None) -> list[str]:
-    today = today or date.today()
+    # Prefer UTC calendar day — Netlify/build and lastmod are written in UTC.
+    # Local date.today() can lag behind UTC near midnight and false-flag lastmod.
+    if today is None:
+        from datetime import datetime, timezone
+
+        today = datetime.now(timezone.utc).date()
     defects: list[str] = []
     for m in re.finditer(r"<lastmod>\s*([^<\s]+)\s*</lastmod>", sitemap_text):
         raw = m.group(1).strip()[:10]

@@ -1,7 +1,9 @@
 # PSEO Wave 0 — Final Activation 03
 
 **Campaign:** `WEB-CFG-PSEO-WAVE0-FINAL-ACTIVATION-03`  
-**Baseline:** `PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED`
+**Baseline:** `PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED`  
+**Terminal:** `PASS_WAVE0_ACTIVATED_GSC_OBSERVED`  
+**next_wave_gate:** `true` (technical gate only — no expansion without explicit Wave 1 campaign)
 
 ## Objective
 
