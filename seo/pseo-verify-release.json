@@ -1,6 +1,6 @@
 {
   "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
-  "web_cfg_head": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "web_cfg_head": "7a565a7d125a210e4a8589e75d313ffc79d637af",
   "extra_cli_head": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "extra_cli_main_integration": {
     "on_main": true,
@@ -17,8 +17,8 @@
     "compare_status": "identical",
     "reason": null
   },
-  "netlify_deployed_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
-  "production_audit_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "netlify_deployed_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
+  "production_audit_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
   "production_audit_is_current": true,
   "public_directory": "_site",
   "public_artifact_hash": "0ff4e455be0be7279f36796e905d62424b45f2858c6d7e9a72a71f833bedff95",
@@ -78,7 +78,7 @@
       "uninspected": [],
       "blocking": []
     },
-    "computed_at": "2026-08-01T01:33:50Z",
+    "computed_at": "2026-08-01T01:36:57Z",
     "auditor_version": "wave0-closure-02"
   },
   "production_audit": {
@@ -93,17 +93,17 @@
       "deployed_only": 13
     },
     "production_audit_is_current": true,
-    "audit_target_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
-    "live_manifest_sha": "7d594d542f959d4853eda05316659814f7e1ddd2"
+    "audit_target_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
+    "live_manifest_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af"
   },
   "public_artifact_audit_ok": true,
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+    "web_cfg_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
     "snapshot_hash_short": "a2f6ee9b62ffc313",
     "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
-    "generated_at": "2026-08-01T01:29:21Z",
+    "generated_at": "2026-08-01T01:35:54Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 3,
     "public_directory": "_site",
@@ -115,5 +115,5 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-01T01:33:50Z"
+  "generated_at": "2026-08-01T01:36:57Z"
 }

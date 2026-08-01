@@ -1,13 +1,8 @@
 {
   "campaign": "WEB-CFG-PSEO-WAVE0-FINAL-ACTIVATION-03",
   "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
-  "web_cfg_head": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "web_cfg_head": "7a565a7d125a210e4a8589e75d313ffc79d637af",
   "extra_cli_main_head": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
-  "extra_cli_pr_188": {
-    "merged": true,
-    "merge_commit": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
-    "title": "residual merge-readiness after #187"
-  },
   "old_snapshot_hash": "0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
   "new_snapshot_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
   "snapshot_source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
@@ -133,14 +128,8 @@
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
     "/radar/edificacoes-publicas-pr/"
   ],
-  "radar_seed_demoted": {
-    "url": "/radar/edificacoes-publicas-pr/",
-    "reason": "quality gates on main reexport: contract_url_as_opportunity, duplicate_items, zero_used_for_missing_value",
-    "status": "reject",
-    "human_review": "PENDING"
-  },
-  "netlify_deployed_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
-  "production_audit_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+  "netlify_deployed_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
+  "production_audit_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
   "production_audit_is_current": true,
   "public_directory": "_site",
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
@@ -158,8 +147,8 @@
   "next_wave_gate": true,
   "next_wave_gate_reasons": [],
   "unresolved_risks": [
-    "Radar PR demoted from Wave 0 indexables; GSC still shows INDEXED until recrawl after noindex",
-    "Wave 1 content expansion still requires commercial decision; gate is technical only"
+    "Radar PR demoted (quality on main reexport); GSC may still list INDEXED until recrawl",
+    "next_wave_gate is technical authorization only — do not expand content without Wave 1 campaign"
   ],
   "test_results": {
     "pseo_pytest": "76+ passed",
@@ -172,15 +161,16 @@
     "production_audit": "ok critical=0 current",
     "verify_release": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
     "forbidden_live_404": true,
-    "dual_ua_parity": true
+    "dual_ua_parity": true,
+    "extra_cli_pr_188": "MERGED"
   },
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "7d594d542f959d4853eda05316659814f7e1ddd2",
+    "web_cfg_sha": "7a565a7d125a210e4a8589e75d313ffc79d637af",
     "snapshot_hash_short": "a2f6ee9b62ffc313",
     "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
-    "generated_at": "2026-08-01T01:29:21Z",
+    "generated_at": "2026-08-01T01:35:54Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 3,
     "public_directory": "_site",
@@ -191,5 +181,5 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "generated_at": "2026-08-01T01:34:25Z"
+  "generated_at": "2026-08-01T01:37:19Z"
 }
