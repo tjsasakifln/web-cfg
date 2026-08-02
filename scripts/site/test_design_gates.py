@@ -64,14 +64,14 @@ def test_css_tokens_mirror_system():
 def test_home_archetypes_diverse():
     html = HOME.read_text(encoding="utf-8")
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', html)
-    assert len(archetypes) >= 8, f"expected many section archetypes, got {archetypes}"
-    assert len(set(archetypes)) >= 3, f"need ≥3 distinct archetypes, got {set(archetypes)}"
-    # no three consecutive identical archetypes that are card-like
-    cardish = {"card_grid", "equal_cards"}
+    # Home narrative architecture: ≤7 large blocks (excluding header/footer)
+    assert 5 <= len(archetypes) <= 7, f"expected 5–7 narrative archetypes, got {archetypes}"
+    assert len(set(archetypes)) >= 5, f"need ≥5 distinct archetypes, got {set(archetypes)}"
+    # no three consecutive identical archetypes
     for i in range(len(archetypes) - 2):
         window = archetypes[i : i + 3]
-        if len(set(window)) == 1 and window[0] in cardish:
-            raise AssertionError(f"three consecutive cardish archetypes: {window}")
+        if len(set(window)) == 1:
+            raise AssertionError(f"three consecutive identical archetypes: {window}")
 
 
 def test_home_card_grid_limit():
@@ -89,6 +89,11 @@ def test_home_card_grid_limit():
     assert "Diretoria B2G fracionada" in html
     assert "Licitação vencida não paga a conta" in html
     assert "Contrato rentável, sim" in html
+    # Seven-block narrative: hero risk offers method authority fit conversion
+    sections = re.findall(r"<main[\s\S]*?</main>", html)
+    assert sections, "main missing"
+    main_sections = len(re.findall(r"<section\b", sections[0]))
+    assert main_sections <= 7, f"home must have ≤7 narrative sections, got {main_sections}"
 
 
 def test_home_no_uniform_section_padding_only():
@@ -167,37 +172,89 @@ def test_offer_depth_and_distinct_layouts():
 
 def test_journey_accessible_without_js():
     html = HOME.read_text(encoding="utf-8")
-    assert "data-journey-enhance" in html
-    # all 8 stages present as real content
-    for stage in ("j-mercado", "j-decisao", "j-mobilizacao", "j-proposta", "j-contrato", "j-ocorrencia", "j-resultado", "j-aprendizado"):
+    assert "data-journey-enhance" in html or "macro-phases" in html
+    # Four macro-phases present as real content (consolidated from 8-stage journey)
+    for stage in ("j-mercado", "j-decisao", "j-contrato", "j-aprendizado"):
         assert f'id="{stage}"' in html
-    assert "stage-meta" in html
-    # enhancement hides only when JS marks enhanced — default CSS shows all
+    assert "macro-phase" in html or "stage-meta" in html
+    # Progressive disclosure via native details — works without JS
+    assert "<details" in html
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    assert 'data-enhanced="true"' in css or "[data-enhanced" in css
+    assert "macro-phase" in css or "journey-stage" in css
 
 
 def test_trace_matrix_and_tension_present():
     html = HOME.read_text(encoding="utf-8")
-    assert "O trabalho precisa deixar rastros verificáveis" in html
     assert "trace-matrix" in html
+    assert "trace-cards" in html  # mobile stacked composition
     assert "O contrato pode destruir margem em três momentos" in html
     assert "tension-flow" in html or "tension-stage" in html
-    assert "Como a CONFENGE entra na operação" in html
+    assert "Diretoria B2G" in html
     assert "Arquitetura de ofertas" not in html
+    # Positive proof language — no defensive public copy
+    lower = html.lower()
+    for leak in (
+        "sem inventar case",
+        "sem métrica fictícia",
+        "sem metrica ficticia",
+        "sem javascript",
+        "legível sem javascript",
+    ):
+        assert leak not in lower, f"defensive leak on home: {leak}"
 
 
 def test_primary_cta_not_spam():
     html = HOME.read_text(encoding="utf-8")
     primary = len(re.findall(r"button-primary", html))
-    # header + hero + offer + final + form + content feature etc. — soft cap
-    assert primary <= 12, f"too many primary CTAs on home: {primary}"
+    # header (+ mobile nav), hero, form submit — ≤4 semantic primaries
+    assert primary <= 4, f"too many primary CTAs on home: {primary}"
+    # Dominant CTA family
+    assert "Diagnosticar operação B2G" in html
+    # WhatsApp secondary must not share primary button class in hero
+    hero = re.search(r'class="hero[\s\S]*?</section>', html)
+    assert hero, "hero missing"
+    hero_html = hero.group(0)
+    assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
+    assert "Enviar decisão crítica" in hero_html or "decisão crítica" in hero_html.lower()
+
+
+def test_home_five_second_clarity():
+    """Buyer can answer what / who / problem / trust / next from home copy."""
+    html = HOME.read_text(encoding="utf-8")
+    lower = html.lower()
+    assert "diretoria b2g" in lower
+    assert "construtor" in lower
+    assert "margem" in lower
+    assert "eesc-usp" in lower or "usp" in lower
+    assert "#contato" in html or 'id="contato"' in html
+    assert "diagnosticar operação b2g" in lower
+
+
+def test_form_qualification_minimal():
+    html = HOME.read_text(encoding="utf-8")
+    for field in ("nome", "empresa", "email", "telefone", "estagio", "urgencia", "consentimento"):
+        assert f'name="{field}"' in html, f"missing form field {field}"
+    # email and whatsapp are alternative contact paths (not both hard-required in markup)
+    assert 'id="email"' in html and "required" not in re.search(r'id="email"[^>]*>', html).group(0)
+    assert "data-netlify" in html or 'netlify' in html
 
 
 def test_prefers_reduced_motion_declared():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     assert "prefers-reduced-motion" in css
+    assert "prefers-reduced-data" in css
+    # Functional text floor: hero proof and mono labels ≥14px (.875rem)
+    assert "font-size:.875rem" in css or "font-size: .875rem" in css or "font-size:0.875rem" in css
 
+
+def test_mobile_matrix_composition():
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    assert ".trace-cards" in css
+    assert "display:none" in css  # one of table/cards hidden per breakpoint
+    html = HOME.read_text(encoding="utf-8")
+    assert "trace-card" in html
+    # Hero visual suppressed on narrow viewports
+    assert "hero-visual{display:none}" in css.replace(" ", "") or ".hero-visual{display:none}" in css.replace(" ", "")
 
 def run_all() -> int:
     tests = [v for k, v in list(globals().items()) if k.startswith("test_") and callable(v)]

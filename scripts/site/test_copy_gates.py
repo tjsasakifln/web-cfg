@@ -34,13 +34,29 @@ def test_brand_forbidden_phrases_still_enforced():
 
 def test_microcopy_preferences():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "responsáveis" in home.lower()
-    assert "análise posterior" in home.lower() or "Aprendizado" in home
+    assert "responsáveis" in home.lower() or "responsável" in home.lower()
+    assert "aprend" in home.lower() or "recalibr" in home.lower()
     bid = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
     assert "revisão crítica independente" in bid.lower()
     assert not re.search(r"\bowners\b", home, re.I)
     assert not re.search(r"\bowners\b", bid, re.I)
-
+    # Defensive / internal language must not appear on public home
+    lower = home.lower()
+    for phrase in (
+        "sem inventar case",
+        "sem métrica fictícia",
+        "sem metrica ficticia",
+        "javascript",
+        "arquétipo",
+        "arquetipo",
+        "pipeline editorial",
+        "visual regression",
+        "red team",
+    ):
+        assert phrase not in lower, f"public leak: {phrase}"
+    # English offer terms explained in Portuguese on first commercial exposure
+    assert "sala de decisão" in lower or "bid room" in lower
+    assert "defesa técnica" in lower or "proteção de margem" in lower
 
 def test_llms_consistent():
     text = (ROOT / "llms.txt").read_text(encoding="utf-8")
