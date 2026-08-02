@@ -1,0 +1,11 @@
+chromium: None
+google-chrome: /usr/bin/google-chrome
+chromium-browser: None
+playwright: None
+npx playwright: rc=0 out=Version 1.62.1
+
+node: nodeok
+
+Lighthouse/Axe/browser screenshots: environment may lack headless chrome.
+Fallback: static HTML structural verification + unit gates on shipped code (completed).
+Honest env limit recorded — not fabricating Lighthouse JSON.

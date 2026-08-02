@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Build Wave 1 editorial pages, hubs, sitemaps, and registry reports.
 
-Fail-closed: only HUMAN_APPROVED pages that pass gates become INDEXABLE
-and enter segmented sitemaps.
+Fail-closed:
+- Automated build may advance at most to EDITORIAL_REVIEWED when gates pass.
+- HUMAN_APPROVED / INDEXABLE require a real named human via CLI/tools — never CI.
+- Only INDEXABLE pages (with human approval) enter segmented sitemaps.
 """
 
 from __future__ import annotations
@@ -21,15 +23,17 @@ if str(ROOT) not in sys.path:
 from scripts.editorial.gates import evaluate_page, sitemap_membership_ok  # noqa: E402
 from scripts.editorial.registry import (  # noqa: E402
     INDEXABLE_STATES,
+    advance,
+    get_page,
+    indexable_pages,
     load_registry,
-    mark_indexable,
     material_hash,
+    revoke_auto_approvals,
     save_registry,
     upsert_page,
-    approve_human,
 )
 from scripts.editorial.render import render_hub, render_page  # noqa: E402
-from scripts.editorial.sources import load_manifest  # noqa: E402
+from scripts.editorial.sources import load_manifest, page_sources_ok  # noqa: E402
 
 PAGES_DIR = ROOT / "data" / "editorial" / "pages"
 REPORT_PATH = ROOT / "seo" / "editorial-build-report.json"
@@ -52,7 +56,6 @@ def load_page_defs() -> list[dict[str, Any]]:
 
 
 def write_html(url_path: str, html: str) -> Path:
-    # /lei-14133-obras/foo/ → lei-14133-obras/foo/index.html
     rel = url_path.strip("/")
     out = ROOT / rel / "index.html"
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -77,14 +80,17 @@ def _urlset(urls: list[tuple[str, str]]) -> str:
 
 
 def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
+    """Only truly indexable (human-approved) page URLs. Hubs only if ≥1 child indexable."""
     editorial: list[tuple[str, str]] = []
     juris: list[tuple[str, str]] = []
     intel: list[tuple[str, str]] = []
+    by_arch = {"lei_14133": 0, "guia": 0, "jurisprudencia": 0, "inteligencia": 0}
 
     for p in indexable:
         loc = f"{SITE}{p['url']}"
         lm = p.get("date_modified") or p.get("date_published") or _now_date()
-        arch = p.get("archetype")
+        arch = p.get("archetype") or "guia"
+        by_arch[arch] = by_arch.get(arch, 0) + 1
         if arch == "jurisprudencia":
             juris.append((loc, lm))
         elif arch == "inteligencia":
@@ -92,25 +98,21 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
         else:
             editorial.append((loc, lm))
 
-    # hubs that exist and are intended indexable
-    for hub_path, lm in (
-        ("/lei-14133-obras/", _now_date()),
-        ("/jurisprudencia-contratos-obras/", _now_date()),
-        ("/guias-contratos-obras/", _now_date()),
-    ):
-        if (ROOT / hub_path.strip("/") / "index.html").exists():
-            editorial.append((f"{SITE}{hub_path}", lm))
+    # Hubs only when that archetype has indexable children
+    hub_map = (
+        ("/lei-14133-obras/", "lei_14133"),
+        ("/guias-contratos-obras/", "guia"),
+        ("/jurisprudencia-contratos-obras/", "jurisprudencia"),
+    )
+    for hub_path, arch in hub_map:
+        if by_arch.get(arch, 0) > 0 and (ROOT / hub_path.strip("/") / "index.html").exists():
+            editorial.append((f"{SITE}{hub_path}", _now_date()))
 
     (ROOT / "sitemap-editorial.xml").write_text(_urlset(editorial), encoding="utf-8")
     (ROOT / "sitemap-jurisprudencia.xml").write_text(_urlset(juris), encoding="utf-8")
-    # Preserve intelligence sitemap writer only for editorial intel pages;
-    # existing pSEO pipeline also writes sitemap-inteligencia.xml — merge carefully.
-    existing_intel = ROOT / "sitemap-inteligencia.xml"
     if intel:
-        existing_intel.write_text(_urlset(intel), encoding="utf-8")
-    # if no intel pages, leave existing empty or pSEO-managed file alone if publishable empty
+        (ROOT / "sitemap-inteligencia.xml").write_text(_urlset(intel), encoding="utf-8")
 
-    # Update sitemap-index
     today = _now_date()
     index_parts = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -136,7 +138,6 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
     ]
     (ROOT / "sitemap-index.xml").write_text("\n".join(index_parts), encoding="utf-8")
 
-    # robots already points to sitemap-index; ensure editorial segments listed
     robots = ROOT / "robots.txt"
     if robots.exists():
         txt = robots.read_text(encoding="utf-8")
@@ -155,64 +156,149 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
     }
 
 
-def build(
+def _auto_progress_to_editorial_reviewed(
+    reg: dict[str, Any],
+    page_id: str,
     *,
-    auto_approve: bool = False,
-    reviewer: str = "editorial-wave1-operator",
-) -> dict[str, Any]:
-    """Build editorial pages. auto_approve only after gates pass (CI/operator path)."""
+    gate_ok: bool,
+    man: dict[str, Any],
+    page: dict[str, Any],
+) -> str:
+    """Machine may validate sources/tech/editorial quality only — never HUMAN_APPROVED."""
+    stored = get_page(reg, page_id)
+    if not stored:
+        return "DRAFT"
+    st = stored.get("status") or "DRAFT"
+
+    # Never touch human-approved indexable with valid human reviewer
+    if st in INDEXABLE_STATES:
+        appr = stored.get("approval") or {}
+        from scripts.editorial.registry import is_blocked_reviewer
+
+        if appr.get("reviewer") and not is_blocked_reviewer(str(appr["reviewer"])):
+            return st
+
+    if not gate_ok:
+        if st not in {"REJECTED", "REVIEW_REQUIRED"}:
+            # keep prior work; do not advance
+            pass
+        return get_page(reg, page_id).get("status") or "DRAFT"  # type: ignore[union-attr]
+
+    # Forced reject for incomplete jurisprudence identity
+    if page.get("archetype") == "jurisprudencia":
+        if (
+            not page.get("decision_date")
+            or "consultar" in str(page.get("decision_date") or "").lower()
+            or not page.get("relator")
+            and page.get("decision_number", "").lower().startswith("súmula") is False
+        ):
+            # Súmula may lack relator, but need concrete date + specific official URL
+            url = page.get("official_source_url") or ""
+            if (
+                "consultar" in str(page.get("decision_date") or "").lower()
+                or not page.get("decision_date")
+                or url.rstrip("/").endswith("/jurisprudencia")
+                or "jurisprudencia/" == url.rstrip("/").split(".br")[-1]
+                or url.endswith("jurisprudencia/")
+            ):
+                stored["status"] = "REJECTED"
+                stored.setdefault("history", []).append(
+                    {
+                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "event": "REJECTED",
+                        "reason": "jurisprudence_source_incomplete",
+                    }
+                )
+                return "REJECTED"
+
+    actor = "editorial-build-gates"
+    # Step through progression while gates hold
+    try:
+        if st == "DRAFT":
+            src_ok = not page_sources_ok(page.get("sources") or [], man)
+            if src_ok:
+                advance(reg, page_id, "LEGAL_SOURCE_VALIDATED", actor=actor, notes="sources ok")
+                st = "LEGAL_SOURCE_VALIDATED"
+        if st == "LEGAL_SOURCE_VALIDATED":
+            advance(reg, page_id, "TECHNICAL_REVIEWED", actor=actor, notes="devices/CTAs/schema ok")
+            st = "TECHNICAL_REVIEWED"
+        if st == "TECHNICAL_REVIEWED":
+            advance(reg, page_id, "EDITORIAL_REVIEWED", actor=actor, notes="naturalness gates ok")
+            st = "EDITORIAL_REVIEWED"
+        if st == "REVIEW_REQUIRED":
+            # re-enter
+            advance(reg, page_id, "LEGAL_SOURCE_VALIDATED", actor=actor, notes="re-validation after review_required")
+            advance(reg, page_id, "TECHNICAL_REVIEWED", actor=actor, notes="re-validation")
+            advance(reg, page_id, "EDITORIAL_REVIEWED", actor=actor, notes="re-validation")
+            st = "EDITORIAL_REVIEWED"
+    except ValueError:
+        st = get_page(reg, page_id).get("status") or st  # type: ignore[union-attr]
+    return st
+
+
+def build(*, actor: str = "editorial-build") -> dict[str, Any]:
+    """Build pages. Max automated status = EDITORIAL_REVIEWED."""
     defs = load_page_defs()
     reg = load_registry()
+    revoked = revoke_auto_approvals(reg)
     man = load_manifest()
     bodies: list[str] = []
     results = []
-    rendered: list[dict[str, Any]] = []
 
-    # First pass: upsert + naturalness pairwise
     for page in defs:
         page["material_hash"] = material_hash(page)
+        # Do not carry INDEXABLE from JSON defs
+        page.pop("status", None)
+        page.pop("approval", None)
         upsert_page(reg, page)
 
-    # Render + gate
     for page in defs:
-        # refresh from registry (status may exist)
-        from scripts.editorial.registry import get_page
-
         stored = get_page(reg, page["page_id"]) or page
-        merged = {**page, **{k: stored[k] for k in ("status", "approval", "history", "material_hash") if k in stored}}
+        merged = {
+            **page,
+            **{
+                k: stored[k]
+                for k in ("status", "approval", "history", "material_hash")
+                if k in stored
+            },
+        }
+        # Force jurisprudence incomplete → reject before render gate soft-pass
+        if merged.get("page_id") == "jur-sumula-260-art":
+            merged["status"] = "REJECTED"
+            sp = get_page(reg, merged["page_id"])
+            if sp:
+                sp["status"] = "REJECTED"
+                sp.setdefault("history", []).append(
+                    {
+                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "event": "REJECTED",
+                        "reason": "official_sumula_text_date_url_not_verified",
+                    }
+                )
+
+        # Temporary status for gate (INDEXABLE only if truly approved)
         html = render_page(merged)
-        other = [b for b in bodies]
-        gate = evaluate_page(merged, html, other_bodies=other, manifest=man)
+        gate = evaluate_page(merged, html, other_bodies=bodies, manifest=man)
         bodies.append(merged.get("body_markdown") or "")
 
-        if gate["ok"] and auto_approve:
-            # progressive status
-            merged["status"] = "EDITORIAL_REVIEWED"
-            upsert_page(reg, merged)
-            approve_human(
-                reg,
-                merged["page_id"],
-                reviewer=reviewer,
-                notes=(
-                    "Aprovação operacional Wave 1: fontes oficiais verificadas (Planalto/AGU/TCU links), "
-                    "gates de naturalidade e CTAs contextuais aprovados. Autoria pública NÃO atribuída a "
-                    "Tiago Sasaki (author_is_tiago=false) até revisão nominal adicional."
-                ),
-                sources_verified=list(merged.get("sources") or []),
-                caveats="Conteúdo técnico-educacional; caso concreto pode divergir.",
+        if merged.get("status") != "REJECTED":
+            st = _auto_progress_to_editorial_reviewed(
+                reg, merged["page_id"], gate_ok=gate["ok"], man=man, page=merged
             )
-            try:
-                mark_indexable(reg, merged["page_id"])
-            except ValueError as exc:
-                gate = {**gate, "ok": False, "issues": gate["issues"] + [str(exc)]}
+            merged["status"] = st
+            # re-render with correct robots (noindex unless INDEXABLE)
             stored2 = get_page(reg, merged["page_id"]) or merged
             merged = {**merged, **stored2}
-            html = render_page(merged)  # re-render with index robots
+            html = render_page(merged)
 
-        # Write HTML for all non-rejected (noindex if not indexable)
         if merged.get("status") != "REJECTED":
             write_html(merged["url"], html)
-            rendered.append(merged)
+        else:
+            # Still write noindex shell so URL does not 404 if linked; exclude from sitemap
+            merged["status"] = "REJECTED"
+            html = render_page({**merged, "status": "REJECTED"})
+            # render uses noindex for non-INDEXABLE
+            write_html(merged["url"], html)
 
         results.append(
             {
@@ -224,7 +310,8 @@ def build(
             }
         )
 
-    # Hubs
+    indexable = indexable_pages(reg)
+
     hubs = [
         {
             "id": "hub-lei",
@@ -260,10 +347,6 @@ def build(
             "journey": "operacao",
         },
     ]
-    indexable = [p for p in (get_page_safe(reg, d["page_id"]) for d in defs) if p and p.get("status") in INDEXABLE_STATES]
-    # reload pages from reg
-    indexable = [p for p in reg.get("pages") or [] if p.get("status") in INDEXABLE_STATES]
-
     for hub in hubs:
         relevant = [
             p
@@ -275,71 +358,145 @@ def build(
             )
         ]
         html = render_hub(hub, relevant)
+        # Hub noindex when zero indexable children of that type
+        arch_key = {
+            "hub-lei": "lei_14133",
+            "hub-jur": "jurisprudencia",
+            "hub-guias": "guia",
+        }[hub["id"]]
+        child_idx = [p for p in indexable if p.get("archetype") == arch_key]
+        if not child_idx:
+            html = html.replace(
+                'content="index,follow"',
+                'content="noindex,follow"',
+                1,
+            )
         write_html(hub["url"], html)
 
     sm_counts = write_segmented_sitemaps(indexable)
 
-    # Validate sitemap membership
-    sm_urls = []
+    from urllib.parse import urlparse
+    import re
+
+    sm_paths = []
     for name in ("sitemap-editorial.xml", "sitemap-jurisprudencia.xml"):
         p = ROOT / name
         if p.exists():
-            import re
-
-            sm_urls.extend(re.findall(r"<loc>([^<]+)</loc>", p.read_text(encoding="utf-8")))
-    # strip hubs from membership check vs page indexable set
+            for u in re.findall(r"<loc>([^<]+)</loc>", p.read_text(encoding="utf-8")):
+                path = urlparse(u).path
+                if path.rstrip("/").endswith(
+                    ("lei-14133-obras", "jurisprudencia-contratos-obras", "guias-contratos-obras")
+                ):
+                    continue
+                sm_paths.append(path)
     page_idx = [p["url"] for p in indexable]
-    sm_page_urls = [
-        u
-        for u in sm_urls
-        if not u.rstrip("/").endswith(
-            ("lei-14133-obras", "jurisprudencia-contratos-obras", "guias-contratos-obras")
-        )
-    ]
-    sm_issues = sitemap_membership_ok(
-        sm_page_urls,
-        [f"{SITE}{u}" if not u.startswith("http") else u for u in page_idx]
-        if page_idx and sm_page_urls and sm_page_urls[0].startswith("http")
-        else page_idx,
-    )
-    # normalize membership: compare paths
-    sm_paths = []
-    for u in sm_page_urls:
-        from urllib.parse import urlparse
-
-        sm_paths.append(urlparse(u).path if u.startswith("http") else u)
     sm_issues = sitemap_membership_ok(sm_paths, page_idx)
 
+    # Strip wave1 URLs from main sitemap.xml if not indexable
+    _sync_main_sitemap(page_idx)
+
     save_registry(reg)
+    docs_reg = ROOT / "docs" / "editorial" / "EDITORIAL-REGISTRY.json"
+    if docs_reg.parent.exists():
+        docs_reg.write_text(
+            json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
 
     report = {
-        "ok": all(r["gate_ok"] for r in results if r["status"] in INDEXABLE_STATES)
-        and not sm_issues,
+        "ok": not sm_issues,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "page_defs": len(defs),
         "indexable_count": len(indexable),
-        "indexable_urls": [p["url"] for p in indexable],
+        "indexable_urls": page_idx,
+        "revoked_non_human_approvals": revoked,
         "results": results,
         "sitemap_counts": sm_counts,
         "sitemap_issues": sm_issues,
+        "awaiting_human_approval": [
+            r["url"]
+            for r in results
+            if r["status"] == "EDITORIAL_REVIEWED" and r["gate_ok"]
+        ],
+        "rejected": [r["url"] for r in results if r["status"] == "REJECTED"],
+        "terminal_hint": (
+            "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS"
+            if len(indexable) == 0
+            else "PARTIAL_INDEXABLE"
+        ),
         "fail_closed_intelligence_publishable": True,
+        "note": (
+            "Automated build never sets HUMAN_APPROVED. "
+            "Use: python3 scripts/editorial/approve_cli.py --reviewer NAME --page-id ID"
+        ),
     }
     REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report
 
 
-def get_page_safe(reg: dict[str, Any], page_id: str) -> dict[str, Any] | None:
-    from scripts.editorial.registry import get_page
+def _sync_main_sitemap(indexable_urls: list[str]) -> None:
+    """Remove Wave 1 archetype URLs from sitemap.xml unless human-indexable."""
+    sm_path = ROOT / "sitemap.xml"
+    if not sm_path.exists():
+        return
+    text = sm_path.read_text(encoding="utf-8")
+    import re
 
-    return get_page(reg, page_id)
+    def keep(loc: str) -> bool:
+        path = loc.replace(SITE, "")
+        is_wave = any(
+            path.startswith(p)
+            for p in (
+                "/lei-14133-obras/",
+                "/jurisprudencia-contratos-obras/",
+                "/guias-contratos-obras/",
+            )
+        )
+        if not is_wave:
+            return True
+        return path in indexable_urls or path in {
+            "/lei-14133-obras/",
+            "/jurisprudencia-contratos-obras/",
+            "/guias-contratos-obras/",
+        } and any(
+            u.startswith(path.rstrip("/") + "/") or u == path for u in indexable_urls
+        )
+
+    # Rebuild url entries
+    blocks = re.findall(r"\s*<url>\s*<loc>([^<]+)</loc>.*?</url>", text, flags=re.S)
+    # simpler: filter full url blocks
+    parts = re.split(r"(?=<url>)", text)
+    out = []
+    for part in parts:
+        if part.strip().startswith("<url>"):
+            m = re.search(r"<loc>([^<]+)</loc>", part)
+            if m and not keep(m.group(1)):
+                continue
+        out.append(part)
+    sm_path.write_text("".join(out), encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
     argv = argv if argv is not None else sys.argv[1:]
-    auto = "--auto-approve" in argv
-    report = build(auto_approve=auto)
-    print(json.dumps({"ok": report["ok"], "indexable": report["indexable_count"]}, ensure_ascii=False))
-    return 0 if report["ok"] or report["indexable_count"] >= 0 else 1
+    if "--auto-approve" in argv:
+        print(
+            "ERROR: --auto-approve removed. Human approval required via approve_cli.py",
+            file=sys.stderr,
+        )
+        return 2
+    report = build()
+    print(
+        json.dumps(
+            {
+                "ok": report["ok"],
+                "indexable": report["indexable_count"],
+                "awaiting_human": len(report.get("awaiting_human_approval") or []),
+                "rejected": len(report.get("rejected") or []),
+                "terminal_hint": report.get("terminal_hint"),
+            },
+            ensure_ascii=False,
+        )
+    )
+    return 0
 
 
 if __name__ == "__main__":

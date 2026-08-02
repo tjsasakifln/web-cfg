@@ -177,12 +177,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL-CLOSED build exception: {exc}", file=sys.stderr)
         return 2
 
-    # Wave 1+ editorial engine (lei / jurisprudência / guias) — fail-closed on crash
+    # Wave 1+ editorial engine — automated max status EDITORIAL_REVIEWED (no auto HUMAN_APPROVED)
     editorial_report: dict = {}
     try:
         from scripts.editorial.build import build as editorial_build
 
-        editorial_report = editorial_build(auto_approve=True)
+        editorial_report = editorial_build()
         if editorial_report.get("sitemap_issues"):
             errors.append(
                 "editorial_sitemap_issues:" + ",".join(editorial_report["sitemap_issues"][:5])
