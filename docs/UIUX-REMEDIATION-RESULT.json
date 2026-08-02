@@ -1,8 +1,8 @@
 {
   "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
   "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "final_sha_at_write": "c9525da76c4dc27f0e4a647798bc527d2e5db5a1",
-  "date": "2026-08-02T02:31:09Z",
+  "final_sha_at_write": "4873c1f3c9c2f08387459fc645092e0054e59d72",
+  "date": "2026-08-02T02:44:32Z",
   "status": "COMPLETE",
   "metrics_before": {
     "1440x1000": {
@@ -20,20 +20,27 @@
   },
   "metrics_after": {
     "1440x1000": {
-      "scrollHeight": 7162,
+      "scrollHeight": 7142,
+      "mainHeight": 6302,
       "visibleChars": 6221,
       "sections": 7,
-      "primaryCtas": 4
+      "primaryCtas": 4,
+      "minFunctionalFontPx": 14
     },
     "390x844": {
-      "scrollHeight": 12396,
-      "visibleChars": 6191,
+      "scrollHeight": 12392,
+      "mainHeight": 10987,
+      "visibleChars": 6144,
       "sections": 7,
-      "primaryCtas": 4
+      "primaryCtas": 4,
+      "minFunctionalFontPx": 14
     },
-    "height_reduction_pct_1440": 38.3,
-    "height_reduction_pct_390": 35.0,
-    "chars_reduction_pct_1440": 30.3
+    "height_reduction_pct_1440": 38.4,
+    "height_reduction_pct_390": 35,
+    "chars_reduction_pct_1440": 30.3,
+    "chars_reduction_pct_390": 31.1,
+    "targets_met": true,
+    "metrics_file": "docs/uiux-evidence/METRICS-BEFORE-AFTER.json"
   },
   "asset_sizes": {
     "styles_css_bytes": 72837,
@@ -98,9 +105,10 @@
     "Lighthouse scores not fabricated; axe moderate region residual",
     "pSEO long-tail pages only inherit shared CSS chrome, not full rewrite"
   ],
-  "final_sha": "c9525da76c4dc27f0e4a647798bc527d2e5db5a1",
+  "final_sha": "4873c1f3c9c2f08387459fc645092e0054e59d72",
   "commits": [
-    "3c7ce3b9 docs(uiux): set final_sha to HEAD after skeptic closure",
+    "4873c1f3 docs(uiux): record measured 30%+ height/text reductions and final build proof",
+    "f7e805ae docs(uiux): set final_sha to HEAD after skeptic closure",
     "45e10de5 docs(uiux): record build:site pass and skeptic-gap closure evidence",
     "d055d82a fix(uiux): enforce 14px functional type floor and convert CTA family",
     "f4257562 docs(uiux): mark remediation status COMPLETE",
@@ -116,19 +124,33 @@
     "pseo:audit": "ok publish_fail_count=0",
     "pseo:verify:release": "public_artifact_audit_ok true; production_audit fails pre-deploy (live SHA still baseline)",
     "test:ui": "ok all geometry gates",
-    "axe": "0 critical 0 serious"
+    "axe": "0 critical 0 serious",
+    "build:site_final": "ok exit 0 (docs/uiux-evidence/logs/build-site-final.log)",
+    "source_equals_site": true,
+    "metrics_remeasure_pass": true
   },
   "post_build_site_proof": {
+    "source_equals_site": true,
     "home_macro_phases": true,
     "primary_cta_count": 4,
+    "sections": 7,
     "field_label_875rem": true,
     "obrigado_cta": true,
-    "specialist_cta": true
+    "specialist_cta": true,
+    "build_ok": true
   },
   "skeptic_remediation": [
     "functional text floor 14px for labels/consent/offer-label/nav",
     "test_ui_geometry covers field labels + expanded gates",
     "obrigado + specialist CTA family aligned",
     "build:site + assemble + _site proof logged"
-  ]
+  ],
+  "reduction_targets": {
+    "min_height_reduction_pct": 30,
+    "min_chars_reduction_pct": 30,
+    "max_scroll_height_1440": 8000,
+    "max_scroll_height_390": 12500,
+    "result": "ALL_MET",
+    "exceptions": []
+  }
 }

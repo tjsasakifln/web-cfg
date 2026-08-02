@@ -1,0 +1,101 @@
+{
+  "measured_at": "2026-08-02T02:32:36.273Z",
+  "baseline_source": "docs/uiux-evidence/BASELINE.json + implementer/baseline/metrics.json",
+  "baseline": {
+    "1440x1000": {
+      "scrollHeight": 11599,
+      "mainHeight": 10832.734375,
+      "bodyHeight": 11599,
+      "visibleChars": 8920,
+      "visibleWords": 1307,
+      "sections": 13,
+      "primary": 7
+    },
+    "390x844": {
+      "scrollHeight": 19071,
+      "mainHeight": 17707.34375,
+      "bodyHeight": 19071,
+      "visibleChars": 8916,
+      "visibleWords": 1305,
+      "sections": 13,
+      "primary": 7
+    }
+  },
+  "after": {
+    "1440x1000": {
+      "scrollHeight": 7142,
+      "mainHeight": 6302,
+      "bodyHeight": 7142,
+      "visibleChars": 6221,
+      "visibleWords": 911,
+      "sections": 7,
+      "primary": 4,
+      "minFunctionalFontPx": 14,
+      "minEl": "A",
+      "overflow": false
+    },
+    "390x844": {
+      "scrollHeight": 12392,
+      "mainHeight": 10987,
+      "bodyHeight": 12392,
+      "visibleChars": 6144,
+      "visibleWords": 894,
+      "sections": 7,
+      "primary": 4,
+      "minFunctionalFontPx": 14,
+      "minEl": "button button-primary button-lg",
+      "overflow": false
+    }
+  },
+  "comparison": {
+    "1440x1000": {
+      "height_before": 11599,
+      "height_after": 7142,
+      "height_reduction_pct": 38.4,
+      "mainHeight_after": 6302,
+      "chars_before": 8920,
+      "chars_after": 6221,
+      "chars_reduction_pct": 30.3,
+      "sections_before": 13,
+      "sections_after": 7,
+      "primary_before": 7,
+      "primary_after": 4,
+      "targets": {
+        "height_reduction_min_pct": 30,
+        "chars_reduction_min_pct": 30,
+        "max_height_1440": 8000,
+        "max_height_390": 12500
+      },
+      "meets_height_pct": true,
+      "meets_chars_pct": true,
+      "meets_absolute_height": true
+    },
+    "390x844": {
+      "height_before": 19071,
+      "height_after": 12392,
+      "height_reduction_pct": 35,
+      "mainHeight_after": 10987,
+      "chars_before": 8916,
+      "chars_after": 6144,
+      "chars_reduction_pct": 31.1,
+      "sections_before": 13,
+      "sections_after": 7,
+      "primary_before": 7,
+      "primary_after": 4,
+      "targets": {
+        "height_reduction_min_pct": 30,
+        "chars_reduction_min_pct": 30,
+        "max_height_1440": 8000,
+        "max_height_390": 12500
+      },
+      "meets_height_pct": true,
+      "meets_chars_pct": true,
+      "meets_absolute_height": true
+    }
+  },
+  "min_functional_font": {
+    "1440x1000": 14,
+    "390x844": 14
+  },
+  "pass": true
+}
