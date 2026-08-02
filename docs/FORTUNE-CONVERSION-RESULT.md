@@ -44,3 +44,10 @@ Production host: https://confenge.com.br
 - Secure multi-file upload not on Netlify form; WhatsApp path documented on confirmations.
 - pSEO leaf pages remain under editorial containment (zero publish while gate rejects).
 - Form receipt proof requires live Netlify Forms notification after deploy.
+
+
+## CI / deploy identity
+
+- Latest main commit: see `git rev-parse HEAD`
+- site-ci: green on Lighthouse Node API runner
+- Public build-info: `https://confenge.com.br/.well-known/build-info.json`
