@@ -11,13 +11,6 @@
  * 7) Semantic HTTP codes — no 200 when not persisted
  */
 const crypto = require("crypto");
-// Eager-load Blobs client at function entry so Netlify injects runtime context
-// (external_node_modules in netlify.toml keeps this package unbundled).
-try {
-  require("@netlify/blobs");
-} catch (_) {
-  /* optional at unit-test time */
-}
 const {
   parseBody,
   validateAndNormalize,
@@ -42,8 +35,30 @@ function setStoreForTests(store) {
   _storeOverride = store;
 }
 
-async function getStore() {
+/**
+ * Wire Netlify Blobs credentials from the Lambda event (`event.blobs` + site headers).
+ * Required on Netlify Functions before getStore() — see @netlify/blobs connectLambda.
+ */
+function bindBlobsContext(event) {
+  try {
+    // eslint-disable-next-line import/no-unresolved
+    const { connectLambda } = require("@netlify/blobs");
+    if (event && event.blobs) {
+      connectLambda(event);
+      return true;
+    }
+  } catch (err) {
+    safeLog("warn", "blobs_connect_skip", {
+      reason: err && err.message ? String(err.message).slice(0, 120) : "skip",
+      has_blobs_field: Boolean(event && event.blobs),
+    });
+  }
+  return false;
+}
+
+async function getStore(event) {
   if (_storeOverride) return _storeOverride;
+  bindBlobsContext(event);
   return createStore();
 }
 
@@ -157,7 +172,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const store = await getStore();
+  const store = await getStore(event);
   if (!store) {
     safeLog("error", "store_unavailable", {});
     return {

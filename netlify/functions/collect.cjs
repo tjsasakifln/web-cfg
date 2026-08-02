@@ -211,7 +211,8 @@ exports.handler = async (event) => {
   // Best-effort durable sample store
   if (accepted.length && process.env.LEAD_STORE !== "memory") {
     try {
-      const { getStore } = require("@netlify/blobs");
+      const { getStore, connectLambda } = require("@netlify/blobs");
+      if (event && event.blobs) connectLambda(event);
       const store = getStore({ name: "confenge-analytics" });
       const day = new Date().toISOString().slice(0, 10);
       const key = `events/${day}/${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
