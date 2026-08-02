@@ -295,13 +295,13 @@ O repositório continha a redação incorreta *"posse provisória ou definitiva"
 - Verificado: art.143 + art.141 ordem cronológica sem promessa automática.
 
 **Risco residual:**
-- Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.
+- Concorrente /conteudos/parcela-incontroversa-medicao-contrato-publico/ já está noindex; risco dual-index atual é nulo.
 - Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.
 - Aprovação automática revogada; só approve_cli.py com revisor nominal.
 
 **Justificativa do status:** Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.
 
-**Recomendação final:** aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual
+**Recomendação final:** aprovar via approve_wave1_tiago.sh (Tiago Sasaki) + --indexable; competidor em /conteudos/ já noindex — sem bloqueio de canibalização pré-indexação
 
 ### `lei-servico-sem-aditivo` — **READY_FOR_HUMAN_APPROVAL**
 
@@ -338,13 +338,13 @@ O repositório continha a redação incorreta *"posse provisória ou definitiva"
 - Verificado: art.132 formalização; art.125 obrigação de aceitar nos limites.
 
 **Risco residual:**
-- Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.
+- Concorrente /conteudos/servico-executado-sem-termo-aditivo/ já noindex (disposição consolidar aplicada); não reindexar o duplicado.
 - Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.
 - Aprovação automática revogada; só approve_cli.py com revisor nominal.
 
 **Justificativa do status:** Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.
 
-**Recomendação final:** aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual
+**Recomendação final:** aprovar via approve_wave1_tiago.sh (Tiago Sasaki) + --indexable; competidor em /conteudos/ já noindex — sem bloqueio de canibalização pré-indexação
 
 ### `guia-checklist-aditivo` — **READY_FOR_HUMAN_APPROVAL**
 
@@ -424,13 +424,13 @@ O repositório continha a redação incorreta *"posse provisória ou definitiva"
 - Removida duplicação de ressalva/contexto; texto operacional específico de reequilíbrio.
 
 **Risco residual:**
-- Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.
+- Concorrente /conteudos/documentos-reequilibrio-obra-publica/ já está noindex; Wave 1 é o checklist operacional preferido.
 - Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.
 - Aprovação automática revogada; só approve_cli.py com revisor nominal.
 
 **Justificativa do status:** Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.
 
-**Recomendação final:** aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual
+**Recomendação final:** aprovar via approve_wave1_tiago.sh (Tiago Sasaki) + --indexable; competidor em /conteudos/ já noindex — sem bloqueio de canibalização pré-indexação
 
 ### `guia-glosa` — **READY_FOR_HUMAN_APPROVAL**
 
