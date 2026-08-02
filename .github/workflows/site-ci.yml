@@ -1,0 +1,59 @@
+name: site-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: npm ci || npm install
+      - name: Unit and brand/copy/design gates
+        run: |
+          npm run test:brand
+          npm run test:copy
+          npm run test:design
+          npm run pseo:test
+          npm run test:analytics
+          npm run test:pseo-attribution
+      - name: Build public site
+        run: npm run build:site
+      - name: UI geometry
+        run: npm run test:ui
+      - name: pSEO validate and audit
+        run: |
+          npm run pseo:validate
+          npm run pseo:audit
+      - name: Public artifact audit
+        run: npm run audit:public-artifact
+      - name: SEO validation
+        run: npm run validate:seo
+      - name: CSS usage inventory
+        run: npm run audit:css-usage
+      - name: axe accessibility
+        run: npm run audit:axe
+      - name: Lighthouse local (_site)
+        run: npm run test:lighthouse
+        continue-on-error: false
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-ci-reports
+          path: |
+            docs/lighthouse-runs/
+            docs/uiux-evidence/axe-report.json
+            seo/pseo-*.json
+          if-no-files-found: ignore
