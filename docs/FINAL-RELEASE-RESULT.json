@@ -2,7 +2,7 @@
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
   "date": "2026-08-02T03:56:44.399329+00:00",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "7bf06d5f04132c716ff3f6d4b9531872f386ceb7",
+  "final_sha": "0465a32ae2b944e611ce1b0fb7d9b2eabe7e1dea",
   "deployed_sha": null,
   "netlify_deploy_id": null,
   "status": "AWAITING_NETLIFY_DEPLOY",
