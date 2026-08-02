@@ -1,0 +1,7 @@
+/ 200
+/privacidade/ 200
+/obrigado-contrato 200
+/diretoria-b2g/ 200
+/bid-room-licitacoes-obras/ 200
+/defesa-margem-contratos-publicos/ 200
+/.well-known/build-info.json 200

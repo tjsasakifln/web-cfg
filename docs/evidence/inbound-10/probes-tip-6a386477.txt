@@ -1,0 +1,21 @@
+tip={
+  "schema_version": "1.0.0",
+  "commit": "6a386477ea3f10244d52f73e2ffc1beec581b6a6",
+  "build_time": "2026-08-02T15:34:03Z",
+  "environment": "production",
+  "site_schema_version": "1.1.0",
+  "source": "build_site.write_build_info"
+}
+=== JOURNEY contrato ===
+{"ok":true,"lead_id":"833f8f8e506f892ed7d949b6","receipt_id":"833f8f8e506f892ed7d949b6","received_at":"2026-08-02T15:35:17.458Z","journey":"contrato","stage_category":"probe tip contrato","status":"persisted"}
+HTTP:201
+=== JOURNEY edital ===
+{"ok":true,"lead_id":"6067352dc3637ccdcc139bf6","receipt_id":"6067352dc3637ccdcc139bf6","received_at":"2026-08-02T15:35:17.931Z","journey":"edital","stage_category":"probe tip edital","status":"persisted"}
+HTTP:201
+=== JOURNEY operacao ===
+{"ok":true,"lead_id":"cfb8cb464e344143c3540290","receipt_id":"cfb8cb464e344143c3540290","received_at":"2026-08-02T15:35:18.486Z","journey":"operacao","stage_category":"probe tip operacao","status":"persisted"}
+HTTP:201
+=== SECURITY ===
+{"ok":true,"lead_id":"7470ccaf49f47c81319ba447","receipt_id":"7470ccaf49f47c81319ba447","received_at":"2026-08-02T15:35:19.060Z","journey":"operacao","stage_category":"sec","status":"persisted"}
+=== RATE SAME IP ===
+201 201 201 201 201 201 201 201 429 429 429 429 
