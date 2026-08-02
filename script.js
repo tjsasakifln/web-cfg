@@ -600,6 +600,70 @@
           journey: journey || '',
           cta_label: (estagioEl?.value || '').slice(0, 80),
         });
+
+        // Progressive enhancement: AJAX submit so we can fall back if Netlify Forms
+        // is not intercepting POSTs (observed 404 on bare static POST).
+        if (typeof window.fetch === 'function' && form.getAttribute('data-ajax') !== 'false') {
+          event.preventDefault();
+          const dest = form.getAttribute('action') || JOURNEY_ACTIONS[journey] || '/obrigado';
+          const fd = new FormData(form);
+          if (!fd.get('form-name')) fd.set('form-name', form.getAttribute('name') || 'diagnostico-b2g');
+          const body = new URLSearchParams();
+          fd.forEach((val, key) => {
+            // skip honeypot name only if empty — still send for Netlify bot check
+            body.append(key, String(val));
+          });
+          const submitBtn = form.querySelector('[type="submit"]');
+          if (submitBtn) submitBtn.disabled = true;
+          showFormStatus('Enviando…', 'ok');
+          const finishOk = () => {
+            track('lead_form_success', {
+              page_path: pagePath,
+              content_cluster: defaultCluster,
+              device_context: deviceContext,
+              destination_type: 'form',
+              journey: journey || '',
+            });
+            window.location.assign(dest);
+          };
+          const finishFallback = () => {
+            // Operational fallback: WhatsApp with non-sensitive summary only
+            const stage = (estagioEl?.value || '').slice(0, 80);
+            const msg = encodeURIComponent(
+              `Olá, Tiago. Enviei solicitação pelo site (${stage || journey || 'contato'}). Nome: ${(nomeEl?.value || '').slice(0, 60)}. Prefiro retorno por WhatsApp.`,
+            );
+            showFormStatus(
+              'Não foi possível confirmar o envio automático. Abrindo WhatsApp como canal operacional…',
+              'error',
+            );
+            track('lead_form_error', {
+              page_path: pagePath,
+              content_cluster: defaultCluster,
+              device_context: deviceContext,
+              destination_type: 'form_fallback_whatsapp',
+              journey: journey || '',
+            });
+            window.open(`https://wa.me/5548988344559?text=${msg}`, '_blank', 'noopener');
+            // Still land on confirmation so the user sees next steps / SLA
+            setTimeout(() => { window.location.assign(dest); }, 600);
+          };
+          fetch(form.getAttribute('action') || '/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString(),
+          }).then((res) => {
+            if (res.ok || res.status === 200 || res.status === 302 || res.status === 303) {
+              finishOk();
+              return;
+            }
+            // Netlify sometimes returns 404 when Forms is not registered for the site
+            finishFallback();
+          }).catch(() => {
+            finishFallback();
+          }).finally(() => {
+            if (submitBtn) submitBtn.disabled = false;
+          });
+        }
       });
       form.addEventListener('invalid', () => {
         track('lead_form_error', {

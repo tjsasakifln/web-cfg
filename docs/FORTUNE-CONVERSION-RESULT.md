@@ -31,6 +31,14 @@ Production host: https://confenge.com.br
 - Production conversion rate after cutover
 - Full editorial rewrite of 97 library articles marked `reescrever`
 
+## Production verification (external)
+
+- Deploy commit (build-info): see `/.well-known/build-info.json` on confenge.com.br
+- Homepage category + three journey CTAs: HTTP 200 observed live
+- Journey confirmations `/obrigado-contrato|edital|operacao`: HTTP 200, data-lead-success present
+- Netlify Forms bare POST returned **HTTP 404** (empty body) at verification time — form feature may be unregistered on the site; shipped JS falls back to WhatsApp + confirmation page
+- WhatsApp deep links with contextual prefill: present on home and journey confirmations
+
 ## Limits
 
 - Secure multi-file upload not on Netlify form; WhatsApp path documented on confirmations.
