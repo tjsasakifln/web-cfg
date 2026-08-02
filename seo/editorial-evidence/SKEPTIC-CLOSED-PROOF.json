@@ -1,0 +1,73 @@
+{
+  "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "skeptic_items": {
+    "auto_approve": {
+      "package_editorial_build": true,
+      "build_rejects_flag_rc": 2,
+      "build_error_msg": "ERROR: --auto-approve removed. Human approval required via approve_cli.py\n",
+      "no_auto_approve_function": true,
+      "closed": true
+    },
+    "approval_machine": {
+      "counts": {
+        "EDITORIAL_REVIEWED": 11,
+        "REJECTED": 1
+      },
+      "indexable_urls": [],
+      "sample_history": [
+        "DRAFT",
+        "LEGAL_SOURCE_VALIDATED",
+        "TECHNICAL_REVIEWED",
+        "EDITORIAL_REVIEWED",
+        "NOTE"
+      ],
+      "has_legal_tech_editorial": true,
+      "draft_approve_blocked": true,
+      "operator_approve_blocked": true,
+      "closed": true
+    },
+    "final_status": {
+      "claims_complete": false,
+      "claims_blocked": true,
+      "closed": true
+    },
+    "jurisprudence": {
+      "status": "REJECTED",
+      "hold": true,
+      "not_indexable": true,
+      "closed": true
+    },
+    "cannibalization": {
+      "wave1_in_editorial_sitemap": 0,
+      "wave1_in_main_sitemap": false,
+      "consolidar_in_sitemap": false,
+      "consolidar_noindex": true,
+      "wave1_noindex": true,
+      "closed": true
+    },
+    "evidence": {
+      "screenshots": [
+        "art124-mobile.png",
+        "art124.png",
+        "checklist-mobile.png",
+        "checklist.png"
+      ],
+      "deep_review": true,
+      "conversion_test": true,
+      "env_limit": true,
+      "external_actions": true,
+      "closed": true
+    }
+  },
+  "production": {
+    "commit": "0906eada06eaa090621f01bdbb236eb2543dc74f",
+    "wave1_robots": "noindex,follow",
+    "editorial_sitemap_locs": 0,
+    "closed": true
+  },
+  "all_skeptic_closed": true,
+  "indexable_count": 0,
+  "awaiting_human": 11,
+  "rejected": 1,
+  "why_not_complete": "Named human must run docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md (approve_cli.py). Automated HUMAN_APPROVED is forbidden by objective."
+}

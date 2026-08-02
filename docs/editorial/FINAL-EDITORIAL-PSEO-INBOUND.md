@@ -2,6 +2,8 @@
 
 **Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`
 
+Machine-readable: `docs/editorial/TERMINAL-RESULT.json` · Skeptic closed: `seo/editorial-evidence/SKEPTIC-CLOSED-PROOF.json` (`all_skeptic_closed: true`).
+
 **Date:** 2026-08-02  
 **Repo tip after remediation:** (see git log)  
 **pSEO intelligence:** 0 publishable (fail-closed preserved)

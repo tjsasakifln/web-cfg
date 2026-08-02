@@ -1,0 +1,10 @@
+{
+  "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "all_skeptic_closed": true,
+  "indexable_count": 0,
+  "awaiting_human": 11,
+  "rejected": 1,
+  "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
+  "production_commit": "0906eada06eaa090621f01bdbb236eb2543dc74f",
+  "why": "Named human must run docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md (approve_cli.py). Automated HUMAN_APPROVED is forbidden by objective."
+}
