@@ -38,7 +38,9 @@
     "test:production-cutover": "node scripts/site/test_production_cutover.mjs",
     "test:production-cutover:local": "node scripts/site/test_production_cutover.mjs http://127.0.0.1:8765",
     "test:lighthouse": "node scripts/site/run_lighthouse.mjs",
-    "audit:css-usage": "python3 scripts/site/audit_css_usage.py"
+    "audit:css-usage": "python3 scripts/site/audit_css_usage.py",
+    "test:redirects": "node scripts/site/test_redirects.mjs",
+    "test:redirects:prod": "node scripts/site/test_redirects.mjs https://confenge.com.br"
   },
   "engines": {
     "node": ">=18"

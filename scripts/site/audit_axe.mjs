@@ -15,7 +15,7 @@ const require = createRequire(import.meta.url);
 const PORT = 8793;
 const CHROME = process.env.CHROME_PATH || "/usr/bin/google-chrome";
 const PAGES = [
-  "/",
+  "/", // home includes Netlify form #contato (formulário surface)
   "/diretoria-b2g/",
   "/diagnostico-b2g-360/",
   "/bid-room-licitacoes-obras/",
@@ -25,6 +25,10 @@ const PAGES = [
   "/conteudos/",
   "/obrigado.html",
   "/404.html",
+  // Three representative pSEO / intelligence content pages
+  "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+  "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+  "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
 ];
 
 let axeSource;

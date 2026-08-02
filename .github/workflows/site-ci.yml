@@ -42,6 +42,8 @@ jobs:
         run: npm run validate:seo
       - name: CSS usage inventory
         run: npm run audit:css-usage
+      - name: Redirect and 410 gates
+        run: npm run test:redirects
       - name: axe accessibility
         run: npm run audit:axe
       - name: Lighthouse local (_site)

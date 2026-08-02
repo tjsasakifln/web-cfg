@@ -14,7 +14,7 @@
 
 1. Copy / CTA / em-dash closure + gates
 2. Offer identity CTAs
-3. CSS dead-rule removal (~15% bytes; safe dead set)
+3. CSS dead-rule removal (~24.2% bytes; safe dead set)
 4. WhatsApp float inside `<aside class="contact-float">` landmark
 5. Legacy URL disposition + redirect integrity
 6. pSEO snapshot regenerated from extra-cli `main` (`704975a7`)
@@ -23,8 +23,8 @@
 ## CSS
 
 - Before: 72878 bytes
-- After: 62061 bytes
-- Reduction: 14.8%
+- After: 55216 bytes
+- Reduction: 24.2%
 - JS unchanged target: 28188 bytes
 
 ## pSEO

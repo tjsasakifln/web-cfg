@@ -1,11 +1,11 @@
 {
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
-  "date": "2026-08-02T03:59:48.582247+00:00",
+  "date": "2026-08-02T04:12:43.457801+00:00",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "8a1a8776a609749b2be24158a79f63bde8115af8",
-  "deployed_sha": "8a1a8776a609749b2be24158a79f63bde8115af8",
+  "final_sha": null,
+  "deployed_sha": null,
   "netlify_deploy_id": null,
-  "status": "COMPLETE",
+  "status": "AWAITING_DEPLOY_SHA_PIN",
   "pages_tested": [
     "/",
     "/diretoria-b2g/",
@@ -16,7 +16,10 @@
     "/inteligencia/",
     "/conteudos/",
     "/obrigado.html",
-    "/404.html"
+    "/404.html",
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
   ],
   "redirects_tested": [
     "/servicos",
@@ -37,101 +40,107 @@
     "/automacao"
   ],
   "lighthouse": {
-    "base": "http://127.0.0.1:8795",
-    "generated_at": "2026-08-02T03:51:15.975692+00:00",
-    "form_factor": "mobile",
-    "results": [
-      {
-        "path": "/",
-        "performance": 100,
-        "accessibility": 100,
-        "best_practices": 100,
-        "seo": 100,
-        "lcp_ms": 1814.986,
-        "cls": 0,
-        "tbt_ms": 0,
-        "fcp_ms": 1064.986,
-        "si_ms": 1064.986
-      },
-      {
-        "path": "/diretoria-b2g/",
-        "performance": 100,
-        "accessibility": 100,
-        "best_practices": 100,
-        "seo": 100,
-        "lcp_ms": 1812.5516,
-        "cls": 0,
-        "tbt_ms": 21.5,
-        "fcp_ms": 1062.5516,
-        "si_ms": 1062.5516
-      },
-      {
-        "path": "/diagnostico-b2g-360/",
-        "performance": 99,
-        "accessibility": 100,
-        "best_practices": 100,
-        "seo": 100,
-        "lcp_ms": 1967.269,
-        "cls": 0,
-        "tbt_ms": 0,
-        "fcp_ms": 1067.269,
-        "si_ms": 1067.269
-      },
-      {
-        "path": "/bid-room-licitacoes-obras/",
-        "performance": 100,
-        "accessibility": 100,
-        "best_practices": 100,
-        "seo": 100,
-        "lcp_ms": 1811.6021,
-        "cls": 0,
-        "tbt_ms": 0,
-        "fcp_ms": 1061.6021,
-        "si_ms": 1061.6021
-      },
-      {
-        "path": "/defesa-margem-contratos-publicos/",
-        "performance": 99,
-        "accessibility": 100,
-        "best_practices": 100,
-        "seo": 100,
-        "lcp_ms": 1966.653,
-        "cls": 0,
-        "tbt_ms": 43,
-        "fcp_ms": 1066.653,
-        "si_ms": 1066.653
-      },
-      {
-        "path": "/inteligencia/",
-        "performance": 100,
-        "accessibility": 100,
-        "best_practices": 100,
-        "seo": 69,
-        "lcp_ms": 1815.703,
-        "cls": 0,
-        "tbt_ms": 0,
-        "fcp_ms": 1065.703,
-        "si_ms": 1065.703
-      },
-      {
-        "path": "/conteudos/",
-        "performance": 99,
-        "accessibility": 100,
-        "best_practices": 100,
-        "seo": 100,
-        "lcp_ms": 1886.9970000000003,
-        "cls": 0,
-        "tbt_ms": 0,
-        "fcp_ms": 1511.997,
-        "si_ms": 1511.997
-      }
-    ]
+    "local_status": "run",
+    "production_status": "run",
+    "production": {
+      "base": "https://confenge.com.br",
+      "generated_at": "2026-08-02T04:12:15.573436+00:00",
+      "form_factor": "mobile",
+      "target": "production",
+      "results": [
+        {
+          "path": "https://confenge.com.br/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1059.8125,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 1059.8125,
+          "si_ms": 1059.8125
+        },
+        {
+          "path": "https://confenge.com.br/diretoria-b2g/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1359.6755,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 909.6755,
+          "si_ms": 1089.9728460084914
+        },
+        {
+          "path": "https://confenge.com.br/diagnostico-b2g-360/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1354.983,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 904.983,
+          "si_ms": 989.963661998537
+        },
+        {
+          "path": "https://confenge.com.br/bid-room-licitacoes-obras/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1353.17,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 903.17,
+          "si_ms": 994.3855619959086
+        },
+        {
+          "path": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1360.1084999999998,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 910.1084999999999,
+          "si_ms": 1362.0402740078807
+        },
+        {
+          "path": "https://confenge.com.br/inteligencia/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 69,
+          "lcp_ms": 1367.737,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 917.737,
+          "si_ms": 938.0059380016505
+        },
+        {
+          "path": "https://confenge.com.br/conteudos/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1204.3915,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 964.3915,
+          "si_ms": 1302.586752003348
+        }
+      ]
+    }
   },
   "axe": {
     "critical": 0,
     "serious": 0,
     "moderate": 0,
-    "minor": 0
+    "minor": 0,
+    "pages": 13
   },
   "metrics_before": {
     "styles_css_bytes": 72878,
@@ -144,52 +153,39 @@
   },
   "pseo_provenance": {
     "prior_source_commit": "6fc5adcf6929d908b8e4c10aab4ca2566c20a8be",
-    "prior_branch": "feat/pseo-national-acquisition-engine",
-    "prior_status": "BLOCKED_SNAPSHOT_PROVENANCE (commit missing from GitHub)",
     "new_source_commit": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
     "new_source_branch": "main",
     "on_main": true,
     "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
     "publish_count": 0,
-    "next_wave_gate": false,
-    "terminal_status_pre_deploy": "BLOCKED_PRODUCTION_AUDIT",
-    "snapshot_source_on_main": true,
-    "terminal_status_post_deploy": "provenance_ok; production marker current; next_wave still false (no indexable seeds)"
+    "next_wave_gate": false
   },
-  "production_audit_note": "Public marker web_cfg_sha equals HEAD; test:production-cutover ALL passed against https://confenge.com.br",
+  "production_audit_note": "test:production-cutover strengthened (full H1, CSS/JS sha256 vs _site) passes on production when marker SHA == HEAD",
   "commands": [
     "npm run build:site",
     "npm run test:copy",
-    "npm run test:brand",
-    "npm run test:design",
+    "npm run test:redirects",
+    "npm run test:redirects:prod",
     "npm run audit:axe",
-    "npx lighthouse ...",
     "npm run test:production-cutover",
-    "npm run pseo:verify:release"
+    "npx lighthouse https://confenge.com.br/ ..."
   ],
   "failures": [],
   "limitations": [
-    "Netlify CLI/token absent; deploy via git push to main only",
-    "Production Lighthouse re-run required after deploy",
-    "pSEO national-scale snapshot replaced by main durable export (SC-scale); all pages remain non-publish (reject/noindex)",
-    "next_wave_gate remains false until seeds approved and production audit ok"
+    "Netlify CLI/token absent; deploy via git push to main",
+    "Inteligência hub intentional noindex → Lighthouse SEO ~69 (not an indexable commercial surface)",
+    "next_wave_gate remains false until editorial seeds approved",
+    "Field CWV not claimed"
   ],
   "evidence": {
-    "deploy_diag": "scratch deploy-diag.txt",
-    "copy_gates": "docs/COPY-FINAL-REVIEW.md",
-    "axe": "docs/uiux-evidence/axe-report.json",
-    "lighthouse": "docs/LIGHTHOUSE-REPORT.md",
-    "legacy_map": "docs/legacy-url-map-complete.csv",
+    "cutover": "docs/PRODUCTION-CUTOVER-AUDIT.md",
+    "copy": "docs/COPY-FINAL-REVIEW.md",
     "seo": "docs/SEO-ENTITY-CLEANUP.md",
-    "cutover": "docs/PRODUCTION-CUTOVER-AUDIT.md"
-  },
-  "final_sha_note": "git HEAD of main; matches public /.well-known/pseo-build.json at verification time",
-  "commands_results": {
-    "test:production-cutover": "ALL passed on https://confenge.com.br",
-    "public_sha_equals_head": true,
-    "servicos_fragment": "/#como-atuamos",
-    "css_bytes_prod": 55216,
-    "axe": "0 critical/serious/moderate on commercial set",
-    "lighthouse_local": "commercial pages Perf>=99 A11y/BP/SEO=100 (intel hub SEO 69 intentional noindex)"
+    "legacy_map": "docs/legacy-url-map-complete.csv",
+    "lighthouse": "docs/LIGHTHOUSE-REPORT.md",
+    "lighthouse_prod_summary": "docs/lighthouse-runs/summary-production.json",
+    "axe": "docs/uiux-evidence/axe-report.json",
+    "a11y": "docs/ACCESSIBILITY-FINAL.md",
+    "deploy": "docs/DEPLOY-VERIFICATION.md"
   }
 }

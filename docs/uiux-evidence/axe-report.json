@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T03:36:12.404Z",
+  "generated_at": "2026-08-02T04:08:20.339Z",
   "pages": [
     {
       "path": "/",
@@ -93,6 +93,36 @@
     },
     {
       "path": "/404.html",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
       "counts": {
         "critical": 0,
         "serious": 0,
