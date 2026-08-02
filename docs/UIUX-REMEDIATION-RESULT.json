@@ -2,7 +2,7 @@
   "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
   "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
   "final_sha_at_write": "4873c1f3c9c2f08387459fc645092e0054e59d72",
-  "date": "2026-08-02T02:44:32Z",
+  "date": "2026-08-02T02:44:52Z",
   "status": "COMPLETE",
   "metrics_before": {
     "1440x1000": {
@@ -117,7 +117,7 @@
     "ced40d89 test(ui): add rendered geometry gates, axe audit, and screenshot capture",
     "ebdc4057 feat(home): compress to seven narrative blocks with clear CTA hierarchy"
   ],
-  "final_sha_note": "Use git rev-parse HEAD after pull; last amend may differ by docs-only commit",
+  "final_sha_note": "Authoritative final SHA is git HEAD of this commit",
   "commands_results": {
     "build:site": "ok exit 0 (see docs/uiux-evidence/logs/build-site.log)",
     "pseo:validate": "ok",
