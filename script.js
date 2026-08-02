@@ -67,6 +67,31 @@
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
     document.querySelectorAll('#year').forEach((el) => { el.textContent = new Date().getFullYear(); });
+
+    // Journey rail progressive enhancement — all stages remain in the DOM for no-JS
+    document.querySelectorAll('[data-journey-enhance]').forEach((rail) => {
+      const tabs = [...rail.querySelectorAll('[data-journey-tab]')];
+      const panels = [...rail.querySelectorAll('[data-journey-panel]')];
+      if (!tabs.length || !panels.length) return;
+      rail.setAttribute('data-enhanced', 'true');
+      const activate = (id) => {
+        tabs.forEach((t) => t.classList.toggle('is-active', t.getAttribute('data-journey-tab') === id));
+        panels.forEach((p) => p.classList.toggle('is-active', p.getAttribute('data-journey-panel') === id));
+      };
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', (event) => {
+          const id = tab.getAttribute('data-journey-tab');
+          if (!id) return;
+          event.preventDefault();
+          activate(id);
+          const panel = rail.querySelector(`[data-journey-panel="${id}"]`);
+          if (panel && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        });
+      });
+    });
+
     const reveals = document.querySelectorAll('.reveal');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if ('IntersectionObserver' in window && !reducedMotion) {

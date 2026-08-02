@@ -83,7 +83,7 @@ PERSON_JSONLD = {
     "name": "Engº Tiago Sasaki",
     "image": f"{SITE}/assets/tiago-sasaki-foto-v11-sem-fundo.png",
     "url": f"{SITE}/especialista/tiago-jun-sasaki/",
-    "jobTitle": "Engenheiro Civil e Diretoria B2G fracionada",
+    "jobTitle": "Engenheiro Civil e consultor B2G",
     "worksFor": {"@id": f"{SITE}/#organization"},
 }
 

@@ -1,0 +1,23 @@
+{
+  "before": {
+    "problem-card": 3,
+    "operates-card": 4,
+    "offer-card": 5,
+    "metric-card": 8,
+    "journey-step": 8,
+    "home-cluster-card": 6,
+    "total_cardish": 34
+  },
+  "after": {
+    "problem-card": 0,
+    "operates-card": 0,
+    "offer-card": 0,
+    "metric-card": 0,
+    "journey-step": 0,
+    "home-cluster-card": 0,
+    "offer-dominant": 1,
+    "offer-path": 4
+  },
+  "card_grids_home_after": 0,
+  "notes": "Legacy card grids removed from home. Offer dominant + paths replace equal offer cards. Journey rail replaces 8 boxes. Trace matrix replaces metric cards."
+}

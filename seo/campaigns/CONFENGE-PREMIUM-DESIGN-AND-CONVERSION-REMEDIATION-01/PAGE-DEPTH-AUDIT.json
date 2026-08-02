@@ -1,0 +1,47 @@
+{
+  "diretoria-b2g/index.html": {
+    "sections": [
+      "problem",
+      "role",
+      "cadence",
+      "map",
+      "raci",
+      "onboarding",
+      "objections"
+    ],
+    "bytes": 17688,
+    "has_raci": true
+  },
+  "diagnostico-b2g-360/index.html": {
+    "sections": [
+      "scope",
+      "docs",
+      "maturity",
+      "deliverables",
+      "raci",
+      "fit"
+    ],
+    "bytes": 16024,
+    "has_raci": true
+  },
+  "bid-room-licitacoes-obras/index.html": {
+    "sections": [
+      "urgency",
+      "workstreams",
+      "inout",
+      "raci"
+    ],
+    "bytes": 14230,
+    "has_raci": true
+  },
+  "defesa-margem-contratos-publicos/index.html": {
+    "sections": [
+      "timeline",
+      "scope",
+      "raci",
+      "objections"
+    ],
+    "bytes": 14465,
+    "has_raci": true
+  }
+}

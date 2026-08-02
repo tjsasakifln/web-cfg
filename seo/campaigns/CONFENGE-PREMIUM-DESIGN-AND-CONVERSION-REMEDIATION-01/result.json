@@ -1,0 +1,23 @@
+{
+  "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
+  "status": "PREMIUM_REMEDIATION_IMPLEMENTED_NOT_APPROVED",
+  "base_sha": "ff7ba69be9d79348b7d6461d4f0ba6bde942562f",
+  "head_sha_at_write": "ff7ba69be9d79348b7d6461d4f0ba6bde942562f",
+  "branch": "feat/confenge-premium-design-remediation",
+  "design_system": "data/site/design-system.json",
+  "gates": [
+    "test:design",
+    "test:copy",
+    "test:visual-structure",
+    "test:brand",
+    "audit:performance",
+    "audit:accessibility"
+  ],
+  "preview": null,
+  "production": null,
+  "limitations": [
+    "No Netlify preview/prod deploy authorization in session",
+    "pseo assemble/build_site I/O flaky on mounted filesystem",
+    "Lighthouse scores not claimed"
+  ]
+}

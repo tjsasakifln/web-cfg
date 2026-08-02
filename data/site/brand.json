@@ -1,7 +1,11 @@
 {
   "schema_version": "1.0.0",
-  "campaign": "CONFENGE-VALUE-COMMUNICATION-2040-01",
+  "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
   "updated_at": "2026-08-01",
+  "person": {
+    "jobTitle": "Engenheiro Civil e consultor B2G",
+    "name": "Engº Tiago Sasaki"
+  },
   "positioning": {
     "short": "A CONFENGE opera a frente B2G da construtora para transformar mercado público em contratos rentáveis e defensáveis.",
     "long": "A CONFENGE atua como diretoria B2G fracionada para construtoras e empresas de engenharia. Integramos inteligência de mercado, decisão de participação, preparação de proposta, proteção de margem e gestão de riscos contratuais. A tecnologia reduz o trabalho mecânico; a responsabilidade pela recomendação, implantação e aprendizado permanece humana e tecnicamente fundamentada.",
@@ -53,7 +57,7 @@
       "name": "Diagnóstico B2G 360°",
       "url": "/diagnostico-b2g-360/",
       "headline": "Descubra onde sua operação perde oportunidade, margem e controle.",
-      "description": "Mapeamento da capacidade da empresa, mercado, acervo, pipeline, processo decisório, riscos e gargalos. Termina com um plano executivo de 90 dias.",
+      "description": "Mapeamento da capacidade da empresa, mercado, acervo, carteira de oportunidades, processo decisório, riscos e gargalos. Termina com um plano executivo de 90 dias.",
       "result": "Prioridades claras e backlog de implantação.",
       "cta": "Solicitar diagnóstico B2G",
       "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico B2G 360° para mapear oportunidades, margem e controle da nossa operação.",
@@ -65,7 +69,7 @@
       "name": "Diretoria B2G fracionada",
       "url": "/diretoria-b2g/",
       "headline": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
-      "description": "Pipeline qualificado, GO/NO-GO, coordenação das oportunidades prioritárias, indicadores, riscos, owners, reuniões executivas e memória de decisões e resultados.",
+      "description": "Oportunidades priorizadas com critérios, GO/NO-GO, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
       "result": "A frente B2G deixa de depender de improviso e passa a operar com método.",
       "cta": "Conhecer a Diretoria B2G",
       "wa_message": "Olá, Tiago. Quero conhecer a Diretoria B2G fracionada e entender se encaixa na nossa operação.",
@@ -77,7 +81,7 @@
       "name": "Bid Room",
       "url": "/bid-room-licitacoes-obras/",
       "headline": "Para o edital que merece sala de guerra, não improviso.",
-      "description": "Leitura crítica, estratégia, habilitação, acervo, orçamento, cronograma, responsabilidades, red team e controle final da proposta.",
+      "description": "Leitura crítica, estratégia, habilitação, acervo, orçamento, cronograma, responsabilidades, revisão crítica independente e controle final da proposta.",
       "result": "Uma decisão consciente de participar e uma proposta coerente com a capacidade da empresa.",
       "cta": "Avaliar uma oportunidade",
       "wa_message": "Olá, Tiago. Tenho uma oportunidade crítica de licitação e quero avaliar se vale montar um Bid Room.",
@@ -174,7 +178,30 @@
     "oferta coerente",
     "página de enquadramento problema e serviço",
     "nenhum item publicado nesta onda",
-    "sem ranking proprietário"
+    "sem ranking proprietário",
+    "Arquitetura de ofertas",
+    "Sem preço público sem autorização",
+    "Sem cases fabricados",
+    "pipeline editorial",
+    "status de implementação",
+    "aprovado para publicação",
+    "critério interno",
+    "Engenheiro Civil e Diretoria B2G fracionada"
+  ],
+  "copy_leaks": [
+    "Arquitetura de ofertas",
+    "Sem preço público sem autorização",
+    "Sem cases fabricados",
+    "O que será medido em cada atuação",
+    "pipeline editorial",
+    "status de implementação",
+    "aprovado para publicação",
+    "critério interno",
+    "red team",
+    "post-mortem"
+  ],
+  "copy_leak_word_boundaries": [
+    "owners"
   ],
   "proof_labels": [
     "Engenharia Civil pela USP",

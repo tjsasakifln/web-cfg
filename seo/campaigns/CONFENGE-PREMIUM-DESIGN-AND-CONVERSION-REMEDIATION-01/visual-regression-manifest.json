@@ -1,0 +1,77 @@
+{
+  "generated": "2026-08-02T00:43:26.359Z",
+  "items": [
+    {
+      "url": "http://127.0.0.1:8792/",
+      "viewport": "360x800",
+      "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
+      "main_height": 18054,
+      "text_len": 9592,
+      "file": "home_360x800.png",
+      "ok": true
+    },
+    {
+      "url": "http://127.0.0.1:8792/",
+      "viewport": "390x844",
+      "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
+      "main_height": 17707,
+      "text_len": 9592,
+      "file": "home_390x844.png",
+      "ok": true
+    },
+    {
+      "url": "http://127.0.0.1:8792/",
+      "viewport": "768x1024",
+      "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
+      "main_height": 14720,
+      "text_len": 9592,
+      "file": "home_768x1024.png",
+      "ok": true
+    },
+    {
+      "url": "http://127.0.0.1:8792/",
+      "viewport": "1440x1000",
+      "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
+      "main_height": 10833,
+      "text_len": 9681,
+      "file": "home_1440x1000.png",
+      "ok": true
+    },
+    {
+      "url": "http://127.0.0.1:8792/diretoria-b2g/",
+      "viewport": "1440x1000",
+      "h1": "Diretoria B2G fracionada",
+      "main_height": 6502,
+      "text_len": 4725,
+      "file": "diretoria_1440x1000.png",
+      "ok": true
+    },
+    {
+      "url": "http://127.0.0.1:8792/diagnostico-b2g-360/",
+      "viewport": "1440x1000",
+      "h1": "Diagnóstico B2G 360°",
+      "main_height": 6221,
+      "text_len": 3892,
+      "file": "diagnostico_1440x1000.png",
+      "ok": true
+    },
+    {
+      "url": "http://127.0.0.1:8792/bid-room-licitacoes-obras/",
+      "viewport": "1440x1000",
+      "h1": "Bid Room",
+      "main_height": 4346,
+      "text_len": 3219,
+      "file": "bidroom_1440x1000.png",
+      "ok": true
+    },
+    {
+      "url": "http://127.0.0.1:8792/defesa-margem-contratos-publicos/",
+      "viewport": "1440x1000",
+      "h1": "Contract Defense & Margin",
+      "main_height": 4911,
+      "text_len": 3064,
+      "file": "defesa_1440x1000.png",
+      "ok": true
+    }
+  ]
+}

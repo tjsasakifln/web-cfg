@@ -1,0 +1,174 @@
+{
+  "schema_version": "1.0.0",
+  "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
+  "updated_at": "2026-08-01",
+  "concept": "engenharia editorial premium",
+  "design_principles": [
+    "Cards are the exception, not the default section structure",
+    "Every section has one dominant element (claim, evidence, consequence, or action)",
+    "Controlled asymmetry over uniform grids",
+    "Technical materiality: timelines, matrices, decision gates — never invented metrics",
+    "Contrast with intent: white editorial, deep navy, near-black, neutral surfaces; green only as decision/action/protection signal",
+    "Typography hierarchy over decoration; mono only for technical evidence",
+    "Motion only to orient reading; respect prefers-reduced-motion"
+  ],
+  "colors": {
+    "navy_950": "#031020",
+    "navy_900": "#061a33",
+    "navy_800": "#0a294b",
+    "ink": "#071a31",
+    "text": "#26374a",
+    "muted": "#647182",
+    "line": "#dce3e8",
+    "soft": "#f3f4f5",
+    "white": "#ffffff",
+    "green_700": "#2d6f2d",
+    "green_600": "#3d8238",
+    "green_signal": "#2d6f2d",
+    "lime_accent": "#ced62a",
+    "green_100_restricted": "#edf5ec",
+    "usage": {
+      "green_100": "Never default section background. Max one consecutive light-green surface in a page scroll.",
+      "lime": "Rare accent for status, emphasis in dark panels, or a single key number — not body text color.",
+      "green_border": "Only on primary actions, decision signals, or one featured block — not every card."
+    }
+  },
+  "typography": {
+    "sans": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+    "serif_display": "ui-serif, \"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+    "scale": {
+      "display": "clamp(2.75rem, 5.2vw, 4.75rem)",
+      "h1_hero": "clamp(2.65rem, 4.6vw, 4.5rem)",
+      "h2": "clamp(1.85rem, 3.2vw, 3.15rem)",
+      "h3": "1.05rem–1.35rem",
+      "body": "1rem / 1.7",
+      "small": "0.8rem–0.88rem",
+      "data": "0.72rem mono uppercase tracking"
+    },
+    "rules": [
+      "Strategic claims may use serif-display class for one line per section max",
+      "Do not rely only on Inter size changes for hierarchy",
+      "Measure body copy ~58–72ch on desktop"
+    ]
+  },
+  "spacing": {
+    "section_tight": "56px 0",
+    "section_default": "80px 0",
+    "section_loose": "104px 0",
+    "container": "1200px",
+    "rule": "Never apply the same vertical padding to every consecutive section; alternate tight/default/loose and surface contrast"
+  },
+  "radii": {
+    "sm": "8px",
+    "md": "12px",
+    "lg": "16px",
+    "rule": "Large radius is rare; editorial panels prefer 0–12px"
+  },
+  "shadows": {
+    "none_default": true,
+    "elevated": "0 20px 50px rgba(3,16,32,.10)",
+    "rule": "Shadows only on primary interactive or one featured panel per section"
+  },
+  "section_archetypes": {
+    "hero_split": "Positioning + H1 + consequence + dual CTA + proprietary visual (not SaaS dashboard)",
+    "tension_sequence": "Numbered causal sequence with rising stakes; no equal cards",
+    "model_radial": "Central nucleus + linked vectors; not four identical cards",
+    "offer_dominant": "One large editorial offer + secondary situational paths",
+    "journey_rail": "Operational line with stages; all content accessible without JS",
+    "compare_split": "Two-column editorial contrast (tool vs responsibility)",
+    "authority_editorial": "Photo + trajectory + fields of experience; no fake metrics",
+    "trace_matrix": "Method table: decision, premise, owner, risk, action, result, learning",
+    "content_editorial": "Featured + thematic trails, not six equal cards",
+    "icp_contrast": "Faz sentido / Não faz sentido as typographic contrast",
+    "faq_compact": "Dense Q&A with clear open state",
+    "cta_formal": "Memorable close + private form; not generic template form"
+  },
+  "component_usage_rules": {
+    "card_allowed_when": [
+      "Independent action/navigation unit",
+      "True comparison of discrete options",
+      "Reusable module with clear boundary"
+    ],
+    "card_forbidden_when": [
+      "Only visual grouping of paragraphs",
+      "Equal weight for unequal hierarchy",
+      "Filling a section without composition intent"
+    ],
+    "max_card_grids_per_page": 2,
+    "max_identical_cards_in_row": 3,
+    "icons": "Only for specific actions/concepts; never decorate every heading; never icon-in-circle on every section"
+  },
+  "forbidden_patterns": [
+    "more_than_two_consecutive_card_grid_sections",
+    "four_identical_cards_without_hierarchy",
+    "icon_in_circle_on_every_section",
+    "uniform_section_padding_112px",
+    "eyebrow_h2_side_paragraph_on_every_section",
+    "green_border_on_all_elements",
+    "repeated_light_green_backgrounds",
+    "equal_height_cards_for_aesthetics_only",
+    "shadow_on_all_blocks",
+    "primary_cta_overuse",
+    "internal_governance_language_public",
+    "saas_dashboard_on_institutional_pages",
+    "generic_stock_construction_photos",
+    "abstract_startup_illustration",
+    "icon_as_art_direction_substitute",
+    "fictional_metrics_or_fake_case_numbers"
+  ],
+  "public_copy_leaks": [
+    "Arquitetura de ofertas",
+    "Sem preço público sem autorização",
+    "Sem cases fabricados",
+    "O que será medido em cada atuação",
+    "pipeline editorial",
+    "status de implementação",
+    "aprovado para publicação",
+    "critério interno",
+    "owners",
+    "red team",
+    "post-mortem",
+    "extra-cli"
+  ],
+  "motion": {
+    "allowed": ["subtle entrance", "step focus", "line reveal", "state change", "interaction feedback"],
+    "forbidden": ["exaggerated parallax", "continuous float", "fake counters", "particles"],
+    "prefers_reduced_motion": true
+  },
+  "breakpoints": {
+    "xs": 360,
+    "sm": 390,
+    "md": 430,
+    "tablet": 768,
+    "laptop": 1024,
+    "desktop": 1440,
+    "wide": 1728
+  },
+  "performance_budget": {
+    "own_js_gzip_kb_max": 40,
+    "css_gzip_kb_max": 80,
+    "no_framework_runtime": true,
+    "no_carousel_video_webgl_lottie": true
+  },
+  "accessibility": {
+    "wcag": "2.2 AA",
+    "requirements": [
+      "keyboard navigation",
+      "visible focus",
+      "landmarks",
+      "logical headings",
+      "labels",
+      "reduced motion",
+      "content without JS",
+      "touch targets >= 44px"
+    ]
+  },
+  "job_title_allowed": [
+    "Engenheiro Civil e consultor B2G",
+    "Engenheiro Civil e diretor da CONFENGE"
+  ],
+  "job_title_forbidden": [
+    "Engenheiro Civil e Diretoria B2G fracionada"
+  ]
+}
