@@ -256,6 +256,32 @@ def test_mobile_matrix_composition():
     # Hero visual suppressed on narrow viewports
     assert "hero-visual{display:none}" in css.replace(" ", "") or ".hero-visual{display:none}" in css.replace(" ", "")
 
+
+def test_functional_type_floor_in_css():
+    """Shipped CSS must not set form labels / consent / offer labels below 14px (.875rem)."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    # Direct declarations that skeptic caught
+    for pattern in (
+        r"\.field label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.consent\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.offer-label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.offer-dominant \.offer-label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+    ):
+        assert not re.search(pattern, css), f"sub-14px functional type: {pattern}"
+    assert re.search(r"\.field label\{[^}]*font-size:\.875rem", css)
+    assert re.search(r"\.consent\{[^}]*font-size:\.875rem", css)
+
+
+def test_thankyou_specialist_cta_family():
+    obrigado = (ROOT / "obrigado.html").read_text(encoding="utf-8")
+    assert "Diagnosticar operação B2G" in obrigado
+    assert re.search(r">Diagnosticar operação<", obrigado) is None
+    specialist = (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
+    assert "Diagnosticar operação B2G" in specialist
+    lower = specialist.lower()
+    assert "analisar meu cenário" not in lower
+    assert "apresentar uma demanda" not in lower
+
 def run_all() -> int:
     tests = [v for k, v in list(globals().items()) if k.startswith("test_") and callable(v)]
     failed = 0

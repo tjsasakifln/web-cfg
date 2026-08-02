@@ -59,7 +59,7 @@ p{margin-bottom:1.1em}
 .brand{width:224px;margin-right:auto}
 .brand img{width:100%;height:auto}
 .desktop-nav{display:flex;align-items:center;gap:4px}
-.desktop-nav a{position:relative;padding:12px 11px;color:#3e4e61;font-size:.82rem;font-weight:700;border-radius:8px;transition:color .2s ease,background .2s ease}
+.desktop-nav a{position:relative;padding:12px 11px;color:#3e4e61;font-size:.875rem;font-weight:700;border-radius:8px;transition:color .2s ease,background .2s ease}
 .desktop-nav a:hover,.desktop-nav a[aria-current="true"]{color:var(--green-700);background:var(--green-100)}
 .header-cta{min-height:44px;padding-inline:17px;font-size:.875rem}
 .menu-toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center;padding:0;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px}
@@ -205,17 +205,17 @@ p{margin-bottom:1.1em}
 .contact-channels>a:hover{color:#e7efae;transform:translateX(3px)}
 .contact-channels .icon{width:23px;height:23px;color:var(--lime)}
 .contact-channels span{display:grid}
-.contact-channels small{color:#94a8ba;font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.contact-channels small{color:#94a8ba;font-size:.875rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
 .contact-form{padding:38px;color:var(--text);background:#fff;border:1px solid rgba(255,255,255,.25);border-radius:22px;box-shadow:0 32px 78px rgba(0,0,0,.28)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field{display:grid;gap:8px;margin-bottom:17px}
-.field label{color:var(--ink);font-size:.82rem;font-weight:730}
+.field label{color:var(--ink);font-size:.875rem;font-weight:730}
 .field label span{color:#7b8794;font-weight:560}
 .contact-form input,.contact-form select,.contact-form textarea{width:100%;color:var(--ink);background:#fbfcfc;border:1px solid #cbd4dc;border-radius:9px;outline:none;transition:border-color .2s ease,box-shadow .2s ease}
 .contact-form input,.contact-form select{min-height:50px;padding:0 13px}
 .contact-form textarea{min-height:134px;padding:12px 13px;resize:vertical}
 .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{border-color:var(--green-600);box-shadow:0 0 0 4px rgba(61,130,56,.11)}
-.consent{display:flex;align-items:flex-start;gap:10px;margin:3px 0 18px;color:var(--muted);font-size:.77rem;line-height:1.5}
+.consent{display:flex;align-items:flex-start;gap:10px;margin:3px 0 18px;color:var(--muted);font-size:.875rem;line-height:1.55}
 .consent input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--green-700);flex:none}
 .consent a{color:var(--green-700);text-decoration:underline;text-underline-offset:2px}
 .form-submit{width:100%;border:0}
@@ -250,7 +250,7 @@ p{margin-bottom:1.1em}
 .privacy-card h2{margin-top:38px;font-size:1.55rem}
 
 @media (max-width:1120px){
-  .desktop-nav{gap:0}.desktop-nav a{padding-inline:8px;font-size:.78rem}.brand{width:205px}.header-cta{display:none}
+  .desktop-nav{gap:0}.desktop-nav a{padding-inline:8px;font-size:.875rem}.brand{width:205px}.header-cta{display:none}
   .hero-grid{grid-template-columns:minmax(0,.94fr) minmax(470px,1.06fr);gap:48px}.hero-visual{min-height:600px}
   .section-heading{gap:50px}.deliverables-grid,.authority-grid,.faq-grid,.contact-grid{gap:60px}
   .service-row:nth-child(odd){padding-right:30px}.service-row:nth-child(even){padding-left:30px}
@@ -368,7 +368,7 @@ p{margin-bottom:1.1em}
 }
 
 /* ===== Value communication 2040 — commercial home & offers ===== */
-.hero-micro{max-width:560px;margin:-18px 0 28px;color:#657284;font-size:.84rem;line-height:1.55}
+.hero-micro{max-width:560px;margin:-18px 0 28px;color:#4a5b6e;font-size:.875rem;line-height:1.55}
 .hero-proof{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 0}
 .hero-proof li+li{border-left:0}
 .hero-proof li:nth-child(odd){padding-left:0;padding-right:15px}
@@ -397,7 +397,7 @@ p{margin-bottom:1.1em}
 .offer-card-featured h3,.offer-card-featured .offer-headline,.offer-card-featured .offer-result{color:#fff}
 .offer-card-featured p{color:#c8d4df}
 .offer-card-featured .offer-label{color:var(--lime)}
-.offer-label{display:inline-block;margin-bottom:12px;color:var(--green-700);font-size:.66rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.offer-label{display:inline-block;margin-bottom:12px;color:var(--green-700);font-size:.875rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
 .offer-card h3{margin:0 0 10px;font-size:1.28rem}
 .offer-headline{margin:0 0 12px;color:var(--ink);font-size:1rem;font-weight:650;line-height:1.45}
 .offer-result{margin:0 0 22px;color:#3b4d61;font-size:.88rem;line-height:1.6}
@@ -524,7 +524,7 @@ body{font-size:1rem;line-height:1.65}
 .offers-section{background:#fff}
 .offer-layout{display:grid;grid-template-columns:1.3fr .9fr;gap:20px;align-items:stretch}
 .offer-dominant{display:flex;flex-direction:column;gap:12px;padding:36px 32px;color:#fff;background:#071a31;border:1px solid #0a294b;border-radius:12px}
-.offer-dominant .offer-label{color:var(--lime);font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.offer-dominant .offer-label{color:var(--lime);font-size:.875rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .offer-dominant h3{margin:0;color:#fff;font-size:clamp(1.45rem,2.2vw,1.95rem)}
 .offer-dominant .offer-headline{margin:0;color:#e8eef4;font-size:1.05rem;font-weight:600;line-height:1.5}
 .offer-facts{margin:8px 0 12px;padding:0;list-style:none;display:grid;gap:10px}
