@@ -1,11 +1,11 @@
 {
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
-  "date": "2026-08-02T03:56:44.399329+00:00",
+  "date": "2026-08-02T03:57:56.272923+00:00",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "0465a32ae2b944e611ce1b0fb7d9b2eabe7e1dea",
-  "deployed_sha": null,
+  "final_sha": "868db0ecf80d6522bf26ab236a15d455d98c2cf8",
+  "deployed_sha": "868db0ecf80d6522bf26ab236a15d455d98c2cf8",
   "netlify_deploy_id": null,
-  "status": "AWAITING_NETLIFY_DEPLOY",
+  "status": "COMPLETE",
   "pages_tested": [
     "/",
     "/diretoria-b2g/",
@@ -152,9 +152,11 @@
     "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
     "publish_count": 0,
     "next_wave_gate": false,
-    "terminal_status_pre_deploy": "BLOCKED_PRODUCTION_AUDIT"
+    "terminal_status_pre_deploy": "BLOCKED_PRODUCTION_AUDIT",
+    "snapshot_source_on_main": true,
+    "terminal_status_post_deploy": "provenance_ok; production marker current; next_wave still false (no indexable seeds)"
   },
-  "production_audit_note": "Re-run after Netlify publishes new HEAD; pre-push live still on initial SHA with old /servicos fragment",
+  "production_audit_note": "Public marker web_cfg_sha equals HEAD; test:production-cutover ALL passed against https://confenge.com.br",
   "commands": [
     "npm run build:site",
     "npm run test:copy",
