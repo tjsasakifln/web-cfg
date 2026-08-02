@@ -10,7 +10,11 @@
       "objections"
     ],
     "bytes": 17688,
-    "has_raci": true
+    "has_raci": true,
+    "has_inout": true,
+    "has_objections": true,
+    "dead_hash_links": 0,
+    "dup_antes_protocolo": 0
   },
   "diagnostico-b2g-360/index.html": {
     "sections": [
@@ -21,18 +25,28 @@
       "raci",
       "fit"
     ],
-    "bytes": 16024,
-    "has_raci": true
+    "bytes": 16122,
+    "has_raci": true,
+    "has_inout": true,
+    "has_objections": false,
+    "dead_hash_links": 0,
+    "dup_antes_protocolo": 0
   },
   "bid-room-licitacoes-obras/index.html": {
     "sections": [
       "urgency",
       "workstreams",
+      "when",
       "inout",
-      "raci"
+      "raci",
+      "objections"
     ],
-    "bytes": 14230,
-    "has_raci": true
+    "bytes": 16172,
+    "has_raci": true,
+    "has_inout": true,
+    "has_objections": true,
+    "dead_hash_links": 0,
+    "dup_antes_protocolo": 0
   },
   "defesa-margem-contratos-publicos/index.html": {
     "sections": [
@@ -42,6 +56,10 @@
       "objections"
     ],
     "bytes": 14465,
-    "has_raci": true
+    "has_raci": true,
+    "has_inout": true,
+    "has_objections": true,
+    "dead_hash_links": 0,
+    "dup_antes_protocolo": 0
   }
 }

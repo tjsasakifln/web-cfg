@@ -16,6 +16,14 @@ Home: grades de cards legadas removidas; arquétipos hero_split, tension_sequenc
 
 Home reconstruída como narrativa contínua. Quatro ofertas com profundidade e personalidade distintas.
 
+Bid Room (pós-skeptic): escopo **o que entra / o que não entra**, quando acionar, e seção de **objeções**. Microcopy duplicada “antes do protocolo” removida.
+
+Diagnóstico (pós-skeptic): itens “Quando faz sentido” sem `href="#"` morto; âncora `#fit`.
+
+## Painel de crítica (cinco lentes)
+
+Ver `FIVE-LENS-CRITIQUE.md`: diretor de construtora, diretor de criação, designer editorial, especialista em conversão, engenheiro frontend — com achados e correções.
+
 ## 8. Linguagem interna removida
 
 Arquitetura de ofertas, Sem cases fabricados, owners, red team, post-mortem, jobTitle inválido.
