@@ -26,3 +26,10 @@
 
 ## Unlock
 Named human must run `scripts/editorial/approve_cli.py` per page — see FINAL and WAVE-1-APPROVALS.
+
+## Conversion smoke (shipped path)
+- `npm run test:analytics` runs `seo/scripts/test_analytics_pii.mjs` + `seo/scripts/test_editorial_analytics.mjs`
+- Loads real `script.js` in VM with `data-content-type=lei_14133`
+- Fires: legal_article_view, editorial_page_view, whatsapp_click, editorial_whatsapp_click, email_click, editorial_email_click
+- Asserts no PII leak on click events
+- Log: `seo/editorial-evidence/CONVERSION-SMOKE.log`
