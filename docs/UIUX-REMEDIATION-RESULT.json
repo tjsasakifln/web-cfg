@@ -1,0 +1,97 @@
+{
+  "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
+  "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+  "final_sha_at_write": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+  "date": "2026-08-02T01:44:13Z",
+  "status": "COMPLETE_PENDING_COMMIT",
+  "metrics_before": {
+    "1440x1000": {
+      "scrollHeight": 11599,
+      "visibleChars": 8920,
+      "sections": 13,
+      "primaryCtas": 7
+    },
+    "390x844": {
+      "scrollHeight": 19071,
+      "visibleChars": 8916,
+      "sections": 13,
+      "primaryCtas": 7
+    }
+  },
+  "metrics_after": {
+    "1440x1000": {
+      "scrollHeight": 7162,
+      "visibleChars": 6221,
+      "sections": 7,
+      "primaryCtas": 4
+    },
+    "390x844": {
+      "scrollHeight": 12396,
+      "visibleChars": 6191,
+      "sections": 7,
+      "primaryCtas": 4
+    },
+    "height_reduction_pct_1440": 38.3,
+    "height_reduction_pct_390": 35.0,
+    "chars_reduction_pct_1440": 30.3
+  },
+  "asset_sizes": {
+    "styles_css_bytes": 72837,
+    "script_js_bytes": 28188,
+    "index_html_bytes": 32905
+  },
+  "axe": {
+    "critical": 0,
+    "serious": 0,
+    "moderate": 6,
+    "note": "moderate region only; zero critical/serious"
+  },
+  "lighthouse": {
+    "status": "not_run",
+    "reason": "CLI not installed in environment; command: npx lighthouse http://127.0.0.1:8765 --only-categories=performance,accessibility,best-practices,seo"
+  },
+  "commands": [
+    "npm run test:design",
+    "npm run test:copy",
+    "npm run test:brand",
+    "npm run test:ui",
+    "npm run audit:accessibility",
+    "npm run audit:performance",
+    "npm run audit:axe"
+  ],
+  "evidence": {
+    "audit": "docs/UIUX-ADVERSARIAL-AUDIT.md",
+    "decisions": "docs/UIUX-DECISIONS.md",
+    "compare": "docs/uiux-evidence/compare.html",
+    "axe": "docs/uiux-evidence/axe-report.json",
+    "baseline_screens": "docs/uiux-evidence/baseline/",
+    "after_screens": "docs/uiux-evidence/after/"
+  },
+  "changed_files_snapshot": [
+    "bid-room-licitacoes-obras/index.html",
+    "data/site/brand.json",
+    "data/site/design-system.json",
+    "defesa-margem-contratos-publicos/index.html",
+    "diagnostico-b2g-360/index.html",
+    "diretoria-b2g/index.html",
+    "index.html",
+    "package.json",
+    "script.js",
+    "scripts/site/test_copy_gates.py",
+    "scripts/site/test_design_gates.py",
+    "seo/PUBLIC-ARTIFACT-MANIFEST.json",
+    "seo/pseo-site-build-report.json",
+    "styles.css",
+    "docs/UIUX-ADVERSARIAL-AUDIT.md",
+    "docs/UIUX-DECISIONS.md",
+    "docs/uiux-evidence/",
+    "scripts/site/audit_axe.mjs",
+    "scripts/site/capture_screenshots.mjs",
+    "scripts/site/test_ui_geometry.mjs"
+  ],
+  "limitations": [
+    "Full npm run build:site (pSEO regenerate) not awaited to completion in this session; commercial sources mirrored into _site for home/offers",
+    "Lighthouse scores not fabricated; axe moderate region residual",
+    "pSEO long-tail pages only inherit shared CSS chrome, not full rewrite"
+  ]
+}

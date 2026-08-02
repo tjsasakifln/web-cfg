@@ -1,0 +1,77 @@
+{
+  "sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+  "note": "Baseline from HEAD before home rewrite; metrics.json captured with 13 sections / 7 primary CTAs",
+  "metrics": {
+    "320x568": {
+      "scrollHeight": 19620,
+      "mainHeight": 18255.734375,
+      "bodyHeight": 19620,
+      "visibleChars": 8916,
+      "visibleWords": 1305,
+      "sections": 13,
+      "primary": 7
+    },
+    "360x800": {
+      "scrollHeight": 19418,
+      "mainHeight": 18054.28125,
+      "bodyHeight": 19418,
+      "visibleChars": 8916,
+      "visibleWords": 1305,
+      "sections": 13,
+      "primary": 7
+    },
+    "390x844": {
+      "scrollHeight": 19071,
+      "mainHeight": 17707.34375,
+      "bodyHeight": 19071,
+      "visibleChars": 8916,
+      "visibleWords": 1305,
+      "sections": 13,
+      "primary": 7
+    },
+    "768x1024": {
+      "scrollHeight": 15655,
+      "mainHeight": 14719.90625,
+      "bodyHeight": 15655,
+      "visibleChars": 8916,
+      "visibleWords": 1305,
+      "sections": 13,
+      "primary": 7
+    },
+    "1024x768": {
+      "scrollHeight": 15018,
+      "mainHeight": 14225.953125,
+      "bodyHeight": 15018,
+      "visibleChars": 8916,
+      "visibleWords": 1305,
+      "sections": 13,
+      "primary": 7
+    },
+    "1440x1000": {
+      "scrollHeight": 11599,
+      "mainHeight": 10832.734375,
+      "bodyHeight": 11599,
+      "visibleChars": 8920,
+      "visibleWords": 1307,
+      "sections": 13,
+      "primary": 7
+    },
+    "1920x1080": {
+      "scrollHeight": 12212,
+      "mainHeight": 11445.578125,
+      "bodyHeight": 12212,
+      "visibleChars": 8920,
+      "visibleWords": 1307,
+      "sections": 13,
+      "primary": 7
+    }
+  },
+  "targets": {
+    "height_reduction_pct": 30,
+    "text_reduction_pct": 30,
+    "max_height_1440": 8000,
+    "max_height_390": 12500,
+    "max_narrative_sections": 7,
+    "max_primary_cta": 4
+  }
+}

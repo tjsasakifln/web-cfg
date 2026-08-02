@@ -44,24 +44,22 @@ Proibido: todas as seções com o mesmo padding vertical.
 
 Sombra e radius generosos são exceção. Painéis editoriais preferem linha, peso tipográfico e contraste de superfície.
 
-## Arquétipos de seção
+## Arquitetura da home (máx. 7 blocos)
 
-Cada seção da home deve declarar um arquétipo (`data-section-archetype`):
+Excluindo header/footer, a home pública deve ter **no máximo sete** seções narrativas:
 
-1. `hero_split`
-2. `tension_sequence`
-3. `model_radial`
-4. `offer_dominant`
-5. `journey_rail`
-6. `compare_split`
-7. `authority_editorial`
-8. `trace_matrix`
-9. `content_editorial`
-10. `icp_contrast`
-11. `faq_compact`
-12. `cta_formal`
+1. `hero_split` — tese, um CTA primário, prova, visual estrutural (não dashboard)
+2. `tension_sequence` — três momentos de erosão de margem
+3. `offer_dominant` — Diretoria B2G + rotas situacionais
+4. `journey_rail` — quatro macrofases + rastros (tabela desktop / cards mobile)
+5. `authority_editorial` — credenciais verificáveis
+6. `icp_contrast` — adequação + objeções (FAQ curto)
+7. `cta_formal` — conversão (form)
 
-Gates automatizados falham se três seções consecutivas reutilizam o mesmo arquétipo de **grid de cards**, ou se a página tem mais de duas grades de cards.
+**CTA primário:** `Diagnosticar operação B2G` (≤4 ocorrências `button-primary`).  
+**CTA secundário:** `Enviar decisão crítica` (WhatsApp, peso visual menor).
+
+Gates falham se: >7 seções; três arquétipos idênticos consecutivos; >4 primários; linguagem interna; texto funcional &lt;14px.
 
 ## Quando usar card
 

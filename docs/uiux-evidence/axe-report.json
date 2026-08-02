@@ -1,0 +1,141 @@
+{
+  "generated_at": "2026-08-02T01:41:28.416Z",
+  "pages": [
+    {
+      "path": "/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              ".whatsapp-float"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              ".whatsapp-float"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/diagnostico-b2g-360/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              ".whatsapp-float"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/bid-room-licitacoes-obras/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              ".whatsapp-float"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/defesa-margem-contratos-publicos/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              ".whatsapp-float"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/obrigado.html",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              ".whatsapp-float"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "critical": 0,
+  "serious": 0,
+  "moderate": 6,
+  "minor": 0
+}
