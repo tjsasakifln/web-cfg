@@ -2,11 +2,11 @@
 
 **Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`
 
-**Tip repositório = produção:** `6a386477ea3f10244d52f73e2ffc1beec581b6a6`  
-**build_time produção:** `2026-08-02T15:34:03Z` · `environment: production`  
-**Evidência de identidade:** `docs/evidence/inbound-10/prod-build-info-tip.json`
+**Repo tip:** `1f22f66a` (branch protection + Turnstile-ready + probe)  
+**Produção funcional leads (comprovada):** tip `6a386477` e posteriores com mesmo pipeline; revalidar `build-info` após cada deploy.  
+**Evidência:** `docs/evidence/inbound-10/` · `docs/ops/EXTERNAL-ACTIONS.md`
 
-**Não declarar** `COMPLETE` / `10/10` / `FORTUNE_500` enquanto qualquer item de `docs/ops/EXTERNAL-ACTIONS.md` necessário ao inbound completo permanecer sem prova.
+**Não declarar** `COMPLETE` / `10/10` / `FORTUNE_500` enquanto itens **OPEN** em EXTERNAL-ACTIONS permanecerem sem prova.
 
 ---
 
@@ -14,9 +14,10 @@
 
 O canal inseguro (ntfy público + FormSubmit + topic na resposta) foi **eliminado e substituído** por pipeline persist-first (Netlify Blobs + `connectLambda`), rate limit, resposta whitelist, coletor 1ª parte, LGPD alinhada e gates de CI.  
 
-**Revalidado no tip `6a386477` em produção:** leads **HTTP 201** (jornadas A/B/C), **sem leak**, rate **429**, collect **accepted**, páginas críticas **200**, privacidade atualizada.
+**Comprovado em produção:** leads **HTTP 201** (jornadas A/B/C), **sem leak**, rate **429**, collect **accepted**, páginas críticas **200**, privacidade atualizada, **branch protection `main`** (API GitHub).
 
-**Bloqueio residual 10/10:** apenas ações **owner-only** (e-mail Resend+DNS, Turnstile, webhook ops, branch protection, uptime monitor, rotação ntfy histórica). Mapa: `docs/evidence/inbound-10/score-blocker-map.md`.
+**Bloqueio residual 10/10 (OPEN owner only):** Resend+DNS e-mail, Turnstile enforce, webhook ops, uptime monitor, rotação ntfy histórica, rollback live Netlify UI.  
+**DONE:** Blobs persist, branch protection §5, coletor 1ª parte. Mapa: `score-blocker-map.md`.
 
 ## 2. Estado inicial
 
