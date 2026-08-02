@@ -1,0 +1,21 @@
+{
+  "head": "efb6ccf048e1340793837740284251ed1b9ebba6",
+  "prod": "efb6ccf048e1340793837740284251ed1b9ebba6",
+  "claims": {
+    "1_auto_approve": true,
+    "2_registry_progression": true,
+    "3_final_blocked": true,
+    "4_jur_rejected": true,
+    "5_cannibal_mitigated": true,
+    "6_evidence": true,
+    "production_noindex_empty_sm": true
+  },
+  "all_closed": true,
+  "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "will_not_impersonate_tiago": true,
+  "external_actions": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
+  "counts": {
+    "EDITORIAL_REVIEWED": 11,
+    "REJECTED": 1
+  }
+}
