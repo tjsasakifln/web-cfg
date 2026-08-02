@@ -601,39 +601,46 @@
           cta_label: (estagioEl?.value || '').slice(0, 80),
         });
 
-        // Progressive enhancement: AJAX submit so we can fall back if Netlify Forms
-        // is not intercepting POSTs (observed 404 on bare static POST).
+        // Progressive enhancement: POST to production lead function (receipt-bearing),
+        // then FormSubmit/Netlify Forms, then WhatsApp operational fallback.
         if (typeof window.fetch === 'function' && form.getAttribute('data-ajax') !== 'false') {
           event.preventDefault();
-          const dest = form.getAttribute('action') || JOURNEY_ACTIONS[journey] || '/obrigado';
+          const dest = JOURNEY_ACTIONS[journey] || form.getAttribute('action') || '/obrigado';
           const fd = new FormData(form);
           if (!fd.get('form-name')) fd.set('form-name', form.getAttribute('name') || 'diagnostico-b2g');
-          const body = new URLSearchParams();
-          fd.forEach((val, key) => {
-            // skip honeypot name only if empty — still send for Netlify bot check
-            body.append(key, String(val));
-          });
+          if (!fd.get('jornada')) fd.set('jornada', journey || '');
+          const payload = {};
+          fd.forEach((val, key) => { payload[key] = String(val); });
           const submitBtn = form.querySelector('[type="submit"]');
           if (submitBtn) submitBtn.disabled = true;
           showFormStatus('Enviando…', 'ok');
-          const finishOk = () => {
+          const finishOk = (receipt) => {
             track('lead_form_success', {
               page_path: pagePath,
               content_cluster: defaultCluster,
               device_context: deviceContext,
               destination_type: 'form',
               journey: journey || '',
+              // receipt id only — not PII
+              receipt_id: (receipt && receipt.receipt_id) ? String(receipt.receipt_id).slice(0, 32) : '',
             });
-            window.location.assign(dest);
+            try {
+              if (receipt && receipt.receipt_id) {
+                sessionStorage.setItem('confenge_last_receipt', String(receipt.receipt_id).slice(0, 32));
+              }
+            } catch (_) { /* private mode */ }
+            const q = receipt && receipt.receipt_id
+              ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(String(receipt.receipt_id).slice(0, 32))}`
+              : dest;
+            window.location.assign(q);
           };
           const finishFallback = () => {
-            // Operational fallback: WhatsApp with non-sensitive summary only
             const stage = (estagioEl?.value || '').slice(0, 80);
             const msg = encodeURIComponent(
               `Olá, Tiago. Enviei solicitação pelo site (${stage || journey || 'contato'}). Nome: ${(nomeEl?.value || '').slice(0, 60)}. Prefiro retorno por WhatsApp.`,
             );
             showFormStatus(
-              'Não foi possível confirmar o envio automático. Abrindo WhatsApp como canal operacional…',
+              'Canal automático indisponível. Abrindo WhatsApp com o contexto da solicitação…',
               'error',
             );
             track('lead_form_error', {
@@ -644,22 +651,36 @@
               journey: journey || '',
             });
             window.open(`https://wa.me/5548988344559?text=${msg}`, '_blank', 'noopener');
-            // Still land on confirmation so the user sees next steps / SLA
             setTimeout(() => { window.location.assign(dest); }, 600);
           };
-          fetch(form.getAttribute('action') || '/', {
+          // 1) Primary: Netlify Function (issues receipt even if mail upstream needs activation)
+          fetch('/.netlify/functions/lead', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: body.toString(),
-          }).then((res) => {
-            if (res.ok || res.status === 200 || res.status === 302 || res.status === 303) {
-              finishOk();
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(payload),
+          }).then(async (res) => {
+            if (!res.ok) throw new Error(`lead_http_${res.status}`);
+            const data = await res.json().catch(() => ({}));
+            if (data && data.ok && data.receipt_id) {
+              finishOk(data);
               return;
             }
-            // Netlify sometimes returns 404 when Forms is not registered for the site
-            finishFallback();
+            throw new Error('lead_no_receipt');
           }).catch(() => {
-            finishFallback();
+            // 2) Secondary: classic Netlify Forms POST (if Forms ever registered)
+            const body = new URLSearchParams();
+            Object.keys(payload).forEach((k) => body.append(k, payload[k]));
+            return fetch('/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: body.toString(),
+            }).then((res) => {
+              if (res.ok || res.status === 200 || res.status === 302 || res.status === 303) {
+                finishOk({ receipt_id: `netlify-form-${Date.now().toString(36)}` });
+                return;
+              }
+              finishFallback();
+            }).catch(() => finishFallback());
           }).finally(() => {
             if (submitBtn) submitBtn.disabled = false;
           });

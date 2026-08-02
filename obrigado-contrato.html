@@ -8,7 +8,7 @@
 <title>Documentos / caso contratual recebido | CONFENGE</title>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/styles.css" rel="stylesheet"/>
-<script defer="" src="/script.js?v=fortune01"></script>
+<script defer="" src="/script.js?v=fortune02"></script>
 <meta content="Confirmação de recebimento: problema em contrato público enviado à CONFENGE." name="description"/>
 </head>
 <body class="simple-page" data-lead-success="1" data-journey="contrato">
@@ -36,6 +36,9 @@
 <p class="eyebrow">Jornada A · Contrato</p>
 <h1>Recebemos sua solicitação de análise inicial.</h1>
 <p>O próximo contato serve para enquadrar o problema (glosa, medição, aditivo, reequilíbrio, atraso ou notificação), a urgência e os documentos disponíveis.</p>
+
+<p class="sla-box" id="receipt-id" hidden><strong>Protocolo de recebimento:</strong> <code></code></p>
+
 <div class="sla-box">
 <strong>Prazo esperado:</strong> retorno inicial em até <strong>1 dia útil</strong> nos casos urgentes; demais em até 2 dias úteis.<br/>
 <strong>O que não prometemos:</strong> deferimento de pleito, recuperação financeira ou vitória em disputa.
@@ -50,5 +53,18 @@
 <footer class="site-footer">
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
 </footer>
+
+<script>
+(function(){
+  try {
+    var q = new URLSearchParams(location.search);
+    var r = q.get("receipt") || sessionStorage.getItem("confenge_last_receipt");
+    if (!r) return;
+    var el = document.getElementById("receipt-id");
+    if (el) { el.hidden = false; el.querySelector("code").textContent = r; }
+  } catch (e) {}
+})();
+</script>
+
 </body>
 </html>

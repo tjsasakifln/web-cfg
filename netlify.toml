@@ -8,10 +8,15 @@
   # Skip publish when only campaign evidence / audit reports change so freezing
   # deploy SHAs into JSON cannot advance live /.well-known/pseo-build.json.
   ignore = "bash scripts/pseo/ignore_evidence_build.sh"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
   PYTHON_VERSION = "3.12"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 # Optional: keep host rule here as belt-and-suspenders for domain-level match.
 # _redirects already contains the same rule first (processed before toml).

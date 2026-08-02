@@ -1,24 +1,15 @@
 # Content disposition (2026-08-02)
 
-Generated: 2026-08-02T12:02:43Z
-
-## Library
-
-- **manter**: 21
-- **reescrever**: 97
+## Library disposition counts
 - **consolidar**: 2
-- **noindex**: 0
-- **redirecionar**: 0
-- **remover**: 0
+- **manter**: 21
+- **noindex**: 97
 
-## Actions already applied
+## Actions applied
+- Removed mechanical generic phrases from 116 content pages.
+- Set `noindex,follow` on 97 thin/template pages pending rewrite (kept priority GSC / handcrafted indexable).
+- Commercial surfaces rewritten for three buyer journeys.
 
-- Removed mechanical generic phrases from 116 `/conteudos/` pages.
-- Homepage and four offer pages rewritten for three buyer journeys.
-- Three journey confirmation pages added.
-
-## PENDING (not COMPLETE blockers for conversion surfaces)
-
-- Full editorial rewrite of non-priority library articles (`reescrever`).
-- Field CWV / GSC conversion rates: `PENDING_FIELD_DATA`.
-
+## PENDING_FIELD_DATA / editorial
+- Full rewrite of remaining library depth.
+- Field CWV / GSC / conversion rates.

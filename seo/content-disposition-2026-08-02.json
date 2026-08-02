@@ -2,12 +2,9 @@
   "generated": "2026-08-02T12:02:43Z",
   "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
   "content_library_by_disposition": {
+    "noindex": 97,
     "manter": 21,
-    "reescrever": 97,
-    "consolidar": 2,
-    "noindex": 0,
-    "redirecionar": 0,
-    "remover": 0
+    "consolidar": 2
   },
   "generic_boilerplate_stripped_pages": 116,
   "banned_phrases_removed": [
@@ -75,8 +72,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "aditivo-empreitada-por-preco-global",
@@ -103,8 +101,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "administracao-local-orcamento-obra-publica",
@@ -131,8 +130,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "analise-edital-obra-publica-construtora",
@@ -145,8 +145,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "ata-reuniao-ordem-servico-obra-publica",
@@ -159,8 +160,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "atraso-na-medicao-obra-publica",
@@ -215,8 +217,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "auditoria-contrato-obra-publica-mensal",
@@ -229,8 +232,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "aumento-material-reequilibrio-contrato-publico",
@@ -243,8 +247,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "bdi-diferenciado-obra-publica",
@@ -271,8 +276,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "calculo-reequilibrio-economico-financeiro",
@@ -285,8 +291,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "capacidade-tecnica-operacional-profissional-licitacao",
@@ -299,8 +306,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "chuva-prorrogacao-prazo-obra-publica",
@@ -313,8 +321,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "clausula-matriz-risco-abusiva-edital",
@@ -327,8 +336,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "como-provar-atraso-obra-publica",
@@ -341,8 +351,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "compensacao-acrescimo-supressao-aditivo",
@@ -355,8 +366,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "composicao-propria-preco-obra-publica",
@@ -369,8 +381,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "comprovacao-exequibilidade-proposta-obra",
@@ -397,8 +410,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "consorcio-subcontratacao-obra-publica",
@@ -411,8 +425,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "consultoria-b2g-engenharia-construtora",
@@ -425,8 +440,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "consultoria-contrato-obra-publica-construtora",
@@ -439,8 +455,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "contratacao-integrada-semi-integrada-obra",
@@ -453,8 +470,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "controle-mudancas-obra-publica",
@@ -467,8 +485,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "cotacao-mercado-orcamento-obra-publica",
@@ -481,8 +500,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "criterio-de-medicao-nao-previsto-contrato",
@@ -495,8 +515,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "cronograma-fisico-financeiro-obra-publica",
@@ -509,8 +530,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "cronologia-contrato-obra-publica",
@@ -523,8 +545,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "culpa-sancao-atraso-contrato-publico",
@@ -537,8 +560,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "curva-abc-orcamento-obra",
@@ -551,8 +575,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "curva-abc-reequilibrio-contrato",
@@ -565,8 +590,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "custos-indiretos-atraso-administracao-obra",
@@ -579,8 +605,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "data-base-orcamento-reajuste-obra-publica",
@@ -607,8 +634,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "demolicao-nao-prevista-obra-publica",
@@ -635,8 +663,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "desagio-licitacao-obra-publica",
@@ -649,8 +678,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "desconto-da-proposta-em-item-novo-aditivo",
@@ -677,8 +707,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "divergencia-diario-obra-fiscalizacao",
@@ -691,8 +722,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "divergencia-quantitativo-medicao-as-built",
@@ -705,8 +737,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "documentos-reequilibrio-obra-publica",
@@ -719,8 +752,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "dosimetria-multa-contrato-administrativo",
@@ -733,8 +767,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "empreitada-preco-global-preco-unitario",
@@ -761,8 +796,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "erros-comunicacao-contrato-publico-construtora",
@@ -775,8 +811,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "evento-previsivel-consequencias-incalculaveis-reequilibrio",
@@ -789,8 +826,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "extincao-contrato-culpa-administracao",
@@ -803,8 +841,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "extincao-contrato-obra-publica-pelo-contratado",
@@ -817,8 +856,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "fiscal-mandou-executar-sem-aditivo",
@@ -831,8 +871,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "fiscal-nao-assina-medicao-obra-publica",
@@ -859,8 +900,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "garantia-proposta-licitacao-obra",
@@ -873,8 +915,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "gestao-contrato-obra-publica-indicadores",
@@ -887,8 +930,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "glosa-de-medicao-obra-publica",
@@ -901,8 +945,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "glosa-por-qualidade-obra-publica",
@@ -929,8 +974,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "indenizacao-servico-extracontratual-obra-publica",
@@ -943,8 +989,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "interferencia-concessionaria-obra-publica-atraso",
@@ -957,8 +1004,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "jogo-de-planilha-aditivo-obra-publica",
@@ -971,8 +1019,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "juros-atraso-pagamento-contrato-administrativo",
@@ -985,8 +1034,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "limite-aditivo-25-50-obra-publica",
@@ -1013,8 +1063,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "matriz-de-riscos-obra-publica",
@@ -1027,8 +1078,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "matriz-de-riscos-reequilibrio-economico-financeiro",
@@ -1055,8 +1107,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "medicao-por-evento-obra-publica",
@@ -1097,8 +1150,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "multa-atraso-parcial-contrato-publico",
@@ -1111,8 +1165,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "multa-contrato-obra-publica-defesa",
@@ -1125,8 +1180,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "notas-fiscais-reequilibrio-contrato",
@@ -1139,8 +1195,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "notificacao-impacto-prazo-custo-obra",
@@ -1153,8 +1210,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "orcamento-incompleto-edital-obra-publica",
@@ -1167,8 +1225,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "orcamento-sigiloso-licitacao-obra",
@@ -1181,8 +1240,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "ordem-paralisacao-obra-publica-custos",
@@ -1195,8 +1255,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "pagamento-contrato-publico-certidao-vencida",
@@ -1209,8 +1270,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "pagamento-parcial-etapa-empreitada-global",
@@ -1237,8 +1299,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "pedido-de-reequilibrio-negado",
@@ -1251,8 +1314,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "pedido-prorrogacao-prazo-antes-vencimento",
@@ -1265,8 +1329,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "plano-recuperacao-obra-atrasada",
@@ -1279,8 +1344,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "pleito-tecnico-obra-publica",
@@ -1293,8 +1359,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "prazo-vigencia-prazo-execucao-contrato-obra",
@@ -1307,8 +1374,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "preco-de-item-novo-aditivo-obra-publica",
@@ -1321,8 +1389,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "preco-unitario-acima-referencia-proposta-global",
@@ -1335,8 +1404,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "produtividade-sinapi-obra-publica",
@@ -1349,8 +1419,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "projeto-basico-incompleto-obra-publica",
@@ -1363,8 +1434,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "proposta-inexequivel-obra-publica-lei-14133",
@@ -1377,8 +1449,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "prorrogacao-prazo-obra-publica-documentos",
@@ -1405,8 +1478,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "prova-de-medicao-diario-de-obra-fotos",
@@ -1419,8 +1493,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "quantitativo-insuficiente-planilha-obra-publica",
@@ -1433,8 +1508,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "reajuste-repactuacao-reequilibrio-diferenca",
@@ -1447,8 +1523,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "recuperar-contrato-obra-publica-problematico",
@@ -1461,8 +1538,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "recurso-inabilitacao-tecnica-licitacao",
@@ -1475,8 +1553,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "reequilibrio-antes-da-prorrogacao-contrato",
@@ -1489,8 +1568,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "reequilibrio-apos-fim-do-contrato",
@@ -1503,8 +1583,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "reequilibrio-economico-financeiro-obra-publica",
@@ -1517,8 +1598,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "reequilibrio-empreitada-preco-global",
@@ -1531,8 +1613,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "registro-contemporaneo-pleito-obra",
@@ -1545,8 +1628,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "reprogramacao-cronograma-obra-publica",
@@ -1559,8 +1643,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "rescisao-unilateral-contrato-obra-publica",
@@ -1573,8 +1658,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "resposta-notificacao-atraso-obra-publica",
@@ -1601,8 +1687,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "servico-executado-sem-projeto-aprovado",
@@ -1615,8 +1702,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "servico-executado-sem-termo-aditivo",
@@ -1643,8 +1731,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "sinapi-desonerado-nao-desonerado",
@@ -1685,8 +1774,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "suspensao-execucao-contrato-publico-contratado",
@@ -1699,8 +1789,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "tributos-bdi-obra-publica",
@@ -1713,8 +1804,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "troca-responsavel-tecnico-contrato-publico",
@@ -1727,8 +1819,9 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
       "slug": "visita-tecnica-licitacao-obra-publica",
@@ -1741,13 +1834,15 @@
       "priority_gsc": false,
       "deepened_handcrafted": false,
       "consolidate_into": null,
-      "disposition": "reescrever",
-      "generic_boilerplate_removed": true
+      "disposition": "noindex",
+      "generic_boilerplate_removed": true,
+      "noindex_reason": "thin_or_template_pending_rewrite"
     }
   ],
   "notes": [
     "Pages marked reescrever remain indexable after boilerplate removal; full editorial rewrite is PENDING for non-priority library items.",
     "No fabricated metrics. pSEO wave gated by existing next_wave_gate / editorial audit.",
     "lastmod not bulk-bumped; only material commercial pages change intent."
-  ]
+  ],
+  "by_class_note": "reescrever thin pages set to noindex until full editorial rewrite"
 }

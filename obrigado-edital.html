@@ -8,7 +8,7 @@
 <title>Edital recebido para triagem | CONFENGE</title>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/styles.css" rel="stylesheet"/>
-<script defer="" src="/script.js?v=fortune01"></script>
+<script defer="" src="/script.js?v=fortune02"></script>
 <meta content="Confirmação de recebimento: edital enviado para triagem na CONFENGE." name="description"/>
 </head>
 <body class="simple-page" data-lead-success="1" data-journey="edital">
@@ -36,6 +36,9 @@
 <p class="eyebrow">Jornada B · Edital / proposta</p>
 <h1>Recebemos o pedido de triagem do edital.</h1>
 <p>O próximo contato serve para entender prazo do edital, valor estimado, estágio da proposta e se o caso pede leitura rápida, sala de decisão da proposta (Bid Room) ou recusa fundamentada.</p>
+
+<p class="sla-box" id="receipt-id" hidden><strong>Protocolo de recebimento:</strong> <code></code></p>
+
 <div class="sla-box">
 <strong>Prazo esperado:</strong> triagem inicial em até <strong>2 dias úteis</strong> após dados essenciais (e o edital, quando enviado).<br/>
 <strong>O que não prometemos:</strong> vitória na licitação ou preço “ótimo” sem análise.
@@ -50,5 +53,18 @@
 <footer class="site-footer">
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
 </footer>
+
+<script>
+(function(){
+  try {
+    var q = new URLSearchParams(location.search);
+    var r = q.get("receipt") || sessionStorage.getItem("confenge_last_receipt");
+    if (!r) return;
+    var el = document.getElementById("receipt-id");
+    if (el) { el.hidden = false; el.querySelector("code").textContent = r; }
+  } catch (e) {}
+})();
+</script>
+
 </body>
 </html>

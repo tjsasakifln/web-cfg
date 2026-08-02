@@ -8,7 +8,7 @@
 <title>Solicitação recebida | CONFENGE</title>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/styles.css" rel="stylesheet"/>
-<script defer="" src="/script.js?v=fortune01"></script>
+<script defer="" src="/script.js?v=fortune02"></script>
 <meta content="Confirmação de recebimento de solicitação enviada à CONFENGE." name="description"/>
 </head>
 <body class="simple-page" data-lead-success="1" data-journey="operacao">
@@ -36,6 +36,9 @@
 <p class="eyebrow">Solicitação recebida</p>
 <h1>Recebemos seu contato.</h1>
 <p>O próximo passo é enquadrar a necessidade (contrato sob pressão, edital em análise ou operação B2G recorrente), a urgência e o formato de apoio.</p>
+
+<p class="sla-box" id="receipt-id" hidden><strong>Protocolo de recebimento:</strong> <code></code></p>
+
 <div class="sla-box">
 <strong>Prazo esperado:</strong> retorno em até <strong>2 dias úteis</strong> (casos urgentes de contrato: até 1 dia útil).<br/>
 <strong>Sem promessa</strong> de vitória em licitação, deferimento de pleito ou recuperação financeira.
@@ -50,5 +53,18 @@
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
 </footer>
 <aside class="contact-float" aria-label="Contato rápido"><a aria-label="Falar com a CONFENGE pelo WhatsApp" class="whatsapp-float" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Acabei%20de%20enviar%20uma%20solicita%C3%A7%C3%A3o%20pelo%20site." rel="noopener" target="_blank"><svg class="icon"><use href="#i-whatsapp"></use></svg></a></aside>
+
+<script>
+(function(){
+  try {
+    var q = new URLSearchParams(location.search);
+    var r = q.get("receipt") || sessionStorage.getItem("confenge_last_receipt");
+    if (!r) return;
+    var el = document.getElementById("receipt-id");
+    if (el) { el.hidden = false; el.querySelector("code").textContent = r; }
+  } catch (e) {}
+})();
+</script>
+
 </body>
 </html>

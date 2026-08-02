@@ -942,7 +942,7 @@
         }
       ],
       "intent": "proteger_margem_proposta_contrato",
-      "evidence_kind": null,
+      "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
       "contextual_evidence_count": 0,
       "editorial_unique_ratio": null,
@@ -994,7 +994,7 @@
         }
       ],
       "intent": "proteger_margem_proposta_contrato",
-      "evidence_kind": null,
+      "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
       "contextual_evidence_count": 0,
       "editorial_unique_ratio": null,
@@ -1039,7 +1039,7 @@
         }
       ],
       "intent": "proteger_margem_proposta_contrato",
-      "evidence_kind": null,
+      "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
       "contextual_evidence_count": 0,
       "editorial_unique_ratio": null,
@@ -1090,7 +1090,7 @@
         }
       ],
       "intent": "proteger_margem_proposta_contrato",
-      "evidence_kind": null,
+      "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
       "contextual_evidence_count": 0,
       "editorial_unique_ratio": null,
@@ -1136,7 +1136,7 @@
         }
       ],
       "intent": "proteger_margem_proposta_contrato",
-      "evidence_kind": null,
+      "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
       "contextual_evidence_count": 0,
       "editorial_unique_ratio": null,
