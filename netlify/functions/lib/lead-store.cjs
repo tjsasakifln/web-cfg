@@ -167,6 +167,83 @@ class NetlifyBlobsStore {
 /** Singleton memory for cold-start-friendly rate buckets in same instance */
 const globalMemory = new MemoryStore();
 
+/**
+ * HTTP durable store: POST JSON to create; optional GET for idempotency lookup.
+ * Compatible with n8n/Make/Supabase Edge/Airtable proxy that returns the record.
+ */
+class HttpStore {
+  constructor({ baseUrl, token, getUrlTemplate }) {
+    this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.token = token || "";
+    this.getUrlTemplate = getUrlTemplate || "";
+  }
+  _headers() {
+    const h = { "Content-Type": "application/json", Accept: "application/json" };
+    if (this.token) h.Authorization = `Bearer ${this.token}`;
+    return h;
+  }
+  async getByIdempotency(key) {
+    if (!this.getUrlTemplate) return null;
+    try {
+      const url = this.getUrlTemplate.replace("{idempotency_key}", encodeURIComponent(key));
+      const res = await fetch(url, { headers: this._headers() });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data && data.lead_id ? data : null;
+    } catch {
+      return null;
+    }
+  }
+  async get(id) {
+    try {
+      const res = await fetch(`${this.baseUrl}/${encodeURIComponent(id)}`, {
+        headers: this._headers(),
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+  async put(record) {
+    const res = await fetch(this.baseUrl, {
+      method: "POST",
+      headers: this._headers(),
+      body: JSON.stringify(record),
+    });
+    if (!res.ok) {
+      const err = new Error(`http_store_${res.status}`);
+      throw err;
+    }
+    return record;
+  }
+  async update(id, patch) {
+    const cur = (await this.get(id)) || { lead_id: id };
+    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const res = await fetch(`${this.baseUrl}/${encodeURIComponent(id)}`, {
+      method: "PUT",
+      headers: this._headers(),
+      body: JSON.stringify(next),
+    });
+    if (!res.ok) {
+      // Some backends only support POST upsert
+      return this.put(next);
+    }
+    return next;
+  }
+  async delete(id) {
+    try {
+      await fetch(`${this.baseUrl}/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+        headers: this._headers(),
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+}
+
 async function createStore(options = {}) {
   if (options.store) return options.store;
   if (process.env.LEAD_STORE === "memory" || options.forceMemory) {
@@ -175,16 +252,47 @@ async function createStore(options = {}) {
   if (process.env.LEAD_STORE_DIR) {
     return new FileStore(process.env.LEAD_STORE_DIR);
   }
-  // Prefer Netlify Blobs in production
+  // Explicit HTTP durable backend (n8n/Airtable/Supabase proxy)
+  if (process.env.LEAD_STORE_HTTP_URL) {
+    return new HttpStore({
+      baseUrl: process.env.LEAD_STORE_HTTP_URL,
+      token: process.env.LEAD_STORE_HTTP_TOKEN,
+      getUrlTemplate: process.env.LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL || "",
+    });
+  }
+  // Prefer Netlify Blobs in production (auto context or manual siteID+token)
   try {
-    // Dynamic require so local unit tests without the package still load lead-core
     // eslint-disable-next-line import/no-unresolved
-    const { getStore } = require("@netlify/blobs");
-    const store = getStore({ name: "confenge-leads", consistency: "strong" });
+    const blobs = require("@netlify/blobs");
+    const siteID =
+      process.env.NETLIFY_BLOBS_SITE_ID ||
+      process.env.SITE_ID ||
+      process.env.NETLIFY_SITE_ID ||
+      "";
+    const token =
+      process.env.NETLIFY_BLOBS_TOKEN ||
+      process.env.NETLIFY_API_TOKEN ||
+      process.env.NETLIFY_AUTH_TOKEN ||
+      "";
+    let store;
+    if (siteID && token) {
+      store = blobs.getStore({
+        name: "confenge-leads",
+        siteID,
+        token,
+        consistency: "strong",
+      });
+      safeLog("info", "store_blobs_manual_creds", { site_len: siteID.length });
+    } else {
+      // Platform injects NETLIFY_BLOBS_CONTEXT in Netlify Functions when Blobs enabled
+      store = blobs.getStore({ name: "confenge-leads", consistency: "strong" });
+    }
     return new NetlifyBlobsStore(store);
   } catch (err) {
     safeLog("warn", "store_blobs_unavailable", {
-      reason: err && err.message ? String(err.message).slice(0, 120) : "unknown",
+      reason: err && err.message ? String(err.message).slice(0, 160) : "unknown",
+      has_context: Boolean(process.env.NETLIFY_BLOBS_CONTEXT),
+      has_site: Boolean(process.env.SITE_ID || process.env.NETLIFY_SITE_ID),
     });
   }
   // Last resort: memory (ephemeral) — handler must treat as non-durable for success policy

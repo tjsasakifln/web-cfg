@@ -17,6 +17,8 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  # Keep Blobs client unbundled so Netlify can inject NETLIFY_BLOBS_CONTEXT at runtime
+  external_node_modules = ["@netlify/blobs"]
 
 # Optional: keep host rule here as belt-and-suspenders for domain-level match.
 # _redirects already contains the same rule first (processed before toml).

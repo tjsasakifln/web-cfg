@@ -80,10 +80,26 @@ Alerta: e-mail ops **diferente** do canal de leads.
 
 Se quiser dashboard SaaS além do coletor 1ª parte: conta Plausible → domain → `PLAUSIBLE_DOMAIN` + `PLAUSIBLE_FORWARD=1` + CSP `connect-src`/`script-src` se script client.
 
-## 8. Netlify Blobs
+## 8. Netlify Blobs (obrigatório se não houver HTTP store)
 
-Confirmar no plano do site que Blobs está habilitado (padrão em Functions modernas).  
-Validação: após deploy, POST lead → 201 (não 503 `store_unavailable`).
+Produção retornou `store_unavailable` quando `NETLIFY_BLOBS_CONTEXT` não foi injetado.
+
+**Opção A — Blobs nativo**
+
+1. Netlify UI → Site → ensure Blobs not disabled  
+2. Redeploy após `external_node_modules = ["@netlify/blobs"]`  
+3. Se ainda 503: User settings → Applications → Personal access tokens → gerar token  
+4. Site env: `NETLIFY_BLOBS_TOKEN=<token>` e `NETLIFY_BLOBS_SITE_ID=<site_id>` (API ID do site)  
+5. Redeploy functions  
+
+**Opção B — HTTP store (Airtable/n8n/Supabase)**
+
+| Variável | Valor |
+| --- | --- |
+| `LEAD_STORE_HTTP_URL` | endpoint POST que grava o JSON do lead |
+| `LEAD_STORE_HTTP_TOKEN` | Bearer |
+
+Validação: `POST /.netlify/functions/lead` → **201** com `lead_id`, body **sem** `topic`/`delivery`.
 
 ## Consequência de não executar
 

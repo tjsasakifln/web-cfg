@@ -11,6 +11,13 @@
  * 7) Semantic HTTP codes — no 200 when not persisted
  */
 const crypto = require("crypto");
+// Eager-load Blobs client at function entry so Netlify injects runtime context
+// (external_node_modules in netlify.toml keeps this package unbundled).
+try {
+  require("@netlify/blobs");
+} catch (_) {
+  /* optional at unit-test time */
+}
 const {
   parseBody,
   validateAndNormalize,
