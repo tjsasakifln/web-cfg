@@ -184,6 +184,31 @@ ok(
 
 
 
+
+// Public build-injected release result (authoritative SHAs post-deploy)
+if (isProd) {
+  try {
+    const rr = await fetchText("/.well-known/release-result.json");
+    if (rr.status === 200) {
+      const body = JSON.parse(rr.body);
+      ok(
+        "public_release_result_matches_live",
+        body.final_sha === markerJson.web_cfg_sha && body.deployed_sha === markerJson.web_cfg_sha,
+        `release=${body.final_sha} live=${markerJson.web_cfg_sha}`
+      );
+      ok(
+        "public_release_result_matches_head",
+        body.final_sha === head,
+        `release=${body.final_sha} head=${head}`
+      );
+    } else {
+      console.log("SKIP public_release_result (HTTP", rr.status, ")");
+    }
+  } catch (e) {
+    failures.push(`public_release_result: ${e}`);
+  }
+}
+
 if (failures.length) {
   console.error("\nCUTOVER FAILURES:", failures.length);
   for (const f of failures) console.error(" -", f);
