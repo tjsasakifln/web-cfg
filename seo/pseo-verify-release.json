@@ -1,27 +1,26 @@
 {
-  "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
-  "web_cfg_head": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-  "extra_cli_head": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+  "terminal_status": "BLOCKED_SNAPSHOT_PROVENANCE",
+  "web_cfg_head": "f42575626ec471aab9afe74b850d78479746f526",
+  "extra_cli_head": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
   "extra_cli_main_integration": {
     "on_main": true,
     "branch": "main",
-    "sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+    "sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
     "entrypoint": "scripts.pseo.export_web_cfg",
     "source": "github_main",
     "blob_sha": "daa6dc17a3094104f6e62640e8c8bac5454dcfad"
   },
   "snapshot_source_provenance": {
-    "on_main": true,
-    "source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
-    "source_branch": "main",
-    "compare_status": "identical",
-    "reason": null
+    "on_main": false,
+    "source_commit_sha": "6fc5adcf6929d908b8e4c10aab4ca2566c20a8be",
+    "source_branch": "feat/pseo-national-acquisition-engine",
+    "reason": "source_commit_lookup_failed_or_missing"
   },
-  "netlify_deployed_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-  "production_audit_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "netlify_deployed_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+  "production_audit_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
   "production_audit_is_current": true,
   "public_directory": "_site",
-  "public_artifact_hash": "7ce200fcfdec04234446c7db7da50cd43ffccd78aac205b12c1804bca7c734d9",
+  "public_artifact_hash": "75feecc9fe595f777fa077c09ce545c3625bf372c665a3cdcd41641ba7827a26",
   "forbidden_public_urls_status": {
     "ok": true,
     "statuses": {
@@ -34,14 +33,10 @@
       "/.github/workflows/pseo.yml": 404
     }
   },
-  "snapshot_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-  "live_snapshot_hash_short": "137528d496ee5678",
-  "seed_urls": [
-    "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
-    "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/"
-  ],
-  "indexable_seed_count": 3,
+  "snapshot_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
+  "live_snapshot_hash_short": "a0882dd4ebddb376",
+  "seed_urls": [],
+  "indexable_seed_count": 0,
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
   "gsc_state_by_url": {
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/": "DISCOVERED_NOT_CRAWLED",
@@ -62,52 +57,60 @@
       "radar-edificacoes-publicas-pr"
     ]
   },
-  "snapshot_source_commit_on_main": true,
-  "next_wave_gate": true,
-  "next_wave_gate_reasons": [],
+  "snapshot_source_commit_on_main": false,
+  "next_wave_gate": false,
+  "next_wave_gate_reasons": [
+    "no_indexable_seeds",
+    "production_audit_not_ok",
+    "snapshot_source_commit_not_on_extra_cli_main"
+  ],
   "next_wave_gate_detail": {
-    "allowed": true,
-    "next_wave_gate": true,
+    "allowed": false,
+    "next_wave_gate": false,
     "gsc_discovery_or_crawl_without_soft404": true,
-    "reasons": [],
+    "reasons": [
+      "no_indexable_seeds",
+      "production_audit_not_ok",
+      "snapshot_source_commit_not_on_extra_cli_main"
+    ],
     "metrics": {
-      "indexable_seed_count": 3,
-      "inspected_count": 3,
-      "discovered_or_crawled_count": 3,
-      "required_discovered": 3,
+      "indexable_seed_count": 0,
+      "inspected_count": 0,
+      "discovered_or_crawled_count": 0,
+      "required_discovered": 0,
       "uninspected": [],
       "blocking": [],
       "new_pages_published": 0,
       "pages_added": []
     },
-    "computed_at": "2026-08-01T01:50:08Z",
+    "computed_at": "2026-08-02T02:21:42Z",
     "auditor_version": "wave0-closure-02"
   },
   "production_audit": {
-    "ok": true,
-    "technical_ok": true,
-    "critical_count": 0,
+    "ok": false,
+    "technical_ok": false,
+    "critical_count": 6,
     "stale_code": null,
     "counts": {
-      "urls_audited": 18,
-      "critical_defects": 0,
-      "crawlable_production": 5,
-      "deployed_only": 13
+      "urls_audited": 19,
+      "critical_defects": 6,
+      "crawlable_production": 0,
+      "deployed_only": 19
     },
     "production_audit_is_current": true,
-    "audit_target_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-    "live_manifest_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545"
+    "audit_target_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+    "live_manifest_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2"
   },
   "public_artifact_audit_ok": true,
   "live_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-    "snapshot_hash_short": "137528d496ee5678",
-    "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
-    "generated_at": "2026-08-01T01:49:06Z",
+    "web_cfg_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+    "snapshot_hash_short": "a0882dd4ebddb376",
+    "source_run_id": "pseo-20260801T035051Z-9d2d9627",
+    "generated_at": "2026-08-02T01:09:40Z",
     "data_as_of": "2026-07-31",
-    "published_page_count": 3,
+    "published_page_count": 0,
     "public_directory": "_site",
     "sitemap_urls": [
       "https://confenge.com.br/sitemap-index.xml",
@@ -117,5 +120,5 @@
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-01T01:50:08Z"
+  "generated_at": "2026-08-02T02:21:42Z"
 }

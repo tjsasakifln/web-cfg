@@ -1,8 +1,8 @@
 {
   "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
   "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "final_sha_at_write": "4873c1f3c9c2f08387459fc645092e0054e59d72",
-  "date": "2026-08-02T02:44:52Z",
+  "final_sha_at_write": "58cb4fb942998aab0037b9484952084a6e422502",
+  "date": "2026-08-02T02:58:40Z",
   "status": "COMPLETE",
   "metrics_before": {
     "1440x1000": {
@@ -105,9 +105,11 @@
     "Lighthouse scores not fabricated; axe moderate region residual",
     "pSEO long-tail pages only inherit shared CSS chrome, not full rewrite"
   ],
-  "final_sha": "4873c1f3c9c2f08387459fc645092e0054e59d72",
+  "final_sha": "58cb4fb942998aab0037b9484952084a6e422502",
   "commits": [
-    "4873c1f3 docs(uiux): record measured 30%+ height/text reductions and final build proof",
+    "58cb4fb9 fix(uiux): raise footer, breadcrumb, profile, and related-card type to 14px",
+    "ebbe3d33 docs(uiux): confirm metrics ALL_MET and build:site proof status",
+    "fcf20784 docs(uiux): record measured 30%+ height/text reductions and final build proof",
     "f7e805ae docs(uiux): set final_sha to HEAD after skeptic closure",
     "45e10de5 docs(uiux): record build:site pass and skeptic-gap closure evidence",
     "d055d82a fix(uiux): enforce 14px functional type floor and convert CTA family",

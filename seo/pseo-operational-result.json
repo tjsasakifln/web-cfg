@@ -1,27 +1,23 @@
 {
-  "terminal_status": "PASS_WAVE0_ACTIVATED_GSC_OBSERVED",
-  "web_cfg_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-  "extra_cli_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
+  "terminal_status": "BLOCKED_SNAPSHOT_PROVENANCE",
+  "web_cfg_sha": "f42575626ec471aab9afe74b850d78479746f526",
+  "extra_cli_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-  "snapshot_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
+  "netlify_deployed_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+  "snapshot_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
   "public_directory": "_site",
-  "public_artifact_hash": "7ce200fcfdec04234446c7db7da50cd43ffccd78aac205b12c1804bca7c734d9",
-  "seed_urls": [
-    "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
-    "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-    "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/"
-  ],
-  "indexable_seed_count": 3,
+  "public_artifact_hash": "75feecc9fe595f777fa077c09ce545c3625bf372c665a3cdcd41641ba7827a26",
+  "seed_urls": [],
+  "indexable_seed_count": 0,
   "production_audit": {
-    "ok": true,
-    "technical_ok": true,
+    "ok": false,
+    "technical_ok": false,
     "production_audit_is_current": true,
     "stale_code": null,
-    "critical_count": 0,
-    "audit_target_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-    "live_manifest_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545"
+    "critical_count": 6,
+    "audit_target_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+    "live_manifest_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2"
   },
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
   "gsc_status_by_url": {
@@ -31,9 +27,13 @@
     "/radar/edificacoes-publicas-pr/": "INDEXED"
   },
   "next_wave_gate": {
-    "allowed": true,
+    "allowed": false,
     "gsc_discovery_or_crawl_without_soft404": true,
-    "reasons": []
+    "reasons": [
+      "no_indexable_seeds",
+      "production_audit_not_ok",
+      "snapshot_source_commit_not_on_extra_cli_main"
+    ]
   },
   "forbidden_public_urls_status": {
     "ok": true,
@@ -52,18 +52,18 @@
     "QUALITY_ELIGIBLE": true,
     "EDITORIALLY_APPROVED": true,
     "DEPLOYED_PRODUCTION": true,
-    "CRAWLABLE_PRODUCTION": true,
+    "CRAWLABLE_PRODUCTION": false,
     "INDEXED_BY_GOOGLE": false
   },
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
-    "snapshot_hash_short": "137528d496ee5678",
-    "source_run_id": "pseo-20260801T011600Z-b7e9fb73",
-    "generated_at": "2026-08-01T01:49:06Z",
+    "web_cfg_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+    "snapshot_hash_short": "a0882dd4ebddb376",
+    "source_run_id": "pseo-20260801T035051Z-9d2d9627",
+    "generated_at": "2026-08-02T01:09:40Z",
     "data_as_of": "2026-07-31",
-    "published_page_count": 3,
+    "published_page_count": 0,
     "public_directory": "_site",
     "sitemap_urls": [
       "https://confenge.com.br/sitemap-index.xml",
@@ -72,7 +72,11 @@
     ],
     "note": "Public build marker only. Does not imply Google indexation. Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
   },
-  "unresolved_risks": [],
-  "generated_at": "2026-08-01T01:50:08Z",
+  "unresolved_risks": [
+    "no_indexable_seeds",
+    "production_audit_not_ok",
+    "snapshot_source_commit_not_on_extra_cli_main"
+  ],
+  "generated_at": "2026-08-02T02:21:42Z",
   "auditor_version": "wave0-closure-02"
 }
