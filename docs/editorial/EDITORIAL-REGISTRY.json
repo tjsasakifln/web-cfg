@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-02T17:30:18Z",
+  "generated_at": "2026-08-02T17:37:30Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -57,38 +57,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -140,38 +136,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -221,38 +213,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -303,38 +291,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -393,41 +377,13 @@
       "status": "REJECTED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "REJECTED",
+          "reason": "jurisprudence_source_incomplete",
+          "actor": "editorial-build"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
+          "at": "2026-08-02T17:37:30Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
         }
@@ -511,38 +467,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -606,38 +558,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -703,38 +651,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -804,38 +748,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -897,38 +837,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -992,38 +928,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     },
@@ -1088,38 +1020,34 @@
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "DRAFT",
+          "actor": "editorial-build",
+          "notes": "page body authored from official sources"
         },
         {
-          "at": "2026-08-02T17:12:14Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "LEGAL_SOURCE_VALIDATED",
+          "actor": "editorial-build-gates",
+          "notes": "SOURCE-MANIFEST sources resolve"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "TECHNICAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "devices CTAs schema naturalness package"
         },
         {
-          "at": "2026-08-02T17:13:48Z",
-          "event": "INDEXABLE"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "EDITORIAL_REVIEWED",
+          "actor": "editorial-build-gates",
+          "notes": "awaiting named human via approve_cli.py"
         },
         {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "HUMAN_APPROVED",
-          "reviewer": "editorial-wave1-operator"
-        },
-        {
-          "at": "2026-08-02T17:16:51Z",
-          "event": "INDEXABLE"
-        },
-        {
-          "at": "2026-08-02T17:30:18Z",
-          "event": "revoked_non_human_approval",
-          "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "reviewer_was": "editorial-wave1-operator"
+          "at": "2026-08-02T17:37:20Z",
+          "event": "NOTE",
+          "actor": "system",
+          "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ]
     }
@@ -1128,5 +1056,7 @@
     "EDITORIAL_REVIEWED": 11,
     "REJECTED": 1
   },
-  "indexable_urls": []
+  "indexable_urls": [],
+  "human_approval_required": true,
+  "note": "INDEXABLE only after approve_cli.py with named human reviewer"
 }
