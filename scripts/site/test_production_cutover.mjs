@@ -177,6 +177,31 @@ ok(
   "sitemap"
 );
 
+
+// Release result JSON: COMPLETE requires final_sha==deployed_sha==live (head==live already enforced)
+const releasePath = resolve(ROOT, "docs/FINAL-RELEASE-RESULT.json");
+if (existsSync(releasePath)) {
+  try {
+    const rel = JSON.parse(readFileSync(releasePath, "utf8"));
+    if (rel.status === "COMPLETE" && isProd) {
+      const liveSha = markerJson.web_cfg_sha;
+      ok(
+        "release_result_shas_consistent",
+        rel.final_sha && rel.deployed_sha && rel.final_sha === rel.deployed_sha,
+        `final_sha=${rel.final_sha} deployed_sha=${rel.deployed_sha}`
+      );
+      ok(
+        "release_result_matches_live_and_head",
+        rel.final_sha === liveSha && rel.final_sha === head,
+        `final_sha=${rel.final_sha} live=${liveSha} head=${head}`
+      );
+    }
+  } catch (e) {
+    failures.push(`release_result_json: ${e}`);
+  }
+}
+
+
 if (failures.length) {
   console.error("\nCUTOVER FAILURES:", failures.length);
   for (const f of failures) console.error(" -", f);

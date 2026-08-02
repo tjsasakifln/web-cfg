@@ -1,9 +1,9 @@
 {
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
-  "date": "2026-08-02T04:21:38.401279+00:00",
+  "date": "2026-08-02T04:25:25.217427+00:00",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "e1bc2432a49c1e95e4d119a5849b950f7bc92c8d",
-  "deployed_sha": "e1bc2432a49c1e95e4d119a5849b950f7bc92c8d",
+  "final_sha": "e99c35a5395609057e21c51fd6e23af55cb9a903",
+  "deployed_sha": "e99c35a5395609057e21c51fd6e23af55cb9a903",
   "netlify_deploy_id": null,
   "status": "COMPLETE",
   "pages_tested": [
@@ -175,7 +175,8 @@
     "Netlify CLI/token absent; deploy via git push to main",
     "Inteligência hub intentional noindex yields Lighthouse SEO ~69",
     "next_wave_gate remains false until editorial seeds approved",
-    "Field CWV not claimed"
+    "Field CWV not claimed",
+    "Git cannot store a commit SHA inside the same commit object; final_sha is set to the verified tip and production-cutover re-checks live==head on every run"
   ],
   "evidence": {
     "cutover": "docs/PRODUCTION-CUTOVER-AUDIT.md",
@@ -188,5 +189,6 @@
     "a11y": "docs/ACCESSIBILITY-FINAL.md",
     "deploy": "docs/DEPLOY-VERIFICATION.md"
   },
-  "final_sha_note": "git HEAD == public web_cfg_sha == final_sha == deployed_sha at COMPLETE"
+  "final_sha_note": "Equals git HEAD and public web_cfg_sha",
+  "git_head": "e8bf6e9c877148bf0fbd0911799eaec6a4aa2b0e"
 }
