@@ -1,0 +1,31 @@
+{
+  "head": "3fac08c225fa6fefb1ec194bfe7573f152c62a41",
+  "prod_commit": "3fac08c225fa6fefb1ec194bfe7573f152c62a41",
+  "head_matches_prod": true,
+  "stale_claim_auto_approve_lines_188_206": true,
+  "auto_approve_rc": 2,
+  "registry_counts": {
+    "EDITORIAL_REVIEWED": 11,
+    "REJECTED": 1
+  },
+  "indexable_urls": [],
+  "sample_history": [
+    "DRAFT",
+    "LEGAL_SOURCE_VALIDATED",
+    "TECHNICAL_REVIEWED",
+    "EDITORIAL_REVIEWED",
+    "NOTE"
+  ],
+  "draft_approve_blocked": true,
+  "draft_err": "requires_EDITORIAL_REVIEWED_got_DRAFT",
+  "final_terminal": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "final_claims_complete_as_success": false,
+  "jur_status": "REJECTED",
+  "prod_robots": "noindex,follow",
+  "prod_editorial_sitemap_locs": 0,
+  "external_actions_doc_exists": true,
+  "will_not_run_approve_as_tiago": true,
+  "reason": "Objective forbids false human approval; only real named human may run approve_cli.py",
+  "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "all_stale_skeptic_claims_resolved": true
+}
