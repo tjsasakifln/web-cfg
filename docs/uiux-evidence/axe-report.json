@@ -1,141 +1,109 @@
 {
-  "generated_at": "2026-08-02T01:41:28.416Z",
+  "generated_at": "2026-08-02T03:36:12.404Z",
   "pages": [
     {
       "path": "/",
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              ".whatsapp-float"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/diretoria-b2g/",
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              ".whatsapp-float"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/diagnostico-b2g-360/",
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              ".whatsapp-float"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/bid-room-licitacoes-obras/",
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              ".whatsapp-float"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/defesa-margem-contratos-publicos/",
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              ".whatsapp-float"
-            ]
-          ]
-        }
-      ]
+      "violations": []
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/conteudos/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
     },
     {
       "path": "/obrigado.html",
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              ".whatsapp-float"
-            ]
-          ]
-        }
-      ]
+      "violations": []
+    },
+    {
+      "path": "/404.html",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
     }
   ],
   "critical": 0,
   "serious": 0,
-  "moderate": 6,
+  "moderate": 0,
   "minor": 0
 }

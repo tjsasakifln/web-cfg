@@ -20,7 +20,11 @@ const PAGES = [
   "/diagnostico-b2g-360/",
   "/bid-room-licitacoes-obras/",
   "/defesa-margem-contratos-publicos/",
+  "/especialista/tiago-jun-sasaki/",
+  "/inteligencia/",
+  "/conteudos/",
   "/obrigado.html",
+  "/404.html",
 ];
 
 let axeSource;
