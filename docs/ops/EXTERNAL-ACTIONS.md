@@ -33,15 +33,18 @@ No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confe
 
 ## 2. DNS e-mail (domínio confenge.com.br) — **OPEN**
 
-**Plataforma:** DNS do registrador do domínio  
+**Plataforma:** DNS do registrador do domínio (MX atual: Hostinger `mx1/mx2.hostinger.com` — DoH 2026-08-02)
+
+**Estado observado (Cloudflare DoH):** sem TXT SPF em `@`; sem `_dmarc`; MX Hostinger apenas.  
+Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 
 | Registro | Host | Valor esperado | Validação |
 | --- | --- | --- | --- |
-| SPF TXT | `@` | incluir include do Resend (doc atual Resend, p.ex. `include:amazonses.com` ou o que o painel mostrar) | `dig TXT confenge.com.br` / Resend dashboard green |
-| DKIM CNAME | hosts dados pelo Resend | valores do wizard Resend | Resend Domain → Verified |
-| DMARC TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | `dig TXT _dmarc.confenge.com.br` |
+| SPF TXT | `@` | `v=spf1 include:…` **conforme wizard Resend** (não inventar include; copiar do painel) **mantendo** envio Hostinger se ainda usar webmail | DoH/dig + Resend Domain green |
+| DKIM CNAME | hosts do Resend | valores do wizard Resend | Resend Domain → Verified |
+| DMARC TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | DoH/dig `_dmarc.confenge.com.br` |
 
-**Consequência se OPEN:** e-mail não pode ser score 10 (spam/bounce).
+**Consequência se OPEN:** e-mail transacional não pode ser score 10 (sem auth → spam/bounce).
 
 ---
 

@@ -2,8 +2,8 @@
 
 **Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`
 
-**Repo tip:** `1f22f66a` (branch protection + Turnstile-ready + probe)  
-**Produção funcional leads (comprovada):** tip `6a386477` e posteriores com mesmo pipeline; revalidar `build-info` após cada deploy.  
+**Repo tip = produção:** `d88094ad88698bd9e471c1a40dfe4bcb05d2d492`  
+**build_time prod:** `2026-08-02T15:42:39Z` · `docs/evidence/inbound-10/prod-build-info-tip-d88094ad.json`  
 **Evidência:** `docs/evidence/inbound-10/` · `docs/ops/EXTERNAL-ACTIONS.md`
 
 **Não declarar** `COMPLETE` / `10/10` / `FORTUNE_500` enquanto itens **OPEN** em EXTERNAL-ACTIONS permanecerem sem prova.
