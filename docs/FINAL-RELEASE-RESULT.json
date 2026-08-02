@@ -2,8 +2,8 @@
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
   "date": "2026-08-02T04:36:42Z",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "2e9b1a7d596a8e346d162f4cac4edc9087b4e6b6",
-  "deployed_sha": "2e9b1a7d596a8e346d162f4cac4edc9087b4e6b6",
+  "final_sha": "PLACEHOLDER",
+  "deployed_sha": "PLACEHOLDER",
   "netlify_deploy_id": null,
   "status": "COMPLETE",
   "pages_tested": [
@@ -176,7 +176,7 @@
     "Inteligência hub intentional noindex yields Lighthouse SEO ~69",
     "next_wave_gate remains false until editorial seeds approved",
     "Field CWV not claimed",
-    "final_sha/deployed_sha are injected at build:site from git HEAD so they match the public marker"
+    "final_sha/deployed_sha are PLACEHOLDER in the git blob when COMPLETE; smudge injects HEAD on checkout; build:site pins authentic tip into docs and /.well-known/release-result.json"
   ],
   "evidence": {
     "cutover": "docs/PRODUCTION-CUTOVER-AUDIT.md",
@@ -189,6 +189,6 @@
     "a11y": "docs/ACCESSIBILITY-FINAL.md",
     "deploy": "docs/DEPLOY-VERIFICATION.md"
   },
-  "final_sha_note": "Injected at build time (npm run build:site) from git HEAD; matches /.well-known/pseo-build.json web_cfg_sha for this deploy",
-  "git_head": "e8bf6e9c877148bf0fbd0911799eaec6a4aa2b0e"
+  "final_sha_note": "PLACEHOLDER in git blob; smudge injects HEAD on checkout; build:site and /.well-known/release-result.json carry the real tip SHA",
+  "git_head": "PLACEHOLDER"
 }

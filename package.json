@@ -5,6 +5,8 @@
   "description": "CONFENGE static site — SEO migration and host canonization tooling",
   "type": "module",
   "scripts": {
+    "prepare": "bash scripts/install-git-filters.sh",
+    "test:release-filters": "python3 scripts/site/test_release_result_filters.py",
     "audit:migration": "node scripts/audit-migration.mjs",
     "audit:public-artifact": "python3 scripts/pseo/public_artifact.py audit",
     "validate:seo": "python3 seo/scripts/validate_seo.py",
