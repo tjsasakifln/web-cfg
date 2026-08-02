@@ -1,27 +1,22 @@
 {
-  "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
-  "all_skeptic_closed": true,
-  "skeptic_panel_findings": "STALE — describe pre-remediation code; live build.py:188-206 rejects incomplete jurisprudence, does not auto-approve",
-  "indexable_count": 0,
-  "awaiting_human": 11,
-  "rejected": 1,
-  "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
-  "will_not_impersonate_named_human": true,
-  "why_not_complete": "Objective forbids automated or false HUMAN_APPROVED. Named human must run approve_cli.py.",
-  "verified_at": "2026-08-02T17:49:15Z",
-  "live_proof": {
-    "auto_approve_rc": 2,
-    "approve_human_in_build": false,
-    "registry_history_sample": [
-      "DRAFT",
-      "LEGAL_SOURCE_VALIDATED",
-      "TECHNICAL_REVIEWED",
-      "EDITORIAL_REVIEWED",
-      "NOTE"
-    ],
-    "final_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
-    "jur_status": "REJECTED",
-    "prod_wave1_robots": "noindex,follow",
-    "prod_editorial_sitemap_locs": 0
-  }
+  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "audit": "wave1-final-human-packet",
+  "completed_at": "2026-08-02T19:21:45Z",
+  "EDITORIAL_REVIEWED": 11,
+  "REJECTED": 1,
+  "HUMAN_APPROVED": 0,
+  "INDEXABLE": 0,
+  "ready_for_human_approval": 11,
+  "blocked": [
+    "jur-sumula-260-art"
+  ],
+  "material_fix": "art.115 §1 official wording restored (posse do chefe do Poder Executivo / novo titular)",
+  "approve_script": "scripts/editorial/approve_wave1_tiago.sh",
+  "approve_script_executed": false,
+  "packet": [
+    "docs/editorial/FINAL-HUMAN-REVIEW-PACKET.md",
+    "docs/editorial/FINAL-HUMAN-REVIEW-PACKET.json",
+    "docs/editorial/FINAL-AUDIT-EVIDENCE.md"
+  ],
+  "single_manual_action": "Tiago Sasaki runs bash scripts/editorial/approve_wave1_tiago.sh after reading FINAL-HUMAN-REVIEW-PACKET.md"
 }

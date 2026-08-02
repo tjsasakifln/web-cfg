@@ -1,0 +1,1380 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-02T19:14:01Z",
+  "audit_principle": "Procure razões para reprovar. Na dúvida, corrija ou noindex.",
+  "baseline": {
+    "EDITORIAL_REVIEWED": 11,
+    "REJECTED": 1,
+    "HUMAN_APPROVED": 0,
+    "INDEXABLE": 0,
+    "sitemap_editorial_urls": 0,
+    "sitemap_jurisprudencia_urls": 0,
+    "auto_approve_removed": true,
+    "author_public": "Biblioteca técnica CONFENGE",
+    "author_is_tiago": false
+  },
+  "ready_count": 11,
+  "blocked_count": 1,
+  "ready_page_ids": [
+    "lei-art124-alteracao-obra",
+    "lei-limite-25-50",
+    "lei-item-novo-desconto",
+    "lei-reequilibrio-reajuste",
+    "lei-atraso-administracao",
+    "lei-parcela-incontroversa",
+    "lei-servico-sem-aditivo",
+    "guia-checklist-aditivo",
+    "guia-docs-reequilibrio",
+    "guia-glosa",
+    "guia-notificacao-atraso"
+  ],
+  "blocked_page_ids": [
+    "jur-sumula-260-art"
+  ],
+  "pages": [
+    {
+      "page_id": "lei-art124-alteracao-obra",
+      "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "material_hash": "8ca36cc833f6dca2594d057d30722eb1328350d470ae01a03d232830053925e1",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "art. 124 aditivo obra",
+      "journey": "execucao",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art124",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art125",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art126-132",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art136",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        },
+        {
+          "id": "agu-alteracoes-contratuais-2024",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art135",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.124",
+        "art.125",
+        "art.126"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "art124-eixos-unilateral-acordo",
+          "claim": "O art. 124 organiza alterações unilaterais pela Administração (inciso I) e por acordo entre as partes (inciso II), sempre com as devidas justificativas.",
+          "support_level": "direct",
+          "source_locator": "art. 124, caput, I e II"
+        },
+        {
+          "claim_id": "art124-inciso-i-hipoteses",
+          "claim": "Unilateral: (a) projeto/especificações para adequação técnica; (b) acréscimo/supressão quantitativa nos limites legais.",
+          "support_level": "direct",
+          "source_locator": "art. 124, I, a e b"
+        },
+        {
+          "claim_id": "art124-inciso-ii-hipoteses",
+          "claim": "Por acordo (II): substituição de garantia; regime/modo de execução; forma de pagamento superveniente com valor atualizado; reequilíbrio nas hipóteses da alínea d.",
+          "support_level": "direct",
+          "source_locator": "art. 124, II, a–d"
+        },
+        {
+          "claim_id": "art136-nao-e-124-denominacao",
+          "claim": "Alterações na razão ou denominação social do contratado podem ser apostiladas (art. 136, III), sem se confundir com hipóteses do art. 124, II.",
+          "support_level": "direct",
+          "source_locator": "art. 136, III"
+        },
+        {
+          "claim_id": "art125-limites-no-contexto-124",
+          "claim": "Nas alterações unilaterais do art. 124, I, vigoram os limites de 25% e, em reforma de edifício ou equipamento, 50% de acréscimo (art. 125).",
+          "support_level": "direct",
+          "source_locator": "art. 125"
+        },
+        {
+          "claim_id": "art126-nao-transfigura-objeto",
+          "claim": "Alterações unilaterais não podem transfigurar o objeto da contratação (art. 126).",
+          "support_level": "direct",
+          "source_locator": "art. 126"
+        },
+        {
+          "claim_id": "art132-formalizacao-contexto-124",
+          "claim": "A formalização do termo aditivo é condição para a execução das prestações determinadas pela Administração, salvo antecipação justificada com formalização em até 1 mês (art. 132).",
+          "support_level": "direct",
+          "source_locator": "art. 132"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/aditivo-qualitativo-quantitativo/ (noindex)",
+          "/aditivos-obras-publicas/ (serviço)"
+        ],
+        "overlap": "baixa–média (intenção legal específica art.124 vs guias genéricos)",
+        "winner": "Wave 1 (quando INDEXABLE)",
+        "action": "manter ambas; Wave 1 é aplicação legal profunda; serviço institucional permanece comercial"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__art-124-alteracao-contratual-obra__desktop.png",
+        "h1": "Art. 124 da Lei 14.133: quando o aditivo de obra é unilateral ou por acordo"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__art-124-alteracao-contratual-obra__mobile.png"
+      },
+      "errors_found": [],
+      "corrections_executed": [
+        "Verificado: art.124 I/II sem vínculo societário; arts.125/126/132 coerentes com Planalto."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar via approve_wave1_tiago.sh (Tiago Sasaki) + --indexable; em seguida executar pós-aprovação de canibalização se aplicável",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "lei-limite-25-50",
+      "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "material_hash": "5f4aec0b2e9e62d951262cec4bbd2edc4dd41b0caf1e1fcf427beb793a58b70f",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "limite aditivo 25 50",
+      "journey": "execucao",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art125",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art124",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art126-132",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        },
+        {
+          "id": "agu-alteracoes-contratuais-2024",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.125",
+        "art.124",
+        "art.126"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "art125-limites-25-50",
+          "claim": "Nas alterações unilaterais do art. 124, I, o contratado aceita acréscimos ou supressões de até 25% do valor inicial atualizado; em reforma de edifício ou de equipamento, acréscimo de até 50%.",
+          "support_level": "direct",
+          "source_locator": "art. 125"
+        },
+        {
+          "claim_id": "art125-vinculo-124i",
+          "claim": "Os limites do art. 125 aplicam-se às alterações unilaterais do inciso I do art. 124.",
+          "support_level": "direct",
+          "source_locator": "art. 125 c/c art. 124, I"
+        },
+        {
+          "claim_id": "art126-nao-transfigura",
+          "claim": "Alterações unilaterais do art. 124, I, não podem transfigurar o objeto da contratação (art. 126).",
+          "support_level": "direct",
+          "source_locator": "art. 126"
+        },
+        {
+          "claim_id": "art125-50-nao-e-regra-geral",
+          "claim": "O limite de acréscimo de 50% não é regra geral de qualquer edificação nova: o art. 125 eleva o teto apenas no caso de reforma de edifício ou de equipamento.",
+          "support_level": "direct",
+          "source_locator": "art. 125 (cláusula de reforma)"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.",
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/limite-aditivo-25-50-obra-publica/ (index,follow)"
+        ],
+        "overlap": "alta (mesma consulta principal de teto 25/50)",
+        "winner": "Wave 1 preferida após HUMAN_APPROVED (devices + claims + fontes frescas)",
+        "action": "após indexar Wave 1: noindex ou canonical do conteudos para Wave 1; não dual-index"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__limite-25-50-aditivo-obra__desktop.png",
+        "h1": "Limite de 25% e 50% no art. 125: o que conta no aditivo de obra"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__limite-25-50-aditivo-obra__mobile.png"
+      },
+      "errors_found": [],
+      "corrections_executed": [
+        "Verificado: 50% só reforma de edifício/equipamento; limites sobre valor inicial atualizado."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "lei-item-novo-desconto",
+      "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "material_hash": "66bb5e782da7074e9e646c90a3752c75ffa40b5619658a01184599afbbf8f0d8",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "item novo aditivo desconto",
+      "journey": "execucao",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art126-132",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art124",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        },
+        {
+          "id": "agu-alteracoes-contratuais-2024",
+          "from_page_sources": true
+        },
+        {
+          "id": "sinapi-caixa",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art125",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.127",
+        "art.124",
+        "art.125"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "art127-preco-sem-unitario",
+          "claim": "Sem preços unitários para obras ou serviços cujo aditamento se fizer necessário, fixam-se pela relação proposta/orçamento-base sobre preços referenciais ou de mercado na data do aditamento, respeitado o art. 125.",
+          "support_level": "direct",
+          "source_locator": "art. 127"
+        },
+        {
+          "claim_id": "art124-contexto-aditamento",
+          "claim": "Aditamento com item novo permanece no regime de alterações do art. 124, que exige as devidas justificativas para unilateralidade ou acordo.",
+          "support_level": "direct",
+          "source_locator": "art. 124"
+        },
+        {
+          "claim_id": "art125-limite-item-novo",
+          "claim": "Preços de obras ou serviços sem unitário no aditamento, fixados na forma do art. 127, respeitam os limites de acréscimo e supressão do art. 125.",
+          "support_level": "direct",
+          "source_locator": "art. 127 c/c art. 125"
+        },
+        {
+          "claim_id": "desconto-proposta-operacional",
+          "claim": "Manutenção do desconto da proposta em item novo é prática/tese frequente, não regra automática do art. 127; exige coerência documental com a proposta e o contrato.",
+          "support_level": "interpretive",
+          "source_locator": "art. 127 + orientação operacional/AGU"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.",
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/desconto-da-proposta-em-item-novo-aditivo/ (index,follow)",
+          "/conteudos/preco-de-item-novo-aditivo-obra-publica/ (noindex)"
+        ],
+        "overlap": "alta com desconto-da-proposta",
+        "winner": "Wave 1 preferida após aprovação",
+        "action": "após indexar Wave 1: noindex/consolidar conteudos desconto-da-proposta; manter links related"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__preco-item-novo-desconto-proposta__desktop.png",
+        "h1": "Item novo no aditivo: como formar preço e preservar o desconto da proposta"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__preco-item-novo-desconto-proposta__mobile.png"
+      },
+      "errors_found": [],
+      "corrections_executed": [
+        "Verificado: art.127 relação proposta/orçamento-base; desconto não automático."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "lei-reequilibrio-reajuste",
+      "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "material_hash": "b339ec79e05601c2113db5ebf64e5edfed07766c903cdc246eb2036965070e30",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "reequilibrio reajuste repactuacao",
+      "journey": "pagamento",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art130-131",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art135",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art136",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art6-definicoes",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art92",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art134",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.130",
+        "art.131",
+        "art.135",
+        "art.136",
+        "art.6"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "repactuacao-art135-escopo",
+          "claim": "Repactuação no art. 135 aplica-se a serviços contínuos com dedicação exclusiva ou predominância de mão de obra, com demonstração analítica de variação de custos.",
+          "support_level": "direct",
+          "source_locator": "art. 135, caput; art. 6º, LIX"
+        },
+        {
+          "claim_id": "reajuste-sentido-estrito",
+          "claim": "Reajustamento em sentido estrito é aplicação do índice de correção monetária previsto no contrato que retrate a variação do custo de produção.",
+          "support_level": "direct",
+          "source_locator": "art. 6º, LVIII"
+        },
+        {
+          "claim_id": "reequilibrio-art130-aditivo",
+          "claim": "Alteração unilateral que aumente ou diminua encargos exige restabelecimento do equilíbrio no mesmo termo aditivo (art. 130).",
+          "support_level": "direct",
+          "source_locator": "art. 130"
+        },
+        {
+          "claim_id": "reequilibrio-art131-janela",
+          "claim": "Extinção não impede reconhecimento do desequilíbrio; pedido deve ser formulado na vigência e antes de prorrogação nos termos do art. 107.",
+          "support_level": "direct",
+          "source_locator": "art. 131 e parágrafo único"
+        },
+        {
+          "claim_id": "apostila-136-reajuste-repactuacao",
+          "claim": "Variação de valor por reajuste ou repactuação previstos no contrato pode ser registrada por apostila (art. 136, I).",
+          "support_level": "direct",
+          "source_locator": "art. 136, I"
+        },
+        {
+          "claim_id": "matriz-riscos-equilibrio",
+          "claim": "A matriz de riscos caracteriza o equilíbrio econômico-financeiro inicial e a alocação de ônus de eventos supervenientes (art. 6º, XXVII), interferindo na análise de reequilíbrio.",
+          "support_level": "direct",
+          "source_locator": "art. 6º, XXVII"
+        },
+        {
+          "claim_id": "art107-prorrogacao-continuos",
+          "claim": "Contratos de serviços e fornecimentos contínuos podem ser prorrogados sucessivamente até vigência máxima decenal, com atestação de vantajosidade (art. 107).",
+          "support_level": "direct",
+          "source_locator": "art. 107"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/ (noindex)",
+          "/reequilibrio-obras-publicas/ (serviço)"
+        ],
+        "overlap": "média com conteudos noindex; baixa com serviço",
+        "winner": "Wave 1",
+        "action": "manter ambas Wave 1 + serviço; conteudos permanece noindex"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__reequilibrio-reajuste-repactuacao__desktop.png",
+        "h1": "Reequilíbrio, reajuste e repactuação na Lei 14.133: qual caminho na obra"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__reequilibrio-reajuste-repactuacao__mobile.png"
+      },
+      "errors_found": [],
+      "corrections_executed": [
+        "Verificado: art.135 escopo serviços contínuos; distinção reajuste/repactuação/reequilíbrio."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar via approve_wave1_tiago.sh (Tiago Sasaki) + --indexable; em seguida executar pós-aprovação de canibalização se aplicável",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "lei-atraso-administracao",
+      "url": "/lei-14133-obras/atraso-imputavel-administracao/",
+      "material_hash": "4fe9b1cb9d4ac259b30f9e284b42720ba74965f502fa107e7690e13bf7641af6",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "atraso imputavel administracao",
+      "journey": "prazo",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art115",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art130-131",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art124",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.115",
+        "art.124",
+        "art.130"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "art115-proibicao-retardo",
+          "claim": "É proibido à Administração retardar imotivadamente a execução de obra ou serviço, ou de suas parcelas, inclusive na hipótese de posse do chefe do Poder Executivo ou de novo titular no órgão ou entidade contratante (art. 115, § 1º).",
+          "support_level": "direct",
+          "source_locator": "art. 115, § 1º"
+        },
+        {
+          "claim_id": "art115-execucao-fiel",
+          "claim": "O contrato deve ser executado fielmente pelas partes, de acordo com as cláusulas avençadas e a Lei.",
+          "support_level": "direct",
+          "source_locator": "art. 115, caput"
+        },
+        {
+          "claim_id": "art130-equilibrio-alteracao",
+          "claim": "Se alteração unilateral aumentar ou diminuir encargos, o equilíbrio deve ser restabelecido no mesmo termo aditivo (art. 130).",
+          "support_level": "direct",
+          "source_locator": "art. 130"
+        },
+        {
+          "claim_id": "art124-contexto-alteracao-atraso",
+          "claim": "Quando houver alteração contratual de projeto ou quantitativo no curso da execução, o art. 124 exige justificativas e enquadra unilateralidade ou acordo.",
+          "support_level": "direct",
+          "source_locator": "art. 124, caput, I e II"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.",
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/atraso-obra-culpa-administracao/ (index,follow)",
+          "/atrasos-prorrogacao-obras-publicas/ (serviço)"
+        ],
+        "overlap": "alta com conteudos atraso-culpa",
+        "winner": "Wave 1 preferida após aprovação (art.115 §1 corrigido)",
+        "action": "após indexar Wave 1: noindex/consolidar conteudos atraso-obra-culpa-administracao"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__atraso-imputavel-administracao__desktop.png",
+        "h1": "Atraso imputável à Administração na Lei 14.133: prova e efeitos na obra"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__atraso-imputavel-administracao__mobile.png"
+      },
+      "errors_found": [
+        "official_excerpt art.115 §1 com redação incorreta ('posse provisória ou definitiva') em claims/manifest/excerpts"
+      ],
+      "corrections_executed": [
+        "Corrigido official_excerpt do art. 115 § 1º: texto Planalto é 'posse do respectivo chefe do Poder Executivo ou de novo titular no órgão ou entidade contratante', não 'posse provisória ou definitiva'.",
+        "Body atualizado com a hipótese legal de troca de gestão e menção ao § 5º (paralisação/cronograma).",
+        "Claim art115-proibicao-retardo alinhado ao texto oficial."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Art.115 §1 corrigido para texto Planalto. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "lei-parcela-incontroversa",
+      "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "material_hash": "527030dad87845d07afc1e9d40fb5ce3cdceaab5dd19ab60662929c037504189",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "parcela incontroversa medicao",
+      "journey": "medicao",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art141-143",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.143",
+        "art.141"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "art143-parcela-incontroversa",
+          "claim": "Havendo controvérsia sobre dimensão, qualidade e quantidade da execução, a parcela incontroversa deve ser liberada no prazo de pagamento.",
+          "support_level": "direct",
+          "source_locator": "art. 143"
+        },
+        {
+          "claim_id": "art141-ordem-cronologica",
+          "claim": "O dever de pagamento observa ordem cronológica por fonte de recursos e categorias (bens, locações, serviços, obras).",
+          "support_level": "direct",
+          "source_locator": "art. 141"
+        },
+        {
+          "claim_id": "art143-individualizacao-operacional",
+          "claim": "Liberação da parcela incontroversa exige individualizar valores e critérios na medição; alegar o artigo sem memória de cálculo é insuficiente na prática.",
+          "support_level": "interpretive",
+          "source_locator": "art. 143 (aplicação operacional)"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.",
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/parcela-incontroversa-medicao-contrato-publico/ (noindex)"
+        ],
+        "overlap": "alta mas competidor já noindex",
+        "winner": "Wave 1",
+        "action": "manter Wave 1; conteudos permanece noindex"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__parcela-incontroversa-medicao-pagamento__desktop.png",
+        "h1": "Parcela incontroversa na medição: o que a Lei 14.133 manda pagar"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__parcela-incontroversa-medicao-pagamento__mobile.png"
+      },
+      "errors_found": [],
+      "corrections_executed": [
+        "Verificado: art.143 + art.141 ordem cronológica sem promessa automática."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "lei-servico-sem-aditivo",
+      "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "material_hash": "5b2d66db23bc425c4d61f46e9cd354cae4a6333ad20c22c3234c628cda0c6ffa",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "servico sem termo aditivo",
+      "journey": "execucao",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art124",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art126-132",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        },
+        {
+          "id": "agu-alteracoes-contratuais-2024",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art125",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.124",
+        "art.132",
+        "art.125"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "art132-formalizacao-aditivo",
+          "claim": "A formalização do termo aditivo é condição para a execução das prestações determinadas pela Administração no curso do contrato, salvo antecipação justificada com formalização em até 1 mês.",
+          "support_level": "direct",
+          "source_locator": "art. 132"
+        },
+        {
+          "claim_id": "art124-alteracao-justificada",
+          "claim": "Alterações contratuais exigem as devidas justificativas nos eixos do art. 124.",
+          "support_level": "direct",
+          "source_locator": "art. 124, caput"
+        },
+        {
+          "claim_id": "art125-obrigacao-aceitar-limites",
+          "claim": "Nas alterações unilaterais, o contratado é obrigado a aceitar acréscimos ou supressões nos limites do art. 125 (25%/50% reforma).",
+          "support_level": "direct",
+          "source_locator": "art. 125"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.",
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/servico-executado-sem-termo-aditivo/ (noindex)"
+        ],
+        "overlap": "alta; competidor noindex (disposição consolidar já aplicada)",
+        "winner": "Wave 1",
+        "action": "manter Wave 1; não reindexar conteudos duplicado"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__servico-executado-sem-termo-aditivo__desktop.png",
+        "h1": "Serviço executado sem termo aditivo: risco, prova e enquadramento na 14.133"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/lei-14133-obras__servico-executado-sem-termo-aditivo__mobile.png"
+      },
+      "errors_found": [],
+      "corrections_executed": [
+        "Verificado: art.132 formalização; art.125 obrigação de aceitar nos limites."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "guia-checklist-aditivo",
+      "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "material_hash": "51e1bec123b5ca64a4674f371c84f666038bf84641c8fc86ca5d77d848bd5bd0",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "checklist aditivo obra",
+      "journey": "execucao",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art124",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art125",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        },
+        {
+          "id": "agu-alteracoes-contratuais-2024",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.124",
+        "art.125"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "guia-aditivo-docs-minimos",
+          "claim": "Pedido de aditivo de obra exige descrição técnica, nexo com determinação/projeto, planilha, memória de saldo (arts. 124 e 125) e comunicações oficiais.",
+          "support_level": "interpretive",
+          "source_locator": "arts. 124 e 125 + prática documental"
+        },
+        {
+          "claim_id": "guia-aditivo-art124-eixos",
+          "claim": "O enquadramento do aditivo deve distinguir alteração unilateral (art. 124, I) e por acordo (art. 124, II).",
+          "support_level": "direct",
+          "source_locator": "art. 124, I e II"
+        },
+        {
+          "claim_id": "guia-aditivo-art125-saldo",
+          "claim": "Memória do saldo percentual amarra-se aos limites de acréscimo/supressão do art. 125 sobre o valor inicial atualizado.",
+          "support_level": "direct",
+          "source_locator": "art. 125"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "nenhum equivalente indexable forte"
+        ],
+        "overlap": "baixa",
+        "winner": "Wave 1",
+        "action": "manter"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__checklist-pedido-aditivo__desktop.png",
+        "h1": "Checklist de pedido de aditivo em obra pública"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__checklist-pedido-aditivo__mobile.png"
+      },
+      "errors_found": [],
+      "corrections_executed": [
+        "Verificado: checklist amarrado a arts.124/125; sem promessa de deferimento."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar via approve_wave1_tiago.sh (Tiago Sasaki) + --indexable; em seguida executar pós-aprovação de canibalização se aplicável",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "guia-docs-reequilibrio",
+      "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "material_hash": "708e188e53ff185293b030806d26d5a6a32bbc60a24a3498f23116a7cd7d22a9",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "documentos reequilibrio obra",
+      "journey": "pagamento",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art130-131",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art135",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-art136",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.130",
+        "art.131"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "guia-reeq-art130",
+          "claim": "Alteração unilateral que aumente ou diminua encargos exige restabelecimento do equilíbrio no mesmo termo aditivo (art. 130).",
+          "support_level": "direct",
+          "source_locator": "art. 130"
+        },
+        {
+          "claim_id": "guia-reeq-art131-janela",
+          "claim": "Pedido de restabelecimento do equilíbrio deve ser formulado na vigência e antes de prorrogação nos termos do art. 107 (art. 131, parágrafo único).",
+          "support_level": "direct",
+          "source_locator": "art. 131, parágrafo único"
+        },
+        {
+          "claim_id": "guia-reeq-nexo-matriz",
+          "claim": "Dossiê de reequilíbrio em obra precisa de causa, nexo com contrato e matriz de riscos, quantificação e prova contemporânea — documentos sem nexo não sustentam a tese.",
+          "support_level": "interpretive",
+          "source_locator": "arts. 130–131 (aplicação documental)"
+        },
+        {
+          "claim_id": "guia-reeq-vs-repactuacao",
+          "claim": "Repactuação do art. 135 não se confunde com reequilíbrio dos arts. 130/131 nem com reajuste por índice (art. 136, I).",
+          "support_level": "direct",
+          "source_locator": "art. 135 c/c art. 136, I"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.",
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/documentos-reequilibrio-obra-publica/ (noindex)"
+        ],
+        "overlap": "média–alta; competidor noindex",
+        "winner": "Wave 1",
+        "action": "manter Wave 1 checklist operacional; conteudos noindex"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__documentos-pedido-reequilibrio__desktop.png",
+        "h1": "Documentos para pedido de reequilíbrio em obra pública"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__documentos-pedido-reequilibrio__mobile.png"
+      },
+      "errors_found": [
+        "boilerplate editorial duplicado genérico de checklist"
+      ],
+      "corrections_executed": [
+        "Removida duplicação de ressalva/contexto; texto operacional específico de reequilíbrio."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "guia-glosa",
+      "url": "/guias-contratos-obras/contestar-glosa-medicao/",
+      "material_hash": "fba21a75f6a50279f032bda1946fce4ceb2991dd0f66b1efb9504ba31aa7f468",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "contestar glosa medicao",
+      "journey": "medicao",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art141-143",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.143"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "guia-glosa-art143",
+          "claim": "Havendo controvérsia sobre dimensão, qualidade e quantidade, a parcela incontroversa deve ser liberada no prazo de pagamento (art. 143).",
+          "support_level": "direct",
+          "source_locator": "art. 143"
+        },
+        {
+          "claim_id": "guia-glosa-prova-operacional",
+          "claim": "Contestação de glosa deve juntar critério de medição do contrato e prova de execução (diário, fotos, levantamentos), individualizando o valor glosado.",
+          "support_level": "interpretive",
+          "source_locator": "art. 143 (aplicação operacional)"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/glosa-de-medicao-obra-publica/ (noindex)",
+          "/conteudos/glosa-por-qualidade-obra-publica/ (index)"
+        ],
+        "overlap": "média com glosa-por-qualidade (ângulo qualidade vs checklist contestação)",
+        "winner": "manter ambas se ângulos distintos",
+        "action": "Wave 1 = checklist contestação + art.143; glosa-por-qualidade = foco qualidade — diferenciar no related; não canonical cruzado sem relação editorial"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__contestar-glosa-medicao__desktop.png",
+        "h1": "Documentos para contestar glosa de medição em obra pública"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__contestar-glosa-medicao__mobile.png"
+      },
+      "errors_found": [
+        "boilerplate editorial duplicado genérico de checklist"
+      ],
+      "corrections_executed": [
+        "Removida duplicação 'Contexto de uso' e boilerplate genérico de checklist."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar via approve_wave1_tiago.sh (Tiago Sasaki) + --indexable; em seguida executar pós-aprovação de canibalização se aplicável",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "guia-notificacao-atraso",
+      "url": "/guias-contratos-obras/responder-notificacao-atraso/",
+      "material_hash": "e8ce56a3690414f9fdf7b7985873ade153ef5386d9daf6d788689f1cf4b83543",
+      "status": "READY_FOR_HUMAN_APPROVAL",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "intent_summary": "resposta notificacao atraso obra",
+      "journey": "prazo",
+      "official_sources_opened": [
+        {
+          "id": "lei-14133-planalto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+          "accessed": "2026-08-02",
+          "verified": true
+        },
+        {
+          "id": "lei-14133-art115",
+          "from_page_sources": true
+        },
+        {
+          "id": "lei-14133-planalto",
+          "from_page_sources": true
+        }
+      ],
+      "legal_devices_checked": [
+        "art.115",
+        "art.155"
+      ],
+      "claims_verified": [
+        {
+          "claim_id": "guia-atraso-art115",
+          "claim": "É proibido à Administração retardar imotivadamente a execução de obra ou serviço, ou de suas parcelas, inclusive na hipótese de posse do chefe do Poder Executivo ou de novo titular no órgão (art. 115, § 1º).",
+          "support_level": "direct",
+          "source_locator": "art. 115, § 1º"
+        },
+        {
+          "claim_id": "guia-atraso-resposta-operacional",
+          "claim": "Resposta a notificação de atraso deve mapear cronologia, fatos admitidos/contestados e provas; silêncio e resposta genérica enfraquecem a defesa.",
+          "support_level": "interpretive",
+          "source_locator": "art. 115 (aplicação operacional)"
+        }
+      ],
+      "caveats_present": true,
+      "residual_risk": [
+        "Canibalização alta com URL indexable em /conteudos/: resolver noindex/consolidação no pós-aprovação antes de submeter sitemap.",
+        "Caso concreto (contrato, edital, matriz, regulamento local) pode modificar a conclusão.",
+        "Aprovação automática revogada; só approve_cli.py com revisor nominal."
+      ],
+      "cannibalization": {
+        "competitors": [
+          "/conteudos/resposta-notificacao-atraso-obra-publica/ (index,follow)"
+        ],
+        "overlap": "alta",
+        "winner": "Wave 1 preferida após aprovação",
+        "action": "após indexar Wave 1: noindex/consolidar conteudos resposta-notificacao-atraso"
+      },
+      "cta_verified": {
+        "whatsapp_present": true,
+        "mailto_present": true,
+        "origin_url_in_message": true,
+        "no_result_promise": true
+      },
+      "analytics_verified": {
+        "suite": "npm run test:analytics exit 0",
+        "events": [
+          "legal_article_view",
+          "editorial_page_view",
+          "whatsapp_click",
+          "editorial_whatsapp_click",
+          "email_click",
+          "editorial_email_click"
+        ],
+        "pii": false
+      },
+      "desktop_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "canonical": "https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__responder-notificacao-atraso__desktop.png",
+        "h1": "Como responder notificação por atraso em obra pública"
+      },
+      "mobile_result": {
+        "http_status": 200,
+        "robots": "noindex,follow",
+        "screenshot": "docs/evidence/wave1-audit-screenshots/guias-contratos-obras__responder-notificacao-atraso__mobile.png"
+      },
+      "errors_found": [
+        "mesmo erro de excerpt art.115 §1",
+        "boilerplate de checklist copiado (word_count caiu <400 após limpeza parcial)",
+        "seções duplicadas de contexto"
+      ],
+      "corrections_executed": [
+        "Mesma correção do art. 115 § 1º nos claims/excerpts.",
+        "Removido boilerplate copiado de checklist; reescrito ressalvas e exemplo hipotético.",
+        "Expandido body para word_count>=400 (gate)."
+      ],
+      "status_rationale": "Gates editoriais verdes; claims sustentados por trechos oficiais Planalto verificados em 2026-08-02; robots noindex,follow; fora de sitemaps; autor Biblioteca técnica CONFENGE; author_is_tiago false; CTAs contextuais; sem promessa de resultado. Art.115 §1 corrigido para texto Planalto. Pronto para revisão humana nominal.",
+      "final_recommendation": "aprovar conteúdo e indexar Wave 1 somente após (ou em conjunto com) disposição do competidor indexable em /conteudos/ conforme matriz; script de aprovação ainda executável com ciência do residual",
+      "approve_or_noindex": "aprovar (manter noindex até HUMAN_APPROVED+INDEXABLE pelo script de Tiago)"
+    },
+    {
+      "page_id": "jur-sumula-260-art",
+      "url": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "material_hash": "717c8e524920e0d7af8266af3bba35572294546177fb66b387482fb60abadf40",
+      "status": "REJECTED",
+      "registry_status": "REJECTED",
+      "intent_summary": "Súmula TCU 260 ART obras",
+      "official_sources_opened": [
+        {
+          "id": "tcu-portal",
+          "url": "https://portal.tcu.gov.br/jurisprudencia/",
+          "note": "raiz de busca insuficiente"
+        }
+      ],
+      "legal_devices_checked": [],
+      "claims_verified": [],
+      "caveats_present": true,
+      "residual_risk": [
+        "Falta texto oficial integral da Súmula 260",
+        "Falta data oficial de aprovação",
+        "Falta URL estável e verificável do enunciado no TCU",
+        "Distinção ART/autoria/responsabilidade incompleta sem enunciado"
+      ],
+      "cannibalization": {
+        "action": "manter REJECTED + noindex + fora de sitemaps"
+      },
+      "cta_verified": {
+        "note": "HTML existe mas página não é candidata a aprovação"
+      },
+      "analytics_verified": {
+        "note": "n/a for approval"
+      },
+      "desktop_result": {
+        "robots": "noindex,follow"
+      },
+      "mobile_result": {
+        "robots": "noindex,follow"
+      },
+      "errors_found": [
+        "dossier oficial incompleto"
+      ],
+      "corrections_executed": [
+        "mantido REJECTED; publication_hold true"
+      ],
+      "status_rationale": "Bloqueio deliberado até dossiê TCU completo.",
+      "final_recommendation": "manter noindex; não incluir no script de aprovação",
+      "approve_or_noindex": "manter noindex"
+    }
+  ],
+  "human_only_action": "Tiago Sasaki executa scripts/editorial/approve_wave1_tiago.sh após ler este pacote.",
+  "post_approval_commands": [
+    "npm run editorial:build",
+    "npm run editorial:test",
+    "verificar index,follow só em aprovadas",
+    "verificar sitemap-editorial.xml só com aprovadas",
+    "confirmar jur-sumula-260-art REJECTED",
+    "disposição de canibalização em /conteudos/ concorrentes indexable",
+    "deploy + GSC sitemap submit"
+  ]
+}
