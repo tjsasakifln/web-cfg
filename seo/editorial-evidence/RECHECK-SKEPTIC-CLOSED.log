@@ -1,0 +1,35 @@
+HEAD 0a5e3b15a1045b371ca1640c846408256b961e96
+PROD 0a5e3b15a1045b371ca1640c846408256b961e96
+{
+  "auto_approve_rc2": true,
+  "pkg_no_auto": true,
+  "counts": {
+    "EDITORIAL_REVIEWED": 11,
+    "REJECTED": 1
+  },
+  "indexable_empty": true,
+  "has_progression": [
+    "DRAFT",
+    "LEGAL_SOURCE_VALIDATED",
+    "TECHNICAL_REVIEWED",
+    "EDITORIAL_REVIEWED",
+    "NOTE"
+  ],
+  "jur_rejected": true,
+  "final_blocked": true,
+  "final_not_complete_as_success": true,
+  "editorial_sm_empty": true,
+  "wave1_noindex": true,
+  "consolidar_noindex": true,
+  "screenshots": 4,
+  "deep_review": true,
+  "conversion_test": true,
+  "external_actions": true,
+  "skeptic_proof": true,
+  "prod_robots": "noindex,follow",
+  "prod_editorial_locs": 0,
+  "draft_blocked": true
+}
+ALL_SKEPTIC_GAPS_CLOSED True
+TERMINAL BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS
+NEXT Named human runs docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md
