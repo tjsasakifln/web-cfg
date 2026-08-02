@@ -248,9 +248,15 @@ exports.handler = async (event) => {
 
   try {
     await store.put(record);
+    // Read-back proves durable write (not only in-memory success)
+    const verified = await store.get(lead_id);
+    if (!verified || verified.lead_id !== lead_id) {
+      throw new Error("persist_verify_miss");
+    }
   } catch (err) {
     safeLog("error", "persist_failed", {
-      code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      code: err && err.message ? String(err.message).slice(0, 120) : "error",
+      name: err && err.name ? String(err.name).slice(0, 40) : undefined,
     });
     return {
       statusCode: 503,

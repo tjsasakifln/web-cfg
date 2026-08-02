@@ -117,10 +117,39 @@ class NetlifyBlobsStore {
   constructor(store) {
     this.store = store;
   }
+  async _setJson(key, value) {
+    if (typeof this.store.setJSON === "function") {
+      try {
+        await this.store.setJSON(key, value);
+        return;
+      } catch (err) {
+        // fall through to set()
+        if (!err || !/consistency|uncached/i.test(String(err.message || err))) throw err;
+      }
+    }
+    await this.store.set(key, JSON.stringify(value), {
+      contentType: "application/json",
+    });
+  }
+  async _getJson(key) {
+    try {
+      const asJson = await this.store.get(key, { type: "json" });
+      if (asJson != null) return asJson;
+    } catch {
+      /* try text */
+    }
+    try {
+      const text = await this.store.get(key, { type: "text" });
+      if (!text) return null;
+      return JSON.parse(text);
+    } catch {
+      return null;
+    }
+  }
   async getByIdempotency(key) {
     const h = crypto.createHash("sha256").update(key).digest("hex").slice(0, 40);
     try {
-      const raw = await this.store.get(`idem/${h}`, { type: "json" });
+      const raw = await this._getJson(`idem/${h}`);
       if (!raw?.lead_id) return null;
       return this.get(raw.lead_id);
     } catch {
@@ -129,16 +158,16 @@ class NetlifyBlobsStore {
   }
   async get(id) {
     try {
-      return (await this.store.get(`leads/${id}`, { type: "json" })) || null;
+      return (await this._getJson(`leads/${id}`)) || null;
     } catch {
       return null;
     }
   }
   async put(record) {
-    await this.store.setJSON(`leads/${record.lead_id}`, record);
+    await this._setJson(`leads/${record.lead_id}`, record);
     if (record.idempotency_key) {
       const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
-      await this.store.setJSON(`idem/${h}`, { lead_id: record.lead_id });
+      await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
     }
     return record;
   }
@@ -280,12 +309,11 @@ async function createStore(options = {}) {
         name: "confenge-leads",
         siteID,
         token,
-        consistency: "strong",
       });
       safeLog("info", "store_blobs_manual_creds", { site_len: siteID.length });
     } else {
-      // Platform injects NETLIFY_BLOBS_CONTEXT in Netlify Functions when Blobs enabled
-      store = blobs.getStore({ name: "confenge-leads", consistency: "strong" });
+      // Context from connectLambda(event) / NETLIFY_BLOBS_CONTEXT
+      store = blobs.getStore("confenge-leads");
     }
     return new NetlifyBlobsStore(store);
   } catch (err) {
