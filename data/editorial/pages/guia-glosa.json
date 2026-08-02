@@ -38,5 +38,37 @@
       "a": "Individualize o valor glosado, junte o critério contratual e a prova de execução do item, e requeira a liberação do incontroverso com base no art. 143."
     }
   ],
-  "body_markdown": "## Checklist de contestação\n\n### Identificação\n\n- Número da medição e período  \n- Itens glosados (código, descrição, valor)  \n- Data da ciência da glosa e prazo de resposta  \n\n### Critério\n\n- Cláusula e caderno de encargos  \n- Unidade e forma de medição do item  \n- Projetos e planilha de referência  \n\n### Prova de execução\n\n- Diário de obra  \n- Registro fotográfico datado  \n- Levantamentos e croquis  \n- Notas de serviço / RDO  \n- Testes e laudos, se a glosa for por qualidade  \n\n### Cálculo\n\n- Memória do valor glosado  \n- Memória da parcela incontroversa  \n- Eventual proposta de medição parcial alternativa  \n\n### Peça de resposta\n\n- Objeto claro: anular/reduzir glosa e liberar incontroverso  \n- Fundamento contratual e art. 143 quando couber  \n- Anexos indexados  \n- Pedido de reunião técnica, se útil  \n\n## Ordem de escrita da peça\n\n1. Fatos da medição  \n2. O que a fiscalização alegou  \n3. Por que a alegação não se sustenta (critério + prova)  \n4. Valores  \n5. Pedidos  \n\n## Erros\n\n- Responder só “discordo”  \n- Anexar 200 fotos sem legenda nem amarração ao item  \n- Esquecer de pedir a parcela incontroversa  \n\n## Ressalva\n\nAlguns editais fixam ritos e prazos próprios de impugnação de medição. Cumpra o rito local.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Hipóteses locais de rito, prazos e formulários do órgão prevalecem quando mais específicos.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Nesses cenários, organizar o dossiê cedo evita reconstrução tardia de fatos.\n\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar.\n\n## Exemplo de abertura da peça (hipotético)\n\n“Em atenção à glosa do item X da medição Y, no valor de R$ …, apresenta-se contestação com base no critério de medição do item … do contrato, acompanhada de levantamento topográfico e registro fotográfico datado. Requer-se, ainda, a liberação da parcela incontroversa de R$ …, correspondente aos itens não impugnados, nos termos do art. 143 da Lei nº 14.133/2021.”\n\n## Contexto de uso na construtora\n\nDefina SLA interno: glosa conhecida em D+0; dossiê técnico em D+2; peça protocolada antes do prazo do órgão. Atrasar a resposta por “esperar a próxima medição” costuma piorar o caixa e o histórico do contrato.\n"
+  "body_markdown": "## Checklist de contestação\n\n### Identificação\n\n- Número da medição e período  \n- Itens glosados (código, descrição, valor)  \n- Data da ciência da glosa e prazo de resposta  \n\n### Critério\n\n- Cláusula e caderno de encargos  \n- Unidade e forma de medição do item  \n- Projetos e planilha de referência  \n\n### Prova de execução\n\n- Diário de obra  \n- Registro fotográfico datado  \n- Levantamentos e croquis  \n- Notas de serviço / RDO  \n- Testes e laudos, se a glosa for por qualidade  \n\n### Cálculo\n\n- Memória do valor glosado  \n- Memória da parcela incontroversa  \n- Eventual proposta de medição parcial alternativa  \n\n### Peça de resposta\n\n- Objeto claro: anular/reduzir glosa e liberar incontroverso  \n- Fundamento contratual e art. 143 quando couber  \n- Anexos indexados  \n- Pedido de reunião técnica, se útil  \n\n## Ordem de escrita da peça\n\n1. Fatos da medição  \n2. O que a fiscalização alegou  \n3. Por que a alegação não se sustenta (critério + prova)  \n4. Valores  \n5. Pedidos  \n\n## Erros\n\n- Responder só “discordo”  \n- Anexar 200 fotos sem legenda nem amarração ao item  \n- Esquecer de pedir a parcela incontroversa  \n\n## Ressalva\n\nAlguns editais fixam ritos e prazos próprios de impugnação de medição. Cumpra o rito local. O checklist reduz omissão documental; não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto.\n\n## Exemplo de abertura da peça (hipotético)\n\n“Em atenção à glosa do item X da medição Y, no valor de R$ …, apresenta-se contestação com base no critério de medição do item … do contrato, acompanhada de levantamento topográfico e registro fotográfico datado. Requer-se, ainda, a liberação da parcela incontroversa de R$ …, correspondente aos itens não impugnados, nos termos do art. 143 da Lei nº 14.133/2021.”\n\n## Contexto de uso na construtora\n\nDefina SLA interno: glosa conhecida em D+0; dossiê técnico em D+2; peça protocolada antes do prazo do órgão. Atrasar a resposta por “esperar a próxima medição” costuma piorar o caixa e o histórico do contrato. Um responsável único pelo índice de anexos e pela memória de cálculo evita peça fragmentada.\n\n## Quando a contestação não basta sozinha\n\nSe o valor glosado é material para a margem, se há risco de sanção cruzada ou se a prova de campo é fraca, reforce o dossiê (levantamento, laudo, critério contratual) antes de protocolar. O art. 143 ajuda na parcela incontroversa; o trecho glosado exige prova do item.\n",
+  "claims": [
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "guia-glosa-art143",
+      "claim": "Havendo controvérsia sobre dimensão, qualidade e quantidade, a parcela incontroversa deve ser liberada no prazo de pagamento (art. 143).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art141-143"
+      ],
+      "source_locator": "art. 143",
+      "support_level": "direct",
+      "official_excerpt": "No caso de controvérsia sobre a execução do objeto, quanto a dimensão, qualidade e quantidade, a parcela incontroversa deverá ser liberada no prazo previsto para pagamento."
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "guia-glosa-prova-operacional",
+      "claim": "Contestação de glosa deve juntar critério de medição do contrato e prova de execução (diário, fotos, levantamentos), individualizando o valor glosado.",
+      "claim_type": "operational_interpretation",
+      "source_ids": [
+        "lei-14133-art141-143"
+      ],
+      "source_locator": "art. 143 (aplicação operacional)",
+      "support_level": "interpretive",
+      "official_excerpt": "No caso de controvérsia sobre a execução do objeto, quanto a dimensão, qualidade e quantidade, a parcela incontroversa deverá ser liberada no prazo previsto para pagamento."
+    }
+  ]
 }

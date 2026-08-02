@@ -58,5 +58,68 @@
       "a": "O dispositivo fala em percentual do valor inicial atualizado do contrato, amarrado às alterações unilaterais de quantitativo/projeto nos termos da Lei. A planilha física importa para provar a alteração, mas o teto legal opera em valor."
     }
   ],
-  "body_markdown": "## O problema real\n\nDiretoria e orçamento olham o último aditivo e perguntam: “ainda cabe?”. Fiscalização olha a necessidade da obra. Contabilidade olha empenho. Sem memória do **valor inicial atualizado** e do histórico, o debate vira achismo.\n\n## Texto do art. 125 (síntese operacional)\n\nNas alterações unilaterais do **art. 124, I**, o contratado aceita, nas mesmas condições contratuais:\n\n- acréscimos ou supressões de até **25%** do valor inicial atualizado do contrato (obras, serviços ou compras);\n- em **reforma de edifício ou de equipamento**, acréscimos de até **50%**.\n\nFonte: Lei nº 14.133/2021, art. 125 — Planalto, verificação em 02/08/2026.\n\nO **art. 126** fecha a porta para alterações unilaterais que transfigurem o objeto. Percentual disponível não legitima obra diferente da contratada.\n\n## O que precisa entrar na conta do saldo\n\n- Valor inicial do contrato e critérios de atualização previstos\n- Cada termo aditivo (acréscimo e supressão) com valor e data\n- Natureza da alteração (quantitativa vs mudança de projeto/especificação)\n- Itens novos e reequilíbrios — que podem ter lógica distinta do puro quantitativo\n- Hipótese de 50%: só se o objeto se enquadrar como reforma de edifício ou equipamento\n\n## Exemplo aplicado (hipotético)\n\nContrato de pavimentação, valor inicial atualizado R$ 10 milhões. Já houve acréscimo formal de R$ 1,8 milhão (18%). Novo acréscimo pretendido de R$ 1,0 milhão (10%) levaria a 28% — acima de 25% se tudo for alteração unilateral quantitativa/projeto no mesmo enquadramento. Opções típicas: reavaliar escopo, separar o que exige acordo e reequilíbrio, ou recusar execução irregular. O número isolado não decide; o enquadramento jurídico-contratual decide.\n\n## Documentos mínimos\n\n1. Contrato e planilha inicial  \n2. Cronologia de aditivos e apostilas  \n3. Memória de cálculo do percentual acumulado  \n4. Projetos e OS que motivam a nova alteração  \n5. Justificativa técnica da Administração (quando existir)  \n6. Proposta vencedora (desconto) para precificação de itens  \n\n## Riscos de interpretação\n\n- Aplicar 50% a obra nova de edificação sem ser reforma\n- Ignorar atualização do valor inicial\n- Executar primeiro e formalizar depois quando o volume já estourou o teto\n- Confundir reajuste (art. 136) com aditivo quantitativo\n\n## Roteiro\n\n1. Atualize o valor base conforme o contrato.  \n2. Some acréscimos e registre supressões com critério.  \n3. Classifique a nova alteração.  \n4. Teste o teto do art. 125.  \n5. Se houver aumento de encargos, examine o art. 130 no mesmo instrumento.  \n6. Formalize antes de liberar frentes caras.  \n\n## Ressalva\n\nO caso concreto pode envolver regulamento do órgão, cláusulas específicas e entendimentos de controle. Esta página não esgota controvérsias sobre compensação de acréscimos/supressões nem sobre itens extracontratuais.\n"
+  "body_markdown": "## O problema real\n\nDiretoria e orçamento olham o último aditivo e perguntam: “ainda cabe?”. Fiscalização olha a necessidade da obra. Contabilidade olha empenho. Sem memória do **valor inicial atualizado** e do histórico, o debate vira achismo.\n\n## Texto do art. 125 (síntese operacional)\n\nNas alterações unilaterais do **art. 124, I**, o contratado aceita, nas mesmas condições contratuais:\n\n- acréscimos ou supressões de até **25%** do valor inicial atualizado do contrato (obras, serviços ou compras);\n- em **reforma de edifício ou de equipamento**, acréscimos de até **50%**.\n\nFonte: Lei nº 14.133/2021, art. 125 — Planalto, verificação em 02/08/2026.\n\nO **art. 126** fecha a porta para alterações unilaterais que transfigurem o objeto. Percentual disponível não legitima obra diferente da contratada.\n\n## O que precisa entrar na conta do saldo\n\n- Valor inicial do contrato e critérios de atualização previstos\n- Cada termo aditivo (acréscimo e supressão) com valor e data\n- Natureza da alteração (quantitativa vs mudança de projeto/especificação)\n- Itens novos e reequilíbrios — que podem ter lógica distinta do puro quantitativo\n- Hipótese de 50%: só se o objeto se enquadrar como reforma de edifício ou equipamento\n\n## Exemplo aplicado (hipotético)\n\nContrato de pavimentação, valor inicial atualizado R$ 10 milhões. Já houve acréscimo formal de R$ 1,8 milhão (18%). Novo acréscimo pretendido de R$ 1,0 milhão (10%) levaria a 28% — acima de 25% se tudo for alteração unilateral quantitativa/projeto no mesmo enquadramento. Opções típicas: reavaliar escopo, separar o que exige acordo e reequilíbrio, ou recusar execução irregular. O número isolado não decide; o enquadramento jurídico-contratual decide.\n\n## Documentos mínimos\n\n1. Contrato e planilha inicial  \n2. Cronologia de aditivos e apostilas  \n3. Memória de cálculo do percentual acumulado  \n4. Projetos e OS que motivam a nova alteração  \n5. Justificativa técnica da Administração (quando existir)  \n6. Proposta vencedora (desconto) para precificação de itens  \n\n## Riscos de interpretação\n\n- Aplicar 50% a obra nova de edificação sem ser reforma\n- Ignorar atualização do valor inicial\n- Executar primeiro e formalizar depois quando o volume já estourou o teto\n- Confundir reajuste (art. 136) com aditivo quantitativo\n\n## Roteiro\n\n1. Atualize o valor base conforme o contrato.  \n2. Some acréscimos e registre supressões com critério.  \n3. Classifique a nova alteração.  \n4. Teste o teto do art. 125.  \n5. Se houver aumento de encargos, examine o art. 130 no mesmo instrumento.  \n6. Formalize antes de liberar frentes caras.  \n\n## Ressalva\n\nO caso concreto pode envolver regulamento do órgão, cláusulas específicas e entendimentos de controle. Esta página não esgota controvérsias sobre compensação de acréscimos/supressões nem sobre itens extracontratuais.\n",
+  "claims": [
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Base: valor inicial atualizado; acumular aditivos exige memória de saldo.",
+      "interpretation": "O teto de 50% restringe-se a reforma de edifício ou equipamento e apenas a acréscimos.",
+      "claim_id": "art125-limites-25-50",
+      "claim": "Nas alterações unilaterais do art. 124, I, o contratado aceita acréscimos ou supressões de até 25% do valor inicial atualizado; em reforma de edifício ou de equipamento, acréscimo de até 50%.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art125"
+      ],
+      "source_locator": "art. 125",
+      "support_level": "direct",
+      "official_excerpt": "Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% (vinte e cinco por cento) do valor inicial atualizado do contrato que se fizerem nas obras, nos serviços ou nas compras, e, no caso de reforma de edifício ou de equipamento, o limite para os acréscimos será de 50% (cinquenta por cento)."
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "art125-vinculo-124i",
+      "claim": "Os limites do art. 125 aplicam-se às alterações unilaterais do inciso I do art. 124.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art125",
+        "lei-14133-art124"
+      ],
+      "source_locator": "art. 125 c/c art. 124, I",
+      "support_level": "direct",
+      "official_excerpt": "Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar"
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "art126-nao-transfigura",
+      "claim": "Alterações unilaterais do art. 124, I, não podem transfigurar o objeto da contratação (art. 126).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art126-132"
+      ],
+      "source_locator": "art. 126",
+      "support_level": "direct",
+      "official_excerpt": "As alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei não poderão transfigurar o objeto da contratação."
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Natureza da intervenção e objeto contratual definem o enquadramento.",
+      "interpretation": "FAQ e corpo devem negar extensão automática a prédio novo.",
+      "claim_id": "art125-50-nao-e-regra-geral",
+      "claim": "O limite de acréscimo de 50% não é regra geral de qualquer edificação nova: o art. 125 eleva o teto apenas no caso de reforma de edifício ou de equipamento.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art125"
+      ],
+      "source_locator": "art. 125 (cláusula de reforma)",
+      "support_level": "direct",
+      "official_excerpt": "Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% (vinte e cinco por cento) do valor inicial atualizado do contrato que se fizerem nas obras, nos serviços ou nas compras, e, no caso de reforma de edifício ou de equipamento, o limite para os acréscimos será de 50% (cinquenta por cento)."
+    }
+  ]
 }

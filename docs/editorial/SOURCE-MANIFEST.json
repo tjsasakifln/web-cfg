@@ -13,7 +13,11 @@
       "accessed_at": "2026-08-02",
       "device": "lei completa",
       "limitations": "Texto federal; regulamentos locais e cláusulas do contrato podem particularizar a aplicação.",
-      "themes": ["licitacoes", "contratos", "obras"]
+      "themes": [
+        "licitacoes",
+        "contratos",
+        "obras"
+      ]
     },
     {
       "source_id": "lei-14133-art124",
@@ -26,7 +30,11 @@
       "accessed_at": "2026-08-02",
       "device": "art. 124, caput, I e II",
       "limitations": "Ler em conjunto com arts. 125 a 132.",
-      "themes": ["aditivos", "alteracao-contratual"]
+      "themes": [
+        "aditivos",
+        "alteracao-contratual"
+      ],
+      "official_excerpt": "Art. 124. Os contratos regidos por esta Lei poderão ser alterados, com as devidas justificativas, nos seguintes casos:\nI - unilateralmente pela Administração:\na) quando houver modificação do projeto ou das especificações, para melhor adequação técnica a seus objetivos;\nb) quando for necessária a modificação do valor contratual em decorrência de acréscimo ou diminuição quantitativa de seu objeto, nos limites permitidos por esta Lei;\nII - por acordo entre as partes:\na) quando conveniente a substit"
     },
     {
       "source_id": "lei-14133-art125",
@@ -39,7 +47,11 @@
       "accessed_at": "2026-08-02",
       "device": "art. 125",
       "limitations": "Limites de alteração unilateral; hipóteses de 50% restritas a reforma de edifício ou equipamento.",
-      "themes": ["aditivos", "limites"]
+      "themes": [
+        "aditivos",
+        "limites"
+      ],
+      "official_excerpt": "Art. 125. Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% (vinte e cinco por cento) do valor inicial atualizado do contrato que se fizerem nas obras, nos serviços ou nas compras, e, no caso de reforma de edifício ou de equipamento, o limite para os acréscimos será de 50% (cinquenta por cento)."
     },
     {
       "source_id": "lei-14133-art126-132",
@@ -52,7 +64,12 @@
       "accessed_at": "2026-08-02",
       "device": "arts. 126–132",
       "limitations": null,
-      "themes": ["aditivos", "equilibrio", "precos"]
+      "themes": [
+        "aditivos",
+        "equilibrio",
+        "precos"
+      ],
+      "official_excerpt": "Art. 126. As alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei não poderão transfigurar o objeto da contratação.\nArt. 127. Se o contrato não contemplar preços unitários para obras ou serviços cujo aditamento se fizer necessário, esses serão fixados por meio da aplicação da relação geral entre os valores da proposta e o do orçamento-base da Administração sobre os preços referenciais ou de mercado vigentes na data do aditamento, respeitados os limites estabelecidos no art. 125 desta Lei.\nArt. 130. Caso haja alteração unilateral do contrato que aumente ou diminua os encargos do contratado, a Administração deverá restabelecer, no mesmo termo aditivo, o equilíbrio econômico-financeiro inicial.\nArt. 132. A formalização do termo aditivo é condição para a execução, pelo contratado, das prestações determinadas pela Administração no curso da execução do contrato, salvo nos casos de justificada necessidade de antecipação de seus efeitos, hipótese em que a formalização deverá ocorrer no prazo máximo de 1 (um) mês."
     },
     {
       "source_id": "lei-14133-art115",
@@ -64,7 +81,11 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-02",
       "device": "art. 115, caput e § 1º",
-      "themes": ["atraso", "execucao"]
+      "themes": [
+        "atraso",
+        "execucao"
+      ],
+      "official_excerpt": "Art. 115. O contrato deverá ser executado fielmente pelas partes, de acordo com as cláusulas avençadas e as normas desta Lei, e cada parte responderá pelas consequências de sua inexecução total ou parcial.\n§ 1º É proibido à Administração retardar imotivadamente a execução de obra ou serviço, ou de suas parcelas, inclusive na hipótese de posse do respectivo chefe do Poder Executivo ou de novo titular no órgão ou entidade contratante."
     },
     {
       "source_id": "lei-14133-art130-131",
@@ -76,7 +97,10 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-02",
       "device": "arts. 130 e 131",
-      "themes": ["reequilibrio"]
+      "themes": [
+        "reequilibrio"
+      ],
+      "official_excerpt": "Art. 130. Caso haja alteração unilateral do contrato que aumente ou diminua os encargos do contratado, a Administração deverá restabelecer, no mesmo termo aditivo, o equilíbrio econômico-financeiro inicial.\nArt. 131. A extinção do contrato não configurará óbice para o reconhecimento do desequilíbrio econômico-financeiro, hipótese em que será concedida indenização por meio de termo indenizatório.\nParágrafo único. O pedido de restabelecimento do equilíbrio econômico-financeiro deverá ser formulado durante a vigência do contrato e antes de eventual prorrogação nos termos do art. 107 desta Lei."
     },
     {
       "source_id": "lei-14133-art136",
@@ -88,7 +112,11 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-02",
       "device": "art. 136",
-      "themes": ["reajuste", "repactuacao"]
+      "themes": [
+        "reajuste",
+        "repactuacao"
+      ],
+      "official_excerpt": "Art. 136. Registros que não caracterizam alteração do contrato podem ser realizados por simples apostila, dispensada a celebração de termo aditivo, como nas seguintes situações:\nI - variação do valor contratual para fazer face ao reajuste ou à repactuação de preços previstos no próprio contrato;\nII - atualizações, compensações ou penalizações financeiras decorrentes das condições de pagamento previstas no contrato;\nIII - alterações na razão ou na denominação social do contratado;\nIV - empenho de dotações orçamentárias."
     },
     {
       "source_id": "lei-14133-art137-138",
@@ -100,7 +128,10 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-02",
       "device": "art. 137",
-      "themes": ["extincao", "suspensao"]
+      "themes": [
+        "extincao",
+        "suspensao"
+      ]
     },
     {
       "source_id": "lei-14133-art141-143",
@@ -112,7 +143,11 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-02",
       "device": "arts. 141 e 143",
-      "themes": ["pagamento", "medicao"]
+      "themes": [
+        "pagamento",
+        "medicao"
+      ],
+      "official_excerpt": "Art. 143. No caso de controvérsia sobre a execução do objeto, quanto a dimensão, qualidade e quantidade, a parcela incontroversa deverá ser liberada no prazo previsto para pagamento."
     },
     {
       "source_id": "lei-14133-art92",
@@ -124,7 +159,11 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-02",
       "device": "art. 92",
-      "themes": ["matriz-riscos", "contrato"]
+      "themes": [
+        "matriz-riscos",
+        "contrato"
+      ],
+      "official_excerpt": "Art. 92. São necessárias em todo contrato cláusulas que estabeleçam: ... V - o preço e as condições de pagamento, os critérios, a data-base e a periodicidade do reajustamento de preços e os critérios de atualização monetária entre a data do adimplemento das obrigações e a do efetivo pagamento;"
     },
     {
       "source_id": "lei-14133-art59-matriz",
@@ -136,7 +175,9 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-02",
       "device": "matriz de riscos (texto legal vigente)",
-      "themes": ["matriz-riscos"]
+      "themes": [
+        "matriz-riscos"
+      ]
     },
     {
       "source_id": "agu-alteracoes-contratuais-2024",
@@ -148,7 +189,12 @@
       "url": "https://www.gov.br/agu/pt-br/composicao/procuradoria-geral-federal-1/subprocuradoria-federal-de-consultoria-juridica/24_Alteracoes_Contratuais_Obras_e_Servicos_Engenharia_Lei_14_133_2021_fev_2024.docx",
       "accessed_at": "2026-08-02",
       "limitations": "Orientação da AGU/PGF; não vincula automaticamente todos os entes. Útil para enquadramento federal e boas práticas.",
-      "themes": ["aditivos", "obras", "desconto", "itens-novos"]
+      "themes": [
+        "aditivos",
+        "obras",
+        "desconto",
+        "itens-novos"
+      ]
     },
     {
       "source_id": "tcu-portal-licitacoes",
@@ -158,7 +204,9 @@
       "url": "https://portal.tcu.gov.br/jurisprudencia/",
       "accessed_at": "2026-08-02",
       "limitations": "Portal de acesso; decisões específicas devem ser lidas na íntegra.",
-      "themes": ["jurisprudencia"]
+      "themes": [
+        "jurisprudencia"
+      ]
     },
     {
       "source_id": "tcu-acordao-1977-2013",
@@ -172,7 +220,11 @@
       "url": "https://portal.tcu.gov.br/jurisprudencia/",
       "accessed_at": "2026-08-02",
       "limitations": "Decisão sob regime anterior à Lei 14.133/2021; não transportar automaticamente. Verificar ementa e voto na Pesquisa Integrada do TCU antes de invocar. Citada na orientação AGU fev/2024 sobre alterações contratuais.",
-      "themes": ["bdi", "editais", "obras"]
+      "themes": [
+        "bdi",
+        "editais",
+        "obras"
+      ]
     },
     {
       "source_id": "tcu-sumula-260",
@@ -185,7 +237,11 @@
       "url": "https://portal.tcu.gov.br/jurisprudencia/",
       "accessed_at": "2026-08-02",
       "limitations": "Súmula de observância no âmbito do TCU; confirmar texto oficial atualizado.",
-      "themes": ["fiscalizacao", "art", "responsabilidade-tecnica"]
+      "themes": [
+        "fiscalizacao",
+        "art",
+        "responsabilidade-tecnica"
+      ]
     },
     {
       "source_id": "sinapi-caixa",
@@ -194,7 +250,10 @@
       "title": "SINAPI — Sistema Nacional de Pesquisa de Custos e Índices da Construção Civil",
       "url": "https://www.caixa.gov.br/poder-publico/modernizacao-gestao/sinapi/Paginas/default.aspx",
       "accessed_at": "2026-08-02",
-      "themes": ["sinapi", "orcamento"]
+      "themes": [
+        "sinapi",
+        "orcamento"
+      ]
     },
     {
       "source_id": "sicro-dnit",
@@ -203,7 +262,10 @@
       "title": "SICRO — Sistemas de Custos Rodoviários (DNIT)",
       "url": "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-e-pagamentos/custos-e-pagamentos-dnit/sistemas-de-custos/sicro",
       "accessed_at": "2026-08-02",
-      "themes": ["sicro", "orcamento"]
+      "themes": [
+        "sicro",
+        "orcamento"
+      ]
     },
     {
       "source_id": "pncp",
@@ -212,7 +274,62 @@
       "title": "PNCP — Portal Nacional de Contratações Públicas",
       "url": "https://www.gov.br/pncp/pt-br",
       "accessed_at": "2026-08-02",
-      "themes": ["dados", "contratacoes"]
+      "themes": [
+        "dados",
+        "contratacoes"
+      ]
+    },
+    {
+      "source_id": "lei-14133-art135",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 135 (repactuação em serviços contínuos com mão de obra)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-02",
+      "device": "art. 135, caput e §§",
+      "official_excerpt": "Art. 135. Os preços dos contratos para serviços contínuos com regime de dedicação exclusiva de mão de obra ou com predominância de mão de obra serão repactuados para manutenção do equilíbrio econômico-financeiro, mediante demonstração analítica da variação dos custos contratuais, com data vinculada:\nI - à da apresentação da proposta, para custos decorrentes do mercado;\nII - ao acordo, à convenção coletiva ou ao dissídio coletivo ao qual a proposta esteja vinculada, para os custos de mão de obra.",
+      "limitations": "Repactuação legal restrita a serviços contínuos com dedicação exclusiva ou predominância de mão de obra; não é mecanismo ordinário de qualquer contrato de obra.",
+      "themes": [
+        "repactuacao",
+        "servicos-continuos",
+        "mao-de-obra"
+      ]
+    },
+    {
+      "source_id": "lei-14133-art6-definicoes",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 6º (definições: obra, serviço de engenharia, reajuste, repactuação, matriz de riscos)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-02",
+      "device": "art. 6º, XII, XVI, XXI, XXVII, LVIII, LIX",
+      "official_excerpt": "LIX - repactuação: forma de manutenção do equilíbrio econômico-financeiro de contrato utilizada para serviços contínuos com regime de dedicação exclusiva de mão de obra ou predominância de mão de obra, por meio da análise da variação dos custos contratuais, devendo estar prevista no edital com data vinculada à apresentação das propostas, para os custos decorrentes do mercado, e com data vinculada ao acordo, à convenção coletiva ou ao dissídio coletivo ao qual o orçamento esteja vinculado, para os custos decorrentes da mão de obra;\nLVIII - reajustamento em sentido estrito: forma de manutenção do equilíbrio econômico-financeiro de contrato consistente na aplicação do índice de correção monetária previsto no contrato, que deve retratar a variação efetiva do custo de produção, admitida a adoção de índices específicos ou setoriais;",
+      "themes": [
+        "definicoes",
+        "repactuacao",
+        "reajuste",
+        "matriz-riscos"
+      ]
+    },
+    {
+      "source_id": "lei-14133-art134",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 134 (tributos e encargos legais)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-02",
+      "device": "art. 134",
+      "official_excerpt": "Art. 134. Os preços contratados serão alterados, para mais ou para menos, conforme o caso, se houver, após a data da apresentação da proposta, criação, alteração ou extinção de quaisquer tributos ou encargos legais ou a superveniência de disposições legais, com comprovada repercussão sobre os preços contratados.",
+      "themes": [
+        "tributos",
+        "equilibrio"
+      ]
     }
   ]
 }

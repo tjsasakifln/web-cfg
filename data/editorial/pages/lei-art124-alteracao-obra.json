@@ -18,13 +18,122 @@
   "author_is_tiago": false,
   "meta_description": "Como o art. 124 da Lei 14.133 separa alteração unilateral e por acordo em obras públicas, e o que a construtora precisa documentar antes de executar.",
   "lead": "A dúvida aparece quando a fiscalização manda mudar projeto ou quantidade e ninguém sabe se basta ordem de serviço ou se precisa de termo aditivo assinado.",
-  "direct_answer": "O art. 124 da Lei nº 14.133/2021 organiza as alterações do contrato em dois eixos: unilateral pela Administração (modificação de projeto/especificações ou acréscimo/supressão quantitativa nos limites legais) e por acordo entre as partes (garantia, regime de execução, forma de pagamento, atualização de vínculo societário e restabelecimento do equilíbrio, entre outras hipóteses do inciso II). Em obra, a pergunta prática não é só “pode alterar?”, e sim quem determina, em qual limite, com qual preço e com qual papel assinado antes de executar volume relevante.",
+  "direct_answer": "O art. 124 da Lei nº 14.133/2021 separa alterações com justificativas em dois eixos. Unilateralmente (inciso I): (a) modificação do projeto ou das especificações para melhor adequação técnica; (b) modificação do valor por acréscimo ou diminuição quantitativa do objeto, nos limites da Lei. Por acordo (inciso II): (a) substituição da garantia de execução; (b) modificação do regime de execução ou do modo de fornecimento; (c) modificação da forma de pagamento por circunstâncias supervenientes, mantido o valor inicial atualizado; (d) restabelecimento do equilíbrio econômico-financeiro nas hipóteses legais, respeitada a repartição de risco do contrato. Em obra, a pergunta prática é quem determina, em qual limite, com qual preço e com qual papel assinado antes de executar volume relevante.",
   "sources": [
     "lei-14133-art124",
     "lei-14133-art125",
     "lei-14133-art126-132",
+    "lei-14133-art136",
     "lei-14133-planalto",
-    "agu-alteracoes-contratuais-2024"
+    "agu-alteracoes-contratuais-2024",
+    "lei-14133-art135"
+  ],
+  "claims": [
+    {
+      "claim_id": "art124-eixos-unilateral-acordo",
+      "claim": "O art. 124 organiza alterações unilaterais pela Administração (inciso I) e por acordo entre as partes (inciso II), sempre com as devidas justificativas.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art124"
+      ],
+      "source_locator": "art. 124, caput, I e II",
+      "support_level": "direct",
+      "official_excerpt": "Art. 124. Os contratos regidos por esta Lei poderão ser alterados, com as devidas justificativas, nos seguintes casos: I - unilateralmente pela Administração: a) quando houver modificação do projeto ou das especificações, para melhor adequação técnica a seus objetivos; b) quando for necessária a modificação do valor contratual em decorrência de acréscimo ou diminuição quantitativa de seu objeto, nos limites permitidos por esta Lei; II - por acordo entre as partes: a) quando conveniente a substituição da garantia de execução; b) quando necessária a modificação do regime de execução da obra ou do serviço, bem como do modo de fornecimento; c) quando necessária a modificação da forma de pagamento por imposição de circunstâncias supervenientes, mantido o valor inicial atualizado; d) para restabelecer o equilíbrio econômico-financeiro inicial do contrato",
+      "interpretation": "Dois eixos de competência e forma; cada alínea tem hipótese própria.",
+      "limitations": "Ler com arts. 125–132 (limites, formalização, preços, equilíbrio).",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "claim_id": "art124-inciso-i-hipoteses",
+      "claim": "Unilateral: (a) projeto/especificações para adequação técnica; (b) acréscimo/supressão quantitativa nos limites legais.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art124"
+      ],
+      "source_locator": "art. 124, I, a e b",
+      "support_level": "direct",
+      "official_excerpt": "a) quando houver modificação do projeto ou das especificações, para melhor adequação técnica a seus objetivos; b) quando for necessária a modificação do valor contratual em decorrência de acréscimo ou diminuição quantitativa de seu objeto, nos limites permitidos por esta Lei",
+      "interpretation": "Na obra, I,a costuma ser mudança de especificação/projeto; I,b é quantitativo puro com impacto de valor.",
+      "limitations": "Limites de valor no art. 125; vedação de transfigurar o objeto no art. 126.",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "claim_id": "art124-inciso-ii-hipoteses",
+      "claim": "Por acordo (II): substituição de garantia; regime/modo de execução; forma de pagamento superveniente com valor atualizado; reequilíbrio nas hipóteses da alínea d.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art124"
+      ],
+      "source_locator": "art. 124, II, a–d",
+      "support_level": "direct",
+      "official_excerpt": "a) quando conveniente a substituição da garantia de execução; b) quando necessária a modificação do regime de execução da obra ou do serviço, bem como do modo de fornecimento...; c) quando necessária a modificação da forma de pagamento por imposição de circunstâncias supervenientes, mantido o valor inicial atualizado...; d) para restabelecer o equilíbrio econômico-financeiro inicial do contrato...",
+      "interpretation": "O inciso II não lista atualização de vínculo societário nem mudança de razão social — esses registros, quando cabíveis por apostila, estão no art. 136.",
+      "limitations": "Alínea d exige enquadramento fático e respeito à matriz/repartição de risco do contrato.",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "claim_id": "art136-nao-e-124-denominacao",
+      "claim": "Alterações na razão ou denominação social do contratado podem ser apostiladas (art. 136, III), sem se confundir com hipóteses do art. 124, II.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art136"
+      ],
+      "source_locator": "art. 136, III",
+      "support_level": "direct",
+      "official_excerpt": "III - alterações na razão ou na denominação social do contratado",
+      "interpretation": "Apostila de denominação/razão social ≠ alteração contratual do art. 124.",
+      "limitations": "Apostila não autoriza mudar objeto, preço de escopo ou quantitativos sob o rótulo de 'atualização cadastral'.",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "art125-limites-no-contexto-124",
+      "claim": "Nas alterações unilaterais do art. 124, I, vigoram os limites de 25% e, em reforma de edifício ou equipamento, 50% de acréscimo (art. 125).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art125"
+      ],
+      "source_locator": "art. 125",
+      "support_level": "direct",
+      "official_excerpt": "Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% (vinte e cinco por cento) do valor inicial atualizado do contrato que se fizerem nas obras, nos serviços ou nas compras, e, no caso de reforma de edifício ou de equipamento, o limite para os acréscimos será de 50% (cinquenta por cento)."
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "art126-nao-transfigura-objeto",
+      "claim": "Alterações unilaterais não podem transfigurar o objeto da contratação (art. 126).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art126-132"
+      ],
+      "source_locator": "art. 126",
+      "support_level": "direct",
+      "official_excerpt": "As alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei não poderão transfigurar o objeto da contratação."
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "art132-formalizacao-contexto-124",
+      "claim": "A formalização do termo aditivo é condição para a execução das prestações determinadas pela Administração, salvo antecipação justificada com formalização em até 1 mês (art. 132).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art126-132"
+      ],
+      "source_locator": "art. 132",
+      "support_level": "direct",
+      "official_excerpt": "A formalização do termo aditivo é condição para a execução, pelo contratado, das prestações determinadas pela Administração no curso da execução do contrato, salvo nos casos de justificada necessidade de antecipação de seus efeitos, hipótese em que a formalização deverá ocorrer no prazo máximo de 1 (um) mês."
+    }
   ],
   "cta_whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre o art. 124 da Lei 14.133 em alteração contratual de obra. Tenho uma situação de aditivo/ordem de serviço e quero avaliar documentos e próximos passos. Origem: /lei-14133-obras/art-124-alteracao-contratual-obra/",
   "cta_email_subject": "Análise inicial — art. 124 e alteração contratual de obra",
@@ -66,7 +175,11 @@
     {
       "q": "Serviço novo sem preço na planilha entra no mesmo enquadramento?",
       "a": "Item sem preço unitário demanda regra própria (art. 127 e seguintes) e, na prática, memória de formação de preço e manutenção do desconto da proposta quando aplicável. Não improvise preço só para “não parar a obra”."
+    },
+    {
+      "q": "Mudança de razão social ou de sócios entra no art. 124, II?",
+      "a": "Não. O art. 124, II, lista garantia, regime/modo de execução, forma de pagamento e reequilíbrio (alíneas a–d). Alterações na razão ou na denominação social, quando forem mero registro, podem ser tratadas por apostila (art. 136, III). Mudança societária que altere capacidade técnica, econômico-financeira ou consórcio exige análise contratual própria — não confunda com o inciso II do art. 124."
     }
   ],
-  "body_markdown": "## Onde a dúvida explode no canteiro\n\nA obra está em andamento. A fiscalização envia croqui, e-mail ou reunião com mudança de especificação, quantitativo ou serviço que não estava claro na planilha. O engenheiro de produção quer executar para não perder frente. O orçamentista pergunta se entra no saldo de 25%. O jurídico quer papel. Esse é o terreno do art. 124.\n\n## O que o texto legal separa\n\nO **art. 124** da Lei nº 14.133/2021 (texto compilado no Planalto, verificado em 02/08/2026) prevê alteração **com as devidas justificativas**:\n\n### Unilateral (inciso I)\n\n- **a)** modificação do projeto ou das especificações, para melhor adequação técnica aos objetivos da Administração;\n- **b)** modificação do valor contratual por acréscimo ou diminuição quantitativa do objeto, **nos limites permitidos pela Lei** (o art. 125 materializa 25% e, em reforma de edifício ou equipamento, acréscimo de até 50%).\n\n### Por acordo (inciso II)\n\nInclui, entre outras hipóteses do dispositivo, substituição de garantia, mudança de regime de execução ou modo de fornecimento, forma de pagamento, atualização de vínculo societário do contratado e **restabelecimento do equilíbrio econômico-financeiro**.\n\nA leitura isolada do art. 124 é insuficiente. Os **arts. 125 a 132** fecham o circuito: limites, vedação de transfigurar o objeto, preços de itens sem cotação, manutenção de desconto, equilíbrio no mesmo termo aditivo e formalização.\n\n## Situação concreta (hipotética, para raciocínio)\n\nContrato de reforma de escola, empreitada por preço unitário. A fiscalização determina troca de sistema de impermeabilização não equivalente ao memorial. Há impacto de custo e prazo. Perguntas que mudam o caminho:\n\n1. A mudança é de especificação/projeto (I, a) ou quantitativo puro (I, b)?\n2. O valor acumulado de aditivos ainda cabe no art. 125?\n3. Os encargos da contratada aumentam de forma que o **art. 130** exija reequilíbrio no mesmo aditivo?\n4. Existe preço unitário na planilha ou será item novo (art. 127)?\n\n## Documentos que alteram a conclusão\n\n- Contrato, edital, planilha e memorial originais\n- Histórico de termos aditivos e apostilamentos\n- Projetos “como contratado” versus “como determinado”\n- Ordens, e-mails e atas com data e responsável da Administração\n- Memória do saldo percentual acumulado (acréscimos e supressões)\n- Composições de preço e desconto da proposta vencedora\n- Cronograma físico-financeiro e diário de obra no período da determinação\n\nSem essa base, qualquer tese vira narrativa tardia.\n\n## Regra operacional para a construtora\n\n1. Classifique a alteração (projeto/especificação, quantitativo, item novo, reequilíbrio).\n2. Calcule o saldo legal antes de executar volume material.\n3. Precifique com a regra do contrato e da Lei — não com “preço de mercado informal”.\n4. Exija formalização adequada **antes** de comprometer margem e prazo de forma irreversível.\n5. Se a Administração determinar execução sob risco, registre por escrito a ressalva e o impacto.\n\n## Exceções e controvérsias\n\n- **Apostila** (art. 136) serve a reajuste/repactuação e outras atualizações listadas — não é atalho genérico para mudar objeto.\n- Jurisprudência e orientações formadas sob a Lei nº 8.666/1993 **não se transportam automaticamente** para a 14.133; use-as só com distinção explícita do regime.\n- A orientação da AGU/PGF sobre alterações contratuais em obras (fev/2024) ajuda no enquadramento federal, mas o contrato do ente e o caso concreto prevalecem na disputa local.\n\n## Erros frequentes\n\n- Executar serviço novo grande só com ordem verbal\n- Somar apenas o aditivo da vez e ignorar o acumulado\n- Tratar toda edificação como se o teto de 50% fosse automático (o art. 125 restringe a **reforma de edifício ou de equipamento**)\n- Misturar reequilíbrio econômico-financeiro com aditivo quantitativo sem separar causas\n- Assumir que supressão “compensa” acréscimo sem critério documentado\n\n## Roteiro de ação (48–72h)\n\n1. Congelar descrição técnica da mudança com anexos.\n2. Levantar saldo de aditivos em valor e percentual sobre o valor inicial atualizado.\n3. Separar o que é quantitativo, qualitativo ou extracontratual.\n4. Montar planilha do aditivo e memória de cálculo.\n5. Protocolar pedido ou responder à determinação com ressalvas e prazo.\n6. Só então liberar execução de trechos de alto valor.\n\n## Quando buscar análise especializada\n\nQuando o saldo se aproxima do teto, há item novo relevante, a fiscalização pressiona execução sem aditivo, ou o impacto de prazo/custo já compromete o fluxo de caixa. Nesses casos, a análise técnica-documental costuma ser pré-requisito de qualquer conversa jurídica.\n\n## Ressalva\n\nEsta página traduz o texto legal para decisão operacional. Não substitui parecer sobre o contrato específico nem garante resultado em processo administrativo ou judicial.\n"
+  "body_markdown": "## Onde a dúvida explode no canteiro\n\nA obra está em andamento. A fiscalização envia croqui, e-mail ou reunião com mudança de especificação, quantitativo ou serviço que não estava claro na planilha. O engenheiro de produção quer executar para não perder frente. O orçamentista pergunta se entra no saldo de 25%. O jurídico quer papel. Esse é o terreno do art. 124.\n\n## O que o texto legal separa\n\nO **art. 124** da Lei nº 14.133/2021 (texto compilado no Planalto, verificado em 02/08/2026) prevê alteração **com as devidas justificativas**:\n\n### Unilateral (inciso I)\n\n- **a)** modificação do projeto ou das especificações, para melhor adequação técnica aos objetivos da Administração;\n- **b)** modificação do valor contratual por acréscimo ou diminuição quantitativa do objeto, **nos limites permitidos pela Lei** (o art. 125 materializa 25% e, em reforma de edifício ou equipamento, acréscimo de até 50%).\n\n### Por acordo (inciso II)\n\nHipóteses expressas do dispositivo:\n\n- **a)** substituição da garantia de execução;\n- **b)** modificação do regime de execução da obra ou do serviço, bem como do modo de fornecimento, diante de verificação técnica de inaplicabilidade dos termos originários;\n- **c)** modificação da forma de pagamento por circunstâncias supervenientes, **mantido o valor inicial atualizado**, vedada antecipação sem contraprestação correspondente;\n- **d)** restabelecimento do equilíbrio econômico-financeiro inicial nas hipóteses de força maior, caso fortuito, fato do príncipe ou fatos imprevisíveis (ou previsíveis de consequências incalculáveis) que inviabilizem a execução tal como pactuada, **respeitada a repartição objetiva de risco do contrato**.\n\nO inciso II **não** inclui “atualização de vínculo societário do contratado”. Mudança de razão ou denominação social, quando mero registro, pode ser apostilada (art. 136, III) — e isso não autoriza alterar objeto, quantitativos ou preços sob o rótulo de atualização cadastral.\n\nA leitura isolada do art. 124 é insuficiente. Os **arts. 125 a 132** fecham o circuito: limites, vedação de transfigurar o objeto, preços de itens sem cotação, manutenção de desconto, equilíbrio no mesmo termo aditivo e formalização.\n\n## Situação concreta (hipotética, para raciocínio)\n\nContrato de reforma de escola, empreitada por preço unitário. A fiscalização determina troca de sistema de impermeabilização não equivalente ao memorial. Há impacto de custo e prazo. Perguntas que mudam o caminho:\n\n1. A mudança é de especificação/projeto (I, a) ou quantitativo puro (I, b)?\n2. O valor acumulado de aditivos ainda cabe no art. 125?\n3. Os encargos da contratada aumentam de forma que o **art. 130** exija reequilíbrio no mesmo aditivo?\n4. Existe preço unitário na planilha ou será item novo (art. 127)?\n\n## Documentos que alteram a conclusão\n\n- Contrato, edital, planilha e memorial originais\n- Histórico de termos aditivos e apostilamentos\n- Projetos “como contratado” versus “como determinado”\n- Ordens, e-mails e atas com data e responsável da Administração\n- Memória do saldo percentual acumulado (acréscimos e supressões)\n- Composições de preço e desconto da proposta vencedora\n- Cronograma físico-financeiro e diário de obra no período da determinação\n\nSem essa base, qualquer tese vira narrativa tardia.\n\n## Regra operacional para a construtora\n\n1. Classifique a alteração (projeto/especificação, quantitativo, item novo, reequilíbrio).\n2. Calcule o saldo legal antes de executar volume material.\n3. Precifique com a regra do contrato e da Lei — não com “preço de mercado informal”.\n4. Exija formalização adequada **antes** de comprometer margem e prazo de forma irreversível.\n5. Se a Administração determinar execução sob risco, registre por escrito a ressalva e o impacto.\n\n## Exceções e controvérsias\n\n- **Apostila** (art. 136) serve a reajuste/repactuação previstos, atualizações financeiras de pagamento, razão/denominação social e empenho — não é atalho genérico para mudar objeto.\n- Jurisprudência e orientações formadas sob a Lei nº 8.666/1993 **não se transportam automaticamente** para a 14.133; use-as só com distinção explícita do regime.\n- A orientação da AGU/PGF sobre alterações contratuais em obras (fev/2024) ajuda no enquadramento federal, mas o contrato do ente e o caso concreto prevalecem na disputa local.\n\n## Erros frequentes\n\n- Executar serviço novo grande só com ordem verbal\n- Somar apenas o aditivo da vez e ignorar o acumulado\n- Tratar toda edificação como se o teto de 50% fosse automático (o art. 125 restringe a **reforma de edifício ou de equipamento**)\n- Misturar reequilíbrio econômico-financeiro com aditivo quantitativo sem separar causas\n- Assumir que supressão “compensa” acréscimo sem critério documentado\n- Colocar mudança societária ou cadastral como se fosse hipótese do art. 124, II\n\n## Roteiro de ação (48–72h)\n\n1. Congelar descrição técnica da mudança com anexos.\n2. Levantar saldo de aditivos em valor e percentual sobre o valor inicial atualizado.\n3. Separar o que é quantitativo, qualitativo ou extracontratual.\n4. Montar planilha do aditivo e memória de cálculo.\n5. Protocolar pedido ou responder à determinação com ressalvas e prazo.\n6. Só então liberar execução de trechos de alto valor.\n\n## Quando buscar análise especializada\n\nQuando o saldo se aproxima do teto, há item novo relevante, a fiscalização pressiona execução sem aditivo, ou o impacto de prazo/custo já compromete o fluxo de caixa. Nesses casos, a análise técnica-documental costuma ser pré-requisito de qualquer conversa jurídica.\n\n## Ressalva\n\nEsta página traduz o texto legal para decisão operacional. Não substitui parecer sobre o contrato específico nem garante resultado em processo administrativo ou judicial.\n\n\n## Nota sobre repactuação\n\nQuando o tema for **repactuação**, o enquadramento legal próprio é o **art. 135** da Lei nº 14.133/2021 (serviços contínuos com dedicação exclusiva ou predominância de mão de obra), distinto do reajuste por índice e do reequilíbrio dos arts. 130 e 131.\n"
 }

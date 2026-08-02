@@ -80,6 +80,7 @@ def material_hash(payload: dict[str, Any]) -> str:
         "direct_answer",
         "body_markdown",
         "sources",
+        "claims",
         "cta_whatsapp",
         "cta_email_subject",
         "cta_email_body",

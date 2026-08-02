@@ -8,7 +8,13 @@ from urllib.parse import unquote, urlparse, parse_qs
 
 from scripts.editorial.naturalness import evaluate_body, strip_html, find_internal_terms
 from scripts.editorial.registry import INDEXABLE_STATES
-from scripts.editorial.sources import is_official_url, page_sources_ok, load_manifest
+from scripts.editorial.sources import (
+    is_official_url,
+    page_sources_ok,
+    load_manifest,
+    page_claims_ok,
+    page_text_forbidden_legal_errors,
+)
 
 
 EMAIL_RE = re.compile(r"mailto:([^\"'\s>]+)", re.I)
@@ -95,6 +101,17 @@ def evaluate_page(
     man = manifest if manifest is not None else load_manifest()
     src_issues = page_sources_ok(page.get("sources") or [], man)
     issues.extend(src_issues)
+
+    # Claim–source semantic layer (not domain-only)
+    claim_issues = page_claims_ok(
+        page,
+        manifest=man,
+        require_claims=page.get("archetype") in {"lei_14133", "jurisprudencia"},
+    )
+    issues.extend(claim_issues)
+
+    # Known legal falsehood regressions
+    issues.extend(page_text_forbidden_legal_errors(page))
 
     # Legal device when archetype is law application
     if page.get("archetype") == "lei_14133":

@@ -9,20 +9,134 @@
   "legal_devices": [
     "art.130",
     "art.131",
-    "art.136"
+    "art.135",
+    "art.136",
+    "art.6"
   ],
   "law_version": "Lei nº 14.133/2021 (texto Planalto verificado em 2026-08-02)",
   "date_published": "2026-08-02",
   "date_modified": "2026-08-02",
   "author_public": "Biblioteca técnica CONFENGE",
   "author_is_tiago": false,
-  "meta_description": "Diferença prática entre reajuste, repactuação e reequilíbrio econômico-financeiro em contratos de obras públicas sob a Lei 14.133.",
-  "lead": "Pedido genérico de “reajuste de tudo” costuma ser indeferido. O enquadramento certo começa pela causa do descompasso.",
-  "direct_answer": "Na Lei nº 14.133/2021, reajuste e repactuação previstos no contrato podem ser registrados por apostila (art. 136, I), sem termo aditivo. Já o restabelecimento do equilíbrio econômico-financeiro, quando a alteração unilateral aumenta ou diminui encargos, deve ser tratado no mesmo termo aditivo (art. 130). O art. 131 preserva a possibilidade de reconhecimento do desequilíbrio mesmo após extinção, via termo indenizatório, com pedido formulado na vigência e antes de eventual prorrogação nos termos do art. 107. Escolher o instituto errado atrasa caixa e enfraquece a prova.",
+  "meta_description": "Diferença prática entre reajuste por índice, repactuação (art. 135) e reequilíbrio econômico-financeiro em contratos de obras e serviços sob a Lei 14.133.",
+  "lead": "Pedido genérico de “reajuste de tudo” costuma ser indeferido. O enquadramento certo começa pela causa do descompasso e pelo tipo de contrato.",
+  "direct_answer": "Na Lei nº 14.133/2021, reajuste e repactuação são institutos distintos (art. 6º, LVIII e LIX). Reajuste aplica o índice ou a fórmula do contrato à variação temporal de preços. Repactuação, no art. 135, vale para serviços contínuos com dedicação exclusiva ou predominância de mão de obra, com demonstração analítica de custos — não é o mecanismo ordinário de qualquer contrato de obra. O art. 130 trata do equilíbrio no mesmo aditivo quando alteração unilateral mexe em encargos; o art. 131 cobre reconhecimento após extinção, com pedido na vigência e antes de prorrogação (art. 107). Apostila (art. 136, I) registra reajuste ou repactuação previstos no contrato, sem criar o direito em si.",
   "sources": [
     "lei-14133-art130-131",
+    "lei-14133-art135",
     "lei-14133-art136",
+    "lei-14133-art6-definicoes",
+    "lei-14133-art92",
+    "lei-14133-art134",
     "lei-14133-planalto"
+  ],
+  "claims": [
+    {
+      "claim_id": "repactuacao-art135-escopo",
+      "claim": "Repactuação no art. 135 aplica-se a serviços contínuos com dedicação exclusiva ou predominância de mão de obra, com demonstração analítica de variação de custos.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art135",
+        "lei-14133-art6-definicoes"
+      ],
+      "source_locator": "art. 135, caput; art. 6º, LIX",
+      "support_level": "direct",
+      "official_excerpt": "Os preços dos contratos para serviços contínuos com regime de dedicação exclusiva de mão de obra ou com predominância de mão de obra serão repactuados para manutenção do equilíbrio econômico-financeiro, mediante demonstração analítica da variação dos custos contratuais",
+      "interpretation": "Em contrato típico de obra por escopo (empreitada), a repactuação do art. 135 não é o caminho ordinário; variações de mão de obra em obra não geram automaticamente repactuação.",
+      "limitations": "Exige previsão no edital/contrato e datas vinculadas (proposta / ACT-CCT-dissídio). Interregno mínimo de 1 ano (§ 3º).",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "claim_id": "reajuste-sentido-estrito",
+      "claim": "Reajustamento em sentido estrito é aplicação do índice de correção monetária previsto no contrato que retrate a variação do custo de produção.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art6-definicoes"
+      ],
+      "source_locator": "art. 6º, LVIII",
+      "support_level": "direct",
+      "official_excerpt": "reajustamento em sentido estrito: forma de manutenção do equilíbrio econômico-financeiro de contrato consistente na aplicação do índice de correção monetária previsto no contrato, que deve retratar a variação efetiva do custo de produção",
+      "interpretation": "Em obras, o caminho ordinário de atualização temporal costuma ser o reajuste por índice/fórmula contratual, quando previsto (cláusulas do art. 92, V).",
+      "limitations": "Índice inadequado ou defasado não se confunde automaticamente com reequilíbrio por álea extraordinária.",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "claim_id": "reequilibrio-art130-aditivo",
+      "claim": "Alteração unilateral que aumente ou diminua encargos exige restabelecimento do equilíbrio no mesmo termo aditivo (art. 130).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art130-131"
+      ],
+      "source_locator": "art. 130",
+      "support_level": "direct",
+      "official_excerpt": "Caso haja alteração unilateral do contrato que aumente ou diminua os encargos do contratado, a Administração deverá restabelecer, no mesmo termo aditivo, o equilíbrio econômico-financeiro inicial.",
+      "interpretation": "Separar causa (alteração unilateral) de meras variações de mercado cobertas por reajuste.",
+      "limitations": "Matriz de riscos e repartição objetiva condicionam a análise (art. 6º, XXVII; art. 124, II, d).",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "claim_id": "reequilibrio-art131-janela",
+      "claim": "Extinção não impede reconhecimento do desequilíbrio; pedido deve ser formulado na vigência e antes de prorrogação nos termos do art. 107.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art130-131"
+      ],
+      "source_locator": "art. 131 e parágrafo único",
+      "support_level": "direct",
+      "official_excerpt": "A extinção do contrato não configurará óbice para o reconhecimento do desequilíbrio econômico-financeiro... O pedido de restabelecimento do equilíbrio econômico-financeiro deverá ser formulado durante a vigência do contrato e antes de eventual prorrogação nos termos do art. 107 desta Lei.",
+      "interpretation": "Atraso na formulação do pedido é risco concreto de indeferimento formal.",
+      "limitations": "Art. 107 cuida de serviços e fornecimentos contínuos; a janela do parágrafo único deve ser lida com o tipo contratual.",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "claim_id": "apostila-136-reajuste-repactuacao",
+      "claim": "Variação de valor por reajuste ou repactuação previstos no contrato pode ser registrada por apostila (art. 136, I).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art136"
+      ],
+      "source_locator": "art. 136, I",
+      "support_level": "direct",
+      "official_excerpt": "I - variação do valor contratual para fazer face ao reajuste ou à repactuação de preços previstos no próprio contrato",
+      "interpretation": "Apostila é forma de registro; não cria direito a repactuação fora do art. 135 e do contrato.",
+      "limitations": "Não usa apostila para reequilíbrio por alteração de objeto/encargos (caminho de aditivo).",
+      "verified_at": "2026-08-02",
+      "verified_by": null
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Leitura alinhada ao texto legal; não substitui parecer do caso.",
+      "claim_id": "matriz-riscos-equilibrio",
+      "claim": "A matriz de riscos caracteriza o equilíbrio econômico-financeiro inicial e a alocação de ônus de eventos supervenientes (art. 6º, XXVII), interferindo na análise de reequilíbrio.",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-art6-definicoes"
+      ],
+      "source_locator": "art. 6º, XXVII",
+      "support_level": "direct",
+      "official_excerpt": "matriz de riscos: cláusula contratual definidora de riscos e de responsabilidades entre as partes e caracterizadora do equilíbrio econômico-financeiro inicial do contrato, em termos de ônus financeiro decorrente de eventos supervenientes à contratação"
+    },
+    {
+      "verified_at": "2026-08-02",
+      "verified_by": null,
+      "limitations": "Aplicação depende do contrato, do ente e da prova do caso.",
+      "interpretation": "Relevante para a janela do art. 131, parágrafo único.",
+      "claim_id": "art107-prorrogacao-continuos",
+      "claim": "Contratos de serviços e fornecimentos contínuos podem ser prorrogados sucessivamente até vigência máxima decenal, com atestação de vantajosidade (art. 107).",
+      "claim_type": "statutory_text",
+      "source_ids": [
+        "lei-14133-planalto"
+      ],
+      "source_locator": "art. 107",
+      "support_level": "direct",
+      "official_excerpt": "Os contratos de serviços e fornecimentos contínuos poderão ser prorrogados sucessivamente, respeitada a vigência máxima decenal, desde que haja previsão em edital e que a autoridade competente ateste que as condições e os preços permanecem vantajosos para a Administração"
+    }
   ],
   "cta_whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre reequilíbrio, reajuste e repactuação na Lei 14.133. Quero enquadrar o meu contrato de obra. Origem: /lei-14133-obras/reequilibrio-reajuste-repactuacao/",
   "cta_email_subject": "Análise inicial — reequilíbrio ou reajuste em obra",
@@ -45,12 +159,20 @@
   "faq": [
     {
       "q": "Aumento de material sempre é reequilíbrio?",
-      "a": "Não. Se o contrato prevê reajuste por índice que já captura a variação, o caminho pode ser o reajuste. Reequilíbrio exige nexo com álea extraordinária ou com alteração que desequilibre a equação — conforme o caso e a matriz de riscos."
+      "a": "Não. Se o contrato prevê reajuste por índice que já captura a variação, o caminho pode ser o reajuste. Reequilíbrio exige nexo com álea extraordinária, alteração unilateral com impacto de encargos (art. 130) ou hipótese do art. 124, II, d — e passa pela matriz de riscos."
     },
     {
       "q": "Posso pedir reequilíbrio depois do contrato encerrado?",
       "a": "O art. 131 admite reconhecimento do desequilíbrio após extinção, por termo indenizatório, mas o pedido deve ter sido formulado na vigência e antes de prorrogação nos termos do art. 107. Atraso na formulação é risco concreto."
+    },
+    {
+      "q": "Variação de mão de obra em obra pública gera repactuação automática?",
+      "a": "Não. A repactuação do art. 135 está ligada a serviços contínuos com dedicação exclusiva ou predominância de mão de obra, com demonstração analítica e datas vinculadas. Em obra típica por escopo, a alta de mão de obra não se converte automaticamente em repactuação; o caminho ordinário, se houver, costuma ser o reajuste por índice ou, em casos excepcionais, reequilíbrio com prova e matriz."
+    },
+    {
+      "q": "Qual a diferença entre obra, serviço de engenharia e serviço contínuo?",
+      "a": "A Lei define obra (art. 6º, XII) e serviço de engenharia (art. 6º, XXI) de forma distinta de serviços e fornecimentos contínuos (art. 6º, XV) e de serviços contínuos com dedicação exclusiva (art. 6º, XVI). A repactuação do art. 135 não se aplica indistintamente a qualquer desses objetos."
     }
   ],
-  "body_markdown": "## Três nomes, três lógicas\n\n**Reajuste** — gatilho típico: variação temporal de preços com índice ou fórmula do contrato. Instrumento frequente: apostila (art. 136, I).\n\n**Repactuação** — gatilho típico: custos de mão de obra ou convenção coletiva, quando previstos. Instrumento frequente: apostila (art. 136, I).\n\n**Reequilíbrio** — gatilho típico: quebra da equação econômico-financeira (álea extraordinária, alteração unilateral com aumento de encargos, entre outras hipóteses do caso). Instrumentos: termo aditivo e, no art. 131, termo indenizatório.\n\n## Arts. 130 e 131 na operação\n\n**Art. 130.** Se a alteração unilateral aumenta ou diminui encargos do contratado, a Administração deve restabelecer o equilíbrio inicial **no mesmo termo aditivo**.\n\n**Art. 131.** A extinção não impede o reconhecimento do desequilíbrio; a indenização pode ocorrer por termo indenizatório. O parágrafo único exige pedido durante a vigência e antes de eventual prorrogação (art. 107).\n\nVerificação do texto: Planalto, 02/08/2026.\n\n## Matriz de riscos muda o jogo\n\nSe o edital alocou determinado risco à contratada, o pedido de reequilíbrio sobre esse fato nasce mais frágil. Por isso a leitura da matriz (e do art. 92 e dispositivos correlatos sobre alocação) vem antes da planilha de custos.\n\n## Documentos que separam tese séria de pedido genérico\n\n- Contrato, matriz de riscos e cláusulas de reajuste\n- Data-base e índices\n- Curva de custos e notas fiscais do período\n- Cronologia do evento (atraso da Administração, interferência, norma nova, etc.)\n- Memória de cálculo do impacto\n- Diário de obra e comunicações oficiais\n\n## Erros frequentes\n\n- Pedir “reajuste” de evento que é reequilíbrio (ou o contrário)\n- Juntar pastas de NF sem nexo causal\n- Formular pedido só no encerramento, sem registro contemporâneo\n- Ignorar o que a matriz já atribuiu à contratada\n\n## Roteiro\n\n1. Identifique a causa do descompasso.  \n2. Teste se o índice/fórmula contratual já cobre.  \n3. Se não cobre, construa nexo, quantificação e enquadramento (130/131).  \n4. Protocolize dentro da janela do art. 131, parágrafo único.  \n5. Preserve prova contemporânea — não reconstrua meses depois.  \n\n## Ressalva\n\nReequilíbrio é dos temas mais litigiosos. Esta página organiza o mapa legal; a procedência depende do caso e da prova.\n\n## Exemplo de enquadramento (hipotético)\n\nContrato com reajuste anual por índice setorial. Seis meses após a data-base, norma ambiental nova obriga sistema de tratamento não previsto. Isso não é reajuste ordinário de preço de material; é candidato a discussão de reequilíbrio/alteração com base no evento e na matriz. Já a simples alta de aço coberta pelo índice contratual tende a caminhar pelo reajuste — salvo prova de descompasso extraordinário além do índice, o que é teses mais exigente.\n\n## Checklist rápido de triagem\n\n1. O contrato já prevê fórmula que cobre o fato?  \n2. A matriz alocou o risco à contratada?  \n3. Há alteração unilateral com aumento de encargos (art. 130)?  \n4. O pedido ainda está na janela do art. 131?  \nSe a resposta a (1) for sim e a (2) imputar o risco à contratada, o reequilíbrio nasce frágil.\n"
+  "body_markdown": "## Três nomes, três lógicas — e tipos de contrato\n\nAntes de montar planilha, classifique o objeto e a causa do descompasso.\n\n| Conceito | O que é (Lei 14.133) | Uso típico |\n|---|---|---|\n| **Obra** | Art. 6º, XII — intervenção que inova espaço físico ou altera substancialmente bem imóvel | Empreitada de construção/reforma |\n| **Serviço de engenharia** | Art. 6º, XXI — utilidade de arquiteto/engenheiro não enquadrada como obra | Manutenção, projeto, supervisão |\n| **Serviço contínuo** | Art. 6º, XV — necessidade permanente ou prolongada | Limpeza, vigilância, manutenção contínua |\n| **Serviço contínuo com dedicação exclusiva** | Art. 6º, XVI — empregados à disposição nas dependências, sem compartilhamento típico | Terceirização com posto de trabalho |\n| **Reajuste (reajustamento em sentido estrito)** | Art. 6º, LVIII — índice/fórmula do contrato | Atualização temporal de preços em obra e outros contratos |\n| **Repactuação** | Art. 6º, LIX e **art. 135** — serviços contínuos com dedicação exclusiva ou predominância de mão de obra | Análise analítica de custos (mercado e mão de obra) |\n| **Revisão / reequilíbrio** | Arts. 124, II, d; 130; 131 (e correlatos) | Quebra da equação por evento/alteração, não mero índice |\n\n## Reajuste\n\nGatilho típico: variação temporal de preços com **índice ou fórmula do contrato** (cláusulas do art. 92, V). Instrumento frequente de registro: **apostila** (art. 136, I), quando o reajuste já está previsto.\n\n## Repactuação (art. 135) — não é “reajuste de mão de obra de obra”\n\nO **art. 135** determina que os preços de contratos de **serviços contínuos com regime de dedicação exclusiva de mão de obra ou com predominância de mão de obra** serão **repactuados** para manutenção do equilíbrio, mediante **demonstração analítica** da variação dos custos, com data vinculada:\n\n- à apresentação da proposta, para custos de mercado;\n- ao acordo, convenção ou dissídio coletivo ao qual a proposta esteja vinculada, para custos de mão de obra.\n\nHá interregno mínimo de 1 (um) ano (§ 3º) e limites quanto a ACT/CCT que extrapolem matéria trabalhista (§§ 1º e 2º).\n\n**Consequência operacional:** em contrato de **obra por escopo**, a simples variação de mão de obra **não gera automaticamente** repactuação do art. 135. Tratar repactuação como sinônimo genérico de “aumentar preço de obra” é erro de enquadramento.\n\n## Reequilíbrio / revisão\n\n**Art. 130.** Se a alteração **unilateral** aumenta ou diminui encargos do contratado, a Administração deve restabelecer o equilíbrio inicial **no mesmo termo aditivo**.\n\n**Art. 124, II, d.** Por acordo, restabelecimento nas hipóteses de força maior, caso fortuito, fato do príncipe ou fatos imprevisíveis (ou previsíveis de consequências incalculáveis), **respeitada a repartição objetiva de risco** do contrato.\n\n**Art. 131.** A extinção não impede o reconhecimento do desequilíbrio; indenização pode ocorrer por termo indenizatório. O parágrafo único exige pedido **durante a vigência** e **antes** de eventual prorrogação nos termos do art. 107.\n\n**Art. 134.** Criação, alteração ou extinção de tributos ou encargos legais, ou disposições legais supervenientes, com repercussão comprovada nos preços, também altera preços contratados (para mais ou para menos).\n\nVerificação do texto: Planalto, 02/08/2026.\n\n## Matriz de riscos muda o jogo\n\nA **matriz de riscos** (art. 6º, XXVII; cláusulas necessárias do art. 92) define quem arca com eventos supervenientes e caracteriza o equilíbrio inicial. Se o edital alocou determinado risco à contratada, o pedido de reequilíbrio sobre esse fato nasce mais frágil. Por isso a leitura da matriz vem **antes** da planilha de custos.\n\n## Apostila não cria direito\n\nO art. 136, I, permite registrar por apostila a variação de valor para reajuste ou **repactuação previstos no próprio contrato**. Isso não transforma obra em serviço contínuo com dedicação exclusiva nem dispensa a demonstração analítica do art. 135 quando a hipótese for realmente repactuação.\n\n## Documentos que separam tese séria de pedido genérico\n\n- Contrato, matriz de riscos e cláusulas de reajuste/repactuação\n- Tipo de objeto (obra × serviço de engenharia × serviço contínuo)\n- Data-base, índices e, se houver, ACT/CCT aplicável\n- Curva de custos e notas fiscais do período\n- Cronologia do evento (atraso da Administração, interferência, norma nova, etc.)\n- Memória de cálculo do impacto\n- Diário de obra e comunicações oficiais\n\n## Erros frequentes\n\n- Pedir “reajuste” de evento que é reequilíbrio (ou o contrário)\n- Tratar **repactuação** como caminho genérico de qualquer obra\n- Assumir que alta de mão de obra em canteiro gera repactuação automática\n- Juntar pastas de NF sem nexo causal\n- Formular pedido só no encerramento, sem registro contemporâneo\n- Ignorar o que a matriz já atribuiu à contratada\n\n## Roteiro\n\n1. Identifique o tipo de contrato e a causa do descompasso.  \n2. Teste se o índice/fórmula contratual já cobre (reajuste).  \n3. Só discuta repactuação se o objeto couber no art. 135 e no art. 6º, LIX.  \n4. Se não for reajuste nem repactuação, construa nexo, quantificação e enquadramento (124/130/131/134) com a matriz.  \n5. Protocolize dentro da janela do art. 131, parágrafo único, quando aplicável.  \n6. Preserve prova contemporânea — não reconstrua meses depois.  \n\n## Ressalva\n\nReequilíbrio é dos temas mais litigiosos. Esta página organiza o mapa legal; a procedência depende do caso, da prova e da alocação de riscos.\n\n## Exemplo de enquadramento (hipotético)\n\nContrato de construção de escola (obra por escopo) com reajuste anual por índice setorial. Seis meses após a data-base, norma ambiental nova obriga sistema de tratamento não previsto. Isso não é reajuste ordinário de preço de material nem repactuação do art. 135; é candidato a discussão de reequilíbrio/alteração com base no evento e na matriz. Já a simples alta de aço coberta pelo índice contratual tende a caminhar pelo reajuste — salvo prova de descompasso extraordinário além do índice, tese mais exigente. Em outro contrato, de limpeza contínua com dedicação exclusiva, a variação de salário por convenção coletiva, com demonstração analítica e anualidade, pode ser repactuação do art. 135.\n\n## Checklist rápido de triagem\n\n1. O contrato já prevê fórmula que cobre o fato?  \n2. O objeto é serviço contínuo com dedicação exclusiva/predominância de mão de obra (art. 135)?  \n3. A matriz alocou o risco à contratada?  \n4. Há alteração unilateral com aumento de encargos (art. 130)?  \n5. O pedido ainda está na janela do art. 131?  \nSe a resposta a (1) for sim e a (3) imputar o risco à contratada, o reequilíbrio nasce frágil. Se (2) for não, não force repactuação.\n"
 }
