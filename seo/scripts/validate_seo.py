@@ -27,10 +27,20 @@ def page_path(p: Path) -> str:
 
 
 def main() -> int:
+    skip_dirs = {
+        ".git",
+        "seo",
+        ".playwright-mcp",
+        "node_modules",
+        "_site",
+        "docs",
+        ".netlify",
+        ".cache",
+    }
     html_pages = [
         p
         for p in ROOT.rglob("*.html")
-        if not any(x in p.parts for x in [".git", "seo", ".playwright-mcp", "node_modules"])
+        if not any(x in p.parts for x in skip_dirs)
     ]
     sm = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
     sm_urls = re.findall(r"<loc>([^<]+)</loc>", sm)
@@ -56,7 +66,17 @@ def main() -> int:
             r'name=["\']description["\'][^>]*content=["\']([^"\']*)["\']|content=["\']([^"\']*)["\'][^>]*name=["\']description["\']',
             t,
         )
-        if path in ("/404.html", "/obrigado.html"):
+        is_noindex = bool(
+            re.search(r'name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', t, re.I)
+        )
+        is_utility = (
+            path in ("/404.html", "/obrigado.html")
+            or path.startswith("/obrigado")
+            or p.name.startswith("obrigado")
+        )
+        if is_utility or is_noindex:
+            # Journey confirmations and other noindex utilities are not indexable
+            # SEO targets; skip title/canonical uniqueness gates.
             continue
         if not title:
             errors.append(f"no title {path}")
@@ -91,7 +111,7 @@ def main() -> int:
     sm_paths = {urlparse(u).path for u in sm_urls}
     indexable: set[str] = set()
     for path, p in paths_info.items():
-        if path in ("/404.html", "/obrigado.html"):
+        if path in ("/404.html", "/obrigado.html") or path.startswith("/obrigado") or p.name.startswith("obrigado"):
             continue
         t = p.read_text(encoding="utf-8", errors="replace")
         if re.search(r'name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', t, re.I):
