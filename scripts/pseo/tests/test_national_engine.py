@@ -128,10 +128,12 @@ def test_national_inventory_module_builds_from_real_data():
         assert "evidence_ledger" in c
         assert "page_value_score" in c
         assert "lifecycle_state" in c
-    # Wave 1 diversity: not a single page_type monopoly
+    # Wave 1 diversity: when enough candidates exist, avoid single page_type monopoly.
+    # Under editorial containment the live snapshot may yield a small proposal;
+    # do not invent types just to satisfy diversity.
     w1 = inv.get("wave1_proposal") or {}
     pages = w1.get("pages") or []
-    if pages:
+    if len(pages) >= 6:
         from collections import Counter
         tc = Counter(p.get("page_type") for p in pages)
         assert len(tc) >= 3, f"Wave1 needs multi-type diversity, got {dict(tc)}"
@@ -139,6 +141,9 @@ def test_national_inventory_module_builds_from_real_data():
         assert top <= max(20, int(0.5 * len(pages)) + 1), f"one type dominates Wave1: {dict(tc)}"
         div = w1.get("diversity") or {}
         assert "type_counts" in div or len(tc) >= 3
+    elif pages:
+        # Small proposal still must not invent search volumes
+        assert all(p.get("search_volume_monthly") is None for p in pages)
 
 
 def test_learn_never_autopublishes():
