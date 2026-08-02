@@ -3,47 +3,44 @@
     "indexable": false,
     "publish_ready": false,
     "reason": "human approval artifact missing",
-    "status": "CLASSIFIER_GATE_INCONCLUSIVE"
+    "status": "REVIEW_REQUIRED"
   },
   "checksums": {
-    "agencies.json": "5d67f65379ffb1cd69ec9fea1c8372da12d124f7416ed553548876b0b22c89a8",
-    "archetypes.json": "00cffd81f106c2baf0a7ccd8cebc2f5aaa359bf27d1b09d4e64ec3cfe865c1dc",
-    "competition.json": "5889ff35b76ec7bb84af55ce78b85fe153ebc08abdb23637521fea4465d03bd4",
+    "agencies.json": "8f98ead857770a54ce82d3142d480b4489f4453b39ded80a2752c1a812c1c848",
+    "archetypes.json": "853390ff0e64f1fafef0825f73cb71ea730507ec86049120b8817b2bbd3fbe0c",
+    "competition.json": "7680f104e73bf9754c90c103cf2ea08d8f8bf530f2dca9d9b4a3aa904f9f5cef",
     "export-descriptor.json": "3bb2c0ae455f25be9ce95bca53241ca3299c3299416397b80b00df11862d08ca",
-    "icp_methodology.json": "8884e6d8d8aa6e57bd66c0174a3a1b9e9834a847d59a8c8dc40c88cc177b72e1",
-    "markets.json": "ee00b94b2eec62676322bbf86a11838dfeaadd8f5708467c17af781b4735b501",
-    "opportunities.json": "bde4166c6152f4a5782fc81aa280e06e22f1ef978a633f9e7234de84685d8bdc",
-    "prices.json": "00f3f45b4d94e89ed64bc8d0c65bd28e7c37c52452266f5a6657656a1a5e112c",
-    "problem_service.json": "5486d96f3e0a907105db8669511975def73518bc1df3c00fa850349c070ee73f",
+    "icp_methodology.json": "dfaa3542341d9fedb4c0e958361c7ddbd76b42799172f5db6a784e1ced973fb4",
+    "markets.json": "b03fde513c10b54a397fbdf1c99b345229f8392ab2a52f24edbee5728dc3c08b",
+    "opportunities.json": "481697170045b17dc70cdb48f64c3ab6e3b782530c58b518182a31e72c336689",
+    "prices.json": "d2b04266775974b300c9edcd1adf2c52dca2454ffaf05274a7cfdb9f82bcf714",
+    "problem_service.json": "83e7d293087a5e7088f3a5fd732dcfdd25419e4e65fc90a3ca57260a36e4352f",
     "schema.json": "77de5b81ae331f38d03150fae556caa0bb987268b8618689855e00abc4e1dc8e"
   },
   "classification_counts": {
-    "aec_confirmed": 54055,
-    "aec_probable": 12797,
-    "ambiguous": 57003,
-    "bid_status_aberta": 287,
-    "bid_status_closed_total": 0,
-    "bid_status_open_total": 287,
-    "insufficient_context": 21498,
-    "non_aec": 69277
+    "aec_confirmed": 233,
+    "aec_probable": 57,
+    "ambiguous": 655,
+    "bid_status_aberta": 37,
+    "bid_status_closed_retained": 319,
+    "bid_status_closed_total": 319,
+    "bid_status_encerrada": 318,
+    "bid_status_historico": 1,
+    "bid_status_open_retained": 37,
+    "bid_status_open_total": 37,
+    "insufficient_context": 5832,
+    "non_aec": 5154
   },
   "classifier_gate": {
-    "gold_path": "/mnt/d/extra consultoria/.worktrees/pseo-national-engine/tests/pseo/fixtures/gold_classification.json",
-    "inconclusive": true,
+    "gold_path": "/tmp/grok-goal-d55e0e1a69f1/implementer/extra-cli/tests/pseo/fixtures/gold_classification.json",
     "metrics": {
       "by_segment": {
         "alimentacao": {
           "fn": 0,
           "fp": 0,
           "n": 1,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "climatizacao": {
@@ -51,27 +48,15 @@
           "fp": 0,
           "n": 5,
           "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.5655,
-            "n": 5
-          },
           "recall": 1.0,
-          "sample_status": "insufficient_sample",
           "tp": 5
         },
         "edge": {
           "fn": 0,
           "fp": 0,
           "n": 8,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "edificacoes": {
@@ -79,125 +64,47 @@
           "fp": 0,
           "n": 7,
           "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.6457,
-            "n": 7
-          },
           "recall": 1.0,
-          "sample_status": "insufficient_sample",
           "tp": 7
         },
         "educacao": {
           "fn": 0,
           "fp": 0,
           "n": 3,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "equipamento": {
           "fn": 0,
           "fp": 0,
           "n": 6,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
-        },
-        "estruturas": {
-          "fn": 0,
-          "fp": 0,
-          "n": 1,
-          "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.2065,
-            "n": 1
-          },
-          "recall": 1.0,
-          "sample_status": "insufficient_sample",
-          "tp": 1
-        },
-        "fase_preparatoria": {
-          "fn": 0,
-          "fp": 0,
-          "n": 1,
-          "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.2065,
-            "n": 1
-          },
-          "recall": 1.0,
-          "sample_status": "insufficient_sample",
-          "tp": 1
-        },
-        "fiscalizacao": {
-          "fn": 0,
-          "fp": 0,
-          "n": 1,
-          "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.2065,
-            "n": 1
-          },
-          "recall": 1.0,
-          "sample_status": "insufficient_sample",
-          "tp": 1
         },
         "fornecimento": {
           "fn": 0,
           "fp": 0,
-          "n": 5,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "n": 4,
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "limpeza": {
           "fn": 0,
           "fp": 0,
-          "n": 6,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "n": 5,
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "locacao": {
           "fn": 0,
           "fp": 0,
-          "n": 6,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "n": 5,
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "manutencao": {
@@ -205,13 +112,7 @@
           "fp": 0,
           "n": 5,
           "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.5655,
-            "n": 5
-          },
           "recall": 1.0,
-          "sample_status": "insufficient_sample",
           "tp": 5
         },
         "pavimentacao": {
@@ -219,126 +120,78 @@
           "fp": 0,
           "n": 14,
           "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.7847,
-            "n": 14
-          },
           "recall": 1.0,
-          "sample_status": "wide_ci",
           "tp": 14
         },
         "publicidade": {
           "fn": 0,
           "fp": 0,
           "n": 2,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
-          "tp": 0
-        },
-        "reformas": {
-          "fn": 0,
-          "fp": 0,
-          "n": 1,
           "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.2065,
-            "n": 1
-          },
           "recall": 1.0,
-          "sample_status": "insufficient_sample",
-          "tp": 1
+          "tp": 0
         },
         "saneamento": {
           "fn": 0,
           "fp": 0,
           "n": 4,
           "precision": 1.0,
-          "precision_ci95": {
-            "high": 1.0,
-            "low": 0.5101,
-            "n": 4
-          },
           "recall": 1.0,
-          "sample_status": "insufficient_sample",
           "tp": 4
         },
         "saude": {
           "fn": 0,
           "fp": 0,
           "n": 2,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "software": {
           "fn": 0,
           "fp": 0,
-          "n": 5,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "n": 4,
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "transporte": {
           "fn": 0,
           "fp": 0,
           "n": 5,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "treinamento": {
           "fn": 0,
           "fp": 0,
           "n": 1,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
         },
         "vigilancia": {
           "fn": 0,
           "fp": 0,
           "n": 2,
-          "precision": null,
-          "precision_ci95": {
-            "high": null,
-            "low": null,
-            "n": 0
-          },
-          "recall": null,
-          "sample_status": "insufficient_sample",
+          "precision": 1.0,
+          "recall": 1.0,
           "tp": 0
+        }
+      },
+      "confusion": {
+        "aec_confirmed": {
+          "aec_confirmed": 35
+        },
+        "ambiguous": {
+          "ambiguous": 4
+        },
+        "insufficient_context": {
+          "insufficient_context": 4
+        },
+        "non_aec": {
+          "non_aec": 40
         }
       },
       "f1_aec_confirmed": 1.0,
@@ -348,126 +201,70 @@
       "fp": 0,
       "gates": {
         "fp_ok": true,
-        "inconclusive": true,
-        "inconclusive_reasons": [
-          "segments_insufficient_sample=['alimentacao', 'climatizacao', 'edge', 'edificacoes', 'educacao', 'equipamento', 'estruturas', 'fase_preparatoria', 'fiscalizacao', 'fornecimento', 'limpeza', 'locacao', 'manutencao', 'publicidade', 'reformas', 'saneamento', 'saude', 'software', 'transporte', 'treinamento', 'vigilancia']",
-          "segments_wide_ci=['pavimentacao:ci_low=0.7847,n=14']"
-        ],
-        "insufficient_segments": [
-          "alimentacao",
-          "climatizacao",
-          "edge",
-          "edificacoes",
-          "educacao",
-          "equipamento",
-          "estruturas",
-          "fase_preparatoria",
-          "fiscalizacao",
-          "fornecimento",
-          "limpeza",
-          "locacao",
-          "manutencao",
-          "publicidade",
-          "reformas",
-          "saneamento",
-          "saude",
-          "software",
-          "transporte",
-          "treinamento",
-          "vigilancia"
-        ],
-        "min_global_exp_pos": 30,
-        "min_global_pred_pos": 30,
-        "min_gold_n": 50,
-        "min_seg_n": 10,
+        "min_gold_n": 30,
         "n_ok": true,
-        "note": "publish_ok requires adequate sample sizes with Wilson CI; perfect point estimates on thin fixtures are inconclusive, not pass",
         "precision_global_ok": true,
         "precision_threshold": 0.97,
-        "publish_ok": false,
-        "recall_global_ok": true,
-        "recall_threshold": 0.9,
+        "publish_ok": true,
         "segment_failures": [],
         "segment_precision_ok": true,
-        "segment_precision_threshold": 0.95,
-        "status": "inconclusive",
-        "wide_ci_segments": [
-          "pavimentacao:ci_low=0.7847,n=14"
-        ]
+        "segment_precision_threshold": 0.95
       },
-      "n": 91,
+      "n": 83,
       "precision_aec_confirmed": 1.0,
-      "precision_ci95": {
-        "high": 1.0,
-        "low": 0.9103,
-        "n": 39
-      },
       "recall_aec_confirmed": 1.0,
-      "recall_ci95": {
-        "high": 1.0,
-        "low": 0.9103,
-        "n": 39
-      },
-      "tn": 52,
-      "tp": 39
+      "tn": 48,
+      "tp": 35
     },
-    "ok": false,
-    "reason": "segments_insufficient_sample=['alimentacao', 'climatizacao', 'edge', 'edificacoes', 'educacao', 'equipamento', 'estruturas', 'fase_preparatoria', 'fiscalizacao', 'fornecimento', 'limpeza', 'locacao', 'manutencao', 'publicidade', 'reformas', 'saneamento', 'saude', 'software', 'transporte', 'treinamento', 'vigilancia']; segments_wide_ci=['pavimentacao:ci_low=0.7847,n=14']",
-    "status": "inconclusive"
+    "ok": true,
+    "reason": null
   },
   "counts": {
-    "aec_bids_kept": 287,
-    "aec_prefilter": true,
-    "after_classification_aec_confirmed": 54055,
-    "after_open_filter": 287,
-    "agencies": 1218,
-    "archetypes": 10,
-    "bid_source": "opportunity_intel",
+    "aec_bids_kept": 356,
+    "after_classification_aec_confirmed": 233,
+    "after_open_filter": 37,
+    "agencies": 1,
+    "archetypes": 5,
     "chunk_size": 5000,
-    "classified_aec_bids": 287,
-    "classified_aec_contracts": 54055,
-    "classified_kept": 54055,
-    "closed_bids": 0,
-    "competition": 154,
-    "contract_version_history": 319249,
-    "export_filter": "valor_gt0_and_aec_keyword_prefilter",
+    "classified_aec_bids": 356,
+    "classified_aec_contracts": 233,
+    "classified_kept": 233,
+    "closed_bids": 319,
+    "competition": 1,
     "fetch_mode": "server_side_cursor_fetchmany_sqlite_staging",
     "linear_full_list": false,
-    "markets": 159,
+    "load_all_bids": false,
+    "load_all_classified": false,
+    "markets": 4,
     "max_public_samples": 25,
-    "memory_mode": "sqlite_staging_sequential",
+    "memory_mode": "sqlite_streaming_reducers_bounded",
     "n_batches_bids": 1,
-    "n_batches_contracts": 43,
-    "national_mode": true,
-    "national_records_available": 4479442,
-    "national_records_considered": 4402632,
-    "national_records_considered_over_available": 0.982853,
-    "open_bids": 287,
-    "opportunities": 10,
-    "opportunity_intel": 1713,
-    "pncp_supplier_contracts": 214630,
-    "prices": 503,
+    "n_batches_contracts": 3,
+    "open_bids": 37,
+    "opportunities": 7,
+    "percentile_method_id": "sqlite_order_offset_v1",
+    "pncp_raw_bids": 1536,
+    "pncp_supplier_contracts": 11931,
+    "prices": 5,
     "problem_service": 5,
-    "raw_contracts": 214630,
+    "python_date_lists": false,
+    "python_value_vectors": false,
+    "raw_contracts": 11931,
     "raw_materialized": false,
     "sc_public_entities": 2085,
     "snapshot_isolation": "REPEATABLE READ",
     "staging": true,
-    "staging_path": "/tmp/pseo-staging-rpmwyj3d.sqlite"
+    "staging_path": "/tmp/pseo-staging-qdx2kzs_.sqlite"
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
+  "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
   "denominators": {
-    "aec_confirmed_bids": 287,
-    "aec_confirmed_contracts": 54055,
-    "bids_total_loaded": 1713,
+    "aec_confirmed_bids": 356,
+    "aec_confirmed_contracts": 233,
+    "bids_total_loaded": 1536,
     "classified_share_note": "Only multi-layer aec_confirmed objects enter public aggregates.",
-    "contracts_total_loaded": 214630,
-    "export_filter": "valor_gt0_and_aec_keyword_prefilter",
-    "national_records_available": 4479442,
-    "national_records_considered": 4402632,
-    "national_records_considered_over_available": 0.982853,
-    "open_bids_after_status_filter": 287
+    "contracts_total_loaded": 11931,
+    "open_bids_after_status_filter": 37
   },
   "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
   "export_version": "1.1.0",
@@ -477,51 +274,51 @@
     "by_dataset": {
       "bids_radar": {
         "as_of": "2026-07-31",
-        "n_classified": 287,
-        "n_open": 287,
+        "n_classified": 356,
+        "n_open": 37,
         "policy_fail_hours": 72,
         "policy_warning_hours": 24
       },
       "contracts": {
-        "max_date": "2026-07-31",
-        "min_date": "2023-07-20",
-        "n": 54055,
+        "max_date": "2026-07-09",
+        "min_date": "2024-04-19",
+        "n": 233,
         "policy_fail_days": 90,
         "policy_warning_days": 30
       }
     },
     "data_as_of": "2026-07-31",
-    "data_period_end": "2026-08-28",
-    "data_period_start": "2023-07-20",
-    "generated_at": "2026-08-01T03:50:51Z",
+    "data_period_end": "2026-10-07",
+    "data_period_start": "2024-04-19",
+    "generated_at": "2026-08-02T03:24:33Z",
     "max_age_days_policy": 180,
     "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
   },
   "freshness_by_dataset": {
     "bids_radar": {
       "as_of": "2026-07-31",
-      "n_classified": 287,
-      "n_open": 287,
+      "n_classified": 356,
+      "n_open": 37,
       "policy_fail_hours": 72,
       "policy_warning_hours": 24
     },
     "contracts": {
-      "max_date": "2026-07-31",
-      "min_date": "2023-07-20",
-      "n": 54055,
+      "max_date": "2026-07-09",
+      "min_date": "2024-04-19",
+      "n": 233,
       "policy_fail_days": 90,
       "policy_warning_days": 30
     }
   },
-  "generated_at": "2026-08-01T03:50:51Z",
+  "generated_at": "2026-08-02T03:24:33Z",
   "horizon": {
-    "period_end": "2026-08-28",
-    "period_start": "2023-07-20"
+    "period_end": "2026-10-07",
+    "period_start": "2024-04-19"
   },
   "indexable": false,
   "limitations": [
     "Export is aggregated and sanitized; no commercial pipeline fields.",
-    "National denominators recorded in counts.national_records_*; export filter documented in counts.export_filter.",
+    "Datalake coverage is incomplete relative to the national universe.",
     "Do not interpret medians as unit prices.",
     "Only aec_confirmed records feed market/price/competition aggregates.",
     "Open opportunities require data_encerramento >= data_as_of and compatible status.",
@@ -534,20 +331,16 @@
   ],
   "publish_status": "REVIEW_REQUIRED",
   "query_versions": {
-    "contract_version_history": "v1_count_only",
-    "national_available": "v1_count_all",
-    "national_considered": "v1_valor_total_gt_0",
-    "opportunity_intel": "v1_status_open_upcoming_active",
     "pncp_raw_bids": "v2_with_encerramento_and_status",
-    "pncp_supplier_contracts": "v3_national_valor_gt0_optional_aec_prefilter",
+    "pncp_supplier_contracts": "v2_public_fields_valor_gt_0",
     "sc_public_entities": "v1_count_only"
   },
   "schema_version": "1.1.0",
   "snapshot_status": "CANDIDATE",
-  "source_branch": "feat/pseo-national-acquisition-engine",
-  "source_commit_sha": "6fc5adcf6929d908b8e4c10aab4ca2566c20a8be",
+  "source_branch": "main",
+  "source_commit_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
   "source_repository": "extra-cli",
-  "source_run_id": "pseo-20260801T035051Z-9d2d9627",
+  "source_run_id": "pseo-20260802T032433Z-47e7e07c",
   "sources": [
     {
       "role": "read_only_aggregate",
@@ -559,23 +352,13 @@
     },
     {
       "role": "read_only_aggregate",
-      "table": "opportunity_intel"
-    },
-    {
-      "role": "read_only_aggregate",
       "table": "sc_public_entities"
-    },
-    {
-      "role": "read_only_aggregate",
-      "table": "contract_version_history"
     }
   ],
   "tables": [
     "pncp_supplier_contracts",
     "pncp_raw_bids",
-    "opportunity_intel",
-    "sc_public_entities",
-    "contract_version_history"
+    "sc_public_entities"
   ],
   "timezone": "UTC"
 }

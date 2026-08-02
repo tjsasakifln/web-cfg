@@ -1,22 +1,24 @@
 {
   "ok": false,
   "technical_ok": false,
-  "production_audit_is_current": true,
-  "stale_code": null,
-  "identity_mismatches": [],
-  "audit_generated_at": "2026-08-02T02:21:40Z",
-  "audit_target_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "live_manifest_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "snapshot_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
-  "public_artifact_hash": "5a80319aa476a39d827cedd2b6bc6bd69ea1c0a3b4a75d5c7551f24219fd3652",
-  "seed_set_hash": "31edec459acbbc634d1e7303b2b5ebc49d90c23fa978de27ac1bf797fbb3e07f",
+  "production_audit_is_current": false,
+  "stale_code": "STALE_AUDIT_DEPLOY_MISMATCH",
+  "identity_mismatches": [
+    "snapshot_hash!=live"
+  ],
+  "audit_generated_at": "2026-08-02T03:44:46Z",
+  "audit_target_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "live_manifest_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "snapshot_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+  "public_artifact_hash": "beaa2f168ea5551f678bb60e9d6eab8bd9e06df3260ab481de42eb5ada1ab40f",
+  "seed_set_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-02T02:21:40.440038+00:00",
+  "generated_at": "2026-08-02T03:44:46.438558+00:00",
   "base_url": "https://confenge.com.br",
-  "web_cfg_sha": "d055d82a3e2b274f7ee0e29959ca2621150115a3",
-  "git_head": "d055d82a3e2b274f7ee0e29959ca2621150115a3",
-  "netlify_deployed_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "dataset_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
+  "web_cfg_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "git_head": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "netlify_deployed_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
   "vocabulary_note": "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build never mean 'indexado'. ok=true only when technical audit passes AND identities match live deploy.",
   "sitemap": {
     "url_count": 0,
@@ -25,18 +27,19 @@
     "source": "local"
   },
   "counts": {
-    "urls_audited": 19,
-    "critical_defects": 6,
+    "urls_audited": 18,
+    "critical_defects": 7,
     "crawlable_production": 0,
-    "deployed_only": 19
+    "deployed_only": 18
   },
   "critical": [
+    "/inteligencia/:prod_html_mismatch",
     "/inteligencia/mercados/:prod_html_mismatch",
     "/inteligencia/orgaos/:prod_html_mismatch",
     "/inteligencia/precos/:prod_html_mismatch",
     "/inteligencia/concorrencia/:prod_html_mismatch",
-    "/radar/edificacoes-publicas-pr/:http_4xx",
-    "/radar/edificacoes-publicas-pr/:noindex_on_publish"
+    "/inteligencia/cenarios/:prod_html_mismatch",
+    "/radar/:prod_html_mismatch"
   ],
   "rows": [
     {
@@ -98,12 +101,16 @@
         "canonical": "https://confenge.com.br/inteligencia/",
         "text_len": 1561
       },
-      "local_html_sha256": "f069fdaa2959ed864b0e5bd4cc237ab034bee63b3825abd4380b298109511d9b",
+      "local_html_sha256": "20e4a5377bb2052ac809574808d5b13a33017099bd90fab605b4843e0fcd7149",
       "prod_html_sha256": "f069fdaa2959ed864b0e5bd4cc237ab034bee63b3825abd4380b298109511d9b",
       "in_sitemap": false,
       "in_hub": true,
-      "defects": [],
-      "notes": [],
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
@@ -118,7 +125,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; fwd=stale; fwd-status=200; stored"
         },
         "redirect_chain": [
           {
@@ -146,7 +153,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; fwd=miss; fwd-status=200; stored"
+          "cache-status": "\"Netlify Edge\"; fwd=stale; fwd-status=200; stored"
         },
         "redirect_chain": [
           {
@@ -165,7 +172,7 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/",
         "text_len": 17472
       },
-      "local_html_sha256": "c1a36136dd400085d3a34dcd6a80c209261ac52971c278fc2fdedaf640b0cedb",
+      "local_html_sha256": "998ac9a72d85a8d5076a3362a30ce6006dbbcc992f2d74191def7829b11e2a6c",
       "prod_html_sha256": "c11c8cff8acec7f8838834724de5992b2e411af2763b3df5d299f49f0c5302ac",
       "in_sitemap": false,
       "in_hub": true,
@@ -189,7 +196,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -236,7 +243,7 @@
         "canonical": "https://confenge.com.br/inteligencia/orgaos/",
         "text_len": 135377
       },
-      "local_html_sha256": "42efd3f717561f769aada85335850aee29e6d5fbf01e38ba5fba979455224081",
+      "local_html_sha256": "fc8b0250bd31cc95ae04ef2227db63af74d9f2beb758f7fa1fffdc62289a1c70",
       "prod_html_sha256": "0618fb5df2fbcd30ea38434cb14a1e63525c43dd8f528a0c0196a96cfb4b9f75",
       "in_sitemap": false,
       "in_hub": true,
@@ -307,7 +314,7 @@
         "canonical": "https://confenge.com.br/inteligencia/precos/",
         "text_len": 38773
       },
-      "local_html_sha256": "79c9b47f8137bab7e7d7bd76661306eb45a672bc15201d1f3d71729a57c6f19c",
+      "local_html_sha256": "dfcd0db31b904ddc088c5c973e1becce2cbd394385c2c1af0774c52b8e37127a",
       "prod_html_sha256": "cae0c0191bf3a8e5815d7d5ba7929e50c79785ea484730b5526968088f7732d4",
       "in_sitemap": false,
       "in_hub": true,
@@ -378,7 +385,7 @@
         "canonical": "https://confenge.com.br/inteligencia/concorrencia/",
         "text_len": 18585
       },
-      "local_html_sha256": "4be8039352374e96b4ce767d5a6d9369302de73c923ffd2b0a501a7ff449bfd8",
+      "local_html_sha256": "01aec29acad28c7ab0296f25c6c63301f122c0475434fea906db6c5e4549cd37",
       "prod_html_sha256": "9ce834fa8285d3c80612720ac2062219572cc7cd36d5963c9a0782de8ab7a556",
       "in_sitemap": false,
       "in_hub": true,
@@ -402,7 +409,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -449,12 +456,16 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/",
         "text_len": 1323
       },
-      "local_html_sha256": "ee536d30cda80d37135043409147eacc7f60c4a2a693e21c745fc8b1893796a7",
+      "local_html_sha256": "58ec803d2f35536fe8877bfc6e930fa1f71fb19e101f55bd2152a0b36af4788f",
       "prod_html_sha256": "ee536d30cda80d37135043409147eacc7f60c4a2a693e21c745fc8b1893796a7",
       "in_sitemap": false,
       "in_hub": true,
-      "defects": [],
-      "notes": [],
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
@@ -516,79 +527,16 @@
         "canonical": "https://confenge.com.br/radar/",
         "text_len": 1475
       },
-      "local_html_sha256": "7ecc81fdc67b0926691e8b2c4478441625e64d2297d3953a9e0590a671947d62",
+      "local_html_sha256": "5b036651fbc102fe87970c1391ce6373fc2a8cb1c57932266d2aed8cc751e976",
       "prod_html_sha256": "7ecc81fdc67b0926691e8b2c4478441625e64d2297d3953a9e0590a671947d62",
       "in_sitemap": false,
       "in_hub": false,
-      "defects": [],
-      "notes": [],
-      "stage_reached": "DEPLOYED_PRODUCTION"
-    },
-    {
-      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-      "expected_role": "noindex_sample",
-      "browser": {
-        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "status": 200,
-        "error": null,
-        "headers": {
-          "content-type": "text/html; charset=UTF-8",
-          "x-robots-tag": null,
-          "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
-        },
-        "redirect_chain": [
-          {
-            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-            "status": 200,
-            "location": null,
-            "content_type": "text/html; charset=UTF-8"
-          }
-        ],
-        "body_size": 23061,
-        "html_sha256": "f1c31a46f65632ac78ea122bc0198b036655c1e0140515560162a6138559a436",
-        "title": "Mercado de Pavimentação e infraestrutura viária em Rio Grande do Sul: contratos e órgãos | CONFENGE",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Rio Grande do Sul",
-        "meta_robots": "noindex,follow",
-        "meta_description": "Inteligência de mercado: 3506 contratos, 365 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
-        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "text_len": 6415
-      },
-      "googlebot": {
-        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "status": 200,
-        "error": null,
-        "headers": {
-          "content-type": "text/html; charset=UTF-8",
-          "x-robots-tag": null,
-          "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
-        },
-        "redirect_chain": [
-          {
-            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-            "status": 200,
-            "location": null,
-            "content_type": "text/html; charset=UTF-8"
-          }
-        ],
-        "body_size": 23061,
-        "html_sha256": "f1c31a46f65632ac78ea122bc0198b036655c1e0140515560162a6138559a436",
-        "title": "Mercado de Pavimentação e infraestrutura viária em Rio Grande do Sul: contratos e órgãos | CONFENGE",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Rio Grande do Sul",
-        "meta_robots": "noindex,follow",
-        "meta_description": "Inteligência de mercado: 3506 contratos, 365 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
-        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "text_len": 6415
-      },
-      "local_html_sha256": "f1c31a46f65632ac78ea122bc0198b036655c1e0140515560162a6138559a436",
-      "prod_html_sha256": "f1c31a46f65632ac78ea122bc0198b036655c1e0140515560162a6138559a436",
-      "in_sitemap": false,
-      "in_hub": true,
-      "defects": [],
-      "notes": [],
+      "defects": [
+        "prod_html_mismatch"
+      ],
+      "notes": [
+        "local_and_production_html_differ"
+      ],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
@@ -631,7 +579,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -650,20 +598,20 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
         "text_len": 6550
       },
-      "local_html_sha256": "455c9941972571ddd526c280eba2d0d0f81f95a02b8c506355a43a77fbb99f86",
+      "local_html_sha256": "3e633112ab3edd5478f530dd6337abaf43e5082933458181af0a32b75423bb88",
       "prod_html_sha256": "455c9941972571ddd526c280eba2d0d0f81f95a02b8c506355a43a77fbb99f86",
       "in_sitemap": false,
-      "in_hub": true,
+      "in_hub": false,
       "defects": [],
       "notes": [],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
-      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
       "expected_role": "noindex_sample",
       "browser": {
-        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
-        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
         "status": 200,
         "error": null,
         "headers": {
@@ -674,24 +622,24 @@
         },
         "redirect_chain": [
           {
-            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
             "status": 200,
             "location": null,
             "content_type": "text/html; charset=UTF-8"
           }
         ],
-        "body_size": 23026,
-        "html_sha256": "07ec2c671d19f42c3fdefbf6e078b40a5c3c85b7145941a9e6db17ca86dd26c8",
-        "title": "Mercado de Pavimentação e infraestrutura viária em Paraná: contratos e órgãos | CONFENGE",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Paraná",
+        "body_size": 23010,
+        "html_sha256": "40732c59a448b12f3f8050a8b73cee114583d75b8fdb63e03cd40aafdd8d43d8",
+        "title": "Mercado de Pavimentação e infraestrutura viária em Piauí: contratos e órgãos | CONFENGE",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
         "meta_robots": "noindex,follow",
-        "meta_description": "Inteligência de mercado: 2872 contratos, 329 órgãos em Paraná. Medianas, compradores e implicações para empresas de engenharia.",
-        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
-        "text_len": 6487
+        "meta_description": "Inteligência de mercado: 856 contratos, 80 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
+        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "text_len": 6510
       },
       "googlebot": {
-        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
-        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
         "status": 200,
         "error": null,
         "headers": {
@@ -702,25 +650,92 @@
         },
         "redirect_chain": [
           {
-            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
+            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
             "status": 200,
             "location": null,
             "content_type": "text/html; charset=UTF-8"
           }
         ],
-        "body_size": 23026,
-        "html_sha256": "07ec2c671d19f42c3fdefbf6e078b40a5c3c85b7145941a9e6db17ca86dd26c8",
-        "title": "Mercado de Pavimentação e infraestrutura viária em Paraná: contratos e órgãos | CONFENGE",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Paraná",
+        "body_size": 23010,
+        "html_sha256": "40732c59a448b12f3f8050a8b73cee114583d75b8fdb63e03cd40aafdd8d43d8",
+        "title": "Mercado de Pavimentação e infraestrutura viária em Piauí: contratos e órgãos | CONFENGE",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
         "meta_robots": "noindex,follow",
-        "meta_description": "Inteligência de mercado: 2872 contratos, 329 órgãos em Paraná. Medianas, compradores e implicações para empresas de engenharia.",
-        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/",
-        "text_len": 6487
+        "meta_description": "Inteligência de mercado: 856 contratos, 80 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
+        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "text_len": 6510
       },
-      "local_html_sha256": "07ec2c671d19f42c3fdefbf6e078b40a5c3c85b7145941a9e6db17ca86dd26c8",
-      "prod_html_sha256": "07ec2c671d19f42c3fdefbf6e078b40a5c3c85b7145941a9e6db17ca86dd26c8",
+      "local_html_sha256": "375a676e31f8a4b683ec1c99e4e301d1ec659c49cf0b5994735be0237fbc80b2",
+      "prod_html_sha256": "40732c59a448b12f3f8050a8b73cee114583d75b8fdb63e03cd40aafdd8d43d8",
       "in_sitemap": false,
-      "in_hub": true,
+      "in_hub": false,
+      "defects": [],
+      "notes": [],
+      "stage_reached": "DEPLOYED_PRODUCTION"
+    },
+    {
+      "path": "/inteligencia/mercados/edificacoes-publicas-mg/",
+      "expected_role": "noindex_sample",
+      "browser": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 22353,
+        "html_sha256": "124f8b873cb723fd34282286b1efbf381b26cc34cd7423969723ff477d2dca25",
+        "title": "Mercado de Edificações públicas em Minas Gerais: contratos e órgãos | CONFENGE",
+        "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+        "meta_robots": "noindex,follow",
+        "meta_description": "Inteligência de mercado: 1497 contratos, 508 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
+        "canonical": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "text_len": 6215
+      },
+      "googlebot": {
+        "request_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "final_url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 22353,
+        "html_sha256": "124f8b873cb723fd34282286b1efbf381b26cc34cd7423969723ff477d2dca25",
+        "title": "Mercado de Edificações públicas em Minas Gerais: contratos e órgãos | CONFENGE",
+        "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+        "meta_robots": "noindex,follow",
+        "meta_description": "Inteligência de mercado: 1497 contratos, 508 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
+        "canonical": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
+        "text_len": 6215
+      },
+      "local_html_sha256": "ee1c1ee58b7c8f0df22fc2deb1c42478335ac80ff1478d37a09c5db417903140",
+      "prod_html_sha256": "124f8b873cb723fd34282286b1efbf381b26cc34cd7423969723ff477d2dca25",
+      "in_sitemap": false,
+      "in_hub": false,
       "defects": [],
       "notes": [],
       "stage_reached": "DEPLOYED_PRODUCTION"
@@ -737,7 +752,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
         },
         "redirect_chain": [
           {
@@ -784,20 +799,20 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
         "text_len": 6429
       },
-      "local_html_sha256": "d488bfa546a8c8c7f275b00ad6f47c3bda596395a1c092d902bbca20ed8cd3ee",
+      "local_html_sha256": "8e0f1e2e21679171ff7ab4c828688e95ed91eb27c256686d99499b8b158cc646",
       "prod_html_sha256": "d488bfa546a8c8c7f275b00ad6f47c3bda596395a1c092d902bbca20ed8cd3ee",
       "in_sitemap": false,
-      "in_hub": true,
+      "in_hub": false,
       "defects": [],
       "notes": [],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
-      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+      "path": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
       "expected_role": "noindex_sample",
       "browser": {
-        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
-        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
         "status": 200,
         "error": null,
         "headers": {
@@ -808,53 +823,53 @@
         },
         "redirect_chain": [
           {
-            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+            "url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
             "status": 200,
             "location": null,
             "content_type": "text/html; charset=UTF-8"
           }
         ],
-        "body_size": 23044,
-        "html_sha256": "13dec1a3ba121676ba3291665b4ba01a8b9ebfb61260ba27df5bf588b019d6ac",
-        "title": "Mercado de Pavimentação e infraestrutura viária em São Paulo: contratos e órgãos | CONFENGE",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — São Paulo",
+        "body_size": 20003,
+        "html_sha256": "ec0599f60d3f553fcfeb1a5ee9c843d7dad956c2f7cec5bb06a2c62c8161e199",
+        "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
+        "h1": "Contratação de engenharia em Prefeitura Municipal de Caxias do Sul: o que os dados públicos mostram",
         "meta_robots": "noindex,follow",
-        "meta_description": "Inteligência de mercado: 2298 contratos, 406 órgãos em São Paulo. Medianas, compradores e implicações para empresas de engenharia.",
-        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
-        "text_len": 6481
+        "meta_description": "Dossiê de comprador: 259 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+        "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "text_len": 5168
       },
       "googlebot": {
-        "request_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
-        "final_url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+        "request_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "final_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
         "status": 200,
         "error": null,
         "headers": {
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
-            "url": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
+            "url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
             "status": 200,
             "location": null,
             "content_type": "text/html; charset=UTF-8"
           }
         ],
-        "body_size": 23044,
-        "html_sha256": "13dec1a3ba121676ba3291665b4ba01a8b9ebfb61260ba27df5bf588b019d6ac",
-        "title": "Mercado de Pavimentação e infraestrutura viária em São Paulo: contratos e órgãos | CONFENGE",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — São Paulo",
+        "body_size": 20003,
+        "html_sha256": "ec0599f60d3f553fcfeb1a5ee9c843d7dad956c2f7cec5bb06a2c62c8161e199",
+        "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
+        "h1": "Contratação de engenharia em Prefeitura Municipal de Caxias do Sul: o que os dados públicos mostram",
         "meta_robots": "noindex,follow",
-        "meta_description": "Inteligência de mercado: 2298 contratos, 406 órgãos em São Paulo. Medianas, compradores e implicações para empresas de engenharia.",
-        "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/",
-        "text_len": 6481
+        "meta_description": "Dossiê de comprador: 259 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
+        "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "text_len": 5168
       },
-      "local_html_sha256": "13dec1a3ba121676ba3291665b4ba01a8b9ebfb61260ba27df5bf588b019d6ac",
-      "prod_html_sha256": "13dec1a3ba121676ba3291665b4ba01a8b9ebfb61260ba27df5bf588b019d6ac",
+      "local_html_sha256": "46afff9d3ec7dd58a5c2c1442fff941a13209fc5fe08fcbad63411325f830c0f",
+      "prod_html_sha256": "ec0599f60d3f553fcfeb1a5ee9c843d7dad956c2f7cec5bb06a2c62c8161e199",
       "in_sitemap": false,
-      "in_hub": true,
+      "in_hub": false,
       "defects": [],
       "notes": [],
       "stage_reached": "DEPLOYED_PRODUCTION"
@@ -899,7 +914,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -918,7 +933,7 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
         "text_len": 4537
       },
-      "local_html_sha256": "94bd9b62a7c8c58c7764d92a6e15527c1c9060e176c8efa08e52fde9443b68cf",
+      "local_html_sha256": "552225dbff5159282f674c403afcc1935f152a0fbb154637483bfac9386fe762",
       "prod_html_sha256": "94bd9b62a7c8c58c7764d92a6e15527c1c9060e176c8efa08e52fde9443b68cf",
       "in_sitemap": false,
       "in_hub": false,
@@ -938,7 +953,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535999"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
         },
         "redirect_chain": [
           {
@@ -985,7 +1000,7 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
         "text_len": 4705
       },
-      "local_html_sha256": "572393bb0c506feafd50d247f4d044369783c70e808d05b80064fc04da947220",
+      "local_html_sha256": "82fdc63f59b1ac241dd78efe77500626a9a710afbfff4290b09504e94496c08e",
       "prod_html_sha256": "572393bb0c506feafd50d247f4d044369783c70e808d05b80064fc04da947220",
       "in_sitemap": false,
       "in_hub": false,
@@ -1052,7 +1067,7 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
         "text_len": 4504
       },
-      "local_html_sha256": "bbd41a948ee1e82232df0d80dba67045b1c838415c5b82cd481b5640db1ef5d2",
+      "local_html_sha256": "a68c9f000454cd2c6aa7d3cb1b2128a563b0246c6cbec396144383c38ca4936e",
       "prod_html_sha256": "bbd41a948ee1e82232df0d80dba67045b1c838415c5b82cd481b5640db1ef5d2",
       "in_sitemap": false,
       "in_hub": false,
@@ -1062,7 +1077,7 @@
     },
     {
       "path": "/radar/edificacoes-publicas-pr/",
-      "expected_role": "publish",
+      "expected_role": "noindex_sample",
       "browser": {
         "request_url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
         "final_url": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
@@ -1119,83 +1134,13 @@
         "canonical": null,
         "text_len": 1029
       },
-      "local_html_sha256": null,
+      "local_html_sha256": "5cbf25ea877b7bb332cd3441a6ae2116be4aeae2c201dc93d542fcd46ff1fdf1",
       "prod_html_sha256": "0ca6e219c8b44503f3c722e281717876ad53995608d1f46feedde388c8d89f9c",
-      "in_sitemap": false,
-      "in_hub": false,
-      "defects": [
-        "http_4xx",
-        "noindex_on_publish"
-      ],
-      "notes": [],
-      "stage_reached": "DEPLOYED_PRODUCTION"
-    },
-    {
-      "path": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-      "expected_role": "publish_candidate",
-      "browser": {
-        "request_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "final_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "status": 200,
-        "error": null,
-        "headers": {
-          "content-type": "text/html; charset=UTF-8",
-          "x-robots-tag": null,
-          "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
-        },
-        "redirect_chain": [
-          {
-            "url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-            "status": 200,
-            "location": null,
-            "content_type": "text/html; charset=UTF-8"
-          }
-        ],
-        "body_size": 20003,
-        "html_sha256": "ec0599f60d3f553fcfeb1a5ee9c843d7dad956c2f7cec5bb06a2c62c8161e199",
-        "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
-        "h1": "Contratação de engenharia em Prefeitura Municipal de Caxias do Sul: o que os dados públicos mostram",
-        "meta_robots": "noindex,follow",
-        "meta_description": "Dossiê de comprador: 259 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
-        "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "text_len": 5168
-      },
-      "googlebot": {
-        "request_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "final_url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "status": 200,
-        "error": null,
-        "headers": {
-          "content-type": "text/html; charset=UTF-8",
-          "x-robots-tag": null,
-          "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
-        },
-        "redirect_chain": [
-          {
-            "url": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-            "status": 200,
-            "location": null,
-            "content_type": "text/html; charset=UTF-8"
-          }
-        ],
-        "body_size": 20003,
-        "html_sha256": "ec0599f60d3f553fcfeb1a5ee9c843d7dad956c2f7cec5bb06a2c62c8161e199",
-        "title": "Prefeitura Municipal de Caxias do Sul: histórico de contratação em engenharia | CONFENGE",
-        "h1": "Contratação de engenharia em Prefeitura Municipal de Caxias do Sul: o que os dados públicos mostram",
-        "meta_robots": "noindex,follow",
-        "meta_description": "Dossiê de comprador: 259 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
-        "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "text_len": 5168
-      },
-      "local_html_sha256": "ec0599f60d3f553fcfeb1a5ee9c843d7dad956c2f7cec5bb06a2c62c8161e199",
-      "prod_html_sha256": "ec0599f60d3f553fcfeb1a5ee9c843d7dad956c2f7cec5bb06a2c62c8161e199",
       "in_sitemap": false,
       "in_hub": false,
       "defects": [],
       "notes": [
-        "noindex_on_former_seed"
+        "http_4xx_sample"
       ],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
@@ -1258,10 +1203,10 @@
         "canonical": "https://confenge.com.br/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
         "text_len": 6120
       },
-      "local_html_sha256": "afadfd26d658a72b1569e389850f3382fab505c27f02acd704068abe2b5b0dc1",
+      "local_html_sha256": null,
       "prod_html_sha256": "afadfd26d658a72b1569e389850f3382fab505c27f02acd704068abe2b5b0dc1",
       "in_sitemap": false,
-      "in_hub": true,
+      "in_hub": false,
       "defects": [],
       "notes": [
         "noindex_on_former_seed"
@@ -1272,34 +1217,6 @@
       "path": "/radar/pavimentacao-infraestrutura-viaria-sc/",
       "expected_role": "publish_candidate",
       "browser": {
-        "request_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
-        "final_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
-        "status": 200,
-        "error": null,
-        "headers": {
-          "content-type": "text/html; charset=UTF-8",
-          "x-robots-tag": null,
-          "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
-        },
-        "redirect_chain": [
-          {
-            "url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
-            "status": 200,
-            "location": null,
-            "content_type": "text/html; charset=UTF-8"
-          }
-        ],
-        "body_size": 22593,
-        "html_sha256": "5d910f0941d3a4b290ad7c79277d3aeebe27cb7ca9cac4e9e2cb78e586b2fc00",
-        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
-        "meta_robots": "noindex,follow",
-        "meta_description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 98 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
-        "canonical": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
-        "text_len": 7644
-      },
-      "googlebot": {
         "request_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
         "final_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
         "status": 200,
@@ -1327,7 +1244,35 @@
         "canonical": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
         "text_len": 7644
       },
-      "local_html_sha256": "5d910f0941d3a4b290ad7c79277d3aeebe27cb7ca9cac4e9e2cb78e586b2fc00",
+      "googlebot": {
+        "request_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "final_url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "status": 200,
+        "error": null,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "x-robots-tag": null,
+          "server": "Netlify",
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31536000"
+        },
+        "redirect_chain": [
+          {
+            "url": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+            "status": 200,
+            "location": null,
+            "content_type": "text/html; charset=UTF-8"
+          }
+        ],
+        "body_size": 22593,
+        "html_sha256": "5d910f0941d3a4b290ad7c79277d3aeebe27cb7ca9cac4e9e2cb78e586b2fc00",
+        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+        "meta_robots": "noindex,follow",
+        "meta_description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 98 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+        "canonical": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "text_len": 7644
+      },
+      "local_html_sha256": "bdce92a74ebdf76922f443b60fd5c1ab0de0965f20792730254cf7b4e48aff1c",
       "prod_html_sha256": "5d910f0941d3a4b290ad7c79277d3aeebe27cb7ca9cac4e9e2cb78e586b2fc00",
       "in_sitemap": false,
       "in_hub": false,

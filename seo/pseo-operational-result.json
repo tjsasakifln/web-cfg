@@ -1,23 +1,23 @@
 {
-  "terminal_status": "BLOCKED_SNAPSHOT_PROVENANCE",
-  "web_cfg_sha": "f42575626ec471aab9afe74b850d78479746f526",
+  "terminal_status": "BLOCKED_PRODUCTION_AUDIT",
+  "web_cfg_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
   "extra_cli_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "snapshot_hash": "a0882dd4ebddb376520d65b0e791c861f28f5575d3a78d55ad205ab6e763507b",
+  "netlify_deployed_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "snapshot_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
   "public_directory": "_site",
-  "public_artifact_hash": "75feecc9fe595f777fa077c09ce545c3625bf372c665a3cdcd41641ba7827a26",
+  "public_artifact_hash": "beaa2f168ea5551f678bb60e9d6eab8bd9e06df3260ab481de42eb5ada1ab40f",
   "seed_urls": [],
   "indexable_seed_count": 0,
   "production_audit": {
     "ok": false,
     "technical_ok": false,
-    "production_audit_is_current": true,
-    "stale_code": null,
-    "critical_count": 6,
-    "audit_target_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-    "live_manifest_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2"
+    "production_audit_is_current": false,
+    "stale_code": "STALE_AUDIT_DEPLOY_MISMATCH",
+    "critical_count": 7,
+    "audit_target_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+    "live_manifest_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0"
   },
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
   "gsc_status_by_url": {
@@ -32,7 +32,7 @@
     "reasons": [
       "no_indexable_seeds",
       "production_audit_not_ok",
-      "snapshot_source_commit_not_on_extra_cli_main"
+      "production_audit_stale_or_mismatch"
     ]
   },
   "forbidden_public_urls_status": {
@@ -58,10 +58,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
+    "web_cfg_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
     "snapshot_hash_short": "a0882dd4ebddb376",
     "source_run_id": "pseo-20260801T035051Z-9d2d9627",
-    "generated_at": "2026-08-02T01:09:40Z",
+    "generated_at": "2026-08-02T02:59:30Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 0,
     "public_directory": "_site",
@@ -75,8 +75,8 @@
   "unresolved_risks": [
     "no_indexable_seeds",
     "production_audit_not_ok",
-    "snapshot_source_commit_not_on_extra_cli_main"
+    "production_audit_stale_or_mismatch"
   ],
-  "generated_at": "2026-08-02T02:21:42Z",
+  "generated_at": "2026-08-02T03:44:48Z",
   "auditor_version": "wave0-closure-02"
 }

@@ -2,24 +2,20 @@
   {
     "buyer_types_observed": [
       {
-        "contract_count": 11700,
+        "contract_count": 38,
         "type": "municipal"
       },
       {
-        "contract_count": 7554,
-        "type": "outro_ou_nao_classificado"
+        "contract_count": 26,
+        "type": "outro"
       },
       {
-        "contract_count": 2445,
+        "contract_count": 13,
         "type": "estadual"
       },
       {
-        "contract_count": 155,
+        "contract_count": 1,
         "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 18,
-        "type": "federal"
       }
     ],
     "confenge_service_slugs": [
@@ -29,14 +25,15 @@
       "aditivos-obras-publicas"
     ],
     "description": "Contratos públicos de pavimentação, asfalto, vias urbanas, drenagem e obras de arte correntes — típicos de prefeituras e departamentos de infraestrutura.",
-    "evidence_buyer_count": 3443,
-    "evidence_contract_count": 21872,
+    "evidence_buyer_count": 65,
+    "evidence_contract_count": 78,
     "id": "pavimentacao-infraestrutura-viaria",
     "label": "Pavimentação e infraestrutura viária",
     "limitations": [
       "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
+      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência.",
+      "Percentis exatos via SQLite spill (sem vetor O(N) em RAM)."
     ],
     "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
@@ -59,83 +56,79 @@
     "theme": null,
     "ufs_observed": [
       {
-        "contract_count": 3544,
-        "uf": "RS"
-      },
-      {
-        "contract_count": 3192,
+        "contract_count": 13,
         "uf": "SC"
       },
       {
-        "contract_count": 2878,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 2309,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 2139,
-        "uf": "MG"
-      },
-      {
-        "contract_count": 869,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 862,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 856,
+        "contract_count": 13,
         "uf": "PI"
       },
       {
-        "contract_count": 821,
+        "contract_count": 7,
+        "uf": "MG"
+      },
+      {
+        "contract_count": 7,
+        "uf": "SP"
+      },
+      {
+        "contract_count": 5,
+        "uf": "CE"
+      },
+      {
+        "contract_count": 5,
         "uf": "BA"
       },
       {
-        "contract_count": 631,
-        "uf": "PB"
+        "contract_count": 4,
+        "uf": "GO"
       },
       {
-        "contract_count": 470,
-        "uf": "PE"
+        "contract_count": 4,
+        "uf": "MT"
       },
       {
-        "contract_count": 421,
-        "uf": "ES"
+        "contract_count": 3,
+        "uf": "RO"
+      },
+      {
+        "contract_count": 3,
+        "uf": "PA"
+      },
+      {
+        "contract_count": 3,
+        "uf": "PR"
+      },
+      {
+        "contract_count": 2,
+        "uf": "RN"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 586939.74,
-      "n": 21872,
-      "p25": 199992.4,
-      "p75": 1824000.0
+      "median": 733493.2,
+      "n": 78,
+      "p25": 279900.0,
+      "p75": 2330000.0
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 10313,
+        "contract_count": 46,
         "type": "municipal"
       },
       {
-        "contract_count": 6936,
-        "type": "outro_ou_nao_classificado"
+        "contract_count": 25,
+        "type": "outro"
       },
       {
-        "contract_count": 1958,
+        "contract_count": 6,
         "type": "estadual"
       },
       {
-        "contract_count": 385,
+        "contract_count": 1,
         "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 41,
-        "type": "federal"
       }
     ],
     "confenge_service_slugs": [
@@ -145,14 +138,15 @@
       "atrasos-prorrogacao-obras-publicas"
     ],
     "description": "Construção, reforma e ampliação de edificações públicas (escolas, saúde, equipamentos comunitários e prédio administrativo).",
-    "evidence_buyer_count": 4375,
-    "evidence_contract_count": 19633,
+    "evidence_buyer_count": 70,
+    "evidence_contract_count": 78,
     "id": "edificacoes-publicas",
     "label": "Edificações públicas",
     "limitations": [
       "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
+      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência.",
+      "Percentis exatos via SQLite spill (sem vetor O(N) em RAM)."
     ],
     "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
@@ -175,83 +169,71 @@
     "theme": null,
     "ufs_observed": [
       {
-        "contract_count": 3586,
-        "uf": "RS"
-      },
-      {
-        "contract_count": 2032,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 1948,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 1862,
+        "contract_count": 15,
         "uf": "MG"
       },
       {
-        "contract_count": 1690,
+        "contract_count": 12,
+        "uf": "RS"
+      },
+      {
+        "contract_count": 8,
         "uf": "SC"
       },
       {
-        "contract_count": 1242,
+        "contract_count": 7,
+        "uf": "PR"
+      },
+      {
+        "contract_count": 6,
         "uf": "GO"
       },
       {
-        "contract_count": 1171,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 711,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 562,
-        "uf": "RJ"
-      },
-      {
-        "contract_count": 561,
-        "uf": "MA"
-      },
-      {
-        "contract_count": 517,
+        "contract_count": 4,
         "uf": "PA"
       },
       {
-        "contract_count": 411,
-        "uf": "PE"
+        "contract_count": 4,
+        "uf": "MT"
+      },
+      {
+        "contract_count": 3,
+        "uf": "PI"
+      },
+      {
+        "contract_count": 3,
+        "uf": "SP"
+      },
+      {
+        "contract_count": 3,
+        "uf": "PB"
+      },
+      {
+        "contract_count": 2,
+        "uf": "BA"
+      },
+      {
+        "contract_count": 2,
+        "uf": "RJ"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 439600.2,
-      "n": 19633,
-      "p25": 106370.13,
-      "p75": 1785500.0
+      "median": 504997.83,
+      "n": 78,
+      "p25": 249493.84,
+      "p75": 2578827.3
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 1748,
+        "contract_count": 16,
+        "type": "outro"
+      },
+      {
+        "contract_count": 9,
         "type": "municipal"
-      },
-      {
-        "contract_count": 1537,
-        "type": "outro_ou_nao_classificado"
-      },
-      {
-        "contract_count": 289,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 34,
-        "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 1,
-        "type": "federal"
       }
     ],
     "confenge_service_slugs": [
@@ -261,14 +243,15 @@
       "acompanhamento-contratos-obras"
     ],
     "description": "Redes de água e esgoto, drenagem pluvial estrutural, ETAs/ETEs e adutoras — contratos com maior complexidade técnica e risco de quantitativo.",
-    "evidence_buyer_count": 1344,
-    "evidence_contract_count": 3609,
+    "evidence_buyer_count": 22,
+    "evidence_contract_count": 25,
     "id": "saneamento-hidraulica",
     "label": "Saneamento e hidráulica",
     "limitations": [
       "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
+      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência.",
+      "Percentis exatos via SQLite spill (sem vetor O(N) em RAM)."
     ],
     "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
@@ -289,83 +272,55 @@
     "theme": null,
     "ufs_observed": [
       {
-        "contract_count": 770,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 528,
+        "contract_count": 10,
         "uf": "SP"
       },
       {
-        "contract_count": 507,
+        "contract_count": 6,
+        "uf": "SC"
+      },
+      {
+        "contract_count": 3,
         "uf": "MG"
       },
       {
-        "contract_count": 466,
+        "contract_count": 2,
         "uf": "RS"
       },
       {
-        "contract_count": 193,
-        "uf": "PR"
+        "contract_count": 1,
+        "uf": "PB"
       },
       {
-        "contract_count": 164,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 146,
-        "uf": "RN"
-      },
-      {
-        "contract_count": 124,
-        "uf": "RJ"
-      },
-      {
-        "contract_count": 92,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 83,
+        "contract_count": 1,
         "uf": "CE"
       },
       {
-        "contract_count": 81,
-        "uf": "PA"
+        "contract_count": 1,
+        "uf": "RJ"
       },
       {
-        "contract_count": 75,
-        "uf": "MA"
+        "contract_count": 1,
+        "uf": "PR"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 304998.94,
-      "n": 3609,
-      "p25": 62500.0,
-      "p75": 1055080.0
+      "median": 310910.94,
+      "n": 25,
+      "p25": 112000.0,
+      "p75": 911148.06
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 1351,
-        "type": "outro_ou_nao_classificado"
+        "contract_count": 9,
+        "type": "outro"
       },
       {
-        "contract_count": 896,
+        "contract_count": 4,
         "type": "municipal"
-      },
-      {
-        "contract_count": 533,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 83,
-        "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 5,
-        "type": "federal"
       }
     ],
     "confenge_service_slugs": [
@@ -374,14 +329,15 @@
       "medicoes-glosas-obras-publicas"
     ],
     "description": "Climatização, instalações elétricas e hidráulicas prediais, SPDA e sistemas prediais em equipamentos públicos.",
-    "evidence_buyer_count": 968,
-    "evidence_contract_count": 2868,
+    "evidence_buyer_count": 8,
+    "evidence_contract_count": 13,
     "id": "climatizacao-instalacoes",
     "label": "Climatização e instalações prediais",
     "limitations": [
       "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
+      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência.",
+      "Percentis exatos via SQLite spill (sem vetor O(N) em RAM)."
     ],
     "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
@@ -400,83 +356,47 @@
     "theme": null,
     "ufs_observed": [
       {
-        "contract_count": 935,
+        "contract_count": 7,
         "uf": "SP"
       },
       {
-        "contract_count": 334,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 327,
+        "contract_count": 3,
         "uf": "RS"
       },
       {
-        "contract_count": 297,
-        "uf": "PR"
+        "contract_count": 2,
+        "uf": "SC"
       },
       {
-        "contract_count": 164,
+        "contract_count": 1,
         "uf": "MG"
-      },
-      {
-        "contract_count": 104,
-        "uf": "RJ"
-      },
-      {
-        "contract_count": 93,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 74,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 69,
-        "uf": "DF"
-      },
-      {
-        "contract_count": 55,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 46,
-        "uf": "PE"
-      },
-      {
-        "contract_count": 44,
-        "uf": "RO"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 131990.0,
-      "n": 2868,
-      "p25": 28300.0,
-      "p75": 726109.07
+      "median": 121999.76,
+      "n": 13,
+      "p25": 44844.0,
+      "p75": 527298.15
     }
   },
   {
     "buyer_types_observed": [
       {
-        "contract_count": 3197,
-        "type": "outro_ou_nao_classificado"
-      },
-      {
-        "contract_count": 1935,
+        "contract_count": 57,
         "type": "municipal"
       },
       {
-        "contract_count": 681,
+        "contract_count": 5,
+        "type": "outro"
+      },
+      {
+        "contract_count": 3,
         "type": "estadual"
       },
       {
-        "contract_count": 221,
+        "contract_count": 1,
         "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 7,
-        "type": "federal"
       }
     ],
     "confenge_service_slugs": [
@@ -485,14 +405,15 @@
       "defesa-tecnica-contratos-publicos"
     ],
     "description": "Manutenção predial contínua e serviços técnicos de engenharia para órgãos públicos — contratos recorrentes com medição mensal.",
-    "evidence_buyer_count": 1452,
-    "evidence_contract_count": 6041,
+    "evidence_buyer_count": 16,
+    "evidence_contract_count": 66,
     "id": "manutencao-predial-engenharia",
     "label": "Manutenção predial e serviços de engenharia",
     "limitations": [
       "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
+      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência.",
+      "Percentis exatos via SQLite spill (sem vetor O(N) em RAM)."
     ],
     "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
@@ -509,608 +430,48 @@
     "theme": null,
     "ufs_observed": [
       {
-        "contract_count": 1049,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 556,
+        "contract_count": 50,
         "uf": "RS"
       },
       {
-        "contract_count": 543,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 439,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 372,
-        "uf": "MG"
-      },
-      {
-        "contract_count": 325,
-        "uf": "DF"
-      },
-      {
-        "contract_count": 294,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 291,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 288,
-        "uf": "RJ"
-      },
-      {
-        "contract_count": 247,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 232,
-        "uf": "MA"
-      },
-      {
-        "contract_count": 173,
-        "uf": "MT"
-      }
-    ],
-    "value_band": {
-      "currency": "BRL",
-      "median": 80000.0,
-      "n": 6041,
-      "p25": 14902.55,
-      "p75": 540000.0
-    }
-  },
-  {
-    "buyer_types_observed": [
-      {
-        "contract_count": 512,
-        "type": "municipal"
-      },
-      {
-        "contract_count": 381,
-        "type": "outro_ou_nao_classificado"
-      },
-      {
-        "contract_count": 117,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 54,
-        "type": "autarquia_fundacao"
+        "contract_count": 5,
+        "uf": "SP"
       },
       {
         "contract_count": 4,
-        "type": "federal"
-      }
-    ],
-    "confenge_service_slugs": [
-      "diagnostico-pre-licitacao",
-      "auditoria-orcamento-licitacao",
-      "acompanhamento-contratos-obras"
-    ],
-    "description": "Elaboração de projetos de engenharia/arquitetura, fiscalização e supervisão de obras públicas — serviços técnicos de fase preparatória e acompanhamento contratual.",
-    "evidence_buyer_count": 646,
-    "evidence_contract_count": 1068,
-    "id": "projetos-fiscalizacao-supervisao",
-    "label": "Projetos, fiscalização e supervisão",
-    "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
-      "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
-    ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
-    "modalities_observed": [],
-    "object_patterns_public": [
-      "projeto executivo",
-      "projeto b[aá]sico",
-      "fiscaliza[cç][aã]o de obras?",
-      "supervis[aã]o de obras?",
-      "gerenciamento de obras?",
-      "acompanhamento t[eé]cnico de obras?"
-    ],
-    "related_services": [],
-    "slug": "projetos-fiscalizacao-supervisao",
-    "sources": [],
-    "theme": null,
-    "ufs_observed": [
-      {
-        "contract_count": 154,
-        "uf": "MG"
-      },
-      {
-        "contract_count": 96,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 93,
-        "uf": "RS"
-      },
-      {
-        "contract_count": 86,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 85,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 81,
         "uf": "SC"
-      },
-      {
-        "contract_count": 74,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 40,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 36,
-        "uf": "RN"
-      },
-      {
-        "contract_count": 36,
-        "uf": "MT"
-      },
-      {
-        "contract_count": 35,
-        "uf": "ES"
-      },
-      {
-        "contract_count": 33,
-        "uf": "SE"
-      }
-    ],
-    "value_band": {
-      "currency": "BRL",
-      "median": 81832.5,
-      "n": 1068,
-      "p25": 32500.0,
-      "p75": 409723.73
-    }
-  },
-  {
-    "buyer_types_observed": [
-      {
-        "contract_count": 2727,
-        "type": "municipal"
-      },
-      {
-        "contract_count": 1561,
-        "type": "outro_ou_nao_classificado"
-      },
-      {
-        "contract_count": 525,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 78,
-        "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 12,
-        "type": "federal"
-      }
-    ],
-    "confenge_service_slugs": [
-      "auditoria-orcamento-licitacao",
-      "medicoes-glosas-obras-publicas",
-      "aditivos-obras-publicas"
-    ],
-    "description": "Reformas, recuperações e ampliações de edificações e equipamentos públicos com execução de obra.",
-    "evidence_buyer_count": 2115,
-    "evidence_contract_count": 4903,
-    "id": "reformas-ampliacoes",
-    "label": "Reformas e ampliações",
-    "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
-      "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
-    ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
-    "modalities_observed": [],
-    "object_patterns_public": [
-      "reforma e amplia[cç]",
-      "reforma de (escola|creche|ubs|pr[eé]dio|unidade|hospital)",
-      "amplia[cç][aã]o de (escola|creche|ubs|pr[eé]dio|unidade)",
-      "recupera[cç][aã]o estrutural"
-    ],
-    "related_services": [],
-    "slug": "reformas-ampliacoes",
-    "sources": [],
-    "theme": null,
-    "ufs_observed": [
-      {
-        "contract_count": 611,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 544,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 544,
-        "uf": "RS"
-      },
-      {
-        "contract_count": 441,
-        "uf": "MG"
-      },
-      {
-        "contract_count": 388,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 316,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 308,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 220,
-        "uf": "MA"
-      },
-      {
-        "contract_count": 209,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 177,
-        "uf": "PB"
-      },
-      {
-        "contract_count": 174,
-        "uf": "PA"
-      },
-      {
-        "contract_count": 133,
-        "uf": "PE"
-      }
-    ],
-    "value_band": {
-      "currency": "BRL",
-      "median": 360040.83,
-      "n": 4903,
-      "p25": 116900.0,
-      "p75": 1026606.1
-    }
-  },
-  {
-    "buyer_types_observed": [
-      {
-        "contract_count": 1045,
-        "type": "municipal"
-      },
-      {
-        "contract_count": 742,
-        "type": "outro_ou_nao_classificado"
-      },
-      {
-        "contract_count": 223,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 19,
-        "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 3,
-        "type": "federal"
-      }
-    ],
-    "confenge_service_slugs": [
-      "auditoria-orcamento-licitacao",
-      "acompanhamento-contratos-obras",
-      "defesa-tecnica-contratos-publicos"
-    ],
-    "description": "Estruturas de concreto, contenções, muros de arrimo, pontes, viadutos e obras de arte especiais.",
-    "evidence_buyer_count": 1029,
-    "evidence_contract_count": 2032,
-    "id": "estruturas-contencoes-obras-especiais",
-    "label": "Estruturas, contenções e obras especiais",
-    "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
-      "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
-    ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
-    "modalities_observed": [],
-    "object_patterns_public": [
-      "contenc[aã]o",
-      "muro de arrimo",
-      "estrutura de concreto",
-      "concreto armado",
-      "\\bponte\\b",
-      "viaduto",
-      "obra de arte"
-    ],
-    "related_services": [],
-    "slug": "estruturas-contencoes-obras-especiais",
-    "sources": [],
-    "theme": null,
-    "ufs_observed": [
-      {
-        "contract_count": 457,
-        "uf": "RS"
-      },
-      {
-        "contract_count": 243,
-        "uf": "MG"
-      },
-      {
-        "contract_count": 226,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 219,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 196,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 128,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 101,
-        "uf": "PA"
-      },
-      {
-        "contract_count": 56,
-        "uf": "ES"
-      },
-      {
-        "contract_count": 52,
-        "uf": "MS"
-      },
-      {
-        "contract_count": 51,
-        "uf": "MT"
-      },
-      {
-        "contract_count": 46,
-        "uf": "RJ"
-      },
-      {
-        "contract_count": 35,
-        "uf": "BA"
-      }
-    ],
-    "value_band": {
-      "currency": "BRL",
-      "median": 295902.4,
-      "n": 2032,
-      "p25": 72347.63,
-      "p75": 1288436.04
-    }
-  },
-  {
-    "buyer_types_observed": [
-      {
-        "contract_count": 4635,
-        "type": "outro_ou_nao_classificado"
-      },
-      {
-        "contract_count": 3094,
-        "type": "municipal"
-      },
-      {
-        "contract_count": 785,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 631,
-        "type": "autarquia_fundacao"
-      },
-      {
-        "contract_count": 13,
-        "type": "federal"
-      }
-    ],
-    "confenge_service_slugs": [
-      "diagnostico-pre-licitacao",
-      "auditoria-orcamento-licitacao"
-    ],
-    "description": "Apoio técnico a pequenos órgãos na fase preparatória da Lei 14.133: ETP, termo de referência, orçamento estimativo e pesquisa de preços.",
-    "evidence_buyer_count": 1930,
-    "evidence_contract_count": 9158,
-    "id": "servicos-tecnicos-fase-preparatoria",
-    "label": "Serviços técnicos — fase preparatória",
-    "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
-      "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
-    ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
-    "modalities_observed": [],
-    "object_patterns_public": [
-      "estudo t[eé]cnico preliminar",
-      "\\betp\\b",
-      "termo de refer[eê]ncia",
-      "or[cç]amento estimativo",
-      "pesquisa de pre[cç]os",
-      "planilha or[cç]ament[aá]ria"
-    ],
-    "related_services": [],
-    "slug": "servicos-tecnicos-fase-preparatoria",
-    "sources": [],
-    "theme": null,
-    "ufs_observed": [
-      {
-        "contract_count": 1164,
-        "uf": "RS"
-      },
-      {
-        "contract_count": 1091,
-        "uf": "SP"
-      },
-      {
-        "contract_count": 1004,
-        "uf": "SC"
-      },
-      {
-        "contract_count": 898,
-        "uf": "MG"
-      },
-      {
-        "contract_count": 570,
-        "uf": "RJ"
-      },
-      {
-        "contract_count": 526,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 455,
-        "uf": "GO"
-      },
-      {
-        "contract_count": 452,
-        "uf": "DF"
-      },
-      {
-        "contract_count": 338,
-        "uf": "BA"
-      },
-      {
-        "contract_count": 277,
-        "uf": "MS"
-      },
-      {
-        "contract_count": 271,
-        "uf": "PE"
-      },
-      {
-        "contract_count": 232,
-        "uf": "CE"
-      }
-    ],
-    "value_band": {
-      "currency": "BRL",
-      "median": 190000.0,
-      "n": 9158,
-      "p25": 38253.8,
-      "p75": 1048084.3
-    }
-  },
-  {
-    "buyer_types_observed": [
-      {
-        "contract_count": 444,
-        "type": "municipal"
-      },
-      {
-        "contract_count": 310,
-        "type": "outro_ou_nao_classificado"
-      },
-      {
-        "contract_count": 79,
-        "type": "estadual"
-      },
-      {
-        "contract_count": 50,
-        "type": "autarquia_fundacao"
       },
       {
         "contract_count": 2,
-        "type": "federal"
-      }
-    ],
-    "confenge_service_slugs": [
-      "acompanhamento-contratos-obras",
-      "medicoes-glosas-obras-publicas",
-      "aditivos-obras-publicas",
-      "defesa-tecnica-contratos-publicos"
-    ],
-    "description": "Apoio à gestão, fiscalização e supervisão de contratos de obras e serviços de engenharia — medições, glosas, aditivos e documentação técnica.",
-    "evidence_buyer_count": 557,
-    "evidence_contract_count": 885,
-    "id": "gestao-fiscalizacao-contratos-publicos",
-    "label": "Gestão e fiscalização de contratos públicos",
-    "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
-      "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
-      "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
-    ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
-    "modalities_observed": [],
-    "object_patterns_public": [
-      "fiscaliza[cç][aã]o contratual",
-      "gest[aã]o de contratos? de obras?",
-      "apoio [aà] fiscaliza[cç]",
-      "medi[cç][aã]o de obras?",
-      "acompanhamento de contratos? de engenharia"
-    ],
-    "related_services": [],
-    "slug": "gestao-fiscalizacao-contratos-publicos",
-    "sources": [],
-    "theme": null,
-    "ufs_observed": [
-      {
-        "contract_count": 145,
-        "uf": "MG"
-      },
-      {
-        "contract_count": 99,
-        "uf": "CE"
-      },
-      {
-        "contract_count": 76,
         "uf": "BA"
       },
       {
-        "contract_count": 73,
-        "uf": "SP"
+        "contract_count": 1,
+        "uf": "CE"
       },
       {
-        "contract_count": 71,
-        "uf": "GO"
+        "contract_count": 1,
+        "uf": "AP"
       },
       {
-        "contract_count": 70,
-        "uf": "SC"
+        "contract_count": 1,
+        "uf": "AM"
       },
       {
-        "contract_count": 59,
-        "uf": "RS"
+        "contract_count": 1,
+        "uf": "MT"
       },
       {
-        "contract_count": 42,
-        "uf": "ES"
-      },
-      {
-        "contract_count": 33,
-        "uf": "PR"
-      },
-      {
-        "contract_count": 26,
-        "uf": "RN"
-      },
-      {
-        "contract_count": 23,
-        "uf": "PB"
-      },
-      {
-        "contract_count": 23,
-        "uf": "PA"
+        "contract_count": 1,
+        "uf": "DF"
       }
     ],
     "value_band": {
       "currency": "BRL",
-      "median": 60000.0,
-      "n": 885,
-      "p25": 20000.0,
-      "p75": 156000.0
+      "median": 4829.63,
+      "n": 66,
+      "p25": 1053.0,
+      "p75": 23400.0
     }
   }
 ]
