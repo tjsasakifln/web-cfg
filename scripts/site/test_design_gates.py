@@ -252,7 +252,10 @@ def test_form_qualification_minimal():
         assert f'name="{field}"' in html, f"missing form field {field}"
     # email and whatsapp are alternative contact paths (not both hard-required in markup)
     assert 'id="email"' in html and "required" not in re.search(r'id="email"[^>]*>', html).group(0)
-    assert "data-netlify" in html or 'netlify' in html
+    # Corporate lead pipeline: AJAX to Netlify Function (not Netlify Forms)
+    assert "data-form-multistep" in html
+    assert 'name="empresa-site"' in html  # honeypot secondary layer
+    assert "data-netlify" not in html and " netlify" not in html
 
 
 def test_prefers_reduced_motion_declared():

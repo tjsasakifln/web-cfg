@@ -13,6 +13,8 @@
     "test:analytics": "node seo/scripts/test_analytics_pii.mjs",
     "test:form-funnel": "node seo/scripts/test_form_funnel.mjs",
     "test:lead-function": "node scripts/site/test_lead_function.mjs",
+    "test:secrets-scan": "node scripts/site/test_secrets_scan.mjs",
+    "test:cta-whatsapp": "node scripts/site/test_cta_whatsapp.mjs",
     "test:pseo-attribution": "node seo/scripts/test_pseo_attribution.mjs",
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "test:brand": "python3 scripts/site/test_brand_contract.py",
@@ -36,7 +38,7 @@
     "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
-    "test": "npm run pseo:test && npm run test:analytics && npm run test:form-funnel && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui",
+    "test": "npm run pseo:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "pseo:learn": "python3 scripts/pseo/learn.py",
     "test:production-cutover": "node scripts/site/test_production_cutover.mjs",
@@ -54,5 +56,8 @@
     "chrome-launcher": "^1.2.1",
     "lighthouse": "^12.8.2",
     "puppeteer-core": "^23.0.0"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.11"
   }
 }

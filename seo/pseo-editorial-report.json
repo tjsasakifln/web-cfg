@@ -3,7 +3,7 @@
   "generated_from": "data/pseo/registry.json",
   "page_count": 23,
   "publish_fail_count": 0,
-  "p0_issue_count": 38,
+  "p0_issue_count": 30,
   "pages": [
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
@@ -905,7 +905,7 @@
       "page_id": "prob-orcamento-edital",
       "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
       "page_type": "problem_service",
-      "status": "reject",
+      "status": "noindex",
       "human_review": "PENDING",
       "decision": "pass",
       "sample": {
@@ -926,21 +926,8 @@
         "label": "Revisar esta oportunidade",
         "intent": "avaliar_oportunidade"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_direct_budget_edital_evidence",
-          "evidence": "no_direct_budget_edital_evidence"
-        },
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ],
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": [],
       "intent": "proteger_margem_proposta_contrato",
       "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
@@ -948,16 +935,16 @@
       "editorial_unique_ratio": null,
       "similarity_max": null,
       "commercial_offer": "auditoria-orcamento-licitacao",
-      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-      "indexability": "reject",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
       "reviewer": "tiago-wave0-operational",
-      "page_material_hash": "4a92eadfb0fd0cd623fe1e1c5fcaaac7cf8befa886f780217ccf97464ab576f6"
+      "page_material_hash": "9efe8c375986abd7674012f18a3f951cf4a29b0f5ff3fd96e819adf6d7d2a272"
     },
     {
       "page_id": "prob-sinapi-sicro",
       "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
       "page_type": "problem_service",
-      "status": "reject",
+      "status": "noindex",
       "human_review": "PENDING",
       "decision": "pass",
       "sample": {
@@ -978,21 +965,8 @@
         "label": "Revisar esta oportunidade",
         "intent": "avaliar_oportunidade"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_direct_sinapi_sicro_evidence",
-          "evidence": "no_direct_sinapi_sicro_evidence"
-        },
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ],
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": [],
       "intent": "proteger_margem_proposta_contrato",
       "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
@@ -1000,16 +974,16 @@
       "editorial_unique_ratio": null,
       "similarity_max": null,
       "commercial_offer": "auditoria-orcamento-licitacao",
-      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-      "indexability": "reject",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
       "reviewer": "tiago-wave0-operational",
-      "page_material_hash": "20d5853af514b176f66f2a2cf3d7e0c7aeb337f8d87bcd759e67e2860532065b"
+      "page_material_hash": "bf5e9b31a4ea9fcac34b7582b6a42be47d8ba755cdcc73857abd8ca79c25ad27"
     },
     {
       "page_id": "prob-medicao-glosa",
       "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
       "page_type": "problem_service",
-      "status": "reject",
+      "status": "noindex",
       "human_review": "PENDING",
       "decision": "pass",
       "sample": {
@@ -1029,15 +1003,8 @@
         "label": "Revisar esta oportunidade",
         "intent": "avaliar_oportunidade"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ],
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": [],
       "intent": "proteger_margem_proposta_contrato",
       "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
@@ -1045,16 +1012,16 @@
       "editorial_unique_ratio": null,
       "similarity_max": null,
       "commercial_offer": "medicoes-glosas-obras-publicas",
-      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-      "indexability": "reject",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
       "reviewer": "tiago",
-      "page_material_hash": "5c44b463a8730e41a703f46ba5ddffcaee7fdeb538b1644c23d847790fa81db4"
+      "page_material_hash": "4489c5df0a17cabc38d44f81b3bdef8e033affc76686f0d75ad998556c121cf2"
     },
     {
       "page_id": "prob-aditivos-margem",
       "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
       "page_type": "problem_service",
-      "status": "reject",
+      "status": "noindex",
       "human_review": "PENDING",
       "decision": "pass",
       "sample": {
@@ -1074,21 +1041,8 @@
         "label": "Revisar esta oportunidade",
         "intent": "avaliar_oportunidade"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_direct_aditivo_evidence",
-          "evidence": "no_direct_aditivo_evidence"
-        },
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ],
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": [],
       "intent": "proteger_margem_proposta_contrato",
       "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
@@ -1096,16 +1050,16 @@
       "editorial_unique_ratio": null,
       "similarity_max": null,
       "commercial_offer": "aditivos-obras-publicas",
-      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-      "indexability": "reject",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
       "reviewer": "wave0-final-activation-03",
-      "page_material_hash": "c2441e3536979eacc0e0996706ba53c6cd2d15484392ed5e87f6c82a309650a9"
+      "page_material_hash": "afdc58a5852676566a26060705b5ef6d7c5790a1a3c1579071d3a8c049e3636a"
     },
     {
       "page_id": "prob-reequilibrio",
       "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
       "page_type": "problem_service",
-      "status": "reject",
+      "status": "noindex",
       "human_review": "PENDING",
       "decision": "pass",
       "sample": {
@@ -1126,15 +1080,8 @@
         "label": "Revisar esta oportunidade",
         "intent": "avaliar_oportunidade"
       },
-      "approval_recommendation": "reject_or_noindex",
-      "issues": [
-        {
-          "code": "claim_without_evidence",
-          "severity": "P0",
-          "message": "no_claim_specific_evidence",
-          "evidence": "no_claim_specific_evidence"
-        }
-      ],
+      "approval_recommendation": "eligible_for_human_review",
+      "issues": [],
       "intent": "proteger_margem_proposta_contrato",
       "evidence_kind": "normative_editorial",
       "direct_evidence_count": 0,
@@ -1142,10 +1089,10 @@
       "editorial_unique_ratio": null,
       "similarity_max": null,
       "commercial_offer": "reequilibrio-obras-publicas",
-      "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-      "indexability": "reject",
+      "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT",
+      "indexability": "noindex",
       "reviewer": "tiago",
-      "page_material_hash": "9e0a3abed0bce7e69f2839fe5a51ddc48582d552dce556f8dc0f43bc474b1b57"
+      "page_material_hash": "7750f95185388aa6e6285af6cae59f1eaf0e5fde139cbd53c3b97078f02928c9"
     }
   ],
   "editorial_decisions": {
@@ -1167,10 +1114,10 @@
     "radar-edificacoes-publicas-sc": "REJECT_DUPLICATE_OR_WEAK",
     "radar-pavimentacao-infraestrutura-viaria-pr": "REJECT_DUPLICATE_OR_WEAK",
     "radar-edificacoes-publicas-rs": "REJECT_DUPLICATE_OR_WEAK",
-    "prob-orcamento-edital": "REJECT_DUPLICATE_OR_WEAK",
-    "prob-sinapi-sicro": "REJECT_DUPLICATE_OR_WEAK",
-    "prob-medicao-glosa": "REJECT_DUPLICATE_OR_WEAK",
-    "prob-aditivos-margem": "REJECT_DUPLICATE_OR_WEAK",
-    "prob-reequilibrio": "REJECT_DUPLICATE_OR_WEAK"
+    "prob-orcamento-edital": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "prob-sinapi-sicro": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "prob-medicao-glosa": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "prob-aditivos-margem": "NOINDEX_EVIDENCE_INSUFFICIENT",
+    "prob-reequilibrio": "NOINDEX_EVIDENCE_INSUFFICIENT"
   }
 }

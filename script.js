@@ -1,13 +1,53 @@
 (() => {
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-  /** Decoupled analytics bus — no PII; ready for GA4/Plausible later. */
+  /** Analytics bus — no PII. First-party collector + optional gtag/plausible. */
   const PII_PARAM_KEYS = new Set([
     'nome', 'name', 'email', 'telefone', 'phone', 'tel', 'whatsapp',
     'mensagem', 'message', 'message_body', 'empresa', 'company',
     'documento', 'document', 'attachment', 'file', 'arquivo',
     'cpf', 'cnpj', 'address', 'endereco', 'full_name',
   ]);
+  const analyticsQueue = [];
+  let analyticsFlushTimer = null;
+  const getSessionId = () => {
+    try {
+      let sid = sessionStorage.getItem('confenge_sid');
+      if (!sid) {
+        sid = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+        sessionStorage.setItem('confenge_sid', sid);
+      }
+      return sid.slice(0, 32);
+    } catch (_) {
+      return 'anon';
+    }
+  };
+  const flushAnalytics = () => {
+    analyticsFlushTimer = null;
+    if (!analyticsQueue.length || typeof window.fetch !== 'function') return;
+    const batch = analyticsQueue.splice(0, 25);
+    const body = JSON.stringify({
+      events: batch.map((e) => ({
+        event: e.eventName,
+        props: e.safe,
+        path: e.safe.page_path || window.location.pathname || '/',
+        sid: getSessionId(),
+      })),
+    });
+    const url = '/.netlify/functions/collect';
+    try {
+      if (navigator.sendBeacon) {
+        const blob = new Blob([body], { type: 'application/json' });
+        if (navigator.sendBeacon(url, blob)) return;
+      }
+    } catch (_) { /* fall through */ }
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body,
+      keepalive: true,
+    }).catch(() => { /* never break UX */ });
+  };
   const track = (eventName, params = {}) => {
     try {
       const safe = {};
@@ -30,6 +70,9 @@
       if (typeof window.plausible === 'function') {
         window.plausible(eventName, { props: safe });
       }
+      analyticsQueue.push({ eventName, safe });
+      if (analyticsQueue.length >= 10) flushAnalytics();
+      else if (!analyticsFlushTimer) analyticsFlushTimer = setTimeout(flushAnalytics, 2000);
       if (window.CONFENGE_DEBUG_ANALYTICS) {
         // eslint-disable-next-line no-console
         console.info('[confenge:analytics]', eventName, safe);
@@ -38,6 +81,13 @@
       /* analytics must never break UX */
     }
   };
+  // Flush on page hide
+  try {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') flushAnalytics();
+    });
+    window.addEventListener('pagehide', flushAnalytics);
+  } catch (_) { /* ignore */ }
 
   const clusterFromPath = (path) => {
     const p = path || '';
@@ -615,73 +665,104 @@
           if (submitBtn) submitBtn.disabled = true;
           showFormStatus('Enviando…', 'ok');
           const finishOk = (receipt) => {
+            const protocol = (receipt && (receipt.lead_id || receipt.receipt_id))
+              ? String(receipt.lead_id || receipt.receipt_id).slice(0, 32)
+              : '';
             track('lead_form_success', {
               page_path: pagePath,
               content_cluster: defaultCluster,
               device_context: deviceContext,
               destination_type: 'form',
               journey: journey || '',
-              // receipt id only — not PII
-              receipt_id: (receipt && receipt.receipt_id) ? String(receipt.receipt_id).slice(0, 32) : '',
+              receipt_id: protocol,
+            });
+            track('lead_persisted', {
+              page_path: pagePath,
+              content_cluster: defaultCluster,
+              journey: journey || '',
+              conversion: 'lead_persisted',
             });
             try {
-              if (receipt && receipt.receipt_id) {
-                sessionStorage.setItem('confenge_last_receipt', String(receipt.receipt_id).slice(0, 32));
-              }
+              if (protocol) sessionStorage.setItem('confenge_last_receipt', protocol);
             } catch (_) { /* private mode */ }
-            const q = receipt && receipt.receipt_id
-              ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(String(receipt.receipt_id).slice(0, 32))}`
+            const q = protocol
+              ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(protocol)}`
               : dest;
+            flushAnalytics();
             window.location.assign(q);
           };
-          const finishFallback = () => {
+          const finishFallback = (reason) => {
             const stage = (estagioEl?.value || '').slice(0, 80);
             const msg = encodeURIComponent(
-              `Olá, Tiago. Enviei solicitação pelo site (${stage || journey || 'contato'}). Nome: ${(nomeEl?.value || '').slice(0, 60)}. Prefiro retorno por WhatsApp.`,
+              `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e preciso de retorno. Protocolo local indisponível.`,
             );
             showFormStatus(
-              'Canal automático indisponível. Abrindo WhatsApp com o contexto da solicitação…',
+              'Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.',
               'error',
             );
-            track('lead_form_error', {
+            track('lead_form_backend_error', {
               page_path: pagePath,
               content_cluster: defaultCluster,
               device_context: deviceContext,
               destination_type: 'form_fallback_whatsapp',
               journey: journey || '',
+              error_code: String(reason || 'unknown').slice(0, 40),
             });
-            window.open(`https://wa.me/5548988344559?text=${msg}`, '_blank', 'noopener');
-            setTimeout(() => { window.location.assign(dest); }, 600);
+            const wa = document.createElement('a');
+            wa.href = `https://wa.me/5548988344559?text=${msg}`;
+            wa.target = '_blank';
+            wa.rel = 'noopener';
+            wa.className = 'button button-primary';
+            wa.textContent = 'Continuar pelo WhatsApp (fallback)';
+            if (statusEl && !statusEl.querySelector('[data-wa-fallback]')) {
+              wa.setAttribute('data-wa-fallback', '1');
+              statusEl.appendChild(document.createElement('br'));
+              statusEl.appendChild(wa);
+            }
           };
-          // 1) Primary: Netlify Function (issues receipt even if mail upstream needs activation)
+          // Idempotency key for double-submit protection (server-side)
+          try {
+            payload.idempotency_key = payload.idempotency_key
+              || `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+          } catch (_) { /* ignore */ }
+          // Attribution already injected into hidden fields; ensure landing
+          if (!payload.landing_page) payload.landing_page = pagePath;
+          // Turnstile token if widget present
+          const turnstileInput = form.querySelector('[name="cf-turnstile-response"]');
+          if (turnstileInput && turnstileInput.value) {
+            payload.turnstile_token = turnstileInput.value;
+          }
+          const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          const timeoutId = controller ? setTimeout(() => controller.abort(), 15000) : null;
           fetch('/.netlify/functions/lead', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              'Idempotency-Key': payload.idempotency_key || '',
+            },
             body: JSON.stringify(payload),
+            signal: controller ? controller.signal : undefined,
           }).then(async (res) => {
-            if (!res.ok) throw new Error(`lead_http_${res.status}`);
             const data = await res.json().catch(() => ({}));
-            if (data && data.ok && data.receipt_id) {
+            if ((res.status === 201 || res.status === 200) && data && data.ok && (data.lead_id || data.receipt_id)) {
               finishOk(data);
               return;
             }
-            throw new Error('lead_no_receipt');
-          }).catch(() => {
-            // 2) Secondary: classic Netlify Forms POST (if Forms ever registered)
-            const body = new URLSearchParams();
-            Object.keys(payload).forEach((k) => body.append(k, payload[k]));
-            return fetch('/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: body.toString(),
-            }).then((res) => {
-              if (res.ok || res.status === 200 || res.status === 302 || res.status === 303) {
-                finishOk({ receipt_id: `netlify-form-${Date.now().toString(36)}` });
-                return;
-              }
-              finishFallback();
-            }).catch(() => finishFallback());
+            if (res.status === 429) {
+              showFormStatus('Muitas tentativas. Aguarde um minuto e tente de novo.', 'error');
+              track('lead_form_error', {
+                page_path: pagePath,
+                journey: journey || '',
+                error_code: 'rate_limited',
+              });
+              return;
+            }
+            throw new Error(data.error || `lead_http_${res.status}`);
+          }).catch((err) => {
+            finishFallback(err && err.name === 'AbortError' ? 'timeout' : (err && err.message) || 'network');
           }).finally(() => {
+            if (timeoutId) clearTimeout(timeoutId);
             if (submitBtn) submitBtn.disabled = false;
           });
         }
@@ -877,7 +958,56 @@
   window.confengeTrack = track;
 
   const safeInit = () => {
-    try { init(); } catch (err) {
+    try {
+      init();
+      // Session + page view (no PII)
+      try {
+        const path = window.location.pathname || '/';
+        if (!sessionStorage.getItem('confenge_session_logged')) {
+          sessionStorage.setItem('confenge_session_logged', '1');
+          track('session_start', {
+            page_path: path,
+            content_cluster: clusterFromPath(path),
+            landing_page: path,
+          });
+        }
+        track('page_view', {
+          page_path: path,
+          content_cluster: clusterFromPath(path),
+          referrer_host: (() => {
+            try { return document.referrer ? new URL(document.referrer).hostname.slice(0, 80) : ''; } catch (_) { return ''; }
+          })(),
+        });
+        if (document.body && document.body.getAttribute('data-lead-success') === '1') {
+          track('confirmation_view', {
+            page_path: path,
+            journey: document.body.getAttribute('data-journey') || '',
+            conversion: 'confirmation',
+          });
+        }
+        document.querySelectorAll('[data-copy-email]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const email = btn.getAttribute('data-copy-email') || 'tiago.sasaki@confenge.com.br';
+            try {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(email);
+              } else {
+                const ta = document.createElement('textarea');
+                ta.value = email;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+              }
+              const prev = btn.textContent;
+              btn.textContent = 'Copiado';
+              setTimeout(() => { btn.textContent = prev; }, 1500);
+              track('email_click', { page_path: path, destination_type: 'copy_email' });
+            } catch (_) { /* ignore */ }
+          });
+        });
+      } catch (_) { /* ignore */ }
+    } catch (err) {
       if (window.CONFENGE_DEBUG_ANALYTICS) console.error('[confenge:init]', err);
     }
   };

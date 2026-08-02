@@ -3,7 +3,7 @@
 - ok: **True**
 - pages: 23
 - publish fails: 0
-- P0 issues: 38
+- P0 issues: 30
 
 | page_id | status | decision | P0 | P1 | recommendation |
 |---|---|---|---:|---:|---|
@@ -25,11 +25,11 @@
 | `radar-edificacoes-publicas-sc` | reject | pass | 2 | 0 | reject_or_noindex |
 | `radar-pavimentacao-infraestrutura-viaria-pr` | reject | pass | 2 | 0 | reject_or_noindex |
 | `radar-edificacoes-publicas-rs` | reject | pass | 2 | 0 | reject_or_noindex |
-| `prob-orcamento-edital` | reject | pass | 2 | 0 | reject_or_noindex |
-| `prob-sinapi-sicro` | reject | pass | 2 | 0 | reject_or_noindex |
-| `prob-medicao-glosa` | reject | pass | 1 | 0 | reject_or_noindex |
-| `prob-aditivos-margem` | reject | pass | 2 | 0 | reject_or_noindex |
-| `prob-reequilibrio` | reject | pass | 1 | 0 | reject_or_noindex |
+| `prob-orcamento-edital` | noindex | pass | 0 | 0 | eligible_for_human_review |
+| `prob-sinapi-sicro` | noindex | pass | 0 | 0 | eligible_for_human_review |
+| `prob-medicao-glosa` | noindex | pass | 0 | 0 | eligible_for_human_review |
+| `prob-aditivos-margem` | noindex | pass | 0 | 0 | eligible_for_human_review |
+| `prob-reequilibrio` | noindex | pass | 0 | 0 | eligible_for_human_review |
 
 ## agency-88830609
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: suppliers<3
@@ -91,22 +91,4 @@
 ## radar-edificacoes-publicas-rs
 - **P0** `data_quality_gate`: contract_url_as_opportunity=1
 - **P0** `contract_link_as_opportunity`: Link de contrato em radar
-
-## prob-orcamento-edital
-- **P0** `claim_without_evidence`: no_direct_budget_edital_evidence
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-sinapi-sicro
-- **P0** `claim_without_evidence`: no_direct_sinapi_sicro_evidence
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-medicao-glosa
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-aditivos-margem
-- **P0** `claim_without_evidence`: no_direct_aditivo_evidence
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
-
-## prob-reequilibrio
-- **P0** `claim_without_evidence`: no_claim_specific_evidence
 

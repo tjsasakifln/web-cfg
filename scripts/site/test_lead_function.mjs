@@ -1,48 +1,111 @@
 /**
- * Unit test for netlify/functions/lead.cjs — drives the real handler.
- * Mocks fetch for ntfy + formsubmit; asserts receipt + delivery flags.
+ * Drives the real netlify/functions/lead.cjs handler (not a reimplementation).
+ * Covers: method, validation, consent, honeypot, rate limit, persist-before-success,
+ * response whitelist (no topic/token/PII), idempotency, delivery failure ≠ drop lead.
  */
 import { createRequire } from "module";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
+import os from "os";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
-const { handler } = require(path.join(root, "netlify/functions/lead.cjs"));
 
-function event(body, method = "POST") {
+// Durable file store for tests (real I/O path of createStore when LEAD_STORE_DIR set)
+const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-leads-"));
+process.env.LEAD_STORE_DIR = storeDir;
+process.env.NODE_ENV = "test";
+delete process.env.NTFY_URL;
+delete process.env.NTFY_TOKEN;
+delete process.env.NTFY_TOPIC;
+delete process.env.FORMSUBMIT_URL;
+delete process.env.RESEND_API_KEY;
+delete process.env.OPS_WEBHOOK_URL;
+delete process.env.TURNSTILE_SECRET_KEY;
+delete process.env.LEAD_REQUIRE_TURNSTILE;
+
+// Clear module cache so env is read fresh
+const leadPath = path.join(root, "netlify/functions/lead.cjs");
+const ratePath = path.join(root, "netlify/functions/lib/lead-rate-limit.cjs");
+
+function loadHandler() {
+  delete require.cache[require.resolve(leadPath)];
+  delete require.cache[require.resolve(path.join(root, "netlify/functions/lib/lead-core.cjs"))];
+  delete require.cache[require.resolve(path.join(root, "netlify/functions/lib/lead-store.cjs"))];
+  delete require.cache[require.resolve(path.join(root, "netlify/functions/lib/lead-delivery.cjs"))];
+  delete require.cache[require.resolve(ratePath)];
+  return require(leadPath);
+}
+
+function event(body, method = "POST", extraHeaders = {}) {
   return {
     httpMethod: method,
     headers: {
       "content-type": "application/json",
       origin: "https://confenge.com.br",
+      "user-agent": "confenge-lead-test/1.0",
+      "x-forwarded-for": extraHeaders.ip || "203.0.113.50",
+      ...extraHeaders,
     },
     body: typeof body === "string" ? body : JSON.stringify(body),
   };
 }
 
+const results = [];
+function pass(name, detail) {
+  results.push({ name, ok: true, detail });
+  console.log("PASS", name, detail || "");
+}
+function fail(name, detail) {
+  console.error("FAIL", name, detail);
+  process.exitCode = 1;
+  throw new Error(`FAIL: ${name} — ${typeof detail === "string" ? detail : JSON.stringify(detail)}`);
+}
+
+const { handler, setStoreForTests } = loadHandler();
+const { MemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+const { _reset } = require(ratePath);
+
+// Use memory store with explicit test override for speed + assertions
+const mem = new MemoryStore();
+setStoreForTests(mem);
+_reset();
+
 // 1) method guard
 {
   const res = await handler(event({}, "GET"));
-  if (res.statusCode !== 405) {
-    console.error("FAIL: expected 405", res);
-    process.exit(1);
-  }
+  if (res.statusCode !== 405) fail("method", res);
+  pass("method_405");
 }
 
-// 2) validation
+// 2) validation missing fields
 {
   const res = await handler(event({ nome: "A" }));
   const data = JSON.parse(res.body);
-  if (res.statusCode !== 400 || data.ok !== false) {
-    console.error("FAIL: validation", res);
-    process.exit(1);
-  }
+  if (res.statusCode !== 400 || data.ok !== false) fail("validation", data);
+  pass("validation_400");
 }
 
-// 3) honeypot
+// 3) consent required
 {
+  const res = await handler(
+    event({
+      nome: "QA Consent",
+      telefone: "48999999999",
+      estagio: "contrato sob pressao",
+      jornada: "contrato",
+    }),
+  );
+  const data = JSON.parse(res.body);
+  if (res.statusCode !== 400 || data.error !== "consent") fail("consent", data);
+  pass("consent_required");
+}
+
+// 4) honeypot — no real store write for bot fields
+{
+  const before = (await mem.list()).length;
   const res = await handler(
     event({
       nome: "Bot",
@@ -53,43 +116,21 @@ function event(body, method = "POST") {
     }),
   );
   const data = JSON.parse(res.body);
-  if (!data.ok || !data.suppressed) {
-    console.error("FAIL: honeypot", data);
-    process.exit(1);
-  }
+  if (!data.ok || data.status !== "suppressed") fail("honeypot", data);
+  if ((await mem.list()).length !== before) fail("honeypot_persisted", "store grew");
+  pass("honeypot_suppressed");
 }
 
-// 4) valid lead with mocked ntfy success + formsubmit activation error
+// 5) happy path — persist then 201, no secrets in body
 {
   const originalFetch = globalThis.fetch;
   const calls = [];
   globalThis.fetch = async (url, init = {}) => {
-    calls.push({ url: String(url), body: init.body });
-    if (String(url).includes("ntfy.sh")) {
-      return {
-        ok: true,
-        status: 200,
-        text: async () =>
-          JSON.stringify({
-            id: "ntfy-msg-test-001",
-            event: "message",
-            topic: "test",
-          }),
-      };
-    }
-    if (String(url).includes("formsubmit.co")) {
-      return {
-        ok: false,
-        status: 403,
-        text: async () =>
-          JSON.stringify({
-            success: "false",
-            message: "This form needs Activation.",
-          }),
-      };
-    }
-    return { ok: false, status: 500, text: async () => "" };
+    calls.push({ url: String(url), body: init.body, headers: init.headers });
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({ id: "msg" }) };
   };
+  process.env.OPS_WEBHOOK_URL = "https://example.com/hooks/ops";
+  process.env.OPS_WEBHOOK_SECRET = "test-secret-not-for-prod";
   try {
     const res = await handler(
       event({
@@ -100,41 +141,169 @@ function event(body, method = "POST") {
         consentimento: "on",
         origem: "/",
         utm_source: "test",
-        mensagem: "should not appear in response",
+        utm_medium: "cpc",
+        utm_campaign: "inbound",
+        landing_page: "/defesa-margem-contratos-publicos/",
+        mensagem: "SECRET_MESSAGE_SHOULD_NOT_LEAK",
       }),
     );
     const data = JSON.parse(res.body);
-    if (res.statusCode !== 200 || !data.ok || !data.receipt_id) {
-      console.error("FAIL: receipt", data);
-      process.exit(1);
+    if (res.statusCode !== 201 || !data.ok || !data.lead_id) fail("persist_success", data);
+    if (data.receipt_id !== data.lead_id) fail("receipt_compat", data);
+    const bodyStr = JSON.stringify(data);
+    if (bodyStr.includes("SECRET_MESSAGE") || bodyStr.includes("ntfy") || bodyStr.includes("topic") || bodyStr.includes("test-secret") || bodyStr.includes("example.com")) {
+      fail("response_leak", data);
     }
-    if (data.journey !== "contrato" || data.delivered !== true) {
-      console.error("FAIL: delivery flag", data);
-      process.exit(1);
-    }
-    const ntfy = (data.delivery || []).find((d) => d.channel === "ntfy");
-    if (!ntfy || ntfy.status !== "ok" || ntfy.message_id !== "ntfy-msg-test-001") {
-      console.error("FAIL: ntfy delivery", data.delivery);
-      process.exit(1);
-    }
-    if (JSON.stringify(data).includes("should not appear")) {
-      console.error("FAIL: message leaked", data);
-      process.exit(1);
-    }
-    if (!calls.some((c) => c.url.includes("ntfy.sh"))) {
-      console.error("FAIL: ntfy not called", calls);
-      process.exit(1);
-    }
-    console.log(
-      "LEAD_FUNCTION_OK",
-      JSON.stringify({
-        receipt_id: data.receipt_id,
-        journey: data.journey,
-        delivered: data.delivered,
-        ntfy_message_id: ntfy.message_id,
-      }),
-    );
+    if (data.delivery || data.upstream || data.topic) fail("delivery_in_response", data);
+    const stored = await mem.get(data.lead_id);
+    if (!stored) fail("not_in_store", data.lead_id);
+    if (stored.nome !== "QA Journey A") fail("store_nome", stored);
+    if (stored.utm_source !== "test" || stored.jornada !== "contrato") fail("store_attribution", stored);
+    if (stored.mensagem !== "SECRET_MESSAGE_SHOULD_NOT_LEAK") fail("store_message", stored);
+    if (!calls.some((c) => c.url.includes("example.com/hooks/ops"))) fail("webhook_not_called", calls);
+    // Webhook body may contain PII over TLS to private endpoint — response must not
+    pass("persist_201", { lead_id: data.lead_id, journey: data.journey });
   } finally {
     globalThis.fetch = originalFetch;
+    delete process.env.OPS_WEBHOOK_URL;
+    delete process.env.OPS_WEBHOOK_SECRET;
   }
+}
+
+// 6) idempotency — second submit same payload returns same lead_id
+{
+  const payload = {
+    nome: "QA Idem",
+    email: "qa-idem@example.com",
+    estagio: "edital em analise",
+    jornada: "edital",
+    consentimento: "true",
+    idempotency_key: "fixed-key-abc-001",
+  };
+  const r1 = await handler(event(payload));
+  const d1 = JSON.parse(r1.body);
+  const r2 = await handler(event(payload));
+  const d2 = JSON.parse(r2.body);
+  if (!d1.lead_id || d1.lead_id !== d2.lead_id) fail("idempotency", { d1, d2 });
+  pass("idempotency", { lead_id: d1.lead_id });
+}
+
+// 7) email delivery failure does not destroy persisted lead
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    if (String(url).includes("resend.com")) {
+      return { ok: false, status: 500, text: async () => "fail", json: async () => ({}) };
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    const res = await handler(
+      event({
+        nome: "QA Email Fail",
+        email: "qa-email-fail@example.com",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("email_fail_persist", data);
+    const stored = await mem.get(data.lead_id);
+    if (!stored || stored.status === undefined) fail("email_fail_store", stored);
+    pass("email_fail_keeps_lead", { lead_id: data.lead_id, delivery_email: stored.delivery?.email?.status });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+  }
+}
+
+// 8) rate limit
+{
+  _reset();
+  const ip = "198.51.100.99";
+  let limited = false;
+  for (let i = 0; i < 20; i++) {
+    const res = await handler(
+      event(
+        {
+          nome: `Rate ${i}`,
+          telefone: `4899900${String(i).padStart(4, "0")}`,
+          estagio: "teste",
+          jornada: "outro",
+          consentimento: "on",
+        },
+        "POST",
+        { ip, "x-forwarded-for": ip },
+      ),
+    );
+    if (res.statusCode === 429) {
+      limited = true;
+      break;
+    }
+  }
+  if (!limited) fail("rate_limit", "never 429");
+  pass("rate_limit_429");
+}
+
+// 9) origin denied
+{
+  _reset();
+  const res = await handler(
+    event(
+      {
+        nome: "Evil",
+        telefone: "48988887777",
+        estagio: "x",
+        consentimento: "on",
+      },
+      "POST",
+      { origin: "https://evil.example" },
+    ),
+  );
+  if (res.statusCode !== 403) fail("origin", res);
+  pass("origin_denied");
+}
+
+// 10) no hardcoded ntfy topic in source
+{
+  const src = fs.readFileSync(leadPath, "utf8");
+  const core = fs.readFileSync(path.join(root, "netlify/functions/lib/lead-delivery.cjs"), "utf8");
+  if (/confenge-prod-leads-b2g-9f3c2a1e7d4b6e80/.test(src + core)) {
+    fail("hardcoded_topic", "old ntfy topic still present");
+  }
+  if (/formsubmit\.co/.test(src + core)) {
+    fail("formsubmit_primary", "formsubmit still in delivery path");
+  }
+  pass("no_hardcoded_secrets");
+}
+
+// 11) core pure unit: phone/email normalize
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  if (core.normalizePhone("(48) 98834-4559") !== "48988344559") fail("phone_norm");
+  if (core.normalizeEmail("  A@B.COM ") !== "a@b.com") fail("email_norm");
+  if (core.normalizeJourney("", "glosa de medicao") !== "contrato") fail("journey_norm");
+  pass("core_normalize");
+}
+
+// 12) collect scrub
+{
+  const collectPath = path.join(root, "netlify/functions/collect.cjs");
+  const collect = require(collectPath);
+  const scrubbed = collect._scrubProps({ path: "/x", email: "a@b.com", journey: "contrato", nome: "X" });
+  if (scrubbed.email || scrubbed.nome) fail("collect_pii", scrubbed);
+  if (scrubbed.journey !== "contrato") fail("collect_keep", scrubbed);
+  pass("collect_scrub");
+}
+
+console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
+// cleanup store dir
+try {
+  fs.rmSync(storeDir, { recursive: true, force: true });
+} catch {
+  /* ignore */
 }

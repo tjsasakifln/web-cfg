@@ -8,7 +8,8 @@
     "radar": 7
   },
   "counts": {
-    "reject": 23
+    "noindex": 5,
+    "reject": 18
   },
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "generated_at": "2026-08-02",
@@ -60,7 +61,7 @@
         "unique_buyer_count": 11,
         "unique_supplier_count": 11
       },
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -172,7 +173,7 @@
         "unique_buyer_count": 6,
         "unique_supplier_count": 13
       },
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -282,7 +283,7 @@
         "unique_buyer_count": 10,
         "unique_supplier_count": 11
       },
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -394,7 +395,7 @@
         "unique_buyer_count": 10,
         "unique_supplier_count": 10
       },
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -518,7 +519,7 @@
         "unique_procurement_count": 40,
         "unique_supplier_count": 1
       },
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Dossiê de comprador: 49 contratos primários classificados, objetos, valores e cuidados para disputar contratos deste órgão.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -635,7 +636,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Faixa de valores: Manutenção predial e serviços de engenharia em Rio Grande do Sul (19 contratos; manutenção-predial-engenharia ·…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -751,7 +752,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Faixa de valores: Edificações públicas em Minas Gerais (15 contratos; edificacoes-publicas · edificacoes-publicas-mg). Mediana/P25/P75 de tickets…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -863,7 +864,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Faixa de valores: Pavimentação e infraestrutura viária em Piauí (13 contratos; pavimentação-infraestrutura-viaria ·…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -980,7 +981,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Faixa de valores: Edificações públicas em Rio Grande do Sul (12 contratos; edificacoes-publicas · edificacoes-publicas-rs). Mediana/P25/P75 de tickets…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1094,7 +1095,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Faixa de valores: Pavimentação e infraestrutura viária em Santa Catarina (12 contratos; pavimentação-infraestrutura-viaria ·…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1206,7 +1207,7 @@
         "unique_supplier_count": 2
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público — sem juízo…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1312,7 +1313,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1436,7 +1437,7 @@
         "raw_open_before_dedup": 36,
         "unique_open": 31
       },
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1550,7 +1551,7 @@
         "raw_open_before_dedup": 36,
         "unique_open": 31
       },
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1651,7 +1652,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1757,7 +1758,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Radar de Edificações públicas em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1864,7 +1865,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -1970,7 +1971,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -2050,7 +2051,7 @@
       "approver": "tiago-wave0-operational",
       "archetype": "edificacoes-publicas",
       "cannibalization_checked": true,
-      "canonical_related": null,
+      "canonical_related": "/conteudos/orcamento-incompleto-edital-obra-publica/",
       "claims_checked": [
         "decision_support",
         "limitations_explicit",
@@ -2064,10 +2065,7 @@
         "cta_label": "Revisar esta oportunidade",
         "description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão…",
         "h1": "Inconsistência entre orçamento de referência e edital",
-        "mandatory_fail": [
-          "no_claim_specific_evidence",
-          "no_direct_budget_edital_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 48,
         "period_end": null,
         "period_start": null,
@@ -2082,7 +2080,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão…",
       "editorial_issues": null,
       "evidence_sample": [
@@ -2101,23 +2099,25 @@
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-08-02",
-      "mandatory_fail": [
-        "no_direct_budget_edital_evidence",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-orcamento-edital",
-      "page_material_hash": "4a92eadfb0fd0cd623fe1e1c5fcaaac7cf8befa886f780217ccf97464ab576f6",
+      "page_material_hash": "9efe8c375986abd7674012f18a3f951cf4a29b0f5ff3fd96e819adf6d7d2a272",
       "page_type": "problem_service",
-      "publication_decision_reason": "no_direct_budget_edital_evidence; no_claim_specific_evidence; score=86",
-      "quality_eligible": false,
+      "publication_decision_reason": "gates_ok; score=86; human_review=PENDING_blocks_index",
+      "quality_eligible": true,
       "reasons": [
-        "no_direct_budget_edital_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
+        "gates_ok",
+        "score=86",
+        "human_review=PENDING_blocks_index"
       ],
       "region": null,
-      "related_urls": [],
+      "related_urls": [
+        "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/analise-edital-obra-publica-construtora/",
+        "/auditoria-orcamento-licitacao/"
+      ],
       "review_checklist": {
         "cannibalization_checked": true,
         "claims_have_direct_evidence": true,
@@ -2175,7 +2175,7 @@
         "pncp_supplier_contracts",
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "noindex",
       "title": "Inconsistência entre orçamento de referência e edital | CONFENGE",
       "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/"
     },
@@ -2185,7 +2185,7 @@
       "approver": "tiago-wave0-operational",
       "archetype": "pavimentacao-infraestrutura-viaria",
       "cannibalization_checked": true,
-      "canonical_related": null,
+      "canonical_related": "/conteudos/sinapi-ou-sicro-obra-publica/",
       "claims_checked": [
         "decision_support",
         "limitations_explicit",
@@ -2199,10 +2199,7 @@
         "cta_label": "Revisar esta oportunidade",
         "description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a…",
         "h1": "Referência SINAPI/SICRO e risco de margem na proposta",
-        "mandatory_fail": [
-          "no_claim_specific_evidence",
-          "no_direct_sinapi_sicro_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 48,
         "period_end": null,
         "period_start": null,
@@ -2217,7 +2214,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a…",
       "editorial_issues": null,
       "evidence_sample": [
@@ -2236,23 +2233,25 @@
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-08-02",
-      "mandatory_fail": [
-        "no_direct_sinapi_sicro_evidence",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-sinapi-sicro",
-      "page_material_hash": "20d5853af514b176f66f2a2cf3d7e0c7aeb337f8d87bcd759e67e2860532065b",
+      "page_material_hash": "bf5e9b31a4ea9fcac34b7582b6a42be47d8ba755cdcc73857abd8ca79c25ad27",
       "page_type": "problem_service",
-      "publication_decision_reason": "no_direct_sinapi_sicro_evidence; no_claim_specific_evidence; score=86",
-      "quality_eligible": false,
+      "publication_decision_reason": "gates_ok; score=86; human_review=PENDING_blocks_index",
+      "quality_eligible": true,
       "reasons": [
-        "no_direct_sinapi_sicro_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
+        "gates_ok",
+        "score=86",
+        "human_review=PENDING_blocks_index"
       ],
       "region": null,
-      "related_urls": [],
+      "related_urls": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/produtividade-sinapi-obra-publica/",
+        "/conteudos/bdi-obra-publica/",
+        "/auditoria-orcamento-licitacao/"
+      ],
       "review_checklist": {
         "cannibalization_checked": true,
         "claims_have_direct_evidence": true,
@@ -2310,7 +2309,7 @@
         "site-confenge-guides",
         "pncp_supplier_contracts"
       ],
-      "status": "reject",
+      "status": "noindex",
       "title": "Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE",
       "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/"
     },
@@ -2320,7 +2319,7 @@
       "approver": null,
       "archetype": "manutencao-predial-engenharia",
       "cannibalization_checked": null,
-      "canonical_related": null,
+      "canonical_related": "/conteudos/glosa-de-medicao-obra-publica/",
       "claims_checked": null,
       "cta_intent": "avaliar_oportunidade",
       "cta_label": "Revisar esta oportunidade",
@@ -2330,10 +2329,7 @@
         "cta_label": "Revisar esta oportunidade",
         "description": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
         "h1": "Medição e glosa em contratos com execução contínua",
-        "mandatory_fail": [
-          "generic_evidence_count_only",
-          "no_claim_specific_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 22,
         "period_end": null,
         "period_start": null,
@@ -2347,7 +2343,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -2360,23 +2356,24 @@
       "indexability_score_alias": 76,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-08-02",
-      "mandatory_fail": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 22,
       "page_id": "prob-medicao-glosa",
-      "page_material_hash": "5c44b463a8730e41a703f46ba5ddffcaee7fdeb538b1644c23d847790fa81db4",
+      "page_material_hash": "4489c5df0a17cabc38d44f81b3bdef8e033affc76686f0d75ad998556c121cf2",
       "page_type": "problem_service",
-      "publication_decision_reason": "generic_evidence_count_only; no_claim_specific_evidence; score=76",
+      "publication_decision_reason": "gates_ok; score=76",
       "quality_eligible": false,
       "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
+        "gates_ok",
         "score=76"
       ],
       "region": null,
-      "related_urls": [],
+      "related_urls": [
+        "/conteudos/glosa-de-medicao-obra-publica/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "/medicoes-glosas-obras-publicas/"
+      ],
       "review_checklist": null,
       "review_dataset_hash": "ac09cc3142c396b7fcb2839b123ccc099bec5010e24fe884a636c96c19e518d1",
       "review_date": "2026-07-31",
@@ -2419,7 +2416,7 @@
       "sources": [
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "noindex",
       "title": "Medição e glosa em contratos com execução contínua | CONFENGE",
       "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/"
     },
@@ -2429,7 +2426,7 @@
       "approver": "wave0-final-activation-03",
       "archetype": "edificacoes-publicas",
       "cannibalization_checked": true,
-      "canonical_related": null,
+      "canonical_related": "/conteudos/aditivo-qualitativo-quantitativo/",
       "claims_checked": [
         "decision_support",
         "limitations_explicit",
@@ -2443,10 +2440,7 @@
         "cta_label": "Revisar esta oportunidade",
         "description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
         "h1": "Aditivos, serviços extras e erosão de margem",
-        "mandatory_fail": [
-          "no_claim_specific_evidence",
-          "no_direct_aditivo_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 48,
         "period_end": null,
         "period_start": null,
@@ -2460,7 +2454,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
       "editorial_issues": null,
       "evidence_sample": [
@@ -2479,23 +2473,25 @@
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-08-02",
-      "mandatory_fail": [
-        "no_direct_aditivo_evidence",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-aditivos-margem",
-      "page_material_hash": "c2441e3536979eacc0e0996706ba53c6cd2d15484392ed5e87f6c82a309650a9",
+      "page_material_hash": "afdc58a5852676566a26060705b5ef6d7c5790a1a3c1579071d3a8c049e3636a",
       "page_type": "problem_service",
-      "publication_decision_reason": "no_direct_aditivo_evidence; no_claim_specific_evidence; score=86",
-      "quality_eligible": false,
+      "publication_decision_reason": "gates_ok; score=86; human_review=PENDING_blocks_index",
+      "quality_eligible": true,
       "reasons": [
-        "no_direct_aditivo_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
+        "gates_ok",
+        "score=86",
+        "human_review=PENDING_blocks_index"
       ],
       "region": null,
-      "related_urls": [],
+      "related_urls": [
+        "/conteudos/aditivo-qualitativo-quantitativo/",
+        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/aditivos-obras-publicas/"
+      ],
       "review_checklist": {
         "cannibalization_checked": true,
         "claims_have_direct_evidence": true,
@@ -2551,7 +2547,7 @@
       "sources": [
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "noindex",
       "title": "Aditivos, serviços extras e erosão de margem | CONFENGE",
       "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
     },
@@ -2561,7 +2557,7 @@
       "approver": null,
       "archetype": "pavimentacao-infraestrutura-viaria",
       "cannibalization_checked": null,
-      "canonical_related": null,
+      "canonical_related": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
       "claims_checked": null,
       "cta_intent": "avaliar_oportunidade",
       "cta_label": "Revisar esta oportunidade",
@@ -2571,10 +2567,7 @@
         "cta_label": "Revisar esta oportunidade",
         "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
         "h1": "Reequilíbrio diante de dispersão de preços e insumos",
-        "mandatory_fail": [
-          "generic_evidence_count_only",
-          "no_claim_specific_evidence"
-        ],
+        "mandatory_fail": [],
         "observation_count": 28,
         "period_end": null,
         "period_start": null,
@@ -2589,7 +2582,7 @@
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
-      "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
       "editorial_issues": null,
       "evidence_sample": null,
@@ -2602,23 +2595,24 @@
       "indexability_score_alias": 78,
       "intent": "proteger_margem_proposta_contrato",
       "last_material_change": "2026-08-02",
-      "mandatory_fail": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence"
-      ],
+      "mandatory_fail": [],
       "observation_count": 28,
       "page_id": "prob-reequilibrio",
-      "page_material_hash": "9e0a3abed0bce7e69f2839fe5a51ddc48582d552dce556f8dc0f43bc474b1b57",
+      "page_material_hash": "7750f95185388aa6e6285af6cae59f1eaf0e5fde139cbd53c3b97078f02928c9",
       "page_type": "problem_service",
-      "publication_decision_reason": "generic_evidence_count_only; no_claim_specific_evidence; score=78",
+      "publication_decision_reason": "gates_ok; score=78",
       "quality_eligible": false,
       "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
+        "gates_ok",
         "score=78"
       ],
       "region": null,
-      "related_urls": [],
+      "related_urls": [
+        "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "/conteudos/documentos-reequilibrio-obra-publica/",
+        "/reequilibrio-obras-publicas/"
+      ],
       "review_checklist": null,
       "review_dataset_hash": "6e4f17369f2149413d9642de16167214fe9f862b90a320641426c593efd31d6f",
       "review_date": "2026-07-31",
@@ -2663,7 +2657,7 @@
         "pncp_supplier_contracts",
         "site-confenge-guides"
       ],
-      "status": "reject",
+      "status": "noindex",
       "title": "Reequilíbrio diante de dispersão de preços e insumos | CONFENGE",
       "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
     }

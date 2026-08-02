@@ -31,6 +31,8 @@ jobs:
           npm run test:analytics
           npm run test:form-funnel
           npm run test:lead-function
+          npm run test:secrets-scan
+          npm run test:cta-whatsapp
           npm run test:release-filters
           npm run test:pseo-attribution
       - name: Build public site

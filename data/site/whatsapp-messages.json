@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "number_e164": "5548988344559",
+  "base": "https://wa.me/5548988344559",
+  "messages": {
+    "contrato_pressao": "Olá, Tiago. Tenho um problema urgente em contrato público (glosa, medição, aditivo, reequilíbrio ou atraso) e preciso de análise inicial.",
+    "glosa_medicao": "Olá, Tiago. Preciso de apoio em glosa ou medição retida em contrato de obra pública.",
+    "aditivo": "Olá, Tiago. Preciso estruturar aditivo ou serviço extra com base técnica e econômica.",
+    "reequilibrio": "Olá, Tiago. Preciso analisar reequilíbrio ou reajuste em contrato público.",
+    "atraso_pagamento": "Olá, Tiago. Há atraso de pagamento / parcela em contrato público e quero enquadrar o risco.",
+    "sancao_notificacao": "Olá, Tiago. Recebemos notificação ou risco de sanção em contrato público e preciso de leitura técnica.",
+    "edital": "Olá, Tiago. Tenho um edital em análise e quero enviar para triagem.",
+    "orcamento_bdi": "Olá, Tiago. Preciso de auditoria de orçamento/BDI ou referência SINAPI/SICRO para proposta.",
+    "proposta": "Olá, Tiago. Estou montando proposta de licitação de obras e quero sala de decisão (Bid Room).",
+    "diagnostico_b2g": "Olá, Tiago. Quero diagnosticar a operação B2G da empresa (carteira, margem e rotina).",
+    "pseo_conteudo": "Olá, Tiago. Li um conteúdo técnico no site da CONFENGE e quero enquadrar meu caso de licitação/contrato.",
+    "confirmacao_pos_form": "Olá, Tiago. Acabei de enviar uma solicitação pelo site e posso encaminhar documentos com o protocolo."
+  }
+}

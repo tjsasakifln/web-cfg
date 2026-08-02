@@ -1,12 +1,19 @@
 {
   "ok": true,
-  "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+  "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "source_run_id": "pseo-20260802T032433Z-47e7e07c",
   "counts": {
-    "reject": 23
+    "reject": 18,
+    "noindex": 5
   },
   "publishable": [],
-  "noindex": [],
+  "noindex": [
+    "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+    "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+    "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+    "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+    "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
+  ],
   "rejected": [
     {
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
@@ -166,51 +173,6 @@
         "score=64"
       ],
       "score": 64
-    },
-    {
-      "url": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-      "reasons": [
-        "no_direct_budget_edital_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
-      ],
-      "score": 86
-    },
-    {
-      "url": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-      "reasons": [
-        "no_direct_sinapi_sicro_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
-      ],
-      "score": 86
-    },
-    {
-      "url": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
-      "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
-        "score=76"
-      ],
-      "score": 76
-    },
-    {
-      "url": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
-      "reasons": [
-        "no_direct_aditivo_evidence",
-        "no_claim_specific_evidence",
-        "score=86"
-      ],
-      "score": 86
-    },
-    {
-      "url": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
-      "reasons": [
-        "generic_evidence_count_only",
-        "no_claim_specific_evidence",
-        "score=78"
-      ],
-      "score": 78
     }
   ],
   "pages_written": 23,

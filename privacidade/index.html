@@ -38,20 +38,49 @@
 <article class="simple-card privacy-card">
 <p class="eyebrow">Privacidade</p>
 <h1>Política de Privacidade</h1>
-<p><strong>Última atualização:</strong> 14 de julho de 2026.</p>
-<p>A CONFENGE trata os dados enviados por meio deste site somente para responder solicitações, compreender demandas comerciais e técnicas e manter a comunicação relacionada ao atendimento solicitado.</p>
+<p><strong>Última atualização:</strong> 2 de agosto de 2026.</p>
+<p>A CONFENGE (CNPJ 52.407.089/0001-09) trata dados pessoais nos canais digitais de confenge.com.br para responder solicitações comerciais e técnicas de construtoras e empresas de engenharia, com base na Lei nº 13.709/2018 (LGPD).</p>
+<h2>Controlador e canal do titular</h2>
+<p>Controlador: CONFENGE. Encarregado / canal de atendimento a direitos do titular: <a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a> · WhatsApp <a href="tel:+5548988344559">(48) 98834-4559</a>. Respostas a pedidos de acesso, correção, eliminação, portabilidade, informação sobre compartilhamento ou revogação de consentimento em prazo razoável, observadas hipóteses legais de conservação.</p>
 <h2>Dados coletados</h2>
-<p>O formulário pode coletar nome, empresa, e-mail, telefone, tipo de necessidade e a descrição fornecida pelo visitante. O Netlify poderá registrar dados técnicos necessários ao funcionamento e à proteção do formulário contra abuso.</p>
-<h2>Finalidade e base do tratamento</h2>
-<p>Os dados são usados para retorno de contato, análise preliminar da demanda e preparação de eventual proposta. O tratamento ocorre a partir do consentimento fornecido no formulário e de procedimentos preliminares solicitados pelo próprio titular.</p>
+<ul>
+<li><strong>Formulário de contato / diagnóstico:</strong> nome; WhatsApp e/ou e-mail; tipo de demanda (estágio); consentimento; campos opcionais (empresa, urgência, mensagem); metadados de atribuição (página de entrada, UTMs, referrer, cluster de conteúdo) — sem upload de documentos sensíveis no formulário público.</li>
+<li><strong>Telemetria técnica (sem conteúdo identificável de mensagem):</strong> caminho de página, tipo de evento de interação (CTA, início/envio de formulário, clique em WhatsApp/e-mail), contexto de dispositivo resumido, identificador de sessão técnico efêmero e hash de IP para antiabuso — nunca nome, telefone, e-mail, empresa ou texto livre de mensagem no coletor de analytics.</li>
+<li><strong>Logs de infraestrutura:</strong> registros técnicos da hospedagem necessários à segurança e operação (sem reutilizar mensagem do formulário em logs de aplicação).</li>
+</ul>
+<h2>Finalidades e bases legais</h2>
+<ul>
+<li><strong>Resposta a solicitação e atendimento comercial</strong> — consentimento (art. 7º, I) manifestado no formulário; execução de procedimentos preliminares a pedido do titular (art. 7º, V), quando aplicável.</li>
+<li><strong>Segurança, prevenção a fraude e abuso</strong> (rate limit, verificação antiabuso, honeypot) — legítimo interesse (art. 7º, IX) e/ou cumprimento de obrigação de segurança.</li>
+<li><strong>Mensuração agregada de aquisição</strong> (funil, conversões, origem de campanha) sem PII — legítimo interesse, com minimização.</li>
+</ul>
+<h2>Como o formulário funciona (arquitetura real)</h2>
+<p>O envio autentica-se junto a uma função serverless na plataforma de hospedagem (Netlify Functions). O lead válido recebe um <strong>protocolo (lead_id)</strong> somente após <strong>persistência durável</strong> (armazenamento operacional da CONFENGE na infraestrutura Netlify Blobs ou equivalente configurado). Em seguida, tenta-se notificação operacional autenticada e e-mail transacional — falha de e-mail <strong>não apaga</strong> o registro persistido. <strong>Não utilizamos Netlify Forms como processador do formulário de leads.</strong> Não enviamos dados do lead a tópicos públicos não autenticados.</p>
+<h2>Operadores e subprocessadores</h2>
+<p>Registro técnico interno (sem segredos): ver <code>docs/security/lgpd-operators.md</code> no repositório operacional. Em resumo:</p>
+<ul>
+<li><strong>Netlify</strong> — hospedagem do site estático, funções serverless e armazenamento de objetos (Blobs) para leads e telemetria agregada; pode envolver transferência internacional conforme a infraestrutura do fornecedor.</li>
+<li><strong>Provedor de e-mail transacional</strong> (quando ativado, p.ex. Resend) — envio de notificação de lead ao endereço operacional da CONFENGE, com remetente no domínio confenge.com.br após autenticação DNS (SPF/DKIM/DMARC).</li>
+<li><strong>Webhook operacional autenticado</strong> (quando configurado) — notificação em canal privado da operação comercial.</li>
+<li><strong>Cloudflare Turnstile</strong> (quando ativado) — desafio antiabuso no envio do formulário.</li>
+<li><strong>Meta / WhatsApp</strong> — somente se o titular optar por abrir conversa via link wa.me; a CONFENGE não envia o conteúdo do formulário automaticamente ao WhatsApp.</li>
+</ul>
 <h2>Compartilhamento</h2>
-<p>Não comercializamos dados pessoais. Informações poderão ser processadas por fornecedores essenciais à hospedagem, ao formulário e à comunicação, dentro dos limites necessários para prestar o serviço.</p>
-<h2>Retenção e segurança</h2>
-<p>Os dados serão mantidos pelo período necessário para tratar a solicitação, cumprir obrigações legais e preservar registros legítimos da relação comercial. Adotamos medidas razoáveis para limitar acesso e reduzir riscos de uso indevido.</p>
+<p>Não vendemos nem alugamos dados pessoais. Compartilhamento limita-se a operadores necessários à hospedagem, segurança, e-mail e atendimento, sob contratos/termos de processamento e minimização. Dados de lead não são publicados em canais abertos.</p>
+<h2>Transferência internacional</h2>
+<p>A hospedagem e alguns operadores podem processar dados fora do Brasil. Nesses casos, a transferência observa as salvaguardas cabíveis nos termos da LGPD e das políticas dos fornecedores, com finalidade restrita à operação do site e do atendimento.</p>
+<h2>Retenção e eliminação</h2>
+<p>Leads: retenção padrão de até 730 dias (ajustável por política interna), após o que o registro é elegível a eliminação, salvo obrigação legal ou exercício regular de direitos. Telemetria analítica: amostras agregadas com retenção operacional curta. O titular pode pedir eliminação antecipada pelo canal acima; a CONFENGE confirmará o protocolo e o resultado.</p>
+<h2>Segurança</h2>
+<p>Medidas aplicadas ao canal digital: HTTPS; validação e sanitização no servidor; limite de payload; restrição de origem; rate limiting por IP/fingerprint técnico; honeypot; verificação antiabuso (Turnstile quando ativo); respostas de API sem exposição de segredos ou canais internos; logs de aplicação sem PII de mensagem; persistência antes da confirmação ao usuário.</p>
+<h2>Cookies e analytics</h2>
+<p>Utilizamos armazenamento local/sessão do navegador para atribuição de campanha (UTMs de primeiro toque) e identificador técnico de sessão — sem cookies de publicidade de terceiros no estado padrão. Eventos de funil são enviados ao coletor de primeira parte da CONFENGE (<code>/.netlify/functions/collect</code>), sem PII. Integrações opcionais (p.ex. Plausible ou GA4) só entram em operação se explicitamente configuradas e refletidas nesta política.</p>
 <h2>Direitos do titular</h2>
-<p>Você pode solicitar confirmação de tratamento, acesso, correção, eliminação, informação sobre compartilhamento ou revogação do consentimento, observadas as hipóteses legais de conservação.</p>
+<p>Confirmação de tratamento, acesso, correção, anonimização, bloqueio, eliminação, portabilidade (quando aplicável), informação sobre compartilhamento, revogação do consentimento e oposição a tratamento baseado em legítimo interesse, nos termos da LGPD. Exportação do registro associado a um protocolo pode ser solicitada pelo e-mail acima, com validação razoável de titularidade.</p>
+<h2>Documentos sensíveis</h2>
+<p>Não envie editais completos, planilhas com dados de terceiros ou documentos sigilosos pelo formulário público. Após o protocolo, a orientação é combinar canal seguro (preferencialmente WhatsApp operacional ou e-mail com destinatário confirmado) para anexos.</p>
 <h2>Contato</h2>
-<p>Solicitações relacionadas à privacidade podem ser enviadas para <a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>.</p>
+<p>Privacidade e direitos do titular: <a href="mailto:tiago.sasaki@confenge.com.br?subject=LGPD%20-%20direitos%20do%20titular">tiago.sasaki@confenge.com.br</a>.</p>
 <a class="button button-primary" href="/">Voltar para a página inicial</a>
 </article>
 </main>

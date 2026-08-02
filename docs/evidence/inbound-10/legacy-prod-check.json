@@ -1,0 +1,65 @@
+[
+  {
+    "path": "/avcb",
+    "expected": "410",
+    "got": 410,
+    "final": "https://confenge.com.br/avcb",
+    "ok": true
+  },
+  {
+    "path": "/clcb",
+    "expected": "410",
+    "got": 410,
+    "final": "https://confenge.com.br/clcb",
+    "ok": true
+  },
+  {
+    "path": "/vision",
+    "expected": "410",
+    "got": 410,
+    "final": "https://confenge.com.br/vision",
+    "ok": true
+  },
+  {
+    "path": "/ia",
+    "expected": "410",
+    "got": 410,
+    "final": "https://confenge.com.br/ia",
+    "ok": true
+  },
+  {
+    "path": "/avaliacoes",
+    "expected": "410",
+    "got": 410,
+    "final": "https://confenge.com.br/avaliacoes",
+    "ok": true
+  },
+  {
+    "path": "/blog",
+    "expected": "301",
+    "got": 200,
+    "final": "https://confenge.com.br/conteudos/",
+    "ok": false
+  },
+  {
+    "path": "/privacidade/",
+    "expected": "200",
+    "got": 200,
+    "final": "https://confenge.com.br/privacidade/",
+    "ok": true
+  },
+  {
+    "path": "/servicos",
+    "expected": "301",
+    "got": 200,
+    "final": "https://confenge.com.br/#como-atuamos",
+    "ok": false
+  },
+  {
+    "path": "/sobre",
+    "expected": "301",
+    "got": 200,
+    "final": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+    "ok": false
+  }
+]
