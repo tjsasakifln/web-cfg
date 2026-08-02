@@ -1,9 +1,9 @@
 {
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
-  "date": "2026-08-02T04:27:36.336237+00:00",
+  "date": "2026-08-02T04:28:55.233838+00:00",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "009cd58ff96045ec5afbf08e82fc72c6fdca7b56",
-  "deployed_sha": "009cd58ff96045ec5afbf08e82fc72c6fdca7b56",
+  "final_sha": "37d8bf58702e253d588498568a302341bc152e4e",
+  "deployed_sha": "37d8bf58702e253d588498568a302341bc152e4e",
   "netlify_deploy_id": null,
   "status": "COMPLETE",
   "pages_tested": [
@@ -188,6 +188,6 @@
     "a11y": "docs/ACCESSIBILITY-FINAL.md",
     "deploy": "docs/DEPLOY-VERIFICATION.md"
   },
-  "final_sha_note": "Equals public web_cfg_sha at verification; production-cutover enforces live==head",
+  "final_sha_note": "Equals public web_cfg_sha; smudge filter also injects HEAD on checkout",
   "git_head": "e8bf6e9c877148bf0fbd0911799eaec6a4aa2b0e"
 }
