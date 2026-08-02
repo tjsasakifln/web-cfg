@@ -258,18 +258,31 @@ def test_mobile_matrix_composition():
 
 
 def test_functional_type_floor_in_css():
-    """Shipped CSS must not set form labels / consent / offer labels below 14px (.875rem)."""
+    """Shipped CSS must not set commercial functional type below 14px (.875rem)."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    # Direct declarations that skeptic caught
+    # Selectors that must stay ≥.875rem on commercial surfaces
     for pattern in (
         r"\.field label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.consent\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.offer-label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.offer-dominant \.offer-label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.footer-links\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.footer-links strong\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.footer-bottom\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.breadcrumbs ol\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.profile-list li\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.related-card span\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.related-card small\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.service-number\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
+        r"\.deliverables-list span\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
     ):
         assert not re.search(pattern, css), f"sub-14px functional type: {pattern}"
     assert re.search(r"\.field label\{[^}]*font-size:\.875rem", css)
     assert re.search(r"\.consent\{[^}]*font-size:\.875rem", css)
+    assert re.search(r"\.footer-links\{[^}]*font-size:\.875rem", css)
+    assert re.search(r"\.breadcrumbs ol\{[^}]*font-size:\.875rem", css)
+    assert re.search(r"\.profile-list li\{[^}]*font-size:\.875rem", css)
+    assert re.search(r"\.related-card span\{[^}]*font-size:\.875rem", css)
 
 
 def test_thankyou_specialist_cta_family():

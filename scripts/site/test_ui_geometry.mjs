@@ -185,51 +185,71 @@ async function main() {
     fail("mobile_hero_cta_without_decor_panel", e.message || e);
   }
 
-  // 5) functional text ≥ 14px (includes form labels, consent, offer labels, nav)
+  // 5) functional text ≥ 14px on home + commercial surfaces (footer, breadcrumbs, profile, related)
   try {
     await page.setViewport({ width: 1440, height: 1000 });
-    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-    const fontReport = await page.evaluate(() => {
-      const sel = [
-        ".hero-lead",
-        ".hero-proof li",
-        ".hero-micro",
-        ".button",
-        ".hero-secondary",
-        ".macro-phase p",
-        ".macro-phase h3",
-        ".tension-stage p",
-        ".offer-path p",
-        ".offer-path strong",
-        ".offer-label",
-        ".fit-faq summary",
-        ".contact-copy p",
-        ".form-hint",
-        ".form-note",
-        ".field label",
-        ".consent",
-        ".desktop-nav a",
-        ".header-cta",
-        ".trace-card p",
-        ".contact-channels small",
-      ].join(",");
-      let min = Infinity;
-      let minSel = "";
-      for (const el of document.querySelectorAll(sel)) {
-        const r = el.getBoundingClientRect();
-        if (r.width === 0 || r.height === 0) continue;
-        const fs = parseFloat(getComputedStyle(el).fontSize);
-        if (fs && fs < min) {
-          min = fs;
-          minSel = el.className || el.tagName;
+    const fontSel = [
+      ".hero-lead",
+      ".hero-proof li",
+      ".hero-micro",
+      ".button",
+      ".hero-secondary",
+      ".macro-phase p",
+      ".macro-phase h3",
+      ".tension-stage p",
+      ".offer-path p",
+      ".offer-path strong",
+      ".offer-label",
+      ".fit-faq summary",
+      ".contact-copy p",
+      ".form-hint",
+      ".form-note",
+      ".field label",
+      ".consent",
+      ".desktop-nav a",
+      ".header-cta",
+      ".trace-card p",
+      ".contact-channels small",
+      ".footer-links a",
+      ".footer-links strong",
+      ".footer-bottom",
+      ".footer-bottom a",
+      ".breadcrumbs ol",
+      ".breadcrumbs a",
+      ".profile-list li",
+      ".related-card span",
+      ".related-card strong",
+      ".related-card small",
+      ".service-number",
+      ".deliverables-list span",
+    ].join(",");
+    const measureFonts = async (path) => {
+      await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded" });
+      return page.evaluate((sel) => {
+        let min = Infinity;
+        let minSel = "";
+        for (const el of document.querySelectorAll(sel)) {
+          const r = el.getBoundingClientRect();
+          if (r.width === 0 || r.height === 0) continue;
+          const fs = parseFloat(getComputedStyle(el).fontSize);
+          if (fs && fs < min) {
+            min = fs;
+            minSel = (el.className || el.tagName || "").toString().slice(0, 60);
+          }
         }
+        return { min, minSel, path: location.pathname };
+      }, fontSel);
+    };
+    const paths = ["/", "/diretoria-b2g/", "/especialista/tiago-jun-sasaki/"];
+    let worst = { min: Infinity, minSel: "", path: "" };
+    for (const path of paths) {
+      const rep = await measureFonts(path);
+      if (rep.min < worst.min) worst = rep;
+      if (rep.min < 14) {
+        throw new Error(`${path}: functional text ${rep.min}px < 14px (${rep.minSel})`);
       }
-      return { min, minSel };
-    });
-    if (fontReport.min < 14) {
-      throw new Error(`functional text ${fontReport.min}px < 14px (${fontReport.minSel})`);
     }
-    ok(`functional_text_min_14px (${fontReport.min}px)`);
+    ok(`functional_text_min_14px (${worst.min}px across home/offer/specialist)`);
   } catch (e) {
     fail("functional_text_min_14px", e.message || e);
   }
@@ -253,6 +273,7 @@ async function main() {
 
   // 7) focus visible
   try {
+    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     await page.focus(".hero .button-primary");
     const outline = await page.evaluate(() => {
       const el = document.querySelector(".hero .button-primary");
