@@ -1,0 +1,74 @@
+{
+  "HEAD": "893ea817a984ed09c0829605d4152ad9d5c42027",
+  "PROD": "893ea817a984ed09c0829605d4152ad9d5c42027",
+  "claim1_auto_approve": {
+    "has_approve_human_in_build": false,
+    "auto_approve_param_in_build_fn": false,
+    "pkg_script": [
+      "    \"editorial:build\": \"python3 scripts/editorial/build.py\","
+    ],
+    "flag_rc": 2,
+    "flag_err": "ERROR: --auto-approve removed. Human approval required via approve_cli.py",
+    "VERDICT": "FIXED"
+  },
+  "claim2_registry": {
+    "counts": {
+      "EDITORIAL_REVIEWED": 11,
+      "REJECTED": 1
+    },
+    "indexable_urls": [],
+    "sample_history": [
+      "DRAFT",
+      "LEGAL_SOURCE_VALIDATED",
+      "TECHNICAL_REVIEWED",
+      "EDITORIAL_REVIEWED",
+      "NOTE"
+    ],
+    "draft_approve_works": false,
+    "draft_err": "requires_EDITORIAL_REVIEWED_got_DRAFT",
+    "jur_status": "REJECTED",
+    "VERDICT": "FIXED"
+  },
+  "claim3_final": {
+    "first_status_line": [
+      "**Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`"
+    ],
+    "terminal_json": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+    "VERDICT": "FIXED"
+  },
+  "claim4_jur": {
+    "reg_status": "REJECTED",
+    "hold": true,
+    "html_robots": true,
+    "VERDICT": "FIXED"
+  },
+  "claim5_cannibal": {
+    "editorial_locs": 0,
+    "wave1_in_main": false,
+    "consolidar_in_main": false,
+    "wave1_noindex": true,
+    "consolidar_noindex": true,
+    "report_lines": 29,
+    "VERDICT": "FIXED"
+  },
+  "claim6_evidence": {
+    "screenshots": [
+      "art124-mobile.png",
+      "art124.png",
+      "checklist-mobile.png",
+      "checklist.png"
+    ],
+    "deep_review": true,
+    "conversion_test": true,
+    "external_actions": true,
+    "VERDICT": "FIXED"
+  },
+  "production": {
+    "commit": "893ea817a984ed09c0829605d4152ad9d5c42027",
+    "robots": "noindex,follow",
+    "editorial_locs": 0
+  },
+  "all_fixed": true,
+  "terminal": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "will_not_impersonate_tiago": true
+}
