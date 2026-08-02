@@ -28,8 +28,8 @@
     "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
     "h1_html": "Licitação vencida não paga a conta. <span>Contrato rentável, sim.</span>",
     "subheadline": "A CONFENGE entra antes da proposta e permanece durante a execução para ajudar sua direção a escolher onde competir, como precificar, o que recusar e como proteger a margem do contrato público.",
-    "cta_primary": "Diagnosticar minha operação B2G",
-    "cta_secondary": "Tenho uma decisão crítica agora",
+    "cta_primary": "Diagnosticar operação B2G",
+    "cta_secondary": "Enviar decisão crítica",
     "cta_secondary_wa": "Olá, Tiago. Tenho uma decisão crítica envolvendo uma licitação ou contrato público e preciso enquadrar o risco e os próximos passos.",
     "microcopy": "Para construtoras e empresas de engenharia que já disputam ou executam contratos públicos.",
     "meta_title": "CONFENGE | Diretoria B2G para construtoras e contratos públicos",
@@ -101,39 +101,31 @@
     }
   ],
   "ctas": {
-    "home_primary": "Diagnosticar minha operação B2G",
-    "home_secondary": "Tenho uma decisão crítica agora",
-    "header": "Diagnosticar operação",
-    "final_primary": "Diagnosticar minha operação B2G",
-    "final_secondary": "Enviar uma decisão crítica",
+    "home_primary": "Diagnosticar operação B2G",
+    "home_secondary": "Enviar decisão crítica",
+    "header": "Diagnosticar operação B2G",
+    "final_primary": "Diagnosticar operação B2G",
+    "final_secondary": "Enviar decisão crítica",
     "final_secondary_wa": "Olá, Tiago. Quero enviar uma decisão crítica sobre licitação ou contrato público para enquadramento.",
-    "form_submit": "Enviar para diagnóstico",
+    "form_submit": "Diagnosticar operação B2G",
     "default_wa": "Olá, Tiago. Quero diagnosticar a operação B2G da minha empresa e entender o formato de atuação adequado."
   },
   "faq": [
     {
       "q": "Já temos equipe de licitação.",
-      "a": "Ótimo. A CONFENGE não precisa substituir a equipe. Entramos onde volume e rotina operacional não resolvem sozinhos: foco, decisão, risco, preço, integração com engenharia e aprendizado após o resultado."
+      "a": "A CONFENGE não precisa substituir a equipe. Entramos onde volume sozinho não resolve: foco, decisão, risco, preço e aprendizado após o resultado."
     },
     {
       "q": "Já utilizamos uma plataforma de editais.",
-      "a": "A plataforma encontra a oportunidade. A CONFENGE ajuda a decidir se ela merece seu capital, sua equipe e sua capacidade de execução."
+      "a": "A plataforma encontra a oportunidade. A CONFENGE ajuda a decidir se ela merece capital, equipe e capacidade de execução."
     },
     {
       "q": "Já temos jurídico.",
-      "a": "A atuação é complementar. O jurídico trabalha melhor quando recebe cronologia, fatos, cálculos, documentos e tese técnica organizados."
-    },
-    {
-      "q": "A CONFENGE elabora todas as propostas?",
-      "a": "O formato depende da operação. Podemos coordenar oportunidades críticas, revisar a estrutura existente ou atuar como Bid Room em processos selecionados. A prioridade é qualidade decisória, não volume indiscriminado."
-    },
-    {
-      "q": "Como começa?",
-      "a": "Uma conversa de enquadramento identifica a decisão, a urgência, os documentos disponíveis e se o caso pede diagnóstico, atuação pontual ou operação continuada."
+      "a": "Atuação complementar. O jurídico trabalha melhor com cronologia, fatos, cálculos e tese técnica organizados."
     },
     {
       "q": "A CONFENGE assegura vitória ou recuperação?",
-      "a": "Não. Licitações e contratos dependem de concorrência, documentação, decisão administrativa, execução e fatores externos. A CONFENGE trabalha para melhorar a qualidade da decisão e da posição técnica, nunca para prometer resultado que não controla."
+      "a": "Não. Melhoramos a qualidade da decisão e da posição técnica — sem prometer resultado que a empresa não controla."
     }
   ],
   "form": {
@@ -198,7 +190,13 @@
     "aprovado para publicação",
     "critério interno",
     "red team",
-    "post-mortem"
+    "post-mortem",
+    "sem inventar case",
+    "sem métrica fictícia",
+    "sem metrica ficticia",
+    "visual regression",
+    "arquétipo",
+    "legível sem JavaScript"
   ],
   "copy_leak_word_boundaries": [
     "owners"

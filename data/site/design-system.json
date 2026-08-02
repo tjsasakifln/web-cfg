@@ -129,8 +129,29 @@
     "owners",
     "red team",
     "post-mortem",
-    "extra-cli"
+    "extra-cli",
+    "sem inventar case",
+    "sem métrica fictícia",
+    "sem metrica ficticia",
+    "visual regression",
+    "arquétipo",
+    "legível sem JavaScript"
   ],
+  "home_architecture": {
+    "max_narrative_sections": 7,
+    "max_primary_cta": 4,
+    "blocks": [
+      "hero_split",
+      "tension_sequence",
+      "offer_dominant",
+      "journey_rail",
+      "authority_editorial",
+      "icp_contrast",
+      "cta_formal"
+    ],
+    "primary_cta": "Diagnosticar operação B2G",
+    "secondary_cta": "Enviar decisão crítica"
+  },
   "motion": {
     "allowed": ["subtle entrance", "step focus", "line reveal", "state change", "interaction feedback"],
     "forbidden": ["exaggerated parallax", "continuous float", "fake counters", "particles"],

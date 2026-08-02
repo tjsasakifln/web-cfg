@@ -355,8 +355,46 @@
           urgency_category: v,
         });
       });
+      const emailEl = form.querySelector('#email');
+      const phoneEl = form.querySelector('#telefone');
+      const statusEl = form.querySelector('.form-status');
+      const showFormStatus = (msg, kind) => {
+        if (!statusEl) return;
+        statusEl.hidden = !msg;
+        statusEl.textContent = msg || '';
+        statusEl.classList.toggle('is-error', kind === 'error');
+        statusEl.classList.toggle('is-ok', kind === 'ok');
+      };
+      const clearContactValidity = () => {
+        emailEl?.setCustomValidity('');
+        phoneEl?.setCustomValidity('');
+        emailEl?.classList.remove('is-invalid');
+        phoneEl?.classList.remove('is-invalid');
+      };
+      const requireEmailOrPhone = () => {
+        clearContactValidity();
+        const email = (emailEl?.value || '').trim();
+        const phone = (phoneEl?.value || '').trim();
+        if (email || phone) return true;
+        const msg = 'Informe e-mail ou WhatsApp para retorno.';
+        if (emailEl) {
+          emailEl.setCustomValidity(msg);
+          emailEl.classList.add('is-invalid');
+        }
+        if (phoneEl) {
+          phoneEl.setCustomValidity(msg);
+          phoneEl.classList.add('is-invalid');
+        }
+        showFormStatus(msg, 'error');
+        return false;
+      };
+      emailEl?.addEventListener('input', () => { clearContactValidity(); showFormStatus('', ''); });
+      phoneEl?.addEventListener('input', () => { clearContactValidity(); showFormStatus('', ''); });
+
       form.addEventListener('submit', (event) => {
-        if (!form.checkValidity()) {
+        if (!requireEmailOrPhone() || !form.checkValidity()) {
+          event.preventDefault();
+          form.reportValidity();
           track('lead_form_error', {
             page_path: pagePath,
             content_cluster: defaultCluster,
@@ -365,6 +403,7 @@
           });
           return;
         }
+        showFormStatus('', '');
         track('lead_form_submit', {
           page_path: pagePath,
           content_cluster: defaultCluster,
