@@ -13,15 +13,15 @@ import { fileURLToPath } from "url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(ROOT, "docs", "lighthouse-runs");
-const PAGES = [
-  "/",
-  "/diretoria-b2g/",
-  "/diagnostico-b2g-360/",
-  "/bid-room-licitacoes-obras/",
-  "/defesa-margem-contratos-publicos/",
-  "/inteligencia/",
-  "/conteudos/",
-];
+// Critical surfaces only — full catalog is too slow/flaky for CI lab runs.
+const PAGES = process.env.LH_PAGES
+  ? process.env.LH_PAGES.split(",").map((s) => s.trim()).filter(Boolean)
+  : [
+      "/",
+      "/diretoria-b2g/",
+      "/defesa-margem-contratos-publicos/",
+      "/conteudos/",
+    ];
 const PORT = 8766;
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -66,6 +66,15 @@ for (const path of PAGES) {
   const slug = path === "/" ? "home" : path.replace(/\//g, "_").replace(/^_|_$/g, "");
   const outJson = join(OUT, `${slug}.json`);
   const chrome = process.env.CHROME_PATH || "/usr/bin/google-chrome";
+  const chromeFlags = [
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--disable-extensions",
+    "--no-first-run",
+    "--disable-background-networking",
+  ].join(" ");
   const args = [
     lhBin,
     url,
@@ -74,21 +83,24 @@ for (const path of PAGES) {
     "--screenEmulation.mobile=true",
     "--screenEmulation.width=390",
     "--screenEmulation.height=844",
+    "--max-wait-for-load=45000",
     "--output=json",
     `--output-path=${outJson}`,
     `--chrome-path=${chrome}`,
-    "--chrome-flags=--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage",
+    `--chrome-flags=${chromeFlags}`,
     "--quiet",
   ];
   console.log("Lighthouse", url, "chrome=", chrome);
   const run = spawnSync(process.execPath, args, {
     encoding: "utf8",
-    timeout: 240000,
+    timeout: 120000,
     env: { ...process.env, CHROME_PATH: chrome },
+    maxBuffer: 20 * 1024 * 1024,
   });
-  if (run.status !== 0) {
-    console.error("lighthouse failed", run.stderr || run.stdout);
-    results.push({ path, error: run.stderr || run.stdout || "failed", status: "error" });
+  if (run.status !== 0 || !existsSync(outJson)) {
+    const detail = (run.stderr || run.stdout || "failed").toString().slice(0, 2000);
+    console.error("lighthouse failed", detail);
+    results.push({ path, error: detail || "failed", status: "error" });
     continue;
   }
   const report = JSON.parse(readFileSync(outJson, "utf8"));
