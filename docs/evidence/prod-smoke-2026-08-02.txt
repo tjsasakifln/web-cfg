@@ -1,0 +1,33 @@
+=== PROD SMOKE 2026-08-02T13:35:06Z ===
+{
+  "schema_version": "1.0.0",
+  "commit": "9a30abd993a3952b8c2161e592fcfaa73ff811ff",
+  "build_time": "2026-08-02T13:34:06Z",
+  "environment": "production",
+  "site_schema_version": "1.1.0",
+  "source": "build_site.write_build_info"
+}
+
+GET / -> 200 redir=0
+GET /diretoria-b2g/ -> 200 redir=0
+GET /bid-room-licitacoes-obras/ -> 200 redir=0
+GET /defesa-margem-contratos-publicos/ -> 200 redir=0
+GET /diagnostico-b2g-360/ -> 200 redir=0
+GET /obrigado -> 200 redir=0
+GET /obrigado-contrato -> 200 redir=0
+GET /obrigado-edital -> 200 redir=0
+GET /obrigado-operacao -> 200 redir=0
+POST /.netlify/functions/lead -> 200
+GET /robots.txt -> 200 redir=0
+GET /sitemap.xml -> 200 redir=0
+GET /contato -> 200 redir=1
+GET /blog -> 200 redir=1
+GET /conteudos/ -> 200 redir=0
+GET /conteudos/aditivo-empreitada-por-preco-global/ -> 200 redir=0
+GET /conteudos/aceleracao-obra-publica-custo-adicional/ -> 200 redir=0
+GET /especialista/tiago-jun-sasaki/ -> 200 redir=0
+GET /inteligencia/ -> 200 redir=0
+GET /privacidade/ -> 200 redir=0
+thin_page_robots=noindex,follow
+0
+thin_not_in_sitemap=0

@@ -1,0 +1,35 @@
+[
+    {
+        "ok": true,
+        "receipt_id": "4d187329bb2217a7b1f62090",
+        "received_at": "2026-08-02T13:34:48.095Z",
+        "journey": "contrato",
+        "stage_category": "problema urgente em contrato",
+        "upstream": {
+            "status": "error",
+            "http": 403
+        }
+    },
+    {
+        "ok": true,
+        "receipt_id": "1a7c63794b9d3f2893d15893",
+        "received_at": "2026-08-02T13:34:48.810Z",
+        "journey": "edital",
+        "stage_category": "edital ou proposta em preparacao",
+        "upstream": {
+            "status": "error",
+            "http": 403
+        }
+    },
+    {
+        "ok": true,
+        "receipt_id": "635e665f037117bd43840cfc",
+        "received_at": "2026-08-02T13:34:49.226Z",
+        "journey": "operacao",
+        "stage_category": "estruturando a operacao B2G",
+        "upstream": {
+            "status": "error",
+            "http": 403
+        }
+    }
+]
