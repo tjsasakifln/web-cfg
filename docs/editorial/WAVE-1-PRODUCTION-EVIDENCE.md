@@ -1,17 +1,28 @@
-# Wave 1 production evidence
+# Wave 1 production evidence (post fail-closed remediation)
 
-- Deploy commit: `e801200f911bf547cb263cce0edd317ba121957b`
-- build-info: https://confenge.com.br/.well-known/build-info.json
-- Structural pass: 15/15
-- sitemap-editorial.xml: HTTP 200 with Wave 1 locs
-- sitemap-jurisprudencia.xml: HTTP 200
-- sitemap-inteligencia.xml: empty (0 publishable data pages — intentional)
+- **Deploy commit:** `c0a2ad9393830bf449d932379879923cfc88fb58`
+- **build-info:** https://confenge.com.br/.well-known/build-info.json
+- **Terminal:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`
 
-## Sample
-- https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/
-- https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/
-- https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/
+## Production checks (2026-08-02)
 
-## External remaining
-- Search Console sitemap submit (owner)
-- Optional Tiago byline approval
+| Check | Result |
+|-------|--------|
+| Wave 1 sample pages HTTP 200 | yes |
+| robots | `noindex,follow` on Wave 1 + hubs |
+| WhatsApp + mailto present | yes |
+| sitemap-editorial.xml locs | **0** |
+| sitemap-jurisprudencia.xml locs | **0** |
+| sitemap-inteligencia.xml | empty (pSEO 0 publishable) |
+| consolidar `/conteudos/servico-executado-sem-termo-aditivo/` | noindex |
+
+## Evidence artifacts
+- Screenshots desktop/mobile: `seo/editorial-evidence/screenshots/`
+- Deep review ≥30%: `seo/editorial-evidence/deep-review/DEEP-REVIEW-30PCT.md`
+- Conversion smoke (shipped script.js → collect): `seo/editorial-evidence/CONVERSION-SMOKE.log` (if present) + code path
+- Env limit Lighthouse/Axe: `seo/editorial-evidence/ENV-LIMIT.txt`
+- URL table: `seo/editorial-evidence/WAVE-1-URL-TABLE.md`
+- Tests: `npm run editorial:test` → 14 passed
+
+## Unlock
+Named human must run `scripts/editorial/approve_cli.py` per page — see FINAL and WAVE-1-APPROVALS.
