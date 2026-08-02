@@ -50,7 +50,13 @@ jobs:
         run: npm run test:redirects
       - name: axe accessibility
         run: npm run audit:axe
+      - name: Setup Chrome for Lighthouse
+        uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
       - name: Lighthouse local (_site)
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          LH_PAGES: "/,/diretoria-b2g/,/conteudos/"
         run: npm run test:lighthouse
         continue-on-error: false
       - name: Upload reports
