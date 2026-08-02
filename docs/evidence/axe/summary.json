@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-08-02T13:57:23.858Z",
+  "results": [
+    {
+      "id": "home",
+      "url": "https://confenge.com.br/",
+      "violations": 0,
+      "critical_serious": 0,
+      "violation_ids": []
+    },
+    {
+      "id": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "violations": 0,
+      "critical_serious": 0,
+      "violation_ids": []
+    },
+    {
+      "id": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "violations": 0,
+      "critical_serious": 0,
+      "violation_ids": []
+    },
+    {
+      "id": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "violations": 0,
+      "critical_serious": 0,
+      "violation_ids": []
+    }
+  ]
+}

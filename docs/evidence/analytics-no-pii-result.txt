@@ -1,0 +1,3 @@
+ANALYTICS_UNIT_OK {"last":{"event":"whatsapp_click","page_path":"/x","cta_label":"ok"},"submit":{"event":"lead_form_submit","page_path":"/","journey":"contrato","stage_category":"problema urgente em contrato"}}
+FORM_FUNNEL_OK {"events":["lead_form_start","lead_form_step","lead_form_submit","whatsapp_click","email_click","service_page_view"],"submit_journey":"contrato","home_multistep":true}
+LEAD_FUNCTION_OK {"receipt_id":"3cf464d1f47027eecfd9da2b","journey":"contrato","delivered":true,"ntfy_message_id":"ntfy-msg-test-001"}

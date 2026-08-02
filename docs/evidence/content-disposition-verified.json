@@ -1,0 +1,770 @@
+{
+  "library_counts": {
+    "noindex": 97,
+    "manter": 23
+  },
+  "items": [
+    {
+      "path": "/conteudos/aceleracao-obra-publica-custo-adicional/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/aditivo-empreitada-por-preco-global/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/administracao-local-orcamento-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/administracao-local-prolongada-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/analise-edital-obra-publica-construtora/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/atraso-obra-culpa-administracao/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/atraso-projeto-executivo-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/auditoria-contrato-obra-publica-mensal/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/aumento-material-reequilibrio-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/bdi-diferenciado-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/bdi-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/clausula-matriz-risco-abusiva-edital/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/como-provar-atraso-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/compensacao-acrescimo-supressao-aditivo/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/composicao-propria-preco-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/comunicacao-fiscal-contrato-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/consorcio-subcontratacao-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/consultoria-b2g-engenharia-construtora/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/consultoria-contrato-obra-publica-construtora/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/contratacao-integrada-semi-integrada-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/controle-mudancas-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/cotacao-mercado-orcamento-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/cronograma-fisico-financeiro-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/cronologia-contrato-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/culpa-sancao-atraso-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/curva-abc-orcamento-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/curva-abc-reequilibrio-contrato/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/custos-indiretos-atraso-administracao-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/defesa-processo-sancionador-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/demolicao-nao-prevista-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/demora-decisao-administracao-contrato-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/desagio-licitacao-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/diario-de-obra-pleito-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/divergencia-diario-obra-fiscalizacao/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/dosimetria-multa-contrato-administrativo/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/empreitada-preco-global-preco-unitario/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/erros-comunicacao-contrato-publico-construtora/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/extincao-contrato-culpa-administracao/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/fiscal-mandou-executar-sem-aditivo/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/frente-de-servico-nao-liberada-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/garantia-proposta-licitacao-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/gestao-contrato-obra-publica-indicadores/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/glosa-de-medicao-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/glosa-por-qualidade-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/impedimento-de-licitar-construtora/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/indenizacao-servico-extracontratual-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/interferencia-concessionaria-obra-publica-atraso/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/jogo-de-planilha-aditivo-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/manutencao-habilitacao-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/matriz-de-riscos-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/medicao-de-obra-publica-rejeitada/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/medicao-por-evento-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/multa-atraso-parcial-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/multa-contrato-obra-publica-defesa/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/notas-fiscais-reequilibrio-contrato/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/notificacao-impacto-prazo-custo-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/orcamento-sigiloso-licitacao-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/ordem-paralisacao-obra-publica-custos/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/pagamento-contrato-publico-certidao-vencida/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/pedido-de-reequilibrio-negado/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/plano-recuperacao-obra-atrasada/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/pleito-tecnico-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/preco-de-item-novo-aditivo-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/produtividade-sinapi-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/projeto-basico-incompleto-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/prova-custos-adicionais-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/recuperar-contrato-obra-publica-problematico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/reequilibrio-apos-fim-do-contrato/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/reequilibrio-empreitada-preco-global/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/registro-contemporaneo-pleito-obra/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/reprogramacao-cronograma-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/rescisao-unilateral-contrato-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/resposta-notificacao-atraso-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/seguro-garantia-execucao-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/servico-executado-sem-projeto-aprovado/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/servico-executado-sem-termo-aditivo/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "disposition": "manter",
+      "in_sitemap": true,
+      "noindex_meta": false
+    },
+    {
+      "path": "/conteudos/subcontratacao-obra-publica-autorizacao/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/tributos-bdi-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    },
+    {
+      "path": "/conteudos/visita-tecnica-licitacao-obra-publica/",
+      "disposition": "noindex",
+      "in_sitemap": false,
+      "noindex_meta": true
+    }
+  ],
+  "commercial": [
+    [
+      "/",
+      "reescrever-shipped",
+      "homepage three journeys"
+    ],
+    [
+      "/diretoria-b2g/",
+      "reescrever-shipped",
+      "jornada C"
+    ],
+    [
+      "/bid-room-licitacoes-obras/",
+      "reescrever-shipped",
+      "jornada B"
+    ],
+    [
+      "/defesa-margem-contratos-publicos/",
+      "reescrever-shipped",
+      "jornada A"
+    ],
+    [
+      "/diagnostico-b2g-360/",
+      "reescrever-shipped",
+      "jornada C entry"
+    ],
+    [
+      "/obrigado-contrato",
+      "manter",
+      "confirmation A noindex"
+    ],
+    [
+      "/obrigado-edital",
+      "manter",
+      "confirmation B noindex"
+    ],
+    [
+      "/obrigado-operacao",
+      "manter",
+      "confirmation C noindex"
+    ]
+  ]
+}

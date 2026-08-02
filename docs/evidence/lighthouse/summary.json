@@ -1,0 +1,54 @@
+{
+  "base": "https://confenge.com.br",
+  "generated_at": "2026-08-02T13:57:04.478Z",
+  "results": [
+    {
+      "path": "/",
+      "performance": 99,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1631.9915,
+      "cls": 0,
+      "tbt_ms": 79,
+      "fcp_ms": 1057.9915,
+      "si_ms": 1057.9915
+    },
+    {
+      "path": "/defesa-margem-contratos-publicos/",
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1455.5608,
+      "cls": 0,
+      "tbt_ms": 19.5,
+      "fcp_ms": 916.5608,
+      "si_ms": 916.5608
+    },
+    {
+      "path": "/bid-room-licitacoes-obras/",
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1366.5725,
+      "cls": 0,
+      "tbt_ms": 0,
+      "fcp_ms": 916.5725,
+      "si_ms": 916.5725
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1432.3075,
+      "cls": 0,
+      "tbt_ms": 8,
+      "fcp_ms": 916.3075,
+      "si_ms": 916.3075
+    }
+  ]
+}

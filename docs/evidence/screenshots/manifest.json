@@ -1,0 +1,320 @@
+{
+  "generated_at": "2026-08-02T13:57:00.845Z",
+  "shots": [
+    {
+      "page": "home",
+      "url": "https://confenge.com.br/",
+      "width": 320,
+      "file": "home-320.png",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "overflowX": false
+    },
+    {
+      "page": "home",
+      "url": "https://confenge.com.br/",
+      "width": 360,
+      "file": "home-360.png",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "page": "home",
+      "url": "https://confenge.com.br/",
+      "width": 390,
+      "file": "home-390.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "page": "home",
+      "url": "https://confenge.com.br/",
+      "width": 768,
+      "file": "home-768.png",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "page": "home",
+      "url": "https://confenge.com.br/",
+      "width": 1024,
+      "file": "home-1024.png",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "page": "home",
+      "url": "https://confenge.com.br/",
+      "width": 1440,
+      "file": "home-1440.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "page": "home",
+      "url": "https://confenge.com.br/",
+      "width": 1920,
+      "file": "home-1920.png",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "overflowX": false
+    },
+    {
+      "page": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "width": 320,
+      "file": "journey-a-320.png",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "overflowX": false
+    },
+    {
+      "page": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "width": 360,
+      "file": "journey-a-360.png",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "page": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "width": 390,
+      "file": "journey-a-390.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "page": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "width": 768,
+      "file": "journey-a-768.png",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "page": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "width": 1024,
+      "file": "journey-a-1024.png",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "page": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "width": 1440,
+      "file": "journey-a-1440.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "page": "journey-a",
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "width": 1920,
+      "file": "journey-a-1920.png",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "overflowX": false
+    },
+    {
+      "page": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "width": 320,
+      "file": "journey-b-320.png",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "overflowX": false
+    },
+    {
+      "page": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "width": 360,
+      "file": "journey-b-360.png",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "page": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "width": 390,
+      "file": "journey-b-390.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "page": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "width": 768,
+      "file": "journey-b-768.png",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "page": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "width": 1024,
+      "file": "journey-b-1024.png",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "page": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "width": 1440,
+      "file": "journey-b-1440.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "page": "journey-b",
+      "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "width": 1920,
+      "file": "journey-b-1920.png",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "overflowX": false
+    },
+    {
+      "page": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "width": 320,
+      "file": "journey-c-320.png",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "overflowX": false
+    },
+    {
+      "page": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "width": 360,
+      "file": "journey-c-360.png",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "page": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "width": 390,
+      "file": "journey-c-390.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "page": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "width": 768,
+      "file": "journey-c-768.png",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "page": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "width": 1024,
+      "file": "journey-c-1024.png",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "page": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "width": 1440,
+      "file": "journey-c-1440.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "page": "journey-c",
+      "url": "https://confenge.com.br/diretoria-b2g/",
+      "width": 1920,
+      "file": "journey-c-1920.png",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "overflowX": false
+    },
+    {
+      "page": "form",
+      "url": "https://confenge.com.br/#contato",
+      "width": 320,
+      "file": "form-320.png",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "overflowX": false
+    },
+    {
+      "page": "form",
+      "url": "https://confenge.com.br/#contato",
+      "width": 360,
+      "file": "form-360.png",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "page": "form",
+      "url": "https://confenge.com.br/#contato",
+      "width": 390,
+      "file": "form-390.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "page": "form",
+      "url": "https://confenge.com.br/#contato",
+      "width": 768,
+      "file": "form-768.png",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "page": "form",
+      "url": "https://confenge.com.br/#contato",
+      "width": 1024,
+      "file": "form-1024.png",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "page": "form",
+      "url": "https://confenge.com.br/#contato",
+      "width": 1440,
+      "file": "form-1440.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "page": "form",
+      "url": "https://confenge.com.br/#contato",
+      "width": 1920,
+      "file": "form-1920.png",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "overflowX": false
+    }
+  ]
+}
