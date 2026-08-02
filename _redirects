@@ -9,8 +9,11 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # --- File extension / legacy HTML ---
 /privacidade.html  /privacidade/  301!
 
-# --- Form success rewrite (URL stays /obrigado) ---
+# --- Form success rewrites (pretty URLs, noindex pages) ---
 /obrigado  /obrigado.html  200
+/obrigado-contrato  /obrigado-contrato.html  200
+/obrigado-edital  /obrigado-edital.html  200
+/obrigado-operacao  /obrigado-operacao.html  200
 
 # --- Legacy with semantic substitute (301, single hop) ---
 /privacy-policy            /privacidade/     301

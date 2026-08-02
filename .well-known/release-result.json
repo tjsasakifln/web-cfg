@@ -1,6 +1,6 @@
 {
-  "final_sha": "2e9b1a7d596a8e346d162f4cac4edc9087b4e6b6",
-  "deployed_sha": "2e9b1a7d596a8e346d162f4cac4edc9087b4e6b6",
-  "status": "COMPLETE",
-  "web_cfg_sha": "2e9b1a7d596a8e346d162f4cac4edc9087b4e6b6"
+  "commit": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+  "web_cfg_sha": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+  "build_time": "2026-08-02T00:00:00Z",
+  "status": "BUILT"
 }

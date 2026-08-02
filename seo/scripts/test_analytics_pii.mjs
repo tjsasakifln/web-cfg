@@ -70,4 +70,24 @@ if (last.cta_label !== "ok" || last.page_path !== "/x") {
   process.exit(1);
 }
 
-console.log("ANALYTICS_UNIT_OK", JSON.stringify(last));
+track("lead_form_submit", {
+  page_path: "/",
+  journey: "contrato",
+  stage_category: "problema urgente em contrato",
+  nome: "Alice",
+  email: "alice@example.com",
+  telefone: "48988887777",
+  mensagem: "conteudo sensivel do edital",
+  empresa: "Construtora X",
+});
+const sub = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+if (sub.nome || sub.email || sub.telefone || sub.mensagem || sub.empresa) {
+  console.error("FAIL: PII field names not stripped", sub);
+  process.exit(1);
+}
+if (sub.journey !== "contrato" || sub.stage_category !== "problema urgente em contrato") {
+  console.error("FAIL: safe enums missing", sub);
+  process.exit(1);
+}
+
+console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, submit: sub }));

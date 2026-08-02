@@ -2,12 +2,20 @@
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
   /** Decoupled analytics bus — no PII; ready for GA4/Plausible later. */
+  const PII_PARAM_KEYS = new Set([
+    'nome', 'name', 'email', 'telefone', 'phone', 'tel', 'whatsapp',
+    'mensagem', 'message', 'message_body', 'empresa', 'company',
+    'documento', 'document', 'attachment', 'file', 'arquivo',
+    'cpf', 'cnpj', 'address', 'endereco', 'full_name',
+  ]);
   const track = (eventName, params = {}) => {
     try {
       const safe = {};
       Object.keys(params || {}).forEach((key) => {
         const val = params[key];
         if (val == null || val === '') return;
+        // Drop known PII field names even if caller passes them by mistake
+        if (PII_PARAM_KEYS.has(String(key).toLowerCase())) return;
         // Never send free-text that may contain email/phone/name
         if (typeof val === 'string' && val.length > 180) return;
         if (typeof val === 'string' && /@|\+?\d{8,}/.test(val)) return;
@@ -184,8 +192,8 @@
       || searchParams.get('origem') || hashParams.get('origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
-    const ensureHidden = (fname, fval) => {
-      if (!form || !fval) return;
+    const ensureHidden = (fname, fval, force = false) => {
+      if (!form || fval == null || fval === '') return;
       let input = form.querySelector(`input[name="${fname}"]`);
       if (!input) {
         input = document.createElement('input');
@@ -193,15 +201,54 @@
         input.name = fname;
         form.appendChild(input);
       }
-      // never duplicate origem with conflicting values; prefer first non-empty pSEO source
-      if (!input.value) input.value = String(fval).slice(0, 180);
+      if (force || !input.value) input.value = String(fval).slice(0, 180);
+    };
+    const JOURNEY_ACTIONS = {
+      contrato: '/obrigado-contrato',
+      edital: '/obrigado-edital',
+      operacao: '/obrigado-operacao',
+    };
+    const stageToJourney = (stageVal) => {
+      const s = (stageVal || '').toLowerCase();
+      if (s.includes('edital') || s.includes('proposta')) return 'edital';
+      if (s.includes('contrato') || s.includes('urgente') || s.includes('glosa') || s.includes('execução') || s.includes('execucao')) return 'contrato';
+      if (s.includes('operação') || s.includes('operacao') || s.includes('oportunidade') || s.includes('estrutur')) return 'operacao';
+      return 'operacao';
+    };
+    const applyJourneyToForm = (journeyId) => {
+      if (!form || !journeyId) return;
+      const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'operacao';
+      ensureHidden('jornada', j, true);
+      form.setAttribute('action', JOURNEY_ACTIONS[j] || '/obrigado');
+      const stage = form.querySelector('#estagio');
+      if (stage && !stage.value) {
+        const opt = [...stage.options].find((o) => o.getAttribute('data-journey') === j);
+        if (opt) stage.value = opt.value;
+      }
     };
     if (form) {
       ensureHidden('origem', origem || storedPseo.origem || window.location.pathname || '/');
+      ensureHidden('landing_page', sessionStorage.getItem('confenge_landing') || window.location.pathname || '/', true);
+      ensureHidden('utm_source', searchParams.get('utm_source') || sessionStorage.getItem('utm_source') || '');
+      ensureHidden('utm_medium', searchParams.get('utm_medium') || sessionStorage.getItem('utm_medium') || '');
+      ensureHidden('utm_campaign', searchParams.get('utm_campaign') || sessionStorage.getItem('utm_campaign') || '');
+      ['utm_source', 'utm_medium', 'utm_campaign'].forEach((k) => {
+        const v = searchParams.get(k);
+        if (v) {
+          try { sessionStorage.setItem(k, sanitizeAttr(v)); } catch (_) { /* private */ }
+        }
+      });
+      try {
+        if (!sessionStorage.getItem('confenge_landing')) {
+          sessionStorage.setItem('confenge_landing', window.location.pathname || '/');
+        }
+      } catch (_) { /* private */ }
       PSEO_ATTR_KEYS.forEach((name) => {
         const val = fromUrl[name] || storedPseo[name];
         if (val) ensureHidden(name, val);
       });
+      const journeyParam = searchParams.get('jornada') || hashParams.get('jornada');
+      if (journeyParam) applyJourneyToForm(journeyParam);
     }
     if (mensagem && (tema || storedPseo.tema) && !mensagem.value) {
       const t = tema || storedPseo.tema;
@@ -209,16 +256,37 @@
       mensagem.focus();
     }
     if (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
-      || window.location.hash.startsWith('#contato')) {
+      || window.location.hash.startsWith('#contato')
+      || searchParams.get('jornada')) {
       const contact = document.getElementById('contato');
-      if (contact && (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id)) {
+      if (contact && (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
+        || searchParams.get('jornada') || window.location.hash.startsWith('#contato'))) {
         contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
+    // Journey preselect from CTA links
+    document.querySelectorAll('[data-set-journey]').forEach((el) => {
+      el.addEventListener('click', () => {
+        applyJourneyToForm(el.getAttribute('data-set-journey'));
+      });
+    });
+
     const pagePath = window.location.pathname || '/';
     const defaultCluster = clusterFromPath(pagePath);
     const deviceContext = window.matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop';
+
+    // Service / offer page view
+    if (document.body?.getAttribute('data-content-cluster') === 'offer'
+      || /\/(diretoria-b2g|diagnostico-b2g-360|bid-room|defesa-margem|medicoes-glosas|aditivos|reequilibrio|auditoria-orcamento|diagnostico-pre|defesa-tecnica|acompanhamento|atrasos)/.test(pagePath)) {
+      track('service_page_view', {
+        page_path: pagePath,
+        content_cluster: defaultCluster,
+        device_context: deviceContext,
+        offer_id: document.body?.getAttribute('data-offer-id') || '',
+        journey: document.body?.getAttribute('data-journey') || '',
+      });
+    }
 
     // WhatsApp clicks
     document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
@@ -233,6 +301,20 @@
           cta_label: label || 'whatsapp',
           device_context: deviceContext,
           destination_type: 'whatsapp',
+          journey: link.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || '',
+        });
+      });
+    });
+
+    // Email clicks
+    document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
+      link.addEventListener('click', () => {
+        track('email_click', {
+          page_path: pagePath,
+          content_cluster: defaultCluster,
+          cta_position: link.getAttribute('data-cta-position') || 'inline',
+          device_context: deviceContext,
+          destination_type: 'email',
         });
       });
     });
@@ -316,9 +398,27 @@
       compObs.observe(comparison);
     }
 
-    // Form funnel
+    // Form funnel (multi-step progressive enhancement)
     if (form) {
       let formStarted = false;
+      let formStep = 1;
+      const multi = form.getAttribute('data-form-multistep') === 'true';
+      const step1 = form.querySelector('[data-form-step="1"]');
+      const step2 = form.querySelector('[data-form-step="2"]');
+      const statusEl = form.querySelector('.form-status');
+      const emailEl = form.querySelector('#email');
+      const phoneEl = form.querySelector('#telefone');
+      const estagioEl = form.querySelector('#estagio');
+      const urgenciaEl = form.querySelector('#urgencia');
+      const nomeEl = form.querySelector('#nome');
+
+      const showFormStatus = (msg, kind) => {
+        if (!statusEl) return;
+        statusEl.hidden = !msg;
+        statusEl.textContent = msg || '';
+        statusEl.classList.toggle('is-error', kind === 'error');
+        statusEl.classList.toggle('is-ok', kind === 'ok');
+      };
       const markStart = () => {
         if (formStarted) return;
         formStarted = true;
@@ -327,44 +427,28 @@
           content_cluster: defaultCluster,
           device_context: deviceContext,
           destination_type: 'form',
+          journey: form.querySelector('#jornada-hidden')?.value || stageToJourney(estagioEl?.value) || '',
         });
       };
       form.querySelectorAll('input, select, textarea').forEach((el) => {
         el.addEventListener('focus', markStart, { once: true });
       });
-      // Controlled selects only — enum categories, never free text
-      const estagioEl = form.querySelector('#estagio');
-      const urgenciaEl = form.querySelector('#urgencia');
-      estagioEl?.addEventListener('change', () => {
-        const v = (estagioEl.value || '').slice(0, 80);
-        if (!v) return;
-        track('qualification_stage_select', {
-          page_path: pagePath,
-          content_cluster: defaultCluster,
-          device_context: deviceContext,
-          stage_category: v,
+
+      const setStep = (n) => {
+        formStep = n;
+        if (step1) step1.classList.toggle('is-active', n === 1);
+        if (step2) step2.classList.toggle('is-active', n === 2);
+        form.querySelectorAll('[data-step-indicator]').forEach((ind) => {
+          const sn = Number(ind.getAttribute('data-step-indicator'));
+          ind.classList.toggle('is-active', sn === n);
+          ind.classList.toggle('is-done', sn < n);
         });
-      });
-      urgenciaEl?.addEventListener('change', () => {
-        const v = (urgenciaEl.value || '').slice(0, 80);
-        if (!v) return;
-        track('qualification_urgency_select', {
-          page_path: pagePath,
-          content_cluster: defaultCluster,
-          device_context: deviceContext,
-          urgency_category: v,
-        });
-      });
-      const emailEl = form.querySelector('#email');
-      const phoneEl = form.querySelector('#telefone');
-      const statusEl = form.querySelector('.form-status');
-      const showFormStatus = (msg, kind) => {
-        if (!statusEl) return;
-        statusEl.hidden = !msg;
-        statusEl.textContent = msg || '';
-        statusEl.classList.toggle('is-error', kind === 'error');
-        statusEl.classList.toggle('is-ok', kind === 'ok');
+        const focusTarget = n === 2
+          ? form.querySelector('#empresa') || form.querySelector('#urgencia')
+          : nomeEl;
+        focusTarget?.focus();
       };
+
       const clearContactValidity = () => {
         emailEl?.setCustomValidity('');
         phoneEl?.setCustomValidity('');
@@ -388,10 +472,108 @@
         showFormStatus(msg, 'error');
         return false;
       };
+      const validateStep1 = () => {
+        markStart();
+        let ok = true;
+        if (nomeEl && !(nomeEl.value || '').trim()) {
+          nomeEl.setCustomValidity('Informe seu nome.');
+          nomeEl.classList.add('is-invalid');
+          ok = false;
+        } else {
+          nomeEl?.setCustomValidity('');
+          nomeEl?.classList.remove('is-invalid');
+        }
+        if (!requireEmailOrPhone()) ok = false;
+        if (estagioEl && !estagioEl.value) {
+          estagioEl.setCustomValidity('Selecione o tipo de necessidade.');
+          estagioEl.classList.add('is-invalid');
+          ok = false;
+        } else {
+          estagioEl?.setCustomValidity('');
+          estagioEl?.classList.remove('is-invalid');
+        }
+        if (!ok) {
+          form.reportValidity();
+          track('lead_form_error', {
+            page_path: pagePath,
+            content_cluster: defaultCluster,
+            device_context: deviceContext,
+            destination_type: 'form',
+            form_step: 1,
+          });
+          return false;
+        }
+        showFormStatus('', '');
+        const j = stageToJourney(estagioEl?.value);
+        applyJourneyToForm(j);
+        return true;
+      };
+
+      estagioEl?.addEventListener('change', () => {
+        const v = (estagioEl.value || '').slice(0, 80);
+        if (!v) return;
+        const j = stageToJourney(v);
+        applyJourneyToForm(j);
+        track('qualification_stage_select', {
+          page_path: pagePath,
+          content_cluster: defaultCluster,
+          device_context: deviceContext,
+          stage_category: v,
+          journey: j,
+        });
+      });
+      urgenciaEl?.addEventListener('change', () => {
+        const v = (urgenciaEl.value || '').slice(0, 80);
+        if (!v) return;
+        track('qualification_urgency_select', {
+          page_path: pagePath,
+          content_cluster: defaultCluster,
+          device_context: deviceContext,
+          urgency_category: v,
+          journey: form.querySelector('#jornada-hidden')?.value || '',
+        });
+      });
       emailEl?.addEventListener('input', () => { clearContactValidity(); showFormStatus('', ''); });
       phoneEl?.addEventListener('input', () => { clearContactValidity(); showFormStatus('', ''); });
 
+      form.querySelectorAll('[data-form-next]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (!validateStep1()) return;
+          if (multi) {
+            setStep(2);
+            track('lead_form_step', {
+              page_path: pagePath,
+              content_cluster: defaultCluster,
+              device_context: deviceContext,
+              form_step: 2,
+              journey: form.querySelector('#jornada-hidden')?.value || stageToJourney(estagioEl?.value),
+              stage_category: (estagioEl?.value || '').slice(0, 80),
+            });
+          }
+        });
+      });
+      form.querySelectorAll('[data-form-back]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          setStep(1);
+          track('lead_form_step', {
+            page_path: pagePath,
+            content_cluster: defaultCluster,
+            device_context: deviceContext,
+            form_step: 1,
+            journey: form.querySelector('#jornada-hidden')?.value || '',
+          });
+        });
+      });
+
       form.addEventListener('submit', (event) => {
+        if (multi && formStep < 2) {
+          // allow no-js full submit; with js require step 2 visible
+          if (step2 && !step2.classList.contains('is-active')) {
+            event.preventDefault();
+            if (validateStep1()) setStep(2);
+            return;
+          }
+        }
         if (!requireEmailOrPhone() || !form.checkValidity()) {
           event.preventDefault();
           form.reportValidity();
@@ -400,21 +582,23 @@
             content_cluster: defaultCluster,
             device_context: deviceContext,
             destination_type: 'form',
+            form_step: formStep,
           });
           return;
         }
+        const journey = form.querySelector('#jornada-hidden')?.value
+          || stageToJourney(estagioEl?.value);
+        applyJourneyToForm(journey);
         showFormStatus('', '');
         track('lead_form_submit', {
           page_path: pagePath,
           content_cluster: defaultCluster,
           device_context: deviceContext,
           destination_type: 'form',
-          // controlled selects only — safe enum-like values
-          stage_category: (form.querySelector('#estagio')?.value || '').slice(0, 80),
-          urgency_category: (form.querySelector('#urgencia')?.value || '').slice(0, 80),
-          cta_label: (form.querySelector('#necessidade')?.value
-            || form.querySelector('#estagio')?.value
-            || '').slice(0, 80),
+          stage_category: (estagioEl?.value || '').slice(0, 80),
+          urgency_category: (urgenciaEl?.value || '').slice(0, 80),
+          journey: journey || '',
+          cta_label: (estagioEl?.value || '').slice(0, 80),
         });
       });
       form.addEventListener('invalid', () => {
@@ -423,6 +607,7 @@
           content_cluster: defaultCluster,
           device_context: deviceContext,
           destination_type: 'form',
+          form_step: formStep,
         });
       }, true);
     }
@@ -435,6 +620,7 @@
         content_cluster: defaultCluster,
         device_context: deviceContext,
         destination_type: 'form',
+        journey: document.body.getAttribute('data-journey') || '',
       });
     }
 

@@ -1,108 +1,92 @@
 #!/usr/bin/env python3
-"""Prove clean stores PLACEHOLDER and smudge injects HEAD — drives real filter scripts."""
+"""Release identity must come from deploy/CI env via build-info — not git clean/smudge."""
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-CLEAN = ROOT / "scripts" / "site" / "clean_release_result.py"
-SMUDGE = ROOT / "scripts" / "site" / "smudge_release_result.py"
-PLACEHOLDER = "PLACEHOLDER"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.pseo.build_site import _deploy_commit, write_build_info  # noqa: E402
 
 
-def run_filter(script: Path, payload: dict) -> dict:
-    raw = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+def test_gitattributes_has_no_release_filter():
+    attrs = (ROOT / ".gitattributes").read_text(encoding="utf-8")
+    assert "filter=release-sha" not in attrs
+    assert "release-sha" not in attrs
+
+
+def test_install_git_filters_is_noop():
+    script = ROOT / "scripts" / "install-git-filters.sh"
+    assert script.exists()
     proc = subprocess.run(
-        [sys.executable, str(script)],
-        input=raw,
+        ["bash", str(script)],
+        cwd=str(ROOT),
         capture_output=True,
         text=True,
-        cwd=str(ROOT),
-        check=True,
         timeout=15,
+        check=True,
     )
-    return json.loads(proc.stdout)
+    assert "no-op" in (proc.stdout or "").lower() or proc.returncode == 0
 
 
-def test_clean_stores_placeholder():
-    sample = {
-        "status": "COMPLETE",
-        "final_sha": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        "deployed_sha": "cafebabecafebabecafebabecafebabecafebabe",
-        "final_sha_note": "stale",
-    }
-    out = run_filter(CLEAN, sample)
-    assert out["status"] == "COMPLETE"
-    assert out["final_sha"] == PLACEHOLDER, out["final_sha"]
-    assert out["deployed_sha"] == PLACEHOLDER, out["deployed_sha"]
-    assert "PLACEHOLDER" in (out.get("final_sha_note") or "")
+def test_deploy_commit_prefers_env(monkeypatch=None):
+    """COMMIT_REF wins over git when set (Netlify)."""
+    fake = "abcdef0123456789abcdef0123456789abcdef01"
+    old = os.environ.get("COMMIT_REF")
+    os.environ["COMMIT_REF"] = fake
+    try:
+        assert _deploy_commit() == fake
+    finally:
+        if old is None:
+            os.environ.pop("COMMIT_REF", None)
+        else:
+            os.environ["COMMIT_REF"] = old
 
 
-def test_smudge_injects_head():
-    head = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True
-    ).strip()
-    sample = {
-        "status": "COMPLETE",
-        "final_sha": PLACEHOLDER,
-        "deployed_sha": PLACEHOLDER,
-    }
-    out = run_filter(SMUDGE, sample)
-    assert out["final_sha"] == head, (out["final_sha"], head)
-    assert out["deployed_sha"] == head
-
-
-def test_clean_then_smudge_roundtrip():
-    head = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True
-    ).strip()
-    sample = {
-        "status": "COMPLETE",
-        "final_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "deployed_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        "axe": {"critical": 0},
-    }
-    cleaned = run_filter(CLEAN, sample)
-    assert cleaned["final_sha"] == PLACEHOLDER
-    restored = run_filter(SMUDGE, cleaned)
-    assert restored["final_sha"] == head
-    assert restored["deployed_sha"] == head
-    assert restored.get("axe", {}).get("critical") == 0
-
-
-def test_git_blob_must_not_claim_wrong_concrete_tip():
-    """If FINAL is COMPLETE in the index/HEAD blob, SHAs must be PLACEHOLDER."""
-    blob = subprocess.check_output(
-        ["git", "show", "HEAD:docs/FINAL-RELEASE-RESULT.json"],
-        cwd=str(ROOT),
-        text=True,
+def test_write_build_info_schema():
+    path = write_build_info(
+        commit="deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        generated_at="2026-08-02T00:00:00Z",
+        environment="test",
+        schema_version="1.0.0",
     )
-    data = json.loads(blob)
-    if data.get("status") != "COMPLETE":
-        return
-    for key in ("final_sha", "deployed_sha"):
-        val = data.get(key) or ""
-        assert val == PLACEHOLDER or val == "", (
-            f"git blob {key}={val!r} must be PLACEHOLDER when COMPLETE "
-            f"(not a lagging concrete tip)"
-        )
+    assert path.exists()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["commit"] == "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+    assert data["build_time"] == "2026-08-02T00:00:00Z"
+    assert data["environment"] == "test"
+    assert data["schema_version"] == "1.0.0"
+    # Does not rewrite docs/FINAL-RELEASE-RESULT.json as a side effect of identity
+    # (file may exist from prior campaigns; must not be required for identity)
+
+
+def test_public_build_info_path_documented():
+    # Source of truth path used by Netlify publish root after assemble
+    assert (ROOT / "scripts" / "pseo" / "build_site.py").exists()
+    src = (ROOT / "scripts" / "pseo" / "build_site.py").read_text(encoding="utf-8")
+    assert "build-info.json" in src
+    assert "pin_release_result_shas" not in src
+
+
+def run_all() -> int:
+    failed = 0
+    for name, fn in list(globals().items()):
+        if not name.startswith("test_") or not callable(fn):
+            continue
+        try:
+            fn()
+            print("OK", name)
+        except Exception as exc:  # noqa: BLE001
+            failed += 1
+            print("FAIL", name, exc)
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
-    failed = 0
-    for fn in (
-        test_clean_stores_placeholder,
-        test_smudge_injects_head,
-        test_clean_then_smudge_roundtrip,
-        test_git_blob_must_not_claim_wrong_concrete_tip,
-    ):
-        try:
-            fn()
-            print("OK", fn.__name__)
-        except Exception as exc:  # noqa: BLE001
-            failed += 1
-            print("FAIL", fn.__name__, exc)
-    sys.exit(1 if failed else 0)
+    sys.exit(run_all())

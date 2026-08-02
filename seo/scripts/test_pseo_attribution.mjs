@@ -15,12 +15,35 @@ const code = fs.readFileSync(path.join(root, "script.js"), "utf8");
 function makeDoc(formFields = {}) {
   const hiddens = {};
   const form = {
+    getAttribute(name) {
+      if (name === "data-form-multistep") return "true";
+      if (name === "action") return form.action || "/obrigado";
+      if (name === "name") return "diagnostico-b2g";
+      return null;
+    },
+    setAttribute(name, value) {
+      if (name === "action") form.action = value;
+      form._attrs = form._attrs || {};
+      form._attrs[name] = value;
+    },
+    action: "/obrigado",
     querySelector(sel) {
       if (sel.startsWith('input[name="')) {
         const name = sel.match(/name="([^"]+)"/)?.[1];
         return hiddens[name] || null;
       }
       if (sel === "#necessidade") return { value: "diagnostico" };
+      if (sel === "#nome") return { value: "", setCustomValidity() {}, classList: { add() {}, remove() {} } };
+      if (sel === "#email") return { value: "", setCustomValidity() {}, classList: { add() {}, remove() {} }, addEventListener() {} };
+      if (sel === "#telefone") return { value: "", setCustomValidity() {}, classList: { add() {}, remove() {} }, addEventListener() {} };
+      if (sel === "#estagio") return { value: "estruturando a operação B2G", addEventListener() {}, options: [], classList: { add() {}, remove() {} }, setCustomValidity() {} };
+      if (sel === "#urgencia") return { value: "", addEventListener() {} };
+      if (sel === "#jornada-hidden") return hiddens.jornada || null;
+      if (sel === "#consentimento") return { checked: true };
+      if (sel === "#empresa") return { value: "", focus() {} };
+      if (sel === ".form-status") return { hidden: true, textContent: "", classList: { toggle() {} } };
+      if (sel === '[data-form-step="1"]') return { classList: { toggle() {} } };
+      if (sel === '[data-form-step="2"]') return { classList: { toggle() {}, contains: () => false } };
       return null;
     },
     querySelectorAll(sel) {
@@ -41,6 +64,9 @@ function makeDoc(formFields = {}) {
       if (!form._focusables || form._focusables.length === 0) {
         form._focusables = [makeFocusable(), makeFocusable()];
       }
+      if (sel === "[data-form-next]" || sel === "[data-form-back]" || sel === "[data-step-indicator]") {
+        return [];
+      }
       return form._focusables;
     },
     appendChild(el) {
@@ -49,6 +75,7 @@ function makeDoc(formFields = {}) {
     checkValidity() {
       return true;
     },
+    reportValidity() {},
     addEventListener(type, fn) {
       form._listeners = form._listeners || {};
       form._listeners[type] = form._listeners[type] || [];

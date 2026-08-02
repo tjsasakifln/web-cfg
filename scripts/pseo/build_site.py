@@ -14,6 +14,8 @@ Order (fail-closed on critical):
 from __future__ import annotations
 
 import json
+import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -33,7 +35,16 @@ from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
 
 
-def _git_sha() -> str:
+def _deploy_commit() -> str:
+    """Commit identity from deploy/CI env first; git HEAD only as local fallback.
+
+    Prefer Netlify COMMIT_REF / CACHED_COMMIT_REF, then GITHUB_SHA, then git.
+    Never mutates the working tree or requires git clean/smudge filters.
+    """
+    for key in ("COMMIT_REF", "CACHED_COMMIT_REF", "GITHUB_SHA", "CF_PAGES_COMMIT_SHA"):
+        val = (os.environ.get(key) or "").strip()
+        if val and re.fullmatch(r"[0-9a-fA-F]{7,40}", val):
+            return val.lower()
     try:
         return subprocess.check_output(
             ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
@@ -45,18 +56,31 @@ def _git_sha() -> str:
         return "unknown"
 
 
+# Back-compat alias used by older call sites / tests
+def _git_sha() -> str:
+    return _deploy_commit()
+
+
 def write_public_manifest(summary: dict, snap: dict) -> Path:
     """Safe public manifest — no DSN, scores, commercial notes, or PII."""
     manifest = snap.get("manifest") or {}
     dataset_hash = (manifest.get("dataset_hash") or summary.get("dataset_hash") or "")
     pubs = summary.get("publishable") or []
+    commit = _deploy_commit()
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    env_name = (
+        os.environ.get("CONTEXT")
+        or os.environ.get("NETLIFY_CONTEXT")
+        or os.environ.get("NODE_ENV")
+        or "local"
+    )
     payload = {
         "schema_version": manifest.get("schema_version"),
         "export_version": manifest.get("export_version") or manifest.get("exporter_version"),
-        "web_cfg_sha": _git_sha(),
+        "web_cfg_sha": commit,
         "snapshot_hash_short": dataset_hash[:16] if dataset_hash else None,
         "source_run_id": manifest.get("source_run_id"),
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": generated_at,
         "data_as_of": manifest.get("data_as_of"),
         "published_page_count": len(pubs),
         "public_directory": PUBLIC_DIR_NAME,
@@ -70,47 +94,42 @@ def write_public_manifest(summary: dict, snap: dict) -> Path:
             "Stages: GENERATED_LOCAL→…→CRAWLABLE_PRODUCTION require separate proof."
         ),
     }
-    out = ROOT / ".well-known" / "pseo-build.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
+    well_known = ROOT / ".well-known"
+    well_known.mkdir(parents=True, exist_ok=True)
+    out = well_known / "pseo-build.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    # Pin release result SHAs to this build's git HEAD (solves self-referential commit problem)
-    pin_release_result_shas(payload["web_cfg_sha"])
+    # Simple public build identity — no git filters, no working-tree SHA chase
+    write_build_info(commit, generated_at, env_name, payload.get("schema_version"))
     return out
 
 
-def pin_release_result_shas(web_cfg_sha: str) -> None:
-    """Rewrite docs/FINAL-RELEASE-RESULT.json final/deployed SHAs to the build tip.
-
-    Git cannot store a commit's own hash inside that same commit; the build injects
-    the authentic tip SHA so the report matches the public marker after deploy.
-    """
-    path = ROOT / "docs" / "FINAL-RELEASE-RESULT.json"
-    if not path.exists() or not web_cfg_sha or web_cfg_sha == "unknown":
-        return
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return
-    data["final_sha"] = web_cfg_sha
-    data["deployed_sha"] = web_cfg_sha
-    if data.get("status") in {None, "AWAITING_DEPLOY", "AWAITING_DEPLOY_SHA_PIN"}:
-        data["status"] = "COMPLETE"
-    data["final_sha_note"] = (
-        "Injected at build time (npm run build:site) from git HEAD; "
-        "matches /.well-known/pseo-build.json web_cfg_sha for this deploy"
-    )
-    data["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    # Public copy for verification without git self-hash
-    public = ROOT / ".well-known" / "release-result.json"
-    public.parent.mkdir(parents=True, exist_ok=True)
-    public.write_text(
+def write_build_info(
+    commit: str,
+    generated_at: str,
+    environment: str,
+    schema_version: str | None,
+) -> Path:
+    """Emit /.well-known/build-info.json from deploy env / git HEAD only."""
+    payload = {
+        "schema_version": "1.0.0",
+        "commit": commit,
+        "build_time": generated_at,
+        "environment": environment,
+        "site_schema_version": schema_version,
+        "source": "build_site.write_build_info",
+    }
+    path = ROOT / ".well-known" / "build-info.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Minimal public release marker (read-only identity; does not rewrite docs/)
+    release = ROOT / ".well-known" / "release-result.json"
+    release.write_text(
         json.dumps(
             {
-                "final_sha": web_cfg_sha,
-                "deployed_sha": web_cfg_sha,
-                "status": data.get("status"),
-                "web_cfg_sha": web_cfg_sha,
+                "commit": commit,
+                "web_cfg_sha": commit,
+                "build_time": generated_at,
+                "status": "BUILT",
             },
             ensure_ascii=False,
             indent=2,
@@ -118,6 +137,7 @@ def pin_release_result_shas(web_cfg_sha: str) -> None:
         + "\n",
         encoding="utf-8",
     )
+    return path
 
 
 def run_node_gate(script: str) -> dict:

@@ -98,12 +98,20 @@ def test_concordance_and_forbidden_microcopy():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Premissas e decisões ficam registradas" in home
     assert "confrontada posteriormente com o resultado" in home or "confrontada depois com o resultado" in home
-    assert "Diagnosticar encaixe da Diretoria B2G" in home or "Diagnosticar operação B2G" in home
-    # primary CTAs family
-    assert "Solicitar Diagnóstico B2G" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
-    assert "Avaliar proposta crítica" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
-    assert "Avaliar contrato sob pressão" in (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
-    assert "Diagnosticar encaixe da Diretoria B2G" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
+    # Journey confirmations exist
+    for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
+        p = ROOT / name
+        assert p.exists(), name
+        t = p.read_text(encoding="utf-8")
+        assert "data-lead-success" in t
+        assert "Prazo" in t or "prazo" in t
+        assert "wa.me" in t
+    assert "Diagnosticar a operação B2G" in home or "Diagnosticar operação B2G" in home
+    # Journey-aligned CTA family on offer pages
+    assert "Diagnosticar a operação B2G" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
+    assert "Enviar edital para triagem" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
+    assert "Enviar documentos para análise inicial" in (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
+    assert "Diagnosticar a operação B2G" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
 
 
 def test_whatsapp_float_in_landmark():

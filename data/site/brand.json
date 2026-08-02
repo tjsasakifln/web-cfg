@@ -1,18 +1,18 @@
 {
-  "schema_version": "1.0.0",
-  "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
-  "updated_at": "2026-08-01",
+  "schema_version": "1.1.0",
+  "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
+  "updated_at": "2026-08-02",
   "person": {
     "jobTitle": "Engenheiro Civil e consultor B2G",
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
-    "short": "A CONFENGE opera a frente B2G da construtora para transformar mercado público em contratos rentáveis e defensáveis.",
-    "long": "A CONFENGE atua como diretoria B2G fracionada para construtoras e empresas de engenharia. Integramos inteligência de mercado, decisão de participação, preparação de proposta, proteção de margem e gestão de riscos contratuais. A tecnologia reduz o trabalho mecânico; a responsabilidade pela recomendação, implantação e aprendizado permanece humana e tecnicamente fundamentada.",
-    "tagline": "Decisão técnica. Contrato rentável. Margem protegida.",
-    "label": "Diretoria B2G fracionada para construtoras",
-    "org_description": "Diretoria B2G fracionada para construtoras e empresas de engenharia: inteligência de mercado, decisão de participação, proposta, proteção de margem e riscos em contratos públicos.",
-    "footer_blurb": "Diretoria B2G fracionada para construtoras: decisão de participação, proposta, proteção de margem e gestão de riscos em contratos públicos."
+    "short": "Consultoria para licitações e contratos de obras públicas que ajuda construtoras a selecionar melhor, precificar com disciplina e proteger a margem na execução.",
+    "long": "A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). O modelo proprietário de rotina contínua chama-se Diretoria B2G fracionada.",
+    "tagline": "Licitação vencida não paga a conta. Contrato rentável, sim.",
+    "label": "Consultoria para licitações e contratos de obras públicas",
+    "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
+    "footer_blurb": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada."
   },
   "contact": {
     "email": "tiago.sasaki@confenge.com.br",
@@ -24,32 +24,73 @@
     "site": "https://confenge.com.br"
   },
   "hero": {
-    "eyebrow": "Diretoria B2G fracionada para construtoras",
+    "eyebrow": "Consultoria para licitações e contratos de obras públicas",
     "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
-    "h1_html": "Licitação vencida não paga a conta. <span>Contrato rentável, sim.</span>",
-    "subheadline": "A CONFENGE entra antes da proposta e permanece durante a execução para ajudar sua direção a escolher onde competir, como precificar, o que recusar e como proteger a margem do contrato público.",
-    "cta_primary": "Diagnosticar operação B2G",
-    "cta_secondary": "Enviar decisão crítica",
-    "cta_secondary_wa": "Olá, Tiago. Tenho uma decisão crítica envolvendo uma licitação ou contrato público e preciso enquadrar o risco e os próximos passos.",
-    "microcopy": "Para construtoras e empresas de engenharia que já disputam ou executam contratos públicos.",
-    "meta_title": "CONFENGE | Diretoria B2G para construtoras e contratos públicos",
-    "meta_description": "A CONFENGE opera a frente B2G de construtoras: inteligência de mercado, decisão de participação, proposta, proteção de margem e gestão de riscos em contratos públicos.",
+    "h1_html": "Licitação vencida não paga a conta. <span class=\"type-serif\">Contrato rentável, sim.</span>",
+    "subheadline": "A CONFENGE ajuda construtoras a selecionar melhor as licitações, precificar com disciplina e proteger a margem durante a execução do contrato público.",
+    "cta_primary": "Diagnosticar a operação B2G",
+    "cta_secondary": "Problema urgente no contrato",
+    "cta_secondary_wa": "Olá, Tiago. Tenho um problema urgente em contrato público (glosa, medição, aditivo, reequilíbrio ou atraso) e preciso de análise inicial.",
+    "microcopy": "Para construtoras e empresas de engenharia com licitações ou contratos públicos ativos.",
+    "meta_title": "CONFENGE | Consultoria para licitações e contratos de obras públicas",
+    "meta_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e defesa de margem na execução. Para construtoras.",
     "og_title": "Licitação vencida não paga a conta. Contrato rentável, sim.",
-    "og_description": "Diretoria B2G fracionada para construtoras que precisam escolher melhor, precificar com disciplina e proteger a margem durante a execução."
+    "og_description": "Consultoria para licitações e contratos de obras públicas. Construtoras: selecionar melhor, precificar com disciplina e proteger a margem na execução."
   },
+  "journeys": [
+    {
+      "id": "contrato",
+      "code": "A",
+      "label": "Problema urgente em contrato",
+      "need": "glosa, medição retida, aditivo, reequilíbrio, atraso, notificação ou risco de multa",
+      "cta": "Enviar documentos para análise inicial",
+      "href": "/#contato",
+      "href_params": "jornada=contrato",
+      "obrigado": "/obrigado-contrato",
+      "wa_message": "Olá, Tiago. Tenho um problema urgente em contrato público e quero enviar documentos para análise inicial.",
+      "response_sla": "Retorno inicial em até 1 dia útil nos casos urgentes; demais em até 2 dias úteis.",
+      "next_step": "Enquadramos o risco, a urgência e os documentos necessários. Sem promessa de deferimento ou recuperação."
+    },
+    {
+      "id": "edital",
+      "code": "B",
+      "label": "Edital ou proposta em preparação",
+      "need": "edital em análise, orçamento, habilitação, acervo, cronograma ou risco de inexequibilidade",
+      "cta": "Enviar edital para triagem",
+      "href": "/#contato",
+      "href_params": "jornada=edital",
+      "obrigado": "/obrigado-edital",
+      "wa_message": "Olá, Tiago. Tenho um edital em análise e quero enviar para triagem (participar, revisar ou recusar).",
+      "response_sla": "Triagem inicial em até 2 dias úteis após o recebimento do edital e dados essenciais.",
+      "next_step": "Indicamos se o caso pede leitura rápida, Bid Room (sala de decisão da proposta) ou recusa fundamentada."
+    },
+    {
+      "id": "operacao",
+      "code": "C",
+      "label": "Operação B2G recorrente",
+      "need": "estruturar inteligência de oportunidades, go/no-go, propostas, margem e gestão de contratos",
+      "cta": "Diagnosticar a operação B2G",
+      "href": "/#contato",
+      "href_params": "jornada=operacao",
+      "obrigado": "/obrigado-operacao",
+      "wa_message": "Olá, Tiago. Quero diagnosticar a operação B2G da minha empresa e entender se a Diretoria B2G fracionada encaixa.",
+      "response_sla": "Agendamento ou retorno de enquadramento em até 2 dias úteis.",
+      "next_step": "Conversamos com quem decide a frente pública. Você recebe o enquadramento do formato (diagnóstico pontual ou rotina contínua)."
+    }
+  ],
   "navigation": {
     "desktop": [
       {
-        "label": "Como atuamos",
-        "href": "/#como-atuamos"
+        "label": "Analisar licitação",
+        "href": "/bid-room-licitacoes-obras/"
       },
       {
-        "label": "Diretoria B2G",
+        "label": "Proteger contrato",
+        "href": "/defesa-margem-contratos-publicos/"
+      },
+      {
+        "label": "Operação B2G",
         "href": "/diretoria-b2g/"
-      },
-      {
-        "label": "Inteligência",
-        "href": "/inteligencia/"
       },
       {
         "label": "Conteúdos",
@@ -61,7 +102,7 @@
       }
     ],
     "cta": {
-      "label": "Diagnosticar operação",
+      "label": "Falar com a CONFENGE",
       "href": "/#contato"
     }
   },
@@ -70,18 +111,20 @@
       "id": "diagnostico-b2g-360",
       "label": "Entrada",
       "name": "Diagnóstico B2G 360°",
+      "plain_name": "Diagnóstico da operação de licitações e contratos públicos",
       "url": "/diagnostico-b2g-360/",
-      "headline": "Descubra onde sua operação perde oportunidade, margem e controle.",
+      "headline": "Mapeie onde a frente pública perde tempo, margem e controle.",
       "description": "Mapeamento da capacidade da empresa, mercado, acervo, carteira de oportunidades, processo decisório, riscos e gargalos. Termina com um plano executivo de 90 dias.",
       "result": "Prioridades claras e backlog de implantação.",
-      "cta": "Solicitar Diagnóstico B2G",
+      "cta": "Diagnosticar a operação B2G",
       "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico B2G 360° para mapear oportunidades, margem e controle da nossa operação.",
-      "schema_service_type": "Diagnóstico B2G 360°"
+      "schema_service_type": "Diagnóstico da operação B2G de construtoras"
     },
     {
       "id": "diretoria-b2g",
       "label": "Operação principal",
       "name": "Diretoria B2G fracionada",
+      "plain_name": "Rotina contínua de decisão em licitações e contratos públicos",
       "url": "/diretoria-b2g/",
       "headline": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
       "description": "Oportunidades priorizadas com critérios, decisão de participar ou recusar, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
@@ -94,36 +137,38 @@
       "id": "bid-room",
       "label": "Oportunidade crítica",
       "name": "Bid Room",
+      "plain_name": "Sala de decisão da proposta em licitação de obras",
       "url": "/bid-room-licitacoes-obras/",
       "headline": "Para o edital que exige coordenação da proposta, não improviso.",
       "description": "Leitura crítica, estratégia, habilitação, acervo, orçamento, cronograma, responsabilidades, revisão crítica independente e controle final da proposta.",
       "result": "Uma decisão consciente de participar e uma proposta coerente com a capacidade da empresa.",
-      "cta": "Avaliar proposta crítica",
-      "wa_message": "Olá, Tiago. Tenho uma oportunidade crítica de licitação e quero avaliar se vale montar um Bid Room.",
-      "schema_service_type": "Bid Room para licitações de obras"
+      "cta": "Enviar edital para triagem",
+      "wa_message": "Olá, Tiago. Tenho um edital crítico e quero enviar para triagem / Bid Room (sala de decisão da proposta).",
+      "schema_service_type": "Sala de decisão da proposta para licitações de obras"
     },
     {
       "id": "contract-defense",
       "label": "Contrato crítico",
       "name": "Contract Defense & Margin",
+      "plain_name": "Defesa técnica e proteção de margem em contratos públicos",
       "url": "/defesa-margem-contratos-publicos/",
       "headline": "Quando cada dia sem registro enfraquece sua posição.",
       "description": "Organização de cronologia, causalidade, cálculos, evidências, notificações, aditivos, reequilíbrio, defesa técnica e proteção de margem.",
       "result": "Posição técnica organizada para decisão da direção e atuação coordenada com jurídico e engenharia.",
-      "cta": "Avaliar contrato sob pressão",
+      "cta": "Enviar documentos para análise inicial",
       "wa_message": "Olá, Tiago. Preciso enquadrar um risco contratual e proteger a margem de um contrato público.",
       "schema_service_type": "Defesa de margem em contratos públicos"
     }
   ],
   "ctas": {
-    "home_primary": "Diagnosticar operação B2G",
-    "home_secondary": "Enviar decisão crítica",
-    "header": "Diagnosticar operação B2G",
-    "final_primary": "Diagnosticar operação B2G",
-    "final_secondary": "Enviar decisão crítica",
-    "final_secondary_wa": "Olá, Tiago. Quero enviar uma decisão crítica sobre licitação ou contrato público para enquadramento.",
-    "form_submit": "Diagnosticar operação B2G",
-    "default_wa": "Olá, Tiago. Quero diagnosticar a operação B2G da minha empresa e entender o formato de atuação adequado."
+    "home_primary": "Diagnosticar a operação B2G",
+    "home_secondary": "Problema urgente no contrato",
+    "header": "Falar com a CONFENGE",
+    "final_primary": "Enviar solicitação",
+    "final_secondary": "WhatsApp com contexto",
+    "final_secondary_wa": "Olá, Tiago. Preciso de apoio em licitação ou contrato público.",
+    "form_submit": "Enviar solicitação",
+    "default_wa": "Olá, Tiago. Quero falar com a CONFENGE sobre licitação ou contrato público."
   },
   "faq": [
     {
@@ -140,19 +185,18 @@
     },
     {
       "q": "A CONFENGE assegura vitória ou recuperação?",
-      "a": "Não. Melhoramos a qualidade da decisão e da posição técnica — sem prometer resultado que a empresa não controla."
+      "a": "Não. Melhoramos a qualidade da decisão e da posição técnica, sem prometer resultado que a empresa não controla."
     }
   ],
   "form": {
     "name": "diagnostico-b2g",
     "legacy_name": "diagnostico-confenge",
     "stages": [
-      "estruturando a frente B2G",
+      "problema urgente em contrato",
+      "edital ou proposta em preparação",
+      "estruturando a operação B2G",
       "escolhendo oportunidades",
-      "preparando proposta",
-      "contrato em mobilização",
       "contrato em execução",
-      "conflito, notificação ou pleito",
       "outro"
     ],
     "urgency": [
@@ -160,7 +204,9 @@
       "até 7 dias",
       "até 30 dias",
       "planejamento sem prazo imediato"
-    ]
+    ],
+    "step1_fields": ["nome", "telefone_ou_email", "estagio"],
+    "step2_fields": ["empresa", "urgencia", "mensagem"]
   },
   "forbidden_phrases": [
     "soluções personalizadas",
@@ -221,9 +267,9 @@
     "owners"
   ],
   "proof_labels": [
-    "Engenharia Civil pela USP",
+    "Engenharia Civil pela EESC-USP",
     "Experiência na iniciativa privada e na Administração Pública",
-    "Visão de fiscalização, gestão e execução contratual",
+    "Fiscalização, gestão e orçamento contratual",
     "Atendimento nacional"
   ]
 }

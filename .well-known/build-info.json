@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0.0",
+  "commit": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+  "build_time": "2026-08-02T00:00:00Z",
+  "environment": "test",
+  "site_schema_version": "1.0.0",
+  "source": "build_site.write_build_info"
+}

@@ -1,1 +1,1 @@
-docs/FINAL-RELEASE-RESULT.json filter=release-sha
+# No git content filters — build identity from deploy env

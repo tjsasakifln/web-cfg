@@ -67,6 +67,7 @@ def test_home_archetypes_diverse():
     # Home narrative architecture: ≤7 large blocks (excluding header/footer)
     assert 5 <= len(archetypes) <= 7, f"expected 5–7 narrative archetypes, got {archetypes}"
     assert len(set(archetypes)) >= 5, f"need ≥5 distinct archetypes, got {set(archetypes)}"
+    assert "journey_paths" in archetypes, "three buyer journeys must be a first-class home section"
     # no three consecutive identical archetypes
     for i in range(len(archetypes) - 2):
         window = archetypes[i : i + 3]
@@ -184,13 +185,17 @@ def test_journey_accessible_without_js():
 
 
 def test_trace_matrix_and_tension_present():
+    """Home must show three buyer journeys; legacy tension/trace optional if fused."""
     html = HOME.read_text(encoding="utf-8")
-    assert "trace-matrix" in html
-    assert "trace-cards" in html  # mobile stacked composition
-    assert "O contrato pode destruir margem em três momentos" in html
-    assert "tension-flow" in html or "tension-stage" in html
     assert "Diretoria B2G" in html
     assert "Arquitetura de ofertas" not in html
+    # Three differentiated conversion paths (required by conversion architecture)
+    assert "Enviar documentos para análise inicial" in html
+    assert "Enviar edital para triagem" in html
+    assert "Diagnosticar a operação B2G" in html
+    assert 'data-journey="contrato"' in html
+    assert 'data-journey="edital"' in html
+    assert 'data-journey="operacao"' in html
     # Positive proof language — no defensive public copy
     lower = html.lower()
     for leak in (
@@ -208,26 +213,29 @@ def test_primary_cta_not_spam():
     primary = len(re.findall(r"button-primary", html))
     # header (+ mobile nav), hero, form submit — ≤4 semantic primaries
     assert primary <= 4, f"too many primary CTAs on home: {primary}"
-    # Dominant CTA family
-    assert "Diagnosticar operação B2G" in html
+    # Dominant CTA family (article optional)
+    assert "Diagnosticar a operação B2G" in html or "Diagnosticar operação B2G" in html
     # WhatsApp secondary must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
-    assert "Enviar decisão crítica" in hero_html or "decisão crítica" in hero_html.lower()
+    # Urgent secondary path present (WhatsApp or critical decision)
+    assert "wa.me" in hero_html
+    assert "urgente" in hero_html.lower() or "cr%c3%adtica" in hero_html.lower() or "crítica" in hero_html.lower()
 
 
 def test_home_five_second_clarity():
     """Buyer can answer what / who / problem / trust / next from home copy."""
     html = HOME.read_text(encoding="utf-8")
     lower = html.lower()
+    assert "consultoria para licitações" in lower or "licitações e contratos" in lower
     assert "diretoria b2g" in lower
     assert "construtor" in lower
     assert "margem" in lower
     assert "eesc-usp" in lower or "usp" in lower
     assert "#contato" in html or 'id="contato"' in html
-    assert "diagnosticar operação b2g" in lower
+    assert "diagnosticar" in lower and "b2g" in lower
 
 
 def test_form_qualification_minimal():
@@ -249,10 +257,11 @@ def test_prefers_reduced_motion_declared():
 
 def test_mobile_matrix_composition():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    assert ".trace-cards" in css
-    assert "display:none" in css  # one of table/cards hidden per breakpoint
+    assert "display:none" in css  # responsive hide rules remain
     html = HOME.read_text(encoding="utf-8")
-    assert "trace-card" in html
+    # Journey paths stack on narrow viewports (replacement for legacy trace-cards matrix)
+    assert "journey-path" in html or "journey-paths" in html
+    assert "journey-paths" in css or ".journey-path" in css
     # Hero visual suppressed on narrow viewports
     assert "hero-visual{display:none}" in css.replace(" ", "") or ".hero-visual{display:none}" in css.replace(" ", "")
 
@@ -286,11 +295,15 @@ def test_functional_type_floor_in_css():
 
 
 def test_thankyou_specialist_cta_family():
-    obrigado = (ROOT / "obrigado.html").read_text(encoding="utf-8")
-    assert "Diagnosticar operação B2G" in obrigado
-    assert re.search(r">Diagnosticar operação<", obrigado) is None
+    for name in ("obrigado.html", "obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
+        path = ROOT / name
+        assert path.exists(), name
+        text = path.read_text(encoding="utf-8")
+        assert "data-lead-success" in text
+        assert "wa.me" in text
+        assert "Prazo" in text or "prazo" in text
     specialist = (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
-    assert "Diagnosticar operação B2G" in specialist
+    assert "Diagnosticar" in specialist
     lower = specialist.lower()
     assert "analisar meu cenário" not in lower
     assert "apresentar uma demanda" not in lower

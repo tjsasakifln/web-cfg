@@ -52,9 +52,16 @@ def test_home_has_canonical_copy():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     assert hero["h1"] in html or "Contrato rentável, sim" in html
     assert "Diretoria B2G fracionada" in html
+    # Conventional category language first (not only proprietary label)
+    assert "Consultoria para licitações e contratos de obras públicas" in html
     assert 'name="diagnostico-b2g"' in html
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html
+    assert 'data-form-multistep="true"' in html
+    # Three differentiated journey CTAs
+    assert "Enviar documentos para análise inicial" in html
+    assert "Enviar edital para triagem" in html
+    assert "Diagnosticar a operação B2G" in html
     for o in brand["offers"]:
         assert o["url"] in html, o["url"]
     # FAQ sync
@@ -111,10 +118,14 @@ def test_org_description_consistent():
 
 def test_whatsapp_contextual_on_home():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "decis%C3%A3o%20cr%C3%ADtica" in html or "decisão crítica" in html.lower() or "decisao%20critica" in html.lower() or "decis%C3%A3o%20cr%C3%ADtica" in html
-    # encoded critical decision message
     assert "wa.me/5548988344559" in html
-    assert "cr%C3%ADtica" in html or "critica" in html.lower()
+    # Contextual prefill for urgent contract / critical decision path
+    assert (
+        "decis%C3%A3o%20cr%C3%ADtica" in html
+        or "cr%C3%ADtica" in html
+        or "an%C3%A1lise%20inicial" in html
+        or "problema%20urgente" in html
+    )
 
 
 def test_radar_not_empty_wave_message():

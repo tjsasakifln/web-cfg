@@ -37,3 +37,41 @@
 }@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.offer-path:hover,.button:hover,.contact-channels>a:hover,.whatsapp-float:hover{transform:none}.text-link:hover .icon{transform:none}
 }@media (prefers-reduced-data:reduce){.hero-visual,.authority-photo img{display:none}
 }
+
+/* === Fortune conversion: journeys + multi-step form === */
+.journey-paths{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:1.5rem}
+@media(min-width:900px){.journey-paths{grid-template-columns:repeat(3,1fr);gap:1.5rem}}
+.journey-path{display:flex;flex-direction:column;gap:.75rem;padding:1.5rem;border:1px solid rgba(6,26,51,.12);border-radius:18px;background:#fff;box-shadow:0 12px 40px rgba(6,26,51,.06)}
+.journey-path--core{border-color:rgba(15,118,110,.35);box-shadow:0 16px 48px rgba(15,118,110,.1)}
+.journey-path h3{margin:0;font-size:1.2rem;line-height:1.25;color:var(--navy-950,#061a33)}
+.journey-path p{margin:0;color:var(--ink,#1a2332);font-size:.95rem;line-height:1.5}
+.journey-risk{font-size:.9rem;color:var(--ink,#1a2332)}
+.journey-path .button{margin-top:auto;align-self:flex-start;min-height:44px}
+.journey-alt{font-size:.875rem}
+.journey-alt a{color:var(--green-700,#0f766e)}
+.contact-sla{list-style:none;padding:0;margin:1rem 0 1.25rem;display:grid;gap:.5rem}
+.contact-sla li{font-size:.92rem;line-height:1.45;padding-left:0}
+.contact-proof-near-cta{margin-top:1rem;font-size:.85rem;color:rgba(255,255,255,.85)}
+.form-progress{display:none;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+html.js .form-progress{display:flex}
+.form-progress-step{width:2rem;height:2rem;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font:600 .85rem/1 var(--mono,ui-monospace,monospace);border:2px solid rgba(6,26,51,.2);color:rgba(6,26,51,.55);background:#fff}
+.form-progress-step.is-active{border-color:var(--green-700,#0f766e);color:var(--green-700,#0f766e);background:rgba(15,118,110,.08)}
+.form-progress-step.is-done{border-color:var(--green-700,#0f766e);background:var(--green-700,#0f766e);color:#fff}
+.form-progress-bar{flex:1;height:2px;background:rgba(6,26,51,.12)}
+.form-step{border:0;margin:0;padding:0;min-width:0}
+.form-step-legend{font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:rgba(6,26,51,.55);margin-bottom:1rem;padding:0}
+html.js .form-step:not(.is-active){display:none}
+html.js .form-step-fallback{display:none}
+.form-step-actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-top:.5rem}
+.form-step-actions .form-submit{flex:1;min-width:12rem}
+.button-secondary{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:44px;padding:.75rem 1.1rem;border-radius:999px;border:1px solid rgba(6,26,51,.18);background:transparent;color:var(--navy-950,#061a33);font:600 .95rem/1.2 inherit;cursor:pointer;text-decoration:none}
+.button-secondary:hover,.button-secondary:focus-visible{border-color:var(--green-700,#0f766e);outline:2px solid rgba(15,118,110,.35);outline-offset:2px}
+.form-status.is-error{color:#b42318;margin-top:.75rem;font-size:.9rem}
+.form-status.is-ok{color:var(--green-700,#0f766e);margin-top:.75rem;font-size:.9rem}
+.field input.is-invalid,.field select.is-invalid,.field textarea.is-invalid{border-color:#b42318;outline-color:#b42318}
+.simple-card .journey-next{margin-top:1rem;display:grid;gap:.5rem}
+.simple-card .sla-box{margin:1rem 0;padding:1rem 1.1rem;border-radius:12px;background:rgba(6,26,51,.04);border:1px solid rgba(6,26,51,.08);font-size:.95rem;line-height:1.5}
+@media(max-width:760px){
+  .journey-path{padding:1.15rem}
+  .hero-proof{font-size:.85rem}
+}

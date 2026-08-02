@@ -27,6 +27,8 @@ jobs:
           npm run test:design
           npm run pseo:test
           npm run test:analytics
+          npm run test:form-funnel
+          npm run test:release-filters
           npm run test:pseo-attribution
       - name: Build public site
         run: npm run build:site

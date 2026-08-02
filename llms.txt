@@ -1,19 +1,24 @@
 # CONFENGE
-> Diretoria B2G fracionada para construtoras e empresas de engenharia, integrando inteligência de mercado, decisão de participação, proposta, proteção de margem e riscos em contratos públicos.
+> Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada.
 
 Site: https://confenge.com.br/
 Contato: tiago.sasaki@confenge.com.br | WhatsApp +55 48 98834-4559
 Responsável técnico: Eng. Tiago Sasaki (EESC-USP)
-Tagline: Decisão técnica. Contrato rentável. Margem protegida.
+Tagline: Licitação vencida não paga a conta. Contrato rentável, sim.
 
 ## Posicionamento
-A CONFENGE atua como diretoria B2G fracionada para construtoras e empresas de engenharia. Integramos inteligência de mercado, decisão de participação, preparação de proposta, proteção de margem e gestão de riscos contratuais. A tecnologia reduz o trabalho mecânico; a responsabilidade pela recomendação, implantação e aprendizado permanece humana e tecnicamente fundamentada.
+A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). Quando a empresa precisa de rotina contínua, o formato se chama Diretoria B2G fracionada.
+
+## Jornadas de contato
+- Problema urgente em contrato: Enviar documentos para análise inicial
+- Edital ou proposta em preparação: Enviar edital para triagem
+- Operação B2G recorrente: Diagnosticar a operação B2G
 
 ## Ofertas principais
-- https://confenge.com.br/diagnostico-b2g-360/ — Diagnóstico B2G 360° (entrada)
-- https://confenge.com.br/diretoria-b2g/ — Diretoria B2G fracionada (operação principal)
-- https://confenge.com.br/bid-room-licitacoes-obras/ — Bid Room (oportunidade crítica)
-- https://confenge.com.br/defesa-margem-contratos-publicos/ — Contract Defense & Margin (contrato crítico)
+- https://confenge.com.br/diagnostico-b2g-360/ - Diagnóstico B2G 360° (entrada)
+- https://confenge.com.br/diretoria-b2g/ - Diretoria B2G fracionada (operação principal)
+- https://confenge.com.br/bid-room-licitacoes-obras/ - Bid Room / sala de decisão da proposta
+- https://confenge.com.br/defesa-margem-contratos-publicos/ - Contract Defense & Margin / defesa técnica e proteção de margem
 
 ## Páginas principais
 - https://confenge.com.br/
@@ -23,24 +28,19 @@ A CONFENGE atua como diretoria B2G fracionada para construtoras e empresas de en
 - https://confenge.com.br/#contato
 
 ## Páginas-pilar (clusters)
-- https://confenge.com.br/medicoes-glosas-obras-publicas/ — Medições, glosas e pagamentos
-- https://confenge.com.br/aditivos-obras-publicas/ — Aditivos e serviços extras
-- https://confenge.com.br/reequilibrio-obras-publicas/ — Reequilíbrio econômico-financeiro
-- https://confenge.com.br/defesa-tecnica-contratos-publicos/ — Sanções, defesa e extinção
-- https://confenge.com.br/acompanhamento-contratos-obras/ — Gestão contratual e pleitos
-- https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ — Atrasos, prorrogação e paralisação
-- https://confenge.com.br/diagnostico-pre-licitacao/ — Edital, proposta e matriz de riscos
-- https://confenge.com.br/auditoria-orcamento-licitacao/ — Orçamento, BDI, SINAPI e preço
+- https://confenge.com.br/medicoes-glosas-obras-publicas/ - Medições, glosas e pagamentos
+- https://confenge.com.br/aditivos-obras-publicas/ - Aditivos e serviços extras
+- https://confenge.com.br/reequilibrio-obras-publicas/ - Reequilíbrio econômico-financeiro
+- https://confenge.com.br/defesa-tecnica-contratos-publicos/ - Sanções, defesa e extinção
+- https://confenge.com.br/acompanhamento-contratos-obras/ - Gestão contratual e pleitos
+- https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ - Atrasos, prorrogação e paralisação
+- https://confenge.com.br/diagnostico-pre-licitacao/ - Edital, proposta e matriz de riscos
+- https://confenge.com.br/auditoria-orcamento-licitacao/ - Orçamento, BDI, SINAPI e preço
 
 ## Biblioteca técnica
-Mais de 120 guias em https://confenge.com.br/conteudos/ cobrindo problemas reais de obra pública.
+Guias em https://confenge.com.br/conteudos/ sobre problemas reais de obra pública.
 
 ## O que a CONFENGE não é
 - Plataforma genérica de alertas
 - Promessa de vitória ou preço de lance ideal
-- Substituta de jurídico
-- Influência junto à Administração
-- Cobertura integral ou monitoramento em tempo real de todo o mercado
-
-## Como citar / uso
-Conteúdo educacional e técnico. Não substitui análise do edital, contrato e documentos do caso. Para diagnóstico aplicado: /#contato ou WhatsApp.
+- Parecer jurídico genérico em substituição a análise individual
