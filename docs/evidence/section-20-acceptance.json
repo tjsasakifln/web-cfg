@@ -1,0 +1,181 @@
+{
+  "generated_at": "2026-08-02T13:52:29Z",
+  "production_host": "https://confenge.com.br",
+  "build_info": {
+    "schema_version": "1.0.0",
+    "commit": "f08495cafa0e498041eedbedb9d503f939ebb93b",
+    "build_time": "2026-08-02T13:51:28Z",
+    "environment": "production",
+    "site_schema_version": "1.1.0",
+    "source": "build_site.write_build_info"
+  },
+  "section_20": {
+    "engineering": {
+      "ci_green": true,
+      "note": "site-ci green on conversion commits; see GitHub Actions main",
+      "deploy_identified": true,
+      "build_info_endpoint": "https://confenge.com.br/.well-known/build-info.json",
+      "git_filters_removed": true,
+      "external_smoke": true,
+      "evidence": [
+        "docs/evidence/section-20-smoke.txt",
+        "docs/evidence/lighthouse-production-2026-08-02.json"
+      ]
+    },
+    "seo": {
+      "thin_pages_noindex": true,
+      "thin_removed_from_sitemap": true,
+      "pseo_gated": true,
+      "note": "97 thin library pages noindex; pSEO leaves rejected by editorial gate",
+      "evidence": [
+        "seo/content-disposition-2026-08-02.md",
+        "docs/evidence/section-20-smoke.txt"
+      ]
+    },
+    "copy": {
+      "conventional_category_first": true,
+      "three_journey_ctas": true,
+      "diretoria_explained": true,
+      "verified_proof_near_cta": true,
+      "evidence": [
+        "index.html",
+        "data/site/brand.json",
+        "data/site/proof.json"
+      ]
+    },
+    "conversion": {
+      "three_journeys": true,
+      "low_friction_form": true,
+      "document_handoff": "WhatsApp operational (no multi-file upload on static form)",
+      "whatsapp_contextual": true,
+      "journey_confirmations": true,
+      "tracking_no_pii": true,
+      "production_submission_verified": true,
+      "delivery_channel": "ntfy (verified) + FormSubmit (pending owner activation)",
+      "receipts": [
+        {
+          "journey": "contrato",
+          "receipt_id": "515106b8202de7c3c8c806fe",
+          "received_at": "2026-08-02T13:51:47.087Z",
+          "delivered": true,
+          "ntfy_status": "ok",
+          "ntfy_message_id": "Cpx9KeEkW1A6",
+          "ntfy_poll_match": true,
+          "ntfy_poll_sample": "receipt=515106b8202de7c3c8c806fe\nwhen=2026-08-02T13:51:47.087Z\nstage=problema urgente em contrato\nname=QA Delivery Contrato\ncontact=WhatsApp 48988344559\norigin=/\nsource=confenge.com.br/lead"
+        },
+        {
+          "journey": "edital",
+          "receipt_id": "efb5d6a66aab08d9edd45566",
+          "received_at": "2026-08-02T13:51:48.055Z",
+          "delivered": true,
+          "ntfy_status": "ok",
+          "ntfy_message_id": "ZSkKzCw5hwcT",
+          "ntfy_poll_match": true,
+          "ntfy_poll_sample": "receipt=efb5d6a66aab08d9edd45566\nwhen=2026-08-02T13:51:48.055Z\nstage=edital ou proposta em preparacao\nname=QA Delivery Edital\ncontact=WhatsApp 48988344559\norigin=/\nsource=confenge.com.br/lead"
+        },
+        {
+          "journey": "operacao",
+          "receipt_id": "c37294d9e2f30c00d01738bb",
+          "received_at": "2026-08-02T13:51:49.095Z",
+          "delivered": true,
+          "ntfy_status": "ok",
+          "ntfy_message_id": "966NRmzQwfgT",
+          "ntfy_poll_match": true,
+          "ntfy_poll_sample": "receipt=c37294d9e2f30c00d01738bb\nwhen=2026-08-02T13:51:49.095Z\nstage=estruturando a operacao B2G\nname=QA Delivery Operacao\ncontact=WhatsApp 48988344559\norigin=/\nsource=confenge.com.br/lead"
+        }
+      ],
+      "evidence": [
+        "docs/evidence/lead-delivery-verification.json"
+      ]
+    },
+    "ux": {
+      "ui_geometry_ci": true,
+      "axe_zero_critical_serious": true,
+      "keyboard_and_nojs_checks": true,
+      "evidence": [
+        "scripts/site/test_ui_geometry.mjs",
+        "CI site-ci"
+      ]
+    },
+    "performance": {
+      "lab_production_mobile": [
+        {
+          "path": "/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1494.779,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 1024.779,
+          "si_ms": 1213.7347454415872
+        },
+        {
+          "path": "/diretoria-b2g/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1221.9272,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 921.9272,
+          "si_ms": 921.9272
+        },
+        {
+          "path": "/defesa-margem-contratos-publicos/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1372.5001,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 922.5001,
+          "si_ms": 922.5001
+        },
+        {
+          "path": "/bid-room-licitacoes-obras/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1383.3912,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 933.3912,
+          "si_ms": 933.3912
+        },
+        {
+          "path": "/conteudos/",
+          "performance": 100,
+          "accessibility": 100,
+          "best_practices": 100,
+          "seo": 100,
+          "lcp_ms": 1218.6521,
+          "cls": 0,
+          "tbt_ms": 0,
+          "fcp_ms": 999.6521,
+          "si_ms": 999.6521
+        }
+      ],
+      "field_cwv": "PENDING_FIELD_DATA",
+      "evidence": [
+        "docs/evidence/lighthouse-production-2026-08-02.json"
+      ]
+    }
+  },
+  "pending_field_data": [
+    "CrUX / field Core Web Vitals",
+    "Search Console ranking and CTR deltas",
+    "Real conversion rate after traffic accumulation",
+    "FormSubmit email delivery after owner activation click"
+  ],
+  "limitations": [
+    "Netlify Forms HTML POST still 404 (feature not intercepting); replaced by /.netlify/functions/lead",
+    "FormSubmit returns 403 until tiago.sasaki@confenge.com.br activates the form email",
+    "ntfy topic is ops secret-by-URL; rotate via NTFY_TOPIC env on Netlify if exposed",
+    "97 library pages noindex pending full editorial rewrite"
+  ]
+}

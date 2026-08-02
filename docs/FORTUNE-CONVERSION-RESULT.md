@@ -1,63 +1,88 @@
-# CONFENGE conversion / SEO remediation result
+# CONFENGE conversion / SEO remediation — factual result
 
 Date: 2026-08-02  
-Baseline main SHA (pre-change): `90cebc457fbb9a8d6c74c7483ef944651c30d401`  
-Production host: https://confenge.com.br
+Production: https://confenge.com.br  
+Baseline pre-change main: `90cebc457fbb9a8d6c74c7483ef944651c30d401`
 
-## Implemented
+## Deploy identity
 
-1. **Homepage** — conventional category first; three journeys A/B/C; lean narrative; proprietary labels after plain language.
-2. **Lead capture** — multi-step form → `POST /.netlify/functions/lead` issues `receipt_id`; journey confirmations; WhatsApp fallback.
-3. **Analytics** — funnel events without PII; automated tests.
-4. **Content** — generic boilerplate stripped; 97 thin pages `noindex,follow` and removed from sitemap.
-5. **Release** — no git SHA filters; `/.well-known/build-info.json` from deploy env.
+Live `/.well-known/build-info.json` (re-check after each deploy):
 
-## Production lead receipts (verified)
+- commit, build_time, environment, schema — see endpoint and `docs/evidence/section-20-smoke.txt`
 
-Endpoint: `https://confenge.com.br/.netlify/functions/lead`  
-Evidence file: `docs/evidence/production-lead-receipts.json`
+## Conversion architecture (live)
 
-| Journey | receipt_id | received_at (UTC) |
-| --- | --- | --- |
-| contrato (A) | `4d187329bb2217a7b1f62090` | 2026-08-02T13:34:48.095Z |
-| edital (B) | `1a7c63794b9d3f2893d15893` | 2026-08-02T13:34:48.810Z |
-| operacao (C) | `635e665f037117bd43840cfc` | 2026-08-02T13:34:49.226Z |
+| Journey | Market need | Primary CTA | Confirmation | Lead API |
+| --- | --- | --- | --- | --- |
+| A | Contrato sob pressão | Enviar documentos para análise inicial | `/obrigado-contrato` | `jornada=contrato` |
+| B | Edital / proposta | Enviar edital para triagem | `/obrigado-edital` | `jornada=edital` |
+| C | Operação B2G | Diagnosticar a operação B2G | `/obrigado-operacao` | `jornada=operacao` |
 
-Upstream mail (FormSubmit) returned HTTP 403 until the site owner activates that form by email. Receipt issuance on the production edge is independent and verified.
+Homepage first viewport: conventional category, construtoras, economic problem, benefit, EESC-USP proof, primary CTA + urgent WhatsApp.
 
-## Production Lighthouse lab (mobile, 2026-08-02)
+## Production lead delivery (verified)
 
-Source: `docs/evidence/lighthouse-production-2026-08-02.json`
+Endpoint: `POST https://confenge.com.br/.netlify/functions/lead`  
+Evidence: `docs/evidence/lead-delivery-verification.json`
+
+| Journey | receipt_id | ntfy message_id | poll match |
+| --- | --- | --- | --- |
+| contrato | `515106b8202de7c3c8c806fe` | `Cpx9KeEkW1A6` | yes |
+| edital | `efb5d6a66aab08d9edd45566` | `ZSkKzCw5hwcT` | yes |
+| operacao | `c37294d9e2f30c00d01738bb` | `966NRmzQwfgT` | yes |
+
+Delivery channel: **ntfy** publish + external poll-back (operational notification).  
+FormSubmit email remains secondary (HTTP 403 until owner activates activation email).  
+WhatsApp remains document handoff path for sensitive files.
+
+## Production Lighthouse lab (mobile)
+
+Evidence: `docs/evidence/lighthouse-production-2026-08-02.json`
 
 | URL | Perf | A11y | BP | SEO | LCP | CLS | TBT |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `/` | 100 | 100 | 100 | 100 | 1.49s | 0 | 0 |
-| `/diretoria-b2g/` | 100 | 100 | 100 | 100 | 1.22s | 0 | 0 |
-| `/defesa-margem-contratos-publicos/` | 100 | 100 | 100 | 100 | 1.37s | 0 | 0 |
-| `/bid-room-licitacoes-obras/` | 100 | 100 | 100 | 100 | 1.38s | 0 | 0 |
-| `/conteudos/` | 100 | 100 | 100 | 100 | 1.22s | 0 | 0 |
+| `/` | 100 | 100 | 100 | 100 | ≤2.5s | 0 | 0 |
+| `/diretoria-b2g/` | 100 | 100 | 100 | 100 | ≤2.5s | 0 | 0 |
+| `/defesa-margem-contratos-publicos/` | 100 | 100 | 100 | 100 | ≤2.5s | 0 | 0 |
+| `/bid-room-licitacoes-obras/` | 100 | 100 | 100 | 100 | ≤2.5s | 0 | 0 |
+| `/conteudos/` | 100 | 100 | 100 | 100 | ≤2.5s | 0 | 0 |
 
-Field Core Web Vitals: `PENDING_FIELD_DATA`.
+Field CWV: `PENDING_FIELD_DATA`
+
+## Content disposition
+
+Evidence: `seo/content-disposition-2026-08-02.md`
+
+- Mechanical generic phrases removed from 116 articles
+- 97 thin/template pages: `noindex,follow` + removed from sitemap
+- Priority/handcrafted pages remain indexable
 
 ## Before → after
 
-| Surface | Before | After |
+| Item | Before | After |
 | --- | --- | --- |
-| Hero category | Diretoria B2G first | Consultoria para licitações e contratos… |
-| CTAs | Single generic | Three journey CTAs |
-| Form | All fields at once | Two-step + production receipt API |
-| Confirmations | One page | Journey-specific + protocol |
-| Thin content | Indexable templates | 97 `noindex` + out of sitemap |
-| build-info | 404 | Live commit identity |
-| Git filters | PLACEHOLDER clean/smudge | Removed |
+| Category language | Diretoria B2G first | Consultoria para licitações e contratos… |
+| CTAs | One generic | Three journeys |
+| Form | Single long form | Two-step + `/.netlify/functions/lead` |
+| Lead proof | HTML only | receipt_id + ntfy delivery verified |
+| Thin content | Indexable | noindex + out of sitemap |
+| Release SHA | git clean/smudge | build-info from deploy env |
+| build-info | 404 | Live |
+
+## Acceptance matrix
+
+`docs/evidence/section-20-acceptance.json`
+
+## PENDING_FIELD_DATA
+
+- Field Core Web Vitals (CrUX)
+- Search Console ranking / CTR
+- Conversion rate under real traffic
+- FormSubmit email after owner activation
 
 ## Limits
 
-- FormSubmit email delivery requires one-time activation by `tiago.sasaki@confenge.com.br` (403 until activated). Lead **receipt** is already issued by production function.
-- Full editorial rewrite of library depth still open; thin pages are out of index.
-- pSEO leaves stay under editorial containment.
-- Field rankings/conversion: `PENDING_FIELD_DATA`.
-
-## CI
-
-site-ci green on conversion commits with Lighthouse Node API runner (see GitHub Actions on `main`).
+- Netlify Forms native HTML POST remains non-functional (404); function path is the operational form backend
+- FormSubmit needs one activation click by `tiago.sasaki@confenge.com.br`
+- ntfy topic is secret-by-URL; set `NTFY_TOPIC` on Netlify to rotate
+- Full editorial rewrite of noindexed library pages still open

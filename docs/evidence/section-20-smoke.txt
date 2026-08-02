@@ -1,0 +1,26 @@
+=== §20 evidence pack 2026-08-02T13:52:25Z ===
+HEAD=f08495cafa0e498041eedbedb9d503f939ebb93b
+{
+  "schema_version": "1.0.0",
+  "commit": "f08495cafa0e498041eedbedb9d503f939ebb93b",
+  "build_time": "2026-08-02T13:51:28Z",
+  "environment": "production",
+  "site_schema_version": "1.1.0",
+  "source": "build_site.write_build_info"
+}
+
+GET / 200 redir=0
+GET /diretoria-b2g/ 200 redir=0
+GET /bid-room-licitacoes-obras/ 200 redir=0
+GET /defesa-margem-contratos-publicos/ 200 redir=0
+GET /diagnostico-b2g-360/ 200 redir=0
+GET /obrigado-contrato 200 redir=0
+GET /obrigado-edital 200 redir=0
+GET /obrigado-operacao 200 redir=0
+GET /sitemap.xml 200 redir=0
+GET /robots.txt 200 redir=0
+GET /contato 200 redir=1
+GET /blog 200 redir=1
+thin robots: noindex,follow
+thin in sitemap: 0
+0
