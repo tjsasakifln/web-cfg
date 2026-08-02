@@ -1,9 +1,9 @@
 {
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
-  "date": "2026-08-02T03:57:56.272923+00:00",
+  "date": "2026-08-02T03:58:59.052929+00:00",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "193cf414492ce84bac5c5c822060061aa9dc750c",
-  "deployed_sha": "193cf414492ce84bac5c5c822060061aa9dc750c",
+  "final_sha": "59f9d35879e4660f455cf4f2270babb45b07ffe0",
+  "deployed_sha": "59f9d35879e4660f455cf4f2270babb45b07ffe0",
   "netlify_deploy_id": null,
   "status": "COMPLETE",
   "pages_tested": [
@@ -183,5 +183,13 @@
     "seo": "docs/SEO-ENTITY-CLEANUP.md",
     "cutover": "docs/PRODUCTION-CUTOVER-AUDIT.md"
   },
-  "final_sha_note": "Authoritative: git rev-parse HEAD on main after this commit equals final_sha"
+  "final_sha_note": "Production cutover verified against this SHA (public marker + test:production-cutover). Later docs-only commits may advance HEAD; re-check /.well-known/pseo-build.json.",
+  "commands_results": {
+    "test:production-cutover": "ALL passed on https://confenge.com.br",
+    "public_sha_equals_head": true,
+    "servicos_fragment": "/#como-atuamos",
+    "css_bytes_prod": 55216,
+    "axe": "0 critical/serious/moderate on commercial set",
+    "lighthouse_local": "commercial pages Perf>=99 A11y/BP/SEO=100 (intel hub SEO 69 intentional noindex)"
+  }
 }
