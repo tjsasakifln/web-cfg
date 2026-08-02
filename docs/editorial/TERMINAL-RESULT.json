@@ -1,10 +1,27 @@
 {
   "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
   "all_skeptic_closed": true,
+  "skeptic_panel_findings": "STALE — describe pre-remediation code; live build.py:188-206 rejects incomplete jurisprudence, does not auto-approve",
   "indexable_count": 0,
   "awaiting_human": 11,
   "rejected": 1,
   "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
-  "production_commit": "0906eada06eaa090621f01bdbb236eb2543dc74f",
-  "why": "Named human must run docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md (approve_cli.py). Automated HUMAN_APPROVED is forbidden by objective."
+  "will_not_impersonate_named_human": true,
+  "why_not_complete": "Objective forbids automated or false HUMAN_APPROVED. Named human must run approve_cli.py.",
+  "verified_at": "2026-08-02T17:49:15Z",
+  "live_proof": {
+    "auto_approve_rc": 2,
+    "approve_human_in_build": false,
+    "registry_history_sample": [
+      "DRAFT",
+      "LEGAL_SOURCE_VALIDATED",
+      "TECHNICAL_REVIEWED",
+      "EDITORIAL_REVIEWED",
+      "NOTE"
+    ],
+    "final_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+    "jur_status": "REJECTED",
+    "prod_wave1_robots": "noindex,follow",
+    "prod_editorial_sitemap_locs": 0
+  }
 }
