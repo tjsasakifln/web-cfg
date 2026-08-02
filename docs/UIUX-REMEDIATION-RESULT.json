@@ -1,8 +1,8 @@
 {
   "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
   "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "final_sha_at_write": "d055d82a3e2b274f7ee0e29959ca2621150115a3",
-  "date": "2026-08-02T02:30:08Z",
+  "final_sha_at_write": "c9525da76c4dc27f0e4a647798bc527d2e5db5a1",
+  "date": "2026-08-02T02:31:09Z",
   "status": "COMPLETE",
   "metrics_before": {
     "1440x1000": {
@@ -98,8 +98,10 @@
     "Lighthouse scores not fabricated; axe moderate region residual",
     "pSEO long-tail pages only inherit shared CSS chrome, not full rewrite"
   ],
-  "final_sha": "d055d82a3e2b274f7ee0e29959ca2621150115a3",
+  "final_sha": "c9525da76c4dc27f0e4a647798bc527d2e5db5a1",
   "commits": [
+    "3c7ce3b9 docs(uiux): set final_sha to HEAD after skeptic closure",
+    "45e10de5 docs(uiux): record build:site pass and skeptic-gap closure evidence",
     "d055d82a fix(uiux): enforce 14px functional type floor and convert CTA family",
     "f4257562 docs(uiux): mark remediation status COMPLETE",
     "465ca018 docs(uiux): record final remediation HEAD SHA in result JSON",
