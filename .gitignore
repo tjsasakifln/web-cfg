@@ -25,3 +25,12 @@ _site/
 docs/lighthouse-runs/*.json
 !docs/lighthouse-runs/summary.json
 
+
+# Chrome/Lighthouse temp profiles (Windows path leaks)
+C:/
+**/lighthouse.*/
+
+
+# Chrome/Lighthouse temp profiles (Windows path leaks under repo)
+C:/
+**/lighthouse.*/

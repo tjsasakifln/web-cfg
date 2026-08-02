@@ -2,11 +2,10 @@
 
 ## Method
 
-- CLI: `npx lighthouse` + system Chrome (`/usr/bin/google-chrome`)
+- CLI: `npx lighthouse` + system Chrome
 - Form factor: mobile
-- Categories: performance, accessibility, best-practices, seo
-- **Local:** static serve of `_site`
-- **Production:** live `https://confenge.com.br` URLs (required by cutover)
+- **Production URLs** on `https://confenge.com.br` (required)
+- Local `_site` also exercised earlier in campaign
 
 ## Production mobile scores
 
@@ -22,9 +21,9 @@
 
 ### Notes
 
-- Commercial indexable pages on production meet Performance ≥90 and A11y/BP/SEO ≥95 (all scored 100).
-- `/inteligencia/` SEO 69 is **expected**: hub is intentionally `noindex,follow` while `publish_count=0`.
-- Field Core Web Vitals are not claimed.
+- Commercial indexable pages: Perf/A11y/BP/SEO all 100 on production.
+- `/inteligencia/` SEO 69 expected (intentional `noindex,follow` while publish_count=0).
+- Field CWV not claimed.
 
 ## CSS size
 
@@ -32,4 +31,4 @@
 - After: 55216 bytes
 - Reduction: 24.2%
 
-Evidence: `docs/lighthouse-runs/summary-production.json` (production), local runs under `docs/lighthouse-runs/*` (gitignored full JSON except summaries).
+Evidence: `docs/lighthouse-runs/summary-production.json`
