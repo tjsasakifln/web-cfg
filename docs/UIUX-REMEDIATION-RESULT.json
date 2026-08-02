@@ -1,8 +1,8 @@
 {
   "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
   "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "final_sha_at_write": "4fbbfd96ca554ed19ea8a9c3b5e3ca7a36bce60a",
-  "date": "2026-08-02T01:47:03Z",
+  "final_sha_at_write": "d055d82a3e2b274f7ee0e29959ca2621150115a3",
+  "date": "2026-08-02T02:30:08Z",
   "status": "COMPLETE",
   "metrics_before": {
     "1440x1000": {
@@ -51,13 +51,17 @@
     "reason": "CLI not installed in environment; command: npx lighthouse http://127.0.0.1:8765 --only-categories=performance,accessibility,best-practices,seo"
   },
   "commands": [
+    "npm run build:site",
     "npm run test:design",
     "npm run test:copy",
     "npm run test:brand",
     "npm run test:ui",
     "npm run audit:accessibility",
     "npm run audit:performance",
-    "npm run audit:axe"
+    "npm run audit:axe",
+    "npm run pseo:validate",
+    "npm run pseo:audit",
+    "npm run pseo:verify:release"
   ],
   "evidence": {
     "audit": "docs/UIUX-ADVERSARIAL-AUDIT.md",
@@ -94,12 +98,35 @@
     "Lighthouse scores not fabricated; axe moderate region residual",
     "pSEO long-tail pages only inherit shared CSS chrome, not full rewrite"
   ],
-  "final_sha": "4fbbfd96ca554ed19ea8a9c3b5e3ca7a36bce60a",
+  "final_sha": "d055d82a3e2b274f7ee0e29959ca2621150115a3",
   "commits": [
+    "d055d82a fix(uiux): enforce 14px functional type floor and convert CTA family",
+    "f4257562 docs(uiux): mark remediation status COMPLETE",
     "465ca018 docs(uiux): record final remediation HEAD SHA in result JSON",
     "a1247758 docs(uiux): adversarial audit, decisions, metrics, and before/after evidence",
     "ced40d89 test(ui): add rendered geometry gates, axe audit, and screenshot capture",
     "ebdc4057 feat(home): compress to seven narrative blocks with clear CTA hierarchy"
   ],
-  "final_sha_note": "Use git rev-parse HEAD after pull; last amend may differ by docs-only commit"
+  "final_sha_note": "Use git rev-parse HEAD after pull; last amend may differ by docs-only commit",
+  "commands_results": {
+    "build:site": "ok exit 0 (see docs/uiux-evidence/logs/build-site.log)",
+    "pseo:validate": "ok",
+    "pseo:audit": "ok publish_fail_count=0",
+    "pseo:verify:release": "public_artifact_audit_ok true; production_audit fails pre-deploy (live SHA still baseline)",
+    "test:ui": "ok all geometry gates",
+    "axe": "0 critical 0 serious"
+  },
+  "post_build_site_proof": {
+    "home_macro_phases": true,
+    "primary_cta_count": 4,
+    "field_label_875rem": true,
+    "obrigado_cta": true,
+    "specialist_cta": true
+  },
+  "skeptic_remediation": [
+    "functional text floor 14px for labels/consent/offer-label/nav",
+    "test_ui_geometry covers field labels + expanded gates",
+    "obrigado + specialist CTA family aligned",
+    "build:site + assemble + _site proof logged"
+  ]
 }
