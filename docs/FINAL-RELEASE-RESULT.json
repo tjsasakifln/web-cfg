@@ -1,9 +1,9 @@
 {
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
-  "date": "2026-08-02T04:28:55.233838+00:00",
+  "date": "2026-08-02T04:29:35.050882+00:00",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "37d8bf58702e253d588498568a302341bc152e4e",
-  "deployed_sha": "37d8bf58702e253d588498568a302341bc152e4e",
+  "final_sha": "6590c4cc463d1319d1449176a15480ed5a4f8e34",
+  "deployed_sha": "6590c4cc463d1319d1449176a15480ed5a4f8e34",
   "netlify_deploy_id": null,
   "status": "COMPLETE",
   "pages_tested": [
