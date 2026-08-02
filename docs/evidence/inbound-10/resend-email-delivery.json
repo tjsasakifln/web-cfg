@@ -1,0 +1,38 @@
+{
+  "at": "2026-08-02T16:34:40Z",
+  "domain": "confenge.com.br",
+  "domain_status": "Verified",
+  "from": "CONFENGE Leads <leads@confenge.com.br>",
+  "to": "tiago.sasaki@confenge.com.br",
+  "netlify_env_keys_set": [
+    "RESEND_API_KEY",
+    "LEAD_FROM_EMAIL",
+    "LEAD_NOTIFY_EMAIL",
+    "IP_HASH_SALT"
+  ],
+  "api_key_name": "confenge-leads-prod",
+  "api_key_committed": false,
+  "deploy": {
+    "id": "6a6f7027381c29f8c55c70d1",
+    "production_url": "https://confenge.com.br",
+    "method": "netlify deploy --build --prod"
+  },
+  "lead_pipeline_test": {
+    "http": 201,
+    "lead_id": "ece4862f449f360d13b72062",
+    "journey": "contrato",
+    "status": "persisted",
+    "resend_list_subject": "Lead CONFENGE [contrato] problema urgente em contrato \u00b7 ece4862f449f360d13b72062",
+    "resend_status": "Delivered"
+  },
+  "direct_api_smoke": {
+    "resend_id": "6be0acd4-b3e7-4223-8979-1c89aa14ca34",
+    "subject": "CONFENGE smoke test Resend domain (no PII)",
+    "status": "Delivered"
+  },
+  "dns_safety": {
+    "root_mx_still_hostinger": true,
+    "netlify_alias_intact": true,
+    "only_additive_resend_records": true
+  }
+}

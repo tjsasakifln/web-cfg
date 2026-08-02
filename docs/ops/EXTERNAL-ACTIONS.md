@@ -6,7 +6,7 @@ Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner.
 
 ---
 
-## 1. Netlify — variáveis de ambiente (produção) — **OPEN**
+## 1. Netlify — variáveis de ambiente (produção) — **PARTIAL**
 
 **Plataforma:** Netlify UI → Site `confenge` → Site configuration → Environment variables → Production  
 
@@ -22,6 +22,8 @@ Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner.
 | `LEAD_REQUIRE_TURNSTILE` | `1` **somente após** sitekey no HTML | Força verify | POST sem token → **403** |
 | `LEAD_PROBE_SECRET` | random | Smoke sintético | `X-Confenge-Probe` header |
 
+**Status 2026-08-02:** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`, `IP_HASH_SALT` set via Netlify CLI (production). Redeploy `6a6f7027381c29f8c55c70d1` live. E-mail lead **Delivered** (Resend UI). Ainda OPEN: `OPS_WEBHOOK_*`, Turnstile, probe secret.
+
 **Depois de salvar env:** Deploys → Trigger deploy (clear cache) ou empty commit para recarregar functions.
 
 **Rotação ntfy (obrigatória — OPEN):**  
@@ -31,7 +33,7 @@ No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confe
 
 ---
 
-## 2. DNS e-mail (domínio confenge.com.br) — **OPEN**
+## 2. DNS e-mail (domínio confenge.com.br) — **DONE** (additive Resend records)
 
 **Plataforma:** DNS do registrador do domínio (MX atual: Hostinger `mx1/mx2.hostinger.com` — DoH 2026-08-02)
 
@@ -48,7 +50,7 @@ Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 
 ---
 
-## 3. Resend — domínio e API — **OPEN**
+## 3. Resend — domínio e API — **DONE**
 
 **Plataforma:** [resend.com](https://resend.com) → Domains → Add `confenge.com.br` → copiar DNS → API Keys → Create  
 
