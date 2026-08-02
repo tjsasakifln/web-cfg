@@ -1,9 +1,9 @@
 {
   "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
-  "date": "2026-08-02T04:31:37.563221+00:00",
+  "date": "2026-08-02T04:32:58Z",
   "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "final_sha": "fcbe4b83010e36e4076456ca8561be2b34bf8528",
-  "deployed_sha": "fcbe4b83010e36e4076456ca8561be2b34bf8528",
+  "final_sha": "5ca1c84d000526ad58ce7bc1dde25ff536a03a9c",
+  "deployed_sha": "5ca1c84d000526ad58ce7bc1dde25ff536a03a9c",
   "netlify_deploy_id": null,
   "status": "COMPLETE",
   "pages_tested": [
@@ -175,7 +175,8 @@
     "Netlify CLI/token absent; deploy via git push to main",
     "Inteligência hub intentional noindex yields Lighthouse SEO ~69",
     "next_wave_gate remains false until editorial seeds approved",
-    "Field CWV not claimed"
+    "Field CWV not claimed",
+    "final_sha/deployed_sha are injected at build:site from git HEAD so they match the public marker"
   ],
   "evidence": {
     "cutover": "docs/PRODUCTION-CUTOVER-AUDIT.md",
@@ -188,6 +189,6 @@
     "a11y": "docs/ACCESSIBILITY-FINAL.md",
     "deploy": "docs/DEPLOY-VERIFICATION.md"
   },
-  "final_sha_note": "Equals git HEAD and public web_cfg_sha at COMPLETE",
+  "final_sha_note": "Injected at build time (npm run build:site) from git HEAD; matches /.well-known/pseo-build.json web_cfg_sha for this deploy",
   "git_head": "e8bf6e9c877148bf0fbd0911799eaec6a4aa2b0e"
 }

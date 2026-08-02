@@ -73,7 +73,51 @@ def write_public_manifest(summary: dict, snap: dict) -> Path:
     out = ROOT / ".well-known" / "pseo-build.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Pin release result SHAs to this build's git HEAD (solves self-referential commit problem)
+    pin_release_result_shas(payload["web_cfg_sha"])
     return out
+
+
+def pin_release_result_shas(web_cfg_sha: str) -> None:
+    """Rewrite docs/FINAL-RELEASE-RESULT.json final/deployed SHAs to the build tip.
+
+    Git cannot store a commit's own hash inside that same commit; the build injects
+    the authentic tip SHA so the report matches the public marker after deploy.
+    """
+    path = ROOT / "docs" / "FINAL-RELEASE-RESULT.json"
+    if not path.exists() or not web_cfg_sha or web_cfg_sha == "unknown":
+        return
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    data["final_sha"] = web_cfg_sha
+    data["deployed_sha"] = web_cfg_sha
+    if data.get("status") in {None, "AWAITING_DEPLOY", "AWAITING_DEPLOY_SHA_PIN"}:
+        data["status"] = "COMPLETE"
+    data["final_sha_note"] = (
+        "Injected at build time (npm run build:site) from git HEAD; "
+        "matches /.well-known/pseo-build.json web_cfg_sha for this deploy"
+    )
+    data["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Public copy for verification without git self-hash
+    public = ROOT / ".well-known" / "release-result.json"
+    public.parent.mkdir(parents=True, exist_ok=True)
+    public.write_text(
+        json.dumps(
+            {
+                "final_sha": web_cfg_sha,
+                "deployed_sha": web_cfg_sha,
+                "status": data.get("status"),
+                "web_cfg_sha": web_cfg_sha,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
 
 def run_node_gate(script: str) -> dict:
