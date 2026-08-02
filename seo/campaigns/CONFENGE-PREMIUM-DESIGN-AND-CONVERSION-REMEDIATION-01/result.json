@@ -20,6 +20,7 @@
     "pseo assemble/build_site I/O flaky on mounted filesystem",
     "Lighthouse scores not claimed"
   ],
-  "head_sha": "a6b391767c13776f652e3ae8503f1fbf94b61df7",
-  "implementation_sha": "eda6678435615f50b1446c3d4ed08a95b186ca68"
+  "head_sha": "a9c104b91225d19c79a44f0be6bbe0eb9c4d01a9",
+  "implementation_sha": "eda6678435615f50b1446c3d4ed08a95b186ca68",
+  "skeptic_round": "fixed_bid_room_diag_five_lens"
 }
