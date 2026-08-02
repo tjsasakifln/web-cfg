@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generated_at": "2026-08-02T17:37:30Z",
+  "generated_at": "2026-08-02T19:09:19Z",
   "page_defs": 12,
   "indexable_count": 0,
   "indexable_urls": [],
@@ -38,8 +38,10 @@
       "page_id": "jur-sumula-260-art",
       "url": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
       "status": "REJECTED",
-      "gate_ok": true,
-      "issues": []
+      "gate_ok": false,
+      "issues": [
+        "missing_claims"
+      ]
     },
     {
       "page_id": "lei-art124-alteracao-obra",

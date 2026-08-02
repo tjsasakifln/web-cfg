@@ -1,9 +1,9 @@
 {
   "ok": true,
-  "web_cfg_sha": "4a597b8056ceb11313a9dcd8928bb7e5b2b92785",
+  "web_cfg_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "be5c091eee5b93b03b8724c368a109a8b98d3bc75a7ee0e0b19f9d2528a3403c",
+  "public_artifact_hash": "0c4d53d3b84c30bdfd4f7551530f7f8795116fb540fa963bc701da6615a50ca2",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
     "counts": {
@@ -13,6 +13,16 @@
     "publishable": [],
     "pages_written": 23
   },
+  "editorial_wave": {
+    "ok": true,
+    "indexable_count": 0,
+    "indexable_urls": [],
+    "sitemap_counts": {
+      "editorial": 0,
+      "jurisprudencia": 0,
+      "inteligencia_segment": 0
+    }
+  },
   "validate": {
     "ok": true,
     "error_count": 0
@@ -20,7 +30,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 328,
+    "file_count": 345,
     "finding_count": 0
   },
   "errors": []
