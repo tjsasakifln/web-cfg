@@ -1,8 +1,9 @@
 # FINAL — Editorial + pSEO inbound (Wave 1)
 
-**Terminal status:** `COMPLETE_EDITORIAL_PSEO_INBOUND_OPERATIONAL` (pending production deploy confirmation of this commit)
+**Terminal status:** `COMPLETE_EDITORIAL_PSEO_INBOUND_OPERATIONAL`
 
 **Date:** 2026-08-02  
+**Production commit:** `e801200f`  
 **Baseline HEAD:** `76da40b7` (matched production at start)  
 **pSEO intelligence:** 0 publishable (fail-closed preserved)
 
