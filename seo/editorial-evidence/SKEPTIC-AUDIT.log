@@ -1,0 +1,65 @@
+=== HEAD/PROD ===
+f31ce0df6b06784e478c6e8db739f88e520c89f1
+{
+  "schema_version": "1.0.0",
+  "commit": "f31ce0df6b06784e478c6e8db739f88e520c89f1",
+  "build_time": "2026-08-02T17:38:52Z",
+  "environment": "production",
+  "site_schema_version": "1.1.0",
+  "source": "build_site.write_build_info"
+}
+
+=== SKEPTIC 1: auto-approve path ===
+scripts/editorial/build.py:480:    if "--auto-approve" in argv:
+scripts/editorial/build.py:482:            "ERROR: --auto-approve removed. Human approval required via approve_cli.py",
+ERROR: --auto-approve removed. Human approval required via approve_cli.py
+auto-approve-rc=2
+=== SKEPTIC 2: registry progression + approve from DRAFT ===
+counts {'EDITORIAL_REVIEWED': 11, 'REJECTED': 1}
+indexable_urls []
+guia-checklist-aditivo EDITORIAL_REVIEWED ['DRAFT', 'LEGAL_SOURCE_VALIDATED', 'TECHNICAL_REVIEWED', 'EDITORIAL_REVIEWED', 'NOTE']
+guia-docs-reequilibrio EDITORIAL_REVIEWED ['DRAFT', 'LEGAL_SOURCE_VALIDATED', 'TECHNICAL_REVIEWED', 'EDITORIAL_REVIEWED', 'NOTE']
+guia-glosa EDITORIAL_REVIEWED ['DRAFT', 'LEGAL_SOURCE_VALIDATED', 'TECHNICAL_REVIEWED', 'EDITORIAL_REVIEWED', 'NOTE']
+OK draft blocked: requires_EDITORIAL_REVIEWED_got_DRAFT
+OK operator blocked: reviewer_not_human:editorial-wave1-operator
+operator blocked pattern True
+=== SKEPTIC 3: FINAL status ===
+# FINAL — Editorial + pSEO inbound (Wave 1)
+
+**Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`
+
+**Date:** 2026-08-02  
+**Repo tip after remediation:** (see git log)  
+**pSEO intelligence:** 0 publishable (fail-closed preserved)
+
+=== SKEPTIC 4: jurisprudence ===
+def status True consultar texto oficial no portal TCU
+reg status REJECTED
+=== SKEPTIC 5: cannibalization ===
+local consolidar robots noindex,follow
+in sitemap False
+editorial locs 0
+wave1 in main sitemap False
+prod /lei-14133-obras/art-124-alteracao-contratual-obra/ noindex,follow
+prod /conteudos/servico-executado-sem-termo-aditivo/ noindex,follow
+prod editorial locs 0
+=== SKEPTIC 6: evidence artifacts ===
+-rw-r--r-- 1 tjsasakifln tjsasakifln 4061 Aug  2 14:35 docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md
+
+seo/editorial-evidence/deep-review/:
+total 4
+drwxr-xr-x 1 tjsasakifln tjsasakifln 4096 Aug  2 14:28 .
+drwxr-xr-x 1 tjsasakifln tjsasakifln 4096 Aug  2 14:35 ..
+-rw-r--r-- 1 tjsasakifln tjsasakifln 2002 Aug  2 14:28 DEEP-REVIEW-30PCT.md
+
+seo/editorial-evidence/screenshots/:
+total 812
+drwxr-xr-x 1 tjsasakifln tjsasakifln   4096 Aug  2 14:29 .
+drwxr-xr-x 1 tjsasakifln tjsasakifln   4096 Aug  2 14:35 ..
+-rw-r--r-- 1 tjsasakifln tjsasakifln 155177 Aug  2 14:29 art124-mobile.png
+-rw-r--r-- 1 tjsasakifln tjsasakifln 222008 Aug  2 14:29 art124.png
+-rw-r--r-- 1 tjsasakifln tjsasakifln 160510 Aug  2 14:29 checklist-mobile.png
+-rw-r--r-- 1 tjsasakifln tjsasakifln 283242 Aug  2 14:29 checklist.png
+  55 seo/editorial-evidence/deep-review/DEEP-REVIEW-30PCT.md
+  29 docs/editorial/CONTENT-CANNIBALIZATION-REPORT.md
+  84 total
