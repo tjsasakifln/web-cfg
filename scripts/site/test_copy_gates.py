@@ -65,6 +65,58 @@ def test_llms_consistent():
     assert "Engenheiro Civil e Diretoria B2G fracionada" not in text
 
 
+
+
+def test_concordance_and_forbidden_microcopy():
+    """Gate for already-identified grammar/CTA defects — not a substitute for human review."""
+    commercial = [
+        ROOT / "index.html",
+        ROOT / "diretoria-b2g" / "index.html",
+        ROOT / "diagnostico-b2g-360" / "index.html",
+        ROOT / "bid-room-licitacoes-obras" / "index.html",
+        ROOT / "defesa-margem-contratos-publicos" / "index.html",
+        ROOT / "obrigado.html",
+        ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
+    ]
+    forbidden = [
+        "Premissas e decisões registrados",
+        "Preferir formulário",
+        "Deep work",
+        "Conhecer a Diretoria B2G",
+        "GO / REVIEW / NO-GO",
+        "GO/REVIEW/NO-GO",
+        "assume a recomendação e confronta com o resultado",
+    ]
+    for path in commercial:
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for phrase in forbidden:
+            assert phrase not in text, f"{path}: forbidden microcopy {phrase!r}"
+        # no em-dash (travessão) in user-facing commercial HTML
+        assert "—" not in text, f"{path}: em-dash/travessão present"
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "Premissas e decisões ficam registradas" in home
+    assert "confrontada posteriormente com o resultado" in home or "confrontada depois com o resultado" in home
+    assert "Diagnosticar encaixe da Diretoria B2G" in home or "Diagnosticar operação B2G" in home
+    # primary CTAs family
+    assert "Solicitar Diagnóstico B2G" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
+    assert "Avaliar proposta crítica" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
+    assert "Avaliar contrato sob pressão" in (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
+    assert "Diagnosticar encaixe da Diretoria B2G" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
+
+
+def test_whatsapp_float_in_landmark():
+    pages = [
+        ROOT / "index.html",
+        ROOT / "diretoria-b2g" / "index.html",
+        ROOT / "obrigado.html",
+    ]
+    for path in pages:
+        text = path.read_text(encoding="utf-8")
+        assert "contact-float" in text, f"{path}: missing contact-float landmark"
+        assert 'aria-label="Contato rápido"' in text or "Contato rápido" in text
+
 if __name__ == "__main__":
     failed = 0
     for t in (
@@ -73,6 +125,8 @@ if __name__ == "__main__":
         test_brand_forbidden_phrases_still_enforced,
         test_microcopy_preferences,
         test_llms_consistent,
+        test_concordance_and_forbidden_microcopy,
+        test_whatsapp_float_in_landmark,
     ):
         try:
             t()

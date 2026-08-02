@@ -39,11 +39,26 @@
   },
   "navigation": {
     "desktop": [
-      {"label": "Como atuamos", "href": "/#como-atuamos"},
-      {"label": "Diretoria B2G", "href": "/diretoria-b2g/"},
-      {"label": "Inteligência", "href": "/inteligencia/"},
-      {"label": "Conteúdos", "href": "/conteudos/"},
-      {"label": "Especialista", "href": "/especialista/tiago-jun-sasaki/"}
+      {
+        "label": "Como atuamos",
+        "href": "/#como-atuamos"
+      },
+      {
+        "label": "Diretoria B2G",
+        "href": "/diretoria-b2g/"
+      },
+      {
+        "label": "Inteligência",
+        "href": "/inteligencia/"
+      },
+      {
+        "label": "Conteúdos",
+        "href": "/conteudos/"
+      },
+      {
+        "label": "Especialista",
+        "href": "/especialista/tiago-jun-sasaki/"
+      }
     ],
     "cta": {
       "label": "Diagnosticar operação",
@@ -59,7 +74,7 @@
       "headline": "Descubra onde sua operação perde oportunidade, margem e controle.",
       "description": "Mapeamento da capacidade da empresa, mercado, acervo, carteira de oportunidades, processo decisório, riscos e gargalos. Termina com um plano executivo de 90 dias.",
       "result": "Prioridades claras e backlog de implantação.",
-      "cta": "Solicitar diagnóstico B2G",
+      "cta": "Solicitar Diagnóstico B2G",
       "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico B2G 360° para mapear oportunidades, margem e controle da nossa operação.",
       "schema_service_type": "Diagnóstico B2G 360°"
     },
@@ -69,9 +84,9 @@
       "name": "Diretoria B2G fracionada",
       "url": "/diretoria-b2g/",
       "headline": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
-      "description": "Oportunidades priorizadas com critérios, GO/NO-GO, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
+      "description": "Oportunidades priorizadas com critérios, decisão de participar ou recusar, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
       "result": "A frente B2G deixa de depender de improviso e passa a operar com método.",
-      "cta": "Conhecer a Diretoria B2G",
+      "cta": "Diagnosticar encaixe da Diretoria B2G",
       "wa_message": "Olá, Tiago. Quero conhecer a Diretoria B2G fracionada e entender se encaixa na nossa operação.",
       "schema_service_type": "Diretoria B2G fracionada"
     },
@@ -80,10 +95,10 @@
       "label": "Oportunidade crítica",
       "name": "Bid Room",
       "url": "/bid-room-licitacoes-obras/",
-      "headline": "Para o edital que merece sala de guerra, não improviso.",
+      "headline": "Para o edital que exige coordenação da proposta, não improviso.",
       "description": "Leitura crítica, estratégia, habilitação, acervo, orçamento, cronograma, responsabilidades, revisão crítica independente e controle final da proposta.",
       "result": "Uma decisão consciente de participar e uma proposta coerente com a capacidade da empresa.",
-      "cta": "Avaliar uma oportunidade",
+      "cta": "Avaliar proposta crítica",
       "wa_message": "Olá, Tiago. Tenho uma oportunidade crítica de licitação e quero avaliar se vale montar um Bid Room.",
       "schema_service_type": "Bid Room para licitações de obras"
     },
@@ -95,7 +110,7 @@
       "headline": "Quando cada dia sem registro enfraquece sua posição.",
       "description": "Organização de cronologia, causalidade, cálculos, evidências, notificações, aditivos, reequilíbrio, defesa técnica e proteção de margem.",
       "result": "Posição técnica organizada para decisão da direção e atuação coordenada com jurídico e engenharia.",
-      "cta": "Enquadrar um risco contratual",
+      "cta": "Avaliar contrato sob pressão",
       "wa_message": "Olá, Tiago. Preciso enquadrar um risco contratual e proteger a margem de um contrato público.",
       "schema_service_type": "Defesa de margem em contratos públicos"
     }
@@ -178,7 +193,11 @@
     "status de implementação",
     "aprovado para publicação",
     "critério interno",
-    "Engenheiro Civil e Diretoria B2G fracionada"
+    "Engenheiro Civil e Diretoria B2G fracionada",
+    "Preferir formulário",
+    "Premissas e decisões registrados",
+    "Deep work",
+    "Conhecer a Diretoria B2G"
   ],
   "copy_leaks": [
     "Arquitetura de ofertas",

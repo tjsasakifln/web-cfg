@@ -18,7 +18,7 @@ try:
     from scripts.site.brand import footer_blurb as _footer_blurb
     from scripts.site.brand import load_brand as _load_brand
     from scripts.site.brand import org_description as _org_description
-except Exception:  # noqa: BLE001 — keep pSEO build resilient
+except Exception:  # noqa: BLE001 ,  keep pSEO build resilient
     _load_brand = None  # type: ignore[assignment]
     _org_description = None  # type: ignore[assignment]
     _footer_blurb = None  # type: ignore[assignment]
@@ -166,11 +166,11 @@ def e(s: Any) -> str:
 
 def money(v: Any) -> str:
     if v is None:
-        return "—"
+        return ", "
     try:
         n = float(v)
     except (TypeError, ValueError):
-        return "—"
+        return ", "
     return f"R$ {n:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
@@ -290,7 +290,7 @@ def page_shell(
 {body_main}
 </main>
 {FOOTER}
-<a aria-label="Falar com a CONFENGE pelo WhatsApp" class="whatsapp-float" data-cta-position="float" data-content-cluster="pseo" href="{e(wa_link(wa_message))}" rel="noopener" target="_blank"><svg class="icon"><use href="#i-whatsapp"></use></svg></a>
+<aside class="contact-float" aria-label="Contato rápido"><a aria-label="Falar com a CONFENGE pelo WhatsApp" class="whatsapp-float" data-cta-position="float" data-content-cluster="pseo" href="{e(wa_link(wa_message))}" rel="noopener" target="_blank"><svg class="icon"><use href="#i-whatsapp"></use></svg></a></aside>
 </body>
 </html>
 """
@@ -324,7 +324,7 @@ def author_box() -> str:
 
 
 def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> str:
-    """Commercial CTA for pSEO pages — decision/consequence language, not pipeline jargon."""
+    """Commercial CTA for pSEO pages ,  decision/consequence language, not pipeline jargon."""
     wa = wa_link(wa_message)
     form = form_href(meta, tema, "inline_cta")
     attr = attribution_query(meta, "inline_cta")
@@ -341,13 +341,13 @@ def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> s
 <p>{e(body)}</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-cta-position="inline_cta" data-content-cluster="pseo" data-pseo-event="pseo_whatsapp_click" href="{e(wa)}" rel="noopener" target="_blank">Revisar esta oportunidade</a>
-<a class="button button-secondary" data-cta-position="form" data-content-cluster="pseo" data-pseo-event="pseo_cta_click" href="{e(form)}">Preferir formulário</a>
+<a class="button button-secondary" data-cta-position="form" data-content-cluster="pseo" data-pseo-event="pseo_cta_click" href="{e(form)}">Continuar pelo formulário</a>
 </div></section>"""
 
 
 def _br(iso: str | None) -> str:
     if not iso:
-        return "—"
+        return ", "
     d = str(iso)[:10]
     if len(d) == 10 and d[4] == "-" and d[7] == "-":
         return f"{d[8:10]}/{d[5:7]}/{d[0:4]}"
