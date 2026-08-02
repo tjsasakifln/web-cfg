@@ -20,3 +20,8 @@ __pycache__/
 
 # Isolated public artifact (Netlify publish directory)
 _site/
+
+# Lighthouse full runs (keep summary only)
+docs/lighthouse-runs/*.json
+!docs/lighthouse-runs/summary.json
+

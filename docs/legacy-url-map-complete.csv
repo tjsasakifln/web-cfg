@@ -1,0 +1,53 @@
+old_url,current_status_before,decision,target_url,expected_status,reason,validated_after_deploy
+/servicos,301→/#atuacao (fragmento inexistente),A,/#como-atuamos,301,Catálogo de serviços legado → seção Como atuamos (macrofases) na home,pending
+/servicos/,301→/#atuacao (fragmento inexistente),A,/#como-atuamos,301,Catálogo de serviços legado → seção Como atuamos (macrofases) na home,pending
+/contato,301→/#contato,A,/#contato,301,Formulário e canais de contato estão na home #contato,yes
+/contato/,301→/#contato,A,/#contato,301,Variante com barra final,yes
+/blog,301→/conteudos/,A,/conteudos/,301,Biblioteca técnica B2G é a sucessora legítima do blog,yes
+/blog/,301→/conteudos/,A,/conteudos/,301,Variante com barra final,yes
+/privacy-policy,301→/privacidade/,A,/privacidade/,301,Política EN legada → canônica PT /privacidade/,yes
+/privacy-policy/,301→/privacidade/,A,/privacidade/,301,Variante com barra final,yes
+/politica-de-privacidade,404,A,/privacidade/,301,Variante PT comum sem página própria → canônica,yes
+/politica-de-privacidade/,404,A,/privacidade/,301,Variante com barra final,yes
+/privacidade,301→/privacidade/,A,/privacidade/,301,Normalização de barra final canônica,yes
+/privacidade/,200,A,/privacidade/,200,Página canônica atual de privacidade (destino),yes
+/terms-and-conditions,301→/privacidade/ (soft),B,/termos-de-uso/,301,Terms não é privacidade; redirect para termos B2G canônicos,yes
+/terms-and-conditions/,301→/privacidade/ (soft),B,/termos-de-uso/,301,Variante com barra final,yes
+/termos-de-uso,n/a,B,/termos-de-uso/,301,Normalização sem barra → canônica,yes
+/termos-de-uso/,n/a (nova),B,/termos-de-uso/,200,Página institucional prudente de termos (B2G); revisar juridicamente se necessário,yes
+/trabalhe-conosco,301→/#contato,A,/#contato,301,Sem carreiras públicas; canal de contato é o substituto razoável,yes
+/trabalhe-conosco/,301→/#contato,A,/#contato,301,Variante com barra final,yes
+/vision,301→/ (soft-404),C,,410,Produto/marca legada Vision sem equivalente B2G; 410 Gone deliberado,yes
+/vision/,301→/ (soft-404),C,,410,Variante com barra final,yes
+/nexgen,301→/ (soft-404),C,,410,Produto/marca legada NexGen sem equivalente B2G; 410 Gone,yes
+/nexgen/,301→/ (soft-404),C,,410,Variante com barra final,yes
+/avcbclcb,301→/ (soft-404),C,,410,Serviço AVCB/CLCB abandonado; fora do posicionamento B2G; 410 Gone,yes
+/avcbclcb/,301→/ (soft-404),C,,410,Variante com barra final,yes
+https://confenge.netlify.app/*,200 (duplicata de host),A,https://confenge.com.br/:splat,301,Canonização de host Netlify → apex confenge.com.br preservando path,yes
+https://www.confenge.com.br/*,301 (Netlify auto),A,https://confenge.com.br/*,301,Alias www gerido pela Netlify (domínio principal apex); não duplicar regra,yes
+http://confenge.com.br/*,301,A,https://confenge.com.br/*,301,Upgrade HTTP→HTTPS pela plataforma Netlify,yes
+/* (desconhecido),404,C,/404.html,404,Catch-all real 404 com página de erro B2G; sem SPA 200,yes
+/-servicos,unknown,D,,404,Slug com hífen inicial sem histórico útil; 404 real,pending
+/-contato,unknown,D,,404,Slug com hífen inicial sem histórico útil; 404 real,pending
+/servicos.html,unknown,A,/#como-atuamos,301,Variante .html do catálogo de serviços,pending
+/contato.html,unknown,A,/#contato,301,Variante .html do contato,pending
+/blog.html,unknown,A,/conteudos/,301,Variante .html do blog,pending
+/index.html,200/redirect,A,/,301,Normalização index.html → /,pending
+/avaliacoes,unknown,C,,410,Avaliações imobiliárias legadas; sem equivalente B2G,pending
+/avaliacoes-imobiliarias,unknown,C,,410,Avaliações imobiliárias legadas; sem equivalente B2G,pending
+/avaliacao-imovel,unknown,C,,410,Avaliações imobiliárias legadas; sem equivalente B2G,pending
+/ia,unknown,C,,410,IA genérica legada; fora do posicionamento B2G,pending
+/inteligencia-artificial,unknown,C,,410,IA genérica legada; fora do posicionamento B2G,pending
+/automacao,unknown,C,,410,Automação genérica legada; sem equivalente B2G,pending
+/avcb,unknown,C,,410,AVCB abandonado; sem soft-404 para home B2G,pending
+/clcb,unknown,C,,410,CLCB abandonado; sem soft-404 para home B2G,pending
+/avcb-clcb,unknown,C,,410,AVCB/CLCB abandonado,pending
+/sobre,unknown,A,/especialista/tiago-jun-sasaki/,301,Sobre genérico → especialista (entidade atual),pending
+/sobre-nos,unknown,A,/especialista/tiago-jun-sasaki/,301,Sobre nós genérico → especialista,pending
+/about,unknown,A,/especialista/tiago-jun-sasaki/,301,About EN → especialista,pending
+/services,unknown,A,/#como-atuamos,301,Services EN → como atuamos,pending
+/contact,unknown,A,/#contato,301,Contact EN → contato,pending
+/auditoria-orcamento-licitacao/,gsc,D,,404,URL vista em GSC (Paginas.csv); sem substituto semântico mapeado — validar antes de 410,pending
+/diagnostico-pre-licitacao/,gsc,D,,404,URL vista em GSC (Paginas.csv); sem substituto semântico mapeado — validar antes de 410,pending
+/reequilibrio-obras-publicas/,gsc,D,,404,URL vista em GSC (Paginas.csv); sem substituto semântico mapeado — validar antes de 410,pending
+/acompanhamento-contratos-obras/,gsc,D,,404,URL vista em GSC (Paginas.csv); sem substituto semântico mapeado — validar antes de 410,pending

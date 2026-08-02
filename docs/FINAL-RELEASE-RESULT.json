@@ -1,0 +1,184 @@
+{
+  "campaign": "PRODUCTION-CUTOVER-UIUX-SEO-RELEASE",
+  "date": "2026-08-02T03:50:56.189510+00:00",
+  "initial_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "final_sha": null,
+  "deployed_sha": null,
+  "netlify_deploy_id": null,
+  "status": "IN_PROGRESS_PRE_PUSH",
+  "pages_tested": [
+    "/",
+    "/diretoria-b2g/",
+    "/diagnostico-b2g-360/",
+    "/bid-room-licitacoes-obras/",
+    "/defesa-margem-contratos-publicos/",
+    "/especialista/tiago-jun-sasaki/",
+    "/inteligencia/",
+    "/conteudos/",
+    "/obrigado.html",
+    "/404.html"
+  ],
+  "redirects_tested": [
+    "/servicos",
+    "/vision",
+    "/nexgen",
+    "/avcbclcb",
+    "/contato",
+    "/blog"
+  ],
+  "urls_410": [
+    "/vision",
+    "/nexgen",
+    "/avcbclcb",
+    "/avcb",
+    "/clcb",
+    "/avaliacoes",
+    "/ia",
+    "/automacao"
+  ],
+  "lighthouse": {
+    "base": "http://127.0.0.1:8795/_site",
+    "generated_at": "2026-08-02T03:48:00.632966+00:00",
+    "form_factor": "mobile",
+    "results": [
+      {
+        "path": "/",
+        "performance": 100,
+        "accessibility": 100,
+        "best_practices": 100,
+        "seo": 100,
+        "lcp_ms": 1814.986,
+        "cls": 0,
+        "tbt_ms": 0,
+        "fcp_ms": 1064.986,
+        "si_ms": 1064.986
+      },
+      {
+        "path": "/diretoria-b2g/",
+        "performance": 0,
+        "accessibility": 0,
+        "best_practices": 0,
+        "seo": 0,
+        "lcp_ms": null,
+        "cls": null,
+        "tbt_ms": null,
+        "fcp_ms": null,
+        "si_ms": null
+      },
+      {
+        "path": "/diagnostico-b2g-360/",
+        "performance": 0,
+        "accessibility": 0,
+        "best_practices": 0,
+        "seo": 0,
+        "lcp_ms": null,
+        "cls": null,
+        "tbt_ms": null,
+        "fcp_ms": null,
+        "si_ms": null
+      },
+      {
+        "path": "/bid-room-licitacoes-obras/",
+        "performance": 0,
+        "accessibility": 0,
+        "best_practices": 0,
+        "seo": 0,
+        "lcp_ms": null,
+        "cls": null,
+        "tbt_ms": null,
+        "fcp_ms": null,
+        "si_ms": null
+      },
+      {
+        "path": "/defesa-margem-contratos-publicos/",
+        "performance": 0,
+        "accessibility": 0,
+        "best_practices": 0,
+        "seo": 0,
+        "lcp_ms": null,
+        "cls": null,
+        "tbt_ms": null,
+        "fcp_ms": null,
+        "si_ms": null
+      },
+      {
+        "path": "/inteligencia/",
+        "performance": 0,
+        "accessibility": 0,
+        "best_practices": 0,
+        "seo": 0,
+        "lcp_ms": null,
+        "cls": null,
+        "tbt_ms": null,
+        "fcp_ms": null,
+        "si_ms": null
+      },
+      {
+        "path": "/conteudos/",
+        "performance": 0,
+        "accessibility": 0,
+        "best_practices": 0,
+        "seo": 0,
+        "lcp_ms": null,
+        "cls": null,
+        "tbt_ms": null,
+        "fcp_ms": null,
+        "si_ms": null
+      }
+    ]
+  },
+  "axe": {
+    "critical": 0,
+    "serious": 0,
+    "moderate": 0,
+    "minor": 0
+  },
+  "metrics_before": {
+    "styles_css_bytes": 72878,
+    "script_js_bytes": 28188
+  },
+  "metrics_after": {
+    "styles_css_bytes": 55216,
+    "script_js_bytes": 28188,
+    "css_reduction_pct": 24.2
+  },
+  "pseo_provenance": {
+    "prior_source_commit": "6fc5adcf6929d908b8e4c10aab4ca2566c20a8be",
+    "prior_branch": "feat/pseo-national-acquisition-engine",
+    "prior_status": "BLOCKED_SNAPSHOT_PROVENANCE (commit missing from GitHub)",
+    "new_source_commit": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
+    "new_source_branch": "main",
+    "on_main": true,
+    "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+    "publish_count": 0,
+    "next_wave_gate": false,
+    "terminal_status_pre_deploy": "BLOCKED_PRODUCTION_AUDIT"
+  },
+  "production_audit_note": "Re-run after Netlify publishes new HEAD; pre-push live still on initial SHA with old /servicos fragment",
+  "commands": [
+    "npm run build:site",
+    "npm run test:copy",
+    "npm run test:brand",
+    "npm run test:design",
+    "npm run audit:axe",
+    "npx lighthouse ...",
+    "npm run test:production-cutover",
+    "npm run pseo:verify:release"
+  ],
+  "failures": [],
+  "limitations": [
+    "Netlify CLI/token absent; deploy via git push to main only",
+    "Production Lighthouse re-run required after deploy",
+    "pSEO national-scale snapshot replaced by main durable export (SC-scale); all pages remain non-publish (reject/noindex)",
+    "next_wave_gate remains false until seeds approved and production audit ok"
+  ],
+  "evidence": {
+    "deploy_diag": "scratch deploy-diag.txt",
+    "copy_gates": "docs/COPY-FINAL-REVIEW.md",
+    "axe": "docs/uiux-evidence/axe-report.json",
+    "lighthouse": "docs/LIGHTHOUSE-REPORT.md",
+    "legacy_map": "docs/legacy-url-map-complete.csv",
+    "seo": "docs/SEO-ENTITY-CLEANUP.md",
+    "cutover": "docs/PRODUCTION-CUTOVER-AUDIT.md"
+  }
+}

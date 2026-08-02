@@ -18,7 +18,7 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /terms-and-conditions      /termos-de-uso/   301
 /blog                      /conteudos/       301
 /contato                   /#contato         301
-/servicos                  /#atuacao         301
+/servicos                  /#como-atuamos    301
 /trabalhe-conosco          /#contato         301
 
 # --- Abandoned products (410 Gone + custom body; never soft-404 to home) ---
@@ -29,5 +29,24 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # Custom 404: Netlify auto-serves /404.html for missing paths with status 404.
 # Do not add a catch-all rewrite to index.html (SPA-style status 200).
 
+
+# --- Extended legacy disposition (entity cleanup) ---
+/servicos.html  /#como-atuamos  301
+/contato.html  /#contato  301
+/blog.html  /conteudos/  301
+/avaliacoes  /404.html  410
+/avaliacoes-imobiliarias  /404.html  410
+/avaliacao-imovel  /404.html  410
+/ia  /404.html  410
+/inteligencia-artificial  /404.html  410
+/automacao  /404.html  410
+/clcb  /404.html  410
+/avcb  /404.html  410
+/avcb-clcb  /404.html  410
+/sobre  /especialista/tiago-jun-sasaki/  301
+/sobre-nos  /especialista/tiago-jun-sasaki/  301
+/about  /especialista/tiago-jun-sasaki/  301
+/services  /#como-atuamos  301
+/contact  /#contato  301
 # pSEO legacy slug (ingestion prefix stripped)
 /inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/*  /inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/:splat  301

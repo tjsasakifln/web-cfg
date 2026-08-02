@@ -2,7 +2,7 @@
   "name": "confenge-site",
   "private": true,
   "version": "1.0.0",
-  "description": "CONFENGE static site \u2014 SEO migration and host canonization tooling",
+  "description": "CONFENGE static site — SEO migration and host canonization tooling",
   "type": "module",
   "scripts": {
     "audit:migration": "node scripts/audit-migration.mjs",
@@ -34,13 +34,18 @@
     "pseo:review": "python3 scripts/pseo/review.py",
     "test": "npm run pseo:test && npm run test:analytics && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
-    "pseo:learn": "python3 scripts/pseo/learn.py"
+    "pseo:learn": "python3 scripts/pseo/learn.py",
+    "test:production-cutover": "node scripts/site/test_production_cutover.mjs",
+    "test:production-cutover:local": "node scripts/site/test_production_cutover.mjs http://127.0.0.1:8765",
+    "test:lighthouse": "node scripts/site/run_lighthouse.mjs",
+    "audit:css-usage": "python3 scripts/site/audit_css_usage.py"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
     "axe-core": "^4.10.0",
+    "lighthouse": "^12.8.2",
     "puppeteer-core": "^23.0.0"
   }
 }
