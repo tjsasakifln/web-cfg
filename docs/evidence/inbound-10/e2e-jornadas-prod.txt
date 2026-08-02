@@ -1,0 +1,9 @@
+=== contrato ===
+{"ok":true,"lead_id":"6a846b5f2a4c46d8dc685cd6","receipt_id":"6a846b5f2a4c46d8dc685cd6","received_at":"2026-08-02T15:33:00.684Z","journey":"contrato","stage_category":"teste contrato","status":"persisted"}
+HTTP:201
+=== edital ===
+{"ok":true,"lead_id":"b61739c1865650b4a8e17e8b","receipt_id":"b61739c1865650b4a8e17e8b","received_at":"2026-08-02T15:33:01.512Z","journey":"edital","stage_category":"teste edital","status":"persisted"}
+HTTP:201
+=== operacao ===
+{"ok":true,"lead_id":"e3743621e6c81fce4c06b92e","receipt_id":"e3743621e6c81fce4c06b92e","received_at":"2026-08-02T15:33:03.148Z","journey":"operacao","stage_category":"teste operacao","status":"persisted"}
+HTTP:201

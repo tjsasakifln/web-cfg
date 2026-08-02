@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0.0",
+  "commit": "96f0c030ebc78b672fbcbca8d681509b17a0c738",
+  "build_time": "2026-08-02T15:32:41Z",
+  "environment": "production",
+  "site_schema_version": "1.1.0",
+  "source": "build_site.write_build_info"
+}

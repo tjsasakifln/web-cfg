@@ -2,9 +2,13 @@
 
 **Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`  
 
-**Motivo:** pipeline corporativo de leads, analytics 1ª parte, LGPD e gates de engenharia estão no repositório e prontos para deploy; **produção ainda não comprova** e-mail autenticado (SPF/DKIM/DMARC + Resend), Turnstile ativo, webhook ops, branch protection GitHub e coleta pós-deploy até o owner configurar secrets/DNS/GitHub. O tópico ntfy público ainda está em produção no tip antigo até o deploy deste commit.
+**Produção no tip:** `96f0c030ebc78b672fbcbca8d681509b17a0c738` (2026-08-02T15:32:41Z)  
 
-**Não declarar COMPLETE / 10/10 / FORTUNE_500** enquanto a tabela de ações externas e a paridade produção≠repo inseguro permanecerem.
+**Comprovado em produção agora:** lead persistente HTTP **201** + `lead_id` (jornadas A/B/C), resposta **sem** tópico/ntfy/PII, rate limit **429**, coletor analytics 1ª parte **202 accepted**, privacidade atualizada, HTTPS/canônico, 410 legado.  
+
+**Ainda bloqueado para 10/10:** e-mail transacional real (Resend + SPF/DKIM/DMARC), Turnstile keys, webhook ops autenticado, branch protection GitHub, monitor uptime externo, rotação formal do tópico ntfy histórico, prova de inbox.
+
+**Não declarar COMPLETE / 10/10 / FORTUNE_500** enquanto as ações externas listadas em `docs/ops/EXTERNAL-ACTIONS.md` não estiverem feitas e revalidadas.
 
 ---
 
@@ -108,12 +112,13 @@ Scratch tests: `/tmp/grok-goal-d957e1511b09/implementer/*.log`
 
 ## 16. Testes ponta a ponta
 
-| Teste | Repo | Produção (pré-deploy deste commit) |
+| Teste | Repo | Produção (tip `96f0c030`) |
 | --- | --- | --- |
-| lead unit/integration | PASS (`npm run test:lead-function`) | FAIL segurança (topic exposto) |
-| secrets scan | PASS | N/A até deploy |
-| CTA WA | PASS | número correto já em prod |
-| analytics unit | PASS | coletor ausente até deploy |
+| lead unit/integration | PASS | **201** persistido A/B/C (`e2e-jornadas-prod.txt`) |
+| secrets / no topic | PASS | CLEAN_RESPONSE |
+| rate limit | PASS | 429 após burst (`rate-limit-smoke.txt`) |
+| CTA WA | PASS | número correto |
+| analytics collect | PASS | health + batch accepted |
 | form funnel | PASS | — |
 | redirects | PASS | 410/301 OK |
 | e-mail real | código Resend | **bloqueado** sem API+DNS |
@@ -158,11 +163,11 @@ BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS
 | SEO técnico | 9 | 9 | validate:seo, redirects prod |
 | Conteúdo e E-E-A-T | 8 | 8 | especialista + pilares |
 | pSEO | 7 | 6 | containment editorial honesto (0 publish) |
-| Conversão | 9 | 7 | form/WA ok; prod lead inseguro até deploy |
-| Analytics | 9 | 4 | coletor no repo; prod sem até deploy |
-| Leads | 9 | 2 | pipeline repo; prod ntfy PII |
-| Segurança e LGPD | 9 | 3 | privacy atualizada no repo; prod antiga |
-| Engenharia | 9 | 7 | CI gates; deploy pending |
+| Conversão | 9 | 8 | form/WA + lead 201; e-mail notify pendente |
+| Analytics | 9 | 8 | coletor prod aceita eventos; dashboard SaaS opcional |
+| Leads | 9 | 8 | persist+protocolo prod; notify/e-mail owner |
+| Segurança e LGPD | 9 | 8 | sem topic; rate limit; Turnstile off até keys |
+| Engenharia | 9 | 9 | tip prod = commit; CI gates |
 | Governança | 7 | 4 | CODEOWNERS/Dependabot/CodeQL; branch protection owner |
 | Observabilidade | 7 | 3 | docs SLO; monitor owner |
 | Operação comercial | 8 | 5 | LEAD-HANDLING.md; e-mail/notify owner |
