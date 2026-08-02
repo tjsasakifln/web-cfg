@@ -14,7 +14,7 @@
     "markets.json": "b03fde513c10b54a397fbdf1c99b345229f8392ab2a52f24edbee5728dc3c08b",
     "opportunities.json": "481697170045b17dc70cdb48f64c3ab6e3b782530c58b518182a31e72c336689",
     "prices.json": "d2b04266775974b300c9edcd1adf2c52dca2454ffaf05274a7cfdb9f82bcf714",
-    "problem_service.json": "83e7d293087a5e7088f3a5fd732dcfdd25419e4e65fc90a3ca57260a36e4352f",
+    "problem_service.json": "b2881394e47b8d971db83d86ed82e633a91f07966daccafb13d62745b9f42e44",
     "schema.json": "77de5b81ae331f38d03150fae556caa0bb987268b8618689855e00abc4e1dc8e"
   },
   "classification_counts": {
@@ -257,7 +257,7 @@
     "staging_path": "/tmp/pseo-staging-qdx2kzs_.sqlite"
   },
   "data_as_of": "2026-07-31",
-  "dataset_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+  "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "denominators": {
     "aec_confirmed_bids": 356,
     "aec_confirmed_contracts": 233,
