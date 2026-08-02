@@ -324,35 +324,41 @@ async function main() {
     fail("essential_content_without_js", e.message || e);
   }
 
-  // 10) matrix mobile composition present
+  // 10) journey cards stack on mobile (replacement for legacy trace matrix)
   try {
     await page.setViewport({ width: 390, height: 844 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const matrix = await page.evaluate(() => {
-      const cards = document.querySelector(".trace-cards");
-      const wrap = document.querySelector(".trace-matrix-wrap");
+      const paths = document.querySelectorAll(".journey-path");
+      const grid = document.querySelector(".journey-paths");
       return {
-        cardsDisplay: cards ? getComputedStyle(cards).display : "missing",
-        tableDisplay: wrap ? getComputedStyle(wrap).display : "missing",
-        cardCount: document.querySelectorAll(".trace-card").length,
+        cardCount: paths.length,
+        gridDisplay: grid ? getComputedStyle(grid).display : "missing",
+        labels: [...paths].map((p) => (p.querySelector("h3")?.textContent || "").trim()).filter(Boolean),
       };
     });
-    if (matrix.cardCount < 3) throw new Error("expected ≥3 trace cards");
-    if (matrix.cardsDisplay === "none") throw new Error("trace cards hidden on mobile");
-    if (matrix.tableDisplay !== "none") throw new Error("wide table still shown on mobile");
+    if (matrix.cardCount < 3) throw new Error(`expected ≥3 journey paths, got ${matrix.cardCount}`);
+    if (matrix.gridDisplay === "none") throw new Error("journey paths hidden on mobile");
     ok("matrix_mobile_stacked_records");
   } catch (e) {
     fail("matrix_mobile_stacked_records", e.message || e);
   }
 
-  // 11) form validation message by text
+  // 11) form validation — empty multi-step form is invalid
   try {
     await page.setViewport({ width: 1024, height: 800 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-    await page.click('button[type="submit"]');
     const invalid = await page.evaluate(() => {
       const form = document.querySelector('form[name="diagnostico-b2g"]');
-      return form ? !form.checkValidity() : false;
+      if (!form) return false;
+      // Prefer Continuar (step 1) when multi-step is active
+      const next = form.querySelector("[data-form-next]");
+      if (next) next.click();
+      else {
+        const submit = form.querySelector('button[type="submit"]');
+        if (submit) submit.click();
+      }
+      return !form.checkValidity();
     });
     if (!invalid) throw new Error("empty form should be invalid");
     ok("form_invalid_without_fields");
@@ -494,22 +500,24 @@ async function main() {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     await page.type("#nome", "Teste UI");
-    await page.type("#empresa", "Construtora Teste");
-    await page.select("#estagio", "preparando proposta");
-    await page.select("#urgencia", "até 7 dias");
-    await page.click("#consentimento");
-    // leave email and phone empty
-    await page.click('button[type="submit"]');
+    // leave email and phone empty; select a real step-1 option
+    await page.select("#estagio", "problema urgente em contrato");
+    await page.click("[data-form-next]");
     await new Promise((r) => setTimeout(r, 150));
     const err = await page.evaluate(() => {
       const status = document.querySelector(".form-status");
       const email = document.querySelector("#email");
+      const phone = document.querySelector("#telefone");
       const msg = status && !status.hidden ? status.textContent : "";
       const validity = email ? email.validationMessage : "";
+      const phoneVal = phone ? phone.validationMessage : "";
       return {
         statusText: (msg || "").trim(),
-        validity: (validity || "").trim(),
-        invalidClass: email?.classList.contains("is-invalid") || false,
+        validity: (validity || phoneVal || "").trim(),
+        invalidClass:
+          email?.classList.contains("is-invalid")
+          || phone?.classList.contains("is-invalid")
+          || false,
       };
     });
     const text = `${err.statusText} ${err.validity}`.toLowerCase();
@@ -563,20 +571,28 @@ async function main() {
 
   // 21) thank-you + specialist CTA family
   try {
-    for (const path of ["/obrigado.html", "/especialista/tiago-jun-sasaki/"]) {
+    for (const path of [
+      "/obrigado.html",
+      "/obrigado-contrato.html",
+      "/obrigado-edital.html",
+      "/obrigado-operacao.html",
+      "/especialista/tiago-jun-sasaki/",
+    ]) {
       await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded" });
       const labels = await page.evaluate(() =>
-        [...document.querySelectorAll(".button-primary")]
+        [...document.querySelectorAll(".button-primary, .button-secondary")]
           .map((el) => (el.textContent || "").replace(/\s+/g, " ").trim())
           .filter(Boolean)
       );
-      const bad = labels.filter((l) => !/diagnosticar operação b2g/i.test(l) && !/voltar/i.test(l));
-      // obrigado may have "Voltar para a página inicial" as primary — allow that OR Diagnosticar
       if (path.includes("obrigado")) {
-        const okLabel = labels.every((l) => /diagnosticar operação b2g|voltar/i.test(l));
+        const okLabel = labels.some((l) =>
+          /whatsapp|voltar|falar com a confenge|diagnosticar|edital|documentos|agilizar/i.test(l)
+        );
         if (!okLabel) throw new Error(`obrigado CTAs: ${labels.join(" | ")}`);
+        const hasSuccess = await page.$("[data-lead-success]");
+        if (!hasSuccess) throw new Error(`${path} missing data-lead-success`);
       } else {
-        if (!labels.some((l) => /diagnosticar operação b2g/i.test(l))) {
+        if (!labels.some((l) => /diagnosticar|falar com a confenge|contato/i.test(l))) {
           throw new Error(`specialist missing primary family: ${labels.join(" | ")}`);
         }
         if (labels.some((l) => /analisar meu cenário|apresentar uma demanda/i.test(l))) {
