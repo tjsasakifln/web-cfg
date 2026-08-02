@@ -190,12 +190,18 @@ def test_trace_matrix_and_tension_present():
     assert "Diretoria B2G" in html
     assert "Arquitetura de ofertas" not in html
     # Three differentiated conversion paths (required by conversion architecture)
-    assert "Enviar documentos para análise inicial" in html
+    assert "Enviar documentos para análise" in html
     assert "Enviar edital para triagem" in html
-    assert "Diagnosticar a operação B2G" in html
+    assert "Diagnosticar operação B2G" in html or "Diagnosticar a operação B2G" in html
     assert 'data-journey="contrato"' in html
     assert 'data-journey="edital"' in html
     assert 'data-journey="operacao"' in html
+    # Client-facing journey section — no briefing metalinguage
+    assert "Como podemos ajudar" in html
+    assert "Qual situação sua empresa precisa resolver agora" in html
+    assert "Sem CTA genérico" not in html
+    assert not re.search(r">\s*Jornada\s+[ABC]\s*<", html)
+    assert "Risco de não agir" not in html
     # Positive proof language — no defensive public copy
     lower = html.lower()
     for leak in (
@@ -204,6 +210,8 @@ def test_trace_matrix_and_tension_present():
         "sem metrica ficticia",
         "sem javascript",
         "legível sem javascript",
+        "cta genérico",
+        "prova próxima ao cta",
     ):
         assert leak not in lower, f"defensive leak on home: {leak}"
 

@@ -52,8 +52,27 @@ def test_microcopy_preferences():
         "pipeline editorial",
         "visual regression",
         "red team",
+        "sem cta genérico",
+        "cta genérico único",
+        "jornada a",
+        "jornada b",
+        "jornada c",
+        "prova próxima ao cta",
+        "funil",
     ):
         assert phrase not in lower, f"public leak: {phrase}"
+    # Client-facing journey section (not briefing metalinguage)
+    assert "como podemos ajudar" in lower
+    assert "qual situação sua empresa precisa resolver agora" in lower
+    assert "problema urgente em contrato" in lower
+    assert "edital ou proposta em análise" in lower
+    assert "operação b2g sem método" in lower
+    assert "enviar documentos para análise" in lower
+    assert "enviar edital para triagem" in lower
+    assert "diagnosticar operação b2g" in lower or "diagnosticar a operação b2g" in lower
+    # Visible labels "Jornada A/B/C" must not appear (data-journey attrs OK)
+    assert not re.search(r">\s*Jornada\s+[ABC]\s*<", home), "visible Jornada A/B/C label"
+    assert "risco de não agir" not in lower
     # English offer terms explained in Portuguese on first commercial exposure
     assert "sala de decisão" in lower or "bid room" in lower
     assert "defesa técnica" in lower or "proteção de margem" in lower
@@ -107,10 +126,16 @@ def test_concordance_and_forbidden_microcopy():
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
     assert "Diagnosticar a operação B2G" in home or "Diagnosticar operação B2G" in home
+    assert "Enviar documentos para análise" in home
+    # Thank-you pages must not expose journey letter labels to visitors
+    for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
+        ty = (ROOT / name).read_text(encoding="utf-8")
+        assert not re.search(r"Jornada\s+[ABC]", ty), f"{name}: visible Jornada letter"
     # Journey-aligned CTA family on offer pages
     assert "Diagnosticar a operação B2G" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
     assert "Enviar edital para triagem" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
-    assert "Enviar documentos para análise inicial" in (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
+    defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
+    assert "Enviar documentos para análise" in defesa
     assert "Diagnosticar a operação B2G" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
 
 

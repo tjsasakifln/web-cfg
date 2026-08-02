@@ -58,10 +58,15 @@ def test_home_has_canonical_copy():
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
-    # Three differentiated journey CTAs
-    assert "Enviar documentos para análise inicial" in html
+    # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels)
+    assert "Enviar documentos para análise" in html
     assert "Enviar edital para triagem" in html
-    assert "Diagnosticar a operação B2G" in html
+    assert "Diagnosticar operação B2G" in html or "Diagnosticar a operação B2G" in html
+    assert "Como podemos ajudar" in html
+    assert "Sem CTA genérico" not in html
+    for j in brand.get("journeys") or []:
+        assert j["label"] in html, j["label"]
+        assert j["cta"] in html, j["cta"]
     for o in brand["offers"]:
         assert o["url"] in html, o["url"]
     # FAQ sync

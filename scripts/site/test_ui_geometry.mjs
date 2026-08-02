@@ -366,15 +366,113 @@ async function main() {
     fail("form_invalid_without_fields", e.message || e);
   }
 
-  // 12) internal language absent
+  // 12) internal language absent (visitor-facing)
   try {
-    const html = readFileSync(join(ROOT, "index.html"), "utf8").toLowerCase();
-    const leaks = ["sem inventar case", "sem métrica fictícia", "javascript", "arquétipo", "pipeline editorial", "red team", "visual regression"];
-    const hit = leaks.filter((p) => html.includes(p));
+    const html = readFileSync(join(ROOT, "index.html"), "utf8");
+    const lower = html.toLowerCase();
+    const leaks = [
+      "sem inventar case",
+      "sem métrica fictícia",
+      "javascript",
+      "arquétipo",
+      "pipeline editorial",
+      "red team",
+      "visual regression",
+      "sem cta genérico",
+      "cta genérico único",
+      "prova próxima ao cta",
+      "risco de não agir",
+    ];
+    const hit = leaks.filter((p) => lower.includes(p));
     if (hit.length) throw new Error(hit.join(", "));
+    if (/>\s*Jornada\s+[ABC]\s*</.test(html)) throw new Error("visible Jornada A/B/C label");
+    if (!/como podemos ajudar/i.test(html)) throw new Error("missing client journey eyebrow");
+    if (!/qual situação sua empresa precisa resolver agora/i.test(html)) throw new Error("missing client journey title");
     ok("no_internal_language_home");
   } catch (e) {
     fail("no_internal_language_home", e.message || e);
+  }
+
+  // 12b) journeys section mobile hierarchy outcomes (390 / 360 / 412)
+  try {
+    const reports = [];
+    for (const [w, h] of [
+      [360, 800],
+      [390, 844],
+      [412, 915],
+    ]) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}/`, { waitUntil: "networkidle0", timeout: 30000 });
+      const rep = await page.evaluate(() => {
+        const overflow =
+          document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+        const title = document.querySelector("#journeys-title");
+        const firstCard = document.querySelector(".journey-path");
+        const firstCta = document.querySelector(".journey-path .button");
+        const floatEl = document.querySelector(".whatsapp-float, .contact-float .whatsapp-float");
+        const header = document.querySelector(".site-header");
+        const titleLines = title
+          ? Math.round(title.getBoundingClientRect().height / (parseFloat(getComputedStyle(title).lineHeight) || 24))
+          : 0;
+        const titleFs = title ? parseFloat(getComputedStyle(title).fontSize) : 0;
+        const bodyP = document.querySelector(".journey-path > p");
+        const bodyFs = bodyP ? parseFloat(getComputedStyle(bodyP).fontSize) : 0;
+        const ctaBox = firstCta ? firstCta.getBoundingClientRect() : null;
+        const floatBox = floatEl ? floatEl.getBoundingClientRect() : null;
+        let floatObscuresCta = false;
+        if (ctaBox && floatBox && floatBox.width > 0 && getComputedStyle(floatEl).display !== "none") {
+          const overlapX = Math.min(ctaBox.right, floatBox.right) - Math.max(ctaBox.left, floatBox.left);
+          const overlapY = Math.min(ctaBox.bottom, floatBox.bottom) - Math.max(ctaBox.top, floatBox.top);
+          const overlapArea = Math.max(0, overlapX) * Math.max(0, overlapY);
+          const ctaArea = Math.max(1, ctaBox.width * ctaBox.height);
+          floatObscuresCta = overlapArea / ctaArea > 0.35;
+        }
+        const container = document.querySelector(".journeys-section .container") || document.querySelector(".container");
+        const padLeft = container ? container.getBoundingClientRect().left : 0;
+        return {
+          overflow,
+          titleLines,
+          titleFs,
+          bodyFs,
+          headerH: header ? header.getBoundingClientRect().height : 0,
+          cardCount: document.querySelectorAll(".journey-path").length,
+          ctaW: ctaBox?.width || 0,
+          ctaH: ctaBox?.height || 0,
+          ctaFullyInLayout: ctaBox ? ctaBox.width > 0 && ctaBox.right <= window.innerWidth + 1 : false,
+          floatObscuresCta,
+          padLeft,
+          titleText: (title?.textContent || "").trim().slice(0, 80),
+        };
+      });
+      reports.push({ w, h, ...rep });
+      if (rep.overflow) throw new Error(`${w}: horizontal overflow`);
+      if (rep.cardCount < 3) throw new Error(`${w}: expected 3 journey cards`);
+      if (rep.titleLines > 3) throw new Error(`${w}: journeys title ${rep.titleLines} lines > 3`);
+      if (rep.titleFs > 36) throw new Error(`${w}: journeys title font ${rep.titleFs}px too large`);
+      if (rep.bodyFs < 16 || rep.bodyFs > 20) throw new Error(`${w}: body font ${rep.bodyFs}px outside 16–20`);
+      if (rep.headerH > 96) throw new Error(`${w}: header height ${rep.headerH} absurd`);
+      if (rep.ctaH < 44 || rep.ctaW < 120) throw new Error(`${w}: CTA too small ${rep.ctaW}x${rep.ctaH}`);
+      if (!rep.ctaFullyInLayout) throw new Error(`${w}: CTA overflows viewport`);
+      if (rep.floatObscuresCta) throw new Error(`${w}: floating WhatsApp obscures journey CTA`);
+      if (rep.padLeft < 18) throw new Error(`${w}: lateral padding ${rep.padLeft} < 18`);
+    }
+    ok(`journeys_mobile_hierarchy (${reports.map((r) => r.w).join(",")})`);
+  } catch (e) {
+    fail("journeys_mobile_hierarchy", e.message || e);
+  }
+
+  // 12c) journey CTA sets form journey hidden field
+  try {
+    await page.setViewport({ width: 1024, height: 900 });
+    await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+    for (const j of ["contrato", "edital", "operacao"]) {
+      await page.click(`[data-set-journey="${j}"]`);
+      const val = await page.$eval("#jornada-hidden", (el) => el.value);
+      if (val !== j) throw new Error(`data-set-journey=${j} left hidden=${val}`);
+    }
+    ok("journey_cta_binds_form");
+  } catch (e) {
+    fail("journey_cta_binds_form", e.message || e);
   }
 
   // 13) anchors / primary CTA path

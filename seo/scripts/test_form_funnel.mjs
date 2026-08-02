@@ -16,15 +16,25 @@ const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
-  "Enviar documentos para análise inicial",
+  "Enviar documentos para análise",
   "Enviar edital para triagem",
-  "Diagnosticar a operação B2G",
+  "Diagnosticar operação B2G",
+  'data-set-journey="contrato"',
+  'data-set-journey="edital"',
+  'data-set-journey="operacao"',
   'id="estagio"',
   'data-form-step="1"',
   'data-form-step="2"',
 ]) {
   if (!home.includes(needle)) {
     console.error("FAIL: home missing", needle);
+    process.exit(1);
+  }
+}
+// No visitor-facing marketing metalinguage on the conversion surface
+for (const leak of ["Sem CTA genérico", "Jornada A", "Jornada B", "Jornada C", "Risco de não agir"]) {
+  if (home.includes(leak)) {
+    console.error("FAIL: metalinguage leak on home", leak);
     process.exit(1);
   }
 }
