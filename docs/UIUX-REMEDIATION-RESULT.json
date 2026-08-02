@@ -1,9 +1,9 @@
 {
   "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
   "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "final_sha_at_write": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "date": "2026-08-02T01:44:13Z",
-  "status": "COMPLETE_PENDING_COMMIT",
+  "final_sha_at_write": "cb1338c1e577ea08c3d271ad9123dccdedc6b2ed",
+  "date": "2026-08-02T01:46:53Z",
+  "status": "COMPLETE",
   "metrics_before": {
     "1440x1000": {
       "scrollHeight": 11599,
@@ -93,5 +93,12 @@
     "Full npm run build:site (pSEO regenerate) not awaited to completion in this session; commercial sources mirrored into _site for home/offers",
     "Lighthouse scores not fabricated; axe moderate region residual",
     "pSEO long-tail pages only inherit shared CSS chrome, not full rewrite"
+  ],
+  "final_sha": "cb1338c1e577ea08c3d271ad9123dccdedc6b2ed",
+  "commits": [
+    "cb1338c1 docs(uiux): record final remediation HEAD SHA in result JSON",
+    "a1247758 docs(uiux): adversarial audit, decisions, metrics, and before/after evidence",
+    "ced40d89 test(ui): add rendered geometry gates, axe audit, and screenshot capture",
+    "ebdc4057 feat(home): compress to seven narrative blocks with clear CTA hierarchy"
   ]
 }
