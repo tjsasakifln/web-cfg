@@ -1,6 +1,6 @@
 /**
- * Unit test for netlify/functions/lead.cjs — drives the real handler export.
- * Proves validation + receipt issuance without network when upstream fails.
+ * Unit test for netlify/functions/lead.cjs — drives the real handler.
+ * Mocks fetch for ntfy + formsubmit; asserts receipt + delivery flags.
  */
 import { createRequire } from "module";
 import path from "path";
@@ -41,7 +41,7 @@ function event(body, method = "POST") {
   }
 }
 
-// 3) honeypot suppressed
+// 3) honeypot
 {
   const res = await handler(
     event({
@@ -59,15 +59,37 @@ function event(body, method = "POST") {
   }
 }
 
-// 4) valid lead → receipt (upstream may be activation_required / error offline)
+// 4) valid lead with mocked ntfy success + formsubmit activation error
 {
-  // Mock fetch for upstream
   const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => ({
-    ok: true,
-    status: 200,
-    text: async () => JSON.stringify({ success: "true", message: "ok" }),
-  });
+  const calls = [];
+  globalThis.fetch = async (url, init = {}) => {
+    calls.push({ url: String(url), body: init.body });
+    if (String(url).includes("ntfy.sh")) {
+      return {
+        ok: true,
+        status: 200,
+        text: async () =>
+          JSON.stringify({
+            id: "ntfy-msg-test-001",
+            event: "message",
+            topic: "test",
+          }),
+      };
+    }
+    if (String(url).includes("formsubmit.co")) {
+      return {
+        ok: false,
+        status: 403,
+        text: async () =>
+          JSON.stringify({
+            success: "false",
+            message: "This form needs Activation.",
+          }),
+      };
+    }
+    return { ok: false, status: 500, text: async () => "" };
+  };
   try {
     const res = await handler(
       event({
@@ -86,23 +108,32 @@ function event(body, method = "POST") {
       console.error("FAIL: receipt", data);
       process.exit(1);
     }
-    if (data.journey !== "contrato") {
-      console.error("FAIL: journey", data);
+    if (data.journey !== "contrato" || data.delivered !== true) {
+      console.error("FAIL: delivery flag", data);
+      process.exit(1);
+    }
+    const ntfy = (data.delivery || []).find((d) => d.channel === "ntfy");
+    if (!ntfy || ntfy.status !== "ok" || ntfy.message_id !== "ntfy-msg-test-001") {
+      console.error("FAIL: ntfy delivery", data.delivery);
       process.exit(1);
     }
     if (JSON.stringify(data).includes("should not appear")) {
-      console.error("FAIL: message leaked in response", data);
+      console.error("FAIL: message leaked", data);
       process.exit(1);
     }
-    if (!/^[a-f0-9]{16,32}$/i.test(data.receipt_id)) {
-      console.error("FAIL: receipt format", data.receipt_id);
+    if (!calls.some((c) => c.url.includes("ntfy.sh"))) {
+      console.error("FAIL: ntfy not called", calls);
       process.exit(1);
     }
-    console.log("LEAD_FUNCTION_OK", JSON.stringify({
-      receipt_id: data.receipt_id,
-      journey: data.journey,
-      upstream: data.upstream?.status,
-    }));
+    console.log(
+      "LEAD_FUNCTION_OK",
+      JSON.stringify({
+        receipt_id: data.receipt_id,
+        journey: data.journey,
+        delivered: data.delivered,
+        ntfy_message_id: ntfy.message_id,
+      }),
+    );
   } finally {
     globalThis.fetch = originalFetch;
   }

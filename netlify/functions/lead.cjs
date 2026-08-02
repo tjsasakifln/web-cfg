@@ -1,16 +1,23 @@
 /**
  * Production lead intake for CONFENGE.
- * Receives JSON POST from the site form, validates essential fields,
- * returns a receipt id, and optionally forwards to FormSubmit when activated.
  *
- * Never logs full free-text message content. PII is only forwarded to the
- * configured mail endpoint and not written to function logs.
+ * Delivery paths (in order of reliability without external account setup):
+ * 1) ntfy.sh secret topic — verified publish + poll-back (ops notification)
+ * 2) FormSubmit email — works after one-time owner activation email
+ *
+ * Always returns a receipt_id when validation passes.
+ * Does not write free-text messages to function logs.
  */
 const crypto = require("crypto");
 
 const FORMSUBMIT_URL =
   process.env.FORMSUBMIT_URL ||
   "https://formsubmit.co/ajax/tiago.sasaki@confenge.com.br";
+
+// Secret ops topic (override via NTFY_TOPIC in Netlify env). Not a public marketing surface.
+const NTFY_TOPIC =
+  process.env.NTFY_TOPIC || "confenge-prod-leads-b2g-9f3c2a1e7d4b6e80";
+const NTFY_URL = `https://ntfy.sh/${NTFY_TOPIC}`;
 
 const ALLOWED_ORIGINS = new Set([
   "https://confenge.com.br",
@@ -44,7 +51,6 @@ function parseBody(event) {
       return {};
     }
   }
-  // application/x-www-form-urlencoded
   const out = {};
   for (const part of raw.split("&")) {
     if (!part) continue;
@@ -66,6 +72,77 @@ function receiptId(payload) {
   return crypto.createHash("sha256").update(material).digest("hex").slice(0, 24);
 }
 
+async function deliverNtfy({ id, receivedAt, jornada, estagio, nome, telefone, email, urgencia, origem }) {
+  const contact = telefone
+    ? `WhatsApp ${telefone}`
+    : email
+      ? `email ${email}`
+      : "sem contato";
+  const title = `CONFENGE lead · ${jornada}`;
+  const message = [
+    `receipt=${id}`,
+    `when=${receivedAt}`,
+    `stage=${estagio}`,
+    `name=${nome}`,
+    `contact=${contact}`,
+    urgencia ? `urgency=${urgencia}` : null,
+    origem ? `origin=${origem}` : null,
+    "source=confenge.com.br/lead",
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const res = await fetch(NTFY_URL, {
+    method: "POST",
+    headers: {
+      Title: title.slice(0, 120),
+      Priority: jornada === "contrato" ? "high" : "default",
+      Tags: "briefcase,confenge",
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+    body: message,
+  });
+  const text = await res.text();
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    parsed = null;
+  }
+  return {
+    channel: "ntfy",
+    status: res.ok ? "ok" : "error",
+    http: res.status,
+    // ntfy message id — used to prove delivery without re-sending PII
+    message_id: parsed && parsed.id ? String(parsed.id) : undefined,
+    topic: NTFY_TOPIC,
+  };
+}
+
+async function deliverFormSubmit(forward) {
+  const res = await fetch(FORMSUBMIT_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(forward),
+  });
+  const text = await res.text();
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    parsed = { raw: text.slice(0, 200) };
+  }
+  return {
+    channel: "formsubmit",
+    status: res.ok && String(parsed?.success) === "true" ? "ok" : "error",
+    http: res.status,
+    message: parsed && parsed.message ? String(parsed.message).slice(0, 200) : undefined,
+  };
+}
+
 exports.handler = async (event) => {
   const origin = event.headers.origin || event.headers.Origin || "";
   const headers = cors(origin);
@@ -82,7 +159,6 @@ exports.handler = async (event) => {
   }
 
   const data = parseBody(event);
-  // Honeypot
   if (data["empresa-site"] || data.bot_field) {
     return {
       statusCode: 200,
@@ -97,6 +173,8 @@ exports.handler = async (event) => {
   const estagio = String(data.estagio || "").trim();
   const jornada = String(data.jornada || "").trim() || "operacao";
   const consentimento = String(data.consentimento || "").trim();
+  const urgencia = String(data.urgencia || "").trim().slice(0, 80);
+  const origem = String(data.origem || "").trim().slice(0, 180);
 
   if (!nome || (!telefone && !email) || !estagio) {
     return {
@@ -129,56 +207,58 @@ exports.handler = async (event) => {
   });
   const receivedAt = new Date().toISOString();
 
-  let upstream = { status: "skipped" };
+  const deliveries = [];
+
+  // 1) Verified ops notification (primary while email activation is pending)
   try {
-    const forward = {
-      name: nome,
-      _replyto: email || undefined,
-      telefone: telefone || undefined,
-      email: email || undefined,
-      estagio,
-      jornada,
-      empresa: String(data.empresa || "").slice(0, 180),
-      urgencia: String(data.urgencia || "").slice(0, 80),
-      // Cap free text; never log it here
-      mensagem: String(data.mensagem || "").slice(0, 2000),
-      origem: String(data.origem || "").slice(0, 180),
-      utm_source: String(data.utm_source || "").slice(0, 80),
-      utm_medium: String(data.utm_medium || "").slice(0, 80),
-      utm_campaign: String(data.utm_campaign || "").slice(0, 80),
-      landing_page: String(data.landing_page || "").slice(0, 180),
-      receipt_id: id,
-      _subject: `CONFENGE lead [${jornada}] ${estagio}`.slice(0, 120),
-      _template: "table",
-      _captcha: "false",
-    };
-    const res = await fetch(FORMSUBMIT_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(forward),
-    });
-    const text = await res.text();
-    let parsed = null;
-    try {
-      parsed = JSON.parse(text);
-    } catch {
-      parsed = { raw: text.slice(0, 200) };
-    }
-    upstream = {
-      status: res.ok ? "ok" : "error",
-      http: res.status,
-      // Do not echo PII from upstream
-      message: parsed && parsed.message ? String(parsed.message).slice(0, 200) : undefined,
-      success: parsed && parsed.success,
-    };
-  } catch (err) {
-    upstream = { status: "error", message: "upstream_unreachable" };
+    deliveries.push(
+      await deliverNtfy({
+        id,
+        receivedAt,
+        jornada,
+        estagio,
+        nome,
+        telefone,
+        email,
+        urgencia,
+        origem,
+      }),
+    );
+  } catch (_) {
+    deliveries.push({ channel: "ntfy", status: "error", message: "ntfy_unreachable" });
   }
 
-  // Receipt is always issued when validation passed — lead reached production endpoint
+  // 2) Email path (optional; 403 until FormSubmit activation by site owner)
+  try {
+    deliveries.push(
+      await deliverFormSubmit({
+        name: nome,
+        _replyto: email || undefined,
+        telefone: telefone || undefined,
+        email: email || undefined,
+        estagio,
+        jornada,
+        empresa: String(data.empresa || "").slice(0, 180),
+        urgencia,
+        mensagem: String(data.mensagem || "").slice(0, 2000),
+        origem,
+        utm_source: String(data.utm_source || "").slice(0, 80),
+        utm_medium: String(data.utm_medium || "").slice(0, 80),
+        utm_campaign: String(data.utm_campaign || "").slice(0, 80),
+        landing_page: String(data.landing_page || "").slice(0, 180),
+        receipt_id: id,
+        _subject: `CONFENGE lead [${jornada}] ${estagio}`.slice(0, 120),
+        _template: "table",
+        _captcha: "false",
+      }),
+    );
+  } catch (_) {
+    deliveries.push({ channel: "formsubmit", status: "error", message: "upstream_unreachable" });
+  }
+
+  const delivered = deliveries.some((d) => d.status === "ok");
+  const primary = deliveries.find((d) => d.channel === "ntfy") || deliveries[0];
+
   return {
     statusCode: 200,
     headers,
@@ -188,7 +268,10 @@ exports.handler = async (event) => {
       received_at: receivedAt,
       journey: jornada,
       stage_category: estagio.slice(0, 80),
-      upstream,
+      delivered,
+      delivery: deliveries,
+      // back-compat field
+      upstream: primary,
     }),
   };
 };
