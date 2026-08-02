@@ -15,6 +15,8 @@
     "test:lead-function": "node scripts/site/test_lead_function.mjs",
     "test:secrets-scan": "node scripts/site/test_secrets_scan.mjs",
     "test:cta-whatsapp": "node scripts/site/test_cta_whatsapp.mjs",
+    "probe:lead": "node scripts/site/synthetic_lead_probe.mjs",
+    "probe:lead:prod": "node scripts/site/synthetic_lead_probe.mjs https://confenge.com.br",
     "test:pseo-attribution": "node seo/scripts/test_pseo_attribution.mjs",
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "test:brand": "python3 scripts/site/test_brand_contract.py",

@@ -731,6 +731,7 @@
           const turnstileInput = form.querySelector('[name="cf-turnstile-response"]');
           if (turnstileInput && turnstileInput.value) {
             payload.turnstile_token = turnstileInput.value;
+            payload['cf-turnstile-response'] = turnstileInput.value;
           }
           const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
           const timeoutId = controller ? setTimeout(() => controller.abort(), 15000) : null;
@@ -957,9 +958,35 @@
 
   window.confengeTrack = track;
 
+  /** Optional Cloudflare Turnstile — only loads when a public sitekey is present. */
+  const initTurnstile = () => {
+    try {
+      const slot = document.getElementById('turnstile-slot');
+      if (!slot) return;
+      const key = (
+        slot.getAttribute('data-turnstile-sitekey')
+        || window.CONFENGE_TURNSTILE_SITEKEY
+        || document.querySelector('meta[name="turnstile-sitekey"]')?.getAttribute('content')
+        || ''
+      ).trim();
+      if (!key || key === 'SITEKEY' || key.length < 10) return;
+      slot.hidden = false;
+      const widget = slot.querySelector('.cf-turnstile');
+      if (widget) widget.setAttribute('data-sitekey', key);
+      if (document.querySelector('script[data-confenge-turnstile]')) return;
+      const s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      s.async = true;
+      s.defer = true;
+      s.setAttribute('data-confenge-turnstile', '1');
+      document.head.appendChild(s);
+    } catch (_) { /* optional anti-abuse */ }
+  };
+
   const safeInit = () => {
     try {
       init();
+      initTurnstile();
       // Session + page view (no PII)
       try {
         const path = window.location.pathname || '/';

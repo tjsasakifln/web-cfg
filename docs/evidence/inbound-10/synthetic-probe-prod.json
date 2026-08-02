@@ -1,0 +1,5 @@
+
+> confenge-site@1.0.0 probe:lead:prod
+> node scripts/site/synthetic_lead_probe.mjs https://confenge.com.br
+
+{"ok":true,"http":201,"lead_id":"cc868c16430d56270b98a7a9","status":"persisted","leaks":[],"base":"https://confenge.com.br","ts":"2026-08-02T15:40:36.302Z"}

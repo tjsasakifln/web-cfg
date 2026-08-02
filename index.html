@@ -340,6 +340,10 @@
 <div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" placeholder="Edital, contrato, glosa, notificação ou o que precisa ser decidido. Não cole dados sensíveis desnecessários." rows="3"></textarea></div>
 <p class="form-hint">Anexos e dossiês: após o primeiro retorno, orientamos o envio seguro (WhatsApp ou canal combinado). Upload multiarquivo não está ativo neste formulário.</p>
 <label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
+<!-- Turnstile: set data-sitekey via TURNSTILE_SITE_KEY at build or replace SITEKEY; hidden until key present -->
+<div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="">
+  <div class="cf-turnstile" data-theme="light" data-size="normal"></div>
+</div>
 <div class="form-step-actions">
 <button class="button button-secondary form-back" type="button" data-form-back="2">Voltar</button>
 <button class="button button-primary button-lg form-submit" type="submit" data-cta-position="form-submit">Enviar solicitação <svg class="icon"><use href="#i-arrow"></use></svg></button>

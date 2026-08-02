@@ -147,10 +147,11 @@ Diretório `docs/evidence/inbound-10/`:
 | 2 | DNS | SPF/DKIM/DMARC confenge.com.br |
 | 3 | Resend | domínio + API key + prova inbox |
 | 4 | Cloudflare Turnstile | site/secret + widget + CSP + `LEAD_REQUIRE_TURNSTILE=1` |
-| 5 | GitHub | branch protection `main` + required checks |
-| 6 | Uptime | Better Stack/UptimeRobot/Checkly + alerta ≠ canal leads |
-| 7 | Plausible | opcional (coletor 1ª parte já basta para mensuração) |
-| 8 | Blobs | **já operacional** no tip (201+verify) — manter; HTTP store se migrar |
+| 5 | GitHub | **DONE** — ver `branch-protection.json` |
+| 6 | Uptime | Better Stack/UptimeRobot/Checkly + alerta ≠ canal leads — **OPEN** |
+| 7 | Plausible | opcional (coletor 1ª parte já basta) |
+| 8 | Blobs | **DONE** (201+verify) |
+| 9 | Rollback UI | Netlify Publish deploy drill — **OPEN** |
 
 ## 18. Limitações
 
@@ -193,8 +194,8 @@ BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS
 | Leads | 10 | **9** | 201+persist+idempotency+rate | **§1 webhook, §2–3 Resend** |
 | Segurança e LGPD | 10 | **9** | no leak, rate 429, privacy | **§4 Turnstile; §1 rotação ntfy** |
 | Engenharia | 10 | 10 | tip=`6a386477` = prod build-info | — |
-| Governança | **9** | **4** | CODEOWNERS, Dependabot, CodeQL, PR template | **§5 branch protection** |
-| Observabilidade | **9** | **3** | SLO-MONITORING.md | **§6 uptime/alerts** |
+| Governança | 10 | 10 | CODEOWNERS, Dependabot, CodeQL, PR template, **branch protection** (`branch-protection.json`) | — (§5 DONE) |
+| Observabilidade | **9** | **3** | SLO-MONITORING.md, synthetic probe | **§6 uptime/alerts** |
 | Operação comercial | **9** | **5** | LEAD-HANDLING.md, SLAs | **§1–3 notify+e-mail** |
 
 **Linhas com 10/10 repo+prod:** posicionamento, IA, UI/UX, copy, performance, a11y, SEO, E-E-A-T, pSEO (containment), analytics, engenharia.

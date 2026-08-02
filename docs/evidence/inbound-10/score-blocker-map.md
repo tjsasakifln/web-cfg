@@ -18,8 +18,8 @@ Only rows **below 10** must map to an owner-only item in `docs/ops/EXTERNAL-ACTI
 | Leads | 10 | 9 | Persistência 201+lead_id OK; delivery notify/email skipped sem env | §1, §2, §3 |
 | Segurança e LGPD | 10 | 9 | Sem leak + rate 429; Turnstile não forçado em prod | §4 Turnstile + rotação ntfy §1 nota |
 | Engenharia | 10 | 10 | tip = prod commit | — |
-| Governança | 9 | 4 | CODEOWNERS/Dependabot/CodeQL/PR template no repo; **branch protection** só no GitHub UI | §5 |
-| Observabilidade | 9 | 3 | SLO/docs + synthetic design; **uptime alerts** não ativos | §6 |
+| Governança | 10 | 10 | Branch protection aplicada + CODEOWNERS/Dependabot/CodeQL | — (§5 DONE) |
+| Observabilidade | 9 | 3 | SLO/docs + `probe:lead:prod`; **uptime alerts** não ativos | §6 |
 | Operação comercial | 9 | 5 | Fluxo/SLA documentados; 1º contato/e-mail ops dependem de notify real | §1, §2, §3 |
 
 ## Provas tip `6a386477` (revalidadas)

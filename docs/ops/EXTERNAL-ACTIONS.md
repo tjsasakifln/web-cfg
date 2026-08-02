@@ -1,112 +1,153 @@
 # Ações externas exatas (owner) — bloqueadores de 10/10 produção
 
-Cada item impede COMPLETE enquanto não executado e validado.
+Cada item **OPEN** impede `COMPLETE_10_10_REPO_AND_PRODUCTION` até validação.
 
-## 1. Netlify — variáveis de ambiente (produção)
+Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner.
 
-**Plataforma:** Netlify UI → Site `confenge` → Site configuration → Environment variables  
+---
 
-| Variável | Valor esperado | Razão | Validação |
+## 1. Netlify — variáveis de ambiente (produção) — **OPEN**
+
+**Plataforma:** Netlify UI → Site `confenge` → Site configuration → Environment variables → Production  
+
+| Variável | Valor esperado | Razão | Validação pós-set |
 | --- | --- | --- | --- |
-| `OPS_WEBHOOK_URL` | HTTPS do webhook privado (Slack/Make/n8n/Discord) | Notificação ops autenticada | POST lead sintético → mensagem no canal |
-| `OPS_WEBHOOK_SECRET` | string aleatória ≥32 chars | HMAC `X-Confenge-Signature` | Verificar assinatura no receptor |
-| `RESEND_API_KEY` | key Resend | E-mail transacional | Inbox recebe e-mail com lead_id |
-| `LEAD_FROM_EMAIL` | `CONFENGE Leads <leads@confenge.com.br>` | Remetente domínio próprio | Header From correto |
+| `OPS_WEBHOOK_URL` | HTTPS webhook privado (Slack Incoming / Make / n8n / Discord) | Notify ops autenticado | POST lead sintético → mensagem no canal com `lead_id` |
+| `OPS_WEBHOOK_SECRET` | random ≥32 chars | HMAC header `X-Confenge-Signature: sha256=…` | Receptor verifica HMAC do body |
+| `RESEND_API_KEY` | `re_…` da conta Resend | E-mail transacional | Inbox ops recebe e-mail com protocolo |
+| `LEAD_FROM_EMAIL` | `CONFENGE Leads <leads@confenge.com.br>` | Remetente domínio próprio | Header From coerente |
 | `LEAD_NOTIFY_EMAIL` | `tiago.sasaki@confenge.com.br` | Destino ops | Inbox |
-| `IP_HASH_SALT` | random | Hash estável de IP | logs sem IP raw |
-| `TURNSTILE_SECRET_KEY` | secret Turnstile | Antiabuso primário | POST sem token → 403 quando `LEAD_REQUIRE_TURNSTILE=1` |
-| `LEAD_REQUIRE_TURNSTILE` | `1` após sitekey no HTML | Força Turnstile | form em prod |
-| `LEAD_PROBE_SECRET` | random | Smoke sintético | header probe |
+| `IP_HASH_SALT` | random | Hash estável de IP em logs/store | logs sem IP raw |
+| `TURNSTILE_SECRET_KEY` | secret Cloudflare | Antiabuso primário | ver §4 |
+| `LEAD_REQUIRE_TURNSTILE` | `1` **somente após** sitekey no HTML | Força verify | POST sem token → **403** |
+| `LEAD_PROBE_SECRET` | random | Smoke sintético | `X-Confenge-Probe` header |
 
-**Após setar:** trigger deploy ou clear cache + redeploy functions.
+**Depois de salvar env:** Deploys → Trigger deploy (clear cache) ou empty commit para recarregar functions.
 
-**Rotação obrigatória:** revogar tópico ntfy antigo `confenge-prod-leads-b2g-*` (qualquer pessoa com o topic lido em respostas históricas). Não recriar o mesmo nome.
+**Rotação ntfy (obrigatória — OPEN):**  
+No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confenge-prod-leads-b2g-9f3c2a1e7d4b6e80`. Não reutilizar o nome. Código de produção **já não usa** esse tópico.
 
-## 2. DNS e-mail (domínio confenge.com.br)
+**Consequência se OPEN:** lead persiste (201) mas ops pode não receber e-mail/webhook; Turnstile não forçado.
 
-**Plataforma:** DNS do registrador (onde estão os registros do domínio)
+---
 
-| Registro | Valor esperado | Razão | Validação |
+## 2. DNS e-mail (domínio confenge.com.br) — **OPEN**
+
+**Plataforma:** DNS do registrador do domínio  
+
+| Registro | Host | Valor esperado | Validação |
 | --- | --- | --- | --- |
-| SPF TXT `@` | incluir mecanismo Resend (`include:amazonses.com` ou doc Resend atual) | Autenticação | `dig TXT confenge.com.br` |
-| DKIM | CNAME(s) fornecidos pelo Resend para `leads`/`send` | Autenticação | MXToolbox / Resend dashboard |
-| DMARC TXT `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | Política | dig TXT _dmarc |
+| SPF TXT | `@` | incluir include do Resend (doc atual Resend, p.ex. `include:amazonses.com` ou o que o painel mostrar) | `dig TXT confenge.com.br` / Resend dashboard green |
+| DKIM CNAME | hosts dados pelo Resend | valores do wizard Resend | Resend Domain → Verified |
+| DMARC TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | `dig TXT _dmarc.confenge.com.br` |
 
-Sem SPF/DKIM/DMARC válidos, e-mail não pode ser marcado 10/10.
+**Consequência se OPEN:** e-mail não pode ser score 10 (spam/bounce).
 
-## 3. Resend — domínio e API
+---
 
-**Plataforma:** resend.com → Domains → Add `confenge.com.br` → copiar DNS → API Keys  
+## 3. Resend — domínio e API — **OPEN**
 
-Validação: envio de teste com `lead_id` sintético e print/export sem PII desnecessário.
-
-## 4. Cloudflare Turnstile
-
-**Plataforma:** dash.cloudflare.com → Turnstile → Add site `confenge.com.br`  
+**Plataforma:** [resend.com](https://resend.com) → Domains → Add `confenge.com.br` → copiar DNS → API Keys → Create  
 
 | Campo | Valor |
 | --- | --- |
-| Domain | confenge.com.br |
+| Domain | `confenge.com.br` |
+| API key | colar em Netlify `RESEND_API_KEY` |
+| From | `leads@confenge.com.br` (ou subdomínio verificado) |
+
+**Validação:**  
+`npm run probe:lead:prod` → 201 → checar inbox `LEAD_NOTIFY_EMAIL` com subject contendo o `lead_id`. Export/screenshot **sem** colar PII no git.
+
+---
+
+## 4. Cloudflare Turnstile — **OPEN**
+
+**Plataforma:** [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add widget  
+
+| Campo | Valor |
+| --- | --- |
+| Domain | `confenge.com.br` |
 | Widget mode | Managed |
-| Site key | colar no HTML do formulário (campo público) |
-| Secret key | `TURNSTILE_SECRET_KEY` no Netlify |
+| Site key (pública) | `index.html` → `#turnstile-slot` attribute `data-turnstile-sitekey="…"` **ou** `window.CONFENGE_TURNSTILE_SITEKEY` |
+| Secret key | Netlify `TURNSTILE_SECRET_KEY` |
 
-HTML: widget antes do submit + `name="cf-turnstile-response"`.  
-CSP: adicionar `https://challenges.cloudflare.com` em `script-src` e `frame-src` em `_headers`.
+Depois: set `LEAD_REQUIRE_TURNSTILE=1`, redeploy.  
 
-## 5. GitHub — branch protection em `main`
+**Validação:**  
+- Form carrega widget  
+- POST lead sem token → **403** `anti_abuse`  
+- POST com token válido → **201**  
 
-**Plataforma:** GitHub → repo `tjsasakifln/web-cfg` → Settings → Branches → Add rule  
+CSP já permite `challenges.cloudflare.com` em `_headers`. Script carrega **só** se sitekey presente.
+
+---
+
+## 5. GitHub — branch protection em `main` — **DONE** (2026-08-02)
+
+Aplicado via API (`gh`) neste ambiente:
 
 | Setting | Valor |
 | --- | --- |
-| Branch name pattern | `main` |
-| Require a pull request before merging | ON |
-| Require status checks | ON: `gates` (site-ci), `Analyze` (codeql) |
-| Require conversation resolution | ON |
-| Do not allow bypassing | ON se possível |
-| Restrict force push | ON |
+| required_status_checks.strict | true |
+| contexts | `gates` (job site-ci) |
+| required_pull_request_reviews | dismiss_stale true, approving count 0 (solo) |
+| allow_force_pushes | false |
+| required_conversation_resolution | true |
 
-Validação: tentativa de push direto em main bloqueada (ou documentar admin bypass).
+**Evidência:** `docs/evidence/inbound-10/branch-protection.json`  
 
-## 6. Monitoramento uptime
+**Validação owner (opcional reforço):** Settings → Branches → confirmar UI; elevar `required_approving_review_count` se houver segundo revisor; adicionar check `Analyze` (CodeQL) quando estável.
 
-**Plataforma:** Better Stack / UptimeRobot / Checkly  
+---
 
-URLs: `/`, `/robots.txt`, `/sitemap-index.xml`, `/.well-known/build-info.json`, `GET /.netlify/functions/collect`  
-Alerta: e-mail ops **diferente** do canal de leads.
+## 6. Monitoramento uptime — **OPEN**
 
-## 7. Analytics opcional (Plausible cloud)
+**Plataforma:** Better Stack / UptimeRobot / Checkly (conta owner)
 
-Se quiser dashboard SaaS além do coletor 1ª parte: conta Plausible → domain → `PLAUSIBLE_DOMAIN` + `PLAUSIBLE_FORWARD=1` + CSP `connect-src`/`script-src` se script client.
-
-## 8. Netlify Blobs (obrigatório se não houver HTTP store)
-
-Produção retornou `store_unavailable` quando `NETLIFY_BLOBS_CONTEXT` não foi injetado.
-
-**Opção A — Blobs nativo**
-
-1. Netlify UI → Site → ensure Blobs not disabled  
-2. Redeploy após `external_node_modules = ["@netlify/blobs"]`  
-3. Se ainda 503: User settings → Applications → Personal access tokens → gerar token  
-4. Site env: `NETLIFY_BLOBS_TOKEN=<token>` e `NETLIFY_BLOBS_SITE_ID=<site_id>` (API ID do site)  
-5. Redeploy functions  
-
-**Opção B — HTTP store (Airtable/n8n/Supabase)**
-
-| Variável | Valor |
+| URL | Expect |
 | --- | --- |
-| `LEAD_STORE_HTTP_URL` | endpoint POST que grava o JSON do lead |
-| `LEAD_STORE_HTTP_TOKEN` | Bearer |
+| `https://confenge.com.br/` | 200 |
+| `https://confenge.com.br/robots.txt` | 200 |
+| `https://confenge.com.br/sitemap-index.xml` | 200 |
+| `https://confenge.com.br/.well-known/build-info.json` | 200 JSON |
+| `https://confenge.com.br/.netlify/functions/collect` | 200 GET |
 
-Validação: `POST /.netlify/functions/lead` → **201** com `lead_id`, body **sem** `topic`/`delivery`.
+Alerta por e-mail/SMS **diferente** do canal de leads.  
+Probe periódico de lead: `npm run probe:lead:prod` (cron owner) com `LEAD_PROBE_SECRET` se configurado.
 
-## Consequência de não executar
+---
 
-| Item | Sem ação |
-| --- | --- |
-| Webhook/e-mail | Lead persiste mas ops pode não ver (status `persisted`) |
-| DNS e-mail | Bounce/spam |
-| Turnstile | Rate limit + honeypot apenas |
-| Branch protection | Governança < 10 |
-| Monitor | Detecção manual |
+## 7. Analytics SaaS opcional (Plausible) — **OPEN (não bloqueia coletor 1ª parte)**
+
+Coletor `/.netlify/functions/collect` **já opera em produção**.  
+Plausible: conta → domain → `PLAUSIBLE_DOMAIN` + `PLAUSIBLE_FORWARD=1` se quiser dashboard SaaS.
+
+---
+
+## 8. Netlify Blobs — **DONE** (produção)
+
+Persistência comprovada: HTTP **201** + `lead_id` + read-back no tip funcional.  
+Não exige ação adicional salvo migração para HTTP store.
+
+---
+
+## 9. Rollback live click — **OPEN (Netlify UI)**
+
+Procedimento + SHAs: `docs/ops/ROLLBACK.md`, `docs/evidence/inbound-10/rollback-evidence.md`.  
+Owner: Netlify → Deploys → Publish deploy anterior → validar probe → republicar tip.
+
+---
+
+## Ordem recomendada de execução (owner, ~45–90 min)
+
+1. Resend domain + DNS §2–3  
+2. Netlify env §1 (Resend + webhook + salt) → redeploy  
+3. `npm run probe:lead:prod` + confirmar inbox + webhook  
+4. Turnstile §4 → sitekey HTML + secret + `LEAD_REQUIRE_TURNSTILE=1` → redeploy  
+5. Uptime §6  
+6. Revogar ntfy antigo §1  
+7. Rollback drill click §9 (opcional mas fecha 10 em release ops)
+
+## Após executar
+
+Avisar o agente para revalidar: e-mail/inbox, Turnstile 403/201, webhook HMAC, uptime green, tip = HEAD.
