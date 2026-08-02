@@ -1,0 +1,20 @@
+{
+  "confenge.com.br/TXT": [],
+  "confenge.com.br/MX": [
+    "10 mx2.hostinger.com.",
+    "5 mx1.hostinger.com."
+  ],
+  "_dmarc.confenge.com.br/TXT": [],
+  "spf_present": false,
+  "dmarc_present": false,
+  "resend_ready": false,
+  "blockers": [
+    "no_spf_txt",
+    "no_dmarc",
+    "no_resend_api_key_in_runtime_unknown"
+  ],
+  "mx": [
+    "10 mx2.hostinger.com.",
+    "5 mx1.hostinger.com."
+  ]
+}
