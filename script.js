@@ -338,12 +338,50 @@
       });
     }
 
+    // Editorial / legal / guide / case-law page views (Wave 1 inbound)
+    const editorialType = document.body?.getAttribute('data-content-type') || '';
+    const editorialTopic = document.body?.getAttribute('data-editorial-topic')
+      || document.body?.getAttribute('data-topic') || '';
+    const editorialJourney = document.body?.getAttribute('data-journey') || '';
+    if (editorialType && editorialType !== 'hub') {
+      const viewByType = {
+        lei_14133: 'legal_article_view',
+        jurisprudencia: 'case_law_page_view',
+        guia: 'checklist_view',
+        inteligencia: 'data_insight_view',
+      };
+      const viewName = viewByType[editorialType] || 'editorial_page_view';
+      track(viewName, {
+        page_path: pagePath,
+        content_type: editorialType,
+        topic: editorialTopic.slice(0, 120),
+        journey: editorialJourney,
+        device_context: deviceContext,
+      });
+      track('editorial_page_view', {
+        page_path: pagePath,
+        content_type: editorialType,
+        topic: editorialTopic.slice(0, 120),
+        journey: editorialJourney,
+        device_context: deviceContext,
+      });
+    } else if (/\/(lei-14133-obras|jurisprudencia-contratos-obras|guias-contratos-obras)\//.test(pagePath)) {
+      track('editorial_page_view', {
+        page_path: pagePath,
+        content_type: editorialType || 'editorial',
+        topic: editorialTopic.slice(0, 120),
+        journey: editorialJourney,
+        device_context: deviceContext,
+      });
+    }
+
     // WhatsApp clicks
     document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
       link.addEventListener('click', () => {
         const position = link.getAttribute('data-cta-position')
           || (link.classList.contains('whatsapp-float') ? 'float' : 'inline');
         const label = (link.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+        const isEditorial = !!(editorialType || /\/(lei-14133-obras|jurisprudencia-contratos-obras|guias-contratos-obras|inteligencia)\//.test(pagePath));
         track('whatsapp_click', {
           page_path: pagePath,
           content_cluster: link.getAttribute('data-content-cluster') || defaultCluster,
@@ -351,14 +389,25 @@
           cta_label: label || 'whatsapp',
           device_context: deviceContext,
           destination_type: 'whatsapp',
-          journey: link.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || '',
+          journey: link.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
         });
+        if (isEditorial) {
+          track(editorialType === 'inteligencia' ? 'pseo_whatsapp_click' : 'editorial_whatsapp_click', {
+            page_path: pagePath,
+            content_type: editorialType || 'editorial',
+            topic: editorialTopic.slice(0, 120),
+            cta_position: position,
+            journey: editorialJourney,
+            device_context: deviceContext,
+          });
+        }
       });
     });
 
     // Email clicks
     document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
       link.addEventListener('click', () => {
+        const isEditorial = !!(editorialType || /\/(lei-14133-obras|jurisprudencia-contratos-obras|guias-contratos-obras|inteligencia)\//.test(pagePath));
         track('email_click', {
           page_path: pagePath,
           content_cluster: defaultCluster,
@@ -366,6 +415,16 @@
           device_context: deviceContext,
           destination_type: 'email',
         });
+        if (isEditorial) {
+          track(editorialType === 'inteligencia' ? 'pseo_email_click' : 'editorial_email_click', {
+            page_path: pagePath,
+            content_type: editorialType || 'editorial',
+            topic: editorialTopic.slice(0, 120),
+            cta_position: link.getAttribute('data-cta-position') || 'inline',
+            journey: editorialJourney,
+            device_context: deviceContext,
+          });
+        }
       });
     });
 

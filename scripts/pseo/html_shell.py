@@ -244,11 +244,13 @@ def page_shell(
     wa_message: str,
     extra_head: str = "",
     data_attrs: dict[str, str] | None = None,
+    author_name: str | None = None,
 ) -> str:
     canonical = f"{SITE}{canonical_path}"
     og_t = og_title or title
     attrs = data_attrs or {}
     body_attr = " ".join(f'data-{k}="{e(v)}"' for k, v in attrs.items())
+    author = author_name or "Engº Tiago Sasaki"
     ld = json.dumps(
         {"@context": "https://schema.org", "@graph": jsonld_graph},
         ensure_ascii=False,
@@ -278,7 +280,7 @@ def page_shell(
 <meta content="{e(canonical)}" property="og:url"/>
 <meta content="{SITE}/assets/og-confenge.jpg" property="og:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="Engº Tiago Sasaki" name="author"/>
+<meta content="{e(author)}" name="author"/>
 <script type="application/ld+json">{ld}</script>
 {extra_head}
 </head>

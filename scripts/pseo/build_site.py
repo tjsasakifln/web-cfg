@@ -177,6 +177,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL-CLOSED build exception: {exc}", file=sys.stderr)
         return 2
 
+    # Wave 1+ editorial engine (lei / jurisprudência / guias) — fail-closed on crash
+    editorial_report: dict = {}
+    try:
+        from scripts.editorial.build import build as editorial_build
+
+        editorial_report = editorial_build(auto_approve=True)
+        if editorial_report.get("sitemap_issues"):
+            errors.append(
+                "editorial_sitemap_issues:" + ",".join(editorial_report["sitemap_issues"][:5])
+            )
+    except Exception as exc:  # noqa: BLE001
+        print(f"FAIL-CLOSED editorial build: {exc}", file=sys.stderr)
+        return 2
+
     man_path = write_public_manifest(summary, snap)
 
     # Assemble _site BEFORE validate/editorial so audits see the public artifact
@@ -216,6 +230,12 @@ def main(argv: list[str] | None = None) -> int:
             "counts": summary.get("counts"),
             "publishable": summary.get("publishable"),
             "pages_written": summary.get("pages_written"),
+        },
+        "editorial_wave": {
+            "ok": editorial_report.get("ok"),
+            "indexable_count": editorial_report.get("indexable_count"),
+            "indexable_urls": editorial_report.get("indexable_urls"),
+            "sitemap_counts": editorial_report.get("sitemap_counts"),
         },
         "validate": {"ok": v.get("ok"), "error_count": len(v.get("errors") or [])},
         "public_artifact": {

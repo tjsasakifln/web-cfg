@@ -1,0 +1,42 @@
+{
+  "page_id": "guia-glosa",
+  "archetype": "guia",
+  "url": "/guias-contratos-obras/contestar-glosa-medicao/",
+  "title": "Documentos para contestar glosa de medição em obra pública",
+  "theme": "contestar glosa medição",
+  "journey": "medicao",
+  "primary_keyword": "contestar glosa medicao",
+  "legal_devices": [
+    "art.143"
+  ],
+  "date_published": "2026-08-02",
+  "date_modified": "2026-08-02",
+  "author_public": "Biblioteca técnica CONFENGE",
+  "author_is_tiago": false,
+  "meta_description": "Checklist para contestar glosa de medição: critério, prova de campo, parcela incontroversa e prazo de resposta.",
+  "lead": "Glosa sem critério escrito se responde com critério escrito — não com indignação.",
+  "direct_answer": "Para contestar glosa de medição em obra pública, reúna a planilha medida, o critério de medição do contrato, a motivação da glosa, provas de execução (diário, fotos, levantamentos) e a memória que separa a parcela incontroversa da parcela impugnada. O art. 143 da Lei nº 14.133/2021 determina a liberação da parcela incontroversa no prazo de pagamento quando a controvérsia versa sobre dimensão, qualidade ou quantidade. Contestar o trecho glosado e cobrar o incontroverso são movimentos paralelos.",
+  "sources": [
+    "lei-14133-art141-143",
+    "lei-14133-planalto"
+  ],
+  "cta_whatsapp": "Olá, Tiago. Consultei o checklist da CONFENGE para contestar glosa de medição e quero apoio no meu caso de obra. Origem: /guias-contratos-obras/contestar-glosa-medicao/",
+  "cta_email_subject": "Análise inicial — glosa de medição",
+  "cta_email_body": "Olá, Tiago.\n\nLi /guias-contratos-obras/contestar-glosa-medicao/ e preciso contestar glosa.\n",
+  "cta_offer": "Organizar a contestação da glosa e a parcela incontroversa",
+  "related": [
+    {
+      "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "title": "Parcela incontroversa (art. 143)",
+      "cluster": "Lei 14.133",
+      "kind": "Aplicação"
+    }
+  ],
+  "faq": [
+    {
+      "q": "Tenho prazo curto de resposta. O que priorizar?",
+      "a": "Individualize o valor glosado, junte o critério contratual e a prova de execução do item, e requeira a liberação do incontroverso com base no art. 143."
+    }
+  ],
+  "body_markdown": "## Checklist de contestação\n\n### Identificação\n\n- Número da medição e período  \n- Itens glosados (código, descrição, valor)  \n- Data da ciência da glosa e prazo de resposta  \n\n### Critério\n\n- Cláusula e caderno de encargos  \n- Unidade e forma de medição do item  \n- Projetos e planilha de referência  \n\n### Prova de execução\n\n- Diário de obra  \n- Registro fotográfico datado  \n- Levantamentos e croquis  \n- Notas de serviço / RDO  \n- Testes e laudos, se a glosa for por qualidade  \n\n### Cálculo\n\n- Memória do valor glosado  \n- Memória da parcela incontroversa  \n- Eventual proposta de medição parcial alternativa  \n\n### Peça de resposta\n\n- Objeto claro: anular/reduzir glosa e liberar incontroverso  \n- Fundamento contratual e art. 143 quando couber  \n- Anexos indexados  \n- Pedido de reunião técnica, se útil  \n\n## Ordem de escrita da peça\n\n1. Fatos da medição  \n2. O que a fiscalização alegou  \n3. Por que a alegação não se sustenta (critério + prova)  \n4. Valores  \n5. Pedidos  \n\n## Erros\n\n- Responder só “discordo”  \n- Anexar 200 fotos sem legenda nem amarração ao item  \n- Esquecer de pedir a parcela incontroversa  \n\n## Ressalva\n\nAlguns editais fixam ritos e prazos próprios de impugnação de medição. Cumpra o rito local.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Hipóteses locais de rito, prazos e formulários do órgão prevalecem quando mais específicos.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Nesses cenários, organizar o dossiê cedo evita reconstrução tardia de fatos.\n\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar.\n\n## Exemplo de abertura da peça (hipotético)\n\n“Em atenção à glosa do item X da medição Y, no valor de R$ …, apresenta-se contestação com base no critério de medição do item … do contrato, acompanhada de levantamento topográfico e registro fotográfico datado. Requer-se, ainda, a liberação da parcela incontroversa de R$ …, correspondente aos itens não impugnados, nos termos do art. 143 da Lei nº 14.133/2021.”\n\n## Contexto de uso na construtora\n\nDefina SLA interno: glosa conhecida em D+0; dossiê técnico em D+2; peça protocolada antes do prazo do órgão. Atrasar a resposta por “esperar a próxima medição” costuma piorar o caixa e o histórico do contrato.\n"
+}

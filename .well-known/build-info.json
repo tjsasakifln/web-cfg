@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "commit": "8c11a9c873c878dcde6602d49c0b268524218ddc",
-  "build_time": "2026-08-02T15:18:32Z",
-  "environment": "local",
+  "commit": "4a597b8056ceb11313a9dcd8928bb7e5b2b92785",
+  "build_time": "2026-08-02T16:29:10Z",
+  "environment": "production",
   "site_schema_version": "1.1.0",
   "source": "build_site.write_build_info"
 }

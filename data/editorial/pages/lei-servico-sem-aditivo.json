@@ -1,0 +1,57 @@
+{
+  "page_id": "lei-servico-sem-aditivo",
+  "archetype": "lei_14133",
+  "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+  "title": "Serviço executado sem termo aditivo: risco, prova e enquadramento na 14.133",
+  "theme": "serviço executado sem termo aditivo",
+  "journey": "execucao",
+  "primary_keyword": "servico sem termo aditivo",
+  "legal_devices": [
+    "art.124",
+    "art.132",
+    "art.125"
+  ],
+  "law_version": "Lei nº 14.133/2021 (texto Planalto verificado em 2026-08-02)",
+  "date_published": "2026-08-02",
+  "date_modified": "2026-08-02",
+  "author_public": "Biblioteca técnica CONFENGE",
+  "author_is_tiago": false,
+  "meta_description": "O que fazer quando a obra executa serviço determinado pela fiscalização sem termo aditivo formalizado sob a Lei 14.133.",
+  "lead": "“Executa que depois a gente regulariza” é frase cara. O art. 132 e o regime de alterações existem para evitar exatamente esse atalho.",
+  "direct_answer": "Executar serviço fora da planilha ou além do escopo sem termo aditivo coloca a construtora em zona de risco de não pagamento, glosa e discussão sobre irregularidade. A Lei nº 14.133/2021 exige justificativas para alterações (art. 124), observa limites (art. 125) e trata a formalização do termo aditivo como condição para a execução das alterações (art. 132). Se a execução já ocorreu por determinação da Administração, a prioridade passa a ser documentar ordem, nexo, quantitativos, preços e o pedido de regularização — sem transformar o fato consumado em tese frágil.",
+  "sources": [
+    "lei-14133-art124",
+    "lei-14133-art126-132",
+    "lei-14133-planalto",
+    "agu-alteracoes-contratuais-2024"
+  ],
+  "cta_whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre serviço executado sem termo aditivo. Preciso regularizar documentação e avaliar risco de pagamento. Origem: /lei-14133-obras/servico-executado-sem-termo-aditivo/",
+  "cta_email_subject": "Análise inicial — serviço sem termo aditivo",
+  "cta_email_body": "Olá, Tiago.\n\nLi /lei-14133-obras/servico-executado-sem-termo-aditivo/ e temos serviço executado por determinação da fiscalização sem aditivo formal.\n\nPosso enviar OS, diário, fotos e planilha.\n",
+  "cta_offer": "Montar a regularização documental do serviço extra",
+  "related": [
+    {
+      "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "title": "Art. 124 e tipos de alteração",
+      "cluster": "Aditivos",
+      "kind": "Lei 14.133"
+    },
+    {
+      "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "title": "Checklist de pedido de aditivo",
+      "cluster": "Guias",
+      "kind": "Checklist"
+    }
+  ],
+  "faq": [
+    {
+      "q": "Ordem verbal do fiscal vale?",
+      "a": "É prova frágil. Busque confirmação escrita imediata (e-mail institucional, OS, ata). Sem suporte documental, o pagamento futuro fica exposto."
+    },
+    {
+      "q": "Posso recusar executar sem aditivo?",
+      "a": "Depende do enquadramento (obrigação de aceitar acréscimos nos limites do art. 125, por exemplo) e do risco concreto. A recusa e a execução irregular têm consequências distintas — documente a posição técnica."
+    }
+  ],
+  "body_markdown": "## Como se chega nesse ponto\n\n1. Fiscal determina serviço “emergencial”.  \n2. Produção executa para não perder frente.  \n3. Medição chega e o item “não tem cobertura contratual”.  \n4. Começa a disputa de responsabilidade.  \n\n## Âncoras na Lei 14.133\n\n- **Art. 124** — alterações com justificativas (unilateral ou acordo)  \n- **Art. 125** — limites percentuais nas unilaterais  \n- **Art. 132** — formalização do termo aditivo como condição para execução das alterações (leia o dispositivo completo no caso)  \n\nVerificação: texto Planalto, 02/08/2026.\n\n## Se já executou: triagem em 24h\n\n1. Quem determinou, quando e por qual meio?  \n2. O serviço era quantitativo de item existente, mudança de especificação ou item novo?  \n3. Há medição parcial, foto georreferenciada, diário?  \n4. Qual o valor estimado e o impacto no saldo de 25%/50%?  \n5. Já houve comunicação de ressalva da contratada?  \n\n## Pacote documental de regularização\n\n- OS/e-mail/ata da determinação  \n- Desenhos e quantitativos executados  \n- Diário de obra do período  \n- Composições de preço e proposta original  \n- Pedido formal de aditivo/regularização com memória  \n- Cronologia de impactos de prazo  \n\n## O que não fazer\n\n- Completar o restante do serviço extra no mesmo modo informal  \n- Emitir NF genérica sem amarrar ao processo de aditivo  \n- Aceitar quitação parcial que renuncie ao restante sem análise  \n\n## Ressalva\n\nHá discussões sobre gestão de fato e enriquecimento sem causa em cenários extremos. São matérias delicadas: não use esta página como autorização para executar fora do contrato.\n\n## Por que o art. 132 importa na conversa com a fiscalização\n\nA formalização do termo aditivo como condição para executar alterações não é preciosismo cartorial. É a linha que separa serviço medível e pagável de serviço discutível. Quando a Administração alega urgência, a resposta técnica da construtora pode ser: executar trecho mínimo de segurança com ressalva escrita e protocolar o aditivo no mesmo dia — não engolir o escopo inteiro no informal.\n\n## Exemplo hipotético de regularização\n\nContrato de manutenção predial. Fiscal manda trocar 40 m de tubulação fora da planilha. Equipe executa 40 m em dois dias. Medição seguinte glosa o item. Caminho de recuperação: juntar OS/e-mail, fotos antes/depois, quantitativo, composição, desconto da proposta se aplicável, pedido de aditivo com art. 124/125 e pedido de medição vinculada ao processo de regularização. Sem isso, restam só fotos soltas.\n\n\nRegistre decisões e premissas por escrito. Em contrato público, o que não está no processo dificilmente sustenta tese meses depois, quando a equipe de campo já rotacionou e a memória viva se perdeu.\n\n\n## Riscos se nada for regularizado\n\nO risco principal é executar valor material sem cobertura contratual e depois não conseguir medição. Há também risco de apontamento de irregularidade e de fragilizar defesa em sanção se a narrativa for só informalidade recíproca sem prova.\n"
+}

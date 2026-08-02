@@ -1,0 +1,51 @@
+{
+  "page_id": "guia-checklist-aditivo",
+  "archetype": "guia",
+  "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+  "title": "Checklist de pedido de aditivo em obra pública",
+  "theme": "checklist pedido aditivo obra",
+  "journey": "execucao",
+  "primary_keyword": "checklist aditivo obra",
+  "legal_devices": [
+    "art.124",
+    "art.125"
+  ],
+  "date_published": "2026-08-02",
+  "date_modified": "2026-08-02",
+  "author_public": "Biblioteca técnica CONFENGE",
+  "author_is_tiago": false,
+  "meta_description": "Lista objetiva de documentos e checagens antes de protocolar aditivo de obra pública sob a Lei 14.133.",
+  "lead": "Pedido incompleto vira diligência eterna. Este checklist é o mínimo para não perder a fila nem a prova.",
+  "direct_answer": "Antes de protocolar um aditivo de obra pública, reúna a descrição técnica da alteração, o nexo com projeto ou determinação da Administração, a planilha do aditivo com quantitativos e preços, a memória do saldo percentual (arts. 124 e 125 da Lei nº 14.133/2021), as composições de itens novos, o impacto de prazo e as comunicações oficiais. O checklist abaixo é utilizável sem formulário. Se o seu caso já ultrapassou o teto, envolve item novo sensível ou execução sem papel, o próximo passo é análise do dossiê completo.",
+  "sources": [
+    "lei-14133-art124",
+    "lei-14133-art125",
+    "lei-14133-planalto",
+    "agu-alteracoes-contratuais-2024"
+  ],
+  "cta_whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
+  "cta_email_subject": "Análise inicial — dossiê de aditivo de obra",
+  "cta_email_body": "Olá, Tiago.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n",
+  "cta_offer": "Validar o dossiê de aditivo com a CONFENGE",
+  "related": [
+    {
+      "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "title": "Art. 124 na prática",
+      "cluster": "Lei 14.133",
+      "kind": "Aplicação"
+    },
+    {
+      "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "title": "Limites 25% e 50%",
+      "cluster": "Lei 14.133",
+      "kind": "Aplicação"
+    }
+  ],
+  "faq": [
+    {
+      "q": "Preciso de todos os itens para protocolar?",
+      "a": "O mínimo varia conforme o órgão. Quanto mais completo o dossiê na origem, menor a chance de diligência que empurra a execução informal."
+    }
+  ],
+  "body_markdown": "## Como usar\n\nMarque item a item. O que faltar vira risco explícito — não surpresa na medição.\n\n## 1. Identificação do contrato\n\n- Número do contrato e do processo  \n- Órgão, objeto e regime de execução  \n- Valor inicial e valor atualizado  \n- Data-base e índices de reajuste  \n- Gestor e fiscal nomeados  \n\n## 2. Descrição da alteração\n\n- O que muda (quantitativo, especificação, item novo)  \n- Por que muda (erro de projeto, campo, determinação, interferência)  \n- Onde na obra (trecho, pavimento, sistema)  \n- Quando foi determinada e por quem  \n\n## 3. Base legal e contratual\n\n- Enquadramento no art. 124 (unilateral ou acordo)  \n- Teste do art. 125 (25% / 50% se reforma de edifício ou equipamento)  \n- Checagem do art. 126 (não transfigurar objeto)  \n- Cláusulas do contrato sobre alterações  \n\n## 4. Números\n\n- Planilha do aditivo (itens, unidades, quantitativos, preços)  \n- Memória do saldo acumulado de aditivos  \n- Composições de preço de itens novos  \n- Tratamento do desconto da proposta, se aplicável  \n- Impacto no cronograma físico-financeiro  \n\n## 5. Provas de campo e de gabinete\n\n- Projetos “antes” e “depois”  \n- Diário de obra  \n- Fotos e levantamentos  \n- OS, e-mails e atas  \n- Pareceres técnicos internos da contratada  \n\n## 6. Pedido formal\n\n- Requerimento objetivo (o que se pede: valor, prazo, enquadramento)  \n- Anexos numerados  \n- Protocolo com data  \n- Ressalvas se a Administração exigir execução antecipada  \n\n## Sinais de que o pedido vai travar\n\n- Sem memória de saldo percentual  \n- Item novo sem composição  \n- Justificativa só genérica (“necessidade da obra”)  \n- Execução já concluída sem qualquer registro de determinação  \n\n## Depois do checklist\n\nSe todos os itens críticos estão verdes, protocolize. Se há lacuna material (sem determinação escrita, sem nexo, saldo estourado), corrija a prova antes de entrar com o pedido “para cumprir rito”.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Hipóteses locais de rito, prazos e formulários do órgão prevalecem quando mais específicos.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Nesses cenários, organizar o dossiê cedo evita reconstrução tardia de fatos.\n\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar.\n"
+}

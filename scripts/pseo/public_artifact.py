@@ -46,6 +46,10 @@ PUBLIC_TOP_DIRS = frozenset(
         "bid-room-licitacoes-obras",
         "defesa-margem-contratos-publicos",
         "metodologia-inteligencia",
+        # Editorial Wave 1 hubs + archetype pages
+        "lei-14133-obras",
+        "jurisprudencia-contratos-obras",
+        "guias-contratos-obras",
         ".well-known",
     }
 )
@@ -69,6 +73,8 @@ PUBLIC_ROOT_FILES = frozenset(
         "sitemap.xml",
         "sitemap-index.xml",
         "sitemap-inteligencia.xml",
+        "sitemap-editorial.xml",
+        "sitemap-jurisprudencia.xml",
         "sitemap.txt",
         "content-index.json",
     }
