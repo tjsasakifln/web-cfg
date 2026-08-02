@@ -1,0 +1,42 @@
+{
+  "tool": "playwright-mcp",
+  "production": "https://confenge.com.br",
+  "build_info_commit_at_test": "4a597b8056ceb11313a9dcd8928bb7e5b2b92785",
+  "tested_at": "2026-08-02T16:07:00Z",
+  "journeys": {
+    "contrato": {
+      "http": 201,
+      "lead_id": "09a41797eadf272bc0979fc8",
+      "finalUrl": "https://confenge.com.br/obrigado-contrato?receipt=09a41797eadf272bc0979fc8",
+      "protocolVisible": true,
+      "collect_202": true,
+      "consoleErrors": 0,
+      "dataLayer": ["lead_form_success", "page_view", "confirmation_view"],
+      "whatsapp": "https://wa.me/5548988344559?text=..."
+    },
+    "edital": {
+      "http": 201,
+      "lead_id": "499886efe50b8dfc1965d718",
+      "finalUrl": "https://confenge.com.br/obrigado-edital?receipt=499886efe50b8dfc1965d718",
+      "protocolVisible": true
+    },
+    "operacao": {
+      "http": 201,
+      "lead_id": "e3a37044f454a83c73b6883b",
+      "finalUrl": "https://confenge.com.br/obrigado-operacao?receipt=e3a37044f454a83c73b6883b",
+      "protocolVisible": true
+    }
+  },
+  "mobile_390": {
+    "overflowX": false,
+    "h1_present": true,
+    "whatsapp_float": 1
+  },
+  "still_blocked_owner_only": [
+    "RESEND_API_KEY + DNS SPF/DKIM/DMARC",
+    "OPS_WEBHOOK_URL + secret",
+    "TURNSTILE sitekey+secret + LEAD_REQUIRE_TURNSTILE=1",
+    "uptime monitor external",
+    "ntfy historical topic rotation"
+  ]
+}

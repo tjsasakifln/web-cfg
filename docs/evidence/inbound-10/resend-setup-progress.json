@@ -1,0 +1,42 @@
+{
+  "at": "2026-08-02T16:24:00Z",
+  "actions_done": {
+    "deleted_smartlic_tech": true,
+    "added_confenge_com_br_resend": true,
+    "resend_domain_id": "a75ceeb3-52aa-4ae6-8f9c-26f3d82489ea",
+    "region": "sa-east-1",
+    "api_key_name": "confenge-leads-prod",
+    "api_key_created": true,
+    "api_key_in_repo": false
+  },
+  "dns_hostinger_added_only_additive": {
+    "TXT resend._domainkey": true,
+    "MX send -> feedback-smtp.sa-east-1.amazonses.com prio 10": true,
+    "TXT send SPF amazonses": true,
+    "TXT _dmarc p=none": true,
+    "touched_root_MX_hostinger": false,
+    "touched_netlify_ALIAS_or_www": false,
+    "touched_hostinger_mail_dkim": false
+  },
+  "safety_preserved": {
+    "mx1_hostinger": true,
+    "mx2_hostinger": true,
+    "netlify_alias": true,
+    "www_cname_netlify": true,
+    "hostinger_mail_dkim_cnames": true
+  },
+  "resend_status": "Verified",
+  "remaining": [
+    "OPS_WEBHOOK optional",
+    "TURNSTILE",
+    "uptime monitor",
+    "ntfy topic revoke"
+  ],
+  "email_delivery": "Delivered (lead + smoke)",
+  "netlify_env": [
+    "RESEND_API_KEY",
+    "LEAD_FROM_EMAIL",
+    "LEAD_NOTIFY_EMAIL",
+    "IP_HASH_SALT"
+  ]
+}
