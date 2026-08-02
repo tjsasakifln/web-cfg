@@ -1,8 +1,8 @@
 {
   "campaign": "CONFENGE-UIUX-ADVERSARIAL-REMEDIATION-02",
   "initial_sha": "7f111f117b493d4d249d7aab01ea19b0be76c9c2",
-  "final_sha_at_write": "cb1338c1e577ea08c3d271ad9123dccdedc6b2ed",
-  "date": "2026-08-02T01:46:53Z",
+  "final_sha_at_write": "4fbbfd96ca554ed19ea8a9c3b5e3ca7a36bce60a",
+  "date": "2026-08-02T01:47:03Z",
   "status": "COMPLETE",
   "metrics_before": {
     "1440x1000": {
@@ -94,11 +94,12 @@
     "Lighthouse scores not fabricated; axe moderate region residual",
     "pSEO long-tail pages only inherit shared CSS chrome, not full rewrite"
   ],
-  "final_sha": "cb1338c1e577ea08c3d271ad9123dccdedc6b2ed",
+  "final_sha": "4fbbfd96ca554ed19ea8a9c3b5e3ca7a36bce60a",
   "commits": [
-    "cb1338c1 docs(uiux): record final remediation HEAD SHA in result JSON",
+    "465ca018 docs(uiux): record final remediation HEAD SHA in result JSON",
     "a1247758 docs(uiux): adversarial audit, decisions, metrics, and before/after evidence",
     "ced40d89 test(ui): add rendered geometry gates, axe audit, and screenshot capture",
     "ebdc4057 feat(home): compress to seven narrative blocks with clear CTA hierarchy"
-  ]
+  ],
+  "final_sha_note": "Use git rev-parse HEAD after pull; last amend may differ by docs-only commit"
 }
