@@ -140,14 +140,19 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
 
     robots = ROOT / "robots.txt"
     if robots.exists():
-        txt = robots.read_text(encoding="utf-8")
-        for line in (
-            "Sitemap: https://confenge.com.br/sitemap-editorial.xml",
-            "Sitemap: https://confenge.com.br/sitemap-jurisprudencia.xml",
-        ):
-            if line not in txt:
-                txt = txt.rstrip() + "\n" + line + "\n"
-        robots.write_text(txt, encoding="utf-8")
+        # Canonical entry only: individual urlsets are listed in sitemap-index.xml
+        lines_out = []
+        saw_index = False
+        for line in robots.read_text(encoding="utf-8").splitlines():
+            if line.strip().lower().startswith("sitemap:"):
+                if "sitemap-index.xml" in line and not saw_index:
+                    lines_out.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
+                    saw_index = True
+                continue
+            lines_out.append(line)
+        if not saw_index:
+            lines_out.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
+        robots.write_text("\n".join(lines_out).rstrip() + "\n", encoding="utf-8")
 
     return {
         "editorial": len(editorial),
