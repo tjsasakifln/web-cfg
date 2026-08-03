@@ -2,7 +2,7 @@
   "name": "confenge-site",
   "private": true,
   "version": "1.0.0",
-  "description": "CONFENGE static site — SEO migration and host canonization tooling",
+  "description": "CONFENGE static site \u2014 SEO migration and host canonization tooling",
   "type": "module",
   "scripts": {
     "prepare": "bash scripts/install-git-filters.sh",
@@ -40,7 +40,7 @@
     "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
-    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates",
+    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates && npm run test:revops",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "editorial:build": "python3 scripts/editorial/build.py",
     "editorial:approve": "python3 scripts/editorial/approve_cli.py",
@@ -57,7 +57,14 @@
     "test:inbound-gates": "python3 scripts/site/test_inbound_gates.py",
     "editorial:truth": "python3 scripts/editorial/truth.py --fail-on-contradiction --require-packaged-sha --require-packaged-live",
     "editorial:packet": "python3 -c \"print(\"use docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json\")\"",
-    "editorial:truth:write": "python3 scripts/editorial/truth.py --write --fail-on-contradiction"
+    "editorial:truth:write": "python3 scripts/editorial/truth.py --write --fail-on-contradiction",
+    "test:revops": "node scripts/revops/test_lead_stages.mjs && python3 scripts/revops/test_search_demand.py",
+    "revops:gsc:import": "python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-2026-07-30",
+    "revops:gsc:analyze": "python3 scripts/revops/search_demand_observatory.py analyze",
+    "revops:gsc:pull": "python3 scripts/revops/search_demand_observatory.py pull-api --days 28",
+    "revops:lead": "python3 scripts/revops/lead_cli.py",
+    "test:entity-gone:prod": "node scripts/site/test_entity_gone_prod.mjs https://confenge.com.br",
+    "test:ops-health": "node -e \"fetch('https://confenge.com.br/.netlify/functions/ops?action=health').then(r=>r.json()).then(j=>{if(!j.ok)process.exit(1);console.log(j)})\""
   },
   "engines": {
     "node": ">=18"

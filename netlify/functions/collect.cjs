@@ -54,6 +54,9 @@ const ALLOWED_EVENTS = new Set([
   "critical_decision_cta_click",
   "scroll_depth",
   "outbound_click",
+  "web_vital",
+  "tool_use",
+  "tool_result",
 ]);
 
 function originOk(event) {

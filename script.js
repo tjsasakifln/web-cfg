@@ -89,6 +89,60 @@
     window.addEventListener('pagehide', flushAnalytics);
   } catch (_) { /* ignore */ }
 
+  /** Field Core Web Vitals (LCP, INP, CLS, TTFB) — anonymous aggregates only */
+  const reportVital = (metric, value, rating) => {
+    if (!Number.isFinite(value)) return;
+    track('web_vital', {
+      metric: String(metric).toLowerCase(),
+      value: Math.round(value * 1000) / 1000,
+      rating: rating || undefined,
+      nav: (performance.getEntriesByType && performance.getEntriesByType('navigation')[0] || {}).type || 'nav',
+    });
+  };
+  try {
+    if (typeof PerformanceObserver !== 'undefined') {
+      // LCP
+      try {
+        const po = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const last = entries[entries.length - 1];
+          if (last) reportVital('lcp', last.startTime);
+        });
+        po.observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch (_) { /* unsupported */ }
+      // CLS
+      try {
+        let cls = 0;
+        const po = new PerformanceObserver((list) => {
+          for (const e of list.getEntries()) {
+            if (!e.hadRecentInput) cls += e.value;
+          }
+          reportVital('cls', cls);
+        });
+        po.observe({ type: 'layout-shift', buffered: true });
+      } catch (_) { /* unsupported */ }
+      // INP (event timing)
+      try {
+        let worst = 0;
+        const po = new PerformanceObserver((list) => {
+          for (const e of list.getEntries()) {
+            const d = e.duration || 0;
+            if (d > worst) {
+              worst = d;
+              reportVital('inp', worst);
+            }
+          }
+        });
+        po.observe({ type: 'event', buffered: true, durationThreshold: 16 });
+      } catch (_) { /* unsupported */ }
+    }
+    // TTFB
+    try {
+      const nav = performance.getEntriesByType('navigation')[0];
+      if (nav && nav.responseStart) reportVital('ttfb', nav.responseStart);
+    } catch (_) { /* ignore */ }
+  } catch (_) { /* never break */ }
+
   const clusterFromPath = (path) => {
     const p = path || '';
     if (p.includes('/diretoria-b2g')) return 'offer-diretoria-b2g';

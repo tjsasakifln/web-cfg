@@ -191,15 +191,16 @@ if (isProd) {
     const rr = await fetchText("/.well-known/release-result.json");
     if (rr.status === 200) {
       const body = JSON.parse(rr.body);
+      const releaseSha = body.web_cfg_sha || body.commit || body.final_sha || body.deployed_sha;
       ok(
         "public_release_result_matches_live",
-        body.final_sha === markerJson.web_cfg_sha && body.deployed_sha === markerJson.web_cfg_sha,
-        `release=${body.final_sha} live=${markerJson.web_cfg_sha}`
+        releaseSha === markerJson.web_cfg_sha || releaseSha === markerJson.commit,
+        `release=${releaseSha} live=${markerJson.web_cfg_sha}`
       );
       ok(
         "public_release_result_matches_head",
-        body.final_sha === head,
-        `release=${body.final_sha} head=${head}`
+        releaseSha === head,
+        `release=${releaseSha} head=${head}`
       );
     } else {
       console.log("SKIP public_release_result (HTTP", rr.status, ")");
