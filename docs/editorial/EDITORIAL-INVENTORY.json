@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0.0",
+  "derived_at": "2026-08-03T21:45:56Z",
+  "commit_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "registry_counts": {
+    "EDITORIAL_REVIEWED": 11,
+    "REJECTED": 1
+  },
+  "wave1": {
+    "total": 11,
+    "editorial_reviewed": 11,
+    "human_approved": 0,
+    "indexable": 0,
+    "pages": [
+      {
+        "page_id": "guia-checklist-aditivo",
+        "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "guia-docs-reequilibrio",
+        "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "guia-glosa",
+        "url": "/guias-contratos-obras/contestar-glosa-medicao/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "guia-notificacao-atraso",
+        "url": "/guias-contratos-obras/responder-notificacao-atraso/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "lei-art124-alteracao-obra",
+        "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "lei-atraso-administracao",
+        "url": "/lei-14133-obras/atraso-imputavel-administracao/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "lei-item-novo-desconto",
+        "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "lei-limite-25-50",
+        "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "lei-parcela-incontroversa",
+        "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "lei-reequilibrio-reajuste",
+        "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      },
+      {
+        "page_id": "lei-servico-sem-aditivo",
+        "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "registry_status": "EDITORIAL_REVIEWED",
+        "robots": "noindex,follow",
+        "noindex": true
+      }
+    ]
+  },
+  "rejected": {
+    "count": 1,
+    "page_ids": [
+      "jur-sumula-260-art"
+    ]
+  },
+  "public_inventory": {
+    "conteudos_indexable": 22,
+    "hub_claimed_guides": 22,
+    "legacy_indexable_public_surface": 22,
+    "wave1_awaiting_approval": 11,
+    "wave1_published": 0,
+    "note": "Do not mix legacy indexable count with Wave 1 awaiting approval."
+  },
+  "sitemaps": {
+    "editorial_locs": 0,
+    "jurisprudencia_locs": 0,
+    "editorial_urls": []
+  },
+  "false_reviewer_stamps": [],
+  "contradictions": [],
+  "ok": true,
+  "will_not_impersonate_named_human": true,
+  "max_terminal_without_external_human": "READY_FOR_NAMED_HUMAN_APPROVAL"
+}

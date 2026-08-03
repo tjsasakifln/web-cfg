@@ -1,0 +1,58 @@
+{
+  "ok": true,
+  "gates": {
+    "naturalness": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "scanned": 40,
+        "pages_with_hits": 0,
+        "error_count": 0
+      }
+    },
+    "index_surface": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "sitemap_locs": 40
+      }
+    },
+    "brand_shell": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "scanned": 27,
+        "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
+        "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
+      }
+    },
+    "conversion": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "scanned": 22,
+        "journeys": [
+          "contrato",
+          "edital",
+          "operacao"
+        ]
+      }
+    },
+    "legacy_entity": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "rules_checked": 8
+      }
+    },
+    "similarity": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "pages": 22,
+        "pairs": 231,
+        "threshold": 0.55
+      }
+    }
+  }
+}

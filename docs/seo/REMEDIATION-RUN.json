@@ -1,0 +1,109 @@
+{
+  "date": "2026-08-03",
+  "radar": "fixed",
+  "hub": {
+    "removed_directory_items": 0,
+    "indexable_count": 22,
+    "featured": 7
+  },
+  "feed": {
+    "removed_items": 0
+  },
+  "conteudos": {
+    "shell": 22,
+    "machine": 14,
+    "related": 22,
+    "journey": 22,
+    "indexable": 22,
+    "noindex": 98
+  },
+  "pillars": {
+    "pillars": {
+      "medicoes-glosas-obras-publicas": {
+        "kept": 6,
+        "removed": 0
+      },
+      "aditivos-obras-publicas": {
+        "kept": 4,
+        "removed": 0
+      },
+      "reequilibrio-obras-publicas": {
+        "kept": 1,
+        "removed": 0
+      },
+      "atrasos-prorrogacao-obras-publicas": {
+        "kept": 2,
+        "removed": 0
+      },
+      "defesa-tecnica-contratos-publicos": {
+        "kept": 1,
+        "removed": 0
+      },
+      "acompanhamento-contratos-obras": {
+        "kept": 0,
+        "removed": 0
+      },
+      "diagnostico-pre-licitacao": {
+        "kept": 2,
+        "removed": 0
+      },
+      "auditoria-orcamento-licitacao": {
+        "kept": 6,
+        "removed": 0
+      }
+    },
+    "total_removed": 0
+  },
+  "shell_other": 0,
+  "hub_pass2": {
+    "removed_directory_items": 0,
+    "indexable_count": 22,
+    "featured": 7
+  },
+  "pillars_pass2": {
+    "pillars": {
+      "medicoes-glosas-obras-publicas": {
+        "kept": 6,
+        "removed": 0
+      },
+      "aditivos-obras-publicas": {
+        "kept": 4,
+        "removed": 0
+      },
+      "reequilibrio-obras-publicas": {
+        "kept": 1,
+        "removed": 0
+      },
+      "atrasos-prorrogacao-obras-publicas": {
+        "kept": 2,
+        "removed": 0
+      },
+      "defesa-tecnica-contratos-publicos": {
+        "kept": 1,
+        "removed": 0
+      },
+      "acompanhamento-contratos-obras": {
+        "kept": 0,
+        "removed": 0
+      },
+      "diagnostico-pre-licitacao": {
+        "kept": 2,
+        "removed": 0
+      },
+      "auditoria-orcamento-licitacao": {
+        "kept": 6,
+        "removed": 0
+      }
+    },
+    "total_removed": 0
+  },
+  "inventory_rows": 154,
+  "disposition_counts": {
+    "KEEP_AND_IMPROVE": 35,
+    "RETAIN_NOINDEX": 98,
+    "BLOCKED_HUMAN_REVIEW": 11,
+    "BLOCKED_MISSING_EVIDENCE": 1,
+    "RETIRE_410": 6,
+    "REDIRECT_301": 3
+  }
+}

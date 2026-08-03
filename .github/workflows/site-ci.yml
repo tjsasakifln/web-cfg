@@ -24,6 +24,9 @@ jobs:
           pip install pytest
       - name: Unit and brand/copy/design gates
         run: |
+          npm run editorial:test
+          npm run test:inbound-gates
+          npm run editorial:truth
           npm run test:brand
           npm run test:copy
           npm run test:design

@@ -47,6 +47,7 @@ PROGRESSION = [
 ]
 
 # Reviewer strings that are automated / non-human — cannot HUMAN_APPROVE
+# Keep in sync with scripts.editorial.governance.BLOCKED_REVIEWER_PATTERNS
 BLOCKED_REVIEWER_PATTERNS = (
     r"^editorial-wave1-operator$",
     r"^ci[-_]",
@@ -57,6 +58,12 @@ BLOCKED_REVIEWER_PATTERNS = (
     r"^tester$",
     r"^system$",
     r"^pipeline$",
+    r"^github-actions$",
+    r"^dependabot$",
+    r"^grok$",
+    r"^agent$",
+    r"^llm$",
+    r"^automation$",
 )
 
 
@@ -65,10 +72,15 @@ def _now() -> str:
 
 
 def is_blocked_reviewer(reviewer: str) -> bool:
-    r = (reviewer or "").strip().lower()
-    if not r or len(r) < 3:
-        return True
-    return any(re.search(p, r, re.I) for p in BLOCKED_REVIEWER_PATTERNS)
+    try:
+        from scripts.editorial.governance import is_blocked_reviewer as _gov
+
+        return _gov(reviewer)
+    except Exception:  # noqa: BLE001
+        r = (reviewer or "").strip().lower()
+        if not r or len(r) < 3:
+            return True
+        return any(re.search(p, r, re.I) for p in BLOCKED_REVIEWER_PATTERNS)
 
 
 def material_hash(payload: dict[str, Any]) -> str:

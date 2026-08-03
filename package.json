@@ -40,7 +40,7 @@
     "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
-    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui",
+    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "editorial:build": "python3 scripts/editorial/build.py",
     "editorial:approve": "python3 scripts/editorial/approve_cli.py",
@@ -51,7 +51,12 @@
     "test:lighthouse": "node scripts/site/run_lighthouse.mjs",
     "audit:css-usage": "python3 scripts/site/audit_css_usage.py",
     "test:redirects": "node scripts/site/test_redirects.mjs",
-    "test:redirects:prod": "node scripts/site/test_redirects.mjs https://confenge.com.br"
+    "test:redirects:prod": "node scripts/site/test_redirects.mjs https://confenge.com.br",
+    "inbound:gates": "python3 scripts/site/inbound_gates.py --out docs/seo/INBOUND-GATES-REPORT.json",
+    "inbound:remediate": "python3 scripts/site/inbound_first_remediate.py",
+    "test:inbound-gates": "python3 scripts/site/test_inbound_gates.py",
+    "editorial:truth": "python3 scripts/editorial/truth.py --write --fail-on-contradiction",
+    "editorial:packet": "python3 -c \"print(\"use docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json\")\""
   },
   "engines": {
     "node": ">=18"

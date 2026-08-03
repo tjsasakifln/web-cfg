@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-02T17:37:30Z",
+  "generated_at": "2026-08-03T21:44:14Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -384,6 +384,22 @@
         },
         {
           "at": "2026-08-02T17:37:30Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T00:00:00Z",
+          "event": "NOTE",
+          "actor": "recovery/clean-inbound-launch",
+          "notes": "Marcações HUMAN_APPROVED/INDEXABLE/revisor Tiago Sasaki sem evidência humana externa válida foram revogadas; página permanece EDITORIAL_REVIEWED/noindex até aprovação individual auditável."
+        },
+        {
+          "at": "2026-08-03T21:43:39Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T21:44:14Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
         }

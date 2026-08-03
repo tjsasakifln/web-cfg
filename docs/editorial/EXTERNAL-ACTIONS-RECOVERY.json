@@ -1,0 +1,49 @@
+{
+  "title": "Ações externas obrigatórias (pós-PR recovery)",
+  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "commit_sha_note": "Atualizar após merge/push — ver TERMINAL-RESULT.json",
+  "actions": [
+    {
+      "id": 1,
+      "action": "Revisar pacote Wave 1 (docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json) página a página",
+      "owner": "Tiago Sasaki (ou revisor humano nomeado)",
+      "blocks_indexation": true
+    },
+    {
+      "id": 2,
+      "action": "Para cada página aprovável: ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py com --checklist completo, --material-hash, --confirm, --reviewer real",
+      "owner": "humano externo",
+      "blocks_indexation": true
+    },
+    {
+      "id": 3,
+      "action": "Resolver canibalização BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL antes de indexar pares sobrepostos",
+      "owner": "humano editorial",
+      "blocks_indexation": true
+    },
+    {
+      "id": 4,
+      "action": "Rebuild editorial + verificar sitemaps/robots após cada aprovação; páginas não selecionadas permanecem noindex",
+      "owner": "humano + CI",
+      "blocks_indexation": true
+    },
+    {
+      "id": 5,
+      "action": "Não liberar onda pSEO até proveniência/singularidade material refeitas (operacional continua 0 publish)",
+      "owner": "equipe SEO",
+      "blocks_indexation": false
+    },
+    {
+      "id": 6,
+      "action": "Encerrar PRs #10 e #11 como substituídas após merge desta recovery (sem auto-merge desta PR)",
+      "owner": "Tiago",
+      "blocks_indexation": false
+    }
+  ],
+  "forbidden": [
+    "Registrar Tiago Sasaki como revisor por agente/automação",
+    "approve-all / aprovação em lote",
+    "Inferir aprovação de mensagens de goal done",
+    "Declarar HUMAN_APPROVED/INDEXABLE/10/10 sem ato humano externo"
+  ]
+}

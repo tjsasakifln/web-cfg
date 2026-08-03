@@ -1,27 +1,19 @@
 {
-  "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
-  "all_skeptic_closed": true,
-  "skeptic_panel_findings": "STALE — describe pre-remediation code; live build.py:188-206 rejects incomplete jurisprudence, does not auto-approve",
+  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "commit_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+  "derived_at": "2026-08-03T21:45:56Z",
   "indexable_count": 0,
+  "human_approved_count": 0,
   "awaiting_human": 11,
   "rejected": 1,
-  "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
+  "public_indexable_conteudos": 22,
+  "hub_claimed_guides": 22,
+  "editorial_sitemap_locs": 0,
+  "contradictions": [],
   "will_not_impersonate_named_human": true,
-  "why_not_complete": "Objective forbids automated or false HUMAN_APPROVED. Named human must run approve_cli.py.",
-  "verified_at": "2026-08-02T17:49:15Z",
-  "live_proof": {
-    "auto_approve_rc": 2,
-    "approve_human_in_build": false,
-    "registry_history_sample": [
-      "DRAFT",
-      "LEGAL_SOURCE_VALIDATED",
-      "TECHNICAL_REVIEWED",
-      "EDITORIAL_REVIEWED",
-      "NOTE"
-    ],
-    "final_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
-    "jur_status": "REJECTED",
-    "prod_wave1_robots": "noindex,follow",
-    "prod_editorial_sitemap_locs": 0
-  }
+  "why_not_complete": "Named human must run approve_cli.py per page with checklist, material hash, and external identity. Agents must not stamp HUMAN_APPROVED.",
+  "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
+  "wave1_packet": "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
+  "inventory": "docs/editorial/EDITORIAL-INVENTORY.json",
+  "ok": true
 }

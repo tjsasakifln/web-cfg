@@ -1,0 +1,540 @@
+{
+  "schema_version": "1.0.0",
+  "title": "Wave 1 — pacote de revisão humana individual",
+  "commit_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+  "derived_at": "2026-08-03T21:39:43Z",
+  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "summary": {
+    "awaiting_human": 11,
+    "rejected": 1,
+    "human_approved": 0,
+    "indexable": 0,
+    "public_legacy_indexable_conteudos": 22
+  },
+  "rules": [
+    "Aprovar somente com checklist completo, hash material e --confirm.",
+    "Proibido approve-all / lote.",
+    "Proibido registrar Tiago Sasaki sem ato humano externo real.",
+    "Resolver canibalização antes de indexar qualquer par sobreposto.",
+    "jur-sumula-260-art permanece REJECTED até dossiê completo."
+  ],
+  "pages": [
+    {
+      "page_id": "guia-checklist-aditivo",
+      "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "title": "Checklist de pedido de aditivo em obra pública",
+      "question_answered": "Checklist de pedido de aditivo em obra pública",
+      "conclusion_summary": "Antes de protocolar um aditivo de obra pública, reúna a descrição técnica da alteração, o nexo com projeto ou determinação da Administração, a planilha do aditivo com quantitativos e preços, a memória do saldo percentual (arts. 124 e 125 da Lei nº 14.133/2021), as composições de itens novos, o impacto de prazo e as comunicações oficiais. O checklist abaixo é utilizável sem formulário. Se o seu cas",
+      "sources": [
+        "lei-14133-art124",
+        "lei-14133-art125",
+        "lei-14133-planalto",
+        "agu-alteracoes-contratuais-2024"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: ",
+        "email_subject": "Análise inicial — dossiê de aditivo de obra",
+        "offer": "Validar o dossiê de aditivo com a CONFENGE"
+      },
+      "cannibalization": {
+        "peers": [],
+        "decision": "NO_KNOWN_INDEXABLE_OVERLAP",
+        "action": "indexação bloqueada até aprovação humana individual"
+      },
+      "material_hash": "6d693bdf9d530603c30b633931c49be2fc6d358d299db74dd957652c32610824",
+      "preview": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "guia-docs-reequilibrio",
+      "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "title": "Documentos para pedido de reequilíbrio em obra pública",
+      "question_answered": "Documentos para pedido de reequilíbrio em obra pública",
+      "conclusion_summary": "Um pedido de reequilíbrio econômico-financeiro em obra pública precisa de causa identificada, nexo com o contrato e a matriz de riscos, quantificação com memória de cálculo e prova contemporânea do evento. Sob a Lei nº 14.133/2021, os arts. 130 e 131 tratam do restabelecimento do equilíbrio e da janela de formulação do pedido. A lista abaixo organiza o dossiê mínimo. Reajuste por índice previsto n",
+      "sources": [
+        "lei-14133-art130-131",
+        "lei-14133-art136",
+        "lei-14133-planalto"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Consultei o guia da CONFENGE de documentos para reequilíbrio e quero revisar o dossiê do meu contrato de obr",
+        "email_subject": "Análise inicial — dossiê de reequilíbrio",
+        "offer": "Revisar o dossiê de reequilíbrio"
+      },
+      "cannibalization": {
+        "peers": [
+          "/conteudos/documentos-reequilibrio-obra-publica/"
+        ],
+        "decision": "PEER_NOINDEX_OR_LOW_RISK",
+        "action": "verificar peer robots antes de indexar Wave 1"
+      },
+      "material_hash": "31f1b2c6a085441f7d24423868d6fb8572a9d060faba2a0f62ba1ed5b0a6b1fa",
+      "preview": "https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "guia-glosa",
+      "url": "/guias-contratos-obras/contestar-glosa-medicao/",
+      "title": "Documentos para contestar glosa de medição em obra pública",
+      "question_answered": "Documentos para contestar glosa de medição em obra pública",
+      "conclusion_summary": "Para contestar glosa de medição em obra pública, reúna a planilha medida, o critério de medição do contrato, a motivação da glosa, provas de execução (diário, fotos, levantamentos) e a memória que separa a parcela incontroversa da parcela impugnada. O art. 143 da Lei nº 14.133/2021 determina a liberação da parcela incontroversa no prazo de pagamento quando a controvérsia versa sobre dimensão, qual",
+      "sources": [
+        "lei-14133-art141-143",
+        "lei-14133-planalto"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Consultei o checklist da CONFENGE para contestar glosa de medição e quero apoio no meu caso de obra. Origem:",
+        "email_subject": "Análise inicial — glosa de medição",
+        "offer": "Organizar a contestação da glosa e a parcela incontroversa"
+      },
+      "cannibalization": {
+        "peers": [],
+        "decision": "NO_KNOWN_INDEXABLE_OVERLAP",
+        "action": "indexação bloqueada até aprovação humana individual"
+      },
+      "material_hash": "f69bcafc8f7556ecaad49fc1a2eee538f373726f4fc950af2a221af6289cf350",
+      "preview": "https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "guia-notificacao-atraso",
+      "url": "/guias-contratos-obras/responder-notificacao-atraso/",
+      "title": "Como responder notificação por atraso em obra pública",
+      "question_answered": "Como responder notificação por atraso em obra pública",
+      "conclusion_summary": "Ao receber notificação por atraso em obra pública, calcule o prazo de resposta, separe fatos admitidos e fatos contestados, monte linha do tempo com provas e indique causas imputáveis à Administração quando existirem — com apoio no art. 115, § 1º, da Lei nº 14.133/2021 quando houver retardo imotivado. Peça o que for cabível: dilação de prazo, afastamento de sanção, reunião técnica. Não misture des",
+      "sources": [
+        "lei-14133-art115",
+        "lei-14133-planalto"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Consultei o guia da CONFENGE sobre resposta a notificação por atraso e preciso de apoio no meu contrato de o",
+        "email_subject": "Análise inicial — notificação por atraso",
+        "offer": "Estruturar a resposta à notificação de atraso"
+      },
+      "cannibalization": {
+        "peers": [
+          "/conteudos/resposta-notificacao-atraso-obra-publica/"
+        ],
+        "decision": "BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL",
+        "action": "manter peer; Wave 1 noindex"
+      },
+      "material_hash": "688321dceae242bc1c212fe2ae86fd21d8ba4aeea3c3a26ac49f7d3a211eab11",
+      "preview": "https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "jur-sumula-260-art",
+      "url": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "title": "Súmula TCU 260: ART em projeto, fiscalização e execução de obras",
+      "status": "REJECTED",
+      "robots": "noindex,follow",
+      "decision_available": [
+        "manter_rejeitada",
+        "reabrir_somente_com_dossie_sumula_oficial"
+      ],
+      "decision_stamped": null,
+      "blocked_reason": "Dossiê documental da Súmula 260/art. incompleto — sem texto oficial, data e URL estável TCU",
+      "material_hash": "85c0b8f7dea0db73dd88354d7d87c0d241d19a8b16a1664d9d2998cb277b1dfe",
+      "preview": "https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
+    },
+    {
+      "page_id": "lei-art124-alteracao-obra",
+      "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "title": "Art. 124 da Lei 14.133: quando o aditivo de obra é unilateral ou por acordo",
+      "question_answered": "Art. 124 da Lei 14.133: quando o aditivo de obra é unilateral ou por acordo",
+      "conclusion_summary": "O art. 124 da Lei nº 14.133/2021 organiza as alterações do contrato em dois eixos: unilateral pela Administração (modificação de projeto/especificações ou acréscimo/supressão quantitativa nos limites legais) e por acordo entre as partes (garantia, regime de execução, forma de pagamento, atualização de vínculo societário e restabelecimento do equilíbrio, entre outras hipóteses do inciso II). Em obr",
+      "sources": [
+        "lei-14133-art124",
+        "lei-14133-art125",
+        "lei-14133-art126-132",
+        "lei-14133-planalto",
+        "agu-alteracoes-contratuais-2024"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre o art. 124 da Lei 14.133 em alteração contratual de obra. Tenho uma situação ",
+        "email_subject": "Análise inicial — art. 124 e alteração contratual de obra",
+        "offer": "Avaliar se esta alteração exige aditivo unilateral ou acordo"
+      },
+      "cannibalization": {
+        "peers": [],
+        "decision": "NO_KNOWN_INDEXABLE_OVERLAP",
+        "action": "indexação bloqueada até aprovação humana individual"
+      },
+      "material_hash": "07caf5f73084efe74e78e3ee4da3827403fd22fee7a6c4613e36f693a2306b30",
+      "preview": "https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "lei-atraso-administracao",
+      "url": "/lei-14133-obras/atraso-imputavel-administracao/",
+      "title": "Atraso imputável à Administração na Lei 14.133: prova e efeitos na obra",
+      "question_answered": "Atraso imputável à Administração na Lei 14.133: prova e efeitos na obra",
+      "conclusion_summary": "O art. 115 da Lei nº 14.133/2021 impõe execução fiel do contrato e, no § 1º, proíbe a Administração de retardar imotivadamente a execução de obra ou serviço, ou de suas parcelas. Na vida da obra, isso se traduz em frentes não liberadas, projetos incompletos, demora decisória e interferências. O direito a prazo e a eventual custo adicional não nasce do mero desconforto: nasce de nexo causal, cronol",
+      "sources": [
+        "lei-14133-art115",
+        "lei-14133-planalto",
+        "lei-14133-art130-131"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre atraso imputável à Administração (art. 115). Preciso organizar prova e próxim",
+        "email_subject": "Análise inicial — atraso da Administração em obra",
+        "offer": "Organizar a prova do atraso e o pedido de prazo/custo"
+      },
+      "cannibalization": {
+        "peers": [
+          "/conteudos/atraso-obra-culpa-administracao/"
+        ],
+        "decision": "BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL",
+        "action": "manter peer indexável até decisão humana"
+      },
+      "material_hash": "29023ca69d9d846fe8fa17563016af6c9c3f3aeb98a4f66e1f7992e52e94dda4",
+      "preview": "https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "lei-item-novo-desconto",
+      "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "title": "Item novo no aditivo: como formar preço e preservar o desconto da proposta",
+      "question_answered": "Item novo no aditivo: como formar preço e preservar o desconto da proposta",
+      "conclusion_summary": "Quando o aditivo exige obra, serviço ou material sem preço unitário na planilha contratada, a Lei nº 14.133/2021 trata a hipótese nos dispositivos que seguem o art. 124 — em especial a lógica do art. 127 e correlatos sobre preços não contemplados. Na prática da construtora, formar preço de item novo exige composição defensável, coerência com o desconto (ou ágio) da proposta vencedora quando a regr",
+      "sources": [
+        "lei-14133-art126-132",
+        "lei-14133-art124",
+        "lei-14133-planalto",
+        "agu-alteracoes-contratuais-2024",
+        "sinapi-caixa"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar c",
+        "email_subject": "Análise inicial — preço de item novo em aditivo",
+        "offer": "Revisar a formação de preço do item novo"
+      },
+      "cannibalization": {
+        "peers": [
+          "/conteudos/desconto-da-proposta-em-item-novo-aditivo/"
+        ],
+        "decision": "BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL",
+        "action": "diferenciar intenção ou consolidar — dual-index proibido"
+      },
+      "material_hash": "4c39b0ca89a6cd3ae34003efea5b5e56c248c702db7bdbd34c0e0f28543ae28c",
+      "preview": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "lei-limite-25-50",
+      "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "title": "Limite de 25% e 50% no art. 125: o que conta no aditivo de obra",
+      "question_answered": "Limite de 25% e 50% no art. 125: o que conta no aditivo de obra",
+      "conclusion_summary": "Pelo art. 125 da Lei nº 14.133/2021, nas alterações unilaterais do art. 124, I, o contratado é obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% do valor inicial atualizado do contrato em obras, serviços ou compras. No caso de reforma de edifício ou de equipamento, o limite para os acréscimos é de 50%. O teto não autoriza transfigurar o objeto (art. 126) nem",
+      "sources": [
+        "lei-14133-art125",
+        "lei-14133-art124",
+        "lei-14133-art126-132",
+        "lei-14133-planalto",
+        "agu-alteracoes-contratuais-2024"
+      ],
+      "interpretive_claims": [
+        "## Riscos de interpretação"
+      ],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre limites de 25% e 50% no art. 125 em obra pública. Preciso validar o saldo de ",
+        "email_subject": "Análise inicial — saldo de aditivos 25%/50%",
+        "offer": "Validar o saldo percentual do meu contrato"
+      },
+      "cannibalization": {
+        "peers": [
+          "/conteudos/limite-aditivo-25-50-obra-publica/"
+        ],
+        "decision": "BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL",
+        "action": "diferenciar_ou_substituir_com_redirect — Wave 1 permanece noindex"
+      },
+      "material_hash": "c86f6e0dea8011c697990d419d13accfc4960775ab16132400d81529cf345465",
+      "preview": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "lei-parcela-incontroversa",
+      "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "title": "Parcela incontroversa na medição: o que a Lei 14.133 manda pagar",
+      "question_answered": "Parcela incontroversa na medição: o que a Lei 14.133 manda pagar",
+      "conclusion_summary": "O art. 143 da Lei nº 14.133/2021 determina que, havendo controvérsia sobre a execução do objeto quanto a dimensão, qualidade e quantidade, a parcela incontroversa deve ser liberada no prazo previsto para pagamento. Na obra, isso significa separar o que está incontroverso do que está em disputa técnica — e não aceitar, sem registro, a retenção integral por divergência parcial. O art. 141 trata da o",
+      "sources": [
+        "lei-14133-art141-143",
+        "lei-14133-planalto"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre parcela incontroversa (art. 143) em medição de obra. Tenho glosa/retenção e q",
+        "email_subject": "Análise inicial — parcela incontroversa e glosa",
+        "offer": "Separar o incontroverso da glosa no meu contrato"
+      },
+      "cannibalization": {
+        "peers": [
+          "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+        ],
+        "decision": "PEER_NOINDEX_OR_LOW_RISK",
+        "action": "OK se peer noindex"
+      },
+      "material_hash": "eea0bca5985695d3613b79422d1a7067c3abbb355507de7168a11dd3dae76cca",
+      "preview": "https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "lei-reequilibrio-reajuste",
+      "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "title": "Reequilíbrio, reajuste e repactuação na Lei 14.133: qual caminho na obra",
+      "question_answered": "Reequilíbrio, reajuste e repactuação na Lei 14.133: qual caminho na obra",
+      "conclusion_summary": "Na Lei nº 14.133/2021, reajuste e repactuação previstos no contrato podem ser registrados por apostila (art. 136, I), sem termo aditivo. Já o restabelecimento do equilíbrio econômico-financeiro, quando a alteração unilateral aumenta ou diminui encargos, deve ser tratado no mesmo termo aditivo (art. 130). O art. 131 preserva a possibilidade de reconhecimento do desequilíbrio mesmo após extinção, vi",
+      "sources": [
+        "lei-14133-art130-131",
+        "lei-14133-art136",
+        "lei-14133-planalto"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre reequilíbrio, reajuste e repactuação na Lei 14.133. Quero enquadrar o meu con",
+        "email_subject": "Análise inicial — reequilíbrio ou reajuste em obra",
+        "offer": "Enquadrar o pedido certo para o meu descompasso de custo"
+      },
+      "cannibalization": {
+        "peers": [],
+        "decision": "NO_KNOWN_INDEXABLE_OVERLAP",
+        "action": "indexação bloqueada até aprovação humana individual"
+      },
+      "material_hash": "0d2647d1bfcb957abf9ffc6c296598edbc0757c76aeb51d60f4c44f74a149223",
+      "preview": "https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    },
+    {
+      "page_id": "lei-servico-sem-aditivo",
+      "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "title": "Serviço executado sem termo aditivo: risco, prova e enquadramento na 14.133",
+      "question_answered": "Serviço executado sem termo aditivo: risco, prova e enquadramento na 14.133",
+      "conclusion_summary": "Executar serviço fora da planilha ou além do escopo sem termo aditivo coloca a construtora em zona de risco de não pagamento, glosa e discussão sobre irregularidade. A Lei nº 14.133/2021 exige justificativas para alterações (art. 124), observa limites (art. 125) e trata a formalização do termo aditivo como condição para a execução das alterações (art. 132). Se a execução já ocorreu por determinaçã",
+      "sources": [
+        "lei-14133-art124",
+        "lei-14133-art126-132",
+        "lei-14133-planalto",
+        "agu-alteracoes-contratuais-2024"
+      ],
+      "interpretive_claims": [],
+      "caveats": [
+        "Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+        "Aprovação humana individual obrigatória antes de index,follow."
+      ],
+      "cta": {
+        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre serviço executado sem termo aditivo. Preciso regularizar documentação e avali",
+        "email_subject": "Análise inicial — serviço sem termo aditivo",
+        "offer": "Montar a regularização documental do serviço extra"
+      },
+      "cannibalization": {
+        "peers": [
+          "/conteudos/servico-executado-sem-termo-aditivo/"
+        ],
+        "decision": "PEER_ALREADY_NOINDEX_OR_CONSOLIDATED",
+        "action": "manter Wave 1 noindex até aprovação; peer noindex"
+      },
+      "material_hash": "4151ac67b83031339c3d708faaea24737b269ec1b697ea1b5ebc6c10042e5392",
+      "preview": "https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "robots": "noindex,follow",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_available": [
+        "aprovar",
+        "solicitar_ajuste",
+        "rejeitar"
+      ],
+      "decision_stamped": null,
+      "decision_by": null,
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+    }
+  ],
+  "external_actions": [
+    "Revisar cada uma das 11 páginas do pacote individualmente.",
+    "Para cada página: aprovar, solicitar ajuste ou rejeitar — com checklist e hash.",
+    "Resolver pares de canibalização marcados BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL antes de indexação.",
+    "Executar approve_cli.py fora de CI/agente com ALLOW_HUMAN_APPROVAL=1 e identidade real.",
+    "Rebuild editorial + verificar sitemaps/robots após cada aprovação.",
+    "Não publicar nova onda pSEO até proveniência e singularidade refeitas."
+  ]
+}
