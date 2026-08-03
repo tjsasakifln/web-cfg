@@ -319,6 +319,73 @@ def test_live_registry_wave1_not_human_approved():
     assert truth["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
 
 
+def test_packaged_sha_rejects_unrelated_ancestor():
+    """Skeptic: pre-recovery main (or any deep ancestor) must NOT pass on recovery tip.
+
+    Drives shipped packaged_sha_is_acceptable — not a reimplementation.
+    """
+    import subprocess
+
+    from scripts.editorial.truth import packaged_sha_is_acceptable, _git_sha
+
+    live = _git_sha()
+    assert live != "unknown"
+    # merge-base with origin/main if present, else first parent chain deep enough
+    stale = None
+    try:
+        stale = (
+            subprocess.check_output(
+                ["git", "merge-base", "HEAD", "origin/main"],
+                cwd=ROOT,
+                stderr=subprocess.DEVNULL,
+            )
+            .decode()
+            .strip()
+        )
+    except Exception:  # noqa: BLE001
+        pass
+    if not stale or stale == live:
+        # fall back: grandparent if available (not HEAD, not docs-pin parent alone)
+        try:
+            stale = (
+                subprocess.check_output(
+                    ["git", "rev-parse", "HEAD~5"],
+                    cwd=ROOT,
+                    stderr=subprocess.DEVNULL,
+                )
+                .decode()
+                .strip()
+            )
+        except Exception:  # noqa: BLE001
+            pytest.skip("not enough history for ancestor rejection test")
+    # On a docs-only tip, first parent is allowed — ensure we pick something else
+    from scripts.editorial.truth import _git_parent_sha, _head_is_docs_editorial_pin_only
+
+    if _head_is_docs_editorial_pin_only():
+        parent = _git_parent_sha()
+        if stale == parent or stale == live:
+            try:
+                stale = (
+                    subprocess.check_output(
+                        ["git", "rev-parse", "HEAD~5"],
+                        cwd=ROOT,
+                        stderr=subprocess.DEVNULL,
+                    )
+                    .decode()
+                    .strip()
+                )
+            except Exception:  # noqa: BLE001
+                pytest.skip("cannot find non-allowed ancestor")
+    assert stale not in {live, _git_parent_sha() if _head_is_docs_editorial_pin_only() else None}
+    assert packaged_sha_is_acceptable(stale, live) is False, (
+        f"unrelated ancestor {stale[:12]} must not be accepted at {live[:12]}"
+    )
+    # Positive controls
+    assert packaged_sha_is_acceptable(live, live) is True
+    if _head_is_docs_editorial_pin_only() and _git_parent_sha():
+        assert packaged_sha_is_acceptable(_git_parent_sha(), live) is True
+
+
 def test_truth_write_matches_registry():
     truth = derive_editorial_truth()
     path = write_terminal_result(truth)

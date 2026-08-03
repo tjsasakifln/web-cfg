@@ -93,24 +93,46 @@ def _head_is_docs_editorial_pin_only() -> bool:
     return all(n.startswith("docs/editorial/") for n in names)
 
 
-def _is_ancestor(maybe_ancestor: str, tip: str) -> bool:
+def _git_parents(sha: str = "HEAD") -> list[str]:
+    """Return parent SHAs of a commit (empty for root)."""
     try:
-        subprocess.check_call(
-            ["git", "merge-base", "--is-ancestor", maybe_ancestor, tip],
-            cwd=ROOT,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+        raw = (
+            subprocess.check_output(
+                ["git", "rev-parse", f"{sha}^@"],
+                cwd=ROOT,
+                stderr=subprocess.DEVNULL,
+            )
+            .decode()
+            .strip()
         )
-        return True
+        return [p for p in raw.splitlines() if p]
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def _commit_is_docs_editorial_pin_only(sha: str) -> bool:
+    """True when commit *sha* only touches docs/editorial/*."""
+    try:
+        names = (
+            subprocess.check_output(
+                ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", sha],
+                cwd=ROOT,
+                stderr=subprocess.DEVNULL,
+            )
+            .decode()
+            .splitlines()
+        )
     except Exception:  # noqa: BLE001
         return False
+    if not names:
+        return False
+    return all(n.startswith("docs/editorial/") for n in names)
 
 
 def allowed_packaged_shas() -> set[str]:
-    """HEAD always; parent when tip is docs-only pin.
+    """Exact HEAD; if tip is docs-only pin, first parent is also allowed.
 
-    Also treat any package SHA that is an ancestor of HEAD as valid when
-    validating on PR merge checkouts (GitHub creates a temporary merge commit).
+    Unbounded ancestors (e.g. pre-recovery main) are NOT allowed.
     """
     live = _git_sha()
     out = {live} if live != "unknown" else set()
@@ -122,29 +144,39 @@ def allowed_packaged_shas() -> set[str]:
 
 
 def packaged_sha_is_acceptable(pkg_sha: str, live: str | None = None) -> bool:
-    """True if package SHA matches HEAD/parent pin or is an ancestor of HEAD."""
+    """Accept package SHA only when tightly bound to current tip.
+
+    Allowed:
+      1. exact HEAD
+      2. first parent of HEAD when HEAD is a docs/editorial-only pin commit
+      3. PR merge-commit special-case (exactly 2 parents): package may equal
+         the *second* parent (PR tip per GitHub merge convention), or that
+         tip's first parent when the PR tip is itself a docs-only pin
+
+    Explicitly rejected: arbitrary ancestors (e.g. pre-recovery main).
+    """
     live = live or _git_sha()
     if not pkg_sha or live == "unknown":
         return False
-    if pkg_sha in allowed_packaged_shas():
+    if pkg_sha == live:
         return True
-    # PR merge checkouts / extra commits on top of the pin
-    if _is_ancestor(pkg_sha, live):
-        return True
-    # Fallback: present in recent rev-list (helps some shallow/partial histories)
-    try:
-        listed = (
-            subprocess.check_output(
-                ["git", "rev-list", "--max-count=100", live],
-                cwd=ROOT,
-                stderr=subprocess.DEVNULL,
-            )
-            .decode()
-            .split()
-        )
-        return pkg_sha in listed
-    except Exception:  # noqa: BLE001
-        return False
+    # (2) docs-only pin on a normal branch tip
+    if _head_is_docs_editorial_pin_only() or _commit_is_docs_editorial_pin_only(live):
+        parents = _git_parents(live)
+        if parents and pkg_sha == parents[0]:
+            return True
+    # (3) GitHub PR merge ref: two parents — base (main) then PR head.
+    # Never accept first parent alone (would greenlight pinning main).
+    parents = _git_parents(live)
+    if len(parents) == 2:
+        pr_tip = parents[1]
+        if pkg_sha == pr_tip:
+            return True
+        if _commit_is_docs_editorial_pin_only(pr_tip):
+            pr_parents = _git_parents(pr_tip)
+            if pr_parents and pkg_sha == pr_parents[0]:
+                return True
+    return False
 
 
 def robots_of(html: str) -> str:
