@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "from_default": "CONFENGE <nurture@confenge.com.br>",
+  "site": "https://confenge.com.br",
+  "tracks": {
+    "contrato": {
+      "id": "contrato",
+      "label": "Contrato sob pressão",
+      "intent": "contrato_ativo_com_risco",
+      "offer": "defesa-margem-contratos-publicos",
+      "cta_default": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "tool": "https://confenge.com.br/ferramentas/matriz-atraso-obra/",
+      "consent_label": "Quero receber 5 e-mails técnicos sobre defesa de margem em contrato público (posso sair a qualquer momento).",
+      "messages": [
+        {
+          "day_offset": 0,
+          "subject": "Contrato sob pressão: o que registrar nas próximas 48h",
+          "preheader": "Cronologia, nexo e prova contemporânea — sem jargão vazio.",
+          "body_md": "Se o contrato já está em execução e algo saiu do planejado, o erro mais caro é tratar o caso só na memória.\n\nNas próximas 48h, priorize:\n1. Data e fato (ordem de serviço, diário, e-mail/ofício);\n2. Quem determinou o quê;\n3. Impacto em prazo e/ou custo (mesmo que estimado);\n4. Comunicação formal tempestiva.\n\nFerramenta útil agora: matriz de atraso (orientativa).\n{{tool_url}}\n\nLeitura: defesa de margem.\n{{cta_url}}\n\nIsto não é parecer jurídico. É rotina de prova."
+        },
+        {
+          "day_offset": 2,
+          "subject": "Glosa e medição: o que separa discussão de dossiê",
+          "preheader": "Medição não é só planilha — é nexo e tempestividade.",
+          "body_md": "Quando a fiscalização glosa ou trava medição, o dossiê precisa responder:\n• Qual item/etapa?\n• Qual critério contratual ou de projeto?\n• Qual evidência contemporânea?\n• Qual pedido certo (valor, refazer, reabrir medição)?\n\nSem pedido certo, a conversa vira ruído.\n\nOferta se o caso for material: Contract Defense & Margin.\n{{cta_url}}"
+        },
+        {
+          "day_offset": 5,
+          "subject": "Aditivo: saldo de 25%/50% antes de protocolar",
+          "preheader": "Art. 125 — saldos de acréscimo e supressão em separado.",
+          "body_md": "Antes do próximo termo aditivo, calcule o saldo orientativo de acréscimos e supressões sobre o valor inicial atualizado (Lei 14.133/2021, art. 125).\n\nUse o verificador (resultado no navegador, sem cadastro):\nhttps://confenge.com.br/ferramentas/limite-acrescimos-supressoes/\n\nSe o saldo estiver apertado ou houver item novo, organize planilha + nexo + comunicações antes de assinar."
+        },
+        {
+          "day_offset": 9,
+          "subject": "Reequilíbrio: prontidão do dossiê (score honesto)",
+          "preheader": "Checklist de documentos — score alto ≠ direito automático.",
+          "body_md": "Pedido de reequilíbrio sem cronologia e memória de cálculo vira narrativa.\n\nChecklist de prontidão:\nhttps://confenge.com.br/ferramentas/checklist-reequilibrio/\n\nScore alto significa organização mínima para decisão — não deferimento.\n\nSe o impacto for material, o próximo passo é validar tese e números com engenharia + prova.\n{{cta_url}}"
+        },
+        {
+          "day_offset": 14,
+          "subject": "Quando a CONFENGE agrega (e quando não)",
+          "preheader": "Complementar ao jurídico. Sem promessa de recuperação.",
+          "body_md": "A CONFENGE entra quando o problema é posição técnica: cronologia, causalidade, cálculos, aditivos, reequilíbrio, glosa, atraso.\n\nNão substitui o jurídico da empresa. Não promete vitória ou recuperação de valor.\n\nSe ainda há um caso vivo no contrato, envie o contexto (sem documentos sensíveis no primeiro contato):\nhttps://confenge.com.br/#contato?jornada=contrato\n\nOu leia a oferta Contract Defense:\n{{cta_url}}\n\nPara sair desta sequência a qualquer momento: {{unsubscribe_url}}"
+        }
+      ]
+    },
+    "edital": {
+      "id": "edital",
+      "label": "Edital em análise",
+      "intent": "licitacao_em_avaliacao",
+      "offer": "bid-room-licitacoes-obras",
+      "cta_default": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "tool": "https://confenge.com.br/ferramentas/",
+      "consent_label": "Quero receber 5 e-mails técnicos sobre análise de edital e proposta de obra (posso sair a qualquer momento).",
+      "messages": [
+        {
+          "day_offset": 0,
+          "subject": "Edital em análise: 5 riscos antes de comprometer capital",
+          "preheader": "Não é lista genérica — é filtro de decisão.",
+          "body_md": "Antes de montar a proposta, responda com documentos:\n1. Matriz de riscos e o que a Administração empurrou para o contratado;\n2. Orçamento de referência vs realidade de mercado;\n3. Exequibilidade e desconto em itens sensíveis;\n4. Habilitação/acervo e caminhos de impugnação;\n5. Prazo e cronograma realistas.\n\nLeitura de oferta: Bid Room.\n{{cta_url}}"
+        },
+        {
+          "day_offset": 2,
+          "subject": "BDI e orçamento: onde a margem morre cedo",
+          "preheader": "Desonerado/não desonerado e BDI diferenciado não são detalhe.",
+          "body_md": "Erros frequentes em obra pública:\n• misturar premissas de desoneração;\n• BDI incompatível com o regime;\n• composição própria sem memória;\n• item novo futuro sem regra de desconto da proposta.\n\nConteúdos de partida: BDI e SINAPI desonerado no hub /conteudos/.\n\nSe a licitação for estratégica: Bid Room.\n{{cta_url}}"
+        },
+        {
+          "day_offset": 5,
+          "subject": "Impugnação e esclarecimento: tempismo é posição",
+          "preheader": "Pergunta mal feita não protege; impugnação sem nexo também não.",
+          "body_md": "Use o prazo de esclarecimento/impugnação para remover ambiguidade material — não para registrar opinião.\n\nPergunte com:\n• cláusula/item do edital;\n• impacto em preço ou prazo;\n• pedido objetivo (excluir, alterar, esclarecer).\n\nSe o edital já estiver no limite do prazo, priorize o que muda a decisão de participar."
+        },
+        {
+          "day_offset": 9,
+          "subject": "Decisão de participar: critérios, não feeling",
+          "preheader": "Capacidade, margem, órgão e risco — nessa ordem.",
+          "body_md": "Um Bid Room sério termina em decisão: participar, participar com ressalva, ou recusar.\n\nCritérios mínimos:\n• capacidade técnica e financeira real;\n• margem após riscos do edital;\n• histórico do órgão/fiscalização quando conhecido;\n• custo de oportunidade vs carteira.\n\nOferta: {{cta_url}}"
+        },
+        {
+          "day_offset": 14,
+          "subject": "Próximo passo se o edital ainda está vivo",
+          "preheader": "Análise inicial sem promessa de vitória.",
+          "body_md": "Se o edital ainda está no radar da empresa, o próximo passo é uma leitura crítica com documentos — não mais um PDF genérico.\n\nBid Room: {{cta_url}}\nFormulário: https://confenge.com.br/#contato?jornada=edital\n\nSair da sequência: {{unsubscribe_url}}"
+        }
+      ]
+    },
+    "operacao": {
+      "id": "operacao",
+      "label": "Estruturação da operação B2G",
+      "intent": "rotina_b2g_continua",
+      "offer": "diretoria-b2g",
+      "cta_default": "https://confenge.com.br/diretoria-b2g/",
+      "tool": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "consent_label": "Quero receber 5 e-mails sobre rotina B2G e priorização de oportunidades (posso sair a qualquer momento).",
+      "messages": [
+        {
+          "day_offset": 0,
+          "subject": "Operação B2G: volume de editais não é estratégia",
+          "preheader": "Filtro de oportunidades com critérios da empresa.",
+          "body_md": "Plataforma de editais encontra oportunidade. Estratégia decide se ela merece capital e equipe.\n\nComece por: capacidade, acervo, órgãos-alvo, faixas de valor, apetite de risco.\n\nDiagnóstico B2G 360°: https://confenge.com.br/diagnostico-b2g-360/\nDiretoria B2G: {{cta_url}}"
+        },
+        {
+          "day_offset": 2,
+          "subject": "Radar e demanda: o que o Google já mostra (sem inventar mercado)",
+          "preheader": "Demanda orgânica verificada — lineage explícito.",
+          "body_md": "O Radar aberto da CONFENGE publica metodologia e demanda GSC com lineage — sem inventar tickets nacionais sem export auditável.\n\n{{tool_url}}\n\nUse para priorizar conteúdo e ofertas, não como censo de mercado."
+        },
+        {
+          "day_offset": 5,
+          "subject": "Indicadores que a direção precisa ver",
+          "preheader": "Participar/recusar, win-rate honesto, margem pós-contrato.",
+          "body_md": "Rotina B2G útil para a direção:\n• pipeline de editais com critério de prioridade;\n• taxa de participação consciente (não vanity);\n• causas de perda (preço, habilitação, risco);\n• contratos em risco (glosa, aditivo, atraso).\n\nDiretoria B2G fracionada: {{cta_url}}"
+        },
+        {
+          "day_offset": 9,
+          "subject": "Aprendizado pós-resultado (ganhou ou perdeu)",
+          "preheader": "Sem memória de decisão, a empresa repete o erro.",
+          "body_md": "Depois do resultado:\n1. O que a proposta assumiu de risco?\n2. O que o órgão valorizou de fato?\n3. O que muda no próximo filtro?\n\nIsso é operação — não post-mortem cosmética.\n\n{{cta_url}}"
+        },
+        {
+          "day_offset": 14,
+          "subject": "Quando fazer Diagnóstico vs Diretoria B2G",
+          "preheader": "Um é mapa de 90 dias; a outra é rotina contínua.",
+          "body_md": "Diagnóstico B2G 360°: se a empresa ainda não tem mapa claro de capacidade, mercado e gargalos.\nhttps://confenge.com.br/diagnostico-b2g-360/\n\nDiretoria B2G: se o problema é rotina de decisão e acompanhamento.\n{{cta_url}}\n\nContato: https://confenge.com.br/#contato?jornada=operacao\nDescadastro: {{unsubscribe_url}}"
+        }
+      ]
+    }
+  }
+}
