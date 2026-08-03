@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "derived_at": "2026-08-03T22:08:08Z",
-  "commit_sha": "d9b3a441e0fc118bf592dcf7b397d21c1968fe3b",
-  "terminal_status": "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE",
+  "derived_at": "2026-08-03T22:13:40Z",
+  "commit_sha": "c5132fea6d214bac9b2072bab76a8f4449eac2df",
+  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "registry_counts": {
     "EDITORIAL_REVIEWED": 11,
     "REJECTED": 1
