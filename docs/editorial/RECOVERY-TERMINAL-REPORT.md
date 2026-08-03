@@ -4,6 +4,8 @@
 
 `READY_FOR_NAMED_HUMAN_APPROVAL`
 
+**Content commit:** `92931b8e` (recovery fix). Docs regenerated from live HEAD via `scripts/editorial/truth.py`.
+
 ## What this is
 
 Base editorial coerente, segura e auditável. **Não** é “site 10/10”.  
