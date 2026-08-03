@@ -129,7 +129,22 @@ def packaged_sha_is_acceptable(pkg_sha: str, live: str | None = None) -> bool:
     if pkg_sha in allowed_packaged_shas():
         return True
     # PR merge checkouts / extra commits on top of the pin
-    return _is_ancestor(pkg_sha, live)
+    if _is_ancestor(pkg_sha, live):
+        return True
+    # Fallback: present in recent rev-list (helps some shallow/partial histories)
+    try:
+        listed = (
+            subprocess.check_output(
+                ["git", "rev-list", "--max-count=100", live],
+                cwd=ROOT,
+                stderr=subprocess.DEVNULL,
+            )
+            .decode()
+            .split()
+        )
+        return pkg_sha in listed
+    except Exception:  # noqa: BLE001
+        return False
 
 
 def robots_of(html: str) -> str:
