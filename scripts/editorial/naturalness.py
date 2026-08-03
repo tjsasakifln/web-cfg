@@ -67,6 +67,24 @@ GENERIC_OPENERS: tuple[str, ...] = (
 )
 
 
+
+# Machine pSEO residue (keyword stuffed as if natural Portuguese)
+MACHINE_RESIDUE_RES: tuple[tuple[str, str], ...] = (
+    ("converta_discussao", r"Converta a discuss[aã]o sobre"),
+    ("faq_doc_caso_de", r"Qual documento deve ser lido primeiro em um caso de"),
+    ("faq_risco_caso_de", r"Qual o primeiro risco pr[aá]tico em um caso de"),
+    ("caso_de_slug", r"O caso de\s+[a-z0-9][a-z0-9\s]{12,70}\s+s[oó] se sustenta"),
+    ("absorver_keyword", r"absorver custo ou risco de\s+[a-záàâãéêíóôõúç0-9\s\-]{8,50}\s+sem prova"),
+)
+
+
+def find_machine_residue(text: str) -> list[str]:
+    hits = []
+    for name, pat in MACHINE_RESIDUE_RES:
+        if re.search(pat, text, re.I):
+            hits.append(name)
+    return hits
+
 def _normalize(text: str) -> str:
     t = text.lower()
     t = re.sub(r"\s+", " ", t)
@@ -182,6 +200,10 @@ def evaluate_body(
     internal = find_internal_terms(body_text)
     if internal:
         issues.append("internal_terms:" + ",".join(internal[:8]))
+
+    machine = find_machine_residue(body_text)
+    if machine:
+        issues.append("machine_residue:" + ",".join(machine[:8]))
 
     for g in GENERIC_OPENERS:
         if _normalize(body_text).startswith(g) or f" {g}" in _normalize(body_text)[:200]:

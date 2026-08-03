@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history required for package commit_sha ancestor checks (PR merge refs)
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

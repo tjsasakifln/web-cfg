@@ -75,19 +75,39 @@ def cmd_set(args: argparse.Namespace) -> int:
     if args.state not in ALLOWED:
         print(f"invalid state {args.state}; allowed={sorted(ALLOWED)}", file=sys.stderr)
         return 2
-    if args.state in {"APPROVED", "APPROVED_WITH_NOTES"} and not args.reviewer:
-        print("reviewer required for approval", file=sys.stderr)
-        return 2
-    reg = load_reg()
-    found = False
-    for p in reg.get("pages") or []:
-        if p.get("page_id") != args.page_id:
-            continue
-        found = True
-        # Block APPROVED without checklist + rationale
-        if args.state in {"APPROVED", "APPROVED_WITH_NOTES"}:
-            checklist_keys = [x.strip() for x in (args.checklist or "").split(",") if x.strip()]
-            required = {
+
+    # Hard block bulk / approve-all style invocations
+    if getattr(args, "page_id", None) in {"*", "ALL", "all", "approve-all"}:
+        print("approval blocked — bulk/approve-all forbidden", file=sys.stderr)
+        return 3
+    if "," in (args.page_id or ""):
+        print("approval blocked — bulk_approval_forbidden (one page_id only)", file=sys.stderr)
+        return 3
+
+    if args.state in {"APPROVED", "APPROVED_WITH_NOTES"}:
+        # Import governance (fail-closed)
+        try:
+            from scripts.editorial.governance import (
+                PSEO_CHECKLIST_KEYS,
+                is_automation_environment,
+                is_blocked_reviewer,
+                missing_checklist,
+            )
+        except Exception:  # noqa: BLE001
+            # Fallback minimal if package layout differs
+            def is_automation_environment():  # type: ignore
+                import os
+
+                return bool(os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS"))
+
+            def is_blocked_reviewer(r):  # type: ignore
+                return not r or r.strip().lower() in {"tester", "ci", "bot", "system"}
+
+            def missing_checklist(provided, required):  # type: ignore
+                have = set(provided or [])
+                return sorted(set(required) - have)
+
+            PSEO_CHECKLIST_KEYS = (  # type: ignore
                 "sample_independence_verified",
                 "no_internal_slugs",
                 "sources_checked",
@@ -96,29 +116,73 @@ def cmd_set(args: argparse.Namespace) -> int:
                 "meta_description_complete",
                 "cannibalization_checked",
                 "cta_contextual",
-            }
+            )
+
+        try:
+            from scripts.editorial.governance import human_approval_explicitly_allowed
+        except Exception:  # noqa: BLE001
+            def human_approval_explicitly_allowed():  # type: ignore
+                import os
+
+                return (os.environ.get("ALLOW_HUMAN_APPROVAL") or "").strip() == "1"
+
+        if is_automation_environment():
+            print("approval blocked — CI/automation environment", file=sys.stderr)
+            return 3
+        if not human_approval_explicitly_allowed():
+            print(
+                "approval blocked — set ALLOW_HUMAN_APPROVAL=1 only when a named human runs this",
+                file=sys.stderr,
+            )
+            return 3
+        if not args.reviewer or is_blocked_reviewer(args.reviewer):
+            print(
+                f"approval blocked — reviewer not accepted as named human: {args.reviewer!r}",
+                file=sys.stderr,
+            )
+            return 3
+        if not getattr(args, "confirm", False):
+            print(
+                "approval blocked — individual --confirm required (no silent approve)",
+                file=sys.stderr,
+            )
+            return 3
+        notes = (args.notes or args.rationale or "").strip()
+        if len(notes) < 20:
+            print("approval blocked — notes/rationale too short (min 20 chars)", file=sys.stderr)
+            return 3
+
+    reg = load_reg()
+    found = False
+    for p in reg.get("pages") or []:
+        if p.get("page_id") != args.page_id:
+            continue
+        found = True
+        # Block APPROVED without checklist + rationale
+        if args.state in {"APPROVED", "APPROVED_WITH_NOTES"}:
+            if (p.get("status") or "").upper() == "REJECTED" or (
+                p.get("human_review") or ""
+            ).upper() == "REJECTED":
+                print("approval blocked — cannot_approve_rejected", file=sys.stderr)
+                return 3
+            checklist_keys = [x.strip() for x in (args.checklist or "").split(",") if x.strip()]
+            required = set(PSEO_CHECKLIST_KEYS)
             existing = dict(p.get("review_checklist") or {})
             for k in checklist_keys:
                 existing[k] = True
-            missing = sorted(required - {k for k, v in existing.items() if v})
+            missing = missing_checklist(existing, required)
             if missing:
                 print(f"approval blocked — checklist incomplete: {missing}", file=sys.stderr)
                 print("Run: python3 scripts/pseo/review.py audit PAGE_ID", file=sys.stderr)
                 return 3
-            if not (args.notes or "").strip() and not args.rationale:
-                print("approval blocked — notes/rationale required", file=sys.stderr)
+            # Fail-closed: --material-hash required and must match current material
+            expected = (getattr(args, "material_hash", None) or "").strip()
+            if not expected:
+                print(
+                    "approval blocked — --material-hash required and must match page_material_hash",
+                    file=sys.stderr,
+                )
                 return 3
-            p["review_checklist"] = existing
-            p["approval_rationale"] = args.rationale or args.notes
-            p["approver"] = args.reviewer
-            # Capture render hash if page exists
-            import hashlib
-            url = (p.get("url") or "").strip("/")
-            hp = ROOT / url / "index.html" if url else None
-            if hp and hp.exists():
-                p["reviewed_render_hash"] = hashlib.sha256(hp.read_bytes()).hexdigest()[:32]
-            # Snapshot material signature + hash for future invalidation
-            # (global dataset_hash alone must NOT wipe this approval)
             sig = p.get("current_material_signature") or {
                 "title": p.get("title"),
                 "h1": p.get("h1"),
@@ -131,13 +195,31 @@ def cmd_set(args: argparse.Namespace) -> int:
                 "mandatory_fail": tuple(sorted(p.get("mandatory_fail") or [])),
                 "template_version": "pseo-html-v2",
             }
-            p["reviewed_material_signature"] = sig
             try:
                 from scripts.pseo.score import page_material_hash
 
-                p["page_material_hash"] = page_material_hash(sig)
+                actual = p.get("page_material_hash") or page_material_hash(sig)
             except Exception:  # noqa: BLE001
-                p["page_material_hash"] = p.get("page_material_hash")
+                actual = p.get("page_material_hash") or ""
+            if not actual or expected != actual:
+                print(
+                    f"approval blocked — approval_hash_mismatch "
+                    f"(expected flag must equal current page_material_hash)",
+                    file=sys.stderr,
+                )
+                return 3
+            p["review_checklist"] = existing
+            p["approval_rationale"] = args.rationale or args.notes
+            p["approver"] = args.reviewer
+            # Capture render hash if page exists
+            import hashlib
+            url = (p.get("url") or "").strip("/")
+            hp = ROOT / url / "index.html" if url else None
+            if hp and hp.exists():
+                p["reviewed_render_hash"] = hashlib.sha256(hp.read_bytes()).hexdigest()[:32]
+            # Snapshot material signature + pin approved hash (already validated above)
+            p["reviewed_material_signature"] = sig
+            p["page_material_hash"] = actual
             p["data_quality_metrics"] = p.get("data_quality_metrics") or {}
         p["human_review"] = args.state
         p["reviewer"] = args.reviewer
@@ -303,6 +385,17 @@ def main(argv: list[str] | None = None) -> int:
     p_set.add_argument("--claims", default="", help="pipe-separated claims checked")
     p_set.add_argument("--sources-checked", default="", dest="sources_checked")
     p_set.add_argument("--cannibalization", type=int, default=None, help="1 if cannibalization checked")
+    p_set.add_argument(
+        "--confirm",
+        action="store_true",
+        help="Required for APPROVED — individual confirmation of this page only",
+    )
+    p_set.add_argument(
+        "--material-hash",
+        default="",
+        dest="material_hash",
+        help="Optional pin: must match page_material_hash when set",
+    )
     p_set.set_defaults(func=cmd_set)
 
     p_audit = sub.add_parser("audit")
