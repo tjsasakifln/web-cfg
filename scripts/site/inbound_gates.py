@@ -298,6 +298,44 @@ def gate_naturalness(*, only_indexable: bool = True) -> GateReport:
     )
 
 
+def pillar_guide_count_findings(pillar: str, html: str) -> list[Finding]:
+    """Fail when published guide counts exceed library-item size.
+
+    Uses strip_html so HTML wrapping like <strong>15</strong><span>guias cannot hide
+    overclaims (regression against gate theater).
+    """
+    findings: list[Finding] = []
+    kept = len(re.findall(r'class="library-item"', html))
+    plain = strip_html(html)
+    for m in re.finditer(r"\b(\d{1,3})\s+guias?\b", plain, re.I):
+        n = int(m.group(1))
+        if n > kept:
+            findings.append(
+                Finding(
+                    gate="index_surface",
+                    path=f"{pillar}/index.html",
+                    reason="pillar_guide_count_exceeds_library",
+                    excerpt=f"{m.group(0)} kept={kept}",
+                )
+            )
+    for m in re.finditer(
+        r'class="pillar-stat"[^>]*>\s*<strong>(\d+)</strong>\s*<span>([^<]*guia[^<]*)</span>',
+        html,
+        re.I,
+    ):
+        n = int(m.group(1))
+        if n != kept:
+            findings.append(
+                Finding(
+                    gate="index_surface",
+                    path=f"{pillar}/index.html",
+                    reason="pillar_stat_count_mismatch_library",
+                    excerpt=f"strong={n} label={m.group(2)[:40]} kept={kept}",
+                )
+            )
+    return findings
+
+
 def gate_index_surface() -> GateReport:
     findings: list[Finding] = []
     # Sitemaps must not list noindex pages
@@ -427,19 +465,8 @@ def gate_index_surface() -> GateReport:
                             excerpt=href,
                         )
                     )
-        # Count claims must not exceed indexable library items kept
-        kept = ph.count('class="library-item"')
-        for m in re.finditer(r"\b(\d{1,3})\s+guias\b", ph, re.I):
-            n = int(m.group(1))
-            if n > kept:
-                findings.append(
-                    Finding(
-                        gate="index_surface",
-                        path=f"{pillar}/index.html",
-                        reason="pillar_guide_count_exceeds_library",
-                        excerpt=f"{m.group(0)} kept={kept}",
-                    )
-                )
+        for f in pillar_guide_count_findings(pillar, ph):
+            findings.append(f)
 
     # Feed
     feed = ROOT / "feed.xml"

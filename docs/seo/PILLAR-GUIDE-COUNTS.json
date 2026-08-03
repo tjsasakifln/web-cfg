@@ -1,0 +1,167 @@
+{
+  "medicoes-glosas-obras-publicas": {
+    "library_items": 6,
+    "guia_claims": [
+      "6 guias",
+      "6 guias",
+      "01 Guia",
+      "02 Guia",
+      "03 Guia",
+      "04 Guia",
+      "05 Guia",
+      "06 Guia"
+    ],
+    "pillar_stats": [
+      [
+        "6",
+        "guias indexáveis"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  },
+  "aditivos-obras-publicas": {
+    "library_items": 4,
+    "guia_claims": [
+      "4 guias",
+      "4 guias",
+      "01 Guia",
+      "02 Guia",
+      "03 Guia",
+      "04 Guia"
+    ],
+    "pillar_stats": [
+      [
+        "4",
+        "guias indexáveis"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  },
+  "reequilibrio-obras-publicas": {
+    "library_items": 1,
+    "guia_claims": [
+      "1 guia",
+      "1 guia",
+      "01 Guia"
+    ],
+    "pillar_stats": [
+      [
+        "1",
+        "guia indexável"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  },
+  "atrasos-prorrogacao-obras-publicas": {
+    "library_items": 2,
+    "guia_claims": [
+      "2 guias",
+      "2 guias",
+      "01 Guia",
+      "02 Guia"
+    ],
+    "pillar_stats": [
+      [
+        "2",
+        "guias indexáveis"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  },
+  "defesa-tecnica-contratos-publicos": {
+    "library_items": 1,
+    "guia_claims": [
+      "1 guia",
+      "1 guia",
+      "01 Guia"
+    ],
+    "pillar_stats": [
+      [
+        "1",
+        "guia indexável"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  },
+  "acompanhamento-contratos-obras": {
+    "library_items": 0,
+    "guia_claims": [
+      "0 guias"
+    ],
+    "pillar_stats": [
+      [
+        "0",
+        "guias indexáveis publicados (biblioteca em revisão)"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  },
+  "diagnostico-pre-licitacao": {
+    "library_items": 2,
+    "guia_claims": [
+      "2 guias",
+      "2 guias",
+      "01 Guia",
+      "02 Guia"
+    ],
+    "pillar_stats": [
+      [
+        "2",
+        "guias indexáveis"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  },
+  "auditoria-orcamento-licitacao": {
+    "library_items": 6,
+    "guia_claims": [
+      "6 guias",
+      "6 guias",
+      "01 Guia",
+      "02 Guia",
+      "03 Guia",
+      "04 Guia",
+      "05 Guia",
+      "06 Guia"
+    ],
+    "pillar_stats": [
+      [
+        "6",
+        "guias indexáveis"
+      ],
+      [
+        "3",
+        "eixos integrados: engenharia, contrato e impacto econômico"
+      ]
+    ],
+    "gate_findings": []
+  }
+}

@@ -49,6 +49,8 @@ def test_index_surface_hub_and_sitemaps():
 
 def test_pillars_exclude_noindex_library():
     """Commercial pillar hubs must not promote noindex /conteudos/*."""
+    from scripts.site.inbound_gates import strip_html
+
     pillars = [
         "medicoes-glosas-obras-publicas",
         "aditivos-obras-publicas",
@@ -61,6 +63,7 @@ def test_pillars_exclude_noindex_library():
     ]
     for pillar in pillars:
         html = (ROOT / pillar / "index.html").read_text(encoding="utf-8")
+        kept = len(re.findall(r'class="library-item"', html))
         for m in re.finditer(
             r'<article class="library-item"[^>]*>.*?</article>', html, re.S
         ):
@@ -72,6 +75,50 @@ def test_pillars_exclude_noindex_library():
                     href,
                 )
         assert "/#atuacao" not in html, pillar
+        # Published guide counts (including HTML-wrapped <strong>N</strong>guias)
+        # must not exceed library size.
+        plain = strip_html(html)
+        for m in re.finditer(r"\b(\d{1,3})\s+guias?\b", plain, re.I):
+            n = int(m.group(1))
+            assert n <= kept, (pillar, m.group(0), f"kept={kept}")
+        for m in re.finditer(
+            r'class="pillar-stat"[^>]*>\s*<strong>(\d+)</strong>\s*<span>([^<]*guia[^<]*)</span>',
+            html,
+            re.I,
+        ):
+            assert int(m.group(1)) == kept, (
+                pillar,
+                m.group(1),
+                m.group(2),
+                f"kept={kept}",
+            )
+
+
+def test_gate_detects_html_wrapped_false_guide_count():
+    """Regression: <strong>15</strong><span>guias must fail when library is smaller."""
+    from scripts.site.inbound_gates import pillar_guide_count_findings
+
+    # Exact evasion pattern the skeptic found on shipped pillars
+    fake = (
+        '<div class="pillar-stat"><strong>15</strong>'
+        "<span>guias para perguntas específicas</span></div>"
+        '<div class="library-list">'
+        '<article class="library-item">'
+        '<a href="/conteudos/atraso-pagamento-contrato-publico-suspender/">x</a>'
+        "</article></div>"
+    )
+    findings = pillar_guide_count_findings("medicoes-glosas-obras-publicas", fake)
+    reasons = {f.reason for f in findings}
+    assert "pillar_guide_count_exceeds_library" in reasons, findings
+    assert "pillar_stat_count_mismatch_library" in reasons, findings
+    assert any("15" in (f.excerpt or "") for f in findings)
+
+    # Clean page with matching count must pass
+    clean = (
+        '<div class="pillar-stat"><strong>1</strong><span>guia indexável</span></div>'
+        '<article class="library-item"><a href="/conteudos/x/">x</a></article>'
+    )
+    assert pillar_guide_count_findings("medicoes-glosas-obras-publicas", clean) == []
 
 
 def test_footer_not_legacy_atuacao_on_indexable():
