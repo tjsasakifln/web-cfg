@@ -1,0 +1,34 @@
+{
+  "date": "2026-08-03",
+  "radar": "fixed",
+  "hub": {
+    "removed_directory_items": 98,
+    "indexable_count": 22,
+    "featured": 7
+  },
+  "feed": {
+    "removed_items": 18
+  },
+  "conteudos": {
+    "shell": 120,
+    "machine": 17,
+    "related": 120,
+    "journey": 22,
+    "indexable": 22,
+    "noindex": 98
+  },
+  "shell_other": 15,
+  "hub_pass2": {
+    "removed_directory_items": 0,
+    "indexable_count": 22,
+    "featured": 7
+  },
+  "inventory_rows": 154,
+  "disposition_counts": {
+    "KEEP_AND_IMPROVE": 46,
+    "RETAIN_NOINDEX": 98,
+    "BLOCKED_MISSING_EVIDENCE": 1,
+    "RETIRE_410": 6,
+    "REDIRECT_301": 3
+  }
+}

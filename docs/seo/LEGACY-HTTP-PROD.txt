@@ -1,0 +1,23 @@
+PASS redirects_file_nonempty
+PASS servicos_rule
+PASS servicos_301
+PASS vision_410
+PASS nexgen_410
+PASS avcbclcb_410
+PASS no_soft404_home:/vision
+PASS no_soft404_home:/nexgen
+PASS no_soft404_home:/avcbclcb
+PASS no_soft404_home:/avcb
+PASS no_soft404_home:/ia
+PASS no_soft404_home:/avaliacoes
+PASS fragment_exists:#contato
+PASS fragment_exists:#como-atuamos
+PASS live_status:/servicos
+PASS live_loc:/servicos
+PASS live_status:/vision
+PASS live_status:/nexgen
+PASS live_status:/avcbclcb
+PASS live_status:/contato
+PASS live_loc:/contato
+
+ALL redirect gates passed

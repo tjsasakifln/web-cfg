@@ -27,13 +27,12 @@ SITE = "https://confenge.com.br"
 WA_BASE = "https://wa.me/5548988344559"
 
 _ORG_DESC_FALLBACK = (
-    "Diretoria B2G fracionada para construtoras e empresas de engenharia: "
-    "inteligência de mercado, decisão de participação, proposta, proteção de "
-    "margem e riscos em contratos públicos."
+    "Consultoria para licitações e contratos de obras públicas: análise de edital, "
+    "orçamento, proposta e proteção de margem na execução para construtoras."
 )
 _FOOTER_FALLBACK = (
-    "Diretoria B2G fracionada para construtoras: decisão de participação, "
-    "proposta, proteção de margem e gestão de riscos em contratos públicos."
+    "Consultoria para licitações e contratos de obras públicas. "
+    "Modelo de rotina contínua: Diretoria B2G fracionada."
 )
 
 

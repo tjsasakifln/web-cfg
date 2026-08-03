@@ -187,7 +187,7 @@ def make_faq3(slug: str, title_core: str, keyword: str) -> tuple[str, str, str]:
         return q, a, a
 
     # Cluster-aware generic but unique
-    q = f"Qual o primeiro risco prático em um caso de {keyword or title_core.lower()}?"
+    q = f"Qual é o principal risco prático ao decidir sobre {keyword or title_core.lower()}?"  # prefer natural phrasing; avoid "caso de {slug}"
     a = (
         f"O primeiro risco é decidir por intuição: aceitar, executar ou contestar sem amarrar fato, "
         f"cláusula, documento e impacto. Em {keyword or 'obras públicas'}, isso vira renúncia silenciosa "
@@ -197,6 +197,9 @@ def make_faq3(slug: str, title_core: str, keyword: str) -> tuple[str, str, str]:
     a = a + f" O guia de {title_core.split(':')[0][:40]} detalha a trilha mínima de análise."
     return q, a, a
 
+
+# INBOUND_FIRST: do not generate "caso de {keyword}" FAQ templates.
+# New FAQ copy must be natural Brazilian Portuguese (see docs/seo/EDITORIAL-NATURALNESS-STANDARD.md).
 
 def lead_inline_html(wa_url: str, topic: str, form_path: str) -> str:
     return (

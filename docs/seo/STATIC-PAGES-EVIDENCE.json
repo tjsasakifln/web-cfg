@@ -1,0 +1,42 @@
+[
+  {
+    "path": "index.html",
+    "title": "CONFENGE | Consultoria para licitações e contratos de obras públicas",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "nav": "Analisar licitação Proteger contrato Operação B2G Conteúdos Especialista",
+    "has_converta": false,
+    "has_legacy_nav": false
+  },
+  {
+    "path": "conteudos/index.html",
+    "title": "Conteúdos sobre licitações, contratos e obras públicas | CONFENGE",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "nav": "Analisar licitação Proteger contrato Operação B2G Conteúdos Especialista",
+    "has_converta": false,
+    "has_legacy_nav": false
+  },
+  {
+    "path": "diretoria-b2g/index.html",
+    "title": "Diretoria B2G fracionada | Rotina de licitações e contratos | CONFENGE",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "nav": "Analisar licitação Proteger contrato Operação B2G Conteúdos Especialista",
+    "has_converta": false,
+    "has_legacy_nav": false
+  },
+  {
+    "path": "conteudos/atraso-pagamento-contrato-publico-suspender/index.html",
+    "title": "Atraso de pagamento: pode suspender a obra pública? | CONFENGE",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "nav": "Analisar licitação Proteger contrato Operação B2G Conteúdos Especialista",
+    "has_converta": false,
+    "has_legacy_nav": false
+  },
+  {
+    "path": "radar/index.html",
+    "title": "Radar de oportunidades B2G | CONFENGE",
+    "robots": "noindex,follow",
+    "nav": "Analisar licitação Proteger contrato Operação B2G Conteúdos Especialista",
+    "has_converta": false,
+    "has_legacy_nav": false
+  }
+]
