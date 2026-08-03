@@ -332,23 +332,23 @@ def write_sitemap_index(lastmod: str) -> Path:
 
 
 def patch_main_sitemap_index() -> None:
+    """Keep robots.txt pointing at a single canonical sitemap index."""
     robots = ROOT / "robots.txt"
     text = robots.read_text(encoding="utf-8")
-    lines_needed = [
-        "Sitemap: https://confenge.com.br/sitemap-index.xml",
-        "Sitemap: https://confenge.com.br/sitemap.xml",
-        "Sitemap: https://confenge.com.br/sitemap-inteligencia.xml",
-    ]
-    changed = False
-    if not text.endswith("\n"):
-        text += "\n"
-        changed = True
-    for line in lines_needed:
-        if line not in text:
-            text += line + "\n"
-            changed = True
-    if changed:
-        robots.write_text(text, encoding="utf-8")
+    lines = []
+    saw_index = False
+    for line in text.splitlines():
+        if line.strip().lower().startswith("sitemap:"):
+            if "sitemap-index.xml" in line and not saw_index:
+                lines.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
+                saw_index = True
+            continue
+        lines.append(line)
+    if not saw_index:
+        lines.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
+    new_text = "\n".join(lines).rstrip() + "\n"
+    if new_text != text:
+        robots.write_text(new_text, encoding="utf-8")
 
 
 def render_hubs(cands: list[Candidate]) -> list[str]:

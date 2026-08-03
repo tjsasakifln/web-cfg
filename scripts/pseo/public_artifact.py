@@ -50,6 +50,10 @@ PUBLIC_TOP_DIRS = frozenset(
         "lei-14133-obras",
         "jurisprudencia-contratos-obras",
         "guias-contratos-obras",
+        # Private RevOps UI (noindex + robots Disallow; still need publish for ops staff)
+        "ops",
+        # High-intent tools (conversion moat)
+        "ferramentas",
         ".well-known",
     }
 )

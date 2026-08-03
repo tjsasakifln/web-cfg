@@ -191,6 +191,30 @@ class NetlifyBlobsStore {
     }
     return true;
   }
+  async list() {
+    const out = [];
+    if (!this.store || typeof this.store.list !== "function") return out;
+    try {
+      let cursor;
+      do {
+        const page = await this.store.list({ prefix: "leads/", cursor });
+        const blobs = page.blobs || [];
+        for (const b of blobs) {
+          const key = b.key || b;
+          const id = String(key).replace(/^leads\//, "");
+          const rec = await this.get(id);
+          if (rec) out.push(rec);
+        }
+        cursor = page.cursor || page.next_cursor;
+        if (!page.truncated) break;
+      } while (cursor);
+    } catch (err) {
+      safeLog("warn", "blobs_list_fail", {
+        reason: err && err.message ? String(err.message).slice(0, 80) : "fail",
+      });
+    }
+    return out;
+  }
 }
 
 /** Singleton memory for cold-start-friendly rate buckets in same instance */
@@ -333,9 +357,41 @@ async function createStore(options = {}) {
 function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, status }) {
   const retention = Number(process.env.LEAD_RETAIN_DAYS || 730);
   const delete_after = new Date(Date.now() + retention * 864e5).toISOString();
+  let commercial = {};
+  try {
+    const { commercialDefaults } = require("./lead-stages.cjs");
+    commercial = commercialDefaults(received_at);
+  } catch {
+    commercial = {
+      commercial_stage: "lead_persisted",
+      stage_history: [{ at: received_at, from: "form_started", to: "lead_persisted", actor: "system" }],
+      owner: null,
+      next_action: "first_contact",
+      last_contact_at: null,
+      loss_reason: null,
+      proposal_value: null,
+      contract_value: null,
+      revenue_received: null,
+      ops_notes: [],
+    };
+  }
   return {
     lead_id,
     status: status || "persisted",
+    commercial_stage: commercial.commercial_stage || "lead_persisted",
+    stage_history: commercial.stage_history || [],
+    owner: commercial.owner,
+    next_action: commercial.next_action,
+    last_contact_at: commercial.last_contact_at,
+    loss_reason: commercial.loss_reason,
+    proposal_value: commercial.proposal_value,
+    contract_value: commercial.contract_value,
+    revenue_received: commercial.revenue_received,
+    ops_notes: commercial.ops_notes || [],
+    session_id: lead.session_id || lead.sid || null,
+    previous_page: lead.previous_page || lead.referrer || null,
+    cta_id: lead.cta_id || null,
+    offer_id: lead.offer_id || null,
     received_at,
     updated_at: received_at,
     delete_after,
