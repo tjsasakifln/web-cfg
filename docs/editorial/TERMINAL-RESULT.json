@@ -1,7 +1,7 @@
 {
-  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
-  "commit_sha": "570da120a00faecf641c26bf2aac5c0cec74eae3",
-  "derived_at": "2026-08-03T21:47:58Z",
+  "terminal_status": "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE",
+  "commit_sha": "44b6b16d8d2135c05bd7317c303f2cf8c540217c",
+  "derived_at": "2026-08-03T22:06:50Z",
   "indexable_count": 0,
   "human_approved_count": 0,
   "awaiting_human": 11,
