@@ -65,7 +65,8 @@
     "revops:lead": "python3 scripts/revops/lead_cli.py",
     "test:entity-gone:prod": "node scripts/site/test_entity_gone_prod.mjs https://confenge.com.br",
     "test:ops-health": "node -e \"fetch('https://confenge.com.br/.netlify/functions/ops?action=health').then(r=>r.json()).then(j=>{if(!j.ok)process.exit(1);console.log(j)})\"",
-    "test:tools": "node scripts/site/test_tools_structure.mjs"
+    "test:tools": "node scripts/site/test_tools_structure.mjs",
+    "revops:daily-health": "node scripts/revops/daily_health.mjs"
   },
   "engines": {
     "node": ">=18"
