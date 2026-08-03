@@ -40,3 +40,12 @@ python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-YYY
 LEAD_STORE_DIR=./.leads npm run revops:lead -- list
 OPS_TOKEN=… OPS_BASE=https://confenge.com.br npm run revops:lead -- list --remote
 ```
+
+## Nurture
+
+| Variable | Purpose |
+|----------|---------|
+| `RESEND_API_KEY` | Required for real sends |
+| `NURTURE_FROM_EMAIL` | From address |
+| `OPS_TOKEN` | Daily tick + stop_commercial |
+| `NURTURE_ADVANCE_WITHOUT_RESEND` | Test only |

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sequências técnicas por intenção | CONFENGE</title>
+<meta name="description" content="Receba 5 e-mails técnicos sobre contrato, edital ou operação B2G. Opt-in com confirmação e descadastro."/>
+<meta name="robots" content="index,follow"/>
+<link rel="canonical" href="https://confenge.com.br/nurture/"/>
+<link rel="stylesheet" href="/styles.css"/>
+<style>
+.n-wrap{max-width:42rem;margin:0 auto}
+.n-card{border:1px solid rgba(15,23,42,.1);border-radius:12px;padding:1.25rem;margin:1rem 0;background:#f8fafc}
+.n-card label{display:block;font-weight:600;margin:.5rem 0 .25rem}
+.n-card input,.n-card select{width:100%;padding:.55rem;border-radius:8px;border:1px solid #cbd5e1;font:inherit}
+.n-status{margin-top:.75rem;font-size:.95rem}
+.case-badge{display:inline-block;background:#fef3c7;color:#92400e;font-size:.75rem;font-weight:700;padding:.2rem .5rem;border-radius:4px}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<header class="site-header"><div class="container header-inner">
+<a class="logo" href="/">CONFENGE</a>
+<nav class="nav-desktop" aria-label="Principal">
+<a href="/ferramentas/">Ferramentas</a>
+<a href="/conteudos/">Conteúdos</a>
+<a href="/casos/">Casos</a>
+<a href="/imprensa/">Imprensa</a>
+<a href="/nurture/">E-mails</a>
+<a href="/#contato">Contato</a>
+</nav></div></header>
+<main id="conteudo" class="container n-wrap" style="padding:2rem 1rem 4rem">
+
+<p class="eyebrow">Nurture por intenção · opt-in</p>
+<h1>Cinco e-mails úteis — não newsletter genérica</h1>
+<p class="content-lead">Escolha a trilha do problema atual. Confirmação por e-mail é obrigatória. Você sai quando quiser.</p>
+<div class="n-card">
+<form id="nurture-form" novalidate>
+<label for="track">Trilha</label>
+<select id="track" name="track" required>
+<option value="contrato">Contrato sob pressão</option>
+<option value="edital">Edital em análise</option>
+<option value="operacao">Estruturação da operação B2G</option>
+</select>
+<label for="email">E-mail corporativo</label>
+<input id="email" name="email" type="email" required autocomplete="email" placeholder="voce@construtora.com.br"/>
+<label style="font-weight:500;display:flex;gap:.5rem;align-items:flex-start;margin-top:1rem">
+<input id="consent" name="consent" type="checkbox" required style="width:auto;margin-top:.3rem"/>
+<span>Autorizo até 5 e-mails técnicos desta trilha e li a <a href="/privacidade/">Privacidade</a>. Posso sair a qualquer momento.</span>
+</label>
+<div style="margin-top:1rem"><button class="button button-primary" type="submit">Quero a sequência</button></div>
+<p class="n-status" id="status" role="status" hidden></p>
+</form>
+</div>
+<p>Mensagens ligam a ferramentas e ofertas reais. Sequência interrompe se o lead avançar a reunião/proposta.</p>
+<script>
+document.getElementById('nurture-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const status = document.getElementById('status');
+  status.hidden = false; status.textContent = 'Enviando…';
+  try {
+    const res = await fetch('/.netlify/functions/nurture?action=subscribe', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('email').value,
+        track: document.getElementById('track').value,
+        consent: document.getElementById('consent').checked,
+        source: 'nurture_landing', landing_page: '/nurture/'
+      })
+    });
+    const j = await res.json();
+    if (!res.ok) throw new Error(j.message || j.error || 'falha');
+    status.textContent = j.message || 'Verifique seu e-mail para confirmar.';
+  } catch (err) { status.textContent = 'Não foi possível inscrever: ' + (err.message || err); }
+});
+</script>
+
+</main>
+<footer class="site-footer"><div class="container"><p>© CONFENGE · <a href="/privacidade/">Privacidade</a> · <a href="/nurture/sair/">Sair de e-mails</a></p></div></footer>
+<script src="/script.js" defer></script>
+</body></html>

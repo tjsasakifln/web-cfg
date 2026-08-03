@@ -54,6 +54,9 @@ PUBLIC_TOP_DIRS = frozenset(
         "ops",
         # High-intent tools (conversion moat)
         "ferramentas",
+        "nurture",
+        "casos",
+        "imprensa",
         ".well-known",
     }
 )
