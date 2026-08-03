@@ -1,0 +1,451 @@
+{
+  "artifact": "FULL-DATALAKE-UTILIZATION-PROOF",
+  "schema_version": "1.0.0",
+  "status": "FULL_DATALAKE_UTILIZED",
+  "generated_at": "2026-08-03T01:38:46Z",
+  "run_id": "full-proof-20260803T012518Z-f532a5a2",
+  "source_run_id": "full-proof-20260803T012518Z-f532a5a2",
+  "source_commit_sha": "75b4165f5b864362d3e697d2020ed707126beb64",
+  "source_branch": "feat/inbound-seo-engine-full-datalake",
+  "host_label": "vps-national-tunnel",
+  "environment": {
+    "python": "3.12.3",
+    "platform": "linux",
+    "cwd": "/mnt/d/extra consultoria",
+    "dsn_host_label": "vps-national-tunnel",
+    "read_only": true,
+    "transaction_isolation": "REPEATABLE READ",
+    "fetch_mode": "server_side_cursor_fetchmany",
+    "fetchall_used": false,
+    "fixture_used": false,
+    "sc_only_fallback": false,
+    "top20_substitute": false,
+    "staging_path": "/tmp/pseo-full-proof-6bir3qlj.sqlite",
+    "staging_on_disk": true,
+    "staging_deleted": true
+  },
+  "contracts_read": 4479442,
+  "national_records_available_sql": 4479442,
+  "national_records_considered_sql": 4402632,
+  "contracts_read_matches_available": true,
+  "min_date": "2023-07-20",
+  "max_date": "2026-07-31",
+  "period_covered": {
+    "min_data_publicacao": "2023-07-20",
+    "max_data_publicacao": "2026-07-31",
+    "min_data_inicio": "2021-04-01",
+    "max_data_inicio": "8406-05-16",
+    "as_of": "2026-08-03"
+  },
+  "ufs": {
+    "count_distinct_observed": 27,
+    "distribution": [
+      {
+        "uf": "SC",
+        "n": 1192919
+      },
+      {
+        "uf": "SP",
+        "n": 820772
+      },
+      {
+        "uf": "MG",
+        "n": 366775
+      },
+      {
+        "uf": "RS",
+        "n": 331897
+      },
+      {
+        "uf": "GO",
+        "n": 316579
+      },
+      {
+        "uf": "PR",
+        "n": 233453
+      },
+      {
+        "uf": "BA",
+        "n": 207220
+      },
+      {
+        "uf": "CE",
+        "n": 193823
+      },
+      {
+        "uf": "RJ",
+        "n": 132239
+      },
+      {
+        "uf": "DF",
+        "n": 98385
+      },
+      {
+        "uf": "PE",
+        "n": 75090
+      },
+      {
+        "uf": "PB",
+        "n": 67489
+      },
+      {
+        "uf": "ES",
+        "n": 61741
+      },
+      {
+        "uf": "PA",
+        "n": 52622
+      },
+      {
+        "uf": "MA",
+        "n": 51858
+      },
+      {
+        "uf": "MS",
+        "n": 50152
+      },
+      {
+        "uf": "RN",
+        "n": 43028
+      },
+      {
+        "uf": "MT",
+        "n": 28530
+      },
+      {
+        "uf": "RO",
+        "n": 27052
+      },
+      {
+        "uf": "PI",
+        "n": 24265
+      },
+      {
+        "uf": "SE",
+        "n": 22606
+      },
+      {
+        "uf": "AM",
+        "n": 22460
+      },
+      {
+        "uf": "AL",
+        "n": 17634
+      },
+      {
+        "uf": "TO",
+        "n": 17446
+      },
+      {
+        "uf": "AC",
+        "n": 9893
+      },
+      {
+        "uf": "RR",
+        "n": 8898
+      },
+      {
+        "uf": "AP",
+        "n": 4616
+      }
+    ]
+  },
+  "municipios": {
+    "unique_keys_capped": 4690,
+    "cap": 50000,
+    "note": "Unique UF:municipio keys tracked up to cap for memory bound"
+  },
+  "orgaos": {
+    "unique_cnpj_capped": 14188,
+    "cap": 100000
+  },
+  "fornecedores": {
+    "unique_cnpj_capped": 100000,
+    "cap": 100000
+  },
+  "sources": [
+    {
+      "source": "pncp_contracts",
+      "n": 4479442
+    }
+  ],
+  "segments_classified": {
+    "n_classified": 111986,
+    "classify_every": 40,
+    "max_classify": null,
+    "by_label": {
+      "insufficient_context": 49986,
+      "non_aec": 53038,
+      "ambiguous": 5242,
+      "aec_confirmed": 3251,
+      "aec_probable": 469
+    },
+    "by_archetype": {
+      "servicos-tecnicos-fase-preparatoria": 1973,
+      "pavimentacao-infraestrutura-viaria": 583,
+      "saneamento-hidraulica": 146,
+      "manutencao-predial-engenharia": 160,
+      "edificacoes-publicas": 501,
+      "estruturas-contencoes-obras-especiais": 56,
+      "climatizacao-instalacoes": 134,
+      "reformas-ampliacoes": 119,
+      "gestao-fiscalizacao-contratos-publicos": 17,
+      "projetos-fiscalizacao-supervisao": 20
+    },
+    "aec_confirmed": {
+      "raw_count_in_sample": 3251,
+      "note": "Subsampled classification; see aec_keyword_prefilter for scale proxy"
+    }
+  },
+  "aec_contracts": {
+    "keyword_prefilter_hits": 214630,
+    "keyword_prefilter_query_version": "v1_sql_keyword_approx_not_gold",
+    "classifier_aec_confirmed_in_scan": 3251,
+    "note": "Only multi-layer aec_confirmed feeds public market pages; keyword is scale accelerator only"
+  },
+  "distribution_by_segment": {
+    "servicos-tecnicos-fase-preparatoria": 1973,
+    "pavimentacao-infraestrutura-viaria": 583,
+    "saneamento-hidraulica": 146,
+    "manutencao-predial-engenharia": 160,
+    "edificacoes-publicas": 501,
+    "estruturas-contencoes-obras-especiais": 56,
+    "climatizacao-instalacoes": 134,
+    "reformas-ampliacoes": 119,
+    "gestao-fiscalizacao-contratos-publicos": 17,
+    "projetos-fiscalizacao-supervisao": 20
+  },
+  "distribution_by_uf": [
+    {
+      "uf": "SC",
+      "n": 1192919
+    },
+    {
+      "uf": "SP",
+      "n": 820772
+    },
+    {
+      "uf": "MG",
+      "n": 366775
+    },
+    {
+      "uf": "RS",
+      "n": 331897
+    },
+    {
+      "uf": "GO",
+      "n": 316579
+    },
+    {
+      "uf": "PR",
+      "n": 233453
+    },
+    {
+      "uf": "BA",
+      "n": 207220
+    },
+    {
+      "uf": "CE",
+      "n": 193823
+    },
+    {
+      "uf": "RJ",
+      "n": 132239
+    },
+    {
+      "uf": "DF",
+      "n": 98385
+    },
+    {
+      "uf": "PE",
+      "n": 75090
+    },
+    {
+      "uf": "PB",
+      "n": 67489
+    },
+    {
+      "uf": "ES",
+      "n": 61741
+    },
+    {
+      "uf": "PA",
+      "n": 52622
+    },
+    {
+      "uf": "MA",
+      "n": 51858
+    },
+    {
+      "uf": "MS",
+      "n": 50152
+    },
+    {
+      "uf": "RN",
+      "n": 43028
+    },
+    {
+      "uf": "MT",
+      "n": 28530
+    },
+    {
+      "uf": "RO",
+      "n": 27052
+    },
+    {
+      "uf": "PI",
+      "n": 24265
+    },
+    {
+      "uf": "SE",
+      "n": 22606
+    },
+    {
+      "uf": "AM",
+      "n": 22460
+    },
+    {
+      "uf": "AL",
+      "n": 17634
+    },
+    {
+      "uf": "TO",
+      "n": 17446
+    },
+    {
+      "uf": "AC",
+      "n": 9893
+    },
+    {
+      "uf": "RR",
+      "n": 8898
+    },
+    {
+      "uf": "AP",
+      "n": 4616
+    }
+  ],
+  "distribution_by_value_band": [
+    {
+      "band": "ate_100k",
+      "n": 3847667
+    },
+    {
+      "band": "100k_500k",
+      "n": 345816
+    },
+    {
+      "band": "1m_5m",
+      "n": 92344
+    },
+    {
+      "band": "500k_1m",
+      "n": 79581
+    },
+    {
+      "band": "sem_valor_ou_zero",
+      "n": 76810
+    },
+    {
+      "band": "5m_20m",
+      "n": 25799
+    },
+    {
+      "band": "acima_20m",
+      "n": 11425
+    }
+  ],
+  "concentration": {
+    "top_uf_share": 0.26631,
+    "top_5_ufs": [
+      {
+        "uf": "SC",
+        "n": 1192919,
+        "share": 0.26631
+      },
+      {
+        "uf": "SP",
+        "n": 820772,
+        "share": 0.183231
+      },
+      {
+        "uf": "MG",
+        "n": 366775,
+        "share": 0.08188
+      },
+      {
+        "uf": "RS",
+        "n": 331897,
+        "share": 0.074093
+      },
+      {
+        "uf": "GO",
+        "n": 316579,
+        "share": 0.070674
+      }
+    ],
+    "herfindahl_uf_approx": 0.131151,
+    "note": "UF-level concentration only; supplier HHI requires full supplier set materialization"
+  },
+  "records_discarded": {
+    "reasons": {
+      "classifier_non_aec": 53038,
+      "valor_null_or_lte_0": 76810
+    },
+    "total_discard_events": 129848,
+    "note": "Discard events are multi-label (a row can match more than one reason)"
+  },
+  "query_version": {
+    "contracts_physical_total": "v1_count_pncp_supplier_contracts",
+    "contracts_distinct_id": "v1_count_distinct_contrato_id",
+    "contracts_valor_gt0": "v1_valor_total_gt_0",
+    "contracts_valor_zero": "v1_valor_total_eq_0",
+    "contracts_valor_null": "v1_valor_total_is_null",
+    "contracts_with_uf": "v1_uf_nonempty",
+    "contracts_with_municipio": "v1_municipio_nonempty",
+    "contracts_with_orgao": "v1_orgao_cnpj_nonempty",
+    "contracts_with_fornecedor": "v1_fornecedor_cnpj_nonempty",
+    "contracts_with_objeto": "v1_objeto_nonempty",
+    "contracts_period": "v1_min_max_data_publicacao_inicio",
+    "contracts_by_uf": "v1_group_uf",
+    "contracts_by_source": "v1_group_source",
+    "contracts_by_year": "v1_group_year_publicacao",
+    "contracts_is_active": "v1_group_is_active",
+    "bids_physical_total": "v1_count_pncp_raw_bids",
+    "opportunity_intel_total": "v1_count_opportunity_intel",
+    "opportunity_intel_by_status": "v1_group_status_canonico",
+    "contract_version_history": "v1_count_contract_version_history",
+    "export_filter_valor_gt0": "v2_public_fields_valor_gt_0",
+    "export_bids_active": "v2_with_encerramento_and_status",
+    "export_opportunity_intel_open": "v1_status_open_upcoming_active",
+    "aec_keyword_prefilter": "v1_sql_keyword_approx_not_gold",
+    "full_stream_read": "v1_select_public_fields_all_rows"
+  },
+  "dataset_hash": "50f92b7c7f23678a7a46a211de8b9a4efc3028494c7a25d19ac0f7cb35ccf32a",
+  "dataset_hash_method": "sha256_of_contrato_id_stream_null_separated",
+  "checksums": {
+    "dataset_hash": "50f92b7c7f23678a7a46a211de8b9a4efc3028494c7a25d19ac0f7cb35ccf32a",
+    "contracts_read": 4479442
+  },
+  "runtime": {
+    "seconds": 740.601,
+    "n_batches": 896,
+    "batch_size": 5000,
+    "rows_per_second": 6048.4
+  },
+  "peak_memory": {
+    "rss_mb_start": 20.31,
+    "rss_mb_peak": 73.69,
+    "ru_maxrss_raw": 75460
+  },
+  "batch_size": 5000,
+  "transaction_isolation": "REPEATABLE READ",
+  "limitations": [
+    "Municipio/orgao/fornecedor unique sets are memory-capped; counts are lower bounds when cap hit.",
+    "Keyword AEC prefilter is not gold classification.",
+    "Values are nominal; no deflation.",
+    "No commercial Top-20 or private scores included."
+  ],
+  "expected_min_national": 4000000,
+  "below_expected": false
+}

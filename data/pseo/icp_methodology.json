@@ -82,7 +82,7 @@
     ]
   },
   "limitations": [],
-  "methodology": "Top 20 comercial so calibra classes de atividade. Classificador multi-camada: so aec_confirmed alimenta indicadores indexaveis. Staging SQLite + streaming reducers: full classified/bids lists never retained.",
+  "methodology": "Top 20 comercial so calibra classes de atividade. Classificador multi-camada: so aec_confirmed alimenta indicadores indexaveis.",
   "schema_version": "1.1.0",
   "sources": [],
   "version": null

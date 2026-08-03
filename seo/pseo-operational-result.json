@@ -1,13 +1,13 @@
 {
-  "terminal_status": "BLOCKED_PRODUCTION_AUDIT",
-  "web_cfg_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "terminal_status": "BLOCKED_SNAPSHOT_PROVENANCE",
+  "web_cfg_sha": "4c03b68da8a07c6fd11040ac261857548263f02a",
   "extra_cli_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "netlify_deployed_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-  "snapshot_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
+  "netlify_deployed_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+  "snapshot_hash": "09659ca1db6bdcbe7d821a60fbe8cde21be551f15da38a9f53920c4899e8ac81",
   "public_directory": "_site",
-  "public_artifact_hash": "beaa2f168ea5551f678bb60e9d6eab8bd9e06df3260ab481de42eb5ada1ab40f",
+  "public_artifact_hash": "99d89c8b428fb2834ef72236ac662690651dde77504a0443870b55089d57bd77",
   "seed_urls": [],
   "indexable_seed_count": 0,
   "production_audit": {
@@ -15,9 +15,9 @@
     "technical_ok": false,
     "production_audit_is_current": false,
     "stale_code": "STALE_AUDIT_DEPLOY_MISMATCH",
-    "critical_count": 7,
-    "audit_target_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-    "live_manifest_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0"
+    "critical_count": 6,
+    "audit_target_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+    "live_manifest_sha": "4003f94de0148a46765c1a0d6b0bcea646129736"
   },
   "gsc_access": "INSPECTED_WITH_EVIDENCE",
   "gsc_status_by_url": {
@@ -32,7 +32,8 @@
     "reasons": [
       "no_indexable_seeds",
       "production_audit_not_ok",
-      "production_audit_stale_or_mismatch"
+      "production_audit_stale_or_mismatch",
+      "snapshot_source_commit_not_on_extra_cli_main"
     ]
   },
   "forbidden_public_urls_status": {
@@ -58,10 +59,10 @@
   "public_manifest": {
     "schema_version": "1.1.0",
     "export_version": "1.1.0",
-    "web_cfg_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
-    "snapshot_hash_short": "a0882dd4ebddb376",
-    "source_run_id": "pseo-20260801T035051Z-9d2d9627",
-    "generated_at": "2026-08-02T02:59:30Z",
+    "web_cfg_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+    "snapshot_hash_short": "0d8757f7cda3a677",
+    "source_run_id": "pseo-20260802T032433Z-47e7e07c",
+    "generated_at": "2026-08-02T17:50:57Z",
     "data_as_of": "2026-07-31",
     "published_page_count": 0,
     "public_directory": "_site",
@@ -75,8 +76,9 @@
   "unresolved_risks": [
     "no_indexable_seeds",
     "production_audit_not_ok",
-    "production_audit_stale_or_mismatch"
+    "production_audit_stale_or_mismatch",
+    "snapshot_source_commit_not_on_extra_cli_main"
   ],
-  "generated_at": "2026-08-02T03:44:48Z",
+  "generated_at": "2026-08-03T03:22:12Z",
   "auditor_version": "wave0-closure-02"
 }

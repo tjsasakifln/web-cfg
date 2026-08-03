@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "generated_note": "Intent → CTA mapping for inbound engine (contextual, not one-CTA-everywhere)",
+  "mappings": [
+    {
+      "intent": "informational",
+      "funnel": "TOFU",
+      "examples": ["o que é reequilíbrio", "o que é BDI"],
+      "primary_cta": {"label": "Ver guia operacional", "service": null, "event": "cta_read_guide"},
+      "secondary_cta": {"label": "Conhecer a CONFENGE", "href": "/diretoria-b2g/", "event": "cta_brand"}
+    },
+    {
+      "intent": "investigative",
+      "funnel": "MOFU",
+      "examples": ["mercado de pavimentação em SC", "perfil de órgão"],
+      "primary_cta": {"label": "Diagnosticar operação B2G", "service": "diagnostico-b2g-360", "event": "cta_diagnostico"},
+      "secondary_cta": {"label": "Solicitar mapa de mercado", "service": "diagnostico-pre-licitacao", "event": "cta_mapa"}
+    },
+    {
+      "intent": "commercial_investigation",
+      "funnel": "MOFU",
+      "examples": ["faixas de valor observadas", "competição no segmento"],
+      "primary_cta": {"label": "Validar orçamento e margem", "service": "auditoria-orcamento-licitacao", "event": "cta_orcamento"},
+      "secondary_cta": {"label": "Defesa de margem", "service": "defesa-margem-contratos-publicos", "event": "cta_margem"}
+    },
+    {
+      "intent": "transactional",
+      "funnel": "BOFU",
+      "examples": ["edital aberto", "glosa", "notificação de atraso"],
+      "primary_cta": {"label": "Enviar edital / documentos", "service": "bid-room-licitacoes-obras", "event": "cta_enviar_edital"},
+      "secondary_cta": {"label": "WhatsApp com a equipe", "channel": "whatsapp", "event": "cta_whatsapp"},
+      "confirmation_pages": ["/obrigado-edital.html", "/obrigado-contrato.html", "/obrigado.html"]
+    },
+    {
+      "intent": "problem_glosa",
+      "funnel": "BOFU",
+      "primary_cta": {"label": "Enviar medição e documentos da glosa", "service": "medicoes-glosas-obras-publicas", "event": "cta_glosa"}
+    },
+    {
+      "intent": "problem_reequilibrio",
+      "funnel": "BOFU",
+      "primary_cta": {"label": "Estruturar pedido de reequilíbrio", "service": "reequilibrio-obras-publicas", "event": "cta_reequilibrio"}
+    },
+    {
+      "intent": "recurring_b2g",
+      "funnel": "BOFU",
+      "primary_cta": {"label": "Conhecer Diretoria B2G", "service": "diretoria-b2g", "event": "cta_diretoria"}
+    }
+  ],
+  "analytics_events": [
+    "cta_diagnostico",
+    "cta_mapa",
+    "cta_orcamento",
+    "cta_margem",
+    "cta_enviar_edital",
+    "cta_glosa",
+    "cta_reequilibrio",
+    "cta_diretoria",
+    "cta_whatsapp",
+    "pseo_page_view",
+    "editorial_page_view"
+  ],
+  "sla_note": "Lead SLA and delivery handled by netlify/functions/lead — do not claim response time without config evidence"
+}

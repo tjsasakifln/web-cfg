@@ -1082,9 +1082,9 @@
     }
   },
   "status_counts": {
-    "noindex": 592,
-    "publish": 1221,
-    "reject": 236
+    "noindex": 599,
+    "publish": 1217,
+    "reject": 233
   },
   "type_counts": {
     "agency": 1218,

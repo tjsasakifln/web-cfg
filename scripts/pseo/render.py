@@ -71,6 +71,8 @@ def _scrub_criteria(items: list | None) -> list[str]:
 
 def _scrub_limitations(items: list | None) -> list[str]:
     """Never show internal archetype IDs in visitor-facing limitations."""
+    from scripts.pseo.places import fix_place_locatives
+
     out = []
     for raw in items or []:
         s = str(raw)
@@ -81,6 +83,7 @@ def _scrub_limitations(items: list | None) -> list[str]:
             s,
         )
         s = re.sub(r"arquétipo primário\s+deste segmento", "segmento primário", s, flags=re.I)
+        s = fix_place_locatives(s)
         out.append(s)
     return out
 
@@ -393,25 +396,13 @@ def money_or_ni(v, value_status: str | None = None) -> str:
     return money(v)
 
 
-def accent_region(label: str | None) -> str:
-    if not label:
-        return ""
-    fixes = {
-        "Piaui": "Piauí", "Sao Paulo": "São Paulo", "Parana": "Paraná",
-        "Goias": "Goiás", "Ceara": "Ceará", "Para": "Pará",
-        "Espirito Santo": "Espírito Santo", "Rondonia": "Rondônia",
-        "Amapa": "Amapá",
-    }
-    s = str(label)
-    for a, b in fixes.items():
-        s = s.replace(a, b)
-    s = s.replace("paralelepipedo", "paralelepípedo").replace("Paralelepipedo", "Paralelepípedo")
-    s = s.replace("manutencao", "manutenção").replace("Manutencao", "Manutenção")
-    s = s.replace("pavimentacao", "pavimentação").replace("Pavimentacao", "Pavimentação")
-    # strip archetype slug in parentheses e.g. "foo (manutencao-predial-engenharia)"
-    s = re.sub(r"\s*\([a-z0-9]+(?:-[a-z0-9]+)+\)", "", s)
-    return s
-
+from scripts.pseo.places import (  # noqa: E402
+    Em_place,
+    accent_region,
+    de_place,
+    em_place,
+    place_name,
+)
 
 
 def _meta(c: Candidate, manifest: dict[str, Any]) -> dict[str, Any]:
@@ -463,7 +454,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     m = c.data_ref
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"No recorte público analisado, {m.get('segment')} em {m.get('region_label')} "
+        f"No recorte público analisado, {m.get('segment')} {em_place(m.get('region_label') or m.get('region'))} "
         f"reúne {m.get('contract_count')} contratos de engenharia/obras junto a "
         f"{m.get('buyer_count')} órgãos, com valor total de {money(m.get('total_value'))}. "
         f"A mediana contratual é {money(m.get('median_value'))} (P25 {money(m.get('p25_value'))}, "
@@ -530,8 +521,9 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         if ratio and ratio >= 3
         else "Dispersão moderada no recorte; ainda assim objetos não são unitariamente comparáveis."
     )
+    region_ref = m.get("region_label") or m.get("region")
     interpretation = (
-        f"Em {m.get('region_label')}, o arquétipo {m.get('segment')} concentra "
+        f"{Em_place(region_ref)}, o arquétipo {m.get('segment')} concentra "
         f"{m.get('contract_count')} contratos e {m.get('buyer_count')} órgãos. "
         f"O comprador mais frequente no recorte é {top_buyer.get('name') or 'não identificado'} "
         f"({top_buyer.get('contract_count') or 0} contratos, {money(top_buyer.get('total_value'))}). "
@@ -539,7 +531,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         f"({top_obj.get('count') or 0} ocorrências). {year_note} {disp}"
     )
     implications = (
-        f"Para atuar em {m.get('region')}: (1) priorize órgãos com frequência ≥3 no recorte; "
+        f"Para atuar {em_place(region_ref)}: (1) priorize órgãos com frequência ≥3 no recorte; "
         f"(2) ancore porte pela mediana {money(m.get('median_value'))}, nunca por média; "
         f"(3) cruze {m.get('open_opportunity_count')} oportunidades do radar com capacidade "
         f"técnica e de documentação; (4) rode auditoria de planilha antes de deságio agressivo."
@@ -549,11 +541,11 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
         ("Mercados", "/inteligencia/mercados/"),
-        (f"{m.get('segment')} — {m.get('region')}", None),
+        (f"{m.get('segment')} — {place_name(region_ref)}", None),
     ]
     wa = (
         f"Olá, Tiago. Vi a página de inteligência de mercado de {m.get('segment')} "
-        f"em {m.get('region_label')} e gostaria de um mapa aplicado à minha empresa."
+        f"{em_place(region_ref)} e gostaria de um mapa aplicado à minha empresa."
     )
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -563,7 +555,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 <p class="content-lead">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>Dados: <time datetime="{e(m.get('period_start'))}">{e(br_date(m.get('period_start')))}</time> – <time datetime="{e(m.get('period_end'))}">{e(br_date(m.get('period_end')))}</time></span>
-<span>Escopo: {e(m.get('region_label'))}</span></div>
+<span>Escopo: {e(place_name(m.get('region_label') or m.get('region')))}</span></div>
 </div></div></header>
 <div class="container article-layout">
 <article class="article-main">
@@ -601,7 +593,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         "identifier": c.page_id,
         "isBasedOn": "https://pncp.gov.br/",
         "temporalCoverage": f"{m.get('period_start') or ''}/{m.get('period_end') or ''}".strip("/"),
-        "spatialCoverage": m.get("region_label") or m.get("region") or "BR",
+        "spatialCoverage": place_name(m.get("region_label") or m.get("region")) or "Brasil",
         "variableMeasured": ["contract_count", "median_value", "buyer_count", "primary_contract_count"],
         "license": "https://opendefinition.org/od/2.1/pt/",
         "dateModified": (manifest.get("data_as_of") or manifest.get("generated_at") or "")[:10],
@@ -837,10 +829,10 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     p = c.data_ref
     obj_label = accent_region(p.get('object_label'))
-    region_label = accent_region(p.get('region_label') or p.get('region'))
+    region_label = place_name(p.get('region_label') or p.get('region'))
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"Para {obj_label} em {region_label}, com {p.get('observation_count')} "
+        f"Para {obj_label} {em_place(p.get('region_label') or p.get('region'))}, com {p.get('observation_count')} "
         f"contratos primários comparáveis (ticket integral, não preço unitário), a mediana contratual é "
         f"{money(p.get('median_value'))}, com P25 {money(p.get('p25_value'))} e P75 "
         f"{money(p.get('p75_value'))}. IQR = {money(p.get('dispersion_iqr'))}. "
@@ -910,7 +902,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     ]
     wa = (
         f"Olá, Tiago. Quero validar preço, risco e margem com base no benchmark de "
-        f"{p.get('object_label')} em {p.get('region_label')}."
+        f"{p.get('object_label')} {em_place(p.get('region_label') or p.get('region'))}."
     )
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -1001,7 +993,8 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
     d = c.data_ref
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"Em {d.get('segment')} ({d.get('region_label')}), {d.get('supplier_count')} fornecedores "
+        f"Em {d.get('segment')} ({place_name(d.get('region_label') or d.get('region'))}), "
+        f"{d.get('supplier_count')} fornecedores "
         f"foram observados em {d.get('contract_count')} contratos públicos classificados. "
         f"Os três mais frequentes concentram {float(d.get('concentration_top3_share') or 0)*100:.1f}% "
         f"dos contratos do recorte. Linguagem neutra: frequência observada, não qualidade."
@@ -1034,16 +1027,22 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
         [[b.get("band"), b.get("contract_count")] for b in (d.get("value_bands") or [])],
         "Faixas de valor contratual",
     )
-    changes = "".join(f"<li>{e(x)}</li>" for x in (d.get("recent_changes") or []))
+    from scripts.pseo.places import fix_place_locatives as _fix_loc
+    from scripts.pseo.html_shell import scrub_public_limitation as _scrub_lim
+
+    def _pub_change(x: str) -> str:
+        return _fix_loc(_scrub_lim(str(x)))
+
+    changes = "".join(f"<li>{e(_pub_change(x))}</li>" for x in (d.get("recent_changes") or []))
     crumbs = [
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
         ("Concorrência", "/inteligencia/concorrencia/"),
-        (f"{d.get('segment')} — {d.get('region')}", None),
+        (f"{d.get('segment')} — {place_name(d.get('region_label') or d.get('region'))}", None),
     ]
     wa = (
         f"Olá, Tiago. Vi a página de concorrência observada em {d.get('segment')} "
-        f"({d.get('region_label')}) e quero um mapa aplicado à minha empresa."
+        f"({place_name(d.get('region_label') or d.get('region'))}) e quero um mapa aplicado à minha empresa."
     )
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -1113,7 +1112,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     open_n = o.get("open_count")
     hist_n = o.get("historical_count")
     summary = _exec_summary(
-        f"Radar evergreen de {o.get('segment')} em {o.get('region_label')}: "
+        f"Radar evergreen de {o.get('segment')} {em_place(o.get('region_label') or o.get('region'))}: "
         f"{open_n} oportunidades classificadas no recorte de {as_of_br}. "
         f"Esta URL não representa um edital individual; editais entram e saem da lista. "
         f"Confirme sempre no portal de origem antes de precificar."
@@ -1122,7 +1121,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         [
             ("Abertas", str(open_n), f"referência {as_of_br}"),
             ("Segmento", str(o.get("segment")), None),
-            ("UF", str(o.get("region")), o.get("region_label")),
+            ("UF", place_name(o.get("region_label") or o.get("region")), None),
             ("Itens listados", str(len(o.get("items") or [])), "nesta página"),
         ]
     )
@@ -1177,7 +1176,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     ]
     wa = (
         f"Olá, Tiago. Quero analisar um edital do radar de {o.get('segment')} "
-        f"em {o.get('region_label')} antes da proposta."
+        f"{em_place(o.get('region_label') or o.get('region'))} antes da proposta."
     )
     market_link = o.get("related_market_slug")
     # Only link to market pages that exist on disk (reject/no-build siblings omitted)

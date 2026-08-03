@@ -14,6 +14,8 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from scripts.pseo.places import Em_place, em_place, place_name
+
 # Weights (sum 100)
 W_ICP = 20
 W_INTENT = 15
@@ -864,11 +866,17 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=m["id"],
                 page_type="market",
                 url=url,
-                title=f"Mercado de {m['segment']} em {m['region_label']}: contratos e órgãos | CONFENGE",
-                h1=f"Quanto o poder público contratou em {m['segment']} — {m['region_label']}",
+                title=(
+                    f"Mercado de {m['segment']} {em_place(m.get('region_label') or m.get('region'))}: "
+                    f"contratos e órgãos | CONFENGE"
+                ),
+                h1=(
+                    f"Quanto o poder público contratou em {m['segment']} — "
+                    f"{place_name(m.get('region_label') or m.get('region'))}"
+                ),
                 description=(
                     f"Inteligência de mercado: {m['contract_count']} contratos, "
-                    f"{m['buyer_count']} órgãos em {m['region_label']}. "
+                    f"{m['buyer_count']} órgãos {em_place(m.get('region_label') or m.get('region'))}. "
                     f"Medianas, compradores e implicações para empresas de engenharia."
                 ),
                 archetype=arch,
@@ -952,7 +960,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 sources=list(a.get("sources") or []),
                 cta_label="Avaliar estratégia para disputar contratos deste órgão",
                 cta_intent="estrategia_orgao",
-                related_urls=_agency_related(a, markets),
+                related_urls=_agency_related(a, markets, opportunities),
                 data_ref=a,
                 body_text=_agency_body_fingerprint(a),
                 mandatory_fail=fails,
@@ -1022,15 +1030,19 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=p["id"],
                 page_type="price",
                 url=url,
-                title=f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))} | CONFENGE",
-                h1=f"Valores de contratos — {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
+                title=(
+                    f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} "
+                    f"{em_place(p.get('region_label') or p.get('region'))} | CONFENGE"
+                ),
+                h1=(
+                    f"Valores de contratos — {_clean_price_label(p.get('object_label'))} "
+                    f"({place_name(p.get('region_label') or p.get('region'))})"
+                ),
                 description=(
-                    f"Faixa de valores: {_clean_price_label(p.get('object_label'))} em "
-                    f"{_clean_price_label(p.get('region_label'))} "
-                    f"({p['observation_count']} contratos; "
-                    f"{_clean_price_label(arch) if arch else 'padrão'} "
-                    f"· {p.get('slug') or p.get('id') or 'price'}). "
-                    f"Mediana/P25/P75 de tickets integrais."
+                    f"Faixa de valores: {_clean_price_label(p.get('object_label'))} "
+                    f"{em_place(p.get('region_label') or p.get('region'))} "
+                    f"({p['observation_count']} contratos comparáveis; "
+                    f"mediana/P25/P75 de tickets integrais — não é preço unitário)."
                 ),
                 archetype=arch,
                 segment=_clean_price_label(p.get("object_label")),
@@ -1100,10 +1112,17 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=c["id"],
                 page_type="competition",
                 url=url,
-                title=f"Concorrência observada: {c['segment']} em {c['region_label']} | CONFENGE",
-                h1=f"Fornecedores observados em {c['segment']} — {c['region_label']}",
+                title=(
+                    f"Concorrência observada: {c['segment']} "
+                    f"{em_place(c.get('region_label') or c.get('region'))} | CONFENGE"
+                ),
+                h1=(
+                    f"Fornecedores observados em {c['segment']} — "
+                    f"{place_name(c.get('region_label') or c.get('region'))}"
+                ),
                 description=(
-                    f"Concorrência observada em {c['segment']} ({c['region_label']}): "
+                    f"Concorrência observada em {c['segment']} "
+                    f"({place_name(c.get('region_label') or c.get('region'))}): "
                     f"{c['supplier_count']} fornecedores e {c['contract_count']} contratos "
                     f"no recorte público — sem juízo de qualidade."
                 ),
@@ -1186,10 +1205,16 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=o["id"],
                 page_type="radar",
                 url=url,
-                title=f"Radar de oportunidades: {o['segment']} em {o['region_label']} | CONFENGE",
-                h1=f"Oportunidades abertas em {o['segment']} — {o['region_label']}",
+                title=(
+                    f"Radar de oportunidades: {o['segment']} "
+                    f"{em_place(o.get('region_label') or o.get('region'))} | CONFENGE"
+                ),
+                h1=(
+                    f"Oportunidades abertas em {o['segment']} — "
+                    f"{place_name(o.get('region_label') or o.get('region'))}"
+                ),
                 description=(
-                    f"Radar de {o['segment']} em {o['region_label']}: "
+                    f"Radar de {o['segment']} {em_place(o.get('region_label') or o.get('region'))}: "
                     f"{open_n} oportunidades abertas "
                     f"(verificado em {as_of}). Página evergreen — não é URL por edital."
                 ),
@@ -1370,7 +1395,7 @@ def _market_related(m, market_by_slug, prices, competition, opportunities) -> li
     return urls[:8]
 
 
-def _agency_related(a, markets) -> list[str]:
+def _agency_related(a, markets, opportunities=None) -> list[str]:
     urls = [
         "/inteligencia/orgaos/",
         "/diagnostico-pre-licitacao/",
@@ -1379,11 +1404,14 @@ def _agency_related(a, markets) -> list[str]:
     uf = a.get("uf")
     mix = a.get("archetype_mix") or []
     market_slugs = {m.get("slug") for m in (markets or [])}
+    opp_slugs = {o.get("slug") for o in (opportunities or []) if o.get("slug")}
     if mix and uf:
         slug = f"{mix[0]['archetype_id']}-{str(uf).lower()}"
         if slug in market_slugs:
             urls.insert(0, f"/inteligencia/mercados/{slug}/")
-        urls.insert(1, f"/radar/{slug}/")
+        # Only link radar when an open-opportunity cluster exists for that slug
+        if slug in opp_slugs:
+            urls.insert(1, f"/radar/{slug}/")
     return urls[:8]
 
 

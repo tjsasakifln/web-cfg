@@ -302,12 +302,33 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     url = hub["url"]
     crumbs = [("Início", "/"), (title, None)]
     cards = []
-    for p in pages:
-        if p.get("status") not in {"INDEXABLE", "PUBLISHED"}:
+    # List indexable children first; also surface EDITORIAL_REVIEWED /
+    # READY_FOR_HUMAN_APPROVAL as preview so internal linking is not orphaned
+    # while human approval is pending (robots stay noindex on those leaves).
+    listable = {
+        "INDEXABLE",
+        "PUBLISHED",
+        "EDITORIAL_REVIEWED",
+        "READY_FOR_HUMAN_APPROVAL",
+        "HUMAN_APPROVED",
+    }
+    ordered = sorted(
+        pages,
+        key=lambda p: (
+            0 if p.get("status") in {"INDEXABLE", "PUBLISHED"} else 1,
+            p.get("title") or "",
+        ),
+    )
+    for p in ordered:
+        st = p.get("status") or ""
+        if st not in listable or st == "REJECTED":
             continue
+        badge = p.get("archetype") or "guia"
+        if st in {"EDITORIAL_REVIEWED", "READY_FOR_HUMAN_APPROVAL"}:
+            badge = f"{badge} · preview (revisão)"
         cards.append(
             f'<article class="library-item"><div class="library-rank"></div><div>'
-            f'<span class="content-badge guide-badge">{e(p.get("archetype") or "guia")}</span>'
+            f'<span class="content-badge guide-badge">{e(badge)}</span>'
             f'<h2><a href="{e(p["url"])}">{e(p["title"])}</a></h2>'
             f'<p>{e(p.get("meta_description") or p.get("direct_answer","")[:160])}</p>'
             f"</div></article>"

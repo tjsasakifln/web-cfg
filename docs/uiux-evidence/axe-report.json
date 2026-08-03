@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T04:08:20.339Z",
+  "generated_at": "2026-08-03T03:22:42.106Z",
   "pages": [
     {
       "path": "/",
@@ -7,9 +7,27 @@
         "critical": 0,
         "serious": 0,
         "moderate": 0,
-        "minor": 0
+        "minor": 1
       },
-      "violations": []
+      "violations": [
+        {
+          "id": "aria-allowed-role",
+          "impact": "minor",
+          "description": "Ensure role attribute has an appropriate value for the element",
+          "nodes": 3,
+          "targets": [
+            [
+              "#jornada-contrato"
+            ],
+            [
+              "#jornada-edital"
+            ],
+            [
+              "#jornada-operacao"
+            ]
+          ]
+        }
+      ]
     },
     {
       "path": "/diretoria-b2g/",
@@ -135,5 +153,5 @@
   "critical": 0,
   "serious": 0,
   "moderate": 0,
-  "minor": 0
+  "minor": 1
 }

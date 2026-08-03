@@ -1,17 +1,17 @@
 {
   "ok": true,
-  "web_cfg_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+  "web_cfg_sha": "4c03b68da8a07c6fd11040ac261857548263f02a",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "0c4d53d3b84c30bdfd4f7551530f7f8795116fb540fa963bc701da6615a50ca2",
+  "public_artifact_hash": "16f08622d0d506556db0c50ba29b300ba9947873090a969cc8a36e522c48871e",
   "build_summary": {
-    "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+    "dataset_hash": "09659ca1db6bdcbe7d821a60fbe8cde21be551f15da38a9f53920c4899e8ac81",
     "counts": {
-      "reject": 18,
-      "noindex": 5
+      "noindex": 1807,
+      "reject": 242
     },
     "publishable": [],
-    "pages_written": 23
+    "pages_written": 2049
   },
   "editorial_wave": {
     "ok": true,
@@ -30,7 +30,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 345,
+    "file_count": 2263,
     "finding_count": 0
   },
   "errors": []

@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>TIAGO — SEO Approval Center | CONFENGE</title>
+<style>
+:root { --bg:#0b1220; --card:#121a2b; --line:#243049; --txt:#e8eef7; --mut:#9fb0c7;
+  --ok:#1f9d55; --warn:#c9a227; --bad:#c0392b; --info:#3b82f6; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--txt); }
+header { padding:1.25rem 1.5rem; border-bottom:1px solid var(--line); background:#0e1628; }
+h1 { margin:0 0 .35rem; font-size:1.35rem; }
+.meta { color:var(--mut); font-size:.9rem; }
+main { padding:1.25rem 1.5rem 4rem; }
+.banner { background:#1a1030; border:1px solid #5b3d8a; padding:1rem; border-radius:8px; margin-bottom:1.25rem; }
+.banner strong { color:#d8b4fe; }
+section { margin-bottom:2rem; }
+h2 { font-size:1.1rem; margin:0 0 .75rem; }
+table { width:100%; border-collapse:collapse; font-size:13px; background:var(--card); }
+th, td { border:1px solid var(--line); padding:.4rem .5rem; text-align:left; vertical-align:top; }
+th { background:#152038; position:sticky; top:0; }
+code { color:#9ecbff; font-size:12px; }
+.actions button { margin:0 .15rem .15rem 0; border:0; border-radius:4px; padding:.3rem .45rem;
+  font-size:11px; cursor:pointer; color:#fff; }
+.actions .a { background:var(--ok); }
+.actions .w { background:var(--warn); color:#111; }
+.actions .r { background:var(--bad); }
+.actions .d { background:var(--info); }
+#ledger { background:#0a0f1a; border:1px solid var(--line); padding:1rem; border-radius:8px;
+  white-space:pre-wrap; font-family:ui-monospace,monospace; font-size:12px; min-height:120px; }
+.cmd { background:#0a0f1a; border:1px dashed var(--line); padding:.75rem; border-radius:8px;
+  font-family:ui-monospace,monospace; font-size:12px; color:#a7f3d0; }
+footer { color:var(--mut); font-size:.85rem; padding:1rem 1.5rem 2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>TIAGO — SEO Approval Center</h1>
+  <div class="meta">Gerado: 2026-08-03T03:01:26Z · Revisão humana real · Automação <strong>não</strong> grava HUMAN_APPROVED</div>
+</header>
+<main>
+  <div class="banner">
+    <strong>Princípio:</strong> não procure justificativas para aprovar — procure razões para reprovar.
+    Ações abaixo apenas <em>registram a intenção localmente no navegador</em> e montam o comando CLI.
+    Só a execução explícita por Tiago Sasaki do script de aprovação altera o registry.
+  </div>
+
+  <section>
+    <h2>Lote editorial (12 páginas)</h2>
+    <table>
+      <thead><tr><th>#</th><th>Tipo</th><th>URL</th><th>Título</th><th>Status</th><th>Score</th><th>N</th><th>Ação</th></tr></thead>
+      <tbody>
+        <tr data-id="guia-checklist-aditivo">
+          <td>1</td>
+          <td>editorial</td>
+          <td><code>/guias-contratos-obras/checklist-pedido-aditivo/</code></td>
+          <td>Checklist de pedido de aditivo em obra pública</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="guia-docs-reequilibrio">
+          <td>2</td>
+          <td>editorial</td>
+          <td><code>/guias-contratos-obras/documentos-pedido-reequilibrio/</code></td>
+          <td>Documentos para pedido de reequilíbrio em obra pública</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="guia-glosa">
+          <td>3</td>
+          <td>editorial</td>
+          <td><code>/guias-contratos-obras/contestar-glosa-medicao/</code></td>
+          <td>Documentos para contestar glosa de medição em obra pública</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="guia-notificacao-atraso">
+          <td>4</td>
+          <td>editorial</td>
+          <td><code>/guias-contratos-obras/responder-notificacao-atraso/</code></td>
+          <td>Como responder notificação por atraso em obra pública</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="jur-sumula-260-art">
+          <td>5</td>
+          <td>editorial</td>
+          <td><code>/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/</code></td>
+          <td>Súmula TCU 260: ART em projeto, fiscalização e execução de obras</td>
+          <td><code>REJECTED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="lei-art124-alteracao-obra">
+          <td>6</td>
+          <td>editorial</td>
+          <td><code>/lei-14133-obras/art-124-alteracao-contratual-obra/</code></td>
+          <td>Art. 124 da Lei 14.133: quando o aditivo de obra é unilateral ou por acordo</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="lei-atraso-administracao">
+          <td>7</td>
+          <td>editorial</td>
+          <td><code>/lei-14133-obras/atraso-imputavel-administracao/</code></td>
+          <td>Atraso imputável à Administração na Lei 14.133: prova e efeitos na obra</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="lei-item-novo-desconto">
+          <td>8</td>
+          <td>editorial</td>
+          <td><code>/lei-14133-obras/preco-item-novo-desconto-proposta/</code></td>
+          <td>Item novo no aditivo: como formar preço e preservar o desconto da proposta</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="lei-limite-25-50">
+          <td>9</td>
+          <td>editorial</td>
+          <td><code>/lei-14133-obras/limite-25-50-aditivo-obra/</code></td>
+          <td>Limite de 25% e 50% no art. 125: o que conta no aditivo de obra</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="lei-parcela-incontroversa">
+          <td>10</td>
+          <td>editorial</td>
+          <td><code>/lei-14133-obras/parcela-incontroversa-medicao-pagamento/</code></td>
+          <td>Parcela incontroversa na medição: o que a Lei 14.133 manda pagar</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="lei-reequilibrio-reajuste">
+          <td>11</td>
+          <td>editorial</td>
+          <td><code>/lei-14133-obras/reequilibrio-reajuste-repactuacao/</code></td>
+          <td>Reequilíbrio, reajuste e repactuação na Lei 14.133: qual caminho na obra</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="lei-servico-sem-aditivo">
+          <td>12</td>
+          <td>editorial</td>
+          <td><code>/lei-14133-obras/servico-executado-sem-termo-aditivo/</code></td>
+          <td>Serviço executado sem termo aditivo: risco, prova e enquadramento na 14.133</td>
+          <td><code>EDITORIAL_REVIEWED</code></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Lote pSEO Wave 1 proposal (40 páginas)</h2>
+    <p class="meta">Proposta diversificada — publish ainda exige aprovação nominal + gates fail-closed.</p>
+    <table>
+      <thead><tr><th>#</th><th>Tipo</th><th>URL</th><th>Pergunta / título</th><th>Status</th><th>Score</th><th>N</th><th>Ação</th></tr></thead>
+      <tbody>
+        <tr data-id="market-pavimentacao-infraestrutura-viaria-rs">
+          <td>1</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/pavimentacao-infraestrutura-viaria-rs/</code></td>
+          <td>Mercado de Pavimentação e infraestrutura viária em Rio Grande do Sul: contratos </td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>3506</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-pavimentacao-infraestrutura-viaria-sc">
+          <td>2</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/</code></td>
+          <td>Mercado de Pavimentação e infraestrutura viária em Santa Catarina: contratos e ó</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>3179</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-pavimentacao-infraestrutura-viaria-pr">
+          <td>3</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pr/</code></td>
+          <td>Mercado de Pavimentação e infraestrutura viária em Paraná: contratos e órgãos | </td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>2872</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-edificacoes-publicas-rs">
+          <td>4</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/edificacoes-publicas-rs/</code></td>
+          <td>Mercado de Edificações públicas em Rio Grande do Sul: contratos e órgãos | CONFE</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>2529</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-pavimentacao-infraestrutura-viaria-sp">
+          <td>5</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sp/</code></td>
+          <td>Mercado de Pavimentação e infraestrutura viária em São Paulo: contratos e órgãos</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>2298</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-pavimentacao-infraestrutura-viaria-mg">
+          <td>6</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/pavimentacao-infraestrutura-viaria-mg/</code></td>
+          <td>Mercado de Pavimentação e infraestrutura viária em Minas Gerais: contratos e órg</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>2129</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-edificacoes-publicas-sp">
+          <td>7</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/edificacoes-publicas-sp/</code></td>
+          <td>Mercado de Edificações públicas em São Paulo: contratos e órgãos | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>1710</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-edificacoes-publicas-pr">
+          <td>8</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/edificacoes-publicas-pr/</code></td>
+          <td>Mercado de Edificações públicas em Paraná: contratos e órgãos | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>1541</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-edificacoes-publicas-mg">
+          <td>9</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/edificacoes-publicas-mg/</code></td>
+          <td>Mercado de Edificações públicas em Minas Gerais: contratos e órgãos | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>1497</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-edificacoes-publicas-sc">
+          <td>10</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/edificacoes-publicas-sc/</code></td>
+          <td>Mercado de Edificações públicas em Santa Catarina: contratos e órgãos | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>1222</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-edificacoes-publicas-go">
+          <td>11</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/edificacoes-publicas-go/</code></td>
+          <td>Mercado de Edificações públicas em Goiás: contratos e órgãos | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>1067</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="market-manutencao-predial-engenharia-sp">
+          <td>12</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/mercados/manutencao-predial-engenharia-sp/</code></td>
+          <td>Mercado de Manutenção predial e serviços de engenharia em São Paulo: contratos e</td>
+          <td><code>noindex</code></td>
+          <td>93</td>
+          <td>1043</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-60509015">
+          <td>13</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/</code></td>
+          <td>Esp-prestacao de Servicos Fde/see: histórico de contratação em engenharia | CONF</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>547</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-00394452">
+          <td>14</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/base-administrativa-do-curado-pe-pe/engenharia/</code></td>
+          <td>Base Administrativa do Curado - Pe: histórico de contratação em engenharia | CON</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>407</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-00394494">
+          <td>15</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/</code></td>
+          <td>Superintendencia Reg. Pol. Rodv. Federal-go: histórico de contratação em engenha</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>350</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-07954480">
+          <td>16</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/</code></td>
+          <td>Eem Euclides Pinheiro de Andrade: histórico de contratação em engenharia | CONFE</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>345</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-00394429">
+          <td>17</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/base-aerea-de-anapolis-go/engenharia/</code></td>
+          <td>Base Aérea de Anápolis: histórico de contratação em engenharia | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>332</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-00509968">
+          <td>18</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/tribunal-regional-do-trabalho-da-15a-regiao-sp/engenharia/</code></td>
+          <td>Tribunal Regional do Trabalho da 15a.regiao: histórico de contratação em engenha</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>277</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-00394502">
+          <td>19</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/servico-de-veteranos-e-pensionistas-da-marinh-rj/engenharia/</code></td>
+          <td>Servico de Veteranos e Pensionistas da Marinh: histórico de contratação em engen</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>242</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="radar-servicos-tecnicos-fase-preparatoria-sc">
+          <td>20</td>
+          <td>pseo</td>
+          <td><code>/radar/servicos-tecnicos-fase-preparatoria-sc/</code></td>
+          <td>Radar de oportunidades: Serviços técnicos — fase preparatória em Santa Catarina </td>
+          <td><code>noindex</code></td>
+          <td>82</td>
+          <td>127</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="comp-pavimentacao-infraestrutura-viaria-rs">
+          <td>21</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-rs/</code></td>
+          <td>Concorrência observada: Pavimentação e infraestrutura viária em Rio Grande do Su</td>
+          <td><code>noindex</code></td>
+          <td>90</td>
+          <td>3506</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="comp-pavimentacao-infraestrutura-viaria-sc">
+          <td>22</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sc/</code></td>
+          <td>Concorrência observada: Pavimentação e infraestrutura viária em Santa Catarina |</td>
+          <td><code>noindex</code></td>
+          <td>90</td>
+          <td>3179</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="comp-pavimentacao-infraestrutura-viaria-pr">
+          <td>23</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-pr/</code></td>
+          <td>Concorrência observada: Pavimentação e infraestrutura viária em Paraná | CONFENG</td>
+          <td><code>noindex</code></td>
+          <td>90</td>
+          <td>2872</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="comp-edificacoes-publicas-rs">
+          <td>24</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/concorrencia/edificacoes-publicas-rs/</code></td>
+          <td>Concorrência observada: Edificações públicas em Rio Grande do Sul | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>90</td>
+          <td>2529</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="comp-pavimentacao-infraestrutura-viaria-sp">
+          <td>25</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-sp/</code></td>
+          <td>Concorrência observada: Pavimentação e infraestrutura viária em São Paulo | CONF</td>
+          <td><code>noindex</code></td>
+          <td>90</td>
+          <td>2298</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="comp-pavimentacao-infraestrutura-viaria-mg">
+          <td>26</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/concorrencia/pavimentacao-infraestrutura-viaria-mg/</code></td>
+          <td>Concorrência observada: Pavimentação e infraestrutura viária em Minas Gerais | C</td>
+          <td><code>noindex</code></td>
+          <td>90</td>
+          <td>2129</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto">
+          <td>27</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto/</code></td>
+          <td>Faixa de valores de contratos: cbuq asfalto em Parana | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>1528</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto">
+          <td>28</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto/</code></td>
+          <td>Faixa de valores de contratos: cbuq asfalto em Santa Catarina | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>1292</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto">
+          <td>29</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto/</code></td>
+          <td>Faixa de valores de contratos: cbuq asfalto em Rio Grande do Sul | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>1171</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-edificacoes-publicas-rs-edificacoes-publicas">
+          <td>30</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/edificacoes-publicas-rs-edificacoes-publicas/</code></td>
+          <td>Faixa de valores de contratos: edificacoes-publicas em Rio Grande do Sul | CONFE</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>985</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica">
+          <td>31</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica/</code></td>
+          <td>Faixa de valores de contratos: pavimentação generica em Rio Grande do Sul | CONF</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>909</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica">
+          <td>32</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica/</code></td>
+          <td>Faixa de valores de contratos: pavimentação generica em Santa Catarina | CONFENG</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>894</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto">
+          <td>33</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto/</code></td>
+          <td>Faixa de valores de contratos: cbuq asfalto em Sao Paulo | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>834</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica">
+          <td>34</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/precos/pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica/</code></td>
+          <td>Faixa de valores de contratos: pavimentação generica em Minas Gerais | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>94</td>
+          <td>708</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="radar-saneamento-hidraulica-sc">
+          <td>35</td>
+          <td>pseo</td>
+          <td><code>/radar/saneamento-hidraulica-sc/</code></td>
+          <td>Radar de oportunidades: Saneamento e hidráulica em Santa Catarina | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>82</td>
+          <td>28</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="agency-04892707">
+          <td>36</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/orgaos/sup-regional-do-dnit-no-estado-de-pernambuco-pe/engenharia/</code></td>
+          <td>Sup. Regional do Dnit No Estado de Pernambuco: histórico de contratação em engen</td>
+          <td><code>noindex</code></td>
+          <td>89</td>
+          <td>239</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="radar-manutencao-predial-engenharia-sc">
+          <td>37</td>
+          <td>pseo</td>
+          <td><code>/radar/manutencao-predial-engenharia-sc/</code></td>
+          <td>Radar de oportunidades: Manutenção predial e serviços de engenharia em Santa Cat</td>
+          <td><code>noindex</code></td>
+          <td>80</td>
+          <td>9</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="prob-aditivos-margem">
+          <td>38</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/cenarios/aditivos-e-risco-de-margem/</code></td>
+          <td>Aditivos, serviços extras e erosão de margem | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>87</td>
+          <td>39296</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="prob-orcamento-edital">
+          <td>39</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/cenarios/inconsistencia-orcamento-edital/</code></td>
+          <td>Inconsistência entre orçamento de referência e edital | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>87</td>
+          <td>39296</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr>
+        <tr data-id="prob-sinapi-sicro">
+          <td>40</td>
+          <td>pseo</td>
+          <td><code>/inteligencia/cenarios/referencia-sinapi-sicro-margem/</code></td>
+          <td>Referência SINAPI/SICRO e risco de margem na proposta | CONFENGE</td>
+          <td><code>noindex</code></td>
+          <td>87</td>
+          <td>37812</td>
+          <td class="actions">
+            <button type="button" class="a" data-a="APROVAR">APROVAR</button>
+            <button type="button" class="w" data-a="APROVAR COM RESSALVAS">RESSALVAS</button>
+            <button type="button" class="r" data-a="REJEITAR">REJEITAR</button>
+            <button type="button" class="d" data-a="DEVOLVER PARA CORREÇÃO">DEVOLVER</button>
+          </td>
+        </tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Ledger local de decisões (não persistido no repo)</h2>
+    <div id="ledger">Nenhuma decisão ainda. Clique nas ações da tabela.</div>
+  </section>
+
+  <section>
+    <h2>Comando preparado (não executado)</h2>
+    <div class="cmd" id="cmd"># Após revisar o pacote:
+# bash scripts/editorial/approve_wave1_tiago.sh
+# # ou, página a página:
+# python3 scripts/editorial/approve_cli.py --page-id &lt;ID&gt; --decision APPROVED
+# npm run editorial:build && npm run editorial:test && npm run pseo:build && npm run build:site</div>
+  </section>
+
+  <section>
+    <h2>Checklist por página</h2>
+    <ul>
+      <li>Fontes oficiais verificáveis e links vivos</li>
+      <li>Afirmações jurídicas com dispositivo correto</li>
+      <li>Dados com N, período, metodologia e limitações (se houver números)</li>
+      <li>Sem thin content / doorway / canibalização material</li>
+      <li>CTA contextual (não genérico em todas as páginas)</li>
+      <li>Hash material estável após última edição</li>
+      <li>Title / H1 / description únicos</li>
+    </ul>
+  </section>
+</main>
+<footer>
+  CONFENGE · Approval Center · robots: noindex · Este HTML não altera registries.
+</footer>
+<script>
+const ledger = [];
+const el = document.getElementById('ledger');
+document.querySelectorAll('.actions button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tr = btn.closest('tr');
+    const id = tr.getAttribute('data-id');
+    const action = btn.getAttribute('data-a');
+    const url = tr.querySelector('code')?.textContent || '';
+    ledger.push({ ts: new Date().toISOString(), page_id: id, url, action });
+    el.textContent = JSON.stringify(ledger, null, 2);
+    const cmd = document.getElementById('cmd');
+    cmd.textContent = ledger.map(d =>
+      `# ${d.action} ${d.page_id}\n# python3 scripts/editorial/approve_cli.py --page-id ${d.page_id} --decision ${d.action.replace(/ /g,'_')}`
+    ).join('\n') + '\n\n# Lembrete: automação NÃO executa estes comandos.';
+  });
+});
+</script>
+</body>
+</html>

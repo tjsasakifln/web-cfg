@@ -1,0 +1,7 @@
+{
+  "available": false,
+  "reason": "No authenticated Google Search Console credentials in this environment",
+  "search_demand_unverified": true,
+  "owner_actions_doc": "docs/seo/GSC-OWNER-ACTIONS.md",
+  "invented_volume": false
+}

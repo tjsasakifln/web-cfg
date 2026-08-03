@@ -1,0 +1,113 @@
+{
+  "brief_id": "brief-031-e7619a",
+  "rank": 31,
+  "intention": "Como resolver contestar glosa medicao",
+  "primary_keyword_or_intent": "Como resolver contestar glosa medicao",
+  "serp_observed": null,
+  "serp_note": "search_demand_unverified — no invented volume; SERP to be attached when available",
+  "main_question": "Como resolver contestar glosa medicao?",
+  "secondary_questions": [
+    "Quais evidências a construtora precisa reunir?",
+    "Quais dispositivos da Lei 14.133 se aplicam?",
+    "Qual o próximo passo operacional e o risco de inércia?",
+    "Quando vale envolver consultoria técnica especializada?"
+  ],
+  "outline": [
+    "Resposta direta (lead)",
+    "Contexto normativo (Lei 14.133 / fontes oficiais)",
+    "Passo a passo operacional",
+    "Evidências e documentos",
+    "Erros frequentes",
+    "Quando os dados públicos ajudam (se aplicável)",
+    "Limitações e o que não afirmar",
+    "CTA contextual",
+    "Links internos (hub + dados + serviço)"
+  ],
+  "entities": [
+    "Lei 14.133/2021",
+    "PNCP",
+    "construtora",
+    "Administração Pública",
+    "fiscalização",
+    "medição",
+    "aditivo"
+  ],
+  "official_sources": [
+    {
+      "name": "Lei nº 14.133/2021",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+    },
+    {
+      "name": "PNCP",
+      "url": "https://pncp.gov.br/"
+    },
+    {
+      "name": "TCU",
+      "url": "https://portal.tcu.gov.br/"
+    },
+    {
+      "name": "SINAPI/CAIXA",
+      "url": "https://www.caixa.gov.br/site/Paginas/sinapi.aspx"
+    }
+  ],
+  "practical_examples": [
+    "Cenário de obra municipal com medição glosada",
+    "Cenário de atraso por interferência de rede",
+    "Cenário de item novo em aditivo com desconto da proposta"
+  ],
+  "datalake_data": {
+    "use": false,
+    "required_if_used": [
+      "cut_date",
+      "N",
+      "source",
+      "methodology",
+      "limitations",
+      "related_data_page"
+    ],
+    "suggested_views": []
+  },
+  "table_or_visualization": "Tabela de checklist +, se dados, histograma de faixas de valor com N e período",
+  "legal_risks": [
+    "Não dar aconselhamento jurídico individualizado",
+    "Não inventar jurisprudência",
+    "Citar dispositivo com redação verificada no Planalto",
+    "Não transformar correlação de dados em certeza causal"
+  ],
+  "cta": {
+    "primary": {
+      "label": "Solicitar diagnóstico técnico",
+      "service": "diagnostico-b2g-360",
+      "intent_event": "cta_diagnostico-b2g-360"
+    },
+    "secondary": {
+      "label": "Falar no WhatsApp com a equipe",
+      "channel": "whatsapp"
+    }
+  },
+  "internal_links": {
+    "hub": "/diagnostico-b2g-360/",
+    "related_guides": [],
+    "data_pages": [
+      "/inteligencia/",
+      "/metodologia-inteligencia/"
+    ],
+    "lei": [
+      "/lei-14133-obras/"
+    ]
+  },
+  "competitor_content": "Mapear 3 URLs na SERP na revisão humana — não fabricar aqui",
+  "confenge_differential": "Combina engenharia de contratos, operação B2G e dados públicos agregados com limitações explícitas — sem thin content nem doorway pages",
+  "update_criteria": [
+    "Mudança legislativa material",
+    "Fonte oficial quebrada",
+    "Dado com idade acima da política do tipo",
+    "Canibalização detectada com página irmã"
+  ],
+  "lifecycle_target": "READY_FOR_HUMAN_APPROVAL",
+  "status": "BRIEF_COMPLETE",
+  "existing_url": "/guias-contratos-obras/contestar-glosa-medicao/",
+  "topic_id": null,
+  "funnel": "MOFU",
+  "type": "existing_page"
+}

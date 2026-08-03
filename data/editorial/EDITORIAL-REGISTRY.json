@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-02T19:09:19Z",
+  "generated_at": "2026-08-03T04:17:22Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -54,7 +54,7 @@
       "body_markdown": "## Como usar\n\nMarque item a item. O que faltar vira risco explícito — não surpresa na medição.\n\n## 1. Identificação do contrato\n\n- Número do contrato e do processo  \n- Órgão, objeto e regime de execução  \n- Valor inicial e valor atualizado  \n- Data-base e índices de reajuste  \n- Gestor e fiscal nomeados  \n\n## 2. Descrição da alteração\n\n- O que muda (quantitativo, especificação, item novo)  \n- Por que muda (erro de projeto, campo, determinação, interferência)  \n- Onde na obra (trecho, pavimento, sistema)  \n- Quando foi determinada e por quem  \n\n## 3. Base legal e contratual\n\n- Enquadramento no art. 124 (unilateral ou acordo)  \n- Teste do art. 125 (25% / 50% se reforma de edifício ou equipamento)  \n- Checagem do art. 126 (não transfigurar objeto)  \n- Cláusulas do contrato sobre alterações  \n\n## 4. Números\n\n- Planilha do aditivo (itens, unidades, quantitativos, preços)  \n- Memória do saldo acumulado de aditivos  \n- Composições de preço de itens novos  \n- Tratamento do desconto da proposta, se aplicável  \n- Impacto no cronograma físico-financeiro  \n\n## 5. Provas de campo e de gabinete\n\n- Projetos “antes” e “depois”  \n- Diário de obra  \n- Fotos e levantamentos  \n- OS, e-mails e atas  \n- Pareceres técnicos internos da contratada  \n\n## 6. Pedido formal\n\n- Requerimento objetivo (o que se pede: valor, prazo, enquadramento)  \n- Anexos numerados  \n- Protocolo com data  \n- Ressalvas se a Administração exigir execução antecipada  \n\n## Sinais de que o pedido vai travar\n\n- Sem memória de saldo percentual  \n- Item novo sem composição  \n- Justificativa só genérica (“necessidade da obra”)  \n- Execução já concluída sem qualquer registro de determinação  \n\n## Depois do checklist\n\nSe todos os itens críticos estão verdes, protocolize. Se há lacuna material (sem determinação escrita, sem nexo, saldo estourado), corrija a prova antes de entrar com o pedido “para cumprir rito”.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Hipóteses locais de rito, prazos e formulários do órgão prevalecem quando mais específicos.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Nesses cenários, organizar o dossiê cedo evita reconstrução tardia de fatos.\n\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar.\n",
       "_source_file": "data/editorial/pages/guia-checklist-aditivo.json",
       "material_hash": "51e1bec123b5ca64a4674f371c84f666038bf84641c8fc86ca5d77d848bd5bd0",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -85,6 +85,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:13Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:13Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -134,7 +143,20 @@
           "support_level": "direct",
           "official_excerpt": "Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% (vinte e cinco por cento) do valor inicial atualizado do contrato que se fizerem nas obras, nos serviços ou nas compras, e, no caso de reforma de edifício ou de equipamento, o limite para os acréscimos será de 50% (cinquenta por cento)."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:13Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art124",
+          "lei-14133-art125",
+          "lei-14133-planalto",
+          "agu-alteracoes-contratuais-2024"
+        ],
+        "caveats": "",
+        "material_hash": "51e1bec123b5ca64a4674f371c84f666038bf84641c8fc86ca5d77d848bd5bd0"
+      }
     },
     {
       "page_id": "guia-docs-reequilibrio",
@@ -182,7 +204,7 @@
       "body_markdown": "## Estrutura do dossiê\n\n### A. Instrumentos\n\n- Contrato e aditivos  \n- Matriz de riscos  \n- Cláusulas de reajuste e, se o objeto for serviço contínuo com mão de obra, de repactuação (art. 135)  \n- Planilha orçamentária da proposta  \n\n### B. Evento\n\n- Descrição factual com datas  \n- Norma, interferência, atraso da Administração ou outro fato gerador  \n- Por que foge à álea ordinária do contrato (tese explícita)  \n\n### C. Nexo\n\n- Ligação entre o fato e o item de custo impactado  \n- Trechos do cronograma afetados  \n- Comunicações oficiais do período  \n\n### D. Quantificação\n\n- Memória de cálculo por item  \n- Série de preços (antes/depois)  \n- Critérios de produtividade e quantitativos  \n- Separação entre o que seria reajuste ordinário e o que se pede a maior  \n\n### E. Pedido\n\n- Valor e prazo pretendidos  \n- Enquadramento (art. 130 / art. 131)  \n- Protocolo dentro da vigência (art. 131, parágrafo único)  \n\n## Ordem de montagem recomendada\n\n1. Escreva a história do evento em uma página.  \n2. Só então anexe planilhas e NFs.  \n3. Faça um revisor técnico (orçamento) e um revisor de contrato lerem o nexo.  \n4. Protocolize com índice de anexos.  \n\n## Falhas clássicas\n\n- Pedido genérico de “alta de insumos” sem amarrar ao objeto  \n- Ignorar índice de reajuste já previsto  \n- Formular só no encerramento  \n- Misturar prejuízo por ineficiência própria com evento externo  \n\n## Ressalva\n\nA procedência é sempre caso a caso. O checklist reduz omissão documental; não cria direito inexistente nem substitui a leitura do contrato, do edital, da matriz de riscos e da Lei nº 14.133/2021 no caso concreto. Ritos e formulários locais prevalecem quando mais específicos.\n\n## Modelo de índice de anexos\n\nAnexo I — Contrato e matriz  \nAnexo II — Cronologia do evento (1–2 páginas)  \nAnexo III — Comunicações oficiais  \nAnexo IV — Memória de cálculo  \nAnexo V — Comprovantes de custo (NF, cotações)  \nAnexo VI — Cronogramas impactados  \nAnexo VII — Pedido formal  \n\nQuem abre o processo deve conseguir entender a tese só com o Anexo II e o IV. O resto prova.\n\n## Contexto de uso na construtora\n\nSepare o pedido de reequilíbrio do pedido de aditivo quantitativo. Misturar os dois no mesmo texto, sem capítulos, confunde fiscal e jurídico do órgão e atrasa os dois. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar.\n\n## Quando o dossiê não basta sozinho\n\nSe o valor em disputa é material para a margem, se há notificação sancionadora em curso ou se a prova contemporânea do evento é fraca, organize o dossiê com análise técnica antes de protocolar. Pedido tardio e pasta de NFs sem nexo costumam ser indeferidos.\n",
       "_source_file": "data/editorial/pages/guia-docs-reequilibrio.json",
       "material_hash": "708e188e53ff185293b030806d26d5a6a32bbc60a24a3498f23116a7cd7d22a9",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -213,6 +235,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:13Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:13Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -277,7 +308,20 @@
           "support_level": "direct",
           "official_excerpt": "Os preços dos contratos para serviços contínuos com regime de dedicação exclusiva de mão de obra ou com predominância de mão de obra serão repactuados para manutenção do equilíbrio econômico-financeiro, mediante demonstração analítica da variação dos custos contratuais Registros que não caracterizam alteração do contrato podem ser realizados por simples apostila, dispensada a celebração de termo aditivo, como nas seguintes situações: I - variação do valor contratual para fazer face ao reajuste ou à repactuação de preços previstos no próprio contrato; III - alterações na razão ou na denominação social do contratado"
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:13Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art130-131",
+          "lei-14133-art135",
+          "lei-14133-art136",
+          "lei-14133-planalto"
+        ],
+        "caveats": "",
+        "material_hash": "708e188e53ff185293b030806d26d5a6a32bbc60a24a3498f23116a7cd7d22a9"
+      }
     },
     {
       "page_id": "guia-glosa",
@@ -322,7 +366,7 @@
       "body_markdown": "## Checklist de contestação\n\n### Identificação\n\n- Número da medição e período  \n- Itens glosados (código, descrição, valor)  \n- Data da ciência da glosa e prazo de resposta  \n\n### Critério\n\n- Cláusula e caderno de encargos  \n- Unidade e forma de medição do item  \n- Projetos e planilha de referência  \n\n### Prova de execução\n\n- Diário de obra  \n- Registro fotográfico datado  \n- Levantamentos e croquis  \n- Notas de serviço / RDO  \n- Testes e laudos, se a glosa for por qualidade  \n\n### Cálculo\n\n- Memória do valor glosado  \n- Memória da parcela incontroversa  \n- Eventual proposta de medição parcial alternativa  \n\n### Peça de resposta\n\n- Objeto claro: anular/reduzir glosa e liberar incontroverso  \n- Fundamento contratual e art. 143 quando couber  \n- Anexos indexados  \n- Pedido de reunião técnica, se útil  \n\n## Ordem de escrita da peça\n\n1. Fatos da medição  \n2. O que a fiscalização alegou  \n3. Por que a alegação não se sustenta (critério + prova)  \n4. Valores  \n5. Pedidos  \n\n## Erros\n\n- Responder só “discordo”  \n- Anexar 200 fotos sem legenda nem amarração ao item  \n- Esquecer de pedir a parcela incontroversa  \n\n## Ressalva\n\nAlguns editais fixam ritos e prazos próprios de impugnação de medição. Cumpra o rito local. O checklist reduz omissão documental; não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto.\n\n## Exemplo de abertura da peça (hipotético)\n\n“Em atenção à glosa do item X da medição Y, no valor de R$ …, apresenta-se contestação com base no critério de medição do item … do contrato, acompanhada de levantamento topográfico e registro fotográfico datado. Requer-se, ainda, a liberação da parcela incontroversa de R$ …, correspondente aos itens não impugnados, nos termos do art. 143 da Lei nº 14.133/2021.”\n\n## Contexto de uso na construtora\n\nDefina SLA interno: glosa conhecida em D+0; dossiê técnico em D+2; peça protocolada antes do prazo do órgão. Atrasar a resposta por “esperar a próxima medição” costuma piorar o caixa e o histórico do contrato. Um responsável único pelo índice de anexos e pela memória de cálculo evita peça fragmentada.\n\n## Quando a contestação não basta sozinha\n\nSe o valor glosado é material para a margem, se há risco de sanção cruzada ou se a prova de campo é fraca, reforce o dossiê (levantamento, laudo, critério contratual) antes de protocolar. O art. 143 ajuda na parcela incontroversa; o trecho glosado exige prova do item.\n",
       "_source_file": "data/editorial/pages/guia-glosa.json",
       "material_hash": "fba21a75f6a50279f032bda1946fce4ceb2991dd0f66b1efb9504ba31aa7f468",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -353,6 +397,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:13Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:13Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -386,7 +439,18 @@
           "support_level": "interpretive",
           "official_excerpt": "No caso de controvérsia sobre a execução do objeto, quanto a dimensão, qualidade e quantidade, a parcela incontroversa deverá ser liberada no prazo previsto para pagamento."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:13Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art141-143",
+          "lei-14133-planalto"
+        ],
+        "caveats": "",
+        "material_hash": "fba21a75f6a50279f032bda1946fce4ceb2991dd0f66b1efb9504ba31aa7f468"
+      }
     },
     {
       "page_id": "guia-notificacao-atraso",
@@ -432,7 +496,7 @@
       "body_markdown": "## Primeiras horas\n\n1. Registrar data/hora da ciência  \n2. Ler o prazo e o que exatamente é imputado  \n3. Congelar versões de cronograma e diários  \n4. Definir responsável interno pela resposta  \n\n## Estrutura da resposta\n\n### 1. Endereçamento e objeto\n\nIdentifique contrato, notificação e pedidos da Administração.\n\n### 2. Síntese da posição\n\nEm um parágrafo: o que se admite, o que se contesta, o que se pede.\n\n### 3. Cronologia\n\nTabela mental em texto: data → fato → documento anexo.\n\n### 4. Causas\n\n- Próprias (se houver, com mitigação)  \n- Da Administração (frente, projeto, decisão) com prova  \n- Externas previstas na matriz  \n\n### 5. Impacto no caminho crítico\n\nMostre que o atraso alegado não corresponde ao atraso real do objeto, se for o caso.\n\n### 6. Pedidos\n\n- Afastamento de sanção  \n- Prorrogação  \n- Reunião  \n- Produção de prova  \n\n## Anexos prioritários\n\n- Notificação recebida  \n- Cronogramas  \n- Diários  \n- Protocolos de pedido de liberação/frente  \n- Respostas da fiscalização  \n- Fotos e relatórios de interferência  \n\n## Tom\n\nObjetivo, técnico, sem agressão. Frases longas de “estranhamos veementemente” não substituem data e documento.\n\n## Ressalva\n\nSanções administrativas têm rito próprio (arts. 155 e 156 da Lei nº 14.133/2021). Esta resposta à notificação não encerra eventual processo sancionador — mas molda o dossiê desde o início. O art. 115, § 1º, proíbe retardo imotivado da Administração, inclusive na posse de novo chefe do Executivo ou de novo titular no órgão; use-o só com prova do obstáculo, não como escudo genérico.\n\n## O que não escrever\n\n- Acusações pessoais ao fiscal  \n- Promessas de prazo irreais para “acalmar”  \n- Admissão genérica de culpa sem quantificar  \n- Cópia de cláusulas sem fatos  \n\n## Quando a resposta não basta sozinha\n\nSe a notificação já cita sanção em curso, o valor em risco é material para a margem ou a prova contemporânea do obstáculo é fraca, organize o dossiê com análise técnica antes de protocolar. Silêncio e peça genérica costumam piorar o histórico do contrato.\n\n## Contexto de uso na construtora\n\nA resposta à notificação é também peça de compliance interno: mostre à diretoria o risco de sanção (arts. 155 e 156) e o plano de recuperação de prazo. Se a causa for da Administração, o mesmo dossiê alimenta pedido de dilação e, se cabível, de custo. Defina um responsável único pela cronologia e pelos anexos.\n\n## Exemplo de estrutura (hipotético)\n\nContrato de pavimentação. Notificação alega 45 dias de atraso no trecho B. A contratada estava apta desde D0; a frente B só foi liberada em D+30 por remoção de rede pela concessionária sob responsabilidade da Administração. Resposta: (1) admite atraso físico aparente; (2) contesta imputação de culpa exclusiva; (3) anexa cronologia, pedidos de liberação e diário; (4) pede dilação de 30 dias e afastamento de multa sobre o período do obstáculo. O art. 115, § 1º, ampara a tese de retardo imotivado — sem transformar o pedido em garantia de resultado.\n\n## Relação com atraso imputável à Administração\n\nSe o núcleo da defesa é obstáculo da Administração, leia em paralelo a página de aplicação do art. 115. Esta guia foca o rito da resposta; aquela, a prova do retardo. Não repita o mesmo dossiê em dois pedidos sem índice: use um índice comum e peças com pedidos distintos (defesa sancionadora vs. dilação/custo).\n",
       "_source_file": "data/editorial/pages/guia-notificacao-atraso.json",
       "material_hash": "e8ce56a3690414f9fdf7b7985873ade153ef5386d9daf6d788689f1cf4b83543",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -463,6 +527,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -496,7 +569,18 @@
           "support_level": "interpretive",
           "official_excerpt": "O contrato deverá ser executado fielmente pelas partes, de acordo com as cláusulas avençadas e as normas desta Lei. § 1º É proibido à Administração retardar imotivadamente a execução de obra ou serviço, ou de suas parcelas, inclusive na hipótese de posse do respectivo chefe do Poder Executivo ou de novo titular no órgão ou entidade contratante."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:14Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art115",
+          "lei-14133-planalto"
+        ],
+        "caveats": "",
+        "material_hash": "e8ce56a3690414f9fdf7b7985873ade153ef5386d9daf6d788689f1cf4b83543"
+      }
     },
     {
       "page_id": "jur-sumula-260-art",
@@ -597,6 +681,36 @@
           "at": "2026-08-02T19:09:18Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-02T19:34:05Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T03:07:01Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T03:22:13Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T03:24:26Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T04:06:21Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T04:17:21Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
         }
       ],
       "publication_hold": true,
@@ -681,7 +795,7 @@
       "body_markdown": "## Onde a dúvida explode no canteiro\n\nA obra está em andamento. A fiscalização envia croqui, e-mail ou reunião com mudança de especificação, quantitativo ou serviço que não estava claro na planilha. O engenheiro de produção quer executar para não perder frente. O orçamentista pergunta se entra no saldo de 25%. O jurídico quer papel. Esse é o terreno do art. 124.\n\n## O que o texto legal separa\n\nO **art. 124** da Lei nº 14.133/2021 (texto compilado no Planalto, verificado em 02/08/2026) prevê alteração **com as devidas justificativas**:\n\n### Unilateral (inciso I)\n\n- **a)** modificação do projeto ou das especificações, para melhor adequação técnica aos objetivos da Administração;\n- **b)** modificação do valor contratual por acréscimo ou diminuição quantitativa do objeto, **nos limites permitidos pela Lei** (o art. 125 materializa 25% e, em reforma de edifício ou equipamento, acréscimo de até 50%).\n\n### Por acordo (inciso II)\n\nHipóteses expressas do dispositivo:\n\n- **a)** substituição da garantia de execução;\n- **b)** modificação do regime de execução da obra ou do serviço, bem como do modo de fornecimento, diante de verificação técnica de inaplicabilidade dos termos originários;\n- **c)** modificação da forma de pagamento por circunstâncias supervenientes, **mantido o valor inicial atualizado**, vedada antecipação sem contraprestação correspondente;\n- **d)** restabelecimento do equilíbrio econômico-financeiro inicial nas hipóteses de força maior, caso fortuito, fato do príncipe ou fatos imprevisíveis (ou previsíveis de consequências incalculáveis) que inviabilizem a execução tal como pactuada, **respeitada a repartição objetiva de risco do contrato**.\n\nO inciso II **não** inclui “atualização de vínculo societário do contratado”. Mudança de razão ou denominação social, quando mero registro, pode ser apostilada (art. 136, III) — e isso não autoriza alterar objeto, quantitativos ou preços sob o rótulo de atualização cadastral.\n\nA leitura isolada do art. 124 é insuficiente. Os **arts. 125 a 132** fecham o circuito: limites, vedação de transfigurar o objeto, preços de itens sem cotação, manutenção de desconto, equilíbrio no mesmo termo aditivo e formalização.\n\n## Situação concreta (hipotética, para raciocínio)\n\nContrato de reforma de escola, empreitada por preço unitário. A fiscalização determina troca de sistema de impermeabilização não equivalente ao memorial. Há impacto de custo e prazo. Perguntas que mudam o caminho:\n\n1. A mudança é de especificação/projeto (I, a) ou quantitativo puro (I, b)?\n2. O valor acumulado de aditivos ainda cabe no art. 125?\n3. Os encargos da contratada aumentam de forma que o **art. 130** exija reequilíbrio no mesmo aditivo?\n4. Existe preço unitário na planilha ou será item novo (art. 127)?\n\n## Documentos que alteram a conclusão\n\n- Contrato, edital, planilha e memorial originais\n- Histórico de termos aditivos e apostilamentos\n- Projetos “como contratado” versus “como determinado”\n- Ordens, e-mails e atas com data e responsável da Administração\n- Memória do saldo percentual acumulado (acréscimos e supressões)\n- Composições de preço e desconto da proposta vencedora\n- Cronograma físico-financeiro e diário de obra no período da determinação\n\nSem essa base, qualquer tese vira narrativa tardia.\n\n## Regra operacional para a construtora\n\n1. Classifique a alteração (projeto/especificação, quantitativo, item novo, reequilíbrio).\n2. Calcule o saldo legal antes de executar volume material.\n3. Precifique com a regra do contrato e da Lei — não com “preço de mercado informal”.\n4. Exija formalização adequada **antes** de comprometer margem e prazo de forma irreversível.\n5. Se a Administração determinar execução sob risco, registre por escrito a ressalva e o impacto.\n\n## Exceções e controvérsias\n\n- **Apostila** (art. 136) serve a reajuste/repactuação previstos, atualizações financeiras de pagamento, razão/denominação social e empenho — não é atalho genérico para mudar objeto.\n- Jurisprudência e orientações formadas sob a Lei nº 8.666/1993 **não se transportam automaticamente** para a 14.133; use-as só com distinção explícita do regime.\n- A orientação da AGU/PGF sobre alterações contratuais em obras (fev/2024) ajuda no enquadramento federal, mas o contrato do ente e o caso concreto prevalecem na disputa local.\n\n## Erros frequentes\n\n- Executar serviço novo grande só com ordem verbal\n- Somar apenas o aditivo da vez e ignorar o acumulado\n- Tratar toda edificação como se o teto de 50% fosse automático (o art. 125 restringe a **reforma de edifício ou de equipamento**)\n- Misturar reequilíbrio econômico-financeiro com aditivo quantitativo sem separar causas\n- Assumir que supressão “compensa” acréscimo sem critério documentado\n- Colocar mudança societária ou cadastral como se fosse hipótese do art. 124, II\n\n## Roteiro de ação (48–72h)\n\n1. Congelar descrição técnica da mudança com anexos.\n2. Levantar saldo de aditivos em valor e percentual sobre o valor inicial atualizado.\n3. Separar o que é quantitativo, qualitativo ou extracontratual.\n4. Montar planilha do aditivo e memória de cálculo.\n5. Protocolar pedido ou responder à determinação com ressalvas e prazo.\n6. Só então liberar execução de trechos de alto valor.\n\n## Quando buscar análise especializada\n\nQuando o saldo se aproxima do teto, há item novo relevante, a fiscalização pressiona execução sem aditivo, ou o impacto de prazo/custo já compromete o fluxo de caixa. Nesses casos, a análise técnica-documental costuma ser pré-requisito de qualquer conversa jurídica.\n\n## Ressalva\n\nEsta página traduz o texto legal para decisão operacional. Não substitui parecer sobre o contrato específico nem garante resultado em processo administrativo ou judicial.\n\n\n## Nota sobre repactuação\n\nQuando o tema for **repactuação**, o enquadramento legal próprio é o **art. 135** da Lei nº 14.133/2021 (serviços contínuos com dedicação exclusiva ou predominância de mão de obra), distinto do reajuste por índice e do reequilíbrio dos arts. 130 e 131.\n",
       "_source_file": "data/editorial/pages/lei-art124-alteracao-obra.json",
       "material_hash": "8ca36cc833f6dca2594d057d30722eb1328350d470ae01a03d232830053925e1",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -712,6 +826,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -820,7 +943,23 @@
           "support_level": "direct",
           "official_excerpt": "A formalização do termo aditivo é condição para a execução, pelo contratado, das prestações determinadas pela Administração no curso da execução do contrato, salvo nos casos de justificada necessidade de antecipação de seus efeitos, hipótese em que a formalização deverá ocorrer no prazo máximo de 1 (um) mês."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:14Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art124",
+          "lei-14133-art125",
+          "lei-14133-art126-132",
+          "lei-14133-art136",
+          "lei-14133-planalto",
+          "agu-alteracoes-contratuais-2024",
+          "lei-14133-art135"
+        ],
+        "caveats": "",
+        "material_hash": "8ca36cc833f6dca2594d057d30722eb1328350d470ae01a03d232830053925e1"
+      }
     },
     {
       "page_id": "lei-atraso-administracao",
@@ -880,7 +1019,7 @@
       "body_markdown": "## O § 1º do art. 115 em linguagem de canteiro\n\nA Lei diz que a Administração **não pode retardar imotivadamente** a execução da obra ou de suas parcelas. O § 1º deixa expresso que a proibição **inclui** a hipótese de **posse do respectivo chefe do Poder Executivo ou de novo titular** no órgão ou entidade contratante — troca de gestão **não** é motivo legítimo para paralisar a obra sem justificativa.\n\nExemplos recorrentes de retardo imputável à Administração (sempre com prova):\n\n- Projeto executivo incompleto ou contraditório\n- Frente de serviço não liberada (desapropriação, remoção de interferência, autorização de acesso)\n- Demora em aprovar amostra, memória de cálculo ou medição\n- Ordem para esperar decisão política ou “aguardar o novo gestor”\n\nTexto: art. 115, caput e § 1º — Lei nº 14.133/2021, Planalto (verificado em 02/08/2026). Em caso de impedimento, ordem de paralisação ou suspensão, o § 5º do mesmo artigo disciplina efeitos sobre cronograma e prorrogações — leia o dispositivo completo no caso concreto.\n\n## Separar causas\n\nNem todo atraso é da Administração. Chuva extrema, falha de fornecedor da contratada, retrabalho por execução deficiente e greve interna têm caminhos distintos. A matriz de riscos e o contrato dizem quem carrega o quê.\n\n## Prova contemporânea (o que costuma faltar)\n\n1. Data em que a contratada estava apta a executar  \n2. Obstáculo específico e quem deveria removê-lo  \n3. Comunicação formal com pedido de providência e prazo  \n4. Impacto no caminho crítico do cronograma  \n5. Custos de administração local, canteiro e remobilização (se houver)  \n6. Resposta (ou silêncio) da fiscalização  \n\n## Efeitos possíveis (sempre caso a caso)\n\n- Prorrogação de prazo sem sanção  \n- Reprogramação físico-financeira  \n- Discussão de custos adicionais e reequilíbrio (art. 130 quando houver alteração unilateral com encargos)  \n- Defesa em notificação de atraso  \n\nNada disso é automático.\n\n## Erros frequentes\n\n- Registrar “aguardando liberação” no diário sem detalhar o quê e desde quando  \n- Aceitar notificação de atraso em silêncio  \n- Medir custo só no final, sem série histórica  \n- Misturar atraso próprio com atraso alheio na mesma narrativa  \n\n## Roteiro\n\n1. Linha do tempo do obstáculo.  \n2. Evidências de prontidão da contratada.  \n3. Comunicações oficiais.  \n4. Atualização de cronograma.  \n5. Pedido de prazo e, se cabível, de custo.  \n6. Preparação de resposta a sanção.  \n\n## Ressalva\n\nAtraso imputável à Administração **não gera automaticamente** reequilíbrio, prorrogação ou indenização: exige prova contemporânea, nexo e enquadramento (arts. 115, 124, 130 e correlatos).\n\nCulpa e nexo são matérias de prova. Esta página não afirma responsabilidade em caso genérico.\n\n## Custos de prorrogação: o que documentar além do prazo\n\nPrazo sem custo é só metade da conversa. Administração local prolongada, canteiro, vigilância, equipamentos parados e remobilização precisam de série de custos e nexo com o período do obstáculo. O art. 130 entra quando há alteração unilateral com aumento de encargos; fora disso, a tese de custo adicional exige base contratual e prova robusta. Não prometa reembolso automático só porque o atraso “foi do órgão”.\n\n## Defesa em notificação\n\nRecebeu notificação de atraso? Anexe a linha do tempo do obstáculo da Administração como peça central da resposta, não como anexo escondido. Peça dilação e afastamento de sanção com base nos fatos — e cite o art. 115, § 1º, quando o retardo for imotivado e documentado.\n",
       "_source_file": "data/editorial/pages/lei-atraso-administracao.json",
       "material_hash": "4fe9b1cb9d4ac259b30f9e284b42720ba74965f502fa107e7690e13bf7641af6",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -911,6 +1050,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -974,7 +1122,20 @@
           "support_level": "direct",
           "official_excerpt": "Art. 124. Os contratos regidos por esta Lei poderão ser alterados, com as devidas justificativas, nos seguintes casos: I - unilateralmente pela Administração: a) quando houver modificação do projeto ou das especificações, para melhor adequação técnica a seus objetivos; b) quando for necessária a modificação do valor contratual em decorrência de acréscimo ou diminuição quantitativa de seu objeto, nos limites permitidos por esta Lei; II - por acordo entre as partes: a) quando conveniente a substituição da garantia de execução; b) quando necessária a modificação do regime de execução da obra ou do serviço, bem como do modo de fornecimento; c) quando necessária a modificação da forma de pagamento por imposição de circunstâncias supervenientes, mantido o valor inicial atualizado; d) para restabelecer o equilíbrio econômico-financeiro inicial do contrato"
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:14Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art115",
+          "lei-14133-planalto",
+          "lei-14133-art130-131",
+          "lei-14133-art124"
+        ],
+        "caveats": "",
+        "material_hash": "4fe9b1cb9d4ac259b30f9e284b42720ba74965f502fa107e7690e13bf7641af6"
+      }
     },
     {
       "page_id": "lei-item-novo-desconto",
@@ -1036,7 +1197,7 @@
       "body_markdown": "## Quando o item novo aparece\n\nDemolição não prevista, drenagem extra, troca de sistema predial, serviço de contenção emergencial. A planilha original não tem o código. Alguém precisa de preço unitário “para ontem”.\n\n## Enquadramento legal (sem atalho)\n\nAlterações passam pelo **art. 124** e limites do **art. 125**. Para preços não contemplados no contrato, a Lei estabelece disciplina específica a partir do **art. 127** e dispositivos seguintes (texto Planalto, verificado em 02/08/2026). Leia o artigo completo no caso concreto: a formação de preço de item novo não é “livre negociação de balcão”.\n\nA orientação AGU/PGF sobre alterações contratuais em obras (fev/2024) discute, no ambiente federal, cuidados com planilha, desconto e instrução processual — use como apoio, não como substituto do seu contrato.\n\n## O que a construtora precisa provar\n\n- Por que o item é necessário (nexo com projeto, campo ou determinação da Administração)\n- Que não havia preço unitário utilizável na planilha\n- Composição de custos (mão de obra, materiais, equipamentos, encargos)\n- Critério de BDI adotado e coerência com a proposta\n- Tratamento do desconto/ágio da licitação, se aplicável\n- Comparação com referência oficial (SINAPI, SICRO ou outra do edital) quando fizer sentido\n- Impacto no saldo percentual do art. 125\n\n## Erros que destroem a tese\n\n1. Aceitar preço “chutado” pelo fiscal em planilha sem composição  \n2. Aplicar desconto zero no item novo sem justificativa quando o contrato puxa a lógica da proposta  \n3. Usar referência de tabela errada (SINAPI onde o edital manda SICRO, ou o inverso)  \n4. Executar o serviço inteiro e só depois discutir preço  \n5. Misturar item novo com reequilíbrio de item existente sem separar causas  \n\n## Roteiro de precificação\n\n1. Descreva o serviço com unidade e critério de medição.  \n2. Monte composição analítica.  \n3. Aplique BDI conforme regra do certame/contrato.  \n4. Teste coerência com desconto da proposta e com referenciais.  \n5. Documente premissas (produtividade, distância, interferências).  \n6. Submeta no processo do aditivo **antes** da execução plena.  \n\n## Ressalva\n\nManutenção do desconto da proposta em item novo **não é regra automática** do art. 127: é tese operacional frequente que depende do contrato, da natureza do item e da coerência com a proposta.\n\nHá controvérsia legítima sobre extensão da manutenção do desconto em cenários distintos (item semelhante versus item sem qualquer análogo). Não há atalho seguro sem os autos do contrato.\n\n## Jogo de planilha e item novo\n\nFormar preço de item novo com distorção proposital em relação a itens semelhantes da planilha original é risco clássico de apontamento de controle. A precificação deve ser coerente: se o item é análogo, a lógica de desconto e de composição precisa dialogar com a proposta; se é radicalmente distinto, a memória deve explicar a diferença de produtividade, insumos e BDI.\n\n## Papel dos referenciais SINAPI/SICRO\n\nUse a tabela que o edital e a natureza do serviço indicam. Pavimentação e obras rodoviárias frequentemente caminham no SICRO; edificações, no SINAPI — sem absolutismo. O referencial não elimina a necessidade de composição analítica quando o item foge do código padrão.\n",
       "_source_file": "data/editorial/pages/lei-item-novo-desconto.json",
       "material_hash": "66bb5e782da7074e9e646c90a3752c75ffa40b5619658a01184599afbbf8f0d8",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -1067,6 +1228,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -1132,7 +1302,22 @@
           "support_level": "interpretive",
           "official_excerpt": "Se o contrato não contemplar preços unitários para obras ou serviços cujo aditamento se fizer necessário, esses serão fixados por meio da aplicação da relação geral entre os valores da proposta e o do orçamento-base da Administração sobre os preços referenciais ou de mercado vigentes na data do aditamento, respeitados os limites estabelecidos no art. 125 desta Lei."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:14Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art126-132",
+          "lei-14133-art124",
+          "lei-14133-planalto",
+          "agu-alteracoes-contratuais-2024",
+          "sinapi-caixa",
+          "lei-14133-art125"
+        ],
+        "caveats": "",
+        "material_hash": "66bb5e782da7074e9e646c90a3752c75ffa40b5619658a01184599afbbf8f0d8"
+      }
     },
     {
       "page_id": "lei-limite-25-50",
@@ -1197,7 +1382,7 @@
       "body_markdown": "## O problema real\n\nDiretoria e orçamento olham o último aditivo e perguntam: “ainda cabe?”. Fiscalização olha a necessidade da obra. Contabilidade olha empenho. Sem memória do **valor inicial atualizado** e do histórico, o debate vira achismo.\n\n## Texto do art. 125 (síntese operacional)\n\nNas alterações unilaterais do **art. 124, I**, o contratado aceita, nas mesmas condições contratuais:\n\n- acréscimos ou supressões de até **25%** do valor inicial atualizado do contrato (obras, serviços ou compras);\n- em **reforma de edifício ou de equipamento**, acréscimos de até **50%**.\n\nFonte: Lei nº 14.133/2021, art. 125 — Planalto, verificação em 02/08/2026.\n\nO **art. 126** fecha a porta para alterações unilaterais que transfigurem o objeto. Percentual disponível não legitima obra diferente da contratada.\n\n## O que precisa entrar na conta do saldo\n\n- Valor inicial do contrato e critérios de atualização previstos\n- Cada termo aditivo (acréscimo e supressão) com valor e data\n- Natureza da alteração (quantitativa vs mudança de projeto/especificação)\n- Itens novos e reequilíbrios — que podem ter lógica distinta do puro quantitativo\n- Hipótese de 50%: só se o objeto se enquadrar como reforma de edifício ou equipamento\n\n## Exemplo aplicado (hipotético)\n\nContrato de pavimentação, valor inicial atualizado R$ 10 milhões. Já houve acréscimo formal de R$ 1,8 milhão (18%). Novo acréscimo pretendido de R$ 1,0 milhão (10%) levaria a 28% — acima de 25% se tudo for alteração unilateral quantitativa/projeto no mesmo enquadramento. Opções típicas: reavaliar escopo, separar o que exige acordo e reequilíbrio, ou recusar execução irregular. O número isolado não decide; o enquadramento jurídico-contratual decide.\n\n## Documentos mínimos\n\n1. Contrato e planilha inicial  \n2. Cronologia de aditivos e apostilas  \n3. Memória de cálculo do percentual acumulado  \n4. Projetos e OS que motivam a nova alteração  \n5. Justificativa técnica da Administração (quando existir)  \n6. Proposta vencedora (desconto) para precificação de itens  \n\n## Riscos de interpretação\n\n- Aplicar 50% a obra nova de edificação sem ser reforma\n- Ignorar atualização do valor inicial\n- Executar primeiro e formalizar depois quando o volume já estourou o teto\n- Confundir reajuste (art. 136) com aditivo quantitativo\n\n## Roteiro\n\n1. Atualize o valor base conforme o contrato.  \n2. Some acréscimos e registre supressões com critério.  \n3. Classifique a nova alteração.  \n4. Teste o teto do art. 125.  \n5. Se houver aumento de encargos, examine o art. 130 no mesmo instrumento.  \n6. Formalize antes de liberar frentes caras.  \n\n## Ressalva\n\nO caso concreto pode envolver regulamento do órgão, cláusulas específicas e entendimentos de controle. Esta página não esgota controvérsias sobre compensação de acréscimos/supressões nem sobre itens extracontratuais.\n",
       "_source_file": "data/editorial/pages/lei-limite-25-50.json",
       "material_hash": "5f4aec0b2e9e62d951262cec4bbd2edc4dd41b0caf1e1fcf427beb793a58b70f",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -1228,6 +1413,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -1292,7 +1486,21 @@
           "support_level": "direct",
           "official_excerpt": "Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% (vinte e cinco por cento) do valor inicial atualizado do contrato que se fizerem nas obras, nos serviços ou nas compras, e, no caso de reforma de edifício ou de equipamento, o limite para os acréscimos será de 50% (cinquenta por cento)."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:14Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art125",
+          "lei-14133-art124",
+          "lei-14133-art126-132",
+          "lei-14133-planalto",
+          "agu-alteracoes-contratuais-2024"
+        ],
+        "caveats": "",
+        "material_hash": "5f4aec0b2e9e62d951262cec4bbd2edc4dd41b0caf1e1fcf427beb793a58b70f"
+      }
     },
     {
       "page_id": "lei-parcela-incontroversa",
@@ -1349,7 +1557,7 @@
       "body_markdown": "## O texto\n\n**Art. 143.** No caso de controvérsia sobre a execução do objeto, quanto a dimensão, qualidade e quantidade, a parcela incontroversa deverá ser liberada no prazo previsto para pagamento.\n\nFonte: Lei nº 14.133/2021 — Planalto, 02/08/2026.\n\n## Como isso aparece na medição\n\n- Fiscal glosa um item de revestimento e retém a fatura inteira  \n- Divergência de quantitativo em um serviço e trava de todos os outros  \n- Discussão de qualidade em um trecho com demais frentes aceitas  \n\nA pergunta útil: **qual valor está efetivamente controvertido?**\n\n## Documentos que separam as parcelas\n\n- Planilha de medição item a item  \n- Critérios de medição do edital/contrato  \n- Caderno de encargos e projetos  \n- Relatório fotográfico e levantamentos  \n- Notas de glosa com motivação  \n- Memória da parcela que a própria fiscalização não contestou  \n\n## Roteiro operacional\n\n1. Abra a medição por item.  \n2. Marque contestados versus aceitos (explícita ou tacitamente no rito do órgão).  \n3. Some a parcela incontroversa com memória clara.  \n4. Protocolize pedido de liberação com base no art. 143.  \n5. Conteste a glosa do trecho controverso com prova técnica — em trilha separada.  \n\n## Relação com o art. 141\n\nO art. 141 organiza a ordem cronológica de pagamentos por fonte e categoria (incluindo realização de obras). Atraso de pagamento e fila cronológica são debates paralelos: um não apaga o outro.\n\n## Erros\n\n- Aceitar retenção total “para não brigar”  \n- Contestar glosa sem individualizar valores  \n- Misturar pedido de parcela incontroversa com reequilíbrio sem clareza  \n\n## Ressalva\n\nÓrgãos podem ter fluxos de ateste específicos. O artigo federal orienta; o processo local precisa ser observado.\n\n## Como redigir o pedido de liberação\n\nO requerimento deve ser curto e numérico. Exemplo de estrutura: (1) medição nº X no valor total Y; (2) itens controvertidos e valores; (3) parcela incontroversa Z com memória anexa; (4) fundamento no art. 143; (5) pedido de liberação de Z no prazo contratual de pagamento; (6) reserva de contestar a glosa do restante em peça própria.\n\n## Relação com glosa por qualidade\n\nSe a glosa alega defeito em um trecho, o restante da medição — serviços em outras frentes, materiais aceitos, quantidades não impugnadas — tende a ser o terreno da parcela incontroversa. Ainda assim, leia o critério de medição: em empreitada global por etapa, a lógica de “item” pode ser diferente da planilha unitária.\n\n\nRegistre decisões e premissas por escrito. Em contrato público, o que não está no processo dificilmente sustenta tese meses depois, quando a equipe de campo já rotacionou e a memória viva se perdeu.\n",
       "_source_file": "data/editorial/pages/lei-parcela-incontroversa.json",
       "material_hash": "527030dad87845d07afc1e9d40fb5ce3cdceaab5dd19ab60662929c037504189",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -1380,6 +1588,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:14Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -1428,7 +1645,18 @@
           "support_level": "interpretive",
           "official_excerpt": "No caso de controvérsia sobre a execução do objeto, quanto a dimensão, qualidade e quantidade, a parcela incontroversa deverá ser liberada no prazo previsto para pagamento."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:14Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art141-143",
+          "lei-14133-planalto"
+        ],
+        "caveats": "",
+        "material_hash": "527030dad87845d07afc1e9d40fb5ce3cdceaab5dd19ab60662929c037504189"
+      }
     },
     {
       "page_id": "lei-reequilibrio-reajuste",
@@ -1501,7 +1729,7 @@
       "body_markdown": "## Três nomes, três lógicas — e tipos de contrato\n\nAntes de montar planilha, classifique o objeto e a causa do descompasso.\n\n| Conceito | O que é (Lei 14.133) | Uso típico |\n|---|---|---|\n| **Obra** | Art. 6º, XII — intervenção que inova espaço físico ou altera substancialmente bem imóvel | Empreitada de construção/reforma |\n| **Serviço de engenharia** | Art. 6º, XXI — utilidade de arquiteto/engenheiro não enquadrada como obra | Manutenção, projeto, supervisão |\n| **Serviço contínuo** | Art. 6º, XV — necessidade permanente ou prolongada | Limpeza, vigilância, manutenção contínua |\n| **Serviço contínuo com dedicação exclusiva** | Art. 6º, XVI — empregados à disposição nas dependências, sem compartilhamento típico | Terceirização com posto de trabalho |\n| **Reajuste (reajustamento em sentido estrito)** | Art. 6º, LVIII — índice/fórmula do contrato | Atualização temporal de preços em obra e outros contratos |\n| **Repactuação** | Art. 6º, LIX e **art. 135** — serviços contínuos com dedicação exclusiva ou predominância de mão de obra | Análise analítica de custos (mercado e mão de obra) |\n| **Revisão / reequilíbrio** | Arts. 124, II, d; 130; 131 (e correlatos) | Quebra da equação por evento/alteração, não mero índice |\n\n## Reajuste\n\nGatilho típico: variação temporal de preços com **índice ou fórmula do contrato** (cláusulas do art. 92, V). Instrumento frequente de registro: **apostila** (art. 136, I), quando o reajuste já está previsto.\n\n## Repactuação (art. 135) — não é “reajuste de mão de obra de obra”\n\nO **art. 135** determina que os preços de contratos de **serviços contínuos com regime de dedicação exclusiva de mão de obra ou com predominância de mão de obra** serão **repactuados** para manutenção do equilíbrio, mediante **demonstração analítica** da variação dos custos, com data vinculada:\n\n- à apresentação da proposta, para custos de mercado;\n- ao acordo, convenção ou dissídio coletivo ao qual a proposta esteja vinculada, para custos de mão de obra.\n\nHá interregno mínimo de 1 (um) ano (§ 3º) e limites quanto a ACT/CCT que extrapolem matéria trabalhista (§§ 1º e 2º).\n\n**Consequência operacional:** em contrato de **obra por escopo**, a simples variação de mão de obra **não gera automaticamente** repactuação do art. 135. Tratar repactuação como sinônimo genérico de “aumentar preço de obra” é erro de enquadramento.\n\n## Reequilíbrio / revisão\n\n**Art. 130.** Se a alteração **unilateral** aumenta ou diminui encargos do contratado, a Administração deve restabelecer o equilíbrio inicial **no mesmo termo aditivo**.\n\n**Art. 124, II, d.** Por acordo, restabelecimento nas hipóteses de força maior, caso fortuito, fato do príncipe ou fatos imprevisíveis (ou previsíveis de consequências incalculáveis), **respeitada a repartição objetiva de risco** do contrato.\n\n**Art. 131.** A extinção não impede o reconhecimento do desequilíbrio; indenização pode ocorrer por termo indenizatório. O parágrafo único exige pedido **durante a vigência** e **antes** de eventual prorrogação nos termos do art. 107.\n\n**Art. 134.** Criação, alteração ou extinção de tributos ou encargos legais, ou disposições legais supervenientes, com repercussão comprovada nos preços, também altera preços contratados (para mais ou para menos).\n\nVerificação do texto: Planalto, 02/08/2026.\n\n## Matriz de riscos muda o jogo\n\nA **matriz de riscos** (art. 6º, XXVII; cláusulas necessárias do art. 92) define quem arca com eventos supervenientes e caracteriza o equilíbrio inicial. Se o edital alocou determinado risco à contratada, o pedido de reequilíbrio sobre esse fato nasce mais frágil. Por isso a leitura da matriz vem **antes** da planilha de custos.\n\n## Apostila não cria direito\n\nO art. 136, I, permite registrar por apostila a variação de valor para reajuste ou **repactuação previstos no próprio contrato**. Isso não transforma obra em serviço contínuo com dedicação exclusiva nem dispensa a demonstração analítica do art. 135 quando a hipótese for realmente repactuação.\n\n## Documentos que separam tese séria de pedido genérico\n\n- Contrato, matriz de riscos e cláusulas de reajuste/repactuação\n- Tipo de objeto (obra × serviço de engenharia × serviço contínuo)\n- Data-base, índices e, se houver, ACT/CCT aplicável\n- Curva de custos e notas fiscais do período\n- Cronologia do evento (atraso da Administração, interferência, norma nova, etc.)\n- Memória de cálculo do impacto\n- Diário de obra e comunicações oficiais\n\n## Erros frequentes\n\n- Pedir “reajuste” de evento que é reequilíbrio (ou o contrário)\n- Tratar **repactuação** como caminho genérico de qualquer obra\n- Assumir que alta de mão de obra em canteiro gera repactuação automática\n- Juntar pastas de NF sem nexo causal\n- Formular pedido só no encerramento, sem registro contemporâneo\n- Ignorar o que a matriz já atribuiu à contratada\n\n## Roteiro\n\n1. Identifique o tipo de contrato e a causa do descompasso.  \n2. Teste se o índice/fórmula contratual já cobre (reajuste).  \n3. Só discuta repactuação se o objeto couber no art. 135 e no art. 6º, LIX.  \n4. Se não for reajuste nem repactuação, construa nexo, quantificação e enquadramento (124/130/131/134) com a matriz.  \n5. Protocolize dentro da janela do art. 131, parágrafo único, quando aplicável.  \n6. Preserve prova contemporânea — não reconstrua meses depois.  \n\n## Ressalva\n\nReequilíbrio é dos temas mais litigiosos. Esta página organiza o mapa legal; a procedência depende do caso, da prova e da alocação de riscos.\n\n## Exemplo de enquadramento (hipotético)\n\nContrato de construção de escola (obra por escopo) com reajuste anual por índice setorial. Seis meses após a data-base, norma ambiental nova obriga sistema de tratamento não previsto. Isso não é reajuste ordinário de preço de material nem repactuação do art. 135; é candidato a discussão de reequilíbrio/alteração com base no evento e na matriz. Já a simples alta de aço coberta pelo índice contratual tende a caminhar pelo reajuste — salvo prova de descompasso extraordinário além do índice, tese mais exigente. Em outro contrato, de limpeza contínua com dedicação exclusiva, a variação de salário por convenção coletiva, com demonstração analítica e anualidade, pode ser repactuação do art. 135.\n\n## Checklist rápido de triagem\n\n1. O contrato já prevê fórmula que cobre o fato?  \n2. O objeto é serviço contínuo com dedicação exclusiva/predominância de mão de obra (art. 135)?  \n3. A matriz alocou o risco à contratada?  \n4. Há alteração unilateral com aumento de encargos (art. 130)?  \n5. O pedido ainda está na janela do art. 131?  \nSe a resposta a (1) for sim e a (3) imputar o risco à contratada, o reequilíbrio nasce frágil. Se (2) for não, não force repactuação.\n",
       "_source_file": "data/editorial/pages/lei-reequilibrio-reajuste.json",
       "material_hash": "b339ec79e05601c2113db5ebf64e5edfed07766c903cdc246eb2036965070e30",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -1532,6 +1760,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:15Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:15Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -1641,7 +1878,23 @@
           "support_level": "direct",
           "official_excerpt": "Os contratos de serviços e fornecimentos contínuos poderão ser prorrogados sucessivamente, respeitada a vigência máxima decenal, desde que haja previsão em edital e que a autoridade competente ateste que as condições e os preços permanecem vantajosos para a Administração"
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:15Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art130-131",
+          "lei-14133-art135",
+          "lei-14133-art136",
+          "lei-14133-art6-definicoes",
+          "lei-14133-art92",
+          "lei-14133-art134",
+          "lei-14133-planalto"
+        ],
+        "caveats": "",
+        "material_hash": "b339ec79e05601c2113db5ebf64e5edfed07766c903cdc246eb2036965070e30"
+      }
     },
     {
       "page_id": "lei-servico-sem-aditivo",
@@ -1702,7 +1955,7 @@
       "body_markdown": "## Como se chega nesse ponto\n\n1. Fiscal determina serviço “emergencial”.  \n2. Produção executa para não perder frente.  \n3. Medição chega e o item “não tem cobertura contratual”.  \n4. Começa a disputa de responsabilidade.  \n\n## Âncoras na Lei 14.133\n\n- **Art. 124** — alterações com justificativas (unilateral ou acordo)  \n- **Art. 125** — limites percentuais nas unilaterais  \n- **Art. 132** — formalização do termo aditivo como condição para execução das alterações (leia o dispositivo completo no caso)  \n\nVerificação: texto Planalto, 02/08/2026.\n\n## Se já executou: triagem em 24h\n\n1. Quem determinou, quando e por qual meio?  \n2. O serviço era quantitativo de item existente, mudança de especificação ou item novo?  \n3. Há medição parcial, foto georreferenciada, diário?  \n4. Qual o valor estimado e o impacto no saldo de 25%/50%?  \n5. Já houve comunicação de ressalva da contratada?  \n\n## Pacote documental de regularização\n\n- OS/e-mail/ata da determinação  \n- Desenhos e quantitativos executados  \n- Diário de obra do período  \n- Composições de preço e proposta original  \n- Pedido formal de aditivo/regularização com memória  \n- Cronologia de impactos de prazo  \n\n## O que não fazer\n\n- Completar o restante do serviço extra no mesmo modo informal  \n- Emitir NF genérica sem amarrar ao processo de aditivo  \n- Aceitar quitação parcial que renuncie ao restante sem análise  \n\n## Ressalva\n\nHá discussões sobre gestão de fato e enriquecimento sem causa em cenários extremos. São matérias delicadas: não use esta página como autorização para executar fora do contrato.\n\n## Por que o art. 132 importa na conversa com a fiscalização\n\nA formalização do termo aditivo como condição para executar alterações não é preciosismo cartorial. É a linha que separa serviço medível e pagável de serviço discutível. Quando a Administração alega urgência, a resposta técnica da construtora pode ser: executar trecho mínimo de segurança com ressalva escrita e protocolar o aditivo no mesmo dia — não engolir o escopo inteiro no informal.\n\n## Exemplo hipotético de regularização\n\nContrato de manutenção predial. Fiscal manda trocar 40 m de tubulação fora da planilha. Equipe executa 40 m em dois dias. Medição seguinte glosa o item. Caminho de recuperação: juntar OS/e-mail, fotos antes/depois, quantitativo, composição, desconto da proposta se aplicável, pedido de aditivo com art. 124/125 e pedido de medição vinculada ao processo de regularização. Sem isso, restam só fotos soltas.\n\n\nRegistre decisões e premissas por escrito. Em contrato público, o que não está no processo dificilmente sustenta tese meses depois, quando a equipe de campo já rotacionou e a memória viva se perdeu.\n\n\n## Riscos se nada for regularizado\n\nO risco principal é executar valor material sem cobertura contratual e depois não conseguir medição. Há também risco de apontamento de irregularidade e de fragilizar defesa em sanção se a narrativa for só informalidade recíproca sem prova.\n",
       "_source_file": "data/editorial/pages/lei-servico-sem-aditivo.json",
       "material_hash": "5b2d66db23bc425c4d61f46e9cd354cae4a6333ad20c22c3234c628cda0c6ffa",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -1733,6 +1986,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-03T04:06:15Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Sasaki"
+        },
+        {
+          "at": "2026-08-03T04:06:15Z",
+          "event": "INDEXABLE"
         }
       ],
       "claims": [
@@ -1781,14 +2043,40 @@
           "support_level": "direct",
           "official_excerpt": "Nas alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, o contratado será obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% (vinte e cinco por cento) do valor inicial atualizado do contrato que se fizerem nas obras, nos serviços ou nas compras, e, no caso de reforma de edifício ou de equipamento, o limite para os acréscimos será de 50% (cinquenta por cento)."
         }
-      ]
+      ],
+      "approval": {
+        "reviewer": "Tiago Sasaki",
+        "at": "2026-08-03T04:06:15Z",
+        "notes": "Aprovação explícita do operador: aprovar todas exceto REJECTED e noindex. Fontes do page record conferidas; material em EDITORIAL_REVIEWED; CTAs e gates prévios OK.",
+        "sources_verified": [
+          "lei-14133-art124",
+          "lei-14133-art126-132",
+          "lei-14133-planalto",
+          "agu-alteracoes-contratuais-2024",
+          "lei-14133-art125"
+        ],
+        "caveats": "",
+        "material_hash": "5b2d66db23bc425c4d61f46e9cd354cae4a6333ad20c22c3234c628cda0c6ffa"
+      }
     }
   ],
   "counts": {
-    "EDITORIAL_REVIEWED": 11,
+    "INDEXABLE": 11,
     "REJECTED": 1
   },
-  "indexable_urls": [],
+  "indexable_urls": [
+    "/guias-contratos-obras/checklist-pedido-aditivo/",
+    "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+    "/guias-contratos-obras/contestar-glosa-medicao/",
+    "/guias-contratos-obras/responder-notificacao-atraso/",
+    "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+    "/lei-14133-obras/atraso-imputavel-administracao/",
+    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+    "/lei-14133-obras/limite-25-50-aditivo-obra/",
+    "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+    "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+    "/lei-14133-obras/servico-executado-sem-termo-aditivo/"
+  ],
   "human_approval_required": true,
   "note": "INDEXABLE only after approve_cli.py with named human reviewer"
 }

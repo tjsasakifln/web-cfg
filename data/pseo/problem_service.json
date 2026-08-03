@@ -3,13 +3,49 @@
     "amendment_count": null,
     "archetype_ids": [],
     "budget_signals": [],
-    "claim_evidence": [],
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/orcamento-incompleto-edital-obra-publica/",
+          "/conteudos/sinapi-ou-sicro-obra-publica/",
+          "/conteudos/analise-edital-obra-publica-construtora/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 39296,
+        "role": "contextual_only"
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
     "confenge_service_slug": "auditoria-orcamento-licitacao",
     "document_divergence_count": null,
     "document_signals": [],
-    "evidence_count": 48,
+    "evidence_count": 39296,
     "evidence_kind": "normative_editorial",
-    "evidence_signals": [],
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ],
     "id": "prob-orcamento-edital",
     "limitations": [
       "Página de enquadramento problema→serviço; não substitui análise do edital concreto."
@@ -44,19 +80,56 @@
       "/conteudos/sinapi-ou-sicro-obra-publica/",
       "/conteudos/analise-edital-obra-publica-construtora/"
     ],
-    "theme": "orcamento-edital"
+    "theme": "orcamento-edital",
+    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
     "amendment_count": null,
     "archetype_ids": [],
     "budget_signals": [],
-    "claim_evidence": [],
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/sinapi-ou-sicro-obra-publica/",
+          "/conteudos/produtividade-sinapi-obra-publica/",
+          "/conteudos/bdi-obra-publica/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 37812,
+        "role": "contextual_only"
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
     "confenge_service_slug": "auditoria-orcamento-licitacao",
     "document_divergence_count": null,
     "document_signals": [],
-    "evidence_count": 48,
+    "evidence_count": 37812,
     "evidence_kind": "normative_editorial",
-    "evidence_signals": [],
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ],
     "id": "prob-sinapi-sicro",
     "limitations": [
       "Não publica coeficientes proprietários; orienta critério de escolha da referência."
@@ -90,24 +163,61 @@
       "/conteudos/produtividade-sinapi-obra-publica/",
       "/conteudos/bdi-obra-publica/"
     ],
-    "theme": "sinapi-sicro"
+    "theme": "sinapi-sicro",
+    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
     "amendment_count": null,
     "archetype_ids": [],
     "budget_signals": [],
-    "claim_evidence": [],
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/glosa-de-medicao-obra-publica/",
+          "/conteudos/medicao-de-obra-publica-rejeitada/",
+          "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Arquétipos de manutenção predial e edificações com múltiplas medições estão sujeitos a disputas de critério, diário de obra e parcela incontroversa."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 21938,
+        "role": "contextual_only"
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
     "confenge_service_slug": "medicoes-glosas-obras-publicas",
     "document_divergence_count": null,
     "document_signals": [],
-    "evidence_count": 22,
+    "evidence_count": 21938,
     "evidence_kind": "normative_editorial",
-    "evidence_signals": [],
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ],
     "id": "prob-medicao-glosa",
     "limitations": [
       "Padrão qualitativo cruzado com densidade de contratos recorrentes no datalake."
     ],
-    "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+    "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições estão sujeitos a disputas de critério, diário de obra e parcela incontroversa.",
     "official_references": [
       {
         "name": "Lei nº 14.133/2021 — execução e pagamento (Planalto)",
@@ -135,24 +245,61 @@
       "/conteudos/medicao-de-obra-publica-rejeitada/",
       "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
     ],
-    "theme": "medicao-glosa"
+    "theme": "medicao-glosa",
+    "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT"
   },
   {
     "amendment_count": null,
     "archetype_ids": [],
     "budget_signals": [],
-    "claim_evidence": [],
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/aditivo-qualitativo-quantitativo/",
+          "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+          "/conteudos/limite-aditivo-25-50-obra-publica/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Obras de edificações e saneamento estão particularmente sujeitas a alterações de projeto e quantitativos durante a execução. Sem registro contemporâneo, o aditivo vira custo absorvido."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 39296,
+        "role": "contextual_only"
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
     "confenge_service_slug": "aditivos-obras-publicas",
     "document_divergence_count": null,
     "document_signals": [],
-    "evidence_count": 48,
+    "evidence_count": 39296,
     "evidence_kind": "normative_editorial",
-    "evidence_signals": [],
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ],
     "id": "prob-aditivos-margem",
     "limitations": [
       "Não estima taxa de aditivo por órgão sem denominador documental completo."
     ],
-    "observed_pattern": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+    "observed_pattern": "Obras de edificações e saneamento estão particularmente sujeitas a alterações de projeto e quantitativos durante a execução. Sem registro contemporâneo, o aditivo vira custo absorvido.",
     "official_references": [
       {
         "name": "Lei nº 14.133/2021 — alterações contratuais (Planalto)",
@@ -181,19 +328,56 @@
       "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
       "/conteudos/limite-aditivo-25-50-obra-publica/"
     ],
-    "theme": "aditivos"
+    "theme": "aditivos",
+    "editorial_decision": "PUBLISH_EDITORIAL_VALUE"
   },
   {
     "amendment_count": null,
     "archetype_ids": [],
     "budget_signals": [],
-    "claim_evidence": [],
+    "claim_evidence": [
+      {
+        "kind": "regulatory_reference",
+        "summary": "Referências oficiais (lei/portal) amparam o enquadramento do problema.",
+        "n": 2
+      },
+      {
+        "kind": "technical_guide",
+        "summary": "Guias técnicos CONFENGE relacionados ao problema (biblioteca do site).",
+        "paths": [
+          "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+          "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+          "/conteudos/documentos-reequilibrio-obra-publica/"
+        ]
+      },
+      {
+        "kind": "observed_pattern",
+        "summary": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução."
+      },
+      {
+        "kind": "market_density",
+        "summary": "Contratos de engenharia no recorte público associados aos segmentos do tema (dimensão de mercado; não mede frequência do problema).",
+        "n": 23412,
+        "role": "contextual_only"
+      },
+      {
+        "kind": "explicit_limitations",
+        "summary": "Limitações editoriais publicadas na página.",
+        "n": 1
+      }
+    ],
     "confenge_service_slug": "reequilibrio-obras-publicas",
     "document_divergence_count": null,
     "document_signals": [],
-    "evidence_count": 28,
+    "evidence_count": 23412,
     "evidence_kind": "normative_editorial",
-    "evidence_signals": [],
+    "evidence_signals": [
+      "regulatory_reference",
+      "technical_guide",
+      "observed_pattern",
+      "market_density",
+      "explicit_limitations"
+    ],
     "id": "prob-reequilibrio",
     "limitations": [
       "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
@@ -227,6 +411,7 @@
       "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
       "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
-    "theme": "reequilibrio"
+    "theme": "reequilibrio",
+    "editorial_decision": "NOINDEX_EVIDENCE_INSUFFICIENT"
   }
 ]

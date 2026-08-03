@@ -1,0 +1,3908 @@
+{
+  "schema_version": "1.0.0",
+  "artifact": "SEO-TOPIC-GRAPH",
+  "generated_at": "2026-08-03T01:27:50Z",
+  "n_topics": 60,
+  "n_pillars": 7,
+  "n_clusters": 27,
+  "pillars": [
+    "contratos",
+    "defesa",
+    "execucao",
+    "inteligencia-operacao",
+    "licitacao",
+    "operacao-comercial",
+    "preco-margem"
+  ],
+  "clusters": [
+    "alteracoes",
+    "dados",
+    "defesa",
+    "edital",
+    "equilibrio",
+    "estrutura",
+    "evidencias",
+    "extincao",
+    "governanca",
+    "habilitacao",
+    "inicio",
+    "interdisciplinar",
+    "margem",
+    "medicao-pagamento",
+    "melhoria",
+    "modalidades",
+    "operacao",
+    "orcamento",
+    "planejamento",
+    "prazos",
+    "pre-licitacao",
+    "proposta",
+    "referencias",
+    "regime",
+    "relacao-admin",
+    "riscos",
+    "sancoes"
+  ],
+  "layers": {
+    "1_commercial": "Páginas comerciais",
+    "2_pillars": "Pilares",
+    "3_guides": "Guias operacionais",
+    "4_lei": "Lei aplicada",
+    "5_jurisprudencia": "Jurisprudência",
+    "6_data": "Dados e inteligência",
+    "7_tools": "Ferramentas e checklists",
+    "8_studies": "Estudos e análises"
+  },
+  "topics": [
+    {
+      "topic_id": "intel-selecao",
+      "title": "Inteligência e seleção de oportunidades",
+      "pillar": "inteligencia-operacao",
+      "cluster": "pre-licitacao",
+      "layer": 6,
+      "intent": "informational",
+      "question": "Como a construtora deve tratar inteligência e seleção de oportunidades em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "TOFU-MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": true,
+        "hooks": [
+          "distribuição por segmento e UF",
+          "faixas de valor observadas",
+          "concentração de fornecedores"
+        ],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
+        "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+        "/inteligencia/precos/edificacoes-publicas-rs/",
+        "/inteligencia/precos/edificacoes-publicas-mg/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
+        "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+        "/inteligencia/precos/edificacoes-publicas-rs/",
+        "/inteligencia/precos/edificacoes-publicas-mg/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+          "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
+          "/inteligencia/precos/manutencao-predial-engenharia-rs/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 44,
+      "content_type": "data_intelligence",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "go-no-go",
+      "title": "Decisão go/no-go",
+      "pillar": "inteligencia-operacao",
+      "cluster": "pre-licitacao",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar decisão go/no-go em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": true,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/demora-decisao-administracao-contrato-obra/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/demora-decisao-administracao-contrato-obra/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "leitura-impugnacao",
+      "title": "Leitura e impugnação de edital",
+      "pillar": "licitacao",
+      "cluster": "edital",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar leitura e impugnação de edital em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "/conteudos/clausula-matriz-risco-abusiva-edital/",
+        "/conteudos/analise-edital-obra-publica-construtora/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "/conteudos/clausula-matriz-risco-abusiva-edital/",
+        "/conteudos/analise-edital-obra-publica-construtora/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+          "/conteudos/orcamento-incompleto-edital-obra-publica/",
+          "/conteudos/clausula-matriz-risco-abusiva-edital/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "habilitacao",
+      "title": "Habilitação",
+      "pillar": "licitacao",
+      "cluster": "habilitacao",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar habilitação em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/manutencao-habilitacao-contrato-publico/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/manutencao-habilitacao-contrato-publico/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "qualificacao-tecnica",
+      "title": "Qualificação técnica",
+      "pillar": "licitacao",
+      "cluster": "habilitacao",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar qualificação técnica em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/defesa-tecnica-contratos-publicos/",
+        "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/visita-tecnica-licitacao-obra-publica/",
+          "/conteudos/recurso-inabilitacao-tecnica-licitacao/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "acervo-cat",
+      "title": "Acervo, CAT e atestados",
+      "pillar": "licitacao",
+      "cluster": "habilitacao",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar acervo, cat e atestados em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/acervo-cat-e-atestados/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "consorcios",
+      "title": "Consórcios",
+      "pillar": "licitacao",
+      "cluster": "estrutura",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar consórcios em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "bid-room-licitacoes-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+        "/conteudos/impedimento-de-licitar-construtora/",
+        "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+        "/conteudos/erros-comunicacao-contrato-publico-construtora/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+        "/conteudos/impedimento-de-licitar-construtora/",
+        "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+        "/conteudos/erros-comunicacao-contrato-publico-construtora/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/bid-room-licitacoes-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+          "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+          "/conteudos/impedimento-de-licitar-construtora/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "orcamento",
+      "title": "Orçamento",
+      "pillar": "preco-margem",
+      "cluster": "orcamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar orçamento em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": true,
+        "hooks": [
+          "distribuição por segmento e UF",
+          "faixas de valor observadas",
+          "concentração de fornecedores"
+        ],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/radar/saneamento-hidraulica-sc/",
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+        "/conteudos/pagamento-contrato-publico-certidao-vencida/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+        "/conteudos/pagamento-contrato-publico-certidao-vencida/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/radar/saneamento-hidraulica-sc/",
+          "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+          "/inteligencia/cenarios/inconsistencia-orcamento-edital/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "sinapi",
+      "title": "SINAPI",
+      "pillar": "preco-margem",
+      "cluster": "referencias",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar sinapi em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/conteudos/produtividade-sinapi-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/conteudos/produtividade-sinapi-obra-publica/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+          "/conteudos/sinapi-ou-sicro-obra-publica/",
+          "/conteudos/sinapi-desonerado-nao-desonerado/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "sicro",
+      "title": "SICRO",
+      "pillar": "preco-margem",
+      "cluster": "referencias",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar sicro em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+          "/conteudos/sinapi-ou-sicro-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "bdi",
+      "title": "BDI",
+      "pillar": "preco-margem",
+      "cluster": "orcamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar bdi em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/bdi/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "encargos",
+      "title": "Encargos",
+      "pillar": "preco-margem",
+      "cluster": "orcamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar encargos em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/encargos/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "custos-diretos-indiretos",
+      "title": "Custos diretos e indiretos",
+      "pillar": "preco-margem",
+      "cluster": "orcamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar custos diretos e indiretos em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/custos-indiretos-atraso-administracao-obra/",
+        "/conteudos/prova-custos-adicionais-obra-publica/",
+        "/conteudos/ordem-paralisacao-obra-publica-custos/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/prova-custos-adicionais-obra-publica/",
+        "/conteudos/ordem-paralisacao-obra-publica-custos/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/custos-indiretos-atraso-administracao-obra/",
+          "/conteudos/prova-custos-adicionais-obra-publica/",
+          "/conteudos/ordem-paralisacao-obra-publica-custos/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "inexequibilidade",
+      "title": "Inexequibilidade",
+      "pillar": "preco-margem",
+      "cluster": "proposta",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar inexequibilidade em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/inexequibilidade/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "proposta",
+      "title": "Proposta",
+      "pillar": "licitacao",
+      "cluster": "proposta",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar proposta em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+        "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+        "/conteudos/garantia-proposta-licitacao-obra/",
+        "/conteudos/desconto-da-proposta-em-item-novo-aditivo/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+        "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+        "/conteudos/garantia-proposta-licitacao-obra/",
+        "/conteudos/desconto-da-proposta-em-item-novo-aditivo/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/auditoria-orcamento-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+          "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+          "/conteudos/preco-unitario-acima-referencia-proposta-global/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "cronograma",
+      "title": "Cronograma",
+      "pillar": "execucao",
+      "cluster": "planejamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar cronograma em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/reprogramacao-cronograma-obra-publica/",
+        "/conteudos/cronograma-fisico-financeiro-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/cronograma-fisico-financeiro-obra-publica/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/reprogramacao-cronograma-obra-publica/",
+          "/conteudos/cronograma-fisico-financeiro-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "matriz-riscos",
+      "title": "Matriz de riscos",
+      "pillar": "contratos",
+      "cluster": "riscos",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar matriz de riscos em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "/conteudos/matriz-de-riscos-obra-publica/",
+        "/conteudos/clausula-matriz-risco-abusiva-edital/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/matriz-de-riscos-obra-publica/",
+        "/conteudos/clausula-matriz-risco-abusiva-edital/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+          "/conteudos/matriz-de-riscos-obra-publica/",
+          "/conteudos/clausula-matriz-risco-abusiva-edital/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "contratos-administrativos",
+      "title": "Contratos administrativos",
+      "pillar": "contratos",
+      "cluster": "regime",
+      "layer": 2,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar contratos administrativos em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diretoria-b2g",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+        "/jurisprudencia-contratos-obras/",
+        "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "/guias-contratos-obras/responder-notificacao-atraso/",
+        "/guias-contratos-obras/documentos-pedido-reequilibrio/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/jurisprudencia-contratos-obras/",
+        "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "/guias-contratos-obras/responder-notificacao-atraso/",
+        "/guias-contratos-obras/documentos-pedido-reequilibrio/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/diretoria-b2g/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+          "/jurisprudencia-contratos-obras/",
+          "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 80,
+      "content_type": "pillar",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "ordem-servico",
+      "title": "Ordem de serviço",
+      "pillar": "execucao",
+      "cluster": "inicio",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar ordem de serviço em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+        "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "/conteudos/servico-executado-sem-termo-aditivo/",
+        "/conteudos/servico-executado-sem-projeto-aprovado/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "/conteudos/servico-executado-sem-termo-aditivo/",
+        "/conteudos/servico-executado-sem-projeto-aprovado/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+          "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+          "/conteudos/servico-nao-previsto-na-planilha-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "mobilizacao",
+      "title": "Mobilização",
+      "pillar": "execucao",
+      "cluster": "inicio",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar mobilização em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "diario-obra",
+      "title": "Diário de obra",
+      "pillar": "execucao",
+      "cluster": "evidencias",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar diário de obra em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/reequilibrio-obras-publicas/",
+        "/medicoes-glosas-obras-publicas/",
+        "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/medicoes-glosas-obras-publicas/",
+        "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/reequilibrio-obras-publicas/",
+          "/medicoes-glosas-obras-publicas/",
+          "/lei-14133-obras/servico-executado-sem-termo-aditivo/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "fiscalizacao",
+      "title": "Fiscalização",
+      "pillar": "execucao",
+      "cluster": "relacao-admin",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar fiscalização em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/divergencia-diario-obra-fiscalizacao/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/divergencia-diario-obra-fiscalizacao/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "medicao",
+      "title": "Medição",
+      "pillar": "execucao",
+      "cluster": "medicao-pagamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar medição em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/medicoes-glosas-obras-publicas/",
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "/guias-contratos-obras/contestar-glosa-medicao/",
+        "/conteudos/prova-de-medicao-diario-de-obra-fotos/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "/guias-contratos-obras/contestar-glosa-medicao/",
+        "/conteudos/prova-de-medicao-diario-de-obra-fotos/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/medicoes-glosas-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/medicoes-glosas-obras-publicas/",
+          "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+          "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "glosa",
+      "title": "Glosa",
+      "pillar": "execucao",
+      "cluster": "medicao-pagamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar glosa em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/medicoes-glosas-obras-publicas/",
+        "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "/guias-contratos-obras/contestar-glosa-medicao/",
+        "/conteudos/glosa-por-qualidade-obra-publica/",
+        "/conteudos/glosa-de-medicao-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "/guias-contratos-obras/contestar-glosa-medicao/",
+        "/conteudos/glosa-por-qualidade-obra-publica/",
+        "/conteudos/glosa-de-medicao-obra-publica/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/medicoes-glosas-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/medicoes-glosas-obras-publicas/",
+          "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+          "/guias-contratos-obras/contestar-glosa-medicao/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "parcela-incontroversa",
+      "title": "Parcela incontroversa",
+      "pillar": "execucao",
+      "cluster": "medicao-pagamento",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar parcela incontroversa em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/medicoes-glosas-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+          "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "atraso-pagamento",
+      "title": "Atraso de pagamento",
+      "pillar": "execucao",
+      "cluster": "medicao-pagamento",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar atraso de pagamento em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+        "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "/lei-14133-obras/atraso-imputavel-administracao/",
+        "/guias-contratos-obras/responder-notificacao-atraso/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "/lei-14133-obras/atraso-imputavel-administracao/",
+        "/guias-contratos-obras/responder-notificacao-atraso/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/medicoes-glosas-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+          "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+          "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "atraso-administracao",
+      "title": "Atraso da Administração",
+      "pillar": "execucao",
+      "cluster": "prazos",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar atraso da administração em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/atraso-imputavel-administracao/",
+        "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+        "/conteudos/custos-indiretos-atraso-administracao-obra/",
+        "/conteudos/atraso-obra-culpa-administracao/",
+        "/guias-contratos-obras/responder-notificacao-atraso/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+        "/conteudos/custos-indiretos-atraso-administracao-obra/",
+        "/conteudos/atraso-obra-culpa-administracao/",
+        "/guias-contratos-obras/responder-notificacao-atraso/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/atrasos-prorrogacao-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/atraso-imputavel-administracao/",
+          "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+          "/conteudos/custos-indiretos-atraso-administracao-obra/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "atraso-contratada",
+      "title": "Atraso da contratada",
+      "pillar": "execucao",
+      "cluster": "prazos",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar atraso da contratada em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/atraso-imputavel-administracao/",
+        "/guias-contratos-obras/responder-notificacao-atraso/",
+        "/conteudos/resposta-notificacao-atraso-obra-publica/",
+        "/conteudos/multa-atraso-parcial-contrato-publico/",
+        "/conteudos/juros-atraso-pagamento-contrato-administrativo/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/guias-contratos-obras/responder-notificacao-atraso/",
+        "/conteudos/resposta-notificacao-atraso-obra-publica/",
+        "/conteudos/multa-atraso-parcial-contrato-publico/",
+        "/conteudos/juros-atraso-pagamento-contrato-administrativo/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/atrasos-prorrogacao-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/atraso-imputavel-administracao/",
+          "/guias-contratos-obras/responder-notificacao-atraso/",
+          "/conteudos/resposta-notificacao-atraso-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "aditivo",
+      "title": "Aditivo",
+      "pillar": "contratos",
+      "cluster": "alteracoes",
+      "layer": 2,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar aditivo em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "/lei-14133-obras/limite-25-50-aditivo-obra/",
+        "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "/guias-contratos-obras/checklist-pedido-aditivo/",
+        "/conteudos/servico-executado-sem-termo-aditivo/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/lei-14133-obras/limite-25-50-aditivo-obra/",
+        "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "/guias-contratos-obras/checklist-pedido-aditivo/",
+        "/conteudos/servico-executado-sem-termo-aditivo/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/aditivos-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+          "/lei-14133-obras/limite-25-50-aditivo-obra/",
+          "/inteligencia/cenarios/aditivos-e-risco-de-margem/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 80,
+      "content_type": "pillar",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "alteracao-qualitativa",
+      "title": "Alteração qualitativa",
+      "pillar": "contratos",
+      "cluster": "alteracoes",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar alteração qualitativa em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/art-124-alteracao-contratual-obra/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/aditivos-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/art-124-alteracao-contratual-obra/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "alteracao-quantitativa",
+      "title": "Alteração quantitativa",
+      "pillar": "contratos",
+      "cluster": "alteracoes",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar alteração quantitativa em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/art-124-alteracao-contratual-obra/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/aditivos-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/art-124-alteracao-contratual-obra/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "itens-novos",
+      "title": "Itens novos",
+      "pillar": "contratos",
+      "cluster": "alteracoes",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar itens novos em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/itens-novos/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/aditivos-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "reajuste",
+      "title": "Reajuste",
+      "pillar": "contratos",
+      "cluster": "equilibrio",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar reajuste em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+        "/conteudos/data-base-orcamento-reajuste-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+        "/conteudos/data-base-orcamento-reajuste-obra-publica/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/reequilibrio-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+          "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+          "/conteudos/data-base-orcamento-reajuste-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "repactuacao",
+      "title": "Repactuação",
+      "pillar": "contratos",
+      "cluster": "equilibrio",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar repactuação em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/reequilibrio-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+          "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "reequilibrio",
+      "title": "Reequilíbrio",
+      "pillar": "contratos",
+      "cluster": "equilibrio",
+      "layer": 2,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar reequilíbrio em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/reequilibrio-obras-publicas/",
+        "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
+        "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+        "/conteudos/reequilibrio-empreitada-preco-global/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
+        "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+        "/conteudos/reequilibrio-empreitada-preco-global/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/reequilibrio-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/reequilibrio-obras-publicas/",
+          "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+          "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 80,
+      "content_type": "pillar",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "prorrogacao",
+      "title": "Prorrogação",
+      "pillar": "execucao",
+      "cluster": "prazos",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar prorrogação em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+        "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+        "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/atrasos-prorrogacao-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+          "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+          "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "suspensao",
+      "title": "Suspensão",
+      "pillar": "execucao",
+      "cluster": "prazos",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar suspensão em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/suspensao-execucao-contrato-publico-contratado/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/atrasos-prorrogacao-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/suspensao-execucao-contrato-publico-contratado/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "paralisacao",
+      "title": "Paralisação",
+      "pillar": "execucao",
+      "cluster": "prazos",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar paralisação em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/ordem-paralisacao-obra-publica-custos/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/atrasos-prorrogacao-obras-publicas/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/ordem-paralisacao-obra-publica-custos/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "rescisao",
+      "title": "Rescisão",
+      "pillar": "contratos",
+      "cluster": "extincao",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar rescisão em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/rescisao-unilateral-contrato-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/rescisao-unilateral-contrato-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "extincao",
+      "title": "Extinção",
+      "pillar": "contratos",
+      "cluster": "extincao",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar extinção em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+        "/conteudos/extincao-contrato-culpa-administracao/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/extincao-contrato-culpa-administracao/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+          "/conteudos/extincao-contrato-culpa-administracao/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "sancoes",
+      "title": "Sanções",
+      "pillar": "defesa",
+      "cluster": "sancoes",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar sanções em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/san-es/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "multa",
+      "title": "Multa",
+      "pillar": "defesa",
+      "cluster": "sancoes",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar multa em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/multa-contrato-obra-publica-defesa/",
+        "/conteudos/multa-atraso-parcial-contrato-publico/",
+        "/conteudos/dosimetria-multa-contrato-administrativo/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/multa-atraso-parcial-contrato-publico/",
+        "/conteudos/dosimetria-multa-contrato-administrativo/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/multa-contrato-obra-publica-defesa/",
+          "/conteudos/multa-atraso-parcial-contrato-publico/",
+          "/conteudos/dosimetria-multa-contrato-administrativo/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "impedimento",
+      "title": "Impedimento",
+      "pillar": "defesa",
+      "cluster": "sancoes",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar impedimento em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/impedimento-de-licitar-construtora/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/impedimento-de-licitar-construtora/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "inidoneidade",
+      "title": "Declaração de inidoneidade",
+      "pillar": "defesa",
+      "cluster": "sancoes",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar declaração de inidoneidade em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/declara-o-de-inidoneidade/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "defesa-tecnica",
+      "title": "Defesa técnica",
+      "pillar": "defesa",
+      "cluster": "defesa",
+      "layer": 2,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar defesa técnica em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/defesa-tecnica-contratos-publicos/",
+        "/defesa-margem-contratos-publicos/",
+        "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "/conteudos/multa-contrato-obra-publica-defesa/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/defesa-margem-contratos-publicos/",
+        "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "/conteudos/multa-contrato-obra-publica-defesa/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/defesa-margem-contratos-publicos/",
+          "/conteudos/visita-tecnica-licitacao-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 80,
+      "content_type": "pillar",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "notificacoes",
+      "title": "Notificações",
+      "pillar": "defesa",
+      "cluster": "defesa",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar notificações em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/guias-contratos-obras/responder-notificacao-atraso/",
+        "/conteudos/resposta-notificacao-atraso-obra-publica/",
+        "/conteudos/notificacao-impacto-prazo-custo-obra/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/resposta-notificacao-atraso-obra-publica/",
+        "/conteudos/notificacao-impacto-prazo-custo-obra/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/guias-contratos-obras/responder-notificacao-atraso/",
+          "/conteudos/resposta-notificacao-atraso-obra-publica/",
+          "/conteudos/notificacao-impacto-prazo-custo-obra/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "recursos",
+      "title": "Recursos",
+      "pillar": "defesa",
+      "cluster": "defesa",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar recursos em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/recursos/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "contratacao-direta",
+      "title": "Contratação direta",
+      "pillar": "licitacao",
+      "cluster": "modalidades",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar contratação direta em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+        "/conteudos/subcontratacao-obra-publica-autorizacao/",
+        "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+        "/conteudos/contratacao-integrada-semi-integrada-obra/",
+        "/conteudos/consorcio-subcontratacao-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/subcontratacao-obra-publica-autorizacao/",
+        "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+        "/conteudos/contratacao-integrada-semi-integrada-obra/",
+        "/conteudos/consorcio-subcontratacao-obra-publica/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+          "/conteudos/subcontratacao-obra-publica-autorizacao/",
+          "/conteudos/extincao-contrato-obra-publica-pelo-contratado/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "dispensa",
+      "title": "Dispensa",
+      "pillar": "licitacao",
+      "cluster": "modalidades",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar dispensa em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/dispensa/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "inexigibilidade",
+      "title": "Inexigibilidade",
+      "pillar": "licitacao",
+      "cluster": "modalidades",
+      "layer": 4,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar inexigibilidade em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/inexigibilidade/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 46,
+      "content_type": "lei_aplicada",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "gestao-b2g",
+      "title": "Gestão B2G",
+      "pillar": "operacao-comercial",
+      "cluster": "governanca",
+      "layer": 1,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar gestão b2g em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "BOFU",
+      "service": "diretoria-b2g",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/gestao-contrato-obra-publica-indicadores/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diretoria-b2g/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/gestao-contrato-obra-publica-indicadores/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 85,
+      "content_type": "commercial",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "governanca-comercial",
+      "title": "Governança comercial",
+      "pillar": "operacao-comercial",
+      "cluster": "governanca",
+      "layer": 1,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar governança comercial em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "BOFU",
+      "service": "diretoria-b2g",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/governan-a-comercial/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diretoria-b2g/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 85,
+      "content_type": "commercial",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "operacao-licitacoes",
+      "title": "Operação de licitações",
+      "pillar": "operacao-comercial",
+      "cluster": "operacao",
+      "layer": 1,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar operação de licitações em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "BOFU",
+      "service": "bid-room-licitacoes-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": true,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+        "/diagnostico-pre-licitacao/",
+        "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "/conteudos/orcamento-sigiloso-licitacao-obra/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/diagnostico-pre-licitacao/",
+        "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "/conteudos/orcamento-sigiloso-licitacao-obra/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/bid-room-licitacoes-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+          "/diagnostico-pre-licitacao/",
+          "/conteudos/visita-tecnica-licitacao-obra-publica/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 85,
+      "content_type": "commercial",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "intel-mercado-publico",
+      "title": "Inteligência de mercado público",
+      "pillar": "inteligencia-operacao",
+      "cluster": "dados",
+      "layer": 6,
+      "intent": "informational",
+      "question": "Como a construtora deve tratar inteligência de mercado público em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "TOFU-MOFU",
+      "service": "diagnostico-b2g-360",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": true,
+        "hooks": [
+          "distribuição por segmento e UF",
+          "faixas de valor observadas",
+          "concentração de fornecedores"
+        ],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "/inteligencia/mercados/edificacoes-publicas-mg/",
+        "/inteligencia/mercados/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "/inteligencia/mercados/edificacoes-publicas-mg/",
+        "/inteligencia/mercados/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/diagnostico-b2g-360/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+          "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+          "/inteligencia/mercados/edificacoes-publicas-rs/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 44,
+      "content_type": "data_intelligence",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "controle-margem",
+      "title": "Controle de margem",
+      "pillar": "preco-margem",
+      "cluster": "margem",
+      "layer": 1,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar controle de margem em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "BOFU",
+      "service": "defesa-margem-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": true,
+        "hooks": [
+          "distribuição por segmento e UF",
+          "faixas de valor observadas",
+          "concentração de fornecedores"
+        ],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "/defesa-margem-contratos-publicos/",
+        "/conteudos/controle-mudancas-obra-publica/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "/defesa-margem-contratos-publicos/",
+        "/conteudos/controle-mudancas-obra-publica/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/defesa-margem-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+          "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+          "/defesa-margem-contratos-publicos/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 85,
+      "content_type": "commercial",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "licoes-aprendidas",
+      "title": "Lições aprendidas",
+      "pillar": "operacao-comercial",
+      "cluster": "melhoria",
+      "layer": 8,
+      "intent": "informational",
+      "question": "Como a construtora deve tratar lições aprendidas em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "TOFU",
+      "service": "diretoria-b2g",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [],
+      "recommended_new_page": "/conteudos/li-es-aprendidas/",
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/diretoria-b2g/",
+          "/conteudos/"
+        ],
+        "children": [],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 42,
+      "content_type": "study",
+      "status": "RECOMMENDED_NEW"
+    },
+    {
+      "topic_id": "gestao-documental",
+      "title": "Gestão documental",
+      "pillar": "execucao",
+      "cluster": "evidencias",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar gestão documental em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/gestao-contrato-obra-publica-indicadores/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/gestao-contrato-obra-publica-indicadores/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "gestao-evidencias",
+      "title": "Gestão de evidências",
+      "pillar": "execucao",
+      "cluster": "evidencias",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar gestão de evidências em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/gestao-contrato-obra-publica-indicadores/",
+        "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/gestao-contrato-obra-publica-indicadores/",
+          "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "engenharia-juridico",
+      "title": "Relação entre engenharia e jurídico",
+      "pillar": "defesa",
+      "cluster": "interdisciplinar",
+      "layer": 8,
+      "intent": "informational",
+      "question": "Como a construtora deve tratar relação entre engenharia e jurídico em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/medicoes-glosas-obras-publicas/",
+        "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+        "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+        "/conteudos/consultoria-b2g-engenharia-construtora/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+        "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+        "/conteudos/consultoria-b2g-engenharia-construtora/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/defesa-tecnica-contratos-publicos/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/medicoes-glosas-obras-publicas/",
+          "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+          "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 42,
+      "content_type": "study",
+      "status": "MAPPED_EXISTING"
+    },
+    {
+      "topic_id": "relacao-fiscalizacao",
+      "title": "Relacionamento técnico com fiscalização",
+      "pillar": "execucao",
+      "cluster": "relacao-admin",
+      "layer": 3,
+      "intent": "commercial_investigation",
+      "question": "Como a construtora deve tratar relacionamento técnico com fiscalização em obras públicas sob a Lei 14.133?",
+      "icp": "Construtoras e engenharias que operam licitações e contratos de obras públicas",
+      "funnel_stage": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "official_sources": [
+        {
+          "name": "Lei nº 14.133/2021",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+        },
+        {
+          "name": "PNCP",
+          "url": "https://pncp.gov.br/"
+        },
+        {
+          "name": "TCU",
+          "url": "https://portal.tcu.gov.br/"
+        }
+      ],
+      "datalake_enrichment": {
+        "possible": false,
+        "hooks": [],
+        "required_fields_when_used": [
+          "cut_date",
+          "N",
+          "source",
+          "methodology",
+          "limitations",
+          "related_data_page"
+        ]
+      },
+      "existing_pages": [
+        "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+        "/conteudos/pleito-tecnico-obra-publica/",
+        "/conteudos/divergencia-diario-obra-fiscalizacao/"
+      ],
+      "recommended_new_page": null,
+      "overlap": [
+        "/conteudos/pleito-tecnico-obra-publica/",
+        "/conteudos/divergencia-diario-obra-fiscalizacao/"
+      ],
+      "internal_links": {
+        "parents": [
+          "/acompanhamento-contratos-obras/",
+          "/conteudos/"
+        ],
+        "children": [
+          "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+          "/conteudos/pleito-tecnico-obra-publica/",
+          "/conteudos/divergencia-diario-obra-fiscalizacao/"
+        ],
+        "data_related": [
+          "/inteligencia/",
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "priority": 75,
+      "content_type": "operational_guide",
+      "status": "MAPPED_EXISTING"
+    }
+  ],
+  "lifecycle": [
+    "DRAFT",
+    "LEGAL_SOURCE_VALIDATED",
+    "DATA_EVIDENCE_VALIDATED",
+    "TECHNICAL_REVIEWED",
+    "EDITORIAL_REVIEWED",
+    "READY_FOR_HUMAN_APPROVAL",
+    "HUMAN_APPROVED",
+    "INDEXABLE",
+    "MONITORED",
+    "REFRESH_REQUIRED",
+    "EXPIRED"
+  ],
+  "rules": [
+    "Automation never stamps HUMAN_APPROVED",
+    "Material change invalidates approval",
+    "Broken sources block indexation",
+    "Stale data blocks data pages",
+    "Cannibal content blocks"
+  ]
+}

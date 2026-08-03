@@ -1,0 +1,606 @@
+{
+  "generated_at": "2026-08-03T01:27:50Z",
+  "n": 100,
+  "briefs": [
+    {
+      "brief_id": "brief-001-f37c2e",
+      "intention": "Como resolver aceleracao obra publica custo adicional",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-002-b5f596",
+      "intention": "Como resolver aditivo empreitada por preco global",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-003-bb4dc5",
+      "intention": "Como resolver aditivo qualitativo quantitativo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-004-02a11e",
+      "intention": "Como resolver administracao local orcamento obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-005-b9288d",
+      "intention": "Como resolver administracao local prolongada obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-006-fd16aa",
+      "intention": "Como resolver analise edital obra publica construtora",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-007-a9e8b3",
+      "intention": "Como resolver art 124 alteracao contratual obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-008-0a9114",
+      "intention": "Como resolver ata reuniao ordem servico obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-009-873b89",
+      "intention": "Como resolver atraso imputavel administracao",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-010-8c1d7b",
+      "intention": "Como resolver atraso na medicao obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-011-127f41",
+      "intention": "Como resolver atraso obra culpa administracao",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-012-56aae6",
+      "intention": "Como resolver atraso pagamento contrato publico suspender",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-013-c22800",
+      "intention": "Como resolver atraso projeto executivo obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-014-1aa4ef",
+      "intention": "Como resolver auditoria contrato obra publica mensal",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-015-05d721",
+      "intention": "Como resolver aumento material reequilibrio contrato publico",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-016-ea19fa",
+      "intention": "Como resolver bdi diferenciado obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-017-e0f477",
+      "intention": "Como resolver bdi obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-018-1b11c0",
+      "intention": "Como resolver calculo reequilibrio economico financeiro",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-019-6acb01",
+      "intention": "Como resolver capacidade tecnica operacional profissional licitacao",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-020-8c3552",
+      "intention": "Como resolver checklist pedido aditivo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-021-da2aac",
+      "intention": "Como resolver chuva prorrogacao prazo obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-022-a55bfc",
+      "intention": "Como resolver clausula matriz risco abusiva edital",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-023-bfa2ea",
+      "intention": "Como resolver como provar atraso obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-024-000f7d",
+      "intention": "Como resolver compensacao acrescimo supressao aditivo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-025-cb6afc",
+      "intention": "Como resolver composicao propria preco obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-026-1da812",
+      "intention": "Como resolver comprovacao exequibilidade proposta obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-027-673a90",
+      "intention": "Como resolver comunicacao fiscal contrato obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-028-e57748",
+      "intention": "Como resolver consorcio subcontratacao obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-029-05af3d",
+      "intention": "Como resolver consultoria b2g engenharia construtora",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-030-ec2003",
+      "intention": "Como resolver consultoria contrato obra publica construtora",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-031-e7619a",
+      "intention": "Como resolver contestar glosa medicao",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-032-80fe32",
+      "intention": "Como resolver contratacao integrada semi integrada obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-033-1d6e42",
+      "intention": "Como resolver controle mudancas obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-034-112fb6",
+      "intention": "Como resolver cotacao mercado orcamento obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-035-a09372",
+      "intention": "Como resolver criterio de medicao nao previsto contrato",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-036-fde211",
+      "intention": "Como resolver cronograma fisico financeiro obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-037-5b2054",
+      "intention": "Como resolver cronologia contrato obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-038-717d50",
+      "intention": "Como resolver culpa sancao atraso contrato publico",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-039-89dfa8",
+      "intention": "Como resolver curva abc orcamento obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-040-2e00f4",
+      "intention": "Como resolver curva abc reequilibrio contrato",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-041-407320",
+      "intention": "Como resolver custos indiretos atraso administracao obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-042-e8e739",
+      "intention": "Como resolver data base orcamento reajuste obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-043-f43895",
+      "intention": "Como resolver defesa processo sancionador contrato publico",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-044-69cdf5",
+      "intention": "Como resolver demolicao nao prevista obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-045-a7ebaa",
+      "intention": "Como resolver demora decisao administracao contrato obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-046-30a7c2",
+      "intention": "Como resolver desagio licitacao obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-047-d39021",
+      "intention": "Como resolver desconto da proposta em item novo aditivo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-048-194732",
+      "intention": "Como resolver diario de obra pleito contrato publico",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-049-257171",
+      "intention": "Como resolver divergencia diario obra fiscalizacao",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-050-cf0c87",
+      "intention": "Como resolver divergencia quantitativo medicao as built",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-051-5dbde9",
+      "intention": "Como resolver documentos pedido reequilibrio",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-052-1dae9c",
+      "intention": "Como resolver documentos reequilibrio obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-053-61524b",
+      "intention": "Como resolver dosimetria multa contrato administrativo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-054-9c462a",
+      "intention": "Como resolver empreitada preco global preco unitario",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-055-32c06f",
+      "intention": "Como resolver erro de projeto gera aditivo obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-056-55ebaa",
+      "intention": "Como resolver erros comunicacao contrato publico construtora",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-057-a138e4",
+      "intention": "Como resolver evento previsivel consequencias incalculaveis reequilibrio",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-058-9b1e81",
+      "intention": "Como resolver extincao contrato culpa administracao",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-059-f27e9c",
+      "intention": "Como resolver extincao contrato obra publica pelo contratado",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-060-ff092a",
+      "intention": "Como resolver fiscal mandou executar sem aditivo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-061-dd3dc0",
+      "intention": "Como resolver fiscal nao assina medicao obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-062-02289a",
+      "intention": "Como resolver frente de servico nao liberada obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-063-600d1c",
+      "intention": "Como resolver garantia proposta licitacao obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-064-89655d",
+      "intention": "Como resolver gestao contrato obra publica indicadores",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-065-990af4",
+      "intention": "Como resolver glosa de medicao obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-066-a19925",
+      "intention": "Como resolver glosa por qualidade obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-067-c8f513",
+      "intention": "Como resolver impedimento de licitar construtora",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-068-6584cf",
+      "intention": "Como resolver indenizacao servico extracontratual obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-069-df53a5",
+      "intention": "Como resolver interferencia concessionaria obra publica atraso",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-070-07a4e4",
+      "intention": "Como resolver jogo de planilha aditivo obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-071-e4080f",
+      "intention": "Como resolver juros atraso pagamento contrato administrativo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-072-de0d6b",
+      "intention": "Como resolver limite 25 50 aditivo obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-073-59cc0b",
+      "intention": "Como resolver limite aditivo 25 50 obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-074-844372",
+      "intention": "Como resolver manutencao habilitacao contrato publico",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-075-80a7c6",
+      "intention": "Como resolver matriz de riscos obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-076-94cdf1",
+      "intention": "Como resolver matriz de riscos reequilibrio economico financeiro",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-077-1ce74f",
+      "intention": "Como resolver medicao de obra publica rejeitada",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-078-4ad9cc",
+      "intention": "Como resolver medicao por evento obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-079-82f228",
+      "intention": "Como resolver mobilizacao desmobilizacao orcamento obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-080-2a088f",
+      "intention": "Como resolver mudanca metodo construtivo obra publica aditivo",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-081-eaac39",
+      "intention": "Como resolver multa atraso parcial contrato publico",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-082-29c290",
+      "intention": "Como resolver multa contrato obra publica defesa",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-083-2107af",
+      "intention": "Como resolver notas fiscais reequilibrio contrato",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-084-fa77cb",
+      "intention": "Como resolver notificacao impacto prazo custo obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-085-e31a60",
+      "intention": "Como resolver orcamento incompleto edital obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-086-766d44",
+      "intention": "Como resolver orcamento sigiloso licitacao obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-087-6c0428",
+      "intention": "Como resolver ordem paralisacao obra publica custos",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-088-ff2a56",
+      "intention": "Como resolver pagamento contrato publico certidao vencida",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-089-80d202",
+      "intention": "Como resolver pagamento parcial etapa empreitada global",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-090-c54787",
+      "intention": "Como resolver parcela incontroversa medicao contrato publico",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-091-6c57ee",
+      "intention": "Como resolver parcela incontroversa medicao pagamento",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-092-d77bcc",
+      "intention": "Como resolver pedido de reequilibrio negado",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-093-939acd",
+      "intention": "Como resolver pedido prorrogacao prazo antes vencimento",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-094-29e097",
+      "intention": "Como resolver plano recuperacao obra atrasada",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-095-f045b7",
+      "intention": "Como resolver pleito tecnico obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-096-686abd",
+      "intention": "Como resolver prazo vigencia prazo execucao contrato obra",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-097-bad51e",
+      "intention": "Como resolver preco de item novo aditivo obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-098-b27f1e",
+      "intention": "Como resolver preco item novo desconto proposta",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-099-663db8",
+      "intention": "Como resolver preco unitario acima referencia proposta global",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    },
+    {
+      "brief_id": "brief-100-cf85a3",
+      "intention": "Como resolver produtividade sinapi obra publica",
+      "status": "BRIEF_COMPLETE",
+      "service": "diagnostico-b2g-360"
+    }
+  ]
+}

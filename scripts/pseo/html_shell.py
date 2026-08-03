@@ -441,6 +441,12 @@ def scrub_public_limitation(text: str | None) -> str:
     s = _INTERNAL_FIELD_RE.sub("critério interno omitido", s)
     s = s.replace("problema→serviço", "problema e serviço")
     s = re.sub(r"\bdatalake\b", "base pública de contratos", s, flags=re.I)
+    try:
+        from scripts.pseo.places import fix_place_locatives
+
+        s = fix_place_locatives(s)
+    except Exception:
+        pass
     return s
 
 

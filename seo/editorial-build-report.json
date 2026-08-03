@@ -1,36 +1,48 @@
 {
   "ok": true,
-  "generated_at": "2026-08-02T19:09:19Z",
+  "generated_at": "2026-08-03T04:17:22Z",
   "page_defs": 12,
-  "indexable_count": 0,
-  "indexable_urls": [],
+  "indexable_count": 11,
+  "indexable_urls": [
+    "/guias-contratos-obras/checklist-pedido-aditivo/",
+    "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+    "/guias-contratos-obras/contestar-glosa-medicao/",
+    "/guias-contratos-obras/responder-notificacao-atraso/",
+    "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+    "/lei-14133-obras/atraso-imputavel-administracao/",
+    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+    "/lei-14133-obras/limite-25-50-aditivo-obra/",
+    "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+    "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+    "/lei-14133-obras/servico-executado-sem-termo-aditivo/"
+  ],
   "revoked_non_human_approvals": 0,
   "results": [
     {
       "page_id": "guia-checklist-aditivo",
       "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "guia-docs-reequilibrio",
       "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "guia-glosa",
       "url": "/guias-contratos-obras/contestar-glosa-medicao/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "guia-notificacao-atraso",
       "url": "/guias-contratos-obras/responder-notificacao-atraso/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
@@ -46,76 +58,64 @@
     {
       "page_id": "lei-art124-alteracao-obra",
       "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "lei-atraso-administracao",
       "url": "/lei-14133-obras/atraso-imputavel-administracao/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "lei-item-novo-desconto",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "lei-parcela-incontroversa",
       "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "lei-reequilibrio-reajuste",
       "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     },
     {
       "page_id": "lei-servico-sem-aditivo",
       "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "gate_ok": true,
       "issues": []
     }
   ],
   "sitemap_counts": {
-    "editorial": 0,
+    "editorial": 13,
     "jurisprudencia": 0,
     "inteligencia_segment": 0
   },
   "sitemap_issues": [],
-  "awaiting_human_approval": [
-    "/guias-contratos-obras/checklist-pedido-aditivo/",
-    "/guias-contratos-obras/documentos-pedido-reequilibrio/",
-    "/guias-contratos-obras/contestar-glosa-medicao/",
-    "/guias-contratos-obras/responder-notificacao-atraso/",
-    "/lei-14133-obras/art-124-alteracao-contratual-obra/",
-    "/lei-14133-obras/atraso-imputavel-administracao/",
-    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-    "/lei-14133-obras/limite-25-50-aditivo-obra/",
-    "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
-    "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
-    "/lei-14133-obras/servico-executado-sem-termo-aditivo/"
-  ],
+  "awaiting_human_approval": [],
   "rejected": [
     "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
   ],
-  "terminal_hint": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "terminal_hint": "PARTIAL_INDEXABLE",
   "fail_closed_intelligence_publishable": true,
   "note": "Automated build never sets HUMAN_APPROVED. Use: python3 scripts/editorial/approve_cli.py --reviewer NAME --page-id ID"
 }

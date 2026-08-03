@@ -1,0 +1,128 @@
+{
+  "artifact": "FINAL-INBOUND-SEO-ENGINE",
+  "schema_version": "1.1.0",
+  "terminal_status": "READY_FOR_TIAGO_APPROVAL",
+  "generated_at": "2026-08-03T03:37:16Z",
+  "summary": {
+    "human_approved_pages": 0,
+    "indexable_pages": 0,
+    "auto_human_approved": false,
+    "gates_lowered": false,
+    "wave1_all_html_exists": true,
+    "wave1_n": 40,
+    "wave1_types": {
+      "market": 12,
+      "agency": 8,
+      "radar": 3,
+      "competition": 6,
+      "price": 8,
+      "problem_service": 3
+    },
+    "wave1_archetypes_n": 6,
+    "wave1_phantom_urls": 0
+  },
+  "datalake": {
+    "proof_status": "FULL_DATALAKE_UTILIZED",
+    "contracts_read": 4479442,
+    "ufs": 27,
+    "stream_dataset_hash": "50f92b7c7f23678a7a46a211de8b9a4efc3028494c7a25d19ac0f7cb35ccf32a",
+    "export_dataset_hash": "09659ca1db6bdcbe7d821a60fbe8cde21be551f15da38a9f53920c4899e8ac81",
+    "peak_rss_mb": 73.69,
+    "runtime_seconds": 740.601
+  },
+  "candidate_universe": {
+    "n": 2399,
+    "families": {
+      "A": 203,
+      "B": 1218,
+      "C": 503,
+      "D": 154,
+      "E": 10,
+      "F": 8,
+      "G": 220,
+      "H": 83
+    },
+    "unknown_archetype_candidates": 0,
+    "wave1_bound_html": true
+  },
+  "wave1_package": {
+    "path": "data/pseo/WAVE1-PACKAGE.json",
+    "approval_center": "docs/review/TIAGO-SEO-APPROVAL-CENTER.html",
+    "n": 40,
+    "all_html_exists": true,
+    "phantom_urls": 0,
+    "type_counts": {
+      "market": 12,
+      "agency": 8,
+      "radar": 3,
+      "competition": 6,
+      "price": 8,
+      "problem_service": 3
+    },
+    "archetypes": [
+      "Saneamento e hidr\u00e1ulica",
+      "Servi\u00e7os t\u00e9cnicos \u2014 fase preparat\u00f3ria",
+      "edificacoes-publicas",
+      "manutencao-predial-engenharia",
+      "multi",
+      "pavimentacao-infraestrutura-viaria"
+    ]
+  },
+  "link_graph": {
+    "ok": true,
+    "n_wave1_review_orphans": 0,
+    "n_editorial_review_orphans": 0,
+    "n_review_package_orphans": 0,
+    "n_intended_orphans": 0,
+    "editorial_review_urls": 11,
+    "wave1_review_urls": 40
+  },
+  "problem_service_evidence_kind": [
+    "normative_editorial",
+    "normative_editorial",
+    "normative_editorial",
+    "normative_editorial",
+    "normative_editorial"
+  ],
+  "gates": {
+    "pseo_audit": "EXIT:0",
+    "pseo_editorial": "EXIT:0",
+    "pseo_verify_release": "EXIT:0",
+    "editorial_build": "EXIT:0",
+    "editorial_test": "EXIT:0",
+    "test_design": "EXIT:0",
+    "test_copy": "EXIT:0",
+    "test_ui": "EXIT:0",
+    "test_redirects": "EXIT:0",
+    "audit_axe": "EXIT:0",
+    "build_site": "EXIT:0",
+    "pseo_validate": "EXIT:0",
+    "pseo_test_full": "97 passed, 2 skipped EXIT:0",
+    "evidence_dir": "implementer/gates/"
+  },
+  "blockers_remaining": [
+    {
+      "id": "HUMAN_APPROVAL",
+      "action": "Tiago reviews Approval Center + Wave1 package, then approve_wave1_tiago.sh"
+    },
+    {
+      "id": "GSC_OWNER",
+      "action": "After deploy: docs/seo/GSC-OWNER-ACTIONS.md"
+    }
+  ],
+  "why_not_complete": [
+    "0 HUMAN_APPROVED by design",
+    "Empty indexable sitemaps until approval",
+    "GSC unauthenticated"
+  ],
+  "skeptic_remediation": {
+    "wave1_phantom_urls_fixed": true,
+    "discover_url_scheme_aligned": true,
+    "evidence_kind_set": true,
+    "editorial_hub_children_linked": true,
+    "homepage_to_guias_lei_wired": true,
+    "link_graph_editorial_and_wave1_orphans_zero": true,
+    "section22_logs_captured": true,
+    "full_pseo_suite_green": true
+  }
+}

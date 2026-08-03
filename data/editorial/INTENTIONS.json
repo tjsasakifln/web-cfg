@@ -1,0 +1,3004 @@
+{
+  "generated_at": "2026-08-03T01:27:50Z",
+  "n_intentions": 338,
+  "n_briefs": 100,
+  "n_topics": 60,
+  "intentions": [
+    {
+      "intention_id": "int-1f55faad0a",
+      "intention": "Como a construtora deve tratar inteligência e seleção de oportunidades em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-intelig-ncia-e-sele-o-de-oportunidades-em-obras-p",
+      "topic_id": "intel-selecao",
+      "funnel": "TOFU-MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-a4a081c9d7",
+      "intention": "Checklist prático de inteligência e seleção de oportunidades em obra pública",
+      "slug": "checklist-pr-tico-de-intelig-ncia-e-sele-o-de-oportunidades-em-obra-p-blica",
+      "topic_id": "intel-selecao",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-66f4360c89",
+      "intention": "Erros comuns em inteligência e seleção de oportunidades sob a Lei 14.133",
+      "slug": "erros-comuns-em-intelig-ncia-e-sele-o-de-oportunidades-sob-a-lei-14-133",
+      "topic_id": "intel-selecao",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-3fa16ae2ff",
+      "intention": "Como a construtora deve tratar decisão go/no-go em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-decis-o-go-no-go-em-obras-p-blicas-sob-a-lei-14-1",
+      "topic_id": "go-no-go",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-186efe3adb",
+      "intention": "Checklist prático de decisão go/no-go em obra pública",
+      "slug": "checklist-pr-tico-de-decis-o-go-no-go-em-obra-p-blica",
+      "topic_id": "go-no-go",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-c64fd85737",
+      "intention": "Erros comuns em decisão go/no-go sob a Lei 14.133",
+      "slug": "erros-comuns-em-decis-o-go-no-go-sob-a-lei-14-133",
+      "topic_id": "go-no-go",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-df05f6bf81",
+      "intention": "Como a construtora deve tratar leitura e impugnação de edital em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-leitura-e-impugna-o-de-edital-em-obras-p-blicas-s",
+      "topic_id": "leitura-impugnacao",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-c1aa32d066",
+      "intention": "Checklist prático de leitura e impugnação de edital em obra pública",
+      "slug": "checklist-pr-tico-de-leitura-e-impugna-o-de-edital-em-obra-p-blica",
+      "topic_id": "leitura-impugnacao",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-aecabbc7ba",
+      "intention": "Erros comuns em leitura e impugnação de edital sob a Lei 14.133",
+      "slug": "erros-comuns-em-leitura-e-impugna-o-de-edital-sob-a-lei-14-133",
+      "topic_id": "leitura-impugnacao",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-4b396f6828",
+      "intention": "Como a construtora deve tratar habilitação em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-habilita-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "habilitacao",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-258443fda7",
+      "intention": "Checklist prático de habilitação em obra pública",
+      "slug": "checklist-pr-tico-de-habilita-o-em-obra-p-blica",
+      "topic_id": "habilitacao",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-561550a405",
+      "intention": "Erros comuns em habilitação sob a Lei 14.133",
+      "slug": "erros-comuns-em-habilita-o-sob-a-lei-14-133",
+      "topic_id": "habilitacao",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-5f50416294",
+      "intention": "Como a construtora deve tratar qualificação técnica em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-qualifica-o-t-cnica-em-obras-p-blicas-sob-a-lei-1",
+      "topic_id": "qualificacao-tecnica",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-e24e63ebf2",
+      "intention": "Checklist prático de qualificação técnica em obra pública",
+      "slug": "checklist-pr-tico-de-qualifica-o-t-cnica-em-obra-p-blica",
+      "topic_id": "qualificacao-tecnica",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-74333a3a88",
+      "intention": "Erros comuns em qualificação técnica sob a Lei 14.133",
+      "slug": "erros-comuns-em-qualifica-o-t-cnica-sob-a-lei-14-133",
+      "topic_id": "qualificacao-tecnica",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-865b7e8f76",
+      "intention": "Como a construtora deve tratar acervo, cat e atestados em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-acervo-cat-e-atestados-em-obras-p-blicas-sob-a-le",
+      "topic_id": "acervo-cat",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-6eecc9d26f",
+      "intention": "Checklist prático de acervo, cat e atestados em obra pública",
+      "slug": "checklist-pr-tico-de-acervo-cat-e-atestados-em-obra-p-blica",
+      "topic_id": "acervo-cat",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-7afc803e0d",
+      "intention": "Erros comuns em acervo, cat e atestados sob a Lei 14.133",
+      "slug": "erros-comuns-em-acervo-cat-e-atestados-sob-a-lei-14-133",
+      "topic_id": "acervo-cat",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-287eb2549f",
+      "intention": "Como a construtora deve tratar consórcios em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-cons-rcios-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "consorcios",
+      "funnel": "MOFU",
+      "service": "bid-room-licitacoes-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-29407d3fd8",
+      "intention": "Checklist prático de consórcios em obra pública",
+      "slug": "checklist-pr-tico-de-cons-rcios-em-obra-p-blica",
+      "topic_id": "consorcios",
+      "funnel": "MOFU",
+      "service": "bid-room-licitacoes-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-df607861fc",
+      "intention": "Erros comuns em consórcios sob a Lei 14.133",
+      "slug": "erros-comuns-em-cons-rcios-sob-a-lei-14-133",
+      "topic_id": "consorcios",
+      "funnel": "TOFU",
+      "service": "bid-room-licitacoes-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-d81f8d241c",
+      "intention": "Como a construtora deve tratar orçamento em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-or-amento-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "orcamento",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-133bbe9af3",
+      "intention": "Checklist prático de orçamento em obra pública",
+      "slug": "checklist-pr-tico-de-or-amento-em-obra-p-blica",
+      "topic_id": "orcamento",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-31c47bc42b",
+      "intention": "Erros comuns em orçamento sob a Lei 14.133",
+      "slug": "erros-comuns-em-or-amento-sob-a-lei-14-133",
+      "topic_id": "orcamento",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-c81fa1b543",
+      "intention": "Como a construtora deve tratar sinapi em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-sinapi-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "sinapi",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-bc3385a4ab",
+      "intention": "Checklist prático de sinapi em obra pública",
+      "slug": "checklist-pr-tico-de-sinapi-em-obra-p-blica",
+      "topic_id": "sinapi",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-dbc967bc03",
+      "intention": "Erros comuns em sinapi sob a Lei 14.133",
+      "slug": "erros-comuns-em-sinapi-sob-a-lei-14-133",
+      "topic_id": "sinapi",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-279d0cdaa6",
+      "intention": "Como a construtora deve tratar sicro em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-sicro-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "sicro",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-fb54c18318",
+      "intention": "Checklist prático de sicro em obra pública",
+      "slug": "checklist-pr-tico-de-sicro-em-obra-p-blica",
+      "topic_id": "sicro",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-9d5be45d0e",
+      "intention": "Erros comuns em sicro sob a Lei 14.133",
+      "slug": "erros-comuns-em-sicro-sob-a-lei-14-133",
+      "topic_id": "sicro",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-b008fcd4e1",
+      "intention": "Como a construtora deve tratar bdi em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-bdi-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "bdi",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-43a71da10b",
+      "intention": "Checklist prático de bdi em obra pública",
+      "slug": "checklist-pr-tico-de-bdi-em-obra-p-blica",
+      "topic_id": "bdi",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-5068eccd8e",
+      "intention": "Erros comuns em bdi sob a Lei 14.133",
+      "slug": "erros-comuns-em-bdi-sob-a-lei-14-133",
+      "topic_id": "bdi",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-ce41c1e607",
+      "intention": "Como a construtora deve tratar encargos em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-encargos-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "encargos",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-e48976b1b8",
+      "intention": "Checklist prático de encargos em obra pública",
+      "slug": "checklist-pr-tico-de-encargos-em-obra-p-blica",
+      "topic_id": "encargos",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-ee709e3c0e",
+      "intention": "Erros comuns em encargos sob a Lei 14.133",
+      "slug": "erros-comuns-em-encargos-sob-a-lei-14-133",
+      "topic_id": "encargos",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-2dfef23049",
+      "intention": "Como a construtora deve tratar custos diretos e indiretos em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-custos-diretos-e-indiretos-em-obras-p-blicas-sob-",
+      "topic_id": "custos-diretos-indiretos",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-0719490dee",
+      "intention": "Checklist prático de custos diretos e indiretos em obra pública",
+      "slug": "checklist-pr-tico-de-custos-diretos-e-indiretos-em-obra-p-blica",
+      "topic_id": "custos-diretos-indiretos",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-078fbf32e6",
+      "intention": "Erros comuns em custos diretos e indiretos sob a Lei 14.133",
+      "slug": "erros-comuns-em-custos-diretos-e-indiretos-sob-a-lei-14-133",
+      "topic_id": "custos-diretos-indiretos",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-6e460aa7e8",
+      "intention": "Como a construtora deve tratar inexequibilidade em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-inexequibilidade-em-obras-p-blicas-sob-a-lei-14-1",
+      "topic_id": "inexequibilidade",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-18e3105a4f",
+      "intention": "Checklist prático de inexequibilidade em obra pública",
+      "slug": "checklist-pr-tico-de-inexequibilidade-em-obra-p-blica",
+      "topic_id": "inexequibilidade",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-87adef3d87",
+      "intention": "Erros comuns em inexequibilidade sob a Lei 14.133",
+      "slug": "erros-comuns-em-inexequibilidade-sob-a-lei-14-133",
+      "topic_id": "inexequibilidade",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-7ae43b54c8",
+      "intention": "Como a construtora deve tratar proposta em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-proposta-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "proposta",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-f1b02b9f9b",
+      "intention": "Checklist prático de proposta em obra pública",
+      "slug": "checklist-pr-tico-de-proposta-em-obra-p-blica",
+      "topic_id": "proposta",
+      "funnel": "MOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-cb97af008b",
+      "intention": "Erros comuns em proposta sob a Lei 14.133",
+      "slug": "erros-comuns-em-proposta-sob-a-lei-14-133",
+      "topic_id": "proposta",
+      "funnel": "TOFU",
+      "service": "auditoria-orcamento-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-2367d0ec1e",
+      "intention": "Como a construtora deve tratar cronograma em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-cronograma-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "cronograma",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-a5998318ea",
+      "intention": "Checklist prático de cronograma em obra pública",
+      "slug": "checklist-pr-tico-de-cronograma-em-obra-p-blica",
+      "topic_id": "cronograma",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-8159d3e178",
+      "intention": "Erros comuns em cronograma sob a Lei 14.133",
+      "slug": "erros-comuns-em-cronograma-sob-a-lei-14-133",
+      "topic_id": "cronograma",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-8af6a4d504",
+      "intention": "Como a construtora deve tratar matriz de riscos em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-matriz-de-riscos-em-obras-p-blicas-sob-a-lei-14-1",
+      "topic_id": "matriz-riscos",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-39cafbf60e",
+      "intention": "Checklist prático de matriz de riscos em obra pública",
+      "slug": "checklist-pr-tico-de-matriz-de-riscos-em-obra-p-blica",
+      "topic_id": "matriz-riscos",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-0d0fc00e37",
+      "intention": "Erros comuns em matriz de riscos sob a Lei 14.133",
+      "slug": "erros-comuns-em-matriz-de-riscos-sob-a-lei-14-133",
+      "topic_id": "matriz-riscos",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-3235c8a198",
+      "intention": "Como a construtora deve tratar contratos administrativos em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-contratos-administrativos-em-obras-p-blicas-sob-a",
+      "topic_id": "contratos-administrativos",
+      "funnel": "MOFU",
+      "service": "diretoria-b2g",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-922c7e13d0",
+      "intention": "Checklist prático de contratos administrativos em obra pública",
+      "slug": "checklist-pr-tico-de-contratos-administrativos-em-obra-p-blica",
+      "topic_id": "contratos-administrativos",
+      "funnel": "MOFU",
+      "service": "diretoria-b2g",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-252598c739",
+      "intention": "Erros comuns em contratos administrativos sob a Lei 14.133",
+      "slug": "erros-comuns-em-contratos-administrativos-sob-a-lei-14-133",
+      "topic_id": "contratos-administrativos",
+      "funnel": "TOFU",
+      "service": "diretoria-b2g",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-812e43c3df",
+      "intention": "Como a construtora deve tratar ordem de serviço em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-ordem-de-servi-o-em-obras-p-blicas-sob-a-lei-14-1",
+      "topic_id": "ordem-servico",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-34e09c5805",
+      "intention": "Checklist prático de ordem de serviço em obra pública",
+      "slug": "checklist-pr-tico-de-ordem-de-servi-o-em-obra-p-blica",
+      "topic_id": "ordem-servico",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-3f5fc20b6a",
+      "intention": "Erros comuns em ordem de serviço sob a Lei 14.133",
+      "slug": "erros-comuns-em-ordem-de-servi-o-sob-a-lei-14-133",
+      "topic_id": "ordem-servico",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-eb932066d3",
+      "intention": "Como a construtora deve tratar mobilização em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-mobiliza-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "mobilizacao",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-b2e223f743",
+      "intention": "Checklist prático de mobilização em obra pública",
+      "slug": "checklist-pr-tico-de-mobiliza-o-em-obra-p-blica",
+      "topic_id": "mobilizacao",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-66261764f2",
+      "intention": "Erros comuns em mobilização sob a Lei 14.133",
+      "slug": "erros-comuns-em-mobiliza-o-sob-a-lei-14-133",
+      "topic_id": "mobilizacao",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-e8f13ee55a",
+      "intention": "Como a construtora deve tratar diário de obra em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-di-rio-de-obra-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "diario-obra",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-0f18e292c1",
+      "intention": "Checklist prático de diário de obra em obra pública",
+      "slug": "checklist-pr-tico-de-di-rio-de-obra-em-obra-p-blica",
+      "topic_id": "diario-obra",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-9366d72381",
+      "intention": "Erros comuns em diário de obra sob a Lei 14.133",
+      "slug": "erros-comuns-em-di-rio-de-obra-sob-a-lei-14-133",
+      "topic_id": "diario-obra",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-e1e1f3e983",
+      "intention": "Como a construtora deve tratar fiscalização em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-fiscaliza-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "fiscalizacao",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-a00ec3aed9",
+      "intention": "Checklist prático de fiscalização em obra pública",
+      "slug": "checklist-pr-tico-de-fiscaliza-o-em-obra-p-blica",
+      "topic_id": "fiscalizacao",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-4644fe4fb2",
+      "intention": "Erros comuns em fiscalização sob a Lei 14.133",
+      "slug": "erros-comuns-em-fiscaliza-o-sob-a-lei-14-133",
+      "topic_id": "fiscalizacao",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-82b164662c",
+      "intention": "Como a construtora deve tratar medição em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-medi-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "medicao",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-f6e4d12ff5",
+      "intention": "Checklist prático de medição em obra pública",
+      "slug": "checklist-pr-tico-de-medi-o-em-obra-p-blica",
+      "topic_id": "medicao",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-a70e1597f3",
+      "intention": "Erros comuns em medição sob a Lei 14.133",
+      "slug": "erros-comuns-em-medi-o-sob-a-lei-14-133",
+      "topic_id": "medicao",
+      "funnel": "TOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-79d201866f",
+      "intention": "Como a construtora deve tratar glosa em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-glosa-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "glosa",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-407bc8d7bc",
+      "intention": "Checklist prático de glosa em obra pública",
+      "slug": "checklist-pr-tico-de-glosa-em-obra-p-blica",
+      "topic_id": "glosa",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-1c66089473",
+      "intention": "Erros comuns em glosa sob a Lei 14.133",
+      "slug": "erros-comuns-em-glosa-sob-a-lei-14-133",
+      "topic_id": "glosa",
+      "funnel": "TOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-0b4affb7d2",
+      "intention": "Como a construtora deve tratar parcela incontroversa em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-parcela-incontroversa-em-obras-p-blicas-sob-a-lei",
+      "topic_id": "parcela-incontroversa",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-54d177302b",
+      "intention": "Checklist prático de parcela incontroversa em obra pública",
+      "slug": "checklist-pr-tico-de-parcela-incontroversa-em-obra-p-blica",
+      "topic_id": "parcela-incontroversa",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-cffdcdbbfc",
+      "intention": "Erros comuns em parcela incontroversa sob a Lei 14.133",
+      "slug": "erros-comuns-em-parcela-incontroversa-sob-a-lei-14-133",
+      "topic_id": "parcela-incontroversa",
+      "funnel": "TOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-9ffbbb4c6d",
+      "intention": "Como a construtora deve tratar atraso de pagamento em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-atraso-de-pagamento-em-obras-p-blicas-sob-a-lei-1",
+      "topic_id": "atraso-pagamento",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-d5324f414f",
+      "intention": "Checklist prático de atraso de pagamento em obra pública",
+      "slug": "checklist-pr-tico-de-atraso-de-pagamento-em-obra-p-blica",
+      "topic_id": "atraso-pagamento",
+      "funnel": "MOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-b561af43f5",
+      "intention": "Erros comuns em atraso de pagamento sob a Lei 14.133",
+      "slug": "erros-comuns-em-atraso-de-pagamento-sob-a-lei-14-133",
+      "topic_id": "atraso-pagamento",
+      "funnel": "TOFU",
+      "service": "medicoes-glosas-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-c26ac2c13f",
+      "intention": "Como a construtora deve tratar atraso da administração em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-atraso-da-administra-o-em-obras-p-blicas-sob-a-le",
+      "topic_id": "atraso-administracao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-9c70dc3414",
+      "intention": "Checklist prático de atraso da administração em obra pública",
+      "slug": "checklist-pr-tico-de-atraso-da-administra-o-em-obra-p-blica",
+      "topic_id": "atraso-administracao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-259989c64e",
+      "intention": "Erros comuns em atraso da administração sob a Lei 14.133",
+      "slug": "erros-comuns-em-atraso-da-administra-o-sob-a-lei-14-133",
+      "topic_id": "atraso-administracao",
+      "funnel": "TOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-6acbe458e8",
+      "intention": "Como a construtora deve tratar atraso da contratada em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-atraso-da-contratada-em-obras-p-blicas-sob-a-lei-",
+      "topic_id": "atraso-contratada",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-698383fa4a",
+      "intention": "Checklist prático de atraso da contratada em obra pública",
+      "slug": "checklist-pr-tico-de-atraso-da-contratada-em-obra-p-blica",
+      "topic_id": "atraso-contratada",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-224735769e",
+      "intention": "Erros comuns em atraso da contratada sob a Lei 14.133",
+      "slug": "erros-comuns-em-atraso-da-contratada-sob-a-lei-14-133",
+      "topic_id": "atraso-contratada",
+      "funnel": "TOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-1869b0a5db",
+      "intention": "Como a construtora deve tratar aditivo em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-aditivo-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "aditivo",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-2f4e1b2ebc",
+      "intention": "Checklist prático de aditivo em obra pública",
+      "slug": "checklist-pr-tico-de-aditivo-em-obra-p-blica",
+      "topic_id": "aditivo",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-a314145df3",
+      "intention": "Erros comuns em aditivo sob a Lei 14.133",
+      "slug": "erros-comuns-em-aditivo-sob-a-lei-14-133",
+      "topic_id": "aditivo",
+      "funnel": "TOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-aca18500e8",
+      "intention": "Como a construtora deve tratar alteração qualitativa em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-altera-o-qualitativa-em-obras-p-blicas-sob-a-lei-",
+      "topic_id": "alteracao-qualitativa",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-beb45821b3",
+      "intention": "Checklist prático de alteração qualitativa em obra pública",
+      "slug": "checklist-pr-tico-de-altera-o-qualitativa-em-obra-p-blica",
+      "topic_id": "alteracao-qualitativa",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-5b07ddcc59",
+      "intention": "Erros comuns em alteração qualitativa sob a Lei 14.133",
+      "slug": "erros-comuns-em-altera-o-qualitativa-sob-a-lei-14-133",
+      "topic_id": "alteracao-qualitativa",
+      "funnel": "TOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-fe65d56e07",
+      "intention": "Como a construtora deve tratar alteração quantitativa em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-altera-o-quantitativa-em-obras-p-blicas-sob-a-lei",
+      "topic_id": "alteracao-quantitativa",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-817f1ca4fb",
+      "intention": "Checklist prático de alteração quantitativa em obra pública",
+      "slug": "checklist-pr-tico-de-altera-o-quantitativa-em-obra-p-blica",
+      "topic_id": "alteracao-quantitativa",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-b43aecfea8",
+      "intention": "Erros comuns em alteração quantitativa sob a Lei 14.133",
+      "slug": "erros-comuns-em-altera-o-quantitativa-sob-a-lei-14-133",
+      "topic_id": "alteracao-quantitativa",
+      "funnel": "TOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-ab1a3209e9",
+      "intention": "Como a construtora deve tratar itens novos em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-itens-novos-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "itens-novos",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-05ce51d05c",
+      "intention": "Checklist prático de itens novos em obra pública",
+      "slug": "checklist-pr-tico-de-itens-novos-em-obra-p-blica",
+      "topic_id": "itens-novos",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-fae46dfde0",
+      "intention": "Erros comuns em itens novos sob a Lei 14.133",
+      "slug": "erros-comuns-em-itens-novos-sob-a-lei-14-133",
+      "topic_id": "itens-novos",
+      "funnel": "TOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-bae764a867",
+      "intention": "Como a construtora deve tratar reajuste em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-reajuste-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "reajuste",
+      "funnel": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-3bd4e4e2d6",
+      "intention": "Checklist prático de reajuste em obra pública",
+      "slug": "checklist-pr-tico-de-reajuste-em-obra-p-blica",
+      "topic_id": "reajuste",
+      "funnel": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-55ba139a8a",
+      "intention": "Erros comuns em reajuste sob a Lei 14.133",
+      "slug": "erros-comuns-em-reajuste-sob-a-lei-14-133",
+      "topic_id": "reajuste",
+      "funnel": "TOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-2811de5725",
+      "intention": "Como a construtora deve tratar repactuação em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-repactua-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "repactuacao",
+      "funnel": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-4d55cec21f",
+      "intention": "Checklist prático de repactuação em obra pública",
+      "slug": "checklist-pr-tico-de-repactua-o-em-obra-p-blica",
+      "topic_id": "repactuacao",
+      "funnel": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-438134ed1a",
+      "intention": "Erros comuns em repactuação sob a Lei 14.133",
+      "slug": "erros-comuns-em-repactua-o-sob-a-lei-14-133",
+      "topic_id": "repactuacao",
+      "funnel": "TOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-da45651497",
+      "intention": "Como a construtora deve tratar reequilíbrio em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-reequil-brio-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "reequilibrio",
+      "funnel": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-2c882a4549",
+      "intention": "Checklist prático de reequilíbrio em obra pública",
+      "slug": "checklist-pr-tico-de-reequil-brio-em-obra-p-blica",
+      "topic_id": "reequilibrio",
+      "funnel": "MOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-434483768d",
+      "intention": "Erros comuns em reequilíbrio sob a Lei 14.133",
+      "slug": "erros-comuns-em-reequil-brio-sob-a-lei-14-133",
+      "topic_id": "reequilibrio",
+      "funnel": "TOFU",
+      "service": "reequilibrio-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-fd2154a648",
+      "intention": "Como a construtora deve tratar prorrogação em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-prorroga-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "prorrogacao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-a24c972dc6",
+      "intention": "Checklist prático de prorrogação em obra pública",
+      "slug": "checklist-pr-tico-de-prorroga-o-em-obra-p-blica",
+      "topic_id": "prorrogacao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-f1d14edce9",
+      "intention": "Erros comuns em prorrogação sob a Lei 14.133",
+      "slug": "erros-comuns-em-prorroga-o-sob-a-lei-14-133",
+      "topic_id": "prorrogacao",
+      "funnel": "TOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-903e06b873",
+      "intention": "Como a construtora deve tratar suspensão em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-suspens-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "suspensao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-45f4ad5b6e",
+      "intention": "Checklist prático de suspensão em obra pública",
+      "slug": "checklist-pr-tico-de-suspens-o-em-obra-p-blica",
+      "topic_id": "suspensao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-15ef03cdf1",
+      "intention": "Erros comuns em suspensão sob a Lei 14.133",
+      "slug": "erros-comuns-em-suspens-o-sob-a-lei-14-133",
+      "topic_id": "suspensao",
+      "funnel": "TOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-7de3257728",
+      "intention": "Como a construtora deve tratar paralisação em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-paralisa-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "paralisacao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-4f4d3d2e83",
+      "intention": "Checklist prático de paralisação em obra pública",
+      "slug": "checklist-pr-tico-de-paralisa-o-em-obra-p-blica",
+      "topic_id": "paralisacao",
+      "funnel": "MOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-6fdb657918",
+      "intention": "Erros comuns em paralisação sob a Lei 14.133",
+      "slug": "erros-comuns-em-paralisa-o-sob-a-lei-14-133",
+      "topic_id": "paralisacao",
+      "funnel": "TOFU",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-f3cfa86dc6",
+      "intention": "Como a construtora deve tratar rescisão em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-rescis-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "rescisao",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-6d58d7878d",
+      "intention": "Checklist prático de rescisão em obra pública",
+      "slug": "checklist-pr-tico-de-rescis-o-em-obra-p-blica",
+      "topic_id": "rescisao",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-530cde6221",
+      "intention": "Erros comuns em rescisão sob a Lei 14.133",
+      "slug": "erros-comuns-em-rescis-o-sob-a-lei-14-133",
+      "topic_id": "rescisao",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-20c336f186",
+      "intention": "Como a construtora deve tratar extinção em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-extin-o-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "extincao",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-76028a777f",
+      "intention": "Checklist prático de extinção em obra pública",
+      "slug": "checklist-pr-tico-de-extin-o-em-obra-p-blica",
+      "topic_id": "extincao",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-944cca9e7b",
+      "intention": "Erros comuns em extinção sob a Lei 14.133",
+      "slug": "erros-comuns-em-extin-o-sob-a-lei-14-133",
+      "topic_id": "extincao",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-cbe4786c9e",
+      "intention": "Como a construtora deve tratar sanções em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-san-es-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "sancoes",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-e1cbf94060",
+      "intention": "Checklist prático de sanções em obra pública",
+      "slug": "checklist-pr-tico-de-san-es-em-obra-p-blica",
+      "topic_id": "sancoes",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-d2e5fcf84e",
+      "intention": "Erros comuns em sanções sob a Lei 14.133",
+      "slug": "erros-comuns-em-san-es-sob-a-lei-14-133",
+      "topic_id": "sancoes",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-6bda00316c",
+      "intention": "Como a construtora deve tratar multa em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-multa-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "multa",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-c31824dd61",
+      "intention": "Checklist prático de multa em obra pública",
+      "slug": "checklist-pr-tico-de-multa-em-obra-p-blica",
+      "topic_id": "multa",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-23377dd7de",
+      "intention": "Erros comuns em multa sob a Lei 14.133",
+      "slug": "erros-comuns-em-multa-sob-a-lei-14-133",
+      "topic_id": "multa",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-2bd4de4988",
+      "intention": "Como a construtora deve tratar impedimento em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-impedimento-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "impedimento",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-1bcd7d6f5c",
+      "intention": "Checklist prático de impedimento em obra pública",
+      "slug": "checklist-pr-tico-de-impedimento-em-obra-p-blica",
+      "topic_id": "impedimento",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-077706d073",
+      "intention": "Erros comuns em impedimento sob a Lei 14.133",
+      "slug": "erros-comuns-em-impedimento-sob-a-lei-14-133",
+      "topic_id": "impedimento",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-532b8ae63d",
+      "intention": "Como a construtora deve tratar declaração de inidoneidade em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-declara-o-de-inidoneidade-em-obras-p-blicas-sob-a",
+      "topic_id": "inidoneidade",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-22f092e2b7",
+      "intention": "Checklist prático de declaração de inidoneidade em obra pública",
+      "slug": "checklist-pr-tico-de-declara-o-de-inidoneidade-em-obra-p-blica",
+      "topic_id": "inidoneidade",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-02aede45fe",
+      "intention": "Erros comuns em declaração de inidoneidade sob a Lei 14.133",
+      "slug": "erros-comuns-em-declara-o-de-inidoneidade-sob-a-lei-14-133",
+      "topic_id": "inidoneidade",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-13c554af4d",
+      "intention": "Como a construtora deve tratar defesa técnica em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-defesa-t-cnica-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "defesa-tecnica",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-e934c2727d",
+      "intention": "Checklist prático de defesa técnica em obra pública",
+      "slug": "checklist-pr-tico-de-defesa-t-cnica-em-obra-p-blica",
+      "topic_id": "defesa-tecnica",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-699fa8f9cb",
+      "intention": "Erros comuns em defesa técnica sob a Lei 14.133",
+      "slug": "erros-comuns-em-defesa-t-cnica-sob-a-lei-14-133",
+      "topic_id": "defesa-tecnica",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-2b35f306c9",
+      "intention": "Como a construtora deve tratar notificações em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-notifica-es-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "notificacoes",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-9dc1dc78bf",
+      "intention": "Checklist prático de notificações em obra pública",
+      "slug": "checklist-pr-tico-de-notifica-es-em-obra-p-blica",
+      "topic_id": "notificacoes",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-ec7696a35a",
+      "intention": "Erros comuns em notificações sob a Lei 14.133",
+      "slug": "erros-comuns-em-notifica-es-sob-a-lei-14-133",
+      "topic_id": "notificacoes",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-66528d465c",
+      "intention": "Como a construtora deve tratar recursos em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-recursos-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "recursos",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-2a7e753650",
+      "intention": "Checklist prático de recursos em obra pública",
+      "slug": "checklist-pr-tico-de-recursos-em-obra-p-blica",
+      "topic_id": "recursos",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-9429f441d2",
+      "intention": "Erros comuns em recursos sob a Lei 14.133",
+      "slug": "erros-comuns-em-recursos-sob-a-lei-14-133",
+      "topic_id": "recursos",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-e7b7e03886",
+      "intention": "Como a construtora deve tratar contratação direta em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-contrata-o-direta-em-obras-p-blicas-sob-a-lei-14-",
+      "topic_id": "contratacao-direta",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-24a64ddd87",
+      "intention": "Checklist prático de contratação direta em obra pública",
+      "slug": "checklist-pr-tico-de-contrata-o-direta-em-obra-p-blica",
+      "topic_id": "contratacao-direta",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-ad84ee7690",
+      "intention": "Erros comuns em contratação direta sob a Lei 14.133",
+      "slug": "erros-comuns-em-contrata-o-direta-sob-a-lei-14-133",
+      "topic_id": "contratacao-direta",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-9bbc6ee687",
+      "intention": "Como a construtora deve tratar dispensa em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-dispensa-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "dispensa",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-45be8b8382",
+      "intention": "Checklist prático de dispensa em obra pública",
+      "slug": "checklist-pr-tico-de-dispensa-em-obra-p-blica",
+      "topic_id": "dispensa",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-1002b99f22",
+      "intention": "Erros comuns em dispensa sob a Lei 14.133",
+      "slug": "erros-comuns-em-dispensa-sob-a-lei-14-133",
+      "topic_id": "dispensa",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-4a939cb0e8",
+      "intention": "Como a construtora deve tratar inexigibilidade em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-inexigibilidade-em-obras-p-blicas-sob-a-lei-14-13",
+      "topic_id": "inexigibilidade",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-04d59a7412",
+      "intention": "Checklist prático de inexigibilidade em obra pública",
+      "slug": "checklist-pr-tico-de-inexigibilidade-em-obra-p-blica",
+      "topic_id": "inexigibilidade",
+      "funnel": "MOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-a7c55ec148",
+      "intention": "Erros comuns em inexigibilidade sob a Lei 14.133",
+      "slug": "erros-comuns-em-inexigibilidade-sob-a-lei-14-133",
+      "topic_id": "inexigibilidade",
+      "funnel": "TOFU",
+      "service": "diagnostico-pre-licitacao",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-edd32280f1",
+      "intention": "Como a construtora deve tratar gestão b2g em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-gest-o-b2g-em-obras-p-blicas-sob-a-lei-14-133",
+      "topic_id": "gestao-b2g",
+      "funnel": "BOFU",
+      "service": "diretoria-b2g",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-006885ad6f",
+      "intention": "Checklist prático de gestão b2g em obra pública",
+      "slug": "checklist-pr-tico-de-gest-o-b2g-em-obra-p-blica",
+      "topic_id": "gestao-b2g",
+      "funnel": "MOFU",
+      "service": "diretoria-b2g",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-d71bd727fc",
+      "intention": "Erros comuns em gestão b2g sob a Lei 14.133",
+      "slug": "erros-comuns-em-gest-o-b2g-sob-a-lei-14-133",
+      "topic_id": "gestao-b2g",
+      "funnel": "TOFU",
+      "service": "diretoria-b2g",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-3db33bdc96",
+      "intention": "Como a construtora deve tratar governança comercial em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-governan-a-comercial-em-obras-p-blicas-sob-a-lei-",
+      "topic_id": "governanca-comercial",
+      "funnel": "BOFU",
+      "service": "diretoria-b2g",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-33fc330952",
+      "intention": "Checklist prático de governança comercial em obra pública",
+      "slug": "checklist-pr-tico-de-governan-a-comercial-em-obra-p-blica",
+      "topic_id": "governanca-comercial",
+      "funnel": "MOFU",
+      "service": "diretoria-b2g",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-7134b42f6a",
+      "intention": "Erros comuns em governança comercial sob a Lei 14.133",
+      "slug": "erros-comuns-em-governan-a-comercial-sob-a-lei-14-133",
+      "topic_id": "governanca-comercial",
+      "funnel": "TOFU",
+      "service": "diretoria-b2g",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-f2e52806ff",
+      "intention": "Como a construtora deve tratar operação de licitações em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-opera-o-de-licita-es-em-obras-p-blicas-sob-a-lei-",
+      "topic_id": "operacao-licitacoes",
+      "funnel": "BOFU",
+      "service": "bid-room-licitacoes-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-6e5c841c1b",
+      "intention": "Checklist prático de operação de licitações em obra pública",
+      "slug": "checklist-pr-tico-de-opera-o-de-licita-es-em-obra-p-blica",
+      "topic_id": "operacao-licitacoes",
+      "funnel": "MOFU",
+      "service": "bid-room-licitacoes-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-f697fa3366",
+      "intention": "Erros comuns em operação de licitações sob a Lei 14.133",
+      "slug": "erros-comuns-em-opera-o-de-licita-es-sob-a-lei-14-133",
+      "topic_id": "operacao-licitacoes",
+      "funnel": "TOFU",
+      "service": "bid-room-licitacoes-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-f9753dd070",
+      "intention": "Como a construtora deve tratar inteligência de mercado público em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-intelig-ncia-de-mercado-p-blico-em-obras-p-blicas",
+      "topic_id": "intel-mercado-publico",
+      "funnel": "TOFU-MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-00b91ae757",
+      "intention": "Checklist prático de inteligência de mercado público em obra pública",
+      "slug": "checklist-pr-tico-de-intelig-ncia-de-mercado-p-blico-em-obra-p-blica",
+      "topic_id": "intel-mercado-publico",
+      "funnel": "MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-45ef101496",
+      "intention": "Erros comuns em inteligência de mercado público sob a Lei 14.133",
+      "slug": "erros-comuns-em-intelig-ncia-de-mercado-p-blico-sob-a-lei-14-133",
+      "topic_id": "intel-mercado-publico",
+      "funnel": "TOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-8670a08f62",
+      "intention": "Como a construtora deve tratar controle de margem em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-controle-de-margem-em-obras-p-blicas-sob-a-lei-14",
+      "topic_id": "controle-margem",
+      "funnel": "BOFU",
+      "service": "defesa-margem-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-4fb27c55e6",
+      "intention": "Checklist prático de controle de margem em obra pública",
+      "slug": "checklist-pr-tico-de-controle-de-margem-em-obra-p-blica",
+      "topic_id": "controle-margem",
+      "funnel": "MOFU",
+      "service": "defesa-margem-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-e88a68cb36",
+      "intention": "Erros comuns em controle de margem sob a Lei 14.133",
+      "slug": "erros-comuns-em-controle-de-margem-sob-a-lei-14-133",
+      "topic_id": "controle-margem",
+      "funnel": "TOFU",
+      "service": "defesa-margem-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-4119223856",
+      "intention": "Como a construtora deve tratar lições aprendidas em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-li-es-aprendidas-em-obras-p-blicas-sob-a-lei-14-1",
+      "topic_id": "licoes-aprendidas",
+      "funnel": "TOFU",
+      "service": "diretoria-b2g",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-4181721ca4",
+      "intention": "Checklist prático de lições aprendidas em obra pública",
+      "slug": "checklist-pr-tico-de-li-es-aprendidas-em-obra-p-blica",
+      "topic_id": "licoes-aprendidas",
+      "funnel": "MOFU",
+      "service": "diretoria-b2g",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-c4a52309e4",
+      "intention": "Erros comuns em lições aprendidas sob a Lei 14.133",
+      "slug": "erros-comuns-em-li-es-aprendidas-sob-a-lei-14-133",
+      "topic_id": "licoes-aprendidas",
+      "funnel": "TOFU",
+      "service": "diretoria-b2g",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-95cb4ff663",
+      "intention": "Como a construtora deve tratar gestão documental em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-gest-o-documental-em-obras-p-blicas-sob-a-lei-14-",
+      "topic_id": "gestao-documental",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-befd03384b",
+      "intention": "Checklist prático de gestão documental em obra pública",
+      "slug": "checklist-pr-tico-de-gest-o-documental-em-obra-p-blica",
+      "topic_id": "gestao-documental",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-de5dd60633",
+      "intention": "Erros comuns em gestão documental sob a Lei 14.133",
+      "slug": "erros-comuns-em-gest-o-documental-sob-a-lei-14-133",
+      "topic_id": "gestao-documental",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-c8d03f097f",
+      "intention": "Como a construtora deve tratar gestão de evidências em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-gest-o-de-evid-ncias-em-obras-p-blicas-sob-a-lei-",
+      "topic_id": "gestao-evidencias",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-1fabc054e0",
+      "intention": "Checklist prático de gestão de evidências em obra pública",
+      "slug": "checklist-pr-tico-de-gest-o-de-evid-ncias-em-obra-p-blica",
+      "topic_id": "gestao-evidencias",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-e71d12e91d",
+      "intention": "Erros comuns em gestão de evidências sob a Lei 14.133",
+      "slug": "erros-comuns-em-gest-o-de-evid-ncias-sob-a-lei-14-133",
+      "topic_id": "gestao-evidencias",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-15f999a584",
+      "intention": "Como a construtora deve tratar relação entre engenharia e jurídico em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-rela-o-entre-engenharia-e-jur-dico-em-obras-p-bli",
+      "topic_id": "engenharia-juridico",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-d4a185ef48",
+      "intention": "Checklist prático de relação entre engenharia e jurídico em obra pública",
+      "slug": "checklist-pr-tico-de-rela-o-entre-engenharia-e-jur-dico-em-obra-p-blica",
+      "topic_id": "engenharia-juridico",
+      "funnel": "MOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-427b9794c6",
+      "intention": "Erros comuns em relação entre engenharia e jurídico sob a Lei 14.133",
+      "slug": "erros-comuns-em-rela-o-entre-engenharia-e-jur-dico-sob-a-lei-14-133",
+      "topic_id": "engenharia-juridico",
+      "funnel": "TOFU",
+      "service": "defesa-tecnica-contratos-publicos",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-ddcee10d67",
+      "intention": "Como a construtora deve tratar relacionamento técnico com fiscalização em obras públicas sob a Lei 14.133?",
+      "slug": "como-a-construtora-deve-tratar-relacionamento-t-cnico-com-fiscaliza-o-em-obras-p",
+      "topic_id": "relacao-fiscalizacao",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "topic_primary"
+    },
+    {
+      "intention_id": "int-a52b908a59",
+      "intention": "Checklist prático de relacionamento técnico com fiscalização em obra pública",
+      "slug": "checklist-pr-tico-de-relacionamento-t-cnico-com-fiscaliza-o-em-obra-p-blica",
+      "topic_id": "relacao-fiscalizacao",
+      "funnel": "MOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "checklist"
+    },
+    {
+      "intention_id": "int-017d7eca20",
+      "intention": "Erros comuns em relacionamento técnico com fiscalização sob a Lei 14.133",
+      "slug": "erros-comuns-em-relacionamento-t-cnico-com-fiscaliza-o-sob-a-lei-14-133",
+      "topic_id": "relacao-fiscalizacao",
+      "funnel": "TOFU",
+      "service": "acompanhamento-contratos-obras",
+      "type": "errors"
+    },
+    {
+      "intention_id": "int-c8caf37c2e",
+      "intention": "Como resolver aceleracao obra publica custo adicional",
+      "slug": "como-resolver-aceleracao-obra-publica-custo-adicional",
+      "existing_url": "/conteudos/aceleracao-obra-publica-custo-adicional/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-a352b5f596",
+      "intention": "Como resolver aditivo empreitada por preco global",
+      "slug": "como-resolver-aditivo-empreitada-por-preco-global",
+      "existing_url": "/conteudos/aditivo-empreitada-por-preco-global/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-5132bb4dc5",
+      "intention": "Como resolver aditivo qualitativo quantitativo",
+      "slug": "como-resolver-aditivo-qualitativo-quantitativo",
+      "existing_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-d90702a11e",
+      "intention": "Como resolver administracao local orcamento obra publica",
+      "slug": "como-resolver-administracao-local-orcamento-obra-publica",
+      "existing_url": "/conteudos/administracao-local-orcamento-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-4679b9288d",
+      "intention": "Como resolver administracao local prolongada obra publica",
+      "slug": "como-resolver-administracao-local-prolongada-obra-publica",
+      "existing_url": "/conteudos/administracao-local-prolongada-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-c2bcfd16aa",
+      "intention": "Como resolver analise edital obra publica construtora",
+      "slug": "como-resolver-analise-edital-obra-publica-construtora",
+      "existing_url": "/conteudos/analise-edital-obra-publica-construtora/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-b5dd0a9114",
+      "intention": "Como resolver ata reuniao ordem servico obra publica",
+      "slug": "como-resolver-ata-reuniao-ordem-servico-obra-publica",
+      "existing_url": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-d7da8c1d7b",
+      "intention": "Como resolver atraso na medicao obra publica",
+      "slug": "como-resolver-atraso-na-medicao-obra-publica",
+      "existing_url": "/conteudos/atraso-na-medicao-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-ba3d127f41",
+      "intention": "Como resolver atraso obra culpa administracao",
+      "slug": "como-resolver-atraso-obra-culpa-administracao",
+      "existing_url": "/conteudos/atraso-obra-culpa-administracao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-51ba56aae6",
+      "intention": "Como resolver atraso pagamento contrato publico suspender",
+      "slug": "como-resolver-atraso-pagamento-contrato-publico-suspender",
+      "existing_url": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-f8d7c22800",
+      "intention": "Como resolver atraso projeto executivo obra publica",
+      "slug": "como-resolver-atraso-projeto-executivo-obra-publica",
+      "existing_url": "/conteudos/atraso-projeto-executivo-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-69c01aa4ef",
+      "intention": "Como resolver auditoria contrato obra publica mensal",
+      "slug": "como-resolver-auditoria-contrato-obra-publica-mensal",
+      "existing_url": "/conteudos/auditoria-contrato-obra-publica-mensal/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-4f9b05d721",
+      "intention": "Como resolver aumento material reequilibrio contrato publico",
+      "slug": "como-resolver-aumento-material-reequilibrio-contrato-publico",
+      "existing_url": "/conteudos/aumento-material-reequilibrio-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-e365ea19fa",
+      "intention": "Como resolver bdi diferenciado obra publica",
+      "slug": "como-resolver-bdi-diferenciado-obra-publica",
+      "existing_url": "/conteudos/bdi-diferenciado-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-e5b6e0f477",
+      "intention": "Como resolver bdi obra publica",
+      "slug": "como-resolver-bdi-obra-publica",
+      "existing_url": "/conteudos/bdi-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-c8f61b11c0",
+      "intention": "Como resolver calculo reequilibrio economico financeiro",
+      "slug": "como-resolver-calculo-reequilibrio-economico-financeiro",
+      "existing_url": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-adba6acb01",
+      "intention": "Como resolver capacidade tecnica operacional profissional licitacao",
+      "slug": "como-resolver-capacidade-tecnica-operacional-profissional-licitacao",
+      "existing_url": "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-8a07da2aac",
+      "intention": "Como resolver chuva prorrogacao prazo obra publica",
+      "slug": "como-resolver-chuva-prorrogacao-prazo-obra-publica",
+      "existing_url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-1ebea55bfc",
+      "intention": "Como resolver clausula matriz risco abusiva edital",
+      "slug": "como-resolver-clausula-matriz-risco-abusiva-edital",
+      "existing_url": "/conteudos/clausula-matriz-risco-abusiva-edital/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-8975bfa2ea",
+      "intention": "Como resolver como provar atraso obra publica",
+      "slug": "como-resolver-como-provar-atraso-obra-publica",
+      "existing_url": "/conteudos/como-provar-atraso-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-a4b8000f7d",
+      "intention": "Como resolver compensacao acrescimo supressao aditivo",
+      "slug": "como-resolver-compensacao-acrescimo-supressao-aditivo",
+      "existing_url": "/conteudos/compensacao-acrescimo-supressao-aditivo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-4bd9cb6afc",
+      "intention": "Como resolver composicao propria preco obra publica",
+      "slug": "como-resolver-composicao-propria-preco-obra-publica",
+      "existing_url": "/conteudos/composicao-propria-preco-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-d9af1da812",
+      "intention": "Como resolver comprovacao exequibilidade proposta obra",
+      "slug": "como-resolver-comprovacao-exequibilidade-proposta-obra",
+      "existing_url": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-8dd8673a90",
+      "intention": "Como resolver comunicacao fiscal contrato obra publica",
+      "slug": "como-resolver-comunicacao-fiscal-contrato-obra-publica",
+      "existing_url": "/conteudos/comunicacao-fiscal-contrato-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-3b51e57748",
+      "intention": "Como resolver consorcio subcontratacao obra publica",
+      "slug": "como-resolver-consorcio-subcontratacao-obra-publica",
+      "existing_url": "/conteudos/consorcio-subcontratacao-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-b41305af3d",
+      "intention": "Como resolver consultoria b2g engenharia construtora",
+      "slug": "como-resolver-consultoria-b2g-engenharia-construtora",
+      "existing_url": "/conteudos/consultoria-b2g-engenharia-construtora/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-14e8ec2003",
+      "intention": "Como resolver consultoria contrato obra publica construtora",
+      "slug": "como-resolver-consultoria-contrato-obra-publica-construtora",
+      "existing_url": "/conteudos/consultoria-contrato-obra-publica-construtora/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-644e80fe32",
+      "intention": "Como resolver contratacao integrada semi integrada obra",
+      "slug": "como-resolver-contratacao-integrada-semi-integrada-obra",
+      "existing_url": "/conteudos/contratacao-integrada-semi-integrada-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-8adb1d6e42",
+      "intention": "Como resolver controle mudancas obra publica",
+      "slug": "como-resolver-controle-mudancas-obra-publica",
+      "existing_url": "/conteudos/controle-mudancas-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-3bda112fb6",
+      "intention": "Como resolver cotacao mercado orcamento obra publica",
+      "slug": "como-resolver-cotacao-mercado-orcamento-obra-publica",
+      "existing_url": "/conteudos/cotacao-mercado-orcamento-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-c660a09372",
+      "intention": "Como resolver criterio de medicao nao previsto contrato",
+      "slug": "como-resolver-criterio-de-medicao-nao-previsto-contrato",
+      "existing_url": "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-01c4fde211",
+      "intention": "Como resolver cronograma fisico financeiro obra publica",
+      "slug": "como-resolver-cronograma-fisico-financeiro-obra-publica",
+      "existing_url": "/conteudos/cronograma-fisico-financeiro-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-47cc5b2054",
+      "intention": "Como resolver cronologia contrato obra publica",
+      "slug": "como-resolver-cronologia-contrato-obra-publica",
+      "existing_url": "/conteudos/cronologia-contrato-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-7c4b717d50",
+      "intention": "Como resolver culpa sancao atraso contrato publico",
+      "slug": "como-resolver-culpa-sancao-atraso-contrato-publico",
+      "existing_url": "/conteudos/culpa-sancao-atraso-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-776489dfa8",
+      "intention": "Como resolver curva abc orcamento obra",
+      "slug": "como-resolver-curva-abc-orcamento-obra",
+      "existing_url": "/conteudos/curva-abc-orcamento-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-0ee82e00f4",
+      "intention": "Como resolver curva abc reequilibrio contrato",
+      "slug": "como-resolver-curva-abc-reequilibrio-contrato",
+      "existing_url": "/conteudos/curva-abc-reequilibrio-contrato/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-cb94407320",
+      "intention": "Como resolver custos indiretos atraso administracao obra",
+      "slug": "como-resolver-custos-indiretos-atraso-administracao-obra",
+      "existing_url": "/conteudos/custos-indiretos-atraso-administracao-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-8ae0e8e739",
+      "intention": "Como resolver data base orcamento reajuste obra publica",
+      "slug": "como-resolver-data-base-orcamento-reajuste-obra-publica",
+      "existing_url": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-f570f43895",
+      "intention": "Como resolver defesa processo sancionador contrato publico",
+      "slug": "como-resolver-defesa-processo-sancionador-contrato-publico",
+      "existing_url": "/conteudos/defesa-processo-sancionador-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-d32c69cdf5",
+      "intention": "Como resolver demolicao nao prevista obra publica",
+      "slug": "como-resolver-demolicao-nao-prevista-obra-publica",
+      "existing_url": "/conteudos/demolicao-nao-prevista-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-eb21a7ebaa",
+      "intention": "Como resolver demora decisao administracao contrato obra",
+      "slug": "como-resolver-demora-decisao-administracao-contrato-obra",
+      "existing_url": "/conteudos/demora-decisao-administracao-contrato-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-110d30a7c2",
+      "intention": "Como resolver desagio licitacao obra publica",
+      "slug": "como-resolver-desagio-licitacao-obra-publica",
+      "existing_url": "/conteudos/desagio-licitacao-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-ec15d39021",
+      "intention": "Como resolver desconto da proposta em item novo aditivo",
+      "slug": "como-resolver-desconto-da-proposta-em-item-novo-aditivo",
+      "existing_url": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-734b194732",
+      "intention": "Como resolver diario de obra pleito contrato publico",
+      "slug": "como-resolver-diario-de-obra-pleito-contrato-publico",
+      "existing_url": "/conteudos/diario-de-obra-pleito-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-db02257171",
+      "intention": "Como resolver divergencia diario obra fiscalizacao",
+      "slug": "como-resolver-divergencia-diario-obra-fiscalizacao",
+      "existing_url": "/conteudos/divergencia-diario-obra-fiscalizacao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-920acf0c87",
+      "intention": "Como resolver divergencia quantitativo medicao as built",
+      "slug": "como-resolver-divergencia-quantitativo-medicao-as-built",
+      "existing_url": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-f1d81dae9c",
+      "intention": "Como resolver documentos reequilibrio obra publica",
+      "slug": "como-resolver-documentos-reequilibrio-obra-publica",
+      "existing_url": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-9c6561524b",
+      "intention": "Como resolver dosimetria multa contrato administrativo",
+      "slug": "como-resolver-dosimetria-multa-contrato-administrativo",
+      "existing_url": "/conteudos/dosimetria-multa-contrato-administrativo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-77fe9c462a",
+      "intention": "Como resolver empreitada preco global preco unitario",
+      "slug": "como-resolver-empreitada-preco-global-preco-unitario",
+      "existing_url": "/conteudos/empreitada-preco-global-preco-unitario/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-999832c06f",
+      "intention": "Como resolver erro de projeto gera aditivo obra publica",
+      "slug": "como-resolver-erro-de-projeto-gera-aditivo-obra-publica",
+      "existing_url": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-66bb55ebaa",
+      "intention": "Como resolver erros comunicacao contrato publico construtora",
+      "slug": "como-resolver-erros-comunicacao-contrato-publico-construtora",
+      "existing_url": "/conteudos/erros-comunicacao-contrato-publico-construtora/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-bf85a138e4",
+      "intention": "Como resolver evento previsivel consequencias incalculaveis reequilibrio",
+      "slug": "como-resolver-evento-previsivel-consequencias-incalculaveis-reequilibrio",
+      "existing_url": "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-ea569b1e81",
+      "intention": "Como resolver extincao contrato culpa administracao",
+      "slug": "como-resolver-extincao-contrato-culpa-administracao",
+      "existing_url": "/conteudos/extincao-contrato-culpa-administracao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-7badf27e9c",
+      "intention": "Como resolver extincao contrato obra publica pelo contratado",
+      "slug": "como-resolver-extincao-contrato-obra-publica-pelo-contratado",
+      "existing_url": "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-4ae3ff092a",
+      "intention": "Como resolver fiscal mandou executar sem aditivo",
+      "slug": "como-resolver-fiscal-mandou-executar-sem-aditivo",
+      "existing_url": "/conteudos/fiscal-mandou-executar-sem-aditivo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-da9ddd3dc0",
+      "intention": "Como resolver fiscal nao assina medicao obra publica",
+      "slug": "como-resolver-fiscal-nao-assina-medicao-obra-publica",
+      "existing_url": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-ff9002289a",
+      "intention": "Como resolver frente de servico nao liberada obra",
+      "slug": "como-resolver-frente-de-servico-nao-liberada-obra",
+      "existing_url": "/conteudos/frente-de-servico-nao-liberada-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-38cd600d1c",
+      "intention": "Como resolver garantia proposta licitacao obra",
+      "slug": "como-resolver-garantia-proposta-licitacao-obra",
+      "existing_url": "/conteudos/garantia-proposta-licitacao-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-9bb389655d",
+      "intention": "Como resolver gestao contrato obra publica indicadores",
+      "slug": "como-resolver-gestao-contrato-obra-publica-indicadores",
+      "existing_url": "/conteudos/gestao-contrato-obra-publica-indicadores/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-9065990af4",
+      "intention": "Como resolver glosa de medicao obra publica",
+      "slug": "como-resolver-glosa-de-medicao-obra-publica",
+      "existing_url": "/conteudos/glosa-de-medicao-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-2716a19925",
+      "intention": "Como resolver glosa por qualidade obra publica",
+      "slug": "como-resolver-glosa-por-qualidade-obra-publica",
+      "existing_url": "/conteudos/glosa-por-qualidade-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-9b4ec8f513",
+      "intention": "Como resolver impedimento de licitar construtora",
+      "slug": "como-resolver-impedimento-de-licitar-construtora",
+      "existing_url": "/conteudos/impedimento-de-licitar-construtora/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-96186584cf",
+      "intention": "Como resolver indenizacao servico extracontratual obra publica",
+      "slug": "como-resolver-indenizacao-servico-extracontratual-obra-publica",
+      "existing_url": "/conteudos/indenizacao-servico-extracontratual-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6643df53a5",
+      "intention": "Como resolver interferencia concessionaria obra publica atraso",
+      "slug": "como-resolver-interferencia-concessionaria-obra-publica-atraso",
+      "existing_url": "/conteudos/interferencia-concessionaria-obra-publica-atraso/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-72f007a4e4",
+      "intention": "Como resolver jogo de planilha aditivo obra publica",
+      "slug": "como-resolver-jogo-de-planilha-aditivo-obra-publica",
+      "existing_url": "/conteudos/jogo-de-planilha-aditivo-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6e78e4080f",
+      "intention": "Como resolver juros atraso pagamento contrato administrativo",
+      "slug": "como-resolver-juros-atraso-pagamento-contrato-administrativo",
+      "existing_url": "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-b84c59cc0b",
+      "intention": "Como resolver limite aditivo 25 50 obra publica",
+      "slug": "como-resolver-limite-aditivo-25-50-obra-publica",
+      "existing_url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6ce8844372",
+      "intention": "Como resolver manutencao habilitacao contrato publico",
+      "slug": "como-resolver-manutencao-habilitacao-contrato-publico",
+      "existing_url": "/conteudos/manutencao-habilitacao-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-710980a7c6",
+      "intention": "Como resolver matriz de riscos obra publica",
+      "slug": "como-resolver-matriz-de-riscos-obra-publica",
+      "existing_url": "/conteudos/matriz-de-riscos-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-8a0794cdf1",
+      "intention": "Como resolver matriz de riscos reequilibrio economico financeiro",
+      "slug": "como-resolver-matriz-de-riscos-reequilibrio-economico-financeiro",
+      "existing_url": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-ad181ce74f",
+      "intention": "Como resolver medicao de obra publica rejeitada",
+      "slug": "como-resolver-medicao-de-obra-publica-rejeitada",
+      "existing_url": "/conteudos/medicao-de-obra-publica-rejeitada/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-4d6e4ad9cc",
+      "intention": "Como resolver medicao por evento obra publica",
+      "slug": "como-resolver-medicao-por-evento-obra-publica",
+      "existing_url": "/conteudos/medicao-por-evento-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-e2ec82f228",
+      "intention": "Como resolver mobilizacao desmobilizacao orcamento obra",
+      "slug": "como-resolver-mobilizacao-desmobilizacao-orcamento-obra",
+      "existing_url": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-a5192a088f",
+      "intention": "Como resolver mudanca metodo construtivo obra publica aditivo",
+      "slug": "como-resolver-mudanca-metodo-construtivo-obra-publica-aditivo",
+      "existing_url": "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6a4ceaac39",
+      "intention": "Como resolver multa atraso parcial contrato publico",
+      "slug": "como-resolver-multa-atraso-parcial-contrato-publico",
+      "existing_url": "/conteudos/multa-atraso-parcial-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-1e3129c290",
+      "intention": "Como resolver multa contrato obra publica defesa",
+      "slug": "como-resolver-multa-contrato-obra-publica-defesa",
+      "existing_url": "/conteudos/multa-contrato-obra-publica-defesa/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-63c22107af",
+      "intention": "Como resolver notas fiscais reequilibrio contrato",
+      "slug": "como-resolver-notas-fiscais-reequilibrio-contrato",
+      "existing_url": "/conteudos/notas-fiscais-reequilibrio-contrato/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-0382fa77cb",
+      "intention": "Como resolver notificacao impacto prazo custo obra",
+      "slug": "como-resolver-notificacao-impacto-prazo-custo-obra",
+      "existing_url": "/conteudos/notificacao-impacto-prazo-custo-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-01e7e31a60",
+      "intention": "Como resolver orcamento incompleto edital obra publica",
+      "slug": "como-resolver-orcamento-incompleto-edital-obra-publica",
+      "existing_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-e4a3766d44",
+      "intention": "Como resolver orcamento sigiloso licitacao obra",
+      "slug": "como-resolver-orcamento-sigiloso-licitacao-obra",
+      "existing_url": "/conteudos/orcamento-sigiloso-licitacao-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-95f56c0428",
+      "intention": "Como resolver ordem paralisacao obra publica custos",
+      "slug": "como-resolver-ordem-paralisacao-obra-publica-custos",
+      "existing_url": "/conteudos/ordem-paralisacao-obra-publica-custos/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-1d16ff2a56",
+      "intention": "Como resolver pagamento contrato publico certidao vencida",
+      "slug": "como-resolver-pagamento-contrato-publico-certidao-vencida",
+      "existing_url": "/conteudos/pagamento-contrato-publico-certidao-vencida/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-3d8280d202",
+      "intention": "Como resolver pagamento parcial etapa empreitada global",
+      "slug": "como-resolver-pagamento-parcial-etapa-empreitada-global",
+      "existing_url": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-462cc54787",
+      "intention": "Como resolver parcela incontroversa medicao contrato publico",
+      "slug": "como-resolver-parcela-incontroversa-medicao-contrato-publico",
+      "existing_url": "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-09dbd77bcc",
+      "intention": "Como resolver pedido de reequilibrio negado",
+      "slug": "como-resolver-pedido-de-reequilibrio-negado",
+      "existing_url": "/conteudos/pedido-de-reequilibrio-negado/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-eea3939acd",
+      "intention": "Como resolver pedido prorrogacao prazo antes vencimento",
+      "slug": "como-resolver-pedido-prorrogacao-prazo-antes-vencimento",
+      "existing_url": "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-c1e029e097",
+      "intention": "Como resolver plano recuperacao obra atrasada",
+      "slug": "como-resolver-plano-recuperacao-obra-atrasada",
+      "existing_url": "/conteudos/plano-recuperacao-obra-atrasada/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6ebef045b7",
+      "intention": "Como resolver pleito tecnico obra publica",
+      "slug": "como-resolver-pleito-tecnico-obra-publica",
+      "existing_url": "/conteudos/pleito-tecnico-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-18b2686abd",
+      "intention": "Como resolver prazo vigencia prazo execucao contrato obra",
+      "slug": "como-resolver-prazo-vigencia-prazo-execucao-contrato-obra",
+      "existing_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-50a4bad51e",
+      "intention": "Como resolver preco de item novo aditivo obra publica",
+      "slug": "como-resolver-preco-de-item-novo-aditivo-obra-publica",
+      "existing_url": "/conteudos/preco-de-item-novo-aditivo-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-1561663db8",
+      "intention": "Como resolver preco unitario acima referencia proposta global",
+      "slug": "como-resolver-preco-unitario-acima-referencia-proposta-global",
+      "existing_url": "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-1affcf85a3",
+      "intention": "Como resolver produtividade sinapi obra publica",
+      "slug": "como-resolver-produtividade-sinapi-obra-publica",
+      "existing_url": "/conteudos/produtividade-sinapi-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-d2c485ca72",
+      "intention": "Como resolver projeto basico incompleto obra publica",
+      "slug": "como-resolver-projeto-basico-incompleto-obra-publica",
+      "existing_url": "/conteudos/projeto-basico-incompleto-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-005a4f76c5",
+      "intention": "Como resolver proposta inexequivel obra publica lei 14133",
+      "slug": "como-resolver-proposta-inexequivel-obra-publica-lei-14133",
+      "existing_url": "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-cd45ca960e",
+      "intention": "Como resolver prorrogacao prazo obra publica documentos",
+      "slug": "como-resolver-prorrogacao-prazo-obra-publica-documentos",
+      "existing_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-dfbd6fe9fd",
+      "intention": "Como resolver prova custos adicionais obra publica",
+      "slug": "como-resolver-prova-custos-adicionais-obra-publica",
+      "existing_url": "/conteudos/prova-custos-adicionais-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-930f944c17",
+      "intention": "Como resolver prova de medicao diario de obra fotos",
+      "slug": "como-resolver-prova-de-medicao-diario-de-obra-fotos",
+      "existing_url": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-be49e769f0",
+      "intention": "Como resolver quantitativo insuficiente planilha obra publica",
+      "slug": "como-resolver-quantitativo-insuficiente-planilha-obra-publica",
+      "existing_url": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-0fbe60e1dc",
+      "intention": "Como resolver reajuste repactuacao reequilibrio diferenca",
+      "slug": "como-resolver-reajuste-repactuacao-reequilibrio-diferenca",
+      "existing_url": "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-5f727b232d",
+      "intention": "Como resolver recuperar contrato obra publica problematico",
+      "slug": "como-resolver-recuperar-contrato-obra-publica-problematico",
+      "existing_url": "/conteudos/recuperar-contrato-obra-publica-problematico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-69d332ada2",
+      "intention": "Como resolver recurso inabilitacao tecnica licitacao",
+      "slug": "como-resolver-recurso-inabilitacao-tecnica-licitacao",
+      "existing_url": "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-23ca943eed",
+      "intention": "Como resolver reequilibrio antes da prorrogacao contrato",
+      "slug": "como-resolver-reequilibrio-antes-da-prorrogacao-contrato",
+      "existing_url": "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6ab7b8ddae",
+      "intention": "Como resolver reequilibrio apos fim do contrato",
+      "slug": "como-resolver-reequilibrio-apos-fim-do-contrato",
+      "existing_url": "/conteudos/reequilibrio-apos-fim-do-contrato/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-61a6f49e01",
+      "intention": "Como resolver reequilibrio economico financeiro obra publica",
+      "slug": "como-resolver-reequilibrio-economico-financeiro-obra-publica",
+      "existing_url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-91ca647528",
+      "intention": "Como resolver reequilibrio empreitada preco global",
+      "slug": "como-resolver-reequilibrio-empreitada-preco-global",
+      "existing_url": "/conteudos/reequilibrio-empreitada-preco-global/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-899d5f45d5",
+      "intention": "Como resolver registro contemporaneo pleito obra",
+      "slug": "como-resolver-registro-contemporaneo-pleito-obra",
+      "existing_url": "/conteudos/registro-contemporaneo-pleito-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-bebcde5f61",
+      "intention": "Como resolver reprogramacao cronograma obra publica",
+      "slug": "como-resolver-reprogramacao-cronograma-obra-publica",
+      "existing_url": "/conteudos/reprogramacao-cronograma-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-057c1c1336",
+      "intention": "Como resolver rescisao unilateral contrato obra publica",
+      "slug": "como-resolver-rescisao-unilateral-contrato-obra-publica",
+      "existing_url": "/conteudos/rescisao-unilateral-contrato-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6148bc7c16",
+      "intention": "Como resolver resposta notificacao atraso obra publica",
+      "slug": "como-resolver-resposta-notificacao-atraso-obra-publica",
+      "existing_url": "/conteudos/resposta-notificacao-atraso-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-acf8b66c3c",
+      "intention": "Como resolver seguro garantia execucao contrato publico",
+      "slug": "como-resolver-seguro-garantia-execucao-contrato-publico",
+      "existing_url": "/conteudos/seguro-garantia-execucao-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-3c4b11ec94",
+      "intention": "Como resolver servico executado sem projeto aprovado",
+      "slug": "como-resolver-servico-executado-sem-projeto-aprovado",
+      "existing_url": "/conteudos/servico-executado-sem-projeto-aprovado/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-2727874636",
+      "intention": "Como resolver servico executado sem termo aditivo",
+      "slug": "como-resolver-servico-executado-sem-termo-aditivo",
+      "existing_url": "/conteudos/servico-executado-sem-termo-aditivo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-e4fb5a4ffa",
+      "intention": "Como resolver servico nao previsto na planilha obra publica",
+      "slug": "como-resolver-servico-nao-previsto-na-planilha-obra-publica",
+      "existing_url": "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-1d88acb0d0",
+      "intention": "Como resolver sinapi desonerado nao desonerado",
+      "slug": "como-resolver-sinapi-desonerado-nao-desonerado",
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-9245a4443d",
+      "intention": "Como resolver sinapi ou sicro obra publica",
+      "slug": "como-resolver-sinapi-ou-sicro-obra-publica",
+      "existing_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-7f854e297c",
+      "intention": "Como resolver subcontratacao obra publica autorizacao",
+      "slug": "como-resolver-subcontratacao-obra-publica-autorizacao",
+      "existing_url": "/conteudos/subcontratacao-obra-publica-autorizacao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-6ade9bf64f",
+      "intention": "Como resolver suspensao execucao contrato publico contratado",
+      "slug": "como-resolver-suspensao-execucao-contrato-publico-contratado",
+      "existing_url": "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-de45dca9f9",
+      "intention": "Como resolver tributos bdi obra publica",
+      "slug": "como-resolver-tributos-bdi-obra-publica",
+      "existing_url": "/conteudos/tributos-bdi-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-2f2277e9b3",
+      "intention": "Como resolver troca responsavel tecnico contrato publico",
+      "slug": "como-resolver-troca-responsavel-tecnico-contrato-publico",
+      "existing_url": "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-050e649b0b",
+      "intention": "Como resolver visita tecnica licitacao obra publica",
+      "slug": "como-resolver-visita-tecnica-licitacao-obra-publica",
+      "existing_url": "/conteudos/visita-tecnica-licitacao-obra-publica/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-516b8c3552",
+      "intention": "Como resolver checklist pedido aditivo",
+      "slug": "como-resolver-checklist-pedido-aditivo",
+      "existing_url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-3f09e7619a",
+      "intention": "Como resolver contestar glosa medicao",
+      "slug": "como-resolver-contestar-glosa-medicao",
+      "existing_url": "/guias-contratos-obras/contestar-glosa-medicao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-95be5dbde9",
+      "intention": "Como resolver documentos pedido reequilibrio",
+      "slug": "como-resolver-documentos-pedido-reequilibrio",
+      "existing_url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-12f5a232cf",
+      "intention": "Como resolver responder notificacao atraso",
+      "slug": "como-resolver-responder-notificacao-atraso",
+      "existing_url": "/guias-contratos-obras/responder-notificacao-atraso/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-d5a2a9e8b3",
+      "intention": "Como resolver art 124 alteracao contratual obra",
+      "slug": "como-resolver-art-124-alteracao-contratual-obra",
+      "existing_url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-ac86873b89",
+      "intention": "Como resolver atraso imputavel administracao",
+      "slug": "como-resolver-atraso-imputavel-administracao",
+      "existing_url": "/lei-14133-obras/atraso-imputavel-administracao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-be1fde0d6b",
+      "intention": "Como resolver limite 25 50 aditivo obra",
+      "slug": "como-resolver-limite-25-50-aditivo-obra",
+      "existing_url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-9a866c57ee",
+      "intention": "Como resolver parcela incontroversa medicao pagamento",
+      "slug": "como-resolver-parcela-incontroversa-medicao-pagamento",
+      "existing_url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-4be3b27f1e",
+      "intention": "Como resolver preco item novo desconto proposta",
+      "slug": "como-resolver-preco-item-novo-desconto-proposta",
+      "existing_url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-67fcfc694e",
+      "intention": "Como resolver reequilibrio reajuste repactuacao",
+      "slug": "como-resolver-reequilibrio-reajuste-repactuacao",
+      "existing_url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "funnel": "MOFU",
+      "type": "existing_page"
+    },
+    {
+      "intention_id": "int-37f30a02f8",
+      "intention": "Quando contratar ajuda para operar licitações como diretoria B2G",
+      "slug": "quando-contratar-ajuda-para-operar-licita-es-como-diretoria-b2g",
+      "service": "diretoria-b2g",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-c27072babe",
+      "intention": "Quando contratar ajuda para montar bid room de obras públicas",
+      "slug": "quando-contratar-ajuda-para-montar-bid-room-de-obras-p-blicas",
+      "service": "bid-room-licitacoes-obras",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-9178935c3a",
+      "intention": "Quando contratar ajuda para defender margem em contrato público",
+      "slug": "quando-contratar-ajuda-para-defender-margem-em-contrato-p-blico",
+      "service": "defesa-margem-contratos-publicos",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-42980e307a",
+      "intention": "Quando contratar ajuda para diagnosticar maturidade B2G da construtora",
+      "slug": "quando-contratar-ajuda-para-diagnosticar-maturidade-b2g-da-construtora",
+      "service": "diagnostico-b2g-360",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-22ba224511",
+      "intention": "Quando contratar ajuda para auditar orçamento de licitação de obra",
+      "slug": "quando-contratar-ajuda-para-auditar-or-amento-de-licita-o-de-obra",
+      "service": "auditoria-orcamento-licitacao",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-888714ae26",
+      "intention": "Quando contratar ajuda para estruturar pedido de reequilíbrio",
+      "slug": "quando-contratar-ajuda-para-estruturar-pedido-de-reequil-brio",
+      "service": "reequilibrio-obras-publicas",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-0bdd679ce1",
+      "intention": "Quando contratar ajuda para contestar glosa de medição",
+      "slug": "quando-contratar-ajuda-para-contestar-glosa-de-medi-o",
+      "service": "medicoes-glosas-obras-publicas",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-c742a50f57",
+      "intention": "Quando contratar ajuda para pedir aditivo com base técnica",
+      "slug": "quando-contratar-ajuda-para-pedir-aditivo-com-base-t-cnica",
+      "service": "aditivos-obras-publicas",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-b8c80ce64f",
+      "intention": "Quando contratar ajuda para prorrogar prazo por atraso da Administração",
+      "slug": "quando-contratar-ajuda-para-prorrogar-prazo-por-atraso-da-administra-o",
+      "service": "atrasos-prorrogacao-obras-publicas",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-bb9bb9aeab",
+      "intention": "Quando contratar ajuda para montar defesa técnica contratual",
+      "slug": "quando-contratar-ajuda-para-montar-defesa-t-cnica-contratual",
+      "service": "defesa-tecnica-contratos-publicos",
+      "funnel": "BOFU",
+      "type": "service"
+    },
+    {
+      "intention_id": "int-1206e77829",
+      "intention": "Como ler o mercado público de pavimentação com dados do PNCP",
+      "slug": "como-ler-o-mercado-p-blico-de-pavimenta-o-com-dados-do-pncp",
+      "funnel": "TOFU-MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-d0e6997aa7",
+      "intention": "Onde a competição é mais concentrada em pavimentação",
+      "slug": "onde-a-competi-o-mais-concentrada-em-pavimenta-o",
+      "funnel": "MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-d325cc4852",
+      "intention": "Como ler o mercado público de edificações públicas com dados do PNCP",
+      "slug": "como-ler-o-mercado-p-blico-de-edifica-es-p-blicas-com-dados-do-pncp",
+      "funnel": "TOFU-MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-c056af3a4e",
+      "intention": "Onde a competição é mais concentrada em edificações públicas",
+      "slug": "onde-a-competi-o-mais-concentrada-em-edifica-es-p-blicas",
+      "funnel": "MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-50d2682f79",
+      "intention": "Como ler o mercado público de saneamento com dados do PNCP",
+      "slug": "como-ler-o-mercado-p-blico-de-saneamento-com-dados-do-pncp",
+      "funnel": "TOFU-MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-2a34cf094f",
+      "intention": "Onde a competição é mais concentrada em saneamento",
+      "slug": "onde-a-competi-o-mais-concentrada-em-saneamento",
+      "funnel": "MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-50a3650c28",
+      "intention": "Como ler o mercado público de manutenção predial com dados do PNCP",
+      "slug": "como-ler-o-mercado-p-blico-de-manuten-o-predial-com-dados-do-pncp",
+      "funnel": "TOFU-MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-e31faaf3e7",
+      "intention": "Onde a competição é mais concentrada em manutenção predial",
+      "slug": "onde-a-competi-o-mais-concentrada-em-manuten-o-predial",
+      "funnel": "MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-806d2dd905",
+      "intention": "Como ler o mercado público de climatização com dados do PNCP",
+      "slug": "como-ler-o-mercado-p-blico-de-climatiza-o-com-dados-do-pncp",
+      "funnel": "TOFU-MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-f421c42442",
+      "intention": "Onde a competição é mais concentrada em climatização",
+      "slug": "onde-a-competi-o-mais-concentrada-em-climatiza-o",
+      "funnel": "MOFU",
+      "service": "diagnostico-b2g-360",
+      "type": "data_editorial",
+      "datalake": true
+    },
+    {
+      "intention_id": "int-5d5f4f62d9",
+      "intention": "O que a Lei 14.133 diz sobre art. 124 alteração contratual em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-art-124-altera-o-contratual-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    },
+    {
+      "intention_id": "int-00a22e3b92",
+      "intention": "O que a Lei 14.133 diz sobre art. 125 limites 25% e 50% em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-art-125-limites-25-e-50-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    },
+    {
+      "intention_id": "int-0cb9c483a3",
+      "intention": "O que a Lei 14.133 diz sobre reequilíbrio econômico-financeiro em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-reequil-brio-econ-mico-financeiro-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    },
+    {
+      "intention_id": "int-3b58a365f0",
+      "intention": "O que a Lei 14.133 diz sobre parcela incontroversa em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-parcela-incontroversa-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    },
+    {
+      "intention_id": "int-7bd90dc2d2",
+      "intention": "O que a Lei 14.133 diz sobre atraso imputável à Administração em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-atraso-imput-vel-administra-o-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    },
+    {
+      "intention_id": "int-87260d006e",
+      "intention": "O que a Lei 14.133 diz sobre inexequibilidade de proposta em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-inexequibilidade-de-proposta-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    },
+    {
+      "intention_id": "int-4abc7143d0",
+      "intention": "O que a Lei 14.133 diz sobre matriz de riscos no edital em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-matriz-de-riscos-no-edital-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    },
+    {
+      "intention_id": "int-d2914abdfc",
+      "intention": "O que a Lei 14.133 diz sobre ordem de serviço e prazo em obras",
+      "slug": "o-que-a-lei-14-133-diz-sobre-ordem-de-servi-o-e-prazo-em-obras",
+      "funnel": "MOFU",
+      "service": "aditivos-obras-publicas",
+      "type": "lei"
+    }
+  ],
+  "brief_ids": [
+    "brief-001-f37c2e",
+    "brief-002-b5f596",
+    "brief-003-bb4dc5",
+    "brief-004-02a11e",
+    "brief-005-b9288d",
+    "brief-006-fd16aa",
+    "brief-007-a9e8b3",
+    "brief-008-0a9114",
+    "brief-009-873b89",
+    "brief-010-8c1d7b",
+    "brief-011-127f41",
+    "brief-012-56aae6",
+    "brief-013-c22800",
+    "brief-014-1aa4ef",
+    "brief-015-05d721",
+    "brief-016-ea19fa",
+    "brief-017-e0f477",
+    "brief-018-1b11c0",
+    "brief-019-6acb01",
+    "brief-020-8c3552",
+    "brief-021-da2aac",
+    "brief-022-a55bfc",
+    "brief-023-bfa2ea",
+    "brief-024-000f7d",
+    "brief-025-cb6afc",
+    "brief-026-1da812",
+    "brief-027-673a90",
+    "brief-028-e57748",
+    "brief-029-05af3d",
+    "brief-030-ec2003",
+    "brief-031-e7619a",
+    "brief-032-80fe32",
+    "brief-033-1d6e42",
+    "brief-034-112fb6",
+    "brief-035-a09372",
+    "brief-036-fde211",
+    "brief-037-5b2054",
+    "brief-038-717d50",
+    "brief-039-89dfa8",
+    "brief-040-2e00f4",
+    "brief-041-407320",
+    "brief-042-e8e739",
+    "brief-043-f43895",
+    "brief-044-69cdf5",
+    "brief-045-a7ebaa",
+    "brief-046-30a7c2",
+    "brief-047-d39021",
+    "brief-048-194732",
+    "brief-049-257171",
+    "brief-050-cf0c87",
+    "brief-051-5dbde9",
+    "brief-052-1dae9c",
+    "brief-053-61524b",
+    "brief-054-9c462a",
+    "brief-055-32c06f",
+    "brief-056-55ebaa",
+    "brief-057-a138e4",
+    "brief-058-9b1e81",
+    "brief-059-f27e9c",
+    "brief-060-ff092a",
+    "brief-061-dd3dc0",
+    "brief-062-02289a",
+    "brief-063-600d1c",
+    "brief-064-89655d",
+    "brief-065-990af4",
+    "brief-066-a19925",
+    "brief-067-c8f513",
+    "brief-068-6584cf",
+    "brief-069-df53a5",
+    "brief-070-07a4e4",
+    "brief-071-e4080f",
+    "brief-072-de0d6b",
+    "brief-073-59cc0b",
+    "brief-074-844372",
+    "brief-075-80a7c6",
+    "brief-076-94cdf1",
+    "brief-077-1ce74f",
+    "brief-078-4ad9cc",
+    "brief-079-82f228",
+    "brief-080-2a088f",
+    "brief-081-eaac39",
+    "brief-082-29c290",
+    "brief-083-2107af",
+    "brief-084-fa77cb",
+    "brief-085-e31a60",
+    "brief-086-766d44",
+    "brief-087-6c0428",
+    "brief-088-ff2a56",
+    "brief-089-80d202",
+    "brief-090-c54787",
+    "brief-091-6c57ee",
+    "brief-092-d77bcc",
+    "brief-093-939acd",
+    "brief-094-29e097",
+    "brief-095-f045b7",
+    "brief-096-686abd",
+    "brief-097-bad51e",
+    "brief-098-b27f1e",
+    "brief-099-663db8",
+    "brief-100-cf85a3"
+  ]
+}

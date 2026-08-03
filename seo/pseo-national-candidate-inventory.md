@@ -1,10 +1,10 @@
 # pSEO National Candidate Inventory
 
-- generated_at: `2026-08-01T04:00:55Z`
-- dataset_hash: `1fa346d1a68506bfdfd9eb191a11d09fb8e354ab58b720989ad3ddd607bd4668`
+- generated_at: `2026-08-03T02:16:19Z`
+- dataset_hash: `09659ca1db6bdcbe7d821a60fbe8cde21be551f15da38a9f53920c4899e8ac81`
 - n_candidates: **2049**
 - wave1_proposal: **50**
-- rejected: **236**
+- rejected: **233**
 - gsc_available: True
 
 ## Coverage (type counts)
@@ -23,21 +23,23 @@
 - `agency-00043711` score=79 type=agency status=publish lifecycle=QUALITY_ELIGIBLE
 - `price-climatizacao-instalacoes-mg-climatizacao-instalacoes` score=76 type=price status=publish lifecycle=QUALITY_ELIGIBLE
 - `radar-saneamento-hidraulica-sc` score=79 type=radar status=publish lifecycle=QUALITY_ELIGIBLE
+- `prob-aditivos-margem` score=79 type=problem_service status=publish lifecycle=QUALITY_ELIGIBLE
 - `market-climatizacao-instalacoes-ce` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
 - `comp-climatizacao-instalacoes-ce` score=81 type=competition status=publish lifecycle=QUALITY_ELIGIBLE
 - `agency-00059311` score=79 type=agency status=publish lifecycle=QUALITY_ELIGIBLE
 - `price-climatizacao-instalacoes-pr-drenagem` score=76 type=price status=publish lifecycle=QUALITY_ELIGIBLE
 - `radar-servicos-tecnicos-fase-preparatoria-sc` score=79 type=radar status=publish lifecycle=QUALITY_ELIGIBLE
+- `prob-medicao-glosa` score=79 type=problem_service status=publish lifecycle=QUALITY_ELIGIBLE
 - `market-climatizacao-instalacoes-df` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
 - `comp-climatizacao-instalacoes-df` score=81 type=competition status=publish lifecycle=QUALITY_ELIGIBLE
 - `agency-00145789` score=79 type=agency status=publish lifecycle=QUALITY_ELIGIBLE
 - `price-climatizacao-instalacoes-rj-climatizacao-instalacoes` score=76 type=price status=publish lifecycle=QUALITY_ELIGIBLE
 - `radar-manutencao-predial-engenharia-sc` score=76 type=radar status=publish lifecycle=QUALITY_ELIGIBLE
+- `prob-reequilibrio` score=79 type=problem_service status=publish lifecycle=QUALITY_ELIGIBLE
 - `market-climatizacao-instalacoes-es` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
 - `comp-climatizacao-instalacoes-es` score=81 type=competition status=publish lifecycle=QUALITY_ELIGIBLE
 - `agency-00394429` score=79 type=agency status=publish lifecycle=QUALITY_ELIGIBLE
 - `price-climatizacao-instalacoes-rs-climatizacao-instalacoes` score=76 type=price status=publish lifecycle=QUALITY_ELIGIBLE
-- `radar-estruturas-contencoes-obras-especiais-sc` score=75 type=radar status=publish lifecycle=QUALITY_ELIGIBLE
 - `market-climatizacao-instalacoes-go` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
 - `comp-climatizacao-instalacoes-go` score=81 type=competition status=publish lifecycle=QUALITY_ELIGIBLE
 - `agency-00394452` score=79 type=agency status=publish lifecycle=QUALITY_ELIGIBLE
@@ -66,8 +68,6 @@
 - `comp-climatizacao-instalacoes-rs` score=81 type=competition status=publish lifecycle=QUALITY_ELIGIBLE
 - `market-climatizacao-instalacoes-rj` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
 - `market-climatizacao-instalacoes-rn` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
-- `market-climatizacao-instalacoes-ro` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
-- `market-climatizacao-instalacoes-rs` score=81 type=market status=publish lifecycle=QUALITY_ELIGIBLE
 
 ## Principles
 
