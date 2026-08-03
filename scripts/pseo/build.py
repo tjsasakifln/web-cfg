@@ -577,6 +577,8 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                     "inteligencia/concorrencia/index.html",
                     "inteligencia/cenarios/index.html",
                     "radar/index.html",
+                    # Hand-authored research asset (not pSEO template output)
+                    "radar/nacional-obras-publicas/index.html",
                 }:
                     continue
                 # Record path as prior URL before wipe

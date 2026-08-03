@@ -46,4 +46,11 @@ const lim = readFileSync(resolve(ROOT, "ferramentas/limite-acrescimos-supressoes
 if (!lim.includes("0.25") || !lim.includes("0.50")) { console.error("FAIL thresholds"); fail++; }
 else console.log("PASS art125_thresholds");
 if (fail) process.exit(1);
+// pSEO build must not wipe hand-authored research radar page
+import { readFileSync as rf2 } from "fs";
+const buildPy = rf2(resolve(ROOT, "scripts/pseo/build.py"), "utf8");
+if (!buildPy.includes("radar/nacional-obras-publicas/index.html")) {
+  console.error("FAIL pseo_build_protects_radar_research");
+  process.exit(1);
+} else console.log("PASS pseo_build_protects_radar_research");
 console.log("ALL tools structure checks passed");
