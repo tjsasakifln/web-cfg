@@ -93,8 +93,25 @@ def _head_is_docs_editorial_pin_only() -> bool:
     return all(n.startswith("docs/editorial/") for n in names)
 
 
+def _is_ancestor(maybe_ancestor: str, tip: str) -> bool:
+    try:
+        subprocess.check_call(
+            ["git", "merge-base", "--is-ancestor", maybe_ancestor, tip],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        return True
+    except Exception:  # noqa: BLE001
+        return False
+
+
 def allowed_packaged_shas() -> set[str]:
-    """HEAD always; if tip is docs-only pin, parent is also valid package pin target."""
+    """HEAD always; parent when tip is docs-only pin.
+
+    Also treat any package SHA that is an ancestor of HEAD as valid when
+    validating on PR merge checkouts (GitHub creates a temporary merge commit).
+    """
     live = _git_sha()
     out = {live} if live != "unknown" else set()
     if _head_is_docs_editorial_pin_only():
@@ -102,6 +119,17 @@ def allowed_packaged_shas() -> set[str]:
         if parent:
             out.add(parent)
     return out
+
+
+def packaged_sha_is_acceptable(pkg_sha: str, live: str | None = None) -> bool:
+    """True if package SHA matches HEAD/parent pin or is an ancestor of HEAD."""
+    live = live or _git_sha()
+    if not pkg_sha or live == "unknown":
+        return False
+    if pkg_sha in allowed_packaged_shas():
+        return True
+    # PR merge checkouts / extra commits on top of the pin
+    return _is_ancestor(pkg_sha, live)
 
 
 def robots_of(html: str) -> str:
@@ -224,7 +252,7 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
         pkg_sha = (packaged.get("commit_sha") or "").strip()
         if not pkg_sha:
             contradictions.append(f"packaged_sha_missing:{rel}")
-        elif allowed_shas and pkg_sha not in allowed_shas and live_sha != "unknown":
+        elif live_sha != "unknown" and not packaged_sha_is_acceptable(pkg_sha, live_sha):
             contradictions.append(
                 f"packaged_sha_mismatch:{rel}:{pkg_sha[:12]}!={live_sha[:12]}"
             )
@@ -389,7 +417,6 @@ def verify_packaged_sha_matches_head() -> list[str]:
     failures: list[str] = []
     if live == "unknown":
         return ["git_sha_unknown"]
-    allowed = allowed_packaged_shas()
     for rel in (
         "docs/editorial/TERMINAL-RESULT.json",
         "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
@@ -403,7 +430,7 @@ def verify_packaged_sha_matches_head() -> list[str]:
         pkg = (data.get("commit_sha") or "").strip()
         if not pkg:
             failures.append(f"{rel}:empty!={live[:12]}")
-        elif pkg not in allowed:
+        elif not packaged_sha_is_acceptable(pkg, live):
             failures.append(f"{rel}:{pkg[:12]}!={live[:12]}")
     return failures
 

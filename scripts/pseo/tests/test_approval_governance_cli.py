@@ -74,7 +74,6 @@ def test_partial_checklist_fails():
 def test_approved_without_material_hash_fails():
     """Skeptic: APPROVED must not succeed without --material-hash even if checklist OK."""
     import json
-    from pathlib import Path
 
     data = json.loads(REG.read_text(encoding="utf-8"))
     pid = None
@@ -84,6 +83,7 @@ def test_approved_without_material_hash_fails():
             break
     assert pid
     before = REG.read_bytes()
+    # Clear CI markers so we exercise the material-hash gate (not the CI short-circuit)
     r = _run(
         [
             "set",
@@ -100,10 +100,11 @@ def test_approved_without_material_hash_fails():
             "meta_description_complete,cannibalization_checked,cta_contextual",
         ],
         env={"ALLOW_HUMAN_APPROVAL": "1"},
-        clear_ci=False,
+        clear_ci=True,
     )
     assert r.returncode != 0, r.stdout + r.stderr
-    assert "material-hash" in (r.stderr + r.stdout).lower() or "hash" in (r.stderr + r.stdout).lower()
+    combined = (r.stderr + r.stdout).lower()
+    assert "material-hash" in combined or "hash" in combined, combined
     assert REG.read_bytes() == before
 
 
