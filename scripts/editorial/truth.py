@@ -342,13 +342,12 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
     awaiting = sum(1 for p in wave1 if p.get("status") == "EDITORIAL_REVIEWED")
     rejected_n = len(rejected)
 
-    # Terminal status: never auto HUMAN_APPROVED
-    if contradictions:
-        terminal = "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
-    elif wave1_indexable_n == 0 and awaiting == len(WAVE1_IDS) and rejected_n >= 1:
-        terminal = "READY_FOR_NAMED_HUMAN_APPROVAL"
-    else:
-        terminal = "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
+    terminal = compute_terminal_status(
+        contradictions=contradictions,
+        wave1_editorial_reviewed=awaiting,
+        wave1_indexable=wave1_indexable_n,
+        rejected_count=rejected_n,
+    )
 
     return {
         "schema_version": "1.0.0",
@@ -388,25 +387,78 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
     }
 
 
-def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
-    """Write terminal + inventory pinned to live HEAD.
+def compute_terminal_status(
+    *,
+    contradictions: list[str],
+    wave1_editorial_reviewed: int,
+    wave1_indexable: int,
+    rejected_count: int,
+) -> str:
+    """Single rule for READY vs BLOCKED — never auto HUMAN_APPROVED.
 
-    When writing, package SHA contradictions against the files being rewritten
-    are cleared for the output payload (fresh pin). Call after commit via a
-    follow-up that re-derives, or use pin_packaged_reports_to_head().
+    Never returns BLOCKED with empty contradictions when Wave1 is in the
+    standard pre-approval shape (11 EDITORIAL_REVIEWED, 0 indexable, ≥1 rejected).
+    """
+    if contradictions:
+        return "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
+    if (
+        wave1_indexable == 0
+        and wave1_editorial_reviewed == len(WAVE1_IDS)
+        and rejected_count >= 1
+    ):
+        return "READY_FOR_NAMED_HUMAN_APPROVAL"
+    return "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
+
+
+def _is_package_self_contra(code: str) -> bool:
+    """True for contradictions about the three files write_terminal_result rewrites."""
+    s = str(code)
+    for prefix in (
+        "packaged_sha_mismatch:docs/editorial/TERMINAL-RESULT",
+        "packaged_sha_mismatch:docs/editorial/EDITORIAL-INVENTORY",
+        "packaged_sha_mismatch:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET",
+        "packaged_sha_missing:docs/editorial/TERMINAL-RESULT",
+        "packaged_sha_missing:docs/editorial/EDITORIAL-INVENTORY",
+        "packaged_sha_missing:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET",
+        "packaged_json_invalid:docs/editorial/TERMINAL-RESULT",
+        "packaged_json_invalid:docs/editorial/EDITORIAL-INVENTORY",
+        "packaged_json_invalid:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET",
+    ):
+        if s.startswith(prefix):
+            return True
+    return False
+
+
+def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
+    """Write terminal + inventory + packet pinned to live HEAD.
+
+    Recomputes terminal_status from the cleaned contradiction list (package-self
+    SHA mismatches dropped because those files are being rewritten). Never writes
+    BLOCKED with empty contradictions when Wave1 is READY-shaped.
     """
     truth = truth or derive_editorial_truth()
     live = _git_sha()
-    # Drop self-referential package SHA mismatches for files we are about to overwrite
-    cleaned = [
-        c
-        for c in (truth.get("contradictions") or [])
-        if not str(c).startswith("packaged_sha_mismatch:docs/editorial/TERMINAL-RESULT")
-        and not str(c).startswith("packaged_sha_mismatch:docs/editorial/EDITORIAL-INVENTORY")
-        and not str(c).startswith("packaged_sha_mismatch:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET")
-    ]
+    cleaned = [c for c in (truth.get("contradictions") or []) if not _is_package_self_contra(c)]
+    terminal = compute_terminal_status(
+        contradictions=cleaned,
+        wave1_editorial_reviewed=int(truth["wave1"]["editorial_reviewed"]),
+        wave1_indexable=int(truth["wave1"]["indexable"]),
+        rejected_count=int(truth["rejected"]["count"]),
+    )
+    # Invariant: never BLOCKED + empty contras + ok when READY-shaped
+    ok = len(cleaned) == 0 and terminal in TERMINAL_ALLOWED
+    if not cleaned and terminal == "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE":
+        # Defensive: if Wave1 is READY-shaped, force READY
+        terminal = compute_terminal_status(
+            contradictions=[],
+            wave1_editorial_reviewed=int(truth["wave1"]["editorial_reviewed"]),
+            wave1_indexable=int(truth["wave1"]["indexable"]),
+            rejected_count=int(truth["rejected"]["count"]),
+        )
+        ok = terminal in TERMINAL_ALLOWED
+
     out = {
-        "terminal_status": truth["terminal_status"],
+        "terminal_status": terminal,
         "commit_sha": live,
         "derived_at": _now(),
         "indexable_count": truth["wave1"]["indexable"],
@@ -425,8 +477,7 @@ def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
         "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
         "wave1_packet": "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
         "inventory": "docs/editorial/EDITORIAL-INVENTORY.json",
-        "ok": len(cleaned) == 0 and truth.get("terminal_status")
-        in TERMINAL_ALLOWED,
+        "ok": ok,
     }
     path = ROOT / "docs" / "editorial" / "TERMINAL-RESULT.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -435,17 +486,22 @@ def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
     inv_body["commit_sha"] = live
     inv_body["derived_at"] = out["derived_at"]
     inv_body["contradictions"] = cleaned
-    inv_body["ok"] = out["ok"]
+    inv_body["terminal_status"] = terminal
+    inv_body["ok"] = ok
     inv = ROOT / "docs" / "editorial" / "EDITORIAL-INVENTORY.json"
     inv.write_text(json.dumps(inv_body, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    # Keep packet SHA in sync when present
     packet_path = ROOT / "docs" / "editorial" / "WAVE1-HUMAN-REVIEW-PACKET.json"
     if packet_path.exists():
         try:
             packet = json.loads(packet_path.read_text(encoding="utf-8"))
             packet["commit_sha"] = live
             packet["derived_at"] = out["derived_at"]
-            packet["terminal_status"] = truth["terminal_status"]
+            packet["terminal_status"] = terminal
+            if "summary" in packet and isinstance(packet["summary"], dict):
+                packet["summary"]["human_approved"] = truth["wave1"]["human_approved"]
+                packet["summary"]["indexable"] = truth["wave1"]["indexable"]
+                packet["summary"]["awaiting_human"] = truth["wave1"]["editorial_reviewed"]
+                packet["summary"]["rejected"] = truth["rejected"]["count"]
             packet_path.write_text(
                 json.dumps(packet, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
             )
@@ -455,11 +511,7 @@ def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
 
 
 def verify_packaged_sha_matches_head() -> list[str]:
-    """Fail list if packaged terminal/packet/inventory SHA is not an allowed pin.
-
-    Allowed: exact HEAD, or parent of HEAD when tip commit only touches docs/editorial/
-    (standard post-content SHA pin commit).
-    """
+    """Fail list if packaged terminal/packet/inventory SHA is not an allowed pin."""
     live = _git_sha()
     failures: list[str] = []
     if live == "unknown":
@@ -482,10 +534,72 @@ def verify_packaged_sha_matches_head() -> list[str]:
     return failures
 
 
+def verify_packaged_matches_live(truth: dict[str, Any] | None = None) -> list[str]:
+    """Fail if packaged terminal/inventory/packet lag live derive on material fields.
+
+    Checks terminal_status, ok, contradictions emptiness, Wave1 counts, hub count.
+    SHA pin rules remain separate (verify_packaged_sha_matches_head).
+    """
+    truth = truth or derive_editorial_truth()
+    failures: list[str] = []
+    term_path = ROOT / "docs" / "editorial" / "TERMINAL-RESULT.json"
+    if not term_path.exists():
+        return ["missing:docs/editorial/TERMINAL-RESULT.json"]
+    term = json.loads(term_path.read_text(encoding="utf-8"))
+    live_status = truth["terminal_status"]
+    pkg_status = term.get("terminal_status")
+    if pkg_status != live_status:
+        failures.append(f"terminal_status:{pkg_status}!={live_status}")
+    # Never allow BLOCKED with empty contras and ok=true (write-path bug signature)
+    pkg_contras = term.get("contradictions") or []
+    if (
+        pkg_status == "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
+        and not pkg_contras
+        and term.get("ok") is True
+    ):
+        failures.append("terminal_blocked_empty_contras_ok_true")
+    if bool(term.get("ok")) != bool(truth.get("ok")) and not pkg_contras and not truth.get(
+        "contradictions"
+    ):
+        # Only flag ok lag when both sides claim no contradictions
+        failures.append(f"ok:{term.get('ok')}!={truth.get('ok')}")
+    if term.get("indexable_count") != truth["wave1"]["indexable"]:
+        failures.append(
+            f"indexable_count:{term.get('indexable_count')}!={truth['wave1']['indexable']}"
+        )
+    if term.get("human_approved_count") != truth["wave1"]["human_approved"]:
+        failures.append(
+            f"human_approved_count:{term.get('human_approved_count')}!={truth['wave1']['human_approved']}"
+        )
+    if term.get("awaiting_human") != truth["wave1"]["editorial_reviewed"]:
+        failures.append(
+            f"awaiting_human:{term.get('awaiting_human')}!={truth['wave1']['editorial_reviewed']}"
+        )
+    if term.get("hub_claimed_guides") != truth["public_inventory"]["hub_claimed_guides"]:
+        failures.append(
+            f"hub_claimed_guides:{term.get('hub_claimed_guides')}!={truth['public_inventory']['hub_claimed_guides']}"
+        )
+    # inventory
+    inv_path = ROOT / "docs" / "editorial" / "EDITORIAL-INVENTORY.json"
+    if inv_path.exists():
+        inv = json.loads(inv_path.read_text(encoding="utf-8"))
+        if inv.get("terminal_status") != live_status:
+            failures.append(f"inventory_terminal_status:{inv.get('terminal_status')}!={live_status}")
+    # packet
+    pkt_path = ROOT / "docs" / "editorial" / "WAVE1-HUMAN-REVIEW-PACKET.json"
+    if pkt_path.exists():
+        pkt = json.loads(pkt_path.read_text(encoding="utf-8"))
+        if pkt.get("terminal_status") and pkt.get("terminal_status") != live_status:
+            failures.append(f"packet_terminal_status:{pkt.get('terminal_status')}!={live_status}")
+    return failures
+
+
 def assert_truth_consistent(truth: dict[str, Any] | None = None) -> list[str]:
     """Return list of failures; empty means consistent."""
     truth = truth or derive_editorial_truth()
-    return list(truth.get("contradictions") or [])
+    fails = list(truth.get("contradictions") or [])
+    fails.extend(verify_packaged_matches_live(truth))
+    return fails
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -497,7 +611,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--require-packaged-sha",
         action="store_true",
-        help="Fail if packaged terminal/packet/inventory commit_sha != git HEAD",
+        help="Fail if packaged commit_sha is not an allowed pin for HEAD",
+    )
+    ap.add_argument(
+        "--require-packaged-live",
+        action="store_true",
+        help="Fail if packaged terminal/inventory/packet lag live derive on material fields",
     )
     args = ap.parse_args(argv)
     truth = derive_editorial_truth()
@@ -513,6 +632,11 @@ def main(argv: list[str] | None = None) -> int:
         fails = verify_packaged_sha_matches_head()
         if fails:
             print({"packaged_sha_failures": fails}, file=sys.stderr)
+            rc = max(rc, 3)
+    if args.require_packaged_live:
+        live_fails = verify_packaged_matches_live(truth)
+        if live_fails:
+            print({"packaged_live_failures": live_fails}, file=sys.stderr)
             rc = max(rc, 3)
     return rc
 

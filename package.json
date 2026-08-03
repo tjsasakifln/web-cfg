@@ -55,7 +55,7 @@
     "inbound:gates": "python3 scripts/site/inbound_gates.py --out docs/seo/INBOUND-GATES-REPORT.json",
     "inbound:remediate": "python3 scripts/site/inbound_first_remediate.py",
     "test:inbound-gates": "python3 scripts/site/test_inbound_gates.py",
-    "editorial:truth": "python3 scripts/editorial/truth.py --fail-on-contradiction --require-packaged-sha",
+    "editorial:truth": "python3 scripts/editorial/truth.py --fail-on-contradiction --require-packaged-sha --require-packaged-live",
     "editorial:packet": "python3 -c \"print(\"use docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json\")\"",
     "editorial:truth:write": "python3 scripts/editorial/truth.py --write --fail-on-contradiction"
   },

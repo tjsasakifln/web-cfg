@@ -319,6 +319,49 @@ def test_live_registry_wave1_not_human_approved():
     assert truth["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
 
 
+def test_write_terminal_never_emits_blocked_empty_contras():
+    """write_terminal_result must recompute READY after dropping package-self SHA contras."""
+    from scripts.editorial.truth import write_terminal_result, derive_editorial_truth
+
+    path = write_terminal_result()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    live = derive_editorial_truth()
+    # After write, package-self SHA mismatches are gone → READY-shaped Wave1 is READY
+    assert data["terminal_status"] == live["terminal_status"]
+    assert not (
+        data["terminal_status"] == "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
+        and not (data.get("contradictions") or [])
+        and data.get("ok") is True
+    )
+    if live["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL":
+        assert data["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
+        assert data["ok"] is True
+        assert data["indexable_count"] == 0
+        assert data["awaiting_human"] == 11
+
+
+def test_packaged_terminal_status_matches_live_ready():
+    """Committed/written packages must not lag live terminal_status (skeptic status lag)."""
+    from scripts.editorial.truth import (
+        derive_editorial_truth,
+        verify_packaged_matches_live,
+        write_terminal_result,
+    )
+
+    write_terminal_result()
+    live = derive_editorial_truth()
+    fails = verify_packaged_matches_live(live)
+    assert not fails, fails
+    term = json.loads((ROOT / "docs" / "editorial" / "TERMINAL-RESULT.json").read_text())
+    inv = json.loads((ROOT / "docs" / "editorial" / "EDITORIAL-INVENTORY.json").read_text())
+    assert term["terminal_status"] == live["terminal_status"]
+    assert inv["terminal_status"] == live["terminal_status"]
+    if live["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL":
+        assert term["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
+        assert term.get("contradictions") == []
+        assert term.get("ok") is True
+
+
 def test_packaged_sha_rejects_unrelated_ancestor():
     """Skeptic: pre-recovery main (or any deep ancestor) must NOT pass on recovery tip.
 
