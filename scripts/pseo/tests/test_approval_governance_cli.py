@@ -63,9 +63,47 @@ def test_partial_checklist_fails():
             "--confirm",
             "--checklist",
             "sources_checked,cta_contextual",
-        ]
+        ],
+        env={"ALLOW_HUMAN_APPROVAL": "1"},
+        clear_ci=False,
     )
     assert r.returncode != 0
+    assert REG.read_bytes() == before
+
+
+def test_approved_without_material_hash_fails():
+    """Skeptic: APPROVED must not succeed without --material-hash even if checklist OK."""
+    import json
+    from pathlib import Path
+
+    data = json.loads(REG.read_text(encoding="utf-8"))
+    pid = None
+    for p in data.get("pages") or []:
+        if p.get("human_review") not in {"APPROVED", "APPROVED_WITH_NOTES"}:
+            pid = p["page_id"]
+            break
+    assert pid
+    before = REG.read_bytes()
+    r = _run(
+        [
+            "set",
+            pid,
+            "APPROVED",
+            "--reviewer",
+            "Maria Silva",
+            "--notes",
+            "Fontes e conteúdo conferidos com rigor adequado.",
+            "--confirm",
+            "--checklist",
+            "sample_independence_verified,no_internal_slugs,sources_checked,"
+            "claims_have_direct_evidence,no_duplicates_in_tables,"
+            "meta_description_complete,cannibalization_checked,cta_contextual",
+        ],
+        env={"ALLOW_HUMAN_APPROVAL": "1"},
+        clear_ci=False,
+    )
+    assert r.returncode != 0, r.stdout + r.stderr
+    assert "material-hash" in (r.stderr + r.stdout).lower() or "hash" in (r.stderr + r.stdout).lower()
     assert REG.read_bytes() == before
 
 
@@ -103,9 +141,38 @@ def test_ci_env_blocks_approval():
             "sample_independence_verified,no_internal_slugs,sources_checked,"
             "claims_have_direct_evidence,no_duplicates_in_tables,"
             "meta_description_complete,cannibalization_checked,cta_contextual",
+            "--material-hash",
+            "deadbeef",
         ],
-        env={"CI": "true", "GITHUB_ACTIONS": "true"},
+        env={"CI": "true", "GITHUB_ACTIONS": "true", "ALLOW_HUMAN_APPROVAL": "1"},
         clear_ci=False,
+    )
+    assert r.returncode != 0, r.stdout + r.stderr
+    assert REG.read_bytes() == before
+
+
+def test_without_allow_human_approval_fails():
+    pid = _pending_page()
+    before = REG.read_bytes()
+    r = _run(
+        [
+            "set",
+            pid,
+            "APPROVED",
+            "--reviewer",
+            "Maria Silva",
+            "--notes",
+            "Fontes e conteúdo conferidos com rigor adequado.",
+            "--confirm",
+            "--checklist",
+            "sample_independence_verified,no_internal_slugs,sources_checked,"
+            "claims_have_direct_evidence,no_duplicates_in_tables,"
+            "meta_description_complete,cannibalization_checked,cta_contextual",
+            "--material-hash",
+            "deadbeef",
+        ],
+        env={},  # no ALLOW_HUMAN_APPROVAL
+        clear_ci=True,
     )
     assert r.returncode != 0, r.stdout + r.stderr
     assert REG.read_bytes() == before

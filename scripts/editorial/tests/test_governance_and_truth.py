@@ -45,6 +45,7 @@ def test_blocked_reviewers_include_tester_and_ci():
 
 def test_ci_environment_blocks_approval(monkeypatch):
     monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("ALLOW_HUMAN_APPROVAL", "1")
     assert is_automation_environment()
     errs = validate_approval_request(
         reviewer="Tiago Sasaki",
@@ -59,6 +60,54 @@ def test_ci_environment_blocks_approval(monkeypatch):
     assert "approval_blocked_in_ci_or_automation" in errs
 
 
+def test_allow_human_approval_required_without_env():
+    """approve path must fail when ALLOW_HUMAN_APPROVAL is unset (non-CI)."""
+    env = {k: v for k, v in os.environ.items() if k not in (
+        "ALLOW_HUMAN_APPROVAL", "CI", "GITHUB_ACTIONS", "PSEO_AUTOMATION", "EDITORIAL_AUTOMATION"
+    )}
+    errs = validate_approval_request(
+        reviewer="Maria Silva",
+        notes="Fontes e conteúdo conferidos com rigor adequado para publicação.",
+        checklist=list(EDITORIAL_CHECKLIST_KEYS),
+        page_ids=["lei-art124-alteracao-obra"],
+        confirm=True,
+        material_hash_expected="abc",
+        material_hash_actual="abc",
+        env=env,
+    )
+    assert "allow_human_approval_required" in errs
+
+
+def test_approve_cli_fails_without_allow_human_approval(monkeypatch):
+    monkeypatch.delenv("ALLOW_HUMAN_APPROVAL", raising=False)
+    monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    reg = load_registry()
+    page = next(p for p in reg["pages"] if p["page_id"] == "lei-art124-alteracao-obra")
+    mh = page.get("material_hash") or ""
+    reg_path = ROOT / "data" / "editorial" / "EDITORIAL-REGISTRY.json"
+    before = reg_path.read_bytes()
+    rc = approve_main(
+        [
+            "--reviewer",
+            "Maria Silva",
+            "--page-id",
+            "lei-art124-alteracao-obra",
+            "--notes",
+            "Fontes e conteúdo conferidos com rigor adequado para publicação.",
+            "--sources",
+            "lei-14133-planalto",
+            "--checklist",
+            ",".join(EDITORIAL_CHECKLIST_KEYS),
+            "--material-hash",
+            mh,
+            "--confirm",
+        ]
+    )
+    assert rc != 0
+    assert reg_path.read_bytes() == before
+
+
 def test_missing_checklist_detected():
     miss = missing_checklist(["sources_verified"], EDITORIAL_CHECKLIST_KEYS)
     assert "naturalness_ok" in miss
@@ -66,18 +115,21 @@ def test_missing_checklist_detected():
 
 
 def test_bulk_and_no_confirm_blocked():
+    env = {"ALLOW_HUMAN_APPROVAL": "1"}
     errs = validate_approval_request(
         reviewer="Maria Silva",
         notes="Fontes e conteúdo conferidos com rigor adequado para publicação.",
         checklist=list(EDITORIAL_CHECKLIST_KEYS),
         page_ids=["a", "b"],
         confirm=False,
+        env=env,
     )
     assert "bulk_approval_forbidden" in errs
     assert "individual_confirm_required" in errs
 
 
 def test_hash_mismatch_blocked():
+    env = {"ALLOW_HUMAN_APPROVAL": "1"}
     errs = validate_approval_request(
         reviewer="Maria Silva",
         notes="Fontes e conteúdo conferidos com rigor adequado para publicação.",
@@ -86,11 +138,28 @@ def test_hash_mismatch_blocked():
         confirm=True,
         material_hash_expected="aaa",
         material_hash_actual="bbb",
+        env=env,
     )
     assert "approval_hash_mismatch" in errs
 
 
+def test_material_hash_flag_required():
+    env = {"ALLOW_HUMAN_APPROVAL": "1"}
+    errs = validate_approval_request(
+        reviewer="Maria Silva",
+        notes="Fontes e conteúdo conferidos com rigor adequado para publicação.",
+        checklist=list(EDITORIAL_CHECKLIST_KEYS),
+        page_ids=["only"],
+        confirm=True,
+        material_hash_expected=None,
+        material_hash_actual="abc",
+        env=env,
+    )
+    assert "material_hash_flag_required" in errs
+
+
 def test_rejected_page_blocked():
+    env = {"ALLOW_HUMAN_APPROVAL": "1"}
     errs = validate_approval_request(
         reviewer="Maria Silva",
         notes="Fontes e conteúdo conferidos com rigor adequado para publicação.",
@@ -98,6 +167,9 @@ def test_rejected_page_blocked():
         page_ids=["jur-sumula-260-art"],
         confirm=True,
         page_status="REJECTED",
+        material_hash_expected="abc",
+        material_hash_actual="abc",
+        env=env,
     )
     assert "cannot_approve_rejected" in errs
 
@@ -238,7 +310,12 @@ def test_live_registry_wave1_not_human_approved():
     assert truth["wave1"]["human_approved"] == 0
     assert truth["wave1"]["indexable"] == 0
     assert truth["sitemaps"]["editorial_locs"] == 0
-    assert truth["ok"]
+    # Package SHA must match HEAD when files are pinned (no lag after recovery commit)
+    from scripts.editorial.truth import verify_packaged_sha_matches_head
+
+    sha_fails = verify_packaged_sha_matches_head()
+    assert not sha_fails, sha_fails
+    assert truth["ok"], truth.get("contradictions")
     assert truth["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
 
 

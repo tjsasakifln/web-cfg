@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import re
 import subprocess
+import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -58,6 +59,49 @@ def _git_sha() -> str:
         )
     except Exception:  # noqa: BLE001
         return "unknown"
+
+
+def _git_parent_sha() -> str | None:
+    try:
+        return (
+            subprocess.check_output(
+                ["git", "rev-parse", "HEAD^"], cwd=ROOT, stderr=subprocess.DEVNULL
+            )
+            .decode()
+            .strip()
+        )
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _head_is_docs_editorial_pin_only() -> bool:
+    """True when tip commit only touches docs/editorial/* (SHA pin commit)."""
+    try:
+        names = (
+            subprocess.check_output(
+                ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"],
+                cwd=ROOT,
+                stderr=subprocess.DEVNULL,
+            )
+            .decode()
+            .splitlines()
+        )
+    except Exception:  # noqa: BLE001
+        return False
+    if not names:
+        return False
+    return all(n.startswith("docs/editorial/") for n in names)
+
+
+def allowed_packaged_shas() -> set[str]:
+    """HEAD always; if tip is docs-only pin, parent is also valid package pin target."""
+    live = _git_sha()
+    out = {live} if live != "unknown" else set()
+    if _head_is_docs_editorial_pin_only():
+        parent = _git_parent_sha()
+        if parent:
+            out.add(parent)
+    return out
 
 
 def robots_of(html: str) -> str:
@@ -161,6 +205,30 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
 
     # Contradictions
     contradictions: list[str] = []
+    allowed_shas = allowed_packaged_shas()
+    live_sha = _git_sha()
+    # Packaged reports must match live HEAD (or parent when tip is docs-only pin)
+    for rel in (
+        "docs/editorial/TERMINAL-RESULT.json",
+        "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
+        "docs/editorial/EDITORIAL-INVENTORY.json",
+    ):
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        try:
+            packaged = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            contradictions.append(f"packaged_json_invalid:{rel}")
+            continue
+        pkg_sha = (packaged.get("commit_sha") or "").strip()
+        if not pkg_sha:
+            contradictions.append(f"packaged_sha_missing:{rel}")
+        elif allowed_shas and pkg_sha not in allowed_shas and live_sha != "unknown":
+            contradictions.append(
+                f"packaged_sha_mismatch:{rel}:{pkg_sha[:12]}!={live_sha[:12]}"
+            )
+
     wave1_approved_n = sum(
         1 for p in wave1 if p.get("status") in {"HUMAN_APPROVED", "INDEXABLE", "PUBLISHED"}
     )
@@ -246,11 +314,26 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
 
 
 def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
+    """Write terminal + inventory pinned to live HEAD.
+
+    When writing, package SHA contradictions against the files being rewritten
+    are cleared for the output payload (fresh pin). Call after commit via a
+    follow-up that re-derives, or use pin_packaged_reports_to_head().
+    """
     truth = truth or derive_editorial_truth()
+    live = _git_sha()
+    # Drop self-referential package SHA mismatches for files we are about to overwrite
+    cleaned = [
+        c
+        for c in (truth.get("contradictions") or [])
+        if not str(c).startswith("packaged_sha_mismatch:docs/editorial/TERMINAL-RESULT")
+        and not str(c).startswith("packaged_sha_mismatch:docs/editorial/EDITORIAL-INVENTORY")
+        and not str(c).startswith("packaged_sha_mismatch:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET")
+    ]
     out = {
         "terminal_status": truth["terminal_status"],
-        "commit_sha": truth["commit_sha"],
-        "derived_at": truth["derived_at"],
+        "commit_sha": live,
+        "derived_at": _now(),
         "indexable_count": truth["wave1"]["indexable"],
         "human_approved_count": truth["wave1"]["human_approved"],
         "awaiting_human": truth["wave1"]["editorial_reviewed"],
@@ -258,7 +341,7 @@ def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
         "public_indexable_conteudos": truth["public_inventory"]["conteudos_indexable"],
         "hub_claimed_guides": truth["public_inventory"]["hub_claimed_guides"],
         "editorial_sitemap_locs": truth["sitemaps"]["editorial_locs"],
-        "contradictions": truth["contradictions"],
+        "contradictions": cleaned,
         "will_not_impersonate_named_human": True,
         "why_not_complete": (
             "Named human must run approve_cli.py per page with checklist, "
@@ -267,14 +350,62 @@ def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
         "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
         "wave1_packet": "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
         "inventory": "docs/editorial/EDITORIAL-INVENTORY.json",
-        "ok": truth["ok"],
+        "ok": len(cleaned) == 0 and truth.get("terminal_status")
+        in TERMINAL_ALLOWED,
     }
     path = ROOT / "docs" / "editorial" / "TERMINAL-RESULT.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    inv_body = dict(truth)
+    inv_body["commit_sha"] = live
+    inv_body["derived_at"] = out["derived_at"]
+    inv_body["contradictions"] = cleaned
+    inv_body["ok"] = out["ok"]
     inv = ROOT / "docs" / "editorial" / "EDITORIAL-INVENTORY.json"
-    inv.write_text(json.dumps(truth, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    inv.write_text(json.dumps(inv_body, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Keep packet SHA in sync when present
+    packet_path = ROOT / "docs" / "editorial" / "WAVE1-HUMAN-REVIEW-PACKET.json"
+    if packet_path.exists():
+        try:
+            packet = json.loads(packet_path.read_text(encoding="utf-8"))
+            packet["commit_sha"] = live
+            packet["derived_at"] = out["derived_at"]
+            packet["terminal_status"] = truth["terminal_status"]
+            packet_path.write_text(
+                json.dumps(packet, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+            )
+        except json.JSONDecodeError:
+            pass
     return path
+
+
+def verify_packaged_sha_matches_head() -> list[str]:
+    """Fail list if packaged terminal/packet/inventory SHA is not an allowed pin.
+
+    Allowed: exact HEAD, or parent of HEAD when tip commit only touches docs/editorial/
+    (standard post-content SHA pin commit).
+    """
+    live = _git_sha()
+    failures: list[str] = []
+    if live == "unknown":
+        return ["git_sha_unknown"]
+    allowed = allowed_packaged_shas()
+    for rel in (
+        "docs/editorial/TERMINAL-RESULT.json",
+        "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
+        "docs/editorial/EDITORIAL-INVENTORY.json",
+    ):
+        path = ROOT / rel
+        if not path.exists():
+            failures.append(f"missing:{rel}")
+            continue
+        data = json.loads(path.read_text(encoding="utf-8"))
+        pkg = (data.get("commit_sha") or "").strip()
+        if not pkg:
+            failures.append(f"{rel}:empty!={live[:12]}")
+        elif pkg not in allowed:
+            failures.append(f"{rel}:{pkg[:12]}!={live[:12]}")
+    return failures
 
 
 def assert_truth_consistent(truth: dict[str, Any] | None = None) -> list[str]:
@@ -287,16 +418,29 @@ def main(argv: list[str] | None = None) -> int:
     import argparse
 
     ap = argparse.ArgumentParser(description="Derive editorial truth / write terminal result")
-    ap.add_argument("--write", action="store_true", help="Write TERMINAL-RESULT + inventory")
+    ap.add_argument("--write", action="store_true", help="Write TERMINAL-RESULT + inventory + packet SHA")
     ap.add_argument("--fail-on-contradiction", action="store_true")
+    ap.add_argument(
+        "--require-packaged-sha",
+        action="store_true",
+        help="Fail if packaged terminal/packet/inventory commit_sha != git HEAD",
+    )
     args = ap.parse_args(argv)
     truth = derive_editorial_truth()
     if args.write:
         write_terminal_result(truth)
+        # Re-derive after write so in-memory output reflects pinned files without SHA lag
+        truth = derive_editorial_truth()
     print(json.dumps(truth, ensure_ascii=False, indent=2))
+    rc = 0 if truth["ok"] else 1
     if args.fail_on_contradiction and truth["contradictions"]:
-        return 2
-    return 0 if truth["ok"] else 1
+        rc = 2
+    if args.require_packaged_sha:
+        fails = verify_packaged_sha_matches_head()
+        if fails:
+            print({"packaged_sha_failures": fails}, file=sys.stderr)
+            rc = max(rc, 3)
+    return rc
 
 
 if __name__ == "__main__":

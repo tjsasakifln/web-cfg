@@ -77,14 +77,17 @@ def is_automation_environment(env: dict[str, str] | None = None) -> bool:
         v = (e.get(m) or "").strip().lower()
         if v in {"1", "true", "yes"}:
             return True
-    # Explicit allow only when human sets this outside CI
-    if (e.get("ALLOW_HUMAN_APPROVAL") or "").strip() == "1" and not (
-        (e.get("GITHUB_ACTIONS") or "").strip()
-    ):
-        return False
     if (e.get("GITHUB_ACTIONS") or "").strip():
         return True
     return False
+
+
+def human_approval_explicitly_allowed(env: dict[str, str] | None = None) -> bool:
+    """True only when a named human set ALLOW_HUMAN_APPROVAL=1 outside CI."""
+    e = env if env is not None else os.environ
+    if is_automation_environment(e):
+        return False
+    return (e.get("ALLOW_HUMAN_APPROVAL") or "").strip() == "1"
 
 
 def missing_checklist(
@@ -113,11 +116,20 @@ def validate_approval_request(
     required_checklist: Iterable[str] = EDITORIAL_CHECKLIST_KEYS,
     env: dict[str, str] | None = None,
     min_notes_len: int = 20,
+    require_material_hash: bool = True,
+    require_allow_human_approval: bool = True,
 ) -> list[str]:
-    """Return error codes; empty list means request may proceed."""
+    """Return error codes; empty list means request may proceed.
+
+    Fail-closed: CI/automation blocked; ALLOW_HUMAN_APPROVAL=1 required;
+    material hash required and must match when require_material_hash is True.
+    """
     errors: list[str] = []
-    if is_automation_environment(env):
+    e = env if env is not None else dict(os.environ)
+    if is_automation_environment(e):
         errors.append("approval_blocked_in_ci_or_automation")
+    if require_allow_human_approval and not human_approval_explicitly_allowed(e):
+        errors.append("allow_human_approval_required")
     if is_blocked_reviewer(reviewer):
         errors.append(f"reviewer_not_human:{reviewer!r}")
     if not notes or len(notes.strip()) < min_notes_len:
@@ -131,9 +143,19 @@ def validate_approval_request(
         errors.append("individual_confirm_required")
     if page_status == "REJECTED":
         errors.append("cannot_approve_rejected")
-    if material_hash_expected and material_hash_actual:
-        if material_hash_expected != material_hash_actual:
+    if require_material_hash:
+        exp = (material_hash_expected or "").strip()
+        act = (material_hash_actual or "").strip()
+        if not exp:
+            errors.append("material_hash_flag_required")
+        elif not act:
+            errors.append("material_hash_required")
+        elif exp != act:
             errors.append("approval_hash_mismatch")
-    elif material_hash_expected and not material_hash_actual:
-        errors.append("material_hash_required")
+    else:
+        if material_hash_expected and material_hash_actual:
+            if material_hash_expected != material_hash_actual:
+                errors.append("approval_hash_mismatch")
+        elif material_hash_expected and not material_hash_actual:
+            errors.append("material_hash_required")
     return errors

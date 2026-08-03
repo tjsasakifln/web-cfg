@@ -99,30 +99,28 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     checklist_keys = [x.strip() for x in (args.checklist or "").split(",") if x.strip()]
+    # Fail-closed: flag value only (do not silently fill from page); ALLOW_HUMAN_APPROVAL=1 required
     errors = validate_approval_request(
         reviewer=args.reviewer,
         notes=args.notes,
         checklist=checklist_keys,
         page_ids=page_ids,
         confirm=bool(args.confirm),
-        material_hash_expected=args.material_hash or pg.get("material_hash"),
+        material_hash_expected=(args.material_hash or "").strip() or None,
         material_hash_actual=pg.get("material_hash"),
         page_status=pg.get("status"),
         required_checklist=EDITORIAL_CHECKLIST_KEYS,
+        require_material_hash=True,
+        require_allow_human_approval=True,
     )
-    # Require explicit --material-hash when approving
-    if not (args.material_hash or "").strip():
-        errors.append("material_hash_flag_required")
-    elif args.material_hash != pg.get("material_hash"):
-        if "approval_hash_mismatch" not in errors:
-            errors.append("approval_hash_mismatch")
 
     if errors:
         for e in errors:
             print(f"ERROR: {e}", file=sys.stderr)
         print(
-            "Approval blocked. Complete checklist, pass --material-hash matching the page, "
-            "--confirm, and a real human --reviewer. Not allowed in CI.",
+            "Approval blocked. Set ALLOW_HUMAN_APPROVAL=1, complete checklist, "
+            "pass --material-hash matching the page, --confirm, and a real human --reviewer. "
+            "Not allowed in CI/automation.",
             file=sys.stderr,
         )
         return 3
