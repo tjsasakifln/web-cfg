@@ -14,6 +14,17 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
+def _is_noindex_html(html: str) -> bool:
+    return bool(
+        re.search(
+            r'name=["\']robots["\'][^>]*content=["\'][^"\']*noindex'
+            r'|content=["\'][^"\']*noindex[^"\']*["\'][^>]*name=["\']robots["\']',
+            html,
+            re.I,
+        )
+    )
+
+
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -66,9 +77,7 @@ def main() -> int:
             r'name=["\']description["\'][^>]*content=["\']([^"\']*)["\']|content=["\']([^"\']*)["\'][^>]*name=["\']description["\']',
             t,
         )
-        is_noindex = bool(
-            re.search(r'name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', t, re.I)
-        )
+        is_noindex = _is_noindex_html(t)
         is_utility = (
             path in ("/404.html", "/obrigado.html")
             or path.startswith("/obrigado")
@@ -114,7 +123,7 @@ def main() -> int:
         if path in ("/404.html", "/obrigado.html") or path.startswith("/obrigado") or p.name.startswith("obrigado"):
             continue
         t = p.read_text(encoding="utf-8", errors="replace")
-        if re.search(r'name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', t, re.I):
+        if _is_noindex_html(t):
             continue
         indexable.add(path)
     if sm_paths - indexable:

@@ -146177,13 +146177,11 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-pr-cbuq-asfalto",
       "page_material_hash": "f4802adf5896f9aca958c8e16b9ca7eba5f3c19c39e26a64b11185c95be893ac",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "PR",
@@ -146301,13 +146299,11 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-sc-cbuq-asfalto",
       "page_material_hash": "277c9a5047a3ea08e6551ee9a2e21ab924ceb7e17a9f636a44ca56f662d574bf",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "SC",
@@ -146425,13 +146421,11 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-rs-cbuq-asfalto",
       "page_material_hash": "289d59fb5b475883a553a828d719ae54cc6db7d53aaac40e6ee30f0ccf116ef4",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "RS",
@@ -146549,13 +146543,11 @@
       "page_id": "price-edificacoes-publicas-rs-edificacoes-publicas",
       "page_material_hash": "48f5ddb938054b5239548005e0902f255432ec9aa271daf0ae70faf54e8c7518",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "RS",
@@ -146673,13 +146665,11 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-rs-pavimentacao-generica",
       "page_material_hash": "7f1fc65b329db3b98a6d8d04b4f08326b907de8a8ae2c4ae0e18a2e3255d6293",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "RS",
@@ -146797,13 +146787,11 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-sc-pavimentacao-generica",
       "page_material_hash": "7aa638a8259c9f1ccb26d6f6e728e935f1d9acacedf6eb7960ee2bf12fb32eae",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "SC",
@@ -146921,13 +146909,11 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-sp-cbuq-asfalto",
       "page_material_hash": "2ea0bc9bf56a6d9fc36cac4af65fa05f3eea190833543a619e8931fd045bfb5b",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "SP",
@@ -147045,13 +147031,11 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-mg-pavimentacao-generica",
       "page_material_hash": "21a922dba03aeb5cbdb0196092e6355fe10805cc1fa06c851fb6e7409f1d77be",
       "page_type": "price",
-      "publication_decision_reason": "gates_ok; score=94; approval_invalidated_material:description; REVIEW_REQUIRED_DATA_CHANGE; human_review=PENDING_blocks_index",
+      "publication_decision_reason": "gates_ok; score=94; human_review=PENDING_blocks_index",
       "quality_eligible": true,
       "reasons": [
         "gates_ok",
         "score=94",
-        "approval_invalidated_material:description",
-        "REVIEW_REQUIRED_DATA_CHANGE",
         "human_review=PENDING_blocks_index"
       ],
       "region": "MG",

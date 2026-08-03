@@ -3,15 +3,7 @@
   "gates": {
     "naturalness": {
       "ok": true,
-      "findings": [
-        {
-          "gate": "naturalness",
-          "path": "conteudos/pagamento-parcial-etapa-empreitada-global/index.html",
-          "reason": "slug_token_sequence_in_body",
-          "excerpt": "pagamento parcial etapa empreitada global",
-          "severity": "warn"
-        }
-      ],
+      "findings": [],
       "stats": {
         "scanned": 61,
         "pages_with_hits": 0,
@@ -22,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 90
+        "sitemap_locs": 87
       }
     },
     "brand_shell": {

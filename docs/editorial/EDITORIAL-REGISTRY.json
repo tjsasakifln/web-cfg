@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-03T04:17:22Z",
+  "generated_at": "2026-08-03T12:59:53Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -709,6 +709,11 @@
         },
         {
           "at": "2026-08-03T04:17:21Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-03T12:59:53Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
         }

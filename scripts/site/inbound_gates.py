@@ -52,6 +52,13 @@ MACHINE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
         ),
     ),
     (
+        "caso_de_slug_loose",
+        re.compile(
+            r"O caso de\s+.{8,80}?\s+s[oó] se sustenta",
+            re.I,
+        ),
+    ),
+    (
         "absorver_keyword",
         re.compile(
             r"absorver custo ou risco de\s+[a-záàâãéêíóôõúç0-9\s\-]{8,60}\s+sem prova",
@@ -246,10 +253,15 @@ def gate_naturalness(*, only_indexable: bool = True) -> GateReport:
         scanned += 1
         text = strip_html(html)
         page_hits = []
+        # Scan both raw HTML and stripped text so <strong> cannot hide slug keywords
         for name, pat in MACHINE_PATTERNS:
-            for m in pat.finditer(html):
-                # FAQ / body patterns: fail on indexable
-                page_hits.append((name, m.group(0)[:120]))
+            for src in (html, text):
+                for m in pat.finditer(src):
+                    page_hits.append((name, m.group(0)[:120]))
+                    break
+                else:
+                    continue
+                break
         if page_hits:
             hit_pages += 1
             for name, excerpt in page_hits[:6]:
@@ -274,7 +286,7 @@ def gate_naturalness(*, only_indexable: bool = True) -> GateReport:
                             path=str(p.relative_to(ROOT)),
                             reason="slug_token_sequence_in_body",
                             excerpt=raw_seq[:100],
-                            severity="warn",
+                            severity="error",
                         )
                     )
     # warnings don't fail unless error
@@ -379,6 +391,53 @@ def gate_index_surface() -> GateReport:
                         path="conteudos/index.html",
                         reason="noindex_in_hub_featured",
                         excerpt=href,
+                    )
+                )
+
+
+    # Pillar hubs must not promote noindex library items
+    for pillar in (
+        "medicoes-glosas-obras-publicas",
+        "aditivos-obras-publicas",
+        "reequilibrio-obras-publicas",
+        "atrasos-prorrogacao-obras-publicas",
+        "defesa-tecnica-contratos-publicos",
+        "acompanhamento-contratos-obras",
+        "diagnostico-pre-licitacao",
+        "auditoria-orcamento-licitacao",
+    ):
+        pp = ROOT / pillar / "index.html"
+        if not pp.exists():
+            continue
+        ph = pp.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(
+            r'<article class="library-item"[^>]*>.*?</article>', ph, re.S
+        ):
+            hrefs = re.findall(r'href="(/conteudos/[^"]+/)"', m.group(0))
+            for href in hrefs:
+                local = ROOT / href.strip("/") / "index.html"
+                if local.exists() and is_noindex(
+                    local.read_text(encoding="utf-8", errors="replace")
+                ):
+                    findings.append(
+                        Finding(
+                            gate="index_surface",
+                            path=f"{pillar}/index.html",
+                            reason="noindex_in_pillar_library",
+                            excerpt=href,
+                        )
+                    )
+        # Count claims must not exceed indexable library items kept
+        kept = ph.count('class="library-item"')
+        for m in re.finditer(r"\b(\d{1,3})\s+guias\b", ph, re.I):
+            n = int(m.group(1))
+            if n > kept:
+                findings.append(
+                    Finding(
+                        gate="index_surface",
+                        path=f"{pillar}/index.html",
+                        reason="pillar_guide_count_exceeds_library",
+                        excerpt=f"{m.group(0)} kept={kept}",
                     )
                 )
 
@@ -494,6 +553,18 @@ def gate_brand_shell() -> GateReport:
                     excerpt=old_footer_start,
                 )
             )
+        # Footer / whole chrome must not use pre-rebrand anchors
+        for bad in ("/#atuacao", "/#diferenciais", "/#metodo"):
+            if bad in html:
+                findings.append(
+                    Finding(
+                        gate="brand_shell",
+                        path=str(p.relative_to(ROOT)),
+                        reason="legacy_footer_or_nav_anchor",
+                        excerpt=bad,
+                    )
+                )
+                break
         if old_org in html and org and org not in html:
             findings.append(
                 Finding(

@@ -85,3 +85,12 @@ Fluxo humano **íntegro**. Nenhum script desta PR marca `HUMAN_APPROVED`/`INDEXA
 ## Próximo lote editorial (recomendação)
 
 Onda P1 de **5–8** URLs noindex com intenção comercial clara **e** (quando existir) sinal GSC, nos clusters de medição/glosa, aditivo e edital. Cada URL: reescrita + fontes + canibalização + aprovação humana + gates + inclusão controlada no hub/sitemap. **Não** reabrir 97 páginas em lote. **Não** iniciar P2 pSEO nacional até baseline GSC.
+
+
+## Skeptic follow-up (P0 completeness)
+
+- Pillar hubs filter library to indexable only (counts + ItemList).
+- Full footer shell from brand.json (no `/#atuacao`).
+- Naturalness scans stripped text (strong tags cannot hide slug keywords).
+- `validate_seo` noindex detection handles both attribute orders.
+- Index-surface evidence: `docs/seo/INDEX-SURFACE-AFTER.json`.

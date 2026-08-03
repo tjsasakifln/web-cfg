@@ -47,6 +47,46 @@ def test_index_surface_hub_and_sitemaps():
             assert is_indexable_html(local.read_text(encoding="utf-8")), href
 
 
+def test_pillars_exclude_noindex_library():
+    """Commercial pillar hubs must not promote noindex /conteudos/*."""
+    pillars = [
+        "medicoes-glosas-obras-publicas",
+        "aditivos-obras-publicas",
+        "reequilibrio-obras-publicas",
+        "atrasos-prorrogacao-obras-publicas",
+        "defesa-tecnica-contratos-publicos",
+        "acompanhamento-contratos-obras",
+        "diagnostico-pre-licitacao",
+        "auditoria-orcamento-licitacao",
+    ]
+    for pillar in pillars:
+        html = (ROOT / pillar / "index.html").read_text(encoding="utf-8")
+        for m in re.finditer(
+            r'<article class="library-item"[^>]*>.*?</article>', html, re.S
+        ):
+            for href in re.findall(r'href="(/conteudos/[^"]+/)"', m.group(0)):
+                local = ROOT / href.strip("/") / "index.html"
+                assert local.exists(), (pillar, href)
+                assert is_indexable_html(local.read_text(encoding="utf-8")), (
+                    pillar,
+                    href,
+                )
+        assert "/#atuacao" not in html, pillar
+
+
+def test_footer_not_legacy_atuacao_on_indexable():
+    samples = [
+        ROOT / "index.html",
+        ROOT / "conteudos" / "atraso-pagamento-contrato-publico-suspender" / "index.html",
+        ROOT / "medicoes-glosas-obras-publicas" / "index.html",
+        ROOT / "diretoria-b2g" / "index.html",
+    ]
+    for p in samples:
+        html = p.read_text(encoding="utf-8")
+        assert "/#atuacao" not in html, p
+        assert "Analisar licitação" in html or "Proteger contrato" in html, p
+
+
 def test_brand_shell_on_indexable_conteudos():
     r = gate_brand_shell()
     assert r.ok, r.findings[:10]

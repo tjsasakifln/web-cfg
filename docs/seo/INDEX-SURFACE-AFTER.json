@@ -1,0 +1,122 @@
+{
+  "hub_urls": [
+    "/conteudos/aditivo-empreitada-por-preco-global/",
+    "/conteudos/administracao-local-orcamento-obra-publica/",
+    "/conteudos/atraso-na-medicao-obra-publica/",
+    "/conteudos/atraso-obra-culpa-administracao/",
+    "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+    "/conteudos/bdi-diferenciado-obra-publica/",
+    "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+    "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+    "/conteudos/demolicao-nao-prevista-obra-publica/",
+    "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+    "/conteudos/empreitada-preco-global-preco-unitario/",
+    "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+    "/conteudos/glosa-por-qualidade-obra-publica/",
+    "/conteudos/limite-aditivo-25-50-obra-publica/",
+    "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+    "/conteudos/medicao-por-evento-obra-publica/",
+    "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+    "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+    "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+    "/conteudos/resposta-notificacao-atraso-obra-publica/",
+    "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "/conteudos/sinapi-ou-sicro-obra-publica/"
+  ],
+  "indexable_conteudos": [
+    "/conteudos/aditivo-empreitada-por-preco-global/",
+    "/conteudos/administracao-local-orcamento-obra-publica/",
+    "/conteudos/atraso-na-medicao-obra-publica/",
+    "/conteudos/atraso-obra-culpa-administracao/",
+    "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+    "/conteudos/bdi-diferenciado-obra-publica/",
+    "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+    "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+    "/conteudos/demolicao-nao-prevista-obra-publica/",
+    "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+    "/conteudos/empreitada-preco-global-preco-unitario/",
+    "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+    "/conteudos/glosa-por-qualidade-obra-publica/",
+    "/conteudos/limite-aditivo-25-50-obra-publica/",
+    "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+    "/conteudos/medicao-por-evento-obra-publica/",
+    "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+    "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+    "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+    "/conteudos/resposta-notificacao-atraso-obra-publica/",
+    "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "/conteudos/sinapi-ou-sicro-obra-publica/"
+  ],
+  "pillars": {
+    "medicoes-glosas-obras-publicas": {
+      "library": [
+        "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "/conteudos/atraso-na-medicao-obra-publica/",
+        "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+        "/conteudos/medicao-por-evento-obra-publica/",
+        "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "/conteudos/glosa-por-qualidade-obra-publica/"
+      ],
+      "count": 6,
+      "has_atuacao": false
+    },
+    "aditivos-obras-publicas": {
+      "library": [
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/conteudos/aditivo-empreitada-por-preco-global/",
+        "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+        "/conteudos/demolicao-nao-prevista-obra-publica/"
+      ],
+      "count": 4,
+      "has_atuacao": false
+    },
+    "reequilibrio-obras-publicas": {
+      "library": [
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/"
+      ],
+      "count": 1,
+      "has_atuacao": false
+    },
+    "atrasos-prorrogacao-obras-publicas": {
+      "library": [
+        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "/conteudos/atraso-obra-culpa-administracao/"
+      ],
+      "count": 2,
+      "has_atuacao": false
+    },
+    "defesa-tecnica-contratos-publicos": {
+      "library": [
+        "/conteudos/resposta-notificacao-atraso-obra-publica/"
+      ],
+      "count": 1,
+      "has_atuacao": false
+    },
+    "acompanhamento-contratos-obras": {
+      "library": [],
+      "count": 0,
+      "has_atuacao": false
+    },
+    "diagnostico-pre-licitacao": {
+      "library": [
+        "/conteudos/empreitada-preco-global-preco-unitario/",
+        "/conteudos/comprovacao-exequibilidade-proposta-obra/"
+      ],
+      "count": 2,
+      "has_atuacao": false
+    },
+    "auditoria-orcamento-licitacao": {
+      "library": [
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+        "/conteudos/administracao-local-orcamento-obra-publica/",
+        "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+        "/conteudos/bdi-diferenciado-obra-publica/"
+      ],
+      "count": 6,
+      "has_atuacao": false
+    }
+  },
+  "hub_subset_ok": true
+}
