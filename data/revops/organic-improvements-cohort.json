@@ -1,0 +1,88 @@
+{
+  "schema": "organic_improvement_cohort_v1",
+  "created_at": "2026-08-04T02:05:33.973656+00:00",
+  "gsc_as_of": "2026-07-30",
+  "note": "Before/after titles & CTAs. Do not declare win until later GSC cohort.",
+  "improvements": [
+    {
+      "id": "sinapi-desonerado-ctr",
+      "intent": "orcamento-bdi",
+      "signals": [
+        "desonerado e não desonerado",
+        "impressions_low_ctr"
+      ],
+      "before": {
+        "title": "SINAPI desonerado ou não desonerado: qual usar? | CONFENGE",
+        "meta": "Entenda quando usar o SINAPI desonerado ou não desonerado, como conferir encargos, BDI e edital e quais erros podem comprometer a proposta."
+      },
+      "after": {
+        "title": "Desonerado e não desonerado no SINAPI: qual usar no edital | CONFENGE",
+        "meta": "Desonerado e não desonerado no SINAPI: quando o edital fixa cada base, como alinhar BDI e encargos e quais erros de mistura distorcem preço e exequibilidade."
+      },
+      "path": "conteudos/sinapi-desonerado-nao-desonerado/index.html"
+    },
+    {
+      "id": "limite-aditivo-tool-link",
+      "path": "conteudos/limite-aditivo-25-50-obra-publica/index.html",
+      "intent": "aditivos",
+      "signals": [
+        "aditivos obra pública",
+        "cluster_traffic_no_leads"
+      ],
+      "before": {
+        "title": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133 | CONFENGE",
+        "tool_link": false
+      },
+      "after": {
+        "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
+        "tool_link": "/ferramentas/limite-acrescimos-supressoes/"
+      }
+    },
+    {
+      "id": "criterio-medicao-striking",
+      "intent": "medicoes",
+      "signals": [
+        "position_4_20",
+        "impressions"
+      ],
+      "before": {
+        "title": "A fiscalização pode criar critério de medição que não está no contrato?"
+      },
+      "after": {
+        "title": "Critério de medição não previsto no contrato: o que fazer | CONFENGE"
+      },
+      "path": "conteudos/criterio-de-medicao-nao-previsto-contrato/index.html"
+    },
+    {
+      "id": "prorrogacao-docs-tool",
+      "path": "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html",
+      "intent": "atrasos",
+      "signals": [
+        "position_4_20"
+      ],
+      "before": {
+        "title": "Prorrogação de prazo: documentos que não podem faltar | CONFENGE"
+      },
+      "after": {
+        "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+        "tool_link": "/ferramentas/matriz-atraso-obra/"
+      }
+    },
+    {
+      "id": "notif-atraso-cta-tool",
+      "path": "conteudos/resposta-notificacao-atraso-obra-publica/index.html",
+      "intent": "defesa",
+      "signals": [
+        "position_4_20",
+        "cluster_atrasos"
+      ],
+      "before": {
+        "title": "Notificação por atraso: como montar a resposta | CONFENGE"
+      },
+      "after": {
+        "title": "Notificação de atraso em obra pública: resposta técnica passo a passo | CONFENGE",
+        "tool_link": "/ferramentas/matriz-atraso-obra/"
+      }
+    }
+  ]
+}

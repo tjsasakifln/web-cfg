@@ -63,7 +63,7 @@
 <nav class="nav-desktop" aria-label="Principal">
 <a href="/ferramentas/">Ferramentas</a>
 <a href="/conteudos/">Conteúdos</a>
-<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
+<a href="/defesa-margem-contratos-publicos/" data-tool-to-offer="defesa-margem">Proteger contrato</a>
 <a href="/bid-room-licitacoes-obras/">Bid Room</a>
 </nav>
 <a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
@@ -124,7 +124,7 @@
 </form>
 <div id="resultado" class="tool-result" hidden></div>
 <div class="tool-actions">
-<button type="button" class="button button-secondary" id="btn-download" hidden>Baixar resultado (.txt)</button>
+<button type="button" class="button button-secondary" id="btn-download" data-tool-download="1" hidden>Baixar resultado (.txt)</button>
 </div>
 <section>
 <h2>O que verificar depois do cálculo</h2>
@@ -156,6 +156,7 @@
 <script>
 (function(){
   const T = window.ConfengeTools;
+  if (T.bindToolLifecycle) T.bindToolLifecycle({ tool: 'limite-acrescimos' });
   const form = document.getElementById('limite-form');
   const out = document.getElementById('resultado');
   const dl = document.getElementById('btn-download');
@@ -212,16 +213,16 @@
     dl.hidden = false;
     const wa = document.getElementById('tool-cta-wa');
     wa.href = T.waLink('Olá, Tiago. Usei o verificador de limite de acréscimos/supressões da CONFENGE. Valor contrato ~ ' + Math.round(r.V) + ', acréscimos acumulados ' + Math.round(r.acTotal) + ' (' + (r.pctAc*100).toFixed(1) + '%), saldo acréscimo ~ ' + Math.round(r.salAc) + '. Quero validar o dossiê.');
-    T.track('tool_result', { tool: 'limite-acrescimos', level: r.level, tipo: r.tipo });
+    T.track('tool_complete', { tool: 'limite-acrescimos', level: r.level, tipo: r.tipo });
   }
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    T.track('tool_use', { tool: 'limite-acrescimos', action: 'calculate' });
+    T.track('tool_start', { tool: 'limite-acrescimos' });
     render(compute());
   });
   document.getElementById('btn-reset').addEventListener('click', function(){ form.reset(); out.hidden = true; dl.hidden = true; });
-  dl.addEventListener('click', function(){ T.downloadText('confenge-limite-aditivo.txt', lastText); T.track('tool_use', { tool: 'limite-acrescimos', action: 'download' }); });
+  dl.addEventListener('click', function(){ T.downloadText('confenge-limite-aditivo.txt', lastText); T.track('tool_download', { tool: 'limite-acrescimos' }); });
   // initial demo calc
   render(compute());
 })();

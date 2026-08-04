@@ -1,0 +1,248 @@
+{
+  "generated_at": "2026-08-04T02:07:59.699969+00:00",
+  "total": 16,
+  "counts": {
+    "promote": 5,
+    "consolidate": 1,
+    "revise": 10
+  },
+  "max_promote_wave": 5,
+  "rule": "Never publish /piloto/* as final indexable URL.",
+  "pages": [
+    {
+      "path": "/piloto/concorrencia/edificacoes-publicas-rs/",
+      "words": 322,
+      "score": 3,
+      "action": "promote",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster",
+        "selected_wave1_max_5"
+      ],
+      "content_sha12": "240ff5bb05e7",
+      "proposed_final_url": "/inteligencia/edificacoes-publicas-rs/",
+      "note": "PROMOTE CANDIDATE only. Requires valid human approval. Final URL must not remain under /piloto/."
+    },
+    {
+      "path": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
+      "words": 319,
+      "score": 3,
+      "action": "promote",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster",
+        "selected_wave1_max_5"
+      ],
+      "content_sha12": "04b25b694c7f",
+      "proposed_final_url": "/inteligencia/pavimentacao-infraestrutura-viaria-pr/",
+      "note": "PROMOTE CANDIDATE only. Requires valid human approval. Final URL must not remain under /piloto/."
+    },
+    {
+      "path": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
+      "words": 328,
+      "score": 3,
+      "action": "promote",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster",
+        "selected_wave1_max_5"
+      ],
+      "content_sha12": "9b55f86b37f6",
+      "proposed_final_url": "/inteligencia/pavimentacao-infraestrutura-viaria-rs/",
+      "note": "PROMOTE CANDIDATE only. Requires valid human approval. Final URL must not remain under /piloto/."
+    },
+    {
+      "path": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
+      "words": 322,
+      "score": 3,
+      "action": "promote",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster",
+        "selected_wave1_max_5"
+      ],
+      "content_sha12": "baee60fa91cc",
+      "proposed_final_url": "/inteligencia/pavimentacao-infraestrutura-viaria-sc/",
+      "note": "PROMOTE CANDIDATE only. Requires valid human approval. Final URL must not remain under /piloto/."
+    },
+    {
+      "path": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
+      "words": 322,
+      "score": 3,
+      "action": "promote",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster",
+        "selected_wave1_max_5"
+      ],
+      "content_sha12": "1c8691c3c0f8",
+      "proposed_final_url": "/inteligencia/pavimentacao-infraestrutura-viaria-sp/",
+      "note": "PROMOTE CANDIDATE only. Requires valid human approval. Final URL must not remain under /piloto/."
+    },
+    {
+      "path": "/piloto/",
+      "words": 353,
+      "score": 1,
+      "action": "consolidate",
+      "reasons": [
+        "medium_length"
+      ],
+      "content_sha12": "9555f3fabc45"
+    },
+    {
+      "path": "/piloto/mercados/edificacoes-publicas-rs/",
+      "words": 420,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "eec2b23bb4e4"
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
+      "words": 412,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "bf9dba36a1c6"
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
+      "words": 428,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "36285e0b4000"
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "words": 418,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "15d720aa82af"
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
+      "words": 423,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "5816939ac7f1"
+    },
+    {
+      "path": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
+      "words": 524,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "5b7e47599891"
+    },
+    {
+      "path": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
+      "words": 502,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "574a6354f9ca"
+    },
+    {
+      "path": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
+      "words": 514,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "38f8f0ab7a65"
+    },
+    {
+      "path": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
+      "words": 499,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "912735d38040"
+    },
+    {
+      "path": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
+      "words": 512,
+      "score": 3,
+      "action": "revise",
+      "reasons": [
+        "medium_length",
+        "methodology_or_sources",
+        "has_cta",
+        "internal_or_placeholder",
+        "entity_cluster"
+      ],
+      "content_sha12": "bf8be06bec6e"
+    }
+  ]
+}
