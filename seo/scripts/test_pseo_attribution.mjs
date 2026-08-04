@@ -27,6 +27,8 @@ function makeDoc(formFields = {}) {
       form._attrs[name] = value;
     },
     action: "/obrigado",
+    // Mirrors DOMStringMap used by the shipped form readiness marker.
+    dataset: {},
     querySelector(sel) {
       if (sel.startsWith('input[name="')) {
         const name = sel.match(/name="([^"]+)"/)?.[1];
