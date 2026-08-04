@@ -31,20 +31,66 @@ def _md_inline(text: str) -> str:
     return t
 
 
-def markdown_to_html(md: str) -> str:
+def _is_checklist_page(page: dict[str, Any] | None) -> bool:
+    """Guia pages whose body is meant to be an interactive checklist UI."""
+    if not page:
+        return False
+    if page.get("checklist_ui") is True:
+        return True
+    if page.get("checklist_ui") is False:
+        return False
+    pid = str(page.get("page_id") or "").lower()
+    title = str(page.get("title") or "").lower()
+    url = str(page.get("url") or "").lower()
+    # Wave 1 "guia-*" archetypes + any explicit checklist title/URL
+    if pid.startswith("guia-"):
+        return True
+    return "checklist" in title or "checklist" in url
+
+
+def markdown_to_html(md: str, *, checklist: bool = False) -> str:
+    """Convert editorial markdown to HTML.
+
+    When checklist=True, bullet lines become interactive checkbox items
+    (not plain <ul> lists). Explicit '- [ ]' / '- [x]' always render as
+    checkboxes even outside checklist mode.
+    """
     lines = md.strip().splitlines()
     out: list[str] = []
     in_ul = False
     in_ol = False
+    in_check = False
+    check_i = 0
 
     def close_lists() -> None:
-        nonlocal in_ul, in_ol
+        nonlocal in_ul, in_ol, in_check
         if in_ul:
             out.append("</ul>")
             in_ul = False
         if in_ol:
             out.append("</ol>")
             in_ol = False
+        if in_check:
+            out.append("</ul>")
+            in_check = False
+
+    def open_checklist() -> None:
+        nonlocal in_check
+        if not in_check:
+            close_lists()
+            out.append('<ul class="checklist" role="list">')
+            in_check = True
+
+    def checklist_item(text: str, checked: bool = False) -> str:
+        nonlocal check_i
+        check_i += 1
+        cid = f"chk-{check_i}"
+        chk = " checked" if checked else ""
+        return (
+            f'<li><label for="{cid}">'
+            f'<input type="checkbox" id="{cid}"{chk}/>'
+            f"<span>{_md_inline(text)}</span></label></li>"
+        )
 
     for raw in lines:
         line = raw.rstrip()
@@ -67,12 +113,23 @@ def markdown_to_html(md: str) -> str:
                 in_ol = True
             item = re.sub(r"^\d+\.\s+", "", line)
             out.append(f"<li><div>{_md_inline(item)}</div></li>")
+        elif re.match(r"^-\s+\[[ xX]\]\s+", line):
+            open_checklist()
+            checked = bool(re.match(r"^-\s+\[[xX]\]\s+", line))
+            item = re.sub(r"^-\s+\[[ xX]\]\s+", "", line)
+            out.append(checklist_item(item, checked=checked))
         elif line.startswith("- "):
-            if not in_ul:
-                close_lists()
-                out.append("<ul>")
-                in_ul = True
-            out.append(f"<li>{_md_inline(line[2:])}</li>")
+            item = line[2:].strip()
+            # Numbered-section bullets on checklist pages → real checkboxes
+            if checklist:
+                open_checklist()
+                out.append(checklist_item(item))
+            else:
+                if not in_ul:
+                    close_lists()
+                    out.append("<ul>")
+                    in_ul = True
+                out.append(f"<li>{_md_inline(item)}</li>")
         else:
             close_lists()
             out.append(f"<p>{_md_inline(line)}</p>")
@@ -188,7 +245,10 @@ def render_page(page: dict[str, Any]) -> str:
         (hub_name, hub_url),
         (title, None),
     ]
-    body_html = markdown_to_html(page.get("body_markdown") or "")
+    body_html = markdown_to_html(
+        page.get("body_markdown") or "",
+        checklist=_is_checklist_page(page),
+    )
     answer = page.get("direct_answer") or ""
     published = page.get("date_published") or "2026-08-02"
     modified = page.get("date_modified") or published
