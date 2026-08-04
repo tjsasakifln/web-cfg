@@ -597,6 +597,9 @@ async function main() {
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+    // The form handler is bound by deferred script.js; wait for its explicit
+    // ready marker rather than racing a fixed timeout on slower CI runners.
+    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 3000 });
     await page.type("#nome", "Teste UI");
     // leave email and phone empty; select a real step-1 option
     await page.select("#estagio", "problema urgente em contrato");
