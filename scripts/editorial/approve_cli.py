@@ -36,6 +36,7 @@ from scripts.editorial.governance import (  # noqa: E402
     EDITORIAL_CHECKLIST_KEYS,
     validate_approval_request,
 )
+from scripts.editorial.truth import FIRST_COHORT_SET  # noqa: E402
 from scripts.editorial.registry import (  # noqa: E402
     approve_human,
     get_page,
@@ -91,6 +92,14 @@ def main(argv: list[str] | None = None) -> int:
         if extras:
             print("ERROR: bulk_approval_forbidden — pass exactly one --page-id", file=sys.stderr)
             return 3
+
+    if args.indexable and args.page_id not in FIRST_COHORT_SET:
+        print(
+            "ERROR: outside_first_cohort_not_indexable — this release permits only "
+            "lei-limite-25-50, guia-checklist-aditivo and lei-item-novo-desconto",
+            file=sys.stderr,
+        )
+        return 3
 
     reg = load_registry()
     pg = get_page(reg, args.page_id)
