@@ -633,41 +633,39 @@ await page.setViewport({ width: 1440, height: 1000 });
   const xssCard = await page.evaluate(() => {
     const causa = document.querySelector('[data-f="causa"]');
     const obs = document.querySelector('[data-f="observacao"]');
-    const html = document.querySelector(".tool-event-card")
-      ? document.querySelector(".tool-event-card").innerHTML
-      : "";
+    const card = document.querySelector(".tool-event-card");
+    const badEls = card ? card.querySelectorAll("img, script, iframe, object, embed").length : -1;
     return {
       causaVal: causa ? causa.value : "",
       obsVal: obs ? obs.value : "",
-      hasRawImgTag: /<img\s/i.test(html),
-      hasOnerror: /onerror=/i.test(html),
+      badEls: badEls,
       xssFlag: !!window.__xss,
     };
   });
   if (xssCard.xssFlag) fail("matriz_xss_executed_card");
   else pass("matriz_xss_card_no_exec");
-  if (xssCard.hasRawImgTag || xssCard.hasOnerror) fail("matriz_xss_card_attrs", xssCard);
+  if (xssCard.badEls !== 0) fail("matriz_xss_card_attrs", xssCard);
   else pass("matriz_xss_card_escaped");
-  pass("matriz_xss_input_value_ok");
+  if (!/onerror|img|script/i.test(xssCard.causaVal + xssCard.obsVal)) fail("matriz_xss_input_value_ok", xssCard);
+  else pass("matriz_xss_input_value_ok");
 
   await page.click('button[type="submit"]');
   await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
   const xssOut = await page.evaluate(() => {
     const out = document.getElementById("out");
     const html = out ? out.innerHTML : "";
+    const badEls = out ? out.querySelectorAll("img, script, iframe, object, embed").length : -1;
     return {
       html: html.slice(0, 1200),
-      hasRawScript: /<script/i.test(html),
-      hasRawImg: /<img\s/i.test(html),
-      hasOnerror: /onerror=/i.test(html),
+      badEls: badEls,
       hasEntities: /&lt;|&quot;|&#39;|&amp;/.test(html),
       xssFlag: !!window.__xss,
-      textShowsPayload: out ? /onerror|img src/i.test(out.innerText) : false,
+      textShowsPayload: out ? /onerror|img src|script/i.test(out.innerText) : false,
     };
   });
   if (xssOut.xssFlag) fail("matriz_xss_executed_result");
   else pass("matriz_xss_result_no_exec");
-  if (xssOut.hasRawScript || xssOut.hasRawImg || xssOut.hasOnerror) fail("matriz_xss_result_raw", xssOut.html.slice(0, 200));
+  if (xssOut.badEls !== 0) fail("matriz_xss_result_raw", { badEls: xssOut.badEls, html: xssOut.html.slice(0, 200) });
   else pass("matriz_xss_result_escaped");
   if (!xssOut.hasEntities && !xssOut.textShowsPayload) fail("matriz_xss_result_visible");
   else pass("matriz_xss_result_safe_text");
