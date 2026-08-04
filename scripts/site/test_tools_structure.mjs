@@ -26,9 +26,13 @@ for (const rel of pages) {
     if (!/<form/i.test(html)) { console.error("FAIL form", rel); fail++; }
     else console.log("PASS form", rel);
   }
-  if (rel.includes("radar") && !/pending_lineage|lineage/i.test(html)) {
-    console.error("FAIL radar lineage honesty", rel); fail++;
-  } else if (rel.includes("radar")) console.log("PASS radar_lineage", rel);
+  // Honesty about incomplete series: Portuguese client language (not pipeline jargon)
+  if (rel.includes("radar") && !/rastreabilidade|fonte rastreável|em preparação|limites honestos/i.test(html)) {
+    console.error("FAIL radar source honesty", rel); fail++;
+  } else if (rel.includes("radar")) console.log("PASS radar_source_honesty", rel);
+  if (rel.includes("radar") && /pending_lineage|extra-cli|datalake|Search Demand Observatory/i.test(html)) {
+    console.error("FAIL radar internal jargon", rel); fail++;
+  } else if (rel.includes("radar")) console.log("PASS radar_no_internal_jargon", rel);
 }
 // sitemap lists tools
 const sm = readFileSync(resolve(ROOT, "sitemap.xml"), "utf8");

@@ -150,6 +150,144 @@ def test_whatsapp_float_in_landmark():
         assert "contact-float" in text, f"{path}: missing contact-float landmark"
         assert 'aria-label="Contato rápido"' in text or "Contato rápido" in text
 
+
+# Visitor-visible backstage / marketing-objective language (public surface banlist).
+# Keep in sync with brand.json forbidden_phrases / copy_leaks extensions.
+PUBLIC_BACKSTAGE_PHRASES = (
+    "Conversão com utilidade real",
+    "utilidade real",
+    "alta intenção",
+    "Prova próxima ao CTA",
+    "Nurture por intenção",
+    "Wave 1 noindex",
+    "QA interno",
+    "PILOTO · NOINDEX",
+    "Search Demand Observatory",
+    "pending_lineage",
+    "datalake",
+    "extra-cli",
+    "motor de inbound",
+    "ativo de conversão",
+    "jornada de decisão",
+    "prova de autoridade",
+    "CTA contextual",
+    "Onboarding e horizonte",
+    "Este cluster",
+    "este cluster",
+    "dados do lead",
+    "notificação de lead",
+    "notificacao de lead",
+)
+
+# Patterns for short chrome that phrase-substring misses (visible badge "CTA", bare lineage).
+PUBLIC_BACKSTAGE_PATTERNS = (
+    re.compile(r">\s*CTA\s*<"),
+    re.compile(r"<span>\s*CTA\s*</span>", re.I),
+    re.compile(r"\blineage\b", re.I),
+)
+
+
+def _public_html_surfaces() -> list[Path]:
+    """Indexable/reachable public HTML roots (not docs/ops/seo)."""
+    roots = [
+        ROOT / "index.html",
+        ROOT / "404.html",
+        ROOT / "obrigado.html",
+        ROOT / "obrigado-contrato.html",
+        ROOT / "obrigado-edital.html",
+        ROOT / "obrigado-operacao.html",
+        ROOT / "ferramentas",
+        ROOT / "conteudos",
+        ROOT / "nurture",
+        ROOT / "radar",
+        ROOT / "casos",
+        ROOT / "imprensa",
+        ROOT / "diretoria-b2g",
+        ROOT / "bid-room-licitacoes-obras",
+        ROOT / "defesa-margem-contratos-publicos",
+        ROOT / "diagnostico-b2g-360",
+        ROOT / "inteligencia",
+        ROOT / "piloto",
+        ROOT / "especialista",
+        ROOT / "privacidade",
+        ROOT / "termos-de-uso",
+        ROOT / "metodologia-inteligencia",
+        ROOT / "guias-contratos-obras",
+        ROOT / "lei-14133-obras",
+        ROOT / "jurisprudencia-contratos-obras",
+        ROOT / "acompanhamento-contratos-obras",
+        ROOT / "aditivos-obras-publicas",
+        ROOT / "atrasos-prorrogacao-obras-publicas",
+        ROOT / "auditoria-orcamento-licitacao",
+        ROOT / "defesa-tecnica-contratos-publicos",
+        ROOT / "diagnostico-pre-licitacao",
+        ROOT / "medicoes-glosas-obras-publicas",
+        ROOT / "reequilibrio-obras-publicas",
+    ]
+    out: list[Path] = []
+    for r in roots:
+        if r.is_file() and r.suffix == ".html":
+            out.append(r)
+        elif r.is_dir():
+            out.extend(sorted(r.rglob("*.html")))
+    return out
+
+
+def test_public_backstage_language_absent():
+    """No visitor-facing backstage / conversion-objective jargon on public HTML."""
+    failures: list[str] = []
+    for path in _public_html_surfaces():
+        text = path.read_text(encoding="utf-8")
+        # Strip scripts/styles/comments — banlist is about visitor-visible chrome + body
+        vis = re.sub(r"<script[\s\S]*?</script>", " ", text, flags=re.I)
+        vis = re.sub(r"<style[\s\S]*?</style>", " ", vis, flags=re.I)
+        vis = re.sub(r"<!--[\s\S]*?-->", " ", vis)
+        lower = vis.lower()
+        for phrase in PUBLIC_BACKSTAGE_PHRASES:
+            if phrase.lower() in lower:
+                failures.append(f"{path.relative_to(ROOT)}: {phrase!r}")
+        for cre in PUBLIC_BACKSTAGE_PATTERNS:
+            if cre.search(vis):
+                failures.append(f"{path.relative_to(ROOT)}: pattern {cre.pattern!r}")
+    assert not failures, failures
+
+
+def test_ferramentas_eyebrow_client_facing():
+    html = (ROOT / "ferramentas" / "index.html").read_text(encoding="utf-8")
+    m = re.search(r'class="eyebrow">([^<]+)', html)
+    assert m, "ferramentas missing eyebrow"
+    eye = m.group(1).strip()
+    assert "conversão" not in eye.lower(), eye
+    assert "utilidade" not in eye.lower(), eye
+    assert re.search(r"ferramenta", eye, re.I), f"expected tools category eyebrow, got {eye!r}"
+
+
+def test_banlist_includes_conversion_eyebrow():
+    """Regression: known leak phrase must remain in brand + design banlists."""
+    brand = load_brand()
+    phrases = " ".join(
+        list(brand.get("forbidden_phrases") or [])
+        + list(brand.get("copy_leaks") or [])
+    ).lower()
+    assert "conversão com utilidade real" in phrases
+    assert "alta intenção" in phrases
+    ds_path = ROOT / "data" / "site" / "design-system.json"
+    import json
+
+    ds = json.loads(ds_path.read_text(encoding="utf-8"))
+    ds_leaks = " ".join(ds.get("public_copy_leaks") or []).lower()
+    assert "conversão com utilidade real" in ds_leaks
+
+
+def test_gate_bites_on_reintroduction():
+    """Prove the public banlist would catch reintroduced conversion / pipeline leaks."""
+    synthetic = '<p class="eyebrow">Conversão com utilidade real</p>'
+    assert any(p.lower() in synthetic.lower() for p in PUBLIC_BACKSTAGE_PHRASES)
+    assert any(cre.search('<div class="aside-card"><span>CTA</span><h2>X</h2>') for cre in PUBLIC_BACKSTAGE_PATTERNS)
+    assert any(cre.search("Números só com lineage.") for cre in PUBLIC_BACKSTAGE_PATTERNS)
+    assert "este cluster" in "Este cluster trata do edital".lower()
+
+
 if __name__ == "__main__":
     failed = 0
     for t in (
@@ -160,6 +298,10 @@ if __name__ == "__main__":
         test_llms_consistent,
         test_concordance_and_forbidden_microcopy,
         test_whatsapp_float_in_landmark,
+        test_public_backstage_language_absent,
+        test_ferramentas_eyebrow_client_facing,
+        test_banlist_includes_conversion_eyebrow,
+        test_gate_bites_on_reintroduction,
     ):
         try:
             t()

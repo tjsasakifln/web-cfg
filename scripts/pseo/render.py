@@ -49,23 +49,29 @@ def br_datetime(iso: str | None) -> str:
 
 
 def _scrub_criteria(items: list | None) -> list[str]:
-    out=[]
+    """Visitor-facing inclusion/exclusion lines — no pipeline / datalake jargon."""
+    out = []
     for raw in items or []:
-        s=str(raw)
+        s = str(raw)
+        if re.search(r"datalake|extra-cli|Fonte pública no", s, re.I):
+            s = "Fonte pública de contratos (PNCP e portais de transparência)"
+            out.append(s)
+            continue
         if "archetype=" in s or re.search(r"\b[a-z]+(?:-[a-z]+)+\b", s) and "http" not in s and " " not in s.split("=")[0]:
             # drop pure internal keys
             if s.startswith("archetype="):
                 continue
-            s=re.sub(
+            s = re.sub(
                 r"\b(pavimentacao-infraestrutura-viaria|edificacoes-publicas|manutencao-predial-engenharia|climatizacao-instalacoes|saneamento-hidraulica)\b",
                 "segmento de engenharia",
                 s,
             )
-        s=s.replace("typology=", "tipologia: ").replace("scope=", "escopo: ").replace("nature=", "natureza: ")
-        s=s.replace("manutencao", "manutenção").replace("paralelepipedo", "paralelepípedo")
-        s=s.replace("somente aec_confirmed", "somente objetos AEC confirmados")
-        s=s.replace("comparison_confidence>=", "confiança ≥ ")
-        s=re.sub(r"^n>=(\d+)", r"mínimo de \1 observações", s)
+        s = s.replace("typology=", "tipologia: ").replace("scope=", "escopo: ").replace("nature=", "natureza: ")
+        s = s.replace("manutencao", "manutenção").replace("paralelepipedo", "paralelepípedo")
+        s = s.replace("somente aec_confirmed", "somente objetos AEC confirmados")
+        s = s.replace("comparison_confidence>=", "confiança ≥ ")
+        s = re.sub(r"^n>=(\d+)", r"mínimo de \1 observações", s)
+        s = re.sub(r"\barquétipo\b", "segmento", s, flags=re.I)
         out.append(s)
     return out
 
@@ -81,6 +87,9 @@ def _scrub_limitations(items: list | None) -> list[str]:
             s,
         )
         s = re.sub(r"arquétipo primário\s+deste segmento", "segmento primário", s, flags=re.I)
+        s = re.sub(r"\barquétipo\b", "segmento", s, flags=re.I)
+        s = re.sub(r"\bdatalake\b", "base pública de contratos", s, flags=re.I)
+        s = re.sub(r"\bextra-cli\b", "exportação pública", s, flags=re.I)
         out.append(s)
     return out
 
@@ -472,7 +481,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     )
     inds = indicators_html(
         [
-            ("Contratos", str(m.get("contract_count")), "classificados no arquétipo"),
+            ("Contratos", str(m.get("contract_count")), "classificados no segmento"),
             ("Órgãos", str(m.get("buyer_count")), "compradores distintos"),
             ("Mediana", money(m.get("median_value")), "valor contratual"),
             ("P25–P75", f"{money(m.get('p25_value'))} – {money(m.get('p75_value'))}", "dispersão"),
@@ -531,7 +540,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         else "Dispersão moderada no recorte; ainda assim objetos não são unitariamente comparáveis."
     )
     interpretation = (
-        f"Em {m.get('region_label')}, o arquétipo {m.get('segment')} concentra "
+        f"Em {m.get('region_label')}, o segmento {m.get('segment')} concentra "
         f"{m.get('contract_count')} contratos e {m.get('buyer_count')} órgãos. "
         f"O comprador mais frequente no recorte é {top_buyer.get('name') or 'não identificado'} "
         f"({top_buyer.get('contract_count') or 0} contratos, {money(top_buyer.get('total_value'))}). "
@@ -585,7 +594,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 {related}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <p>Leve o recorte de {e(m.get('region'))} para uma conversa objetiva.</p>
 <a class="button button-primary" data-cta-position="aside" data-pseo-event="pseo_whatsapp_click" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/mercados/">Todos os mercados</a></div>
@@ -765,7 +774,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
 <section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Retrato do órgão no recorte</h2>{inds}</section>
-<section id="segmentos"><p class="eyebrow">Segmentos</p><h2>Mix de arquétipos</h2>{mix_table}</section>
+<section id="segmentos"><p class="eyebrow">Segmentos</p><h2>Mix de segmentos</h2>{mix_table}</section>
 <section id="objetos"><p class="eyebrow">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
 <section id="sazonalidade"><p class="eyebrow">Temporal</p><h2>Sazonalidade</h2>{season_table or '<p>Sem série mensal suficiente.</p>'}</section>
 <section id="oportunidades"><p class="eyebrow">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}
@@ -785,7 +794,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="{e('https://wa.me/5548988344559')}" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/orgaos/">Todos os órgãos</a></div>
 </aside></div>
@@ -947,7 +956,7 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/precos/">Todos os benchmarks</a></div>
 </aside></div>
@@ -1073,7 +1082,7 @@ Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/concorrencia/">Concorrência</a></div>
 </aside></div>
@@ -1229,7 +1238,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/radar/">Radar</a></div>
 </aside></div>

@@ -79,8 +79,8 @@
 <p><small>Links apontam para a ficha pública do contrato no PNCP quando o ID permite deep-link; caso contrário registramos indisponibilidade sem inventar URL.</small></p>
 <p><strong>Este benchmark não substitui orçamento técnico.</strong></p></section>
 <section id="criterios"><p class="eyebrow">Critérios</p><h2>Inclusão e exclusão</h2>
-<p><strong>Inclusão</strong></p><ul><li>Objeto classificado no arquétipo Pavimentação e infraestrutura viária</li><li>UF = PI</li><li>valor_total &gt;= 5000 BRL</li><li>Fonte pública no datalake CONFENGE/extra-cli</li></ul>
-<p><strong>Exclusão</strong></p><ul><li>Contratos com valor nulo, zero ou abaixo do piso amostral</li><li>Objetos sem classificação de arquétipo AEC</li><li>Média aritmética não é publicada como referência</li></ul></section>
+<p><strong>Inclusão</strong></p><ul><li>Objeto classificado no segmento Pavimentação e infraestrutura viária</li><li>UF = PI</li><li>valor_total &gt;= 5000 BRL</li><li>Fonte pública de contratos (PNCP e portais de transparência)</li></ul>
+<p><strong>Exclusão</strong></p><ul><li>Contratos com valor nulo, zero ou abaixo do piso amostral</li><li>Objetos sem classificação de segmento de engenharia</li><li>Média aritmética não é publicada como referência</li></ul></section>
 <section id="interpretacao"><p class="eyebrow">Leitura</p><h2>Implicações para margem</h2>
 <p>Dispersão elevada (IQR) costuma refletir mistura de portes e escopos. Antes da proposta,
 decomponha quantitativos, produtividade, BDI e logística. A CONFENGE apoia auditoria de planilha
@@ -106,14 +106,14 @@ Síntese a partir de registros públicos de contratação e da biblioteca técni
 Não é monitoramento em tempo real nem censo nacional.</p>
 
 <p><strong>Fontes</strong></p><ul><li>Pncp contracts</li></ul>
-<p><strong>Limitações</strong></p><ul><li>Observações são contratos integrais, não preços unitários de serviço.</li><li>Objetos dentro do mesmo arquétipo podem ser tecnicamente incomparáveis.</li><li>Percentis: ORDER BY + OFFSET exato no spill SQLite (sem lista O(N) em RAM).</li></ul>
+<p><strong>Limitações</strong></p><ul><li>Observações são contratos integrais, não preços unitários de serviço.</li><li>Objetos dentro do mesmo segmento podem ser tecnicamente incomparáveis.</li><li>Percentis: ORDER BY + OFFSET exato no spill SQLite (sem lista O(N) em RAM).</li></ul>
 <p class="technical-note">Conteúdo de inteligência decisória com base em evidência pública. Não constitui ranking comercial proprietário nem recomendação de participação em licitação específica.</p>
 </section>
 <section class="author-box"><div class="author-photo"><img src="/assets/tiago-sasaki-avatar-v11-sem-fundo.png" width="512" height="512" alt="Engº Tiago Sasaki" loading="lazy" decoding="async"/></div><div><span>Autor e responsável técnico pelo conteúdo</span><h2><a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a></h2><p>Engenheiro Civil formado pela EESC-USP, com experiência na iniciativa privada e na Administração Pública, atuando em fiscalização, gestão de contratos, orçamentação e decisões técnicas em obras públicas.</p><a class="text-link" href="/especialista/tiago-jun-sasaki/">Conhecer a experiência <svg class="icon"><use href="#i-arrow"></use></svg></a></div></section>
 
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>Validar preço, risco e margem</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>Validar preço, risco e margem</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/precos/">Todos os benchmarks</a></div>
 </aside></div>
