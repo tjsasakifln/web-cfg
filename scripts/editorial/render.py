@@ -17,6 +17,7 @@ from scripts.pseo.html_shell import (
     wa_link,
 )
 from scripts.editorial.sources import load_manifest
+from scripts.editorial.checklist_ui import render_structured_checklist
 
 
 def _md_inline(text: str) -> str:
@@ -31,21 +32,33 @@ def _md_inline(text: str) -> str:
     return t
 
 
-def _is_checklist_page(page: dict[str, Any] | None) -> bool:
-    """Guia pages whose body is meant to be an interactive checklist UI."""
-    if not page:
-        return False
-    if page.get("checklist_ui") is True:
-        return True
-    if page.get("checklist_ui") is False:
-        return False
+
+_MONTHS_PT = ("", "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro")
+
+def format_date_br(iso):
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", str(iso or "").strip())
+    if not m: return str(iso or "")
+    y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    if not (1 <= mo <= 12): return str(iso)
+    return f"{d} de {_MONTHS_PT[mo]} de {y}"
+
+INTERACTION_TYPES = frozenset({"article", "operational_guide", "checklist", "calculator", "diagnostic"})
+
+def resolve_interaction_type(page):
+    if not page: return "article"
+    raw = str(page.get("interaction_type") or "").strip().lower()
+    if raw in INTERACTION_TYPES: return raw
+    if page.get("checklist_items") or page.get("checklist_ui") is True: return "checklist"
     pid = str(page.get("page_id") or "").lower()
     title = str(page.get("title") or "").lower()
     url = str(page.get("url") or "").lower()
-    # Wave 1 "guia-*" archetypes + any explicit checklist title/URL
     if pid.startswith("guia-"):
-        return True
-    return "checklist" in title or "checklist" in url
+        if "checklist" in pid or "checklist" in title or "checklist" in url: return "checklist"
+        return "operational_guide"
+    return "article"
+
+def _is_checklist_page(page):
+    return resolve_interaction_type(page) == "checklist"
 
 
 def markdown_to_html(md: str, *, checklist: bool = False) -> str:
@@ -208,7 +221,7 @@ def _sources_html(page: dict[str, Any]) -> str:
 
 def _cta_block(page: dict[str, Any], position: str) -> str:
     wa = page.get("cta_whatsapp") or ""
-    subject = page.get("cta_email_subject") or f"Análise inicial — {page.get('theme') or page.get('title')}"
+    subject = page.get("cta_email_subject") or f"Análise inicial: {page.get('theme') or page.get('title')}"
     body = page.get("cta_email_body") or (
         f"Olá, Tiago.\n\nLi a página {page.get('url')} e gostaria de avaliar documentos "
         f"relacionados a {page.get('theme') or 'contrato de obra pública'}.\n\n"
@@ -288,9 +301,10 @@ def render_page(page: dict[str, Any]) -> str:
         (hub_name, hub_url),
         (title, None),
     ]
+    structured_html = render_structured_checklist(page) if page.get("checklist_items") else ""
     body_html = markdown_to_html(
         page.get("body_markdown") or "",
-        checklist=_is_checklist_page(page),
+        checklist=(resolve_interaction_type(page)=="checklist" and not page.get("checklist_items")),
     )
     answer = page.get("direct_answer") or ""
     published = page.get("date_published") or "2026-08-02"
@@ -347,8 +361,8 @@ def render_page(page: dict[str, Any]) -> str:
     meta_line = (
         f'<div class="article-meta" role="list">'
         f'<span class="article-meta-chip" role="listitem">{e(author_name)}</span>'
-        f'<span class="article-meta-chip" role="listitem">Publicado <time datetime="{e(published)}">{e(published)}</time></span>'
-        f'<span class="article-meta-chip" role="listitem">Revisado <time datetime="{e(modified)}">{e(modified)}</time></span>'
+        f'<span class="article-meta-chip" role="listitem">Publicado em <time datetime="{e(published)}">{e(format_date_br(published))}</time></span>'
+        f'<span class="article-meta-chip" role="listitem">Revisado em <time datetime="{e(modified)}">{e(format_date_br(modified))}</time></span>'
         f"</div>"
     )
 
@@ -402,6 +416,7 @@ def render_page(page: dict[str, Any]) -> str:
 <span class="answer-box-kicker">Resposta direta</span>
 <p class="answer-box-body">{e(answer)}</p>
 </div>
+{structured_html}
 <div class="editorial-body">
 {body_html}
 </div>
@@ -467,7 +482,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     wa_msg = hub.get("cta_whatsapp") or (
         f"Olá, Tiago. Estou no hub {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
     )
-    mail_subject = hub.get("cta_email_subject") or f"Orientação — {title}"
+    mail_subject = hub.get("cta_email_subject") or f"Orientação: {title}"
     mail_body = hub.get("cta_email_body") or (
         f"Olá, Tiago.\n\nAcessei {url} e gostaria de orientação sobre o tema do hub.\n"
     )

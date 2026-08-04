@@ -120,9 +120,10 @@
         "duplicate_rate>0",
         "contract_url_as_opportunity=7",
         "zero_used_for_missing_value=1",
-        "score=82"
+        "radar_stale_hours>72",
+        "score=77"
       ],
-      "score": 82
+      "score": 77
     },
     {
       "url": "/radar/pavimentacao-infraestrutura-viaria-sc/",
@@ -130,49 +131,55 @@
         "duplicate_items=2",
         "duplicate_rate>0",
         "contract_url_as_opportunity=4",
-        "score=75"
-      ],
-      "score": 75
-    },
-    {
-      "url": "/radar/saneamento-hidraulica-sc/",
-      "reasons": [
-        "contract_url_as_opportunity=2",
+        "radar_stale_hours>72",
         "score=70"
       ],
       "score": 70
     },
     {
+      "url": "/radar/saneamento-hidraulica-sc/",
+      "reasons": [
+        "contract_url_as_opportunity=2",
+        "radar_stale_hours>72",
+        "score=65"
+      ],
+      "score": 65
+    },
+    {
       "url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
       "reasons": [
         "contract_url_as_opportunity=2",
-        "score=67"
+        "radar_stale_hours>72",
+        "score=62"
       ],
-      "score": 67
+      "score": 62
     },
     {
       "url": "/radar/edificacoes-publicas-sc/",
       "reasons": [
         "contract_url_as_opportunity=2",
-        "score=67"
+        "radar_stale_hours>72",
+        "score=62"
       ],
-      "score": 67
+      "score": 62
     },
     {
       "url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
       "reasons": [
         "contract_url_as_opportunity=4",
-        "score=67"
+        "radar_stale_hours>72",
+        "score=62"
       ],
-      "score": 67
+      "score": 62
     },
     {
       "url": "/radar/edificacoes-publicas-rs/",
       "reasons": [
         "contract_url_as_opportunity=1",
-        "score=64"
+        "radar_stale_hours>72",
+        "score=59"
       ],
-      "score": 64
+      "score": 59
     }
   ],
   "pages_written": 23,

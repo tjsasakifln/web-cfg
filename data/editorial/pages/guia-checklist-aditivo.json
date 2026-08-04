@@ -11,12 +11,12 @@
     "art.125"
   ],
   "date_published": "2026-08-02",
-  "date_modified": "2026-08-02",
+  "date_modified": "2026-08-04",
   "author_public": "Biblioteca técnica CONFENGE",
   "author_is_tiago": false,
   "meta_description": "Lista objetiva de documentos e checagens antes de protocolar aditivo de obra pública sob a Lei 14.133.",
-  "lead": "Pedido incompleto vira diligência eterna. Este checklist é o mínimo para não perder a fila nem a prova.",
-  "direct_answer": "Antes de protocolar um aditivo de obra pública, reúna a descrição técnica da alteração, o nexo com projeto ou determinação da Administração, a planilha do aditivo com quantitativos e preços, a memória do saldo percentual (arts. 124 e 125 da Lei nº 14.133/2021), as composições de itens novos, o impacto de prazo e as comunicações oficiais. O checklist abaixo é utilizável sem formulário. Se o seu caso já ultrapassou o teto, envolve item novo sensível ou execução sem papel, o próximo passo é análise do dossiê completo.",
+  "lead": "Pedido incompleto gera diligência prolongada e atraso no protocolo. Use este checklist para reunir o mínimo documental antes de protocolar.",
+  "direct_answer": "Antes de protocolar um aditivo, reúna descrição técnica, nexo, planilha, memória de saldo (arts. 124 e 125), composições de itens novos, impacto de prazo e comunicações. Marque atendido, pendente ou não aplicável. Sinais de bloqueio geram alerta e não contam como progresso.",
   "sources": [
     "lei-14133-art124",
     "lei-14133-art125",
@@ -24,7 +24,7 @@
     "agu-alteracoes-contratuais-2024"
   ],
   "cta_whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
-  "cta_email_subject": "Análise inicial — dossiê de aditivo de obra",
+  "cta_email_subject": "Análise inicial: dossiê de aditivo de obra",
   "cta_email_body": "Olá, Tiago.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n",
   "cta_offer": "Validar o dossiê de aditivo com a CONFENGE",
   "related": [
@@ -47,5 +47,215 @@
       "a": "O mínimo varia conforme o órgão. Quanto mais completo o dossiê na origem, menor a chance de diligência que empurra a execução informal."
     }
   ],
-  "body_markdown": "## Como usar\n\nMarque item a item. O que faltar vira risco explícito — não surpresa na medição.\n\n## 1. Identificação do contrato\n\n- Número do contrato e do processo  \n- Órgão, objeto e regime de execução  \n- Valor inicial e valor atualizado  \n- Data-base e índices de reajuste  \n- Gestor e fiscal nomeados  \n\n## 2. Descrição da alteração\n\n- O que muda (quantitativo, especificação, item novo)  \n- Por que muda (erro de projeto, campo, determinação, interferência)  \n- Onde na obra (trecho, pavimento, sistema)  \n- Quando foi determinada e por quem  \n\n## 3. Base legal e contratual\n\n- Enquadramento no art. 124 (unilateral ou acordo)  \n- Teste do art. 125 (25% / 50% se reforma de edifício ou equipamento)  \n- Checagem do art. 126 (não transfigurar objeto)  \n- Cláusulas do contrato sobre alterações  \n\n## 4. Números\n\n- Planilha do aditivo (itens, unidades, quantitativos, preços)  \n- Memória do saldo acumulado de aditivos  \n- Composições de preço de itens novos  \n- Tratamento do desconto da proposta, se aplicável  \n- Impacto no cronograma físico-financeiro  \n\n## 5. Provas de campo e de gabinete\n\n- Projetos “antes” e “depois”  \n- Diário de obra  \n- Fotos e levantamentos  \n- OS, e-mails e atas  \n- Pareceres técnicos internos da contratada  \n\n## 6. Pedido formal\n\n- Requerimento objetivo (o que se pede: valor, prazo, enquadramento)  \n- Anexos numerados  \n- Protocolo com data  \n- Ressalvas se a Administração exigir execução antecipada  \n\n## Sinais de que o pedido vai travar\n\n- Sem memória de saldo percentual  \n- Item novo sem composição  \n- Justificativa só genérica (“necessidade da obra”)  \n- Execução já concluída sem qualquer registro de determinação  \n\n## Depois do checklist\n\nSe todos os itens críticos estão verdes, protocolize. Se há lacuna material (sem determinação escrita, sem nexo, saldo estourado), corrija a prova antes de entrar com o pedido “para cumprir rito”.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Hipóteses locais de rito, prazos e formulários do órgão prevalecem quando mais específicos.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Nesses cenários, organizar o dossiê cedo evita reconstrução tardia de fatos.\n\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar.\n"
+  "body_markdown": "## Como usar\n\nPara cada requisito, escolha Atendido, Pendente ou Não aplicável. Os sinais de bloqueio são perguntas de risco: uma resposta positiva gera alerta e não aumenta o progresso da barra de prontidão documental.\n\nOs dados ficam só neste navegador e não são enviados à CONFENGE, salvo se você decidir copiar um resumo ou abrir o contato comercial por conta própria.\n\n## O que o dossiê precisa provar\n\nAntes de protocolar o pedido de aditivo, o dossiê deve deixar claro o que muda na obra, por que muda, quem determinou a mudança e com base em qual dispositivo do contrato e da Lei nº 14.133/2021. Em especial, o art. 124 trata da alteração com justificativas e o art. 125 materializa os limites percentuais de acréscimo e de supressão sobre o valor inicial atualizado.\n\nSem planilha do aditivo, memória de saldo acumulado, composições de preço de itens novos e comunicações oficiais (ordem de serviço, e-mail protocolado, ata), o pedido costuma voltar em diligência ou ser executado informalmente.\n\n## Documentos típicos\n\nReúna, quando existirem no processo: contrato e aditivos anteriores; planilha orçamentária da proposta; planilha do aditivo; composições de itens novos; projetos “antes” e “depois”; diário de obra; fotos e levantamentos; pareceres técnicos internos; índice de anexos numerados; requerimento objetivo com valor, prazo e enquadramento.\n\n## Depois do diagnóstico\n\nSe houver pendências essenciais ou sinais de bloqueio (item novo sem composição, execução antes da formalização, falta de determinação contemporânea, memória de saldo ausente, justificativa genérica), corrija a prova antes de protocolar só para cumprir rito.\n\nSe a cobertura documental estiver sólida, use o resumo gerado para montar o índice de anexos e o texto do requerimento.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Ritos, prazos e formulários do órgão prevalecem quando forem mais específicos. O verificador de limites de acréscimos e supressões da CONFENGE pode complementar a memória do art. 125, mas também é apenas orientativo.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Organizar o dossiê cedo evita reconstrução tardia de fatos e de comunicações.\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo entre o fato de campo e o quantitativo da planilha. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar o pedido junto à Administração.\n",
+  "interaction_type": "checklist",
+  "checklist_categories": [
+    {
+      "id": "essential",
+      "label": "Requisitos essenciais",
+      "description": "Sem estes o pedido costuma travar."
+    },
+    {
+      "id": "support",
+      "label": "Documentos de suporte",
+      "description": "Provas de nexo e quantificação."
+    },
+    {
+      "id": "conditional",
+      "label": "Verificações condicionais",
+      "description": "Hipóteses específicas."
+    },
+    {
+      "id": "blocker",
+      "label": "Sinais de bloqueio",
+      "description": "Resposta positiva gera alerta."
+    },
+    {
+      "id": "final",
+      "label": "Revisão final",
+      "description": "Fechamento."
+    }
+  ],
+  "checklist_items": [
+    {
+      "id": "ad-01",
+      "category": "essential",
+      "label": "Número do contrato e processo"
+    },
+    {
+      "id": "ad-02",
+      "category": "essential",
+      "label": "Órgão e regime de execução"
+    },
+    {
+      "id": "ad-03",
+      "category": "essential",
+      "label": "Valor inicial e atualizado"
+    },
+    {
+      "id": "ad-04",
+      "category": "essential",
+      "label": "Descrição da alteração"
+    },
+    {
+      "id": "ad-05",
+      "category": "essential",
+      "label": "Motivo documentado"
+    },
+    {
+      "id": "ad-06",
+      "category": "essential",
+      "label": "Local na obra"
+    },
+    {
+      "id": "ad-07",
+      "category": "essential",
+      "label": "Data e autor da determinação"
+    },
+    {
+      "id": "ad-08",
+      "category": "essential",
+      "label": "Enquadramento art. 124"
+    },
+    {
+      "id": "ad-09",
+      "category": "essential",
+      "label": "Teste art. 125 com memória de saldo"
+    },
+    {
+      "id": "ad-10",
+      "category": "essential",
+      "label": "Planilha do aditivo"
+    },
+    {
+      "id": "ad-11",
+      "category": "essential",
+      "label": "Composições de itens novos"
+    },
+    {
+      "id": "ad-12",
+      "category": "essential",
+      "label": "Impacto no cronograma"
+    },
+    {
+      "id": "ad-13",
+      "category": "essential",
+      "label": "Requerimento objetivo"
+    },
+    {
+      "id": "ad-14",
+      "category": "support",
+      "label": "Data-base e índices"
+    },
+    {
+      "id": "ad-15",
+      "category": "support",
+      "label": "Gestor e fiscal"
+    },
+    {
+      "id": "ad-16",
+      "category": "support",
+      "label": "Cláusulas de alteração"
+    },
+    {
+      "id": "ad-17",
+      "category": "support",
+      "label": "Checagem art. 126"
+    },
+    {
+      "id": "ad-18",
+      "category": "support",
+      "label": "Desconto da proposta se aplicável"
+    },
+    {
+      "id": "ad-19",
+      "category": "support",
+      "label": "Projetos antes/depois"
+    },
+    {
+      "id": "ad-20",
+      "category": "support",
+      "label": "Diário de obra"
+    },
+    {
+      "id": "ad-21",
+      "category": "support",
+      "label": "Fotos"
+    },
+    {
+      "id": "ad-22",
+      "category": "support",
+      "label": "OS e atas"
+    },
+    {
+      "id": "ad-23",
+      "category": "support",
+      "label": "Pareceres internos"
+    },
+    {
+      "id": "ad-24",
+      "category": "support",
+      "label": "Anexos indexados"
+    },
+    {
+      "id": "ad-25",
+      "category": "support",
+      "label": "Protocolo com data"
+    },
+    {
+      "id": "ad-26",
+      "category": "conditional",
+      "label": "Reforma: limite 50% confirmado"
+    },
+    {
+      "id": "ad-27",
+      "category": "conditional",
+      "label": "Item novo: composição e desconto"
+    },
+    {
+      "id": "ad-28",
+      "category": "conditional",
+      "label": "Execução antecipada: ressalva formal"
+    },
+    {
+      "id": "ad-29",
+      "category": "blocker",
+      "label": "Item novo sem composição?"
+    },
+    {
+      "id": "ad-30",
+      "category": "blocker",
+      "label": "Execução antes da formalização?"
+    },
+    {
+      "id": "ad-31",
+      "category": "blocker",
+      "label": "Falta determinação contemporânea?"
+    },
+    {
+      "id": "ad-32",
+      "category": "blocker",
+      "label": "Memória de saldo ausente?"
+    },
+    {
+      "id": "ad-33",
+      "category": "blocker",
+      "label": "Justificativa só genérica?"
+    },
+    {
+      "id": "ad-34",
+      "category": "final",
+      "label": "Índice confere"
+    },
+    {
+      "id": "ad-35",
+      "category": "final",
+      "label": "Nexo relido"
+    },
+    {
+      "id": "ad-36",
+      "category": "final",
+      "label": "Pendências tratadas"
+    }
+  ]
 }

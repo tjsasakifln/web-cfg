@@ -1,8 +1,10 @@
 {
-  "schema_version": "1.0.0",
-  "commit": "4003f94de0148a46765c1a0d6b0bcea646129736",
-  "build_time": "2026-08-03T21:44:15Z",
+  "schema_version": "1.1.0",
+  "commit": "73fa460a01e73bc389341d9b1501d3564c46fe20",
+  "build_time": "2026-08-04T14:36:35Z",
   "environment": "local",
   "site_schema_version": "1.1.0",
+  "deploy_id": null,
+  "artifact_hash": "8a7be5fa354900855854edb39796da37eb9cd86946d7320a4d9f339f3b4d58e6",
   "source": "build_site.write_build_info"
 }

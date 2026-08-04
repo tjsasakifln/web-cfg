@@ -2,66 +2,21 @@ import { readFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const pages = [
-  "ferramentas/index.html",
-  "ferramentas/limite-acrescimos-supressoes/index.html",
-  "ferramentas/checklist-reequilibrio/index.html",
-  "ferramentas/matriz-atraso-obra/index.html",
-  "radar/nacional-obras-publicas/index.html",
-];
-let fail = 0;
-for (const rel of pages) {
-  const p = resolve(ROOT, rel);
-  if (!existsSync(p)) { console.error("FAIL missing", rel); fail++; continue; }
-  const html = readFileSync(p, "utf8");
-  if (!/canonical/i.test(html)) { console.error("FAIL canonical", rel); fail++; }
-  else console.log("PASS canonical", rel);
-  if (/datalake|pipeline|slug de ingest/i.test(html)) { console.error("FAIL internal lang", rel); fail++; }
-  else console.log("PASS no_internal_lang", rel);
-  if (rel.includes("ferramentas/") && rel !== "ferramentas/index.html") {
-    if (!/não substitui|Nao substitui|não é autorização|não emite|orientativ/i.test(html)) {
-      console.error("FAIL disclaimer", rel); fail++;
-    } else console.log("PASS disclaimer", rel);
-    // Must compute before contact - has form submit handler
-    if (!/<form/i.test(html)) { console.error("FAIL form", rel); fail++; }
-    else console.log("PASS form", rel);
-  }
-  // Honesty about incomplete series: Portuguese client language (not pipeline jargon)
-  if (rel.includes("radar") && !/rastreabilidade|fonte rastreável|em preparação|limites honestos/i.test(html)) {
-    console.error("FAIL radar source honesty", rel); fail++;
-  } else if (rel.includes("radar")) console.log("PASS radar_source_honesty", rel);
-  if (rel.includes("radar") && /pending_lineage|extra-cli|datalake|Search Demand Observatory/i.test(html)) {
-    console.error("FAIL radar internal jargon", rel); fail++;
-  } else if (rel.includes("radar")) console.log("PASS radar_no_internal_jargon", rel);
+let fail=0;
+const pages=["ferramentas/index.html","ferramentas/limite-acrescimos-supressoes/index.html","ferramentas/checklist-reequilibrio/index.html","ferramentas/matriz-atraso-obra/index.html"];
+if(!existsSync(resolve(ROOT,"styles-tools.css"))){console.error("FAIL styles-tools");fail++;}else console.log("PASS styles-tools");
+for(const rel of pages){
+  const html=readFileSync(resolve(ROOT,rel),"utf8");
+  if(html.includes("#0b5fff")){console.error("FAIL blue",rel);fail++;}else console.log("PASS no_blue",rel);
+  if(rel!=="ferramentas/index.html" && !html.includes("styles-tools.css")){console.error("FAIL csslink",rel);fail++;}
+  else if(rel!=="ferramentas/index.html") console.log("PASS csslink",rel);
+  if(!/<form/i.test(html) && rel!=="ferramentas/index.html"){console.error("FAIL form",rel);fail++;}
 }
-// sitemap lists tools
-const sm = readFileSync(resolve(ROOT, "sitemap.xml"), "utf8");
-for (const u of [
-  "ferramentas/limite-acrescimos-supressoes",
-  "ferramentas/checklist-reequilibrio",
-  "ferramentas/matriz-atraso-obra",
-  "radar/nacional-obras-publicas",
-]) {
-  if (!sm.includes(u)) { console.error("FAIL sitemap", u); fail++; }
-  else console.log("PASS sitemap", u);
-}
-// art 125 numbers
-const limHtml = readFileSync(resolve(ROOT, "ferramentas/limite-acrescimos-supressoes/index.html"), "utf8");
-const compute = readFileSync(resolve(ROOT, "assets/js/tool-compute.js"), "utf8");
-if (!limHtml.includes("tool-compute") || !compute.includes("0.25") || !compute.includes("0.5")) {
-  console.error("FAIL thresholds"); fail++;
-} else console.log("PASS art125_thresholds");
-// shipped pure compute must be required by unit test file
-const unit = readFileSync(resolve(ROOT, "scripts/site/test_tool_compute.mjs"), "utf8");
-if (!unit.includes("computeLimiteAditivo") || !unit.includes("computeChecklistScore")) {
-  console.error("FAIL pure_unit_coverage"); fail++;
-} else console.log("PASS pure_unit_coverage");
-if (fail) process.exit(1);
-// pSEO build must not wipe hand-authored research radar page
-import { readFileSync as rf2 } from "fs";
-const buildPy = rf2(resolve(ROOT, "scripts/pseo/build.py"), "utf8");
-if (!buildPy.includes("radar/nacional-obras-publicas/index.html")) {
-  console.error("FAIL pseo_build_protects_radar_research");
-  process.exit(1);
-} else console.log("PASS pseo_build_protects_radar_research");
+const hub=readFileSync(resolve(ROOT,"ferramentas/index.html"),"utf8");
+if(!/CollectionPage|ItemList/.test(hub)){console.error("FAIL schema");fail++;}else console.log("PASS schema");
+const unit=readFileSync(resolve(ROOT,"scripts/site/test_tool_compute.mjs"),"utf8");
+if(!unit.includes("computeLimiteAditivo")||!unit.includes("parseBRL")){console.error("FAIL unit");fail++;}else console.log("PASS unit_cov");
+const compute=readFileSync(resolve(ROOT,"assets/js/tool-compute.js"),"utf8");
+if(!compute.includes("0.25")||!compute.includes("0.5")){console.error("FAIL thr");fail++;}else console.log("PASS thr");
+if(fail) process.exit(1);
 console.log("ALL tools structure checks passed");

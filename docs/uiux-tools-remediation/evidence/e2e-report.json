@@ -1,0 +1,356 @@
+{
+  "generated_at": "2026-08-04T14:44:18.442Z",
+  "base": "http://127.0.0.1:8795",
+  "viewports": [
+    "1440x1000",
+    "1024x768",
+    "768x1024",
+    "390x844",
+    "360x800",
+    "320x568"
+  ],
+  "results": [
+    {
+      "pilot": "hub",
+      "viewport": "1440x1000",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/hub-1440x1000.png"
+    },
+    {
+      "pilot": "hub",
+      "viewport": "1024x768",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/hub-1024x768.png"
+    },
+    {
+      "pilot": "hub",
+      "viewport": "768x1024",
+      "overflow": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/hub-768x1024.png"
+    },
+    {
+      "pilot": "hub",
+      "viewport": "390x844",
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/hub-390x844.png"
+    },
+    {
+      "pilot": "hub",
+      "viewport": "360x800",
+      "overflow": false,
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/hub-360x800.png"
+    },
+    {
+      "pilot": "hub",
+      "viewport": "320x568",
+      "overflow": false,
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/hub-320x568.png"
+    },
+    {
+      "pilot": "limite",
+      "viewport": "1440x1000",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/limite-1440x1000.png"
+    },
+    {
+      "pilot": "limite",
+      "viewport": "1024x768",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/limite-1024x768.png"
+    },
+    {
+      "pilot": "limite",
+      "viewport": "768x1024",
+      "overflow": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/limite-768x1024.png"
+    },
+    {
+      "pilot": "limite",
+      "viewport": "390x844",
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/limite-390x844.png"
+    },
+    {
+      "pilot": "limite",
+      "viewport": "360x800",
+      "overflow": false,
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/limite-360x800.png"
+    },
+    {
+      "pilot": "limite",
+      "viewport": "320x568",
+      "overflow": false,
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/limite-320x568.png"
+    },
+    {
+      "pilot": "reequilibrio",
+      "viewport": "1440x1000",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/reequilibrio-1440x1000.png"
+    },
+    {
+      "pilot": "reequilibrio",
+      "viewport": "1024x768",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/reequilibrio-1024x768.png"
+    },
+    {
+      "pilot": "reequilibrio",
+      "viewport": "768x1024",
+      "overflow": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/reequilibrio-768x1024.png"
+    },
+    {
+      "pilot": "reequilibrio",
+      "viewport": "390x844",
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/reequilibrio-390x844.png"
+    },
+    {
+      "pilot": "reequilibrio",
+      "viewport": "360x800",
+      "overflow": false,
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/reequilibrio-360x800.png"
+    },
+    {
+      "pilot": "reequilibrio",
+      "viewport": "320x568",
+      "overflow": false,
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/reequilibrio-320x568.png"
+    },
+    {
+      "pilot": "matriz",
+      "viewport": "1440x1000",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/matriz-1440x1000.png"
+    },
+    {
+      "pilot": "matriz",
+      "viewport": "1024x768",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/matriz-1024x768.png"
+    },
+    {
+      "pilot": "matriz",
+      "viewport": "768x1024",
+      "overflow": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/matriz-768x1024.png"
+    },
+    {
+      "pilot": "matriz",
+      "viewport": "390x844",
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/matriz-390x844.png"
+    },
+    {
+      "pilot": "matriz",
+      "viewport": "360x800",
+      "overflow": false,
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/matriz-360x800.png"
+    },
+    {
+      "pilot": "matriz",
+      "viewport": "320x568",
+      "overflow": false,
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/matriz-320x568.png"
+    },
+    {
+      "pilot": "aditivo",
+      "viewport": "1440x1000",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/aditivo-1440x1000.png"
+    },
+    {
+      "pilot": "aditivo",
+      "viewport": "1024x768",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/aditivo-1024x768.png"
+    },
+    {
+      "pilot": "aditivo",
+      "viewport": "768x1024",
+      "overflow": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/aditivo-768x1024.png"
+    },
+    {
+      "pilot": "aditivo",
+      "viewport": "390x844",
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/aditivo-390x844.png"
+    },
+    {
+      "pilot": "aditivo",
+      "viewport": "360x800",
+      "overflow": false,
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/aditivo-360x800.png"
+    },
+    {
+      "pilot": "aditivo",
+      "viewport": "320x568",
+      "overflow": false,
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "shot": "/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after/aditivo-320x568.png"
+    }
+  ],
+  "overflows": [],
+  "axe": {
+    "pages": [
+      {
+        "path": "/ferramentas/",
+        "id": "hub",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
+        "path": "/ferramentas/limite-acrescimos-supressoes/",
+        "id": "limite",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
+        "path": "/ferramentas/checklist-reequilibrio/",
+        "id": "reequilibrio",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
+        "path": "/ferramentas/matriz-atraso-obra/",
+        "id": "matriz",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
+        "path": "/guias-contratos-obras/checklist-pedido-aditivo/",
+        "id": "aditivo",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      }
+    ],
+    "critical": 0,
+    "serious": 0,
+    "moderate": 0,
+    "minor": 0
+  },
+  "keyboard": [
+    {
+      "page": "limite",
+      "reached_interactive": true
+    }
+  ],
+  "flows": [
+    {
+      "flow": "limite",
+      "hidden": false,
+      "text": "Resultado orientativo\nNão equivale a validade jurídica.\n\nAcréscimos\nAnteriores\nR$ 1.800.000,00\nProposto\nR$ 900.000,00\nTotal\nR$ 2.700.000,00\nLimite\nR$ 2.500.000,00\nSaldo\n-R$ 200.000,00\n%\n27%\n\nAcima do limite numérico calculado com os dados informados.\n\nSupressões\nAnteriores\nR$ 0,00\nProposto\nR$ 0,00\nTotal\nR$ 0,00\nLimite\nR$ 2.500.000,00\nSaldo\nR$ 2.500.000,00\n%\n0%\n\nDentro do limite numérico calculado com os dados informados.\n\nTotal de acréscimos ultrapassa o limite numérico calculado com os dados in",
+      "hasPanels": true,
+      "hasNumeric": true
+    },
+    {
+      "flow": "reequilibrio",
+      "hidden": false,
+      "text": "Prontidão documental baixa\nO dossiê ainda não está pronto para protocolar com segurança documental. Bloqueadores em aberto: Fato gerador definido, Cronologia, Nexo causal, Comunicação tempestiva, Memória de cálculo, Cláusulas contratuais e matriz de riscos.\n\nCobertura: 0%\nBloqueadores: 6\n\nOrientativo. Não significa direito ao reequilíbrio.",
+      "hasBlock": true
+    },
+    {
+      "flow": "matriz",
+      "hidden": false,
+      "text": "Hipóteses preliminares\nForam analisados 1 evento(s). As imputações abaixo são hipóteses preliminares e tendências que dependem de prova. Não há veredito de responsabilidade nem soma automática de dias.\n\nEventos: 1\nSem prova: 1\nSem período: 1\nProjeto incompleto da Administração: hipótese preliminar de imputação à Administração (depende de prova)\n\nResultado orientativo. Não constitui laudo pericial nem conclusão de culpa.",
+      "hypothesis": true,
+      "noFavorable": true
+    },
+    {
+      "flow": "aditivo",
+      "hasUi": true,
+      "triState": true,
+      "resultVisible": true,
+      "text": "Prontidão documental baixa\nForam analisados 31 requisitos. 1 essenciais atendidos, 12 pendência(s) essencial(is) e 1 sinal(is) de bloqueio: Item novo sem composição?.\n\nAnalisados: 31\nEssenciais: 1\nPendências essenciais: 12\nSinais de bloqueio: 1\n\nDiagnóstico documental orientativo.",
+      "progress": "Prontidão documental baixa. Essenciais atendidos: 1; pendências: 12; bloqueios: 1.",
+      "not100": true
+    }
+  ],
+  "failed": 0
+}
