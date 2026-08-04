@@ -97,7 +97,8 @@ def missing_checklist(
     if provided is None:
         have: set[str] = set()
     elif isinstance(provided, dict):
-        have = {k for k, v in provided.items() if v}
+        # A stored approval is evidence, not a truthy convenience flag.
+        have = {k for k, v in provided.items() if v is True}
     else:
         have = {str(x).strip() for x in provided if str(x).strip()}
     return sorted(set(required) - have)
