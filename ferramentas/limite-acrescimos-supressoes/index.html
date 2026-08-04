@@ -150,6 +150,7 @@
 </main>
 <footer class="site-footer"><div class="container"><p>© CONFENGE · Conteúdo técnico-informativo · <a href="/privacidade/">Privacidade</a></p></div></footer>
 <script src="/assets/js/tools-common.js"></script>
+<script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
 
 <script>
@@ -161,39 +162,25 @@
   let lastText = '';
 
   function compute() {
-    const V = T.num(document.getElementById('valor_inicial'));
-    const tipo = document.getElementById('tipo').value;
-    const acPrev = T.num(document.getElementById('acrescimos_previos'));
-    const suPrev = T.num(document.getElementById('supressoes_previas'));
-    const acNow = T.num(document.getElementById('acrescimo_proposto'));
-    const suNow = T.num(document.getElementById('supressao_proposta'));
-    if (V <= 0) return { error: 'Informe o valor inicial atualizado do contrato.' };
-
-    const limAc = tipo === 'reforma' ? 0.50 : 0.25;
-    const limSu = 0.25;
-    const maxAc = V * limAc;
-    const maxSu = V * limSu;
-    const acTotal = acPrev + acNow;
-    const suTotal = suPrev + suNow;
-    const salAc = maxAc - acTotal;
-    const salSu = maxSu - suTotal;
-    const pctAc = acTotal / V;
-    const pctSu = suTotal / V;
-
-    let level = 'ok';
-    const msgs = [];
-    if (acTotal > maxAc + 0.005) { level = 'bad'; msgs.push('Acréscimos acumulados ultrapassam o teto orientativo de ' + T.pct(limAc) + ' do valor inicial atualizado.'); }
-    else if (salAc < V * 0.02) { level = level === 'bad' ? level : 'warn'; msgs.push('Saldo de acréscimo residual baixo (<2% do contrato). Planeje com folga documental.'); }
-    else { msgs.push('Acréscimos acumulados dentro do teto orientativo de ' + T.pct(limAc) + '.'); }
-
-    if (suTotal > maxSu + 0.005) { level = 'bad'; msgs.push('Supressões acumuladas ultrapassam o teto orientativo de 25%.'); }
-    else if (salSu < V * 0.02) { if (level !== 'bad') level = 'warn'; msgs.push('Saldo de supressão residual baixo.'); }
-    else { msgs.push('Supressões acumuladas dentro do teto orientativo de 25%.'); }
-
-    return {
-      level, msgs, V, tipo, limAc, limSu, maxAc, maxSu, acPrev, suPrev, acNow, suNow,
-      acTotal, suTotal, salAc, salSu, pctAc, pctSu
-    };
+    const C = window.ConfengeToolCompute;
+    const raw = C.computeLimiteAditivo({
+      valorInicial: T.num(document.getElementById('valor_inicial')),
+      tipo: document.getElementById('tipo').value === 'reforma' ? 'reforma' : 'geral',
+      acrescimosPrevios: T.num(document.getElementById('acrescimos_previos')),
+      supressoesPrevias: T.num(document.getElementById('supressoes_previas')),
+      acrescimoProposto: T.num(document.getElementById('acrescimo_proposto')),
+      supressaoProposta: T.num(document.getElementById('supressao_proposta')),
+    });
+    if (!raw.ok) return { error: 'Informe o valor inicial atualizado do contrato.' };
+    const msgs = raw.msgs.map((m) => ({
+      acrescimos_acima_teto: 'Acréscimos acumulados ultrapassam o teto orientativo de ' + T.pct(raw.limAc) + ' do valor inicial atualizado.',
+      saldo_acrescimo_baixo: 'Saldo de acréscimo residual baixo (<2% do contrato). Planeje com folga documental.',
+      acrescimos_dentro_teto: 'Acréscimos acumulados dentro do teto orientativo de ' + T.pct(raw.limAc) + '.',
+      supressoes_acima_teto: 'Supressões acumuladas ultrapassam o teto orientativo de 25%.',
+      saldo_supressao_baixo: 'Saldo de supressão residual baixo.',
+      supressoes_dentro_teto: 'Supressões acumuladas dentro do teto orientativo de 25%.',
+    }[m] || m));
+    return { ...raw, msgs };
   }
 
   function render(r) {

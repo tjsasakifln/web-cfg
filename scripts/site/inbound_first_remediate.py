@@ -902,14 +902,53 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
     html = re.sub(r'<a class="cluster-card"[^>]*>.*?</a>', fix_cluster_card, html, flags=re.S)
 
     html = patch_shell(html, brand, current="/conteudos/")
-    # Hub intro honesty
-    if "demais em revisão" not in html:
+    # Hub intro honesty — whole <p class="content-lead"> only (never partial attrs)
+    lead = (
+        f'<p class="content-lead">{idx_n} guias indexáveis e publicamente recomendados. '
+        f'Outros materiais permanecem em revisão editorial (noindex) e não entram nesta lista.</p>'
+    )
+    if re.search(r'<p class="content-lead">', html):
+        html = re.sub(r'<p class="content-lead">[^<]*</p>', lead, html, count=1)
+    elif re.search(r'<p R guias indexáveis', html) or re.search(
+        r'<p[^>]*>\s*R?\s*guias indexáveis', html
+    ):
         html = re.sub(
-            r'(class="content-lead">)([^<]+)',
-            rf"\1{idx_n} guias indexáveis e publicamente recomendados. "
-            r"Outros materiais permanecem em revisão editorial (noindex) e não entram nesta lista.",
+            r'<p[^>]*>\s*R?\s*guias indexáveis e publicamente recomendados\.[^<]*</p>',
+            lead,
             html,
             count=1,
+        )
+    elif "demais em revisão" not in html:
+        def _insert_lead(m: re.Match[str]) -> str:
+            return m.group(1) + lead
+
+        html = re.sub(
+            r'(<header class="content-hero hub-hero"[^>]*>.*?<h1>[^<]*</h1>)',
+            _insert_lead,
+            html,
+            count=1,
+            flags=re.S,
+        )
+    # Strip forbidden internal language / false inteligencia inventory claims
+    html = re.sub(r'\bdatalake\b', 'base pública de contratos', html, flags=re.I)
+    if 'agregados sanitizados' in html or 'publica páginas evergreen' in html:
+        html = re.sub(
+            r'<section class="section section-soft" id="inteligencia-pseo">.*?</section>',
+            (
+                '<section class="section section-soft" id="inteligencia-pseo">'
+                '<div class="container">'
+                '<p class="eyebrow">Ferramentas e pesquisa</p>'
+                '<h2>Do guia à decisão com evidência</h2>'
+                '<p>Use as ferramentas de alta intenção e o Radar aberto (metodologia e demanda verificável). '
+                'Páginas de inteligência de mercado só entram no sitemap quando superarem critérios de '
+                'singularidade e revisão.</p>'
+                '<p><a class="button button-secondary" href="/ferramentas/">Abrir ferramentas</a> '
+                '<a class="button button-secondary" href="/radar/nacional-obras-publicas/">Radar Nacional</a></p>'
+                '</div></section>'
+            ),
+            html,
+            count=1,
+            flags=re.S,
         )
 
     _write(hub_path, html)

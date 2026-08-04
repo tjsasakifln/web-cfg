@@ -40,7 +40,7 @@
     "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
-    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates && npm run test:revops && npm run test:tools && npm run test:nurture && npm run test:nurture-pages",
+    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates && npm run test:revops && npm run test:tools && npm run test:nurture && npm run test:nurture-pages && npm run test:hub-truth && npm run test:tool-compute && npm run test:wave1-fields",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "editorial:build": "python3 scripts/editorial/build.py",
     "editorial:approve": "python3 scripts/editorial/approve_cli.py",
@@ -68,7 +68,10 @@
     "test:tools": "node scripts/site/test_tools_structure.mjs",
     "revops:daily-health": "node scripts/revops/daily_health.mjs",
     "test:nurture": "node scripts/revops/test_nurture.mjs",
-    "test:nurture-pages": "node scripts/site/test_nurture_pages.mjs"
+    "test:nurture-pages": "node scripts/site/test_nurture_pages.mjs",
+    "test:hub-truth": "node scripts/site/test_hub_truth.mjs",
+    "test:tool-compute": "node scripts/site/test_tool_compute.mjs",
+    "test:wave1-fields": "node scripts/site/test_wave1_review_fields.mjs"
   },
   "engines": {
     "node": ">=18"

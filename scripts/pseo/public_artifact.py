@@ -57,6 +57,7 @@ PUBLIC_TOP_DIRS = frozenset(
         "nurture",
         "casos",
         "imprensa",
+        "piloto",
         ".well-known",
     }
 )
