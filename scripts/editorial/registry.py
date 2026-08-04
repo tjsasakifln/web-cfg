@@ -36,6 +36,10 @@ STATES = (
 
 INDEXABLE_STATES = frozenset({"INDEXABLE", "PUBLISHED"})
 
+# Approval records are decision evidence, not a pin to an arbitrary repository HEAD.
+# Bump only when the approval-record contract changes.
+APPROVAL_SCHEMA_VERSION = "2.0.0"
+
 PROGRESSION = [
     "DRAFT",
     "LEGAL_SOURCE_VALIDATED",
@@ -125,9 +129,7 @@ def save_registry(data: dict[str, Any], path: Path | None = None) -> None:
         counts[st] = counts.get(st, 0) + 1
     data["counts"] = counts
     data["generated_at"] = _now()
-    data["indexable_urls"] = [
-        pg["url"] for pg in pages if pg.get("status") in INDEXABLE_STATES and pg.get("url")
-    ]
+    data["indexable_urls"] = [pg["url"] for pg in indexable_pages(data) if pg.get("url")]
     p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -139,39 +141,64 @@ def get_page(reg: dict[str, Any], page_id: str) -> dict[str, Any] | None:
 
 
 def upsert_page(reg: dict[str, Any], page: dict[str, Any]) -> dict[str, Any]:
+    """Upsert a page and invalidate an approval only for a material change."""
     pages = reg.setdefault("pages", [])
     pid = page["page_id"]
     for i, existing in enumerate(pages):
-        if existing.get("page_id") == pid:
-            old_hash = existing.get("material_hash")
-            new_hash = page.get("material_hash") or material_hash(page)
-            page["material_hash"] = new_hash
-            if (
-                old_hash
-                and new_hash != old_hash
-                and existing.get("status") in INDEXABLE_STATES | {"HUMAN_APPROVED"}
-            ):
-                page["status"] = "REVIEW_REQUIRED"
-                page.pop("approval", None)
-                page.setdefault("history", []).append(
-                    {
-                        "at": _now(),
-                        "event": "material_hash_invalidated_approval",
-                        "from": existing.get("status"),
-                        "to": "REVIEW_REQUIRED",
-                    }
-                )
-            # Preserve history/approval unless explicitly overwritten
-            merged = {**existing, **page}
-            if "history" not in page and existing.get("history"):
-                merged["history"] = existing["history"]
-            pages[i] = merged
-            return pages[i]
+        if existing.get("page_id") != pid:
+            continue
+        # Never trust a caller-supplied stored hash: it can describe older text.
+        old_hash = material_hash(existing)
+        new_hash = material_hash(page)
+        page["material_hash"] = new_hash
+        was_approved = existing.get("status") in INDEXABLE_STATES | {"HUMAN_APPROVED"}
+        invalidated = bool(old_hash and new_hash != old_hash and was_approved)
+
+        merged = {**existing, **page}
+        if "history" not in page and existing.get("history"):
+            merged["history"] = list(existing["history"])
+
+        if invalidated:
+            # Do not leave the previous approval object attached to new material.
+            # Its material_hash is evidence for the old page, never authorization
+            # for the replacement.
+            merged["status"] = "REVIEW_REQUIRED"
+            merged.pop("approval", None)
+            merged.setdefault("history", []).append(
+                {
+                    "at": _now(),
+                    "event": "material_hash_invalidated_approval",
+                    "from": existing.get("status"),
+                    "to": "REVIEW_REQUIRED",
+                    "previous_material_hash": old_hash,
+                    "material_hash": new_hash,
+                }
+            )
+        pages[i] = merged
+        return merged
+
     page.setdefault("status", "DRAFT")
     page.setdefault("history", [])
-    page["material_hash"] = page.get("material_hash") or material_hash(page)
+    page["material_hash"] = material_hash(page)
     pages.append(page)
     return page
+
+
+def approval_is_current(page: dict[str, Any]) -> bool:
+    """Return true only for a named-human approval of this exact material."""
+    approval = page.get("approval") or {}
+    reviewer = str(approval.get("reviewer") or "")
+    canonical_hash = material_hash(page)
+    return bool(
+        approval.get("schema_version") == APPROVAL_SCHEMA_VERSION
+        and approval.get("page_id") == page.get("page_id")
+        and approval.get("state") == "HUMAN_APPROVED"
+        and page.get("material_hash") == canonical_hash
+        and approval.get("material_hash") == canonical_hash
+        and approval.get("at")
+        and reviewer
+        and not is_blocked_reviewer(reviewer)
+    )
 
 
 def can_advance(current: str, target: str) -> bool:
@@ -241,10 +268,16 @@ def approve_human(
         raise ValueError("approval_notes_too_short")
     if not sources_verified:
         raise ValueError("sources_verified_required")
+    # Approval must record the canonical content hash calculated at decision time.
+    pg["material_hash"] = material_hash(pg)
     pg["status"] = "HUMAN_APPROVED"
+    approved_at = _now()
     pg["approval"] = {
+        "schema_version": APPROVAL_SCHEMA_VERSION,
+        "page_id": page_id,
+        "state": "HUMAN_APPROVED",
         "reviewer": reviewer.strip(),
-        "at": _now(),
+        "at": approved_at,
         "notes": notes.strip(),
         "sources_verified": list(sources_verified),
         "caveats": caveats,
@@ -262,49 +295,60 @@ def mark_indexable(reg: dict[str, Any], page_id: str) -> dict[str, Any]:
         raise KeyError(page_id)
     if pg.get("status") not in {"HUMAN_APPROVED", "INDEXABLE"}:
         raise ValueError("requires_HUMAN_APPROVED")
-    appr = pg.get("approval") or {}
-    if not appr.get("reviewer") or is_blocked_reviewer(str(appr.get("reviewer"))):
-        raise ValueError("indexable_requires_human_reviewer")
-    if appr.get("material_hash") and appr.get("material_hash") != pg.get("material_hash"):
+    if not approval_is_current(pg):
         pg["status"] = "REVIEW_REQUIRED"
-        raise ValueError("approval_hash_mismatch")
+        pg.pop("approval", None)
+        raise ValueError("approval_hash_or_identity_mismatch")
     pg["status"] = "INDEXABLE"
     pg.setdefault("history", []).append({"at": _now(), "event": "INDEXABLE"})
     return pg
 
 
 def revoke_auto_approvals(reg: dict[str, Any]) -> int:
-    """Downgrade any INDEXABLE/HUMAN_APPROVED stamped by blocked reviewers to EDITORIAL_REVIEWED."""
+    """Remove invalid human approvals and fail closed on stale material."""
     n = 0
     for pg in reg.get("pages") or []:
-        appr = pg.get("approval") or {}
-        reviewer = str(appr.get("reviewer") or "")
-        st = pg.get("status")
-        if st in INDEXABLE_STATES | {"HUMAN_APPROVED"} and (
-            is_blocked_reviewer(reviewer) or not reviewer
-        ):
-            pg["status"] = "EDITORIAL_REVIEWED"
-            pg.pop("approval", None)
-            pg.setdefault("history", []).append(
-                {
-                    "at": _now(),
-                    "event": "revoked_non_human_approval",
-                    "from": st,
-                    "to": "EDITORIAL_REVIEWED",
-                    "reviewer_was": reviewer,
-                }
-            )
-            n += 1
+        status = pg.get("status")
+        if status not in INDEXABLE_STATES | {"HUMAN_APPROVED"}:
+            continue
+        approval = pg.get("approval") or {}
+        reviewer = str(approval.get("reviewer") or "")
+        canonical_hash = material_hash(pg)
+        if approval_is_current(pg):
+            continue
+        material_changed = (
+            pg.get("material_hash") != canonical_hash
+            or approval.get("material_hash") != canonical_hash
+        )
+        pg["status"] = "REVIEW_REQUIRED" if material_changed else "EDITORIAL_REVIEWED"
+        pg.pop("approval", None)
+        pg.setdefault("history", []).append(
+            {
+                "at": _now(),
+                "event": "revoked_invalid_approval",
+                "from": status,
+                "to": pg["status"],
+                "reviewer_was": reviewer,
+            }
+        )
+        n += 1
     return n
 
 
-def indexable_pages(reg: dict[str, Any]) -> list[dict[str, Any]]:
+
+def indexable_pages(
+    reg: dict[str, Any],
+    *,
+    allowed_page_ids: set[str] | frozenset[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Pages eligible for sitemap/indexing, optionally limited to a release cohort."""
     out = []
     for p in reg.get("pages") or []:
         if p.get("status") not in INDEXABLE_STATES:
             continue
-        appr = p.get("approval") or {}
-        if is_blocked_reviewer(str(appr.get("reviewer") or "")):
+        if allowed_page_ids is not None and p.get("page_id") not in allowed_page_ids:
+            continue
+        if not approval_is_current(p):
             continue
         out.append(p)
     return out
