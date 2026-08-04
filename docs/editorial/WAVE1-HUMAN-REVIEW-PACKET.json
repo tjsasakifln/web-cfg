@@ -1,23 +1,42 @@
 {
-  "schema_version": "2.0.0",
-  "decision_schema_version": "2.0.0",
-  "title": "Primeira coorte editorial: revisão humana individual",
-  "commit_sha": "76505805e6f16e69ae97652882d46fca5d3be3c1",
+  "schema_version": "3.0.0",
+  "decision_schema_version": "3.0.0",
+  "title": "Primeira coorte editorial: revisão humana individual no deploy preview",
+  "commit_sha": "5726ce2a92a4e769b4ed6d5d6efc4fca4d6e786a",
   "commit_sha_role": "informational_only",
-  "derived_at": "2026-08-04T18:10:00Z",
+  "derived_at": "2026-08-04T19:55:09Z",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "review_target": {
+    "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
+    "runtime_evidence_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/editorial-review-packet.json",
+    "build_info_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/build-info.json",
+    "review_target_sha": "resolved_and_verified_at_runtime",
+    "preview_build_sha": "resolved_and_verified_at_runtime",
+    "preview_generated_at": "resolved_and_verified_at_runtime",
+    "production_urls_allowed": false
+  },
   "summary": {
     "first_cohort_total": 3,
     "awaiting_human": 3,
     "human_approved": 0,
     "indexable": 0,
     "editorial_backlog_awaiting_approval": 8,
-    "rejected": 1
+    "rejected": 1,
+    "approved_count": 0,
+    "released_count": 0,
+    "cohort_complete": false,
+    "released_page_ids": [],
+    "awaiting_page_ids": [
+      "lei-limite-25-50",
+      "guia-checklist-aditivo",
+      "lei-item-novo-desconto"
+    ]
   },
   "rules": [
     "Uma página por aprovação; nunca lote.",
     "Somente humano nomeado fora de CI/automação.",
-    "material_hash deve coincidir com o registro atual.",
+    "Todo campo público e toda fonte usada entram no material_hash canônico.",
+    "O CLI verifica build-info, runtime packet e HTML do deploy preview, nunca a produção.",
     "Apenas as três páginas desta primeira coorte podem receber --indexable.",
     "Páginas fora da coorte e jur-sumula-260-art permanecem noindex."
   ],
@@ -26,7 +45,7 @@
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "preview": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "preview": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/limite-25-50-aditivo-obra/",
       "title": "Limite de 25% e 50% no art. 125: o que conta no aditivo de obra",
       "search_intent": "Limite de 25% e 50% no art. 125 em aditivo de obra",
       "demand_evidence": "Peer /conteudos/limite-aditivo-25-50-obra-publica/ teve 24 impressões, 0 cliques e posição 17 no export GSC de 2026-07-30; a query relacionada 'aditivos obra pública' teve 5 impressões.",
@@ -39,6 +58,91 @@
         "lei-14133-planalto",
         "agu-alteracoes-contratuais-2024"
       ],
+      "resolved_sources": [
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "art. 125",
+          "limitations": "Limites de alteração unilateral; hipóteses de 50% restritas a reforma de edifício ou equipamento.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art125",
+          "themes": [
+            "aditivos",
+            "limites"
+          ],
+          "title": "Lei nº 14.133/2021 — art. 125 (limites de 25% e 50%)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "art. 124, caput, I e II",
+          "limitations": "Ler em conjunto com arts. 125 a 132.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art124",
+          "themes": [
+            "aditivos",
+            "alteracao-contratual"
+          ],
+          "title": "Lei nº 14.133/2021 — art. 124 (alteração contratual)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "arts. 126–132",
+          "limitations": null,
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art126-132",
+          "themes": [
+            "aditivos",
+            "equilibrio",
+            "precos"
+          ],
+          "title": "Lei nº 14.133/2021 — arts. 126 a 132 (objeto, preços, equilíbrio, aditivo)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "lei completa",
+          "limitations": "Texto federal; regulamentos locais e cláusulas do contrato podem particularizar a aplicação.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-planalto",
+          "themes": [
+            "licitacoes",
+            "contratos",
+            "obras"
+          ],
+          "title": "Lei nº 14.133, de 1º de abril de 2021 (texto compilado — Planalto)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Advocacia-Geral da União / PGF",
+          "date": "2024-02-01",
+          "limitations": "Orientação da AGU/PGF; não vincula automaticamente todos os entes. Útil para enquadramento federal e boas práticas.",
+          "number": "PGF-AGU fev/2024",
+          "source_id": "agu-alteracoes-contratuais-2024",
+          "themes": [
+            "aditivos",
+            "obras",
+            "desconto",
+            "itens-novos"
+          ],
+          "title": "Alterações Contratuais em Obras e Serviços de Engenharia — Lei 14.133/2021 (fev/2024)",
+          "type": "agu_opinion",
+          "url": "https://www.gov.br/agu/pt-br/composicao/procuradoria-geral-federal-1/subprocuradoria-federal-de-consultoria-juridica/24_Alteracoes_Contratuais_Obras_e_Servicos_Engenharia_Lei_14_133_2021_fev_2024.docx"
+        }
+      ],
       "legal_risk": "Dispositivos: art.125, art.124, art.126. Conteúdo técnico-informativo; não substitui assessoria jurídica no caso concreto.",
       "cannibalization": {
         "internal_competitor": "/conteudos/limite-aditivo-25-50-obra-publica/",
@@ -49,15 +153,21 @@
         "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre limites de 25% e 50% no art. 125 em obra pública. Preciso validar o saldo de aditivos e os documentos. Origem: /lei-14133-obras/limite-25-50-aditivo-obra/",
         "email_subject": "Análise inicial: saldo de aditivos 25%/50%"
       },
-      "material_hash": "eddf3f499ffeab0c382bc340f777e61db2ec38b25ce6e8dfec1da5354804f68f",
+      "material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
+      "material_diff_since_last_packet": {
+        "previous_material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
+        "current_material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
+        "changed": false,
+        "reason": "v3 now commits every public page field plus resolved used-source identity."
+      },
       "registry_status": "EDITORIAL_REVIEWED",
       "approval_identity": null,
-      "decision_reason": "Aprovar somente se as fontes, o conteúdo material e a decisão de canibalização forem conferidos por humano nomeado; o hash deve coincidir com o registro."
+      "decision_reason": "Aprovar somente após conferir fontes, conteúdo material, canibalização e a identidade do deploy preview. O hash deve coincidir com o runtime packet."
     },
     {
       "page_id": "guia-checklist-aditivo",
       "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "preview": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+      "preview": "https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/",
       "title": "Checklist de pedido de aditivo em obra pública",
       "search_intent": "Checklist operacional para protocolar pedido de aditivo de obra",
       "demand_evidence": "A query 'aditivos obra pública' teve 5 impressões; o peer /conteudos/erro-de-projeto-gera-aditivo-obra-publica/ teve 3 impressões e posição 2,33 no export GSC de 2026-07-30.",
@@ -69,6 +179,74 @@
         "lei-14133-planalto",
         "agu-alteracoes-contratuais-2024"
       ],
+      "resolved_sources": [
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "art. 124, caput, I e II",
+          "limitations": "Ler em conjunto com arts. 125 a 132.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art124",
+          "themes": [
+            "aditivos",
+            "alteracao-contratual"
+          ],
+          "title": "Lei nº 14.133/2021 — art. 124 (alteração contratual)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "art. 125",
+          "limitations": "Limites de alteração unilateral; hipóteses de 50% restritas a reforma de edifício ou equipamento.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art125",
+          "themes": [
+            "aditivos",
+            "limites"
+          ],
+          "title": "Lei nº 14.133/2021 — art. 125 (limites de 25% e 50%)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "lei completa",
+          "limitations": "Texto federal; regulamentos locais e cláusulas do contrato podem particularizar a aplicação.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-planalto",
+          "themes": [
+            "licitacoes",
+            "contratos",
+            "obras"
+          ],
+          "title": "Lei nº 14.133, de 1º de abril de 2021 (texto compilado — Planalto)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Advocacia-Geral da União / PGF",
+          "date": "2024-02-01",
+          "limitations": "Orientação da AGU/PGF; não vincula automaticamente todos os entes. Útil para enquadramento federal e boas práticas.",
+          "number": "PGF-AGU fev/2024",
+          "source_id": "agu-alteracoes-contratuais-2024",
+          "themes": [
+            "aditivos",
+            "obras",
+            "desconto",
+            "itens-novos"
+          ],
+          "title": "Alterações Contratuais em Obras e Serviços de Engenharia — Lei 14.133/2021 (fev/2024)",
+          "type": "agu_opinion",
+          "url": "https://www.gov.br/agu/pt-br/composicao/procuradoria-geral-federal-1/subprocuradoria-federal-de-consultoria-juridica/24_Alteracoes_Contratuais_Obras_e_Servicos_Engenharia_Lei_14_133_2021_fev_2024.docx"
+        }
+      ],
       "legal_risk": "Dispositivos: art.124, art.125. Conteúdo técnico-informativo; não substitui assessoria jurídica no caso concreto.",
       "cannibalization": {
         "internal_competitor": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
@@ -79,15 +257,21 @@
         "whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
         "email_subject": "Análise inicial: dossiê de aditivo de obra"
       },
-      "material_hash": "95dce781b83d92b76f91ab1a24ef88159e9ce591cbb64b9acf8b2b13c753233d",
+      "material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
+      "material_diff_since_last_packet": {
+        "previous_material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
+        "current_material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
+        "changed": false,
+        "reason": "v3 now commits every public page field plus resolved used-source identity."
+      },
       "registry_status": "EDITORIAL_REVIEWED",
       "approval_identity": null,
-      "decision_reason": "Aprovar somente se as fontes, o conteúdo material e a decisão de canibalização forem conferidos por humano nomeado; o hash deve coincidir com o registro."
+      "decision_reason": "Aprovar somente após conferir fontes, conteúdo material, canibalização e a identidade do deploy preview. O hash deve coincidir com o runtime packet."
     },
     {
       "page_id": "lei-item-novo-desconto",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "preview": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "preview": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/",
       "title": "Item novo no aditivo: como formar preço e preservar o desconto da proposta",
       "search_intent": "Preço de item novo em aditivo e preservação do desconto da proposta",
       "demand_evidence": "Peer /conteudos/desconto-da-proposta-em-item-novo-aditivo/ teve 4 impressões, 1 clique e posição 7 no export GSC de 2026-07-30.",
@@ -100,6 +284,87 @@
         "agu-alteracoes-contratuais-2024",
         "sinapi-caixa"
       ],
+      "resolved_sources": [
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "arts. 126–132",
+          "limitations": null,
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art126-132",
+          "themes": [
+            "aditivos",
+            "equilibrio",
+            "precos"
+          ],
+          "title": "Lei nº 14.133/2021 — arts. 126 a 132 (objeto, preços, equilíbrio, aditivo)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "art. 124, caput, I e II",
+          "limitations": "Ler em conjunto com arts. 125 a 132.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art124",
+          "themes": [
+            "aditivos",
+            "alteracao-contratual"
+          ],
+          "title": "Lei nº 14.133/2021 — art. 124 (alteração contratual)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "lei completa",
+          "limitations": "Texto federal; regulamentos locais e cláusulas do contrato podem particularizar a aplicação.",
+          "number": "14.133/2021",
+          "source_id": "lei-14133-planalto",
+          "themes": [
+            "licitacoes",
+            "contratos",
+            "obras"
+          ],
+          "title": "Lei nº 14.133, de 1º de abril de 2021 (texto compilado — Planalto)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Advocacia-Geral da União / PGF",
+          "date": "2024-02-01",
+          "limitations": "Orientação da AGU/PGF; não vincula automaticamente todos os entes. Útil para enquadramento federal e boas práticas.",
+          "number": "PGF-AGU fev/2024",
+          "source_id": "agu-alteracoes-contratuais-2024",
+          "themes": [
+            "aditivos",
+            "obras",
+            "desconto",
+            "itens-novos"
+          ],
+          "title": "Alterações Contratuais em Obras e Serviços de Engenharia — Lei 14.133/2021 (fev/2024)",
+          "type": "agu_opinion",
+          "url": "https://www.gov.br/agu/pt-br/composicao/procuradoria-geral-federal-1/subprocuradoria-federal-de-consultoria-juridica/24_Alteracoes_Contratuais_Obras_e_Servicos_Engenharia_Lei_14_133_2021_fev_2024.docx"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Caixa Econômica Federal",
+          "source_id": "sinapi-caixa",
+          "themes": [
+            "sinapi",
+            "orcamento"
+          ],
+          "title": "SINAPI — Sistema Nacional de Pesquisa de Custos e Índices da Construção Civil",
+          "type": "official_cost_reference",
+          "url": "https://www.caixa.gov.br/poder-publico/modernizacao-gestao/sinapi/Paginas/default.aspx"
+        }
+      ],
       "legal_risk": "Dispositivos: art.127, art.124, art.125. Conteúdo técnico-informativo; não substitui assessoria jurídica no caso concreto.",
       "cannibalization": {
         "internal_competitor": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
@@ -110,10 +375,16 @@
         "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
         "email_subject": "Análise inicial: preço de item novo em aditivo"
       },
-      "material_hash": "e1be1bd592734840cc4d01567f9cbb03962ca394c9e984b3245759c5e475fe4b",
+      "material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
+      "material_diff_since_last_packet": {
+        "previous_material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
+        "current_material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
+        "changed": false,
+        "reason": "v3 now commits every public page field plus resolved used-source identity."
+      },
       "registry_status": "EDITORIAL_REVIEWED",
       "approval_identity": null,
-      "decision_reason": "Aprovar somente se as fontes, o conteúdo material e a decisão de canibalização forem conferidos por humano nomeado; o hash deve coincidir com o registro."
+      "decision_reason": "Aprovar somente após conferir fontes, conteúdo material, canibalização e a identidade do deploy preview. O hash deve coincidir com o runtime packet."
     }
   ]
 }
