@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "title": "Wave 1 — pacote de revisão humana individual",
-  "commit_sha": "dd6086205dba6f16a2c9ba0a85d0a3dceafb2cf0",
-  "derived_at": "2026-08-04T14:20:54Z",
+  "commit_sha": "8591539de33bedde35c2680b4a034a733ed45a67",
+  "derived_at": "2026-08-04T14:30:10Z",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "summary": {
     "awaiting_human": 11,
@@ -61,7 +61,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "comercial_investigacional",
@@ -115,7 +115,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "comercial_investigacional",
@@ -168,7 +168,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "informacional_decisao",
@@ -221,7 +221,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "informacional_decisao",
@@ -244,7 +244,7 @@
         "manter_rejeitada",
         "reabrir_somente_com_dossie_sumula_oficial"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "blocked_reason": "Dossiê documental da Súmula 260/art. incompleto — sem texto oficial, data e URL estável TCU",
       "material_hash": "85c0b8f7dea0db73dd88354d7d87c0d241d19a8b16a1664d9d2998cb277b1dfe",
       "preview": "https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
@@ -265,7 +265,13 @@
         "tcu-portal-licitacoes",
         "agu-alteracoes-contratuais-2024",
         "lei-14133-planalto"
-      ]
+      ],
+      "registry_status": "REJECTED",
+      "HUMAN_APPROVED": false,
+      "INDEXABLE": false,
+      "reviewer": null,
+      "reviewed_at": null,
+      "decision_by": null
     },
     {
       "page_id": "lei-art124-alteracao-obra",
@@ -310,7 +316,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "comercial_investigacional",
@@ -364,7 +370,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "informacional_decisao",
@@ -420,7 +426,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "comercial_investigacional",
@@ -478,7 +484,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "comercial_investigacional",
@@ -531,7 +537,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "informacional_decisao",
@@ -583,7 +589,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "comercial_investigacional",
@@ -638,7 +644,7 @@
         "solicitar_ajuste",
         "rejeitar"
       ],
-      "decision_stamped": null,
+      "decision_stamped": false,
       "decision_by": null,
       "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
       "intent": "comercial_investigacional",
