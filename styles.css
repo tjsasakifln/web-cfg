@@ -167,8 +167,12 @@ html.js .form-step-fallback{display:none}
 .field input.is-invalid,.field select.is-invalid,.field textarea.is-invalid{border-color:#b42318;outline-color:#b42318}
 .simple-card .journey-next{margin-top:1rem;display:grid;gap:.5rem}
 .simple-card .sla-box{margin:1rem 0;padding:1rem 1.1rem;border-radius:12px;background:rgba(6,26,51,.04);border:1px solid rgba(6,26,51,.08);font-size:.95rem;line-height:1.5}
-/* Content / tool pages: links must look clickable (global a{color:inherit;text-decoration:none}) */
-main a:not(.button):not(.brand):not(.whatsapp-float):not(.button-secondary):not(.tool-card){
+/* Light content surfaces only — never paint green on navy/dark blocks (axe contrast). */
+.tool-layout a:not(.button):not(.button-secondary):not(.tool-card),
+.n-wrap a:not(.button):not(.button-secondary),
+.simple-main a:not(.button):not(.button-secondary),
+.article-main a:not(.button):not(.button-secondary),
+.breadcrumbs a{
   color:var(--green-700,#2d6f2d);
   text-decoration:underline;
   text-underline-offset:2px;
@@ -176,17 +180,14 @@ main a:not(.button):not(.brand):not(.whatsapp-float):not(.button-secondary):not(
   font-weight:650;
   cursor:pointer;
 }
-main a:not(.button):not(.brand):not(.whatsapp-float):not(.button-secondary):not(.tool-card):hover{
+.tool-layout a:not(.button):not(.button-secondary):not(.tool-card):hover,
+.n-wrap a:not(.button):not(.button-secondary):hover,
+.simple-main a:not(.button):not(.button-secondary):hover,
+.article-main a:not(.button):not(.button-secondary):hover,
+.breadcrumbs a:hover{
   color:#1f4f22;
   text-decoration-thickness:2px;
 }
-.breadcrumbs a{
-  color:var(--green-700,#2d6f2d);
-  text-decoration:underline;
-  text-underline-offset:2px;
-  font-weight:650;
-}
-.breadcrumbs a:hover{color:#1f4f22}
 /* Tool hub cards */
 .tool-card-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
 .tool-card{
