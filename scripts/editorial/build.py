@@ -28,12 +28,14 @@ from scripts.editorial.registry import (  # noqa: E402
     indexable_pages,
     load_registry,
     material_hash,
+    approval_is_current,
     revoke_auto_approvals,
     save_registry,
     upsert_page,
 )
 from scripts.editorial.render import render_hub, render_page  # noqa: E402
 from scripts.editorial.sources import load_manifest, page_sources_ok  # noqa: E402
+from scripts.editorial.truth import FIRST_COHORT_IDS, FIRST_COHORT_SET  # noqa: E402
 
 PAGES_DIR = ROOT / "data" / "editorial" / "pages"
 REPORT_PATH = ROOT / "seo" / "editorial-build-report.json"
@@ -281,6 +283,23 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                     }
                 )
 
+        # This release has one explicit cohort. A valid approval outside it may
+        # remain HUMAN_APPROVED for a later release, but it cannot render/index now.
+        if merged.get("status") in INDEXABLE_STATES and merged.get("page_id") not in FIRST_COHORT_SET:
+            stored_outside = get_page(reg, merged["page_id"])
+            if stored_outside:
+                stored_outside["status"] = (
+                    "HUMAN_APPROVED" if approval_is_current(stored_outside) else "REVIEW_REQUIRED"
+                )
+                stored_outside.setdefault("history", []).append(
+                    {
+                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "event": "outside_first_cohort_indexing_blocked",
+                        "to": stored_outside["status"],
+                    }
+                )
+                merged = {**merged, **stored_outside}
+
         # Temporary status for gate (INDEXABLE only if truly approved)
         html = render_page(merged)
         gate = evaluate_page(merged, html, other_bodies=bodies, manifest=man)
@@ -315,7 +334,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             }
         )
 
-    indexable = indexable_pages(reg)
+    indexable = indexable_pages(reg, allowed_page_ids=FIRST_COHORT_SET)
 
     hubs = [
         {
