@@ -2,10 +2,10 @@
 
 Data de verificação final: 2026-08-04  
 Repo: `tjsasakifln/web-cfg`  
-**Tip de `main` no momento deste relatório:** `bc394078fa0b722178eb7204f6e43af471ab21db` (merge #51)  
+**Tip de `main` no momento deste relatório:** `057b55d3130fb6fc6f43455d923e2bdedd1c5c61` (merge #52)  
 **Último tip com gates verdes no restore stack:** `b8af0b6f958969722c35d1ed12b9cd8c5324835a` (merge #50)  
 **Marco restore coorte (#44):** `49d61778192c7c7fbf53409d9a1c7c9f37c32a2a`  
-**Produção (`build-info.json`):** `commit` = `bc394078fa0b722178eb7204f6e43af471ab21db` (exact match ao tip)
+**Produção (`build-info.json`):** `commit` = `057b55d3130fb6fc6f43455d923e2bdedd1c5c61` (exact match ao tip)
 
 ## 1. Estado anterior
 
@@ -28,7 +28,7 @@ Repo: `tjsasakifln/web-cfg`
 | [#47](https://github.com/tjsasakifln/web-cfg/pull/47) | **Merged** | Docs honesty (APPLIED protection) + `test:ops-docs` |
 | [#50](https://github.com/tjsasakifln/web-cfg/pull/50) | **Merged** | Restore full brand footer em `ferramentas/*` + `test:ferramentas-footer` (reverte regressão #48) |
 | [#51](https://github.com/tjsasakifln/web-cfg/pull/51) | **Merged** | Tools reeq/matriz fixes; **sem** pin editorial → tip vermelho (SHA lag) |
-| [#52](https://github.com/tjsasakifln/web-cfg/pull/52) | **Este PR** | Relatório consolidado + pin docs-only do pacote editorial no tip pós-#51 |
+| [#52](https://github.com/tjsasakifln/web-cfg/pull/52) | **Merged** | Relatório consolidado + pin docs-only do pacote editorial no tip pós-#51 |
 
 Nota futura: `docs/ops/NODE22-LIGHTHOUSE13-MIGRATION-NOTE.md` (não misturada na emergência).
 
@@ -58,13 +58,16 @@ Nota futura: `docs/ops/NODE22-LIGHTHOUSE13-MIGRATION-NOTE.md` (não misturada na
 | `pSEO quality gates` (push main #51) | **failure** | run `30924288147` — mesma asserção editorial |
 | Produção `build-info` | deploy do tip | `commit` = `bc394078…`, `deploy_id` `6a7205013a551f0008796b9b` |
 
-### 3.3 Este PR (#52) — restaura pin e reabre o tip verde
+### 3.3 Pós-#52 — pin restaurado; tip verde comprovado
 
-| Check | Estado esperado | Notas |
-|-------|-----------------|-------|
-| Pin docs-only | `commit_sha` = parent do pin (relatório) ou HEAD | padrão `docs/editorial/*` only |
-| `site-ci` / `pSEO quality gates` no PR | devem ficar **success** antes do merge | required + `strict: true` |
-| CodeQL | **não** required; soft-fail no workflow | falhas de scanning org não bloqueiam |
+| Check | Estado | Evidência |
+|-------|--------|-----------|
+| Pin docs-only | **OK** | `commit_sha` = `b43b9391…` (parent do pin); tip merge `057b55d3` |
+| `site-ci` (push main #52) | **success** | run `30925113697` |
+| `pSEO quality gates` (push main #52) | **success** | run `30925113240` |
+| `editorial:test` local no tip | 40 passed | pin acceptable no merge commit |
+| CodeQL | **não** required; soft-fail no workflow | não bloqueia merge |
+| Branch protection API | **APPLIED** strict | `site-ci`, `pSEO quality gates` |
 
 ## 4. Estado de produção comprovado
 
@@ -72,9 +75,9 @@ Nota futura: `docs/ops/NODE22-LIGHTHOUSE13-MIGRATION-NOTE.md` (não misturada na
 |------|-----------|
 | `https://confenge.com.br/` | HTTP 200 |
 | `/.well-known/build-info.json` | HTTP 200 |
-| `commit` | **`bc394078fa0b722178eb7204f6e43af471ab21db`** (= `origin/main` tip) |
-| `build_time` | `2026-08-04T15:28:26Z` |
-| `deploy_id` | `6a7205013a551f0008796b9b` |
+| `commit` | **`057b55d3130fb6fc6f43455d923e2bdedd1c5c61`** (= `origin/main` tip) |
+| `build_time` | `2026-08-04T15:38:07Z` |
+| `deploy_id` | `6a72074afabf0000082de189` |
 | `/ferramentas/` | HTTP 200 |
 | robots / sitemap-index | HTTP 200 |
 | Lead idempotency | **PASS** `test:lead-function` (onlyIfNew) |
