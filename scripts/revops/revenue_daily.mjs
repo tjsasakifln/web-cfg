@@ -44,6 +44,7 @@ if (TOKEN) {
 }
 
 const probeStamp = Date.now();
+const idemKey = `probe-daily-${probeStamp}`;
 const payload = {
   nome: "SYNTHETIC-PROBE",
   email: `probe+${probeStamp}@example.com`,
@@ -57,7 +58,7 @@ const payload = {
   test_mode: true,
   record_kind: "synthetic",
   mensagem: "[QA] synthetic probe — do not contact",
-  idempotency_key: `probe-daily-${probeStamp}`,
+  idempotency_key: idemKey,
 };
 
 const probeHeaders = {
@@ -66,7 +67,7 @@ const probeHeaders = {
   Origin: "https://confenge.com.br",
   "User-Agent": `confenge-daily-probe/1.0 (${probeStamp})`,
   "X-Confenge-Probe": "1",
-  "Idempotency-Key": `probe-daily-${probeStamp}`,
+  "Idempotency-Key": idemKey,
   "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
 };
 
@@ -80,16 +81,21 @@ const probeHeaders = {
   check("form_probe_201", res.status === 201 || res.status === 200, `http=${res.status} id=${body.lead_id || ""}`);
   check("form_probe_lead_id", Boolean(body.lead_id), body.lead_id);
   check("form_probe_ok_flag", body.ok === true, body.ok);
-  // Public success must not leak delivery secrets
   const blob = JSON.stringify(body);
   check(
     "form_probe_no_secret_leak",
-    !/ntfy|formsubmit|confenge-prod-leads|RESEND_API_KEY/i.test(blob),
+    !/ntfy|formsubmit|confenge-prod-leads|RESEND_API_KEY|topic/i.test(blob),
     "public body clean"
   );
   out.lead_id = body.lead_id;
 
-  // Idempotency: same key must return same lead_id (200 or 201)
+  // Delivery statuses are non-PII and required (ok|pending|skipped|error)
+  const stOk = (s) => /^(ok|pending|skipped|error)$/.test(String(s || ""));
+  check("form_probe_notify_status", stOk(body.notify_status), body.notify_status);
+  check("form_probe_email_status", stOk(body.email_status), body.email_status);
+  out.delivery = { notify: body.notify_status, email: body.email_status };
+
+  // Idempotency: same key MUST return same lead_id
   const res2 = await fetch(`${BASE}/.netlify/functions/lead`, {
     method: "POST",
     headers: probeHeaders,
@@ -101,33 +107,33 @@ const probeHeaders = {
     (res2.status === 200 || res2.status === 201) && body2.lead_id === body.lead_id,
     `http=${res2.status} id1=${body.lead_id} id2=${body2.lead_id}`
   );
-  out.idempotent = { status: res2.status, same_id: body2.lead_id === body.lead_id };
+  out.idempotent = {
+    status: res2.status,
+    same_id: body2.lead_id === body.lead_id,
+    idempotent_flag: body2.idempotent === true,
+  };
 
-  // Delivery / notify / Resend: via authenticated lead or system_health — never stage commercial
   if (body.lead_id && TOKEN) {
     const lead = await j(`/.netlify/functions/ops?action=lead&id=${encodeURIComponent(body.lead_id)}&pii=0`);
     const rec = lead.body.lead || {};
     check("probe_record_kind_non_real", rec.record_kind && rec.record_kind !== "real", rec.record_kind);
-    // delivery may be pending/ok/skipped depending on env — must be present or explicit status
-    const del = rec.delivery || {};
-    const notifySt = del.notify?.status || del.notify_status || null;
-    const emailSt = del.email?.status || del.email_status || null;
-    // Persist path worked if we can read the lead; delivery is best-effort
     check(
       "probe_persistence_readable",
       lead.body.ok === true && rec.lead_id === body.lead_id,
       `kind=${rec.record_kind}`
     );
-    check(
-      "probe_delivery_attempted_or_pending",
-      notifySt != null || emailSt != null || rec.status === "persisted" || rec.status === "persisted_notified",
-      `notify=${notifySt} email=${emailSt} status=${rec.status}`
-    );
-    // Auth: ops with token works
+    const del = rec.delivery || {};
+    const notifySt = del.notify || body.notify_status;
+    const emailSt = del.email || body.email_status;
+    check("probe_ops_notify_status", stOk(notifySt), notifySt);
+    check("probe_ops_email_status", stOk(emailSt), emailSt);
     check("ops_auth_with_token", lead.status === 200 && lead.body.ok === true, lead.status);
-    // Resend config surface via weekly_email dry path is overkill; health already proves auth.
-    // Explicit: do NOT auto-stage to contacted
-    out.delivery = { notify: notifySt, email: emailSt, status: rec.status };
+    // Never auto-stage commercial
+    check(
+      "probe_not_commercial_stage",
+      !["contacted", "qualified", "meeting", "proposal", "won"].includes(rec.commercial_stage),
+      rec.commercial_stage
+    );
 
     const sh = await j("/.netlify/functions/ops?action=system_health");
     check("system_health_ok", sh.body.ok === true, JSON.stringify(sh.body.counts_by_kind || {}));

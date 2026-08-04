@@ -89,16 +89,18 @@ for (const p of critical) {
   check("ops_health", status === 200 && body.ok === true, `auth_configured=${body.auth_configured}`);
 }
 
-// 4 Isolated synthetic probe (must not inflate commercial)
+// 4 Isolated synthetic probe (must not inflate commercial; must be idempotent)
 {
   let before = null;
   if (TOKEN) {
     const f = await j("/.netlify/functions/ops?action=funnel");
     before = f.body.funnel?.counts?.lead_persisted ?? null;
   }
+  const stamp = Date.now();
+  const idem = `scheduled-probe-${stamp}`;
   const payload = {
     nome: "SYNTHETIC-PROBE",
-    email: `probe+daily-${Date.now()}@example.com`,
+    email: `probe+daily-${stamp}@example.com`,
     estagio: "synthetic probe — discard",
     jornada: "operacao",
     consentimento: "true",
@@ -109,21 +111,38 @@ for (const p of critical) {
     test_mode: true,
     record_kind: "synthetic",
     mensagem: "[QA] scheduled daily probe — do not contact",
+    idempotency_key: idem,
+  };
+  const probeHdr = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Origin: "https://confenge.com.br",
+    "User-Agent": `confenge-daily-probe/1.0 (${stamp})`,
+    "X-Confenge-Probe": "1",
+    "Idempotency-Key": idem,
+    "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
   };
   const res = await fetch(`${BASE}/.netlify/functions/lead`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Origin: "https://confenge.com.br",
-      "User-Agent": `confenge-daily-probe/1.0 (${Date.now()})`,
-      "X-Confenge-Probe": "1",
-      "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
-    },
+    headers: probeHdr,
     body: JSON.stringify(payload),
   });
   const body = await res.json().catch(() => ({}));
   check("isolated_probe", res.status === 201 || res.status === 200, `id=${body.lead_id || ""}`);
+  const stOk = (s) => /^(ok|pending|skipped|error)$/.test(String(s || ""));
+  check("probe_notify_status", stOk(body.notify_status), body.notify_status);
+  check("probe_email_status", stOk(body.email_status), body.email_status);
+  const res2 = await fetch(`${BASE}/.netlify/functions/lead`, {
+    method: "POST",
+    headers: probeHdr,
+    body: JSON.stringify(payload),
+  });
+  const body2 = await res2.json().catch(() => ({}));
+  check(
+    "probe_idempotent_same_id",
+    (res2.status === 200 || res2.status === 201) && body2.lead_id === body.lead_id,
+    `id1=${body.lead_id} id2=${body2.lead_id}`
+  );
   if (TOKEN && before != null) {
     const f = await j("/.netlify/functions/ops?action=funnel");
     const after = f.body.funnel?.counts?.lead_persisted;

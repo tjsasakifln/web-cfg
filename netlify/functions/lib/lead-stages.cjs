@@ -212,6 +212,13 @@ function publicLeadSummary(record) {
       isReal &&
       (record.commercial_stage || "lead_persisted") === "lead_persisted" &&
       hoursSince(record.received_at) >= Number(process.env.LEAD_SLA_HOURS || 4),
+    // Non-PII delivery statuses for probe/ops verification
+    delivery: record.delivery
+      ? {
+          notify: record.delivery.notify?.status || null,
+          email: record.delivery.email?.status || null,
+        }
+      : null,
   };
 }
 
