@@ -1,19 +1,21 @@
-"""Checklist UI and CTA contrast structure from editorial render."""
+"""Checklist UI and CTA structure from editorial render."""
 from scripts.editorial.render import markdown_to_html, _is_checklist_page, _cta_block
 
 
 def test_checklist_mode_renders_checkboxes():
-    html = markdown_to_html("## Sec\n\n- Alpha\n- Beta\n", checklist=True)
+    html = markdown_to_html("## 1. Sec\n\n- Alpha\n- Beta\n", checklist=True)
     assert 'class="checklist"' in html
     assert html.count('type="checkbox"') == 2
-    assert "<ul>" not in html.replace('class="checklist"', "")
+    assert "checklist-box" in html
+    assert "editorial-heading-num" in html
+    assert "checklist-toolbar" in html
+    assert "editorial-section" in html
 
 
 def test_plain_list_without_checklist_mode():
     html = markdown_to_html("## Sec\n\n- Alpha\n", checklist=False)
-    assert 'class="checklist"' not in html
-    assert "<ul>" in html
-    assert 'type="checkbox"' not in html
+    assert "checklist-input" not in html
+    assert "editorial-list" in html
 
 
 def test_explicit_checkbox_syntax():
@@ -27,7 +29,7 @@ def test_guia_page_is_checklist():
     assert not _is_checklist_page({"page_id": "lei-limite-25-50", "title": "Limite 25"})
 
 
-def test_cta_block_has_secondary_email_button():
+def test_cta_block_premium_structure():
     html = _cta_block(
         {
             "cta_whatsapp": "Oi",
@@ -37,6 +39,7 @@ def test_cta_block_has_secondary_email_button():
         },
         "mid",
     )
+    assert 'class="editorial-cta"' in html
     assert 'data-cta-channel="email"' in html
-    assert "button-secondary" in html
-    assert "lead-inline" in html
+    assert "editorial-cta-secondary" in html
+    assert "Próximo passo" in html
