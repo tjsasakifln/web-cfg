@@ -1,4 +1,4 @@
-# FINAL REPORT — CONFENGE-VALUE-COMMUNICATION-2040-01
+# FINAL REPORT, CONFENGE-VALUE-COMMUNICATION-2040-01
 
 ## Terminal status
 
@@ -36,7 +36,7 @@ All green: `npm test`, `build:site`, `audit:public-artifact`. SEO validator: war
 
 ## Deploy
 
-Not executed — deliver branch/PR + `_site`. See DEPLOY-EVIDENCE.md.
+Not executed, deliver branch/PR + `_site`. See DEPLOY-EVIDENCE.md.
 
 ## Risks / pending auth
 

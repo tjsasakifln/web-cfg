@@ -1,7 +1,7 @@
 (() => {
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-  /** Analytics bus — no PII. First-party collector + optional gtag/plausible. */
+  /** Analytics bus, no PII. First-party collector + optional gtag/plausible. */
   const PII_PARAM_KEYS = new Set([
     'nome', 'name', 'email', 'telefone', 'phone', 'tel', 'whatsapp',
     'mensagem', 'message', 'message_body', 'empresa', 'company',
@@ -63,7 +63,7 @@
       });
       safe.page_path = safe.page_path || (window.location.pathname || '/');
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: eventName, ...safe });
+      window.dataLayer.push({ event: eventName...safe });
       if (typeof window.gtag === 'function') {
         window.gtag('event', eventName, safe);
       }
@@ -89,7 +89,7 @@
     window.addEventListener('pagehide', flushAnalytics);
   } catch (_) { /* ignore */ }
 
-  /** Field Core Web Vitals (LCP, INP, CLS, TTFB) — anonymous aggregates only */
+  /** Field Core Web Vitals (LCP, INP, CLS, TTFB), anonymous aggregates only */
   const reportVital = (metric, value, rating) => {
     if (!Number.isFinite(value)) return;
     track('web_vital', {
@@ -180,7 +180,7 @@
     }
     document.querySelectorAll('#year').forEach((el) => { el.textContent = new Date().getFullYear(); });
 
-    // Journey rail progressive enhancement — all stages remain in the DOM for no-JS
+    // Journey rail progressive enhancement, all stages remain in the DOM for no-JS
     document.querySelectorAll('[data-journey-enhance]').forEach((rail) => {
       const tabs = [...rail.querySelectorAll('[data-journey-tab]')];
       const panels = [...rail.querySelectorAll('[data-journey-panel]')];
@@ -229,7 +229,7 @@
         lastSearchTerm = q;
         track('internal_search', {
           content_cluster: 'conteudos',
-          // hash length only — do not send raw query (may be sensitive)
+          // hash length only, do not send raw query (may be sensitive)
           query_len: q.length,
           results_count: visible,
         });
@@ -289,7 +289,7 @@
     if (fromUrl.pseo_page_id || fromUrl.origem || fromUrl.page_type) {
       fromUrl.landing_url = sanitizeAttr(window.location.pathname || '/');
       if (!fromUrl.origin_url && fromUrl.origem) fromUrl.origin_url = fromUrl.origem;
-      writeStoredPseo({ ...readStoredPseo(), ...fromUrl });
+      writeStoredPseo({ ...readStoredPseo()...fromUrl });
     }
     const storedPseo = readStoredPseo();
     const origem = fromUrl.origem || storedPseo.origem
@@ -810,7 +810,7 @@
               `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e preciso de retorno. Protocolo local indisponível.`,
             );
             showFormStatus(
-              'Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.',
+              'Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato, o protocolo só aparece após gravação confirmada.',
               'error',
             );
             track('lead_form_backend_error', {
@@ -959,7 +959,7 @@
         origem: pagePath,
         origin_url: pagePath,
       };
-      writeStoredPseo({ ...storedAttr, ...bodyAttr });
+      writeStoredPseo({ ...storedAttr...bodyAttr });
     }
 
     if (hasPseoContext) {
@@ -989,8 +989,7 @@
           // Persist CTA click context before navigation
           const ctaPos = el.getAttribute('data-cta-position') || 'inline';
           writeStoredPseo({
-            ...readStoredPseo(),
-            ...pseoBase,
+            ...readStoredPseo()...pseoBase,
             cta_position: ctaPos,
             origem: pseoBase.pseo_page_id ? pagePath : (storedAttr.origem || pagePath),
           });
@@ -1030,7 +1029,7 @@
           });
         });
       });
-      // Form start/submit on home OR pSEO when attribution present — not pathname-bound
+      // Form start/submit on home OR pSEO when attribution present, not pathname-bound
       if (form && (pseoBase.pseo_page_id || storedAttr.pseo_page_id || fromUrl.pseo_page_id)) {
         let pseoFormStarted = false;
         const markPseoStart = () => {
@@ -1071,7 +1070,7 @@
 
   window.confengeTrack = track;
 
-  /** Optional Cloudflare Turnstile — only loads when a public sitekey is present. */
+  /** Optional Cloudflare Turnstile, only loads when a public sitekey is present. */
   const initTurnstile = () => {
     try {
       const slot = document.getElementById('turnstile-slot');

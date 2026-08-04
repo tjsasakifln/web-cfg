@@ -1,6 +1,6 @@
 # pSEO learn 2026-07
 
-Somente recomendações — sem mutação automática de publish.
+Somente recomendações, sem mutação automática de publish.
 
 ## `agency-88830609`
 - problems: indexation_blocked_quality

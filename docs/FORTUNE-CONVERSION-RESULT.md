@@ -1,4 +1,4 @@
-# CONFENGE conversion / SEO remediation — factual result
+# CONFENGE conversion / SEO remediation, factual result
 
 Date: 2026-08-02  
 Production: https://confenge.com.br  
@@ -8,7 +8,7 @@ Baseline pre-change main: `90cebc457fbb9a8d6c74c7483ef944651c30d401`
 
 Live `/.well-known/build-info.json` (re-check after each deploy):
 
-- commit, build_time, environment, schema — see endpoint and `docs/evidence/section-20-smoke.txt`
+- commit, build_time, environment, schema, see endpoint and `docs/evidence/section-20-smoke.txt`
 
 ## Conversion architecture (live)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit /piloto/* pages — classify promote|revise|consolidate|reject.
+"""Audit /piloto/* pages, classify promote|revise|consolidate|reject.
 
 Never promotes /piloto/* URLs to final indexable paths automatically.
 Max 5 promote candidates; finals would live under stable URLs (e.g. /inteligencia/)

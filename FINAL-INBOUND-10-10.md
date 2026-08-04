@@ -1,4 +1,4 @@
-# FINAL-INBOUND-10-10 — CONFENGE web-cfg + produção
+# FINAL-INBOUND-10-10, CONFENGE web-cfg + produção
 
 **Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`
 
@@ -21,16 +21,16 @@ O canal inseguro (ntfy público + FormSubmit + topic na resposta) foi **eliminad
 
 ## 2. Estado inicial
 
-`docs/evidence/inbound-10/gap-matrix-initial.md` — baseline `8c11a9c8` com topic ntfy exposto e PII em canal público.
+`docs/evidence/inbound-10/gap-matrix-initial.md`, baseline `8c11a9c8` com topic ntfy exposto e PII em canal público.
 
 ## 3. Riscos encontrados
 
-1. Topic ntfy + PII públicos (crítico) — **mitigado no tip**.  
-2. Sucesso sem persistência — **mitigado** (201 só após Blobs + read-back).  
-3. E-mail FormSubmit 403 — path removido; Resend **aguarda** owner.  
-4. Analytics só dataLayer — **coletor prod ativo**.  
-5. Branch protection ausente — **owner §5**.  
-6. pSEO thin — **containment** (0 publish, sitemap vazio válido).
+1. Topic ntfy + PII públicos (crítico), **mitigado no tip**.  
+2. Sucesso sem persistência, **mitigado** (201 só após Blobs + read-back).  
+3. E-mail FormSubmit 403, path removido; Resend **aguarda** owner.  
+4. Analytics só dataLayer, **coletor prod ativo**.  
+5. Branch protection ausente, **owner §5**.  
+6. pSEO thin, **containment** (0 publish, sitemap vazio válido).
 
 ## 4. Alterações realizadas
 
@@ -86,7 +86,7 @@ Redirects/410 legado; `validate:seo` OK; robots/sitemaps 200; entidade antiga 41
 
 ## 11. pSEO
 
-Editorial gate: 0 publishable, 18 reject, 5 noindex; sitemap inteligência vazio **intencional** (`pseo-wave-status.md`). Não é falha de deploy — é contenção de qualidade.
+Editorial gate: 0 publishable, 18 reject, 5 noindex; sitemap inteligência vazio **intencional** (`pseo-wave-status.md`). Não é falha de deploy, é contenção de qualidade.
 
 ## 12. Conversão
 
@@ -148,18 +148,18 @@ Diretório `docs/evidence/inbound-10/`:
 | 2 | DNS | SPF/DKIM/DMARC confenge.com.br |
 | 3 | Resend | domínio + API key + prova inbox |
 | 4 | Cloudflare Turnstile | site/secret + widget + CSP + `LEAD_REQUIRE_TURNSTILE=1` |
-| 5 | GitHub | **DONE** — ver `branch-protection.json` |
-| 6 | Uptime | Better Stack/UptimeRobot/Checkly + alerta ≠ canal leads — **OPEN** |
+| 5 | GitHub | **DONE**, ver `branch-protection.json` |
+| 6 | Uptime | Better Stack/UptimeRobot/Checkly + alerta ≠ canal leads, **OPEN** |
 | 7 | Plausible | opcional (coletor 1ª parte já basta) |
 | 8 | Blobs | **DONE** (201+verify) |
-| 9 | Rollback UI | Netlify Publish deploy drill — **OPEN** |
+| 9 | Rollback UI | Netlify Publish deploy drill, **OPEN** |
 
 ## 18. Limitações
 
 - Inbox e webhook não podem ser provados sem credenciais owner.  
 - Branch protection e uptime exigem UI owner.  
 - Dados sintéticos `TESTE-*` / `*@example.com` em Blobs: eliminar per `LEAD-HANDLING.md`.  
-- LH lab local: console 404 em `/.netlify/functions/collect` (static server sem functions) — **não ocorre em produção** (collect 200).
+- LH lab local: console 404 em `/.netlify/functions/collect` (static server sem functions), **não ocorre em produção** (collect 200).
 
 ## 19. Notas finais
 
@@ -181,21 +181,21 @@ BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS
 
 | Quesito | Repo | Produção | Evidência | Se &lt;10 → EXTERNAL |
 | --- | ---: | ---: | --- | --- |
-| Posicionamento | 10 | 10 | brand.json, home, `test:brand` | — |
-| Arquitetura de informação | 10 | 10 | jornadas A/B/C, hubs | — |
-| UI/UX | 10 | 10 | `test:ui`, axe 0 critical/serious | — |
-| Copy | 10 | 10 | `test:copy` | — |
-| Performance | 10 | 10 | LH lab Perf≥97 LCP≤2.0 home/diretoria; CLS0 TBT0; SEO100 A11y100 (`docs/lighthouse-runs/summary.json`); collect prod ≠ 404 | — |
-| Acessibilidade | 10 | 10 | axe + LH a11y 100 | — |
-| SEO técnico | 10 | 10 | `validate:seo`, redirects/410 prod, robots/sitemaps | — |
-| Conteúdo e E-E-A-T | 10 | 10 | especialista, pilares, prova verificável | — |
-| pSEO | 10 | 10 | gate editorial 0 thin publish; sitemap-int vazio válido | — |
+| Posicionamento | 10 | 10 | brand.json, home, `test:brand` |, |
+| Arquitetura de informação | 10 | 10 | jornadas A/B/C, hubs |, |
+| UI/UX | 10 | 10 | `test:ui`, axe 0 critical/serious |, |
+| Copy | 10 | 10 | `test:copy` |, |
+| Performance | 10 | 10 | LH lab Perf≥97 LCP≤2.0 home/diretoria; CLS0 TBT0; SEO100 A11y100 (`docs/lighthouse-runs/summary.json`); collect prod ≠ 404 |, |
+| Acessibilidade | 10 | 10 | axe + LH a11y 100 |, |
+| SEO técnico | 10 | 10 | `validate:seo`, redirects/410 prod, robots/sitemaps |, |
+| Conteúdo e E-E-A-T | 10 | 10 | especialista, pilares, prova verificável |, |
+| pSEO | 10 | 10 | gate editorial 0 thin publish; sitemap-int vazio válido |, |
 | Conversão | 10 | **9** | form/WA/201/obrigado | **§1 notify, §2–3 e-mail** |
 | Analytics | 10 | 10 | collect tip accepted | §7 opcional |
 | Leads | 10 | **9** | 201+persist+idempotency+rate | **§1 webhook, §2–3 Resend** |
 | Segurança e LGPD | 10 | **9** | no leak, rate 429, privacy | **§4 Turnstile; §1 rotação ntfy** |
-| Engenharia | 10 | 10 | tip=`6a386477` = prod build-info | — |
-| Governança | 10 | 10 | CODEOWNERS, Dependabot, CodeQL, PR template, **branch protection** (`branch-protection.json`) | — (§5 DONE) |
+| Engenharia | 10 | 10 | tip=`6a386477` = prod build-info |, |
+| Governança | 10 | 10 | CODEOWNERS, Dependabot, CodeQL, PR template, **branch protection** (`branch-protection.json`) |, (§5 DONE) |
 | Observabilidade | **9** | **3** | SLO-MONITORING.md, synthetic probe | **§6 uptime/alerts** |
 | Operação comercial | **9** | **5** | LEAD-HANDLING.md, SLAs | **§1–3 notify+e-mail** |
 

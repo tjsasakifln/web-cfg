@@ -1,4 +1,4 @@
-# CONFENGE Design System — Engenharia editorial premium
+# CONFENGE Design System, Engenharia editorial premium
 
 Fonte de verdade: `data/site/design-system.json`.
 
@@ -6,7 +6,7 @@ Fonte de verdade: `data/site/design-system.json`.
 
 A campanha de posicionamento (Diretoria B2G fracionada) acertou a tese comercial, mas a interface ainda parecia **template de consultoria**: seções iguais, grades de cards, bordas verdes, ícones genéricos e pouco contraste compositivo.
 
-Este sistema obriga forma, conteúdo e interação a comunicarem **competência técnica, responsabilidade e alto valor econômico** — não “página bonita”.
+Este sistema obriga forma, conteúdo e interação a comunicarem **competência técnica, responsabilidade e alto valor econômico**, não “página bonita”.
 
 ## Conceito
 
@@ -23,9 +23,9 @@ Não é SaaS. Não é escritório de advocacia genérico. Não é landing de inf
 | Navy 950/900/800 | Superfícies de autoridade, CTA final, painéis de método |
 | Ink / text / muted | Hierarquia tipográfica diária |
 | White / soft | Fundo editorial e respiro; soft ≠ verde-claro |
-| Green 700 | Decisão, proteção, ação primária — **sinal**, não decoração |
+| Green 700 | Decisão, proteção, ação primária, **sinal**, não decoração |
 | Lime | Acento raro em superfície escura |
-| Green-100 | **Restrito** — no máximo um bloco consecutivo por página |
+| Green-100 | **Restrito**, no máximo um bloco consecutivo por página |
 
 ### Tipografia
 
@@ -48,13 +48,13 @@ Sombra e radius generosos são exceção. Painéis editoriais preferem linha, pe
 
 Excluindo header/footer, a home pública deve ter **no máximo sete** seções narrativas:
 
-1. `hero_split` — tese, um CTA primário, prova, visual estrutural (não dashboard)
-2. `tension_sequence` — três momentos de erosão de margem
-3. `offer_dominant` — Diretoria B2G + rotas situacionais
-4. `journey_rail` — quatro macrofases + rastros (tabela desktop / cards mobile)
-5. `authority_editorial` — credenciais verificáveis
-6. `icp_contrast` — adequação + objeções (FAQ curto)
-7. `cta_formal` — conversão (form)
+1. `hero_split`, tese, um CTA primário, prova, visual estrutural (não dashboard)
+2. `tension_sequence`, três momentos de erosão de margem
+3. `offer_dominant`, Diretoria B2G + rotas situacionais
+4. `journey_rail`, quatro macrofases + rastros (tabela desktop / cards mobile)
+5. `authority_editorial`, credenciais verificáveis
+6. `icp_contrast`, adequação + objeções (FAQ curto)
+7. `cta_formal`, conversão (form)
 
 **CTA primário:** `Diagnosticar operação B2G` (≤4 ocorrências `button-primary`).  
 **CTA secundário:** `Enviar decisão crítica` (WhatsApp, peso visual menor).
@@ -74,7 +74,7 @@ Perguntas obrigatórias antes de criar um card:
 3. É comparação?
 4. Será reutilizado?
 
-Se não — composição editorial aberta (linhas, números de seção, colunas desiguais, trilhos, matrizes).
+Se não, composição editorial aberta (linhas, números de seção, colunas desiguais, trilhos, matrizes).
 
 ## Padrões proibidos (gates)
 
@@ -115,10 +115,10 @@ Entrada sutil, foco de etapa, revelação de linha. Sem parallax exagerado, cont
 ## Como não voltar ao genérico
 
 1. Antes de copiar uma seção, escolher um **arquétipo diferente** do anterior.
-2. Dar peso visual à **afirmação dominante** — o resto é secundário.
+2. Dar peso visual à **afirmação dominante**, o resto é secundário.
 3. Preferir artefatos de método (matriz, trilha, GO/REVIEW/NO-GO) a ícones.
 4. Rodar `npm run test:design`, `test:visual-structure` e `test:copy` antes de merge.
-5. Se a página “parece limpa demais”, falta contraste de superfície ou hierarquia — não adicione mais cards.
+5. Se a página “parece limpa demais”, falta contraste de superfície ou hierarquia, não adicione mais cards.
 
 ## Manutenção
 

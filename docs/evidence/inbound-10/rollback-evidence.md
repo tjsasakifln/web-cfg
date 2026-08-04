@@ -27,7 +27,7 @@ Git history on `main` (previous functional lead fix):
 | `02625afc` | connectLambda |
 | `4207a14e` | external_node_modules Blobs |
 | `75f380a4` | secure pipeline (initial 503 until Blobs wired) |
-| `8c11a9c8` | pre-inbound (insecure ntfy) — **do not rollback to this** |
+| `8c11a9c8` | pre-inbound (insecure ntfy), **do not rollback to this** |
 
 Netlify UI path: Site → Deploys → select green deploy with known good `build-info` commit → **Publish deploy**.
 

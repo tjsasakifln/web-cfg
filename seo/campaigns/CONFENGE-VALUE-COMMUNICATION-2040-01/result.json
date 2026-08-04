@@ -55,7 +55,7 @@
     "reason": "No Netlify auth / production deploy in this session"
   },
   "risks": [
-    "Netlify form renamed to diagnostico-b2g — configure dashboard if needed",
+    "Netlify form renamed to diagnostico-b2g, configure dashboard if needed",
     "No live analytics property ID",
     "Zero approved cases",
     "National pSEO noindex title collisions (warn-only)",

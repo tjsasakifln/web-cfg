@@ -1,4 +1,4 @@
-# FINAL-REPORT — CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01
+# FINAL-REPORT, CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01
 
 ## 1. Diagnóstico anterior
 
@@ -22,7 +22,7 @@ Diagnóstico (pós-skeptic): itens “Quando faz sentido” sem `href="#"` morto
 
 ## Painel de crítica (cinco lentes)
 
-Ver `FIVE-LENS-CRITIQUE.md`: diretor de construtora, diretor de criação, designer editorial, especialista em conversão, engenheiro frontend — com achados e correções.
+Ver `FIVE-LENS-CRITIQUE.md`: diretor de construtora, diretor de criação, designer editorial, especialista em conversão, engenheiro frontend, com achados e correções.
 
 ## 8. Linguagem interna removida
 

@@ -1,9 +1,9 @@
-# PSEO Wave 0 — Final Activation 03
+# PSEO Wave 0, Final Activation 03
 
 **Campaign:** `WEB-CFG-PSEO-WAVE0-FINAL-ACTIVATION-03`  
 **Baseline:** `PARTIAL_WAVE0_HARDENED_GSC_NOT_INSPECTED`  
 **Terminal:** `PASS_WAVE0_ACTIVATED_GSC_OBSERVED`  
-**next_wave_gate:** `true` (technical gate only — no expansion without explicit Wave 1 campaign)
+**next_wave_gate:** `true` (technical gate only, no expansion without explicit Wave 1 campaign)
 
 ## Objective
 
@@ -17,14 +17,14 @@ Close residual Wave 0 blockers only:
 6. Real GSC URL Inspection for four seeds
 7. Calculated Wave 1 gate
 
-## Front A — real reexport from main
+## Front A, real reexport from main
 
 | Field | Value |
 |-------|--------|
 | extra-cli main HEAD | `162c2ba18cd216dbb4f4d298ea965db1b98a9d23` |
 | PR enabling export | #187 (prior) + **#188** residual models/staging (merged this campaign) |
 | Command | `python -m scripts.pseo.export_web_cfg --out … --as-of 2026-07-31 --validate` |
-| Source | live read-only PG (`LOCAL_DATALAKE_DSN`) — **not** fixture |
+| Source | live read-only PG (`LOCAL_DATALAKE_DSN`), **not** fixture |
 | `source_repository` | `extra-cli` |
 | `source_branch` | `main` |
 | `source_commit_sha` | `162c2ba18cd216dbb4f4d298ea965db1b98a9d23` (ancestor of origin/main = equal) |
@@ -33,7 +33,7 @@ Close residual Wave 0 blockers only:
 
 Pure `main` at #187 alone failed validation (`ufs_observed` list[str] vs dicts). PR **#188** was squash-merged; reexport used the resulting main tip.
 
-## Front B — snapshot diff + approval stability
+## Front B, snapshot diff + approval stability
 
 Command: `npm run pseo:prove-approval-stability`
 
@@ -47,25 +47,25 @@ Command: `npm run pseo:prove-approval-stability`
 
 Artifacts: `seo/pseo-snapshot-diff.json`, `seo/pseo-approval-stability.json`.
 
-## Front C — human review (four seeds)
+## Front C, human review (four seeds)
 
 | URL | Material change | Decision |
 |-----|-----------------|----------|
 | `/inteligencia/cenarios/inconsistencia-orcamento-edital/` | no | **PRESERVE** `APPROVED` → publish |
 | `/inteligencia/cenarios/referencia-sinapi-sicro-margem/` | no | **PRESERVE** `APPROVED` → publish |
 | `/inteligencia/cenarios/aditivos-e-risco-de-margem/` | yes (editorial language) | **RE-APPROVED** after rewrite → publish |
-| `/radar/edificacoes-publicas-pr/` | yes + quality fail | **NOT re-approved** — reject (`contract_url_as_opportunity`, dups, zero value) |
+| `/radar/edificacoes-publicas-pr/` | yes + quality fail | **NOT re-approved**, reject (`contract_url_as_opportunity`, dups, zero value) |
 
 **Published indexable count:** 3 (≤4). **New pages published:** 0.
 
-## Front D — editorial
+## Front D, editorial
 
 - Removed comparative “concentram” on `normative_editorial` aditivos pattern → “estão particularmente sujeitas a…”.
 - `evidence_kind` + `claim_evidence` package re-applied via `scripts/pseo/enrich_problem_service.py` (exporter ships bridges; Wave 0 classification is editorial).
 - Gate: `evidence_kind_language_mismatch` in `editorial_audit.py`.
 - Tests: `scripts/pseo/tests/test_approval_stability_and_editorial.py`.
 
-## Front E — build / gates
+## Front E, build / gates
 
 ```text
 npm run build:site          ok  public_directory=_site
@@ -76,7 +76,7 @@ npm test                    ok  76+ passed
 npm run pseo:prove-approval-stability  ok
 ```
 
-## Front F — deploy + production audit
+## Front F, deploy + production audit
 
 Deploy via push to `web-cfg` `main` (Netlify `publish=_site`). After deploy:
 
@@ -88,7 +88,7 @@ npm run pseo:audit:production
 
 See `seo/pseo-production-audit.json` and final result JSON for SHA alignment.
 
-## Front G — GSC (real URL Inspection API)
+## Front G, GSC (real URL Inspection API)
 
 Property: `sc-domain:confenge.com.br`  
 Origin: `url_inspection_api`  
@@ -103,7 +103,7 @@ Ingest: `npm run pseo:gsc:ingest -- --input …`
 
 Canonicals self-match on indexed pages; robots ALLOWED; no SOFT_404.
 
-## Front H — Wave 1 gate
+## Front H, Wave 1 gate
 
 Computed only. Requires simultaneous satisfaction of provenance, approval stability, current production audit, GSC thresholds, zero criticals, zero new pages. See `next_wave_gate` / `next_wave_gate_reasons` in `seo/pseo-wave0-final-activation-result.json`.
 

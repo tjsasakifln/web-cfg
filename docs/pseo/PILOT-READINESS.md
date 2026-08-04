@@ -2,7 +2,7 @@
 
 ## Status
 
-`PSEO_PILOT = NOINDEX_QA` — **15 pages generated** with lineage from `national-candidate-inventory.json`.
+`PSEO_PILOT = NOINDEX_QA`, **15 pages generated** with lineage from `national-candidate-inventory.json`.
 
 Not indexable. Not in main sitemap. Human review required before any robots change.
 

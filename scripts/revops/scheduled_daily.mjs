@@ -32,9 +32,7 @@ function check(name, ok, detail = "", { critical = true } = {}) {
 async function j(path, opts = {}) {
   const headers = {
     Accept: "application/json",
-    "Content-Type": "application/json",
-    ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
-    ...(opts.headers || {}),
+    "Content-Type": "application/json"...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {})...(opts.headers || {}),
   };
   const res = await fetch(`${BASE}${path}`, { ...opts, headers });
   const body = await res.json().catch(() => ({}));
@@ -62,7 +60,7 @@ for (const p of critical) {
       execSync("git rev-parse origin/main", { cwd: ROOT, encoding: "utf8" }).trim();
     const bi = await fetch(`${BASE}/.well-known/build-info.json`).then((r) => r.json());
     check("build_info_present", Boolean(bi.commit), bi.commit || "missing");
-    // On schedule from Actions, tip may be ahead of production briefly — soft when GITHUB_SHA set
+    // On schedule from Actions, tip may be ahead of production briefly, soft when GITHUB_SHA set
     if (process.env.REQUIRE_DEPLOY_MATCH === "1") {
       check("deploy_matches_expected", bi.commit === expected, `live=${bi.commit} expected=${expected}`);
     } else {
@@ -101,7 +99,7 @@ for (const p of critical) {
   const payload = {
     nome: "SYNTHETIC-PROBE",
     email: `probe+daily-${stamp}@example.com`,
-    estagio: "synthetic probe — discard",
+    estagio: "synthetic probe, discard",
     jornada: "operacao",
     consentimento: "true",
     origem: "/synthetic-probe-daily",
@@ -110,7 +108,7 @@ for (const p of critical) {
     landing_page: "/",
     test_mode: true,
     record_kind: "synthetic",
-    mensagem: "[QA] scheduled daily probe — do not contact",
+    mensagem: "[QA] scheduled daily probe, do not contact",
     idempotency_key: idem,
   };
   const probeHdr = {
@@ -189,12 +187,12 @@ if (TOKEN) {
     critical: false,
   });
 } else {
-  check("ops_token", true, "OPS_TOKEN not set — commercial checks skipped (set OPS_TOKEN for full daily)", {
+  check("ops_token", true, "OPS_TOKEN not set, commercial checks skipped (set OPS_TOKEN for full daily)", {
     critical: false,
   });
   out.alerts.push({
     name: "ops_token_missing",
-    detail: "OPS_TOKEN not set — commercial funnel/system_health checks skipped",
+    detail: "OPS_TOKEN not set, commercial funnel/system_health checks skipped",
   });
 }
 

@@ -10,7 +10,7 @@
   ],
   "gsc_submit_candidates": [],
   "blocked": [
-    "no_valid_human_approvals — named human must run approve_cli.py per page"
+    "no_valid_human_approvals, named human must run approve_cli.py per page"
   ],
   "not_automated": [
     "git_merge_of_release_pr",

@@ -3,7 +3,7 @@
 
 Fail-closed:
 - Automated build may advance at most to EDITORIAL_REVIEWED when gates pass.
-- HUMAN_APPROVED / INDEXABLE require a real named human via CLI/tools — never CI.
+- HUMAN_APPROVED / INDEXABLE require a real named human via CLI/tools, never CI.
 - Only INDEXABLE pages (with human approval) enter segmented sitemaps.
 """
 
@@ -169,7 +169,7 @@ def _auto_progress_to_editorial_reviewed(
     man: dict[str, Any],
     page: dict[str, Any],
 ) -> str:
-    """Machine may validate sources/tech/editorial quality only — never HUMAN_APPROVED."""
+    """Machine may validate sources/tech/editorial quality only, never HUMAN_APPROVED."""
     stored = get_page(reg, page_id)
     if not stored:
         return "DRAFT"
@@ -324,7 +324,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "title": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia",
             "description": (
                 "Aplicações cotidianas da nova lei de licitações em aditivos, prazos, medições, "
-                "pagamentos e reequilíbrio — com foco na decisão da construtora."
+                "pagamentos e reequilíbrio, com foco na decisão da construtora."
             ),
             "topic": "lei-14133",
             "journey": "execucao",
@@ -335,7 +335,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "title": "Jurisprudência aplicada a contratos de obras públicas",
             "description": (
                 "Análises operacionais de decisões relevantes para aditivos, medições, BDI, "
-                "prazos e sanções — com limites do precedente e documentos necessários."
+                "prazos e sanções, com limites do precedente e documentos necessários."
             ),
             "topic": "jurisprudencia",
             "journey": "defesa",

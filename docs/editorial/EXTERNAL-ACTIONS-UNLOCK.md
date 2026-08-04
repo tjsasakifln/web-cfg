@@ -10,7 +10,7 @@
 - Editorial sitemaps empty (0 URLs)
 - `npm run editorial:test` → 14 passed
 
-## Action A — Named human approval (required)
+## Action A, Named human approval (required)
 
 For **each** page_id below, a real person (e.g. Tiago Sasaki) must run:
 
@@ -43,9 +43,9 @@ python3 scripts/editorial/approve_cli.py \
 `"Planalto arts. 124–125 conferidos em 2026-08-02; CTAs contextuais OK; sem promessa de resultado jurídico."`
 
 **Rejected IDs (do not approve until dossier fixed):**  
-`jur-sumula-260-art` — need official Súmula text, approval date, stable TCU URL.
+`jur-sumula-260-art`, need official Súmula text, approval date, stable TCU URL.
 
-## Action B — Rebuild + deploy after approvals
+## Action B, Rebuild + deploy after approvals
 
 ```bash
 npm run editorial:build
@@ -58,20 +58,20 @@ Confirm:
 - `sitemap-editorial.xml` contains only approved URLs
 - https://confenge.com.br/.well-known/build-info.json matches deploy commit
 
-## Action C — Search Console
+## Action C, Search Console
 Submit when non-empty:
 - https://confenge.com.br/sitemap-editorial.xml
 - https://confenge.com.br/sitemap-jurisprudencia.xml (if any)
 - https://confenge.com.br/sitemap-index.xml
 
-## Action D — Cannibalization after first INDEXABLE overlaps
+## Action D, Cannibalization after first INDEXABLE overlaps
 For each approved Wave 1 URL that competes with a `manter` `/conteudos/` page:
 1. Choose canonical winner
 2. noindex or canonicalize loser
 3. Update `sitemap.xml`
 See `CONTENT-CANNIBALIZATION-REPORT.md`
 
-## Action E — Optional byline
+## Action E, Optional byline
 Set `author_is_tiago: true` in page JSON only after Tiago personal review; re-approve (hash invalidates).
 
 ## Definition of unlocked

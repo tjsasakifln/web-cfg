@@ -1,4 +1,4 @@
-# Go-live pSEO — checklist (deploy Netlify pendente)
+# Go-live pSEO, checklist (deploy Netlify pendente)
 
 ## Estado validado (2026-07-31)
 
@@ -14,11 +14,11 @@
 
 ## Testes (últimos)
 
-- [x] extra-cli `pytest tests/pseo` — 34 passed  
-- [x] `npm run pseo:validate` — ok  
-- [x] `npm run pseo:audit` — ok  
-- [x] `npm test` (unit + analytics + attribution) — ok  
-- [x] `npm run validate:seo` — VALIDATION_OK  
+- [x] extra-cli `pytest tests/pseo`, 34 passed  
+- [x] `npm run pseo:validate`, ok  
+- [x] `npm run pseo:audit`, ok  
+- [x] `npm test` (unit + analytics + attribution), ok  
+- [x] `npm run validate:seo`, VALIDATION_OK  
 - [x] Sitemap inteligência só com publish; robots aponta `sitemap-inteligencia.xml`
 
 ## URLs que entrarão no índice após deploy

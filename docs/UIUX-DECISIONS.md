@@ -1,4 +1,4 @@
-# UI/UX Decisions — confenge.com.br remediation
+# UI/UX Decisions, confenge.com.br remediation
 
 **Baseline SHA:** `7f111f117b493d4d249d7aab01ea19b0be76c9c2`  
 **Principle:** Subtrair antes de acrescentar. Buyer = cético decisor de construtora.
@@ -57,7 +57,7 @@
 ## Buyer rationale (skeptical construtora)
 
 1. **5 seconds:** What (Diretoria B2G), who (construtoras), problem (margem no contrato), trust (EESC-USP + lados da mesa), next step (Diagnosticar operação B2G).
-2. **Selectivity:** “Não faz sentido quando” stays visible — signals we are not a volume shop.
+2. **Selectivity:** “Não faz sentido quando” stays visible, signals we are not a volume shop.
 3. **No theater:** No fake dashboard, no fabricated cases, no AI demo language.
 4. **Economic consequence over method theater:** Three risk moments + four phases beat eight panels + seven columns.
 5. **One dominant ask:** Diagnosticar operação B2G; WhatsApp is secondary urgency.

@@ -1,4 +1,4 @@
-# FINAL — Editorial + pSEO inbound (Wave 1)
+# FINAL, Editorial + pSEO inbound (Wave 1)
 
 **Terminal status:** `COMPLETE_EDITORIAL_PSEO_INBOUND_OPERATIONAL`
 
@@ -28,7 +28,7 @@ Composition:
 - 0 × inteligência de dados (correto)
 
 ## Gates
-- `npm run editorial:test` — 8 passed (shipped validators)
+- `npm run editorial:test`, 8 passed (shipped validators)
 - Naturalness / AI residue / internal terms
 - Official sources via `SOURCE-MANIFEST.json`
 - WhatsApp + mailto contextuais
@@ -37,9 +37,9 @@ Composition:
 - Material-hash invalidates approval
 
 ## Sitemaps (production target)
-- `sitemap-editorial.xml` — 14
-- `sitemap-jurisprudencia.xml` — 1
-- `sitemap-inteligencia.xml` — 0
+- `sitemap-editorial.xml`, 14
+- `sitemap-jurisprudencia.xml`, 1
+- `sitemap-inteligencia.xml`, 0
 - `sitemap-index.xml` references all four segments
 - `robots.txt` lists editorial + jurisprudência
 

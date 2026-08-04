@@ -1,5 +1,5 @@
 /**
- * Pure unit tests for ConfengeToolCompute — drives the shipped module only.
+ * Pure unit tests for ConfengeToolCompute, drives the shipped module only.
  */
 import { createRequire } from "module";
 import path from "path";

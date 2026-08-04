@@ -72,7 +72,7 @@ function fail(name, detail) {
     const patch = stages.applyStageChange(base, { stage: "contacted", actor: "tiago" });
     if (patch.commercial_stage !== "contacted") fail("to_contacted", patch);
     else pass("to_contacted");
-    const mid = { ...base, ...patch };
+    const mid = { ...base...patch };
     const p2 = stages.applyStageChange(mid, { stage: "won", actor: "tiago" });
     fail("skip_to_won_should_deny", p2);
   } catch (e) {
@@ -258,7 +258,7 @@ function fail(name, detail) {
   const rk = require(path.join(root, "netlify/functions/lib/record-kind.cjs"));
   const legacyProbe = {
     lead_id: "legacy-no-kind",
-    // no record_kind field — pre-migration
+    // no record_kind field, pre-migration
     nome: "SYNTHETIC-PROBE",
     email: "probe@example.com",
     utm_source: "synthetic",
@@ -319,7 +319,7 @@ function fail(name, detail) {
     lead: {
       nome: "SYNTHETIC-PROBE",
       email: "probe@example.com",
-      estagio: "synthetic probe — discard",
+      estagio: "synthetic probe, discard",
       jornada: "operacao",
       origem: "/synthetic-probe-daily",
       utm_source: "synthetic",
@@ -349,7 +349,7 @@ function fail(name, detail) {
     utm_source: "test", // alone is weak for backfill without multi-signal strength
     commercial_stage: "qualified",
   });
-  // utm_source:test is a strong signal only with another signal — alone may keep
+  // utm_source:test is a strong signal only with another signal, alone may keep
   if (amb.action === "mark" && amb.signals.length < 2) fail("single_signal_backfill", amb);
   else pass("backfill_requires_multi_signal", amb.reason);
 
@@ -473,7 +473,7 @@ function fail(name, detail) {
     lead: {
       nome: "SYNTHETIC-PROBE",
       email: "probe@example.com",
-      estagio: "synthetic probe — discard",
+      estagio: "synthetic probe, discard",
       jornada: "operacao",
       origem: "/synthetic-probe",
       utm_source: "synthetic",

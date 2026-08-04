@@ -45,7 +45,7 @@ function loadMap(mapPath) {
     header.forEach((h, idx) => {
       row[h.trim()] = (cols[idx] || "").trim();
     });
-    // reason may contain commas — rejoin remainder
+    // reason may contain commas, rejoin remainder
     if (cols.length > header.length) {
       const reasonIdx = header.indexOf("reason");
       if (reasonIdx >= 0) {
@@ -458,7 +458,7 @@ async function main() {
       result: pass ? "OK" : "FAIL",
     });
 
-    // destination check for redirects — one hop, only when edge is authoritative
+    // destination check for redirects, one hop, only when edge is authoritative
     if (
       pass &&
       httpRedirectsAuthoritative &&
@@ -494,7 +494,7 @@ async function main() {
     }
     const can = extractCanonical(res.body);
     const expect = `https://${CANON_HOST}${p === "/" ? "/" : p}`;
-    // local preview may rewrite hosts — only enforce apex on production base
+    // local preview may rewrite hosts, only enforce apex on production base
     if (isProd && base.includes(CANON_HOST)) {
       check(can === expect || can === expect.replace(/\/$/, ""), `live canonical ${p} → ${can}`);
     } else {
@@ -560,7 +560,7 @@ async function main() {
     }
   } else {
     warnings.push(
-      "Host matrix (www / netlify.app) skipped — base is not production apex"
+      "Host matrix (www / netlify.app) skipped, base is not production apex"
     );
     console.log(
       "WARN Host matrix skipped (set --base=https://confenge.com.br for full host checks)"

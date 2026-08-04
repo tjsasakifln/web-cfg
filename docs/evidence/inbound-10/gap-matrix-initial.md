@@ -1,4 +1,4 @@
-# Gap matrix inicial — inbound 10/10 (repo × produção)
+# Gap matrix inicial, inbound 10/10 (repo × produção)
 
 **Baseline commit (repo tip):** `8c11a9c873c878dcde6602d49c0b268524218ddc`  
 **Produção build-info:** mesmo SHA · `2026-08-02T14:28:14Z` · environment `production`  
@@ -6,7 +6,7 @@
 
 | Ativo | Repo | Produção | Impacto | Prioridade | Evidência |
 | --- | --- | --- | --- | --- | --- |
-| Lead intake `/.netlify/functions/lead` | Existe; ntfy hardcoded + FormSubmit | 200 com `topic` exposto; PII em ntfy público; FormSubmit 403 | Crítico — vazamento + perda | P0 | POST prod → `topic: confenge-prod-leads-b2g-9f3c2a1e7d4b6e80` |
+| Lead intake `/.netlify/functions/lead` | Existe; ntfy hardcoded + FormSubmit | 200 com `topic` exposto; PII em ntfy público; FormSubmit 403 | Crítico, vazamento + perda | P0 | POST prod → `topic: confenge-prod-leads-b2g-9f3c2a1e7d4b6e80` |
 | Persistência durável | Ausente | Ausente (só ntfy efêmero) | Crítico | P0 | lead.cjs só ntfy/formsubmit |
 | E-mail transacional | FormSubmit default | 403 Activation | Crítico | P0 | response delivery formsubmit error |
 | Rate limit / Turnstile | Ausente | Ausente | Alto | P0 | código + POST ilimitado |
@@ -26,7 +26,7 @@
 | Dependabot/CodeQL | ausente | n/a | Médio | P1 | .github |
 | Release identity | build-info | 200 match tip | OK | P1 | .well-known |
 | Rollback documentado | parcial | não exercitado neste audit | Médio | P1 | docs |
-| Monitoramento/SLO | ausente formal | n/a | Médio | P1 | — |
+| Monitoramento/SLO | ausente formal | n/a | Médio | P1 |, |
 | Lighthouse/a11y | scripts + evidence antiga | revalidar no tip | Médio | P1 | docs/evidence |
 
 ## Funil mapeado (estado inicial)
@@ -36,7 +36,7 @@ Mensuração: client dataLayer only · sem coletor externo · sem lead store.
 
 ## Riscos imediatos
 
-1. Tópico ntfy hardcoded e retornado na API pública — qualquer um pode ler leads.
+1. Tópico ntfy hardcoded e retornado na API pública, qualquer um pode ler leads.
 2. PII enviada a serviço sem autenticação.
 3. Sucesso HTTP sem persistência durável.
 4. E-mail comercial não operacional.

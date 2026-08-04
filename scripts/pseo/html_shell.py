@@ -166,11 +166,11 @@ def e(s: Any) -> str:
 
 def money(v: Any) -> str:
     if v is None:
-        return ", "
+        return "n/d"
     try:
         n = float(v)
     except (TypeError, ValueError):
-        return ", "
+        return "n/d"
     return f"R$ {n:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
@@ -349,7 +349,7 @@ def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> s
 
 def _br(iso: str | None) -> str:
     if not iso:
-        return ", "
+        return "n/d"
     d = str(iso)[:10]
     if len(d) == 10 and d[4] == "-" and d[7] == "-":
         return f"{d[8:10]}/{d[5:7]}/{d[0:4]}"

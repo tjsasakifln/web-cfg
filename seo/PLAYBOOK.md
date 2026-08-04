@@ -1,4 +1,4 @@
-# Playbook SEO inbound — CONFENGE
+# Playbook SEO inbound, CONFENGE
 
 Rotina para transformar impressões do Google Search Console em cliques e leads.
 

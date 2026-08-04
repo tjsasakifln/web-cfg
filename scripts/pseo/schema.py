@@ -149,7 +149,7 @@ def validate_snapshot(
                         f"dataset_hash not recomposable: manifest={manifest.get('dataset_hash')}"
                     )
 
-    # freshness — prefer data ages, not only generated_at
+    # freshness, prefer data ages, not only generated_at
     max_age = max_age_days
     if max_age is None:
         max_age = int(

@@ -208,7 +208,7 @@ def _sources_html(page: dict[str, Any]) -> str:
 
 def _cta_block(page: dict[str, Any], position: str) -> str:
     wa = page.get("cta_whatsapp") or ""
-    subject = page.get("cta_email_subject") or f"Análise inicial — {page.get('theme') or page.get('title')}"
+    subject = page.get("cta_email_subject") or f"Análise inicial, {page.get('theme') or page.get('title')}"
     body = page.get("cta_email_body") or (
         f"Olá, Tiago.\n\nLi a página {page.get('url')} e gostaria de avaliar documentos "
         f"relacionados a {page.get('theme') or 'contrato de obra pública'}.\n\n"
@@ -467,7 +467,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     wa_msg = hub.get("cta_whatsapp") or (
         f"Olá, Tiago. Estou no hub {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
     )
-    mail_subject = hub.get("cta_email_subject") or f"Orientação — {title}"
+    mail_subject = hub.get("cta_email_subject") or f"Orientação, {title}"
     mail_body = hub.get("cta_email_body") or (
         f"Olá, Tiago.\n\nAcessei {url} e gostaria de orientação sobre o tema do hub.\n"
     )

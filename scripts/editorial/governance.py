@@ -1,6 +1,6 @@
 """Fail-closed governance helpers for human approval.
 
-Used by approve_cli, review CLI wrappers, and tests. Pure functions — no I/O
+Used by approve_cli, review CLI wrappers, and tests. Pure functions, no I/O
 except env inspection for CI/automation markers.
 """
 
@@ -60,7 +60,7 @@ def is_blocked_reviewer(reviewer: str | None) -> bool:
 
 
 def is_automation_environment(env: dict[str, str] | None = None) -> bool:
-    """True when running under CI or agent automation — approval forbidden."""
+    """True when running under CI or agent automation, approval forbidden."""
     e = env if env is not None else os.environ
     markers = (
         "GITHUB_ACTIONS",

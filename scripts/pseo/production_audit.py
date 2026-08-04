@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Production pSEO auditor — GET confenge.com.br (never localhost as proof).
+"""Production pSEO auditor, GET confenge.com.br (never localhost as proof).
 
 Stages vocabulary (never call earlier stages "indexado"):
   GENERATED_LOCAL → QUALITY_ELIGIBLE → EDITORIALLY_APPROVED →
@@ -341,7 +341,7 @@ def collect_targets(
             if n_sample >= 5:
                 break
     # Ensure Wave-0 seed URLs are audited even if not among the noindex sample.
-    # Role follows registry status when known — never force demoted seeds to "publish".
+    # Role follows registry status when known, never force demoted seeds to "publish".
     seed_wave0 = [
         "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
         "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
@@ -365,7 +365,7 @@ def collect_targets(
             role = "publish_candidate"
         out.append((s, role))
         seen.add(s)
-    # Legacy / demoted paths — sample only (no critical index requirements)
+    # Legacy / demoted paths, sample only (no critical index requirements)
     legacy = [
         "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
         "/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/",
@@ -435,7 +435,7 @@ def evaluate_row(
 
     robots = (b.get("meta_robots") or "").lower()
     xrobots = ((b.get("headers") or {}).get("x-robots-tag") or "").lower()
-    # Empty hubs intentionally use noindex,follow — only leaf publish pages must be indexable.
+    # Empty hubs intentionally use noindex,follow, only leaf publish pages must be indexable.
     if row.expected_role in {"publish"}:
         if "noindex" in robots:
             defects.append("noindex_on_publish")
@@ -446,7 +446,7 @@ def evaluate_row(
         if "noindex" in xrobots and "noindex" not in robots:
             defects.append("x_robots_noindex")
     elif row.expected_role == "publish_candidate":
-        # Historical seed paths that may have been demoted — soft note only
+        # Historical seed paths that may have been demoted, soft note only
         if "noindex" in robots:
             notes.append("noindex_on_former_seed")
         if "noindex" in xrobots:
@@ -550,7 +550,7 @@ def evaluate_row(
 
 
 def audit_sitemap_lastmod(sitemap_text: str, today: date | None = None) -> list[str]:
-    # Prefer UTC calendar day — Netlify/build and lastmod are written in UTC.
+    # Prefer UTC calendar day, Netlify/build and lastmod are written in UTC.
     # Local date.today() can lag behind UTC near midnight and false-flag lastmod.
     if today is None:
         from datetime import datetime, timezone
@@ -622,7 +622,7 @@ def run_audit(
         sm_res = fetch_url(f"{base_url}/sitemap-inteligencia.xml", UA_BROWSER)
         prod_sm_text = sm_res.get("html_snippet") or ""
         if sm_res.get("body_size"):
-            # re-fetch full via urllib already truncated in snippet — use full GET body
+            # re-fetch full via urllib already truncated in snippet, use full GET body
             req = urllib.request.Request(
                 f"{base_url}/sitemap-inteligencia.xml",
                 headers={"User-Agent": UA_BROWSER},
@@ -833,7 +833,7 @@ def _render_md(result: dict[str, Any]) -> str:
                 can=(b.get("canonical") or "")[:48],
                 sm="yes" if r.get("in_sitemap") else "no",
                 stage=r.get("stage_reached"),
-                def_=", ".join(r.get("defects") or []) or "—",
+                def_=", ".join(r.get("defects") or []) or "n/d",
             )
         )
     lines.append("")

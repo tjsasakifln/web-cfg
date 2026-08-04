@@ -1,4 +1,4 @@
-# Playwright pós-push — 2026-07-30
+# Playwright pós-push, 2026-07-30
 
 ## Push
 
@@ -6,7 +6,7 @@
 |-------|--------|
 | Repo | `https://github.com/tjsasakifln/web-cfg` |
 | Branch | `main` |
-| Commit | `de4cbef` — *SEO: higiene de indexação, SINAPI, CTR prioritário, analytics e validadores* |
+| Commit | `de4cbef`, *SEO: higiene de indexação, SINAPI, CTR prioritário, analytics e validadores* |
 | Status | **Pushed OK** (`9894342..de4cbef`) |
 
 ## Deploy (bloqueador externo)
@@ -14,20 +14,20 @@
 | Campo | Valor |
 |-------|--------|
 | Host produção | **Netlify** (`server: Netlify`, HSTS ativo) |
-| Auto-deploy a partir do GitHub `web-cfg` | **Não** — push não atualizou o live |
+| Auto-deploy a partir do GitHub `web-cfg` | **Não**, push não atualizou o live |
 | Netlify CLI | Instalável, **não autenticado** (`netlify login` / `NETLIFY_AUTH_TOKEN` ausentes) |
-| App Netlify (Playwright) | Tela **Log in** (Google/GitHub/…) — sem sessão |
+| App Netlify (Playwright) | Tela **Log in** (Google/GitHub/…), sem sessão |
 | Zip pronto para drop | `/tmp/grok-goal-1b02ecba3a6c/implementer/confenge-deploy.zip` (~12 MB) |
 
 **Conclusão deploy:** o código está no GitHub; **produção ainda serve build antigo**. Playwright **não** consegue autenticar a Netlify sem credencial do usuário.
 
 ### Como publicar (1 ação do operador)
 
-1. **Opção A — conectar Git (recomendado)**  
+1. **Opção A, conectar Git (recomendado)**  
    Netlify → Site settings → Build & deploy → Link repository → `tjsasakifln/web-cfg` branch `main` → Publish directory `.` → Deploy.
-2. **Opção B — drag-and-drop**  
+2. **Opção B, drag-and-drop**  
    [app.netlify.com/drop](https://app.netlify.com/drop) com o zip acima **ou** a pasta do repo (exceto `.git`).
-3. **Opção C — CLI**  
+3. **Opção C, CLI**  
    ```bash
    npx netlify-cli@17 login
    npx netlify-cli@17 link   # escolher site confenge.com.br
@@ -67,15 +67,15 @@ Prod: `https://confenge.com.br`
 
 | Path | Status | Location |
 |------|--------|----------|
-| `/servicos` | 404 | — |
-| `/blog` | 404 | — |
-| `/privacy-policy` | 404 | — |
-| `/contato` | 404 | — |
-| `/avcbclcb` | 404 | — |
-| `/vision` | 404 | — |
-| `/trabalhe-conosco` | 404 | — |
-| `/nexgen` | 404 | — |
-| `/terms-and-conditions` | 404 | — |
+| `/servicos` | 404 |, |
+| `/blog` | 404 |, |
+| `/privacy-policy` | 404 |, |
+| `/contato` | 404 |, |
+| `/avcbclcb` | 404 |, |
+| `/vision` | 404 |, |
+| `/trabalhe-conosco` | 404 |, |
+| `/nexgen` | 404 |, |
+| `/terms-and-conditions` | 404 |, |
 
 Após deploy do `netlify.toml` do commit `de4cbef`, esperados **301** semânticos (ver `seo/REDIRECTS.md`).
 
@@ -90,7 +90,7 @@ Após deploy do `netlify.toml` do commit `de4cbef`, esperados **301** semântico
 
 ---
 
-## Pendências externas — o que Playwright sanou vs não
+## Pendências externas, o que Playwright sanou vs não
 
 | Pendência | Via Playwright? | Status |
 |-----------|-----------------|--------|

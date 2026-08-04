@@ -1,4 +1,4 @@
-# Relatório final — pSEO ICP-Derived Evidence (2026-07-31)
+# Relatório final, pSEO ICP-Derived Evidence (2026-07-31)
 
 ## Objetivo econômico
 
@@ -13,7 +13,7 @@ KPI principal: **contato qualificado atribuível a página** (não volume de URL
 - Entry: `python -m scripts.pseo.export_web_cfg`
 - Allowlist + denylist (`scripts/pseo/allowlist.py`, `sanitize.py`)
 - Agregação pública a partir de `pncp_supplier_contracts`, `pncp_raw_bids`, `sc_public_entities`
-- Top 20 usado **somente** como assinatura interna de classes de atividade/sinais (histogramas em `icp_methodology.json`) — **sem** CNPJ, score, rank, pipeline
+- Top 20 usado **somente** como assinatura interna de classes de atividade/sinais (histogramas em `icp_methodology.json`), **sem** CNPJ, score, rank, pipeline
 - Manifest com schema_version, generated_at, source_run_id, source_commit_sha, dataset_hash, fontes, contagens, freshness, limitações, checksums
 - Testes: `tests/pseo/test_export_no_leak.py` (4 passed)
 
@@ -44,10 +44,10 @@ Distribuição por tipo:
 | agency | 2 |
 | price | 2 |
 
-`noindex` (preview): 48 — fora do sitemap de inteligência.  
+`noindex` (preview): 48, fora do sitemap de inteligência.  
 Rejeitados hard: 0 nesta onda (gates amostrais atendidos; excesso virou noindex por cap/diversidade).
 
-Registry: `data/pseo/registry.json` (`human_review: PENDING` em todas — sem aceite humano automático).
+Registry: `data/pseo/registry.json` (`human_review: PENDING` em todas, sem aceite humano automático).
 
 ### 5. SEO + conversão
 
@@ -101,7 +101,7 @@ Metodologia registrada em `archetypes.json` / `icp_methodology.json` e `docs/pse
 
 1. **Malha de links:** `resolve_related_urls` remove hrefs para irmãos não gerados (preço/radar/concorrência ausentes); `pseo:validate` falha em links internos quebrados.
 2. **Descriptions únicas:** templates de preço/concorrência/radar incluem segmento+região; validate exige uniqueness de meta description.
-3. **Hubs sem score:** badge público mostra `tipo · indexável|preview (revisão)` — sem número de `indexability_score`.
+3. **Hubs sem score:** badge público mostra `tipo · indexável|preview (revisão)`, sem número de `indexability_score`.
 4. **validate_seo.py:** exit 0 após rebuild (sem `ERR dup desc` nas páginas pSEO).
 
 ## Riscos residuais

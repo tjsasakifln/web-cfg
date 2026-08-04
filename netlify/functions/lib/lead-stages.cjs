@@ -167,7 +167,7 @@ function applyStageChange(record, { stage, actor, note, loss_reason, next_action
   return patch;
 }
 
-/** Public redaction — never expose PII via ops list without token (caller enforces auth). */
+/** Public redaction, never expose PII via ops list without token (caller enforces auth). */
 function publicLeadSummary(record) {
   if (!record) return null;
   let record_kind = record.record_kind || "real";

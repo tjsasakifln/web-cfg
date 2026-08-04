@@ -42,12 +42,12 @@
   }
 
   function brl(n) {
-    if (!Number.isFinite(n)) return "—";
+    if (!Number.isFinite(n)) return "n/d";
     return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   }
 
   function pct(n) {
-    if (!Number.isFinite(n)) return "—";
+    if (!Number.isFinite(n)) return "n/d";
     return (n * 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + "%";
   }
 

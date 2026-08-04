@@ -56,7 +56,7 @@
     ],
     "limitations": [
       "Observações são contratos integrais, não preços unitários.",
-      "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+      "Grupo de comparabilidade semântico, ainda não substitui orçamento técnico.",
       "Outliers identificados por regra IQR 1.5×."
     ],
     "max": null,
@@ -212,7 +212,7 @@
     ],
     "limitations": [
       "Observações são contratos integrais, não preços unitários.",
-      "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+      "Grupo de comparabilidade semântico, ainda não substitui orçamento técnico.",
       "Outliers identificados por regra IQR 1.5×."
     ],
     "max": null,

@@ -32,9 +32,9 @@ Values matching email or long phone patterns. Strings longer than 180 chars.
 
 ## Automated checks
 
-- `npm run test:analytics` — track() strips PII keys and patterns
-- `npm run test:form-funnel` — multi-step markup + event names + confirmation pages
-- `npm run test:pseo-attribution` — UTM/pSEO survival into form hiddens
+- `npm run test:analytics`, track() strips PII keys and patterns
+- `npm run test:form-funnel`, multi-step markup + event names + confirmation pages
+- `npm run test:pseo-attribution`, UTM/pSEO survival into form hiddens
 
 ## Journeys → confirmation
 

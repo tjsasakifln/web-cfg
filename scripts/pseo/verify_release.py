@@ -79,7 +79,7 @@ def snapshot_source_on_extra_cli_main(root: Path | None = None) -> dict[str, Any
             stderr=subprocess.DEVNULL,
         )
         # 2) must be ancestor of main: compare main...sha; if sha is on main history,
-        #    `gh api repos/.../compare/main...{sha}` status is ahead/identical/diverged —
+        #    `gh api repos/.../compare/main...{sha}` status is ahead/identical/diverged, 
         #    use `git merge-base --is-ancestor` via temporary clone when available.
         # Compare API: if commit is on main, ahead_by can be 0 and base is sha.
         cmp_out = subprocess.check_output(
@@ -284,7 +284,7 @@ def verify_release(
         )
         gsc = load_indexation_status()
 
-    # Approval stability proof (real snapshot pair) — never invent True
+    # Approval stability proof (real snapshot pair), never invent True
     approval_stab: dict[str, Any] = {}
     stab_path = ROOT / "seo" / "pseo-approval-stability.json"
     if stab_path.exists():
@@ -308,7 +308,7 @@ def verify_release(
             snap_diff = json.loads(diff_path.read_text(encoding="utf-8"))
             pages_added = list(snap_diff.get("pages_added") or [])
             # Any non-empty pages_added means campaign introduced candidate paths
-            # (even if later demoted) — gate stays closed until diff is clean.
+            # (even if later demoted), gate stays closed until diff is clean.
         except (OSError, json.JSONDecodeError):
             pages_added = []
     # Live indexable count vs prior campaign baseline (4 Wave0 seeds max)
@@ -428,7 +428,7 @@ def verify_release(
     )
 
     if update_operational:
-        # Only write production_audit.ok true when identities match — never copy stale ok
+        # Only write production_audit.ok true when identities match, never copy stale ok
         op = {
             "terminal_status": terminal,
             "web_cfg_sha": head,
@@ -455,7 +455,7 @@ def verify_release(
             "gsc_access": gsc.get("gsc_access") or GSC_ACCESS_NO_CREDS,
             "gsc_status_by_url": result["gsc_state_by_url"],
             "next_wave_gate": {
-                # Calculated only — never hand-edit true under NOT_INSPECTED
+                # Calculated only, never hand-edit true under NOT_INSPECTED
                 "allowed": gate.get("allowed"),
                 "gsc_discovery_or_crawl_without_soft404": gate.get(
                     "gsc_discovery_or_crawl_without_soft404"
@@ -483,7 +483,7 @@ def verify_release(
         if not extra.get("on_main"):
             op["unresolved_risks"].append("BLOCKED_EXTRA_CLI_NOT_MERGED")
         if gsc.get("gsc_access") in {GSC_ACCESS_NO_CREDS, "NOT_INSPECTED_NO_CREDENTIALS"}:
-            op["unresolved_risks"].append("GSC credentials absent — NOT_INSPECTED")
+            op["unresolved_risks"].append("GSC credentials absent, NOT_INSPECTED")
         write_operational_result(op)
 
     return result

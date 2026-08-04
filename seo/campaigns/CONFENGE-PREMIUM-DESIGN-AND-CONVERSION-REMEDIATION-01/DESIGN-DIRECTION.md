@@ -9,7 +9,7 @@ Precision of engineering reports + sobriety of institutional finance + contempor
 ## Principles in practice
 
 1. Cards are exceptions.
-2. Radical hierarchy — one dominant claim per section.
+2. Radical hierarchy, one dominant claim per section.
 3. Controlled asymmetry.
 4. Technical materiality (rails, matrices, GO/REVIEW/NO-GO).
 5. Intentional contrast (white / navy / near-black; green as signal only).

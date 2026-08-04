@@ -18,7 +18,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "guia-docs-reequilibrio",
@@ -30,7 +30,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "guia-glosa",
@@ -42,7 +42,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "guia-notificacao-atraso",
@@ -54,7 +54,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "jur-sumula-260-art",
@@ -75,7 +75,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "lei-atraso-administracao",
@@ -87,7 +87,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "lei-item-novo-desconto",
@@ -99,7 +99,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "lei-limite-25-50",
@@ -111,7 +111,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "lei-parcela-incontroversa",
@@ -123,7 +123,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "lei-reequilibrio-reajuste",
@@ -135,7 +135,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     },
     {
       "page_id": "lei-servico-sem-aditivo",
@@ -147,7 +147,7 @@
         "machine_checks_passed"
       ],
       "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "note": "Machine recommendation only, not human approval."
     }
   ]
 }

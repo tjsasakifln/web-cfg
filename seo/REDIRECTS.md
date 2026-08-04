@@ -26,7 +26,7 @@ com **X > 0** (esperado ~12–14). Se aparecer `0`, o arquivo `_redirects` não 
 | `https://confenge.netlify.app/*` | `https://confenge.com.br/:splat` | 301! |
 | `www` / HTTP | apex HTTPS | plataforma Netlify |
 
-## Path — substituta (A/B)
+## Path, substituta (A/B)
 
 | De | Para | Status |
 |----|------|--------|
@@ -39,7 +39,7 @@ com **X > 0** (esperado ~12–14). Se aparecer `0`, o arquivo `_redirects` não 
 | `/trabalhe-conosco` | `/#contato` | 301 |
 | `/privacidade.html` | `/privacidade/` | 301! |
 
-## Path — abandonados (C)
+## Path, abandonados (C)
 
 | De | Status |
 |----|--------|

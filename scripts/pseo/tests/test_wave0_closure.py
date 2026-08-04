@@ -1,4 +1,4 @@
-"""Wave 0 closure gates — drive shipped modules (no reimplementation)."""
+"""Wave 0 closure gates, drive shipped modules (no reimplementation)."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ class TestPublicArtifact(unittest.TestCase):
         self.assertGreater(inv["html_route_count"], 10)
         self.assertEqual(inv["public_directory"], "_site")
 
-        # assemble uses real root — only if build already produced pages; still works
+        # assemble uses real root, only if build already produced pages; still works
         rep = assemble_public_artifact(ROOT)
         self.assertTrue(rep.get("ok"), rep)
         self.assertEqual(rep["public_directory"], PUBLIC_DIR_NAME)
@@ -40,7 +40,7 @@ class TestPublicArtifact(unittest.TestCase):
         self.assertFalse((site / "package.json").exists())
 
         audit = audit_public_artifact(ROOT)
-        # May fail if HTML still has internal phrases before rebuild — accept structural
+        # May fail if HTML still has internal phrases before rebuild, accept structural
         self.assertIn("public_artifact_hash", audit)
         self.assertFalse((site / "data" / "pseo").exists())
 
@@ -226,7 +226,7 @@ class TestAuditIdentity(unittest.TestCase):
         seeds = ["/radar/edificacoes-publicas-pr/"]
         live = "f35c00dcf1f5084a052df8437664fe5f14e7ac58"
         identity = identity_block(
-            audit_target_sha=live,  # live tip under audit
+            audit_target_sha=live, # live tip under audit
             live_manifest_sha=live,
             snapshot_hash="0a67cf804cb0a26a5b3d3095d5acd9923fec492675cce4e4ab6928a5f4624faa",
             public_artifact_hash_value="art",
@@ -313,7 +313,7 @@ class TestForbiddenPhraseDetector(unittest.TestCase):
             p = Path(td) / "index.html"
             p.write_text(
                 "<html><body><p>Esta página só deve alegar evidência empírica "
-                "quando o datalake trouxer sinais — não contagens genéricas de contratos.</p>"
+                "quando o datalake trouxer sinais, não contagens genéricas de contratos.</p>"
                 "<p>Fontes: pncp_supplier_contracts</p></body></html>",
                 encoding="utf-8",
             )
@@ -370,7 +370,7 @@ class TestForbiddenPhraseDetector(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             p = Path(td) / "index.html"
             p.write_text(
-                f"<html><body><p>Disputas se resolvem com diário — {singular}.</p></body></html>",
+                f"<html><body><p>Disputas se resolvem com diário, {singular}.</p></body></html>",
                 encoding="utf-8",
             )
             reg = {

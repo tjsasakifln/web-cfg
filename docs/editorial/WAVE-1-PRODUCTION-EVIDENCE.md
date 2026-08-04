@@ -25,7 +25,7 @@
 - Tests: `npm run editorial:test` → 14 passed
 
 ## Unlock
-Named human must run `scripts/editorial/approve_cli.py` per page — see FINAL and WAVE-1-APPROVALS.
+Named human must run `scripts/editorial/approve_cli.py` per page, see FINAL and WAVE-1-APPROVALS.
 
 ## Conversion smoke (shipped path)
 - `npm run test:analytics` runs `seo/scripts/test_analytics_pii.mjs` + `seo/scripts/test_editorial_analytics.mjs`

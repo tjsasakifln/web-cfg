@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Human review CLI for pSEO registry — no bulk auto-approve.
+"""Human review CLI for pSEO registry, no bulk auto-approve.
 
 Usage:
   python3 scripts/pseo/review.py list
@@ -78,10 +78,10 @@ def cmd_set(args: argparse.Namespace) -> int:
 
     # Hard block bulk / approve-all style invocations
     if getattr(args, "page_id", None) in {"*", "ALL", "all", "approve-all"}:
-        print("approval blocked — bulk/approve-all forbidden", file=sys.stderr)
+        print("approval blocked, bulk/approve-all forbidden", file=sys.stderr)
         return 3
     if "," in (args.page_id or ""):
-        print("approval blocked — bulk_approval_forbidden (one page_id only)", file=sys.stderr)
+        print("approval blocked, bulk_approval_forbidden (one page_id only)", file=sys.stderr)
         return 3
 
     if args.state in {"APPROVED", "APPROVED_WITH_NOTES"}:
@@ -127,29 +127,29 @@ def cmd_set(args: argparse.Namespace) -> int:
                 return (os.environ.get("ALLOW_HUMAN_APPROVAL") or "").strip() == "1"
 
         if is_automation_environment():
-            print("approval blocked — CI/automation environment", file=sys.stderr)
+            print("approval blocked, CI/automation environment", file=sys.stderr)
             return 3
         if not human_approval_explicitly_allowed():
             print(
-                "approval blocked — set ALLOW_HUMAN_APPROVAL=1 only when a named human runs this",
+                "approval blocked, set ALLOW_HUMAN_APPROVAL=1 only when a named human runs this",
                 file=sys.stderr,
             )
             return 3
         if not args.reviewer or is_blocked_reviewer(args.reviewer):
             print(
-                f"approval blocked — reviewer not accepted as named human: {args.reviewer!r}",
+                f"approval blocked, reviewer not accepted as named human: {args.reviewer!r}",
                 file=sys.stderr,
             )
             return 3
         if not getattr(args, "confirm", False):
             print(
-                "approval blocked — individual --confirm required (no silent approve)",
+                "approval blocked, individual --confirm required (no silent approve)",
                 file=sys.stderr,
             )
             return 3
         notes = (args.notes or args.rationale or "").strip()
         if len(notes) < 20:
-            print("approval blocked — notes/rationale too short (min 20 chars)", file=sys.stderr)
+            print("approval blocked, notes/rationale too short (min 20 chars)", file=sys.stderr)
             return 3
 
     reg = load_reg()
@@ -163,7 +163,7 @@ def cmd_set(args: argparse.Namespace) -> int:
             if (p.get("status") or "").upper() == "REJECTED" or (
                 p.get("human_review") or ""
             ).upper() == "REJECTED":
-                print("approval blocked — cannot_approve_rejected", file=sys.stderr)
+                print("approval blocked, cannot_approve_rejected", file=sys.stderr)
                 return 3
             checklist_keys = [x.strip() for x in (args.checklist or "").split(",") if x.strip()]
             required = set(PSEO_CHECKLIST_KEYS)
@@ -172,14 +172,14 @@ def cmd_set(args: argparse.Namespace) -> int:
                 existing[k] = True
             missing = missing_checklist(existing, required)
             if missing:
-                print(f"approval blocked — checklist incomplete: {missing}", file=sys.stderr)
+                print(f"approval blocked, checklist incomplete: {missing}", file=sys.stderr)
                 print("Run: python3 scripts/pseo/review.py audit PAGE_ID", file=sys.stderr)
                 return 3
             # Fail-closed: --material-hash required and must match current material
             expected = (getattr(args, "material_hash", None) or "").strip()
             if not expected:
                 print(
-                    "approval blocked — --material-hash required and must match page_material_hash",
+                    "approval blocked, --material-hash required and must match page_material_hash",
                     file=sys.stderr,
                 )
                 return 3
@@ -203,7 +203,7 @@ def cmd_set(args: argparse.Namespace) -> int:
                 actual = p.get("page_material_hash") or ""
             if not actual or expected != actual:
                 print(
-                    f"approval blocked — approval_hash_mismatch "
+                    f"approval blocked, approval_hash_mismatch "
                     f"(expected flag must equal current page_material_hash)",
                     file=sys.stderr,
                 )
@@ -317,7 +317,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
         if re.search(r"R\$\s*0,00", html):
             print("WARNING: R$ 0,00 present")
     else:
-        print("HTML not found — run npm run pseo:build")
+        print("HTML not found, run npm run pseo:build")
 
     # Editorial checklist required for approval
     checklist = [
@@ -340,7 +340,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
         print(f"\nBLOCKED for APPROVED until checklist complete: {missing}")
         print("Set with: review.py set PAGE_ID APPROVED --reviewer X --notes '...' --checklist key1,key2,...")
     else:
-        print("\nChecklist complete — APPROVED may be set with rationale.")
+        print("\nChecklist complete, APPROVED may be set with rationale.")
     print("=" * 72)
     return 0
 
@@ -388,7 +388,7 @@ def main(argv: list[str] | None = None) -> int:
     p_set.add_argument(
         "--confirm",
         action="store_true",
-        help="Required for APPROVED — individual confirmation of this page only",
+        help="Required for APPROVED, individual confirmation of this page only",
     )
     p_set.add_argument(
         "--material-hash",

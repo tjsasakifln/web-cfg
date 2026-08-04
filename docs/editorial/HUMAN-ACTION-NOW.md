@@ -1,4 +1,6 @@
-# HUMAN ACTION NOW — Wave 1
+# HUMAN ACTION NOW, Wave 1
+
+Riscos abertos (não surpresa na medição): ver [RESIDUAL-RISKS.md](./RESIDUAL-RISKS.md).
 
 Pacote curto para ato humano externo. **Não executar estes comandos como agente, CI, bot ou tester.**
 
@@ -22,7 +24,7 @@ Pacote curto para ato humano externo. **Não executar estes comandos como agente
 
 ## NÃO APROVAR (rejeitada)
 
-- **`jur-sumula-260-art`** — REJECTED. Não indexar. Não rodar `approve_cli.py`. Aguarda dossiê completo.
+- **`jur-sumula-260-art`**, REJECTED. Não indexar. Não rodar `approve_cli.py`. Aguarda dossiê completo.
   - preview: https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/
 
 ## 11 páginas aguardando humano
@@ -35,7 +37,7 @@ Pacote curto para ato humano externo. **Não executar estes comandos como agente
 4. **Material hash:** `6d693bdf9d530603c30b633931c49be2fc6d358d299db74dd957652c32610824`
 5. **Alerta de canibalização:** POSSIBLE_OVERLAP_REVIEW · peers: /conteudos/erro-de-projeto-gera-aditivo-obra-publica/ · humano escolhe canônica antes de index,follow
 6. **Risco (resumo):** Dispositivos: art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -57,7 +59,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `31f1b2c6a085441f7d24423868d6fb8572a9d060faba2a0f62ba1ed5b0a6b1fa`
 5. **Alerta de canibalização:** PEER_NOINDEX_OR_LOW_RISK · peers: /conteudos/documentos-reequilibrio-obra-publica/ · verificar peer robots antes de indexar Wave 1
 6. **Risco (resumo):** Dispositivos: art.130, art.131 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -79,7 +81,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `f69bcafc8f7556ecaad49fc1a2eee538f373726f4fc950af2a221af6289cf350`
 5. **Alerta de canibalização:** POSSIBLE_OVERLAP_REVIEW · peers: /conteudos/glosa-de-medicao-obra-publica/ · humano escolhe canônica antes de index,follow
 6. **Risco (resumo):** Dispositivos: art.143 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -101,7 +103,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `688321dceae242bc1c212fe2ae86fd21d8ba4aeea3c3a26ac49f7d3a211eab11`
 5. **Alerta de canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/resposta-notificacao-atraso-obra-publica/ · manter peer; Wave 1 noindex
 6. **Risco (resumo):** Dispositivos: art.115, art.155 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -123,7 +125,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `07caf5f73084efe74e78e3ee4da3827403fd22fee7a6c4613e36f693a2306b30`
 5. **Alerta de canibalização:** POSSIBLE_OVERLAP_REVIEW · peers: /conteudos/erro-de-projeto-gera-aditivo-obra-publica/ · humano escolhe canônica antes de index,follow
 6. **Risco (resumo):** Dispositivos: art.124, art.125, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -145,7 +147,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `29023ca69d9d846fe8fa17563016af6c9c3f3aeb98a4f66e1f7992e52e94dda4`
 5. **Alerta de canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/atraso-obra-culpa-administracao/ · manter peer indexável até decisão humana
 6. **Risco (resumo):** Dispositivos: art.115, art.124, art.130 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -165,9 +167,9 @@ python3 scripts/editorial/approve_cli.py \
 2. **Preview:** https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/
 3. **Fontes:** lei-14133-art126-132, lei-14133-art124, lei-14133-planalto, agu-alteracoes-contratuais-2024, sinapi-caixa
 4. **Material hash:** `4c39b0ca89a6cd3ae34003efea5b5e56c248c702db7bdbd34c0e0f28543ae28c`
-5. **Alerta de canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/desconto-da-proposta-em-item-novo-aditivo/ · diferenciar intenção ou consolidar — dual-index proibido
+5. **Alerta de canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/desconto-da-proposta-em-item-novo-aditivo/ · diferenciar intenção ou consolidar, dual-index proibido
 6. **Risco (resumo):** Dispositivos: art.127, art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -187,9 +189,9 @@ python3 scripts/editorial/approve_cli.py \
 2. **Preview:** https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/
 3. **Fontes:** lei-14133-art125, lei-14133-art124, lei-14133-art126-132, lei-14133-planalto, agu-alteracoes-contratuais-2024
 4. **Material hash:** `c86f6e0dea8011c697990d419d13accfc4960775ab16132400d81529cf345465`
-5. **Alerta de canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/limite-aditivo-25-50-obra-publica/ · diferenciar_ou_substituir_com_redirect — Wave 1 permanece noindex
+5. **Alerta de canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/limite-aditivo-25-50-obra-publica/ · diferenciar_ou_substituir_com_redirect, Wave 1 permanece noindex
 6. **Risco (resumo):** Dispositivos: art.125, art.124, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -211,7 +213,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `eea0bca5985695d3613b79422d1a7067c3abbb355507de7168a11dd3dae76cca`
 5. **Alerta de canibalização:** PEER_NOINDEX_OR_LOW_RISK · peers: /conteudos/parcela-incontroversa-medicao-contrato-publico/ · OK se peer noindex
 6. **Risco (resumo):** Dispositivos: art.143, art.141 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -233,7 +235,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `0d2647d1bfcb957abf9ffc6c296598edbc0757c76aeb51d60f4c44f74a149223`
 5. **Alerta de canibalização:** NO_KNOWN_INDEXABLE_OVERLAP · peers: (nenhum) · indexação bloqueada até aprovação humana individual
 6. **Risco (resumo):** Dispositivos: art.130, art.131, art.136 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \
@@ -255,7 +257,7 @@ python3 scripts/editorial/approve_cli.py \
 4. **Material hash:** `4151ac67b83031339c3d708faaea24737b269ec1b697ea1b5ebc6c10042e5392`
 5. **Alerta de canibalização:** PEER_ALREADY_NOINDEX_OR_CONSOLIDATED · peers: /conteudos/servico-executado-sem-termo-aditivo/ · manter Wave 1 noindex até aprovação; peer noindex
 6. **Risco (resumo):** Dispositivos: art.124, art.132, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando exato (humano nomeado real — não use nomes de agente/CI/bot):**
+7. **Comando exato (humano nomeado real, não use nomes de agente/CI/bot):**
 
 ```bash
 python3 scripts/editorial/approve_cli.py \

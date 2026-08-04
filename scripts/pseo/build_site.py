@@ -63,7 +63,7 @@ def _git_sha() -> str:
 
 
 def write_public_manifest(summary: dict, snap: dict) -> Path:
-    """Safe public manifest — no DSN, scores, commercial notes, or PII."""
+    """Safe public manifest, no DSN, scores, commercial notes, or PII."""
     manifest = snap.get("manifest") or {}
     dataset_hash = (manifest.get("dataset_hash") or summary.get("dataset_hash") or "")
     pubs = summary.get("publishable") or []
@@ -99,7 +99,7 @@ def write_public_manifest(summary: dict, snap: dict) -> Path:
     well_known.mkdir(parents=True, exist_ok=True)
     out = well_known / "pseo-build.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    # Simple public build identity — no git filters, no working-tree SHA chase
+    # Simple public build identity, no git filters, no working-tree SHA chase
     write_build_info(commit, generated_at, env_name, payload.get("schema_version"))
     return out
 
@@ -194,7 +194,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL-CLOSED build exception: {exc}", file=sys.stderr)
         return 2
 
-    # Wave 1+ editorial engine — automated max status EDITORIAL_REVIEWED (no auto HUMAN_APPROVED)
+    # Wave 1+ editorial engine, automated max status EDITORIAL_REVIEWED (no auto HUMAN_APPROVED)
     editorial_report: dict = {}
     try:
         from scripts.editorial.build import build as editorial_build

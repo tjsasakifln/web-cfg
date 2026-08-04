@@ -1,4 +1,4 @@
-# FIVE-LENS CRITIQUE — painel de crítica
+# FIVE-LENS CRITIQUE, painel de crítica
 
 Simulação interna pós-reconstrução. Cada lente registra veredito, falhas e correções aplicadas (ou residual).
 
@@ -13,7 +13,7 @@ Simulação interna pós-reconstrução. Cada lente registra veredito, falhas e 
 | Bid Room parecia incompleto (sem entra/não entra e objeções) | **Corrigido:** escopo dual + seção de objeções |
 | Ofertas agora explicam responsabilidades CONFENGE e cliente | Mantido |
 
-**Veredito:** compra-se “decisão e método”, não “plataforma de alertas”. Confiança sobe com rastros verificáveis e foto/trajetória reais — sem cases inventados.
+**Veredito:** compra-se “decisão e método”, não “plataforma de alertas”. Confiança sobe com rastros verificáveis e foto/trajetória reais, sem cases inventados.
 
 ## 2. Diretor de criação
 
@@ -78,4 +78,4 @@ Simulação interna pós-reconstrução. Cada lente registra veredito, falhas e 
 
 - Preview/prod Netlify não publicados (sem autorização na sessão).
 - Lighthouse scores oficiais não medidos (auditoria estática + screenshots).
-- Percepção “premium” além dos proxies estruturais permanece parcialmente subjetiva — mitigada por gates e este painel.
+- Percepção “premium” além dos proxies estruturais permanece parcialmente subjetiva, mitigada por gates e este painel.

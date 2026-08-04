@@ -1,4 +1,4 @@
-# Ações externas exatas (owner) — bloqueadores de 10/10 produção
+# Ações externas exatas (owner), bloqueadores de 10/10 produção
 
 Cada item **OPEN** impede `COMPLETE_10_10_REPO_AND_PRODUCTION` até validação.
 
@@ -6,7 +6,7 @@ Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner.
 
 ---
 
-## 1. Netlify — variáveis de ambiente (produção) — **PARTIAL**
+## 1. Netlify, variáveis de ambiente (produção), **PARTIAL**
 
 **Plataforma:** Netlify UI → Site `confenge` → Site configuration → Environment variables → Production  
 
@@ -26,16 +26,16 @@ Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner.
 
 **Depois de salvar env:** Deploys → Trigger deploy (clear cache) ou empty commit para recarregar functions.
 
-**Rotação ntfy (obrigatória — OPEN):**  
+**Rotação ntfy (obrigatória, OPEN):**  
 No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confenge-prod-leads-b2g-9f3c2a1e7d4b6e80`. Não reutilizar o nome. Código de produção **já não usa** esse tópico.
 
 **Consequência se OPEN:** lead persiste (201) mas ops pode não receber e-mail/webhook; Turnstile não forçado.
 
 ---
 
-## 2. DNS e-mail (domínio confenge.com.br) — **DONE** (additive Resend records)
+## 2. DNS e-mail (domínio confenge.com.br), **DONE** (additive Resend records)
 
-**Plataforma:** DNS do registrador do domínio (MX atual: Hostinger `mx1/mx2.hostinger.com` — DoH 2026-08-02)
+**Plataforma:** DNS do registrador do domínio (MX atual: Hostinger `mx1/mx2.hostinger.com`, DoH 2026-08-02)
 
 **Estado observado (Cloudflare DoH):** sem TXT SPF em `@`; sem `_dmarc`; MX Hostinger apenas.  
 Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
@@ -50,7 +50,7 @@ Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 
 ---
 
-## 3. Resend — domínio e API — **DONE**
+## 3. Resend, domínio e API, **DONE**
 
 **Plataforma:** [resend.com](https://resend.com) → Domains → Add `confenge.com.br` → copiar DNS → API Keys → Create  
 
@@ -65,7 +65,7 @@ Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 
 ---
 
-## 4. Cloudflare Turnstile — **OPEN**
+## 4. Cloudflare Turnstile, **OPEN**
 
 **Plataforma:** [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add widget  
 
@@ -87,7 +87,7 @@ CSP já permite `challenges.cloudflare.com` em `_headers`. Script carrega **só*
 
 ---
 
-## 5. GitHub — branch protection em `main` — **DONE** (2026-08-02)
+## 5. GitHub, branch protection em `main`, **DONE** (2026-08-02)
 
 Aplicado via API (`gh`) neste ambiente:
 
@@ -105,7 +105,7 @@ Aplicado via API (`gh`) neste ambiente:
 
 ---
 
-## 6. Monitoramento uptime — **OPEN**
+## 6. Monitoramento uptime, **OPEN**
 
 **Plataforma:** Better Stack / UptimeRobot / Checkly (conta owner)
 
@@ -122,21 +122,21 @@ Probe periódico de lead: `npm run probe:lead:prod` (cron owner) com `LEAD_PROBE
 
 ---
 
-## 7. Analytics SaaS opcional (Plausible) — **OPEN (não bloqueia coletor 1ª parte)**
+## 7. Analytics SaaS opcional (Plausible), **OPEN (não bloqueia coletor 1ª parte)**
 
 Coletor `/.netlify/functions/collect` **já opera em produção**.  
 Plausible: conta → domain → `PLAUSIBLE_DOMAIN` + `PLAUSIBLE_FORWARD=1` se quiser dashboard SaaS.
 
 ---
 
-## 8. Netlify Blobs — **DONE** (produção)
+## 8. Netlify Blobs, **DONE** (produção)
 
 Persistência comprovada: HTTP **201** + `lead_id` + read-back no tip funcional.  
 Não exige ação adicional salvo migração para HTTP store.
 
 ---
 
-## 9. Rollback live click — **OPEN (Netlify UI)**
+## 9. Rollback live click, **OPEN (Netlify UI)**
 
 Procedimento + SHAs: `docs/ops/ROLLBACK.md`, `docs/evidence/inbound-10/rollback-evidence.md`.  
 Owner: Netlify → Deploys → Publish deploy anterior → validar probe → republicar tip.

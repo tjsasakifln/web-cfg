@@ -1,13 +1,13 @@
 /**
- * Nurture API — CONFENGE
+ * Nurture API, CONFENGE
  *
  * GET  ?action=health
  * GET  ?action=tracks          public track metadata (no PII)
  * POST ?action=subscribe       { email, track, consent, source?, landing_page? }
  * GET  ?action=confirm&token=&id=
  * GET  ?action=unsubscribe&token=&id=  (also POST one-click)
- * POST ?action=tick            OPS_TOKEN — process due sends
- * POST ?action=stop_commercial OPS_TOKEN — { email|lead_id, stage }
+ * POST ?action=tick            OPS_TOKEN, process due sends
+ * POST ?action=stop_commercial OPS_TOKEN, { email|lead_id, stage }
  * GET  ?action=status&id=      OPS_TOKEN
  */
 const crypto = require("crypto");
@@ -320,7 +320,7 @@ exports.handler = async (event) => {
         lead_id: body.lead_id,
       });
       // Store tokens hashed only; keep unsub hash. confirm hash stored.
-      // We need unsub_token later for emails — store encrypted? For v1 store unsub raw encrypted via env salt hash reverse not possible.
+      // We need unsub_token later for emails, store encrypted? For v1 store unsub raw encrypted via env salt hash reverse not possible.
       // Store unsub_token_raw encrypted with OPS secret if present, else store hash-only and regenerate message links via id+signed MAC.
       record.unsub_token_mac = crypto
         .createHmac("sha256", process.env.OPS_TOKEN || process.env.IP_HASH_SALT || "confenge-nurture")
@@ -339,7 +339,7 @@ exports.handler = async (event) => {
       // Confirmation email
       const trackMeta = (tracksData.tracks || {})[record.track] || {};
       const confirmText = [
-        "CONFENGE — confirme sua inscrição na sequência técnica.",
+        "CONFENGE, confirme sua inscrição na sequência técnica.",
         `Trilha: ${trackMeta.label || record.track}`,
         "",
         "Clique para confirmar (obrigatório):",
@@ -351,7 +351,7 @@ exports.handler = async (event) => {
 
       const send = await sendResendNurture({
         to: record.email,
-        subject: `Confirme: sequência ${trackMeta.label || record.track} — CONFENGE`,
+        subject: `Confirme: sequência ${trackMeta.label || record.track}, CONFENGE`,
         text: confirmText,
         unsubUrl,
       });

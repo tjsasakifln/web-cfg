@@ -6,4 +6,4 @@ ERR duplicate criterion suffix x2 in cotacao-mercado-orcamento-obra-publica: …
 ERR duplicate criterion suffix x3 in custos-indiretos-atraso-administracao-obra: …'stiver omisso ou contraditório entre edi'
 ERR duplicate criterion suffix x2 in divergencia-quantitativo-medicao-as-built: …'ativa ou quantitativa antes do cálculo d'
 ERR duplicate criterion suffix x2 in pedido-de-reequilibrio-negado: …' comodidade; formalize impacto e peça de'
-ERR duplicate criterion suffix x2 in projeto-basico-incompleto-obra-publica: …'ções do mesmo período — divergência prec'
+ERR duplicate criterion suffix x2 in projeto-basico-incompleto-obra-publica: …'ções do mesmo período, divergência prec'

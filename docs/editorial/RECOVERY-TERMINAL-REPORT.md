@@ -1,4 +1,4 @@
-# Recovery terminal report — clean inbound launch
+# Recovery terminal report, clean inbound launch
 
 ## Terminal status
 
@@ -17,7 +17,7 @@ Nenhuma aprovação humana foi carimbada por automação.
 |---------|------:|------------|
 | Wave 1 awaiting human | 11 | `noindex,follow` |
 | Wave 1 rejected (`jur-sumula-260-art`) | 1 | `noindex` / out of sitemaps |
-| Wave 1 HUMAN_APPROVED / INDEXABLE | 0 / 0 | — |
+| Wave 1 HUMAN_APPROVED / INDEXABLE | 0 / 0 |, |
 | Legacy `/conteudos/` indexable public guides | 22 | `index,follow` (pre-existing) |
 | Hub claimed guides | 22 | derived, not hardcoded 120 |
 | Editorial sitemap locs | 0 | empty until human approval |
@@ -54,4 +54,4 @@ Ver `docs/editorial/EXTERNAL-ACTIONS-RECOVERY.md`.
 
 ## Supersedes
 
-PRs #10 e #11 — substituídas por esta recovery limpa a partir de `main`.
+PRs #10 e #11, substituídas por esta recovery limpa a partir de `main`.

@@ -21,7 +21,7 @@
 .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem 1rem; }
 @media (max-width:700px) { .tool-grid { grid-template-columns: 1fr; } }
 .tool-panel label { display:block; font-weight:600; font-size:.9rem; margin-bottom:.25rem; }
-.tool-panel input, .tool-panel select, .tool-panel textarea { width:100%; padding:.55rem .65rem; border-radius:8px; border:1px solid rgba(15,23,42,.15); font:inherit; }
+.tool-panel input.tool-panel select.tool-panel textarea { width:100%; padding:.55rem .65rem; border-radius:8px; border:1px solid rgba(15,23,42,.15); font:inherit; }
 .tool-result { border-left: 4px solid #0b5fff; background:#fff; padding:1rem 1.15rem; margin:1rem 0; border-radius:0 10px 10px 0; }
 .tool-result.ok { border-left-color:#059669; }
 .tool-result.warn { border-left-color:#d97706; }
@@ -31,7 +31,7 @@
 .checklist-item { display:flex; gap:.65rem; align-items:flex-start; padding:.55rem 0; border-bottom:1px solid rgba(15,23,42,.06); }
 .checklist-item input { width:auto; margin-top:.25rem; }
 .matrix-table { width:100%; border-collapse:collapse; font-size:.92rem; }
-.matrix-table th, .matrix-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .55rem; text-align:left; vertical-align:top; }
+.matrix-table th.matrix-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .55rem; text-align:left; vertical-align:top; }
 .score-bar { height:10px; background:#e2e8f0; border-radius:99px; overflow:hidden; margin:.5rem 0; }
 .score-bar > span { display:block; height:100%; background:#0b5fff; }
 .tool-kicker { font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:#64748b; font-weight:700; }
@@ -127,7 +127,7 @@
 <input id="supressao_proposta" inputmode="decimal" value="0"/>
 </div>
 </div>
-<p style="margin:.75rem 0 0;font-size:.9rem">Compensação entre acréscimo e supressão no mesmo aditivo não “zera” automaticamente o saldo legal — trate os saldos de acréscimo e de supressão de forma separada, salvo orientação jurídica do caso.</p>
+<p style="margin:.75rem 0 0;font-size:.9rem">Compensação entre acréscimo e supressão no mesmo aditivo não “zera” automaticamente o saldo legal, trate os saldos de acréscimo e de supressão de forma separada, salvo orientação jurídica do caso.</p>
 <div class="tool-actions">
 <button class="button button-primary" type="submit">Calcular saldos</button>
 <button class="button button-secondary" type="button" id="btn-reset">Limpar</button>
@@ -219,7 +219,7 @@
       <ul>${r.msgs.map(m => '<li>' + m + '</li>').join('')}</ul>
       <p><em>Não é autorização para assinar aditivo. Confirme valor inicial atualizado, natureza (reforma vs obra nova) e regime do contrato.</em></p>`;
     lastText = [
-      'CONFENGE — verificador orientativo de acréscimos/supressões',
+      'CONFENGE, verificador orientativo de acréscimos/supressões',
       'Base legal de referência: Lei 14.133/2021 art. 125 (leitura orientativa)',
       'Valor inicial atualizado: ' + r.V,
       'Tipo: ' + r.tipo,

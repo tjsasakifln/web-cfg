@@ -1,7 +1,7 @@
 """indexability_score (0–100) and publication gates for pSEO candidates.
 
 Score components are measurable features (not fixed archetype constants).
-Human review is applied separately in build.apply_human_review_gate —
+Human review is applied separately in build.apply_human_review_gate, 
 score alone never indexes a page.
 """
 
@@ -124,7 +124,7 @@ def semantic_price_fails(pr: dict) -> list[str]:
     if max_buyer <= 0 and examples:
         from collections import Counter
         names = Counter((e.get("orgao_nome") or "?") for e in examples)
-        # only a sample of examples — if all same, flag
+        # only a sample of examples, if all same, flag
         if len(names) == 1 and len(examples) >= 3:
             max_buyer = 1.0
     if denom == "contrato_integral":
@@ -378,7 +378,7 @@ class Candidate:
             "mandatory_fail": self.mandatory_fail,
             "quality_eligible": self.quality_eligible,
             "human_review": self.human_review,
-            "indexability_score_alias": self.score,  # legacy name
+            "indexability_score_alias": self.score, # legacy name
         }
 
 
@@ -578,7 +578,7 @@ def apply_human_review_gate(
                         c.reasons.append(f"approval_invalidated_material:{field}")
                     c.reasons.append(REVIEW_STATE_DATA_CHANGE)
             else:
-                # Global snapshot may have changed — approval stays
+                # Global snapshot may have changed, approval stays
                 if (
                     prev_dataset
                     and dataset_hash
@@ -589,7 +589,7 @@ def apply_human_review_gate(
             if prev.get("reviewed_render_hash") and prev.get("_current_render_hash"):
                 if prev.get("reviewed_render_hash") != prev.get("_current_render_hash"):
                     # render-only change: require review only if material also shifted
-                    # (template CSS noise should not wipe approval — material hash is source of truth)
+                    # (template CSS noise should not wipe approval, material hash is source of truth)
                     if material_cmp["needs_review"]:
                         human = "PENDING"
                         c.reasons.append("approval_invalidated_render_changed")
@@ -797,7 +797,7 @@ def _soft_meta(text: str, max_len: int = 155) -> str:
     cut = text[: max_len - 1]
     if " " in cut:
         cut = cut.rsplit(" ", 1)[0]
-    cut = cut.rstrip(" ,;:-")
+    cut = cut.rstrip(",;:-")
     if not cut.endswith((".", "!", "?", "…")):
         cut += "…"
     return cut
@@ -847,7 +847,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             intent_clarity=min(1.0, 0.7 + 0.05 * multi_buyer + 0.1 * obs_norm),
             evidence_strength=evidence,
             class_confidence=class_conf,
-            comparability=0.7,  # markets are demand aggregates
+            comparability=0.7, # markets are demand aggregates
             freshness=fresh,
             differentiation=diff,
             service_cta=0.9 if arch and archetypes.get(arch, {}).get("confenge_service_slugs") else 0.4,
@@ -865,7 +865,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="market",
                 url=url,
                 title=f"Mercado de {m['segment']} em {m['region_label']}: contratos e órgãos | CONFENGE",
-                h1=f"Quanto o poder público contratou em {m['segment']} — {m['region_label']}",
+                h1=f"Quanto o poder público contratou em {m['segment']}, {m['region_label']}",
                 description=(
                     f"Inteligência de mercado: {m['contract_count']} contratos, "
                     f"{m['buyer_count']} órgãos em {m['region_label']}. "
@@ -983,7 +983,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
         if conf and conf < MIN_PRICE_COMPARISON_CONF:
             fails.append(f"comparison_confidence<{MIN_PRICE_COMPARISON_CONF}")
         if not p.get("comparison_group") and conf == 0:
-            # legacy snapshot without comparison keys — require explicit warning + enough obs
+            # legacy snapshot without comparison keys, require explicit warning + enough obs
             if p.get("observation_count", 0) < 20:
                 fails.append("no_comparison_group")
         flags = p.get("heterogeneity_flags") or []
@@ -1023,7 +1023,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="price",
                 url=url,
                 title=f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))} | CONFENGE",
-                h1=f"Valores de contratos — {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
+                h1=f"Valores de contratos, {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
                 description=(
                     f"Faixa de valores: {_clean_price_label(p.get('object_label'))} em "
                     f"{_clean_price_label(p.get('region_label'))} "
@@ -1101,11 +1101,11 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="competition",
                 url=url,
                 title=f"Concorrência observada: {c['segment']} em {c['region_label']} | CONFENGE",
-                h1=f"Fornecedores observados em {c['segment']} — {c['region_label']}",
+                h1=f"Fornecedores observados em {c['segment']}, {c['region_label']}",
                 description=(
                     f"Concorrência observada em {c['segment']} ({c['region_label']}): "
                     f"{c['supplier_count']} fornecedores e {c['contract_count']} contratos "
-                    f"no recorte público — sem juízo de qualidade."
+                    f"no recorte público, sem juízo de qualidade."
                 ),
                 archetype=arch,
                 segment=c.get("segment"),
@@ -1187,11 +1187,11 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="radar",
                 url=url,
                 title=f"Radar de oportunidades: {o['segment']} em {o['region_label']} | CONFENGE",
-                h1=f"Oportunidades abertas em {o['segment']} — {o['region_label']}",
+                h1=f"Oportunidades abertas em {o['segment']}, {o['region_label']}",
                 description=(
                     f"Radar de {o['segment']} em {o['region_label']}: "
                     f"{open_n} oportunidades abertas "
-                    f"(verificado em {as_of}). Página evergreen — não é URL por edital."
+                    f"(verificado em {as_of}). Página evergreen, não é URL por edital."
                 ),
                 archetype=arch,
                 segment=o.get("segment"),
@@ -1289,7 +1289,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             class_confidence=0.75,
             comparability=0.5,
             freshness=fresh * 0.9,
-            differentiation=0.95,  # unique problem themes
+            differentiation=0.95, # unique problem themes
             service_cta=1.0,
         )
         score = total_from_breakdown(breakdown)

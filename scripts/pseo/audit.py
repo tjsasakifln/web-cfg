@@ -82,7 +82,7 @@ def audit_no_regression_inventory() -> dict:
     """Content files remain on disk; sitemap lists only indexable URLs.
 
     Thin library pages may be noindex and omitted from the sitemap without
-    counting as a regression — quality over volume.
+    counting as a regression, quality over volume.
     """
     conteudos = list((ROOT / "conteudos").glob("*/index.html")) if (ROOT / "conteudos").exists() else []
     pillars = [
@@ -165,7 +165,7 @@ def main(argv=None) -> int:
         and results["tracking"].get("pii_filter_present")
         and results["tracking"].get("confengeTrack_exported")
     )
-    # tracking events may be wired in this audit pass — missing is warning if we patch script after
+    # tracking events may be wired in this audit pass, missing is warning if we patch script after
     out = {"ok": bool(ok), "results": results}
     print(json.dumps(out, ensure_ascii=False, indent=2, default=str))
     (ROOT / "seo" / "pseo-audit-report.json").write_text(

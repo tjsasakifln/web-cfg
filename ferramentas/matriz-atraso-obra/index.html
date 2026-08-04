@@ -4,11 +4,11 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Matriz de responsabilidade por atraso de obra | CONFENGE</title>
-<meta name="description" content="Monte uma matriz orientativa de responsabilidade por atraso em obra pública e veja a prova mínima por causa — antes de falar com a consultoria."/>
+<meta name="description" content="Monte uma matriz orientativa de responsabilidade por atraso em obra pública e veja a prova mínima por causa, antes de falar com a consultoria."/>
 <meta name="robots" content="index,follow"/>
 <link rel="canonical" href="https://confenge.com.br/ferramentas/matriz-atraso-obra/"/>
 <meta property="og:title" content="Matriz de responsabilidade por atraso de obra | CONFENGE"/>
-<meta property="og:description" content="Monte uma matriz orientativa de responsabilidade por atraso em obra pública e veja a prova mínima por causa — antes de falar com a consultoria."/>
+<meta property="og:description" content="Monte uma matriz orientativa de responsabilidade por atraso em obra pública e veja a prova mínima por causa, antes de falar com a consultoria."/>
 <meta property="og:url" content="https://confenge.com.br/ferramentas/matriz-atraso-obra/"/>
 <meta property="og:type" content="website"/>
 <link rel="stylesheet" href="/styles.css"/>
@@ -21,7 +21,7 @@
 .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem 1rem; }
 @media (max-width:700px) { .tool-grid { grid-template-columns: 1fr; } }
 .tool-panel label { display:block; font-weight:600; font-size:.9rem; margin-bottom:.25rem; }
-.tool-panel input, .tool-panel select, .tool-panel textarea { width:100%; padding:.55rem .65rem; border-radius:8px; border:1px solid rgba(15,23,42,.15); font:inherit; }
+.tool-panel input.tool-panel select.tool-panel textarea { width:100%; padding:.55rem .65rem; border-radius:8px; border:1px solid rgba(15,23,42,.15); font:inherit; }
 .tool-result { border-left: 4px solid #0b5fff; background:#fff; padding:1rem 1.15rem; margin:1rem 0; border-radius:0 10px 10px 0; }
 .tool-result.ok { border-left-color:#059669; }
 .tool-result.warn { border-left-color:#d97706; }
@@ -31,7 +31,7 @@
 .checklist-item { display:flex; gap:.65rem; align-items:flex-start; padding:.55rem 0; border-bottom:1px solid rgba(15,23,42,.06); }
 .checklist-item input { width:auto; margin-top:.25rem; }
 .matrix-table { width:100%; border-collapse:collapse; font-size:.92rem; }
-.matrix-table th, .matrix-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .55rem; text-align:left; vertical-align:top; }
+.matrix-table th.matrix-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .55rem; text-align:left; vertical-align:top; }
 .score-bar { height:10px; background:#e2e8f0; border-radius:99px; overflow:hidden; margin:.5rem 0; }
 .score-bar > span { display:block; height:100%; background:#0b5fff; }
 .tool-kicker { font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:#64748b; font-weight:700; }
@@ -54,7 +54,7 @@
     "name": "CONFENGE",
     "url": "https://confenge.com.br/"
   },
-  "description": "Monte uma matriz orientativa de responsabilidade por atraso em obra pública e veja a prova mínima por causa — antes de falar com a consultoria."
+  "description": "Monte uma matriz orientativa de responsabilidade por atraso em obra pública e veja a prova mínima por causa, antes de falar com a consultoria."
 }
 </script>
 </head>
@@ -89,12 +89,12 @@
 <header class="content-hero container tool-layout">
 <p class="eyebrow">Ferramenta gratuita · atrasos e prorrogação</p>
 <h1>Matriz de responsabilidade por atraso de obra</h1>
-<p class="content-lead">Selecione as causas presentes no caso. A ferramenta devolve imputação tendencial e documentos mínimos — sem conclusão jurídica automática.</p>
+<p class="content-lead">Selecione as causas presentes no caso. A ferramenta devolve imputação tendencial e documentos mínimos, sem conclusão jurídica automática.</p>
 </header>
 <div class="container tool-layout">
 
 <section class="tool-disclaimer">
-<strong>Premissas.</strong> Matriz orientativa de responsabilidade por atraso. A imputação real depende de contrato, matriz de riscos, diário de obra, ordens de serviço e prova. Força maior e fato da Administração não se presumem — demonstram-se. Não emite laudo pericial nem decisão jurídica.
+<strong>Premissas.</strong> Matriz orientativa de responsabilidade por atraso. A imputação real depende de contrato, matriz de riscos, diário de obra, ordens de serviço e prova. Força maior e fato da Administração não se presumem, demonstram-se. Não emite laudo pericial nem decisão jurídica.
 </section>
 <form id="atraso-form" class="tool-panel">
 <p class="tool-kicker">Selecione causas presentes no caso</p>
@@ -199,10 +199,10 @@
       <table class="matrix-table"><thead><tr><th>Causa</th><th>Imputação tendencial</th><th>Prova mínima sugerida</th></tr></thead><tbody>${table}</tbody></table>
       <ul>
         <li>Linhas “Administração (tendência)”: ${adm} · “contratado (tendência)”: ${cont}</li>
-        <li>${matriz === 'nao' ? 'Sem matriz explícita, a leitura do risco depende mais de prova e de cláusulas esparsas — aumente o rigor documental.' : 'Use a matriz contratual como âncora e confronte com os fatos provados.'}</li>
+        <li>${matriz === 'nao' ? 'Sem matriz explícita, a leitura do risco depende mais de prova e de cláusulas esparsas, aumente o rigor documental.' : 'Use a matriz contratual como âncora e confronte com os fatos provados.'}</li>
         <li>Próximo passo: alocar dias por causa no caminho crítico (não some causas como se fossem independentes sem análise de rede).</li>
       </ul>`;
-    lastText = ['CONFENGE matriz atraso', 'dias='+dias, 'matriz_contrato='+matriz, ...rows.map(r => r.k+'|'+r.resp), new Date().toISOString()].join('\n');
+    lastText = ['CONFENGE matriz atraso', 'dias='+dias, 'matriz_contrato='+matriz...rows.map(r => r.k+'|'+r.resp), new Date().toISOString()].join('\n');
     dl.hidden = false;
     document.getElementById('tool-cta-wa').href = T.waLink('Olá, Tiago. Usei a matriz de atraso da CONFENGE. Causas: '+selected.join(', ')+'. Dias alegados: '+dias+'. Quero organizar a cronologia e o pedido de prorrogação/defesa.');
     T.track('tool_complete', { tool: 'matriz-atraso', causes: selected.length, dias });

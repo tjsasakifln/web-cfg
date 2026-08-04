@@ -12,9 +12,9 @@ name: revops-scheduled
 
 on:
   schedule:
-    # Daily ops — 11:15 UTC
+    # Daily ops, 11:15 UTC
     - cron: "15 11 * * *"
-    # Weekly report — Mondays 12:00 UTC
+    # Weekly report, Mondays 12:00 UTC
     - cron: "0 12 * * 1"
   workflow_dispatch:
     inputs:

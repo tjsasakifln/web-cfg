@@ -14,7 +14,7 @@ Restaurar o site público a um deploy anterior conhecido sem perda do histórico
 4. Validar:
    - `build-info.json` mostra commit esperado
    - Homepage 200
-   - `POST /.netlify/functions/lead` com payload sintético (ou 503 se store/env incompatível — documentar)
+   - `POST /.netlify/functions/lead` com payload sintético (ou 503 se store/env incompatível, documentar)
    - robots/sitemap 200
 5. Registrar em `docs/evidence/inbound-10/rollback-evidence.md`: quem, quando, from→to SHA, resultado.
 6. Se o rollback foi de emergência, abrir PR de correção a partir do tip e republicar.

@@ -78,7 +78,7 @@ def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
 
 
 def apply_similarity_gate(cands: list[Candidate]) -> list[Candidate]:
-    """Consolidate near-duplicates (similarity only — no numeric publish cap)."""
+    """Consolidate near-duplicates (similarity only, no numeric publish cap)."""
     by_id = {c.page_id: c for c in cands}
     publishable = [c for c in cands if c.status in {"publish", "noindex", "eligible"}]
     pairs = find_similar_pairs(
@@ -132,7 +132,7 @@ def _attach_review_signatures(registry: dict, cands: list, root: Path) -> None:
                             p["reasons"].append(f"approval_invalidated_material:{k}")
                         p["status"] = "noindex" if p.get("status") == "publish" else p.get("status")
                         break
-            # Record current render hash for diagnostics only — do not demote
+            # Record current render hash for diagnostics only, do not demote
             url = (p.get("url") or "").strip("/")
             hp = root / url / "index.html"
             if hp.exists():
@@ -220,7 +220,7 @@ def write_registry(
 
 
 def _sitemap_lastmod(manifest: dict[str, Any]) -> str:
-    """W3C date for sitemap lastmod — never in the future (GSC hard-rejects that).
+    """W3C date for sitemap lastmod, never in the future (GSC hard-rejects that).
 
     Prefer data_as_of (export verification date). Do NOT use data_period_end:
     open-bid end dates often sit months ahead of as_of and poison lastmod.
@@ -278,7 +278,7 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
         )
 
     hub_defs = [
-        ("/inteligencia/", None),  # root hub always if any publish or own editorial
+        ("/inteligencia/", None), # root hub always if any publish or own editorial
         ("/inteligencia/mercados/", "market"),
         ("/inteligencia/orgaos/", "agency"),
         ("/inteligencia/precos/", "price"),
@@ -391,7 +391,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Mercados, órgãos, preços e concorrência como evidência para decisões de participação, preço e proteção de margem.",
             "Contratos, órgãos, preços, concorrência e oportunidades só criam valor quando são confrontados "
             "com a capacidade, o risco e a estratégia da empresa. Esta área organiza evidências públicas "
-            "para apoiar decisões comerciais e técnicas — sem confundir frequência histórica com certeza futura.",
+            "para apoiar decisões comerciais e técnicas, sem confundir frequência histórica com certeza futura.",
             [
                 ("/inteligencia/mercados/", "Mercados", "Onde a demanda se concentra", "Demanda e órgãos"),
                 ("/inteligencia/orgaos/", "Órgãos", "Quem contrata o que importa", "Dossiês compradores"),
@@ -407,7 +407,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "/inteligencia/mercados/",
             "Mercados públicos de engenharia | CONFENGE",
             "Mercados por segmento e região",
-            "Contratos, órgãos e evolução — para priorizar onde atuar.",
+            "Contratos, órgãos e evolução, para priorizar onde atuar.",
             "Lista de mercados com massa mínima de contratos e compradores. "
             "Use para decidir em quais UFs e segmentos alocar esforço comercial.",
             items_for("market"),
@@ -429,7 +429,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "/inteligencia/precos/",
             "Benchmarks de valores contratados | CONFENGE",
             "Preços e dispersão contratual",
-            "Medianas e quartis com critérios de inclusão — sem média cega.",
+            "Medianas e quartis com critérios de inclusão, sem média cega.",
             "Benchmarks de contratos integrais comparáveis. Não são preços unitários SINAPI/SICRO.",
             items_for("price"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Preços", None)],
@@ -440,7 +440,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Concorrência observada em obras públicas | CONFENGE",
             "Concorrência observada",
             "Fornecedores e concentração no recorte público.",
-            "Frequência neutra de fornecedores no recorte — observação pública, não ranking comercial.",
+            "Frequência neutra de fornecedores no recorte, observação pública, não ranking comercial.",
             items_for("competition"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Concorrência", None)],
             "competition",
@@ -459,10 +459,10 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
         (
             "/radar/",
             "Radar de oportunidades B2G | CONFENGE",
-            "Radar de oportunidades para a sua operação — não para o mercado inteiro.",
+            "Radar de oportunidades para a sua operação, não para o mercado inteiro.",
             "Monitoramento estruturado do mercado público calibrado ao perfil da construtora.",
             "O radar da CONFENGE não é um feed genérico de editais. Ele precisa do perfil da empresa "
-            "— capacidade, acervo, órgãos-alvo, faixas de valor e apetite de risco — para filtrar o que "
+            ", capacidade, acervo, órgãos-alvo, faixas de valor e apetite de risco, para filtrar o que "
             "merece atenção. Sem cobertura integral prometida. Sem fingir disponibilidade quando o "
             "recorte ainda não está publicado para o visitante.",
             # Only list publish radar children publicly; noindex previews stay out of hub promo
@@ -491,7 +491,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
                     "title": "Sem perfil da empresa, o radar vira ruído.",
                     "body": (
                         "Se você já disputa ou executa contratos públicos, o caminho certo é "
-                        "calibrar o recorte — não assinar mais um alerta genérico."
+                        "calibrar o recorte, não assinar mais um alerta genérico."
                     ),
                     "primary_label": "Configurar meu radar de oportunidades",
                     "primary_href": _wa_link(wa),
@@ -531,7 +531,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
     registry_path = data_dir / "registry.json"
     existing_reviews = load_existing_reviews(registry_path)
 
-    # Baseline URLs known BEFORE registry rewrite / HTML wipe — freeze new reject paths.
+    # Baseline URLs known BEFORE registry rewrite / HTML wipe, freeze new reject paths.
     prior_urls: set[str] = set()
     if registry_path.exists():
         try:
@@ -553,7 +553,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
 
     cands = build_candidates(data, manifest)
     cands = apply_similarity_gate(cands)
-    # Human review is a hard gate — never publish PENDING
+    # Human review is a hard gate, never publish PENDING
     cands = apply_human_review_gate(cands, existing_reviews, dataset_hash=manifest.get("dataset_hash"))
     cands = resolve_related_urls(cands, site_root=ROOT)
 
@@ -633,7 +633,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
         )
 
     hubs = [] if dry_run else render_hubs(cands)
-    # lastmod = when the snapshot was verified — never use bid data_period_end
+    # lastmod = when the snapshot was verified, never use bid data_period_end
     # (open-bid end dates can be months in the future and GSC rejects future lastmod).
     lastmod = _sitemap_lastmod(manifest)
     sm = None if dry_run else write_sitemap(cands, lastmod)

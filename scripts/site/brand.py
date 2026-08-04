@@ -1,4 +1,4 @@
-"""CONFENGE brand contract — single source of truth for commercial identity.
+"""CONFENGE brand contract, single source of truth for commercial identity.
 
 Loads data/site/brand.json, proof.json, cases.json and exposes helpers used by
 html_shell, tests, and optional sync tooling.
@@ -146,7 +146,7 @@ def validate_brand_contract() -> dict[str, Any]:
 def find_forbidden_in_text(text: str, phrases: list[str] | None = None) -> list[str]:
     """Flag forbidden phrases used affirmatively.
 
-    Negations within a short window (não/sem/nunca/jamais + phrase) are allowed —
+    Negations within a short window (não/sem/nunca/jamais + phrase) are allowed, 
     the brand *must* be able to deny guarantees of victory, etc.
     """
     import re

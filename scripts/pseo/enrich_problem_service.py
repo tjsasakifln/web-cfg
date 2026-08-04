@@ -7,7 +7,7 @@ compatible with evidence_kind) is applied here so pages remain gate-eligible
 without inventing quantitative incidence claims.
 
 Does NOT change export provenance / dataset_hash recomputation is left to caller
-if body keys that participate in dataset_hash change — prefer calling before
+if body keys that participate in dataset_hash change, prefer calling before
 checksum finalization or re-hash after.
 """
 

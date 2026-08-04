@@ -1,8 +1,8 @@
-# Relatório final — SEO orgânico CONFENGE
+# Relatório final, SEO orgânico CONFENGE
 
 **Data:** 2026-07-30  
 **Repositório:** site estático Netlify (`webcfg`)  
-**Baseline GSC (sinal direcional):** 14–28 jul 2026 — 10 cliques, 325 impressões, CTR ~3,08%, posição média ~9,12  
+**Baseline GSC (sinal direcional):** 14–28 jul 2026, 10 cliques, 325 impressões, CTR ~3,08%, posição média ~9,12  
 
 ---
 
@@ -88,7 +88,7 @@ Janela curta (n≈10 cliques): usada como **sinal direcional**. Não se restauro
 | `/privacidade` | 301 | `/privacidade/` | Normalização de barra |
 | `/privacidade.html` | 301 | `/privacidade/` | Alias legado |
 | HTTP `http://confenge.com.br/*` | upgrade/HSTS | HTTPS | `_headers` no host Netlify |
-| Artigos AVCB / avaliações imobiliárias | N/A | — | Não existem no repositório atual |
+| Artigos AVCB / avaliações imobiliárias | N/A |, | Não existem no repositório atual |
 | Guias `/conteudos/*/` | Manter indexáveis | 200 + canonical | 99 em backlog `aprofundar`; sem purge em massa |
 
 ---
@@ -125,7 +125,7 @@ Matriz com **before = `git show HEAD:`** e **after = HTML atual** (evidência: `
 | Form qualificado | nome, empresa, e-mail, WhatsApp opcional, necessidade, contexto, consentimento, honeypot, `origem` |
 | Prefill | `?tema=` / `?origem=` → mensagem + scroll `#contato` |
 | Eventos (`script.js`) | `whatsapp_click`, `lead_form_start`, `lead_form_submit`, `lead_form_error`, `service_cta_click`, `content_to_service_click`, `internal_search` (só `query_len`), `qualified_scroll` |
-| Params | `page_path`, `content_cluster`, `cta_position`, `cta_label`, `device_context`, `destination_type` — **sem e-mail/telefone/texto livre** |
+| Params | `page_path`, `content_cluster`, `cta_position`, `cta_label`, `device_context`, `destination_type`, **sem e-mail/telefone/texto livre** |
 | Pilares comerciais | 8 clusters com intenção distinta; links guia → pilar preservados |
 
 Contatos oficiais inalterados: WhatsApp **(48) 98834-4559** · **tiago.sasaki@confenge.com.br**.
@@ -139,7 +139,7 @@ Arquivo: `seo/content-classification.json`.
 | Classificação | Qtd | Significado |
 |---------------|-----|-------------|
 | **manter** | 19 | Handcrafted / prioritários GSC com resposta específica |
-| **aprofundar** | 99 | Ainda com variantes estruturais reutilizáveis — backlog editorial (não ostentar volume) |
+| **aprofundar** | 99 | Ainda com variantes estruturais reutilizáveis, backlog editorial (não ostentar volume) |
 | **consolidar** | 2 | `matriz-de-riscos-reequilibrio-economico-financeiro` → matriz geral; `servico-executado-sem-termo-aditivo` → `fiscal-mandou-executar-sem-aditivo` (ainda indexados até dados pós-deploy) |
 | redirecionar / noindex / remover | 0 | Evitado purge em massa sem tráfego estável |
 
@@ -171,7 +171,7 @@ CRITERION_STRUCTURE_OK
 $ # suite full (inventory, crawl, JSON-LD, serve)
 RESULT: PASS
 errors=0 warnings=0
-HTTP 200: / , /conteudos/sinapi-desonerado-nao-desonerado/ , /sitemap.xml , /robots.txt , /script.js , /styles.css , /llms.txt
+HTTP 200: /, /conteudos/sinapi-desonerado-nao-desonerado/, /sitemap.xml, /robots.txt, /script.js, /styles.css, /llms.txt
 JSON-LD blocks parsed OK: 131
 Legacy internal hits: 0
 Sitemap vs FS: 0 mismatches
@@ -212,7 +212,7 @@ Sitemap vs FS: 0 mismatches
 | Confirmar 301 legados em produção | Host Netlify após deploy |
 | Enviar sitemap / inspeção URL no GSC | Conta Google Search Console |
 | Ativar GA4 ou Plausible com ID real | Criar propriedade; ajustar CSP em `_headers` |
-| Cases/depoimentos | Autorização comercial — **não inventados** |
+| Cases/depoimentos | Autorização comercial, **não inventados** |
 | Consolidação física dos 2 pares canibalizados | Decisão editorial + 28 dias de dados |
 | Aprofundamento real dos ~99 guias `aprofundar` | Sprint de conteúdo técnico (sem prosa bulk) |
 | HTTP→HTTPS live | Certificado/host (config local OK) |

@@ -1,4 +1,4 @@
-# Relatório Playwright — checklist SEO / leads
+# Relatório Playwright, checklist SEO / leads
 
 Data: 2026-07-30  
 Ferramenta: Playwright MCP  
@@ -20,11 +20,11 @@ Ambientes: **produção** `https://confenge.com.br` vs **local** `http://127.0.0
 | Prefill `?tema=&origem=#contato` | N/A | **OK** (valid=true) |
 | Redirects 301 legados | **404** (ainda sem netlify.toml novo) | N/A (http.server não aplica redirects) |
 
-**Conclusão:** as melhorias SEO/leads estão no GitHub (`tjsasakifln/web-cfg`) e validadas localmente. **Produção ainda serve a versão antiga** — falta deploy Netlify.
+**Conclusão:** as melhorias SEO/leads estão no GitHub (`tjsasakifln/web-cfg`) e validadas localmente. **Produção ainda serve a versão antiga**, falta deploy Netlify.
 
 ---
 
-## 1. Produção — URLs do checklist
+## 1. Produção, URLs do checklist
 
 | URL | Status | Observação |
 |-----|--------|------------|
@@ -45,7 +45,7 @@ Após deploy do `netlify.toml` atualizado, devem virar 301.
 
 ---
 
-## 2. Local — Tier S (reescritas)
+## 2. Local, Tier S (reescritas)
 
 | Slug | Title | lead-inline | Resposta executiva |
 |------|-------|-------------|-------------------|
@@ -57,7 +57,7 @@ Após deploy do `netlify.toml` atualizado, devem virar 301.
 
 ---
 
-## 3. Conversão (form + WhatsApp) — local
+## 3. Conversão (form + WhatsApp), local
 
 Fluxo validado:
 
@@ -77,10 +77,10 @@ Fluxo validado:
 
 Salvos em `seo/screenshots/`:
 
-- `local-sinapi.png` — hero artigo reescrito  
-- `local-sinapi-lead.png` — bloco de conversão  
-- `local-form-prefill.png` / `local-form-ready.png` — form com atribuição  
-- `live-sinapi.png` — produção (versão antiga)
+- `local-sinapi.png`, hero artigo reescrito  
+- `local-sinapi-lead.png`, bloco de conversão  
+- `local-form-prefill.png` / `local-form-ready.png`, form com atribuição  
+- `live-sinapi.png`, produção (versão antiga)
 
 ---
 

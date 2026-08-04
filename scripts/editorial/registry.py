@@ -46,7 +46,7 @@ PROGRESSION = [
     "PUBLISHED",
 ]
 
-# Reviewer strings that are automated / non-human — cannot HUMAN_APPROVE
+# Reviewer strings that are automated / non-human, cannot HUMAN_APPROVE
 # Keep in sync with scripts.editorial.governance.BLOCKED_REVIEWER_PATTERNS
 BLOCKED_REVIEWER_PATTERNS = (
     r"^editorial-wave1-operator$",

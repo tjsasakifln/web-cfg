@@ -8,4 +8,4 @@ node: nodeok
 
 Lighthouse/Axe/browser screenshots: environment may lack headless chrome.
 Fallback: static HTML structural verification + unit gates on shipped code (completed).
-Honest env limit recorded — not fabricating Lighthouse JSON.
+Honest env limit recorded, not fabricating Lighthouse JSON.

@@ -14,7 +14,7 @@ const idem = `synthetic-probe-${stamp}`;
 const payload = {
   nome: "SYNTHETIC-PROBE",
   email: "probe@example.com",
-  estagio: "synthetic probe — discard",
+  estagio: "synthetic probe, discard",
   jornada: "operacao",
   consentimento: "true",
   origem: "/synthetic-probe",
@@ -22,7 +22,7 @@ const payload = {
   utm_medium: "probe",
   utm_campaign: "slo",
   landing_page: "/",
-  mensagem: "[QA] synthetic probe — do not contact",
+  mensagem: "[QA] synthetic probe, do not contact",
   test_mode: true,
   record_kind: "synthetic",
   idempotency_key: idem,

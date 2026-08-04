@@ -18,7 +18,7 @@ Home, four offers, especialista, obrigado, header, mobile menu, footer, forms, m
 | Enquadrar um risco contratual | Avaliar contrato sob pressão |
 | sala de guerra | coordenação da proposta / coordenação intensiva (explained) |
 | Workstreams | Frentes de trabalho |
-| Travessões (—) in commercial HTML | commas / parentheses / colons |
+| Travessões (U+2014) in commercial HTML | commas / parentheses / colons |
 
 ## Offer identity (primary CTA)
 

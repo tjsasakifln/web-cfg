@@ -1,4 +1,4 @@
-"""Public copy leak gates — real HTML surfaces."""
+"""Public copy leak gates, real HTML surfaces."""
 
 from __future__ import annotations
 
@@ -87,7 +87,7 @@ def test_llms_consistent():
 
 
 def test_concordance_and_forbidden_microcopy():
-    """Gate for already-identified grammar/CTA defects — not a substitute for human review."""
+    """Gate for already-identified grammar/CTA defects, not a substitute for human review."""
     commercial = [
         ROOT / "index.html",
         ROOT / "diretoria-b2g" / "index.html",
@@ -112,7 +112,6 @@ def test_concordance_and_forbidden_microcopy():
         text = path.read_text(encoding="utf-8")
         for phrase in forbidden:
             assert phrase not in text, f"{path}: forbidden microcopy {phrase!r}"
-        # no em-dash (travessão) in user-facing commercial HTML
         assert "—" not in text, f"{path}: em-dash/travessão present"
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Premissas e decisões ficam registradas" in home
@@ -238,7 +237,7 @@ def test_public_backstage_language_absent():
     failures: list[str] = []
     for path in _public_html_surfaces():
         text = path.read_text(encoding="utf-8")
-        # Strip scripts/styles/comments — banlist is about visitor-visible chrome + body
+        # Strip scripts/styles/comments, banlist is about visitor-visible chrome + body
         vis = re.sub(r"<script[\s\S]*?</script>", " ", text, flags=re.I)
         vis = re.sub(r"<style[\s\S]*?</style>", " ", vis, flags=re.I)
         vis = re.sub(r"<!--[\s\S]*?-->", " ", vis)
@@ -288,6 +287,22 @@ def test_gate_bites_on_reintroduction():
     assert "este cluster" in "Este cluster trata do edital".lower()
 
 
+def test_no_emdash_sitewide_public_html():
+    """Visitor-facing HTML/XML/txt must not use U+2014; prefer comma or n/d."""
+    skip = {".git", "node_modules", "_site", "ops"}
+    em = chr(0x2014)
+    bad = []
+    for path in ROOT.rglob("*.html"):
+        if any(s in path.parts for s in skip):
+            continue
+        if em in path.read_text(encoding="utf-8"):
+            bad.append(str(path.relative_to(ROOT)))
+    for rel in ("feed.xml", "llms.txt"):
+        path = ROOT / rel
+        if path.exists() and em in path.read_text(encoding="utf-8"):
+            bad.append(rel)
+    assert not bad, "em-dash/travessao still present: " + ", ".join(bad[:25])
+
 if __name__ == "__main__":
     failed = 0
     for t in (
@@ -302,6 +317,7 @@ if __name__ == "__main__":
         test_ferramentas_eyebrow_client_facing,
         test_banlist_includes_conversion_eyebrow,
         test_gate_bites_on_reintroduction,
+        test_no_emdash_sitewide_public_html,
     ):
         try:
             t()

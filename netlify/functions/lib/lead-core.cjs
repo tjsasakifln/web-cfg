@@ -1,6 +1,6 @@
 /**
  * Pure lead validation, sanitization, idempotency, and response DTO helpers.
- * No I/O — unit-testable without mocks of the unit under test.
+ * No I/O, unit-testable without mocks of the unit under test.
  */
 const crypto = require("crypto");
 
@@ -59,7 +59,7 @@ function normalizePhone(raw) {
 function normalizeEmail(raw) {
   const e = clamp(raw, MAX_FIELD.email).toLowerCase();
   if (!e) return "";
-  // Practical RFC-ish check — server-side only
+  // Practical RFC-ish check, server-side only
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return "";
   if (e.length > 180) return "";
   return e;
@@ -201,7 +201,7 @@ function validateAndNormalize(data) {
 /**
  * Lead id generation.
  * When `deterministic: true` (preferred for explicit idempotency keys), same seed
- * always yields the same id — critical for Netlify Blobs eventual-consistency races.
+ * always yields the same id, critical for Netlify Blobs eventual-consistency races.
  */
 function generateLeadId(seedMaterial, options = {}) {
   if (options && options.deterministic) {
@@ -297,7 +297,7 @@ function corsHeaders(origin) {
   };
 }
 
-/** Public response whitelist — never include channels, topics, tokens, PII. */
+/** Public response whitelist, never include channels, topics, tokens, PII. */
 function publicSuccessBody({
   lead_id,
   received_at,
@@ -332,13 +332,12 @@ function publicErrorBody({ error, message }) {
   };
 }
 
-/** Structured log line — no PII fields. */
+/** Structured log line, no PII fields. */
 function safeLog(level, event, fields) {
   const line = JSON.stringify({
     ts: new Date().toISOString(),
     level,
-    event,
-    ...fields,
+    event...fields,
   });
   if (level === "error") console.error(line);
   else console.log(line);

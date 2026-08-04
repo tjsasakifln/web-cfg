@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for inbound-first gates — drive shipped public HTML and gate functions."""
+"""Tests for inbound-first gates, drive shipped public HTML and gate functions."""
 
 from __future__ import annotations
 

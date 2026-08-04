@@ -3346,7 +3346,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3371,7 +3371,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "pagamento",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3396,7 +3396,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "medicao",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3421,7 +3421,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "prazo",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3446,7 +3446,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_MISSING_EVIDENCE",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3471,7 +3471,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3496,7 +3496,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "prazo",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3521,7 +3521,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3546,7 +3546,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3571,7 +3571,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "medicao",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3596,7 +3596,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "pagamento",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3621,7 +3621,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1, approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {

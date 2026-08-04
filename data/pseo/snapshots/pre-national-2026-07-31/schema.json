@@ -1792,7 +1792,7 @@
         }
       },
       "additionalProperties": false,
-      "description": "Methodology document — structured nested models, no free Any bags.",
+      "description": "Methodology document, structured nested models, no free Any bags.",
       "properties": {
         "classifier": {
           "anyOf": [

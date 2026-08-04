@@ -2,8 +2,8 @@
 
 ## Fontes
 
-1. **Coletor 1ª parte** `POST/GET /.netlify/functions/collect` — eventos sem PII.
-2. **Campos no lead persistido** — UTMs, landing, journey, referrer (não vão ao analytics como PII).
+1. **Coletor 1ª parte** `POST/GET /.netlify/functions/collect`, eventos sem PII.
+2. **Campos no lead persistido**, UTMs, landing, journey, referrer (não vão ao analytics como PII).
 3. **Opcional** Plausible/GA4 quando `PLAUSIBLE_*` ou gtag configurados.
 
 ## Conversões distintas (não contar clique decorativo como lead)
@@ -25,7 +25,7 @@
 - conversão por jornada e por página
 - leads por origem / cluster / campanha (store)
 - falhas técnicas (`lead_form_backend_error`, 5xx)
-- tempo até atendimento (ops — first_touch_at manual/CRM)
+- tempo até atendimento (ops, first_touch_at manual/CRM)
 - proporção formulário × WhatsApp × e-mail
 
 ## Prova em produção

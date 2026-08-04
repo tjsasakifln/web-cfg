@@ -1,4 +1,4 @@
-# Search Console — URLs for manual action
+# Search Console, URLs for manual action
 
 **Do not** use the Google Indexing API for ordinary content pages.
 
@@ -27,14 +27,14 @@ Also submit **Removals** for any `http://` variants and trailing-slash duplicate
 
 ## B. Legacy queries still receiving impressions (GSC export 2026-07-30)
 
-Not URLs to delete alone — reinforce entity signal + ensure no live landing:
+Not URLs to delete alone, reinforce entity signal + ensure no live landing:
 
 | Query | Impressions | Notes |
 |-------|------------:|-------|
 | avcb | 3 | Must not land on indexable CONFENGE page |
 | ia | 1 | Ambiguous; ensure /ia stays 410 |
 
-Action: after 410 stable ≥48h, use **URL inspection** on each path above and **Request indexing** is **not** appropriate for 410 — use **Removals** + wait for recrawl.
+Action: after 410 stable ≥48h, use **URL inspection** on each path above and **Request indexing** is **not** appropriate for 410, use **Removals** + wait for recrawl.
 
 ## C. Soft redirects already correct (no GSC removal)
 
@@ -48,7 +48,7 @@ Action: after 410 stable ≥48h, use **URL inspection** on each path above and *
 ## D. Operator checklist
 
 1. GSC → **Removals** → Temporary removals for each 410 path (and www/http variants if present).
-2. GSC → **Pages** → filter “Excluded” / “Not found” / “Soft 404” — confirm no abandoned path is “Indexed”.
+2. GSC → **Pages** → filter “Excluded” / “Not found” / “Soft 404”, confirm no abandoned path is “Indexed”.
 3. Re-export Performance after 14 days; legacy queries (avcb, ia) should decay.
 4. Do **not** 301 abandoned entity URLs to home.
 
@@ -56,7 +56,7 @@ Action: after 410 stable ≥48h, use **URL inspection** on each path above and *
 
 Optional env for `scripts/revops/search_demand_observatory.py pull-api`:
 
-- `GSC_SITE_URL` — e.g. `sc-domain:confenge.com.br`
-- `GSC_CREDENTIALS_JSON` — service account JSON path with Search Console access
+- `GSC_SITE_URL`, e.g. `sc-domain:confenge.com.br`
+- `GSC_CREDENTIALS_JSON`, service account JSON path with Search Console access
 
 Until then: `import-csv --dir seo/gsc-YYYY-MM-DD`.

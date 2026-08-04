@@ -1,4 +1,4 @@
-# PSEO Wave 0 Closure 02 — Final Report
+# PSEO Wave 0 Closure 02, Final Report
 
 **Campaign:** WEB-CFG-PSEO-WAVE0-CLOSURE-02  
 **Generated:** 2026-08-01T00:52:49Z  
@@ -18,35 +18,35 @@
 
 ## What was implemented
 
-### A — Isolated public artifact
+### A, Isolated public artifact
 - Netlify `publish = "_site"`, command `npm run build:site`
 - `scripts/pseo/public_artifact.py` + `npm run audit:public-artifact`
 - Live internal paths return **404** (`/data/pseo/*`, `/package.json`, `/seo/*`, `/.git/*`, …)
 
-### B — Editorial hardening
+### B, Editorial hardening
 - Governance language removed from public HTML (including singular **contagem genérica**)
 - Typed `evidence_kind` ∈ {direct_problem_evidence, contextual_market_evidence, normative_editorial}
 - Wave 0 scenario pages: `normative_editorial` + `PUBLISH_EDITORIAL_VALUE`
 - Radar limitations scrubbed of snake_case pipeline fields
 - FORBIDDEN regex uses `contage(?:m|ns)` (fixes contagens?-only bug)
 
-### C — Honest GSC gate
+### C, Honest GSC gate
 - Typed per-URL states; `next_wave_gate` **calculated only**
 - `next_wave_gate = false` under `NOT_INSPECTED_NO_CREDENTIALS`
 - `npm run pseo:gsc:ingest` rejects bare `indexed=true`
 
-### D — Deploy-bound audit
+### D, Deploy-bound audit
 - Identity fields on production audit; `STALE_AUDIT_DEPLOY_MISMATCH` on true mismatch
 - `audit_target_sha` binds to **live deploy tip** (not evidence-only git HEAD)
 - `npm run pseo:verify:release`
 
-### E — CI parity
+### E, CI parity
 - Workflow runs exact `build:site` → artifact audit → validate → audit → test + HTTP smoke
 
-### F — extra-cli
+### F, extra-cli
 - PR **#187 squash-merged** to main; entrypoint `python -m scripts.pseo.export_web_cfg` on main
 - Cross-repo fixture export test green
-- **Honest residual:** published snapshot `source_commit_sha` is still from pre-merge branch — **not** claimed as main history
+- **Honest residual:** published snapshot `source_commit_sha` is still from pre-merge branch, **not** claimed as main history
 
 ### G / H
 - Adversarial editorial report fields; dual-UA live checks; no Wave 1 auth

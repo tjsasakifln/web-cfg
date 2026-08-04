@@ -18,5 +18,5 @@
 
 ## Risk
 
-- Home keyword surface shifted from “consultoria B2G” to “Diretoria B2G” — intentional brand move; pillars retain long-tail intent.
+- Home keyword surface shifted from “consultoria B2G” to “Diretoria B2G”, intentional brand move; pillars retain long-tail intent.
 - Radar remains `noindex` while empty.

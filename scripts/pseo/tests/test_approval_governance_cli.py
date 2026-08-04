@@ -1,4 +1,4 @@
-"""Negative tests for pSEO review CLI — must not write on blocked paths."""
+"""Negative tests for pSEO review CLI, must not write on blocked paths."""
 
 from __future__ import annotations
 
@@ -172,7 +172,7 @@ def test_without_allow_human_approval_fails():
             "--material-hash",
             "deadbeef",
         ],
-        env={},  # no ALLOW_HUMAN_APPROVAL
+        env={}, # no ALLOW_HUMAN_APPROVAL
         clear_ci=True,
     )
     assert r.returncode != 0, r.stdout + r.stderr

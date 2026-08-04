@@ -1,4 +1,4 @@
-CONFENGE — CHECKLIST DE PUBLICAÇÃO (SEO inbound 2026-07-30)
+CONFENGE, CHECKLIST DE PUBLICAÇÃO (SEO inbound 2026-07-30)
 
 1. Publique este diretório na Netlify (drag-and-drop ou repo GitHub web-cfg).
 2. Confirme no navegador:
@@ -17,7 +17,7 @@ CONFENGE — CHECKLIST DE PUBLICAÇÃO (SEO inbound 2026-07-30)
    - Solicite indexação das 5 URLs Tier S reescritas
    - Monitore queda de impressões em URLs fantasma
 5. Netlify Forms: confirme que o form "diagnostico-confenge" recebe o campo "origem".
-6. (Opcional) Configure analytics — ver seo/ANALYTICS.md
+6. (Opcional) Configure analytics, ver seo/ANALYTICS.md
 7. Alternativa de diagnóstico de sitemap:
    https://confenge.com.br/sitemap.txt
 

@@ -313,7 +313,7 @@ def prove(
                 "no preserved-approval proof and no material-invalidation justification"
             )
     else:
-        # No prior approvals in focus — still ok if hashes classifiable
+        # No prior approvals in focus, still ok if hashes classifiable
         pass
 
     # Global dataset_hash churn alone must not appear as sole invalidation reason
@@ -412,7 +412,7 @@ def main(argv: list[str] | None = None) -> int:
     ]
 
     # When old and new are the same directory, require an explicit prior registry
-    # backup is not available — still run against current state for post-apply proof.
+    # backup is not available, still run against current state for post-apply proof.
     result = prove(
         old_data_dir=args.old_data,
         new_data_dir=Path(new_data),

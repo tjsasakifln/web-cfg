@@ -39,7 +39,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
 
     reg_path = data_dir / "registry.json"
     if not reg_path.exists():
-        errors.append("registry.json missing — run pseo:build first")
+        errors.append("registry.json missing, run pseo:build first")
         return {"ok": False, "errors": errors}
 
     registry = json.loads(reg_path.read_text(encoding="utf-8"))
@@ -58,7 +58,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
             )
     if len(publish) < 1:
         warnings.append(
-            "zero publish pages — expected during containment until human review"
+            "zero publish pages, expected during containment until human review"
         )
 
     # uniqueness + content gates
@@ -208,7 +208,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
         for href in re.findall(r'href="([^"]+)"', html):
             if not href.startswith("/"):
                 continue
-            if href.startswith("/?"):  # contact form with query — home exists
+            if href.startswith("/?"):  # contact form with query, home exists
                 if not (ROOT / "index.html").exists():
                     broken_internal.append(f"{url} -> {href}")
                 continue
@@ -266,7 +266,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
     if publish and not idx.exists():
         warnings.append("sitemap-index.xml missing (recommended single GSC entrypoint)")
 
-    # similarity among publish — compare answer-box + h1 (not full chrome/template)
+    # similarity among publish, compare answer-box + h1 (not full chrome/template)
     body_items = []
     for p in publish:
         path = ROOT / p["url"].strip("/") / "index.html"
@@ -285,7 +285,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
     if sim:
         errors.append(f"high similarity publish pairs: {sim[:5]}")
 
-    # Editorial audit — must not leave publishable pages with P0/P1 defects
+    # Editorial audit, must not leave publishable pages with P0/P1 defects
     try:
         from scripts.pseo.editorial_audit import run_editorial_audit
 
@@ -300,7 +300,7 @@ def validate_all(data_dir: Path | None = None) -> dict:
                 f"editorial_audit_failed: publish_fails={ed.get('publish_fail_count')} "
                 f"p0={ed.get('p0_issue_count')} (see seo/pseo-editorial-report.md)"
             )
-    except Exception as exc:  # noqa: BLE001 — surface as validation error
+    except Exception as exc:  # noqa: BLE001, surface as validation error
         errors.append(f"editorial_audit_error: {exc}")
         result_ed = {"ok": False, "error": str(exc)}
 

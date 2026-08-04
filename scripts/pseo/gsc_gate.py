@@ -197,7 +197,7 @@ def compute_next_wave_gate(
     new_pages_published: int = 0,
     pages_added: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Return {allowed: bool, reasons: [...], metrics: {...}} — never invent true."""
+    """Return {allowed: bool, reasons: [...], metrics: {...}}, never invent true."""
     reasons: list[str] = []
     n = len(seed_urls)
     if n == 0:

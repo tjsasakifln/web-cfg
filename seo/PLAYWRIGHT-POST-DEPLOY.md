@@ -1,4 +1,4 @@
-# Playwright — pós-deploy Netlify (GitHub)
+# Playwright, pós-deploy Netlify (GitHub)
 
 **Data:** 2026-07-30  
 **Produção:** https://confenge.com.br  
@@ -48,17 +48,17 @@ Após redeploy GitHub→Netlify, checklist limpo em contexto fresco.
 | Item | Status |
 |------|--------|
 | GSC: sitemap enviado/atualizado | **Feito** (operador, 2026-07-30) |
-| Sitemap live coerente | **OK** — 132 URLs HTTPS, robots aponta `https://confenge.com.br/sitemap.xml` |
+| Sitemap live coerente | **OK**, 132 URLs HTTPS, robots aponta `https://confenge.com.br/sitemap.xml` |
 | GSC: inspeção de URL + pedido de indexação (prioritários) | **Pendente** (manual, ver lista abaixo) |
-| GA4/Plausible com ID real | Pendente — não inventar ID |
-| Cases/depoimentos | Pendente — autorização comercial |
+| GA4/Plausible com ID real | Pendente, não inventar ID |
+| Cases/depoimentos | Pendente, autorização comercial |
 
 ### Sitemap verificado em produção (pós-envio GSC)
 
 ```
 sitemap.xml → 200, 132 URLs, todas https://, barra final
 robots.txt  → Sitemap: https://confenge.com.br/sitemap.xml
-Prioritários no sitemap: SINAPI, demolição, atraso pagamento, adm. local, BDI diferenciado — sim
+Prioritários no sitemap: SINAPI, demolição, atraso pagamento, adm. local, BDI diferenciado, sim
 ```
 
 ### Próximo passo recomendado no GSC (5–10 min)

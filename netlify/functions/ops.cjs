@@ -1,5 +1,5 @@
 /**
- * Authenticated RevOps API — CONFENGE.
+ * Authenticated RevOps API, CONFENGE.
  *
  * Security:
  * - Requires OPS_TOKEN (Bearer or X-Ops-Token). Fail-closed if unset in production.
@@ -12,7 +12,7 @@
  *   GET  health
  *   GET  leads
  *   GET  lead&id=
- *   POST stage  { lead_id, stage, ... }
+ *   POST stage  { lead_id, stage... }
  *   GET  funnel              (real-only commercial)
  *   GET  system_health       (probes/QA separated)
  *   GET  analytics_summary
@@ -450,8 +450,7 @@ exports.handler = async (event) => {
     return json(
       200,
       {
-        ok: true,
-        ...health,
+        ok: true...health,
         store_available: Boolean(store),
         ts: new Date().toISOString(),
       },
@@ -540,7 +539,7 @@ exports.handler = async (event) => {
     const weekAgo = Date.now() - 7 * 864e5;
     const newLeads = real.filter((l) => Date.parse(l.received_at || 0) >= weekAgo);
     const html = `
-      <h1>CONFENGE — relatório semanal RevOps (real-only)</h1>
+      <h1>CONFENGE, relatório semanal RevOps (real-only)</h1>
       <p>Gerado em ${new Date().toISOString()}</p>
       <ul>
         <li>Leads reais (total): ${real.length}</li>
@@ -553,10 +552,10 @@ exports.handler = async (event) => {
         <li>Propostas: ${funnel.counts.proposal}</li>
         <li>Ganhos: ${funnel.counts.won}</li>
         <li>Perdidos: ${funnel.counts.lost}</li>
-        <li>Última conversão real: ${health.last_real_conversion || "—"}</li>
+        <li>Última conversão real: ${health.last_real_conversion || ", "}</li>
       </ul>
       <p>Probes/QA nunca entram nestes totais. System Health: synthetic=${health.synthetic_leads} qa=${health.qa_leads} spam=${health.spam_leads}.</p>
-      <p>Métrica principal: pipeline qualificado e receita atribuível ao conteúdo — não sessões.</p>
+      <p>Métrica principal: pipeline qualificado e receita atribuível ao conteúdo, não sessões.</p>
       <p>Dashboard: https://confenge.com.br/ops/</p>
     `;
     const res = await fetch("https://api.resend.com/emails", {
@@ -568,7 +567,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         from: process.env.RESEND_FROM || "CONFENGE Ops <ops@confenge.com.br>",
         to: [to],
-        subject: `[CONFENGE] Semanal real — ${newLeads.length} leads · pipeline R$${funnel.pipeline_value}`,
+        subject: `[CONFENGE] Semanal real, ${newLeads.length} leads · pipeline R$${funnel.pipeline_value}`,
         html,
       }),
     });

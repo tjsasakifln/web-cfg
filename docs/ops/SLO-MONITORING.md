@@ -15,13 +15,13 @@
 
 ## Monitoramento
 
-1. **Uptime externo** (Better Stack / Checkly / UptimeRobot — owner):  
+1. **Uptime externo** (Better Stack / Checkly / UptimeRobot, owner):  
    - `https://confenge.com.br/`  
    - `https://confenge.com.br/sitemap-index.xml`  
    - `https://confenge.com.br/robots.txt`  
    - `https://confenge.com.br/.well-known/build-info.json`  
    - `GET https://confenge.com.br/.netlify/functions/collect` → 200
-2. **Probe sintético de lead** (sem PII real): POST com nome `SYNTHETIC-PROBE`, e-mail `probe@example.com`, header `X-Confenge-Probe: $LEAD_PROBE_SECRET`, consentimento on — esperar 201 + lead_id; depois eliminar registro.
+2. **Probe sintético de lead** (sem PII real): POST com nome `SYNTHETIC-PROBE`, e-mail `probe@example.com`, header `X-Confenge-Probe: $LEAD_PROBE_SECRET`, consentimento on, esperar 201 + lead_id; depois eliminar registro.
 3. **Certificado / domínio**: alerta 30 dias antes (monitor DNS/TLS).
 4. **Headers / indexabilidade**: job semanal `npm run test:redirects:prod` + smoke SEO.
 5. **Alertas**: e-mail ops separado do canal de leads; não usar apenas ntfy de lead.

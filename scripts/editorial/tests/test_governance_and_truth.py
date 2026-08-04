@@ -1,4 +1,4 @@
-"""Governance + truth reconciliation tests — drive shipped modules only."""
+"""Governance + truth reconciliation tests, drive shipped modules only."""
 
 from __future__ import annotations
 
@@ -241,7 +241,7 @@ def test_pseo_review_bare_approved_fails():
         pytest.skip("no pending page")
     before = reg_path.read_bytes()
     env = {**os.environ, "ALLOW_HUMAN_APPROVAL": "0"}
-    # Clear CI markers for this process path — review itself checks CI
+    # Clear CI markers for this process path, review itself checks CI
     env.pop("GITHUB_ACTIONS", None)
     proc = subprocess.run(
         [
@@ -365,10 +365,10 @@ def test_packaged_terminal_status_matches_live_ready():
 def test_packaged_sha_rejects_unrelated_ancestor():
     """Skeptic: pre-recovery main (or any deep ancestor) must NOT pass on recovery tip.
 
-    Drives shipped packaged_sha_is_acceptable — not a reimplementation.
+    Drives shipped packaged_sha_is_acceptable, not a reimplementation.
 
     Note: do NOT use merge-base(HEAD, origin/main) as the "stale" candidate on
-    PR merge refs — that is the first parent (base tip) and is intentionally
+    PR merge refs, that is the first parent (base tip) and is intentionally
     allowed via base-pin inheritance for Dependabot/chore PRs.
     """
     import subprocess
@@ -512,5 +512,5 @@ def test_no_tiago_stamp_in_registry():
             pytest.fail(f"unexpected approval on {p.get('page_id')}: {appr}")
         for h in p.get("history") or []:
             if h.get("event") in {"HUMAN_APPROVED", "INDEXABLE"} and h.get("reviewer") == "Tiago Sasaki":
-                # allow only if also revoked note exists — but recovery wants none
+                # allow only if also revoked note exists, but recovery wants none
                 pytest.fail(f"false Tiago approval history on {p.get('page_id')}: {h}")

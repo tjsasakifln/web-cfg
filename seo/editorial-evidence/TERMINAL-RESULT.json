@@ -1,7 +1,7 @@
 {
   "terminal_status": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
   "all_skeptic_closed": true,
-  "skeptic_panel_findings": "STALE — describe pre-remediation code; live build.py:188-206 rejects incomplete jurisprudence, does not auto-approve",
+  "skeptic_panel_findings": "STALE, describe pre-remediation code; live build.py:188-206 rejects incomplete jurisprudence, does not auto-approve",
   "indexable_count": 0,
   "awaiting_human": 11,
   "rejected": 1,

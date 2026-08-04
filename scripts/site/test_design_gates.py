@@ -1,6 +1,6 @@
 """Design, copy and visual-structure gates for CONFENGE premium remediation.
 
-These tests drive the real shipped HTML/CSS/JSON — not re-implementations.
+These tests drive the real shipped HTML/CSS/JSON, not re-implementations.
 """
 
 from __future__ import annotations
@@ -178,7 +178,7 @@ def test_journey_accessible_without_js():
     for stage in ("j-mercado", "j-decisao", "j-contrato", "j-aprendizado"):
         assert f'id="{stage}"' in html
     assert "macro-phase" in html or "stage-meta" in html
-    # Progressive disclosure via native details — works without JS
+    # Progressive disclosure via native details, works without JS
     assert "<details" in html
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     assert "macro-phase" in css or "journey-stage" in css
@@ -196,13 +196,13 @@ def test_trace_matrix_and_tension_present():
     assert 'data-journey="contrato"' in html
     assert 'data-journey="edital"' in html
     assert 'data-journey="operacao"' in html
-    # Client-facing journey section — no briefing metalinguage
+    # Client-facing journey section, no briefing metalinguage
     assert "Como podemos ajudar" in html
     assert "Qual situação sua empresa precisa resolver agora" in html
     assert "Sem CTA genérico" not in html
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", html)
     assert "Risco de não agir" not in html
-    # Positive proof language — no defensive public copy
+    # Positive proof language, no defensive public copy
     lower = html.lower()
     for leak in (
         "sem inventar case",
@@ -219,7 +219,7 @@ def test_trace_matrix_and_tension_present():
 def test_primary_cta_not_spam():
     html = HOME.read_text(encoding="utf-8")
     primary = len(re.findall(r"button-primary", html))
-    # header (+ mobile nav), hero, form submit — ≤4 semantic primaries
+    # header (+ mobile nav), hero, form submit, ≤4 semantic primaries
     assert primary <= 4, f"too many primary CTAs on home: {primary}"
     # Dominant CTA family (article optional)
     assert "Diagnosticar a operação B2G" in html or "Diagnosticar operação B2G" in html

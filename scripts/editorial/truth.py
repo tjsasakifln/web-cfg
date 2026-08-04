@@ -2,7 +2,7 @@
 """Single derivation pipeline for editorial truth.
 
 All of registry counts, terminal status, HTML robots, sitemaps, hub inventory,
-and Wave 1 readiness are derived here — documents are outputs, not parallel truth.
+and Wave 1 readiness are derived here, documents are outputs, not parallel truth.
 """
 
 from __future__ import annotations
@@ -172,7 +172,7 @@ def packaged_sha_is_acceptable(
         parents = _git_parents(live)
         if parents and pkg_sha == parents[0]:
             return True
-    # (3) GitHub PR merge ref: two parents — base (main) then PR head.
+    # (3) GitHub PR merge ref: two parents, base (main) then PR head.
     # Never accept first parent alone as a bare string match (would greenlight
     # pinning main without checking whether that pin is itself valid).
     parents = _git_parents(live)
@@ -409,7 +409,7 @@ def compute_terminal_status(
     wave1_indexable: int,
     rejected_count: int,
 ) -> str:
-    """Single rule for READY vs BLOCKED — never auto HUMAN_APPROVED.
+    """Single rule for READY vs BLOCKED, never auto HUMAN_APPROVED.
 
     Never returns BLOCKED with empty contradictions when Wave1 is in the
     standard pre-approval shape (11 EDITORIAL_REVIEWED, 0 indexable, ≥1 rejected).

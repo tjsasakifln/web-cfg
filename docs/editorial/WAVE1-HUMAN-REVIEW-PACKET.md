@@ -1,4 +1,4 @@
-# Wave 1 — Pacote de revisão humana
+# Wave 1, Pacote de revisão humana
 
 **Status terminal:** `READY_FOR_NAMED_HUMAN_APPROVAL`  
 **Commit:** `4003f94de0148a46765c1a0d6b0bcea646129736`  
@@ -52,7 +52,7 @@
 - **Título:** Como responder notificação por atraso em obra pública
 - **Status:** EDITORIAL_REVIEWED / robots `noindex,follow`
 - **Pergunta:** Como responder notificação por atraso em obra pública
-- **Conclusão:** Ao receber notificação por atraso em obra pública, calcule o prazo de resposta, separe fatos admitidos e fatos contestados, monte linha do tempo com provas e indique causas imputáveis à Administração quando existirem — com apoio no art. 115, § 1º, da Lei nº 14.133/2021 quando hou
+- **Conclusão:** Ao receber notificação por atraso em obra pública, calcule o prazo de resposta, separe fatos admitidos e fatos contestados, monte linha do tempo com provas e indique causas imputáveis à Administração quando existirem, com apoio no art. 115, § 1º, da Lei nº 14.133/2021 quando hou
 - **Hash material:** `688321dceae242bc1c212fe2ae86fd21d8ba4aeea3c3a26ac49f7d3a211eab11`
 - **Preview:** https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/
 - **Canibalização:** {'peers': ['/conteudos/resposta-notificacao-atraso-obra-publica/'], 'decision': 'BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL', 'action': 'manter peer; Wave 1 noindex'}
@@ -100,10 +100,10 @@
 - **Título:** Item novo no aditivo: como formar preço e preservar o desconto da proposta
 - **Status:** EDITORIAL_REVIEWED / robots `noindex,follow`
 - **Pergunta:** Item novo no aditivo: como formar preço e preservar o desconto da proposta
-- **Conclusão:** Quando o aditivo exige obra, serviço ou material sem preço unitário na planilha contratada, a Lei nº 14.133/2021 trata a hipótese nos dispositivos que seguem o art. 124 — em especial a lógica do art. 127 e correlatos sobre preços não contemplados. Na prática da construtora, forma
+- **Conclusão:** Quando o aditivo exige obra, serviço ou material sem preço unitário na planilha contratada, a Lei nº 14.133/2021 trata a hipótese nos dispositivos que seguem o art. 124, em especial a lógica do art. 127 e correlatos sobre preços não contemplados. Na prática da construtora, forma
 - **Hash material:** `4c39b0ca89a6cd3ae34003efea5b5e56c248c702db7bdbd34c0e0f28543ae28c`
 - **Preview:** https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/
-- **Canibalização:** {'peers': ['/conteudos/desconto-da-proposta-em-item-novo-aditivo/'], 'decision': 'BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL', 'action': 'diferenciar intenção ou consolidar — dual-index proibido'}
+- **Canibalização:** {'peers': ['/conteudos/desconto-da-proposta-em-item-novo-aditivo/'], 'decision': 'BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL', 'action': 'diferenciar intenção ou consolidar, dual-index proibido'}
 - **Decisão disponível:** aprovar, solicitar_ajuste, rejeitar
 - **Decisão carimbada:** nenhuma
 
@@ -115,7 +115,7 @@
 - **Conclusão:** Pelo art. 125 da Lei nº 14.133/2021, nas alterações unilaterais do art. 124, I, o contratado é obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até 25% do valor inicial atualizado do contrato em obras, serviços ou compras. No caso de reforma de ed
 - **Hash material:** `c86f6e0dea8011c697990d419d13accfc4960775ab16132400d81529cf345465`
 - **Preview:** https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/
-- **Canibalização:** {'peers': ['/conteudos/limite-aditivo-25-50-obra-publica/'], 'decision': 'BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL', 'action': 'diferenciar_ou_substituir_com_redirect — Wave 1 permanece noindex'}
+- **Canibalização:** {'peers': ['/conteudos/limite-aditivo-25-50-obra-publica/'], 'decision': 'BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL', 'action': 'diferenciar_ou_substituir_com_redirect, Wave 1 permanece noindex'}
 - **Decisão disponível:** aprovar, solicitar_ajuste, rejeitar
 - **Decisão carimbada:** nenhuma
 
@@ -158,7 +158,7 @@
 ## Ações externas
 
 - Revisar cada uma das 11 páginas do pacote individualmente.
-- Para cada página: aprovar, solicitar ajuste ou rejeitar — com checklist e hash.
+- Para cada página: aprovar, solicitar ajuste ou rejeitar, com checklist e hash.
 - Resolver pares de canibalização marcados BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL antes de indexação.
 - Executar approve_cli.py fora de CI/agente com ALLOW_HUMAN_APPROVAL=1 e identidade real.
 - Rebuild editorial + verificar sitemaps/robots após cada aprovação.

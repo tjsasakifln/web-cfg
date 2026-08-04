@@ -4,7 +4,7 @@
 
 1. Formulário → `POST /.netlify/functions/lead` → persistência Blobs → `lead_id`
 2. Notificação ops (webhook/ntfy auth) e/ou e-mail Resend
-3. Clique WhatsApp / mailto (sem persistência automática — conversão distinta)
+3. Clique WhatsApp / mailto (sem persistência automática, conversão distinta)
 
 ## Estados
 
@@ -33,4 +33,4 @@ Enquanto não houver CRM dedicado: exportar do store Blobs / e-mails de notifica
 
 ## Eliminação de teste
 
-Leads sintéticos com nome prefixo `TESTE-INBOUND` ou e-mail `@example.com` devem ser eliminados após E2E (pedido ao store ou script admin interno — não expor delete público).
+Leads sintéticos com nome prefixo `TESTE-INBOUND` ou e-mail `@example.com` devem ser eliminados após E2E (pedido ao store ou script admin interno, não expor delete público).

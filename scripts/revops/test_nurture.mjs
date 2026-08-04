@@ -40,10 +40,9 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
     headers: {
       origin: "https://confenge.com.br",
       accept: "application/json",
-      "content-type": "application/json",
-      ...headers,
+      "content-type": "application/json"...headers,
     },
-    queryStringParameters: { action, ...qs },
+    queryStringParameters: { action...qs },
     body: body ? JSON.stringify(body) : "",
   };
 }
@@ -128,7 +127,7 @@ let unsubToken;
   else pass("first_message_sent", rec.messages_sent);
 }
 
-// 6) tick advances remaining (day_offset future may skip — force by rewriting confirmed_at)
+// 6) tick advances remaining (day_offset future may skip, force by rewriting confirmed_at)
 {
   const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
   rec.confirmed_at = new Date(Date.now() - 30 * 864e5).toISOString();

@@ -75,7 +75,7 @@ MACHINE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ),
 ]
 
-# Shared chrome / docs / tests may contain patterns for detection — not public editorial.
+# Shared chrome / docs / tests may contain patterns for detection, not public editorial.
 ALLOWLIST_PATH_PREFIXES = (
     "docs/",
     "scripts/",
@@ -202,7 +202,7 @@ def public_html_files() -> list[Path]:
         ROOT / "radar",
         ROOT / "privacidade",
         ROOT / "termos-de-uso",
-        ROOT / "inteligencia",  # hubs only scanned shallowly below
+        ROOT / "inteligencia", # hubs only scanned shallowly below
     ]
     seen: set[Path] = set()
     for base in roots:

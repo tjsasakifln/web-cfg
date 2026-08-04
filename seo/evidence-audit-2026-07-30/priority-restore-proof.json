@@ -59,7 +59,7 @@
         },
         {
           "h3": "Prazo contratual e legal de pagamento",
-          "p": "Conte o atraso com a regra do contrato e a legislação aplicável ao pagamento — não pelo “costume do órgão”. Datas de protocolo e de vencimento precisam estar na cronologia."
+          "p": "Conte o atraso com a regra do contrato e a legislação aplicável ao pagamento, não pelo “costume do órgão”. Datas de protocolo e de vencimento precisam estar na cronologia."
         },
         {
           "h3": "Histórico de notificações",
@@ -117,7 +117,7 @@
       "cards": [
         {
           "h3": "Separar risco de quantitativos",
-          "p": "Em preço global, o risco de quantitativo costuma ser da contratada — mas só no escopo original. Meça o que mudou de projeto/condição de campo versus mera variação de quantidade prevista."
+          "p": "Em preço global, o risco de quantitativo costuma ser da contratada, mas só no escopo original. Meça o que mudou de projeto/condição de campo versus mera variação de quantidade prevista."
         },
         {
           "h3": "Erro de projeto",
@@ -205,7 +205,7 @@
         },
         {
           "h3": "Correção",
-          "p": "Peça prazo e critério objetivo de correção por escrito. Corrija o defeito apontado, reapresente a medição e registre o que foi sanado — silêncio após o apontamento solidifica o corte."
+          "p": "Peça prazo e critério objetivo de correção por escrito. Corrija o defeito apontado, reapresente a medição e registre o que foi sanado, silêncio após o apontamento solidifica o corte."
         },
         {
           "h3": "Retenção e proporcionalidade",
@@ -227,7 +227,7 @@
         },
         {
           "h3": "Obrigações da fiscalização",
-          "p": "Mapeie prazos de ateste, liquidação e pagamento no contrato. Cobre com base nesses prazos e no histórico de devoluções — não em expectativa informal do fiscal."
+          "p": "Mapeie prazos de ateste, liquidação e pagamento no contrato. Cobre com base nesses prazos e no histórico de devoluções, não em expectativa informal do fiscal."
         },
         {
           "h3": "Impactos financeiros e comunicação de riscos à execução",
@@ -245,11 +245,11 @@
         },
         {
           "h3": "Natureza do fornecimento",
-          "p": "Materiais e equipamentos com logística, garantia e risco distintos da mão de obra são o núcleo legítimo da diferenciação — desde que a memória de cálculo feche com os unitários."
+          "p": "Materiais e equipamentos com logística, garantia e risco distintos da mão de obra são o núcleo legítimo da diferenciação, desde que a memória de cálculo feche com os unitários."
         },
         {
           "h3": "Logística e garantia",
-          "p": "Frete, armazenagem, seguro de transporte e garantia podem estar no unitário, no BDI ou em item próprio — sem duplicar. A planilha precisa mostrar uma única casa para cada custo."
+          "p": "Frete, armazenagem, seguro de transporte e garantia podem estar no unitário, no BDI ou em item próprio, sem duplicar. A planilha precisa mostrar uma única casa para cada custo."
         },
         {
           "h3": "Desconto global e jogo de planilha",
@@ -289,7 +289,7 @@
         },
         {
           "h3": "Quantitativos",
-          "p": "No global, erro de quantitativo do projeto original costuma ser risco da contratada; no unitário, paga-se o executado. Meça o que é variação de quantidade versus mudança de escopo — só o segundo caminha bem por aditivo em ambos os regimes."
+          "p": "No global, erro de quantitativo do projeto original costuma ser risco da contratada; no unitário, paga-se o executado. Meça o que é variação de quantidade versus mudança de escopo, só o segundo caminha bem por aditivo em ambos os regimes."
         },
         {
           "h3": "Projeto",
@@ -327,6 +327,6 @@
       }
     ]
   },
-  "bulk_status": "parcialmente concluído — reverted to HEAD; may still carry de4cbef shells (warnings only)",
-  "priority_status": "comprovadamente concluído — hand diagnostico, structural clean"
+  "bulk_status": "parcialmente concluído, reverted to HEAD; may still carry de4cbef shells (warnings only)",
+  "priority_status": "comprovadamente concluído, hand diagnostico, structural clean"
 }

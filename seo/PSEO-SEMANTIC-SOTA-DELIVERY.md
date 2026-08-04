@@ -1,4 +1,4 @@
-# pSEO Semantic SOTA — Final delivery report
+# pSEO Semantic SOTA, Final delivery report
 
 Date: 2026-07-31
 
@@ -26,7 +26,7 @@ Registry: {'reject': 13, 'noindex': 6}
 
 After committing this file, verify tip with: git rev-parse HEAD
 
-## Mariópolis residual — closed
+## Mariópolis residual, closed
 
 | Check | Result |
 |---|---|
@@ -61,7 +61,7 @@ Logs: /tmp/grok-goal-c61c87a5a926/implementer/
 - data/pseo/metrics/gsc|analytics|crm/2026-07.json
 - scripts/pseo/editorial_audit.py + CI .github/workflows/pseo.yml
 
-## Final decisions — original eight
+## Final decisions, original eight
 
 | page_id | status | human_review | qe | reasons |
 |---|---|---|---|---|

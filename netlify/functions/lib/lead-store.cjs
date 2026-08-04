@@ -41,7 +41,7 @@ class MemoryStore {
   async update(id, patch) {
     const cur = this.map.get(id);
     if (!cur) return null;
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const next = { ...cur...patch, updated_at: new Date().toISOString() };
     this.map.set(id, next);
     return next;
   }
@@ -104,7 +104,7 @@ class FileStore {
   async update(id, patch) {
     const cur = await this.get(id);
     if (!cur) return null;
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const next = { ...cur...patch, updated_at: new Date().toISOString() };
     return this.put(next);
   }
   async delete(id) {
@@ -137,7 +137,7 @@ class NetlifyBlobsStore {
     // IMPORTANT: use store.set() (not setJSON) when onlyIfNew is required.
     // @netlify/blobs setJSON spreads conditions into makeRequest incorrectly
     // (...conditions instead of conditions: {...}), so if-none-match never
-    // applies and create-only writes silently overwrite — replaying POST as 201.
+    // applies and create-only writes silently overwrite, replaying POST as 201.
     // store.set() passes { conditions } correctly and returns modified:false on 412.
     if (onlyIfNew) {
       try {
@@ -170,7 +170,7 @@ class NetlifyBlobsStore {
   }
   async _getJson(key) {
     // Use store default consistency. Do NOT force consistency:"strong" on get
-    // after an eventual set — that combination can miss the just-written key
+    // after an eventual set, that combination can miss the just-written key
     // (persist_verify_miss in production).
     try {
       const asJson = await this.store.get(key, { type: "json" });
@@ -208,7 +208,7 @@ class NetlifyBlobsStore {
     // onlyIfNew: concurrent/retry must not overwrite or re-deliver an existing lead.
     const write = await this._setJson(`leads/${record.lead_id}`, record, { onlyIfNew });
     if (onlyIfNew && write && write.modified === false) {
-      // Precondition failed — key exists. Brief get retry (eventual read lag).
+      // Precondition failed, key exists. Brief get retry (eventual read lag).
       let existing = await this.get(record.lead_id);
       if (!existing) {
         await new Promise((r) => setTimeout(r, 150));
@@ -225,7 +225,7 @@ class NetlifyBlobsStore {
   async update(id, patch) {
     const cur = await this.get(id);
     if (!cur) return null;
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const next = { ...cur...patch, updated_at: new Date().toISOString() };
     return this.put(next);
   }
   async delete(id) {
@@ -327,7 +327,7 @@ class HttpStore {
   }
   async update(id, patch) {
     const cur = (await this.get(id)) || { lead_id: id };
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const next = { ...cur...patch, updated_at: new Date().toISOString() };
     const res = await fetch(`${this.baseUrl}/${encodeURIComponent(id)}`, {
       method: "PUT",
       headers: this._headers(),
@@ -384,7 +384,7 @@ async function createStore(options = {}) {
       "";
     let store;
     if (siteID && token) {
-      // Do not set consistency:"strong" here — production Lambda context is not
+      // Do not set consistency:"strong" here, production Lambda context is not
       // always configured for strong reads (BlobsConsistencyError → 503).
       store = blobs.getStore({
         name: "confenge-leads",
@@ -404,7 +404,7 @@ async function createStore(options = {}) {
       has_site: Boolean(process.env.SITE_ID || process.env.NETLIFY_SITE_ID),
     });
   }
-  // Last resort: memory (ephemeral) — handler must treat as non-durable for success policy
+  // Last resort: memory (ephemeral), handler must treat as non-durable for success policy
   if (process.env.LEAD_ALLOW_MEMORY_FALLBACK === "1" || process.env.NODE_ENV === "test") {
     return Object.assign(globalMemory, { ephemeral: true });
   }

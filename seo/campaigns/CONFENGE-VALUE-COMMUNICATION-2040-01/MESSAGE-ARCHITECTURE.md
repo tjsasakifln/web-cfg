@@ -1,4 +1,4 @@
-# Message architecture — CONFENGE-VALUE-COMMUNICATION-2040-01
+# Message architecture, CONFENGE-VALUE-COMMUNICATION-2040-01
 
 ## Nuclear thesis
 
@@ -10,12 +10,12 @@ Decisão técnica. Contrato rentável. Margem protegida.
 
 ## Source of truth
 
-- `data/site/brand.json` — positioning, hero, offers, FAQ, CTAs, navigation, forbidden phrases
-- `data/site/proof.json` — claims gate (only `VERIFIED` + `public_allowed`)
-- `data/site/cases.json` — cases (only `APPROVED` + client authorized)
-- `data/site/message-experiments.json` — sequential experiment registry
-- `scripts/site/brand.py` — loaders and validators
-- `scripts/pseo/html_shell.py` — header/footer/org JSON-LD from brand
+- `data/site/brand.json`, positioning, hero, offers, FAQ, CTAs, navigation, forbidden phrases
+- `data/site/proof.json`, claims gate (only `VERIFIED` + `public_allowed`)
+- `data/site/cases.json`, cases (only `APPROVED` + client authorized)
+- `data/site/message-experiments.json`, sequential experiment registry
+- `scripts/site/brand.py`, loaders and validators
+- `scripts/pseo/html_shell.py`, header/footer/org JSON-LD from brand
 
 ## Offer architecture
 

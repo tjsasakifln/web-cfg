@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Release identity must come from deploy/CI env via build-info — not git clean/smudge."""
+"""Release identity must come from deploy/CI env via build-info, not git clean/smudge."""
 from __future__ import annotations
 
 import json

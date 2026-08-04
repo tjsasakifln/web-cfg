@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Search Demand Observatory — Search Console Search Analytics (not URL Inspection).
+"""Search Demand Observatory, Search Console Search Analytics (not URL Inspection).
 
 Supports:
   1) Google Search Console Search Analytics API (when credentials present)
@@ -255,7 +255,7 @@ def load_latest() -> dict[str, Any]:
 
 
 def expected_ctr(position: float) -> float:
-    """Rough industry CTR curve — directional only, not scientific claim."""
+    """Rough industry CTR curve, directional only, not scientific claim."""
     if position <= 1:
         return 0.28
     if position <= 2:
@@ -313,7 +313,7 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
         and not re.search(r"licita|obra|contrato|aditivo|bdi|sinapi", q.get("query") or "", re.I)
     ]
 
-    # Cannibalization: multiple pages same cluster with similar position — weak without query×page
+    # Cannibalization: multiple pages same cluster with similar position, weak without query×page
     by_cluster: dict[str, list] = defaultdict(list)
     for p in pages:
         by_cluster[p.get("cluster") or "other"].append(p)
@@ -414,7 +414,7 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "cluster": c,
             "impressions": imp,
             "leads_observed": cluster_leads.get(c, 0),
-            "note": "cohort only — not query-level attribution",
+            "note": "cohort only, not query-level attribution",
         }
         for c, imp in sorted(cluster_impr.items(), key=lambda x: -x[1])
         if imp >= 5 and cluster_leads.get(c, 0) == 0
@@ -424,7 +424,7 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "path": path,
             "leads_observed": n,
             "impressions": page_impr.get(path, 0),
-            "note": "cohort only — high commercial signal relative to GSC impressions",
+            "note": "cohort only, high commercial signal relative to GSC impressions",
         }
         for path, n in sorted(lead_pages.items(), key=lambda x: -x[1])
         if n >= 1 and page_impr.get(path, 0) < 10
@@ -500,7 +500,7 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "10_pages_leads_low_traffic": {
                 "status": "cohort_ready" if lead_pages else "awaiting_leads_or_empty_cohort",
                 "items": leads_low_traffic,
-                "note": "Cohort only — pages/paths with leads despite low GSC impressions.",
+                "note": "Cohort only, pages/paths with leads despite low GSC impressions.",
             },
             "11_emerging_terms": sorted(queries, key=lambda x: -float(x.get("impressions") or 0))[:15],
             "12_competitor_content_gaps": competitor_gaps,
@@ -535,13 +535,13 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             {
                 "type": "entity_cleanup_gsc",
                 "query": q.get("query"),
-                "why": "legacy entity query still receiving impressions — reinforce 410 + GSC removal",
+                "why": "legacy entity query still receiving impressions, reinforce 410 + GSC removal",
             }
         )
 
     out = DATA / "insights_latest.json"
     out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
-    # Private ops copies only — never publish as static public (auth via ops?action=gsc_insights)
+    # Private ops copies only, never publish as static public (auth via ops?action=gsc_insights)
     private_targets = [
         ROOT / "data" / "ops" / "gsc-insights.json",
         ROOT / "netlify" / "functions" / "data" / "gsc-insights.json",
@@ -776,7 +776,7 @@ def sync_incremental(
             "blocked": True,
             "error": "missing_credentials",
             "required_env": result.get("required_env"),
-            "note": "July 2026 CSV snapshot is historical only — not continuous current data.",
+            "note": "July 2026 CSV snapshot is historical only, not continuous current data.",
             "recorded_at": datetime.now(timezone.utc).isoformat(),
         }
         (DATA / "last_sync.json").write_text(
@@ -813,7 +813,7 @@ def sync_from_fixture() -> dict[str, Any]:
         "queries": deduped,
         "query_count": len(deduped),
         "is_current": False,
-        "note": "Fixture for pipeline validation only — not production GSC data.",
+        "note": "Fixture for pipeline validation only, not production GSC data.",
     }
     (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     (DATA / "last_sync.json").write_text(

@@ -245,7 +245,7 @@ if (!events.includes("pseo_form_submit") && !events.includes("lead_form_submit")
 for (const ev of dataLayer) {
   const blob = JSON.stringify(ev);
   if (/@|\+55\d{10}/.test(blob) && !blob.includes("dataset_hash")) {
-    // phone pattern might false-positive on hashes — check keys
+    // phone pattern might false-positive on hashes, check keys
     if (ev.email || ev.phone || ev.telefone || ev.nome) {
       console.error("FAIL: PII in event", ev);
       process.exit(1);

@@ -121,7 +121,7 @@ async function main() {
     }));
     if (m1440.sections > 7) throw new Error(`sections ${m1440.sections} > 7`);
     if (m1440.primary > 4) throw new Error(`primary CTAs ${m1440.primary} > 4`);
-    // Soft absolute targets (may be exceeded with justification — fail only if grossly over old baseline)
+    // Soft absolute targets (may be exceeded with justification, fail only if grossly over old baseline)
     if (m1440.h > 9500) throw new Error(`1440 height ${m1440.h} still too long (>9500)`);
     if (m390.h > 14500) throw new Error(`390 height ${m390.h} still too long (>14500)`);
     if (m1440.chars > 7500) throw new Error(`visible chars ${m1440.chars} not reduced enough`);
@@ -258,7 +258,7 @@ async function main() {
   try {
     const small = await page.evaluate(() => {
       const bad = [];
-      for (const el of document.querySelectorAll("a.button, button, .menu-toggle, .whatsapp-float, summary")) {
+      for (const el of document.querySelectorAll("a.button, button.menu-toggle.whatsapp-float, summary")) {
         const r = el.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) continue;
         if (r.width < 24 || r.height < 24) bad.push({ tag: el.tagName, w: r.width, h: r.height, t: (el.textContent || "").slice(0, 40) });
@@ -280,7 +280,7 @@ async function main() {
       const cs = getComputedStyle(el);
       return { outline: cs.outlineStyle, outlineWidth: cs.outlineWidth, outlineColor: cs.outlineColor };
     });
-    // :focus-visible may not apply via .focus() in all engines — also check stylesheet rule exists
+    // :focus-visible may not apply via .focus() in all engines, also check stylesheet rule exists
     const css = readFileSync(join(ROOT, "styles.css"), "utf8");
     if (!css.includes(":focus-visible")) throw new Error("no :focus-visible rule in CSS");
     ok(`focus_visible_rule (runtime outline=${outline.outline})`);
@@ -344,7 +344,7 @@ async function main() {
     fail("matrix_mobile_stacked_records", e.message || e);
   }
 
-  // 11) form validation — empty multi-step form is invalid
+  // 11) form validation, empty multi-step form is invalid
   try {
     await page.setViewport({ width: 1024, height: 800 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
@@ -409,7 +409,7 @@ async function main() {
         const title = document.querySelector("#journeys-title");
         const firstCard = document.querySelector(".journey-path");
         const firstCta = document.querySelector(".journey-path .button");
-        const floatEl = document.querySelector(".whatsapp-float, .contact-float .whatsapp-float");
+        const floatEl = document.querySelector(".whatsapp-float.contact-float .whatsapp-float");
         const header = document.querySelector(".site-header");
         const titleLines = title
           ? Math.round(title.getBoundingClientRect().height / (parseFloat(getComputedStyle(title).lineHeight) || 24))
@@ -444,7 +444,7 @@ async function main() {
           titleText: (title?.textContent || "").trim().slice(0, 80),
         };
       });
-      reports.push({ w, h, ...rep });
+      reports.push({ w, h...rep });
       if (rep.overflow) throw new Error(`${w}: horizontal overflow`);
       if (rep.cardCount < 3) throw new Error(`${w}: expected 3 journey cards`);
       if (rep.titleLines > 3) throw new Error(`${w}: journeys title ${rep.titleLines} lines > 3`);
@@ -514,7 +514,7 @@ async function main() {
       ].filter((el) => {
         const s = getComputedStyle(el);
         if (s.display === "none" || s.visibility === "hidden") return false;
-        // skip-link is intentionally off-screen until focused — still tabbable
+        // skip-link is intentionally off-screen until focused, still tabbable
         if (el.classList.contains("skip-link")) return true;
         return el.getClientRects().length > 0;
       });
@@ -678,7 +678,7 @@ async function main() {
     ]) {
       await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded" });
       const labels = await page.evaluate(() =>
-        [...document.querySelectorAll(".button-primary, .button-secondary")]
+        [...document.querySelectorAll(".button-primary.button-secondary")]
           .map((el) => (el.textContent || "").replace(/\s+/g, " ").trim())
           .filter(Boolean)
       );

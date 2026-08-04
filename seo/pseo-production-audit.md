@@ -30,15 +30,15 @@ CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build
 | `/inteligencia/concorrencia/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/concorrenci | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
 | `/inteligencia/cenarios/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
 | `/radar/` | hub | 200 | noindex,follow | https://confenge.com.br/radar/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
-| `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/pa | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/pa | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/mercados/edificacoes-publicas-mg/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/ed | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/mercados/edificacoes-publicas-rs/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/ed | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/orgaos/mrs- | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/cenarios/aditivos-e-risco-de-margem/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/ad | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/cenarios/inconsistencia-orcamento-edital/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/in | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/cenarios/referencia-sinapi-sicro-margem/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/re | no | DEPLOYED_PRODUCTION | — |
-| `/radar/edificacoes-publicas-pr/` | noindex_sample | 404 | noindex,nofollow |  | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/` | publish_candidate | 200 | noindex,follow | https://confenge.com.br/inteligencia/precos/manu | no | DEPLOYED_PRODUCTION | — |
-| `/radar/pavimentacao-infraestrutura-viaria-sc/` | publish_candidate | 200 | noindex,follow | https://confenge.com.br/radar/pavimentacao-infra | no | DEPLOYED_PRODUCTION | — |
+| `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/pa | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/pa | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/mercados/edificacoes-publicas-mg/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/ed | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/mercados/edificacoes-publicas-rs/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/ed | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/orgaos/mrs- | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/cenarios/aditivos-e-risco-de-margem/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/ad | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/cenarios/inconsistencia-orcamento-edital/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/in | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/cenarios/referencia-sinapi-sicro-margem/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/re | no | DEPLOYED_PRODUCTION |, |
+| `/radar/edificacoes-publicas-pr/` | noindex_sample | 404 | noindex,nofollow |  | no | DEPLOYED_PRODUCTION |, |
+| `/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/` | publish_candidate | 200 | noindex,follow | https://confenge.com.br/inteligencia/precos/manu | no | DEPLOYED_PRODUCTION |, |
+| `/radar/pavimentacao-infraestrutura-viaria-sc/` | publish_candidate | 200 | noindex,follow | https://confenge.com.br/radar/pavimentacao-infra | no | DEPLOYED_PRODUCTION |, |
 

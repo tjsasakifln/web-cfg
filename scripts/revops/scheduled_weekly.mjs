@@ -52,10 +52,10 @@ if (SEND) {
     body: "{}",
   });
   const emailBody = await emailRes.json().catch(() => ({}));
-  out.email = { http: emailRes.status, ...emailBody };
-  // Resend may be unconfigured — surface but don't hard-fail the report fetch
+  out.email = { http: emailRes.status...emailBody };
+  // Resend may be unconfigured, surface but don't hard-fail the report fetch
   if (emailRes.status === 503 && emailBody.error === "resend_not_configured") {
-    out.email_note = "RESEND_API_KEY or OPS_REPORT_EMAIL not configured — report generated, not emailed";
+    out.email_note = "RESEND_API_KEY or OPS_REPORT_EMAIL not configured, report generated, not emailed";
   } else if (!emailBody.ok && emailRes.status !== 503) {
     out.ok = false;
     console.log(JSON.stringify(out, null, 2));

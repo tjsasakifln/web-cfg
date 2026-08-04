@@ -2,7 +2,7 @@
 
 O site **não** inclui ID de GA4/Plausible inventado. Há uma **camada desacoplada** em `script.js`:
 
-- `window.dataLayer.push({ event, ...params })`
+- `window.dataLayer.push({ event...params })`
 - `window.confengeTrack(eventName, params)`
 - Encaminha para `gtag` / `plausible` **somente se** já existirem na página
 
@@ -16,7 +16,7 @@ O site **não** inclui ID de GA4/Plausible inventado. Há uma **camada desacopla
 | `lead_form_error` | invalid / submit inválido | idem |
 | `service_cta_click` | clique para `#contato` / form com `?tema=` | idem |
 | `content_to_service_click` | clique de guia → página-pilar/serviço | idem |
-| `internal_search` | busca na biblioteca (≥3 chars) | `query_len`, `results_count` — **não** envia o termo cru |
+| `internal_search` | busca na biblioteca (≥3 chars) | `query_len`, `results_count`, **não** envia o termo cru |
 | `qualified_scroll` | 50% e 75% da página (uma vez cada) | `cta_position=scroll_50\|75` |
 
 ## O que **não** é enviado

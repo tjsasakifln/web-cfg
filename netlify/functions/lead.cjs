@@ -1,5 +1,5 @@
 /**
- * Production lead intake — CONFENGE.
+ * Production lead intake, CONFENGE.
  *
  * Contract:
  * 1) Validate + sanitize server-side
@@ -8,7 +8,7 @@
  * 4) Persist durable record BEFORE success response
  * 5) Authenticated notify + transactional email (best-effort, non-blocking of persist)
  * 6) Public response never includes secrets, topics, tokens, or free-text PII fields
- * 7) Semantic HTTP codes — no 200 when not persisted
+ * 7) Semantic HTTP codes, no 200 when not persisted
  */
 const crypto = require("crypto");
 const {
@@ -37,7 +37,7 @@ function setStoreForTests(store) {
 
 /**
  * Wire Netlify Blobs credentials from the Lambda event (`event.blobs` + site headers).
- * Required on Netlify Functions before getStore() — see @netlify/blobs connectLambda.
+ * Required on Netlify Functions before getStore(), see @netlify/blobs connectLambda.
  */
 function bindBlobsContext(event) {
   try {
@@ -109,7 +109,7 @@ exports.handler = async (event) => {
 
   const validated = validateAndNormalize(parsed.data);
   if (validated.honeypot) {
-    // Silent success for bots — no persist, no delivery, fake id shape
+    // Silent success for bots, no persist, no delivery, fake id shape
     const fake = generateLeadId("honeypot");
     return {
       statusCode: 200,
@@ -208,7 +208,7 @@ exports.handler = async (event) => {
   const idemKey = idempotencyKeyFor(lead, headerIdem || null);
   lead.idempotency_key = idemKey;
 
-  // Deterministic id from idempotency key — same key always same lead_id even if
+  // Deterministic id from idempotency key, same key always same lead_id even if
   // the idempotency map read is eventually consistent on first retry.
   const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
 
@@ -283,9 +283,9 @@ exports.handler = async (event) => {
 
   try {
     // Create-only: if the deterministic id already exists (lookup missed, race, or
-    // retry), do not overwrite and do not re-run delivery — return 200 idempotent.
+    // retry), do not overwrite and do not re-run delivery, return 200 idempotent.
     await store.put(record, { onlyIfNew: true });
-    // Read-back (retry) — if put did not throw, do not hard-fail on momentary
+    // Read-back (retry), if put did not throw, do not hard-fail on momentary
     // eventual-consistency miss. Deterministic lead_id keeps retries convergent.
     let verified = await store.get(lead_id);
     if (!verified || verified.lead_id !== lead_id) {
@@ -316,7 +316,7 @@ exports.handler = async (event) => {
         safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id, via: "only_if_new" });
         return idempotentOk(existing);
       }
-      // Key exists (412) but body not yet readable — still must not re-deliver.
+      // Key exists (412) but body not yet readable, still must not re-deliver.
       safeLog("info", "lead_idempotent_hit", { lead_id, via: "only_if_new_body_pending" });
       return {
         statusCode: 200,
@@ -370,7 +370,7 @@ exports.handler = async (event) => {
     utm_source: record.utm_source || null,
   });
 
-  // Delivery after persist — failures update status, never drop the lead
+  // Delivery after persist, failures update status, never drop the lead
   let delivery;
   try {
     delivery = await deliverAll(record);

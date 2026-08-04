@@ -1,5 +1,5 @@
 /**
- * First-party analytics collector — no PII.
+ * First-party analytics collector, no PII.
  * Accepts batch of events from the site, stores aggregates/samples in Blobs when available.
  * Optional forward to Plausible events API when PLAUSIBLE_DOMAIN + PLAUSIBLE_API_URL set.
  */

@@ -130,7 +130,7 @@ class TestScore(unittest.TestCase):
         cands = build_candidates(snap["data"], snap["manifest"])
         self.assertGreater(len(cands), 3)
         self.assertTrue(any(c.page_type == "market" for c in cands))
-        # scores must vary — not decorative constants
+        # scores must vary, not decorative constants
         scores = {c.score for c in cands}
         self.assertGreater(len(scores), 1)
         blob = json.dumps([c.as_dict() for c in cands])
@@ -187,9 +187,9 @@ class TestResolveRelatedUrls(unittest.TestCase):
             score=90,
             status="publish",
             related_urls=[
-                "/inteligencia/precos/edificacoes-publicas-sc/",  # missing
-                "/inteligencia/mercados/",  # hub
-                "/diagnostico-pre-licitacao/",  # static pillar
+                "/inteligencia/precos/edificacoes-publicas-sc/", # missing
+                "/inteligencia/mercados/", # hub
+                "/diagnostico-pre-licitacao/", # static pillar
             ],
         )
         sibling = Candidate(
@@ -239,7 +239,7 @@ class TestResolveRelatedUrls(unittest.TestCase):
             self.assertTrue(
                 c.segment and any(
                     _fold(tok) in desc_f
-                    for tok in str(c.segment).replace("—", " ").replace("-", " ").split()
+                    for tok in str(c.segment).replace(", ", " ").replace("-", " ").split()
                     if len(tok) > 3
                 ),
                 msg=f"segment tokens missing from: {c.description} segment={c.segment}",

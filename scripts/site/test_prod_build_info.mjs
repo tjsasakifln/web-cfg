@@ -54,7 +54,7 @@ if (process.env.REQUIRE_FULL_BUILD_INFO === "1") {
   ok("has_artifact_hash", hasHash, info.artifact_hash);
 } else {
   // Soft: report presence without failing pre-deploy main
-  console.log("INFO deploy_id", info.deploy_id || "(absent — expected until PR1 deploy)");
+  console.log("INFO deploy_id", info.deploy_id || "(absent, expected until PR1 deploy)");
   console.log("INFO artifact_hash", info.artifact_hash ? String(info.artifact_hash).slice(0, 16) + "…" : "(absent)");
 }
 

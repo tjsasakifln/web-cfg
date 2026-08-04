@@ -123,5 +123,5 @@ if (hardFail) {
   console.error(`FAIL: ${hardFail} page(s) with critical/serious axe violations`);
   process.exit(1);
 }
-console.log("OK audit:axe — zero critical/serious");
+console.log("OK audit:axe, zero critical/serious");
 process.exit(0);

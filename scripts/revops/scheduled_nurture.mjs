@@ -1,5 +1,5 @@
 /**
- * Scheduled nurture tick — double opt-in / suppression handled server-side.
+ * Scheduled nurture tick, double opt-in / suppression handled server-side.
  *   OPS_TOKEN=… node scripts/revops/scheduled_nurture.mjs
  */
 import { mkdirSync, writeFileSync } from "fs";

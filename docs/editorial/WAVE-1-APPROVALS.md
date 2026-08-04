@@ -18,10 +18,10 @@ A real named human (e.g. `Tiago Sasaki`). Blocked patterns: `*operator*`, `ci-*`
 1. DRAFT  
 2. LEGAL_SOURCE_VALIDATED (sources in SOURCE-MANIFEST)  
 3. TECHNICAL_REVIEWED (devices, CTAs, schema)  
-4. EDITORIAL_REVIEWED (naturalness gates) — **automated build stops here**  
-5. HUMAN_APPROVED — **`approve_cli.py` only**  
-6. INDEXABLE — `--indexable` flag on approve CLI  
-7. PUBLISHED — after production deploy confirmation (optional status)
+4. EDITORIAL_REVIEWED (naturalness gates), **automated build stops here**  
+5. HUMAN_APPROVED, **`approve_cli.py` only**  
+6. INDEXABLE, `--indexable` flag on approve CLI  
+7. PUBLISHED, after production deploy confirmation (optional status)
 
 ## Command
 

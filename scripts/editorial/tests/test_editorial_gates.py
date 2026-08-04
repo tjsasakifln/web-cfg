@@ -1,4 +1,4 @@
-"""Tests drive shipped editorial gates — no reimplementation of validators."""
+"""Tests drive shipped editorial gates, no reimplementation of validators."""
 
 from __future__ import annotations
 

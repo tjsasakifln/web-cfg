@@ -1,4 +1,4 @@
-# Content cannibalization report — Wave 1 vs `/conteudos/`
+# Content cannibalization report, Wave 1 vs `/conteudos/`
 
 **Date:** 2026-08-02  
 **Policy:** Prefer one indexable URL per intent. Unapproved Wave 1 pages are `noindex` and out of sitemaps until named human approval.

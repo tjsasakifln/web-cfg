@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Machine recommendations for Wave 1 — NEVER human approval.
+"""Machine recommendations for Wave 1, NEVER human approval.
 
 Outputs RECOMMEND_APPROVE | RECOMMEND_REVISE | RECOMMEND_CONSOLIDATE | RECOMMEND_REJECT
 per page into docs/editorial/WAVE1-MACHINE-RECOMMENDATIONS.json.
@@ -94,7 +94,7 @@ def recommend_page(page: dict) -> dict:
         "recommendation": rec,
         "reasons": reasons or ["machine_checks_passed"],
         "risk": risk,
-        "note": "Machine recommendation only — not human approval.",
+        "note": "Machine recommendation only, not human approval.",
     }
 
 

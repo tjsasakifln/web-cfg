@@ -1,4 +1,4 @@
-# UI/UX Adversarial Audit — confenge.com.br
+# UI/UX Adversarial Audit, confenge.com.br
 
 **Baseline SHA:** `7f111f117b493d4d249d7aab01ea19b0be76c9c2`  
 **Date:** 2026-08-01  
@@ -40,7 +40,7 @@ Screenshots: `docs/uiux-evidence/baseline/`.
 
 ### CRITICAL
 
-#### C1 — Home length and cognitive load block 5-second clarity
+#### C1, Home length and cognitive load block 5-second clarity
 - **Problem:** 13 narrative sections force the buyer through model, journey, matrix, content library before conversion.
 - **Evidence:** Baseline 11 599 px / 13 sections; multiple redundant decision frameworks.
 - **User impact:** Decisor abandons or skims past proof/CTA.
@@ -49,7 +49,7 @@ Screenshots: `docs/uiux-evidence/baseline/`.
 - **Files:** `index.html`, `styles.css`
 - **Regression test:** `test_home_card_grid_limit`, `test:ui` height/section gates
 
-#### C2 — Primary CTA hierarchy broken
+#### C2, Primary CTA hierarchy broken
 - **Problem:** 7 primary buttons; hero dual CTAs equal weight.
 - **Evidence:** `button-primary` count=7; hero secondary was `button-secondary button-lg`.
 - **User impact:** Unclear next step.
@@ -60,27 +60,27 @@ Screenshots: `docs/uiux-evidence/baseline/`.
 
 ### HIGH
 
-#### H1 — Defensive public copy
+#### H1, Defensive public copy
 - **Problem:** “sem inventar case”, “sem métrica fictícia”, “sem JavaScript” expose internal fears.
 - **Evidence:** Home trace lead + journey lead (baseline HTML).
 - **Fix:** Positive method language; expand `public_copy_leaks`.
 - **Files:** `index.html`, `diretoria-b2g/index.html`, `data/site/brand.json`, `data/site/design-system.json`
 - **Regression test:** `test_trace_matrix_and_tension_present`, `test_microcopy_preferences`
 
-#### H2 — Mobile matrix unusable
+#### H2, Mobile matrix unusable
 - **Problem:** 7-column table with horizontal scroll only.
 - **Evidence:** `.trace-matrix{min-width:860px}` without stacked alternative.
 - **Fix:** `.trace-cards` stacked records; hide table &lt;700px.
 - **Files:** `index.html`, `styles.css`
 - **Regression test:** `test_mobile_matrix_composition`, `test:ui` matrix_mobile
 
-#### H3 — Hero mobile decorative cost
+#### H3, Hero mobile decorative cost
 - **Problem:** Large visual before/around decision content; small labels.
 - **Fix:** Hide `.hero-visual` ≤700px; desktop spine simplified to 4 phases, ≥14px type.
 - **Files:** `styles.css`, `index.html`
 - **Regression test:** `test:ui` mobile_hero_cta_without_decor_panel
 
-#### H4 — Form friction
+#### H4, Form friction
 - **Problem:** Email required + WhatsApp optional + long message required.
 - **Fix:** Email **or** WhatsApp; message optional; situation + urgency retained.
 - **Files:** `index.html`, `script.js`
@@ -88,19 +88,19 @@ Screenshots: `docs/uiux-evidence/baseline/`.
 
 ### MEDIUM
 
-#### M1 — Section header monotony
+#### M1, Section header monotony
 - **Problem:** Repeated section-num + eyebrow + H2 + lead.
 - **Fix:** Removed section numbers; varied surfaces (soft / navy / white); different compositions per block.
 - **Files:** `index.html`, `styles.css`
 - **Regression test:** `test_home_archetypes_diverse`
 
-#### M2 — Content library pre-conversion exits
+#### M2, Content library pre-conversion exits
 - **Problem:** Full library on home.
 - **Fix:** One content link near conversion; library in footer.
 - **Files:** `index.html`
 - **Regression test:** section count ≤7; no `home-content-section`
 
-#### M3 — English jargon
+#### M3, English jargon
 - **Problem:** Bid Room / Contract Defense without PT gloss.
 - **Fix:** First-use explanations on home paths and footer.
 - **Files:** `index.html`
@@ -108,11 +108,11 @@ Screenshots: `docs/uiux-evidence/baseline/`.
 
 ### LOW
 
-#### L1 — Glass header / heavy shadows
+#### L1, Glass header / heavy shadows
 - **Fix:** Reduced backdrop-filter; calmer primary shadow.
 - **Files:** `styles.css`
 
-#### L2 — Static-only a11y audits
+#### L2, Static-only a11y audits
 - **Fix:** Added `npm run audit:axe` (axe-core in real browser) + geometry suite.
 - **Files:** `scripts/site/audit_axe.mjs`, `scripts/site/test_ui_geometry.mjs`
 

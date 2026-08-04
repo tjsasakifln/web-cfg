@@ -7,7 +7,7 @@
  */
 const BASE = (process.argv[2] || process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
 
-/** Abandoned products / old entity — must be 410 (not 200, not 301→home). */
+/** Abandoned products / old entity, must be 410 (not 200, not 301→home). */
 const GONE_410 = [
   "/vision",
   "/nexgen",
@@ -23,7 +23,7 @@ const GONE_410 = [
   "/automacao",
 ];
 
-/** Legacy with semantic substitute — single hop 301, never to bare home unless fragment offer. */
+/** Legacy with semantic substitute, single hop 301, never to bare home unless fragment offer. */
 const REDIRECT_OK = [
   { from: "/blog", allow: ["/conteudos"] },
   { from: "/servicos", allow: ["#como-atuamos", "/#como-atuamos"] },

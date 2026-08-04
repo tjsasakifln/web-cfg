@@ -1,4 +1,4 @@
-"""Multidimensional page_value_score — does not override semantic gates.
+"""Multidimensional page_value_score, does not override semantic gates.
 
 Score is advisory for ranking Wave candidates. Mandatory semantic fails still
 block publish regardless of score magnitude.
@@ -40,7 +40,7 @@ def compute_page_value_score(
     unique_suppliers: int = 0,
     temporal_span_days: int = 0,
     classification_confidence: float = 0.8,
-    demand_evidence: str = "unknown",  # gsc | analytics | unknown
+    demand_evidence: str = "unknown", # gsc | analytics | unknown
     demand_strength: float = 0.0,
     freshness_ok: bool = True,
     has_executive_numbers: bool = True,

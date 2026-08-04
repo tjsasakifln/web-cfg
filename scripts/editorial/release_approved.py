@@ -18,7 +18,7 @@ Not automated here (require human/CI deploy):
   - production publish (Netlify on main)
   - live production verify (use npm run test:prod-build-info after merge)
 
-When zero valid approvals: exit 0 with blocked reason (noop) — not a failure.
+When zero valid approvals: exit 0 with blocked reason (noop), not a failure.
 """
 from __future__ import annotations
 
@@ -113,7 +113,7 @@ def main() -> int:
     if not approved:
         report["actions"].append("noop")
         report["blocked"].append(
-            "no_valid_human_approvals — named human must run approve_cli.py per page"
+            "no_valid_human_approvals, named human must run approve_cli.py per page"
         )
         out = ROOT / "docs" / "editorial" / "RELEASE-APPROVED-LAST.json"
         out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

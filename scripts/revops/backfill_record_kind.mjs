@@ -34,7 +34,7 @@ if (localFixture) {
     lead: {
       nome: "SYNTHETIC-PROBE",
       email: "probe@example.com",
-      estagio: "synthetic probe — discard",
+      estagio: "synthetic probe, discard",
       jornada: "operacao",
       origem: "/synthetic-probe-daily",
       utm_source: "synthetic",

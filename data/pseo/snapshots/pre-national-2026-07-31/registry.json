@@ -37,7 +37,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Santa Catarina",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -69,7 +69,7 @@
       "evidences_checked": [
         "n=15 buyers=11"
       ],
-      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Santa Catarina",
       "human_review": "PENDING",
       "indexability_score": 79,
       "intent": "encontrar_mercados_oportunidades",
@@ -97,7 +97,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Santa Catarina",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -148,7 +148,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Piauí",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -178,7 +178,7 @@
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Piauí",
       "human_review": "PENDING",
       "indexability_score": 73,
       "intent": "encontrar_mercados_oportunidades",
@@ -206,7 +206,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
+        "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Piauí",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -257,7 +257,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+        "h1": "Quanto o poder público contratou em Edificações públicas, Minas Gerais",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -289,7 +289,7 @@
       "evidences_checked": [
         "n=15 buyers=12"
       ],
-      "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+      "h1": "Quanto o poder público contratou em Edificações públicas, Minas Gerais",
       "human_review": "PENDING",
       "indexability_score": 77,
       "intent": "encontrar_mercados_oportunidades",
@@ -317,7 +317,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+        "h1": "Quanto o poder público contratou em Edificações públicas, Minas Gerais",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -368,7 +368,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
+        "h1": "Quanto o poder público contratou em Edificações públicas, Rio Grande do Sul",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -398,7 +398,7 @@
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
+      "h1": "Quanto o poder público contratou em Edificações públicas, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 77,
       "intent": "encontrar_mercados_oportunidades",
@@ -426,7 +426,7 @@
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
         "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
-        "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
+        "h1": "Quanto o poder público contratou em Edificações públicas, Rio Grande do Sul",
         "mandatory_fail": [
           "contracts<15"
         ],
@@ -611,8 +611,8 @@
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
-        "description": "Faixa de valores contratuais de manutenção predial em Rio Grande do Sul: mediana, P25 e P75 com 19 contratos primários. Tickets contratuais integrais —…",
-        "h1": "Valores de contratos — manutenção predial (Rio Grande do Sul)",
+        "description": "Faixa de valores contratuais de manutenção predial em Rio Grande do Sul: mediana, P25 e P75 com 19 contratos primários. Tickets contratuais integrais, …",
+        "h1": "Valores de contratos, manutenção predial (Rio Grande do Sul)",
         "mandatory_fail": [
           "buyers<3",
           "max_buyer_share>0.60",
@@ -640,13 +640,13 @@
         "unique_supplier_count": 1
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Faixa de valores contratuais de manutenção predial em Rio Grande do Sul: mediana, P25 e P75 com 19 contratos primários. Tickets contratuais integrais —…",
+      "description": "Faixa de valores contratuais de manutenção predial em Rio Grande do Sul: mediana, P25 e P75 com 19 contratos primários. Tickets contratuais integrais, …",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": [
         "deep_links=5/5 group=manutencao-predial-engenharia|manutencao_predial|manutencao|obra|RS"
       ],
-      "h1": "Valores de contratos — manutenção predial (Rio Grande do Sul)",
+      "h1": "Valores de contratos, manutenção predial (Rio Grande do Sul)",
       "human_review": "NEEDS_DATA_FIX",
       "indexability_score": 84,
       "intent": "estimar_valores_dispersao",
@@ -678,8 +678,8 @@
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
-        "description": "Faixa de valores contratuais de Manutenção Predial em Rio Grande do Sul: mediana, P25 e P75 com 18 contratos primários. Tickets contratuais integrais —…",
-        "h1": "Valores de contratos — Manutenção Predial (Rio Grande do Sul)",
+        "description": "Faixa de valores contratuais de Manutenção Predial em Rio Grande do Sul: mediana, P25 e P75 com 18 contratos primários. Tickets contratuais integrais, …",
+        "h1": "Valores de contratos, Manutenção Predial (Rio Grande do Sul)",
         "mandatory_fail": [
           "buyers<3",
           "max_buyer_share>0.60",
@@ -732,8 +732,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
-        "description": "Faixa de valores contratuais de paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
-        "h1": "Valores de contratos — paralelepípedo (Piauí)",
+        "description": "Faixa de valores contratuais de paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais, não são preços…",
+        "h1": "Valores de contratos, paralelepípedo (Piauí)",
         "mandatory_fail": [
           "obs<15",
           "primary_contracts<15",
@@ -761,13 +761,13 @@
         "unique_supplier_count": 12
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Faixa de valores contratuais de paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
+      "description": "Faixa de valores contratuais de paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais, não são preços…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": [
         "deep_links=5/5 group=pavimentacao-infraestrutura-viaria|paralelepipedo|execucao|obra|PI"
       ],
-      "h1": "Valores de contratos — paralelepípedo (Piauí)",
+      "h1": "Valores de contratos, paralelepípedo (Piauí)",
       "human_review": "NEEDS_DATA_FIX",
       "indexability_score": 80,
       "intent": "estimar_valores_dispersao",
@@ -799,8 +799,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
-        "description": "Faixa de valores contratuais de Paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
-        "h1": "Valores de contratos — Paralelepípedo (Piauí)",
+        "description": "Faixa de valores contratuais de Paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais, não são preços…",
+        "h1": "Valores de contratos, Paralelepípedo (Piauí)",
         "mandatory_fail": [
           "obs<15",
           "primary_contracts<15",
@@ -852,8 +852,8 @@
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "mapa_concorrencia",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
-        "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público — sem juízo…",
-        "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+        "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público, sem juízo…",
+        "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia, Rio Grande do Sul",
         "mandatory_fail": [
           "suppliers<3"
         ],
@@ -871,11 +871,11 @@
       },
       "data_quality_metrics": null,
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público — sem juízo…",
+      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público, sem juízo…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 75,
       "intent": "compreender_concorrencia",
@@ -903,8 +903,8 @@
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "mapa_concorrencia",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
-        "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 37 contratos no recorte público — sem juízo…",
-        "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+        "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 37 contratos no recorte público, sem juízo…",
+        "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia, Rio Grande do Sul",
         "mandatory_fail": [
           "suppliers<3"
         ],
@@ -958,8 +958,8 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Edificações públicas — Parana",
+        "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Edificações públicas, Parana",
         "mandatory_fail": [
           "contract_url_as_opportunity=7",
           "duplicate_items=1",
@@ -987,7 +987,7 @@
         "unique_open": 31
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": [
         "framework_evidence",
@@ -999,7 +999,7 @@
         "official_refs",
         "market_density"
       ],
-      "h1": "Oportunidades abertas em Edificações públicas — Parana",
+      "h1": "Oportunidades abertas em Edificações públicas, Parana",
       "human_review": "PENDING",
       "indexability_score": 87,
       "intent": "avaliar_oportunidades",
@@ -1042,8 +1042,8 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Edificações públicas em Paraná: 10 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Edificações públicas — Paraná",
+        "description": "Radar de Edificações públicas em Paraná: 10 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Edificações públicas, Paraná",
         "mandatory_fail": [],
         "observation_count": 10,
         "period_end": "2026-07-31",
@@ -1098,8 +1098,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+        "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Santa Catarina",
         "mandatory_fail": [
           "contract_url_as_opportunity=4",
           "duplicate_items=2",
@@ -1126,13 +1126,13 @@
         "unique_open": 31
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": [
         "open=7"
       ],
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Santa Catarina",
       "human_review": "NEEDS_DATA_FIX",
       "indexability_score": 80,
       "intent": "avaliar_oportunidades",
@@ -1164,8 +1164,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+        "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Santa Catarina",
         "mandatory_fail": [],
         "observation_count": 5,
         "primary_contract_count": 5,
@@ -1213,8 +1213,8 @@
         "archetype": "saneamento-hidraulica",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
+        "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Saneamento e hidráulica, Santa Catarina",
         "mandatory_fail": [
           "contract_url_as_opportunity=2"
         ],
@@ -1239,11 +1239,11 @@
         "unique_open": 31
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
+      "h1": "Oportunidades abertas em Saneamento e hidráulica, Santa Catarina",
       "human_review": "PENDING",
       "indexability_score": 75,
       "intent": "avaliar_oportunidades",
@@ -1271,8 +1271,8 @@
         "archetype": "saneamento-hidraulica",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Saneamento e hidráulica em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
+        "description": "Radar de Saneamento e hidráulica em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Saneamento e hidráulica, Santa Catarina",
         "mandatory_fail": [],
         "observation_count": 4,
         "primary_contract_count": 4,
@@ -1320,8 +1320,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
+        "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Rio Grande do Sul",
         "mandatory_fail": [
           "contract_url_as_opportunity=2"
         ],
@@ -1346,11 +1346,11 @@
         "unique_open": 31
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 72,
       "intent": "avaliar_oportunidades",
@@ -1378,8 +1378,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
+        "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Rio Grande do Sul",
         "mandatory_fail": [],
         "observation_count": 4,
         "primary_contract_count": 4,
@@ -1427,8 +1427,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Parana",
+        "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Parana",
         "mandatory_fail": [
           "contract_url_as_opportunity=4"
         ],
@@ -1453,11 +1453,11 @@
         "unique_open": 31
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Parana",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Parana",
       "human_review": "PENDING",
       "indexability_score": 72,
       "intent": "avaliar_oportunidades",
@@ -1485,8 +1485,8 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Paraná: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Paraná",
+        "description": "Radar de Pavimentação e infraestrutura viária em Paraná: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Paraná",
         "mandatory_fail": [],
         "observation_count": 4,
         "primary_contract_count": 4,
@@ -1534,8 +1534,8 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
+        "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Edificações públicas, Rio Grande do Sul",
         "mandatory_fail": [
           "contract_url_as_opportunity=1"
         ],
@@ -1560,11 +1560,11 @@
         "unique_open": 31
       },
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
+      "h1": "Oportunidades abertas em Edificações públicas, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 69,
       "intent": "avaliar_oportunidades",
@@ -1592,8 +1592,8 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
-        "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
+        "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
+        "h1": "Oportunidades abertas em Edificações públicas, Rio Grande do Sul",
         "mandatory_fail": [],
         "observation_count": 3,
         "primary_contract_count": 3,
@@ -2088,7 +2088,7 @@
       },
       "review_dataset_hash": "a2f6ee9b62ffc313c2c63a9003f8dc7aaf48897e036a9fab6b848393f4d33059",
       "review_date": "2026-07-31",
-      "review_notes": "Re-approval after material description rewrite: removed comparative 'concentram' (normative_editorial). Pattern now 'sujeitas a alterações' — no incidence claim. Evidence package intact (refs+guides+limitations).",
+      "review_notes": "Re-approval after material description rewrite: removed comparative 'concentram' (normative_editorial). Pattern now 'sujeitas a alterações', no incidence claim. Evidence package intact (refs+guides+limitations).",
       "reviewed_material_signature": {
         "archetype": "edificacoes-publicas",
         "cta_intent": "organizar_documentos",
@@ -2149,7 +2149,7 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "organizar_documentos",
         "cta_label": "Organizar documentos e próximos passos",
-        "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
+        "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar…",
         "h1": "Reequilíbrio diante de dispersão de preços e insumos",
         "mandatory_fail": [],
         "observation_count": 27,
@@ -2167,7 +2167,7 @@
       },
       "data_quality_metrics": null,
       "dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
-      "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
+      "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": [
@@ -2204,7 +2204,7 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "organizar_documentos",
         "cta_label": "Organizar documentos e próximos passos",
-        "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
+        "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar…",
         "h1": "Reequilíbrio diante de dispersão de preços e insumos",
         "mandatory_fail": [
           "generic_evidence_count_only",

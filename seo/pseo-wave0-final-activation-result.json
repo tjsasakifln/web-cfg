@@ -208,7 +208,7 @@
   "next_wave_gate_reasons": [],
   "unresolved_risks": [
     "Radar PR demoted (quality on main reexport); GSC may still list INDEXED until recrawl",
-    "next_wave_gate is technical authorization only — no Wave 1 content expansion without explicit campaign"
+    "next_wave_gate is technical authorization only, no Wave 1 content expansion without explicit campaign"
   ],
   "test_results": {
     "pseo_pytest": "80 passed",

@@ -1,4 +1,4 @@
-# Ações externas — recovery clean inbound
+# Ações externas, recovery clean inbound
 
 **Status:** `READY_FOR_NAMED_HUMAN_APPROVAL`
 

@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 ARTICLES = ROOT / "conteudos"
 TODAY = "2026-07-30"
 GENERIC_META_TAIL = (
-    "— veja os critérios técnicos, documentos e riscos antes de decidir. Diagnóstico"
+    ", veja os critérios técnicos, documentos e riscos antes de decidir. Diagnóstico"
 )
 GENERIC_WA = (
     "https://wa.me/5548988344559?text="
@@ -58,11 +58,11 @@ TITLE_OVERRIDES = {
 META_OVERRIDES = {
     "sinapi-desonerado-nao-desonerado": (
         "Desonerado ou não desonerado no SINAPI? Veja como o edital, o regime da empresa e os encargos "
-        "definem a tabela certa — e o erro que distorce o orçamento."
+        "definem a tabela certa, e o erro que distorce o orçamento."
     ),
     "bdi-diferenciado-obra-publica": (
         "BDI diferenciado para materiais e equipamentos: critérios técnicos, riscos de rejeição e quando "
-        "a planilha exige decomposição — guia CONFENGE."
+        "a planilha exige decomposição, guia CONFENGE."
     ),
     "limite-aditivo-25-50-obra-publica": (
         "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar "
@@ -118,7 +118,7 @@ def make_meta(slug: str, title_core: str, keyword: str, cluster: str) -> str:
     # avoid repeating full title twice
     variants = [
         f"{short}: critérios técnicos, documentos e riscos para a construtora. Análise CONFENGE.",
-        f"{short}. Como decidir com base em contrato, planilha e prova — sem atalho genérico.",
+        f"{short}. Como decidir com base em contrato, planilha e prova, sem atalho genérico.",
         f"Guia prático: {short.lower() if short[0].isupper() else short}. Documentos, erros e próximo passo.",
         f"{short} em obras públicas: o que verificar antes de pleitear, aceitar ou escalar o conflito.",
         f"{keyword.capitalize() if keyword else short}: impactos em prazo, margem e posição contratual. CONFENGE.",
@@ -128,7 +128,7 @@ def make_meta(slug: str, title_core: str, keyword: str, cluster: str) -> str:
     if len(meta) > 158:
         meta = meta[:155].rsplit(" ", 1)[0] + "…"
     if len(meta) < 110:
-        meta = f"{meta.rstrip('.')} — cluster {cluster}."[:158]
+        meta = f"{meta.rstrip('.')}, cluster {cluster}."[:158]
     return meta
 
 
@@ -148,7 +148,7 @@ def make_faq3(slug: str, title_core: str, keyword: str) -> tuple[str, str, str]:
             "O edital pode impor SINAPI desonerado se a empresa não for desonerada?",
             "O edital define a referência de preço e a regra de composição. A coerência entre encargos "
             "sociais da tabela e o regime da empresa (e da proposta) precisa ser testada: tabela errada "
-            "distorce unitários, BDI e a análise de exequibilidade. A decisão não é só contábil — é de "
+            "distorce unitários, BDI e a análise de exequibilidade. A decisão não é só contábil, é de "
             "aderência ao edital e à planilha.",
         ),
         "bdi-diferenciado-obra-publica": (
@@ -205,7 +205,7 @@ def lead_inline_html(wa_url: str, topic: str, form_path: str) -> str:
         f"<span>Próximo passo</span>"
         f"<strong>Quer validar este cenário com a CONFENGE?</strong>"
         f"<p>Envie o edital, a planilha ou a notificação. Retornamos com enquadramento técnico "
-        f"e próximos passos — sem cadastro em lista.</p>"
+        f"e próximos passos, sem cadastro em lista.</p>"
         f"</div>"
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" href="{wa_url}" rel="noopener" target="_blank">'

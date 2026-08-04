@@ -283,7 +283,7 @@ class TestDatasetAndCopy(unittest.TestCase):
         self.assertTrue(any("approval_invalidated_material:title" in r for r in out[0].reasons))
 
     def test_scenario_shared_chrome_not_flagged_when_not_publish(self):
-        """§11.13 — generic chrome must not force fail on reject pages."""
+        """§11.13, generic chrome must not force fail on reject pages."""
         from scripts.pseo.editorial_audit import run_editorial_audit
         report = run_editorial_audit()
         # no publish fails from generic blocks when all problems are reject/noindex

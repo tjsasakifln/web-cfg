@@ -123,7 +123,7 @@ try {
   // CTA contrast for email button inside lead-inline
   const cta = await page.evaluate(() => {
     const box = document.querySelector(".lead-inline");
-    const btn = document.querySelector('.lead-inline a.button-secondary, .lead-inline .button-secondary');
+    const btn = document.querySelector('.lead-inline a.button-secondary.lead-inline .button-secondary');
     if (!box || !btn) return { missing: true };
     const bs = getComputedStyle(btn);
     const cs = getComputedStyle(box);
@@ -144,7 +144,7 @@ try {
     else {
       const ratio = contrast(fg, bg);
       result.checks.cta_contrast = Number(ratio.toFixed(2));
-      // WCAG AA for normal text is 4.5; buttons large text 3.0 — require 4.5 for safety
+      // WCAG AA for normal text is 4.5; buttons large text 3.0, require 4.5 for safety
       if (ratio < 4.5) result.failures.push("cta_contrast_low:" + ratio.toFixed(2));
     }
   }

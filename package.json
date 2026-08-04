@@ -2,7 +2,7 @@
   "name": "confenge-site",
   "private": true,
   "version": "1.0.0",
-  "description": "CONFENGE static site — SEO migration and host canonization tooling",
+  "description": "CONFENGE static site, SEO migration and host canonization tooling",
   "type": "module",
   "scripts": {
     "prepare": "bash scripts/install-git-filters.sh",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Editorial audit for pSEO pages — fails publishable pages on semantic/editorial defects.
+"""Editorial audit for pSEO pages, fails publishable pages on semantic/editorial defects.
 
 Produces:
   seo/pseo-editorial-report.json
@@ -33,7 +33,7 @@ INTERNAL_SLUG_RE = re.compile(
 FORBIDDEN_PUBLIC_PHRASES = [
     re.compile(r"Esta p[aá]gina s[oó] deve alegar evid[eê]ncia emp[ií]rica", re.I),
     # contagem (singular) / contagens (plural): shared stem is contage + m|ns
-    # (contagens? is wrong — it matches contagen/contagens, never contagem)
+    # (contagens? is wrong, it matches contagen/contagens, never contagem)
     re.compile(r"n[aã]o\s+contage(?:m|ns)\s+gen[eé]ric[ao]s?\s+de\s+contratos", re.I),
     re.compile(r"contage(?:m|ns)\s+gen[eé]ric[ao]s?\s+de\s+contratos", re.I),
     re.compile(r"problema\s*→\s*servi[cç]o", re.I),
@@ -68,7 +68,7 @@ BARE_SLUG_PATH_RE = re.compile(r"(?<![\"\'>])(/[a-z0-9]+(?:-[a-z0-9]+)+/)")
 UNACCENTED_TECH_RE = re.compile(
     r"\b(Piaui|paralelepipedo|manutencao predial|pavimentacao|edificacoes)\b"
 )
-PERIOD_DASH_RE = re.compile(r"per[ií]odo[^.<]{0,40}—\s*a\s*—", re.I)
+PERIOD_DASH_RE = re.compile(r"per[ií]odo[^.<]{0,40}, \s*a\s*, ", re.I)
 
 
 @dataclass
@@ -337,8 +337,8 @@ def audit_page(reg: dict[str, Any], html_path: Path | None) -> PageAudit:
     if UNACCENTED_TECH_RE.search(visible):
         issues.append(Issue("missing_accents", "P1", "Termo técnico sem acentuação editorial", UNACCENTED_TECH_RE.search(visible).group(0)))
 
-    if PERIOD_DASH_RE.search(text) or "— a —" in text or "— a —" in html:
-        issues.append(Issue("empty_period", "P0", "Metodologia com período — a —", "— a —"))
+    if PERIOD_DASH_RE.search(text) or ", a, " in text or ", a, " in html:
+        issues.append(Issue("empty_period", "P0", "Metodologia com período, a, ", ", a, "))
 
     # Dataset JSON-LD
     if '"@type": "Dataset"' in html or '"@type":"Dataset"' in html:
@@ -391,7 +391,7 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
     root = root or ROOT
     reg_path = root / "data" / "pseo" / "registry.json"
     if not reg_path.exists():
-        return {"ok": False, "errors": ["registry.json missing — run pseo:build first"]}
+        return {"ok": False, "errors": ["registry.json missing, run pseo:build first"]}
     registry = json.loads(reg_path.read_text(encoding="utf-8"))
     pages = registry.get("pages") or []
     results: list[PageAudit] = []
@@ -409,7 +409,7 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
         results.append(audit_page(p, html_path))
 
     # Cross-page generic block detection for problem pages.
-    # Only fails *publishable* pages — shared chrome/nav/author is expected on templates.
+    # Only fails *publishable* pages, shared chrome/nav/author is expected on templates.
     _CHROME = re.compile(
         r"(autor e respons|eng[ºo°.]?\s*tiago|tiago sasaki|whatsapp|confenge|"
         r"conhecer a experi|preferir formul|metodologia e limita|"

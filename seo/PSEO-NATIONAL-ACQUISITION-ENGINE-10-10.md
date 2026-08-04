@@ -1,4 +1,4 @@
-# PSEO National Acquisition Engine — Delivery Report
+# PSEO National Acquisition Engine, Delivery Report
 
 **Status terminal:** `PARTIAL_PSEO_NATIONAL_ENGINE`  
 **as_of:** 2026-07-31  
@@ -6,7 +6,7 @@
 
 > National denominators audited (4.48M) and export revalidated with **unique prices (503=503)**.  
 > Wave 1 proposal diversificado (market/agency/price/radar/competition).  
-> Classifier gold gate: **inconclusive** (thin strata / CI) — not a false perfect publish pass.  
+> Classifier gold gate: **inconclusive** (thin strata / CI), not a false perfect publish pass.  
 > **0** autopublished. Wave 1 indexable deploy still blocked on human approval + credentials.  
 
 ## 1. What was implemented
@@ -41,7 +41,7 @@
 | Inventory CLI | `python -m scripts.pseo.national_inventory` |
 | Tests | `scripts/pseo/tests/test_national_engine.py` |
 
-## 2. National denominators (revalidated — not copied from prior notes)
+## 2. National denominators (revalidated, not copied from prior notes)
 
 Live audit against VPS Postgres (`pncp_datalake`), host_label `vps-national-tunnel`, source SHA `162c2ba1` (main tip at audit start):
 
@@ -59,7 +59,7 @@ Live audit against VPS Postgres (`pncp_datalake`), host_label `vps-national-tunn
 | `opportunity_intel` open | 2,258 |
 | `pncp_raw_bids` (VPS) | 68 |
 
-**Source honesty:** On VPS, `pncp_supplier_contracts` **is** the national backfill (`source=pncp_contracts`, all 27 UFs, 2023-07 → 2026-07). On local Docker (~12k rows) the **same table name** is a **subset** — never treat local as national without counting.
+**Source honesty:** On VPS, `pncp_supplier_contracts` **is** the national backfill (`source=pncp_contracts`, all 27 UFs, 2023-07 → 2026-07). On local Docker (~12k rows) the **same table name** is a **subset**, never treat local as national without counting.
 
 **Exclusion (documented SQL):** `valor_total IS NULL OR valor_total <= 0` → not submitted to normalization pipeline.
 
@@ -91,7 +91,7 @@ After cutover + `scripts.pseo.build`:
 - Inventory Wave 1 proposal (max 50): **50** pages with multi-type mix  
   - market / competition / agency / price / radar (problem_service: 0 quality-eligible)  
   - **not published** without human `APPROVED` on material hash
-- Human gate: prior approvals invalidated by national material change — fail-closed
+- Human gate: prior approvals invalidated by national material change, fail-closed
 
 **To go live on Wave 1 (20–50):** run editorial review on the diversity-ranked proposal, approve material hashes, re-build, production audit, deploy.  
 **No thresholds were lowered** and **no autopublish** occurred.
@@ -123,7 +123,7 @@ After cutover + `scripts.pseo.build`:
 |---|-----------|------:|----------|
 | 1 | Governança e proveniência | **9** | National export/registry/inventory dataset_hash `1fa346d1…` (aligned post-rebuild); fail-closed human gate |
 | 2 | Cobertura real do datalake | **9** | 4,479,442 available; 4,402,632 considered; 214,630 classified; 54,055 AEC; prefilter documented |
-| 3 | Qualidade classificação | **7** | Multilayer on 214k; gold gate **inconclusive** (CI/thin strata) — not false perfect pass |
+| 3 | Qualidade classificação | **7** | Multilayer on 214k; gold gate **inconclusive** (CI/thin strata), not false perfect pass |
 | 4 | Cobertura intenções/clusters | **8** | Markets/agencies/prices/competition/radar; Wave1 multi-type; problem_service not QE yet |
 | 5 | Diferenciação editorial | **8** | Methodology/limits/CTA templates; similarity gate; evidence ledgers on inventory |
 | 6 | SEO técnico | **8** | Hubs/sitemaps/canonical/lifecycle; Lighthouse not re-run this session |
@@ -160,11 +160,11 @@ npm run build:site
 
 ## 9. Published vs rejected (this wave)
 
-**Indexable publish after national rebuild:** **0** (human review required; prior approvals invalidated by material change — intentional).
+**Indexable publish after national rebuild:** **0** (human review required; prior approvals invalidated by material change, intentional).
 
 **Quality-eligible awaiting review:** **1,506** (includes Wave 1 proposal of 50 diversity-ranked pages).
 
-**Rejected:** **351** — sample/semantic gates (not threshold gaming).
+**Rejected:** **351**, sample/semantic gates (not threshold gaming).
 
 ## 10. SHAs
 

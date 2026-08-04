@@ -1,5 +1,5 @@
 /**
- * Lead record_kind classification — commercial truth vs probes/QA/spam.
+ * Lead record_kind classification, commercial truth vs probes/QA/spam.
  *
  * Kinds: real | synthetic | qa | spam | internal
  *
@@ -222,7 +222,7 @@ function effectiveRecordKind(record) {
   if (!record) return "real";
   const explicit = normalizeKind(record.record_kind);
   if (explicit && explicit !== "real") return explicit;
-  // Re-detect even when kind is missing or "real" — multi-signal only demotes
+  // Re-detect even when kind is missing or "real", multi-signal only demotes
   const det = classifyForBackfill({
     ...record,
     record_kind: explicit || undefined,

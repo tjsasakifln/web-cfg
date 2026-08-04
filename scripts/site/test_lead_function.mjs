@@ -46,8 +46,7 @@ function event(body, method = "POST", extraHeaders = {}) {
       "content-type": "application/json",
       origin: "https://confenge.com.br",
       "user-agent": "confenge-lead-test/1.0",
-      "x-forwarded-for": extraHeaders.ip || "203.0.113.50",
-      ...extraHeaders,
+      "x-forwarded-for": extraHeaders.ip || "203.0.113.50"...extraHeaders,
     },
     body: typeof body === "string" ? body : JSON.stringify(body),
   };
@@ -61,7 +60,7 @@ function pass(name, detail) {
 function fail(name, detail) {
   console.error("FAIL", name, detail);
   process.exitCode = 1;
-  throw new Error(`FAIL: ${name} — ${typeof detail === "string" ? detail : JSON.stringify(detail)}`);
+  throw new Error(`FAIL: ${name}, ${typeof detail === "string" ? detail : JSON.stringify(detail)}`);
 }
 
 const { handler, setStoreForTests } = loadHandler();
@@ -103,7 +102,7 @@ _reset();
   pass("consent_required");
 }
 
-// 4) honeypot — no real store write for bot fields
+// 4) honeypot, no real store write for bot fields
 {
   const before = (await mem.list()).length;
   const res = await handler(
@@ -121,7 +120,7 @@ _reset();
   pass("honeypot_suppressed");
 }
 
-// 5) happy path — persist then 201, no secrets in body
+// 5) happy path, persist then 201, no secrets in body
 {
   const originalFetch = globalThis.fetch;
   const calls = [];
@@ -167,7 +166,7 @@ _reset();
     if (stored.utm_source !== "test" || stored.jornada !== "contrato") fail("store_attribution", stored);
     if (stored.mensagem !== "SECRET_MESSAGE_SHOULD_NOT_LEAK") fail("store_message", stored);
     if (!calls.some((c) => c.url.includes("example.com/hooks/ops"))) fail("webhook_not_called", calls);
-    // Webhook body may contain PII over TLS to private endpoint — response must not
+    // Webhook body may contain PII over TLS to private endpoint, response must not
     pass("persist_201", { lead_id: data.lead_id, journey: data.journey });
   } finally {
     globalThis.fetch = originalFetch;
@@ -176,7 +175,7 @@ _reset();
   }
 }
 
-// 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent
+// 6) idempotency, second submit same payload returns same lead_id + HTTP 200 + idempotent
 {
   const payload = {
     nome: "QA Idem",

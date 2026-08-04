@@ -16,7 +16,7 @@
 <meta content="#061a33" name="theme-color"/>
 <style>
 .radar-table { width:100%; border-collapse:collapse; font-size:.92rem; margin:1rem 0; }
-.radar-table th, .radar-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .6rem; text-align:left; }
+.radar-table th.radar-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .6rem; text-align:left; }
 .radar-table th { background:#f1f5f9; }
 .note-box { background:#fffbeb; border:1px solid #fcd34d; padding:1rem; border-radius:10px; margin:1rem 0; }
 .method-box { background:#f8fafc; border:1px solid #e2e8f0; padding:1rem 1.15rem; border-radius:10px; margin:1rem 0; }
@@ -26,7 +26,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Dataset",
-  "name": "Radar Nacional de Obras Públicas e Margem Contratual — recorte aberto",
+  "name": "Radar Nacional de Obras Públicas e Margem Contratual, recorte aberto",
   "description": "Metodologia e recorte aberto CONFENGE com demanda orgânica verificada via Search Console export e limitações explícitas. Séries de contratos públicos completas dependem de fontes públicas auditáveis e revisadas.",
   "url": "https://confenge.com.br/radar/nacional-obras-publicas/",
   "creator": { "@type": "Organization", "name": "CONFENGE", "url": "https://confenge.com.br/" },
@@ -62,7 +62,7 @@
 <nav class="breadcrumbs container" aria-label="Navegação"><ol>
 <li><a href="/">Início</a><span aria-hidden="true">/</span></li>
 <li><a href="/radar/">Radar</a><span aria-hidden="true">/</span></li>
-<li aria-current="page">Nacional — obras e margem</li>
+<li aria-current="page">Nacional, obras e margem</li>
 </ol></nav>
 
 <header class="content-hero container">
@@ -85,7 +85,7 @@
 <li><strong>Inclusão:</strong> contratos com data de assinatura ou publicação no período; objeto de obra/engenharia; valor inicial &gt; 0.</li>
 <li><strong>Exclusão:</strong> registros sem valor; duplicatas por chave de instrumento; categorias não-obra quando classificáveis.</li>
 <li><strong>Aditivos:</strong> somente quando o instrumento de aditivo estiver ligado ao contrato-pai na fonte; caso contrário, taxa de aditivo = não reportada.</li>
-<li><strong>Margem:</strong> a CONFENGE <em>não</em> estima margem contábil de terceiros. “Margem contratual” no Radar refere-se a <em>pressões observáveis</em> (aditivos, glosas, prazos) — não ao lucro real da empresa.</li>
+<li><strong>Margem:</strong> a CONFENGE <em>não</em> estima margem contábil de terceiros. “Margem contratual” no Radar refere-se a <em>pressões observáveis</em> (aditivos, glosas, prazos), não ao lucro real da empresa.</li>
 <li><strong>Demanda orgânica (nesta versão):</strong> export estruturado do Google Search Console do domínio confenge.com.br (Performance), com rastreabilidade da fonte.</li>
 </ol>
 </div>
@@ -94,7 +94,7 @@
 
 <section>
 <h2>2. O que a demanda orgânica já mostra (fonte: Search Console)</h2>
-<p>Fonte: export de Performance do Google Search Console do domínio confenge.com.br (referência <code>seo/gsc-2026-07-30</code>). O Search Console é agregado — não atribui consulta a visitante individual.</p>
+<p>Fonte: export de Performance do Google Search Console do domínio confenge.com.br (referência <code>seo/gsc-2026-07-30</code>). O Search Console é agregado, não atribui consulta a visitante individual.</p>
 <table class="radar-table">
 <thead><tr><th>Página (path)</th><th>Cliques</th><th>Impressões</th><th>CTR</th><th>Posição média</th></tr></thead>
 <tbody>
@@ -105,14 +105,14 @@
 <tr><td>/conteudos/limite-aditivo-25-50-obra-publica/</td><td>0</td><td>24</td><td>0%</td><td>17</td></tr>
 </tbody>
 </table>
-<p><strong>Leitura comercial (não causalidade individual):</strong> há impressões materiais em orçamento/BDI e limites de aditivo com CTR zero em páginas-chave — candidatos naturais a melhoria de title/meta e a ferramentas (verificador de limite já publicado).</p>
+<p><strong>Leitura comercial (não causalidade individual):</strong> há impressões materiais em orçamento/BDI e limites de aditivo com CTR zero em páginas-chave, candidatos naturais a melhoria de title/meta e a ferramentas (verificador de limite já publicado).</p>
 
 <table class="radar-table">
 <thead><tr><th>Consulta (amostra)</th><th>Impressões</th><th>Posição</th><th>Sinal</th></tr></thead>
 <tbody>
 <tr><td>desonerado e não desonerado</td><td>10</td><td>9,2</td><td>informacional / orçamento</td></tr>
 <tr><td>aditivos obra pública</td><td>5</td><td>66,2</td><td>comercial / long-tail fraco</td></tr>
-<tr><td>avcb</td><td>3</td><td>4,33</td><td><strong>entidade legada</strong> — páginas 410</td></tr>
+<tr><td>avcb</td><td>3</td><td>4,33</td><td><strong>entidade legada</strong>, páginas 410</td></tr>
 <tr><td>bdi diferenciado</td><td>2</td><td>20</td><td>striking distance</td></tr>
 </tbody>
 </table>

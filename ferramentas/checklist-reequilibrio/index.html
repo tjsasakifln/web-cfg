@@ -21,7 +21,7 @@
 .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem 1rem; }
 @media (max-width:700px) { .tool-grid { grid-template-columns: 1fr; } }
 .tool-panel label { display:block; font-weight:600; font-size:.9rem; margin-bottom:.25rem; }
-.tool-panel input, .tool-panel select, .tool-panel textarea { width:100%; padding:.55rem .65rem; border-radius:8px; border:1px solid rgba(15,23,42,.15); font:inherit; }
+.tool-panel input.tool-panel select.tool-panel textarea { width:100%; padding:.55rem .65rem; border-radius:8px; border:1px solid rgba(15,23,42,.15); font:inherit; }
 .tool-result { border-left: 4px solid #0b5fff; background:#fff; padding:1rem 1.15rem; margin:1rem 0; border-radius:0 10px 10px 0; }
 .tool-result.ok { border-left-color:#059669; }
 .tool-result.warn { border-left-color:#d97706; }
@@ -31,7 +31,7 @@
 .checklist-item { display:flex; gap:.65rem; align-items:flex-start; padding:.55rem 0; border-bottom:1px solid rgba(15,23,42,.06); }
 .checklist-item input { width:auto; margin-top:.25rem; }
 .matrix-table { width:100%; border-collapse:collapse; font-size:.92rem; }
-.matrix-table th, .matrix-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .55rem; text-align:left; vertical-align:top; }
+.matrix-table th.matrix-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .55rem; text-align:left; vertical-align:top; }
 .score-bar { height:10px; background:#e2e8f0; border-radius:99px; overflow:hidden; margin:.5rem 0; }
 .score-bar > span { display:block; height:100%; background:#0b5fff; }
 .tool-kicker { font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:#64748b; font-weight:700; }
@@ -89,7 +89,7 @@
 <header class="content-hero container tool-layout">
 <p class="eyebrow">Ferramenta gratuita · dossiê de reequilíbrio</p>
 <h1>Checklist de documentação para reequilíbrio</h1>
-<p class="content-lead">Marque o que já existe no processo. Receba um score de prontidão e a ordem de ataque dos faltantes — sem pedir contato para ver o resultado.</p>
+<p class="content-lead">Marque o que já existe no processo. Receba um score de prontidão e a ordem de ataque dos faltantes, sem pedir contato para ver o resultado.</p>
 </header>
 <div class="container tool-layout">
 
@@ -113,7 +113,7 @@
 <div class="tool-grid" style="margin-top:1rem">
 <div>
 <label for="urgencia">Urgência percebida</label>
-<select id="urgencia"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta — caixa ou prazo críticos</option></select>
+<select id="urgencia"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta, caixa ou prazo críticos</option></select>
 </div>
 <div>
 <label for="valor_impacto">Ordem de grandeza do impacto (R$, opcional)</label>
@@ -173,7 +173,7 @@
     const score = raw.score;
     const level = raw.level;
     const nextMap = {
-      protocolo_formal: 'Priorize protocolo formal do fato gerador — atraso de comunicação enfraquece nexo.',
+      protocolo_formal: 'Priorize protocolo formal do fato gerador, atraso de comunicação enfraquece nexo.',
       memoria_calculo: 'Sem memória de cálculo, o pedido vira narrativa. Feche planilha e composições.',
       cronologia: 'Monte cronologia data a data com documentos âncora.',
       revisao_independente: 'Dossiê razoavelmente montado: valide tese e números com revisão independente antes de protocolar.',
@@ -188,8 +188,8 @@
       <div class="score-bar"><span style="width:${Math.round(score*100)}%"></span></div>
       <p><strong>Faltantes:</strong> ${missing.length ? missing.join(', ') : 'nenhum marcado como faltante'}</p>
       <ol>${next.map(n => '<li>'+n+'</li>').join('')}</ol>
-      <p><em>Score alto não significa direito ao reequilíbrio — significa organização mínima para decisão.</em></p>`;
-    lastText = ['CONFENGE — checklist reequilíbrio', 'score='+score, 'done='+done.join('|'), 'missing='+missing.join('|'), 'urgencia='+urg, 'impacto='+impacto, new Date().toISOString()].join('\n');
+      <p><em>Score alto não significa direito ao reequilíbrio, significa organização mínima para decisão.</em></p>`;
+    lastText = ['CONFENGE, checklist reequilíbrio', 'score='+score, 'done='+done.join('|'), 'missing='+missing.join('|'), 'urgencia='+urg, 'impacto='+impacto, new Date().toISOString()].join('\n');
     dl.hidden = false;
     document.getElementById('tool-cta-wa').href = T.waLink('Olá, Tiago. Usei o checklist de reequilíbrio da CONFENGE. Score '+Math.round(score*100)+'%. Itens faltantes: '+(missing.slice(0,5).join(', ')||'nenhum')+'. Quero validar o dossiê.');
     T.track('tool_complete', { tool: 'checklist-reequilibrio', score: Math.round(score*100), urgencia: urg });

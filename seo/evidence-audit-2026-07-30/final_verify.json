@@ -81,7 +81,7 @@
         },
         {
           "h3": "Prazo contratual e legal de pagamento",
-          "p": "Conte o atraso com a regra do contrato e a legislação aplicável ao pagamento — não pelo “costume do órgão”. Datas de protocolo e de vencimento precisam estar na cronologia."
+          "p": "Conte o atraso com a regra do contrato e a legislação aplicável ao pagamento, não pelo “costume do órgão”. Datas de protocolo e de vencimento precisam estar na cronologia."
         },
         {
           "h3": "Histórico de notificações",
@@ -101,7 +101,7 @@
       "desc": "Administração local é custo direto, BDI ou item de planilha? Critérios para precificar sem duplicar nem omitir equipe de canteiro.",
       "h1": "Administração local no orçamento: direto, BDI ou planilha?",
       "canonical": "https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/",
-      "answer": "Administração local pode aparecer como item de planilha (custo direto), como parcela embutida no BDI, ou de forma mista — o que vale é o modelo do edital/orçamento de referência, não o hábito interno da empresa. Erro clá",
+      "answer": "Administração local pode aparecer como item de planilha (custo direto), como parcela embutida no BDI, ou de forma mista, o que vale é o modelo do edital/orçamento de referência, não o hábito interno da empresa. Erro clá",
       "wa_phone": "5548988344559",
       "wa_text": "Olá, Tiago. Preciso conferir se administração local no orçamento está como custo direto, BDI ou planilha.",
       "wa_count": 4,
@@ -156,17 +156,17 @@
     },
     "aditivo-empreitada-por-preco-global": {
       "title": "Aditivo em empreitada global: quando cabe | CONFENGE",
-      "desc": "Aditivo em empreitada por preço global: quando a mudança de projeto ou escopo gera direito — e o que o risco de quantitativo não cobre.",
+      "desc": "Aditivo em empreitada por preço global: quando a mudança de projeto ou escopo gera direito, e o que o risco de quantitativo não cobre.",
       "h1": "Aditivo em empreitada global: quando cabe",
       "canonical": "https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/",
-      "answer": "Em empreitada por preço global, o risco de quantitativo costuma ser do contratado — mas isso não elimina aditivo por alteração de projeto, serviço novo, erro da Administração ou fato extraordinário previsto na matriz de ",
+      "answer": "Em empreitada por preço global, o risco de quantitativo costuma ser do contratado, mas isso não elimina aditivo por alteração de projeto, serviço novo, erro da Administração ou fato extraordinário previsto na matriz de ",
       "wa_phone": "5548988344559",
       "wa_text": "Olá, Tiago. Preciso avaliar aditivo em empreitada por preço global.",
       "wa_count": 4,
       "cards": [
         {
           "h3": "Separar risco de quantitativos",
-          "p": "Em preço global, o risco de quantitativo costuma ser da contratada — mas só no escopo original. Meça o que mudou de projeto/condição de campo versus mera variação de quantidade prevista."
+          "p": "Em preço global, o risco de quantitativo costuma ser da contratada, mas só no escopo original. Meça o que mudou de projeto/condição de campo versus mera variação de quantidade prevista."
         },
         {
           "h3": "Erro de projeto",
@@ -186,7 +186,7 @@
       "desc": "Como responder notificação de atraso em obra pública: fatos, anexos, prazos e o que não admitir sem prova.",
       "h1": "Notificação por atraso: como montar a resposta",
       "canonical": "https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/",
-      "answer": "Resposta a notificação de atraso deve separar fato, causa, responsabilidade e impacto — não só “contestar a multa”. Use cronologia, diário, frentes, interferências e pedidos de prorrogação já protocolados. Admitir atraso",
+      "answer": "Resposta a notificação de atraso deve separar fato, causa, responsabilidade e impacto, não só “contestar a multa”. Use cronologia, diário, frentes, interferências e pedidos de prorrogação já protocolados. Admitir atraso",
       "wa_phone": "5548988344559",
       "wa_text": "Olá, Tiago. Recebi notificação por atraso e preciso montar a resposta técnica.",
       "wa_count": 4,
@@ -290,7 +290,7 @@
         },
         {
           "h3": "Correção",
-          "p": "Peça prazo e critério objetivo de correção por escrito. Corrija o defeito apontado, reapresente a medição e registre o que foi sanado — silêncio após o apontamento solidifica o corte."
+          "p": "Peça prazo e critério objetivo de correção por escrito. Corrija o defeito apontado, reapresente a medição e registre o que foi sanado, silêncio após o apontamento solidifica o corte."
         },
         {
           "h3": "Retenção e proporcionalidade",
@@ -321,7 +321,7 @@
         },
         {
           "h3": "Obrigações da fiscalização",
-          "p": "Mapeie prazos de ateste, liquidação e pagamento no contrato. Cobre com base nesses prazos e no histórico de devoluções — não em expectativa informal do fiscal."
+          "p": "Mapeie prazos de ateste, liquidação e pagamento no contrato. Cobre com base nesses prazos e no histórico de devoluções, não em expectativa informal do fiscal."
         },
         {
           "h3": "Impactos financeiros e comunicação de riscos à execução",
@@ -334,10 +334,10 @@
     },
     "bdi-diferenciado-obra-publica": {
       "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
-      "desc": "BDI diferenciado para materiais e equipamentos: critérios técnicos, riscos de rejeição e quando a planilha exige decomposição — guia CONFENGE.",
+      "desc": "BDI diferenciado para materiais e equipamentos: critérios técnicos, riscos de rejeição e quando a planilha exige decomposição, guia CONFENGE.",
       "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
       "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
-      "answer": "Use BDI diferenciado quando o edital permitir (ou a boa técnica exigir) e quando materiais/equipamentos tiverem estrutura de custo e risco distinta da mão de obra — por exemplo, fornecimento com baixa incidência de encar",
+      "answer": "Use BDI diferenciado quando o edital permitir (ou a boa técnica exigir) e quando materiais/equipamentos tiverem estrutura de custo e risco distinta da mão de obra, por exemplo, fornecimento com baixa incidência de encar",
       "wa_phone": "5548988344559",
       "wa_text": "Olá, Tiago. Gostaria de analisar um caso de BDI diferenciado em materiais e equipamentos (licitação, contrato ou obra pública).",
       "wa_count": 4,
@@ -348,11 +348,11 @@
         },
         {
           "h3": "Natureza do fornecimento",
-          "p": "Materiais e equipamentos com logística, garantia e risco distintos da mão de obra são o núcleo legítimo da diferenciação — desde que a memória de cálculo feche com os unitários."
+          "p": "Materiais e equipamentos com logística, garantia e risco distintos da mão de obra são o núcleo legítimo da diferenciação, desde que a memória de cálculo feche com os unitários."
         },
         {
           "h3": "Logística e garantia",
-          "p": "Frete, armazenagem, seguro de transporte e garantia podem estar no unitário, no BDI ou em item próprio — sem duplicar. A planilha precisa mostrar uma única casa para cada custo."
+          "p": "Frete, armazenagem, seguro de transporte e garantia podem estar no unitário, no BDI ou em item próprio, sem duplicar. A planilha precisa mostrar uma única casa para cada custo."
         },
         {
           "h3": "Desconto global e jogo de planilha",
@@ -396,7 +396,7 @@
     },
     "empreitada-preco-global-preco-unitario": {
       "title": "Empreitada global ou unitária: qual regime é mais arriscado? | CONFENGE",
-      "desc": "Empreitada global ou unitária: qual regime é mais arriscado. Como decidir com base em contrato, planilha e prova — sem atalho genérico.",
+      "desc": "Empreitada global ou unitária: qual regime é mais arriscado. Como decidir com base em contrato, planilha e prova, sem atalho genérico.",
       "h1": "Empreitada global ou unitária: qual regime é mais arriscado?",
       "canonical": "https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/",
       "answer": "Na empreitada por preço unitário, o pagamento acompanha o quantitativo medido; na empreitada por preço global, o escopo fechado concentra na contratada o risco de quantidade do projeto original. Nenhum dos regimes elimin",
@@ -410,7 +410,7 @@
         },
         {
           "h3": "Quantitativos",
-          "p": "No global, erro de quantitativo do projeto original costuma ser risco da contratada; no unitário, paga-se o executado. Meça o que é variação de quantidade versus mudança de escopo — só o segundo caminha bem por aditivo em ambos os regimes."
+          "p": "No global, erro de quantitativo do projeto original costuma ser risco da contratada; no unitário, paga-se o executado. Meça o que é variação de quantidade versus mudança de escopo, só o segundo caminha bem por aditivo em ambos os regimes."
         },
         {
           "h3": "Projeto",

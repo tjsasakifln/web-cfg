@@ -4,21 +4,21 @@
     "name": "Radar Nacional de Obras Públicas",
     "url": "https://confenge.com.br/radar/nacional-obras-publicas/",
     "trackable_base": "https://confenge.com.br/radar/nacional-obras-publicas/?utm_source=outreach&utm_medium=digital_pr&utm_campaign=radar_wave1",
-    "short_copy": "Mapa e leitura operacional de obras públicas no Brasil — dados verificáveis, sem hype. Útil para construtoras, associações e portais de engenharia que precisam de contexto de mercado, não de press release genérico.",
+    "short_copy": "Mapa e leitura operacional de obras públicas no Brasil, dados verificáveis, sem hype. Útil para construtoras, associações e portais de engenharia que precisam de contexto de mercado, não de press release genérico.",
     "share_image": "https://confenge.com.br/assets/og-confenge.jpg",
     "embed_note": "Gráficos e tabelas do Radar podem ser citados com link canônico e data de referência da página.",
     "release_tone": "factual; no guaranteed ranking; no fabricated metrics"
   },
   "status_options": ["nao_contatado", "enviado", "respondeu", "publicou", "recusou", "follow-up"],
   "message_templates": {
-    "associacao": "Olá {nome} — publicamos o Radar Nacional de Obras Públicas da CONFENGE com leitura operacional para construtoras. Acredito que os associados de {org} se beneficiam do recorte. Página: {link}. Posso enviar um parágrafo citável e a data de referência?",
-    "sindicato": "Prezados {org} — compartilhamos um observatório público de obras (CONFENGE) com foco em execução e margem, não só edital. Link: {link}. Interessados em citação ou parceria de divulgação com crédito?",
-    "portal_engenharia": "Oi {nome} — material factual para audiência de engenharia/contratos públicos: {link}. Posso mandar bullets verificáveis + imagem para matéria/newsletter?",
-    "portal_licitacoes": "Olá {nome} — Radar de obras públicas com recorte útil a quem opera licitação e contrato: {link}. Sem hype; dados e limitações explícitos na página.",
-    "newsletter": "Sugestão de pauta/curadoria: Radar Nacional de Obras Públicas (CONFENGE) — {link}. Versão curta + link rastreável disponíveis.",
-    "jornalista": "Oi {nome} — se fizer sentido para sua cobertura de infraestrutura/contratos, o Radar está em {link}. Posso enviar metodologia e o que NÃO afirmamos.",
+    "associacao": "Olá {nome}, publicamos o Radar Nacional de Obras Públicas da CONFENGE com leitura operacional para construtoras. Acredito que os associados de {org} se beneficiam do recorte. Página: {link}. Posso enviar um parágrafo citável e a data de referência?",
+    "sindicato": "Prezados {org}, compartilhamos um observatório público de obras (CONFENGE) com foco em execução e margem, não só edital. Link: {link}. Interessados em citação ou parceria de divulgação com crédito?",
+    "portal_engenharia": "Oi {nome}, material factual para audiência de engenharia/contratos públicos: {link}. Posso mandar bullets verificáveis + imagem para matéria/newsletter?",
+    "portal_licitacoes": "Olá {nome}, Radar de obras públicas com recorte útil a quem opera licitação e contrato: {link}. Sem hype; dados e limitações explícitos na página.",
+    "newsletter": "Sugestão de pauta/curadoria: Radar Nacional de Obras Públicas (CONFENGE), {link}. Versão curta + link rastreável disponíveis.",
+    "jornalista": "Oi {nome}, se fizer sentido para sua cobertura de infraestrutura/contratos, o Radar está em {link}. Posso enviar metodologia e o que NÃO afirmamos.",
     "especialista": "{nome}, montei o Radar com leitura de operação B2G. Feedback de {org} seria valioso; link: {link}.",
-    "comunidade": "Pessoal da {org}: publiquei o Radar Nacional de Obras Públicas — {link}. Comentários e críticas técnicas bem-vindos."
+    "comunidade": "Pessoal da {org}: publiquei o Radar Nacional de Obras Públicas, {link}. Comentários e críticas técnicas bem-vindos."
   },
   "contacts": [
     {"id": 1, "name": "CBIC", "org": "Câmara Brasileira da Indústria da Construção", "type": "associacao", "url": "https://cbic.org.br", "why": "Principal voz da indústria da construção; Radar agrega contexto de obras públicas.", "status": "nao_contatado", "link": "https://confenge.com.br/radar/nacional-obras-publicas/?utm_source=outreach&utm_medium=digital_pr&utm_campaign=radar_wave1&utm_content=cbic"},
@@ -54,7 +54,7 @@
   ],
   "human_actions": [
     "Personalize one message per contact using message_templates[type]",
-    "Send manually — no auto-send",
+    "Send manually, no auto-send",
     "Update status in this file after each send/reply",
     "Prefer trackable link field per contact"
   ],

@@ -8,7 +8,7 @@
       "ok": true,
       "errors": [],
       "warnings": [
-        "zero publish pages — expected during containment until human review"
+        "zero publish pages, expected during containment until human review"
       ],
       "publish_count": 0,
       "noindex_count": 5,

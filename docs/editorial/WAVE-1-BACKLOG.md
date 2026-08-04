@@ -1,7 +1,7 @@
 # Wave 1 backlog
 
 ## Publicáveis (passaram gates)
-Ver `EDITORIAL-REGISTRY.json` — 12 URLs INDEXABLE.
+Ver `EDITORIAL-REGISTRY.json`, 12 URLs INDEXABLE.
 
 ## Composição
 - 7 aplicações Lei 14.133

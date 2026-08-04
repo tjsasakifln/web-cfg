@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Human approval CLI — only named humans may stamp HUMAN_APPROVED / INDEXABLE.
+"""Human approval CLI, only named humans may stamp HUMAN_APPROVED / INDEXABLE.
 
 Fail-closed:
   - complete per-page checklist
@@ -9,7 +9,7 @@ Fail-closed:
   - blocked in CI / automation environments
   - cannot approve REJECTED pages
 
-Usage (example — run by named human outside agent):
+Usage (example, run by named human outside agent):
   ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \\
     --reviewer "Tiago Sasaki" \\
     --page-id lei-art124-alteracao-obra \\
@@ -81,7 +81,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--page-ids",
         default="",
-        help=argparse.SUPPRESS,  # hidden trap: if provided with multiple, fail
+        help=argparse.SUPPRESS, # hidden trap: if provided with multiple, fail
     )
     args = ap.parse_args(argv)
 
@@ -89,7 +89,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.page_ids:
         extras = [x.strip() for x in args.page_ids.split(",") if x.strip()]
         if extras:
-            print("ERROR: bulk_approval_forbidden — pass exactly one --page-id", file=sys.stderr)
+            print("ERROR: bulk_approval_forbidden, pass exactly one --page-id", file=sys.stderr)
             return 3
 
     reg = load_registry()

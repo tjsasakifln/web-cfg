@@ -117,7 +117,7 @@ def test_org_description_consistent():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     assert org in html
     shell = (ROOT / "scripts" / "pseo" / "html_shell.py").read_text(encoding="utf-8")
-    # shell loads brand dynamically — ensure fallback matches thesis
+    # shell loads brand dynamically, ensure fallback matches thesis
     assert "Diretoria B2G" in shell or "org_description" in shell
 
 
@@ -139,7 +139,7 @@ def test_radar_not_empty_wave_message():
     assert "noindex" in html
     assert "Configurar meu radar" in html or "configurar meu radar" in html.lower()
     assert "preview (revisão)" not in html.lower()
-    # Must survive build:site — source template in build.py
+    # Must survive build:site, source template in build.py
     build_src = (ROOT / "scripts" / "pseo" / "build.py").read_text(encoding="utf-8")
     assert "Configurar meu radar de oportunidades" in build_src
     assert "Radar evergreen de oportunidades" not in build_src
@@ -195,7 +195,7 @@ def test_pillar_urls_preserved():
 
 
 def test_content_not_overwhelmed_by_sales_copy():
-    """Technical guides must retain informational focus — sample check."""
+    """Technical guides must retain informational focus, sample check."""
     sample = ROOT / "conteudos"
     if not sample.exists():
         return

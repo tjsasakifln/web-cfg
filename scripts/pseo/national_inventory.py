@@ -133,7 +133,7 @@ def build_inventory(
                 "url": it["url"],
                 "page_type": it["page_type"],
                 "primary_intent": it.get("intent"),
-                "primary_query": None,  # filled from GSC when available — never invented
+                "primary_query": None, # filled from GSC when available, never invented
                 "demand_evidence": it["demand_evidence"],
                 "search_volume_monthly": None,
                 "page_value_score": it["page_value_score"],
@@ -293,7 +293,7 @@ def build_inventory(
             "pages": wave1,
             "diversity": wave1_diversity,
             "note": (
-                "Proposal only — publish still requires human approval, "
+                "Proposal only, publish still requires human approval, "
                 "similarity, and production gates. Never autopublish. "
                 "Diversity quotas across market/competition/agency/price/radar/"
                 "problem_service when eligible candidates exist."

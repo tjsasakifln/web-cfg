@@ -7,7 +7,7 @@
     "Cards are the exception, not the default section structure",
     "Every section has one dominant element (claim, evidence, consequence, or action)",
     "Controlled asymmetry over uniform grids",
-    "Technical materiality: timelines, matrices, decision gates — never invented metrics",
+    "Technical materiality: timelines, matrices, decision gates, never invented metrics",
     "Contrast with intent: white editorial, deep navy, near-black, neutral surfaces; green only as decision/action/protection signal",
     "Typography hierarchy over decoration; mono only for technical evidence",
     "Motion only to orient reading; respect prefers-reduced-motion"
@@ -29,8 +29,8 @@
     "green_100_restricted": "#edf5ec",
     "usage": {
       "green_100": "Never default section background. Max one consecutive light-green surface in a page scroll.",
-      "lime": "Rare accent for status, emphasis in dark panels, or a single key number — not body text color.",
-      "green_border": "Only on primary actions, decision signals, or one featured block — not every card."
+      "lime": "Rare accent for status, emphasis in dark panels, or a single key number, not body text color.",
+      "green_border": "Only on primary actions, decision signals, or one featured block, not every card."
     }
   },
   "typography": {

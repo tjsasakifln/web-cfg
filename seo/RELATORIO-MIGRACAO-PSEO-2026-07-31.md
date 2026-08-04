@@ -1,4 +1,4 @@
-# Relatório de migração pSEO — estado final auditado (2026-07-31)
+# Relatório de migração pSEO, estado final auditado (2026-07-31)
 
 ## Objetivo
 
@@ -15,7 +15,7 @@ KPI: contatos comerciais qualificados **sem** dados falsos/contaminados/não aud
 | Bids abertos | histórico misturado | **37** vigentes |
 | Publish PENDING | 24 | **0** |
 | Publish APPROVED | 0 | **8** |
-| noindex / reject | — | **7 / 5** |
+| noindex / reject |, | **7 / 5** |
 | MAX_PUBLISH | 24 | **removido** |
 | Gold aec_confirmed | n/d | **n=83 P=1.0 R=1.0 FP=0** |
 | limpeza+asseio+conservação predial → AEC | sim | **non_aec** |
@@ -43,7 +43,7 @@ KPI: contatos comerciais qualificados **sem** dados falsos/contaminados/não aud
 ```bash
 cd "/mnt/d/extra consultoria" && git checkout feat/pseo-durable-export
 set -a && source .env && set +a
-# Canonical entry (plan name) — durable pipeline with --as-of/--validate
+# Canonical entry (plan name), durable pipeline with --as-of/--validate
 python3 -m scripts.pseo.export_web_cfg --out /mnt/d/webcfg/data/pseo --as-of 2026-07-31 --validate
 python3 -m pytest tests/pseo -q --no-cov
 ```
@@ -113,7 +113,7 @@ Mercado `manutencao-predial-engenharia-sp` **deixou de existir** após remoção
 2. Freshness radar com as_of=hoje → age≈0 (wall-clock correto).
 3. Datalake ≠ censo; massa regional limita markets indexáveis.
 4. Re-export invalida APPROVED (hash gate).
-5. Multi-rótulo residual em contratos edge — primary_archetype mitiga markets, gold não cobre 100% do universo.
+5. Multi-rótulo residual em contratos edge, primary_archetype mitiga markets, gold não cobre 100% do universo.
 6. Classificador baseado em objeto textual; códigos de item/CNAE ainda não usados quando ausentes no snapshot.
 
 ## Contagens export

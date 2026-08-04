@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CONFENGE Ops — RevOps (privado)</title>
+  <title>CONFENGE Ops, RevOps (privado)</title>
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <meta name="googlebot" content="noindex,nofollow" />
   <link rel="canonical" href="https://confenge.com.br/ops/" />
@@ -51,7 +51,7 @@
   <main>
     <div class="note">
       <strong>Atribuição:</strong> Search Console é agregado. Não associe consulta individual a lead individual.
-      Use coortes (página → leads). GSC estratégico só via API autenticada (<code>gsc_insights</code>) — não arquivo público.
+      Use coortes (página → leads). GSC estratégico só via API autenticada (<code>gsc_insights</code>), não arquivo público.
     </div>
     <div id="error" class="err" hidden></div>
     <div class="tabs">
@@ -74,7 +74,7 @@
     <section id="panel-health" class="panel">
       <p class="muted">Probes, QA, spam e internos nunca somam com “leads” comerciais.</p>
       <div class="grid" id="health-kpi"></div>
-      <div class="card"><pre id="health-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">—</pre></div>
+      <div class="card"><pre id="health-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">, </pre></div>
     </section>
 
     <section id="panel-leads" class="panel">
@@ -107,7 +107,7 @@
     </section>
 
     <section id="panel-analytics" class="panel">
-      <div class="card"><pre id="analytics-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">—</pre></div>
+      <div class="card"><pre id="analytics-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">, </pre></div>
     </section>
 
     <section id="panel-gsc" class="panel">
@@ -115,7 +115,7 @@
     </section>
 
     <section id="panel-weekly" class="panel">
-      <div class="card"><pre id="weekly-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">—</pre></div>
+      <div class="card"><pre id="weekly-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">, </pre></div>
       <button type="button" id="btn-email" class="secondary" style="margin-top:.75rem">Disparar e-mail semanal (Resend, real-only)</button>
     </section>
   </main>
@@ -170,22 +170,22 @@
           ["Ganhos", c.won || 0],
           ["Pipeline real R$", f.pipeline_value || 0],
           ["Receita real R$", f.revenue || 0],
-          ["Última conversão real", f.last_real_conversion || sh.last_real_conversion || "—"],
+          ["Última conversão real", f.last_real_conversion || sh.last_real_conversion || ", "],
         ].map(([l, v]) => `<div class="card"><strong>${v}</strong><span>${l}</span></div>`).join("");
         const rates = f.rates || {};
         $("funnel-body").innerHTML = Object.keys(c).map((k) => {
           const rateKey = Object.keys(rates).find((r) => r.endsWith("_to_" + k));
-          return `<tr><td>${k}</td><td>${c[k]}</td><td>${rateKey ? rates[rateKey] : "—"}</td></tr>`;
+          return `<tr><td>${k}</td><td>${c[k]}</td><td>${rateKey ? rates[rateKey] : ", "}</td></tr>`;
         }).join("");
 
         $("health-kpi").innerHTML = [
-          ["Reais", sh.real_leads ?? "—"],
-          ["Sintéticos", sh.synthetic_leads ?? "—"],
-          ["QA", sh.qa_leads ?? "—"],
-          ["Spam", sh.spam_leads ?? "—"],
-          ["Internos", sh.internal_leads ?? "—"],
-          ["Pipeline real R$", sh.pipeline_real ?? "—"],
-          ["Receita real R$", sh.revenue_real ?? "—"],
+          ["Reais", sh.real_leads ?? ", "],
+          ["Sintéticos", sh.synthetic_leads ?? ", "],
+          ["QA", sh.qa_leads ?? ", "],
+          ["Spam", sh.spam_leads ?? ", "],
+          ["Internos", sh.internal_leads ?? ", "],
+          ["Pipeline real R$", sh.pipeline_real ?? ", "],
+          ["Receita real R$", sh.revenue_real ?? ", "],
         ].map(([l, v]) => `<div class="card"><strong>${v}</strong><span>${l}</span></div>`).join("");
         $("health-pre").textContent = JSON.stringify(sh, null, 2);
 

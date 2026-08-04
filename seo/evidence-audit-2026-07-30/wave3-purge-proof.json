@@ -30,8 +30,8 @@
     }
   ],
   "validate_seo": "VALIDATION_OK",
-  "bulk_status": "partialmente concluído — cards gramaticais e únicos por página; não são peças editoriais profundas",
-  "priority_status": "comprovadamente concluído — prosa manual preservada",
+  "bulk_status": "partialmente concluído, cards gramaticais e únicos por página; não são peças editoriais profundas",
+  "priority_status": "comprovadamente concluído, prosa manual preservada",
   "validate_exit": 0,
   "validate_tail": "VALIDATION_OK"
 }

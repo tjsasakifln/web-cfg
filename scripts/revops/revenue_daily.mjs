@@ -17,7 +17,7 @@ const headers = {
 };
 
 async function j(path, opts = {}) {
-  const res = await fetch(`${BASE}${path}`, { ...opts, headers: { ...headers, ...(opts.headers || {}) } });
+  const res = await fetch(`${BASE}${path}`, { ...opts, headers: { ...headers...(opts.headers || {}) } });
   const body = await res.json().catch(() => ({}));
   return { status: res.status, body };
 }
@@ -48,7 +48,7 @@ const idemKey = `probe-daily-${probeStamp}`;
 const payload = {
   nome: "SYNTHETIC-PROBE",
   email: `probe+${probeStamp}@example.com`,
-  estagio: "synthetic probe — discard",
+  estagio: "synthetic probe, discard",
   jornada: "operacao",
   consentimento: "true",
   origem: "/synthetic-probe-daily",
@@ -57,7 +57,7 @@ const payload = {
   landing_page: "/",
   test_mode: true,
   record_kind: "synthetic",
-  mensagem: "[QA] synthetic probe — do not contact",
+  mensagem: "[QA] synthetic probe, do not contact",
   idempotency_key: idemKey,
 };
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for Search Demand Observatory — drives real import + analyze on fixture CSV."""
+"""Tests for Search Demand Observatory, drives real import + analyze on fixture CSV."""
 
 from __future__ import annotations
 

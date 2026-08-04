@@ -7,7 +7,7 @@
 | Turnstile | Código | Off | Keys + CSP widget |
 | Analytics coletor | collect.cjs + script | dataLayer only | Deploy |
 | LGPD texto | Atualizado | Texto antigo | Deploy |
-| Secrets scan CI | OK | — | — |
+| Secrets scan CI | OK |, |, |
 | Branch protection | Docs | Desconhecido | GitHub settings |
 | pSEO wave | 0 publish (gate) | sitemap vazio | Editorial humana |
 | Monitor/SLO | Docs | Não ativo | Owner uptime |

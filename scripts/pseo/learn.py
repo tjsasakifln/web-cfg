@@ -49,7 +49,7 @@ def classify_funnel_stage(
     contract: float,
     revenue: float,
 ) -> str:
-    """Map metrics to funnel problem class — observational only."""
+    """Map metrics to funnel problem class, observational only."""
     idx = (indexation_status or "").upper()
     if revenue > 0:
         return "cluster_with_revenue"
@@ -89,7 +89,7 @@ def load_month(kind: str, yyyymm: str) -> dict[str, Any]:
 
 
 def classify_recommendation(page_id: str, gsc: dict, ana: dict, crm: dict, reg_page: dict | None) -> dict[str, Any]:
-    """Return typed recommendation — never irreversible mutation."""
+    """Return typed recommendation, never irreversible mutation."""
     impressions = float(gsc.get("impressions") or 0)
     clicks = float(gsc.get("clicks") or 0)
     ctr = float(gsc.get("ctr") or 0)
@@ -207,7 +207,7 @@ def run_learn(yyyymm: str) -> dict[str, Any]:
     }
     out_path = ROOT / "seo" / f"pseo-learn-{yyyymm}.json"
     out_path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    md = [f"# pSEO learn {yyyymm}", "", "Somente recomendações — sem mutação automática de publish.", ""]
+    md = [f"# pSEO learn {yyyymm}", "", "Somente recomendações, sem mutação automática de publish.", ""]
     for r in recs[:40]:
         md.append(f"## `{r['page_id']}`")
         md.append(f"- problems: {', '.join(r['problems'])}")

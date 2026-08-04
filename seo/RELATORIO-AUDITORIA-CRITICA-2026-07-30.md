@@ -1,4 +1,4 @@
-# Relatório final — Auditoria crítica SEO / CTR / conversão CONFENGE
+# Relatório final, Auditoria crítica SEO / CTR / conversão CONFENGE
 
 **Data:** 2026-07-30  
 **Fontes de verdade:** código em `/mnt/d/webcfg`, `git` (commits `2477b11`, `de4cbef`, follow-ups), HTML servido localmente, `netlify.toml`, probes em produção.  
@@ -22,16 +22,16 @@ A auditoria hostil identificou **regressões editoriais graves** (waves de mold 
 
 | Requisito | Situação encontrada | Correção aplicada | Evidência | Status final |
 |---|---|---|---|---|
-| Stack estática Netlify | Sem build; publish `.` | — | `netlify.toml` | comprovadamente concluído |
-| robots + sitemap | 132 = indexáveis | — | `VALIDATION_OK` | comprovadamente concluído |
-| Redirects legados 301 | Ativos em prod | — | `prod_report.log` | comprovadamente concluído |
-| Links broken/HTTP/legados | 0 | — | crawls anteriores + suite | comprovadamente concluído |
+| Stack estática Netlify | Sem build; publish `.` |, | `netlify.toml` | comprovadamente concluído |
+| robots + sitemap | 132 = indexáveis |, | `VALIDATION_OK` | comprovadamente concluído |
+| Redirects legados 301 | Ativos em prod |, | `prod_report.log` | comprovadamente concluído |
+| Links broken/HTTP/legados | 0 |, | crawls anteriores + suite | comprovadamente concluído |
 | SINAPI meta/tabela/WA/JSON-LD | Comparativo garbled na 1ª rodada | Comparativo + diag restaurados | `final_verify.json` sinapi | comprovadamente concluído |
 | Priority #diagnostico | Wave-4 H3-slot (13/14) | Hand-restore 53 cards | 14/14 CLEAN em final_verify | comprovadamente concluído |
 | Structural mold detector | Ausente (só exact-body) | H3-normalized ≥8 / priority ≥5 | validate_seo.py + RED 40 → GREEN 0 | comprovadamente concluído |
 | Bulk profundidade editorial | Shells de4cbef em HEAD | Freeze (sem wave-5) | WARN only no validator | parcialmente concluído |
 | Analytics + PII + success | Success ausente na 1ª | `lead_form_success` + obrigado | script.js + ANALYTICS_UNIT_OK | comprovadamente concluído |
-| Form POST E2E | Client OK | — | form em final_verify | parcialmente (host Forms) |
+| Form POST E2E | Client OK |, | form em final_verify | parcialmente (host Forms) |
 | Paridade prod = tree | Pode defasar | Deploy externo | curl prod | parcialmente |
 | GA4/GTM ID | Só dataLayer | Não inventado | script.js | N/A técnico |
 
@@ -98,7 +98,7 @@ Comando: `curl -sI --max-redirs 0 https://confenge.com.br/servicos` → `301|…
 - Canonical: `https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/`
 - Answer-box + `compare-table` + CPRB + checklist
 - Comparativo: `Monte a planilha na base desonerada` (garbled=false)
-- WA: `5548988344559` — `Olá, Tiago. Estou analisando uma licitação e preciso verificar se o orçamento deve usar SINAPI desonerado ou não desonerado. Posso enviar ed`
+- WA: `5548988344559`, `Olá, Tiago. Estou analisando uma licitação e preciso verificar se o orçamento deve usar SINAPI desonerado ou não desonerado. Posso enviar ed`
 - JSON-LD types: ['Organization', 'Person', 'Article', 'BreadcrumbList', 'FAQPage']
 - Serve: `200 38374 ['main','answer-box','compare-table']`
 
@@ -107,9 +107,9 @@ Comando: `curl -sI --max-redirs 0 https://confenge.com.br/servicos` → `301|…
 ## 6. Conteúdo repetitivo e canibalização
 
 **Padrões encontrados:**
-1. Wave-1 de4cbef (`Pedido ligado a`, templates de atraso) — residual em **bulk HEAD** (WARN)
-2. Wave-2/3 repair molds — purgados nas prioritárias
-3. **Wave-4 H3-slot** (~17 frames, freq 8–18) — **revertido** (bulk HEAD + priority hand)
+1. Wave-1 de4cbef (`Pedido ligado a`, templates de atraso), residual em **bulk HEAD** (WARN)
+2. Wave-2/3 repair molds, purgados nas prioritárias
+3. **Wave-4 H3-slot** (~17 frames, freq 8–18), **revertido** (bulk HEAD + priority hand)
 
 **Disposições:**
 - Prioritárias: aprofundadas / restauradas (14/14)
@@ -129,7 +129,7 @@ Comando: `curl -sI --max-redirs 0 https://confenge.com.br/servicos` → `301|…
 | Success | `data-lead-success=1` + script em obrigado | form |
 | Events | all True: ['whatsapp_click', 'lead_form_start', 'lead_form_submit', 'lead_form_error', 'lead_form_success', 'service_cta_click', 'content_to_service_click', 'internal_search', 'qualified_scroll'] | form |
 | PII | ANALYTICS_UNIT_OK | validate_suite |
-| POST E2E | parcial (Netlify Forms host) | — |
+| POST E2E | parcial (Netlify Forms host) |, |
 
 ---
 
@@ -181,11 +181,11 @@ structural_frames_ge8=0 max_freq=1
 
 ## 9. Problemas não corrigidos no código
 
-1. **Deploy Netlify** — tree validado; prod pode servir HTML antigo.  
-2. **POST Forms E2E** — requer backend Netlify.  
-3. **IDs GA4/GTM** — bus pronta; IDs não inventados.  
-4. **Bulk guides** — shells de4cbef em HEAD (WARN); freeze deliberado, sem rewrite em massa.  
-5. **GSC / DNS / credenciais** — externos.
+1. **Deploy Netlify**, tree validado; prod pode servir HTML antigo.  
+2. **POST Forms E2E**, requer backend Netlify.  
+3. **IDs GA4/GTM**, bus pronta; IDs não inventados.  
+4. **Bulk guides**, shells de4cbef em HEAD (WARN); freeze deliberado, sem rewrite em massa.  
+5. **GSC / DNS / credenciais**, externos.
 
 ---
 

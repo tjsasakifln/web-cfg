@@ -1,5 +1,5 @@
 /**
- * Safe analytics aggregation — no PII, no raw IP hashes in public output.
+ * Safe analytics aggregation, no PII, no raw IP hashes in public output.
  * Consumes event batches shaped like collect.cjs accepted events.
  */
 
@@ -140,7 +140,7 @@ function aggregateEvents(events) {
   const funnel_by_path = [];
   for (const [day, pm] of paths) {
     for (const row of pm.values()) {
-      funnel_by_path.push({ day, ...row });
+      funnel_by_path.push({ day...row });
     }
   }
 

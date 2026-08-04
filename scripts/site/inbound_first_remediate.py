@@ -138,7 +138,7 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
 
 
 def _footer_nav_html(brand: dict[str, Any]) -> str:
-    """Build footer navigation links from brand.json — never legacy /#atuacao anchors."""
+    """Build footer navigation links from brand.json, never legacy /#atuacao anchors."""
     nav = (brand.get("navigation") or {}).get("desktop") or []
     parts = ['<a href="/">Início</a>']
     seen = {"/"}
@@ -216,7 +216,7 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     "atraso-na-medicao-obra-publica": [
         (
             "A medição atrasada autoriza cobrar juros ou reter serviço?",
-            "Depende do contrato e da prova do atraso. Isole o valor executado, a data de envio do boletim e a obrigação da fiscalização de apreciar. Juros e medidas de preservação exigem cronologia e comunicação formal — não basta reclamação oral.",
+            "Depende do contrato e da prova do atraso. Isole o valor executado, a data de envio do boletim e a obrigação da fiscalização de apreciar. Juros e medidas de preservação exigem cronologia e comunicação formal, não basta reclamação oral.",
         ),
         (
             "Quais documentos montar primeiro quando a medição não anda?",
@@ -272,7 +272,7 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     "comprovacao-exequibilidade-proposta-obra": [
         (
             "Quando a Administração pode exigir prova de exequibilidade?",
-            "Quando o preço aparenta inexequível perante o edital e a legislação aplicável. A resposta deve mostrar composições, produtividade, BDI e premissas — sem fragilizar a planilha com improviso.",
+            "Quando o preço aparenta inexequível perante o edital e a legislação aplicável. A resposta deve mostrar composições, produtividade, BDI e premissas, sem fragilizar a planilha com improviso.",
         ),
         (
             "O que enviar na comprovação?",
@@ -356,7 +356,7 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     "glosa-por-qualidade-obra-publica": [
         (
             "A Administração pode glosar a medição inteira por qualidade?",
-            "Glosa deve ser proporcional ao defeito demonstrado e ao critério contratual. Glosa total sem laudo ou sem oportunidade de saneamento costuma ser frágil — mas contestar exige prova técnica, não só indignação.",
+            "Glosa deve ser proporcional ao defeito demonstrado e ao critério contratual. Glosa total sem laudo ou sem oportunidade de saneamento costuma ser frágil, mas contestar exige prova técnica, não só indignação.",
         ),
         (
             "O que anexar na contestação?",
@@ -440,7 +440,7 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     "sinapi-ou-sicro-obra-publica": [
         (
             "SINAPI ou SICRO: qual vale?",
-            "A que o edital e a natureza do serviço indicarem. Rodovia e infraestrutura pesada costumam puxar SICRO; edificações, SINAPI — mas a regra do certame manda.",
+            "A que o edital e a natureza do serviço indicarem. Rodovia e infraestrutura pesada costumam puxar SICRO; edificações, SINAPI, mas a regra do certame manda.",
         ),
         (
             "O que confrontar na proposta?",
@@ -459,8 +459,8 @@ def natural_converta_replacement(topic_phrase: str) -> str:
     topic = topic_phrase.strip()
     # Light cleanup: ensure readable
     return (
-        f"Delimite o problema — valor, período, serviço afetado, decisão necessária e "
-        f"responsável — antes de discutir {topic}. Objeto vago gera resposta vaga."
+        f"Delimite o problema, valor, período, serviço afetado, decisão necessária e "
+        f"responsável, antes de discutir {topic}. Objeto vago gera resposta vaga."
     )
 
 
@@ -480,7 +480,7 @@ def rewrite_machine_copy(html: str, slug: str, h1: str) -> str:
     # "O caso de {slug tokens} só se sustenta..." (allow inline tags)
     html = re.sub(
         r"O caso de\s+(?:<[^>]+>)?[a-záàâãéêíóôõúç0-9\s\-]{8,80}(?:</[^>]+>)?\s+s[oó] se sustenta[^.]*\.",
-        "O desfecho depende de prova contemporânea, enquadramento contratual e quantificação do impacto — não de narrativa genérica.",
+        "O desfecho depende de prova contemporânea, enquadramento contratual e quantificação do impacto, não de narrativa genérica.",
         html,
         flags=re.I,
     )
@@ -494,14 +494,14 @@ def rewrite_machine_copy(html: str, slug: str, h1: str) -> str:
 
     faqs = NATURAL_FAQ.get(slug)
     if not faqs:
-        # Generic natural FAQ from H1 — only if machine FAQ present
+        # Generic natural FAQ from H1, only if machine FAQ present
         if not re.search(r"Qual documento deve ser lido primeiro em um caso de", html, re.I):
             return html
         title = h1.split("|")[0].strip()
         faqs = [
             (
                 f"O que decide o desfecho em {title.lower()}?",
-                "A prova contemporânea, o enquadramento contratual e a quantificação do impacto. Sem nexo entre fato, cláusula e valor, o pedido não se sustenta — qualquer que seja o tema.",
+                "A prova contemporânea, o enquadramento contratual e a quantificação do impacto. Sem nexo entre fato, cláusula e valor, o pedido não se sustenta, qualquer que seja o tema.",
             ),
             (
                 "Quais documentos reunir primeiro?",
@@ -628,7 +628,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'data-journey="{journey_id}">'
         f'<div class="lead-inline-copy"><span>Próximo passo</span>'
         f"<strong>{html_lib.escape(cta)}</strong>"
-        f"<p>{html_lib.escape(next_step or 'Envie os documentos essenciais. Retorno com enquadramento técnico — sem promessa de resultado.')}</p>"
+        f"<p>{html_lib.escape(next_step or 'Envie os documentos essenciais. Retorno com enquadramento técnico, sem promessa de resultado.')}</p>"
         f"</div>"
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" data-cta-position="inline" data-journey="{journey_id}" '
@@ -689,7 +689,7 @@ def remediate_conteudos_pages(brand: dict[str, Any]) -> dict[str, Any]:
             )
             if machine_re.search(html):
                 html = rewrite_machine_copy(html, slug, h1)
-            # JSON-LD about.name often dumps raw slug tokens — naturalize for indexable pages
+            # JSON-LD about.name often dumps raw slug tokens, naturalize for indexable pages
             natural_about = h1.split("|")[0].strip()
             html = re.sub(
                 r'("about"\s*:\s*\[\s*\{\s*"@type"\s*:\s*"Thing"\s*,\s*"name"\s*:\s*")([^"]+)(")',
@@ -902,7 +902,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
     html = re.sub(r'<a class="cluster-card"[^>]*>.*?</a>', fix_cluster_card, html, flags=re.S)
 
     html = patch_shell(html, brand, current="/conteudos/")
-    # Hub intro honesty — whole <p class="content-lead"> only (never partial attrs)
+    # Hub intro honesty, whole <p class="content-lead"> only (never partial attrs)
     lead = (
         f'<p class="content-lead">{idx_n} guias indexáveis e publicamente recomendados. '
         f'Outros materiais permanecem em revisão editorial (noindex) e não entram nesta lista.</p>'
@@ -1132,7 +1132,7 @@ def remediate_editorial_and_commercial(brand: dict[str, Any]) -> int:
         *PILLARS,
         "especialista",
         "metodologia-inteligencia",
-        # Note: do NOT walk inteligencia/* bulk org pages — only hub if present
+        # Note: do NOT walk inteligencia/* bulk org pages, only hub if present
     ):
         b = ROOT / base
         if not b.exists():
@@ -1196,7 +1196,7 @@ def fix_radar(brand: dict[str, Any]) -> None:
             '<section class="lead-inline" id="radar-cta">'
             '<div class="lead-inline-copy"><span>Próximo passo</span>'
             "<strong>Sem perfil da empresa, o radar vira ruído.</strong>"
-            "<p>Calibre o recorte à capacidade, acervo e órgãos-alvo — não assine mais um alerta genérico.</p>"
+            "<p>Calibre o recorte à capacidade, acervo e órgãos-alvo, não assine mais um alerta genérico.</p>"
             "</div><div class=\"lead-inline-actions\">"
             f'<a class="button button-primary" href="{wa}" rel="noopener" target="_blank">'
             "Configurar meu radar de oportunidades</a>"
@@ -1238,7 +1238,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "http_status_production": "UNVERIFIED",
                 "canonical": f"{SITE}{url}" if url.startswith("/") else url,
                 "robots": robots,
-                "in_sitemap": False,  # filled later
+                "in_sitemap": False, # filled later
                 "in_hub": False,
                 "in_feed": False,
                 "internal_links_in": "",
@@ -1374,7 +1374,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "similarity_notes": "",
                 "disposition": disp,
                 "journey": "contrato" if page.get("journey") == "execucao" else page.get("journey") or "contrato",
-                "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+                "notes": "Wave 1, approval path is Tiago-only (PR #10)",
                 "path": "",
             }
             rows.append(row)

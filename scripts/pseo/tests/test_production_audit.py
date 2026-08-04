@@ -124,7 +124,7 @@ class TestProductionAuditGates(unittest.TestCase):
         row.googlebot = dict(row.browser)
         out = evaluate_row(
             row,
-            sitemap_urls=set(),  # empty hub out of sitemap
+            sitemap_urls=set(), # empty hub out of sitemap
             hub_link_targets=set(),
         )
         self.assertNotIn("noindex_on_publish", out.defects)
@@ -175,7 +175,7 @@ class TestProductionAuditGates(unittest.TestCase):
         out = evaluate_row(
             row,
             sitemap_urls={"https://confenge.com.br/radar/x/"},
-            hub_link_targets=set(),  # no hub links
+            hub_link_targets=set(), # no hub links
         )
         self.assertFalse(out.in_hub)
         self.assertIn("orphan_page", out.defects)
@@ -266,7 +266,7 @@ class TestProductionAuditGates(unittest.TestCase):
             score=90,
             status="publish",
         )
-        # render_hubs writes files — call items_for logic via module inspection
+        # render_hubs writes files, call items_for logic via module inspection
         import scripts.pseo.build as b
 
         src = Path(b.__file__).read_text(encoding="utf-8")

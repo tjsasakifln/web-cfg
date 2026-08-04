@@ -1,4 +1,4 @@
-# FINAL — Editorial + pSEO inbound (Wave 1)
+# FINAL, Editorial + pSEO inbound (Wave 1)
 
 **Terminal status:** `BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS`
 
@@ -47,7 +47,7 @@ Claiming COMPLETE while `editorial-wave1-operator` auto-approved was incorrect; 
 All live with **`noindex,follow`**, out of editorial sitemaps.
 
 ### Rejected
-- `/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/` — generic TCU portal URL + missing sumula date/text verification.
+- `/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/`, generic TCU portal URL + missing sumula date/text verification.
 
 ## Exact external actions to unblock
 
@@ -98,7 +98,7 @@ When a Wave 1 URL becomes INDEXABLE and overlaps a `manter` `/conteudos/` page:
 - Build refuses `--auto-approve`
 - Hubs + pages rendered; CTAs WhatsApp+mailto contextual
 - Analytics hooks in `script.js` → `/.netlify/functions/collect`
-- Segmented sitemaps (empty while 0 indexable — honest)
+- Segmented sitemaps (empty while 0 indexable, honest)
 - Evidence: deep review 36%, screenshots desktop/mobile, conversion smoke, env notes
 
 ## Production posture after this remediation deploy
@@ -133,10 +133,10 @@ A real named human (e.g. `Tiago Sasaki`). Blocked patterns: `*operator*`, `ci-*`
 1. DRAFT  
 2. LEGAL_SOURCE_VALIDATED (sources in SOURCE-MANIFEST)  
 3. TECHNICAL_REVIEWED (devices, CTAs, schema)  
-4. EDITORIAL_REVIEWED (naturalness gates) — **automated build stops here**  
-5. HUMAN_APPROVED — **`approve_cli.py` only**  
-6. INDEXABLE — `--indexable` flag on approve CLI  
-7. PUBLISHED — after production deploy confirmation (optional status)
+4. EDITORIAL_REVIEWED (naturalness gates), **automated build stops here**  
+5. HUMAN_APPROVED, **`approve_cli.py` only**  
+6. INDEXABLE, `--indexable` flag on approve CLI  
+7. PUBLISHED, after production deploy confirmation (optional status)
 
 ## Command
 See FINAL-EDITORIAL-PSEO-INBOUND.md section “Exact external actions”.

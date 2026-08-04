@@ -264,7 +264,7 @@ def main() -> int:
         "Garanta que",
         "como fazer ",
         "?.",
-        "Organize a linha do.",  # truncated FAQ/answer connective
+        "Organize a linha do.", # truncated FAQ/answer connective
         # bulk verb-glue / delay-template applied to unrelated topics (de4cbef regression)
         "Pedido ligado a",
         "Posicione edital fixa",
@@ -319,7 +319,7 @@ def main() -> int:
         "Ligue o exame de",
     )
     mold_answer_starts = Counter()
-    # Exact diagnostico card bodies across the corpus — mass frames fail above threshold
+    # Exact diagnostico card bodies across the corpus, mass frames fail above threshold
     diag_card_bodies: Counter[str] = Counter()
     # H3-normalized structural frames (H3-slotting cannot game this)
     structural_frames: Counter[str] = Counter()
@@ -343,7 +343,7 @@ def main() -> int:
         t = re.sub(r"(«H3»\s*)+", "«H3» ", t)
         return re.sub(r"\s+", " ", t).strip()
 
-    # Sentence ending on a bare connective — truncation signature
+    # Sentence ending on a bare connective, truncation signature
     trunc_end = re.compile(
         r"\b(do|de|da|das|dos|e|ou|para|com|em|no|na|por|sem|que|um|uma|os|as|a|o)\.\s*$",
         re.I,
@@ -375,7 +375,7 @@ def main() -> int:
         t = p.read_text(encoding="utf-8")
         slug = p.parent.name
         # Literal fingerprints: hard-fail on priority pages; bulk HEAD may still carry
-        # pre-existing de4cbef shells (declared partial — no mass rewrite of 100+ guides).
+        # pre-existing de4cbef shells (declared partial, no mass rewrite of 100+ guides).
         for bp in old_bp:
             if bp in t:
                 msg = f"boilerplate residual {slug}: {bp!r}"

@@ -10,7 +10,7 @@ from collections import Counter
 from typing import Any
 
 # Phrases and patterns that signal generic AI / pipeline residue in public HTML.
-PROHIBITED_PHRASES: tuple[str, ...] = (
+PROHIBITED_PHRASES: tuple[str...] = (
     "além disso",
     "nesse contexto",
     "neste contexto",
@@ -26,14 +26,14 @@ PROHIBITED_PHRASES: tuple[str, ...] = (
     "otimizar processos",
     "maximizar resultados",
     "navegar pelas complexidades",
-    "não apenas",  # often part of "não apenas X, mas também Y" series — flagged if overused
+    "não apenas", # often part of "não apenas X, mas também Y" series, flagged if overused
     "potencializar sua empresa",
     "transforme seus resultados",
     "saiba mais",
     "clique aqui",
 )
 
-INTERNAL_TERMS: tuple[str, ...] = (
+INTERNAL_TERMS: tuple[str...] = (
     "datalake",
     "pipeline",
     "evidence_kind",
@@ -58,7 +58,7 @@ INTERNAL_TERMS: tuple[str, ...] = (
 )
 
 # Soft AI openers that should not dominate openings
-GENERIC_OPENERS: tuple[str, ...] = (
+GENERIC_OPENERS: tuple[str...] = (
     "no mundo atual",
     "na era digital",
     "é inegável que",
@@ -69,7 +69,7 @@ GENERIC_OPENERS: tuple[str, ...] = (
 
 
 # Machine pSEO residue (keyword stuffed as if natural Portuguese)
-MACHINE_RESIDUE_RES: tuple[tuple[str, str], ...] = (
+MACHINE_RESIDUE_RES: tuple[tuple[str, str]...] = (
     ("converta_discussao", r"Converta a discuss[aã]o sobre"),
     ("faq_doc_caso_de", r"Qual documento deve ser lido primeiro em um caso de"),
     ("faq_risco_caso_de", r"Qual o primeiro risco pr[aá]tico em um caso de"),

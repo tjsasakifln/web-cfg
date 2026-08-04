@@ -53,11 +53,11 @@
     "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
     "official_references": [
       {
-        "name": "Lei nº 14.133/2021 — licitações e contratos (Planalto)",
+        "name": "Lei nº 14.133/2021, licitações e contratos (Planalto)",
         "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
       },
       {
-        "name": "PNCP — Portal Nacional de Contratações Públicas",
+        "name": "PNCP, Portal Nacional de Contratações Públicas",
         "url": "https://www.gov.br/pncp/pt-br"
       }
     ],
@@ -137,11 +137,11 @@
     "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
     "official_references": [
       {
-        "name": "SINAPI — Caixa Econômica Federal",
+        "name": "SINAPI, Caixa Econômica Federal",
         "url": "https://www.caixa.gov.br/poder-publico/modernizacao-gestao/sinapi/Paginas/default.aspx"
       },
       {
-        "name": "SICRO — DNIT (sistemas de custos rodoviários)",
+        "name": "SICRO, DNIT (sistemas de custos rodoviários)",
         "url": "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-e-pagamentos/custos-e-pagamentos-dnit/sistemas-de-custos/sicro"
       }
     ],
@@ -220,11 +220,11 @@
     "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições estão sujeitos a disputas de critério, diário de obra e parcela incontroversa.",
     "official_references": [
       {
-        "name": "Lei nº 14.133/2021 — execução e pagamento (Planalto)",
+        "name": "Lei nº 14.133/2021, execução e pagamento (Planalto)",
         "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
       },
       {
-        "name": "TCU — licitações e contratos (orientação)",
+        "name": "TCU, licitações e contratos (orientação)",
         "url": "https://portal.tcu.gov.br/licitacoes-e-contratos/"
       }
     ],
@@ -302,11 +302,11 @@
     "observed_pattern": "Obras de edificações e saneamento estão particularmente sujeitas a alterações de projeto e quantitativos durante a execução. Sem registro contemporâneo, o aditivo vira custo absorvido.",
     "official_references": [
       {
-        "name": "Lei nº 14.133/2021 — alterações contratuais (Planalto)",
+        "name": "Lei nº 14.133/2021, alterações contratuais (Planalto)",
         "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
       },
       {
-        "name": "TCU — licitações e contratos",
+        "name": "TCU, licitações e contratos",
         "url": "https://portal.tcu.gov.br/licitacoes-e-contratos/"
       }
     ],
@@ -352,7 +352,7 @@
       },
       {
         "kind": "observed_pattern",
-        "summary": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução."
+        "summary": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução."
       },
       {
         "kind": "market_density",
@@ -382,14 +382,14 @@
     "limitations": [
       "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
     ],
-    "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+    "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
     "official_references": [
       {
-        "name": "Lei nº 14.133/2021 — reequilíbrio e álea (Planalto)",
+        "name": "Lei nº 14.133/2021, reequilíbrio e álea (Planalto)",
         "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
       },
       {
-        "name": "PNCP — consultas públicas de contratações",
+        "name": "PNCP, consultas públicas de contratações",
         "url": "https://www.gov.br/pncp/pt-br"
       }
     ],

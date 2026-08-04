@@ -10,15 +10,15 @@ const pages = pkt.pages || [];
 ok("pages_12", pages.length >= 11, String(pages.length));
 for (const p of pages) {
   const id = p.page_id;
-  ok(`intent:${id}`, p.intent && p.intent !== "—" && !String(p.intent).includes("undefined"));
-  ok(`material_diff:${id}`, p.material_difference && p.material_difference !== "—" && p.material_difference.length > 40);
+  ok(`intent:${id}`, p.intent && p.intent !== "—" && p.intent !== "n/d" && p.intent !== ", " && !String(p.intent).includes("undefined"));
+  ok(`material_diff:${id}`, p.material_difference && p.material_difference !== "—" && p.material_difference !== "n/d" && p.material_difference !== ", " && p.material_difference.length > 40);
   ok(`risk:${id}`, p.legal_risk && p.legal_risk !== "ver packet" && p.legal_risk.length > 20);
-  ok(`competitor:${id}`, p.competitor && p.competitor !== "—");
+  ok(`competitor:${id}`, p.competitor && p.competitor !== "—" && p.competitor !== "n/d" && p.competitor !== ", ");
   ok(`cann_object:${id}`, p.cannibalization && typeof p.cannibalization === "object");
 }
 ok("ui_has_intencao_labels", (html.match(/<dt>Intenção<\/dt>/g) || []).length >= 11);
 ok("ui_has_diff_labels", (html.match(/Diferença material/g) || []).length >= 11);
-ok("ui_not_all_em_dash_intent", !html.includes("<dt>Intenção</dt><dd>—</dd>"));
+ok("ui_not_all_em_dash_intent", !html.includes("<dt>Intenção</dt><dd>—</dd>") && !html.includes("<dt>Intenção</dt><dd>n/d</dd>") && !html.includes("<dt>Intenção</dt><dd>, </dd>"));
 // REJECTED jurisprudence must not be approvable
 ok(
   "rejected_jur_approve_blocked",

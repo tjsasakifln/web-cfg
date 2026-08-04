@@ -1,5 +1,5 @@
 /**
- * Production cutover gates — fail when live site is on older SHA or architecture.
+ * Production cutover gates, fail when live site is on older SHA or architecture.
  * Usage:
  *   node scripts/site/test_production_cutover.mjs
  *   node scripts/site/test_production_cutover.mjs https://confenge.com.br

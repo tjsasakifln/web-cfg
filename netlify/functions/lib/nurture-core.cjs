@@ -1,5 +1,5 @@
 /**
- * Nurture sequences — CONFENGE.
+ * Nurture sequences, CONFENGE.
  * Tracks: contrato | edital | operacao (5 messages each).
  * PII only in private store; public responses never echo email in full.
  */
@@ -181,7 +181,7 @@ function suppressEmail(storeRecord, email, reason) {
   const now = new Date().toISOString();
   return {
     email_hash: emailHash(e),
-    // store email only in private suppression list for matching — ops only
+    // store email only in private suppression list for matching, ops only
     email: e,
     reason: reason ? String(reason).slice(0, 80) : "manual",
     at: now,
@@ -232,7 +232,7 @@ function nextDueMessage(rec, tracksData, nowMs) {
   if ((nowMs || Date.now()) < dueAt) return null;
 
   const site = tracksData.site || "https://confenge.com.br";
-  // unsub URL uses token only when we still have raw — caller injects
+  // unsub URL uses token only when we still have raw, caller injects
   return {
     index: idx,
     day_offset: msg.day_offset,

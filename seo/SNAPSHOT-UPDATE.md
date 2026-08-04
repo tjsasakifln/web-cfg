@@ -15,7 +15,7 @@ Branch with the durable exporter (PR #187 / `feat/pseo-export-isolated` until me
 cd "/path/to/extra-cli"
 # once on main: git checkout main && git pull
 git checkout feat/pseo-export-isolated   # until merged
-set -a && source .env && set +a          # DATABASE_URL / LOCAL_DATALAKE_DSN — never commit
+set -a && source .env && set +a          # DATABASE_URL / LOCAL_DATALAKE_DSN, never commit
 python3 -m scripts.pseo.export_web_cfg \
   --out /tmp/pseo-export \
   --as-of $(date -I) \
@@ -55,7 +55,7 @@ npm test
 ## Deploy
 
 - Netlify build command: `npm run build:site` (see `netlify.toml`).
-- Public marker: `/.well-known/pseo-build.json` (SHA, abbreviated snapshot hash, counts — no secrets).
+- Public marker: `/.well-known/pseo-build.json` (SHA, abbreviated snapshot hash, counts, no secrets).
 - After deploy: `npm run pseo:audit:production` against `https://confenge.com.br`.
 
 ## Schema

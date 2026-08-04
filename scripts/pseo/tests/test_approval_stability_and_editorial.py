@@ -1,7 +1,7 @@
 """Tests for approval stability proof + evidence_kind language gates.
 
 Drives shipped modules (prove_approval_stability, enrich_problem_service,
-editorial_audit, score.icp_similarity) — no reimplementation.
+editorial_audit, score.icp_similarity), no reimplementation.
 """
 
 from __future__ import annotations
@@ -184,7 +184,7 @@ class TestEvidenceKindLanguage(unittest.TestCase):
             "evidence_kind": "normative_editorial",
             "sources": [],
         }
-        # no HTML path — uses registry fields as text
+        # no HTML path, uses registry fields as text
         r = audit_page(reg, None)
         codes = {i.code for i in r.issues}
         self.assertIn("evidence_kind_language_mismatch", codes)

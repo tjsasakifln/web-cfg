@@ -24,17 +24,17 @@
       "acompanhamento-contratos-obras",
       "aditivos-obras-publicas"
     ],
-    "description": "Contratos públicos de pavimentação, asfalto, vias urbanas, drenagem e obras de arte correntes — típicos de prefeituras e departamentos de infraestrutura.",
+    "description": "Contratos públicos de pavimentação, asfalto, vias urbanas, drenagem e obras de arte correntes, típicos de prefeituras e departamentos de infraestrutura.",
     "evidence_buyer_count": 65,
     "evidence_contract_count": 78,
     "id": "pavimentacao-infraestrutura-viaria",
     "label": "Pavimentação e infraestrutura viária",
     "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
+      "Classificação por padrões textuais do objeto, objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
       "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
     ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
+    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE, classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
     "object_patterns_public": [
       "paviment",
@@ -142,11 +142,11 @@
     "id": "edificacoes-publicas",
     "label": "Edificações públicas",
     "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
+      "Classificação por padrões textuais do objeto, objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
       "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
     ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
+    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE, classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
     "object_patterns_public": [
       "edifica[cç]",
@@ -240,17 +240,17 @@
       "reequilibrio-obras-publicas",
       "acompanhamento-contratos-obras"
     ],
-    "description": "Redes de água e esgoto, drenagem pluvial estrutural, ETAs/ETEs e adutoras — contratos com maior complexidade técnica e risco de quantitativo.",
+    "description": "Redes de água e esgoto, drenagem pluvial estrutural, ETAs/ETEs e adutoras, contratos com maior complexidade técnica e risco de quantitativo.",
     "evidence_buyer_count": 22,
     "evidence_contract_count": 25,
     "id": "saneamento-hidraulica",
     "label": "Saneamento e hidráulica",
     "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
+      "Classificação por padrões textuais do objeto, objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
       "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
     ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
+    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE, classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
     "object_patterns_public": [
       "saneamento",
@@ -331,11 +331,11 @@
     "id": "climatizacao-instalacoes",
     "label": "Climatização e instalações prediais",
     "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
+      "Classificação por padrões textuais do objeto, objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
       "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
     ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
+    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE, classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
     "object_patterns_public": [
       "climatiza",
@@ -400,17 +400,17 @@
       "medicoes-glosas-obras-publicas",
       "defesa-tecnica-contratos-publicos"
     ],
-    "description": "Manutenção predial contínua e serviços técnicos de engenharia para órgãos públicos — contratos recorrentes com medição mensal.",
+    "description": "Manutenção predial contínua e serviços técnicos de engenharia para órgãos públicos, contratos recorrentes com medição mensal.",
     "evidence_buyer_count": 16,
     "evidence_contract_count": 66,
     "id": "manutencao-predial-engenharia",
     "label": "Manutenção predial e serviços de engenharia",
     "limitations": [
-      "Classificação por padrões textuais do objeto — objetos heterogêneos podem receber mais de um arquétipo.",
+      "Classificação por padrões textuais do objeto, objetos heterogêneos podem receber mais de um arquétipo.",
       "Cobertura do datalake não é censo nacional completo; densidade reflete fontes ingeridas (ênfase SC/Sul/Sudeste).",
       "Faixas de valor incluem contratos de portes distintos; não usar mediana como preço unitário de referência."
     ],
-    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE — classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
+    "methodology": "Arquétipos derivados em duas camadas: (1) assinatura interna do ICP CONFENGE, classes de atividade de engenharia confirmada e sinais públicos de portfólio multi-órgão/multi-objeto, sem exportar nomes, scores ou estados de pipeline; (2) clusterização de objetos de contratos públicos (PNCP e fontes oficiais no datalake) por padrões linguísticos e densidade regional. Nenhum arquétipo é hardcodado como página nominal de prospect. Padrões sem massa crítica no horizonte analisado são omitidos.",
     "modalities_observed": [],
     "object_patterns_public": [
       "manuten[cç][aã]o predial",

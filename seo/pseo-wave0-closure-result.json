@@ -88,8 +88,8 @@
     "extra_cli_pr_187": "MERGED"
   },
   "unresolved_risks": [
-    "GSC credentials absent — all seeds NOT_INSPECTED",
-    "Published snapshot source_commit_sha not on extra-cli main (feat/pseo-semantic-sota); re-export from main required for PASS — not invented",
+    "GSC credentials absent, all seeds NOT_INSPECTED",
+    "Published snapshot source_commit_sha not on extra-cli main (feat/pseo-semantic-sota); re-export from main required for PASS, not invented",
     "reexport_without_undue_invalidation not proven against live PG"
   ],
   "production_audit": {

@@ -2,7 +2,7 @@
 """Assemble and audit the isolated public site artifact (_site).
 
 Production Netlify publish must equal PUBLIC_DIR. Only allowlisted public
-paths are copied; internal trees (data/, seo/, scripts/, .git/, …) never
+paths are copied; internal trees (data/, seo/, scripts/.git/, …) never
 enter the artifact.
 """
 
@@ -161,7 +161,7 @@ FORBIDDEN_BASENAMES = frozenset(
         "conftest.py",
         ".env",
         "registry.json",
-        "manifest.json",  # private snapshot only; public uses .well-known/pseo-build.json
+        "manifest.json", # private snapshot only; public uses .well-known/pseo-build.json
     }
 )
 
@@ -279,7 +279,7 @@ def assemble_public_artifact(
         if not src.is_dir():
             continue
         # Safety: never follow into forbidden nested names during copy via ignore.
-        # ops/data is NOT public — strategic GSC insights are served only via
+        # ops/data is NOT public, strategic GSC insights are served only via
         # authenticated ops?action=gsc_insights (robots Disallow is not security).
         def _ignore(directory: str, names: list[str]) -> set[str]:
             skip = set()

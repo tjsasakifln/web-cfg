@@ -15,26 +15,26 @@
         {
           "day_offset": 0,
           "subject": "Contrato sob pressão: o que registrar nas próximas 48h",
-          "preheader": "Cronologia, nexo e prova contemporânea — sem jargão vazio.",
+          "preheader": "Cronologia, nexo e prova contemporânea, sem jargão vazio.",
           "body_md": "Se o contrato já está em execução e algo saiu do planejado, o erro mais caro é tratar o caso só na memória.\n\nNas próximas 48h, priorize:\n1. Data e fato (ordem de serviço, diário, e-mail/ofício);\n2. Quem determinou o quê;\n3. Impacto em prazo e/ou custo (mesmo que estimado);\n4. Comunicação formal tempestiva.\n\nFerramenta útil agora: matriz de atraso (orientativa).\n{{tool_url}}\n\nLeitura: defesa de margem.\n{{cta_url}}\n\nIsto não é parecer jurídico. É rotina de prova."
         },
         {
           "day_offset": 2,
           "subject": "Glosa e medição: o que separa discussão de dossiê",
-          "preheader": "Medição não é só planilha — é nexo e tempestividade.",
+          "preheader": "Medição não é só planilha, é nexo e tempestividade.",
           "body_md": "Quando a fiscalização glosa ou trava medição, o dossiê precisa responder:\n• Qual item/etapa?\n• Qual critério contratual ou de projeto?\n• Qual evidência contemporânea?\n• Qual pedido certo (valor, refazer, reabrir medição)?\n\nSem pedido certo, a conversa vira ruído.\n\nOferta se o caso for material: Contract Defense & Margin.\n{{cta_url}}"
         },
         {
           "day_offset": 5,
           "subject": "Aditivo: saldo de 25%/50% antes de protocolar",
-          "preheader": "Art. 125 — saldos de acréscimo e supressão em separado.",
+          "preheader": "Art. 125, saldos de acréscimo e supressão em separado.",
           "body_md": "Antes do próximo termo aditivo, calcule o saldo orientativo de acréscimos e supressões sobre o valor inicial atualizado (Lei 14.133/2021, art. 125).\n\nUse o verificador (resultado no navegador, sem cadastro):\nhttps://confenge.com.br/ferramentas/limite-acrescimos-supressoes/\n\nSe o saldo estiver apertado ou houver item novo, organize planilha + nexo + comunicações antes de assinar."
         },
         {
           "day_offset": 9,
           "subject": "Reequilíbrio: prontidão do dossiê (score honesto)",
-          "preheader": "Checklist de documentos — score alto ≠ direito automático.",
-          "body_md": "Pedido de reequilíbrio sem cronologia e memória de cálculo vira narrativa.\n\nChecklist de prontidão:\nhttps://confenge.com.br/ferramentas/checklist-reequilibrio/\n\nScore alto significa organização mínima para decisão — não deferimento.\n\nSe o impacto for material, o próximo passo é validar tese e números com engenharia + prova.\n{{cta_url}}"
+          "preheader": "Checklist de documentos, score alto ≠ direito automático.",
+          "body_md": "Pedido de reequilíbrio sem cronologia e memória de cálculo vira narrativa.\n\nChecklist de prontidão:\nhttps://confenge.com.br/ferramentas/checklist-reequilibrio/\n\nScore alto significa organização mínima para decisão, não deferimento.\n\nSe o impacto for material, o próximo passo é validar tese e números com engenharia + prova.\n{{cta_url}}"
         },
         {
           "day_offset": 14,
@@ -56,7 +56,7 @@
         {
           "day_offset": 0,
           "subject": "Edital em análise: 5 riscos antes de comprometer capital",
-          "preheader": "Não é lista genérica — é filtro de decisão.",
+          "preheader": "Não é lista genérica, é filtro de decisão.",
           "body_md": "Antes de montar a proposta, responda com documentos:\n1. Matriz de riscos e o que a Administração empurrou para o contratado;\n2. Orçamento de referência vs realidade de mercado;\n3. Exequibilidade e desconto em itens sensíveis;\n4. Habilitação/acervo e caminhos de impugnação;\n5. Prazo e cronograma realistas.\n\nLeitura de oferta: Bid Room.\n{{cta_url}}"
         },
         {
@@ -69,19 +69,19 @@
           "day_offset": 5,
           "subject": "Impugnação e esclarecimento: tempismo é posição",
           "preheader": "Pergunta mal feita não protege; impugnação sem nexo também não.",
-          "body_md": "Use o prazo de esclarecimento/impugnação para remover ambiguidade material — não para registrar opinião.\n\nPergunte com:\n• cláusula/item do edital;\n• impacto em preço ou prazo;\n• pedido objetivo (excluir, alterar, esclarecer).\n\nSe o edital já estiver no limite do prazo, priorize o que muda a decisão de participar."
+          "body_md": "Use o prazo de esclarecimento/impugnação para remover ambiguidade material, não para registrar opinião.\n\nPergunte com:\n• cláusula/item do edital;\n• impacto em preço ou prazo;\n• pedido objetivo (excluir, alterar, esclarecer).\n\nSe o edital já estiver no limite do prazo, priorize o que muda a decisão de participar."
         },
         {
           "day_offset": 9,
           "subject": "Decisão de participar: critérios, não feeling",
-          "preheader": "Capacidade, margem, órgão e risco — nessa ordem.",
+          "preheader": "Capacidade, margem, órgão e risco, nessa ordem.",
           "body_md": "Um Bid Room sério termina em decisão: participar, participar com ressalva, ou recusar.\n\nCritérios mínimos:\n• capacidade técnica e financeira real;\n• margem após riscos do edital;\n• histórico do órgão/fiscalização quando conhecido;\n• custo de oportunidade vs carteira.\n\nOferta: {{cta_url}}"
         },
         {
           "day_offset": 14,
           "subject": "Próximo passo se o edital ainda está vivo",
           "preheader": "Análise inicial sem promessa de vitória.",
-          "body_md": "Se o edital ainda está no radar da empresa, o próximo passo é uma leitura crítica com documentos — não mais um PDF genérico.\n\nBid Room: {{cta_url}}\nFormulário: https://confenge.com.br/#contato?jornada=edital\n\nSair da sequência: {{unsubscribe_url}}"
+          "body_md": "Se o edital ainda está no radar da empresa, o próximo passo é uma leitura crítica com documentos, não mais um PDF genérico.\n\nBid Room: {{cta_url}}\nFormulário: https://confenge.com.br/#contato?jornada=edital\n\nSair da sequência: {{unsubscribe_url}}"
         }
       ]
     },
@@ -103,8 +103,8 @@
         {
           "day_offset": 2,
           "subject": "Radar e demanda: o que o Google já mostra (sem inventar mercado)",
-          "preheader": "Demanda orgânica verificada — lineage explícito.",
-          "body_md": "O Radar aberto da CONFENGE publica metodologia e demanda GSC com lineage — sem inventar tickets nacionais sem export auditável.\n\n{{tool_url}}\n\nUse para priorizar conteúdo e ofertas, não como censo de mercado."
+          "preheader": "Demanda orgânica verificada, lineage explícito.",
+          "body_md": "O Radar aberto da CONFENGE publica metodologia e demanda GSC com lineage, sem inventar tickets nacionais sem export auditável.\n\n{{tool_url}}\n\nUse para priorizar conteúdo e ofertas, não como censo de mercado."
         },
         {
           "day_offset": 5,
@@ -116,7 +116,7 @@
           "day_offset": 9,
           "subject": "Aprendizado pós-resultado (ganhou ou perdeu)",
           "preheader": "Sem memória de decisão, a empresa repete o erro.",
-          "body_md": "Depois do resultado:\n1. O que a proposta assumiu de risco?\n2. O que o órgão valorizou de fato?\n3. O que muda no próximo filtro?\n\nIsso é operação — não post-mortem cosmética.\n\n{{cta_url}}"
+          "body_md": "Depois do resultado:\n1. O que a proposta assumiu de risco?\n2. O que o órgão valorizou de fato?\n3. O que muda no próximo filtro?\n\nIsso é operação, não post-mortem cosmética.\n\n{{cta_url}}"
         },
         {
           "day_offset": 14,

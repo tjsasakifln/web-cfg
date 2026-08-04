@@ -57,7 +57,7 @@ async function verifyTurnstile(token, ip) {
 
 /**
  * Authenticated webhook (Slack/Discord/custom). HMAC optional.
- * Body contains operational fields including contact for ops — over TLS to private endpoint.
+ * Body contains operational fields including contact for ops, over TLS to private endpoint.
  * Never log the body.
  */
 async function deliverOpsWebhook(record) {
@@ -128,7 +128,7 @@ async function deliverOpsWebhook(record) {
  * No default public topic. NTFY_TOKEN required if NTFY_URL set.
  */
 async function deliverNtfyAuth(record) {
-  const url = process.env.NTFY_URL; // full URL e.g. https://ntfy.sh/private-topic — must be env, never hardcoded
+  const url = process.env.NTFY_URL; // full URL e.g. https://ntfy.sh/private-topic, must be env, never hardcoded
   const token = process.env.NTFY_TOKEN;
   if (!url) return { channel: "ntfy", status: "skipped", reason: "not_configured" };
   if (!token) {
@@ -204,7 +204,7 @@ async function deliverResendEmail(record) {
     record.utm_campaign ? `utm_campaign: ${record.utm_campaign}` : null,
     record.mensagem ? `Mensagem: ${record.mensagem}` : null,
     "",
-    "— Enviado pelo pipeline de leads confenge.com.br (Resend).",
+    ", Enviado pelo pipeline de leads confenge.com.br (Resend).",
   ]
     .filter((l) => l !== null)
     .join("\n");
@@ -246,7 +246,7 @@ async function deliverResendEmail(record) {
 
 /**
  * Run all delivery channels. Persist-before-call is caller's responsibility.
- * Failures do not throw — return status map for audit.
+ * Failures do not throw, return status map for audit.
  */
 async function deliverAll(record) {
   const notifyResults = await Promise.all([deliverOpsWebhook(record), deliverNtfyAuth(record)]);

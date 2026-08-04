@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Iterable
 
-# Jaccard on word shingles — pages above threshold are too similar.
+# Jaccard on word shingles, pages above threshold are too similar.
 DEFAULT_THRESHOLD = 0.82
 
 

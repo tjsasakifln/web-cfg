@@ -1,4 +1,4 @@
-# Changelog SEO — sprint 2026-07-30
+# Changelog SEO, sprint 2026-07-30
 
 ## Dados
 
@@ -32,7 +32,7 @@
 
 ## Reescrita profunda (Tier S + GSC zero-click)
 
-1. `sinapi-desonerado-nao-desonerado` — tabela, decisão, checklist, exemplo, CPRB, 3 CTAs, title SERP
+1. `sinapi-desonerado-nao-desonerado`, tabela, decisão, checklist, exemplo, CPRB, 3 CTAs, title SERP
 2. `bdi-diferenciado-obra-publica`
 3. `limite-aditivo-25-50-obra-publica`
 4. `mobilizacao-desmobilizacao-orcamento-obra`

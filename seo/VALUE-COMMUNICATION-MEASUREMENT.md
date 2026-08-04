@@ -1,4 +1,4 @@
-# Medição comercial — CONFENGE Value Communication 2040
+# Medição comercial, CONFENGE Value Communication 2040
 
 ## Baseline
 

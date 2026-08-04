@@ -186,7 +186,7 @@
         "n_entries": 3,
         "ok": true
       },
-      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina",
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Santa Catarina",
       "human_review": "PENDING",
       "indexability_score": 79,
       "indexability_score_alias": 79,
@@ -434,7 +434,7 @@
         "n_entries": 3,
         "ok": true
       },
-      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Piauí",
+      "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária, Piauí",
       "human_review": "PENDING",
       "indexability_score": 73,
       "indexability_score_alias": 73,
@@ -682,7 +682,7 @@
         "n_entries": 3,
         "ok": true
       },
-      "h1": "Quanto o poder público contratou em Edificações públicas — Minas Gerais",
+      "h1": "Quanto o poder público contratou em Edificações públicas, Minas Gerais",
       "human_review": "PENDING",
       "indexability_score": 77,
       "indexability_score_alias": 77,
@@ -934,7 +934,7 @@
         "n_entries": 3,
         "ok": true
       },
-      "h1": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul",
+      "h1": "Quanto o poder público contratou em Edificações públicas, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 77,
       "indexability_score_alias": 77,
@@ -1028,7 +1028,7 @@
             "url": "https://pncp.gov.br/"
           },
           {
-            "name": "Portal Nacional de Contratações Públicas — consultas",
+            "name": "Portal Nacional de Contratações Públicas, consultas",
             "url": "https://www.gov.br/pncp/pt-br"
           }
         ],
@@ -1230,7 +1230,7 @@
         ],
         "limitations": [
           "Observações são contratos integrais, não preços unitários.",
-          "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+          "Grupo de comparabilidade semântico, ainda não substitui orçamento técnico.",
           "Outliers identificados por regra IQR 1.5×."
         ],
         "max": null,
@@ -1331,7 +1331,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Faixa de valores contratuais de manutenção predial em Rio Grande do Sul: mediana, P25 e P75 com 19 contratos primários. Tickets contratuais integrais —…",
+      "description": "Faixa de valores contratuais de manutenção predial em Rio Grande do Sul: mediana, P25 e P75 com 19 contratos primários. Tickets contratuais integrais, …",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -1340,7 +1340,7 @@
           "denominator": null,
           "limitations": [
             "Observações são contratos integrais, não preços unitários.",
-            "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+            "Grupo de comparabilidade semântico, ainda não substitui orçamento técnico.",
             "Outliers identificados por regra IQR 1.5×."
           ],
           "period_end": "2026-07-03",
@@ -1357,7 +1357,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Valores de contratos — manutenção predial (Rio Grande do Sul)",
+      "h1": "Valores de contratos, manutenção predial (Rio Grande do Sul)",
       "human_review": "NEEDS_DATA_FIX",
       "indexability_score": 84,
       "indexability_score_alias": 84,
@@ -1485,7 +1485,7 @@
         ],
         "limitations": [
           "Observações são contratos integrais, não preços unitários.",
-          "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+          "Grupo de comparabilidade semântico, ainda não substitui orçamento técnico.",
           "Outliers identificados por regra IQR 1.5×."
         ],
         "max": null,
@@ -1586,7 +1586,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Faixa de valores contratuais de paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais — não são preços…",
+      "description": "Faixa de valores contratuais de paralelepípedo em Piauí: mediana, P25 e P75 com 12 contratos primários. Tickets contratuais integrais, não são preços…",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -1595,7 +1595,7 @@
           "denominator": null,
           "limitations": [
             "Observações são contratos integrais, não preços unitários.",
-            "Grupo de comparabilidade semântico — ainda não substitui orçamento técnico.",
+            "Grupo de comparabilidade semântico, ainda não substitui orçamento técnico.",
             "Outliers identificados por regra IQR 1.5×."
           ],
           "period_end": "2026-07-08",
@@ -1612,7 +1612,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Valores de contratos — paralelepípedo (Piauí)",
+      "h1": "Valores de contratos, paralelepípedo (Piauí)",
       "human_review": "NEEDS_DATA_FIX",
       "indexability_score": 80,
       "indexability_score_alias": 80,
@@ -1751,7 +1751,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público — sem juízo…",
+      "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público, sem juízo…",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -1776,7 +1776,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia — Rio Grande do Sul",
+      "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 75,
       "indexability_score_alias": 75,
@@ -2236,7 +2236,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -2263,7 +2263,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Oportunidades abertas em Edificações públicas — Parana",
+      "h1": "Oportunidades abertas em Edificações públicas, Parana",
       "human_review": "PENDING",
       "indexability_score": 87,
       "indexability_score_alias": 87,
@@ -2544,7 +2544,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -2571,7 +2571,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Santa Catarina",
       "human_review": "NEEDS_DATA_FIX",
       "indexability_score": 80,
       "indexability_score_alias": 80,
@@ -2805,7 +2805,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -2832,7 +2832,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
+      "h1": "Oportunidades abertas em Saneamento e hidráulica, Santa Catarina",
       "human_review": "PENDING",
       "indexability_score": 75,
       "indexability_score_alias": 75,
@@ -3038,7 +3038,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
+      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por…",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -3065,7 +3065,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 72,
       "indexability_score_alias": 72,
@@ -3271,7 +3271,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -3298,7 +3298,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Parana",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária, Parana",
       "human_review": "PENDING",
       "indexability_score": 72,
       "indexability_score_alias": 72,
@@ -3481,7 +3481,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
+      "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen, não é URL por edital.",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -3508,7 +3508,7 @@
         "n_entries": 1,
         "ok": true
       },
-      "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
+      "h1": "Oportunidades abertas em Edificações públicas, Rio Grande do Sul",
       "human_review": "PENDING",
       "indexability_score": 69,
       "indexability_score_alias": 69,
@@ -3630,11 +3630,11 @@
         "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
         "official_references": [
           {
-            "name": "Lei nº 14.133/2021 — licitações e contratos (Planalto)",
+            "name": "Lei nº 14.133/2021, licitações e contratos (Planalto)",
             "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
           },
           {
-            "name": "PNCP — Portal Nacional de Contratações Públicas",
+            "name": "PNCP, Portal Nacional de Contratações Públicas",
             "url": "https://www.gov.br/pncp/pt-br"
           }
         ],
@@ -3807,11 +3807,11 @@
         "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
         "official_references": [
           {
-            "name": "SINAPI — Caixa Econômica Federal",
+            "name": "SINAPI, Caixa Econômica Federal",
             "url": "https://www.caixa.gov.br/poder-publico/modernizacao-gestao/sinapi/Paginas/default.aspx"
           },
           {
-            "name": "SICRO — DNIT (sistemas de custos rodoviários)",
+            "name": "SICRO, DNIT (sistemas de custos rodoviários)",
             "url": "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-e-pagamentos/custos-e-pagamentos-dnit/sistemas-de-custos/sicro"
           }
         ],
@@ -3983,11 +3983,11 @@
         "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições estão sujeitos a disputas de critério, diário de obra e parcela incontroversa.",
         "official_references": [
           {
-            "name": "Lei nº 14.133/2021 — execução e pagamento (Planalto)",
+            "name": "Lei nº 14.133/2021, execução e pagamento (Planalto)",
             "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
           },
           {
-            "name": "TCU — licitações e contratos (orientação)",
+            "name": "TCU, licitações e contratos (orientação)",
             "url": "https://portal.tcu.gov.br/licitacoes-e-contratos/"
           }
         ],
@@ -4157,11 +4157,11 @@
         "observed_pattern": "Obras de edificações e saneamento estão particularmente sujeitas a alterações de projeto e quantitativos durante a execução. Sem registro contemporâneo, o aditivo vira custo absorvido.",
         "official_references": [
           {
-            "name": "Lei nº 14.133/2021 — alterações contratuais (Planalto)",
+            "name": "Lei nº 14.133/2021, alterações contratuais (Planalto)",
             "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
           },
           {
-            "name": "TCU — licitações e contratos",
+            "name": "TCU, licitações e contratos",
             "url": "https://portal.tcu.gov.br/licitacoes-e-contratos/"
           }
         ],
@@ -4298,7 +4298,7 @@
           },
           {
             "kind": "observed_pattern",
-            "summary": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução."
+            "summary": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução."
           },
           {
             "kind": "market_density",
@@ -4329,14 +4329,14 @@
         "limitations": [
           "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
         ],
-        "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+        "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
         "official_references": [
           {
-            "name": "Lei nº 14.133/2021 — reequilíbrio e álea (Planalto)",
+            "name": "Lei nº 14.133/2021, reequilíbrio e álea (Planalto)",
             "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
           },
           {
-            "name": "PNCP — consultas públicas de contratações",
+            "name": "PNCP, consultas públicas de contratações",
             "url": "https://www.gov.br/pncp/pt-br"
           }
         ],
@@ -4362,7 +4362,7 @@
       },
       "demand_evidence": "gsc",
       "demand_note": "GSC artifact present but page-level volume not fabricated",
-      "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar…",
+      "description": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística, cenário em que reequilíbrio e matriz de riscos precisam estar…",
       "evidence_ledger": [
         {
           "claim": "observation_count",
@@ -4944,7 +4944,7 @@
   "source_commit_sha": "162c2ba18cd216dbb4f4d298ea965db1b98a9d23",
   "wave1_proposal": {
     "n": 3,
-    "note": "Proposal only — publish still requires human approval, similarity, and production gates. Never autopublish.",
+    "note": "Proposal only, publish still requires human approval, similarity, and production gates. Never autopublish.",
     "pages": [
       {
         "lifecycle_state": "PUBLISHED",
