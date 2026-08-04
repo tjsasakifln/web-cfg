@@ -134,23 +134,36 @@ class NetlifyBlobsStore {
    * @returns {{ modified: boolean, etag?: string }}
    */
   async _setJson(key, value, { onlyIfNew = false } = {}) {
-    const writeOpts = onlyIfNew ? { onlyIfNew: true } : {};
-    if (typeof this.store.setJSON === "function") {
+    // IMPORTANT: use store.set() (not setJSON) when onlyIfNew is required.
+    // @netlify/blobs setJSON spreads conditions into makeRequest incorrectly
+    // (...conditions instead of conditions: {...}), so if-none-match never
+    // applies and create-only writes silently overwrite — replaying POST as 201.
+    // store.set() passes { conditions } correctly and returns modified:false on 412.
+    if (onlyIfNew) {
       try {
-        const result = await this.store.setJSON(key, value, writeOpts);
+        const result = await this.store.set(key, JSON.stringify(value), {
+          onlyIfNew: true,
+        });
         if (result && result.modified === false) return { modified: false };
         return { modified: true, etag: result && result.etag };
       } catch (err) {
-        // fall through to set() unless onlyIfNew precondition path already answered
-        if (onlyIfNew && err && /precondition|412|if-none-match/i.test(String(err.message || err))) {
+        if (err && /precondition|412|if-none-match/i.test(String(err.message || err))) {
           return { modified: false };
         }
+        throw err;
+      }
+    }
+    if (typeof this.store.setJSON === "function") {
+      try {
+        const result = await this.store.setJSON(key, value);
+        if (result && result.modified === false) return { modified: false };
+        return { modified: true, etag: result && result.etag };
+      } catch (err) {
         if (!err || !/consistency|uncached/i.test(String(err.message || err))) throw err;
       }
     }
     const result = await this.store.set(key, JSON.stringify(value), {
       contentType: "application/json",
-      ...writeOpts,
     });
     if (result && result.modified === false) return { modified: false };
     return { modified: true, etag: result && result.etag };
@@ -195,7 +208,13 @@ class NetlifyBlobsStore {
     // onlyIfNew: concurrent/retry must not overwrite or re-deliver an existing lead.
     const write = await this._setJson(`leads/${record.lead_id}`, record, { onlyIfNew });
     if (onlyIfNew && write && write.modified === false) {
-      throw alreadyExistsError(await this.get(record.lead_id));
+      // Precondition failed — key exists. Brief get retry (eventual read lag).
+      let existing = await this.get(record.lead_id);
+      if (!existing) {
+        await new Promise((r) => setTimeout(r, 150));
+        existing = await this.get(record.lead_id);
+      }
+      throw alreadyExistsError(existing);
     }
     if (record.idempotency_key) {
       const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
