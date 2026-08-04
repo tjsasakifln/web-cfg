@@ -185,7 +185,9 @@ def packaged_sha_is_acceptable(
             if pr_parents and pkg_sha == pr_parents[0]:
                 return True
         # (4) Inherit base pin validity (Dependabot / chore PRs).
-        if _depth < 2 and packaged_sha_is_acceptable(
+        # Depth allows walking a short chain of main merge-commits
+        # (checkout bump → chrome bump → …) without accepting unbounded history.
+        if _depth < 8 and packaged_sha_is_acceptable(
             pkg_sha, parents[0], _depth=_depth + 1
         ):
             return True
