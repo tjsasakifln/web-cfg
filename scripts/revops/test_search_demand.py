@@ -40,6 +40,24 @@ def main() -> int:
         # No fake lead↔query join field
         blob = json.dumps(insights)
         ok("no_lead_query_join", "lead_id" not in blob or "never" in insights["attribution_warning"].lower())
+        required = [
+            "1_high_impressions_low_ctr",
+            "2_striking_distance_pos_4_20",
+            "3_commercial_queries_without_page_join",
+            "4_cluster_page_competition",
+            "5_content_growing",
+            "6_content_decaying",
+            "7_indexed_without_impressions",
+            "8_informational_to_offer",
+            "9_clusters_traffic_without_leads",
+            "10_pages_leads_low_traffic",
+            "11_emerging_terms",
+            "12_competitor_content_gaps",
+        ]
+        missing = [k for k in required if k not in insights["analyses"]]
+        ok("twelve_analyses", not missing, str(missing or insights["counts"].get("analysis_keys")))
+        ok("cohort_not_identity", "cohort" in json.dumps(insights["analyses"]["9_clusters_traffic_without_leads"]).lower())
+        ok("gap_proxy_list", isinstance(insights["analyses"]["12_competitor_content_gaps"], list))
     else:
         # Synthetic CSV
         with tempfile.TemporaryDirectory() as td:

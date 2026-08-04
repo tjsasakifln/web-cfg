@@ -318,15 +318,143 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
     for p in pages:
         by_cluster[p.get("cluster") or "other"].append(p)
 
-    zero_impr_indexable_note = (
-        "Requires index coverage export; not available in performance-only CSV. "
-        "Use URL Inspection batch or coverage report separately."
-    )
+    zero_impr_indexable_note = {
+        "status": "needs_coverage_export",
+        "note": (
+            "Requires index coverage export; not available in performance-only CSV. "
+            "Use URL Inspection batch or coverage report separately."
+        ),
+        "candidates": [
+            p
+            for p in pages
+            if float(p.get("impressions") or 0) == 0 and float(p.get("clicks") or 0) == 0
+        ][:20],
+    }
 
-    growth_decay_note = (
-        "Growth/decay requires multi-day series. After daily import-csv or pull-api, "
-        "compare data/revops/gsc/daily/* snapshots."
-    )
+    # 5/6 growth vs decay: compare two most recent daily snapshots when present
+    growth_pages: list[dict[str, Any]] = []
+    decay_pages: list[dict[str, Any]] = []
+    daily_dir = DATA / "daily"
+    daily_files = sorted(daily_dir.glob("*.json")) if daily_dir.is_dir() else []
+    if len(daily_files) >= 2:
+        try:
+            older = json.loads(daily_files[-2].read_text(encoding="utf-8"))
+            newer = json.loads(daily_files[-1].read_text(encoding="utf-8"))
+            old_map = {
+                (p.get("page") or p.get("path") or ""): float(p.get("impressions") or 0)
+                for p in (older.get("pages") or [])
+            }
+            for p in newer.get("pages") or []:
+                key = p.get("page") or p.get("path") or ""
+                if not key:
+                    continue
+                prev = old_map.get(key)
+                cur = float(p.get("impressions") or 0)
+                if prev is None:
+                    continue
+                delta = cur - prev
+                row = {**p, "impressions_prev": prev, "impressions_delta": delta}
+                if delta >= 3:
+                    growth_pages.append(row)
+                elif delta <= -3:
+                    decay_pages.append(row)
+            growth_pages = sorted(growth_pages, key=lambda x: -float(x.get("impressions_delta") or 0))[:30]
+            decay_pages = sorted(decay_pages, key=lambda x: float(x.get("impressions_delta") or 0))[:30]
+        except (OSError, json.JSONDecodeError, TypeError, ValueError):
+            growth_pages, decay_pages = [], []
+    growth_payload: dict[str, Any] = {
+        "status": "compared" if growth_pages or decay_pages else "awaiting_multi_day_series",
+        "daily_snapshots": len(daily_files),
+        "items": growth_pages,
+        "note": (
+            "Growth/decay compares the two most recent data/revops/gsc/daily/* snapshots. "
+            "Run import-csv or pull-api on a schedule to populate."
+            if not growth_pages and not decay_pages
+            else "Compared two latest daily snapshots (impressions delta ±3)."
+        ),
+    }
+    decay_payload: dict[str, Any] = {
+        "status": growth_payload["status"],
+        "daily_snapshots": len(daily_files),
+        "items": decay_pages,
+        "note": growth_payload["note"],
+    }
+
+    # 9/10 cohort analyses: page traffic vs local lead store (never query↔lead identity)
+    lead_pages: dict[str, int] = defaultdict(int)
+    leads_dir = Path(os.environ.get("LEAD_STORE_DIR") or (ROOT / ".leads"))
+    if leads_dir.is_dir():
+        for lf in leads_dir.glob("*.json"):
+            try:
+                rec = json.loads(lf.read_text(encoding="utf-8"))
+                lp = rec.get("landing_page") or rec.get("page") or ""
+                if lp:
+                    path = urlparse(lp).path if str(lp).startswith("http") else str(lp)
+                    lead_pages[path.rstrip("/") or "/"] += 1
+            except (OSError, json.JSONDecodeError, TypeError):
+                continue
+    page_impr = {
+        urlparse(p.get("page") or p.get("path") or "").path.rstrip("/") or "/": float(
+            p.get("impressions") or 0
+        )
+        for p in pages
+        if p.get("page") or p.get("path")
+    }
+    # by cluster traffic without leads
+    cluster_impr: dict[str, float] = defaultdict(float)
+    cluster_leads: dict[str, int] = defaultdict(int)
+    for p in pages:
+        c = p.get("cluster") or "other"
+        cluster_impr[c] += float(p.get("impressions") or 0)
+    for path, n in lead_pages.items():
+        enr = enrich_path(path)
+        cluster_leads[enr.get("cluster") or "other"] += n
+    traffic_no_leads = [
+        {
+            "cluster": c,
+            "impressions": imp,
+            "leads_observed": cluster_leads.get(c, 0),
+            "note": "cohort only — not query-level attribution",
+        }
+        for c, imp in sorted(cluster_impr.items(), key=lambda x: -x[1])
+        if imp >= 5 and cluster_leads.get(c, 0) == 0
+    ][:20]
+    leads_low_traffic = [
+        {
+            "path": path,
+            "leads_observed": n,
+            "impressions": page_impr.get(path, 0),
+            "note": "cohort only — high commercial signal relative to GSC impressions",
+        }
+        for path, n in sorted(lead_pages.items(), key=lambda x: -x[1])
+        if n >= 1 and page_impr.get(path, 0) < 10
+    ][:20]
+
+    # 12 competitor / content gap proxy: commercial queries without strong on-site page match
+    known_paths = " ".join((p.get("page") or p.get("path") or "") for p in pages)
+    competitor_gaps = []
+    for q in queries:
+        if q.get("intent") not in {"commercial", "commercial_investigation"}:
+            continue
+        if float(q.get("impressions") or 0) < 2:
+            continue
+        terms = [t for t in re.split(r"\W+", (q.get("query") or "").lower()) if len(t) > 3]
+        hits = sum(1 for t in terms if t in known_paths.lower())
+        if hits < max(1, len(terms) // 3):
+            competitor_gaps.append(
+                {
+                    **q,
+                    "gap_type": "commercial_query_weak_on_site_match",
+                    "matched_path_tokens": hits,
+                    "note": (
+                        "Proxy gap vs SERP competitors (no third-party scrape). "
+                        "Prioritize own content/tool that owns this intent."
+                    ),
+                }
+            )
+    competitor_gaps = sorted(
+        competitor_gaps, key=lambda x: -float(x.get("impressions") or 0)
+    )[:30]
 
     insights = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -341,6 +469,8 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "pages": len(pages),
             "branded_queries": sum(1 for q in queries if q.get("branded")),
             "nonbranded_queries": sum(1 for q in queries if not q.get("branded")),
+            "analysis_keys": 12,
+            "lead_cohort_paths": len(lead_pages),
         },
         "analyses": {
             "1_high_impressions_low_ctr": sorted(low_ctr, key=lambda x: -float(x.get("impressions") or 0))[:30],
@@ -353,12 +483,27 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
                 for k, v in by_cluster.items()
                 if len(v) > 1
             },
-            "5_6_growth_decay": growth_decay_note,
+            "5_content_growing": growth_payload,
+            "6_content_decaying": decay_payload,
             "7_indexed_without_impressions": zero_impr_indexable_note,
             "8_informational_to_offer": [
                 p for p in pages if p.get("intent") == "informational" and float(p.get("clicks") or 0) > 0
             ][:20],
+            "9_clusters_traffic_without_leads": {
+                "status": "cohort_ready" if lead_pages else "awaiting_leads_or_empty_cohort",
+                "items": traffic_no_leads,
+                "note": (
+                    "Cohort only (cluster impressions vs landing_page lead counts). "
+                    "Set LEAD_STORE_DIR or use .leads/ for local join; never query↔lead."
+                ),
+            },
+            "10_pages_leads_low_traffic": {
+                "status": "cohort_ready" if lead_pages else "awaiting_leads_or_empty_cohort",
+                "items": leads_low_traffic,
+                "note": "Cohort only — pages/paths with leads despite low GSC impressions.",
+            },
             "11_emerging_terms": sorted(queries, key=lambda x: -float(x.get("impressions") or 0))[:15],
+            "12_competitor_content_gaps": competitor_gaps,
             "legacy_entity_queries_still_ranking": legacy_entity,
         },
         "priority_actions": [],

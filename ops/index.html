@@ -231,14 +231,22 @@
 
     fetch("/ops/data/gsc-insights.json", { headers: { Accept: "application/json" } })
       .then((r) => r.ok ? r.json() : Promise.reject(new Error("gsc insights missing — run observatory import")))
-      .then((d) => { $("gsc-pre").textContent = JSON.stringify({
+      .then((d) => {
+        const a = d.analyses || {};
+        $("gsc-pre").textContent = JSON.stringify({
         as_of: d.as_of,
         counts: d.counts,
+        analysis_keys: Object.keys(a),
         attribution_warning: d.attribution_warning,
         priority_actions: d.priority_actions,
-        legacy_entity_queries: d.analyses && d.analyses.legacy_entity_queries_still_ranking,
-        low_ctr: d.analyses && d.analyses["1_high_impressions_low_ctr"],
-        striking: d.analyses && d.analyses["2_striking_distance_pos_4_20"],
+        legacy_entity_queries: a.legacy_entity_queries_still_ranking,
+        low_ctr: a["1_high_impressions_low_ctr"],
+        striking: a["2_striking_distance_pos_4_20"],
+        growth: a["5_content_growing"],
+        decay: a["6_content_decaying"],
+        traffic_no_leads: a["9_clusters_traffic_without_leads"],
+        leads_low_traffic: a["10_pages_leads_low_traffic"],
+        competitor_gaps: a["12_competitor_content_gaps"],
       }, null, 2); })
       .catch((e) => { $("gsc-pre").textContent = String(e.message || e); });
   })();
