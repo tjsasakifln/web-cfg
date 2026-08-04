@@ -132,6 +132,7 @@
 </main>
 <footer class="site-footer"><div class="container"><p>© CONFENGE · Conteúdo técnico-informativo · <a href="/privacidade/">Privacidade</a></p></div></footer>
 <script src="/assets/js/tools-common.js"></script>
+<script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
 
 <script>
@@ -145,19 +146,20 @@
   form.addEventListener('submit', function(e){
     e.preventDefault();
     const done = keys.filter(k => form.querySelector('[data-key="'+k+'"]').checked);
-    const missing = keys.filter(k => !done.includes(k));
-    const score = done.length / keys.length;
-    let level = 'bad';
-    if (score >= 0.75) level = 'ok';
-    else if (score >= 0.45) level = 'warn';
     const urg = document.getElementById('urgencia').value;
     const impacto = T.num(document.getElementById('valor_impacto'));
-    const next = [];
-    if (missing.includes('comunicacao')) next.push('Priorize protocolo formal do fato gerador — atraso de comunicação enfraquece nexo.');
-    if (missing.includes('planilha') || missing.includes('composicoes')) next.push('Sem memória de cálculo, o pedido vira narrativa. Feche planilha e composições.');
-    if (missing.includes('cronologia')) next.push('Monte cronologia data a data com documentos âncora.');
-    if (score >= 0.75) next.push('Dossiê razoavelmente montado: valide tese e números com revisão independente antes de protocolar.');
-    if (urg === 'alta' && score < 0.75) next.push('Urgência alta com dossiê incompleto: foque comunicação + planilha + cronologia nesta semana.');
+    const raw = window.ConfengeToolCompute.computeChecklistScore(done, keys, urg);
+    const missing = raw.missing;
+    const score = raw.score;
+    const level = raw.level;
+    const nextMap = {
+      protocolo_formal: 'Priorize protocolo formal do fato gerador — atraso de comunicação enfraquece nexo.',
+      memoria_calculo: 'Sem memória de cálculo, o pedido vira narrativa. Feche planilha e composições.',
+      cronologia: 'Monte cronologia data a data com documentos âncora.',
+      revisao_independente: 'Dossiê razoavelmente montado: valide tese e números com revisão independente antes de protocolar.',
+      urgente_incompleto: 'Urgência alta com dossiê incompleto: foque comunicação + planilha + cronologia nesta semana.',
+    };
+    const next = (raw.next || []).map(k => nextMap[k] || k);
     out.hidden = false;
     out.className = 'tool-result ' + level;
     out.innerHTML = `

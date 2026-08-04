@@ -42,9 +42,16 @@ for (const u of [
   else console.log("PASS sitemap", u);
 }
 // art 125 numbers
-const lim = readFileSync(resolve(ROOT, "ferramentas/limite-acrescimos-supressoes/index.html"), "utf8");
-if (!lim.includes("0.25") || !lim.includes("0.50")) { console.error("FAIL thresholds"); fail++; }
-else console.log("PASS art125_thresholds");
+const limHtml = readFileSync(resolve(ROOT, "ferramentas/limite-acrescimos-supressoes/index.html"), "utf8");
+const compute = readFileSync(resolve(ROOT, "assets/js/tool-compute.js"), "utf8");
+if (!limHtml.includes("tool-compute") || !compute.includes("0.25") || !compute.includes("0.5")) {
+  console.error("FAIL thresholds"); fail++;
+} else console.log("PASS art125_thresholds");
+// shipped pure compute must be required by unit test file
+const unit = readFileSync(resolve(ROOT, "scripts/site/test_tool_compute.mjs"), "utf8");
+if (!unit.includes("computeLimiteAditivo") || !unit.includes("computeChecklistScore")) {
+  console.error("FAIL pure_unit_coverage"); fail++;
+} else console.log("PASS pure_unit_coverage");
 if (fail) process.exit(1);
 // pSEO build must not wipe hand-authored research radar page
 import { readFileSync as rf2 } from "fs";

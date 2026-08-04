@@ -131,6 +131,7 @@
 </main>
 <footer class="site-footer"><div class="container"><p>© CONFENGE · Conteúdo técnico-informativo · <a href="/privacidade/">Privacidade</a></p></div></footer>
 <script src="/assets/js/tools-common.js"></script>
+<script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
 
 <script>
@@ -144,6 +145,17 @@
   form.addEventListener('submit', function(e){
     e.preventDefault();
     const selected = Object.keys(MAP).filter(k => form.querySelector('[data-cause="'+k+'"]').checked);
+    const raw = window.ConfengeToolCompute.computeMatrizAtraso(
+      selected,
+      Number(document.getElementById('dias').value) || 0,
+      document.getElementById('tem_matriz').value
+    );
+    if (!raw.ok) {
+      out.hidden = false; out.className = 'tool-result warn';
+      out.innerHTML = '<p>Selecione ao menos uma causa para montar a matriz.</p>';
+      return;
+    }
+
     if (!selected.length) {
       out.hidden = false; out.className = 'tool-result warn';
       out.innerHTML = '<p>Selecione ao menos uma causa para montar a matriz.</p>';
@@ -155,11 +167,9 @@
       const [resp, docs] = MAP[k];
       return { k, resp, docs };
     });
-    const adm = rows.filter(r => /Administração/i.test(r.resp)).length;
-    const cont = rows.filter(r => /contratado/i.test(r.resp)).length;
-    let level = 'warn';
-    if (adm > cont) level = 'ok';
-    if (cont > adm && adm === 0) level = 'bad';
+    const adm = raw.counts.administracao;
+    const cont = raw.counts.contratado;
+    let level = raw.level;
     const table = rows.map(r => '<tr><td>'+r.k+'</td><td>'+r.resp+'</td><td>'+r.docs+'</td></tr>').join('');
     out.hidden = false;
     out.className = 'tool-result ' + level;
