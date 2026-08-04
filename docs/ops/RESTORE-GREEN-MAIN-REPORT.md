@@ -1,9 +1,11 @@
 # Relatório consolidado — restauração do `main` e coorte editorial
 
-Data: 2026-08-04  
+Data de verificação final: 2026-08-04  
 Repo: `tjsasakifln/web-cfg`  
-**HEAD de referência do restore (#44):** `49d61778192c7c7fbf53409d9a1c7c9f37c32a2a`  
-**Tip de `main` após merges subsequentes de coorte/UI:** ver `git rev-parse origin/main`
+**Tip de `main` no momento deste relatório:** `bc394078fa0b722178eb7204f6e43af471ab21db` (merge #51)  
+**Último tip com gates verdes no restore stack:** `b8af0b6f958969722c35d1ed12b9cd8c5324835a` (merge #50)  
+**Marco restore coorte (#44):** `49d61778192c7c7fbf53409d9a1c7c9f37c32a2a`  
+**Produção (`build-info.json`):** `commit` = `bc394078fa0b722178eb7204f6e43af471ab21db` (exact match ao tip)
 
 ## 1. Estado anterior
 
@@ -12,41 +14,71 @@ Repo: `tjsasakifln/web-cfg`
 - Follow-ups elevaram GHA para Node 22 enquanto Netlify permanecia `NODE_VERSION=20` (split-brain).
 - Gate pSEO **não era** obrigatório; `site-ci` podia mascarar falha de install com `npm ci || npm install`.
 - Pacote editorial apontava SHA antigo; Wave 1 com 11 páginas aguardando humano, 0 indexáveis, 1 rejeitada.
+- Regressões posteriores (PR #48/#49) reescreveram footers de `ferramentas/*` e deixaram pSEO vermelho até PR #50.
+- **Pós-#51:** merge de tools sem pin docs-only deixou `commit_sha` do pacote editorial em `58b6aa67…` enquanto HEAD era `bc394078…` → `site-ci` e `pSEO quality gates` **vermelhos** no tip (falha legítima de `test_live_registry_wave1_not_human_approved` / package SHA).
 
-## 2. Correções realizadas (e incorporadas em `main`)
+## 2. Correções realizadas (em `main`)
 
 | PR | Status | Escopo |
 |----|--------|--------|
-| [#41](https://github.com/tjsasakifln/web-cfg/pull/41) | **Merged** | Pin `lighthouse@^12.8.2`, `engines >=18`, GHA Node 20, lock regenerado; fix type-floor `.related-card` (14px) |
-| [#42](https://github.com/tjsasakifln/web-cfg/pull/42) | **Merged** | `npm ci` hard-fail; nomes estáveis `site-ci` / `pSEO quality gates`; `test:workflow-gates`; docs de protection |
+| [#41](https://github.com/tjsasakifln/web-cfg/pull/41) | **Merged** | Pin `lighthouse@^12.8.2`, `engines >=18`, GHA Node 20, lock regenerado; type-floor `.related-card` 14px |
+| [#42](https://github.com/tjsasakifln/web-cfg/pull/42) | **Merged** | `npm ci` hard-fail; nomes `site-ci` / `pSEO quality gates`; `test:workflow-gates`; docs de protection |
 | [#43](https://github.com/tjsasakifln/web-cfg/pull/43) | **Merged** | Regen pack editorial + pin SHA; `HUMAN_APPROVED=0`; `INDEXABLE=0`; jur REJECTED |
-| [#44](https://github.com/tjsasakifln/web-cfg/pull/44) | **Merged** | Coorte ≤3 + runbook + nota Node22 + relatório consolidado |
+| [#44](https://github.com/tjsasakifln/web-cfg/pull/44) | **Merged** | Coorte ≤3 + runbook + nota Node22 |
+| [#47](https://github.com/tjsasakifln/web-cfg/pull/47) | **Merged** | Docs honesty (APPLIED protection) + `test:ops-docs` |
+| [#50](https://github.com/tjsasakifln/web-cfg/pull/50) | **Merged** | Restore full brand footer em `ferramentas/*` + `test:ferramentas-footer` (reverte regressão #48) |
+| [#51](https://github.com/tjsasakifln/web-cfg/pull/51) | **Merged** | Tools reeq/matriz fixes; **sem** pin editorial → tip vermelho (SHA lag) |
+| [#52](https://github.com/tjsasakifln/web-cfg/pull/52) | **Este PR** | Relatório consolidado + pin docs-only do pacote editorial no tip pós-#51 |
 
-Nota futura (não misturada na emergência): `docs/ops/NODE22-LIGHTHOUSE13-MIGRATION-NOTE.md`.
+Nota futura: `docs/ops/NODE22-LIGHTHOUSE13-MIGRATION-NOTE.md` (não misturada na emergência).
 
-## 3. Checks atuais (comprovados)
+## 3. Checks atuais (comprovados em 2026-08-04)
 
-| Check | Estado |
-|-------|--------|
-| `npm ci` limpo (Node 20) | **Verde** no tip de restore (zero `EBADENGINE`) |
-| `site-ci` / `pSEO quality gates` em push a `main` pós-#43/#44 | **Verde** (GitHub Actions) |
-| `test:workflow-gates` | **Verde**; falha deliberada com `WORKFLOW_GATE_FORCE_FAIL=1` |
-| Branch protection (API) | **Aplicada**, `strict: true`, contextos: **`site-ci`**, **`pSEO quality gates`** |
-| CodeQL | Workflow com `continue-on-error: true` até code scanning org; **não** é required check |
+### 3.1 Tip verde pós-#50 (`b8af0b6f`)
+
+| Check | Estado | Evidência |
+|-------|--------|-----------|
+| `npm ci` limpo (2×) | **Verde**, zero `EBADENGINE` | local Node v20.19.3 |
+| `lighthouse` / engines | `^12.8.2` / `node >=18` | `package.json` |
+| GHA / Netlify Node | `"20"` / `NODE_VERSION=20` | workflows + `netlify.toml` |
+| `site-ci` (push main #50) | **success** | run `30922993443` |
+| `pSEO quality gates` (push main #50) | **success** | run `30922989876` |
+| CodeQL (push main #50) | **success** | run `30922989778` (soft-fail still configured in workflow) |
+| Branch protection API | **APPLIED** strict | contexts: `site-ci`, `pSEO quality gates` |
+| `test:workflow-gates` | green; deliberate red exit 1 | local |
+| `test:ops-docs` / `test:ferramentas-footer` | green | local |
+| `editorial:test` | 40 passed | local clean tip #50 |
+| Material hashes dual-build | stable | two `editorial:build` runs identical |
+
+### 3.2 Tip pós-#51 (`bc394078`) — lag de SHA (comprovado vermelho)
+
+| Check | Estado | Evidência |
+|-------|--------|-----------|
+| `site-ci` (push main #51) | **failure** | run `30924287228` — package SHA `58b6aa67…!=bc394078…` |
+| `pSEO quality gates` (push main #51) | **failure** | run `30924288147` — mesma asserção editorial |
+| Produção `build-info` | deploy do tip | `commit` = `bc394078…`, `deploy_id` `6a7205013a551f0008796b9b` |
+
+### 3.3 Este PR (#52) — restaura pin e reabre o tip verde
+
+| Check | Estado esperado | Notas |
+|-------|-----------------|-------|
+| Pin docs-only | `commit_sha` = parent do pin (relatório) ou HEAD | padrão `docs/editorial/*` only |
+| `site-ci` / `pSEO quality gates` no PR | devem ficar **success** antes do merge | required + `strict: true` |
+| CodeQL | **não** required; soft-fail no workflow | falhas de scanning org não bloqueiam |
 
 ## 4. Estado de produção comprovado
 
 | Item | Resultado |
 |------|-----------|
 | `https://confenge.com.br/` | HTTP 200 |
-| `/.well-known/build-info.json` | HTTP 200; **`commit` = `49d61778192c7c7fbf53409d9a1c7c9f37c32a2a`** no deploy pós-#44 |
-| `build_time` (prod) | `2026-08-04T14:36:09Z` |
-| `deploy_id` | `6a71f8bdc9c23b00083247ff` |
+| `/.well-known/build-info.json` | HTTP 200 |
+| `commit` | **`bc394078fa0b722178eb7204f6e43af471ab21db`** (= `origin/main` tip) |
+| `build_time` | `2026-08-04T15:28:26Z` |
+| `deploy_id` | `6a7205013a551f0008796b9b` |
+| `/ferramentas/` | HTTP 200 |
 | robots / sitemap-index | HTTP 200 |
-| Lead idempotency | **Comprovado em testes** (`test:lead-function`, onlyIfNew) |
-| Métricas real-only | Testes revops mantidos; probes fora do commercial |
-
-Produção recebeu o tip do restore (LH 12.8.2, gates hard-fail, pack editorial). Merges posteriores em `main` podem avançar o tip sem invalidar a restauração.
+| Lead idempotency | **PASS** `test:lead-function` (onlyIfNew) |
+| Métricas real-only | Testes revops intactos; probes separados |
 
 ## 5. Estado editorial
 
@@ -57,28 +89,30 @@ Produção recebeu o tip do restore (LH 12.8.2, gates hard-fail, pack editorial)
 | INDEXABLE_WAVE1 | 0 |
 | AWAITING_HUMAN | 11 |
 | REJECTED | 1 (`jur-sumula-260-art`) |
-| Sitemap editorial / juris Wave1 | 0 locs |
-| `editorial:release-approved` | noop sem aprovação humana válida |
-| Coorte | 3 páginas **preparadas**, não aprovadas — `docs/editorial/WAVE1-FIRST-COHORT.md` |
+| Sitemap editorial / juris | 0 locs |
+| `editorial:release-approved` | **noop** — `no_valid_human_approvals` |
+| Coorte | 3 páginas preparadas em `docs/editorial/WAVE1-FIRST-COHORT.md` — **não** aprovadas |
 
 ## 6. Bloqueios externos remanescentes
 
-1. **Confirmação visual** da branch protection na UI do GitHub (API já aplicada).
-2. **Code scanning / CodeQL org** — soft-fail permanece até enablement; não bloqueia merge.
-3. **Aprovação editorial humana** — ainda não executada (por desenho fail-closed).
-4. **GSC submit / baseline pós-approve** — só após runbook de publicação.
+1. **UI glance** Settings → Branches (API já aplicada; confirmação visual humana opcional).
+2. **Code scanning org** — workflow ainda `continue-on-error: true`; CodeQL **não** é required check.
+3. **Aprovação editorial humana** — zero páginas Wave 1 aprovadas (fail-closed por desenho).
+4. **GSC submit / baseline pós-approve** — só após runbook.
+5. **Disciplina de pin** — qualquer merge em `main` que altere HEAD sem pin docs-only do pacote editorial reabre o tip vermelho (como #51).
 
 ## 7. Três próximas ações humanas (ordem)
 
-1. **Confirmar na UI** Settings → Branches → `main` que os required checks são exatamente **`site-ci`** e **`pSEO quality gates`** (strict).
-2. **Aprovar individualmente** no máximo as 3 candidatas da coorte (`docs/editorial/WAVE1-FIRST-COHORT.md` / `HUMAN-ACTION-NOW.md`) com nome real, checklist e material hash — sem lote, sem CI/bot/agente como revisor.
-3. **Seguir** `docs/editorial/WAVE1-POST-APPROVAL-RUNBOOK.md` após cada approve (canibalização → rebuild → robots/sitemap → lista GSC → smoke → baselines reais).
+1. **Confirmar na UI** (opcional) que required checks são **`site-ci`** e **`pSEO quality gates`**.
+2. **Aprovar individualmente** ≤3 candidatas da coorte (`WAVE1-FIRST-COHORT.md` / `HUMAN-ACTION-NOW.md`) com nome real, checklist e material hash — sem lote, sem CI/bot/agente.
+3. **Executar** `WAVE1-POST-APPROVAL-RUNBOOK.md` pós-approve (canibalização → rebuild → robots/sitemap → GSC → smoke → baselines reais).
 
 ---
 
-### O que não foi feito / não inventado
+### Não feito / não inventado
 
-- Migração Node 22 / Lighthouse 13 em produção (só nota futura).
-- Indexação ou approve de qualquer página Wave 1.
-- Causalidade de tráfego, receita, leads ou ranking.
-- Screenshot da UI do GitHub (API + deploy/prod comprovados).
+- Migração Node 22 / Lighthouse 13.
+- Autoaprovação ou indexação Wave 1 / piloto / `jur-sumula-260-art`.
+- Afirmações de tráfego, receita, leads ou ranking.
+- Screenshot da UI de branch protection (só API).
+- Forjar verde no tip #51 sem pin (evidência de failure mantida acima).
