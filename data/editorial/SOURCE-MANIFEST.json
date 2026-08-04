@@ -151,6 +151,19 @@
       "themes": ["aditivos", "obras", "desconto", "itens-novos"]
     },
     {
+      "source_id": "agu-on-50-2014",
+      "type": "technical_guidance",
+      "body": "Advocacia-Geral da União",
+      "title": "Orientação Normativa AGU nº 50/2014 (texto consolidado no portal da AGU)",
+      "number": "ON AGU nº 50/2014",
+      "date": "2014-01-01",
+      "url": "https://www.gov.br/agu/pt-br/composicao/cgu/cgu/onsagu",
+      "accessed_at": "2026-08-04",
+      "device": "ON AGU nº 50/2014, item I",
+      "limitations": "Orientação aplicável no âmbito institucional próprio da AGU/União; não substitui regulamentos ou orientações de outros entes.",
+      "themes": ["aditivos", "limites", "acrescimos", "supressoes"]
+    },
+    {
       "source_id": "tcu-portal-licitacoes",
       "type": "tcu_guidance",
       "body": "Tribunal de Contas da União",
