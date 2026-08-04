@@ -1,44 +1,176 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Checklist de reequilíbrio | CONFENGE</title><meta name="description" content="Prontidão documental com bloqueadores centrais."/>
-<link rel="canonical" href="https://confenge.com.br/ferramentas/checklist-reequilibrio/"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Checklist de documentação para reequilíbrio | CONFENGE</title><meta name="description" content="Checklist de prontidão do dossiê de reequilíbrio com bloqueadores centrais."/>
+<link rel="canonical" href="https://confenge.com.br/ferramentas/checklist-reequilibrio/"/>
+<link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
+<meta content="#061a33" name="theme-color"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Checklist de reequilíbrio","url":"https://confenge.com.br/ferramentas/checklist-reequilibrio/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
 </head><body>
-<header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img alt="CONFENGE" src="/assets/logo-confenge.png" width="800" height="208"/></a>
-<nav class="desktop-nav" aria-label="principal"><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/" aria-current="true">Ferramentas</a></nav></div></header>
-<main id="conteudo"><header class="tool-page-hero"><div class="container tool-shell"><h1>Checklist de reequilíbrio</h1>
-<p class="content-lead">Bloqueadores centrais impedem prontidão alta. Urgência ordena a correção.</p></div></header>
-<div class="container tool-shell"><form id="f" class="tool-form"><div id="root"></div>
-<div class="tool-grid"><div class="tool-field"><label for="urg">Urgência</label><select id="urg" name="urgencia"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></div>
-<div class="tool-field"><label for="mat">Materialidade</label><select id="mat" name="materialidade"><option value="nao_informada">Não informar</option><option value="baixa">Baixa</option><option value="media">Média</option><option value="alta">Alta</option></select></div></div>
-<p class="tool-privacy-note">Só neste navegador. Não substitui análise do contrato.</p>
-<div class="tool-actions"><button class="button button-primary tool-run" type="submit">Diagnosticar</button><button type="button" class="button button-secondary" id="rst" data-tool-reset>Apagar</button></div></form>
-<div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
-<div class="tool-actions" id="ra" hidden><button type="button" class="button button-secondary" id="cp" data-tool-copy>Copiar</button><button type="button" class="button button-secondary" id="dl" data-tool-download>Baixar</button></div>
-<div class="tool-cta-contextual" id="cta" hidden></div></div></main>
-<script src="/assets/js/tools-common.js"></script><script src="/assets/js/tool-compute.js"></script><script src="/script.js" defer></script>
-<script>(function(){var T=window.ConfengeTools,C=window.ConfengeToolCompute,TOOL="checklist-reequilibrio",last="";
-if(T.bindToolLifecycle)T.bindToolLifecycle({tool:TOOL});
-var root=document.getElementById("root"),h="";
-Object.keys(C.REEQ_CATEGORIES).forEach(function(cid){var cat=C.REEQ_CATEGORIES[cid];h+="<section class=\"tool-category\"><h3>"+cat.label+"</h3>";
-cat.items.forEach(function(it){h+="<div class=\"tool-req\" data-key=\""+it.key+"\"><div class=\"tool-req-label\">"+it.label+"</div><div class=\"tool-req-states\">";
-[["met","Atendido"],["missing","Pendente"],["na","N/A"]].forEach(function(o){h+="<label><input type=radio name=st-"+it.key+" value="+o[0]+" data-req> "+o[1]+"</label>";});
-h+="</div></div>";});h+="</section>";});root.innerHTML=h;
-document.getElementById("f").onsubmit=function(e){e.preventDefault();var st={};root.querySelectorAll(".tool-req").forEach(function(el){var k=el.getAttribute("data-key"),c=el.querySelector("input:checked");st[k]=c?c.value:"missing";});
-var r=C.computeReequilibrio(st,{urgencia:document.getElementById("urg").value,materialidade:document.getElementById("mat").value});
-var out=document.getElementById("out");out.hidden=false;out.className="tool-result-panel "+r.level;
-out.innerHTML="<p class=\"tool-result-summary\"><strong>"+r.readinessLabel+"</strong>"+r.synthesis+"</p><ul class=\"tool-evidence-list\"><li>Cobertura: "+r.score_pct+"%</li><li>Bloqueadores: "+r.missingBlockers.length+"</li></ul><p class=\"tool-disclaimer\">Orientativo. Não significa direito ao reequilíbrio.</p>";
-last=T.buildReport([{title:"Reequilíbrio",body:r.synthesis}]);document.getElementById("ra").hidden=false;T.focusResult(out);
-document.getElementById("cta").hidden=false;document.getElementById("cta").innerHTML=r.hasCentralBlocker?"<p>Há bloqueadores. Organize o dossiê.</p><a class=\"button button-primary\" data-tool-to-form href=\"/#contato\">Contato</a>":"<a data-tool-to-content href=\"/reequilibrio-obras-publicas/\">Pilar reequilíbrio</a>";
-T.track("tool_complete",{tool:TOOL,readiness:r.readiness,blockers:r.missingBlockers.length,urgencia:r.urgencia,materialidade:r.materialidade});};
-document.getElementById("dl").onclick=function(){T.downloadText("reeq.txt",last);};document.getElementById("cp").onclick=function(){T.copyText(last);};
-document.getElementById("rst").onclick=function(){if(confirm("Apagar?")){root.querySelectorAll("input").forEach(function(i){i.checked=false;});document.getElementById("out").hidden=true;}};
-})();</script><footer class="site-footer">
-<div class="container footer-top">
-<div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada.</p></div>
-<div class="footer-links"><strong>Ofertas</strong><a href="/diagnostico-b2g-360/">Diagnóstico B2G 360°</a><a href="/diretoria-b2g/">Diretoria B2G fracionada</a><a href="/bid-room-licitacoes-obras/">Bid Room (sala de decisão da proposta)</a><a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin (defesa técnica e proteção de margem)</a></div>
-<div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
-<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="CONFENGE"><img alt="CONFENGE" height="208" width="800" src="/assets/logo-confenge.png"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a href="/bid-room-licitacoes-obras/">Analisar licitação</a>
+<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
+<a href="/diretoria-b2g/">Operação B2G</a>
+<a href="/conteudos/">Conteúdos</a>
+<a href="/ferramentas/" aria-current="true">Ferramentas</a>
+<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+</nav>
+<a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
+</div></header>
+<main id="conteudo">
+<nav class="breadcrumbs container" aria-label="breadcrumb"><ol>
+<li><a href="/">Início</a></li><li><a href="/ferramentas/">Ferramentas</a></li>
+<li aria-current="page">Checklist de reequilíbrio</li></ol></nav>
+<header class="tool-page-hero"><div class="container tool-shell">
+<p class="eyebrow">Dossiê de reequilíbrio</p>
+<h1>Checklist de documentação para reequilíbrio</h1>
+<p class="content-lead">Marque o que já existe. Bloqueadores centrais impedem prontidão alta. A urgência ordena a correção; a materialidade só classifica a gravidade em faixas.</p>
+</div></header>
+<div class="container tool-shell">
+<form id="f" class="tool-form">
+<div id="root"></div>
+<div class="tool-grid" style="margin-top:1rem">
+<div class="tool-field"><label for="urg">Urgência</label>
+<select id="urg" name="urgencia"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select>
+<p class="tool-field-hint">Ordena as ações recomendadas.</p></div>
+<div class="tool-field"><label for="mat">Materialidade (faixa)</label>
+<select id="mat" name="materialidade"><option value="nao_informada">Prefiro não informar</option><option value="baixa">Baixa</option><option value="media">Média</option><option value="alta">Alta</option></select>
+<p class="tool-field-hint">Não pedimos valor em reais.</p></div>
 </div>
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a> · <a href="/termos-de-uso/">Termos de Uso</a></div>
-</footer>
+<p class="tool-privacy-note">Respostas só neste navegador e não são enviadas à CONFENGE.</p>
+<div class="tool-actions">
+<button class="button button-primary tool-run" type="submit">Gerar diagnóstico</button>
+<button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
+</div>
+</form>
+<div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
+<div class="tool-actions" id="ra" hidden>
+<button type="button" class="button button-secondary" id="btn-copy" data-tool-copy>Copiar</button>
+<button type="button" class="button button-secondary" id="btn-dl" data-tool-download>Baixar (.txt)</button>
+<button type="button" class="button button-secondary" id="btn-print">Imprimir</button>
+</div>
+<div class="tool-cta-contextual" id="cta" hidden></div>
+</div>
+</main>
+<footer class="site-footer"><div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE</span></div></footer>
+<script src="/assets/js/tool-persist.js"></script>
+<script src="/assets/js/tools-common.js"></script>
+<script src="/assets/js/tool-compute.js"></script>
+<script src="/script.js" defer></script>
+
+<script>
+(function(){
+  var T=window.ConfengeTools, C=window.ConfengeToolCompute;
+  var TOOL="checklist-reequilibrio", SCHEMA=4, lastText="";
+  if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
+  var root=document.getElementById("root"), h="";
+  Object.keys(C.REEQ_CATEGORIES).forEach(function(cid){
+    var cat=C.REEQ_CATEGORIES[cid];
+    h+='<section class="tool-category"><h3>'+cat.label+'</h3>';
+    cat.items.forEach(function(it){
+      h+='<div class="tool-req" data-key="'+it.key+'">';
+      h+='<fieldset class="tool-fieldset"><legend class="tool-req-label" id="lbl-'+it.key+'">'+it.label+'</legend>';
+      h+='<div class="tool-req-states" role="radiogroup" aria-labelledby="lbl-'+it.key+'">';
+      [["met","Atendido"],["missing","Pendente"],["na","Não aplicável"]].forEach(function(o){
+        h+='<label><input type="radio" name="st-'+it.key+'" value="'+o[0]+'" data-req/> '+o[1]+'</label>';
+      });
+      h+='</div></fieldset></div>';
+    });
+    h+='</section>';
+  });
+  root.innerHTML=h;
+
+  function states(){
+    var s={};
+    root.querySelectorAll(".tool-req").forEach(function(el){
+      var k=el.getAttribute("data-key");
+      var c=el.querySelector("input[data-req]:checked");
+      s[k]=c?c.value:"missing";
+    });
+    return s;
+  }
+  function persist(){
+    T.saveState(TOOL, SCHEMA, {
+      states: states(),
+      urgencia: document.getElementById("urg").value,
+      materialidade: document.getElementById("mat").value
+    });
+  }
+  function restore(){
+    var d=T.loadState(TOOL, SCHEMA);
+    if(!d) return;
+    if(d.urgencia) document.getElementById("urg").value=d.urgencia;
+    if(d.materialidade) document.getElementById("mat").value=d.materialidade;
+    if(d.states){
+      Object.keys(d.states).forEach(function(k){
+        var input=root.querySelector('.tool-req[data-key="'+k+'"] input[value="'+d.states[k]+'"]');
+        if(input) input.checked=true;
+      });
+    }
+  }
+
+  document.getElementById("f").addEventListener("submit", function(e){
+    e.preventDefault();
+    var r=C.computeReequilibrio(states(), {
+      urgencia: document.getElementById("urg").value,
+      materialidade: document.getElementById("mat").value
+    });
+    var out=document.getElementById("out");
+    out.hidden=false; out.className="tool-result-panel "+r.level;
+    var order=(r.correctionOrder||[]).map(function(o){ return "<li><strong>"+o.label+"</strong> ("+o.reason+")</li>"; }).join("");
+    out.innerHTML='<p class="tool-result-summary"><strong>'+r.readinessLabel+"</strong>"+r.synthesis+"</p>"+
+      '<ul class="tool-evidence-list"><li>Cobertura ponderada: '+r.score_pct+"%</li>"+
+      "<li>Bloqueadores: "+(r.missingBlockers||[]).length+"</li>"+
+      "<li>Suporte econômico pendente: "+(r.missingImportant||[]).length+"</li>"+
+      "<li>Organização pendente: "+(r.missingProcess||[]).length+"</li>"+
+      "<li>Não aplicáveis: "+(r.naKeys?r.naKeys.length:0)+"</li></ul>"+
+      (order?'<h3>Ordem recomendada de correção</h3><ol class="tool-next-actions">'+order+"</ol>":"")+
+      '<p class="tool-disclaimer">Diagnóstico documental orientativo. Cobertura alta não significa direito ao reequilíbrio.</p>'+
+      '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
+    lastText=T.buildReport([
+      {title:"CONFENGE: checklist de reequilíbrio", body:r.readinessLabel+"\n"+r.synthesis},
+      {title:"Indicadores", lines:[
+        "Cobertura: "+r.score_pct+"%",
+        "Bloqueadores: "+(r.missingBlockers||[]).join(", "),
+        "Econômico: "+(r.missingImportant||[]).join(", "),
+        "Processo: "+(r.missingProcess||[]).join(", "),
+        "N/A: "+(r.naKeys||[]).join(", "),
+        "Urgência: "+r.urgencia,
+        "Materialidade: "+r.materialidade
+      ]},
+      {title:"Ordem de correção", lines:(r.correctionOrder||[]).map(function(o){return o.label+" ["+o.reason+"]";})},
+      {title:"Aviso", body:"Diagnóstico documental orientativo."}
+    ]);
+    document.getElementById("ra").hidden=false;
+    T.focusResult(out);
+    var cta=document.getElementById("cta");
+    cta.hidden=false;
+    cta.innerHTML=r.hasCentralBlocker
+      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/#contato?jornada=contrato">Organizar dossiê</a></div>'
+      : '<p><a class="button button-secondary" data-tool-to-content href="/conteudos/calculo-reequilibrio-economico-financeiro/">Cálculo de reequilíbrio</a></p>';
+    T.track("tool_complete",{tool:TOOL,readiness:r.readiness,level:r.level,blockers:(r.missingBlockers||[]).length,urgencia:r.urgencia,materialidade:r.materialidade});
+    persist();
+  });
+  root.addEventListener("change", persist);
+  document.getElementById("urg").addEventListener("change", persist);
+  document.getElementById("mat").addEventListener("change", persist);
+  document.getElementById("btn-dl").onclick=function(){ T.downloadText("confenge-reeq.txt", lastText); };
+  document.getElementById("btn-copy").onclick=function(){ T.copyText(lastText); };
+  document.getElementById("btn-print").onclick=function(){ window.print(); };
+  document.getElementById("btn-reset").onclick=function(){
+    if(!confirm("Apagar respostas deste checklist neste navegador?")) return;
+    root.querySelectorAll("input[data-req]").forEach(function(i){ i.checked=false; });
+    document.getElementById("out").hidden=true;
+    document.getElementById("ra").hidden=true;
+    document.getElementById("cta").hidden=true;
+    lastText="";
+    T.clearState(TOOL);
+  };
+  restore();
+})();
+</script>
+
 </body></html>
