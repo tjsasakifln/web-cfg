@@ -8,7 +8,7 @@
 <meta name="robots" content="index,follow"/>
 <link rel="canonical" href="https://confenge.com.br/radar/nacional-obras-publicas/"/>
 <meta property="og:title" content="Radar Nacional de Obras Públicas e Margem Contratual"/>
-<meta property="og:description" content="Ativo citável da CONFENGE: metodologia reproduzível, demanda observada e limitações explícitas."/>
+<meta property="og:description" content="Metodologia reproduzível da CONFENGE: demanda observada e limitações explícitas."/>
 <meta property="og:url" content="https://confenge.com.br/radar/nacional-obras-publicas/"/>
 <link rel="stylesheet" href="/styles.css"/>
 <style>
@@ -24,7 +24,7 @@
   "@context": "https://schema.org",
   "@type": "Dataset",
   "name": "Radar Nacional de Obras Públicas e Margem Contratual — recorte aberto",
-  "description": "Metodologia e recorte aberto CONFENGE com demanda orgânica verificada via Search Console export e limitações explícitas. Séries de contratos públicos completas dependem de lineage do ecossistema de dados.",
+  "description": "Metodologia e recorte aberto CONFENGE com demanda orgânica verificada via Search Console export e limitações explícitas. Séries de contratos públicos completas dependem de fontes públicas auditáveis e revisadas.",
   "url": "https://confenge.com.br/radar/nacional-obras-publicas/",
   "creator": { "@type": "Organization", "name": "CONFENGE", "url": "https://confenge.com.br/" },
   "license": "https://confenge.com.br/termos-de-uso/",
@@ -56,13 +56,13 @@
 <header class="content-hero container">
 <p class="eyebrow">Pesquisa proprietária · versão aberta</p>
 <h1>Radar Nacional de Obras Públicas e Margem Contratual</h1>
-<p class="content-lead">Ativo citável da CONFENGE: metodologia reproduzível, demanda orgânica verificada e limites honestos. Números só entram com lineage.</p>
-<p><strong>Autoria:</strong> CONFENGE · <strong>Atualização desta versão aberta:</strong> 2026-08-03 · <strong>Status:</strong> recorte metodológico + demanda (GSC) publicado; séries de contratos públicos ampliam-se com exportes auditáveis.</p>
+<p class="content-lead">Metodologia reproduzível, demanda orgânica verificada e limites honestos. Números só entram com fonte rastreável.</p>
+<p><strong>Autoria:</strong> CONFENGE · <strong>Atualização desta versão aberta:</strong> 2026-08-03 · <strong>Status:</strong> recorte metodológico e demanda (Search Console) publicados; séries de contratos públicos ampliam-se com exportes auditáveis.</p>
 </header>
 
 <div class="container" style="max-width:900px">
 <div class="note-box">
-<strong>Política de verdade.</strong> Esta página <em>não</em> inventa volume nacional de contratos, tickets médios, concentração de órgãos ou taxas de aditivo sem export com hash e período. Onde o ecossistema CONFENGE/extra-cli ainda não tiver série materialmente revisada no repositório público, o campo fica como <code>pending_lineage</code> e a metodologia explica como será preenchido.
+<strong>Política de verdade.</strong> Esta página <em>não</em> inventa volume nacional de contratos, tickets médios, concentração de órgãos ou taxas de aditivo sem export com hash e período. Onde ainda não houver série de contratos materialmente revisada e publicada, o campo permanece em preparação e a metodologia explica como será preenchido.
 </div>
 
 <section>
@@ -74,15 +74,15 @@
 <li><strong>Exclusão:</strong> registros sem valor; duplicatas por chave de instrumento; categorias não-obra quando classificáveis.</li>
 <li><strong>Aditivos:</strong> somente quando o instrumento de aditivo estiver ligado ao contrato-pai na fonte; caso contrário, taxa de aditivo = não reportada.</li>
 <li><strong>Margem:</strong> a CONFENGE <em>não</em> estima margem contábil de terceiros. “Margem contratual” no Radar refere-se a <em>pressões observáveis</em> (aditivos, glosas, prazos) — não ao lucro real da empresa.</li>
-<li><strong>Demanda orgânica (nesta versão):</strong> export estruturado do Google Search Console do domínio confenge.com.br (Performance), importado pelo Search Demand Observatory.</li>
+<li><strong>Demanda orgânica (nesta versão):</strong> export estruturado do Google Search Console do domínio confenge.com.br (Performance), com rastreabilidade da fonte.</li>
 </ol>
 </div>
-<p><strong>Período da demanda (GSC):</strong> export de referência <code>seo/gsc-2026-07-30</code> (Performance on Search). <strong>Período contratual ampliado:</strong> pending_lineage (publicação sobe quando o snapshot agregado for materialmente revisado).</p>
+<p><strong>Período da demanda (GSC):</strong> export de referência <code>seo/gsc-2026-07-30</code> (Performance on Search). <strong>Período contratual ampliado:</strong> em preparação (publicação sobe quando o recorte agregado for materialmente revisado).</p>
 </section>
 
 <section>
-<h2>2. O que a demanda orgânica já mostra (lineage: GSC export)</h2>
-<p>Fonte: <code>data/revops/gsc/latest_import.json</code> gerado de <code>seo/gsc-2026-07-30</code>. Search Console é agregado — não atribui consulta a lead individual.</p>
+<h2>2. O que a demanda orgânica já mostra (fonte: Search Console)</h2>
+<p>Fonte: export de Performance do Google Search Console do domínio confenge.com.br (referência <code>seo/gsc-2026-07-30</code>). O Search Console é agregado — não atribui consulta a visitante individual.</p>
 <table class="radar-table">
 <thead><tr><th>Página (path)</th><th>Cliques</th><th>Impressões</th><th>CTR</th><th>Posição média</th></tr></thead>
 <tbody>
@@ -107,16 +107,16 @@
 </section>
 
 <section>
-<h2>3. Recortes planejados (preenchimento com lineage)</h2>
+<h2>3. Recortes planejados (preenchimento com fonte auditável)</h2>
 <table class="radar-table">
 <thead><tr><th>Recorte</th><th>Status</th><th>Uso para construtora</th></tr></thead>
 <tbody>
-<tr><td>Distribuição por segmento de obra</td><td><code>pending_lineage</code></td><td>Priorizar mercados com recorrência e ticket</td></tr>
-<tr><td>Distribuição regional</td><td><code>pending_lineage</code></td><td>Capacidade logística vs oportunidade</td></tr>
-<tr><td>Concentração de compradores</td><td><code>pending_lineage</code></td><td>Dependência de poucos órgãos</td></tr>
-<tr><td>Tickets (quartis)</td><td><code>pending_lineage</code></td><td>Filtro de participação</td></tr>
-<tr><td>Frequência de aditivos (quando ligada)</td><td><code>pending_lineage</code></td><td>Pressão de margem pós-assinatura</td></tr>
-<tr><td>Padrões de prazo</td><td><code>pending_lineage</code></td><td>Risco de atraso / capital de giro</td></tr>
+<tr><td>Distribuição por segmento de obra</td><td><code>em preparação</code></td><td>Priorizar mercados com recorrência e ticket</td></tr>
+<tr><td>Distribuição regional</td><td><code>em preparação</code></td><td>Capacidade logística vs oportunidade</td></tr>
+<tr><td>Concentração de compradores</td><td><code>em preparação</code></td><td>Dependência de poucos órgãos</td></tr>
+<tr><td>Tickets (quartis)</td><td><code>em preparação</code></td><td>Filtro de participação</td></tr>
+<tr><td>Frequência de aditivos (quando ligada)</td><td><code>em preparação</code></td><td>Pressão de margem pós-assinatura</td></tr>
+<tr><td>Padrões de prazo</td><td><code>em preparação</code></td><td>Risco de atraso / capital de giro</td></tr>
 </tbody>
 </table>
 </section>
@@ -154,7 +154,7 @@
 
 <section>
 <h2>7. Imprensa / kit</h2>
-<p>Para entrevistas e guest posts baseados em dados: <a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>. Releases só com números que tenham lineage nesta página ou em anexo versionado.</p>
+<p>Para entrevistas e guest posts baseados em dados: <a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>. Releases só com números que tenham fonte rastreável nesta página ou em anexo versionado.</p>
 </section>
 </div>
 </main>

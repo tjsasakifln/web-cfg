@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Piloto de inteligência (noindex) | CONFENGE</title>
+<title>Pré-visualização de inteligência | CONFENGE</title>
 <meta name="robots" content="noindex,nofollow"/>
 <link rel="canonical" href="https://confenge.com.br/piloto/"/>
 <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body>
 <main class="container" style="padding:2rem 1rem">
-<p class="eyebrow">QA interno</p>
-<h1>Piloto controlado — noindex</h1>
-<p>15 páginas com evidência de contratos públicos (export versionado). Fora do sitemap até revisão humana.</p>
+<p class="eyebrow">Pré-visualização</p>
+<h1>Pré-visualização de inteligência de mercado</h1>
+<p>15 páginas com evidência de contratos públicos. Fora do sitemap até revisão humana.</p>
 <ul id="list"></ul>
 <p><a href="/docs/pseo/PILOT-MANIFEST.json">Manifesto</a> (se publicado) · ver repositório <code>docs/pseo/PILOT-MANIFEST.json</code></p>
 </main>
@@ -20,7 +20,7 @@
 fetch('/.well-known/../docs/pseo/PILOT-MANIFEST.json').catch(()=>{});
 const pages = [{"url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/", "label": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Rio Grande do Sul", "n": 3506, "type": "market"}, {"url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/", "label": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Santa Catarina", "n": 3179, "type": "market"}, {"url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/", "label": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — Paraná", "n": 2872, "type": "market"}, {"url": "/piloto/mercados/edificacoes-publicas-rs/", "label": "Quanto o poder público contratou em Edificações públicas — Rio Grande do Sul", "n": 2529, "type": "market"}, {"url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/", "label": "Quanto o poder público contratou em Pavimentação e infraestrutura viária — São Paulo", "n": 2298, "type": "market"}, {"url": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/", "label": "Contratação de engenharia em Esp-prestacao de Servicos Fde/see: o que os dados públicos mostram", "n": 547, "type": "agency"}, {"url": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/", "label": "Contratação de engenharia em Base Administrativa do Curado - Pe: o que os dados públicos mostram", "n": 407, "type": "agency"}, {"url": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/", "label": "Contratação de engenharia em Superintendencia Reg. Pol. Rodv. Federal-go: o que os dados públicos mostram", "n": 350, "type": "agency"}, {"url": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/", "label": "Contratação de engenharia em Eem Euclides Pinheiro de Andrade: o que os dados públicos mostram", "n": 345, "type": "agency"}, {"url": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/", "label": "Contratação de engenharia em Base Aérea de Anápolis: o que os dados públicos mostram", "n": 332, "type": "agency"}, {"url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/", "label": "Fornecedores observados em Pavimentação e infraestrutura viária — Rio Grande do Sul", "n": 3506, "type": "competition"}, {"url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/", "label": "Fornecedores observados em Pavimentação e infraestrutura viária — Santa Catarina", "n": 3179, "type": "competition"}, {"url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/", "label": "Fornecedores observados em Pavimentação e infraestrutura viária — Paraná", "n": 2872, "type": "competition"}, {"url": "/piloto/concorrencia/edificacoes-publicas-rs/", "label": "Fornecedores observados em Edificações públicas — Rio Grande do Sul", "n": 2529, "type": "competition"}, {"url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/", "label": "Fornecedores observados em Pavimentação e infraestrutura viária — São Paulo", "n": 2298, "type": "competition"}];
 document.getElementById('list').innerHTML = pages.map(p =>
-  `<li><a href="${p.url}">${p.label || p.url}</a> · ${p.n} contratos · ${p.type || ""} · noindex</li>`
+  `<li><a href="${p.url}">${p.label || p.url}</a> · ${p.n} contratos · ${p.type || ""}</li>`
 ).join('');
 </script>
 <script src="/script.js" defer></script>
