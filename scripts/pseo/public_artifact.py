@@ -278,11 +278,20 @@ def assemble_public_artifact(
         src = root / name
         if not src.is_dir():
             continue
-        # Safety: never follow into forbidden nested names during copy via ignore
+        # Safety: never follow into forbidden nested names during copy via ignore.
+        # Exception: ops/data holds public-safe GSC insights for the private ops UI
+        # (noindex + robots Disallow /ops/); root-level data/ remains forbidden.
         def _ignore(directory: str, names: list[str]) -> set[str]:
             skip = set()
+            try:
+                rel_dir = Path(directory).resolve().relative_to(root.resolve()).as_posix()
+            except ValueError:
+                rel_dir = ""
             for n in names:
                 if n in FORBIDDEN_DIR_NAMES:
+                    # Allow only ops/data (and nested files under it)
+                    if n == "data" and (rel_dir == "ops" or name == "ops" and rel_dir in {"", "ops"}):
+                        continue
                     skip.add(n)
                 elif n.startswith(".env"):
                     skip.add(n)
@@ -364,7 +373,8 @@ def audit_public_artifact(
     for p in sorted(dest.rglob("*")):
         rel = p.relative_to(dest).as_posix()
         if p.is_dir():
-            if p.name in FORBIDDEN_DIR_NAMES:
+            # ops/data is the only nested "data" dir allowed (GSC insights for private ops UI)
+            if p.name in FORBIDDEN_DIR_NAMES and rel != "ops/data" and not rel.startswith("ops/data/"):
                 findings.append(
                     {
                         "code": "forbidden_dir",
