@@ -176,7 +176,7 @@ _reset();
   }
 }
 
-// 6) idempotency — second submit same payload returns same lead_id
+// 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent
 {
   const payload = {
     nome: "QA Idem",
@@ -191,13 +191,62 @@ _reset();
   const r2 = await handler(event(payload, "POST", { "Idempotency-Key": "fixed-key-abc-001" }));
   const d2 = JSON.parse(r2.body);
   if (!d1.lead_id || d1.lead_id !== d2.lead_id) fail("idempotency", { d1, d2, s1: r1.statusCode, s2: r2.statusCode });
-  if (r2.statusCode !== 200 && r2.statusCode !== 201) fail("idempotency_status", r2.statusCode);
+  // Contract: replay MUST be 200 with idempotent:true (never re-create / re-deliver as 201)
+  if (r2.statusCode !== 200) fail("idempotency_status_must_be_200", { status: r2.statusCode, body: d2 });
+  if (d2.idempotent !== true) fail("idempotency_flag_required", d2);
+  if (r1.statusCode !== 201 && r1.statusCode !== 200) fail("idempotency_first_status", r1.statusCode);
   // Deterministic: same key always same id even without map hit
   const { generateLeadId, idempotencyKeyFor } = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
   const k = idempotencyKeyFor({}, "fixed-key-abc-001");
   const expected = generateLeadId(`idem|${k}`, { deterministic: true });
   if (d1.lead_id !== expected) fail("idempotency_deterministic", { got: d1.lead_id, expected });
-  pass("idempotency", { lead_id: d1.lead_id, second_status: r2.statusCode });
+  pass("idempotency", { lead_id: d1.lead_id, second_status: r2.statusCode, idempotent: d2.idempotent });
+}
+
+// 6b) onlyIfNew path: lookup miss then create-only conflict still returns 200 (no re-delivery)
+{
+  const payload = {
+    nome: "QA Idem OnlyIfNew",
+    email: "qa-idem-oin@example.com",
+    estagio: "edital em analise",
+    jornada: "edital",
+    consentimento: "true",
+    idempotency_key: "fixed-key-onlyifnew-002",
+  };
+  const r1 = await handler(event(payload, "POST", { "Idempotency-Key": "fixed-key-onlyifnew-002" }));
+  const d1 = JSON.parse(r1.body);
+  if (r1.statusCode !== 201 || !d1.lead_id) fail("onlyifnew_first", { s: r1.statusCode, d1 });
+
+  // Simulate eventual-consistency miss: wrap store so first get paths return null once
+  const store = mem;
+  const origGet = store.get.bind(store);
+  const origIdem = store.getByIdempotency.bind(store);
+  let missLeft = 8; // enough to exhaust lead.cjs retry loop (4 attempts × 2 lookups)
+  store.get = async (id) => {
+    if (missLeft > 0) {
+      missLeft -= 1;
+      return null;
+    }
+    return origGet(id);
+  };
+  store.getByIdempotency = async (key) => {
+    if (missLeft > 0) {
+      missLeft -= 1;
+      return null;
+    }
+    return origIdem(key);
+  };
+  try {
+    const r2 = await handler(event(payload, "POST", { "Idempotency-Key": "fixed-key-onlyifnew-002" }));
+    const d2 = JSON.parse(r2.body);
+    if (r2.statusCode !== 200) fail("onlyifnew_second_status", { status: r2.statusCode, body: d2 });
+    if (d2.idempotent !== true) fail("onlyifnew_idempotent_flag", d2);
+    if (d2.lead_id !== d1.lead_id) fail("onlyifnew_same_id", { d1, d2 });
+    pass("idempotency_onlyifnew_conflict", { lead_id: d2.lead_id });
+  } finally {
+    store.get = origGet;
+    store.getByIdempotency = origIdem;
+  }
 }
 
 // 7) email delivery failure does not destroy persisted lead

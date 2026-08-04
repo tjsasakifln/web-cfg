@@ -2,9 +2,9 @@
  * Synthetic lead probe (no real PII) against a base URL.
  * Usage: node scripts/site/synthetic_lead_probe.mjs [baseUrl] [probeSecret]
  *
- * Requires: HTTP 201/200, lead_id, no secret leak, SAME lead_id on second POST
- * with identical Idempotency-Key, and notify_status/email_status present.
- * Exit non-zero if idempotency fails.
+ * Requires: first POST 201/200 with lead_id; second POST same Idempotency-Key
+ * returns HTTP 200 with identical lead_id and idempotent:true; no secret leak;
+ * notify_status/email_status present. Exit non-zero if idempotency fails.
  */
 const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
@@ -63,8 +63,13 @@ const second = await postOnce();
 const sameId =
   Boolean(first.data.lead_id) &&
   Boolean(second.data.lead_id) &&
-  second.data.lead_id === first.data.lead_id &&
-  (second.res.status === 200 || second.res.status === 201);
+  second.data.lead_id === first.data.lead_id;
+// Contract: replay is HTTP 200 with idempotent:true (not a second create/201)
+const secondIsIdempotent =
+  second.res.status === 200 &&
+  second.data.idempotent === true &&
+  sameId;
+const no5xx = first.res.status < 500 && second.res.status < 500;
 
 const allowedSt = /^(ok|pending|skipped|error)$/;
 const deliveryOk =
@@ -76,7 +81,8 @@ const ok =
   first.data.ok === true &&
   Boolean(first.data.lead_id || first.data.receipt_id) &&
   leaks.length === 0 &&
-  sameId &&
+  secondIsIdempotent &&
+  no5xx &&
   deliveryOk;
 
 const out = {
@@ -89,6 +95,7 @@ const out = {
   idempotent_same_id: sameId,
   idempotent_http: second.res.status,
   second_lead_id: second.data.lead_id || null,
+  second_idempotent_flag: second.data.idempotent === true,
   notify_status: first.data.notify_status || null,
   email_status: first.data.email_status || null,
   base,
@@ -99,6 +106,9 @@ const out = {
     persistence_lead_id: Boolean(first.data.lead_id),
     no_secret_leak: leaks.length === 0,
     idempotency_same_id: sameId,
+    second_post_http_200: second.res.status === 200,
+    second_post_idempotent_true: second.data.idempotent === true,
+    no_http_5xx: no5xx,
     delivery_status_present: deliveryOk,
   },
 };

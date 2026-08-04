@@ -10,6 +10,13 @@ const fs = require("fs");
 const path = require("path");
 const { safeLog } = require("./lead-core.cjs");
 
+function alreadyExistsError(existing) {
+  const err = new Error("already_exists");
+  err.code = "ALREADY_EXISTS";
+  err.existing = existing || null;
+  return err;
+}
+
 class MemoryStore {
   constructor() {
     this.map = new Map();
@@ -23,7 +30,10 @@ class MemoryStore {
   async get(id) {
     return this.map.get(id) || null;
   }
-  async put(record) {
+  async put(record, { onlyIfNew = false } = {}) {
+    if (onlyIfNew && this.map.has(record.lead_id)) {
+      throw alreadyExistsError(this.map.get(record.lead_id));
+    }
     this.map.set(record.lead_id, record);
     if (record.idempotency_key) this.byIdem.set(record.idempotency_key, record.lead_id);
     return record;
@@ -77,7 +87,10 @@ class FileStore {
       return null;
     }
   }
-  async put(record) {
+  async put(record, { onlyIfNew = false } = {}) {
+    if (onlyIfNew && fs.existsSync(this._path(record.lead_id))) {
+      throw alreadyExistsError(await this.get(record.lead_id));
+    }
     fs.writeFileSync(this._path(record.lead_id), JSON.stringify(record, null, 0), "utf8");
     if (record.idempotency_key) {
       fs.writeFileSync(
@@ -117,19 +130,30 @@ class NetlifyBlobsStore {
   constructor(store) {
     this.store = store;
   }
-  async _setJson(key, value) {
+  /**
+   * @returns {{ modified: boolean, etag?: string }}
+   */
+  async _setJson(key, value, { onlyIfNew = false } = {}) {
+    const writeOpts = onlyIfNew ? { onlyIfNew: true } : {};
     if (typeof this.store.setJSON === "function") {
       try {
-        await this.store.setJSON(key, value);
-        return;
+        const result = await this.store.setJSON(key, value, writeOpts);
+        if (result && result.modified === false) return { modified: false };
+        return { modified: true, etag: result && result.etag };
       } catch (err) {
-        // fall through to set()
+        // fall through to set() unless onlyIfNew precondition path already answered
+        if (onlyIfNew && err && /precondition|412|if-none-match/i.test(String(err.message || err))) {
+          return { modified: false };
+        }
         if (!err || !/consistency|uncached/i.test(String(err.message || err))) throw err;
       }
     }
-    await this.store.set(key, JSON.stringify(value), {
+    const result = await this.store.set(key, JSON.stringify(value), {
       contentType: "application/json",
+      ...writeOpts,
     });
+    if (result && result.modified === false) return { modified: false };
+    return { modified: true, etag: result && result.etag };
   }
   async _getJson(key) {
     // Use store default consistency. Do NOT force consistency:"strong" on get
@@ -166,9 +190,13 @@ class NetlifyBlobsStore {
       return null;
     }
   }
-  async put(record) {
+  async put(record, { onlyIfNew = false } = {}) {
     // Lead body first (same order as pre-idempotency-hardening path that worked in prod).
-    await this._setJson(`leads/${record.lead_id}`, record);
+    // onlyIfNew: concurrent/retry must not overwrite or re-deliver an existing lead.
+    const write = await this._setJson(`leads/${record.lead_id}`, record, { onlyIfNew });
+    if (onlyIfNew && write && write.modified === false) {
+      throw alreadyExistsError(await this.get(record.lead_id));
+    }
     if (record.idempotency_key) {
       const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
       await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
@@ -262,7 +290,11 @@ class HttpStore {
       return null;
     }
   }
-  async put(record) {
+  async put(record, { onlyIfNew = false } = {}) {
+    if (onlyIfNew) {
+      const existing = await this.get(record.lead_id);
+      if (existing && existing.lead_id) throw alreadyExistsError(existing);
+    }
     const res = await fetch(this.baseUrl, {
       method: "POST",
       headers: this._headers(),
