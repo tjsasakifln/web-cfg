@@ -52,14 +52,15 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
     """Convert editorial markdown to HTML.
 
     When checklist=True, bullet lines become interactive checkbox items
-    (not plain <ul> lists). Explicit '- [ ]' / '- [x]' always render as
-    checkboxes even outside checklist mode.
+    grouped under section cards. Explicit '- [ ]' / '- [x]' always render
+    as checkboxes even outside checklist mode.
     """
     lines = md.strip().splitlines()
     out: list[str] = []
     in_ul = False
     in_ol = False
     in_check = False
+    in_section = False
     check_i = 0
 
     def close_lists() -> None:
@@ -74,6 +75,13 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             out.append("</ul>")
             in_check = False
 
+    def close_section() -> None:
+        nonlocal in_section
+        close_lists()
+        if in_section:
+            out.append("</section>")
+            in_section = False
+
     def open_checklist() -> None:
         nonlocal in_check
         if not in_check:
@@ -87,10 +95,24 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
         cid = f"chk-{check_i}"
         chk = " checked" if checked else ""
         return (
-            f'<li><label for="{cid}">'
-            f'<input type="checkbox" id="{cid}"{chk}/>'
-            f"<span>{_md_inline(text)}</span></label></li>"
+            f'<li class="checklist-item">'
+            f'<label class="checklist-label" for="{cid}">'
+            f'<input class="checklist-input" type="checkbox" id="{cid}"{chk}/>'
+            f'<span class="checklist-box" aria-hidden="true"></span>'
+            f'<span class="checklist-text">{_md_inline(text)}</span></label></li>'
         )
+
+    def heading_html(level: str, raw_title: str) -> str:
+        title = raw_title.strip()
+        m = re.match(r"^(\d+)\.\s+(.+)$", title)
+        if m:
+            num, rest = m.group(1), m.group(2)
+            return (
+                f"<{level} class=\"editorial-heading editorial-heading--numbered\">"
+                f'<span class="editorial-heading-num" aria-hidden="true">{num}</span>'
+                f'<span class="editorial-heading-label">{_md_inline(rest)}</span></{level}>'
+            )
+        return f"<{level} class=\"editorial-heading\">{_md_inline(title)}</{level}>"
 
     for raw in lines:
         line = raw.rstrip()
@@ -99,13 +121,13 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             continue
         if line.startswith("### "):
             close_lists()
-            out.append(f"<h3>{_md_inline(line[4:])}</h3>")
-        elif line.startswith("## "):
-            close_lists()
-            out.append(f"<h2>{_md_inline(line[3:])}</h2>")
-        elif line.startswith("# "):
-            close_lists()
-            out.append(f"<h2>{_md_inline(line[2:])}</h2>")
+            out.append(heading_html("h3", line[4:]))
+        elif line.startswith("## ") or line.startswith("# "):
+            title = line[3:] if line.startswith("## ") else line[2:]
+            close_section()
+            out.append('<section class="editorial-section">')
+            in_section = True
+            out.append(heading_html("h2", title))
         elif re.match(r"^\d+\.\s+", line):
             if not in_ol:
                 close_lists()
@@ -120,21 +142,35 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             out.append(checklist_item(item, checked=checked))
         elif line.startswith("- "):
             item = line[2:].strip()
-            # Numbered-section bullets on checklist pages → real checkboxes
             if checklist:
                 open_checklist()
                 out.append(checklist_item(item))
             else:
                 if not in_ul:
                     close_lists()
-                    out.append("<ul>")
+                    out.append("<ul class=\"editorial-list\">")
                     in_ul = True
                 out.append(f"<li>{_md_inline(item)}</li>")
         else:
             close_lists()
             out.append(f"<p>{_md_inline(line)}</p>")
-    close_lists()
-    return "\n".join(out)
+    close_section()
+    body = "\n".join(out)
+    if checklist and check_i:
+        progress = (
+            '<div class="checklist-toolbar" data-checklist-toolbar>'
+            '<div class="checklist-progress" role="status" aria-live="polite">'
+            '<div class="checklist-progress-track"><span class="checklist-progress-fill" data-progress-fill style="width:0%"></span></div>'
+            '<p class="checklist-progress-label">'
+            '<strong data-progress-checked>0</strong> de <strong data-progress-total>'
+            f"{check_i}</strong> itens conferidos"
+            "</p></div>"
+            '<button type="button" class="checklist-reset" data-checklist-reset>Limpar marcações</button>'
+            "</div>"
+        )
+        body = progress + "\n" + body
+    return body
+
 
 
 def mailto_href(email: str, subject: str, body: str) -> str:
@@ -184,19 +220,26 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
     label_wa = page.get("cta_wa_label") or "Enviar a situação pelo WhatsApp"
     label_em = page.get("cta_email_label") or "Solicitar análise inicial por e-mail"
     offer = page.get("cta_offer") or "Avaliar os documentos deste caso"
+    blurb = page.get("cta_blurb") or (
+        "Envie o edital, a planilha, a notificação ou a medição. "
+        "Retorno com enquadramento técnico e próximos passos."
+    )
     return f"""
-<section class="lead-inline" id="cta-{e(position)}" aria-label="Próximo passo" data-cta-position="{e(position)}">
-<div class="lead-inline-copy">
-<span>Próximo passo</span>
-<strong>{e(offer)}</strong>
-<p>{e(page.get('cta_blurb') or 'Envie o edital, a planilha, a notificação ou a medição. Retorno com enquadramento técnico e próximos passos.')}</p>
+<section class="editorial-cta" id="cta-{e(position)}" aria-label="Próximo passo" data-cta-position="{e(position)}">
+<div class="editorial-cta-inner">
+<div class="editorial-cta-copy">
+<span class="editorial-cta-kicker">Próximo passo</span>
+<strong class="editorial-cta-title">{e(offer)}</strong>
+<p class="editorial-cta-text">{e(blurb)}</p>
 </div>
-<div class="lead-inline-actions">
-<a class="button button-primary" data-cta-position="{e(position)}" data-cta-channel="whatsapp" href="{e(wa_href)}" rel="noopener" target="_blank">{e(label_wa)}</a>
-<a class="button button-secondary" data-cta-position="{e(position)}" data-cta-channel="email" href="{e(mail_href)}">{e(label_em)}</a>
+<div class="editorial-cta-actions">
+<a class="button button-primary editorial-cta-primary" data-cta-position="{e(position)}" data-cta-channel="whatsapp" href="{e(wa_href)}" rel="noopener" target="_blank">{e(label_wa)}</a>
+<a class="button button-secondary editorial-cta-secondary" data-cta-position="{e(position)}" data-cta-channel="email" href="{e(mail_href)}">{e(label_em)}</a>
+</div>
 </div>
 </section>
 """
+
 
 
 def _related_html(page: dict[str, Any]) -> str:
@@ -302,14 +345,52 @@ def render_page(page: dict[str, Any]) -> str:
         graph.append(faq_ld)
 
     meta_line = (
-        f'<div class="article-meta"><span>{e(author_name)}</span>'
-        f'<span>Publicado em <time datetime="{e(published)}">{e(published)}</time></span>'
-        f'<span>Revisado em <time datetime="{e(modified)}">{e(modified)}</time></span></div>'
+        f'<div class="article-meta" role="list">'
+        f'<span class="article-meta-chip" role="listitem">{e(author_name)}</span>'
+        f'<span class="article-meta-chip" role="listitem">Publicado <time datetime="{e(published)}">{e(published)}</time></span>'
+        f'<span class="article-meta-chip" role="listitem">Revisado <time datetime="{e(modified)}">{e(modified)}</time></span>'
+        f"</div>"
     )
+
+    checklist_script = ""
+    if _is_checklist_page(page):
+        checklist_script = """
+<script>
+(function () {
+  function refresh(root) {
+    var boxes = root.querySelectorAll('.checklist-input');
+    var n = boxes.length, c = 0;
+    boxes.forEach(function (b) { if (b.checked) c += 1; });
+    var fill = root.querySelector('[data-progress-fill]');
+    var checked = root.querySelector('[data-progress-checked]');
+    var total = root.querySelector('[data-progress-total]');
+    if (fill) fill.style.width = (n ? Math.round((c / n) * 100) : 0) + '%';
+    if (checked) checked.textContent = String(c);
+    if (total) total.textContent = String(n);
+    root.querySelectorAll('.checklist-item').forEach(function (li) {
+      var input = li.querySelector('.checklist-input');
+      li.classList.toggle('is-checked', !!(input && input.checked));
+    });
+  }
+  document.querySelectorAll('.article-main').forEach(function (root) {
+    if (!root.querySelector('.checklist-input')) return;
+    root.addEventListener('change', function (e) {
+      if (e.target && e.target.classList.contains('checklist-input')) refresh(root);
+    });
+    var reset = root.querySelector('[data-checklist-reset]');
+    if (reset) reset.addEventListener('click', function () {
+      root.querySelectorAll('.checklist-input').forEach(function (b) { b.checked = false; });
+      refresh(root);
+    });
+    refresh(root);
+  });
+})();
+</script>
+"""
 
     main = f"""
 {breadcrumbs_html(crumbs)}
-<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div class="article-hero-copy">
 <p class="eyebrow">{e(hub_name)}</p>
 <h1>{e(title)}</h1>
 <p class="content-lead">{e(page.get('lead') or answer[:180])}</p>
@@ -317,23 +398,34 @@ def render_page(page: dict[str, Any]) -> str:
 </div></div></header>
 <div class="container article-layout">
 <article class="article-main" itemscope itemtype="https://schema.org/Article">
-<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(answer)}</p></div>
+<div class="answer-box" id="resposta">
+<span class="answer-box-kicker">Resposta direta</span>
+<p class="answer-box-body">{e(answer)}</p>
+</div>
+<div class="editorial-body">
 {body_html}
+</div>
 {_cta_block(page, "mid")}
 {faq_html}
 {_sources_html(page)}
 {_related_html(page)}
 {_cta_block(page, "footer")}
+{checklist_script}
 </article>
-<aside class="article-aside">
-<div class="aside-card">
-<span>Diagnóstico CONFENGE</span>
-<h2>{e(page.get('aside_title') or 'Aplicar este enquadramento ao seu contrato')}</h2>
-<p>{e(page.get('aside_blurb') or 'Organize documentos, riscos e próximos passos com base no cenário real da obra.')}</p>
+<aside class="article-aside" aria-label="Ações laterais">
+<div class="aside-card aside-card--primary">
+<span class="aside-kicker">Diagnóstico CONFENGE</span>
+<h2 class="aside-title">{e(page.get('aside_title') or 'Aplicar este enquadramento ao seu contrato')}</h2>
+<p class="aside-text">{e(page.get('aside_blurb') or 'Organize documentos, riscos e próximos passos com base no cenário real da obra.')}</p>
+<div class="aside-actions">
 <a class="button button-primary" data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">Conversar pelo WhatsApp</a>
-<a class="button button-secondary" style="margin-top:.75rem;display:inline-flex" data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">Enviar por e-mail</a>
+<a class="button button-secondary" data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">Enviar por e-mail</a>
 </div>
-<div class="aside-card aside-compact"><strong>Hub</strong><a href="{e(hub_url)}">{e(hub_name)}</a></div>
+</div>
+<div class="aside-card aside-compact">
+<span class="aside-kicker">Hub</span>
+<a class="aside-hub-link" href="{e(hub_url)}">{e(hub_name)}</a>
+</div>
 </aside>
 </div>
 """
