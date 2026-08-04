@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "title": "Wave 1 — pacote de revisão humana individual",
-  "commit_sha": "7941b8995dddf7fab02a2a2e03c0d7fe7b882345",
-  "derived_at": "2026-08-03T23:56:01Z",
+  "commit_sha": "33aca15c81f2d38229cd41e1c1b58508f6776838",
+  "derived_at": "2026-08-04T00:15:53Z",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "summary": {
     "awaiting_human": 11,
@@ -42,9 +42,11 @@
         "offer": "Validar o dossiê de aditivo com a CONFENGE"
       },
       "cannibalization": {
-        "peers": [],
-        "decision": "NO_KNOWN_INDEXABLE_OVERLAP",
-        "action": "indexação bloqueada até aprovação humana individual"
+        "peers": [
+          "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/"
+        ],
+        "decision": "POSSIBLE_OVERLAP_REVIEW",
+        "action": "humano escolhe canônica antes de index,follow"
       },
       "material_hash": "6d693bdf9d530603c30b633931c49be2fc6d358d299db74dd957652c32610824",
       "preview": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
@@ -61,7 +63,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: checklist aditivo obra",
+      "journey": "execucao",
+      "primary_keyword": "checklist aditivo obra",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/erro-de-projeto-gera-aditivo-obra-publica/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "guia-docs-reequilibrio",
@@ -106,7 +117,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: documentos reequilibrio obra",
+      "journey": "pagamento",
+      "primary_keyword": "documentos reequilibrio obra",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/documentos-reequilibrio-obra-publica/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.130, art.131 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.130, art.131 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "guia-glosa",
@@ -129,9 +149,11 @@
         "offer": "Organizar a contestação da glosa e a parcela incontroversa"
       },
       "cannibalization": {
-        "peers": [],
-        "decision": "NO_KNOWN_INDEXABLE_OVERLAP",
-        "action": "indexação bloqueada até aprovação humana individual"
+        "peers": [
+          "/conteudos/glosa-de-medicao-obra-publica/"
+        ],
+        "decision": "POSSIBLE_OVERLAP_REVIEW",
+        "action": "humano escolhe canônica antes de index,follow"
       },
       "material_hash": "f69bcafc8f7556ecaad49fc1a2eee538f373726f4fc950af2a221af6289cf350",
       "preview": "https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/",
@@ -148,7 +170,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "informacional_decisao",
+      "search_intent": "Decisão sobre: contestar glosa medicao",
+      "journey": "medicao",
+      "primary_keyword": "contestar glosa medicao",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/glosa-de-medicao-obra-publica/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.143 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.143 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "guia-notificacao-atraso",
@@ -192,7 +223,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "informacional_decisao",
+      "search_intent": "Decisão sobre: resposta notificacao atraso obra",
+      "journey": "prazo",
+      "primary_keyword": "resposta notificacao atraso obra",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/resposta-notificacao-atraso-obra-publica/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.115, art.155 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.115, art.155 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "jur-sumula-260-art",
@@ -207,7 +247,25 @@
       "decision_stamped": null,
       "blocked_reason": "Dossiê documental da Súmula 260/art. incompleto — sem texto oficial, data e URL estável TCU",
       "material_hash": "85c0b8f7dea0db73dd88354d7d87c0d241d19a8b16a1664d9d2998cb277b1dfe",
-      "preview": "https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
+      "preview": "https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: sumula tcu 260 ART",
+      "journey": "execucao",
+      "primary_keyword": "sumula tcu 260 ART",
+      "cannibalization": {
+        "peers": []
+      },
+      "material_difference": "Diferença material vs relacionados: Checklist de aditivo (Checklist). Wave 1 adiciona resposta utilizável e fontes amarradas ao material_hash.",
+      "legal_risk": "Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Risco jurídico elevado se generalizar súmula/acórdão sem fatos.",
+      "residual_risk": "Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Risco jurídico elevado se generalizar súmula/acórdão sem fatos.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "sources": [
+        "tcu-sumula-260",
+        "tcu-portal-licitacoes",
+        "agu-alteracoes-contratuais-2024",
+        "lei-14133-planalto"
+      ]
     },
     {
       "page_id": "lei-art124-alteracao-obra",
@@ -233,9 +291,11 @@
         "offer": "Avaliar se esta alteração exige aditivo unilateral ou acordo"
       },
       "cannibalization": {
-        "peers": [],
-        "decision": "NO_KNOWN_INDEXABLE_OVERLAP",
-        "action": "indexação bloqueada até aprovação humana individual"
+        "peers": [
+          "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/"
+        ],
+        "decision": "POSSIBLE_OVERLAP_REVIEW",
+        "action": "humano escolhe canônica antes de index,follow"
       },
       "material_hash": "07caf5f73084efe74e78e3ee4da3827403fd22fee7a6c4613e36f693a2306b30",
       "preview": "https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/",
@@ -252,7 +312,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: art. 124 aditivo obra",
+      "journey": "execucao",
+      "primary_keyword": "art. 124 aditivo obra",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/erro-de-projeto-gera-aditivo-obra-publica/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.124, art.125, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.124, art.125, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "lei-atraso-administracao",
@@ -297,7 +366,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "informacional_decisao",
+      "search_intent": "Decisão sobre: atraso imputavel administracao",
+      "journey": "prazo",
+      "primary_keyword": "atraso imputavel administracao",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/atraso-obra-culpa-administracao/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.115, art.124, art.130 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.115, art.124, art.130 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "lei-item-novo-desconto",
@@ -344,7 +422,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: item novo aditivo desconto",
+      "journey": "execucao",
+      "primary_keyword": "item novo aditivo desconto",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/desconto-da-proposta-em-item-novo-aditivo/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.127, art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.127, art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "lei-limite-25-50",
@@ -393,7 +480,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: limite aditivo 25 50",
+      "journey": "execucao",
+      "primary_keyword": "limite aditivo 25 50",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/limite-aditivo-25-50-obra-publica/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.125, art.124, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.125, art.124, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "lei-parcela-incontroversa",
@@ -437,7 +533,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "informacional_decisao",
+      "search_intent": "Decisão sobre: parcela incontroversa medicao",
+      "journey": "medicao",
+      "primary_keyword": "parcela incontroversa medicao",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/parcela-incontroversa-medicao-contrato-publico/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.143, art.141 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.143, art.141 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "lei-reequilibrio-reajuste",
@@ -480,7 +585,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: reequilibrio reajuste repactuacao",
+      "journey": "pagamento",
+      "primary_keyword": "reequilibrio reajuste repactuacao",
+      "material_difference": "Diferença material vs relacionados: Documentos para pedido de reequilíbrio (Checklist); Reajuste, repactuação e reequilíbrio (Guia). Wave 1 adiciona resposta utilizável e fontes amarradas ao material_hash.",
+      "legal_risk": "Dispositivos: art.130, art.131, art.136 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.130, art.131, art.136 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     },
     {
       "page_id": "lei-servico-sem-aditivo",
@@ -526,7 +640,16 @@
       ],
       "decision_stamped": null,
       "decision_by": null,
-      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável."
+      "note": "Nenhuma decisão carimbada por automação. Aguardando ato humano externo auditável.",
+      "intent": "comercial_investigacional",
+      "search_intent": "Decisão sobre: servico sem termo aditivo",
+      "journey": "execucao",
+      "primary_keyword": "servico sem termo aditivo",
+      "material_difference": "Esta URL Wave 1 responde com resposta direta + fontes oficiais e CTA de dossiê; peers indexáveis (1): /conteudos/servico-executado-sem-termo-aditivo/. Diferença material: checklist/aplicação normativa com material_hash e status EDITORIAL_REVIEWED, não apenas reformulação do peer.",
+      "legal_risk": "Dispositivos: art.124, art.132, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "residual_risk": "Dispositivos: art.124, art.132, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.",
+      "competitor": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar.",
+      "serp_notes": "SERP não capturada automaticamente neste pacote. Revisar top 3 Google para a consulta-alvo antes de indexar."
     }
   ],
   "external_actions": [

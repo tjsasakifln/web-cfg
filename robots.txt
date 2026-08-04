@@ -8,3 +8,4 @@ Sitemap: https://confenge.com.br/sitemap-index.xml
 User-agent: *
 Disallow: /ops/
 Disallow: /.netlify/
+Disallow: /piloto/
