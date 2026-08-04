@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "derived_at": "2026-08-04T00:25:59Z",
-  "commit_sha": "d40c5530f6318d9f8ac4ec5c03259ff4b789ac41",
+  "derived_at": "2026-08-04T00:26:17Z",
+  "commit_sha": "7a40b0004095b610e57bc037481b15702958b3f4",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "registry_counts": {
     "EDITORIAL_REVIEWED": 11,
