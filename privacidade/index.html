@@ -55,12 +55,12 @@
 <li><strong>Mensuração agregada de visitas e contatos</strong> (origem da visita e etapas de contato) sem PII — legítimo interesse, com minimização.</li>
 </ul>
 <h2>Como o formulário funciona</h2>
-<p>O envio autentica-se junto a uma função serverless na plataforma de hospedagem (Netlify Functions). A solicitação válida recebe um <strong>protocolo de atendimento</strong> somente após <strong>persistência durável</strong> (armazenamento operacional da CONFENGE na infraestrutura Netlify Blobs ou equivalente configurado). Em seguida, tenta-se notificação operacional autenticada e e-mail transacional — falha de e-mail <strong>não apaga</strong> o registro persistido. <strong>Não utilizamos Netlify Forms como processador do formulário de contato.</strong> Não enviamos dados do lead a tópicos públicos não autenticados.</p>
+<p>O envio autentica-se junto a uma função serverless na plataforma de hospedagem (Netlify Functions). A solicitação válida recebe um <strong>protocolo de atendimento</strong> somente após <strong>persistência durável</strong> (armazenamento operacional da CONFENGE na infraestrutura Netlify Blobs ou equivalente configurado). Em seguida, tenta-se notificação operacional autenticada e e-mail transacional — falha de e-mail <strong>não apaga</strong> o registro persistido. <strong>Não utilizamos Netlify Forms como processador do formulário de contato.</strong> Não enviamos dados da solicitação a tópicos públicos não autenticados.</p>
 <h2>Operadores e subprocessadores</h2>
 <p>Registro técnico interno (sem segredos): ver <code>docs/security/lgpd-operators.md</code> no repositório operacional. Em resumo:</p>
 <ul>
-<li><strong>Netlify</strong> — hospedagem do site estático, funções serverless e armazenamento de objetos (Blobs) para leads e telemetria agregada; pode envolver transferência internacional conforme a infraestrutura do fornecedor.</li>
-<li><strong>Provedor de e-mail transacional</strong> (quando ativado, p.ex. Resend) — envio de notificação de lead ao endereço operacional da CONFENGE, com remetente no domínio confenge.com.br após autenticação DNS (SPF/DKIM/DMARC).</li>
+<li><strong>Netlify</strong> — hospedagem do site estático, funções serverless e armazenamento de objetos (Blobs) para solicitações de contato e telemetria agregada; pode envolver transferência internacional conforme a infraestrutura do fornecedor.</li>
+<li><strong>Provedor de e-mail transacional</strong> (quando ativado, p.ex. Resend) — envio de notificação de solicitação ao endereço operacional da CONFENGE, com remetente no domínio confenge.com.br após autenticação DNS (SPF/DKIM/DMARC).</li>
 <li><strong>Webhook operacional autenticado</strong> (quando configurado) — notificação em canal privado da operação comercial.</li>
 <li><strong>Cloudflare Turnstile</strong> (quando ativado) — desafio antiabuso no envio do formulário.</li>
 <li><strong>Meta / WhatsApp</strong> — somente se o titular optar por abrir conversa via link wa.me; a CONFENGE não envia o conteúdo do formulário automaticamente ao WhatsApp.</li>

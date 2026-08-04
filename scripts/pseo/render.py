@@ -594,7 +594,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 {related}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <p>Leve o recorte de {e(m.get('region'))} para uma conversa objetiva.</p>
 <a class="button button-primary" data-cta-position="aside" data-pseo-event="pseo_whatsapp_click" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/mercados/">Todos os mercados</a></div>
@@ -794,7 +794,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="{e('https://wa.me/5548988344559')}" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/orgaos/">Todos os órgãos</a></div>
 </aside></div>
@@ -956,7 +956,7 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/precos/">Todos os benchmarks</a></div>
 </aside></div>
@@ -1082,7 +1082,7 @@ Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/concorrencia/">Concorrência</a></div>
 </aside></div>
@@ -1238,7 +1238,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
 {_related_section(c.related_urls)}
 </article>
 <aside class="article-aside">
-<div class="aside-card"><span>CTA</span><h2>{e(c.cta_label)}</h2>
+<div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
 <div class="aside-card aside-compact"><strong>Hub</strong><a href="/radar/">Radar</a></div>
 </aside></div>

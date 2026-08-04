@@ -172,6 +172,18 @@ PUBLIC_BACKSTAGE_PHRASES = (
     "prova de autoridade",
     "CTA contextual",
     "Onboarding e horizonte",
+    "Este cluster",
+    "este cluster",
+    "dados do lead",
+    "notificação de lead",
+    "notificacao de lead",
+)
+
+# Patterns for short chrome that phrase-substring misses (visible badge "CTA", bare lineage).
+PUBLIC_BACKSTAGE_PATTERNS = (
+    re.compile(r">\s*CTA\s*<"),
+    re.compile(r"<span>\s*CTA\s*</span>", re.I),
+    re.compile(r"\blineage\b", re.I),
 )
 
 
@@ -234,6 +246,9 @@ def test_public_backstage_language_absent():
         for phrase in PUBLIC_BACKSTAGE_PHRASES:
             if phrase.lower() in lower:
                 failures.append(f"{path.relative_to(ROOT)}: {phrase!r}")
+        for cre in PUBLIC_BACKSTAGE_PATTERNS:
+            if cre.search(vis):
+                failures.append(f"{path.relative_to(ROOT)}: pattern {cre.pattern!r}")
     assert not failures, failures
 
 
@@ -265,9 +280,12 @@ def test_banlist_includes_conversion_eyebrow():
 
 
 def test_gate_bites_on_reintroduction():
-    """Prove the public banlist would catch a reintroduced conversion eyebrow."""
+    """Prove the public banlist would catch reintroduced conversion / pipeline leaks."""
     synthetic = '<p class="eyebrow">Conversão com utilidade real</p>'
     assert any(p.lower() in synthetic.lower() for p in PUBLIC_BACKSTAGE_PHRASES)
+    assert any(cre.search('<div class="aside-card"><span>CTA</span><h2>X</h2>') for cre in PUBLIC_BACKSTAGE_PATTERNS)
+    assert any(cre.search("Números só com lineage.") for cre in PUBLIC_BACKSTAGE_PATTERNS)
+    assert "este cluster" in "Este cluster trata do edital".lower()
 
 
 if __name__ == "__main__":
