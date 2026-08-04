@@ -638,7 +638,7 @@ def write_human_action_now(packet: dict[str, Any]) -> Path:
         )
     lines.extend(
         [
-            "As outras 8 páginas seguem `EDITORIAL_REVIEWED` e noindex; `jur-sumula-260-art` segue `REJECTED`. Se houver novo commit não material, confirme o novo preview antes de confiar na decisão existente. Se houver qualquer mudança material, o registro remove a aprovação e retorna a página para `REVIEW_REQUIRED`.",
+            "As outras 8 páginas seguem `EDITORIAL_REVIEWED` e noindex; `jur-sumula-260-art` segue `REJECTED`. Após um commit não material, confirme e registre o novo preview com `python3 scripts/editorial/preview.py --reconfirm-approval --page-id PAGE_ID --expected-head \"$(git rev-parse HEAD)\"`; esse comando não cria aprovação. Qualquer mudança material remove a aprovação e retorna a página para `REVIEW_REQUIRED`.",
             "",
         ]
     )
