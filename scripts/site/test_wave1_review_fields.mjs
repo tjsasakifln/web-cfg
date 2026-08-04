@@ -4,34 +4,28 @@ import { fileURLToPath } from "url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const pkt = JSON.parse(readFileSync(resolve(ROOT, "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json"), "utf8"));
 const html = readFileSync(resolve(ROOT, "ops/wave1-review.html"), "utf8");
+const human = readFileSync(resolve(ROOT, "docs/editorial/HUMAN-ACTION-NOW.md"), "utf8");
 let fail = 0;
 function ok(n,c,d=""){ if(c) console.log("PASS",n); else { console.error("FAIL",n,d); fail++; } }
+const expected = ["lei-limite-25-50", "guia-checklist-aditivo", "lei-item-novo-desconto"];
 const pages = pkt.pages || [];
-ok("pages_12", pages.length >= 11, String(pages.length));
+ok("first_cohort_exactly_three", pages.length === 3, String(pages.length));
+ok("first_cohort_order", pages.map((p) => p.page_id).join(",") === expected.join(","));
+ok("commit_sha_informational", pkt.commit_sha_role === "informational_only");
 for (const p of pages) {
   const id = p.page_id;
-  ok(`intent:${id}`, p.intent && p.intent !== "—" && !String(p.intent).includes("undefined"));
-  ok(`material_diff:${id}`, p.material_difference && p.material_difference !== "—" && p.material_difference.length > 40);
-  ok(`risk:${id}`, p.legal_risk && p.legal_risk !== "ver packet" && p.legal_risk.length > 20);
-  ok(`competitor:${id}`, p.competitor && p.competitor !== "—");
-  ok(`cann_object:${id}`, p.cannibalization && typeof p.cannibalization === "object");
+  ok(`material_hash:${id}`, /^[a-f0-9]{64}$/.test(p.material_hash || ""));
+  ok(`intent:${id}`, Boolean(p.search_intent));
+  ok(`demand:${id}`, Boolean(p.demand_evidence));
+  ok(`objective:${id}`, Boolean(p.objective));
+  ok(`sources:${id}`, Array.isArray(p.legal_sources) && p.legal_sources.length > 0);
+  ok(`competitor:${id}`, Boolean(p.cannibalization && p.cannibalization.internal_competitor));
+  ok(`cta:${id}`, Boolean(p.cta && p.cta.offer));
+  ok(`human_command:${id}`, human.includes(`--page-id ${id}`) && human.includes(p.material_hash));
 }
-ok("ui_has_intencao_labels", (html.match(/<dt>Intenção<\/dt>/g) || []).length >= 11);
-ok("ui_has_diff_labels", (html.match(/Diferença material/g) || []).length >= 11);
-ok("ui_not_all_em_dash_intent", !html.includes("<dt>Intenção</dt><dd>—</dd>"));
-// REJECTED jurisprudence must not be approvable
-ok(
-  "rejected_jur_approve_blocked",
-  /jur-sumula-260-art[\s\S]*?data-dec="approve"[\s\S]*?disabled/i.test(html) ||
-    /data-approve-blocked="1"[\s\S]*?jur-sumula-260-art|jur-sumula-260-art[\s\S]*?data-approve-blocked="1"/i.test(html),
-  "approve button for rejected page must be disabled"
-);
-ok(
-  "export_cli_command_shape",
-  html.includes("approve_cli.py") && html.includes("--material-hash") && html.includes("export-cli"),
-  "must export exact approve_cli with material-hash"
-);
-ok("blocks_tester_reviewer", /tester\|ci\|bot/i.test(html) || html.includes("BLOCKED_REVIEWERS") || html.includes("tester/ci/bot"), "block tester");
+ok("noncohort_not_in_human_commands", !human.includes("--page-id lei-art124-alteracao-obra"));
+ok("ops_is_not_approval_surface", html.includes('data-approval-source="registry"') && !html.includes("approve_cli.py"));
+
 // pilot
 const man = JSON.parse(readFileSync(resolve(ROOT, "docs/pseo/PILOT-MANIFEST.json"), "utf8"));
 ok("pilot_10_20", man.count >= 10 && man.count <= 20, String(man.count));
