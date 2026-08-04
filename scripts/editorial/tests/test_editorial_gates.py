@@ -23,6 +23,7 @@ from scripts.editorial.registry import (  # noqa: E402
     advance,
     approve_human,
     is_blocked_reviewer,
+    indexable_pages,
     load_registry,
     mark_indexable,
     material_hash,
@@ -197,19 +198,31 @@ def test_human_path_to_indexable():
 
 
 def test_revoke_operator_stamps():
-    reg = {
-        "schema_version": "1.0.0",
-        "pages": [
-            {
-                "page_id": "x",
-                "url": "/x/",
-                "status": "INDEXABLE",
-                "material_hash": "abc",
-                "approval": {"reviewer": "editorial-wave1-operator", "material_hash": "abc"},
-                "history": [],
-            }
-        ],
+    page = {
+        "page_id": "x",
+        "url": "/x/",
+        "title": "Título",
+        "direct_answer": "Resposta " * 30,
+        "body_markdown": "Corpo técnico " * 80,
+        "sources": ["lei-14133-planalto"],
+        "cta_whatsapp": "Olá, Tiago. Preciso validar um contrato de obra pública.",
+        "cta_email_subject": "Análise de contrato de obra",
+        "cta_email_body": "Corpo",
+        "archetype": "lei_14133",
+        "legal_devices": ["art.124"],
+        "status": "INDEXABLE",
+        "history": [],
     }
+    page["material_hash"] = material_hash(page)
+    page["approval"] = {
+        "schema_version": "2.0.0",
+        "page_id": "x",
+        "state": "HUMAN_APPROVED",
+        "reviewer": "editorial-wave1-operator",
+        "at": "2026-08-04T00:00:00Z",
+        "material_hash": page["material_hash"],
+    }
+    reg = {"schema_version": "1.0.0", "pages": [page]}
     n = revoke_auto_approvals(reg)
     assert n == 1
     assert reg["pages"][0]["status"] == "EDITORIAL_REVIEWED"
@@ -261,3 +274,64 @@ def test_build_rejects_auto_approve_flag():
     from scripts.editorial.build import main
 
     assert main(["--auto-approve"]) == 2
+
+
+def test_material_change_drops_old_approval_identity():
+    reg = {"schema_version": "1.0.0", "pages": []}
+    page = {
+        "page_id": "material-change",
+        "url": "/material-change/",
+        "title": "Título",
+        "direct_answer": "Resposta " * 30,
+        "body_markdown": "Corpo técnico " * 80,
+        "sources": ["lei-14133-planalto"],
+        "cta_whatsapp": "Olá, Tiago. Preciso validar um contrato de obra pública.",
+        "cta_email_subject": "Análise de contrato de obra",
+        "cta_email_body": "Corpo",
+        "archetype": "lei_14133",
+        "legal_devices": ["art.124"],
+        "status": "EDITORIAL_REVIEWED",
+    }
+    page["material_hash"] = material_hash(page)
+    upsert_page(reg, page)
+    approve_human(
+        reg,
+        "material-change",
+        reviewer="Tiago Sasaki",
+        notes="Fontes e conteúdo conferidos com rigor adequado para publicação.",
+        sources_verified=["lei-14133-planalto"],
+    )
+    mark_indexable(reg, "material-change")
+    # The caller carries the old stored hash. The registry must recompute it
+    # from material fields and revoke the prior approval anyway.
+    changed = {**page, "body_markdown": page["body_markdown"] + " mudança material"}
+    upsert_page(reg, changed)
+    assert reg["pages"][0]["status"] == "REVIEW_REQUIRED"
+    assert "approval" not in reg["pages"][0]
+    assert not indexable_pages(reg)
+
+
+def test_indexable_pages_requires_current_approval_identity():
+    reg = {
+        "schema_version": "1.0.0",
+        "pages": [
+            {
+                "page_id": "bad-identity",
+                "url": "/bad-identity/",
+                "material_hash": "current",
+                "status": "INDEXABLE",
+                "approval": {
+                    "schema_version": "2.0.0",
+                    "page_id": "bad-identity",
+                    "state": "HUMAN_APPROVED",
+                    "reviewer": "Tiago Sasaki",
+                    "at": "2026-08-04T00:00:00Z",
+                    "material_hash": "old",
+                },
+            }
+        ],
+    }
+    assert indexable_pages(reg) == []
+    with pytest.raises(ValueError, match="approval_hash_or_identity_mismatch"):
+        mark_indexable(reg, "bad-identity")
+    assert reg["pages"][0]["status"] == "REVIEW_REQUIRED"
