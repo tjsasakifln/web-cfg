@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Single derivation pipeline for editorial truth.
+"""Derive editorial truth from page material and valid human approvals.
 
-All of registry counts, terminal status, HTML robots, sitemaps, hub inventory,
-and Wave 1 readiness are derived here — documents are outputs, not parallel truth.
+Editorial reports may carry commit_sha for traceability, but commit identity is
+never an approval gate. The approval identity is (schema_version, page_id,
+material_hash, state, reviewer, timestamp).
 """
 
 from __future__ import annotations
@@ -17,7 +18,15 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+SITE = "https://confenge.com.br"
 
+# The rest of the editorial queue remains noindex until a later, explicit cohort.
+FIRST_COHORT_IDS = (
+    "lei-limite-25-50",
+    "guia-checklist-aditivo",
+    "lei-item-novo-desconto",
+)
+FIRST_COHORT_SET = frozenset(FIRST_COHORT_IDS)
 WAVE1_IDS = frozenset(
     {
         "guia-checklist-aditivo",
@@ -34,14 +43,38 @@ WAVE1_IDS = frozenset(
     }
 )
 REJECTED_IDS = frozenset({"jur-sumula-260-art"})
-
 TERMINAL_ALLOWED = frozenset(
     {
         "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE",
         "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
         "READY_FOR_NAMED_HUMAN_APPROVAL",
+        "READY_FOR_RELEASE",
     }
 )
+
+FIRST_COHORT_CONTEXT: dict[str, dict[str, str]] = {
+    "lei-limite-25-50": {
+        "search_intent": "Limite de 25% e 50% no art. 125 em aditivo de obra",
+        "demand_evidence": "Peer /conteudos/limite-aditivo-25-50-obra-publica/ teve 24 impressões, 0 cliques e posição 17 no export GSC de 2026-07-30; a query relacionada 'aditivos obra pública' teve 5 impressões.",
+        "objective": "Explicar o teto do art. 125 sem tratá-lo como crédito automático e levar a uma validação do saldo contratual.",
+        "internal_competitor": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "cannibalization_risk": "alto: definir uma única canônica antes de indexar; 301 ou noindex do peer somente após decisão humana.",
+    },
+    "guia-checklist-aditivo": {
+        "search_intent": "Checklist operacional para protocolar pedido de aditivo de obra",
+        "demand_evidence": "A query 'aditivos obra pública' teve 5 impressões; o peer /conteudos/erro-de-projeto-gera-aditivo-obra-publica/ teve 3 impressões e posição 2,33 no export GSC de 2026-07-30.",
+        "objective": "Organizar o dossiê e seus bloqueadores antes do protocolo, sem vender um checklist como substituto de análise jurídica.",
+        "internal_competitor": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+        "cannibalization_risk": "parcial: diferenciar intenção (erro de projeto versus checklist transversal) e manter linkagem contextual.",
+    },
+    "lei-item-novo-desconto": {
+        "search_intent": "Preço de item novo em aditivo e preservação do desconto da proposta",
+        "demand_evidence": "Peer /conteudos/desconto-da-proposta-em-item-novo-aditivo/ teve 4 impressões, 1 clique e posição 7 no export GSC de 2026-07-30.",
+        "objective": "Explicar a formação defensável de preço do item novo e captar pedidos de revisão de composição e documentos.",
+        "internal_competitor": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+        "cannibalization_risk": "alto: escolher canônica e impedir dual-index antes da publicação.",
+    },
+}
 
 
 def _now() -> str:
@@ -61,144 +94,13 @@ def _git_sha() -> str:
         return "unknown"
 
 
-def _git_parent_sha() -> str | None:
-    try:
-        return (
-            subprocess.check_output(
-                ["git", "rev-parse", "HEAD^"], cwd=ROOT, stderr=subprocess.DEVNULL
-            )
-            .decode()
-            .strip()
-        )
-    except Exception:  # noqa: BLE001
-        return None
-
-
-def _head_is_docs_editorial_pin_only() -> bool:
-    """True when tip commit only touches docs/editorial/* (SHA pin commit)."""
-    try:
-        names = (
-            subprocess.check_output(
-                ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"],
-                cwd=ROOT,
-                stderr=subprocess.DEVNULL,
-            )
-            .decode()
-            .splitlines()
-        )
-    except Exception:  # noqa: BLE001
-        return False
-    if not names:
-        return False
-    return all(n.startswith("docs/editorial/") for n in names)
-
-
-def _git_parents(sha: str = "HEAD") -> list[str]:
-    """Return parent SHAs of a commit (empty for root)."""
-    try:
-        raw = (
-            subprocess.check_output(
-                ["git", "rev-parse", f"{sha}^@"],
-                cwd=ROOT,
-                stderr=subprocess.DEVNULL,
-            )
-            .decode()
-            .strip()
-        )
-        return [p for p in raw.splitlines() if p]
-    except Exception:  # noqa: BLE001
-        return []
-
-
-def _commit_is_docs_editorial_pin_only(sha: str) -> bool:
-    """True when commit *sha* only touches docs/editorial/*."""
-    try:
-        names = (
-            subprocess.check_output(
-                ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", sha],
-                cwd=ROOT,
-                stderr=subprocess.DEVNULL,
-            )
-            .decode()
-            .splitlines()
-        )
-    except Exception:  # noqa: BLE001
-        return False
-    if not names:
-        return False
-    return all(n.startswith("docs/editorial/") for n in names)
-
-
-def allowed_packaged_shas() -> set[str]:
-    """Exact HEAD; if tip is docs-only pin, first parent is also allowed.
-
-    Unbounded ancestors (e.g. pre-recovery main) are NOT allowed.
-    """
-    live = _git_sha()
-    out = {live} if live != "unknown" else set()
-    if _head_is_docs_editorial_pin_only():
-        parent = _git_parent_sha()
-        if parent:
-            out.add(parent)
-    return out
-
-
-def packaged_sha_is_acceptable(
-    pkg_sha: str, live: str | None = None, *, _depth: int = 0
-) -> bool:
-    """Accept package SHA only when tightly bound to current tip.
-
-    Allowed:
-      1. exact HEAD
-      2. first parent of HEAD when HEAD is a docs/editorial-only pin commit
-      3. PR merge-commit special-case (exactly 2 parents): package may equal
-         the *second* parent (PR tip per GitHub merge convention), or that
-         tip's first parent when the PR tip is itself a docs-only pin
-      4. On a 2-parent merge, package may also be acceptable relative to the
-         *first* parent (base/main). This covers Dependabot and other
-         non-editorial PRs whose package JSON is unchanged from main while
-         live is the ephemeral merge SHA. Depth-limited to avoid walking
-         arbitrary history.
-
-    Explicitly rejected: arbitrary ancestors (e.g. pre-recovery main).
-    """
-    live = live or _git_sha()
-    if not pkg_sha or live == "unknown":
-        return False
-    if pkg_sha == live:
-        return True
-    # (2) docs-only pin on a normal branch tip
-    if _head_is_docs_editorial_pin_only() or _commit_is_docs_editorial_pin_only(live):
-        parents = _git_parents(live)
-        if parents and pkg_sha == parents[0]:
-            return True
-    # (3) GitHub PR merge ref: two parents — base (main) then PR head.
-    # Never accept first parent alone as a bare string match (would greenlight
-    # pinning main without checking whether that pin is itself valid).
-    parents = _git_parents(live)
-    if len(parents) == 2:
-        pr_tip = parents[1]
-        if pkg_sha == pr_tip:
-            return True
-        if _commit_is_docs_editorial_pin_only(pr_tip):
-            pr_parents = _git_parents(pr_tip)
-            if pr_parents and pkg_sha == pr_parents[0]:
-                return True
-        # (4) Inherit base pin validity (Dependabot / chore PRs).
-        # Depth allows walking a short chain of main merge-commits
-        # (checkout bump → chrome bump → …) without accepting unbounded history.
-        if _depth < 8 and packaged_sha_is_acceptable(
-            pkg_sha, parents[0], _depth=_depth + 1
-        ):
-            return True
-    return False
-
-
 def robots_of(html: str) -> str:
-    m = re.search(
+    match = re.search(
         r'name=["\']robots["\']\s+content=["\']([^"\']+)', html, re.I
-    ) or re.search(r'content=["\']([^"\']+)["\']\s+name=["\']robots["\']', html, re.I)
-    return (m.group(1) if m else "index,follow").lower()
+    ) or re.search(
+        r'content=["\']([^"\']+)["\']\s+name=["\']robots["\']', html, re.I
+    )
+    return (match.group(1) if match else "index,follow").lower()
 
 
 def is_noindex(robots: str) -> bool:
@@ -206,10 +108,10 @@ def is_noindex(robots: str) -> bool:
 
 
 def load_registry(path: Path | None = None) -> dict[str, Any]:
-    p = path or (ROOT / "data" / "editorial" / "EDITORIAL-REGISTRY.json")
-    if not p.exists():
-        return {"pages": [], "counts": {}}
-    return json.loads(p.read_text(encoding="utf-8"))
+    path = path or (ROOT / "data" / "editorial" / "EDITORIAL-REGISTRY.json")
+    if not path.exists():
+        return {"schema_version": "unknown", "pages": [], "counts": {}}
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def sitemap_locs(path: Path) -> list[str]:
@@ -219,12 +121,11 @@ def sitemap_locs(path: Path) -> list[str]:
 
 
 def count_indexable_conteudos() -> int:
-    n = 0
-    for p in (ROOT / "conteudos").glob("*/index.html"):
-        html = p.read_text(encoding="utf-8", errors="replace")
-        if not is_noindex(robots_of(html)):
-            n += 1
-    return n
+    count = 0
+    for path in (ROOT / "conteudos").glob("*/index.html"):
+        if not is_noindex(robots_of(path.read_text(encoding="utf-8", errors="replace"))):
+            count += 1
+    return count
 
 
 def hub_claimed_guide_count() -> int | None:
@@ -232,48 +133,92 @@ def hub_claimed_guide_count() -> int | None:
     if not hub.exists():
         return None
     text = hub.read_text(encoding="utf-8", errors="replace")
-    m = re.search(r'"numberOfItems"\s*:\s*(\d+)', text)
-    if m:
-        return int(m.group(1))
-    m2 = re.search(r"\b(\d{1,3})\s+guias?\s+indexáveis", text, re.I)
-    if m2:
-        return int(m2.group(1))
-    return None
+    match = re.search(r'"numberOfItems"\s*:\s*(\d+)', text)
+    if match:
+        return int(match.group(1))
+    match = re.search(r"\b(\d{1,3})\s+guias?\s+indexáveis", text, re.I)
+    return int(match.group(1)) if match else None
+
+
+def _cohort_summary(pages: list[dict[str, Any]], valid_indexable_ids: set[str]) -> dict[str, Any]:
+    from scripts.editorial.registry import approval_is_current
+
+    return {
+        "total": len(pages),
+        "editorial_reviewed": sum(1 for p in pages if p.get("status") == "EDITORIAL_REVIEWED"),
+        "human_approved": sum(
+            1
+            for p in pages
+            if p.get("status") in {"HUMAN_APPROVED", "INDEXABLE", "PUBLISHED"}
+            and approval_is_current(p)
+        ),
+        "indexable": sum(1 for p in pages if p.get("page_id") in valid_indexable_ids),
+        "page_ids": [p.get("page_id") for p in pages],
+    }
+
+
+def compute_terminal_status(
+    *,
+    contradictions: list[str],
+    cohort_editorial_reviewed: int,
+    cohort_indexable: int,
+    rejected_count: int,
+) -> str:
+    if contradictions:
+        return "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
+    if (
+        cohort_indexable == 0
+        and cohort_editorial_reviewed == len(FIRST_COHORT_IDS)
+        and rejected_count >= 1
+    ):
+        return "READY_FOR_NAMED_HUMAN_APPROVAL"
+    if 0 < cohort_indexable <= len(FIRST_COHORT_IDS):
+        return "READY_FOR_RELEASE"
+    return "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS"
 
 
 def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
-    """Derive reconciled editorial + public inventory state from live sources."""
+    """Derive truth from the registry and generated public surfaces."""
+    from scripts.editorial.registry import approval_is_current, indexable_pages
+
     reg = reg if reg is not None else load_registry()
     pages = list(reg.get("pages") or [])
-    status_counts = Counter((p.get("status") or "DRAFT") for p in pages)
-
-    wave1 = [p for p in pages if p.get("page_id") in WAVE1_IDS]
-    rejected = [p for p in pages if p.get("page_id") in REJECTED_IDS or p.get("status") == "REJECTED"]
-
-    human_approved = [
+    page_by_id = {p.get("page_id"): p for p in pages if p.get("page_id")}
+    cohort = [page_by_id[page_id] for page_id in FIRST_COHORT_IDS if page_id in page_by_id]
+    queue = [
         p
         for p in pages
-        if p.get("status") in {"HUMAN_APPROVED", "INDEXABLE", "PUBLISHED"}
+        if p.get("page_id") in WAVE1_IDS
+        and p.get("page_id") not in FIRST_COHORT_SET
     ]
-    indexable_reg = [p for p in pages if p.get("status") in {"INDEXABLE", "PUBLISHED"}]
+    rejected = [p for p in pages if p.get("page_id") in REJECTED_IDS or p.get("status") == "REJECTED"]
+    valid_indexable = indexable_pages(reg)
+    valid_indexable_ids = {p.get("page_id") for p in valid_indexable}
+    valid_indexable_urls = {p.get("url") for p in valid_indexable}
 
-    # False reviewer stamps
-    false_reviewers = []
+    contradictions: list[str] = []
+    if set(p.get("page_id") for p in cohort) != FIRST_COHORT_SET:
+        contradictions.append("first_cohort_registry_missing_page")
     for p in pages:
-        appr = p.get("approval") or {}
-        rev = appr.get("reviewer") or p.get("reviewer")
-        if rev and p.get("status") in {"HUMAN_APPROVED", "INDEXABLE", "PUBLISHED"}:
-            false_reviewers.append({"page_id": p.get("page_id"), "reviewer": rev})
+        status = p.get("status")
+        if status in {"HUMAN_APPROVED", "INDEXABLE", "PUBLISHED"} and not approval_is_current(p):
+            contradictions.append(f"invalid_approval_identity:{p.get('page_id')}")
+        if p.get("page_id") not in FIRST_COHORT_SET and p.get("page_id") in valid_indexable_ids:
+            contradictions.append(f"outside_first_cohort_indexable:{p.get('page_id')}")
 
-    # HTML robots for Wave 1
-    wave1_html = []
-    for p in wave1:
+    wave_html: list[dict[str, Any]] = []
+    for p in queue:
         url = (p.get("url") or "").strip("/")
-        hp = ROOT / url / "index.html" if url else None
+        page_path = ROOT / url / "index.html" if url else None
         robots = "missing"
-        if hp and hp.exists():
-            robots = robots_of(hp.read_text(encoding="utf-8", errors="replace"))
-        wave1_html.append(
+        if page_path and page_path.exists():
+            robots = robots_of(page_path.read_text(encoding="utf-8", errors="replace"))
+        valid = p.get("page_id") in valid_indexable_ids
+        if valid and robots != "missing" and is_noindex(robots):
+            contradictions.append(f"indexable_but_noindex_html:{p.get('page_id')}")
+        if not valid and robots != "missing" and not is_noindex(robots):
+            contradictions.append(f"unapproved_but_index_html:{p.get('page_id')}")
+        wave_html.append(
             {
                 "page_id": p.get("page_id"),
                 "url": p.get("url"),
@@ -283,375 +228,279 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
             }
         )
 
-    editorial_sm = sitemap_locs(ROOT / "sitemap-editorial.xml")
-    juris_sm = sitemap_locs(ROOT / "sitemap-jurisprudencia.xml")
-    # Paths only
-    editorial_paths = [
-        re.sub(r"^https?://[^/]+", "", loc) for loc in editorial_sm
-    ]
+    editorial_sitemap = sitemap_locs(ROOT / "sitemap-editorial.xml")
+    editorial_paths = [re.sub(r"^https?://[^/]+", "", loc) for loc in editorial_sitemap]
+    for path in editorial_paths:
+        if path not in valid_indexable_urls and path.rstrip("/") not in {
+            "/lei-14133-obras",
+            "/guias-contratos-obras",
+            "/jurisprudencia-contratos-obras",
+        }:
+            contradictions.append(f"sitemap_without_valid_approval:{path}")
+
+    for p in queue:
+        if p.get("page_id") not in valid_indexable_ids and p.get("url") in editorial_paths:
+            contradictions.append(f"unapproved_in_editorial_sitemap:{p.get('page_id')}")
 
     conteudos_indexable = count_indexable_conteudos()
     hub_count = hub_claimed_guide_count()
-
-    # Contradictions
-    contradictions: list[str] = []
-    allowed_shas = allowed_packaged_shas()
-    live_sha = _git_sha()
-    # Packaged reports must match live HEAD (or parent when tip is docs-only pin)
-    for rel in (
-        "docs/editorial/TERMINAL-RESULT.json",
-        "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
-        "docs/editorial/EDITORIAL-INVENTORY.json",
-    ):
-        path = ROOT / rel
-        if not path.exists():
-            continue
-        try:
-            packaged = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            contradictions.append(f"packaged_json_invalid:{rel}")
-            continue
-        pkg_sha = (packaged.get("commit_sha") or "").strip()
-        if not pkg_sha:
-            contradictions.append(f"packaged_sha_missing:{rel}")
-        elif live_sha != "unknown" and not packaged_sha_is_acceptable(pkg_sha, live_sha):
-            contradictions.append(
-                f"packaged_sha_mismatch:{rel}:{pkg_sha[:12]}!={live_sha[:12]}"
-            )
-
-    wave1_approved_n = sum(
-        1 for p in wave1 if p.get("status") in {"HUMAN_APPROVED", "INDEXABLE", "PUBLISHED"}
-    )
-    wave1_indexable_n = sum(1 for p in wave1 if p.get("status") in {"INDEXABLE", "PUBLISHED"})
-
-    if wave1_approved_n > 0 and any(
-        (p.get("approval") or {}).get("reviewer") in (None, "", "operator", "system")
-        for p in wave1
-        if p.get("status") in {"HUMAN_APPROVED", "INDEXABLE", "PUBLISHED"}
-    ):
-        contradictions.append("wave1_approved_without_named_reviewer")
-
-    for row in wave1_html:
-        st = row["registry_status"]
-        if st in {"INDEXABLE", "PUBLISHED"} and row["noindex"]:
-            contradictions.append(f"indexable_but_noindex_html:{row['page_id']}")
-        if st not in {"INDEXABLE", "PUBLISHED", "HUMAN_APPROVED"} and not row["noindex"] and row["robots"] != "missing":
-            contradictions.append(f"unapproved_but_index_html:{row['page_id']}")
-        if st not in {"INDEXABLE", "PUBLISHED"} and row["url"] in editorial_paths:
-            contradictions.append(f"unapproved_in_editorial_sitemap:{row['page_id']}")
-
-    for loc in editorial_paths:
-        # any editorial sitemap URL must be INDEXABLE in registry
-        match = next((p for p in pages if (p.get("url") or "").rstrip("/") == loc.rstrip("/")), None)
-        if match and match.get("status") not in {"INDEXABLE", "PUBLISHED"}:
-            contradictions.append(f"sitemap_without_indexable_status:{loc}")
-
     if hub_count is not None and hub_count != conteudos_indexable:
-        contradictions.append(
-            f"hub_count_mismatch:hub={hub_count},indexable_conteudos={conteudos_indexable}"
-        )
+        contradictions.append(f"hub_count_mismatch:hub={hub_count},indexable_conteudos={conteudos_indexable}")
     if hub_count == 120:
         contradictions.append("hub_claims_false_120_guides")
 
-    # Registry vs terminal fields we will emit
-    awaiting = sum(1 for p in wave1 if p.get("status") == "EDITORIAL_REVIEWED")
-    rejected_n = len(rejected)
-
+    first = _cohort_summary(cohort, valid_indexable_ids)
+    backlog = _cohort_summary(queue, valid_indexable_ids)
     terminal = compute_terminal_status(
         contradictions=contradictions,
-        wave1_editorial_reviewed=awaiting,
-        wave1_indexable=wave1_indexable_n,
-        rejected_count=rejected_n,
+        cohort_editorial_reviewed=first["editorial_reviewed"],
+        cohort_indexable=first["indexable"],
+        rejected_count=len(rejected),
     )
-
     return {
-        "schema_version": "1.0.0",
+        "schema_version": "2.0.0",
         "derived_at": _now(),
         "commit_sha": _git_sha(),
+        "commit_sha_role": "informational_only",
         "terminal_status": terminal,
-        "registry_counts": dict(status_counts),
-        "wave1": {
-            "total": len(wave1),
-            "editorial_reviewed": awaiting,
-            "human_approved": wave1_approved_n,
-            "indexable": wave1_indexable_n,
-            "pages": wave1_html,
-        },
-        "rejected": {
-            "count": rejected_n,
-            "page_ids": [p.get("page_id") for p in rejected],
-        },
+        "registry_counts": dict(Counter((p.get("status") or "DRAFT") for p in pages)),
+        "first_cohort": first,
+        # Compatibility alias: no caller may interpret Wave 1 as a multi-page release.
+        "wave1": first,
+        "editorial_backlog": backlog,
+        "rejected": {"count": len(rejected), "page_ids": [p.get("page_id") for p in rejected]},
         "public_inventory": {
             "conteudos_indexable": conteudos_indexable,
             "hub_claimed_guides": hub_count,
             "legacy_indexable_public_surface": conteudos_indexable,
-            "wave1_awaiting_approval": awaiting,
-            "wave1_published": wave1_indexable_n,
-            "note": "Do not mix legacy indexable count with Wave 1 awaiting approval.",
+            "first_cohort_awaiting_approval": first["editorial_reviewed"],
+            "first_cohort_published": first["indexable"],
+            "editorial_backlog_awaiting_approval": backlog["editorial_reviewed"],
+            "note": "Only FIRST_COHORT_IDS may become indexable in this release.",
         },
         "sitemaps": {
-            "editorial_locs": len(editorial_sm),
-            "jurisprudencia_locs": len(juris_sm),
+            "editorial_locs": len(editorial_sitemap),
+            "jurisprudencia_locs": len(sitemap_locs(ROOT / "sitemap-jurisprudencia.xml")),
             "editorial_urls": editorial_paths,
         },
-        "false_reviewer_stamps": false_reviewers,
+        "wave1_pages": wave_html,
         "contradictions": contradictions,
-        "ok": len(contradictions) == 0,
+        "ok": not contradictions,
         "will_not_impersonate_named_human": True,
         "max_terminal_without_external_human": "READY_FOR_NAMED_HUMAN_APPROVAL",
     }
 
 
-def compute_terminal_status(
-    *,
-    contradictions: list[str],
-    wave1_editorial_reviewed: int,
-    wave1_indexable: int,
-    rejected_count: int,
-) -> str:
-    """Single rule for READY vs BLOCKED — never auto HUMAN_APPROVED.
+def _packet_page(page: dict[str, Any]) -> dict[str, Any]:
+    context = FIRST_COHORT_CONTEXT[page["page_id"]]
+    approval = page.get("approval") or {}
+    return {
+        "page_id": page["page_id"],
+        "url": page["url"],
+        "preview": f"{SITE}{page['url']}",
+        "title": page.get("title"),
+        "search_intent": context["search_intent"],
+        "demand_evidence": context["demand_evidence"],
+        "objective": context["objective"],
+        "conclusion_summary": page.get("direct_answer"),
+        "legal_sources": list(page.get("sources") or []),
+        "legal_risk": (
+            "Dispositivos: "
+            + ", ".join(page.get("legal_devices") or [])
+            + ". Conteúdo técnico-informativo; não substitui assessoria jurídica no caso concreto."
+        ),
+        "cannibalization": {
+            "internal_competitor": context["internal_competitor"],
+            "risk": context["cannibalization_risk"],
+        },
+        "cta": {
+            "offer": page.get("cta_offer"),
+            "whatsapp": page.get("cta_whatsapp"),
+            "email_subject": page.get("cta_email_subject"),
+        },
+        "material_hash": page.get("material_hash"),
+        "registry_status": page.get("status"),
+        "approval_identity": (
+            {
+                "schema_version": approval.get("schema_version"),
+                "page_id": approval.get("page_id"),
+                "material_hash": approval.get("material_hash"),
+                "state": approval.get("state"),
+                "reviewer": approval.get("reviewer"),
+                "reviewed_at": approval.get("at"),
+            }
+            if approval
+            else None
+        ),
+        "decision_reason": (
+            "Aprovar somente se as fontes, o conteúdo material e a decisão de canibalização "
+            "forem conferidos por humano nomeado; o hash deve coincidir com o registro."
+        ),
+    }
 
-    Never returns BLOCKED with empty contradictions when Wave1 is in the
-    standard pre-approval shape (11 EDITORIAL_REVIEWED, 0 indexable, ≥1 rejected).
-    """
-    if contradictions:
-        return "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
-    if (
-        wave1_indexable == 0
-        and wave1_editorial_reviewed == len(WAVE1_IDS)
-        and rejected_count >= 1
-    ):
-        return "READY_FOR_NAMED_HUMAN_APPROVAL"
-    return "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
 
-
-def _is_package_self_contra(code: str) -> bool:
-    """True for contradictions about the three files write_terminal_result rewrites."""
-    s = str(code)
-    for prefix in (
-        "packaged_sha_mismatch:docs/editorial/TERMINAL-RESULT",
-        "packaged_sha_mismatch:docs/editorial/EDITORIAL-INVENTORY",
-        "packaged_sha_mismatch:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET",
-        "packaged_sha_missing:docs/editorial/TERMINAL-RESULT",
-        "packaged_sha_missing:docs/editorial/EDITORIAL-INVENTORY",
-        "packaged_sha_missing:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET",
-        "packaged_json_invalid:docs/editorial/TERMINAL-RESULT",
-        "packaged_json_invalid:docs/editorial/EDITORIAL-INVENTORY",
-        "packaged_json_invalid:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET",
-    ):
-        if s.startswith(prefix):
-            return True
-    return False
+def review_packet(reg: dict[str, Any], truth: dict[str, Any]) -> dict[str, Any]:
+    page_by_id = {p.get("page_id"): p for p in reg.get("pages") or []}
+    missing = [page_id for page_id in FIRST_COHORT_IDS if page_id not in page_by_id]
+    pages = [_packet_page(page_by_id[page_id]) for page_id in FIRST_COHORT_IDS if page_id in page_by_id]
+    return {
+        "schema_version": "2.0.0",
+        "decision_schema_version": "2.0.0",
+        "title": "Primeira coorte editorial: revisão humana individual",
+        "commit_sha": truth.get("commit_sha"),
+        "commit_sha_role": "informational_only",
+        "derived_at": truth.get("derived_at"),
+        "terminal_status": truth.get("terminal_status"),
+        "summary": {
+            "first_cohort_total": len(FIRST_COHORT_IDS),
+            "awaiting_human": truth["first_cohort"]["editorial_reviewed"],
+            "human_approved": truth["first_cohort"]["human_approved"],
+            "indexable": truth["first_cohort"]["indexable"],
+            "editorial_backlog_awaiting_approval": truth["editorial_backlog"]["editorial_reviewed"],
+            "rejected": truth["rejected"]["count"],
+        },
+        "rules": [
+            "Uma página por aprovação; nunca lote.",
+            "Somente humano nomeado fora de CI/automação.",
+            "material_hash deve coincidir com o registro atual.",
+            "Apenas as três páginas desta primeira coorte podem receber --indexable.",
+            "Páginas fora da coorte e jur-sumula-260-art permanecem noindex.",
+        ],
+        "missing_page_ids": missing,
+        "pages": pages,
+    }
 
 
 def write_terminal_result(truth: dict[str, Any] | None = None) -> Path:
-    """Write terminal + inventory + packet pinned to live HEAD.
-
-    Recomputes terminal_status from the cleaned contradiction list (package-self
-    SHA mismatches dropped because those files are being rewritten). Never writes
-    BLOCKED with empty contradictions when Wave1 is READY-shaped.
-    """
-    truth = truth or derive_editorial_truth()
-    live = _git_sha()
-    cleaned = [c for c in (truth.get("contradictions") or []) if not _is_package_self_contra(c)]
-    terminal = compute_terminal_status(
-        contradictions=cleaned,
-        wave1_editorial_reviewed=int(truth["wave1"]["editorial_reviewed"]),
-        wave1_indexable=int(truth["wave1"]["indexable"]),
-        rejected_count=int(truth["rejected"]["count"]),
-    )
-    # Invariant: never BLOCKED + empty contras + ok when READY-shaped
-    ok = len(cleaned) == 0 and terminal in TERMINAL_ALLOWED
-    if not cleaned and terminal == "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE":
-        # Defensive: if Wave1 is READY-shaped, force READY
-        terminal = compute_terminal_status(
-            contradictions=[],
-            wave1_editorial_reviewed=int(truth["wave1"]["editorial_reviewed"]),
-            wave1_indexable=int(truth["wave1"]["indexable"]),
-            rejected_count=int(truth["rejected"]["count"]),
-        )
-        ok = terminal in TERMINAL_ALLOWED
-
+    reg = load_registry()
+    truth = truth or derive_editorial_truth(reg)
+    first = truth["first_cohort"]
     out = {
-        "terminal_status": terminal,
-        "commit_sha": live,
+        "schema_version": "2.0.0",
+        "terminal_status": truth["terminal_status"],
+        "commit_sha": truth["commit_sha"],
+        "commit_sha_role": "informational_only",
         "derived_at": _now(),
-        "indexable_count": truth["wave1"]["indexable"],
-        "human_approved_count": truth["wave1"]["human_approved"],
-        "awaiting_human": truth["wave1"]["editorial_reviewed"],
+        "first_cohort_total": first["total"],
+        "indexable_count": first["indexable"],
+        "human_approved_count": first["human_approved"],
+        "awaiting_human": first["editorial_reviewed"],
+        "editorial_backlog_awaiting_approval": truth["editorial_backlog"]["editorial_reviewed"],
         "rejected": truth["rejected"]["count"],
         "public_indexable_conteudos": truth["public_inventory"]["conteudos_indexable"],
         "hub_claimed_guides": truth["public_inventory"]["hub_claimed_guides"],
         "editorial_sitemap_locs": truth["sitemaps"]["editorial_locs"],
-        "contradictions": cleaned,
+        "contradictions": truth["contradictions"],
         "will_not_impersonate_named_human": True,
         "why_not_complete": (
-            "Named human must run approve_cli.py per page with checklist, "
-            "material hash, and external identity. Agents must not stamp HUMAN_APPROVED."
+            "A aprovação continua sendo ato humano individual ligado ao material_hash; "
+            "commit_sha é somente rastreabilidade e não exige repin."
         ),
-        "external_actions_doc": "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
+        "external_actions_doc": "docs/editorial/HUMAN-ACTION-NOW.md",
         "wave1_packet": "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
         "inventory": "docs/editorial/EDITORIAL-INVENTORY.json",
-        "ok": ok,
+        "ok": truth["ok"] and truth["terminal_status"] in TERMINAL_ALLOWED,
     }
-    path = ROOT / "docs" / "editorial" / "TERMINAL-RESULT.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
+    docs_dir = ROOT / "docs" / "editorial"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+    path = docs_dir / "TERMINAL-RESULT.json"
     path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    inv_body = dict(truth)
-    inv_body["commit_sha"] = live
-    inv_body["derived_at"] = out["derived_at"]
-    inv_body["contradictions"] = cleaned
-    inv_body["terminal_status"] = terminal
-    inv_body["ok"] = ok
-    inv = ROOT / "docs" / "editorial" / "EDITORIAL-INVENTORY.json"
-    inv.write_text(json.dumps(inv_body, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    packet_path = ROOT / "docs" / "editorial" / "WAVE1-HUMAN-REVIEW-PACKET.json"
-    if packet_path.exists():
-        try:
-            packet = json.loads(packet_path.read_text(encoding="utf-8"))
-            packet["commit_sha"] = live
-            packet["derived_at"] = out["derived_at"]
-            packet["terminal_status"] = terminal
-            if "summary" in packet and isinstance(packet["summary"], dict):
-                packet["summary"]["human_approved"] = truth["wave1"]["human_approved"]
-                packet["summary"]["indexable"] = truth["wave1"]["indexable"]
-                packet["summary"]["awaiting_human"] = truth["wave1"]["editorial_reviewed"]
-                packet["summary"]["rejected"] = truth["rejected"]["count"]
-            packet_path.write_text(
-                json.dumps(packet, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-            )
-        except json.JSONDecodeError:
-            pass
+
+    inventory = dict(truth)
+    inventory["derived_at"] = out["derived_at"]
+    inventory["terminal_status"] = out["terminal_status"]
+    (docs_dir / "EDITORIAL-INVENTORY.json").write_text(
+        json.dumps(inventory, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    (docs_dir / "WAVE1-HUMAN-REVIEW-PACKET.json").write_text(
+        json.dumps(review_packet(reg, truth), ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     return path
 
 
-def verify_packaged_sha_matches_head() -> list[str]:
-    """Fail list if packaged terminal/packet/inventory SHA is not an allowed pin."""
-    live = _git_sha()
-    failures: list[str] = []
-    if live == "unknown":
-        return ["git_sha_unknown"]
-    for rel in (
-        "docs/editorial/TERMINAL-RESULT.json",
-        "docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json",
-        "docs/editorial/EDITORIAL-INVENTORY.json",
-    ):
-        path = ROOT / rel
-        if not path.exists():
-            failures.append(f"missing:{rel}")
-            continue
-        data = json.loads(path.read_text(encoding="utf-8"))
-        pkg = (data.get("commit_sha") or "").strip()
-        if not pkg:
-            failures.append(f"{rel}:empty!={live[:12]}")
-        elif not packaged_sha_is_acceptable(pkg, live):
-            failures.append(f"{rel}:{pkg[:12]}!={live[:12]}")
-    return failures
-
-
 def verify_packaged_matches_live(truth: dict[str, Any] | None = None) -> list[str]:
-    """Fail if packaged terminal/inventory/packet lag live derive on material fields.
-
-    Checks terminal_status, ok, contradictions emptiness, Wave1 counts, hub count.
-    SHA pin rules remain separate (verify_packaged_sha_matches_head).
-    """
+    """Verify material fields, not arbitrary repository HEAD identity."""
     truth = truth or derive_editorial_truth()
     failures: list[str] = []
-    term_path = ROOT / "docs" / "editorial" / "TERMINAL-RESULT.json"
+    docs_dir = ROOT / "docs" / "editorial"
+    term_path = docs_dir / "TERMINAL-RESULT.json"
     if not term_path.exists():
         return ["missing:docs/editorial/TERMINAL-RESULT.json"]
     term = json.loads(term_path.read_text(encoding="utf-8"))
-    live_status = truth["terminal_status"]
-    pkg_status = term.get("terminal_status")
-    if pkg_status != live_status:
-        failures.append(f"terminal_status:{pkg_status}!={live_status}")
-    # Never allow BLOCKED with empty contras and ok=true (write-path bug signature)
-    pkg_contras = term.get("contradictions") or []
-    if (
-        pkg_status == "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE"
-        and not pkg_contras
-        and term.get("ok") is True
+    for field, expected in (
+        ("terminal_status", truth["terminal_status"]),
+        ("indexable_count", truth["first_cohort"]["indexable"]),
+        ("human_approved_count", truth["first_cohort"]["human_approved"]),
+        ("awaiting_human", truth["first_cohort"]["editorial_reviewed"]),
+        ("editorial_backlog_awaiting_approval", truth["editorial_backlog"]["editorial_reviewed"]),
     ):
-        failures.append("terminal_blocked_empty_contras_ok_true")
-    if bool(term.get("ok")) != bool(truth.get("ok")) and not pkg_contras and not truth.get(
-        "contradictions"
-    ):
-        # Only flag ok lag when both sides claim no contradictions
-        failures.append(f"ok:{term.get('ok')}!={truth.get('ok')}")
-    if term.get("indexable_count") != truth["wave1"]["indexable"]:
-        failures.append(
-            f"indexable_count:{term.get('indexable_count')}!={truth['wave1']['indexable']}"
-        )
-    if term.get("human_approved_count") != truth["wave1"]["human_approved"]:
-        failures.append(
-            f"human_approved_count:{term.get('human_approved_count')}!={truth['wave1']['human_approved']}"
-        )
-    if term.get("awaiting_human") != truth["wave1"]["editorial_reviewed"]:
-        failures.append(
-            f"awaiting_human:{term.get('awaiting_human')}!={truth['wave1']['editorial_reviewed']}"
-        )
-    if term.get("hub_claimed_guides") != truth["public_inventory"]["hub_claimed_guides"]:
-        failures.append(
-            f"hub_claimed_guides:{term.get('hub_claimed_guides')}!={truth['public_inventory']['hub_claimed_guides']}"
-        )
-    # inventory
-    inv_path = ROOT / "docs" / "editorial" / "EDITORIAL-INVENTORY.json"
+        if term.get(field) != expected:
+            failures.append(f"terminal_{field}:{term.get(field)}!={expected}")
+    if term.get("commit_sha_role") != "informational_only":
+        failures.append("terminal_commit_sha_must_be_informational_only")
+
+    inv_path = docs_dir / "EDITORIAL-INVENTORY.json"
     if inv_path.exists():
-        inv = json.loads(inv_path.read_text(encoding="utf-8"))
-        if inv.get("terminal_status") != live_status:
-            failures.append(f"inventory_terminal_status:{inv.get('terminal_status')}!={live_status}")
-    # packet
-    pkt_path = ROOT / "docs" / "editorial" / "WAVE1-HUMAN-REVIEW-PACKET.json"
-    if pkt_path.exists():
-        pkt = json.loads(pkt_path.read_text(encoding="utf-8"))
-        if pkt.get("terminal_status") and pkt.get("terminal_status") != live_status:
-            failures.append(f"packet_terminal_status:{pkt.get('terminal_status')}!={live_status}")
+        inventory = json.loads(inv_path.read_text(encoding="utf-8"))
+        if inventory.get("terminal_status") != truth["terminal_status"]:
+            failures.append("inventory_terminal_status_mismatch")
+
+    packet_path = docs_dir / "WAVE1-HUMAN-REVIEW-PACKET.json"
+    if not packet_path.exists():
+        return failures + ["missing:docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json"]
+    packet = json.loads(packet_path.read_text(encoding="utf-8"))
+    if packet.get("commit_sha_role") != "informational_only":
+        failures.append("packet_commit_sha_must_be_informational_only")
+    rows = packet.get("pages") or []
+    if [row.get("page_id") for row in rows] != list(FIRST_COHORT_IDS):
+        failures.append("packet_first_cohort_ids_mismatch")
+    page_by_id = {p.get("page_id"): p for p in load_registry().get("pages") or []}
+    for row in rows:
+        page = page_by_id.get(row.get("page_id"))
+        if not page:
+            failures.append(f"packet_unknown_page:{row.get('page_id')}")
+            continue
+        for field in ("material_hash", "url"):
+            if row.get(field) != page.get(field):
+                failures.append(f"packet_{field}_mismatch:{row.get('page_id')}")
+        if row.get("registry_status") != page.get("status"):
+            failures.append(f"packet_registry_status_mismatch:{row.get('page_id')}")
+        if row.get("legal_sources") != list(page.get("sources") or []):
+            failures.append(f"packet_sources_mismatch:{row.get('page_id')}")
     return failures
 
 
 def assert_truth_consistent(truth: dict[str, Any] | None = None) -> list[str]:
-    """Return list of failures; empty means consistent."""
     truth = truth or derive_editorial_truth()
-    fails = list(truth.get("contradictions") or [])
-    fails.extend(verify_packaged_matches_live(truth))
-    return fails
+    return list(truth.get("contradictions") or []) + verify_packaged_matches_live(truth)
 
 
 def main(argv: list[str] | None = None) -> int:
     import argparse
 
-    ap = argparse.ArgumentParser(description="Derive editorial truth / write terminal result")
-    ap.add_argument("--write", action="store_true", help="Write TERMINAL-RESULT + inventory + packet SHA")
-    ap.add_argument("--fail-on-contradiction", action="store_true")
-    ap.add_argument(
-        "--require-packaged-sha",
-        action="store_true",
-        help="Fail if packaged commit_sha is not an allowed pin for HEAD",
-    )
-    ap.add_argument(
+    parser = argparse.ArgumentParser(description="Derive editorial truth from material identity")
+    parser.add_argument("--write", action="store_true", help="Write terminal, inventory and review packet")
+    parser.add_argument("--fail-on-contradiction", action="store_true")
+    parser.add_argument(
         "--require-packaged-live",
         action="store_true",
-        help="Fail if packaged terminal/inventory/packet lag live derive on material fields",
+        help="Fail if the committed packet no longer matches current page material",
     )
-    args = ap.parse_args(argv)
+    args = parser.parse_args(argv)
+
     truth = derive_editorial_truth()
     if args.write:
         write_terminal_result(truth)
-        # Re-derive after write so in-memory output reflects pinned files without SHA lag
         truth = derive_editorial_truth()
     print(json.dumps(truth, ensure_ascii=False, indent=2))
     rc = 0 if truth["ok"] else 1
     if args.fail_on_contradiction and truth["contradictions"]:
-        rc = 2
-    if args.require_packaged_sha:
-        fails = verify_packaged_sha_matches_head()
-        if fails:
-            print({"packaged_sha_failures": fails}, file=sys.stderr)
-            rc = max(rc, 3)
+        rc = max(rc, 2)
     if args.require_packaged_live:
-        live_fails = verify_packaged_matches_live(truth)
-        if live_fails:
-            print({"packaged_live_failures": live_fails}, file=sys.stderr)
+        failures = verify_packaged_matches_live(truth)
+        if failures:
+            print({"packaged_material_failures": failures}, file=sys.stderr)
             rc = max(rc, 3)
     return rc
 
