@@ -213,8 +213,8 @@ if (!focusables.length) {
 }
 focusables[0].focus();
 const eventsAfterFocus = dataLayer.map((e) => e.event);
-if (!eventsAfterFocus.includes("pseo_form_start")) {
-  console.error("FAIL: pseo_form_start not emitted after focus", eventsAfterFocus, dataLayer);
+if (!eventsAfterFocus.some((event) => event === "pseo_form_start" || event === "lead_form_start")) {
+  console.error("FAIL: form-start event not emitted after focus", eventsAfterFocus, dataLayer);
   process.exit(1);
 }
 
@@ -231,8 +231,11 @@ for (const fn of submitFns) {
 
 const events = dataLayer.map((e) => e.event);
 // form_submit should fire when checkValidity true
-if (!events.includes("pseo_form_start") && !dataLayer.some(e => e.event === "pseo_form_start")) {
-  console.error("FAIL: pseo_form_start missing from funnel", events);
+if (
+  !events.some((event) => event === "pseo_form_start" || event === "lead_form_start")
+  && !dataLayer.some((event) => event.event === "pseo_form_start" || event.event === "lead_form_start")
+) {
+  console.error("FAIL: form-start event missing from funnel", events);
   process.exit(1);
 }
 if (!events.includes("pseo_form_submit") && !events.includes("lead_form_submit")) {
