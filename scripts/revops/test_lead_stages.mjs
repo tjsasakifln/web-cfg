@@ -253,6 +253,260 @@ function fail(name, detail) {
   else pass("pipeline_value", f.pipeline_value);
 }
 
+// 9) record_kind: public lead defaults real; multi-signal probe is synthetic
+{
+  const rk = require(path.join(root, "netlify/functions/lib/record-kind.cjs"));
+  const realRec = buildLeadRecord({
+    lead_id: "rk-real",
+    lead: {
+      nome: "Maria Construtora",
+      email: "maria@empresa.com.br",
+      telefone: "48991112222",
+      estagio: "contrato",
+      jornada: "contrato",
+      origem: "site",
+      utm_source: "google",
+      landing_page: "/conteudos/",
+      consentimento: "true",
+      empresa: "X",
+      mensagem: null,
+      idempotency_key: "idk:rk-real",
+    },
+    received_at: new Date().toISOString(),
+    ip_hash: "h",
+    fingerprint: "f",
+  });
+  if (realRec.record_kind !== "real") fail("default_real", realRec.record_kind);
+  else pass("default_real", realRec.record_kind);
+
+  const probeRec = buildLeadRecord({
+    lead_id: "rk-probe",
+    lead: {
+      nome: "SYNTHETIC-PROBE",
+      email: "probe@example.com",
+      estagio: "synthetic probe — discard",
+      jornada: "operacao",
+      origem: "/synthetic-probe-daily",
+      utm_source: "synthetic",
+      landing_page: "/",
+      consentimento: "true",
+      test_mode: true,
+      record_kind: "synthetic",
+      mensagem: "[QA] do not contact",
+      telefone: null,
+      empresa: null,
+      idempotency_key: "idk:rk-probe",
+    },
+    received_at: new Date().toISOString(),
+    ip_hash: "h",
+    fingerprint: "f",
+    headers: { "user-agent": "confenge-daily-probe/1.0", "x-confenge-probe": "1" },
+  });
+  if (probeRec.record_kind !== "synthetic") fail("probe_synthetic", probeRec.record_kind);
+  else pass("probe_synthetic", probeRec.record_kind);
+  if (probeRec.next_action !== "exclude_from_commercial") fail("probe_next_action", probeRec.next_action);
+  else pass("probe_excluded_from_commercial");
+
+  // Single ambiguous signal must not reclassify for backfill
+  const amb = rk.classifyForBackfill({
+    nome: "João",
+    email: "joao@empresa.com.br",
+    utm_source: "test", // alone is weak for backfill without multi-signal strength
+    commercial_stage: "qualified",
+  });
+  // utm_source:test is a strong signal only with another signal — alone may keep
+  if (amb.action === "mark" && amb.signals.length < 2) fail("single_signal_backfill", amb);
+  else pass("backfill_requires_multi_signal", amb.reason);
+
+  // Funnel excludes synthetic by default
+  const mixed = [
+    { ...realRec, commercial_stage: "lead_persisted", proposal_value: null },
+    {
+      ...probeRec,
+      commercial_stage: "contacted",
+      proposal_value: 999999,
+      stage_history: [{ to: "contacted", actor: "daily-probe" }],
+    },
+    {
+      lead_id: "won-real",
+      record_kind: "real",
+      commercial_stage: "won",
+      contract_value: 5000,
+      revenue_received: 5000,
+      stage_history: [{ to: "contacted" }, { to: "qualified" }, { to: "meeting" }, { to: "proposal" }, { to: "won" }],
+      received_at: "2026-08-01",
+    },
+  ];
+  const fReal = stages.funnelRates(mixed);
+  if (fReal.n !== 2) fail("funnel_excludes_synthetic", fReal);
+  else pass("funnel_excludes_synthetic", fReal.n);
+  if (fReal.pipeline_value === 999999) fail("pipeline_includes_probe", fReal.pipeline_value);
+  else pass("pipeline_excludes_probe_value", fReal.pipeline_value);
+  if (fReal.revenue !== 5000) fail("revenue_real_only", fReal.revenue);
+  else pass("revenue_real_only", fReal.revenue);
+  if (fReal.counts.contacted < 1) fail("real_contacted", fReal.counts);
+  else pass("real_contacted_counted");
+
+  const health = stages.systemHealth(mixed);
+  if (health.synthetic_leads < 1) fail("health_synthetic", health);
+  else pass("system_health_separates_synthetic", health.synthetic_leads);
+  if (health.pipeline_real === 999999) fail("health_pipeline_mixed", health);
+  else pass("system_health_pipeline_real", health.pipeline_real);
+  if (health.real_leads !== 2) fail("health_real_count", health.real_leads);
+  else pass("system_health_real_count", health.real_leads);
+
+  // SLA never flags synthetic
+  const sumProbe = stages.publicLeadSummary({
+    ...probeRec,
+    received_at: new Date(Date.now() - 10 * 3600e3).toISOString(),
+    commercial_stage: "lead_persisted",
+  });
+  if (sumProbe.needs_contact) fail("sla_on_synthetic", sumProbe);
+  else pass("sla_skips_synthetic");
+}
+
+// 10) GSC insights auth + sanitize (drive shipped ops helpers)
+{
+  const prev = process.env.OPS_TOKEN;
+  process.env.OPS_TOKEN = "y".repeat(20);
+  const denied = ops._authOk({ headers: {} });
+  if (denied.ok) fail("gsc_auth_required_helper");
+  else pass("gsc_auth_fail_without_token", denied.reason);
+
+  const loaded = ops._loadGscInsights();
+  if (!loaded.ok) {
+    // Fixture must exist under netlify/functions/data after PR1
+    fail("gsc_insights_file_present", loaded.error);
+  } else {
+    pass("gsc_insights_file_present");
+    const safe = ops._sanitizeGscForOps(loaded.data);
+    const blob = JSON.stringify(safe);
+    if (/@example\.com|telefone|whatsapp/i.test(blob) && /"email"\s*:/i.test(blob)) {
+      fail("gsc_pii_in_payload", blob.slice(0, 200));
+    } else pass("gsc_sanitize_no_pii_keys");
+  }
+  if (prev === undefined) delete process.env.OPS_TOKEN;
+  else process.env.OPS_TOKEN = prev;
+}
+
+// 11) ops handler: gsc without auth → 401; funnel real-only via MemoryStore
+{
+  const prevTok = process.env.OPS_TOKEN;
+  const prevNode = process.env.NODE_ENV;
+  const prevStore = process.env.LEAD_STORE;
+  process.env.OPS_TOKEN = "z".repeat(24);
+  process.env.NODE_ENV = "test";
+  process.env.LEAD_STORE = "memory";
+  process.env.LEAD_ALLOW_MEMORY_FALLBACK = "1";
+
+  const unauth = await ops.handler({
+    httpMethod: "GET",
+    headers: {},
+    queryStringParameters: { action: "gsc_insights" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights",
+  });
+  if (unauth.statusCode !== 401 && unauth.statusCode !== 403) {
+    fail("gsc_http_unauthorized", unauth.statusCode + " " + unauth.body);
+  } else pass("gsc_http_unauthorized", unauth.statusCode);
+
+  const { globalMemory, buildLeadRecord: blr } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+  globalMemory.map.clear();
+  globalMemory.byIdem.clear();
+
+  const realL = blr({
+    lead_id: "ops-real",
+    lead: {
+      nome: "Real Co",
+      email: "r@empresa.com.br",
+      telefone: "48990001111",
+      estagio: "edital",
+      jornada: "edital",
+      origem: "web",
+      utm_source: "google",
+      landing_page: "/",
+      consentimento: "true",
+      empresa: "R",
+      mensagem: null,
+      idempotency_key: "idk:ops-real",
+    },
+    received_at: new Date().toISOString(),
+    ip_hash: "1",
+    fingerprint: "2",
+  });
+  const synL = blr({
+    lead_id: "ops-syn",
+    lead: {
+      nome: "SYNTHETIC-PROBE",
+      email: "probe@example.com",
+      estagio: "synthetic probe — discard",
+      jornada: "operacao",
+      origem: "/synthetic-probe",
+      utm_source: "synthetic",
+      landing_page: "/",
+      consentimento: "true",
+      record_kind: "synthetic",
+      test_mode: true,
+      mensagem: "[QA]",
+      telefone: null,
+      empresa: null,
+      idempotency_key: "idk:ops-syn",
+    },
+    received_at: new Date().toISOString(),
+    ip_hash: "3",
+    fingerprint: "4",
+    headers: { "user-agent": "confenge-synthetic-probe/1.0" },
+  });
+  await globalMemory.put(realL);
+  await globalMemory.put(synL);
+
+  const funnelRes = await ops.handler({
+    httpMethod: "GET",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "funnel" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=funnel",
+  });
+  const funnelBody = JSON.parse(funnelRes.body || "{}");
+  if (!funnelBody.ok) fail("ops_funnel_ok", funnelBody);
+  else if (funnelBody.funnel?.n !== 1) fail("ops_funnel_real_only", funnelBody.funnel);
+  else pass("ops_funnel_real_only", funnelBody.funnel.n);
+  if (funnelBody.system_health?.synthetic_leads < 1) fail("ops_system_health", funnelBody.system_health);
+  else pass("ops_system_health_has_synthetic");
+
+  const gscOk = await ops.handler({
+    httpMethod: "GET",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "gsc_insights" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights",
+  });
+  const gscBody = JSON.parse(gscOk.body || "{}");
+  if (gscOk.statusCode !== 200 || !gscBody.ok) fail("gsc_with_auth", gscOk.statusCode + " " + gscOk.body?.slice?.(0, 120));
+  else {
+    pass("gsc_with_auth");
+    const b = JSON.stringify(gscBody);
+    if (/"email"\s*:\s*"[^"]+@/.test(b)) fail("gsc_auth_response_pii", b.slice(0, 200));
+    else pass("gsc_auth_response_no_email_pii");
+  }
+
+  const week = await ops.handler({
+    httpMethod: "GET",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "weekly_report" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=weekly_report",
+  });
+  const weekBody = JSON.parse(week.body || "{}");
+  if (!weekBody.commercial_only || weekBody.leads_total !== 1) fail("weekly_real_only", weekBody);
+  else pass("weekly_real_only", weekBody.leads_total);
+
+  if (prevTok === undefined) delete process.env.OPS_TOKEN;
+  else process.env.OPS_TOKEN = prevTok;
+  if (prevNode === undefined) delete process.env.NODE_ENV;
+  else process.env.NODE_ENV = prevNode;
+  if (prevStore === undefined) delete process.env.LEAD_STORE;
+  else process.env.LEAD_STORE = prevStore;
+  globalMemory.map.clear();
+  globalMemory.byIdem.clear();
+}
+
 if (failed) {
   console.error(`\n${failed} failure(s)`);
   process.exit(1);

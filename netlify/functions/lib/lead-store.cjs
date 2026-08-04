@@ -354,7 +354,7 @@ async function createStore(options = {}) {
   return null;
 }
 
-function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, status }) {
+function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, status, headers }) {
   const retention = Number(process.env.LEAD_RETAIN_DAYS || 730);
   const delete_after = new Date(Date.now() + retention * 864e5).toISOString();
   let commercial = {};
@@ -375,13 +375,58 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
       ops_notes: [],
     };
   }
+
+  let kindInfo = {
+    record_kind: "real",
+    signals: [],
+    classified_at: received_at,
+    classifier: "default_real",
+  };
+  try {
+    const { resolveRecordKind, kindAuditEntry } = require("./record-kind.cjs");
+    kindInfo = resolveRecordKind(lead || {}, { headers });
+    if (!kindInfo.classified_at) kindInfo.classified_at = received_at;
+  } catch {
+    /* keep default real */
+  }
+
+  const audit = [
+    { at: received_at, event: "created", status: status || "persisted" },
+  ];
+  try {
+    const { kindAuditEntry } = require("./record-kind.cjs");
+    audit.push(
+      kindAuditEntry({
+        from: null,
+        to: kindInfo.record_kind,
+        signals: kindInfo.signals,
+        actor: "system",
+        note: kindInfo.classifier,
+      })
+    );
+  } catch {
+    audit.push({
+      at: received_at,
+      event: "record_kind",
+      to: kindInfo.record_kind,
+      signals: kindInfo.signals || [],
+    });
+  }
+
+  // Non-real leads never enter commercial next_action queue
+  const nextAction =
+    kindInfo.record_kind === "real" ? commercial.next_action : "exclude_from_commercial";
+
   return {
     lead_id,
     status: status || "persisted",
+    record_kind: kindInfo.record_kind,
+    record_kind_signals: kindInfo.signals || [],
+    record_kind_classified_at: kindInfo.classified_at || received_at,
     commercial_stage: commercial.commercial_stage || "lead_persisted",
     stage_history: commercial.stage_history || [],
     owner: commercial.owner,
-    next_action: commercial.next_action,
+    next_action: nextAction,
     last_contact_at: commercial.last_contact_at,
     loss_reason: commercial.loss_reason,
     proposal_value: commercial.proposal_value,
@@ -420,7 +465,7 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
       notify: { status: "pending", attempts: 0 },
       email: { status: "pending", attempts: 0 },
     },
-    audit: [{ at: received_at, event: "created", status: status || "persisted" }],
+    audit,
   };
 }
 

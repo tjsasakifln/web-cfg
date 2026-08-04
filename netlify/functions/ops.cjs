@@ -5,30 +5,99 @@
  * - Requires OPS_TOKEN (Bearer or X-Ops-Token). Fail-closed if unset in production.
  * - Never returns public success without auth.
  * - Lead list with PII only when token valid; public HTML dashboard is noindex + token gated via client.
+ * - Strategic GSC insights only via authenticated gsc_insights (never public static JSON).
+ * - Commercial metrics default to record_kind === "real" only.
  *
  * Routes (query ?action=):
  *   GET  health
  *   GET  leads
  *   GET  lead&id=
  *   POST stage  { lead_id, stage, ... }
- *   GET  funnel
+ *   GET  funnel              (real-only commercial)
+ *   GET  system_health       (probes/QA separated)
  *   GET  analytics_summary
- *   GET  weekly_report
- *   POST weekly_email
- *   POST synthetic_probe_ack (internal)
+ *   GET  weekly_report       (real-only)
+ *   POST weekly_email        (real-only)
+ *   GET  gsc_insights        (auth required)
+ *   POST backfill_record_kind { dry_run?, apply_ids? }
+ *   POST rollback_record_kind { snapshot_id }
  */
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const { corsHeaders, clientIp, safeLog } = require("./lib/lead-core.cjs");
 const { createStore } = require("./lib/lead-store.cjs");
 const {
   applyStageChange,
   publicLeadSummary,
   funnelRates,
+  systemHealth,
   STAGES,
   LOSS_REASONS,
 } = require("./lib/lead-stages.cjs");
+const {
+  classifyForBackfill,
+  kindAuditEntry,
+  filterCommercialLeads,
+  countByKind,
+  isCommercialReal,
+  normalizeKind,
+} = require("./lib/record-kind.cjs");
 const { aggregateEvents, attributeLeads } = require("./lib/analytics-agg.cjs");
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
+
+/** Simple per-IP rate limit for authenticated ops (in-memory, best-effort). */
+const _opsHits = new Map();
+function opsRateLimit(event, { limit = 120, windowMs = 60_000 } = {}) {
+  const ip = clientIp(event) || "unknown";
+  const now = Date.now();
+  let bucket = _opsHits.get(ip);
+  if (!bucket || now - bucket.start > windowMs) {
+    bucket = { start: now, n: 0 };
+    _opsHits.set(ip, bucket);
+  }
+  bucket.n += 1;
+  if (bucket.n > limit) return { ok: false, retryAfter: Math.ceil((bucket.start + windowMs - now) / 1000) };
+  return { ok: true };
+}
+
+function loadGscInsights() {
+  const candidates = [
+    path.join(__dirname, "data", "gsc-insights.json"),
+    path.join(process.cwd(), "data", "ops", "gsc-insights.json"),
+    path.join(process.cwd(), "netlify", "functions", "data", "gsc-insights.json"),
+  ];
+  for (const p of candidates) {
+    try {
+      if (fs.existsSync(p)) {
+        const raw = fs.readFileSync(p, "utf8");
+        return { ok: true, path: p, data: JSON.parse(raw) };
+      }
+    } catch (err) {
+      return { ok: false, error: "gsc_read_failed", detail: String(err.message || err).slice(0, 80) };
+    }
+  }
+  return { ok: false, error: "gsc_insights_missing" };
+}
+
+/** Strip any accidental PII keys from GSC payload (defense in depth). */
+function sanitizeGscForOps(data) {
+  if (!data || typeof data !== "object") return data;
+  const banned = /email|telefone|phone|nome|name|cpf|cnpj|whatsapp|pii/i;
+  function walk(v) {
+    if (Array.isArray(v)) return v.map(walk);
+    if (v && typeof v === "object") {
+      const out = {};
+      for (const [k, val] of Object.entries(v)) {
+        if (banned.test(k)) continue;
+        out[k] = walk(val);
+      }
+      return out;
+    }
+    return v;
+  }
+  return walk(data);
+}
 
 function bindBlobs(event) {
   try {
@@ -215,16 +284,56 @@ exports.handler = async (event) => {
     return json(auth.reason === "ops_token_not_configured" ? 503 : 401, { ok: false, error: auth.reason }, origin);
   }
 
+  const rl = opsRateLimit(event);
+  if (!rl.ok) {
+    safeLog("warn", "ops_rate_limited", { ip: clientIp(event).slice(0, 20) });
+    return json(429, { ok: false, error: "rate_limited", retry_after: rl.retryAfter }, origin);
+  }
+
   bindBlobs(event);
   const store = await createStore(event);
+
+  if (action === "gsc_insights" && event.httpMethod === "GET") {
+    const loaded = loadGscInsights();
+    if (!loaded.ok) {
+      return json(404, { ok: false, error: loaded.error || "gsc_insights_missing" }, origin);
+    }
+    const safe = sanitizeGscForOps(loaded.data);
+    const blob = JSON.stringify(safe);
+    // Assert no PII patterns in payload
+    if (/@|telefone|whatsapp|\b\d{3}\.\d{3}\.\d{3}-\d{2}\b/i.test(blob) && /email|telefone|cpf/i.test(blob)) {
+      safeLog("warn", "gsc_pii_scrub", {});
+    }
+    safeLog("info", "gsc_insights_served", { bytes: blob.length });
+    return json(
+      200,
+      {
+        ok: true,
+        insights: safe,
+        meta: {
+          as_of: safe.as_of || null,
+          generated_at: safe.generated_at || null,
+          source: safe.source || null,
+          note: "Authenticated ops only. Not a public static file.",
+        },
+      },
+      origin
+    );
+  }
 
   if (action === "leads" && event.httpMethod === "GET") {
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const leads = await listLeads(store);
     const includePii = qs.pii === "1";
     const stage = qs.stage || "";
+    const kindFilter = String(qs.kind || "real").toLowerCase(); // real | all | synthetic | qa | spam | internal
     let filtered = leads;
-    if (stage) filtered = leads.filter((l) => (l.commercial_stage || l.status) === stage);
+    if (kindFilter === "real") {
+      filtered = filterCommercialLeads(filtered);
+    } else if (kindFilter !== "all") {
+      filtered = filtered.filter((l) => (normalizeKind(l.record_kind) || "real") === kindFilter);
+    }
+    if (stage) filtered = filtered.filter((l) => (l.commercial_stage || l.status) === stage);
     const summaries = filtered
       .map((l) => redactLeadForExport(l, { includePii }))
       .sort((a, b) => String(b.received_at).localeCompare(String(a.received_at)));
@@ -233,6 +342,8 @@ exports.handler = async (event) => {
       {
         ok: true,
         count: summaries.length,
+        kind_filter: kindFilter,
+        counts_by_kind: countByKind(leads),
         leads: summaries,
         sla_breaches: summaries.filter((l) => l.needs_contact).length,
       },
@@ -284,11 +395,14 @@ exports.handler = async (event) => {
   if (action === "funnel" && event.httpMethod === "GET") {
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const leads = await listLeads(store);
-    const funnel = funnelRates(leads);
+    // Commercial funnel: real-only by default
+    const real = filterCommercialLeads(leads);
+    const funnel = funnelRates(real, { commercialOnly: false });
+    const health = systemHealth(leads);
     const by_cluster = {};
     const by_offer = {};
     const by_landing = {};
-    for (const l of leads) {
+    for (const l of real) {
       const c = l.content_cluster || "unknown";
       if (!by_cluster[c]) by_cluster[c] = [];
       by_cluster[c].push(l);
@@ -303,25 +417,43 @@ exports.handler = async (event) => {
       200,
       {
         ok: true,
+        commercial_only: true,
         funnel,
+        system_health: health,
         by_cluster: Object.fromEntries(
-          Object.entries(by_cluster).map(([k, v]) => [k, funnelRates(v).counts])
+          Object.entries(by_cluster).map(([k, v]) => [k, funnelRates(v, { commercialOnly: false }).counts])
         ),
         by_offer: Object.fromEntries(
-          Object.entries(by_offer).map(([k, v]) => [k, funnelRates(v).counts])
+          Object.entries(by_offer).map(([k, v]) => [k, funnelRates(v, { commercialOnly: false }).counts])
         ),
         by_landing: Object.fromEntries(
           Object.entries(by_landing)
             .sort((a, b) => b[1].length - a[1].length)
             .slice(0, 40)
-            .map(([k, v]) => [k, funnelRates(v).counts])
+            .map(([k, v]) => [k, funnelRates(v, { commercialOnly: false }).counts])
         ),
-        loss_reasons: leads
+        loss_reasons: real
           .filter((l) => l.loss_reason)
           .reduce((acc, l) => {
             acc[l.loss_reason] = (acc[l.loss_reason] || 0) + 1;
             return acc;
           }, {}),
+      },
+      origin
+    );
+  }
+
+  if (action === "system_health" && event.httpMethod === "GET") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const leads = await listLeads(store);
+    const health = systemHealth(leads);
+    return json(
+      200,
+      {
+        ok: true,
+        ...health,
+        store_available: Boolean(store),
+        ts: new Date().toISOString(),
       },
       origin
     );
@@ -333,7 +465,8 @@ exports.handler = async (event) => {
     let attribution = [];
     if (store) {
       const leads = await listLeads(store);
-      attribution = attributeLeads(leads, events);
+      // Attribution cohorts use real commercial leads only
+      attribution = attributeLeads(filterCommercialLeads(leads), events);
     }
     return json(
       200,
@@ -351,20 +484,33 @@ exports.handler = async (event) => {
   if (action === "weekly_report" && event.httpMethod === "GET") {
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const leads = await listLeads(store);
+    const real = filterCommercialLeads(leads);
     const events = await loadRecentAnalytics(event);
     const agg = aggregateEvents(events);
-    const funnel = funnelRates(leads);
+    const funnel = funnelRates(real, { commercialOnly: false });
+    const health = systemHealth(leads);
     const weekAgo = Date.now() - 7 * 864e5;
-    const newLeads = leads.filter((l) => Date.parse(l.received_at || 0) >= weekAgo);
+    const newLeads = real.filter((l) => Date.parse(l.received_at || 0) >= weekAgo);
     const report = {
       ok: true,
       period: "7d",
       generated_at: new Date().toISOString(),
       primary_metric: "pipeline_and_revenue",
-      leads_total: leads.length,
+      commercial_only: true,
+      leads_total: real.length,
       leads_new_7d: newLeads.length,
+      leads_excluded_non_real: leads.length - real.length,
       funnel,
-      sla_breaches: leads.filter((l) => publicLeadSummary(l).needs_contact).length,
+      system_health: {
+        real_leads: health.real_leads,
+        synthetic_leads: health.synthetic_leads,
+        qa_leads: health.qa_leads,
+        spam_leads: health.spam_leads,
+        pipeline_real: health.pipeline_real,
+        revenue_real: health.revenue_real,
+        last_real_conversion: health.last_real_conversion,
+      },
+      sla_breaches: real.filter((l) => publicLeadSummary(l).needs_contact).length,
       analytics: {
         daily: agg.daily.slice(-7),
         web_vitals: agg.web_vitals,
@@ -388,28 +534,31 @@ exports.handler = async (event) => {
     }
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const leads = await listLeads(store);
-    const funnel = funnelRates(leads);
+    const real = filterCommercialLeads(leads);
+    const funnel = funnelRates(real, { commercialOnly: false });
+    const health = systemHealth(leads);
     const weekAgo = Date.now() - 7 * 864e5;
-    const newLeads = leads.filter((l) => Date.parse(l.received_at || 0) >= weekAgo);
+    const newLeads = real.filter((l) => Date.parse(l.received_at || 0) >= weekAgo);
     const html = `
-      <h1>CONFENGE — relatório semanal RevOps</h1>
+      <h1>CONFENGE — relatório semanal RevOps (real-only)</h1>
       <p>Gerado em ${new Date().toISOString()}</p>
       <ul>
-        <li>Leads (total): ${leads.length}</li>
-        <li>Leads novos (7d): ${newLeads.length}</li>
-        <li>Pipeline: R$ ${funnel.pipeline_value}</li>
-        <li>Receita: R$ ${funnel.revenue}</li>
+        <li>Leads reais (total): ${real.length}</li>
+        <li>Leads reais novos (7d): ${newLeads.length}</li>
+        <li>Excluídos (synthetic/qa/spam/internal): ${leads.length - real.length}</li>
+        <li>Pipeline real: R$ ${funnel.pipeline_value}</li>
+        <li>Receita real: R$ ${funnel.revenue}</li>
         <li>Contatados: ${funnel.counts.contacted}</li>
         <li>Reuniões: ${funnel.counts.meeting}</li>
         <li>Propostas: ${funnel.counts.proposal}</li>
         <li>Ganhos: ${funnel.counts.won}</li>
         <li>Perdidos: ${funnel.counts.lost}</li>
+        <li>Última conversão real: ${health.last_real_conversion || "—"}</li>
       </ul>
+      <p>Probes/QA nunca entram nestes totais. System Health: synthetic=${health.synthetic_leads} qa=${health.qa_leads} spam=${health.spam_leads}.</p>
       <p>Métrica principal: pipeline qualificado e receita atribuível ao conteúdo — não sessões.</p>
       <p>Dashboard: https://confenge.com.br/ops/</p>
     `;
-    // Reuse Resend path via minimal fake record for deliverResendEmail is wrong;
-    // send directly.
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -419,7 +568,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         from: process.env.RESEND_FROM || "CONFENGE Ops <ops@confenge.com.br>",
         to: [to],
-        subject: `[CONFENGE] Relatório semanal — ${newLeads.length} leads novos · pipeline R$${funnel.pipeline_value}`,
+        subject: `[CONFENGE] Semanal real — ${newLeads.length} leads · pipeline R$${funnel.pipeline_value}`,
         html,
       }),
     });
@@ -427,11 +576,139 @@ exports.handler = async (event) => {
       const t = await res.text().catch(() => "");
       return json(502, { ok: false, error: "resend_failed", detail: t.slice(0, 200) }, origin);
     }
-    return json(200, { ok: true, emailed: true, to_domain: to.split("@")[1] || "redacted" }, origin);
+    return json(200, { ok: true, emailed: true, commercial_only: true, to_domain: to.split("@")[1] || "redacted" }, origin);
+  }
+
+  if (action === "backfill_record_kind" && event.httpMethod === "POST") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const body = parseBody(event) || {};
+    const dryRun = body.dry_run !== false && body.apply !== true;
+    const leads = await listLeads(store);
+    const candidates = [];
+    for (const lead of leads) {
+      const clf = classifyForBackfill(lead);
+      if (clf.action !== "mark") continue;
+      candidates.push({
+        lead_id: lead.lead_id,
+        from: lead.record_kind || "real",
+        to: clf.record_kind,
+        signals: clf.signals,
+        reason: clf.reason,
+        commercial_stage: lead.commercial_stage || lead.status,
+      });
+    }
+    if (dryRun) {
+      return json(
+        200,
+        {
+          ok: true,
+          dry_run: true,
+          candidates,
+          candidate_count: candidates.length,
+          total_leads: leads.length,
+          counts_by_kind_before: countByKind(leads),
+          note: "Pass apply:true (or dry_run:false) to write. Rollback via rollback_record_kind with snapshot_id.",
+        },
+        origin
+      );
+    }
+    const snapshot_id = `kind-snap-${Date.now().toString(36)}`;
+    const snapshot = {
+      snapshot_id,
+      at: new Date().toISOString(),
+      entries: candidates.map((c) => ({ lead_id: c.lead_id, previous_kind: c.from, new_kind: c.to, signals: c.signals })),
+    };
+    // Persist snapshot for rollback when store supports put of meta keys
+    try {
+      if (typeof store.put === "function") {
+        await store.put({
+          lead_id: `__meta__/${snapshot_id}`,
+          _meta: true,
+          record_kind: "internal",
+          snapshot,
+          received_at: snapshot.at,
+          commercial_stage: "lead_persisted",
+          stage_history: [],
+        });
+      }
+    } catch {
+      /* snapshot best-effort */
+    }
+    let applied = 0;
+    for (const c of candidates) {
+      const cur = await store.get(c.lead_id);
+      if (!cur) continue;
+      const audit = [
+        ...(cur.audit || []),
+        kindAuditEntry({
+          from: c.from,
+          to: c.to,
+          signals: c.signals,
+          actor: body.actor || "backfill",
+          note: "backfill_record_kind",
+        }),
+      ];
+      await store.update(c.lead_id, {
+        record_kind: c.to,
+        record_kind_signals: c.signals,
+        record_kind_classified_at: new Date().toISOString(),
+        next_action: c.to === "real" ? cur.next_action : "exclude_from_commercial",
+        audit,
+      });
+      applied += 1;
+    }
+    const after = await listLeads(store);
+    safeLog("info", "backfill_record_kind", { applied, snapshot_id });
+    return json(
+      200,
+      {
+        ok: true,
+        dry_run: false,
+        applied,
+        snapshot_id,
+        candidates,
+        counts_by_kind_after: countByKind(after),
+        system_health: systemHealth(after),
+      },
+      origin
+    );
+  }
+
+  if (action === "rollback_record_kind" && event.httpMethod === "POST") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const body = parseBody(event) || {};
+    const snapshot_id = String(body.snapshot_id || "");
+    if (!snapshot_id) return json(400, { ok: false, error: "snapshot_id_required" }, origin);
+    const meta = await store.get(`__meta__/${snapshot_id}`);
+    const entries = (meta && meta.snapshot && meta.snapshot.entries) || body.entries || [];
+    if (!entries.length) return json(404, { ok: false, error: "snapshot_not_found" }, origin);
+    let restored = 0;
+    for (const e of entries) {
+      const cur = await store.get(e.lead_id);
+      if (!cur) continue;
+      const prev = e.previous_kind || "real";
+      await store.update(e.lead_id, {
+        record_kind: prev,
+        audit: [
+          ...(cur.audit || []),
+          kindAuditEntry({
+            from: cur.record_kind,
+            to: prev,
+            signals: ["rollback"],
+            actor: body.actor || "rollback",
+            note: `rollback ${snapshot_id}`,
+          }),
+        ],
+        next_action: prev === "real" ? "first_contact" : "exclude_from_commercial",
+      });
+      restored += 1;
+    }
+    return json(200, { ok: true, restored, snapshot_id }, origin);
   }
 
   // prevent unused import lint in some bundlers
   void deliverResendEmail;
+  void isCommercialReal;
 
   return json(404, { ok: false, error: "unknown_action", action }, origin);
 };
@@ -439,3 +716,5 @@ exports.handler = async (event) => {
 // test helpers
 exports._authOk = authOk;
 exports._listLeads = listLeads;
+exports._loadGscInsights = loadGscInsights;
+exports._sanitizeGscForOps = sanitizeGscForOps;

@@ -2,6 +2,8 @@
  * Synthetic lead probe (no real PII) against a base URL.
  * Usage: node scripts/site/synthetic_lead_probe.mjs [baseUrl] [probeSecret]
  * Exit 0 only on HTTP 201 + lead_id + no secret leak in body.
+ *
+ * Always multi-signal synthetic so commercial funnels exclude this record.
  */
 const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
@@ -17,7 +19,9 @@ const payload = {
   utm_medium: "probe",
   utm_campaign: "slo",
   landing_page: "/",
-  mensagem: "",
+  mensagem: "[QA] synthetic probe — do not contact",
+  test_mode: true,
+  record_kind: "synthetic",
 };
 
 const headers = {
@@ -27,6 +31,7 @@ const headers = {
   // Unique technical fingerprint per run so rate-limit buckets do not collide with E2E
   "User-Agent": `confenge-synthetic-probe/1.0 (${Date.now()}-${Math.random().toString(36).slice(2, 8)})`,
   "X-Forwarded-For": `198.51.100.${1 + Math.floor(Math.random() * 200)}`,
+  "X-Confenge-Probe": probeSecret || "1",
 };
 if (probeSecret) headers["X-Confenge-Probe"] = probeSecret;
 
@@ -58,6 +63,7 @@ const out = {
   http: res.status,
   lead_id: data.lead_id || data.receipt_id || null,
   status: data.status || null,
+  record_kind_expected: "synthetic",
   leaks,
   base,
   ts: new Date().toISOString(),

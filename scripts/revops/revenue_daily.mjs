@@ -1,8 +1,10 @@
 /**
- * Daily revenue ops: health + synthetic form + optional weekly snapshot.
+ * Daily revenue ops: health + isolated synthetic probe + commercial real-only checks.
  * Usage:
  *   OPS_TOKEN=… node scripts/revops/revenue_daily.mjs
  *   OPS_TOKEN=… node scripts/revops/revenue_daily.mjs https://confenge.com.br
+ *
+ * Probe creates a record_kind=synthetic lead and MUST NOT inflate commercial funnel.
  */
 const BASE = (process.argv[2] || process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
 const TOKEN = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
@@ -31,7 +33,15 @@ function check(name, ok, detail) {
   check("ops_health", status === 200 && body.ok, `auth=${body.auth_configured}`);
   check("ops_auth_configured", body.auth_configured === true, body.auth_configured);
 }
-// 2 form probe via real lead endpoint
+
+// 2 isolated form probe — multi-signal synthetic, never commercial
+let commercialBefore = null;
+if (TOKEN) {
+  const { body } = await j("/.netlify/functions/ops?action=funnel");
+  commercialBefore = body.funnel?.counts?.lead_persisted ?? null;
+  out.commercial_before = commercialBefore;
+}
+
 {
   const payload = {
     nome: "SYNTHETIC-PROBE",
@@ -43,6 +53,9 @@ function check(name, ok, detail) {
     utm_source: "synthetic",
     utm_medium: "daily",
     landing_page: "/",
+    test_mode: true,
+    record_kind: "synthetic",
+    mensagem: "[QA] synthetic probe — do not contact",
   };
   const res = await fetch(`${BASE}/.netlify/functions/lead`, {
     method: "POST",
@@ -51,6 +64,7 @@ function check(name, ok, detail) {
       Accept: "application/json",
       Origin: "https://confenge.com.br",
       "User-Agent": `confenge-daily-probe/1.0 (${Date.now()})`,
+      "X-Confenge-Probe": "1",
       "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
     },
     body: JSON.stringify(payload),
@@ -59,25 +73,58 @@ function check(name, ok, detail) {
   check("form_probe_201", res.status === 201 || res.status === 200, `http=${res.status} id=${body.lead_id || ""}`);
   check("form_probe_lead_id", Boolean(body.lead_id), body.lead_id);
   out.lead_id = body.lead_id;
+
+  // Do NOT advance synthetic probe through commercial stages.
+  // Probe validates endpoint + persistence only; commercial funnel stays clean.
   if (body.lead_id && TOKEN) {
-    const st = await j("/.netlify/functions/ops?action=stage", {
-      method: "POST",
-      body: JSON.stringify({ lead_id: body.lead_id, stage: "contacted", actor: "daily-probe", note: "auto" }),
-    });
-    check("stage_contacted", st.body.ok === true, st.body.lead?.commercial_stage || st.body.error);
+    const sh = await j("/.netlify/functions/ops?action=system_health");
+    check("system_health_ok", sh.body.ok === true, JSON.stringify(sh.body.counts_by_kind || {}));
+    out.system_health = {
+      real: sh.body.real_leads,
+      synthetic: sh.body.synthetic_leads,
+      last_real_conversion: sh.body.last_real_conversion,
+    };
   }
 }
-// 3 funnel
+
+// 3 funnel real-only + commercial counters must not rise from probe
 if (TOKEN) {
   const { body } = await j("/.netlify/functions/ops?action=funnel");
   check("funnel_ok", body.ok === true, JSON.stringify(body.funnel?.counts || {}));
+  check("funnel_commercial_only", body.commercial_only === true, body.commercial_only);
   out.funnel = body.funnel;
+  out.system_health_funnel = body.system_health;
+  if (commercialBefore != null && body.funnel?.counts) {
+    const after = body.funnel.counts.lead_persisted;
+    check(
+      "probe_did_not_inflate_commercial",
+      after === commercialBefore,
+      `before=${commercialBefore} after=${after}`
+    );
+  }
   const w = await j("/.netlify/functions/ops?action=weekly_report");
   check("weekly_report", w.body.ok === true, `leads=${w.body.leads_total}`);
-  out.weekly = { leads_total: w.body.leads_total, new_7d: w.body.leads_new_7d, pipeline: w.body.funnel?.pipeline_value };
+  check("weekly_commercial_only", w.body.commercial_only === true, w.body.commercial_only);
+  out.weekly = {
+    leads_total: w.body.leads_total,
+    new_7d: w.body.leads_new_7d,
+    pipeline: w.body.funnel?.pipeline_value,
+    excluded: w.body.leads_excluded_non_real,
+  };
   const a = await j("/.netlify/functions/ops?action=analytics_summary");
   check("analytics_summary", a.body.ok === true, `events=${a.body.events_loaded}`);
   out.analytics_events = a.body.events_loaded;
+
+  // GSC insights must require auth (this request has token)
+  const gsc = await j("/.netlify/functions/ops?action=gsc_insights");
+  check("gsc_insights_auth", gsc.status === 200 && gsc.body.ok === true, `http=${gsc.status}`);
+  // Public static path must not serve strategic JSON
+  const pub = await fetch(`${BASE}/ops/data/gsc-insights.json`, { redirect: "manual" });
+  check(
+    "gsc_static_not_public",
+    pub.status === 404 || pub.status === 403 || pub.status === 410 || pub.status === 301,
+    `http=${pub.status}`
+  );
 }
 
 const failed = out.checks.filter((c) => !c.ok).length;

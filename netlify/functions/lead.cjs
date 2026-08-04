@@ -243,8 +243,15 @@ exports.handler = async (event) => {
     ip_hash,
     fingerprint,
     status: "persisted",
+    headers: event.headers || {},
   });
   record.retention = retentionPolicy();
+  // Safe operational log: kind only, never PII
+  safeLog("info", "lead_record_kind", {
+    lead_id,
+    record_kind: record.record_kind || "real",
+    classifier: (record.record_kind_signals || []).length ? "signals" : "default",
+  });
 
   try {
     await store.put(record);
