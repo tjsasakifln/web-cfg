@@ -42,8 +42,17 @@
     document.querySelectorAll("[data-tool-to-content]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_content", { tool: tool }); }); });
     document.querySelectorAll("[data-nurture-opt-in]").forEach(function (el) { el.addEventListener("click", function () { emit("nurture_opt_in", { tool: tool, source: "tool_page" }); }); });
   }
+  function escapeHtml(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
   window.ConfengeTools = {
     track: emit, emit: emit, bindToolLifecycle: bindToolLifecycle, parseMoney: parseMoney, setFieldError: setFieldError,
+    escapeHtml: escapeHtml,
     moneyFromField: function (el) { return el ? parseMoney(el.value) : { ok: false, error: "vazio" }; },
     num: function (el) { var p = el ? parseMoney(el.value) : { ok: false }; return p.ok ? p.value : 0; },
     brl: function (n) { return Number.isFinite(n) ? n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "n/d"; },

@@ -67,26 +67,35 @@
   var TOOL="matriz-atraso", SCHEMA=4, n=0, lastText="", root=document.getElementById("events");
   if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
 
+  function esc(s){ return (T.escapeHtml||function(x){return String(x==null?"":x);})(s); }
   function card(d){
     n++; var id=(d&&d.id)||("ev-"+n); var el=document.createElement("div");
     el.className="tool-event-card"; el.setAttribute("data-event-id", id);
     d=d||{};
+    // Shell only (no user text in attribute/HTML injection surface)
     el.innerHTML='<header><h3>Evento</h3><button type="button" class="button button-secondary tool-event-remove" data-rm>Remover</button></header>'+
       '<div class="tool-grid">'+
-      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-causa">Causa ou evento</label><input id="'+id+'-causa" data-f="causa" value="'+(d.causa||"")+'" required/></div>'+
-      '<div class="tool-field"><label for="'+id+'-di">Data inicial</label><input id="'+id+'-di" type="date" data-f="dataInicio" value="'+(d.dataInicio||"")+'"/></div>'+
-      '<div class="tool-field"><label for="'+id+'-df">Data final</label><input id="'+id+'-df" type="date" data-f="dataFim" value="'+(d.dataFim||"")+'"/></div>'+
-      '<div class="tool-field"><label for="'+id+'-dur">Duração estimada (dias)</label><input id="'+id+'-dur" type="number" min="0" data-f="duracaoDias" value="'+(d.duracaoDias!=null?d.duracaoDias:"")+'"/></div>'+
+      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-causa">Causa ou evento</label><input id="'+id+'-causa" data-f="causa" required/></div>'+
+      '<div class="tool-field"><label for="'+id+'-di">Data inicial</label><input id="'+id+'-di" type="date" data-f="dataInicio"/></div>'+
+      '<div class="tool-field"><label for="'+id+'-df">Data final</label><input id="'+id+'-df" type="date" data-f="dataFim"/></div>'+
+      '<div class="tool-field"><label for="'+id+'-dur">Duração estimada (dias)</label><input id="'+id+'-dur" type="number" min="0" data-f="duracaoDias"/></div>'+
       '<div class="tool-field"><label for="'+id+'-parte">Parte potencialmente responsável</label><select id="'+id+'-parte" data-f="parte">'+
       '<option value="indefinida">Ainda indefinida</option><option value="administracao">Administração (hipótese)</option>'+
       '<option value="contratado">Contratado (hipótese)</option><option value="compartilhado">Compartilhada / concorrente</option></select></div>'+
       '<div class="tool-field"><label for="'+id+'-com">Comunicação contemporânea?</label><select id="'+id+'-com" data-f="comunicacaoContemporanea"><option value="nao">Não localizada</option><option value="sim">Sim</option></select></div>'+
       '<div class="tool-field"><label for="'+id+'-doc">Documento disponível?</label><select id="'+id+'-doc" data-f="documentoDisponivel"><option value="nao">Não</option><option value="sim">Sim</option></select></div>'+
-      '<div class="tool-field"><label for="'+id+'-atv">Atividade afetada</label><input id="'+id+'-atv" data-f="atividadeAfetada" value="'+(d.atividadeAfetada||"")+'"/></div>'+
+      '<div class="tool-field"><label for="'+id+'-atv">Atividade afetada</label><input id="'+id+'-atv" data-f="atividadeAfetada"/></div>'+
       '<div class="tool-field"><label for="'+id+'-crit">Impacto no caminho crítico</label><select id="'+id+'-crit" data-f="impactoCaminhoCritico"><option value="incerto">Incerto</option><option value="sim">Sim (alegado)</option><option value="nao">Não</option></select></div>'+
       '<div class="tool-field"><label for="'+id+'-conc">Concorrência com outro evento?</label><select id="'+id+'-conc" data-f="concorrencia"><option value="nao">Não / não avaliado</option><option value="sim">Sim, possível sobreposição</option></select></div>'+
-      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-obs">Observação</label><textarea id="'+id+'-obs" data-f="observacao" rows="2">'+(d.observacao||"")+'</textarea></div>'+
+      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-obs">Observação</label><textarea id="'+id+'-obs" data-f="observacao" rows="2"></textarea></div>'+
       '</div>';
+    // Assign user-controlled values via properties (never attribute string concat)
+    el.querySelector('[data-f="causa"]').value = d.causa || "";
+    el.querySelector('[data-f="dataInicio"]').value = d.dataInicio || "";
+    el.querySelector('[data-f="dataFim"]').value = d.dataFim || "";
+    if (d.duracaoDias != null && d.duracaoDias !== "") el.querySelector('[data-f="duracaoDias"]').value = d.duracaoDias;
+    el.querySelector('[data-f="atividadeAfetada"]').value = d.atividadeAfetada || "";
+    el.querySelector('[data-f="observacao"]').value = d.observacao || "";
     if(d.parte) el.querySelector('[data-f="parte"]').value=d.parte;
     if(d.comunicacaoContemporanea) el.querySelector('[data-f="comunicacaoContemporanea"]').value="sim";
     if(d.documentoDisponivel) el.querySelector('[data-f="documentoDisponivel"]').value="sim";
@@ -146,28 +155,28 @@
     }
     var s=r.summary;
     var rows=(r.events||[]).map(function(ev){
-      return "<li><strong>"+ev.causa+"</strong><br/>"+
-        "Hipótese: "+ev.hipotese+"<br/>"+
-        (ev.documentosExistentes&&ev.documentosExistentes.length?"Documentos existentes: "+ev.documentosExistentes.join("; ")+"<br/>":"")+
-        (ev.documentosFaltantes&&ev.documentosFaltantes.length?"Documentos faltantes: "+ev.documentosFaltantes.join("; ")+"<br/>":"")+
+      return "<li><strong>"+esc(ev.causa)+"</strong><br/>"+
+        "Hipótese: "+esc(ev.hipotese)+"<br/>"+
+        (ev.documentosExistentes&&ev.documentosExistentes.length?"Documentos existentes: "+esc(ev.documentosExistentes.join("; "))+"<br/>":"")+
+        (ev.documentosFaltantes&&ev.documentosFaltantes.length?"Documentos faltantes: "+esc(ev.documentosFaltantes.join("; "))+"<br/>":"")+
         (ev.precisaNexoTemporal?"Necessita demonstrar nexo temporal.<br/>":"")+
         (ev.precisaImpactoCritico?"Necessita demonstrar impacto no caminho crítico.<br/>":"")+
         (ev.possivelConcorrencia?"Possível concorrência de causas / sobreposição.<br/>":"")+
-        (ev.observacao?"Observação: "+ev.observacao+"<br/>":"")+
+        (ev.observacao?"Observação: "+esc(ev.observacao)+"<br/>":"")+
         "</li>";
     }).join("");
     out.hidden=false; out.className="tool-result-panel hypothesis";
-    out.innerHTML='<p class="tool-result-summary"><strong>Hipóteses preliminares por evento</strong>'+r.synthesis+"</p>"+
+    out.innerHTML='<p class="tool-result-summary"><strong>Hipóteses preliminares por evento</strong>'+esc(r.synthesis)+"</p>"+
       '<h3>Resumo geral</h3><ul class="tool-evidence-list">'+
       "<li>Eventos: "+s.totalEventos+"</li>"+
       "<li>Sem prova contemporânea suficiente: "+s.semProvaContemporanea+"</li>"+
       "<li>Sem período definido: "+s.semPeriodoDefinido+"</li>"+
       "<li>Sem vínculo crítico claro: "+s.semVinculoCritico+"</li>"+
       "<li>Possíveis sobreposições: "+s.possiveisSobreposicoes+"</li>"+
-      "<li>Matriz de riscos no contrato: "+document.getElementById("tem_matriz").value+"</li></ul>"+
+      "<li>Matriz de riscos no contrato: "+esc(document.getElementById("tem_matriz").value)+"</li></ul>"+
       "<h3>Por evento</h3><ul class=\"tool-next-actions\">"+rows+"</ul>"+
-      (s.proximosRegistros&&s.proximosRegistros.length?"<h3>Próximos registros</h3><ul class=\"tool-next-actions\">"+s.proximosRegistros.map(function(x){return "<li>"+x+"</li>";}).join("")+"</ul>":"")+
-      '<p class="tool-disclaimer">'+(r.disclaimer||"Resultado orientativo.")+"</p>"+
+      (s.proximosRegistros&&s.proximosRegistros.length?"<h3>Próximos registros</h3><ul class=\"tool-next-actions\">"+s.proximosRegistros.map(function(x){return "<li>"+esc(x)+"</li>";}).join("")+"</ul>":"")+
+      '<p class="tool-disclaimer">'+esc(r.disclaimer||"Resultado orientativo.")+"</p>"+
       '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
     lastText=T.buildReport([
       {title:"CONFENGE: matriz de atraso de obra", body:r.synthesis},

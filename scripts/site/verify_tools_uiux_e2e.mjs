@@ -508,17 +508,62 @@ await page.setViewport({ width: 1440, height: 1000 });
 }
 
 {
-  // Reequilibrio persist + fieldset
+  // Reequilibrio persist + fieldset + ressalvas + urgency order + naKeys
   await page.goto(`${BASE}/ferramentas/checklist-reequilibrio/`, { waitUntil: "networkidle0", timeout: 60000 });
   await page.waitForSelector("#root fieldset, .tool-fieldset, fieldset", { timeout: 10000 });
   const fs = await page.evaluate(() => document.querySelectorAll("fieldset").length);
   if (fs < 5) fail("reeq_fieldsets " + fs);
   else pass("reeq_fieldsets", fs);
-  // mark one met and submit
+
+  // Mark two N/A, set alta urgency + alta materialidade, leave blockers open
+  await page.select("#urg", "alta");
+  await page.select("#mat", "alta");
+  const naInputs = await page.$$('input[value="na"]');
+  if (naInputs[0]) await naInputs[0].click();
+  if (naInputs[1]) await naInputs[1].click();
   const met = await page.$('input[value="met"]');
   if (met) await met.click();
   await page.click('button[type="submit"]');
   await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+
+  const reDom = await page.evaluate(() => {
+    const out = document.getElementById("out");
+    const t = out ? out.innerText : "";
+    const ressalvas = out ? out.querySelector("[data-ressalvas]") : null;
+    const order = out ? out.querySelector("[data-correction-order]") : null;
+    const naLine = (t.match(/Não aplicáveis:\s*(\d+)/i) || [])[1];
+    return {
+      t: t.slice(0, 900),
+      hasRessalvas: !!(ressalvas && ressalvas.querySelectorAll("li").length),
+      ressalvaText: ressalvas ? ressalvas.innerText.slice(0, 300) : "",
+      hasOrder: !!(order && order.querySelectorAll("li").length),
+      orderText: order ? order.innerText.slice(0, 400) : "",
+      naCount: naLine ? Number(naLine) : -1,
+      urgenteReason: /bloqueador_urgente|suporte_economico_urgente/i.test(t),
+    };
+  });
+  if (!reDom.hasRessalvas) fail("reeq_ressalvas_dom"); else pass("reeq_ressalvas_dom", reDom.ressalvaText.slice(0, 80));
+  if (!/bloqueador|materialidade|urgência/i.test(reDom.ressalvaText)) fail("reeq_ressalvas_content");
+  else pass("reeq_ressalvas_content");
+  if (reDom.naCount < 1) fail("reeq_nakeys_ui", reDom.naCount); else pass("reeq_nakeys_ui", reDom.naCount);
+  if (!reDom.hasOrder) fail("reeq_order_dom"); else pass("reeq_order_dom");
+  if (!reDom.urgenteReason) fail("reeq_urgency_reason_ui"); else pass("reeq_urgency_reason_ui");
+
+  // Switch to baixa and confirm order/reason change in DOM
+  await page.select("#urg", "baixa");
+  await page.click('button[type="submit"]');
+  await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+  const reBaixa = await page.evaluate(() => {
+    const order = document.querySelector("[data-correction-order]");
+    return {
+      orderText: order ? order.innerText : "",
+      noUrgente: order ? !/urgente/i.test(order.innerText) : false,
+    };
+  });
+  if (reBaixa.orderText === reDom.orderText) fail("reeq_urgency_order_ui_same");
+  else pass("reeq_urgency_order_ui_diff");
+  if (!reBaixa.noUrgente) fail("reeq_baixa_no_urgente_tag"); else pass("reeq_baixa_no_urgente_tag");
+
   const reStore = await page.evaluate(() => localStorage.getItem("confenge.tool.checklist-reequilibrio"));
   if (!reStore) fail("reeq_persist");
   else pass("reeq_persist");
@@ -529,7 +574,7 @@ await page.setViewport({ width: 1440, height: 1000 });
 }
 
 {
-  // Matriz: duration, concurrency, full event output
+  // Matriz: duration, concurrency, full event output + XSS escape on restore/result
   await page.goto(`${BASE}/ferramentas/matriz-atraso-obra/`, { waitUntil: "networkidle0", timeout: 60000 });
   await page.waitForSelector('[data-f="causa"]');
   const hasDur = await page.$('[data-f="duracaoDias"]');
@@ -558,6 +603,72 @@ await page.setViewport({ width: 1440, height: 1000 });
   if (!mxFull.conc && !/concorr/i.test(mxFull.t)) fail("matriz_result_conc"); else pass("matriz_result_conc");
   const mxStore = await page.evaluate(() => localStorage.getItem("confenge.tool.matriz-atraso"));
   if (!mxStore) fail("matriz_persist"); else pass("matriz_persist");
+
+  // XSS: inject payload via localStorage restore + result HTML
+  await page.evaluate(() => {
+    const payload = {
+      v: 4,
+      savedAt: Date.now(),
+      data: {
+        tem_matriz: "sim",
+        events: [{
+          id: "xss-1",
+          causa: '"><img src=x onerror=window.__xss=1>',
+          observacao: "<script>window.__xss=1</script><img src=x onerror=window.__xss=1>",
+          dataInicio: "2026-01-01",
+          dataFim: "2026-01-10",
+          parte: "administracao",
+          comunicacaoContemporanea: false,
+          documentoDisponivel: false,
+          atividadeAfetada: "<b>atv</b>",
+          impactoCaminhoCritico: "sim",
+          concorrencia: true,
+        }],
+      },
+    };
+    localStorage.setItem("confenge.tool.matriz-atraso", JSON.stringify(payload));
+  });
+  await page.reload({ waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-f="causa"]', { timeout: 10000 });
+  const xssCard = await page.evaluate(() => {
+    const causa = document.querySelector('[data-f="causa"]');
+    const obs = document.querySelector('[data-f="observacao"]');
+    const card = document.querySelector(".tool-event-card");
+    const badEls = card ? card.querySelectorAll("img, script, iframe, object, embed").length : -1;
+    return {
+      causaVal: causa ? causa.value : "",
+      obsVal: obs ? obs.value : "",
+      badEls: badEls,
+      xssFlag: !!window.__xss,
+    };
+  });
+  if (xssCard.xssFlag) fail("matriz_xss_executed_card");
+  else pass("matriz_xss_card_no_exec");
+  if (xssCard.badEls !== 0) fail("matriz_xss_card_attrs", xssCard);
+  else pass("matriz_xss_card_escaped");
+  if (!/onerror|img|script/i.test(xssCard.causaVal + xssCard.obsVal)) fail("matriz_xss_input_value_ok", xssCard);
+  else pass("matriz_xss_input_value_ok");
+
+  await page.click('button[type="submit"]');
+  await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+  const xssOut = await page.evaluate(() => {
+    const out = document.getElementById("out");
+    const html = out ? out.innerHTML : "";
+    const badEls = out ? out.querySelectorAll("img, script, iframe, object, embed").length : -1;
+    return {
+      html: html.slice(0, 1200),
+      badEls: badEls,
+      hasEntities: /&lt;|&quot;|&#39;|&amp;/.test(html),
+      xssFlag: !!window.__xss,
+      textShowsPayload: out ? /onerror|img src|script/i.test(out.innerText) : false,
+    };
+  });
+  if (xssOut.xssFlag) fail("matriz_xss_executed_result");
+  else pass("matriz_xss_result_no_exec");
+  if (xssOut.badEls !== 0) fail("matriz_xss_result_raw", { badEls: xssOut.badEls, html: xssOut.html.slice(0, 200) });
+  else pass("matriz_xss_result_escaped");
+  if (!xssOut.hasEntities && !xssOut.textShowsPayload) fail("matriz_xss_result_visible");
+  else pass("matriz_xss_result_safe_text");
 }
 
 

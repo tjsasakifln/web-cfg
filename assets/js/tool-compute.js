@@ -102,15 +102,19 @@
       { key: "refs", label: "Referências cruzadas" }, { key: "revisao", label: "Revisão interna" }
     ]}
   };
+  var REEQ_BLOCKER_CRITICALITY = { fato_gerador: 0, nexo: 1, memoria: 2, cronologia: 3, comunicacao: 4, contrato: 5 };
   function computeReequilibrio(states, opts) {
     opts = opts || {};
     var urgencia = opts.urgencia || "media", materialidade = opts.materialidade || "nao_informada", statesMap = states || {};
-    var missingBlockers = [], missingImportant = [], missingProcess = [], weighted = 0, weightDenom = 0;
+    var missingBlockers = [], missingImportant = [], missingProcess = [], naKeys = [], weighted = 0, weightDenom = 0;
     Object.keys(REEQ_CATEGORIES).forEach(function (catId) {
       var cat = REEQ_CATEGORIES[catId], met = 0, applicable = 0;
       cat.items.forEach(function (item) {
         var st = statesMap[item.key] || "missing";
-        if (st === "na") return;
+        if (st === "na") {
+          naKeys.push(item.key);
+          return;
+        }
         applicable += 1;
         if (st === "met") met += 1;
         else {
@@ -130,10 +134,39 @@
     else if (hasCentralBlocker) { level = "bad"; readiness = score >= 0.4 ? "media_com_bloqueio" : "baixa"; }
     else { level = "warn"; readiness = "media"; }
     if (hasCentralBlocker && (level === "ok" || readiness === "alta")) { level = "bad"; readiness = "media_com_bloqueio"; }
+    var blockersOrdered = missingBlockers.slice();
+    if (urgencia === "alta") {
+      blockersOrdered.sort(function (a, b) {
+        var ca = REEQ_BLOCKER_CRITICALITY[a.key], cb = REEQ_BLOCKER_CRITICALITY[b.key];
+        return (ca != null ? ca : 9) - (cb != null ? cb : 9);
+      });
+    }
+    var buckets;
+    if (urgencia === "baixa") {
+      buckets = [
+        { items: blockersOrdered, priority: 1, reason: "bloqueador" },
+        { items: missingProcess, priority: 2, reason: "organizacao" },
+        { items: missingImportant, priority: 3, reason: "suporte_economico" }
+      ];
+    } else if (urgencia === "alta") {
+      buckets = [
+        { items: blockersOrdered, priority: 1, reason: "bloqueador_urgente" },
+        { items: missingImportant, priority: 2, reason: "suporte_economico_urgente" },
+        { items: missingProcess, priority: 3, reason: "organizacao" }
+      ];
+    } else {
+      buckets = [
+        { items: blockersOrdered, priority: 1, reason: "bloqueador" },
+        { items: missingImportant, priority: 2, reason: "suporte_economico" },
+        { items: missingProcess, priority: 3, reason: "organizacao" }
+      ];
+    }
     var order = [];
-    missingBlockers.forEach(function (i) { order.push({ key: i.key, label: i.label, priority: 1, reason: "bloqueador" }); });
-    missingImportant.forEach(function (i) { order.push({ key: i.key, label: i.label, priority: 2, reason: "suporte_economico" }); });
-    missingProcess.forEach(function (i) { order.push({ key: i.key, label: i.label, priority: 3, reason: "organizacao" }); });
+    buckets.forEach(function (b) {
+      b.items.forEach(function (i) {
+        order.push({ key: i.key, label: i.label, priority: b.priority, reason: b.reason, urgencia: urgencia });
+      });
+    });
     var ressalvas = [];
     if (hasCentralBlocker) ressalvas.push("Há bloqueador(es) central(is) em aberto.");
     if (materialidade === "alta") ressalvas.push("Materialidade alta: organize revisão técnica antes de protocolar.");
@@ -143,7 +176,7 @@
     if (missingBlockers.length) synthesis += " Bloqueadores em aberto: " + missingBlockers.map(function (i) { return i.label; }).join(", ") + ".";
     return { ok: true, score: score, score_pct: Math.round(score * 100), level: level, readiness: readiness, readinessLabel: readinessLabel, hasCentralBlocker: hasCentralBlocker,
       missingBlockers: missingBlockers.map(function (i) { return i.key; }), missingImportant: missingImportant.map(function (i) { return i.key; }),
-      missingProcess: missingProcess.map(function (i) { return i.key; }), correctionOrder: order, ressalvas: ressalvas, urgencia: urgencia, materialidade: materialidade, synthesis: synthesis };
+      missingProcess: missingProcess.map(function (i) { return i.key; }), naKeys: naKeys, correctionOrder: order, ressalvas: ressalvas, urgencia: urgencia, materialidade: materialidade, synthesis: synthesis };
   }
   function normalizeParte(p) {
     var s = String(p || "").toLowerCase();
