@@ -2,10 +2,12 @@
  * Hub indexability truth: set equality against an independent policy source.
  *
  * Independent eligibility (not circular with audited HTML robots):
- *   seo/content-disposition-2026-08-02.json items with disposition === "manter"
- *   minus SUPERSEDED_URLS from scripts/site/inbound_first_remediate.py
+ *   1. seo/content-disposition-2026-08-02.json disposition === "manter"
+ *      minus SUPERSEDED_URLS (inbound_first_remediate.py)
+ *   2. plus STILL_PUBLISHED_CONSOLIDAR_URLS — consolidar peers that remain on
+ *      the public library until a real consolidation 301 lands (versioned in
+ *      inbound_first_remediate.py; not derived from live robots)
  *
- * disposition "consolidar" / "noindex" are not policy-indexable.
  * A systemic noindex flip cannot shrink both expected and actual together.
  */
 import { readFileSync, readdirSync, existsSync } from "fs";
@@ -30,35 +32,58 @@ function isIndexableHtml(html) {
   return !robots.includes("noindex");
 }
 
-/** SUPERSEDED_URLS frozenset from the Python remediation module (single source of truth). */
-function loadSupersededUrls() {
+/** Parse a frozenset({ "/conteudos/..." }) constant from the remediation module. */
+function loadUrlFrozenset(constName) {
   const src = readFileSync(REMEDIATE_PY, "utf8");
-  const block = src.match(/SUPERSEDED_URLS\s*=\s*frozenset\s*\(\s*\{([^}]+)\}/s);
+  const re = new RegExp(
+    `${constName}\\s*=\\s*frozenset\\s*\\(\\s*\\{([^}]+)\\}`,
+    "s",
+  );
+  const block = src.match(re);
   if (!block) {
-    throw new Error("SUPERSEDED_URLS block not found in inbound_first_remediate.py");
+    throw new Error(`${constName} block not found in inbound_first_remediate.py`);
   }
-  const urls = [...block[1].matchAll(/["'](\/conteudos\/[^"']+)["']/g)].map((m) => m[1]);
-  if (!urls.length) {
-    throw new Error("SUPERSEDED_URLS parsed empty");
-  }
-  return new Set(urls);
+  return new Set(
+    [...block[1].matchAll(/["'](\/conteudos\/[^"']+)["']/g)].map((m) => m[1]),
+  );
+}
+
+function loadSupersededUrls() {
+  const urls = loadUrlFrozenset("SUPERSEDED_URLS");
+  if (!urls.size) throw new Error("SUPERSEDED_URLS parsed empty");
+  return urls;
+}
+
+function loadStillPublishedConsolidarUrls() {
+  // May be empty if all consolidar peers already have 301s.
+  return loadUrlFrozenset("STILL_PUBLISHED_CONSOLIDAR_URLS");
 }
 
 /**
  * Policy-declared indexable /conteudos/ URLs.
- * Canonical inventory: content-disposition disposition=manter, minus superseded peers.
+ * Canonical inventory: disposition=manter minus superseded, plus still-published consolidar.
  */
 function loadPolicyIndexableUrls() {
   const data = JSON.parse(readFileSync(DISPOSITION_PATH, "utf8"));
   const items = data.items || [];
   const superseded = loadSupersededUrls();
+  const stillConsolidar = loadStillPublishedConsolidarUrls();
   const urls = new Set();
   for (const it of items) {
     if (it.disposition !== "manter") continue;
     const path = it.path;
     if (!path || !path.startsWith("/conteudos/")) continue;
-    if (superseded.has(path)) continue;
-    urls.add(path.endsWith("/") ? path : `${path}/`);
+    const norm = path.endsWith("/") ? path : `${path}/`;
+    if (superseded.has(norm)) continue;
+    urls.add(norm);
+  }
+  for (const u of stillConsolidar) {
+    if (superseded.has(u)) continue;
+    // require the HTML file to exist (published artifact)
+    const slug = u.replace(/^\/conteudos\/|\/$/g, "");
+    if (existsSync(join(ROOT, "conteudos", slug, "index.html"))) {
+      urls.add(u.endsWith("/") ? u : `${u}/`);
+    }
   }
   return urls;
 }
@@ -120,6 +145,8 @@ const policySet = loadPolicyIndexableUrls();
 const liveSet = loadLiveIndexableConteudosUrls();
 const hubSet = loadHubListedConteudosUrls(hub);
 const expected = policySet.size;
+const stillConsolidar = loadStillPublishedConsolidarUrls();
+const superseded = loadSupersededUrls();
 
 let fail = 0;
 function ok(n, c, d = "") {
@@ -136,7 +163,6 @@ ok("no_false_evergreen_intel", !/publica páginas evergreen com agregados/i.test
 ok("no_120_guias", !/120\s*guias/i.test(hub));
 ok("points_to_tools_or_radar", /\/ferramentas\/|\/radar\/nacional/.test(hub));
 
-// Independent policy non-empty and not a magic constant
 ok(
   "policy_indexable_nonempty",
   expected > 0 && expected < 100,
@@ -171,9 +197,16 @@ ok(
   new RegExp(`"numberOfItems"\\s*:\\s*${expected}`).test(hub),
   `expected numberOfItems ${expected}`,
 );
+// Hub metrics tile (not cluster cards)
+ok(
+  `hub_metrics_${expected}`,
+  new RegExp(
+    `<div class="hub-metrics">[\\s\\S]*?<strong>${expected}</strong><span>guias indexáveis</span>`,
+  ).test(hub),
+  `expected hub-metrics ${expected}`,
+);
 
 // Superseded must never reappear as indexable or on the hub
-const superseded = loadSupersededUrls();
 for (const u of superseded) {
   ok(`superseded_not_in_policy_${u}`, !policySet.has(u));
   ok(`superseded_not_in_live_${u}`, !liveSet.has(u));
@@ -186,6 +219,11 @@ for (const u of superseded) {
   }
 }
 
+// Still-published consolidar peers must remain in the independent policy set
+for (const u of stillConsolidar) {
+  ok(`still_consolidar_in_policy_${u}`, policySet.has(u));
+}
+
 // remediate must not use partial class= capture
 const rem = readFileSync(REMEDIATE_PY, "utf8");
 ok("remediate_no_partial_attr_regex", !/\(class="content-lead">\)\(\[\^<\]\+\)/.test(rem));
@@ -195,15 +233,20 @@ ok(
     /content-lead">\[/.test(rem) ||
     'content-lead">[^<]*</p>' in rem,
 );
+// Must not globally rewrite every "N guias" string to the hub total
+ok(
+  "remediate_no_global_digit_guias_rewrite",
+  !/re\.sub\(\s*r["']\\b\\d\+\\s\+guias\\b["']/.test(rem) &&
+    !/re\.sub\(r"\\b\\d\+\\s\+guias\\b"/.test(rem),
+  "broad \\\\b\\\\d+\\\\s+guias\\\\b rewrite must not exist",
+);
 
-// Counterfactual integrity: if every conteudos page were noindex, expected must NOT collapse to 0
-// (policy set is independent of live robots). Documented as a structural assertion.
+// Counterfactual integrity: policy set is independent of live robots counts
 ok(
   "policy_independent_of_live_robots",
   policySet.size > 0 &&
-    !(liveSet.size === 0 && policySet.size === 0) &&
-    // Policy source file does not encode live robots counts
-    !readFileSync(DISPOSITION_PATH, "utf8").includes("numberOfItems"),
+    !readFileSync(DISPOSITION_PATH, "utf8").includes("numberOfItems") &&
+    rem.includes("STILL_PUBLISHED_CONSOLIDAR_URLS"),
   "policy set must remain non-empty even if live HTML were all noindex",
 );
 
@@ -219,8 +262,10 @@ if (fail) {
   process.exit(1);
 }
 console.log("ALL hub truth checks passed", {
-  HUB_EXPECTATION_SOURCE: "seo/content-disposition-2026-08-02.json#disposition=manter minus SUPERSEDED_URLS",
+  HUB_EXPECTATION_SOURCE:
+    "seo/content-disposition-2026-08-02.json#manter minus SUPERSEDED_URLS plus STILL_PUBLISHED_CONSOLIDAR_URLS",
   policy_indexable: expected,
   live_indexable: liveSet.size,
   hub_listed: hubSet.size,
+  still_published_consolidar: [...stillConsolidar],
 });

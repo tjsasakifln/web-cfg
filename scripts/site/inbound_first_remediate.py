@@ -56,6 +56,15 @@ SUPERSEDED_URLS = frozenset(
     }
 )
 
+# disposition=consolidar peers that remain on the public library until a real
+# consolidation 301 lands. Not derived from live robots (avoids circular hub truth).
+# When a consolidar peer is redirected or retired, remove it from this set.
+STILL_PUBLISHED_CONSOLIDAR_URLS = frozenset(
+    {
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+    }
+)
+
 OLD_ORG = (
     "Diretoria B2G fracionada para construtoras e empresas de engenharia: "
     "inteligência de mercado, decisão de participação, proposta, proteção de "
@@ -864,24 +873,34 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         flags=re.S,
     )
 
-    # Replace count claims (any stale N, not only the historic 120)
-    html = re.sub(r"\b\d+\s+guias\b", f"{idx_n} guias", html)
-    html = re.sub(r"\bTodos os \d+\s+guias\b", f"Todos os {idx_n} guias", html)
-    html = re.sub(r"\b\d+\s+conteúdos encontrados\b", f"{idx_n} conteúdos encontrados", html)
+    # Replace hub-level count claims only — never rewrite cluster/local "N guias"
+    # cards globally (e.g. "Ver os 4 guias" must not become "Ver os {idx_n} guias").
+    html = re.sub(r"\b120 guias\b", f"{idx_n} guias", html)
+    html = re.sub(r"\bTodos os 120 guias\b", f"Todos os {idx_n} guias", html)
+    html = re.sub(r"\bTodos os \d+ guias\b", f"Todos os {idx_n} guias", html)
+    html = re.sub(r"\b120 conteúdos encontrados\b", f"{idx_n} conteúdos encontrados", html)
     html = re.sub(
-        r"\d+\s+guias organizados por problema e estágio",
+        r'(class="results-count"[^>]*>)\d+ conteúdos encontrados',
+        rf"\g<1>{idx_n} conteúdos encontrados",
+        html,
+    )
+    html = re.sub(
+        r"120 guias organizados por problema e estágio",
         f"{idx_n} guias indexáveis organizados por problema e estágio (demais em revisão editorial)",
         html,
     )
     html = re.sub(
-        r"<strong>\d+</strong><span>perguntas técnicas</span>",
+        r"<strong>120</strong><span>perguntas técnicas</span>",
         f"<strong>{idx_n}</strong><span>guias indexáveis</span>",
         html,
     )
+    # Hub metrics tile only (not cluster-card <strong>N guias</strong>)
     html = re.sub(
-        r"<strong>\d+</strong><span>guias indexáveis</span>",
-        f"<strong>{idx_n}</strong><span>guias indexáveis</span>",
+        r"(<div class=\"hub-metrics\">.*?<strong>)\d+(</strong><span>guias indexáveis</span>)",
+        rf"\g<1>{idx_n}\g<2>",
         html,
+        count=1,
+        flags=re.S,
     )
     # JSON-LD ItemList numberOfItems
     html = re.sub(

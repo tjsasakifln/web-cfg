@@ -1,9 +1,9 @@
 {
   "schema_version": "3.0.0",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
-  "commit_sha": "8991c9f70244d181a3f09e8b76893702492b475b",
+  "commit_sha": "c31378daeacc5d3a60e1f77d2f6174990c9438e3",
   "commit_sha_role": "informational_only",
-  "derived_at": "2026-08-04T23:02:48Z",
+  "derived_at": "2026-08-04T23:28:07Z",
   "first_cohort_total": 3,
   "indexable_count": 0,
   "human_approved_count": 0,
@@ -19,8 +19,8 @@
     "guia-checklist-aditivo",
     "lei-item-novo-desconto"
   ],
-  "public_indexable_conteudos": 19,
-  "hub_claimed_guides": 19,
+  "public_indexable_conteudos": 20,
+  "hub_claimed_guides": 20,
   "editorial_sitemap_locs": 0,
   "contradictions": [],
   "will_not_impersonate_named_human": true,
