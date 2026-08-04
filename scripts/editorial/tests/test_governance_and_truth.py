@@ -312,7 +312,6 @@ def test_live_registry_wave1_not_human_approved():
     assert truth["sitemaps"]["editorial_locs"] == 0
     # Reports can retain a historical commit_sha, but packet material must match.
     assert truth["ok"], truth.get("contradictions")
-    assert truth["ok"], truth.get("contradictions")
     assert truth["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
 
 
