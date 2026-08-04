@@ -1,0 +1,63 @@
+{
+  "pages": [
+    {
+      "path": "/ferramentas/",
+      "id": "hub",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/limite-acrescimos-supressoes/",
+      "id": "limite",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/checklist-reequilibrio/",
+      "id": "reequilibrio",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/matriz-atraso-obra/",
+      "id": "matriz",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "id": "aditivo",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    }
+  ],
+  "critical": 0,
+  "serious": 0,
+  "moderate": 0,
+  "minor": 0
+}

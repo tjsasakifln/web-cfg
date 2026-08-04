@@ -76,3 +76,19 @@ Turn editorial pages and interactive tools into inbound assets that solve part o
 - Template generator for new tools from JSON config only.
 - Deeper literary pass on all 120+ conteudos HTML pages.
 - Server-side tool state (explicitly not desired).
+
+## Evidence
+- E2E/a11y: `docs/uiux-tools-remediation/evidence/e2e-report.json`, `axe-report.json`
+- Screenshots after: `docs/uiux-tools-remediation/evidence/screenshots/after/`
+- Copy lint: `docs/editorial/COPY-LINT-REPORT.json`
+- Findings / matrix / rewrites: sibling markdown files in this folder
+
+## Run verification
+```bash
+npm run test:tool-compute
+npm run test:tools
+npm run test:tool-events
+npm run lint:editorial-copy
+npm run test:tools-uiux-e2e
+npm run editorial:build
+```

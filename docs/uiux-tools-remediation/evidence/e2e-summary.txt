@@ -1,0 +1,7 @@
+failed=0
+overflows=0
+axe_critical=0
+axe_serious=0
+axe_moderate=0
+screenshots=/tmp/grok-goal-a2062e6b10e9/implementer/e2e-evidence/screenshots/after
+generated=2026-08-04T14:44:18.442Z

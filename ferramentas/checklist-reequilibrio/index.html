@@ -8,8 +8,8 @@
 <main id="conteudo"><header class="tool-page-hero"><div class="container tool-shell"><h1>Checklist de reequilíbrio</h1>
 <p class="content-lead">Bloqueadores centrais impedem prontidão alta. Urgência ordena a correção.</p></div></header>
 <div class="container tool-shell"><form id="f" class="tool-form"><div id="root"></div>
-<div class="tool-grid"><div class="tool-field"><label>Urgência</label><select id="urg"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></div>
-<div class="tool-field"><label>Materialidade</label><select id="mat"><option value="nao_informada">Não informar</option><option value="baixa">Baixa</option><option value="media">Média</option><option value="alta">Alta</option></select></div></div>
+<div class="tool-grid"><div class="tool-field"><label for="urg">Urgência</label><select id="urg" name="urgencia"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></div>
+<div class="tool-field"><label for="mat">Materialidade</label><select id="mat" name="materialidade"><option value="nao_informada">Não informar</option><option value="baixa">Baixa</option><option value="media">Média</option><option value="alta">Alta</option></select></div></div>
 <p class="tool-privacy-note">Só neste navegador. Não substitui análise do contrato.</p>
 <div class="tool-actions"><button class="button button-primary tool-run" type="submit">Diagnosticar</button><button type="button" class="button button-secondary" id="rst" data-tool-reset>Apagar</button></div></form>
 <div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>

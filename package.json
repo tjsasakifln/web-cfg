@@ -88,7 +88,8 @@
     "editorial:release-approved": "python3 scripts/editorial/release_approved.py",
     "pseo:pilot-audit": "python3 scripts/pseo/pilot_audit.py",
     "test:tool-events": "node scripts/site/test_tool_events.mjs",
-    "lint:editorial-copy": "python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json"
+    "lint:editorial-copy": "python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json",
+    "test:tools-uiux-e2e": "node scripts/site/verify_tools_uiux_e2e.mjs docs/uiux-tools-remediation/evidence"
   },
   "engines": {
     "node": ">=18"

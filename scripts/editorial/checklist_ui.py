@@ -21,7 +21,7 @@ def render_structured_checklist(page: dict[str, Any]) -> str:
     parts = [
         '<link rel="stylesheet" href="/styles-tools.css"/>',
         '<div class="tool-shell editorial-checklist" data-aditivo-checklist id="checklist-interativo">',
-        '<div class="tool-progress"><div class="tool-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-progress-bar>'
+        '<div class="tool-progress"><div class="tool-progress-track" role="progressbar" aria-label="Prontidão documental dos requisitos essenciais" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-progress-bar>'
         '<span class="tool-progress-fill" data-progress-fill style="width:0%"></span></div>',
         '<p class="tool-progress-label" data-progress-label role="status" aria-live="polite">'
         "Marque os requisitos essenciais para ver a prontidão.</p></div>",
