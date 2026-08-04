@@ -167,3 +167,63 @@ html.js .form-step-fallback{display:none}
 .field input.is-invalid,.field select.is-invalid,.field textarea.is-invalid{border-color:#b42318;outline-color:#b42318}
 .simple-card .journey-next{margin-top:1rem;display:grid;gap:.5rem}
 .simple-card .sla-box{margin:1rem 0;padding:1rem 1.1rem;border-radius:12px;background:rgba(6,26,51,.04);border:1px solid rgba(6,26,51,.08);font-size:.95rem;line-height:1.5}
+/* Content / tool pages: links must look clickable (global a{color:inherit;text-decoration:none}) */
+main a:not(.button):not(.brand):not(.whatsapp-float):not(.button-secondary):not(.tool-card){
+  color:var(--green-700,#2d6f2d);
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+  font-weight:650;
+  cursor:pointer;
+}
+main a:not(.button):not(.brand):not(.whatsapp-float):not(.button-secondary):not(.tool-card):hover{
+  color:#1f4f22;
+  text-decoration-thickness:2px;
+}
+.breadcrumbs a{
+  color:var(--green-700,#2d6f2d);
+  text-decoration:underline;
+  text-underline-offset:2px;
+  font-weight:650;
+}
+.breadcrumbs a:hover{color:#1f4f22}
+/* Tool hub cards */
+.tool-card-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.tool-card{
+  display:block;
+  padding:1.15rem 1.25rem;
+  background:#fff;
+  border:1px solid rgba(15,23,42,.1);
+  border-radius:12px;
+  color:var(--ink,#061a33)!important;
+  text-decoration:none!important;
+  box-shadow:0 1px 0 rgba(3,16,32,.03);
+  transition:border-color .15s ease,box-shadow .15s ease,background .15s ease;
+}
+.tool-card:hover,.tool-card:focus-visible{
+  border-color:rgba(45,111,45,.45);
+  background:#f7faf7;
+  box-shadow:0 8px 24px rgba(3,16,32,.08);
+  outline:none;
+}
+.tool-card strong{
+  display:block;
+  margin-bottom:.35rem;
+  color:var(--green-700,#2d6f2d);
+  font-size:1.05rem;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.tool-card span{display:block;color:#425265;font-size:.95rem;line-height:1.55;font-weight:500}
+.tool-card .tool-card-cta{
+  display:inline-flex;
+  margin-top:.65rem;
+  color:var(--green-700,#2d6f2d);
+  font-size:.875rem;
+  font-weight:760;
+  text-decoration:none;
+}
+.tool-card:hover .tool-card-cta{text-decoration:underline}
+/* Brand logo guard: never collapse to zero height */
+.brand{display:inline-flex;align-items:center;flex:0 0 auto;min-width:140px;max-width:224px}
+.brand img{display:block;width:100%;height:auto;max-height:48px;object-fit:contain;object-position:left center}

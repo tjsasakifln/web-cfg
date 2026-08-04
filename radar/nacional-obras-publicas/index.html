@@ -11,6 +11,9 @@
 <meta property="og:description" content="Metodologia reproduzível da CONFENGE: demanda observada e limitações explícitas."/>
 <meta property="og:url" content="https://confenge.com.br/radar/nacional-obras-publicas/"/>
 <link rel="stylesheet" href="/styles.css"/>
+<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="#061a33" name="theme-color"/>
 <style>
 .radar-table { width:100%; border-collapse:collapse; font-size:.92rem; margin:1rem 0; }
 .radar-table th, .radar-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .6rem; text-align:left; }
@@ -35,16 +38,25 @@
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
-<header class="site-header">
+<header class="site-header" id="inicio">
 <div class="container header-inner">
-<a class="logo" href="/">CONFENGE</a>
-<nav class="nav-desktop" aria-label="Principal">
-<a href="/ferramentas/">Ferramentas</a>
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a href="/bid-room-licitacoes-obras/">Analisar licitação</a>
+<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
+<a href="/diretoria-b2g/">Operação B2G</a>
 <a href="/conteudos/">Conteúdos</a>
-<a href="/radar/nacional-obras-publicas/">Radar</a>
-<a href="/#contato">Contato</a>
+<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
 </nav>
+<a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
 </div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a href="/bid-room-licitacoes-obras/">Analisar licitação</a><a href="/defesa-margem-contratos-publicos/">Proteger contrato</a><a href="/diretoria-b2g/">Operação B2G</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+<a class="button button-primary" href="/#contato">Falar com a CONFENGE</a>
+</nav>
 </header>
 <main id="conteudo">
 <nav class="breadcrumbs container" aria-label="Navegação"><ol>
@@ -158,7 +170,26 @@
 </section>
 </div>
 </main>
-<footer class="site-footer"><div class="container"><p>© CONFENGE · <a href="/privacidade/">Privacidade</a> · <a href="/termos-de-uso/">Termos</a></p></div></footer>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada.</p></div>
+<div class="footer-links"><strong>Ofertas</strong><a href="/diagnostico-b2g-360/">Diagnóstico B2G 360°</a><a href="/diretoria-b2g/">Diretoria B2G fracionada</a><a href="/bid-room-licitacoes-obras/">Bid Room</a><a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin</a></div>
+<div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
+<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
+</footer>
 <script src="/script.js" defer></script>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-check" viewbox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
+<symbol id="i-chart" viewbox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"></path></symbol>
+<symbol id="i-shield" viewbox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path></symbol>
+<symbol id="i-building" viewbox="0 0 24 24"><path d="M3 21h18M5 21V9m14 12V9M3 9h18L12 3 3 9Z"></path></symbol>
+<symbol id="i-file" viewbox="0 0 24 24"><path d="M6 2h8l4 4v16H6z"></path></symbol>
+<symbol id="i-menu" viewbox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewbox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-whatsapp" viewbox="0 0 24 24"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.6Z"></path></symbol>
+</svg>
 </body>
 </html>
