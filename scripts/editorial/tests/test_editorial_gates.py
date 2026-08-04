@@ -32,8 +32,27 @@ from scripts.editorial.registry import (  # noqa: E402
 )
 from scripts.editorial.render import render_page  # noqa: E402
 from scripts.editorial.sources import is_official_url, load_manifest, page_sources_ok  # noqa: E402
+from scripts.editorial.governance import EDITORIAL_CHECKLIST_KEYS  # noqa: E402
 
 PAGES_DIR = ROOT / "data" / "editorial" / "pages"
+
+
+def _complete_checklist() -> dict[str, bool]:
+    return {key: True for key in EDITORIAL_CHECKLIST_KEYS}
+
+
+def _preview_evidence(page: dict) -> dict:
+    current = material_hash(page)
+    return {
+        "page_id": page["page_id"],
+        "review_target_sha": "a" * 40,
+        "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
+        "preview_build_sha": "a" * 40,
+        "preview_generated_at": "2026-08-04T00:00:00Z",
+        "reviewed_url": "https://deploy-preview-54--confenge.netlify.app" + page["url"],
+        "material_hash": current,
+        "page_http_status": 200,
+    }
 
 
 def _load_pages() -> list[dict]:
@@ -192,6 +211,8 @@ def test_human_path_to_indexable():
         reviewer="Tiago Sasaki",
         notes="Fontes Planalto e aplicação prática conferidas no caso-tipo.",
         sources_verified=["lei-14133-planalto"],
+        checklist=_complete_checklist(),
+        preview_evidence=_preview_evidence(page),
     )
     mark_indexable(reg, "tmp3")
     assert reg["pages"][0]["status"] == "INDEXABLE"
@@ -253,6 +274,8 @@ def test_approval_hash_invalidation():
         reviewer="Tiago Sasaki",
         notes="Fontes e conteúdo conferidos com rigor adequado.",
         sources_verified=["lei-14133-planalto"],
+        checklist=_complete_checklist(),
+        preview_evidence=_preview_evidence(page),
     )
     mark_indexable(reg, "tmp-page")
     page2 = {**page, "body_markdown": page["body_markdown"] + " alteração material extra"}
@@ -300,6 +323,8 @@ def test_material_change_drops_old_approval_identity():
         reviewer="Tiago Sasaki",
         notes="Fontes e conteúdo conferidos com rigor adequado para publicação.",
         sources_verified=["lei-14133-planalto"],
+        checklist=_complete_checklist(),
+        preview_evidence=_preview_evidence(page),
     )
     mark_indexable(reg, "material-change")
     # The caller carries the old stored hash. The registry must recompute it
