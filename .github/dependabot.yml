@@ -7,8 +7,29 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - dependencies
+    groups:
+      dev-tooling:
+        patterns:
+          - "lighthouse"
+          - "puppeteer-core"
+          - "axe-core"
+          - "chrome-launcher"
+    ignore:
+      # puppeteer-core@25+ requires Node >=22.12; CI still on Node 20.
+      # Remove this ignore after engines + workflows move to Node 22 LTS.
+      - dependency-name: "puppeteer-core"
+        update-types:
+          - "version-update:semver-major"
+
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
     open-pull-requests-limit: 3
+    labels:
+      - dependencies
+      - github_actions
+    groups:
+      github-actions:
+        patterns:
+          - "*"

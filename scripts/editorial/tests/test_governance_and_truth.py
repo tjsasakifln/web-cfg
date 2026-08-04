@@ -429,6 +429,55 @@ def test_packaged_sha_rejects_unrelated_ancestor():
         assert packaged_sha_is_acceptable(_git_parent_sha(), live) is True
 
 
+def test_packaged_sha_inherits_base_pin_on_pr_merge():
+    """Dependabot-style PR merge: package pin from main must pass on ephemeral merge SHA.
+
+    Simulates GitHub's pull_request merge ref (2 parents: base, pr_tip) where the PR
+    only touches workflows and leaves docs/editorial package JSON at main's pin.
+    """
+    from scripts.editorial import truth as truth_mod
+
+    base = "base" + "0" * 36
+    pr_tip = "prtip" + "0" * 35
+    merge = "merge" + "0" * 35
+    pin = "pin00" + "0" * 35
+    material = "mater" + "0" * 35
+
+    parents = {
+        merge: [base, pr_tip],
+        # base is itself a merge of prior main + docs-only pin (common on main)
+        base: ["prior" + "0" * 35, pin],
+        pin: [material],
+        pr_tip: ["prior" + "0" * 35],
+    }
+    pin_only = {pin}
+
+    def fake_parents(sha: str):
+        return list(parents.get(sha, []))
+
+    def fake_pin_only(sha: str) -> bool:
+        return sha in pin_only
+
+    orig_parents = truth_mod._git_parents
+    orig_pin = truth_mod._commit_is_docs_editorial_pin_only
+    orig_head_pin = truth_mod._head_is_docs_editorial_pin_only
+    try:
+        truth_mod._git_parents = fake_parents  # type: ignore[assignment]
+        truth_mod._commit_is_docs_editorial_pin_only = fake_pin_only  # type: ignore[assignment]
+        truth_mod._head_is_docs_editorial_pin_only = lambda: False  # type: ignore[assignment]
+
+        # Package at material (parent of docs pin on base) must pass on merge live
+        assert truth_mod.packaged_sha_is_acceptable(material, merge) is True
+        # Exact PR tip still ok
+        assert truth_mod.packaged_sha_is_acceptable(pr_tip, merge) is True
+        # Random SHA still rejected
+        assert truth_mod.packaged_sha_is_acceptable("dead" + "0" * 36, merge) is False
+    finally:
+        truth_mod._git_parents = orig_parents  # type: ignore[assignment]
+        truth_mod._commit_is_docs_editorial_pin_only = orig_pin  # type: ignore[assignment]
+        truth_mod._head_is_docs_editorial_pin_only = orig_head_pin  # type: ignore[assignment]
+
+
 def test_truth_write_matches_registry():
     truth = derive_editorial_truth()
     path = write_terminal_result(truth)
