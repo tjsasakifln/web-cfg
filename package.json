@@ -89,12 +89,12 @@
     "test:tool-events": "node scripts/site/test_tool_events.mjs"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=18"
   },
   "devDependencies": {
     "axe-core": "^4.10.0",
     "chrome-launcher": "^1.2.1",
-    "lighthouse": "^13.4.1",
+    "lighthouse": "^12.8.2",
     "puppeteer-core": "^23.0.0"
   },
   "dependencies": {
