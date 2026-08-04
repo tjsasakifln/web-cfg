@@ -4,7 +4,8 @@
  *   OPS_TOKEN=… node scripts/revops/revenue_daily.mjs
  *   OPS_TOKEN=… node scripts/revops/revenue_daily.mjs https://confenge.com.br
  *
- * Probe creates a record_kind=synthetic lead and MUST NOT inflate commercial funnel.
+ * Probe validates endpoint, validation, persistence, delivery signals, idempotency.
+ * Must NOT inflate commercial funnel (record_kind=synthetic).
  */
 const BASE = (process.argv[2] || process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
 const TOKEN = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
@@ -34,7 +35,7 @@ function check(name, ok, detail) {
   check("ops_auth_configured", body.auth_configured === true, body.auth_configured);
 }
 
-// 2 isolated form probe — multi-signal synthetic, never commercial
+// 2 isolated form probe
 let commercialBefore = null;
 if (TOKEN) {
   const { body } = await j("/.netlify/functions/ops?action=funnel");
@@ -42,41 +43,92 @@ if (TOKEN) {
   out.commercial_before = commercialBefore;
 }
 
+const probeStamp = Date.now();
+const payload = {
+  nome: "SYNTHETIC-PROBE",
+  email: `probe+${probeStamp}@example.com`,
+  estagio: "synthetic probe — discard",
+  jornada: "operacao",
+  consentimento: "true",
+  origem: "/synthetic-probe-daily",
+  utm_source: "synthetic",
+  utm_medium: "daily",
+  landing_page: "/",
+  test_mode: true,
+  record_kind: "synthetic",
+  mensagem: "[QA] synthetic probe — do not contact",
+  idempotency_key: `probe-daily-${probeStamp}`,
+};
+
+const probeHeaders = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+  Origin: "https://confenge.com.br",
+  "User-Agent": `confenge-daily-probe/1.0 (${probeStamp})`,
+  "X-Confenge-Probe": "1",
+  "Idempotency-Key": `probe-daily-${probeStamp}`,
+  "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
+};
+
 {
-  const payload = {
-    nome: "SYNTHETIC-PROBE",
-    email: `probe+${Date.now()}@example.com`,
-    estagio: "synthetic probe — discard",
-    jornada: "operacao",
-    consentimento: "true",
-    origem: "/synthetic-probe-daily",
-    utm_source: "synthetic",
-    utm_medium: "daily",
-    landing_page: "/",
-    test_mode: true,
-    record_kind: "synthetic",
-    mensagem: "[QA] synthetic probe — do not contact",
-  };
   const res = await fetch(`${BASE}/.netlify/functions/lead`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Origin: "https://confenge.com.br",
-      "User-Agent": `confenge-daily-probe/1.0 (${Date.now()})`,
-      "X-Confenge-Probe": "1",
-      "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
-    },
+    headers: probeHeaders,
     body: JSON.stringify(payload),
   });
   const body = await res.json().catch(() => ({}));
   check("form_probe_201", res.status === 201 || res.status === 200, `http=${res.status} id=${body.lead_id || ""}`);
   check("form_probe_lead_id", Boolean(body.lead_id), body.lead_id);
+  check("form_probe_ok_flag", body.ok === true, body.ok);
+  // Public success must not leak delivery secrets
+  const blob = JSON.stringify(body);
+  check(
+    "form_probe_no_secret_leak",
+    !/ntfy|formsubmit|confenge-prod-leads|RESEND_API_KEY/i.test(blob),
+    "public body clean"
+  );
   out.lead_id = body.lead_id;
 
-  // Do NOT advance synthetic probe through commercial stages.
-  // Probe validates endpoint + persistence only; commercial funnel stays clean.
+  // Idempotency: same key must return same lead_id (200 or 201)
+  const res2 = await fetch(`${BASE}/.netlify/functions/lead`, {
+    method: "POST",
+    headers: probeHeaders,
+    body: JSON.stringify(payload),
+  });
+  const body2 = await res2.json().catch(() => ({}));
+  check(
+    "form_probe_idempotent",
+    (res2.status === 200 || res2.status === 201) && body2.lead_id === body.lead_id,
+    `http=${res2.status} id1=${body.lead_id} id2=${body2.lead_id}`
+  );
+  out.idempotent = { status: res2.status, same_id: body2.lead_id === body.lead_id };
+
+  // Delivery / notify / Resend: via authenticated lead or system_health — never stage commercial
   if (body.lead_id && TOKEN) {
+    const lead = await j(`/.netlify/functions/ops?action=lead&id=${encodeURIComponent(body.lead_id)}&pii=0`);
+    const rec = lead.body.lead || {};
+    check("probe_record_kind_non_real", rec.record_kind && rec.record_kind !== "real", rec.record_kind);
+    // delivery may be pending/ok/skipped depending on env — must be present or explicit status
+    const del = rec.delivery || {};
+    const notifySt = del.notify?.status || del.notify_status || null;
+    const emailSt = del.email?.status || del.email_status || null;
+    // Persist path worked if we can read the lead; delivery is best-effort
+    check(
+      "probe_persistence_readable",
+      lead.body.ok === true && rec.lead_id === body.lead_id,
+      `kind=${rec.record_kind}`
+    );
+    check(
+      "probe_delivery_attempted_or_pending",
+      notifySt != null || emailSt != null || rec.status === "persisted" || rec.status === "persisted_notified",
+      `notify=${notifySt} email=${emailSt} status=${rec.status}`
+    );
+    // Auth: ops with token works
+    check("ops_auth_with_token", lead.status === 200 && lead.body.ok === true, lead.status);
+    // Resend config surface via weekly_email dry path is overkill; health already proves auth.
+    // Explicit: do NOT auto-stage to contacted
+    out.delivery = { notify: notifySt, email: emailSt, status: rec.status };
+
     const sh = await j("/.netlify/functions/ops?action=system_health");
     check("system_health_ok", sh.body.ok === true, JSON.stringify(sh.body.counts_by_kind || {}));
     out.system_health = {
@@ -115,10 +167,8 @@ if (TOKEN) {
   check("analytics_summary", a.body.ok === true, `events=${a.body.events_loaded}`);
   out.analytics_events = a.body.events_loaded;
 
-  // GSC insights must require auth (this request has token)
   const gsc = await j("/.netlify/functions/ops?action=gsc_insights");
   check("gsc_insights_auth", gsc.status === 200 && gsc.body.ok === true, `http=${gsc.status}`);
-  // Public static path must not serve strategic JSON
   const pub = await fetch(`${BASE}/ops/data/gsc-insights.json`, { redirect: "manual" });
   check(
     "gsc_static_not_public",
