@@ -213,9 +213,35 @@ function classifyForBackfill(record) {
   };
 }
 
+/**
+ * Effective commercial kind for a stored record.
+ * Explicit non-real wins. Missing kind is re-scanned with multi-signal rules so
+ * pre-migration SYNTHETIC-PROBE rows never inflate commercial totals.
+ */
+function effectiveRecordKind(record) {
+  if (!record) return "real";
+  const explicit = normalizeKind(record.record_kind);
+  if (explicit && explicit !== "real") return explicit;
+  // Re-detect even when kind is missing or "real" — multi-signal only demotes
+  const det = classifyForBackfill({
+    ...record,
+    record_kind: explicit || undefined,
+  });
+  if (det.action === "mark" && det.record_kind && det.record_kind !== "real") {
+    return det.record_kind;
+  }
+  // Also run detect for brand-new multi-signal without existing kind
+  if (!explicit) {
+    const d = detectNonRealSignals(record);
+    const strongEnough =
+      d.strong_count >= 2 || (d.strong_count >= 1 && d.signals.length >= 2);
+    if (d.kind && strongEnough) return d.kind;
+  }
+  return explicit || "real";
+}
+
 function isCommercialReal(record) {
-  const k = normalizeKind(record && record.record_kind) || "real";
-  return k === "real";
+  return effectiveRecordKind(record) === "real";
 }
 
 function filterCommercialLeads(leads) {
@@ -225,7 +251,7 @@ function filterCommercialLeads(leads) {
 function countByKind(leads) {
   const counts = { real: 0, synthetic: 0, qa: 0, spam: 0, internal: 0, unknown: 0 };
   for (const l of leads || []) {
-    const k = normalizeKind(l.record_kind) || (l.record_kind ? "unknown" : "real");
+    const k = effectiveRecordKind(l);
     if (counts[k] == null) counts.unknown += 1;
     else counts[k] += 1;
   }
@@ -254,6 +280,7 @@ module.exports = {
   detectNonRealSignals,
   resolveRecordKind,
   classifyForBackfill,
+  effectiveRecordKind,
   isCommercialReal,
   filterCommercialLeads,
   countByKind,

@@ -170,7 +170,13 @@ function applyStageChange(record, { stage, actor, note, loss_reason, next_action
 /** Public redaction — never expose PII via ops list without token (caller enforces auth). */
 function publicLeadSummary(record) {
   if (!record) return null;
-  const record_kind = record.record_kind || "real";
+  let record_kind = record.record_kind || "real";
+  try {
+    const { effectiveRecordKind } = require("./record-kind.cjs");
+    record_kind = effectiveRecordKind(record);
+  } catch {
+    /* keep stored */
+  }
   const isReal = record_kind === "real";
   return {
     lead_id: record.lead_id,
@@ -220,9 +226,10 @@ function hoursSince(iso) {
  * Funnel conversion rates between stages for a set of leads.
  * Uses peak stage reached (stage_history) when available.
  *
- * By default only `record_kind === "real"` (or missing kind treated as real for
- * pre-migration rows that were not multi-signal probes) are included when
- * `commercialOnly` is true. Pass commercialOnly:false for System Health views.
+ * By default only commercial-real leads are included (effectiveRecordKind).
+ * Missing record_kind is re-scanned with multi-signal rules so pre-migration
+ * SYNTHETIC-PROBE rows never inflate commercial totals before backfill --apply.
+ * Pass commercialOnly:false for System Health views.
  */
 function funnelRates(leads, options = {}) {
   const commercialOnly = options.commercialOnly !== false;
@@ -361,17 +368,21 @@ function commercialDefaults(received_at) {
  */
 function systemHealth(leads) {
   let counts_by_kind = { real: 0, synthetic: 0, qa: 0, spam: 0, internal: 0 };
+  let filterCommercialLeads = (xs) => (xs || []).filter((l) => !l.record_kind || l.record_kind === "real");
+  let effectiveRecordKind = (l) => l.record_kind || "real";
   try {
-    const { countByKind } = require("./record-kind.cjs");
-    counts_by_kind = countByKind(leads);
+    const rk = require("./record-kind.cjs");
+    counts_by_kind = rk.countByKind(leads);
+    filterCommercialLeads = rk.filterCommercialLeads;
+    effectiveRecordKind = rk.effectiveRecordKind;
   } catch {
     for (const l of leads || []) {
       const k = l.record_kind || "real";
       counts_by_kind[k] = (counts_by_kind[k] || 0) + 1;
     }
   }
-  const real = (leads || []).filter((l) => !l.record_kind || l.record_kind === "real");
-  const nonReal = (leads || []).filter((l) => l.record_kind && l.record_kind !== "real");
+  const real = filterCommercialLeads(leads);
+  const nonReal = (leads || []).filter((l) => effectiveRecordKind(l) !== "real");
   const realFunnel = funnelRates(real, { commercialOnly: false });
   const probeFunnel = funnelRates(nonReal, { commercialOnly: false });
   return {
@@ -385,7 +396,7 @@ function systemHealth(leads) {
     revenue_real: realFunnel.revenue,
     last_real_conversion: realFunnel.last_real_conversion,
     probe_funnel: probeFunnel.counts,
-    note: "Commercial metrics exclude non-real. Probes appear only here.",
+    note: "Commercial metrics use effectiveRecordKind (multi-signal even if kind unset). Probes only here.",
   };
 }
 

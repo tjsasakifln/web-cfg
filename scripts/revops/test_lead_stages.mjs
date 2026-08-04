@@ -253,6 +253,41 @@ function fail(name, detail) {
   else pass("pipeline_value", f.pipeline_value);
 }
 
+// 8b) missing record_kind multi-signal probe must NOT enter commercial funnel
+{
+  const rk = require(path.join(root, "netlify/functions/lib/record-kind.cjs"));
+  const legacyProbe = {
+    lead_id: "legacy-no-kind",
+    // no record_kind field — pre-migration
+    nome: "SYNTHETIC-PROBE",
+    email: "probe@example.com",
+    utm_source: "synthetic",
+    origem: "/synthetic-probe-daily",
+    commercial_stage: "contacted",
+    proposal_value: 999999,
+    stage_history: [{ to: "contacted", actor: "daily-probe" }],
+    received_at: "2026-07-01",
+  };
+  const kind = rk.effectiveRecordKind(legacyProbe);
+  if (kind !== "synthetic" && kind !== "qa") fail("legacy_probe_effective_kind", kind);
+  else pass("legacy_probe_effective_kind", kind);
+  if (rk.isCommercialReal(legacyProbe)) fail("legacy_probe_commercial");
+  else pass("legacy_probe_not_commercial");
+  const f = stages.funnelRates([
+    legacyProbe,
+    {
+      lead_id: "real-x",
+      record_kind: "real",
+      commercial_stage: "lead_persisted",
+      received_at: "2026-07-02",
+    },
+  ]);
+  if (f.n !== 1) fail("legacy_probe_excluded_from_funnel", f);
+  else pass("legacy_probe_excluded_from_funnel", f.n);
+  if (f.pipeline_value === 999999) fail("legacy_pipeline_leak", f.pipeline_value);
+  else pass("legacy_pipeline_clean", f.pipeline_value);
+}
+
 // 9) record_kind: public lead defaults real; multi-signal probe is synthetic
 {
   const rk = require(path.join(root, "netlify/functions/lib/record-kind.cjs"));

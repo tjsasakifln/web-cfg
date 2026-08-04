@@ -19,6 +19,19 @@ for (const p of pages) {
 ok("ui_has_intencao_labels", (html.match(/<dt>Intenção<\/dt>/g) || []).length >= 11);
 ok("ui_has_diff_labels", (html.match(/Diferença material/g) || []).length >= 11);
 ok("ui_not_all_em_dash_intent", !html.includes("<dt>Intenção</dt><dd>—</dd>"));
+// REJECTED jurisprudence must not be approvable
+ok(
+  "rejected_jur_approve_blocked",
+  /jur-sumula-260-art[\s\S]*?data-dec="approve"[\s\S]*?disabled/i.test(html) ||
+    /data-approve-blocked="1"[\s\S]*?jur-sumula-260-art|jur-sumula-260-art[\s\S]*?data-approve-blocked="1"/i.test(html),
+  "approve button for rejected page must be disabled"
+);
+ok(
+  "export_cli_command_shape",
+  html.includes("approve_cli.py") && html.includes("--material-hash") && html.includes("export-cli"),
+  "must export exact approve_cli with material-hash"
+);
+ok("blocks_tester_reviewer", /tester\|ci\|bot/i.test(html) || html.includes("BLOCKED_REVIEWERS") || html.includes("tester/ci/bot"), "block tester");
 // pilot
 const man = JSON.parse(readFileSync(resolve(ROOT, "docs/pseo/PILOT-MANIFEST.json"), "utf8"));
 ok("pilot_10_20", man.count >= 10 && man.count <= 20, String(man.count));

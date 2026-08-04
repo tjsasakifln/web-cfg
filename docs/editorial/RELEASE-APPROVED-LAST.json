@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "ts": "2026-08-04T02:08:12.356631+00:00",
+  "ts": "2026-08-04T02:24:17.848712+00:00",
   "valid_human_approved": 0,
   "page_ids": [],
   "wave1_human_approved_truth": 0,
@@ -11,5 +11,19 @@
   "gsc_submit_candidates": [],
   "blocked": [
     "no_valid_human_approvals — named human must run approve_cli.py per page"
-  ]
+  ],
+  "not_automated": [
+    "git_merge_of_release_pr",
+    "netlify_production_publish",
+    "live_production_verify_after_merge"
+  ],
+  "capabilities": {
+    "find_valid_human_approvals": true,
+    "rebuild_editorial_robots_sitemaps": true,
+    "cannibalization_dispositions": true,
+    "tests": true,
+    "gsc_submit_list": true,
+    "open_pr_optional": true,
+    "post_merge_publish_verify": false
+  }
 }

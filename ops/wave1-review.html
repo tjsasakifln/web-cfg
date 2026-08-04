@@ -218,16 +218,17 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
     <div class="frame-wrap mobile"><p class="muted">Preview mobile</p>
       <iframe class="mob" title="mobile jur-sumula-260-art" src="https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/" loading="lazy"></iframe></div>
   </div>
-  <div class="decide">
-    <p><strong>Decisão página a página</strong> — sem aprovação em massa. Carimbo oficial só via CLI.</p>
+  <div class="decide" data-registry-status="REJECTED" data-approve-blocked="1">
+    <p><strong>REJECTED — aprovação bloqueada</strong>. Jurisprudência rejeitada não pode ser reaprovada por esta UI nem via CLI com revisor genérico.</p>
     <div class="btns">
-      <button type="button" data-dec="approve" data-id="jur-sumula-260-art">Aprovar</button>
-      <button type="button" data-dec="reject" data-id="jur-sumula-260-art" class="bad">Rejeitar</button>
+      <button type="button" data-dec="approve" data-id="jur-sumula-260-art" disabled aria-disabled="true" title="Bloqueado: página REJECTED">Aprovar (bloqueado)</button>
+      <button type="button" data-dec="reject" data-id="jur-sumula-260-art" class="bad">Confirmar rejeição</button>
       <button type="button" data-dec="fix" data-id="jur-sumula-260-art" class="warn">Pedir correção</button>
       <button type="button" data-dec="consolidate" data-id="jur-sumula-260-art" class="sec">Consolidar com URL existente</button>
     </div>
     <label>Notas / URL canônica se consolidar<textarea data-notes="jur-sumula-260-art" rows="2"></textarea></label>
-    <p class="decision-out muted" data-out="jur-sumula-260-art">Sem decisão local ainda.</p>
+    <p class="decision-out muted" data-out="jur-sumula-260-art">Aprovação desabilitada (REJECTED).</p>
+    <pre class="muted" data-cli-export="jur-sumula-260-art" style="white-space:pre-wrap;font-size:.78rem;margin-top:.5rem">CLI: aprovação bloqueada para jur-sumula-260-art (REJECTED).</pre>
   </div>
 </article>
 
@@ -505,16 +506,45 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
 </article>
 
   <section class="card">
-    <h2>Exportar rascunhos locais</h2>
-    <button type="button" id="export">Baixar decisões JSON</button>
+    <h2>Exportar comando CLI (uma página por vez)</h2>
+    <p class="muted">Não é carimbo oficial. Preencha revisor real (nunca <code>tester</code> / <code>ci</code> / <code>bot</code>). Bulk approve desabilitado.</p>
+    <label>Revisor humano (nome completo)<input id="reviewer-name" type="text" placeholder="Nome completo do revisor" autocomplete="name" style="width:100%;max-width:28rem;margin:.35rem 0;padding:.45rem;border-radius:8px;border:1px solid var(--line);background:#0b1020;color:var(--text)"/></label>
+    <div class="btns">
+      <button type="button" id="export-cli" class="sec">Exportar comandos approve_cli.py das páginas Aprovar</button>
+      <button type="button" id="export">Baixar rascunho JSON local</button>
+    </div>
     <pre id="export-out" class="muted" style="white-space:pre-wrap;font-size:.8rem"></pre>
   </section>
 </main>
 <script>
 (() => {
   const KEY = "confenge_wave1_decisions_v1";
+  const BLOCKED_REVIEWERS = /^(tester|ci|bot|agent|operator|github-actions)$/i;
+  const REJECTED_IDS = new Set(["jur-sumula-260-art"]);
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { return {}; } };
   const save = (d) => localStorage.setItem(KEY, JSON.stringify(d));
+
+  function buildCliCommand(pageId, hash, notes) {
+    const reviewer = (document.getElementById("reviewer-name") || {}).value || "";
+    const rev = reviewer.trim();
+    if (!rev) return "# Preencha o nome do revisor humano acima.";
+    if (BLOCKED_REVIEWERS.test(rev)) return "# Revisor bloqueado (tester/ci/bot/agent). Use identidade humana real.";
+    if (REJECTED_IDS.has(pageId)) return `# BLOQUEADO: ${pageId} está REJECTED — não executar approve_cli.`;
+    if (!hash || hash.length < 16) return `# Hash material ausente para ${pageId}`;
+    const note = (notes || "Revisão humana Wave 1 — checklist completo.").replace(/"/g, '\\"');
+    return [
+      "ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \\",
+      `  --reviewer "${rev}" \\`,
+      `  --page-id ${pageId} \\`,
+      `  --notes "${note}" \\`,
+      "  --sources lei-14133-planalto \\",
+      "  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \\",
+      `  --material-hash ${hash} \\`,
+      "  --confirm \\",
+      "  --indexable"
+    ].join("\n");
+  }
+
   const render = () => {
     const d = load();
     document.querySelectorAll("[data-out]").forEach((el) => {
@@ -522,28 +552,89 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
       const row = d[id];
       el.textContent = row
         ? `Local: ${row.decision} @ ${row.at} · notes: ${row.notes || "—"} · hash: ${row.hash || "—"}`
-        : "Sem decisão local ainda.";
+        : (REJECTED_IDS.has(id) ? "Aprovação desabilitada (REJECTED)." : "Sem decisão local ainda.");
+    });
+    document.querySelectorAll("[data-cli-export]").forEach((el) => {
+      const id = el.getAttribute("data-cli-export");
+      if (REJECTED_IDS.has(id)) {
+        el.textContent = `CLI: aprovação bloqueada para ${id} (REJECTED).`;
+        return;
+      }
+      const card = document.getElementById(id);
+      const hash = card ? card.getAttribute("data-hash") : "";
+      const notes = (document.querySelector(`textarea[data-notes="${id}"]`) || {}).value || "";
+      const row = d[id];
+      if (row && row.decision === "approve") {
+        el.textContent = buildCliCommand(id, hash || row.hash, row.notes || notes);
+      } else {
+        el.textContent = "Decida Aprovar nesta página para gerar o comando CLI exato com --material-hash.";
+      }
     });
   };
+
+  // Ensure every card has a CLI export pre
+  document.querySelectorAll("article.card[data-page-id]").forEach((card) => {
+    const id = card.getAttribute("data-page-id");
+    if (!card.querySelector(`[data-cli-export="${id}"]`)) {
+      const pre = document.createElement("pre");
+      pre.className = "muted";
+      pre.setAttribute("data-cli-export", id);
+      pre.style.cssText = "white-space:pre-wrap;font-size:.78rem;margin-top:.5rem";
+      const decide = card.querySelector(".decide");
+      if (decide) decide.appendChild(pre);
+    }
+  });
+
   document.querySelectorAll("button[data-dec]").forEach((btn) => {
     btn.addEventListener("click", () => {
+      if (btn.disabled || btn.getAttribute("aria-disabled") === "true") return;
       const id = btn.getAttribute("data-id");
       const decision = btn.getAttribute("data-dec");
+      if (decision === "approve" && REJECTED_IDS.has(id)) {
+        alert("Bloqueado: página REJECTED não pode ser aprovada.");
+        return;
+      }
       const notes = (document.querySelector(`textarea[data-notes="${id}"]`) || {}).value || "";
       const card = document.getElementById(id);
       const hash = card ? card.getAttribute("data-hash") : "";
       const d = load();
       d[id] = { decision, notes, hash, at: new Date().toISOString(), reviewer_local_only: true,
-        warning: "NOT official. Use approve_cli.py with ALLOW_HUMAN_APPROVAL=1" };
+        warning: "NOT official. Use approve_cli.py with ALLOW_HUMAN_APPROVAL=1 and --material-hash from data-hash" };
       save(d); render();
     });
   });
+
   document.getElementById("export").addEventListener("click", () => {
     const d = load();
     const blob = new Blob([JSON.stringify({ exported_at: new Date().toISOString(), decisions: d }, null, 2)], { type: "application/json" });
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "wave1-local-decisions.json"; a.click();
     document.getElementById("export-out").textContent = JSON.stringify(d, null, 2);
   });
+
+  document.getElementById("export-cli").addEventListener("click", () => {
+    const d = load();
+    const lines = [];
+    lines.push("# Wave 1 — comandos exatos (uma página por execução). NÃO use revisor tester/ci/bot.");
+    lines.push("# Bulk approve proibido. Páginas REJECTED omitidas.");
+    let n = 0;
+    Object.keys(d).forEach((id) => {
+      const row = d[id];
+      if (!row || row.decision !== "approve") return;
+      if (REJECTED_IDS.has(id)) return;
+      lines.push("");
+      lines.push(`# --- ${id} ---`);
+      lines.push(buildCliCommand(id, row.hash, row.notes));
+      n += 1;
+    });
+    if (!n) lines.push("# Nenhuma decisão local 'approve'. Aprove uma página por vez nos cards acima.");
+    const text = lines.join("\n");
+    document.getElementById("export-out").textContent = text;
+    const blob = new Blob([text + "\n"], { type: "text/plain" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "wave1-approve-commands.sh"; a.click();
+  });
+
+  const rev = document.getElementById("reviewer-name");
+  if (rev) rev.addEventListener("input", render);
   render();
 })();
 </script>

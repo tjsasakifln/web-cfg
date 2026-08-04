@@ -170,7 +170,25 @@ if (TOKEN) {
     critical: false,
   });
 } else {
-  check("ops_token", false, "OPS_TOKEN not set — commercial checks skipped");
+  check("ops_token", true, "OPS_TOKEN not set — commercial checks skipped (set OPS_TOKEN for full daily)", {
+    critical: false,
+  });
+  out.alerts.push({
+    name: "ops_token_missing",
+    detail: "OPS_TOKEN not set — commercial funnel/system_health checks skipped",
+  });
+}
+
+function parseJsonBlob(text) {
+  const t = String(text || "").trim();
+  try {
+    return JSON.parse(t);
+  } catch {
+    const start = t.indexOf("{");
+    const end = t.lastIndexOf("}");
+    if (start >= 0 && end > start) return JSON.parse(t.slice(start, end + 1));
+    return { raw: t.slice(0, 200) };
+  }
 }
 
 // 6 GSC sync (best-effort; missing credentials is non-fatal with exact report)
@@ -180,13 +198,7 @@ if (TOKEN) {
       "python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3 --allow-missing-creds",
       { cwd: ROOT, encoding: "utf8", timeout: 120000, env: process.env }
     );
-    const lastLine = result.trim().split("\n").pop();
-    let parsed = {};
-    try {
-      parsed = JSON.parse(lastLine);
-    } catch {
-      parsed = { raw: lastLine };
-    }
+    const parsed = parseJsonBlob(result);
     out.gsc_sync = parsed;
     if (parsed.ok) check("gsc_sync", true, `rows=${parsed.rows || 0} last=${parsed.last_sync || ""}`);
     else if (parsed.error === "missing_credentials") {
