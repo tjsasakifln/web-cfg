@@ -234,6 +234,25 @@ function fail(name, detail) {
   else pass("public_summary_no_pii");
 }
 
+
+// peak stage: proposal implies contacted/qualified/meeting reached
+{
+  const leads = [{
+    commercial_stage: "proposal",
+    stage_history: [],
+    proposal_value: 15000,
+    received_at: "2026-08-01",
+  }];
+  const f = stages.funnelRates(leads);
+  if (f.counts.proposal !== 1) fail("peak_proposal", f.counts);
+  else pass("peak_proposal");
+  if (f.counts.contacted !== 1 || f.counts.qualified !== 1 || f.counts.meeting !== 1)
+    fail("peak_earlier_stages", f.counts);
+  else pass("peak_earlier_stages", JSON.stringify(f.counts));
+  if (f.pipeline_value !== 15000) fail("pipeline_value", f.pipeline_value);
+  else pass("pipeline_value", f.pipeline_value);
+}
+
 if (failed) {
   console.error(`\n${failed} failure(s)`);
   process.exit(1);

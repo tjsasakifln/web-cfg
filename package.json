@@ -71,7 +71,9 @@
     "test:nurture-pages": "node scripts/site/test_nurture_pages.mjs",
     "test:hub-truth": "node scripts/site/test_hub_truth.mjs",
     "test:tool-compute": "node scripts/site/test_tool_compute.mjs",
-    "test:wave1-fields": "node scripts/site/test_wave1_review_fields.mjs"
+    "test:wave1-fields": "node scripts/site/test_wave1_review_fields.mjs",
+    "revops:daily": "node scripts/revops/revenue_daily.mjs",
+    "revops:weekly-email": "node -e \"const t=process.env.OPS_TOKEN;if(!t){console.error(\"OPS_TOKEN required\");process.exit(1)};fetch((process.env.BASE_URL||\"https://confenge.com.br\")+\"/.netlify/functions/ops?action=weekly_email\",{method:\"POST\",headers:{Authorization:\"Bearer \"+t,\"Content-Type\":\"application/json\"},body:\"{}\"}).then(r=>r.json()).then(j=>{console.log(JSON.stringify(j));if(!j.ok)process.exit(1)})\""
   },
   "engines": {
     "node": ">=18"

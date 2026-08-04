@@ -189,6 +189,14 @@ function publicLeadSummary(record) {
     proposal_value: record.proposal_value ?? null,
     contract_value: record.contract_value ?? null,
     revenue_received: record.revenue_received ?? null,
+    stage_history: Array.isArray(record.stage_history)
+      ? record.stage_history.map((h) => ({
+          at: h.at,
+          from: h.from,
+          to: h.to,
+          actor: h.actor ? String(h.actor).slice(0, 40) : undefined,
+        }))
+      : [],
     sla_hours_open: hoursSince(record.received_at),
     needs_contact:
       (record.commercial_stage || "lead_persisted") === "lead_persisted" &&
@@ -271,7 +279,15 @@ function peakStage(lead) {
 function reachedStage(lead, stage) {
   if ((lead.commercial_stage || lead.status) === stage) return true;
   const hist = lead.stage_history || [];
-  return hist.some((h) => h.to === stage);
+  if (hist.some((h) => h.to === stage)) return true;
+  // Peak-stage fallback: if current stage is later in funnel, earlier stages are reached
+  const peak = peakStage(lead);
+  const peakIdx = STAGES.indexOf(peak);
+  const wantIdx = STAGES.indexOf(stage);
+  if (peakIdx >= 0 && wantIdx >= 0 && peakIdx >= wantIdx && stage !== "lost" && peak !== "lost") {
+    return true;
+  }
+  return false;
 }
 
 /** Default commercial fields for new lead records */
