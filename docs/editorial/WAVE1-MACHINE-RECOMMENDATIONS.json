@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-04T02:07:14.467864+00:00",
+  "generated_at": "2026-08-04T14:29:42.343272+00:00",
   "human_approved_count": 0,
   "indexable_count": 0,
   "note": "RECOMMEND_* is not HUMAN_APPROVED. Named human must run approve_cli.py.",
