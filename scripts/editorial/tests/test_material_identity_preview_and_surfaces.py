@@ -26,6 +26,7 @@ from scripts.editorial.registry import (  # noqa: E402
     upsert_page,
 )
 from scripts.editorial import truth  # noqa: E402
+from scripts.editorial.preview import reconfirm_approval_preview  # noqa: E402
 
 
 def _manifest() -> dict:
@@ -342,3 +343,14 @@ def test_canonical_payload_contains_used_source_identity_only():
     assert payload["resolved_sources"][0]["url"] == "https://www.gov.br/fonte-a"
     assert "unused" not in json.dumps(payload, ensure_ascii=False)
 
+
+def test_preview_reconfirmation_cannot_create_or_revive_approval():
+    registry = {"pages": [_page()]}
+    with pytest.raises(ValueError, match="approval_not_current_for_preview_reconfirmation"):
+        reconfirm_approval_preview(
+            registry,
+            page_id="lei-limite-25-50",
+            expected_head="a" * 40,
+        )
+    assert registry["pages"][0]["status"] == "EDITORIAL_REVIEWED"
+    assert "approval" not in registry["pages"][0]
