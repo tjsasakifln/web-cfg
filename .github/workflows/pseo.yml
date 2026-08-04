@@ -1,9 +1,13 @@
 name: pSEO quality gates
 on:
   push:
+    branches: [main]
   pull_request:
+    branches: [main]
 jobs:
   pseo:
+    # Stable GitHub check context — require this name in branch protection
+    name: pSEO quality gates
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -18,9 +22,11 @@ jobs:
           node-version: "20"
       - name: Install test deps
         run: pip install pytest
-      - name: npm ci (when lockfile present) or npm install
-        run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - name: npm ci
+        # Hard fail on lock desync — never soft-fallback to npm install
+        run: npm ci
+      - name: Workflow gate shape
+        run: npm run test:workflow-gates
       - name: Netlify publish must equal _site
         run: |
           python3 - <<'PY'

@@ -4,9 +4,12 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
   gates:
+    # Stable GitHub check context — require this name in branch protection
+    name: site-ci
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -22,9 +25,12 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
+        # Hard fail on lock desync — never soft-fallback to npm install
         run: |
-          npm ci || npm install
+          npm ci
           pip install pytest
+      - name: Workflow gate shape
+        run: npm run test:workflow-gates
       - name: Unit and brand/copy/design gates
         run: |
           npm run editorial:test
