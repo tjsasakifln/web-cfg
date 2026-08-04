@@ -1,0 +1,219 @@
+/**
+ * Daily scheduled RevOps orchestration (GitHub Actions primary scheduler).
+ * Validates production health, isolated probe, deploy identity, commercial alerts.
+ *
+ *   node scripts/revops/scheduled_daily.mjs
+ *   BASE_URL=… OPS_TOKEN=… node scripts/revops/scheduled_daily.mjs
+ *
+ * Exit 0 only when all critical checks pass. Writes proof under data/revops/schedule-runs/.
+ */
+import { execSync } from "child_process";
+import { mkdirSync, writeFileSync, existsSync } from "fs";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const BASE = (process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
+const TOKEN = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
+const out = {
+  job: "daily",
+  base: BASE,
+  ts: new Date().toISOString(),
+  checks: [],
+  alerts: [],
+};
+
+function check(name, ok, detail = "", { critical = true } = {}) {
+  out.checks.push({ name, ok, detail, critical });
+  console.log(ok ? "PASS" : "FAIL", name, detail);
+  if (!ok && critical) out.alerts.push({ name, detail });
+}
+
+async function j(path, opts = {}) {
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
+    ...(opts.headers || {}),
+  };
+  const res = await fetch(`${BASE}${path}`, { ...opts, headers });
+  const body = await res.json().catch(() => ({}));
+  return { status: res.status, body };
+}
+
+// 1 Critical URLs
+const critical = ["/", "/conteudos/", "/ferramentas/", "/ops/", "/robots.txt", "/sitemap.xml"];
+for (const p of critical) {
+  try {
+    const res = await fetch(`${BASE}${p}`, { redirect: "manual" });
+    const ok = res.status === 200 || res.status === 301 || res.status === 302;
+    check(`url${p}`, ok, `http=${res.status}`);
+  } catch (e) {
+    check(`url${p}`, false, String(e.message || e));
+  }
+}
+
+// 2 Deploy vs expected main
+{
+  try {
+    const expected =
+      process.env.EXPECTED_SHA ||
+      process.env.GITHUB_SHA ||
+      execSync("git rev-parse origin/main", { cwd: ROOT, encoding: "utf8" }).trim();
+    const bi = await fetch(`${BASE}/.well-known/build-info.json`).then((r) => r.json());
+    check("build_info_present", Boolean(bi.commit), bi.commit || "missing");
+    // On schedule from Actions, tip may be ahead of production briefly — soft when GITHUB_SHA set
+    if (process.env.REQUIRE_DEPLOY_MATCH === "1") {
+      check("deploy_matches_expected", bi.commit === expected, `live=${bi.commit} expected=${expected}`);
+    } else {
+      const match = bi.commit === expected || (expected && String(bi.commit).startsWith(String(expected).slice(0, 7)));
+      check("deploy_identity", Boolean(bi.commit), `live=${bi.commit} expected=${expected} match=${match}`, {
+        critical: false,
+      });
+      if (!match) {
+        out.alerts.push({
+          name: "deploy_divergence",
+          detail: `production ${bi.commit} != expected ${expected}`,
+        });
+      }
+    }
+    out.build_info = bi;
+  } catch (e) {
+    check("build_info", false, String(e.message || e));
+  }
+}
+
+// 3 Ops health
+{
+  const { status, body } = await j("/.netlify/functions/ops?action=health");
+  check("ops_health", status === 200 && body.ok === true, `auth_configured=${body.auth_configured}`);
+}
+
+// 4 Isolated synthetic probe (must not inflate commercial)
+{
+  let before = null;
+  if (TOKEN) {
+    const f = await j("/.netlify/functions/ops?action=funnel");
+    before = f.body.funnel?.counts?.lead_persisted ?? null;
+  }
+  const payload = {
+    nome: "SYNTHETIC-PROBE",
+    email: `probe+daily-${Date.now()}@example.com`,
+    estagio: "synthetic probe — discard",
+    jornada: "operacao",
+    consentimento: "true",
+    origem: "/synthetic-probe-daily",
+    utm_source: "synthetic",
+    utm_medium: "scheduled",
+    landing_page: "/",
+    test_mode: true,
+    record_kind: "synthetic",
+    mensagem: "[QA] scheduled daily probe — do not contact",
+  };
+  const res = await fetch(`${BASE}/.netlify/functions/lead`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Origin: "https://confenge.com.br",
+      "User-Agent": `confenge-daily-probe/1.0 (${Date.now()})`,
+      "X-Confenge-Probe": "1",
+      "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
+    },
+    body: JSON.stringify(payload),
+  });
+  const body = await res.json().catch(() => ({}));
+  check("isolated_probe", res.status === 201 || res.status === 200, `id=${body.lead_id || ""}`);
+  if (TOKEN && before != null) {
+    const f = await j("/.netlify/functions/ops?action=funnel");
+    const after = f.body.funnel?.counts?.lead_persisted;
+    check("probe_no_commercial_inflate", after === before, `before=${before} after=${after}`);
+  }
+}
+
+// 5 System health + uncontacted real leads
+if (TOKEN) {
+  const sh = await j("/.netlify/functions/ops?action=system_health");
+  check("system_health", sh.body.ok === true, JSON.stringify(sh.body.counts_by_kind || {}));
+  out.system_health = {
+    real: sh.body.real_leads,
+    synthetic: sh.body.synthetic_leads,
+    pipeline_real: sh.body.pipeline_real,
+    revenue_real: sh.body.revenue_real,
+    last_real_conversion: sh.body.last_real_conversion,
+  };
+
+  const leads = await j("/.netlify/functions/ops?action=leads&kind=real&pii=0");
+  const breaches = (leads.body.leads || []).filter((l) => l.needs_contact);
+  check("uncontacted_reals_listed", leads.body.ok === true, `sla_breaches=${breaches.length}`, {
+    critical: false,
+  });
+  if (breaches.length) {
+    out.alerts.push({
+      name: "real_leads_sla_breach",
+      detail: `${breaches.length} real lead(s) need first contact`,
+      lead_ids: breaches.slice(0, 10).map((l) => l.lead_id),
+    });
+  }
+
+  // Resend / storage signals via weekly report shape (no email send)
+  const week = await j("/.netlify/functions/ops?action=weekly_report");
+  check(
+    "weekly_report_real_only",
+    week.body.ok === true && week.body.commercial_only === true,
+    `leads=${week.body.leads_total} excluded=${week.body.leads_excluded_non_real}`
+  );
+
+  // GSC auth endpoint
+  const gsc = await j("/.netlify/functions/ops?action=gsc_insights");
+  check("gsc_insights_auth", gsc.status === 200 && gsc.body.ok === true, `http=${gsc.status}`, {
+    critical: false,
+  });
+} else {
+  check("ops_token", false, "OPS_TOKEN not set — commercial checks skipped");
+}
+
+// 6 GSC sync (best-effort; missing credentials is non-fatal with exact report)
+{
+  try {
+    const result = execSync(
+      "python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3 --allow-missing-creds",
+      { cwd: ROOT, encoding: "utf8", timeout: 120000, env: process.env }
+    );
+    const lastLine = result.trim().split("\n").pop();
+    let parsed = {};
+    try {
+      parsed = JSON.parse(lastLine);
+    } catch {
+      parsed = { raw: lastLine };
+    }
+    out.gsc_sync = parsed;
+    if (parsed.ok) check("gsc_sync", true, `rows=${parsed.rows || 0} last=${parsed.last_sync || ""}`);
+    else if (parsed.error === "missing_credentials") {
+      check("gsc_sync", true, "BLOCKED missing GSC_CREDENTIALS_JSON (expected external)", {
+        critical: false,
+      });
+      out.alerts.push({
+        name: "gsc_credentials_missing",
+        detail: "Set GitHub secret GSC_CREDENTIALS_JSON (service account) + GSC_SITE_URL",
+        required_env: parsed.required_env,
+      });
+    } else {
+      check("gsc_sync", false, JSON.stringify(parsed).slice(0, 200), { critical: false });
+    }
+  } catch (e) {
+    check("gsc_sync", false, String(e.message || e).slice(0, 200), { critical: false });
+  }
+}
+
+// Persist proof
+const runDir = resolve(ROOT, "data/revops/schedule-runs");
+mkdirSync(runDir, { recursive: true });
+const day = out.ts.slice(0, 10);
+const proofPath = resolve(runDir, `daily-${day}-${Date.now().toString(36)}.json`);
+const failedCritical = out.checks.filter((c) => !c.ok && c.critical !== false).length;
+out.ok = failedCritical === 0;
+out.failed_critical = failedCritical;
+writeFileSync(proofPath, JSON.stringify(out, null, 2) + "\n");
+console.log(JSON.stringify({ ok: out.ok, failed_critical: failedCritical, proof: proofPath, alerts: out.alerts }, null, 2));
+if (!out.ok) process.exit(1);

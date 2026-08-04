@@ -559,26 +559,71 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
     return insights
 
 
-def pull_api(days: int = 28) -> dict[str, Any]:
-    """Pull Search Analytics via Google API when credentials exist."""
+def _gsc_credentials():
+    """Resolve GSC credentials from env. Returns (creds, error_dict)."""
     site = os.environ.get("GSC_SITE_URL", "sc-domain:confenge.com.br")
     sa = os.environ.get("GSC_CREDENTIALS_JSON")
     secrets = os.environ.get("GSC_CLIENT_SECRETS_JSON")
     token_path = os.environ.get("GSC_TOKEN_JSON")
 
     if not sa and not (secrets and token_path):
-        return {
+        return None, {
             "ok": False,
             "error": "missing_credentials",
             "required_env": [
                 "GSC_SITE_URL",
-                "GSC_CREDENTIALS_JSON (service account) OR (GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON)",
+                "GSC_CREDENTIALS_JSON (service account path or JSON) OR (GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON)",
             ],
             "fallback": "python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-YYYY-MM-DD",
+            "site": site,
         }
 
     try:
         from google.oauth2 import service_account
+    except ImportError:
+        return None, {
+            "ok": False,
+            "error": "google_api_client_not_installed",
+            "install": "pip install google-api-python-client google-auth",
+        }
+
+    scopes = ["https://www.googleapis.com/auth/webmasters.readonly"]
+    if sa:
+        # Allow raw JSON content in env (CI secret) or file path
+        if sa.strip().startswith("{"):
+            import tempfile
+
+            tmp = Path(tempfile.gettempdir()) / "gsc-sa-inline.json"
+            tmp.write_text(sa, encoding="utf-8")
+            sa_path = str(tmp)
+        else:
+            sa_path = sa
+        creds = service_account.Credentials.from_service_account_file(sa_path, scopes=scopes)
+        return (creds, site), None
+    return None, {
+        "ok": False,
+        "error": "oauth_flow_not_automated_here",
+        "note": "Use service account GSC_CREDENTIALS_JSON for unattended pull",
+    }
+
+
+def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000) -> dict[str, Any]:
+    """Pull Search Analytics via Google API when credentials exist.
+
+    Incremental features:
+      - reprocess last N days to absorb GSC lag
+      - pagination via startRow
+      - dedupe by (date, query, page, country, device)
+      - history under data/revops/gsc/daily/
+      - gap detection vs previous last_sync window
+      - last_sync timestamp written to last_sync.json
+    """
+    resolved, err = _gsc_credentials()
+    if err:
+        return err
+    creds, site = resolved
+
+    try:
         from googleapiclient.discovery import build
     except ImportError:
         return {
@@ -588,67 +633,205 @@ def pull_api(days: int = 28) -> dict[str, Any]:
         }
 
     end = date.today() - timedelta(days=3)  # GSC lag
-    start = end - timedelta(days=days)
-    scopes = ["https://www.googleapis.com/auth/webmasters.readonly"]
-
-    if sa:
-        creds = service_account.Credentials.from_service_account_file(sa, scopes=scopes)
-    else:
-        return {
-            "ok": False,
-            "error": "oauth_flow_not_automated_here",
-            "note": "Use service account GSC_CREDENTIALS_JSON for unattended pull",
-        }
-
+    start = end - timedelta(days=max(days, reprocess_days))
     service = build("searchconsole", "v1", credentials=creds, cache_discovery=False)
-    body = {
-        "startDate": start.isoformat(),
-        "endDate": end.isoformat(),
-        "dimensions": ["date", "query", "page", "country", "device"],
-        "rowLimit": 25000,
-    }
-    resp = service.searchanalytics().query(siteUrl=site, body=body).execute()
-    rows_out = []
-    for row in resp.get("rows") or []:
-        keys = row.get("keys") or []
-        # date, query, page, country, device
-        q = keys[1] if len(keys) > 1 else ""
-        page = keys[2] if len(keys) > 2 else ""
-        enr = enrich_path(page or q)
-        rows_out.append(
-            {
-                "date": keys[0] if keys else None,
-                "query": q,
-                "page": page,
-                "country": keys[3] if len(keys) > 3 else None,
-                "device": keys[4] if len(keys) > 4 else None,
-                "impressions": row.get("impressions", 0),
-                "clicks": row.get("clicks", 0),
-                "ctr": row.get("ctr", 0),
-                "position": row.get("position", 0),
-                "branded": branded(q),
-                **enr,
-                "source": "search_analytics_api",
-            }
-        )
+
+    dimensions = ["date", "query", "page", "country", "device"]
+    rows_out: list[dict[str, Any]] = []
+    start_row = 0
+    pages_fetched = 0
+    while True:
+        body = {
+            "startDate": start.isoformat(),
+            "endDate": end.isoformat(),
+            "dimensions": dimensions,
+            "rowLimit": row_limit,
+            "startRow": start_row,
+        }
+        resp = service.searchanalytics().query(siteUrl=site, body=body).execute()
+        batch = resp.get("rows") or []
+        pages_fetched += 1
+        for row in batch:
+            keys = row.get("keys") or []
+            q = keys[1] if len(keys) > 1 else ""
+            page = keys[2] if len(keys) > 2 else ""
+            enr = enrich_path(page or q)
+            rows_out.append(
+                {
+                    "date": keys[0] if keys else None,
+                    "query": q,
+                    "page": page,
+                    "country": keys[3] if len(keys) > 3 else None,
+                    "device": keys[4] if len(keys) > 4 else None,
+                    "impressions": row.get("impressions", 0),
+                    "clicks": row.get("clicks", 0),
+                    "ctr": row.get("ctr", 0),
+                    "position": row.get("position", 0),
+                    "branded": branded(q),
+                    **enr,
+                    "source": "search_analytics_api",
+                }
+            )
+        if len(batch) < row_limit:
+            break
+        start_row += row_limit
+        if pages_fetched > 40:  # hard safety
+            break
+
+    # Dedupe
+    seen: set[tuple] = set()
+    deduped: list[dict[str, Any]] = []
+    for r in rows_out:
+        key = (r.get("date"), r.get("query"), r.get("page"), r.get("country"), r.get("device"))
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(r)
 
     ensure_dirs()
+    last_sync_at = datetime.now(timezone.utc).isoformat()
     payload = {
-        "imported_at": datetime.now(timezone.utc).isoformat(),
+        "imported_at": last_sync_at,
         "as_of": end.isoformat(),
         "source": "search_analytics_api",
         "site": site,
         "start": start.isoformat(),
         "end": end.isoformat(),
-        "queries": rows_out,  # full grain rows
+        "reprocess_days": reprocess_days,
+        "queries": deduped,
         "pages": [],
-        "query_count": len(rows_out),
+        "query_count": len(deduped),
         "page_count": 0,
+        "pages_fetched": pages_fetched,
+        "is_current": True,
+        "note": "API pull is current. July CSV snapshot is historical only.",
     }
     (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     day_path = DATA / "daily" / f"{end.isoformat()}.json"
     day_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
-    return {"ok": True, "rows": len(rows_out), "path": str(day_path.relative_to(ROOT))}
+
+    # Gap detection: missing calendar days in daily/ history
+    gaps = detect_gsc_gaps(start, end)
+    last_sync = {
+        "last_sync_at": last_sync_at,
+        "as_of": end.isoformat(),
+        "start": start.isoformat(),
+        "end": end.isoformat(),
+        "rows": len(deduped),
+        "pages_fetched": pages_fetched,
+        "gaps": gaps,
+        "site": site,
+        "source": "search_analytics_api",
+    }
+    (DATA / "last_sync.json").write_text(json.dumps(last_sync, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    # Refresh private ops insights from latest import (analyze writes private copies)
+    try:
+        analyze(payload)
+    except Exception as exc:  # noqa: BLE001
+        last_sync["analyze_error"] = str(exc)[:200]
+        (DATA / "last_sync.json").write_text(
+            json.dumps(last_sync, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+
+    return {
+        "ok": True,
+        "rows": len(deduped),
+        "path": str(day_path.relative_to(ROOT)),
+        "last_sync": last_sync_at,
+        "gaps": gaps,
+        "pages_fetched": pages_fetched,
+    }
+
+
+def detect_gsc_gaps(start: date, end: date) -> list[str]:
+    """List dates in [start, end] with no daily history file."""
+    ensure_dirs()
+    daily = DATA / "daily"
+    gaps: list[str] = []
+    cur = start
+    while cur <= end:
+        if not (daily / f"{cur.isoformat()}.json").is_file():
+            gaps.append(cur.isoformat())
+        cur += timedelta(days=1)
+    return gaps
+
+
+def sync_incremental(
+    days: int = 28,
+    reprocess_days: int = 3,
+    *,
+    allow_missing_creds: bool = False,
+    use_fixture: bool = False,
+) -> dict[str, Any]:
+    """Primary scheduled entry: pull API or fixture; never invent series."""
+    ensure_dirs()
+    if use_fixture or os.environ.get("GSC_USE_FIXTURE") == "1":
+        return sync_from_fixture()
+    result = pull_api(days=days, reprocess_days=reprocess_days)
+    if result.get("error") == "missing_credentials" and allow_missing_creds:
+        # Record blocked state without fabricating metrics
+        blocked = {
+            "last_sync_at": None,
+            "blocked": True,
+            "error": "missing_credentials",
+            "required_env": result.get("required_env"),
+            "note": "July 2026 CSV snapshot is historical only — not continuous current data.",
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
+        }
+        (DATA / "last_sync.json").write_text(
+            json.dumps(blocked, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        return result
+    return result
+
+
+def sync_from_fixture() -> dict[str, Any]:
+    """Validate sync pipeline with committed fixture (no invented live metrics)."""
+    ensure_dirs()
+    fixture = ROOT / "data" / "revops" / "gsc" / "fixtures" / "sample_rows.json"
+    if not fixture.is_file():
+        return {"ok": False, "error": "fixture_missing", "path": str(fixture.relative_to(ROOT))}
+    rows = json.loads(fixture.read_text(encoding="utf-8"))
+    if not isinstance(rows, list):
+        return {"ok": False, "error": "fixture_invalid"}
+    # Dedupe + store like API path
+    seen: set[tuple] = set()
+    deduped = []
+    for r in rows:
+        key = (r.get("date"), r.get("query"), r.get("page"), r.get("country"), r.get("device"))
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(r)
+    as_of = max((r.get("date") or "1970-01-01") for r in deduped) if deduped else date.today().isoformat()
+    last_sync_at = datetime.now(timezone.utc).isoformat()
+    payload = {
+        "imported_at": last_sync_at,
+        "as_of": as_of,
+        "source": "fixture",
+        "queries": deduped,
+        "query_count": len(deduped),
+        "is_current": False,
+        "note": "Fixture for pipeline validation only — not production GSC data.",
+    }
+    (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    (DATA / "last_sync.json").write_text(
+        json.dumps(
+            {
+                "last_sync_at": last_sync_at,
+                "as_of": as_of,
+                "rows": len(deduped),
+                "source": "fixture",
+                "gaps": [],
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return {"ok": True, "rows": len(deduped), "last_sync": last_sync_at, "source": "fixture"}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -662,6 +845,21 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("analyze", help="Run automatic analyses on latest import")
     p_api = sub.add_parser("pull-api", help="Pull Search Analytics API (needs credentials)")
     p_api.add_argument("--days", type=int, default=28)
+    p_api.add_argument("--reprocess-days", type=int, default=3)
+
+    p_sync = sub.add_parser("sync", help="Incremental GSC sync (scheduled entry)")
+    p_sync.add_argument("--days", type=int, default=28)
+    p_sync.add_argument("--reprocess-days", type=int, default=3)
+    p_sync.add_argument(
+        "--allow-missing-creds",
+        action="store_true",
+        help="Exit 0 with blocked state when GSC_CREDENTIALS_JSON missing",
+    )
+    p_sync.add_argument(
+        "--fixture",
+        action="store_true",
+        help="Run pipeline against committed fixture (no live API)",
+    )
 
     p_dash = sub.add_parser("dashboard", help="Write ops dashboard JSON")
     p_dash.add_argument("--out", type=Path, default=ROOT / "data" / "ops" / "gsc-insights.json")
@@ -708,12 +906,25 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.cmd == "pull-api":
-        result = pull_api(args.days)
+        result = pull_api(args.days, reprocess_days=getattr(args, "reprocess_days", 3))
         print(json.dumps(result, ensure_ascii=False, indent=2))
         if result.get("ok"):
-            analyze()
             return 0
         return 2  # soft external blocker
+
+    if args.cmd == "sync":
+        result = sync_incremental(
+            days=args.days,
+            reprocess_days=args.reprocess_days,
+            allow_missing_creds=args.allow_missing_creds,
+            use_fixture=args.fixture,
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        if result.get("ok"):
+            return 0
+        if args.allow_missing_creds and result.get("error") == "missing_credentials":
+            return 0  # external blocker recorded; schedule continues
+        return 2
 
     if args.cmd == "dashboard":
         insights = analyze()

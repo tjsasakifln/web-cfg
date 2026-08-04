@@ -1,0 +1,50 @@
+[
+  {
+    "date": "2026-07-28",
+    "query": "limite aditivo obra publica",
+    "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+    "country": "bra",
+    "device": "DESKTOP",
+    "impressions": 120,
+    "clicks": 4,
+    "ctr": 0.033,
+    "position": 8.2,
+    "branded": false
+  },
+  {
+    "date": "2026-07-28",
+    "query": "reequilibrio economico financeiro obra",
+    "page": "https://confenge.com.br/reequilibrio-obras-publicas/",
+    "country": "bra",
+    "device": "MOBILE",
+    "impressions": 90,
+    "clicks": 2,
+    "ctr": 0.022,
+    "position": 12.1,
+    "branded": false
+  },
+  {
+    "date": "2026-07-29",
+    "query": "confenge",
+    "page": "https://confenge.com.br/",
+    "country": "bra",
+    "device": "DESKTOP",
+    "impressions": 40,
+    "clicks": 12,
+    "ctr": 0.3,
+    "position": 1.2,
+    "branded": true
+  },
+  {
+    "date": "2026-07-29",
+    "query": "limite aditivo obra publica",
+    "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+    "country": "bra",
+    "device": "DESKTOP",
+    "impressions": 120,
+    "clicks": 4,
+    "ctr": 0.033,
+    "position": 8.2,
+    "branded": false
+  }
+]
