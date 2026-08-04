@@ -345,21 +345,17 @@ async function createStore(options = {}) {
       "";
     let store;
     if (siteID && token) {
+      // Do not set consistency:"strong" here — production Lambda context is not
+      // always configured for strong reads (BlobsConsistencyError → 503).
       store = blobs.getStore({
         name: "confenge-leads",
         siteID,
         token,
-        // Prefer strong consistency when API supports it (read-your-writes).
-        consistency: "strong",
       });
       safeLog("info", "store_blobs_manual_creds", { site_len: siteID.length });
     } else {
       // Context from connectLambda(event) / NETLIFY_BLOBS_CONTEXT
-      try {
-        store = blobs.getStore({ name: "confenge-leads", consistency: "strong" });
-      } catch {
-        store = blobs.getStore("confenge-leads");
-      }
+      store = blobs.getStore("confenge-leads");
     }
     return new NetlifyBlobsStore(store);
   } catch (err) {
