@@ -89,7 +89,7 @@
     "test:tool-events": "node scripts/site/test_tool_events.mjs"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "devDependencies": {
     "axe-core": "^4.10.0",
