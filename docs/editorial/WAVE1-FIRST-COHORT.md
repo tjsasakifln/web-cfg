@@ -3,7 +3,7 @@
 **Status:** preparada para decisão humana — **não aprovada, não indexada, não publicada em massa.**
 
 **Pacote de origem:** `docs/editorial/HUMAN-ACTION-NOW.md`  
-**HEAD de referência do pacote material:** ver `commit_sha` em `docs/editorial/TERMINAL-RESULT.json`  
+**Identidade de revisão:** `schema_version + page_id + material_hash`; `commit_sha` é somente rastreabilidade.  
 **Fonte de demanda:** export GSC `seo/gsc-2026-07-30/` + `data/revops/gsc/insights_latest.json` (as_of ~2026-07-30).  
 **Proibições:** autoaprovação; revisor CI/bot/agente; batch approve; inventar cliques/receita/ranking.
 
@@ -42,18 +42,18 @@
 | **Fonte jurídica** | `lei-14133-art125`, `lei-14133-art124`, `lei-14133-art126-132`, `lei-14133-planalto`, `agu-alteracoes-contratuais-2024` |
 | **Principal risco** | Canibalização com peer já rankeando; interpretação de o que entra na base do % sem assessoria do caso |
 | **CTA adequado** | Validar saldo percentual do contrato; WhatsApp/email do packet; ferramenta `/ferramentas/limite-acrescimos-supressoes/` |
-| **Material hash** | `c86f6e0dea8011c697990d419d13accfc4960775ab16132400d81529cf345465` |
+| **Material hash** | `eddf3f499ffeab0c382bc340f777e61db2ec38b25ce6e8dfec1da5354804f68f` |
 | **Comando exato (humano)** | Ver bloco abaixo |
 | **Verificações pós-aprovação** | robots `index,follow` só nesta URL; peer tratado (301 ou noindex); sitemap-editorial contém a URL; ferramenta ainda noindex se política atual; GSC URL inspection da canônica |
 
 ```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
+ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
+  --reviewer "Tiago Sasaki" \
   --page-id lei-limite-25-50 \
   --notes "Revisão humana de lei-limite-25-50; fontes art.125 e material_hash conferidos; canibalização com /conteudos/limite-aditivo-25-50-obra-publica/ decidida; CTAs OK." \
   --sources lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash c86f6e0dea8011c697990d419d13accfc4960775ab16132400d81529cf345465 \
+  --material-hash eddf3f499ffeab0c382bc340f777e61db2ec38b25ce6e8dfec1da5354804f68f \
   --confirm \
   --indexable
 ```
@@ -71,18 +71,18 @@ python3 scripts/editorial/approve_cli.py \
 | **Fonte jurídica** | `lei-14133-art124`, `lei-14133-art125`, `lei-14133-planalto`, `agu-alteracoes-contratuais-2024` |
 | **Principal risco** | Checklist parecer “template jurídico” — reforçar que não substitui assessoria |
 | **CTA adequado** | Validar dossiê de aditivo com CONFENGE (packet); jornada operação |
-| **Material hash** | `6d693bdf9d530603c30b633931c49be2fc6d358d299db74dd957652c32610824` |
+| **Material hash** | `95dce781b83d92b76f91ab1a24ef88159e9ce591cbb64b9acf8b2b13c753233d` |
 | **Comando exato (humano)** | Ver bloco abaixo |
 | **Verificações pós-aprovação** | robots; peer permanece com intenção distinta; sitemap; âncoras internas sem language backstage |
 
 ```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
+ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
+  --reviewer "Tiago Sasaki" \
   --page-id guia-checklist-aditivo \
   --notes "Revisão humana de guia-checklist-aditivo; fontes e material_hash conferidos; canibalização com peer erro-de-projeto diferenciada por intenção; CTAs OK." \
   --sources lei-14133-art124,lei-14133-art125,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 6d693bdf9d530603c30b633931c49be2fc6d358d299db74dd957652c32610824 \
+  --material-hash 95dce781b83d92b76f91ab1a24ef88159e9ce591cbb64b9acf8b2b13c753233d \
   --confirm \
   --indexable
 ```
@@ -100,18 +100,18 @@ python3 scripts/editorial/approve_cli.py \
 | **Fonte jurídica** | `lei-14133-art126-132`, `lei-14133-art124`, `lei-14133-planalto`, `agu-alteracoes-contratuais-2024`, `sinapi-caixa` |
 | **Principal risco** | Interpretação de desconto/SINAPI no caso concreto; canibalização forte com peer |
 | **CTA adequado** | Revisar formação de preço do item novo (packet) |
-| **Material hash** | `4c39b0ca89a6cd3ae34003efea5b5e56c248c702db7bdbd34c0e0f28543ae28c` |
+| **Material hash** | `e1be1bd592734840cc4d01567f9cbb03962ca394c9e984b3245759c5e475fe4b` |
 | **Comando exato (humano)** | Ver bloco abaixo |
 | **Verificações pós-aprovação** | uma canônica indexável; peer 301/noindex; sitemap; sem dual ranking |
 
 ```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
+ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
+  --reviewer "Tiago Sasaki" \
   --page-id lei-item-novo-desconto \
   --notes "Revisão humana de lei-item-novo-desconto; fontes e material_hash conferidos; canônica escolhida vs peer desconto-item-novo; CTAs OK." \
   --sources lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 4c39b0ca89a6cd3ae34003efea5b5e56c248c702db7bdbd34c0e0f28543ae28c \
+  --material-hash e1be1bd592734840cc4d01567f9cbb03962ca394c9e984b3245759c5e475fe4b \
   --confirm \
   --indexable
 ```
