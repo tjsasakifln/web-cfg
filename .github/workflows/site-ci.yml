@@ -10,15 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Full history required for package commit_sha ancestor checks (PR merge refs)
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
           cache: npm
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Install dependencies
@@ -64,7 +64,7 @@ jobs:
       - name: axe accessibility
         run: npm run audit:axe
       - name: Setup Chrome for Lighthouse
-        uses: browser-actions/setup-chrome@v1
+        uses: browser-actions/setup-chrome@v2
         id: setup-chrome
       - name: Lighthouse local (_site)
         env:
@@ -74,7 +74,7 @@ jobs:
         continue-on-error: false
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site-ci-reports
           path: |
