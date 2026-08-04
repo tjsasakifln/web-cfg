@@ -32,23 +32,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from scripts.editorial.registry import load_registry, save_registry  # noqa: E402
-from scripts.editorial.truth import derive_editorial_truth  # noqa: E402
+from scripts.editorial.registry import approval_is_current, load_registry, save_registry  # noqa: E402
+from scripts.editorial.truth import FIRST_COHORT_SET, derive_editorial_truth  # noqa: E402
 
 
 def valid_human_approved(pages: list[dict]) -> list[dict]:
-    out = []
-    for p in pages:
-        if p.get("status") not in {"HUMAN_APPROVED", "INDEXABLE"}:
-            continue
-        ap = p.get("approval") or {}
-        reviewer = str(ap.get("reviewer") or "")
-        if not reviewer or reviewer.lower() in {"tester", "ci", "bot", "agent", "operator"}:
-            continue
-        if p.get("page_id") == "jur-sumula-260-art":
-            continue
-        out.append(p)
-    return out
+    """Return only current, named-human approvals in the explicitly released cohort."""
+    return [
+        page
+        for page in pages
+        if page.get("page_id") in FIRST_COHORT_SET
+        and page.get("status") in {"HUMAN_APPROVED", "INDEXABLE"}
+        and approval_is_current(page)
+    ]
 
 
 def apply_cannibalization_dispositions(pages: list[dict], approved: list[dict]) -> list[str]:
@@ -89,8 +85,8 @@ def main() -> int:
         "ts": datetime.now(timezone.utc).isoformat(),
         "valid_human_approved": len(approved),
         "page_ids": [p.get("page_id") for p in approved],
-        "wave1_human_approved_truth": truth.get("wave1", {}).get("human_approved"),
-        "wave1_indexable_truth": truth.get("wave1", {}).get("indexable"),
+        "first_cohort_human_approved_truth": truth.get("first_cohort", {}).get("human_approved"),
+        "first_cohort_indexable_truth": truth.get("first_cohort", {}).get("indexable"),
         "actions": [],
         "gsc_submit_candidates": [],
         "blocked": [],
