@@ -44,6 +44,7 @@
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "editorial:build": "python3 scripts/editorial/build.py",
     "editorial:approve": "python3 scripts/editorial/approve_cli.py",
+    "editorial:preview": "python3 scripts/editorial/preview.py --verify",
     "editorial:test": "python3 -m pytest scripts/editorial/tests -q",
     "pseo:learn": "python3 scripts/pseo/learn.py",
     "test:production-cutover": "node scripts/site/test_production_cutover.mjs",
