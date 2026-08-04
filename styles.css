@@ -167,64 +167,35 @@ html.js .form-step-fallback{display:none}
 .field input.is-invalid,.field select.is-invalid,.field textarea.is-invalid{border-color:#b42318;outline-color:#b42318}
 .simple-card .journey-next{margin-top:1rem;display:grid;gap:.5rem}
 .simple-card .sla-box{margin:1rem 0;padding:1rem 1.1rem;border-radius:12px;background:rgba(6,26,51,.04);border:1px solid rgba(6,26,51,.08);font-size:.95rem;line-height:1.5}
-/* Light content surfaces only — never paint green on navy/dark blocks (axe contrast). */
-.tool-layout a:not(.button):not(.button-secondary):not(.tool-card),
-.n-wrap a:not(.button):not(.button-secondary),
-.simple-main a:not(.button):not(.button-secondary),
-.article-main a:not(.button):not(.button-secondary),
-.breadcrumbs a{
-  color:var(--green-700,#2d6f2d);
-  text-decoration:underline;
-  text-underline-offset:2px;
-  text-decoration-thickness:1px;
-  font-weight:650;
-  cursor:pointer;
-}
-.tool-layout a:not(.button):not(.button-secondary):not(.tool-card):hover,
-.n-wrap a:not(.button):not(.button-secondary):hover,
-.simple-main a:not(.button):not(.button-secondary):hover,
-.article-main a:not(.button):not(.button-secondary):hover,
-.breadcrumbs a:hover{
-  color:#1f4f22;
-  text-decoration-thickness:2px;
-}
-/* Tool hub cards */
-.tool-card-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
-.tool-card{
-  display:block;
-  padding:1.15rem 1.25rem;
-  background:#fff;
-  border:1px solid rgba(15,23,42,.1);
-  border-radius:12px;
-  color:var(--ink,#061a33)!important;
-  text-decoration:none!important;
-  box-shadow:0 1px 0 rgba(3,16,32,.03);
-  transition:border-color .15s ease,box-shadow .15s ease,background .15s ease;
-}
-.tool-card:hover,.tool-card:focus-visible{
-  border-color:rgba(45,111,45,.45);
-  background:#f7faf7;
-  box-shadow:0 8px 24px rgba(3,16,32,.08);
-  outline:none;
-}
-.tool-card strong{
-  display:block;
-  margin-bottom:.35rem;
-  color:var(--green-700,#2d6f2d);
-  font-size:1.05rem;
-  text-decoration:underline;
-  text-underline-offset:2px;
-}
-.tool-card span{display:block;color:#425265;font-size:.95rem;line-height:1.55;font-weight:500}
-.tool-card .tool-card-cta{
-  display:inline-flex;
-  margin-top:.65rem;
-  color:var(--green-700,#2d6f2d);
-  font-size:.875rem;
+
+/* ===== Wave1 editorial polish: checklist UI, heading rhythm, CTA contrast ===== */
+.article-main>h2{margin-top:2.75rem;margin-bottom:.9rem;padding-top:.15rem;line-height:1.22;letter-spacing:-.03em}
+.article-main>.answer-box+h2,.article-main>h2:first-of-type{margin-top:2rem}
+.article-main>p{margin:0 0 1.05rem;max-width:68ch}
+.article-main>ul:not(.checklist),.article-main>ol{margin:.4rem 0 1.4rem;padding-left:1.35rem}
+.article-main>ul:not(.checklist) li,.article-main>ol li{margin:.35rem 0;line-height:1.55}
+.checklist{list-style:none;margin:.55rem 0 1.65rem;padding:0;border:1px solid #d5dde5;border-radius:12px;background:#fafcfb;overflow:hidden}
+.checklist li{margin:0;border-bottom:1px solid #e6ebf0}
+.checklist li:last-child{border-bottom:0}
+.checklist label{display:flex;align-items:flex-start;gap:12px;margin:0;padding:14px 16px;cursor:pointer;color:#061a33;font-size:.95rem;line-height:1.5;font-weight:500}
+.checklist label:hover{background:#f0f5f0}
+.checklist input[type=checkbox]{flex:none;width:1.15rem;height:1.15rem;margin:.18rem 0 0;accent-color:var(--green-700,#2d6f2d);cursor:pointer}
+.checklist input[type=checkbox]:checked+span{color:#4a5a6a;text-decoration:line-through;text-decoration-color:#9bb89a}
+.lead-inline .button-secondary,
+.lead-inline a.button-secondary{
+  color:#061a33!important;
+  background:#fff!important;
+  border:1.5px solid #e8eef4!important;
   font-weight:760;
-  text-decoration:none;
+  box-shadow:0 2px 0 rgba(0,0,0,.06);
 }
-.tool-card:hover .tool-card-cta{text-decoration:underline}
-/* Brand logo guard: never collapse to zero height */
-.brand{display:inline-flex;align-items:center;flex:0 0 auto;min-width:140px;max-width:224px}
-.brand img{display:block;width:100%;height:auto;max-height:48px;object-fit:contain;object-position:left center}
+.lead-inline .button-secondary:hover,
+.lead-inline a.button-secondary:hover,
+.lead-inline .button-secondary:focus-visible,
+.lead-inline a.button-secondary:focus-visible{
+  color:#061a33!important;
+  background:#eef6ee!important;
+  border-color:#9bc49a!important;
+}
+.lead-inline .button-primary,
+.lead-inline a.button-primary{color:#fff}
