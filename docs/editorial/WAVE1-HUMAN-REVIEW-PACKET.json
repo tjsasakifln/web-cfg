@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "title": "Wave 1 — pacote de revisão humana individual",
-  "commit_sha": "c135bdd2e27a3a631b70bd6fe1f54db38cf3de3d",
-  "derived_at": "2026-08-04T02:46:34Z",
+  "commit_sha": "7ec1d8c36e42c02237014001cb4cd83399902421",
+  "derived_at": "2026-08-04T02:48:19Z",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "summary": {
     "awaiting_human": 11,
