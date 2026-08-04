@@ -25,6 +25,9 @@ button.bad { background:var(--bad); color:#fff; } button.warn { background:var(-
 textarea { width:100%; margin-top:.35rem; background:#0b1020; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:.5rem; }
 .banner { background:#1e293b; border:1px solid var(--line); padding:.75rem 1rem; border-radius:8px; margin:1rem 0; }
 nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
+a.open-full { display:inline-block; margin:.5rem 0 0; padding:.55rem .9rem; border-radius:8px; background:#2563eb; color:#fff !important; text-decoration:none; font-weight:600; }
+a.open-full:hover { background:#1d4ed8; }
+.frame-wrap .muted { margin:0 0 .35rem; }
 </style>
 </head>
 <body>
@@ -33,6 +36,30 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <p class="muted">Terminal: READY_FOR_NAMED_HUMAN_APPROVAL · campos enriquecidos: intenção, risco, canibalização, diferença material</p>
 </header>
 <main>
+    <div class="banner" style="border-color:#12b981;background:#0f2a22">
+    <strong>Como revisar as páginas:</strong>
+    as URLs Wave 1 <em>existem</em> em produção (HTTP 200). Se o preview embutido ficar em branco,
+    use o botão <strong>Abrir página completa</strong> (nova aba) — o site bloqueava iframe de terceiros
+    e agora permite só same-origin. Links diretos também funcionam (lista abaixo).
+  </div>
+  <div class="banner" id="direct-links">
+    <strong>Links diretos (abrir em nova aba):</strong>
+    <ol style="margin:.5rem 0 0;padding-left:1.25rem;line-height:1.7">
+      <li><a href="https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/" target="_blank" rel="noopener">Checklist aditivo</a></li>
+      <li><a href="https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/" target="_blank" rel="noopener">Docs reequilíbrio</a></li>
+      <li><a href="https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/" target="_blank" rel="noopener">Contestar glosa</a></li>
+      <li><a href="https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/" target="_blank" rel="noopener">Notificação atraso</a></li>
+      <li><a href="https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/" target="_blank" rel="noopener">Art. 124 alteração</a></li>
+      <li><a href="https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/" target="_blank" rel="noopener">Atraso Administração</a></li>
+      <li><a href="https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/" target="_blank" rel="noopener">Item novo / desconto</a></li>
+      <li><a href="https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/" target="_blank" rel="noopener">Limite 25/50</a></li>
+      <li><a href="https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/" target="_blank" rel="noopener">Parcela incontroversa</a></li>
+      <li><a href="https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/" target="_blank" rel="noopener">Reequilíbrio / reajuste</a></li>
+      <li><a href="https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/" target="_blank" rel="noopener">Serviço sem aditivo</a></li>
+    </ol>
+    <p class="muted" style="margin:.75rem 0 0"><strong>Não aprovar:</strong> jur-sumula-260-art (REJECTED)</p>
+  </div>
+
   <div class="banner"><strong>Proibido:</strong> aprovação em massa. CLI: <code>ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py … --confirm --material-hash …</code></div>
   <nav class="toc"><a href="#guia-checklist-aditivo">guia-checklist-aditivo</a> <a href="#guia-docs-reequilibrio">guia-docs-reequilibrio</a> <a href="#guia-glosa">guia-glosa</a> <a href="#guia-notificacao-atraso">guia-notificacao-atraso</a> <a href="#jur-sumula-260-art">jur-sumula-260-art</a> <a href="#lei-art124-alteracao-obra">lei-art124-alteracao-obra</a> <a href="#lei-atraso-administracao">lei-atraso-administracao</a> <a href="#lei-item-novo-desconto">lei-item-novo-desconto</a> <a href="#lei-limite-25-50">lei-limite-25-50</a> <a href="#lei-parcela-incontroversa">lei-parcela-incontroversa</a> <a href="#lei-reequilibrio-reajuste">lei-reequilibrio-reajuste</a> <a href="#lei-servico-sem-aditivo">lei-servico-sem-aditivo</a></nav>
   
@@ -40,6 +67,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Checklist de pedido de aditivo em obra pública</h2>
     <p class="meta"><code>guia-checklist-aditivo</code> · <a href="https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/" target="_blank" rel="noopener">/guias-contratos-obras/checklist-pedido-aditivo/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -79,6 +107,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Documentos para pedido de reequilíbrio em obra pública</h2>
     <p class="meta"><code>guia-docs-reequilibrio</code> · <a href="https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/" target="_blank" rel="noopener">/guias-contratos-obras/documentos-pedido-reequilibrio/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -118,6 +147,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Documentos para contestar glosa de medição em obra pública</h2>
     <p class="meta"><code>guia-glosa</code> · <a href="https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/" target="_blank" rel="noopener">/guias-contratos-obras/contestar-glosa-medicao/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -157,6 +187,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Como responder notificação por atraso em obra pública</h2>
     <p class="meta"><code>guia-notificacao-atraso</code> · <a href="https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/" target="_blank" rel="noopener">/guias-contratos-obras/responder-notificacao-atraso/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -196,6 +227,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Súmula TCU 260: ART em projeto, fiscalização e execução de obras</h2>
     <p class="meta"><code>jur-sumula-260-art</code> · <a href="https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/" target="_blank" rel="noopener">/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>REJECTED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -236,6 +268,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Art. 124 da Lei 14.133: quando o aditivo de obra é unilateral ou por acordo</h2>
     <p class="meta"><code>lei-art124-alteracao-obra</code> · <a href="https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/" target="_blank" rel="noopener">/lei-14133-obras/art-124-alteracao-contratual-obra/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -275,6 +308,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Atraso imputável à Administração na Lei 14.133: prova e efeitos na obra</h2>
     <p class="meta"><code>lei-atraso-administracao</code> · <a href="https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/" target="_blank" rel="noopener">/lei-14133-obras/atraso-imputavel-administracao/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -314,6 +348,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Item novo no aditivo: como formar preço e preservar o desconto da proposta</h2>
     <p class="meta"><code>lei-item-novo-desconto</code> · <a href="https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/" target="_blank" rel="noopener">/lei-14133-obras/preco-item-novo-desconto-proposta/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -353,6 +388,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Limite de 25% e 50% no art. 125: o que conta no aditivo de obra</h2>
     <p class="meta"><code>lei-limite-25-50</code> · <a href="https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/" target="_blank" rel="noopener">/lei-14133-obras/limite-25-50-aditivo-obra/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -392,6 +428,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Parcela incontroversa na medição: o que a Lei 14.133 manda pagar</h2>
     <p class="meta"><code>lei-parcela-incontroversa</code> · <a href="https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/" target="_blank" rel="noopener">/lei-14133-obras/parcela-incontroversa-medicao-pagamento/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -431,6 +468,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Reequilíbrio, reajuste e repactuação na Lei 14.133: qual caminho na obra</h2>
     <p class="meta"><code>lei-reequilibrio-reajuste</code> · <a href="https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/" target="_blank" rel="noopener">/lei-14133-obras/reequilibrio-reajuste-repactuacao/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
@@ -470,6 +508,7 @@ nav.toc a { color:#93c5fd; margin-right:.75rem; font-size:.85rem; }
   <header>
     <h2>Serviço executado sem termo aditivo: risco, prova e enquadramento na 14.133</h2>
     <p class="meta"><code>lei-servico-sem-aditivo</code> · <a href="https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/" target="_blank" rel="noopener">/lei-14133-obras/servico-executado-sem-termo-aditivo/</a></p>
+    <p><a class="open-full" href="https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/" target="_blank" rel="noopener">Abrir página completa ↗</a></p>
     <p class="status">Registry: <strong>EDITORIAL_REVIEWED</strong> · decision_stamped: <strong>None</strong></p>
   </header>
   <dl>
