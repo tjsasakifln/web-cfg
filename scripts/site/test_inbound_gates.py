@@ -153,7 +153,8 @@ def test_machine_patterns_absent_on_sample_indexable():
     samples = [
         "atraso-pagamento-contrato-publico-suspender",
         "atraso-na-medicao-obra-publica",
-        "limite-aditivo-25-50-obra-publica",
+        # limite-aditivo-25-50-obra-publica is superseded (301 + noindex); do not sample it.
+        "glosa-por-qualidade-obra-publica",
         "comprovacao-exequibilidade-proposta-obra",
     ]
     for slug in samples:

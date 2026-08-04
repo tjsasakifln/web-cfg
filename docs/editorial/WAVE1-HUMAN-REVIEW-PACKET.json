@@ -2,9 +2,9 @@
   "schema_version": "3.0.0",
   "decision_schema_version": "3.0.0",
   "title": "Primeira coorte editorial: revisão humana individual no deploy preview",
-  "commit_sha": "5726ce2a92a4e769b4ed6d5d6efc4fca4d6e786a",
+  "commit_sha": "e5986c001c644fc650380cf1cb0c9c73cccad2ad",
   "commit_sha_role": "informational_only",
-  "derived_at": "2026-08-04T19:55:09Z",
+  "derived_at": "2026-08-04T22:01:24Z",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "review_target": {
     "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
@@ -56,7 +56,8 @@
         "lei-14133-art124",
         "lei-14133-art126-132",
         "lei-14133-planalto",
-        "agu-alteracoes-contratuais-2024"
+        "agu-alteracoes-contratuais-2024",
+        "agu-on-50-2014"
       ],
       "resolved_sources": [
         {
@@ -141,6 +142,24 @@
           "title": "Alterações Contratuais em Obras e Serviços de Engenharia — Lei 14.133/2021 (fev/2024)",
           "type": "agu_opinion",
           "url": "https://www.gov.br/agu/pt-br/composicao/procuradoria-geral-federal-1/subprocuradoria-federal-de-consultoria-juridica/24_Alteracoes_Contratuais_Obras_e_Servicos_Engenharia_Lei_14_133_2021_fev_2024.docx"
+        },
+        {
+          "accessed_at": "2026-08-04",
+          "body": "Advocacia-Geral da União",
+          "date": "2014-01-01",
+          "device": "ON AGU nº 50/2014, item I",
+          "limitations": "Orientação aplicável no âmbito institucional próprio da AGU/União; não substitui regulamentos ou orientações de outros entes.",
+          "number": "ON AGU nº 50/2014",
+          "source_id": "agu-on-50-2014",
+          "themes": [
+            "aditivos",
+            "limites",
+            "acrescimos",
+            "supressoes"
+          ],
+          "title": "Orientação Normativa AGU nº 50/2014 (texto consolidado no portal da AGU)",
+          "type": "technical_guidance",
+          "url": "https://www.gov.br/agu/pt-br/composicao/cgu/cgu/onsagu"
         }
       ],
       "legal_risk": "Dispositivos: art.125, art.124, art.126. Conteúdo técnico-informativo; não substitui assessoria jurídica no caso concreto.",
@@ -153,10 +172,10 @@
         "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre limites de 25% e 50% no art. 125 em obra pública. Preciso validar o saldo de aditivos e os documentos. Origem: /lei-14133-obras/limite-25-50-aditivo-obra/",
         "email_subject": "Análise inicial: saldo de aditivos 25%/50%"
       },
-      "material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
+      "material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
       "material_diff_since_last_packet": {
-        "previous_material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
-        "current_material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
+        "previous_material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
+        "current_material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
         "changed": false,
         "reason": "v3 now commits every public page field plus resolved used-source identity."
       },
@@ -172,10 +191,11 @@
       "search_intent": "Checklist operacional para protocolar pedido de aditivo de obra",
       "demand_evidence": "A query 'aditivos obra pública' teve 5 impressões; o peer /conteudos/erro-de-projeto-gera-aditivo-obra-publica/ teve 3 impressões e posição 2,33 no export GSC de 2026-07-30.",
       "objective": "Organizar o dossiê e seus bloqueadores antes do protocolo, sem vender um checklist como substituto de análise jurídica.",
-      "conclusion_summary": "Antes de protocolar um aditivo, reúna descrição técnica, nexo, planilha, memória de saldo (arts. 124 e 125), composições de itens novos, impacto de prazo e comunicações. Marque atendido, pendente ou não aplicável. Sinais de bloqueio geram alerta e não contam como progresso.",
+      "conclusion_summary": "Antes de protocolar um aditivo, reúna descrição técnica, nexo, planilha, memória de saldo (arts. 124 e 125), formação de preço de item sem preço unitário (art. 127), verificação de equilíbrio (art. 130), impacto de prazo e comunicações. O termo aditivo deve estar formalizado antes da execução determinada pela Administração, salvo antecipação excepcional justificada, cuja formalização deve ocorrer em até um mês (art. 132).",
       "legal_sources": [
         "lei-14133-art124",
         "lei-14133-art125",
+        "lei-14133-art126-132",
         "lei-14133-planalto",
         "agu-alteracoes-contratuais-2024"
       ],
@@ -216,6 +236,23 @@
           "accessed_at": "2026-08-02",
           "body": "Presidência da República",
           "date": "2021-04-01",
+          "device": "arts. 126–132",
+          "limitations": null,
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art126-132",
+          "themes": [
+            "aditivos",
+            "equilibrio",
+            "precos"
+          ],
+          "title": "Lei nº 14.133/2021 — arts. 126 a 132 (objeto, preços, equilíbrio, aditivo)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
           "device": "lei completa",
           "limitations": "Texto federal; regulamentos locais e cláusulas do contrato podem particularizar a aplicação.",
           "number": "14.133/2021",
@@ -247,7 +284,7 @@
           "url": "https://www.gov.br/agu/pt-br/composicao/procuradoria-geral-federal-1/subprocuradoria-federal-de-consultoria-juridica/24_Alteracoes_Contratuais_Obras_e_Servicos_Engenharia_Lei_14_133_2021_fev_2024.docx"
         }
       ],
-      "legal_risk": "Dispositivos: art.124, art.125. Conteúdo técnico-informativo; não substitui assessoria jurídica no caso concreto.",
+      "legal_risk": "Dispositivos: art.124, art.125, art.127, art.130, art.132. Conteúdo técnico-informativo; não substitui assessoria jurídica no caso concreto.",
       "cannibalization": {
         "internal_competitor": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
         "risk": "parcial: diferenciar intenção (erro de projeto versus checklist transversal) e manter linkagem contextual."
@@ -257,10 +294,10 @@
         "whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
         "email_subject": "Análise inicial: dossiê de aditivo de obra"
       },
-      "material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
+      "material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
       "material_diff_since_last_packet": {
-        "previous_material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
-        "current_material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
+        "previous_material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
+        "current_material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
         "changed": false,
         "reason": "v3 now commits every public page field plus resolved used-source identity."
       },
@@ -272,11 +309,11 @@
       "page_id": "lei-item-novo-desconto",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
       "preview": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "title": "Item novo no aditivo: como formar preço e preservar o desconto da proposta",
+      "title": "Item novo no aditivo: preço e relação proposta/orçamento-base",
       "search_intent": "Preço de item novo em aditivo e preservação do desconto da proposta",
       "demand_evidence": "Peer /conteudos/desconto-da-proposta-em-item-novo-aditivo/ teve 4 impressões, 1 clique e posição 7 no export GSC de 2026-07-30.",
       "objective": "Explicar a formação defensável de preço do item novo e captar pedidos de revisão de composição e documentos.",
-      "conclusion_summary": "Quando o aditivo exige obra, serviço ou material sem preço unitário na planilha contratada, a Lei nº 14.133/2021 trata a hipótese nos dispositivos que seguem o art. 124, em especial a lógica do art. 127 e correlatos sobre preços não contemplados. Na prática da construtora, formar preço de item novo exige composição defensável, coerência com o desconto (ou ágio) da proposta vencedora quando a regra contratual e a orientação aplicável assim determinarem, e formalização antes da execução em volume. Improvisar cotação informal só para liberar frente costuma virar glosa ou disputa de margem meses depois.",
+      "conclusion_summary": "Quando o aditamento é necessário para obra ou serviço sem preço unitário no contrato, aplica-se o art. 127 da Lei nº 14.133/2021. O preço do item novo é fixado pela aplicação da relação geral entre o valor da proposta vencedora e o orçamento-base da Administração aos preços referenciais ou de mercado vigentes na data do aditamento. A relação pode ser desconto ou ágio, conforme a proposta original, e os limites do art. 125 continuam aplicáveis. Não é escolha discricionária aplicar ou afastar essa relação.",
       "legal_sources": [
         "lei-14133-art126-132",
         "lei-14133-art124",
@@ -375,10 +412,10 @@
         "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
         "email_subject": "Análise inicial: preço de item novo em aditivo"
       },
-      "material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
+      "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
       "material_diff_since_last_packet": {
-        "previous_material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
-        "current_material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
+        "previous_material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+        "current_material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
         "changed": false,
         "reason": "v3 now commits every public page field plus resolved used-source identity."
       },

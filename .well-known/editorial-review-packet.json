@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0.0",
-  "review_target_sha": "1e2eb69e4216e0b679edeec94b3b038e1facfb17",
+  "review_target_sha": "e5986c001c644fc650380cf1cb0c9c73cccad2ad",
   "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
-  "preview_build_sha": "1e2eb69e4216e0b679edeec94b3b038e1facfb17",
-  "preview_generated_at": "2026-08-04T20:03:10Z",
+  "preview_build_sha": "e5986c001c644fc650380cf1cb0c9c73cccad2ad",
+  "preview_generated_at": "2026-08-04T21:56:24Z",
   "pages": [
     {
       "page_id": "lei-limite-25-50",
       "preview_url": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
+      "material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
       "sources": [
         {
           "accessed_at": "2026-08-02",
@@ -92,13 +92,31 @@
           "title": "Alterações Contratuais em Obras e Serviços de Engenharia — Lei 14.133/2021 (fev/2024)",
           "type": "agu_opinion",
           "url": "https://www.gov.br/agu/pt-br/composicao/procuradoria-geral-federal-1/subprocuradoria-federal-de-consultoria-juridica/24_Alteracoes_Contratuais_Obras_e_Servicos_Engenharia_Lei_14_133_2021_fev_2024.docx"
+        },
+        {
+          "accessed_at": "2026-08-04",
+          "body": "Advocacia-Geral da União",
+          "date": "2014-01-01",
+          "device": "ON AGU nº 50/2014, item I",
+          "limitations": "Orientação aplicável no âmbito institucional próprio da AGU/União; não substitui regulamentos ou orientações de outros entes.",
+          "number": "ON AGU nº 50/2014",
+          "source_id": "agu-on-50-2014",
+          "themes": [
+            "aditivos",
+            "limites",
+            "acrescimos",
+            "supressoes"
+          ],
+          "title": "Orientação Normativa AGU nº 50/2014 (texto consolidado no portal da AGU)",
+          "type": "technical_guidance",
+          "url": "https://www.gov.br/agu/pt-br/composicao/cgu/cgu/onsagu"
         }
       ]
     },
     {
       "page_id": "guia-checklist-aditivo",
       "preview_url": "https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/",
-      "material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
+      "material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
       "sources": [
         {
           "accessed_at": "2026-08-02",
@@ -129,6 +147,23 @@
             "limites"
           ],
           "title": "Lei nº 14.133/2021 — art. 125 (limites de 25% e 50%)",
+          "type": "statute",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
+        },
+        {
+          "accessed_at": "2026-08-02",
+          "body": "Presidência da República",
+          "date": "2021-04-01",
+          "device": "arts. 126–132",
+          "limitations": null,
+          "number": "14.133/2021",
+          "source_id": "lei-14133-art126-132",
+          "themes": [
+            "aditivos",
+            "equilibrio",
+            "precos"
+          ],
+          "title": "Lei nº 14.133/2021 — arts. 126 a 132 (objeto, preços, equilíbrio, aditivo)",
           "type": "statute",
           "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm"
         },
@@ -171,7 +206,7 @@
     {
       "page_id": "lei-item-novo-desconto",
       "preview_url": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
+      "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
       "sources": [
         {
           "accessed_at": "2026-08-02",

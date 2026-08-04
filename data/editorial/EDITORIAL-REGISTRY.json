@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-04T19:55:09Z",
+  "generated_at": "2026-08-04T21:56:24Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -12,7 +12,10 @@
       "primary_keyword": "checklist aditivo obra",
       "legal_devices": [
         "art.124",
-        "art.125"
+        "art.125",
+        "art.127",
+        "art.130",
+        "art.132"
       ],
       "date_published": "2026-08-02",
       "date_modified": "2026-08-04",
@@ -20,10 +23,11 @@
       "author_is_tiago": false,
       "meta_description": "Lista objetiva de documentos e checagens antes de protocolar aditivo de obra pública sob a Lei 14.133.",
       "lead": "Pedido incompleto gera diligência prolongada e atraso no protocolo. Use este checklist para reunir o mínimo documental antes de protocolar.",
-      "direct_answer": "Antes de protocolar um aditivo, reúna descrição técnica, nexo, planilha, memória de saldo (arts. 124 e 125), composições de itens novos, impacto de prazo e comunicações. Marque atendido, pendente ou não aplicável. Sinais de bloqueio geram alerta e não contam como progresso.",
+      "direct_answer": "Antes de protocolar um aditivo, reúna descrição técnica, nexo, planilha, memória de saldo (arts. 124 e 125), formação de preço de item sem preço unitário (art. 127), verificação de equilíbrio (art. 130), impacto de prazo e comunicações. O termo aditivo deve estar formalizado antes da execução determinada pela Administração, salvo antecipação excepcional justificada, cuja formalização deve ocorrer em até um mês (art. 132).",
       "sources": [
         "lei-14133-art124",
         "lei-14133-art125",
+        "lei-14133-art126-132",
         "lei-14133-planalto",
         "agu-alteracoes-contratuais-2024"
       ],
@@ -51,9 +55,9 @@
           "a": "O mínimo varia conforme o órgão. Quanto mais completo o dossiê na origem, menor a chance de diligência que empurra a execução informal."
         }
       ],
-      "body_markdown": "## Como usar\n\nPara cada requisito, escolha Atendido, Pendente ou Não aplicável. Os sinais de bloqueio são perguntas de risco: uma resposta positiva gera alerta e não aumenta o progresso da barra de prontidão documental.\n\nOs dados ficam só neste navegador e não são enviados à CONFENGE, salvo se você decidir copiar um resumo ou abrir o contato comercial por conta própria.\n\n## O que o dossiê precisa provar\n\nAntes de protocolar o pedido de aditivo, o dossiê deve deixar claro o que muda na obra, por que muda, quem determinou a mudança e com base em qual dispositivo do contrato e da Lei nº 14.133/2021. Em especial, o art. 124 trata da alteração com justificativas e o art. 125 materializa os limites percentuais de acréscimo e de supressão sobre o valor inicial atualizado.\n\nSem planilha do aditivo, memória de saldo acumulado, composições de preço de itens novos e comunicações oficiais (ordem de serviço, e-mail protocolado, ata), o pedido costuma voltar em diligência ou ser executado informalmente.\n\n## Documentos típicos\n\nReúna, quando existirem no processo: contrato e aditivos anteriores; planilha orçamentária da proposta; planilha do aditivo; composições de itens novos; projetos “antes” e “depois”; diário de obra; fotos e levantamentos; pareceres técnicos internos; índice de anexos numerados; requerimento objetivo com valor, prazo e enquadramento.\n\n## Depois do diagnóstico\n\nSe houver pendências essenciais ou sinais de bloqueio (item novo sem composição, execução antes da formalização, falta de determinação contemporânea, memória de saldo ausente, justificativa genérica), corrija a prova antes de protocolar só para cumprir rito.\n\nSe a cobertura documental estiver sólida, use o resumo gerado para montar o índice de anexos e o texto do requerimento.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Ritos, prazos e formulários do órgão prevalecem quando forem mais específicos. O verificador de limites de acréscimos e supressões da CONFENGE pode complementar a memória do art. 125, mas também é apenas orientativo.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Organizar o dossiê cedo evita reconstrução tardia de fatos e de comunicações.\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo entre o fato de campo e o quantitativo da planilha. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar o pedido junto à Administração.\n",
+      "body_markdown": "## Como usar\n\nPara cada requisito, escolha Atendido, Pendente ou Não aplicável. Os sinais de bloqueio são perguntas de risco: uma resposta positiva gera alerta e não aumenta o progresso da barra de prontidão documental.\n\nOs dados ficam só neste navegador e não são enviados à CONFENGE, salvo se você decidir copiar um resumo ou abrir o contato comercial por conta própria.\n\n## O que o dossiê precisa provar\n\nAntes de protocolar o pedido de aditivo, o dossiê deve deixar claro o que muda na obra, por que muda, quem determinou a mudança e com base em qual dispositivo do contrato e da Lei nº 14.133/2021. O art. 124 trata da alteração com justificativas; o art. 125 materializa os limites percentuais de acréscimo e de supressão sobre o valor inicial atualizado; e o art. 127 disciplina a formação de preço quando o contrato não contempla preço unitário para a obra ou o serviço que precisa ser aditado.\n\nSe a alteração aumentar encargos da contratada, registre a análise do equilíbrio econômico-financeiro no próprio termo aditivo, como determina o art. 130. Sem planilha do aditivo, memória de saldo acumulado, composições de preço de itens sem preço unitário e comunicações oficiais (ordem de serviço, e-mail protocolado, ata), o pedido costuma voltar em diligência ou ser executado informalmente.\n\n## Formalização e antecipação excepcional\n\nPelo art. 132, a formalização do termo aditivo é condição para a execução, pela Administração, das prestações por ela determinadas. A exceção exige necessidade justificada de antecipar os efeitos do aditivo; nessa situação, a formalização deve ocorrer no prazo máximo de um mês. Não é uma rotina de canteiro nem licença para executar primeiro e produzir justificativa depois.\n\n## Documentos típicos\n\nReúna, quando existirem no processo: contrato e aditivos anteriores; planilha orçamentária da proposta; planilha do aditivo; composições de itens novos; projetos “antes” e “depois”; diário de obra; fotos e levantamentos; pareceres técnicos internos; índice de anexos numerados; requerimento objetivo com valor, prazo e enquadramento.\n\n## Depois do diagnóstico\n\nSe houver pendências essenciais ou sinais de bloqueio (item novo sem composição, execução antes da formalização sem justificativa, falta de determinação contemporânea, memória de saldo ausente, justificativa genérica), corrija a prova antes de protocolar só para cumprir rito.\n\nSe a cobertura documental estiver sólida, use o resumo gerado para montar o índice de anexos e o texto do requerimento.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Ritos, prazos e formulários do órgão prevalecem quando forem mais específicos. O verificador de limites de acréscimos e supressões da CONFENGE pode complementar a memória do art. 125, mas também é apenas orientativo.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Organizar o dossiê cedo evita reconstrução tardia de fatos e de comunicações.\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo entre o fato de campo e o quantitativo da planilha. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar o pedido junto à Administração.\n",
       "_source_file": "data/editorial/pages/guia-checklist-aditivo.json",
-      "material_hash": "bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18",
+      "material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
@@ -249,12 +253,12 @@
         {
           "id": "ad-27",
           "category": "conditional",
-          "label": "Item novo: composição e desconto"
+          "label": "Item sem preço unitário: preço conforme art. 127 e relação proposta/orçamento-base"
         },
         {
           "id": "ad-28",
           "category": "conditional",
-          "label": "Execução antecipada: ressalva formal"
+          "label": "Antecipação excepcional: justificativa e formalização em até um mês, conforme art. 132"
         },
         {
           "id": "ad-29",
@@ -264,7 +268,7 @@
         {
           "id": "ad-30",
           "category": "blocker",
-          "label": "Execução antes da formalização?"
+          "label": "Execução antes da formalização sem necessidade justificada ou sem prazo de até um mês?"
         },
         {
           "id": "ad-31",
@@ -685,6 +689,26 @@
           "at": "2026-08-04T19:55:09Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-04T21:46:54Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-04T21:51:26Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-04T21:55:57Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-04T21:56:24Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
         }
       ],
       "publication_hold": true,
@@ -739,12 +763,6 @@
           "title": "Checklist de pedido de aditivo",
           "cluster": "Guias",
           "kind": "Checklist"
-        },
-        {
-          "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
-          "title": "Limite de aditivo 25% e 50% (guia)",
-          "cluster": "Conteúdos",
-          "kind": "Guia"
         }
       ],
       "faq": [
@@ -763,7 +781,7 @@
       ],
       "body_markdown": "## Onde a dúvida explode no canteiro\n\nA obra está em andamento. A fiscalização envia croqui, e-mail ou reunião com mudança de especificação, quantitativo ou serviço que não estava claro na planilha. O engenheiro de produção quer executar para não perder frente. O orçamentista pergunta se entra no saldo de 25%. O jurídico quer papel. Esse é o terreno do art. 124.\n\n## O que o texto legal separa\n\nO **art. 124** da Lei nº 14.133/2021 (texto compilado no Planalto, verificado em 02/08/2026) prevê alteração **com as devidas justificativas**:\n\n### Unilateral (inciso I)\n\n- **a)** modificação do projeto ou das especificações, para melhor adequação técnica aos objetivos da Administração;\n- **b)** modificação do valor contratual por acréscimo ou diminuição quantitativa do objeto, **nos limites permitidos pela Lei** (o art. 125 materializa 25% e, em reforma de edifício ou equipamento, acréscimo de até 50%).\n\n### Por acordo (inciso II)\n\nInclui, entre outras hipóteses do dispositivo, substituição de garantia, mudança de regime de execução ou modo de fornecimento, forma de pagamento, atualização de vínculo societário do contratado e **restabelecimento do equilíbrio econômico-financeiro**.\n\nA leitura isolada do art. 124 é insuficiente. Os **arts. 125 a 132** fecham o circuito: limites, vedação de transfigurar o objeto, preços de itens sem cotação, manutenção de desconto, equilíbrio no mesmo termo aditivo e formalização.\n\n## Situação concreta (hipotética, para raciocínio)\n\nContrato de reforma de escola, empreitada por preço unitário. A fiscalização determina troca de sistema de impermeabilização não equivalente ao memorial. Há impacto de custo e prazo. Perguntas que mudam o caminho:\n\n1. A mudança é de especificação/projeto (I, a) ou quantitativo puro (I, b)?\n2. O valor acumulado de aditivos ainda cabe no art. 125?\n3. Os encargos da contratada aumentam de forma que o **art. 130** exija reequilíbrio no mesmo aditivo?\n4. Existe preço unitário na planilha ou será item novo (art. 127)?\n\n## Documentos que alteram a conclusão\n\n- Contrato, edital, planilha e memorial originais\n- Histórico de termos aditivos e apostilamentos\n- Projetos “como contratado” versus “como determinado”\n- Ordens, e-mails e atas com data e responsável da Administração\n- Memória do saldo percentual acumulado (acréscimos e supressões)\n- Composições de preço e desconto da proposta vencedora\n- Cronograma físico-financeiro e diário de obra no período da determinação\n\nSem essa base, qualquer tese vira narrativa tardia.\n\n## Regra operacional para a construtora\n\n1. Classifique a alteração (projeto/especificação, quantitativo, item novo, reequilíbrio).\n2. Calcule o saldo legal antes de executar volume material.\n3. Precifique com a regra do contrato e da Lei, não com “preço de mercado informal”.\n4. Exija formalização adequada **antes** de comprometer margem e prazo de forma irreversível.\n5. Se a Administração determinar execução sob risco, registre por escrito a ressalva e o impacto.\n\n## Exceções e controvérsias\n\n- **Apostila** (art. 136) serve a reajuste/repactuação e outras atualizações listadas .  não é atalho genérico para mudar objeto.\n- Jurisprudência e orientações formadas sob a Lei nº 8.666/1993 **não se transportam automaticamente** para a 14.133; use-as só com distinção explícita do regime.\n- A orientação da AGU/PGF sobre alterações contratuais em obras (fev/2024) ajuda no enquadramento federal, mas o contrato do ente e o caso concreto prevalecem na disputa local.\n\n## Erros frequentes\n\n- Executar serviço novo grande só com ordem verbal\n- Somar apenas o aditivo da vez e ignorar o acumulado\n- Tratar toda edificação como se o teto de 50% fosse automático (o art. 125 restringe a **reforma de edifício ou de equipamento**)\n- Misturar reequilíbrio econômico-financeiro com aditivo quantitativo sem separar causas\n- Assumir que supressão “compensa” acréscimo sem critério documentado\n\n## Roteiro de ação (48–72h)\n\n1. Congelar descrição técnica da mudança com anexos.\n2. Levantar saldo de aditivos em valor e percentual sobre o valor inicial atualizado.\n3. Separar o que é quantitativo, qualitativo ou extracontratual.\n4. Montar planilha do aditivo e memória de cálculo.\n5. Protocolar pedido ou responder à determinação com ressalvas e prazo.\n6. Só então liberar execução de trechos de alto valor.\n\n## Quando buscar análise especializada\n\nQuando o saldo se aproxima do teto, há item novo relevante, a fiscalização pressiona execução sem aditivo, ou o impacto de prazo/custo já compromete o fluxo de caixa. Nesses casos, a análise técnica-documental costuma ser pré-requisito de qualquer conversa jurídica.\n\n## Ressalva\n\nEsta página traduz o texto legal para decisão operacional. Não substitui parecer sobre o contrato específico nem garante resultado em processo administrativo ou judicial.\n",
       "_source_file": "data/editorial/pages/lei-art124-alteracao-obra.json",
-      "material_hash": "117a46b9ee913f79bc7dba39a1d86c65e2efa709879fac7c591fc438ede80c45",
+      "material_hash": "a829400b26beb8f6940a50bf722d55a17765bca2d1c1a8b67c8f5f882edf82d6",
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
@@ -895,7 +913,7 @@
       "page_id": "lei-item-novo-desconto",
       "archetype": "lei_14133",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "title": "Item novo no aditivo: como formar preço e preservar o desconto da proposta",
+      "title": "Item novo no aditivo: preço e relação proposta/orçamento-base",
       "theme": "item novo desconto proposta aditivo",
       "journey": "execucao",
       "primary_keyword": "item novo aditivo desconto",
@@ -906,12 +924,12 @@
       ],
       "law_version": "Lei nº 14.133/2021 (texto Planalto verificado em 2026-08-02)",
       "date_published": "2026-08-02",
-      "date_modified": "2026-08-02",
+      "date_modified": "2026-08-04",
       "author_public": "Biblioteca técnica CONFENGE",
       "author_is_tiago": false,
-      "meta_description": "Formação de preço de serviço ou material novo em aditivo de obra pública: planilha, desconto da proposta, referências e documentos que sustentam o valor.",
+      "meta_description": "Art. 127 da Lei 14.133: como formar o preço de item novo no aditivo e aplicar a relação entre a proposta e o orçamento-base da Administração.",
       "lead": "O preço do item que não existia na planilha é onde a margem morre em silêncio, se a regra do desconto e a composição não estiverem claras.",
-      "direct_answer": "Quando o aditivo exige obra, serviço ou material sem preço unitário na planilha contratada, a Lei nº 14.133/2021 trata a hipótese nos dispositivos que seguem o art. 124, em especial a lógica do art. 127 e correlatos sobre preços não contemplados. Na prática da construtora, formar preço de item novo exige composição defensável, coerência com o desconto (ou ágio) da proposta vencedora quando a regra contratual e a orientação aplicável assim determinarem, e formalização antes da execução em volume. Improvisar cotação informal só para liberar frente costuma virar glosa ou disputa de margem meses depois.",
+      "direct_answer": "Quando o aditamento é necessário para obra ou serviço sem preço unitário no contrato, aplica-se o art. 127 da Lei nº 14.133/2021. O preço do item novo é fixado pela aplicação da relação geral entre o valor da proposta vencedora e o orçamento-base da Administração aos preços referenciais ou de mercado vigentes na data do aditamento. A relação pode ser desconto ou ágio, conforme a proposta original, e os limites do art. 125 continuam aplicáveis. Não é escolha discricionária aplicar ou afastar essa relação.",
       "sources": [
         "lei-14133-art126-132",
         "lei-14133-art124",
@@ -929,27 +947,25 @@
           "title": "Limites de 25% e 50%",
           "cluster": "Aditivos",
           "kind": "Lei 14.133"
-        },
-        {
-          "url": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
-          "title": "Desconto da proposta em item novo",
-          "cluster": "Conteúdos",
-          "kind": "Guia"
         }
       ],
       "faq": [
         {
           "q": "Sempre aplico o mesmo desconto da licitação no item novo?",
-          "a": "Depende do contrato, da natureza do item e da orientação aplicável ao caso. A manutenção do desconto é tese frequente em alterações, mas precisa de base documental e coerência com a proposta, não de aplicação automática sem leitura do instrumento."
+          "a": "Para obra ou serviço sem preço unitário contratual cujo aditamento seja necessário, o art. 127 manda aplicar aos preços referenciais ou de mercado vigentes na data do aditamento a relação geral entre a proposta e o orçamento-base. Se a proposta original representou desconto, a relação preserva esse desconto; se representou ágio, preserva o ágio."
         },
         {
           "q": "Posso usar só SINAPI sem composição própria?",
-          "a": "Referenciais oficiais ajudam, porém o item precisa dialogar com o critério do edital/contrato e com a realidade de execução. Composição, produtividade e BDI mal amarrados são alvos clássicos de glosa."
+          "a": "O art. 127 exige preço referencial ou de mercado vigente na data do aditamento, ao qual se aplica a relação proposta/orçamento-base. O regulamento e o contrato podem detalhar o referencial e a composição; não tornam facultativa a regra legal. Quando o código não retrata o serviço, documente a composição analítica."
+        },
+        {
+          "q": "E se o item já existe ou é parecido com um item da planilha?",
+          "a": "Se houver preço unitário contratual ou item análogo, a análise não começa pelo art. 127 como se fosse item inteiramente novo: é preciso avaliar o aproveitamento do preço e das condições já contratadas. Reequilíbrio de preço de item existente é instituto diverso e não serve para precificar acréscimo de escopo."
         }
       ],
-      "body_markdown": "## Quando o item novo aparece\n\nDemolição não prevista, drenagem extra, troca de sistema predial, serviço de contenção emergencial. A planilha original não tem o código. Alguém precisa de preço unitário “para ontem”.\n\n## Enquadramento legal (sem atalho)\n\nAlterações passam pelo **art. 124** e limites do **art. 125**. Para preços não contemplados no contrato, a Lei estabelece disciplina específica a partir do **art. 127** e dispositivos seguintes (texto Planalto, verificado em 02/08/2026). Leia o artigo completo no caso concreto: a formação de preço de item novo não é “livre negociação de balcão”.\n\nA orientação AGU/PGF sobre alterações contratuais em obras (fev/2024) discute, no ambiente federal, cuidados com planilha, desconto e instrução processual, use como apoio, não como substituto do seu contrato.\n\n## O que a construtora precisa provar\n\n- Por que o item é necessário (nexo com projeto, campo ou determinação da Administração)\n- Que não havia preço unitário utilizável na planilha\n- Composição de custos (mão de obra, materiais, equipamentos, encargos)\n- Critério de BDI adotado e coerência com a proposta\n- Tratamento do desconto/ágio da licitação, se aplicável\n- Comparação com referência oficial (SINAPI, SICRO ou outra do edital) quando fizer sentido\n- Impacto no saldo percentual do art. 125\n\n## Erros que destroem a tese\n\n1. Aceitar preço “chutado” pelo fiscal em planilha sem composição  \n2. Aplicar desconto zero no item novo sem justificativa quando o contrato puxa a lógica da proposta  \n3. Usar referência de tabela errada (SINAPI onde o edital manda SICRO, ou o inverso)  \n4. Executar o serviço inteiro e só depois discutir preço  \n5. Misturar item novo com reequilíbrio de item existente sem separar causas  \n\n## Roteiro de precificação\n\n1. Descreva o serviço com unidade e critério de medição.  \n2. Monte composição analítica.  \n3. Aplique BDI conforme regra do certame/contrato.  \n4. Teste coerência com desconto da proposta e com referenciais.  \n5. Documente premissas (produtividade, distância, interferências).  \n6. Submeta no processo do aditivo **antes** da execução plena.  \n\n## Ressalva\n\nHá controvérsia legítima sobre extensão da manutenção do desconto em cenários distintos (item semelhante versus item sem qualquer análogo). Não há atalho seguro sem os autos do contrato.\n\n## Jogo de planilha e item novo\n\nFormar preço de item novo com distorção proposital em relação a itens semelhantes da planilha original é risco clássico de apontamento de controle. A precificação deve ser coerente: se o item é análogo, a lógica de desconto e de composição precisa dialogar com a proposta; se é radicalmente distinto, a memória deve explicar a diferença de produtividade, insumos e BDI.\n\n## Papel dos referenciais SINAPI/SICRO\n\nUse a tabela que o edital e a natureza do serviço indicam. Pavimentação e obras rodoviárias frequentemente caminham no SICRO; edificações, no SINAPI .  sem absolutismo. O referencial não elimina a necessidade de composição analítica quando o item foge do código padrão.\n",
+      "body_markdown": "## Quando o item novo aparece\n\nDemolição não prevista, drenagem extra, troca de sistema predial, serviço de contenção emergencial. A planilha original não tem o código. Alguém precisa de preço unitário “para ontem”.\n\n## Enquadramento legal do art. 127\n\nAlterações passam pelo **art. 124** e continuam sujeitas aos limites do **art. 125**. O **art. 127** disciplina a hipótese em que o contrato não contempla preços unitários para obras ou serviços cujo aditamento é necessário. Por paráfrase fiel do dispositivo: os preços são fixados pela aplicação da relação geral entre o valor da proposta e o orçamento-base da Administração aos preços referenciais ou de mercado vigentes na data do aditamento.\n\nA relação geral decorre da proposta original: ela pode expressar **desconto** ou **ágio**. Por isso, não há liberdade para escolher, caso a caso, se a relação será aplicada. Contrato e regulamentos podem disciplinar procedimento, referencial e composição, mas não podem transformar em opcional a regra expressa do art. 127.\n\n## Três situações que não devem ser misturadas\n\n1. **Item realmente sem preço unitário contratual:** quando o aditamento exige obra ou serviço que não tem preço unitário no contrato, aplica-se o art. 127, com a relação proposta/orçamento-base sobre os preços vigentes na data do aditamento.\n2. **Item existente ou análogo na planilha:** a análise pode exigir aproveitamento do preço e das condições já contratadas. Não se deve chamar de item novo aquilo que já possui referência contratual utilizável.\n3. **Reequilíbrio de preço de item existente:** é instituto distinto, ligado à recomposição econômico-financeira; não é instrumento para formar o preço de novo escopo.\n\n## O que a construtora precisa provar\n\n- Por que o item é necessário (nexo com projeto, campo ou determinação da Administração)\n- Que não existe preço unitário contratual para a obra ou o serviço que precisa ser aditado\n- Composição de custos (mão de obra, materiais, equipamentos, encargos)\n- Critério de BDI adotado e coerência com a proposta\n- Relação geral entre a proposta vencedora e o orçamento-base, demonstrada com memória de cálculo\n- Preço referencial ou de mercado vigente na data do aditamento, com a composição que o sustenta\n- Impacto no saldo percentual do art. 125\n\n## Erros que destroem a tese\n\n1. Aceitar preço “chutado” pelo fiscal em planilha sem composição  \n2. Afastar a relação proposta/orçamento-base como se o desconto da proposta fosse opcional  \n3. Usar referência de tabela errada (SINAPI onde o edital manda SICRO, ou o inverso)  \n4. Executar o serviço inteiro e só depois discutir preço  \n5. Misturar item novo com reequilíbrio de item existente sem separar causas  \n\n## Roteiro de precificação\n\n1. Descreva o serviço com unidade e critério de medição.  \n2. Monte composição analítica.  \n3. Aplique BDI conforme a disciplina do certame e do contrato.  \n4. Aplique aos preços vigentes a relação proposta/orçamento-base, seja ela desconto ou ágio.  \n5. Documente premissas (produtividade, distância, interferências).  \n6. Submeta no processo do aditivo **antes** da execução plena.  \n\n## Jogo de planilha e item novo\n\nFormar preço de item novo com distorção proposital em relação a itens semelhantes da planilha original é risco clássico de apontamento de controle. Se o item é análogo, examine o preço e as condições já contratadas; se é realmente sem preço unitário, aplique o art. 127. Em ambos os casos, a memória deve explicar produtividade, insumos e BDI.\n\n## Papel dos referenciais SINAPI/SICRO\n\nUse o referencial compatível com a natureza do serviço e com a disciplina aplicável ao contrato. Pavimentação e obras rodoviárias frequentemente usam o SICRO; edificações frequentemente usam o SINAPI. O referencial não elimina a necessidade de composição analítica quando o item foge do código padrão.\n",
       "_source_file": "data/editorial/pages/lei-item-novo-desconto.json",
-      "material_hash": "daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c",
+      "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
@@ -1000,7 +1016,7 @@
       ],
       "law_version": "Lei nº 14.133/2021 (texto Planalto verificado em 2026-08-02)",
       "date_published": "2026-08-02",
-      "date_modified": "2026-08-02",
+      "date_modified": "2026-08-04",
       "author_public": "Biblioteca técnica CONFENGE",
       "author_is_tiago": false,
       "meta_description": "Art. 125 da Lei 14.133: como calcular o teto de 25% e a hipótese de 50% em reforma, o que entra no saldo e quais documentos sustentam o enquadramento.",
@@ -1011,7 +1027,8 @@
         "lei-14133-art124",
         "lei-14133-art126-132",
         "lei-14133-planalto",
-        "agu-alteracoes-contratuais-2024"
+        "agu-alteracoes-contratuais-2024",
+        "agu-on-50-2014"
       ],
       "cta_whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre limites de 25% e 50% no art. 125 em obra pública. Preciso validar o saldo de aditivos e os documentos. Origem: /lei-14133-obras/limite-25-50-aditivo-obra/",
       "cta_email_subject": "Análise inicial: saldo de aditivos 25%/50%",
@@ -1038,16 +1055,16 @@
         },
         {
           "q": "Supressões aumentam espaço para acréscimos?",
-          "a": "Não assuma compensação automática. Organize a conta do saldo com critério e formalização; a operação prática exige memória clara do que já foi aditado."
+          "a": "A memória deve manter acréscimos e supressões em conjuntos segregados. No âmbito federal, a ON AGU nº 50/2014 determina o cálculo isolado dos conjuntos e veda compensar itens distintos. A orientação tem âmbito próprio; outros entes podem adotar regulamento ou orientação específica."
         },
         {
           "q": "O percentual é sobre valor ou sobre m²?",
           "a": "O dispositivo fala em percentual do valor inicial atualizado do contrato, amarrado às alterações unilaterais de quantitativo/projeto nos termos da Lei. A planilha física importa para provar a alteração, mas o teto legal opera em valor."
         }
       ],
-      "body_markdown": "## O problema real\n\nDiretoria e orçamento olham o último aditivo e perguntam: “ainda cabe?”. Fiscalização olha a necessidade da obra. Contabilidade olha empenho. Sem memória do **valor inicial atualizado** e do histórico, o debate vira achismo.\n\n## Texto do art. 125 (síntese operacional)\n\nNas alterações unilaterais do **art. 124, I**, o contratado aceita, nas mesmas condições contratuais:\n\n- acréscimos ou supressões de até **25%** do valor inicial atualizado do contrato (obras, serviços ou compras);\n- em **reforma de edifício ou de equipamento**, acréscimos de até **50%**.\n\nFonte: Lei nº 14.133/2021, art. 125. Planalto, verificação em 02/08/2026.\n\nO **art. 126** fecha a porta para alterações unilaterais que transfigurem o objeto. Percentual disponível não legitima obra diferente da contratada.\n\n## O que precisa entrar na conta do saldo\n\n- Valor inicial do contrato e critérios de atualização previstos\n- Cada termo aditivo (acréscimo e supressão) com valor e data\n- Natureza da alteração (quantitativa vs mudança de projeto/especificação)\n- Itens novos e reequilíbrios .  que podem ter lógica distinta do puro quantitativo\n- Hipótese de 50%: só se o objeto se enquadrar como reforma de edifício ou equipamento\n\n## Exemplo aplicado (hipotético)\n\nContrato de pavimentação, valor inicial atualizado R$ 10 milhões. Já houve acréscimo formal de R$ 1,8 milhão (18%). Novo acréscimo pretendido de R$ 1,0 milhão (10%) levaria a 28%, acima de 25% se tudo for alteração unilateral quantitativa/projeto no mesmo enquadramento. Opções típicas: reavaliar escopo, separar o que exige acordo e reequilíbrio, ou recusar execução irregular. O número isolado não decide; o enquadramento jurídico-contratual decide.\n\n## Documentos mínimos\n\n1. Contrato e planilha inicial  \n2. Cronologia de aditivos e apostilas  \n3. Memória de cálculo do percentual acumulado  \n4. Projetos e OS que motivam a nova alteração  \n5. Justificativa técnica da Administração (quando existir)  \n6. Proposta vencedora (desconto) para precificação de itens  \n\n## Riscos de interpretação\n\n- Aplicar 50% a obra nova de edificação sem ser reforma\n- Ignorar atualização do valor inicial\n- Executar primeiro e formalizar depois quando o volume já estourou o teto\n- Confundir reajuste (art. 136) com aditivo quantitativo\n\n## Roteiro\n\n1. Atualize o valor base conforme o contrato.  \n2. Some acréscimos e registre supressões com critério.  \n3. Classifique a nova alteração.  \n4. Teste o teto do art. 125.  \n5. Se houver aumento de encargos, examine o art. 130 no mesmo instrumento.  \n6. Formalize antes de liberar frentes caras.  \n\n## Ressalva\n\nO caso concreto pode envolver regulamento do órgão, cláusulas específicas e entendimentos de controle. Esta página não esgota controvérsias sobre compensação de acréscimos/supressões nem sobre itens extracontratuais.\n",
+      "body_markdown": "## O problema real\n\nDiretoria e orçamento olham o último aditivo e perguntam: “ainda cabe?”. Fiscalização olha a necessidade da obra. Contabilidade olha empenho. Sem memória do **valor inicial atualizado** e do histórico, o debate vira achismo.\n\n## Texto do art. 125 (síntese operacional)\n\nNas alterações unilaterais do **art. 124, I**, o contratado aceita, nas mesmas condições contratuais:\n\n- acréscimos ou supressões de até **25%** do valor inicial atualizado do contrato (obras, serviços ou compras);\n- em **reforma de edifício ou de equipamento**, acréscimos de até **50%**.\n\nFonte: Lei nº 14.133/2021, art. 125. Planalto, verificação em 02/08/2026.\n\nO **art. 126** fecha a porta para alterações unilaterais que transfigurem o objeto. Percentual disponível não legitima obra diferente da contratada.\n\n## O que precisa entrar na conta do saldo\n\n- Valor inicial do contrato e critérios de atualização previstos\n- Cada termo aditivo, com valor, data e fundamento\n- Natureza da alteração (quantitativa, mudança de projeto/especificação ou outro regime aplicável)\n- Separação clara entre alteração quantitativa, item novo, reequilíbrio econômico-financeiro, reajuste e repactuação: todos podem ter impacto financeiro, mas não se misturam na mesma linha de cálculo só por isso\n- Hipótese de 50%: só se o objeto se enquadrar como reforma de edifício ou equipamento\n\n## Acréscimos e supressões: memória segregada\n\nNão trate uma supressão como crédito livre para novo acréscimo. Não se deve compensar automaticamente uma supressão com um acréscimo apenas para aparentar enquadramento no limite.\n\nA memória de cálculo deve manter acréscimos e supressões segregados. Para cada conjunto, demonstre separadamente:\n\n- a base de cálculo (valor inicial atualizado e critério de atualização);\n- os itens, quantitativos e preços de cada parcela;\n- a repercussão percentual de cada conjunto sobre a base;\n- o regime jurídico aplicável a cada alteração (alteração unilateral quantitativa ou de projeto, acordo, supressão consensual quando o caso exigir tratamento distinto, item novo, reequilíbrio, reajuste ou repactuação).\n\nA memória precisa permitir que um terceiro refaça o cálculo só com os documentos do processo, sem depender de narrativa oral.\n\nNo âmbito federal, a **Orientação Normativa AGU nº 50/2014** determina que os limites percentuais sejam aplicados isoladamente aos conjuntos de acréscimos e de supressões e veda a compensação entre itens distintos. A ON é orientação da AGU para seu âmbito de atuação; ela não converte, por si, essa disciplina em regra abstrata e idêntica para todos os entes. Estados e municípios podem ter regulamento ou orientação específica, que deve ser verificada no processo.\n\n## Exemplo aplicado (hipotético)\n\nContrato de pavimentação, valor inicial atualizado de R$ 10 milhões. Já houve acréscimo formal de R$ 1,8 milhão (18%). Novo acréscimo pretendido de R$ 1,0 milhão (10%) levaria o conjunto de acréscimos a 28%, acima de 25% se a medida for alteração unilateral quantitativa ou de projeto no mesmo enquadramento. Reequilíbrio econômico-financeiro não pode ser usado artificialmente para ocultar acréscimo de escopo, e fracionar ou reenquadrar parcelas para escapar do limite é prática indevida. Acima do limite, o caso exige análise jurídica e técnica específica; 28% não se regulariza automaticamente por trocar a nomenclatura da parcela.\n\n## Documentos mínimos\n\n1. Contrato e planilha inicial  \n2. Cronologia de aditivos e apostilas  \n3. Memória segregada dos percentuais de acréscimos e supressões  \n4. Projetos e OS que motivam a nova alteração  \n5. Justificativa técnica da Administração (quando existir)  \n6. Proposta vencedora para precificação de itens sem preço unitário  \n\n## Riscos de interpretação\n\n- Aplicar 50% a obra nova de edificação sem ser reforma\n- Ignorar atualização do valor inicial\n- Executar primeiro e formalizar depois quando o volume já estourou o teto\n- Confundir reajuste (art. 136) com aditivo quantitativo\n- Rebatizar acréscimo de escopo como reequilíbrio, ou fracionar parcelas, para aparentar respeito ao teto\n\n## Roteiro\n\n1. Atualize o valor base conforme o contrato.  \n2. Apure acréscimos e supressões em conjuntos segregados; não faça compensação automática.  \n3. Classifique a nova alteração.  \n4. Teste o teto do art. 125.  \n5. Se houver aumento de encargos, examine o art. 130 no mesmo instrumento.  \n6. Formalize antes de liberar frentes caras.  \n\n## Ressalva\n\nO caso concreto pode envolver regulamento do órgão, cláusulas específicas e entendimentos de controle. A ON AGU nº 50/2014 tem âmbito federal próprio; fora dele, verifique a disciplina aplicável ao ente. Esta página não esgota controvérsias sobre itens extracontratuais.\n",
       "_source_file": "data/editorial/pages/lei-limite-25-50.json",
-      "material_hash": "c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e",
+      "material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {

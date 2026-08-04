@@ -47,6 +47,15 @@ from scripts.site.inbound_gates import (  # noqa: E402
 SITE = "https://confenge.com.br"
 TODAY = date.today().isoformat()
 
+# Single-hop 301 targets live in `_redirects`. These URLs must never re-enter
+# indexable public surfaces (feed, hubs, related, sitemaps) after remediation.
+SUPERSEDED_URLS = frozenset(
+    {
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+    }
+)
+
 OLD_ORG = (
     "Diretoria B2G fracionada para construtoras e empresas de engenharia: "
     "inteligência de mercado, decisão de participação, proposta, proteção de "
@@ -83,19 +92,54 @@ def _write(p: Path, text: str) -> None:
     p.write_text(text, encoding="utf-8")
 
 
+def _normalize_conteudos_url(path: str) -> str:
+    path = path.strip()
+    if path.startswith("http"):
+        path = re.sub(r"^https?://[^/]+", "", path)
+    if not path.startswith("/"):
+        path = "/" + path
+    if path.startswith("/conteudos/") and path.rstrip("/") != "/conteudos" and not path.endswith("/"):
+        path = path + "/"
+    return path
+
+
 def indexable_map() -> dict[str, bool]:
-    """url path -> indexable for conteudos children."""
+    """url path -> indexable for conteudos children (superseded always false)."""
     out: dict[str, bool] = {}
     for p in (ROOT / "conteudos").glob("*/index.html"):
-        url = "/" + p.parent.as_posix().replace("\\", "/") + "/"
-        # fix double
-        if not url.startswith("/conteudos"):
-            url = "/conteudos/" + p.parent.name + "/"
-        else:
-            # p.parent is conteudos/slug
-            url = f"/conteudos/{p.parent.name}/"
+        url = f"/conteudos/{p.parent.name}/"
+        if url in SUPERSEDED_URLS:
+            out[url] = False
+            continue
         out[url] = is_indexable_html(_read(p))
     return out
+
+
+def force_noindex_superseded_pages() -> dict[str, Any]:
+    """Superseded HTML keeps a file for history, but must not compete for indexation."""
+    touched = 0
+    for url in SUPERSEDED_URLS:
+        p = ROOT / url.strip("/") / "index.html"
+        if not p.exists():
+            continue
+        html = _read(p)
+        new = html
+        new = re.sub(
+            r'name="robots" content="[^"]+"',
+            'name="robots" content="noindex,follow"',
+            new,
+            count=1,
+        )
+        new = re.sub(
+            r'content="[^"]+" name="robots"',
+            'content="noindex,follow" name="robots"',
+            new,
+            count=1,
+        )
+        if new != html:
+            _write(p, new)
+            touched += 1
+    return {"pages_noindexed": touched}
 
 
 def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[str, str, str]:
@@ -781,14 +825,14 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
             }
         )
 
-    # Prefer known high-intent indexable first
+    # Prefer known high-intent indexable first (never superseded redirects).
     priority = [
         "/conteudos/atraso-pagamento-contrato-publico-suspender/",
-        "/conteudos/limite-aditivo-25-50-obra-publica/",
         "/conteudos/glosa-por-qualidade-obra-publica/",
         "/conteudos/resposta-notificacao-atraso-obra-publica/",
         "/conteudos/sinapi-desonerado-nao-desonerado/",
         "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
     ]
     by_url = {i["url"]: i for i in items_meta}
     featured = []
@@ -969,18 +1013,19 @@ def remediate_feed() -> dict[str, Any]:
         block = m.group(0)
         links = re.findall(r"<link>([^<]+)</link>", block)
         for loc in links:
-            path = loc
-            if loc.startswith("http"):
-                path = re.sub(r"^https?://[^/]+", "", loc)
+            path = _normalize_conteudos_url(loc)
+            if path in SUPERSEDED_URLS:
+                removed += 1
+                return ""
             if path.startswith("/conteudos/") and path.rstrip("/") != "/conteudos":
-                if not path.endswith("/"):
-                    path = path + "/"
                 if not idx_map.get(path, False):
                     removed += 1
                     return ""
         return block
 
     text2 = re.sub(r"<item>.*?</item>", keep_item, text, flags=re.S)
+    # Collapse blank lines left by removed items without rewriting channel metadata.
+    text2 = re.sub(r"\n{3,}", "\n\n", text2)
     _write(feed_path, text2)
     return {"removed_items": removed}
 
@@ -1446,6 +1491,8 @@ def main() -> int:
     report["radar"] = "fixed"
     fix_radar(brand)
 
+    # Superseded pages first so hub/feed/indexable_map never treat them as KEEP.
+    report["superseded"] = force_noindex_superseded_pages()
     report["hub"] = remediate_hub(brand)
     report["feed"] = remediate_feed()
     report["conteudos"] = remediate_conteudos_pages(brand)
@@ -1455,6 +1502,7 @@ def main() -> int:
     # Re-run hub + pillars after page rewrites so counts stay correct
     report["hub_pass2"] = remediate_hub(brand)
     report["pillars_pass2"] = remediate_pillars(brand)
+    report["feed_pass2"] = remediate_feed()
 
     rows = build_inventory(brand)
     # After remediation, reclassify machine indexable as KEEP if clean

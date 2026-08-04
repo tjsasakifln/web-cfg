@@ -14,8 +14,8 @@ A aprovação vale para o conteúdo material canônico, as fontes exatas e o dep
 ## Limite de 25% e 50% no art. 125: o que conta no aditivo de obra
 
 - Preview: https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/limite-25-50-aditivo-obra/
-- Material hash v3: `c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e`
-- Fontes a conferir: `lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024`
+- Material hash v3: `52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5`
+- Fontes a conferir: `lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024,agu-on-50-2014`
 - Concorrente interno: `/conteudos/limite-aditivo-25-50-obra-publica/`
 - Risco de canibalização: alto: definir uma única canônica antes de indexar; 301 ou noindex do peer somente após decisão humana.
 
@@ -24,9 +24,9 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
   --reviewer "<nome humano real>" \
   --page-id lei-limite-25-50 \
   --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
-  --sources lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
+  --sources lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024,agu-on-50-2014 \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash c9aaac9c1ca8680bd6dbdd94c957a79834e19031e2cbab58582b90c08bf8ca6e \
+  --material-hash 52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5 \
   --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
@@ -35,8 +35,8 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
 ## Checklist de pedido de aditivo em obra pública
 
 - Preview: https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/
-- Material hash v3: `bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18`
-- Fontes a conferir: `lei-14133-art124,lei-14133-art125,lei-14133-planalto,agu-alteracoes-contratuais-2024`
+- Material hash v3: `bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15`
+- Fontes a conferir: `lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024`
 - Concorrente interno: `/conteudos/erro-de-projeto-gera-aditivo-obra-publica/`
 - Risco de canibalização: parcial: diferenciar intenção (erro de projeto versus checklist transversal) e manter linkagem contextual.
 
@@ -45,18 +45,18 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
   --reviewer "<nome humano real>" \
   --page-id guia-checklist-aditivo \
   --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
-  --sources lei-14133-art124,lei-14133-art125,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
+  --sources lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash bd7c4b267585cd8aed9f7b2df8484bfa5bf0d212af4e2f7ec728607d07d35a18 \
+  --material-hash bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15 \
   --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
 ```
 
-## Item novo no aditivo: como formar preço e preservar o desconto da proposta
+## Item novo no aditivo: preço e relação proposta/orçamento-base
 
 - Preview: https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/
-- Material hash v3: `daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c`
+- Material hash v3: `06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f`
 - Fontes a conferir: `lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa`
 - Concorrente interno: `/conteudos/desconto-da-proposta-em-item-novo-aditivo/`
 - Risco de canibalização: alto: escolher canônica e impedir dual-index antes da publicação.
@@ -68,7 +68,7 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
   --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
   --sources lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash daaa4e6d005169f8a7f04dbef0a43f11b2eded726877fb8ad2b03a6be1466c8c \
+  --material-hash 06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f \
   --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
