@@ -18,17 +18,21 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from scripts.editorial.cohort import FIRST_COHORT_IDS
 from scripts.editorial.registry import (
     REVIEW_PREVIEW_BASE_URL,
+    approval_is_current,
+    get_page,
     load_registry,
     material_hash,
     resolve_page_sources,
+    save_registry,
 )
 from scripts.editorial.sources import load_manifest
-
-ROOT = Path(__file__).resolve().parents[2]
-
 
 def _now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -194,22 +198,74 @@ def verify_preview_cohort(
     return evidence
 
 
+def reconfirm_approval_preview(
+    registry: dict[str, Any], *, page_id: str, expected_head: str, base_url: str = REVIEW_PREVIEW_BASE_URL
+) -> dict[str, Any]:
+    """Refresh only preview evidence for already approved, unchanged material.
+
+    This cannot create, revive or alter an approval decision.  It is the
+    explicit path for a later non-material commit whose new deploy preview
+    still renders exactly the material the human already approved.
+    """
+    manifest = load_manifest()
+    page = get_page(registry, page_id)
+    if not page or not approval_is_current(page, manifest):
+        raise ValueError("approval_not_current_for_preview_reconfirmation")
+    evidence = verify_preview_cohort(
+        registry, base_url=base_url, expected_head=expected_head
+    ).get(page_id)
+    if not evidence:
+        raise ValueError("preview_packet_missing_requested_page")
+    approval = page.get("approval") or {}
+    approval["preview"] = evidence
+    page["approval"] = approval
+    page.setdefault("history", []).append(
+        {
+            "at": _now(),
+            "event": "preview_reconfirmed_nonmaterial_commit",
+            "preview_build_sha": evidence["preview_build_sha"],
+            "material_hash": evidence["material_hash"],
+        }
+    )
+    return evidence
+
+
 def main(argv: list[str] | None = None) -> int:
     """Read-only preview verification for a changed non-material commit."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Verify PR #54 deploy-preview identity")
     parser.add_argument("--verify", action="store_true", help="Verify build-info, packet and all cohort pages")
+    parser.add_argument(
+        "--reconfirm-approval",
+        action="store_true",
+        help="Refresh preview evidence only for one existing current approval",
+    )
+    parser.add_argument("--page-id", default="", help="Required with --reconfirm-approval")
     parser.add_argument("--expected-head", default="", help="Exact PR head; defaults to local checked-out HEAD")
     parser.add_argument("--preview-base-url", default=REVIEW_PREVIEW_BASE_URL)
     args = parser.parse_args(argv)
-    if not args.verify:
-        parser.error("pass --verify; this command never approves or changes a registry")
+    if not args.verify and not args.reconfirm_approval:
+        parser.error("pass --verify or --reconfirm-approval; this command never approves a page")
+    if args.verify and args.reconfirm_approval:
+        parser.error("choose only one action")
     expected = (args.expected_head or deploy_commit()).strip().lower()
     try:
-        evidence = verify_preview_cohort(
-            load_registry(), base_url=args.preview_base_url, expected_head=expected
-        )
+        registry = load_registry()
+        if args.reconfirm_approval:
+            if not args.page_id:
+                parser.error("--page-id is required with --reconfirm-approval")
+            evidence = reconfirm_approval_preview(
+                registry,
+                page_id=args.page_id,
+                base_url=args.preview_base_url,
+                expected_head=expected,
+            )
+            save_registry(registry, source_manifest=load_manifest())
+        else:
+            evidence = verify_preview_cohort(
+                registry, base_url=args.preview_base_url, expected_head=expected
+            )
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
