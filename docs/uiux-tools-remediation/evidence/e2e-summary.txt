@@ -3,5 +3,5 @@ overflows=0
 axe_critical=0
 axe_serious=0
 axe_moderate=0
-screenshots=/tmp/grok-goal-a2062e6b10e9/implementer/e2e-skeptic/screenshots/after
-generated=2026-08-04T15:01:38.041Z
+screenshots=/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after
+generated=2026-08-04T15:05:23.084Z
