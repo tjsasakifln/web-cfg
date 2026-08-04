@@ -1,19 +1,7 @@
 #!/usr/bin/env bash
-# Wave 1 human approval runner — MUST be executed by a named human outside agents/CI.
-# This script does NOT approve anything by itself; it invokes approve_cli.py per page
-# only when the human supplies checklist + material hash + explicit confirm.
-#
-# Usage (human only):
-#   ALLOW_HUMAN_APPROVAL=1 ./scripts/editorial/approve_wave1_tiago.sh \
-#     --reviewer "Tiago Sasaki" \
-#     --page-id lei-art124-alteracao-obra \
-#     --material-hash <hash> \
-#     --notes "..." \
-#     --sources lei-14133-planalto \
-#     --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-#     --confirm
-#
-# Forbidden: approve-all, bulk page lists, CI, empty checklist, missing hash.
+# Human-only wrapper for one first-cohort approval. It does not approve by itself.
+# The canonical current command, hashes and deploy-preview URLs are generated in
+# docs/editorial/HUMAN-ACTION-NOW.md; do not copy historical hashes from elsewhere.
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -28,27 +16,23 @@ if [[ "${ALLOW_HUMAN_APPROVAL:-}" != "1" ]]; then
   exit 3
 fi
 
-# Reject bulk flags
-for a in "$@"; do
-  case "$a" in
-    --approve-all|ALL|*','*|approve-all)
+# The wrapper rejects only page-selection bulk flags. Source ids are correctly
+# comma-separated and are validated exactly by approve_cli.py.
+for arg in "$@"; do
+  case "$arg" in
+    --approve-all|--page-ids|ALL|approve-all)
       echo "ERROR: bulk_approval_forbidden" >&2
       exit 3
       ;;
   esac
 done
 
-if [[ "$*" != *"--confirm"* ]]; then
-  echo "ERROR: --confirm required" >&2
-  exit 3
-fi
-if [[ "$*" != *"--checklist"* ]]; then
-  echo "ERROR: --checklist required" >&2
-  exit 3
-fi
-if [[ "$*" != *"--material-hash"* ]]; then
-  echo "ERROR: --material-hash required" >&2
-  exit 3
-fi
+for required in --confirm --checklist --material-hash --page-id --sources; do
+  if [[ " $* " != *" $required "* ]]; then
+    echo "ERROR: $required required" >&2
+    exit 3
+  fi
+done
 
 exec python3 scripts/editorial/approve_cli.py "$@"
+
