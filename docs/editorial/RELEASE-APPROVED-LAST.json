@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "ts": "2026-08-04T02:08:12.356631+00:00",
+  "valid_human_approved": 0,
+  "page_ids": [],
+  "wave1_human_approved_truth": 0,
+  "wave1_indexable_truth": 0,
+  "actions": [
+    "noop"
+  ],
+  "gsc_submit_candidates": [],
+  "blocked": [
+    "no_valid_human_approvals — named human must run approve_cli.py per page"
+  ]
+}

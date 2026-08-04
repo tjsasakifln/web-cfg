@@ -63,7 +63,7 @@
 <nav class="nav-desktop" aria-label="Principal">
 <a href="/ferramentas/">Ferramentas</a>
 <a href="/conteudos/">Conteúdos</a>
-<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
+<a href="/defesa-margem-contratos-publicos/" data-tool-to-offer="defesa-margem">Proteger contrato</a>
 <a href="/bid-room-licitacoes-obras/">Bid Room</a>
 </nav>
 <a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
@@ -113,7 +113,7 @@
 </div>
 </form>
 <div id="resultado" class="tool-result" hidden></div>
-<button type="button" class="button button-secondary" id="btn-download" hidden>Baixar matriz (.txt)</button>
+<button type="button" class="button button-secondary" id="btn-download" data-tool-download="1" hidden>Baixar matriz (.txt)</button>
 <section>
 <h2>Documentos típicos por linha</h2>
 <p>Independente da imputação preliminar: pluviometria, diário de obra, OS, ofícios, medições, cronograma baseline e revisões, notificações. Veja também <a href="/atrasos-prorrogacao-obras-publicas/">atrasos e prorrogação</a> e <a href="/conteudos/como-provar-atraso-obra-publica/">como provar atraso</a>.</p>
@@ -137,6 +137,7 @@
 <script>
 (function(){
   const T = window.ConfengeTools;
+  if (T.bindToolLifecycle) T.bindToolLifecycle({ tool: 'matriz-atraso' });
   const MAP = {'chuva': ('compartilhado / caso a caso', 'Pluviometria, diário, cláusula de intempéries, baseline de cronograma'), 'projeto': ('Administração (tendência)', 'Versões de projeto, solicitações de alteração, OS, impacto de caminho crítico'), 'desaprop': ('Administração (tendência)', 'Atas de liberação de área, ofícios, fotos, cronograma'), 'pagamento': ('Administração (tendência)', 'Medições aprovadas, notas, comprovantes, notificações de atraso'), 'material': ('compartilhado / mercado', 'Cotações, lead time, comunicações, cláusulas de reajuste/fornecimento'), 'mao_obra': ('contratado (tendência)', 'Escalas, subcontratos, notificações da fiscalização'), 'equip': ('contratado (tendência)', 'Manutenção, backups, diário'), 'ordem': ('Administração (tendência)', 'OS de paralisação, embargos, reinício'), 'medicao': ('Administração (tendência)', 'Protocolos de medição, prazos regimentais, e-mails/ofícios'), 'outros_adm': ('Administração (hipótese)', 'Prova do nexo e da temporalidade'), 'outros_cont': ('contratado (hipótese)', 'Prova do nexo e da temporalidade')};
   const form = document.getElementById('atraso-form');
   const out = document.getElementById('resultado');
@@ -185,7 +186,7 @@
     lastText = ['CONFENGE matriz atraso', 'dias='+dias, 'matriz_contrato='+matriz, ...rows.map(r => r.k+'|'+r.resp), new Date().toISOString()].join('\n');
     dl.hidden = false;
     document.getElementById('tool-cta-wa').href = T.waLink('Olá, Tiago. Usei a matriz de atraso da CONFENGE. Causas: '+selected.join(', ')+'. Dias alegados: '+dias+'. Quero organizar a cronologia e o pedido de prorrogação/defesa.');
-    T.track('tool_result', { tool: 'matriz-atraso', causes: selected.length, dias });
+    T.track('tool_complete', { tool: 'matriz-atraso', causes: selected.length, dias });
   });
   dl.addEventListener('click', function(){ T.downloadText('confenge-matriz-atraso.txt', lastText); });
 })();

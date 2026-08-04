@@ -63,7 +63,7 @@
 <nav class="nav-desktop" aria-label="Principal">
 <a href="/ferramentas/">Ferramentas</a>
 <a href="/conteudos/">Conteúdos</a>
-<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
+<a href="/defesa-margem-contratos-publicos/" data-tool-to-offer="defesa-margem">Proteger contrato</a>
 <a href="/bid-room-licitacoes-obras/">Bid Room</a>
 </nav>
 <a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
@@ -114,10 +114,10 @@
 </div>
 </form>
 <div id="resultado" class="tool-result" hidden></div>
-<button type="button" class="button button-secondary" id="btn-download" hidden>Baixar checklist (.txt)</button>
+<button type="button" class="button button-secondary" id="btn-download" data-tool-download="1" hidden>Baixar checklist (.txt)</button>
 <section>
 <h2>Leitura útil</h2>
-<p><a href="/reequilibrio-obras-publicas/">Pilar reequilíbrio</a> · <a href="/conteudos/calculo-reequilibrio-economico-financeiro/">Cálculo de reequilíbrio</a> · <a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin</a></p>
+<p><a href="/reequilibrio-obras-publicas/">Pilar reequilíbrio</a> · <a href="/conteudos/calculo-reequilibrio-economico-financeiro/">Cálculo de reequilíbrio</a> · <a href="/defesa-margem-contratos-publicos/" data-tool-to-offer="defesa-margem">Contract Defense &amp; Margin</a></p>
 </section>
 
 <section class="section">
@@ -138,6 +138,7 @@
 <script>
 (function(){
   const T = window.ConfengeTools;
+  if (T.bindToolLifecycle) T.bindToolLifecycle({ tool: 'checklist-reequilibrio' });
   const keys = ['fato_gerador', 'cronologia', 'comunicacao', 'planilha', 'composicoes', 'indices', 'contrato', 'projeto', 'medicoes', 'pedido', 'anexos', 'juridico'];
   const form = document.getElementById('chk-form');
   const out = document.getElementById('resultado');
@@ -172,8 +173,8 @@
     lastText = ['CONFENGE — checklist reequilíbrio', 'score='+score, 'done='+done.join('|'), 'missing='+missing.join('|'), 'urgencia='+urg, 'impacto='+impacto, new Date().toISOString()].join('\n');
     dl.hidden = false;
     document.getElementById('tool-cta-wa').href = T.waLink('Olá, Tiago. Usei o checklist de reequilíbrio da CONFENGE. Score '+Math.round(score*100)+'%. Itens faltantes: '+(missing.slice(0,5).join(', ')||'nenhum')+'. Quero validar o dossiê.');
-    T.track('tool_result', { tool: 'checklist-reequilibrio', score: Math.round(score*100), urgencia: urg });
-    T.track('tool_use', { tool: 'checklist-reequilibrio', action: 'diagnose' });
+    T.track('tool_complete', { tool: 'checklist-reequilibrio', score: Math.round(score*100), urgencia: urg });
+    T.track('tool_start', { tool: 'checklist-reequilibrio' });
   });
   dl.addEventListener('click', function(){ T.downloadText('confenge-checklist-reequilibrio.txt', lastText); });
 })();

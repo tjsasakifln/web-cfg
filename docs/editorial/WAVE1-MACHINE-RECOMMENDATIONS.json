@@ -1,0 +1,153 @@
+{
+  "generated_at": "2026-08-04T02:07:14.467864+00:00",
+  "human_approved_count": 0,
+  "indexable_count": 0,
+  "note": "RECOMMEND_* is not HUMAN_APPROVED. Named human must run approve_cli.py.",
+  "counts": {
+    "RECOMMEND_APPROVE": 11,
+    "RECOMMEND_REJECT": 1
+  },
+  "pages": [
+    {
+      "page_id": "guia-checklist-aditivo",
+      "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "title": "Checklist de pedido de aditivo em obra pública | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "guia-docs-reequilibrio",
+      "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "title": "Documentos para pedido de reequilíbrio em obra pública | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "guia-glosa",
+      "url": "/guias-contratos-obras/contestar-glosa-medicao/",
+      "title": "Documentos para contestar glosa de medição em obra pública | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "guia-notificacao-atraso",
+      "url": "/guias-contratos-obras/responder-notificacao-atraso/",
+      "title": "Como responder notificação por atraso em obra pública | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "jur-sumula-260-art",
+      "url": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "recommendation": "RECOMMEND_REJECT",
+      "reasons": [
+        "already_rejected_or_jurisprudence_blocked"
+      ],
+      "risk": "high"
+    },
+    {
+      "page_id": "lei-art124-alteracao-obra",
+      "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "title": "Art. 124 da Lei 14.133: quando o aditivo de obra é unilateral ou por acordo | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "lei-atraso-administracao",
+      "url": "/lei-14133-obras/atraso-imputavel-administracao/",
+      "title": "Atraso imputável à Administração na Lei 14.133: prova e efeitos na obra | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "lei-item-novo-desconto",
+      "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "title": "Item novo no aditivo: como formar preço e preservar o desconto da proposta | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "lei-limite-25-50",
+      "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "title": "Limite de 25% e 50% no art. 125: o que conta no aditivo de obra | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "lei-parcela-incontroversa",
+      "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "title": "Parcela incontroversa na medição: o que a Lei 14.133 manda pagar | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "lei-reequilibrio-reajuste",
+      "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "title": "Reequilíbrio, reajuste e repactuação na Lei 14.133: qual caminho na obra | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    },
+    {
+      "page_id": "lei-servico-sem-aditivo",
+      "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "title": "Serviço executado sem termo aditivo: risco, prova e enquadramento na 14.133 | CONFENGE",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "recommendation": "RECOMMEND_APPROVE",
+      "reasons": [
+        "machine_checks_passed"
+      ],
+      "risk": "low",
+      "note": "Machine recommendation only — not human approval."
+    }
+  ]
+}
