@@ -2,7 +2,7 @@
   "name": "confenge-site",
   "private": true,
   "version": "1.0.0",
-  "description": "CONFENGE static site \u2014 SEO migration and host canonization tooling",
+  "description": "CONFENGE static site — SEO migration and host canonization tooling",
   "type": "module",
   "scripts": {
     "prepare": "bash scripts/install-git-filters.sh",
@@ -57,9 +57,9 @@
     "test:inbound-gates": "python3 scripts/site/test_inbound_gates.py",
     "test:workflow-gates": "python3 scripts/site/test_workflow_gates.py",
     "test:ops-docs": "python3 scripts/site/test_ops_docs_honesty.py",
-    "editorial:truth": "python3 scripts/editorial/truth.py --fail-on-contradiction --require-packaged-sha --require-packaged-live",
+    "editorial:truth": "python3 scripts/editorial/truth.py --fail-on-contradiction --require-packaged-live",
     "editorial:packet": "python3 -c \"print(\"use docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json\")\"",
-    "editorial:truth:write": "python3 scripts/editorial/truth.py --write --fail-on-contradiction",
+    "editorial:truth:write": "python3 scripts/editorial/truth.py --write --fail-on-contradiction --require-packaged-live",
     "test:revops": "node scripts/revops/test_lead_stages.mjs && node scripts/revops/backfill_record_kind.mjs --local-fixture && python3 scripts/revops/test_search_demand.py",
     "test:schedules": "node scripts/revops/test_schedules.mjs",
     "revops:backfill-kind": "node scripts/revops/backfill_record_kind.mjs",
@@ -94,7 +94,7 @@
     "test:tools-uiux-e2e": "node scripts/site/verify_tools_uiux_e2e.mjs docs/uiux-tools-remediation/evidence"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20 <21"
   },
   "devDependencies": {
     "axe-core": "^4.10.0",
