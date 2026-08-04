@@ -17,6 +17,7 @@ from scripts.pseo.html_shell import (
     wa_link,
 )
 from scripts.editorial.sources import load_manifest
+from scripts.editorial.checklist_ui import render_structured_checklist
 
 
 def _md_inline(text: str) -> str:
@@ -31,6 +32,15 @@ def _md_inline(text: str) -> str:
     return t
 
 
+
+_MONTHS_PT = ("", "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro")
+
+def format_date_br(iso):
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", str(iso or "").strip())
+    if not m: return str(iso or "")
+    y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    if not (1 <= mo <= 12): return str(iso)
+    return f"{d} de {_MONTHS_PT[mo]} de {y}"
 
 INTERACTION_TYPES = frozenset({"article", "operational_guide", "checklist", "calculator", "diagnostic"})
 
@@ -291,6 +301,7 @@ def render_page(page: dict[str, Any]) -> str:
         (hub_name, hub_url),
         (title, None),
     ]
+    structured_html = render_structured_checklist(page) if page.get("checklist_items") else ""
     body_html = markdown_to_html(
         page.get("body_markdown") or "",
         checklist=(resolve_interaction_type(page)=="checklist" and not page.get("checklist_items")),
@@ -350,8 +361,8 @@ def render_page(page: dict[str, Any]) -> str:
     meta_line = (
         f'<div class="article-meta" role="list">'
         f'<span class="article-meta-chip" role="listitem">{e(author_name)}</span>'
-        f'<span class="article-meta-chip" role="listitem">Publicado <time datetime="{e(published)}">{e(published)}</time></span>'
-        f'<span class="article-meta-chip" role="listitem">Revisado <time datetime="{e(modified)}">{e(modified)}</time></span>'
+        f'<span class="article-meta-chip" role="listitem">Publicado em <time datetime="{e(published)}">{e(format_date_br(published))}</time></span>'
+        f'<span class="article-meta-chip" role="listitem">Revisado em <time datetime="{e(modified)}">{e(format_date_br(modified))}</time></span>'
         f"</div>"
     )
 
@@ -405,6 +416,7 @@ def render_page(page: dict[str, Any]) -> str:
 <span class="answer-box-kicker">Resposta direta</span>
 <p class="answer-box-body">{e(answer)}</p>
 </div>
+{structured_html}
 <div class="editorial-body">
 {body_html}
 </div>

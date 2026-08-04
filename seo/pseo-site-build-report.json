@@ -1,9 +1,9 @@
 {
   "ok": true,
-  "web_cfg_sha": "4003f94de0148a46765c1a0d6b0bcea646129736",
+  "web_cfg_sha": "73fa460a01e73bc389341d9b1501d3564c46fe20",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "4b1ad71444035878b9504065694e40cc91ae163e37a77dfc65468d531f166335",
+  "public_artifact_hash": "8a7be5fa354900855854edb39796da37eb9cd86946d7320a4d9f339f3b4d58e6",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
     "counts": {
@@ -30,7 +30,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 345,
+    "file_count": 380,
     "finding_count": 0
   },
   "errors": []

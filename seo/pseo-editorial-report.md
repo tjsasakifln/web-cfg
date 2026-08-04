@@ -3,7 +3,7 @@
 - ok: **True**
 - pages: 23
 - publish fails: 0
-- P0 issues: 30
+- P0 issues: 25
 
 | page_id | status | decision | P0 | P1 | recommendation |
 |---|---|---|---:|---:|---|
@@ -12,11 +12,11 @@
 | `market-edificacoes-publicas-mg` | reject | pass | 0 | 0 | reject_or_noindex |
 | `market-edificacoes-publicas-rs` | reject | pass | 0 | 0 | reject_or_noindex |
 | `agency-88830609` | reject | pass | 2 | 0 | reject_or_noindex |
-| `price-manutencao-predial-engenharia-rs` | reject | pass | 4 | 0 | reject_or_noindex |
-| `price-edificacoes-publicas-mg` | reject | pass | 2 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-pi` | reject | pass | 1 | 1 | reject_or_noindex |
-| `price-edificacoes-publicas-rs` | reject | pass | 2 | 1 | reject_or_noindex |
-| `price-pavimentacao-infraestrutura-viaria-sc` | reject | pass | 1 | 0 | reject_or_noindex |
+| `price-manutencao-predial-engenharia-rs` | reject | pass | 3 | 0 | reject_or_noindex |
+| `price-edificacoes-publicas-mg` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-pi` | reject | pass | 0 | 1 | reject_or_noindex |
+| `price-edificacoes-publicas-rs` | reject | pass | 1 | 1 | reject_or_noindex |
+| `price-pavimentacao-infraestrutura-viaria-sc` | reject | pass | 0 | 0 | reject_or_noindex |
 | `comp-manutencao-predial-engenharia-rs` | reject | pass | 1 | 0 | reject_or_noindex |
 | `radar-edificacoes-publicas-pr` | reject | pass | 3 | 0 | reject_or_noindex |
 | `radar-pavimentacao-infraestrutura-viaria-sc` | reject | pass | 4 | 0 | reject_or_noindex |
@@ -37,26 +37,19 @@
 
 ## price-manutencao-predial-engenharia-rs
 - **P0** `ingestion_prefix_name`: Nome de órgão com prefixo de ingestão
-- **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: buyers<3
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: max_buyer_share>0.60
 
 ## price-edificacoes-publicas-mg
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-pavimentacao-infraestrutura-viaria-pi
-- **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
 
 ## price-edificacoes-publicas-rs
 - **P0** `internal_slug_visible`: Slug/taxonomia interna no texto
-- **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
 - **P1** `missing_accents`: Termo técnico sem acentuação editorial
-
-## price-pavimentacao-infraestrutura-viaria-sc
-- **P0** `internal_language_public`: Linguagem interna de governança/pipeline no HTML público
 
 ## comp-manutencao-predial-engenharia-rs
 - **P0** `sample_concentration`: Amostra concentrada/insuficiente: suppliers<3

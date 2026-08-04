@@ -1,3 +1,4 @@
+/** Canonical events: tool_view, tool_start, tool_complete, tool_copy, tool_download, tool_reset, tool_to_content, tool_to_offer, tool_to_whatsapp, tool_to_form, nurture_opt_in */
 (function () {
   "use strict";
   var P = "confenge.tool.", TTL = 864e5 * 30;

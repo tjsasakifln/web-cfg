@@ -12,7 +12,7 @@
     "reject": 18
   },
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-  "generated_at": "2026-08-03",
+  "generated_at": "2026-08-04",
   "human_review_policy": {
     "indexable_states": [
       "APPROVED",
@@ -73,7 +73,7 @@
       "indexability_score": 79,
       "indexability_score_alias": 79,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -183,7 +183,7 @@
       "indexability_score": 73,
       "indexability_score_alias": 73,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -295,7 +295,7 @@
       "indexability_score": 77,
       "indexability_score_alias": 77,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -405,7 +405,7 @@
       "indexability_score": 77,
       "indexability_score_alias": 77,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -531,7 +531,7 @@
       "indexability_score": 85,
       "indexability_score_alias": 85,
       "intent": "avaliar_orgao_comprador",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "agency_name_ingestion_prefix",
         "suppliers<3",
@@ -646,7 +646,7 @@
       "indexability_score": 77,
       "indexability_score_alias": 77,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "buyers<3",
         "temporal_span_days<90",
@@ -762,7 +762,7 @@
       "indexability_score": 75,
       "indexability_score_alias": 75,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "temporal_span_days<90",
         "no_comparison_group"
@@ -874,7 +874,7 @@
       "indexability_score": 74,
       "indexability_score_alias": 74,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -991,7 +991,7 @@
       "indexability_score": 73,
       "indexability_score_alias": 73,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -1105,7 +1105,7 @@
       "indexability_score": 73,
       "indexability_score_alias": 73,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -1217,7 +1217,7 @@
       "indexability_score": 73,
       "indexability_score_alias": 73,
       "intent": "compreender_concorrencia",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "suppliers<3"
       ],
@@ -1298,6 +1298,7 @@
           "contract_url_as_opportunity=7",
           "duplicate_items=1",
           "duplicate_rate>0",
+          "radar_stale_hours>72",
           "zero_used_for_missing_value=1"
         ],
         "observation_count": 15,
@@ -1320,28 +1321,30 @@
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Edificações públicas — Parana",
       "human_review": "PENDING",
-      "indexability_score": 82,
-      "indexability_score_alias": 82,
+      "indexability_score": 77,
+      "indexability_score_alias": 77,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "duplicate_items=1",
         "duplicate_rate>0",
         "contract_url_as_opportunity=7",
-        "zero_used_for_missing_value=1"
+        "zero_used_for_missing_value=1",
+        "radar_stale_hours>72"
       ],
       "observation_count": 15,
       "page_id": "radar-edificacoes-publicas-pr",
-      "page_material_hash": "562e4bb0301a3632cf95e941757183e8129ad77169485a72a46391ef36731927",
+      "page_material_hash": "3c51da9b37d54bae134468f10df0c9e123fff4021b11ab5ff1e8cf897f8ada07",
       "page_type": "radar",
-      "publication_decision_reason": "duplicate_items=1; duplicate_rate>0; contract_url_as_opportunity=7; zero_used_for_missing_value=1; score=82",
+      "publication_decision_reason": "duplicate_items=1; duplicate_rate>0; contract_url_as_opportunity=7; zero_used_for_missing_value=1; radar_stale_hours>72; score=77",
       "quality_eligible": false,
       "reasons": [
         "duplicate_items=1",
         "duplicate_rate>0",
         "contract_url_as_opportunity=7",
         "zero_used_for_missing_value=1",
-        "score=82"
+        "radar_stale_hours>72",
+        "score=77"
       ],
       "region": "PR",
       "related_urls": [],
@@ -1382,7 +1385,7 @@
         "comparability": 5,
         "differentiation": 10,
         "evidence": 15,
-        "freshness": 5,
+        "freshness": 0,
         "icp_adherence": 15,
         "service_cta": 5
       },
@@ -1415,7 +1418,8 @@
         "mandatory_fail": [
           "contract_url_as_opportunity=4",
           "duplicate_items=2",
-          "duplicate_rate>0"
+          "duplicate_rate>0",
+          "radar_stale_hours>72"
         ],
         "observation_count": 7,
         "period_end": "2026-07-31",
@@ -1446,26 +1450,28 @@
       ],
       "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Santa Catarina",
       "human_review": "NEEDS_DATA_FIX",
-      "indexability_score": 75,
-      "indexability_score_alias": 75,
+      "indexability_score": 70,
+      "indexability_score_alias": 70,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
         "duplicate_items=2",
         "duplicate_rate>0",
-        "contract_url_as_opportunity=4"
+        "contract_url_as_opportunity=4",
+        "radar_stale_hours>72"
       ],
       "observation_count": 7,
       "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
-      "page_material_hash": "211f61e52226dae89aa9c9c912b500f9a8c49897451c2a2c5bbe1c7950cfefbd",
+      "page_material_hash": "805ca57d06a5dcb679bb67045248b390613743f10862b4580b3f219c95f6020b",
       "page_type": "radar",
-      "publication_decision_reason": "duplicate_items=2; duplicate_rate>0; contract_url_as_opportunity=4; score=75",
+      "publication_decision_reason": "duplicate_items=2; duplicate_rate>0; contract_url_as_opportunity=4; radar_stale_hours>72; score=70",
       "quality_eligible": false,
       "reasons": [
         "duplicate_items=2",
         "duplicate_rate>0",
         "contract_url_as_opportunity=4",
-        "score=75"
+        "radar_stale_hours>72",
+        "score=70"
       ],
       "region": "SC",
       "related_urls": [],
@@ -1498,7 +1504,7 @@
         "comparability": 5,
         "differentiation": 6,
         "evidence": 13,
-        "freshness": 5,
+        "freshness": 0,
         "icp_adherence": 14,
         "service_cta": 5
       },
@@ -1529,7 +1535,8 @@
         "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
         "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
         "mandatory_fail": [
-          "contract_url_as_opportunity=2"
+          "contract_url_as_opportunity=2",
+          "radar_stale_hours>72"
         ],
         "observation_count": 5,
         "period_end": "2026-07-31",
@@ -1558,22 +1565,24 @@
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Saneamento e hidráulica — Santa Catarina",
       "human_review": "PENDING",
-      "indexability_score": 70,
-      "indexability_score_alias": 70,
+      "indexability_score": 65,
+      "indexability_score_alias": 65,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
-        "contract_url_as_opportunity=2"
+        "contract_url_as_opportunity=2",
+        "radar_stale_hours>72"
       ],
       "observation_count": 5,
       "page_id": "radar-saneamento-hidraulica-sc",
-      "page_material_hash": "6bcec90b32a51d09103983fcd64d4f9c04dbb060ff592400f01f67829776d06f",
+      "page_material_hash": "e175f615a8048f4789d08d5077e23d3d58b1685db26d4fff290fd6ef51d174da",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=2; score=70",
+      "publication_decision_reason": "contract_url_as_opportunity=2; radar_stale_hours>72; score=65",
       "quality_eligible": false,
       "reasons": [
         "contract_url_as_opportunity=2",
-        "score=70"
+        "radar_stale_hours>72",
+        "score=65"
       ],
       "region": "SC",
       "related_urls": [],
@@ -1606,7 +1615,7 @@
         "comparability": 5,
         "differentiation": 6,
         "evidence": 9,
-        "freshness": 5,
+        "freshness": 0,
         "icp_adherence": 13,
         "service_cta": 5
       },
@@ -1637,7 +1646,8 @@
         "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por…",
         "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
         "mandatory_fail": [
-          "contract_url_as_opportunity=2"
+          "contract_url_as_opportunity=2",
+          "radar_stale_hours>72"
         ],
         "observation_count": 4,
         "period_end": "2026-07-31",
@@ -1659,22 +1669,24 @@
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Rio Grande do Sul",
       "human_review": "PENDING",
-      "indexability_score": 67,
-      "indexability_score_alias": 67,
+      "indexability_score": 62,
+      "indexability_score_alias": 62,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
-        "contract_url_as_opportunity=2"
+        "contract_url_as_opportunity=2",
+        "radar_stale_hours>72"
       ],
       "observation_count": 4,
       "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
-      "page_material_hash": "48fcd1fb675c59a8f73b520f121d5c3e9075fdef0cfaeaeb310c85e6b1924cd4",
+      "page_material_hash": "99df985a4a8fc4a1d6f3ce1505734956bf0be0e33f26eb044dcfb14d3e0d9c28",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=2; score=67",
+      "publication_decision_reason": "contract_url_as_opportunity=2; radar_stale_hours>72; score=62",
       "quality_eligible": false,
       "reasons": [
         "contract_url_as_opportunity=2",
-        "score=67"
+        "radar_stale_hours>72",
+        "score=62"
       ],
       "region": "RS",
       "related_urls": [],
@@ -1712,7 +1724,7 @@
         "comparability": 5,
         "differentiation": 5,
         "evidence": 8,
-        "freshness": 5,
+        "freshness": 0,
         "icp_adherence": 12,
         "service_cta": 5
       },
@@ -1743,7 +1755,8 @@
         "description": "Radar de Edificações públicas em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
         "h1": "Oportunidades abertas em Edificações públicas — Santa Catarina",
         "mandatory_fail": [
-          "contract_url_as_opportunity=2"
+          "contract_url_as_opportunity=2",
+          "radar_stale_hours>72"
         ],
         "observation_count": 4,
         "period_end": "2026-07-31",
@@ -1765,22 +1778,24 @@
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Edificações públicas — Santa Catarina",
       "human_review": "PENDING",
-      "indexability_score": 67,
-      "indexability_score_alias": 67,
+      "indexability_score": 62,
+      "indexability_score_alias": 62,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
-        "contract_url_as_opportunity=2"
+        "contract_url_as_opportunity=2",
+        "radar_stale_hours>72"
       ],
       "observation_count": 4,
       "page_id": "radar-edificacoes-publicas-sc",
-      "page_material_hash": "71c13e67a39a911cc69b82cc7d3491ef4e8dea552017914894cd2604fc6cc263",
+      "page_material_hash": "08970782dcf759cc64ddf9b70b7f41754ba7637bcf05782a2b34fa0ca364e39e",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=2; score=67",
+      "publication_decision_reason": "contract_url_as_opportunity=2; radar_stale_hours>72; score=62",
       "quality_eligible": false,
       "reasons": [
         "contract_url_as_opportunity=2",
-        "score=67"
+        "radar_stale_hours>72",
+        "score=62"
       ],
       "region": "SC",
       "related_urls": [],
@@ -1819,7 +1834,7 @@
         "comparability": 5,
         "differentiation": 5,
         "evidence": 8,
-        "freshness": 5,
+        "freshness": 0,
         "icp_adherence": 12,
         "service_cta": 5
       },
@@ -1850,7 +1865,8 @@
         "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
         "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Parana",
         "mandatory_fail": [
-          "contract_url_as_opportunity=4"
+          "contract_url_as_opportunity=4",
+          "radar_stale_hours>72"
         ],
         "observation_count": 4,
         "period_end": "2026-07-31",
@@ -1872,22 +1888,24 @@
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária — Parana",
       "human_review": "PENDING",
-      "indexability_score": 67,
-      "indexability_score_alias": 67,
+      "indexability_score": 62,
+      "indexability_score_alias": 62,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
-        "contract_url_as_opportunity=4"
+        "contract_url_as_opportunity=4",
+        "radar_stale_hours>72"
       ],
       "observation_count": 4,
       "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
-      "page_material_hash": "f886ef51975adef0d090fc09ac1d9c15921dcb9c0da469a0aa8c121a6bdfc2cf",
+      "page_material_hash": "b7fd39c71123209d2aaf1d75fdb032c2bda36813bf5b33fc47ca50c485e5dbfb",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=4; score=67",
+      "publication_decision_reason": "contract_url_as_opportunity=4; radar_stale_hours>72; score=62",
       "quality_eligible": false,
       "reasons": [
         "contract_url_as_opportunity=4",
-        "score=67"
+        "radar_stale_hours>72",
+        "score=62"
       ],
       "region": "PR",
       "related_urls": [],
@@ -1925,7 +1943,7 @@
         "comparability": 5,
         "differentiation": 5,
         "evidence": 8,
-        "freshness": 5,
+        "freshness": 0,
         "icp_adherence": 12,
         "service_cta": 5
       },
@@ -1956,7 +1974,8 @@
         "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen — não é URL por edital.",
         "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
         "mandatory_fail": [
-          "contract_url_as_opportunity=1"
+          "contract_url_as_opportunity=1",
+          "radar_stale_hours>72"
         ],
         "observation_count": 3,
         "period_end": "2026-07-31",
@@ -1978,22 +1997,24 @@
       "evidences_checked": null,
       "h1": "Oportunidades abertas em Edificações públicas — Rio Grande do Sul",
       "human_review": "PENDING",
-      "indexability_score": 64,
-      "indexability_score_alias": 64,
+      "indexability_score": 59,
+      "indexability_score_alias": 59,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [
-        "contract_url_as_opportunity=1"
+        "contract_url_as_opportunity=1",
+        "radar_stale_hours>72"
       ],
       "observation_count": 3,
       "page_id": "radar-edificacoes-publicas-rs",
-      "page_material_hash": "2e5eec1a0e46029af0f2d1121625dfdfb1bbcf7911a5729740f361914d351b86",
+      "page_material_hash": "425810cf20eddc6d1033b3abaab5e1e2df13f3e06a2839a75444c153d852103f",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=1; score=64",
+      "publication_decision_reason": "contract_url_as_opportunity=1; radar_stale_hours>72; score=59",
       "quality_eligible": false,
       "reasons": [
         "contract_url_as_opportunity=1",
-        "score=64"
+        "radar_stale_hours>72",
+        "score=59"
       ],
       "region": "RS",
       "related_urls": [],
@@ -2031,7 +2052,7 @@
         "comparability": 5,
         "differentiation": 4,
         "evidence": 6,
-        "freshness": 5,
+        "freshness": 0,
         "icp_adherence": 12,
         "service_cta": 5
       },
@@ -2098,7 +2119,7 @@
       "indexability_score": 86,
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-orcamento-edital",
@@ -2232,7 +2253,7 @@
       "indexability_score": 86,
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-sinapi-sicro",
@@ -2355,7 +2376,7 @@
       "indexability_score": 76,
       "indexability_score_alias": 76,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [],
       "observation_count": 22,
       "page_id": "prob-medicao-glosa",
@@ -2472,7 +2493,7 @@
       "indexability_score": 86,
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-aditivos-margem",
@@ -2594,7 +2615,7 @@
       "indexability_score": 78,
       "indexability_score_alias": 78,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-03",
+      "last_material_change": "2026-08-04",
       "mandatory_fail": [],
       "observation_count": 28,
       "page_id": "prob-reequilibrio",
