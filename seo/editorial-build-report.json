@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generated_at": "2026-08-04T14:44:15Z",
+  "generated_at": "2026-08-04T19:55:09Z",
   "page_defs": 12,
   "indexable_count": 0,
   "indexable_urls": [],
@@ -99,13 +99,15 @@
   "sitemap_issues": [],
   "awaiting_human_approval": [
     "/guias-contratos-obras/checklist-pedido-aditivo/",
+    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+    "/lei-14133-obras/limite-25-50-aditivo-obra/"
+  ],
+  "editorial_backlog_awaiting_human": [
     "/guias-contratos-obras/documentos-pedido-reequilibrio/",
     "/guias-contratos-obras/contestar-glosa-medicao/",
     "/guias-contratos-obras/responder-notificacao-atraso/",
     "/lei-14133-obras/art-124-alteracao-contratual-obra/",
     "/lei-14133-obras/atraso-imputavel-administracao/",
-    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-    "/lei-14133-obras/limite-25-50-aditivo-obra/",
     "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
     "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
     "/lei-14133-obras/servico-executado-sem-termo-aditivo/"
@@ -113,7 +115,7 @@
   "rejected": [
     "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
   ],
-  "terminal_hint": "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS",
+  "terminal_hint": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "fail_closed_intelligence_publishable": true,
   "note": "Automated build never sets HUMAN_APPROVED. Use: python3 scripts/editorial/approve_cli.py --reviewer NAME --page-id ID"
 }
