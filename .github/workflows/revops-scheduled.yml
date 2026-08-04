@@ -1,0 +1,150 @@
+# Primary operational scheduler for CONFENGE RevOps.
+# One mechanism: GitHub Actions (versioned, testable, secrets in env).
+#
+# Daily (11:15 UTC ≈ 08:15 America/Sao_Paulo):
+#   health, isolated probe, GSC sync, analytics, uncontacted reals,
+#   Resend/storage signals, deploy-vs-main, critical URLs, nurture tick
+# Weekly (Monday 12:00 UTC):
+#   real-only weekly report email via ops
+#
+# Manual: Actions → revops-scheduled → Run workflow
+name: revops-scheduled
+
+on:
+  schedule:
+    # Daily ops — 11:15 UTC
+    - cron: "15 11 * * *"
+    # Weekly report — Mondays 12:00 UTC
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "Which job to run"
+        required: true
+        default: "daily"
+        type: choice
+        options:
+          - daily
+          - weekly
+          - nurture
+          - gsc
+          - all
+
+concurrency:
+  group: revops-scheduled-${{ github.event.inputs.job || github.event.schedule || 'manual' }}
+  cancel-in-progress: false
+
+jobs:
+  daily:
+    name: daily-ops
+    if: >
+      github.event_name == 'schedule' && github.event.schedule == '15 11 * * *'
+      || github.event_name == 'workflow_dispatch' && (github.event.inputs.job == 'daily' || github.event.inputs.job == 'all')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          npm ci || npm install
+          pip install google-api-python-client google-auth || true
+      - name: Daily scheduled run
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+          REVOPS_TOKEN: ${{ secrets.REVOPS_TOKEN }}
+          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
+          GSC_CREDENTIALS_JSON: ${{ secrets.GSC_CREDENTIALS_JSON }}
+          GITHUB_SHA: ${{ github.sha }}
+          EXPECTED_SHA: ${{ github.sha }}
+        run: node scripts/revops/scheduled_daily.mjs
+      - name: Upload daily report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: revops-daily-${{ github.run_id }}
+          path: |
+            data/revops/gsc/last_sync.json
+            data/revops/schedule-runs/
+          if-no-files-found: ignore
+
+  nurture:
+    name: nurture-tick
+    if: >
+      github.event_name == 'schedule' && github.event.schedule == '15 11 * * *'
+      || github.event_name == 'workflow_dispatch' && (github.event.inputs.job == 'nurture' || github.event.inputs.job == 'all')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Nurture tick
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+          REVOPS_TOKEN: ${{ secrets.REVOPS_TOKEN }}
+        run: node scripts/revops/scheduled_nurture.mjs
+
+  gsc:
+    name: gsc-sync
+    if: >
+      github.event_name == 'schedule' && github.event.schedule == '15 11 * * *'
+      || github.event_name == 'workflow_dispatch' && (github.event.inputs.job == 'gsc' || github.event.inputs.job == 'all')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: GSC incremental sync
+        env:
+          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
+          GSC_CREDENTIALS_JSON: ${{ secrets.GSC_CREDENTIALS_JSON }}
+          GSC_CLIENT_SECRETS_JSON: ${{ secrets.GSC_CLIENT_SECRETS_JSON }}
+          GSC_TOKEN_JSON: ${{ secrets.GSC_TOKEN_JSON }}
+        run: |
+          pip install google-api-python-client google-auth || true
+          # Write service account file if secret is JSON content
+          if [ -n "$GSC_CREDENTIALS_JSON" ] && [ "${GSC_CREDENTIALS_JSON:0:1}" = "{" ]; then
+            echo "$GSC_CREDENTIALS_JSON" > /tmp/gsc-sa.json
+            export GSC_CREDENTIALS_JSON=/tmp/gsc-sa.json
+          fi
+          python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3
+      - name: Upload GSC state
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-sync-${{ github.run_id }}
+          path: |
+            data/revops/gsc/last_sync.json
+            data/revops/gsc/daily/
+          if-no-files-found: ignore
+
+  weekly:
+    name: weekly-report
+    if: >
+      github.event_name == 'schedule' && github.event.schedule == '0 12 * * 1'
+      || github.event_name == 'workflow_dispatch' && (github.event.inputs.job == 'weekly' || github.event.inputs.job == 'all')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Weekly real-only report + email
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+          REVOPS_TOKEN: ${{ secrets.REVOPS_TOKEN }}
+        run: node scripts/revops/scheduled_weekly.mjs
