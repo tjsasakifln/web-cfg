@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-03T23:30:15.272436+00:00",
+  "generated_at": "2026-08-04T00:39:38.584900+00:00",
   "as_of": "2026-07-30",
   "source": "seo/gsc-2026-07-30",
   "attribution_warning": "Search Console is aggregate. Never claim that query X produced lead Y. Use cohort analysis (page → leads) only.",
@@ -7,7 +7,9 @@
     "queries": 20,
     "pages": 59,
     "branded_queries": 4,
-    "nonbranded_queries": 16
+    "nonbranded_queries": 16,
+    "analysis_keys": 12,
+    "lead_cohort_paths": 0
   },
   "analyses": {
     "1_high_impressions_low_ctr": [
@@ -1222,8 +1224,23 @@
         }
       ]
     },
-    "5_6_growth_decay": "Growth/decay requires multi-day series. After daily import-csv or pull-api, compare data/revops/gsc/daily/* snapshots.",
-    "7_indexed_without_impressions": "Requires index coverage export; not available in performance-only CSV. Use URL Inspection batch or coverage report separately.",
+    "5_content_growing": {
+      "status": "awaiting_multi_day_series",
+      "daily_snapshots": 0,
+      "items": [],
+      "note": "Growth/decay compares the two most recent data/revops/gsc/daily/* snapshots. Run import-csv or pull-api on a schedule to populate."
+    },
+    "6_content_decaying": {
+      "status": "awaiting_multi_day_series",
+      "daily_snapshots": 0,
+      "items": [],
+      "note": "Growth/decay compares the two most recent data/revops/gsc/daily/* snapshots. Run import-csv or pull-api on a schedule to populate."
+    },
+    "7_indexed_without_impressions": {
+      "status": "needs_coverage_export",
+      "note": "Requires index coverage export; not available in performance-only CSV. Use URL Inspection batch or coverage report separately.",
+      "candidates": []
+    },
     "8_informational_to_offer": [
       {
         "date": "2026-07-30",
@@ -1388,6 +1405,59 @@
         "source": "csv_export"
       }
     ],
+    "9_clusters_traffic_without_leads": {
+      "status": "awaiting_leads_or_empty_cohort",
+      "items": [
+        {
+          "cluster": "orcamento-bdi",
+          "impressions": 142.0,
+          "leads_observed": 0,
+          "note": "cohort only — not query-level attribution"
+        },
+        {
+          "cluster": "other",
+          "impressions": 90.0,
+          "leads_observed": 0,
+          "note": "cohort only — not query-level attribution"
+        },
+        {
+          "cluster": "medicoes-pagamentos",
+          "impressions": 51.0,
+          "leads_observed": 0,
+          "note": "cohort only — not query-level attribution"
+        },
+        {
+          "cluster": "aditivos",
+          "impressions": 38.0,
+          "leads_observed": 0,
+          "note": "cohort only — not query-level attribution"
+        },
+        {
+          "cluster": "atrasos-prorrogacao",
+          "impressions": 19.0,
+          "leads_observed": 0,
+          "note": "cohort only — not query-level attribution"
+        },
+        {
+          "cluster": "reequilibrio",
+          "impressions": 13.0,
+          "leads_observed": 0,
+          "note": "cohort only — not query-level attribution"
+        },
+        {
+          "cluster": "legacy-entity",
+          "impressions": 9.0,
+          "leads_observed": 0,
+          "note": "cohort only — not query-level attribution"
+        }
+      ],
+      "note": "Cohort only (cluster impressions vs landing_page lead counts). Set LEAD_STORE_DIR or use .leads/ for local join; never query↔lead."
+    },
+    "10_pages_leads_low_traffic": {
+      "status": "awaiting_leads_or_empty_cohort",
+      "items": [],
+      "note": "Cohort only — pages/paths with leads despite low GSC impressions."
+    },
     "11_emerging_terms": [
       {
         "date": "2026-07-30",
@@ -1645,6 +1715,7 @@
         "source": "csv_export"
       }
     ],
+    "12_competitor_content_gaps": [],
     "legacy_entity_queries_still_ranking": [
       {
         "date": "2026-07-30",
