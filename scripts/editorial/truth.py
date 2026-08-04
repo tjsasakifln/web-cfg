@@ -143,7 +143,9 @@ def allowed_packaged_shas() -> set[str]:
     return out
 
 
-def packaged_sha_is_acceptable(pkg_sha: str, live: str | None = None) -> bool:
+def packaged_sha_is_acceptable(
+    pkg_sha: str, live: str | None = None, *, _depth: int = 0
+) -> bool:
     """Accept package SHA only when tightly bound to current tip.
 
     Allowed:
@@ -152,6 +154,11 @@ def packaged_sha_is_acceptable(pkg_sha: str, live: str | None = None) -> bool:
       3. PR merge-commit special-case (exactly 2 parents): package may equal
          the *second* parent (PR tip per GitHub merge convention), or that
          tip's first parent when the PR tip is itself a docs-only pin
+      4. On a 2-parent merge, package may also be acceptable relative to the
+         *first* parent (base/main). This covers Dependabot and other
+         non-editorial PRs whose package JSON is unchanged from main while
+         live is the ephemeral merge SHA. Depth-limited to avoid walking
+         arbitrary history.
 
     Explicitly rejected: arbitrary ancestors (e.g. pre-recovery main).
     """
@@ -166,7 +173,8 @@ def packaged_sha_is_acceptable(pkg_sha: str, live: str | None = None) -> bool:
         if parents and pkg_sha == parents[0]:
             return True
     # (3) GitHub PR merge ref: two parents — base (main) then PR head.
-    # Never accept first parent alone (would greenlight pinning main).
+    # Never accept first parent alone as a bare string match (would greenlight
+    # pinning main without checking whether that pin is itself valid).
     parents = _git_parents(live)
     if len(parents) == 2:
         pr_tip = parents[1]
@@ -176,6 +184,11 @@ def packaged_sha_is_acceptable(pkg_sha: str, live: str | None = None) -> bool:
             pr_parents = _git_parents(pr_tip)
             if pr_parents and pkg_sha == pr_parents[0]:
                 return True
+        # (4) Inherit base pin validity (Dependabot / chore PRs).
+        if _depth < 2 and packaged_sha_is_acceptable(
+            pkg_sha, parents[0], _depth=_depth + 1
+        ):
+            return True
     return False
 
 
