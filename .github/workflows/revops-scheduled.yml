@@ -44,11 +44,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
           cache: npm
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Install
@@ -67,7 +67,7 @@ jobs:
         run: node scripts/revops/scheduled_daily.mjs
       - name: Upload daily report artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: revops-daily-${{ github.run_id }}
           path: |
@@ -84,7 +84,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
       - name: Nurture tick
@@ -103,7 +103,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: GSC incremental sync
@@ -122,7 +122,7 @@ jobs:
           python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3
       - name: Upload GSC state
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gsc-sync-${{ github.run_id }}
           path: |
@@ -139,7 +139,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
       - name: Weekly real-only report + email
