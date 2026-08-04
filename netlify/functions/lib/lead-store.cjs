@@ -167,23 +167,11 @@ class NetlifyBlobsStore {
     }
   }
   async put(record) {
-    // Write idempotency map FIRST so concurrent retries can resolve the same lead_id
+    // Lead body first (same order as pre-idempotency-hardening path that worked in prod).
+    await this._setJson(`leads/${record.lead_id}`, record);
     if (record.idempotency_key) {
       const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
       await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
-    }
-    await this._setJson(`leads/${record.lead_id}`, record);
-    // Best-effort re-write of idem map if not visible yet (non-fatal)
-    if (record.idempotency_key) {
-      const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
-      try {
-        const check = await this._getJson(`idem/${h}`);
-        if (!check || check.lead_id !== record.lead_id) {
-          await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
-        }
-      } catch {
-        /* non-fatal — deterministic lead_id remains the safety net */
-      }
     }
     return record;
   }

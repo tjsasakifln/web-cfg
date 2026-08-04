@@ -282,16 +282,16 @@ exports.handler = async (event) => {
 
   try {
     await store.put(record);
-    // Read-back proves durable write (retry once for eventual consistency)
+    // Read-back (retry) — if put did not throw, do not hard-fail on momentary
+    // eventual-consistency miss. Deterministic lead_id keeps retries convergent.
     let verified = await store.get(lead_id);
     if (!verified || verified.lead_id !== lead_id) {
-      await new Promise((r) => setTimeout(r, 150));
+      await new Promise((r) => setTimeout(r, 250));
       verified = await store.get(lead_id);
     }
     if (!verified || verified.lead_id !== lead_id) {
-      throw new Error("persist_verify_miss");
+      safeLog("warn", "persist_verify_miss_soft", { lead_id });
     }
-    // Confirm idempotency map (best-effort; deterministic id is the safety net)
     try {
       const again = await store.getByIdempotency(idemKey);
       if (!again || again.lead_id !== lead_id) {
