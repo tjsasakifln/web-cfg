@@ -212,47 +212,48 @@ exports.handler = async (event) => {
   // the idempotency map read is eventually consistent on first retry.
   const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
 
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const idempotentOk = (rec) => ({
+    statusCode: 200,
+    headers,
+    body: JSON.stringify(
+      publicSuccessBody({
+        lead_id: rec.lead_id,
+        received_at: rec.received_at,
+        journey: rec.jornada,
+        stage_category: rec.estagio,
+        status: rec.status || "persisted",
+        notify_status: rec.delivery?.notify?.status,
+        email_status: rec.delivery?.email?.status,
+        idempotent: true,
+      }),
+    ),
+  });
+
+  // Brief read-retry: Blobs eventual consistency can miss a just-written key on the
+  // immediate second POST. Must return 200 + idempotent:true without re-delivery.
   try {
-    const existing = await store.getByIdempotency(idemKey);
-    if (existing && existing.lead_id) {
-      safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id, via: "idem_map" });
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify(
-          publicSuccessBody({
-            lead_id: existing.lead_id,
-            received_at: existing.received_at,
-            journey: existing.jornada,
-            stage_category: existing.estagio,
-            status: existing.status || "persisted",
-            notify_status: existing.delivery?.notify?.status,
-            email_status: existing.delivery?.email?.status,
-            idempotent: true,
-          }),
-        ),
-      };
+    let hit = null;
+    for (let attempt = 0; attempt < 4 && !hit; attempt++) {
+      if (attempt > 0) await sleep(100 * attempt);
+      const existing = await store.getByIdempotency(idemKey);
+      if (existing && existing.lead_id) {
+        hit = { rec: existing, via: "idem_map", attempt };
+        break;
+      }
+      const byId = await store.get(lead_id);
+      if (byId && byId.lead_id) {
+        hit = { rec: byId, via: "deterministic_id", attempt };
+        break;
+      }
     }
-    // Secondary path: deterministic id already present
-    const byId = await store.get(lead_id);
-    if (byId && byId.lead_id) {
-      safeLog("info", "lead_idempotent_hit", { lead_id: byId.lead_id, via: "deterministic_id" });
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify(
-          publicSuccessBody({
-            lead_id: byId.lead_id,
-            received_at: byId.received_at,
-            journey: byId.jornada,
-            stage_category: byId.estagio,
-            status: byId.status || "persisted",
-            notify_status: byId.delivery?.notify?.status,
-            email_status: byId.delivery?.email?.status,
-            idempotent: true,
-          }),
-        ),
-      };
+    if (hit) {
+      safeLog("info", "lead_idempotent_hit", {
+        lead_id: hit.rec.lead_id,
+        via: hit.via,
+        attempt: hit.attempt,
+      });
+      return idempotentOk(hit.rec);
     }
   } catch (err) {
     safeLog("error", "idempotency_lookup_failed", {
@@ -281,12 +282,14 @@ exports.handler = async (event) => {
   });
 
   try {
-    await store.put(record);
+    // Create-only: if the deterministic id already exists (lookup missed, race, or
+    // retry), do not overwrite and do not re-run delivery — return 200 idempotent.
+    await store.put(record, { onlyIfNew: true });
     // Read-back (retry) — if put did not throw, do not hard-fail on momentary
     // eventual-consistency miss. Deterministic lead_id keeps retries convergent.
     let verified = await store.get(lead_id);
     if (!verified || verified.lead_id !== lead_id) {
-      await new Promise((r) => setTimeout(r, 250));
+      await sleep(250);
       verified = await store.get(lead_id);
     }
     if (!verified || verified.lead_id !== lead_id) {
@@ -301,27 +304,19 @@ exports.handler = async (event) => {
       /* non-fatal */
     }
   } catch (err) {
+    if (err && err.code === "ALREADY_EXISTS") {
+      const existing = err.existing || (await store.get(lead_id).catch(() => null));
+      if (existing && existing.lead_id) {
+        safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id, via: "only_if_new" });
+        return idempotentOk(existing);
+      }
+    }
     // Race: another request may have written the same deterministic id
     try {
       const raced = await store.get(lead_id);
       if (raced && raced.lead_id === lead_id) {
         safeLog("info", "lead_idempotent_race", { lead_id });
-        return {
-          statusCode: 200,
-          headers,
-          body: JSON.stringify(
-            publicSuccessBody({
-              lead_id: raced.lead_id,
-              received_at: raced.received_at,
-              journey: raced.jornada,
-              stage_category: raced.estagio,
-              status: raced.status || "persisted",
-              notify_status: raced.delivery?.notify?.status,
-              email_status: raced.delivery?.email?.status,
-              idempotent: true,
-            }),
-          ),
-        };
+        return idempotentOk(raced);
       }
     } catch {
       /* fall through */
