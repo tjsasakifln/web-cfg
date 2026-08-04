@@ -55,13 +55,17 @@ def test_write_build_info_schema():
         generated_at="2026-08-02T00:00:00Z",
         environment="test",
         schema_version="1.0.0",
+        deploy_id="deploy-test-123",
+        artifact_hash="abc123def456",
     )
     assert path.exists()
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["commit"] == "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     assert data["build_time"] == "2026-08-02T00:00:00Z"
     assert data["environment"] == "test"
-    assert data["schema_version"] == "1.0.0"
+    assert data["schema_version"] == "1.1.0"
+    assert data["deploy_id"] == "deploy-test-123"
+    assert data["artifact_hash"] == "abc123def456"
     # Does not rewrite docs/FINAL-RELEASE-RESULT.json as a side effect of identity
     # (file may exist from prior campaigns; must not be required for identity)
 

@@ -40,7 +40,7 @@
   <header>
     <div>
       <h1>CONFENGE RevOps</h1>
-      <p class="muted" style="margin:.25rem 0 0;font-size:.85rem">Métrica principal: pipeline e receita — não sessões. noindex.</p>
+      <p class="muted" style="margin:.25rem 0 0;font-size:.85rem">Métricas comerciais = leads <strong>reais</strong> apenas. Probes em System Health. noindex.</p>
     </div>
     <div class="auth">
       <input id="token" type="password" placeholder="OPS_TOKEN" autocomplete="off" style="min-width:12rem" />
@@ -51,12 +51,13 @@
   <main>
     <div class="note">
       <strong>Atribuição:</strong> Search Console é agregado. Não associe consulta individual a lead individual.
-      Use coortes (página → leads) e probabilidade. Dados GSC em <code>ops/data/gsc-insights.json</code>.
+      Use coortes (página → leads). GSC estratégico só via API autenticada (<code>gsc_insights</code>) — não arquivo público.
     </div>
     <div id="error" class="err" hidden></div>
     <div class="tabs">
-      <button type="button" data-tab="funnel" class="active">Funil</button>
-      <button type="button" data-tab="leads">Leads</button>
+      <button type="button" data-tab="funnel" class="active">Funil real</button>
+      <button type="button" data-tab="health">System Health</button>
+      <button type="button" data-tab="leads">Leads reais</button>
       <button type="button" data-tab="analytics">Analytics</button>
       <button type="button" data-tab="gsc">Demanda orgânica</button>
       <button type="button" data-tab="weekly">Semanal</button>
@@ -65,16 +66,22 @@
     <section id="panel-funnel" class="panel active">
       <div class="grid" id="kpi"></div>
       <div class="card">
-        <h2 style="margin-top:0;font-size:1rem">Estágios</h2>
+        <h2 style="margin-top:0;font-size:1rem">Estágios (real-only)</h2>
         <table><thead><tr><th>Estágio</th><th>Qtd</th><th>Taxa</th></tr></thead><tbody id="funnel-body"></tbody></table>
       </div>
     </section>
 
+    <section id="panel-health" class="panel">
+      <p class="muted">Probes, QA, spam e internos nunca somam com “leads” comerciais.</p>
+      <div class="grid" id="health-kpi"></div>
+      <div class="card"><pre id="health-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">—</pre></div>
+    </section>
+
     <section id="panel-leads" class="panel">
-      <p class="muted">PII só com token. SLA padrão: 4h sem contato em <code>lead_persisted</code>.</p>
+      <p class="muted">PII só com token. SLA padrão: 4h sem contato em <code>lead_persisted</code> (somente real).</p>
       <div class="card" style="overflow:auto">
         <table>
-          <thead><tr><th>ID</th><th>Estágio</th><th>Jornada</th><th>Landing</th><th>Cluster</th><th>SLA</th><th>Ação</th></tr></thead>
+          <thead><tr><th>ID</th><th>Kind</th><th>Estágio</th><th>Jornada</th><th>Landing</th><th>Cluster</th><th>SLA</th><th>Ação</th></tr></thead>
           <tbody id="leads-body"></tbody>
         </table>
       </div>
@@ -104,12 +111,12 @@
     </section>
 
     <section id="panel-gsc" class="panel">
-      <div class="card"><pre id="gsc-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">Carregando ops/data/gsc-insights.json…</pre></div>
+      <div class="card"><pre id="gsc-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">Carregue com OPS_TOKEN (endpoint autenticado)…</pre></div>
     </section>
 
     <section id="panel-weekly" class="panel">
       <div class="card"><pre id="weekly-pre" class="muted" style="white-space:pre-wrap;margin:0;font-size:.8rem">—</pre></div>
-      <button type="button" id="btn-email" class="secondary" style="margin-top:.75rem">Disparar e-mail semanal (Resend)</button>
+      <button type="button" id="btn-email" class="secondary" style="margin-top:.75rem">Disparar e-mail semanal (Resend, real-only)</button>
     </section>
   </main>
   <script>
@@ -153,15 +160,17 @@
         const funnel = await api("funnel");
         const f = funnel.funnel || {};
         const c = f.counts || {};
+        const sh = funnel.system_health || {};
         $("kpi").innerHTML = [
-          ["Leads", c.lead_persisted || 0],
+          ["Leads reais", c.lead_persisted || 0],
           ["Contatados", c.contacted || 0],
           ["Qualificados", c.qualified || 0],
           ["Reuniões", c.meeting || 0],
           ["Propostas", c.proposal || 0],
           ["Ganhos", c.won || 0],
-          ["Pipeline R$", f.pipeline_value || 0],
-          ["Receita R$", f.revenue || 0],
+          ["Pipeline real R$", f.pipeline_value || 0],
+          ["Receita real R$", f.revenue || 0],
+          ["Última conversão real", f.last_real_conversion || sh.last_real_conversion || "—"],
         ].map(([l, v]) => `<div class="card"><strong>${v}</strong><span>${l}</span></div>`).join("");
         const rates = f.rates || {};
         $("funnel-body").innerHTML = Object.keys(c).map((k) => {
@@ -169,11 +178,23 @@
           return `<tr><td>${k}</td><td>${c[k]}</td><td>${rateKey ? rates[rateKey] : "—"}</td></tr>`;
         }).join("");
 
-        const leads = await api("leads", { qs: "&pii=0" });
+        $("health-kpi").innerHTML = [
+          ["Reais", sh.real_leads ?? "—"],
+          ["Sintéticos", sh.synthetic_leads ?? "—"],
+          ["QA", sh.qa_leads ?? "—"],
+          ["Spam", sh.spam_leads ?? "—"],
+          ["Internos", sh.internal_leads ?? "—"],
+          ["Pipeline real R$", sh.pipeline_real ?? "—"],
+          ["Receita real R$", sh.revenue_real ?? "—"],
+        ].map(([l, v]) => `<div class="card"><strong>${v}</strong><span>${l}</span></div>`).join("");
+        $("health-pre").textContent = JSON.stringify(sh, null, 2);
+
+        const leads = await api("leads", { qs: "&pii=0&kind=real" });
         $("leads-body").innerHTML = (leads.leads || []).map((l) => {
           const sla = l.needs_contact ? '<span class="bad">SLA</span>' : '<span class="ok">ok</span>';
           return `<tr>
             <td><code>${l.lead_id}</code></td>
+            <td>${l.record_kind || "real"}</td>
             <td>${l.commercial_stage || ""}</td>
             <td>${l.jornada || ""}</td>
             <td>${(l.landing_page || "").slice(0, 48)}</td>
@@ -181,7 +202,7 @@
             <td>${sla}</td>
             <td><button type="button" class="secondary pick-lead" data-id="${l.lead_id}">usar</button></td>
           </tr>`;
-        }).join("") || "<tr><td colspan=7 class=muted>Nenhum lead no store</td></tr>";
+        }).join("") || "<tr><td colspan=8 class=muted>Nenhum lead real no store</td></tr>";
         document.querySelectorAll(".pick-lead").forEach((b) => b.addEventListener("click", () => { $("stage-id").value = b.dataset.id; }));
 
         const an = await api("analytics_summary");
@@ -192,6 +213,28 @@
           cta: an.aggregate && an.aggregate.cta_totals,
           note: an.note,
         }, null, 2);
+
+        try {
+          const gsc = await api("gsc_insights");
+          const d = gsc.insights || {};
+          const a = d.analyses || {};
+          $("gsc-pre").textContent = JSON.stringify({
+            as_of: d.as_of,
+            counts: d.counts,
+            analysis_keys: Object.keys(a),
+            attribution_warning: d.attribution_warning,
+            priority_actions: d.priority_actions,
+            meta: gsc.meta,
+            low_ctr: a["1_high_impressions_low_ctr"],
+            striking: a["2_striking_distance_pos_4_20"],
+            growth: a["5_content_growing"],
+            decay: a["6_content_decaying"],
+            traffic_no_leads: a["9_clusters_traffic_without_leads"],
+            leads_low_traffic: a["10_pages_leads_low_traffic"],
+          }, null, 2);
+        } catch (ge) {
+          $("gsc-pre").textContent = "GSC: " + String(ge.message || ge);
+        }
 
         const week = await api("weekly_report");
         $("weekly-pre").textContent = JSON.stringify(week, null, 2);
@@ -228,27 +271,6 @@
         alert(JSON.stringify(r));
       } catch (e) { showErr(String(e.message || e)); }
     });
-
-    fetch("/ops/data/gsc-insights.json", { headers: { Accept: "application/json" } })
-      .then((r) => r.ok ? r.json() : Promise.reject(new Error("gsc insights missing — run observatory import")))
-      .then((d) => {
-        const a = d.analyses || {};
-        $("gsc-pre").textContent = JSON.stringify({
-        as_of: d.as_of,
-        counts: d.counts,
-        analysis_keys: Object.keys(a),
-        attribution_warning: d.attribution_warning,
-        priority_actions: d.priority_actions,
-        legacy_entity_queries: a.legacy_entity_queries_still_ranking,
-        low_ctr: a["1_high_impressions_low_ctr"],
-        striking: a["2_striking_distance_pos_4_20"],
-        growth: a["5_content_growing"],
-        decay: a["6_content_decaying"],
-        traffic_no_leads: a["9_clusters_traffic_without_leads"],
-        leads_low_traffic: a["10_pages_leads_low_traffic"],
-        competitor_gaps: a["12_competitor_content_gaps"],
-      }, null, 2); })
-      .catch((e) => { $("gsc-pre").textContent = String(e.message || e); });
   })();
   </script>
 </body>

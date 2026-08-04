@@ -170,8 +170,11 @@ function applyStageChange(record, { stage, actor, note, loss_reason, next_action
 /** Public redaction — never expose PII via ops list without token (caller enforces auth). */
 function publicLeadSummary(record) {
   if (!record) return null;
+  const record_kind = record.record_kind || "real";
+  const isReal = record_kind === "real";
   return {
     lead_id: record.lead_id,
+    record_kind,
     commercial_stage: record.commercial_stage || record.status || "lead_persisted",
     received_at: record.received_at,
     updated_at: record.updated_at,
@@ -198,7 +201,9 @@ function publicLeadSummary(record) {
         }))
       : [],
     sla_hours_open: hoursSince(record.received_at),
+    // SLA only applies to commercial (real) leads
     needs_contact:
+      isReal &&
       (record.commercial_stage || "lead_persisted") === "lead_persisted" &&
       hoursSince(record.received_at) >= Number(process.env.LEAD_SLA_HOURS || 4),
   };
@@ -214,10 +219,25 @@ function hoursSince(iso) {
 /**
  * Funnel conversion rates between stages for a set of leads.
  * Uses peak stage reached (stage_history) when available.
+ *
+ * By default only `record_kind === "real"` (or missing kind treated as real for
+ * pre-migration rows that were not multi-signal probes) are included when
+ * `commercialOnly` is true. Pass commercialOnly:false for System Health views.
  */
-function funnelRates(leads) {
+function funnelRates(leads, options = {}) {
+  const commercialOnly = options.commercialOnly !== false;
+  let pool = leads || [];
+  if (commercialOnly) {
+    try {
+      const { filterCommercialLeads } = require("./record-kind.cjs");
+      pool = filterCommercialLeads(pool);
+    } catch {
+      pool = pool.filter((l) => !l.record_kind || l.record_kind === "real");
+    }
+  }
+
   const counts = Object.fromEntries(STAGES.map((s) => [s, 0]));
-  for (const lead of leads || []) {
+  for (const lead of pool) {
     const peak = peakStage(lead);
     const idx = STAGES.indexOf(peak);
     for (let i = 0; i <= idx && i < STAGES.length; i++) {
@@ -229,12 +249,12 @@ function funnelRates(leads) {
     counts.lead_persisted = (counts.lead_persisted || 0);
   }
   // Recompute properly: every lead is at least lead_persisted
-  const n = (leads || []).length;
+  const n = pool.length;
   counts.lead_persisted = n;
   for (const s of ["contacted", "qualified", "meeting", "proposal", "won"]) {
-    counts[s] = (leads || []).filter((l) => reachedStage(l, s)).length;
+    counts[s] = pool.filter((l) => reachedStage(l, s)).length;
   }
-  counts.lost = (leads || []).filter((l) => (l.commercial_stage || l.status) === "lost").length;
+  counts.lost = pool.filter((l) => (l.commercial_stage || l.status) === "lost").length;
 
   const rates = {};
   const pairs = [
@@ -247,19 +267,37 @@ function funnelRates(leads) {
   for (const [a, b] of pairs) {
     rates[`${a}_to_${b}`] = counts[a] ? Math.round((counts[b] / counts[a]) * 1000) / 1000 : null;
   }
-  const pipeline = (leads || []).reduce((sum, l) => {
+  const pipeline = pool.reduce((sum, l) => {
     const stage = l.commercial_stage || l.status;
     if (stage === "won") return sum;
     if (stage === "lost") return sum;
     const v = Number(l.proposal_value || l.contract_value || 0);
     return sum + (Number.isFinite(v) ? v : 0);
   }, 0);
-  const revenue = (leads || []).reduce((sum, l) => {
+  const revenue = pool.reduce((sum, l) => {
     const v = Number(l.revenue_received || (l.commercial_stage === "won" ? l.contract_value : 0) || 0);
     return sum + (Number.isFinite(v) ? v : 0);
   }, 0);
 
-  return { counts, rates, pipeline_value: pipeline, revenue, n };
+  let last_real_conversion = null;
+  for (const l of pool) {
+    if ((l.commercial_stage || l.status) !== "won") continue;
+    const t = l.updated_at || l.received_at;
+    if (!t) continue;
+    if (!last_real_conversion || String(t) > String(last_real_conversion)) {
+      last_real_conversion = t;
+    }
+  }
+
+  return {
+    counts,
+    rates,
+    pipeline_value: pipeline,
+    revenue,
+    n,
+    commercial_only: commercialOnly,
+    last_real_conversion,
+  };
 }
 
 function peakStage(lead) {
@@ -318,6 +356,39 @@ function commercialDefaults(received_at) {
   };
 }
 
+/**
+ * System Health view: counts by kind + non-real funnel (never mixed into commercial totals).
+ */
+function systemHealth(leads) {
+  let counts_by_kind = { real: 0, synthetic: 0, qa: 0, spam: 0, internal: 0 };
+  try {
+    const { countByKind } = require("./record-kind.cjs");
+    counts_by_kind = countByKind(leads);
+  } catch {
+    for (const l of leads || []) {
+      const k = l.record_kind || "real";
+      counts_by_kind[k] = (counts_by_kind[k] || 0) + 1;
+    }
+  }
+  const real = (leads || []).filter((l) => !l.record_kind || l.record_kind === "real");
+  const nonReal = (leads || []).filter((l) => l.record_kind && l.record_kind !== "real");
+  const realFunnel = funnelRates(real, { commercialOnly: false });
+  const probeFunnel = funnelRates(nonReal, { commercialOnly: false });
+  return {
+    counts_by_kind,
+    real_leads: real.length,
+    synthetic_leads: counts_by_kind.synthetic || 0,
+    qa_leads: counts_by_kind.qa || 0,
+    spam_leads: counts_by_kind.spam || 0,
+    internal_leads: counts_by_kind.internal || 0,
+    pipeline_real: realFunnel.pipeline_value,
+    revenue_real: realFunnel.revenue,
+    last_real_conversion: realFunnel.last_real_conversion,
+    probe_funnel: probeFunnel.counts,
+    note: "Commercial metrics exclude non-real. Probes appear only here.",
+  };
+}
+
 module.exports = {
   STAGES,
   LOSS_REASONS,
@@ -331,4 +402,5 @@ module.exports = {
   commercialDefaults,
   peakStage,
   reachedStage,
+  systemHealth,
 };

@@ -279,8 +279,8 @@ def assemble_public_artifact(
         if not src.is_dir():
             continue
         # Safety: never follow into forbidden nested names during copy via ignore.
-        # Exception: ops/data holds public-safe GSC insights for the private ops UI
-        # (noindex + robots Disallow /ops/); root-level data/ remains forbidden.
+        # ops/data is NOT public — strategic GSC insights are served only via
+        # authenticated ops?action=gsc_insights (robots Disallow is not security).
         def _ignore(directory: str, names: list[str]) -> set[str]:
             skip = set()
             try:
@@ -289,9 +289,6 @@ def assemble_public_artifact(
                 rel_dir = ""
             for n in names:
                 if n in FORBIDDEN_DIR_NAMES:
-                    # Allow only ops/data (and nested files under it)
-                    if n == "data" and (rel_dir == "ops" or name == "ops" and rel_dir in {"", "ops"}):
-                        continue
                     skip.add(n)
                 elif n.startswith(".env"):
                     skip.add(n)
@@ -301,6 +298,11 @@ def assemble_public_artifact(
                     # allow only known public basenames; skip private-looking ones
                     if n in {"package.json", "registry.json", "manifest.json"}:
                         skip.add(n)
+                # Explicit: never publish ops strategic JSON under any name
+                if name == "ops" and n in {"data", "gsc-insights.json"}:
+                    skip.add(n)
+                if rel_dir.startswith("ops") and n.endswith("gsc-insights.json"):
+                    skip.add(n)
             return skip
 
         shutil.copytree(src, dest / name, ignore=_ignore, dirs_exist_ok=True)
@@ -373,8 +375,8 @@ def audit_public_artifact(
     for p in sorted(dest.rglob("*")):
         rel = p.relative_to(dest).as_posix()
         if p.is_dir():
-            # ops/data is the only nested "data" dir allowed (GSC insights for private ops UI)
-            if p.name in FORBIDDEN_DIR_NAMES and rel != "ops/data" and not rel.startswith("ops/data/"):
+            # No nested data/ dirs in the public artifact (strategic JSON is auth-only)
+            if p.name in FORBIDDEN_DIR_NAMES:
                 findings.append(
                     {
                         "code": "forbidden_dir",
@@ -387,6 +389,15 @@ def audit_public_artifact(
         file_count += 1
         name = p.name
         suf = p.suffix.lower()
+
+        if name == "gsc-insights.json" or rel.endswith("gsc-insights.json"):
+            findings.append(
+                {
+                    "code": "strategic_gsc_public",
+                    "path": rel,
+                    "detail": "GSC insights must be auth-only via ops function, not static public",
+                }
+            )
 
         for pref in FORBIDDEN_PUBLIC_PATH_PREFIXES:
             if rel == pref.rstrip("/") or rel.startswith(pref):

@@ -18,7 +18,7 @@ Usage:
   python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-2026-07-30
   python3 scripts/revops/search_demand_observatory.py analyze
   python3 scripts/revops/search_demand_observatory.py pull-api --days 28
-  python3 scripts/revops/search_demand_observatory.py dashboard --out ops/data/gsc-insights.json
+  python3 scripts/revops/search_demand_observatory.py dashboard --out data/ops/gsc-insights.json
 """
 
 from __future__ import annotations
@@ -541,10 +541,21 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
 
     out = DATA / "insights_latest.json"
     out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
-    # Public-safe ops copy (no secrets)
-    ops_out = ROOT / "ops" / "data" / "gsc-insights.json"
-    ops_out.parent.mkdir(parents=True, exist_ok=True)
-    ops_out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Private ops copies only — never publish as static public (auth via ops?action=gsc_insights)
+    private_targets = [
+        ROOT / "data" / "ops" / "gsc-insights.json",
+        ROOT / "netlify" / "functions" / "data" / "gsc-insights.json",
+    ]
+    for ops_out in private_targets:
+        ops_out.parent.mkdir(parents=True, exist_ok=True)
+        ops_out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Remove legacy public static path if present
+    legacy = ROOT / "ops" / "data" / "gsc-insights.json"
+    if legacy.is_file():
+        try:
+            legacy.unlink()
+        except OSError:
+            pass
     return insights
 
 
@@ -653,7 +664,7 @@ def main(argv: list[str] | None = None) -> int:
     p_api.add_argument("--days", type=int, default=28)
 
     p_dash = sub.add_parser("dashboard", help="Write ops dashboard JSON")
-    p_dash.add_argument("--out", type=Path, default=ROOT / "ops" / "data" / "gsc-insights.json")
+    p_dash.add_argument("--out", type=Path, default=ROOT / "data" / "ops" / "gsc-insights.json")
 
     args = parser.parse_args(argv)
 

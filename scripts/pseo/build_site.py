@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -108,14 +109,28 @@ def write_build_info(
     generated_at: str,
     environment: str,
     schema_version: str | None,
+    *,
+    deploy_id: str | None = None,
+    artifact_hash: str | None = None,
 ) -> Path:
-    """Emit /.well-known/build-info.json from deploy env / git HEAD only."""
+    """Emit /.well-known/build-info.json from deploy env / git HEAD only.
+
+    Reliable public identity: commit, build_time, environment, deploy_id, artifact_hash.
+    """
+    deploy_id = deploy_id or (
+        os.environ.get("DEPLOY_ID")
+        or os.environ.get("NETLIFY_DEPLOY_ID")
+        or os.environ.get("DEPLOY_URL")
+        or None
+    )
     payload = {
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "commit": commit,
         "build_time": generated_at,
         "environment": environment,
         "site_schema_version": schema_version,
+        "deploy_id": deploy_id,
+        "artifact_hash": artifact_hash,
         "source": "build_site.write_build_info",
     }
     path = ROOT / ".well-known" / "build-info.json"
@@ -129,6 +144,8 @@ def write_build_info(
                 "commit": commit,
                 "web_cfg_sha": commit,
                 "build_time": generated_at,
+                "deploy_id": deploy_id,
+                "artifact_hash": artifact_hash,
                 "status": "BUILT",
             },
             ensure_ascii=False,
@@ -197,6 +214,37 @@ def main(argv: list[str] | None = None) -> int:
     artifact = assemble_public_artifact(ROOT)
     if not artifact.get("ok"):
         errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
+
+    # Re-emit build-info with material artifact hash + deploy id after assemble
+    try:
+        man = json.loads(man_path.read_text(encoding="utf-8"))
+        env_name = (
+            os.environ.get("CONTEXT")
+            or os.environ.get("NETLIFY_CONTEXT")
+            or os.environ.get("NODE_ENV")
+            or "local"
+        )
+        write_build_info(
+            _deploy_commit(),
+            man.get("generated_at")
+            or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            env_name,
+            man.get("schema_version"),
+            deploy_id=os.environ.get("DEPLOY_ID") or os.environ.get("NETLIFY_DEPLOY_ID"),
+            artifact_hash=artifact.get("public_artifact_hash"),
+        )
+        # Ensure _site carries the enriched build-info
+        wk_src = ROOT / ".well-known" / "build-info.json"
+        wk_dest = ROOT / PUBLIC_DIR_NAME / ".well-known" / "build-info.json"
+        if wk_src.is_file() and (ROOT / PUBLIC_DIR_NAME).is_dir():
+            wk_dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(wk_src, wk_dest)
+            rel_src = ROOT / ".well-known" / "release-result.json"
+            rel_dest = ROOT / PUBLIC_DIR_NAME / ".well-known" / "release-result.json"
+            if rel_src.is_file():
+                shutil.copy2(rel_src, rel_dest)
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"build_info_enrich_failed:{exc}")
 
     v = validate_all()
     if not v.get("ok"):
