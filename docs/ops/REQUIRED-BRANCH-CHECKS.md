@@ -70,3 +70,8 @@ A PR that breaks workflow shape or reintroduces soft install will fail
 - Branch protection API/UI was **not** modified by automation in this workstream
 unless a human confirms in a later commit/note with screenshot or API evidence
 - Netlify deploy previews and production smoke are separate from merge checks
+
+
+## Protection update (2026-08-04)
+
+Required contexts on main (API): `site-ci`, `pSEO quality gates`.
