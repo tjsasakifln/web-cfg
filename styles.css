@@ -653,9 +653,9 @@ html.js .form-step-fallback{display:none}
   box-shadow:0 12px 28px rgba(3,16,32,.07);
   transform:translateY(-2px);
 }
-.related-card span{color:var(--green-700);font-size:.68rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.related-card span{color:var(--green-700);font-size:.875rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
 .related-card strong{color:var(--ink);font-size:.98rem;line-height:1.35}
-.related-card small{color:#657284;font-size:.78rem}
+.related-card small{color:#657284;font-size:.875rem}
 
 @media (max-width:620px){
   .content-hero.article-hero{padding:32px 0 40px}
