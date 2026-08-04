@@ -129,7 +129,11 @@ def main() -> int:
     p_set.add_argument("--revenue", type=float, default=None)
 
     p_funnel = sub.add_parser("funnel")
-    args = ap.parse_args()
+    # Allow `lead_cli.py funnel --remote` as well as `--remote funnel`
+    argv = list(sys.argv[1:])
+    if "--remote" in argv:
+        argv = ["--remote"] + [a for a in argv if a != "--remote"]
+    args = ap.parse_args(argv)
     store_dir = Path(os.environ.get("LEAD_STORE_DIR") or ".leads")
 
     if args.cmd == "list":
