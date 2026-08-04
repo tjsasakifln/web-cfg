@@ -1,50 +1,220 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Matriz de atraso de obra | CONFENGE</title><meta name="description" content="Eventos com hipóteses preliminares, sem veredito por contagem."/>
-<link rel="canonical" href="https://confenge.com.br/ferramentas/matriz-atraso-obra/"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Matriz de atraso de obra | CONFENGE</title><meta name="description" content="Registre eventos de atraso e obtenha hipóteses preliminares e lacunas de prova."/>
+<link rel="canonical" href="https://confenge.com.br/ferramentas/matriz-atraso-obra/"/>
+<link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
+<meta content="#061a33" name="theme-color"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Matriz de atraso de obra","url":"https://confenge.com.br/ferramentas/matriz-atraso-obra/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
 </head><body>
-<header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img alt="CONFENGE" src="/assets/logo-confenge.png" width="800" height="208"/></a>
-<nav class="desktop-nav" aria-label="principal"><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/" aria-current="true">Ferramentas</a></nav></div></header>
-<main id="conteudo"><header class="tool-page-hero"><div class="container tool-shell"><h1>Matriz de atraso de obra</h1>
-<p class="content-lead">Eventos com período e prova. Hipóteses preliminares apenas.</p></div></header>
-<div class="container tool-shell"><form id="f" class="tool-form"><div id="events" class="tool-event-list"></div>
-<div class="tool-actions"><button type="button" class="button button-secondary" id="add">Adicionar evento</button></div>
-<p class="tool-privacy-note">Só neste navegador. Não emite laudo.</p>
-<div class="tool-actions"><button class="button button-primary tool-run" type="submit">Montar hipóteses</button><button type="button" class="button button-secondary" id="rst" data-tool-reset>Apagar</button></div></form>
-<div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
-<div class="tool-actions" id="ra" hidden><button type="button" class="button button-secondary" id="cp" data-tool-copy>Copiar</button><button type="button" class="button button-secondary" id="dl" data-tool-download>Baixar</button></div>
-<div class="tool-cta-contextual" id="cta" hidden></div></div></main>
-<script src="/assets/js/tools-common.js"></script><script src="/assets/js/tool-compute.js"></script><script src="/script.js" defer></script>
-<script>(function(){var T=window.ConfengeTools,C=window.ConfengeToolCompute,TOOL="matriz-atraso",n=0,last="",root=document.getElementById("events");
-if(T.bindToolLifecycle)T.bindToolLifecycle({tool:TOOL});
-function card(){n++;var el=document.createElement("div");el.className="tool-event-card";var id="ev"+n;el.innerHTML="<div class=\"tool-grid\">"+
-"<div class=\"tool-field\" style=\"grid-column:1/-1\"><label for=\""+id+"-causa\">Causa</label><input id=\""+id+"-causa\" data-f=\"causa\" required/></div>"+
-"<div class=\"tool-field\"><label for=\""+id+"-parte\">Parte</label><select id=\""+id+"-parte\" data-f=\"parte\"><option value=\"indefinida\">Indefinida</option><option value=\"administracao\">Administração</option><option value=\"contratado\">Contratado</option><option value=\"compartilhado\">Compartilhada</option></select></div>"+
-"<div class=\"tool-field\"><label for=\""+id+"-com\">Comunicação?</label><select id=\""+id+"-com\" data-f=\"com\"><option value=\"nao\">Não</option><option value=\"sim\">Sim</option></select></div>"+
-"<div class=\"tool-field\"><label for=\""+id+"-doc\">Documento?</label><select id=\""+id+"-doc\" data-f=\"doc\"><option value=\"nao\">Não</option><option value=\"sim\">Sim</option></select></div>"+
-"<div class=\"tool-field\"><label for=\""+id+"-atv\">Atividade</label><input id=\""+id+"-atv\" data-f=\"atv\"/></div>"+
-"<div class=\"tool-field\"><label for=\""+id+"-crit\">Crítico</label><select id=\""+id+"-crit\" data-f=\"crit\"><option value=\"incerto\">Incerto</option><option value=\"sim\">Sim</option><option value=\"nao\">Não</option></select></div>"+
-"<div class=\"tool-field\"><label for=\""+id+"-di\">Início</label><input id=\""+id+"-di\" type=date data-f=\"di\"/></div>"+
-"<div class=\"tool-field\"><label for=\""+id+"-df\">Fim</label><input id=\""+id+"-df\" type=date data-f=\"df\"/></div>"+
-"</div>";return el;}
-root.appendChild(card());document.getElementById("add").onclick=function(){root.appendChild(card());};
-document.getElementById("f").onsubmit=function(e){e.preventDefault();var ev=[];root.querySelectorAll(".tool-event-card").forEach(function(c){var g=function(f){var el=c.querySelector("[data-f="+f+"]");return el?el.value:"";};ev.push({causa:g("causa"),parte:g("parte"),comunicacaoContemporanea:g("com")==="sim",documentoDisponivel:g("doc")==="sim",atividadeAfetada:g("atv"),impactoCaminhoCritico:g("crit"),dataInicio:g("di"),dataFim:g("df"),concorrencia:false});});
-var r=C.computeMatrizEventos(ev.filter(function(x){return x.causa;}));var out=document.getElementById("out");
-if(!r.ok){out.hidden=false;out.innerHTML="<p>Adicione um evento.</p>";return;}
-out.hidden=false;out.className="tool-result-panel hypothesis";
-var s=r.summary;out.innerHTML="<p class=\"tool-result-summary\"><strong>Hipóteses preliminares</strong>"+r.synthesis+"</p><ul class=\"tool-evidence-list\"><li>Eventos: "+s.totalEventos+"</li><li>Sem prova: "+s.semProvaContemporanea+"</li><li>Sem período: "+s.semPeriodoDefinido+"</li></ul><ul>"+r.events.map(function(ev){return "<li><strong>"+ev.causa+"</strong>: "+ev.hipotese+"</li>";}).join("")+"</ul><p class=\"tool-disclaimer\">"+r.disclaimer+"</p>";
-last=T.buildReport([{title:"Matriz",body:r.synthesis}]);document.getElementById("ra").hidden=false;T.focusResult(out);
-document.getElementById("cta").hidden=false;document.getElementById("cta").innerHTML=s.semProvaContemporanea?"<a class=\"button button-primary\" data-tool-to-form href=\"/#contato\">Analisar prova</a>":"<a data-tool-to-content href=\"/conteudos/como-provar-atraso-obra-publica/\">Como provar atraso</a>";
-T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis"});};
-document.getElementById("dl").onclick=function(){T.downloadText("matriz.txt",last);};document.getElementById("cp").onclick=function(){T.copyText(last);};
-document.getElementById("rst").onclick=function(){if(confirm("Apagar?")){root.innerHTML="";root.appendChild(card());document.getElementById("out").hidden=true;}};
-})();</script><footer class="site-footer">
-<div class="container footer-top">
-<div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada.</p></div>
-<div class="footer-links"><strong>Ofertas</strong><a href="/diagnostico-b2g-360/">Diagnóstico B2G 360°</a><a href="/diretoria-b2g/">Diretoria B2G fracionada</a><a href="/bid-room-licitacoes-obras/">Bid Room (sala de decisão da proposta)</a><a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin (defesa técnica e proteção de margem)</a></div>
-<div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
-<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="CONFENGE"><img alt="CONFENGE" height="208" width="800" src="/assets/logo-confenge.png"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a href="/bid-room-licitacoes-obras/">Analisar licitação</a>
+<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
+<a href="/diretoria-b2g/">Operação B2G</a>
+<a href="/conteudos/">Conteúdos</a>
+<a href="/ferramentas/" aria-current="true">Ferramentas</a>
+<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+</nav>
+<a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
+</div></header>
+<main id="conteudo">
+<nav class="breadcrumbs container" aria-label="breadcrumb"><ol>
+<li><a href="/">Início</a></li><li><a href="/ferramentas/">Ferramentas</a></li>
+<li aria-current="page">Matriz de atraso</li></ol></nav>
+<header class="tool-page-hero"><div class="container tool-shell">
+<p class="eyebrow">Atrasos e prorrogação</p>
+<h1>Matriz de atraso de obra</h1>
+<p class="content-lead">Adicione eventos com período, prova, duração e possível concorrência. A ferramenta devolve hipóteses preliminares, nunca um veredito por contagem.</p>
+</div></header>
+<div class="container tool-shell">
+<details class="tool-premises"><summary>Premissas</summary>
+<div class="tool-premises-body">
+<p>Matriz orientativa. Força maior e fato da Administração não se presumem: demonstram-se. A ferramenta não soma dias automaticamente nem emite laudo pericial.</p>
+</div></details>
+<form id="f" class="tool-form">
+<div id="events" class="tool-event-list"></div>
+<div class="tool-actions"><button type="button" class="button button-secondary" id="btn-add">Adicionar evento</button></div>
+<div class="tool-field" style="margin-top:1rem">
+<label for="tem_matriz">Contrato tem matriz de riscos explícita?</label>
+<select id="tem_matriz"><option value="sim">Sim</option><option value="nao">Não / não localizei</option><option value="parcial">Parcial / ambígua</option></select>
 </div>
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a> · <a href="/termos-de-uso/">Termos de Uso</a></div>
-</footer>
+<p class="tool-privacy-note">Respostas só neste navegador e não são enviadas à CONFENGE.</p>
+<div class="tool-actions">
+<button class="button button-primary tool-run" type="submit">Montar hipóteses</button>
+<button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
+</div>
+</form>
+<div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
+<div class="tool-actions" id="ra" hidden>
+<button type="button" class="button button-secondary" id="btn-copy" data-tool-copy>Copiar</button>
+<button type="button" class="button button-secondary" id="btn-dl" data-tool-download>Baixar (.txt)</button>
+<button type="button" class="button button-secondary" id="btn-print">Imprimir</button>
+</div>
+<div class="tool-cta-contextual" id="cta" hidden></div>
+</div>
+</main>
+<footer class="site-footer"><div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE</span></div></footer>
+<script src="/assets/js/tool-persist.js"></script>
+<script src="/assets/js/tools-common.js"></script>
+<script src="/assets/js/tool-compute.js"></script>
+<script src="/script.js" defer></script>
+
+<script>
+(function(){
+  var T=window.ConfengeTools, C=window.ConfengeToolCompute;
+  var TOOL="matriz-atraso", SCHEMA=4, n=0, lastText="", root=document.getElementById("events");
+  if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
+
+  function card(d){
+    n++; var id=(d&&d.id)||("ev-"+n); var el=document.createElement("div");
+    el.className="tool-event-card"; el.setAttribute("data-event-id", id);
+    d=d||{};
+    el.innerHTML='<header><h3>Evento</h3><button type="button" class="button button-secondary tool-event-remove" data-rm>Remover</button></header>'+
+      '<div class="tool-grid">'+
+      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-causa">Causa ou evento</label><input id="'+id+'-causa" data-f="causa" value="'+(d.causa||"")+'" required/></div>'+
+      '<div class="tool-field"><label for="'+id+'-di">Data inicial</label><input id="'+id+'-di" type="date" data-f="dataInicio" value="'+(d.dataInicio||"")+'"/></div>'+
+      '<div class="tool-field"><label for="'+id+'-df">Data final</label><input id="'+id+'-df" type="date" data-f="dataFim" value="'+(d.dataFim||"")+'"/></div>'+
+      '<div class="tool-field"><label for="'+id+'-dur">Duração estimada (dias)</label><input id="'+id+'-dur" type="number" min="0" data-f="duracaoDias" value="'+(d.duracaoDias!=null?d.duracaoDias:"")+'"/></div>'+
+      '<div class="tool-field"><label for="'+id+'-parte">Parte potencialmente responsável</label><select id="'+id+'-parte" data-f="parte">'+
+      '<option value="indefinida">Ainda indefinida</option><option value="administracao">Administração (hipótese)</option>'+
+      '<option value="contratado">Contratado (hipótese)</option><option value="compartilhado">Compartilhada / concorrente</option></select></div>'+
+      '<div class="tool-field"><label for="'+id+'-com">Comunicação contemporânea?</label><select id="'+id+'-com" data-f="comunicacaoContemporanea"><option value="nao">Não localizada</option><option value="sim">Sim</option></select></div>'+
+      '<div class="tool-field"><label for="'+id+'-doc">Documento disponível?</label><select id="'+id+'-doc" data-f="documentoDisponivel"><option value="nao">Não</option><option value="sim">Sim</option></select></div>'+
+      '<div class="tool-field"><label for="'+id+'-atv">Atividade afetada</label><input id="'+id+'-atv" data-f="atividadeAfetada" value="'+(d.atividadeAfetada||"")+'"/></div>'+
+      '<div class="tool-field"><label for="'+id+'-crit">Impacto no caminho crítico</label><select id="'+id+'-crit" data-f="impactoCaminhoCritico"><option value="incerto">Incerto</option><option value="sim">Sim (alegado)</option><option value="nao">Não</option></select></div>'+
+      '<div class="tool-field"><label for="'+id+'-conc">Concorrência com outro evento?</label><select id="'+id+'-conc" data-f="concorrencia"><option value="nao">Não / não avaliado</option><option value="sim">Sim, possível sobreposição</option></select></div>'+
+      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-obs">Observação</label><textarea id="'+id+'-obs" data-f="observacao" rows="2">'+(d.observacao||"")+'</textarea></div>'+
+      '</div>';
+    if(d.parte) el.querySelector('[data-f="parte"]').value=d.parte;
+    if(d.comunicacaoContemporanea) el.querySelector('[data-f="comunicacaoContemporanea"]').value="sim";
+    if(d.documentoDisponivel) el.querySelector('[data-f="documentoDisponivel"]').value="sim";
+    if(d.impactoCaminhoCritico) el.querySelector('[data-f="impactoCaminhoCritico"]').value=d.impactoCaminhoCritico;
+    if(d.concorrencia) el.querySelector('[data-f="concorrencia"]').value="sim";
+    el.querySelector("[data-rm]").onclick=function(){
+      if(root.querySelectorAll(".tool-event-card").length<=1){ alert("Mantenha ao menos um evento ou use Apagar respostas."); return; }
+      el.remove(); persist();
+    };
+    return el;
+  }
+
+  function collect(){
+    var ev=[];
+    root.querySelectorAll(".tool-event-card").forEach(function(c){
+      var g=function(f){ var el=c.querySelector('[data-f="'+f+'"]'); return el?el.value:""; };
+      ev.push({
+        id: c.getAttribute("data-event-id"),
+        causa: g("causa"),
+        dataInicio: g("dataInicio"),
+        dataFim: g("dataFim"),
+        duracaoDias: g("duracaoDias")?Number(g("duracaoDias")):null,
+        parte: g("parte"),
+        comunicacaoContemporanea: g("comunicacaoContemporanea")==="sim",
+        documentoDisponivel: g("documentoDisponivel")==="sim",
+        atividadeAfetada: g("atividadeAfetada"),
+        impactoCaminhoCritico: g("impactoCaminhoCritico"),
+        concorrencia: g("concorrencia")==="sim",
+        observacao: g("observacao")
+      });
+    });
+    return ev;
+  }
+  function persist(){
+    T.saveState(TOOL, SCHEMA, { events: collect(), tem_matriz: document.getElementById("tem_matriz").value });
+  }
+  function restore(){
+    var d=T.loadState(TOOL, SCHEMA);
+    if(d && d.tem_matriz) document.getElementById("tem_matriz").value=d.tem_matriz;
+    if(d && d.events && d.events.length){
+      d.events.forEach(function(ev){ root.appendChild(card(ev)); });
+    } else {
+      root.appendChild(card({}));
+    }
+  }
+
+  document.getElementById("btn-add").onclick=function(){ root.appendChild(card({})); persist(); };
+  document.getElementById("f").addEventListener("submit", function(e){
+    e.preventDefault();
+    var events=collect().filter(function(x){ return (x.causa||"").trim(); });
+    var r=C.computeMatrizEventos(events, { temMatriz: document.getElementById("tem_matriz").value });
+    var out=document.getElementById("out");
+    if(!r.ok){
+      out.hidden=false; out.className="tool-result-panel warn";
+      out.innerHTML="<p>Adicione ao menos um evento com descrição da causa.</p>";
+      return;
+    }
+    var s=r.summary;
+    var rows=(r.events||[]).map(function(ev){
+      return "<li><strong>"+ev.causa+"</strong><br/>"+
+        "Hipótese: "+ev.hipotese+"<br/>"+
+        (ev.documentosExistentes&&ev.documentosExistentes.length?"Documentos existentes: "+ev.documentosExistentes.join("; ")+"<br/>":"")+
+        (ev.documentosFaltantes&&ev.documentosFaltantes.length?"Documentos faltantes: "+ev.documentosFaltantes.join("; ")+"<br/>":"")+
+        (ev.precisaNexoTemporal?"Necessita demonstrar nexo temporal.<br/>":"")+
+        (ev.precisaImpactoCritico?"Necessita demonstrar impacto no caminho crítico.<br/>":"")+
+        (ev.possivelConcorrencia?"Possível concorrência de causas / sobreposição.<br/>":"")+
+        (ev.observacao?"Observação: "+ev.observacao+"<br/>":"")+
+        "</li>";
+    }).join("");
+    out.hidden=false; out.className="tool-result-panel hypothesis";
+    out.innerHTML='<p class="tool-result-summary"><strong>Hipóteses preliminares por evento</strong>'+r.synthesis+"</p>"+
+      '<h3>Resumo geral</h3><ul class="tool-evidence-list">'+
+      "<li>Eventos: "+s.totalEventos+"</li>"+
+      "<li>Sem prova contemporânea suficiente: "+s.semProvaContemporanea+"</li>"+
+      "<li>Sem período definido: "+s.semPeriodoDefinido+"</li>"+
+      "<li>Sem vínculo crítico claro: "+s.semVinculoCritico+"</li>"+
+      "<li>Possíveis sobreposições: "+s.possiveisSobreposicoes+"</li>"+
+      "<li>Matriz de riscos no contrato: "+document.getElementById("tem_matriz").value+"</li></ul>"+
+      "<h3>Por evento</h3><ul class=\"tool-next-actions\">"+rows+"</ul>"+
+      (s.proximosRegistros&&s.proximosRegistros.length?"<h3>Próximos registros</h3><ul class=\"tool-next-actions\">"+s.proximosRegistros.map(function(x){return "<li>"+x+"</li>";}).join("")+"</ul>":"")+
+      '<p class="tool-disclaimer">'+(r.disclaimer||"Resultado orientativo.")+"</p>"+
+      '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
+    lastText=T.buildReport([
+      {title:"CONFENGE: matriz de atraso de obra", body:r.synthesis},
+      {title:"Resumo", lines:[
+        "Eventos: "+s.totalEventos,
+        "Sem prova: "+s.semProvaContemporanea,
+        "Sem período: "+s.semPeriodoDefinido,
+        "Sem crítico: "+s.semVinculoCritico,
+        "Sobreposições: "+s.possiveisSobreposicoes
+      ]},
+      {title:"Eventos", lines:(r.events||[]).map(function(ev){
+        return ev.causa+" | "+ev.hipotese+" | faltantes: "+(ev.documentosFaltantes||[]).join("; ")+
+          (ev.possivelConcorrencia?" | possível concorrência":"")+
+          (ev.precisaNexoTemporal?" | nexo temporal":"")+
+          (ev.precisaImpactoCritico?" | impacto crítico":"");
+      })},
+      {title:"Próximos registros", lines:s.proximosRegistros||[]},
+      {title:"Aviso", body:r.disclaimer}
+    ]);
+    document.getElementById("ra").hidden=false;
+    T.focusResult(out);
+    var cta=document.getElementById("cta");
+    cta.hidden=false;
+    var needs=(s.semProvaContemporanea||0)+(s.semPeriodoDefinido||0);
+    cta.innerHTML=needs
+      ? '<p>Há eventos sem prova contemporânea ou período definido. Envie cronograma e comunicações para análise de nexo.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/#contato?jornada=contrato">Analisar cronograma e prova</a></div>'
+      : '<p><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></p>';
+    T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis"});
+    persist();
+  });
+  root.addEventListener("change", persist);
+  document.getElementById("tem_matriz").addEventListener("change", persist);
+  document.getElementById("btn-dl").onclick=function(){ T.downloadText("confenge-matriz-atraso.txt", lastText); };
+  document.getElementById("btn-copy").onclick=function(){ T.copyText(lastText); };
+  document.getElementById("btn-print").onclick=function(){ window.print(); };
+  document.getElementById("btn-reset").onclick=function(){
+    if(!confirm("Apagar todos os eventos neste navegador?")) return;
+    root.innerHTML=""; root.appendChild(card({}));
+    document.getElementById("out").hidden=true;
+    document.getElementById("ra").hidden=true;
+    document.getElementById("cta").hidden=true;
+    lastText="";
+    T.clearState(TOOL);
+  };
+  restore();
+})();
+</script>
+
 </body></html>

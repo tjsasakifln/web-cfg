@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head>
+<html lang="pt-BR">
+<head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Verificador de limite de acréscimos e supressões | CONFENGE</title><meta name="description" content="Saldo orientativo de acréscimos e supressões (art. 125, Lei 14.133/2021)."/>
+<title>Verificador de limite de acréscimos e supressões | CONFENGE</title>
+<meta name="description" content="Calcule o saldo orientativo de acréscimos e supressões (art. 125 da Lei 14.133/2021)."/>
 <link rel="canonical" href="https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/"/>
-<link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
+<link rel="stylesheet" href="/styles.css"/>
+<link rel="stylesheet" href="/styles-tools.css"/>
 <meta content="#061a33" name="theme-color"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Verificador de limite","url":"https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
-</head><body>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Verificador de limite de acréscimos e supressões","url":"https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
+</script>
+</head>
+<body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <header class="site-header"><div class="container header-inner">
 <a class="brand" href="/" aria-label="CONFENGE"><img alt="CONFENGE" height="208" width="800" src="/assets/logo-confenge.png"/></a>
@@ -20,55 +26,189 @@
 </nav>
 <a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
 </div></header>
-<main id="conteudo"><nav class="breadcrumbs container"><ol><li><a href="/">Início</a></li><li><a href="/ferramentas/">Ferramentas</a></li><li aria-current="page">Limite</li></ol></nav>
-<header class="tool-page-hero"><div class="container tool-shell"><p class="eyebrow">Art. 125</p><h1>Verificador de limite de acréscimos e supressões</h1>
-<p class="content-lead">Saldos de acréscimo e supressão independentes, com o valor inicial atualizado informado.</p></div></header>
+<main id="conteudo">
+
+<nav class="breadcrumbs container" aria-label="breadcrumb"><ol>
+<li><a href="/">Início</a></li><li><a href="/ferramentas/">Ferramentas</a></li>
+<li aria-current="page">Limite de acréscimos e supressões</li></ol></nav>
+<header class="tool-page-hero"><div class="container tool-shell">
+<p class="eyebrow">Art. 125 · Lei 14.133/2021</p>
+<h1>Verificador de limite de acréscimos e supressões</h1>
+<p class="content-lead">Informe o valor inicial atualizado e os aditivos já formalizados. Veja saldos de acréscimo e de supressão de forma independente.</p>
+</div></header>
 <div class="container tool-shell">
-<details class="tool-premises"><summary>Premissas</summary><div class="tool-premises-body"><p>Valor inicial atualizado por reajustes. Limites 25%/25% ou 50% de acréscimo em reforma. Não zere saldos por compensação automática. Não é validade jurídica.</p></div></details>
+<details class="tool-premises"><summary>Premissas e valor inicial atualizado</summary>
+<div class="tool-premises-body">
+<p>Use o valor inicial do contrato atualizado por reajustes e repactuações previstos. Não confunda com o valor já acrescido por aditivos de quantitativo.</p>
+<p>Limites orientativos: 25% de acréscimo e 25% de supressão; em reforma de edifício ou equipamento, acréscimo até 50%. Compensação no mesmo aditivo não zera os saldos automaticamente.</p>
+</div></details>
 <form id="limite-form" class="tool-form" novalidate>
 <div class="tool-grid">
-<div class="tool-field"><label for="valor_inicial">Valor inicial atualizado</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="valor_inicial" inputmode="decimal" required placeholder="ex.: 10.000.000,00"/></div></div>
-<div class="tool-field"><label for="tipo">Tipo</label><select id="tipo"><option value="geral">Geral 25%</option><option value="reforma">Reforma 50%</option></select></div>
-<div class="tool-field"><label for="acrescimos_previos">Acréscimos anteriores</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="acrescimos_previos" value="0"/></div></div>
-<div class="tool-field"><label for="supressoes_previas">Supressões anteriores</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="supressoes_previas" value="0"/></div></div>
-<div class="tool-field"><label for="acrescimo_proposto">Acréscimo proposto</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="acrescimo_proposto" value="0"/></div></div>
-<div class="tool-field"><label for="supressao_proposta">Supressão proposta</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="supressao_proposta" value="0"/></div></div>
+<div class="tool-field"><label for="valor_inicial">Valor inicial atualizado</label>
+<div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
+<input id="valor_inicial" name="valor_inicial" inputmode="decimal" required autocomplete="off" placeholder="ex.: 10.000.000,00"/></div>
+<p class="tool-field-hint">Aceita 10000000, 10.000.000 ou 10.000.000,50</p></div>
+<div class="tool-field"><label for="tipo">Tipo predominante</label>
+<select id="tipo" name="tipo"><option value="geral">Geral (acréscimo 25%, supressão 25%)</option>
+<option value="reforma">Reforma de edifício ou equipamento (acréscimo 50%, supressão 25%)</option></select></div>
+<div class="tool-field"><label for="acrescimos_previos">Acréscimos já formalizados</label>
+<div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
+<input id="acrescimos_previos" name="acrescimos_previos" inputmode="decimal" value="0" autocomplete="off"/></div></div>
+<div class="tool-field"><label for="supressoes_previas">Supressões já formalizadas</label>
+<div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
+<input id="supressoes_previas" name="supressoes_previas" inputmode="decimal" value="0" autocomplete="off"/></div></div>
+<div class="tool-field"><label for="acrescimo_proposto">Acréscimo proposto agora</label>
+<div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
+<input id="acrescimo_proposto" name="acrescimo_proposto" inputmode="decimal" value="0" autocomplete="off"/></div></div>
+<div class="tool-field"><label for="supressao_proposta">Supressão proposta agora</label>
+<div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
+<input id="supressao_proposta" name="supressao_proposta" inputmode="decimal" value="0" autocomplete="off"/></div></div>
 </div>
-<p class="tool-privacy-note">Dados só neste navegador.</p>
-<div class="tool-actions"><button class="button button-primary tool-run" type="submit">Calcular saldos</button><button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar</button></div>
+<p class="tool-privacy-note">Os valores ficam apenas neste navegador e não são enviados à CONFENGE.</p>
+<div class="tool-actions">
+<button class="button button-primary tool-run" type="submit">Calcular saldos</button>
+<button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
+</div>
 </form>
 <div id="resultado" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
-<div class="tool-actions" id="ra" hidden><button type="button" id="btn-copy" data-tool-copy class="button button-secondary">Copiar</button><button type="button" id="btn-dl" data-tool-download class="button button-secondary">Baixar</button></div>
+<div class="tool-actions" id="ra" hidden>
+<button type="button" class="button button-secondary" id="btn-copy" data-tool-copy>Copiar</button>
+<button type="button" class="button button-secondary" id="btn-dl" data-tool-download>Baixar (.txt)</button>
+<button type="button" class="button button-secondary" id="btn-print">Imprimir</button>
+</div>
 <div class="tool-cta-contextual" id="cta" hidden></div>
-</div></main>
+</div>
+
+</main>
+<footer class="site-footer"><div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE</span><a href="/privacidade/">Privacidade</a></div></footer>
+<script src="/assets/js/tool-persist.js"></script>
 <script src="/assets/js/tools-common.js"></script>
 <script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
+
 <script>
-(function(){var T=window.ConfengeTools,C=window.ConfengeToolCompute,TOOL="limite-acrescimos",last="";
-if(T.bindToolLifecycle)T.bindToolLifecycle({tool:TOOL});
-function money(id){var el=document.getElementById(id),p=T.moneyFromField(el);if(!p.ok){T.setFieldError(el,"Valor inválido");return null;}T.setFieldError(el,"");return p.value;}
-function panel(t,b){var pr=b.proposto!=null?b.proposto:b.proposta;return '<div class="tool-limit-panel '+(b.dentroDoLimite?"is-ok":"is-over")+'"><h3>'+t+'</h3><dl><dt>Anteriores</dt><dd>'+T.brl(b.anteriores)+'</dd><dt>Proposto</dt><dd>'+T.brl(pr)+'</dd><dt>Total</dt><dd>'+T.brl(b.total)+'</dd><dt>Limite</dt><dd>'+T.brl(b.limite)+'</dd><dt>Saldo</dt><dd>'+T.brl(b.saldo)+'</dd><dt>%</dt><dd>'+T.pct(b.percentualUtilizado)+'</dd></dl><p class="tool-limit-status">'+b.labelStatus+'</p></div>';}
-document.getElementById("limite-form").onsubmit=function(e){e.preventDefault();
-var V=money("valor_inicial");if(V===null||!(V>0)){document.getElementById("resultado").hidden=false;document.getElementById("resultado").className="tool-result-panel bad";document.getElementById("resultado").innerHTML="<p>Informe valor inicial válido.</p>";return;}
-var r=C.computeLimiteAditivo({valorInicial:V,tipo:document.getElementById("tipo").value==="reforma"?"reforma":"geral",acrescimosPrevios:money("acrescimos_previos")||0,supressoesPrevias:money("supressoes_previas")||0,acrescimoProposto:money("acrescimo_proposto")||0,supressaoProposta:money("supressao_proposta")||0});
-var out=document.getElementById("resultado");out.hidden=false;out.className="tool-result-panel "+r.level;
-var al=(r.alerts||[]).map(function(a){return '<li data-severity="'+a.severity+'">'+a.text+"</li>";}).join("");
-out.innerHTML='<p class="tool-result-summary"><strong>Resultado orientativo</strong>Não equivale a validade jurídica.</p><div class="tool-limit-panels">'+panel("Acréscimos",r.acrescimos)+panel("Supressões",r.supressoes)+"</div>"+(al?'<ul class="tool-alert-list">'+al+"</ul>":"")+'<p class="tool-disclaimer">Orientativo.</p>';
-last=T.buildReport([{title:"Limite aditivo",body:r.acrescimos.labelStatus}]);document.getElementById("ra").hidden=false;T.focusResult(out);
-var cta=document.getElementById("cta");cta.hidden=false;cta.innerHTML=(!r.withinAc||!r.withinSu)?'<p>Revise a memória de aditivos.</p><a class="button button-primary" data-tool-to-form href="/#contato">Solicitar revisão</a>':'<a class="button button-secondary" data-tool-to-content href="/guias-contratos-obras/checklist-pedido-aditivo/">Checklist de aditivo</a>';
-T.track("tool_complete",{tool:TOOL,level:r.level,tipo:r.tipo,within_ac:r.withinAc,within_su:r.withinSu});};
-document.getElementById("btn-dl").onclick=function(){T.downloadText("limite.txt",last);};
-document.getElementById("btn-copy").onclick=function(){T.copyText(last);};
-document.getElementById("btn-reset").onclick=function(){if(confirm("Apagar?")){document.getElementById("limite-form").reset();document.getElementById("valor_inicial").value="";document.getElementById("resultado").hidden=true;}};
-})();</script>
-<footer class="site-footer">
-<div class="container footer-top">
-<div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada.</p></div>
-<div class="footer-links"><strong>Ofertas</strong><a href="/diagnostico-b2g-360/">Diagnóstico B2G 360°</a><a href="/diretoria-b2g/">Diretoria B2G fracionada</a><a href="/bid-room-licitacoes-obras/">Bid Room (sala de decisão da proposta)</a><a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin (defesa técnica e proteção de margem)</a></div>
-<div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
-<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
-</div>
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a> · <a href="/termos-de-uso/">Termos de Uso</a></div>
-</footer>
+(function(){
+  var T = window.ConfengeTools, C = window.ConfengeToolCompute;
+  var TOOL = "limite-acrescimos", SCHEMA = 3, lastText = "";
+  if (T.bindToolLifecycle) T.bindToolLifecycle({ tool: TOOL });
+
+  function money(id, required) {
+    var el = document.getElementById(id);
+    var p = T.moneyFromField(el);
+    var raw = el && String(el.value || "").trim();
+    if (!raw) {
+      if (required) { T.setFieldError(el, "Informe o valor."); return { ok: false }; }
+      T.setFieldError(el, "");
+      return { ok: true, value: 0, empty: true };
+    }
+    if (!p.ok) {
+      T.setFieldError(el, "Valor inválido. Use formato brasileiro (ex.: 10.000.000,50).");
+      return { ok: false };
+    }
+    T.setFieldError(el, "");
+    return { ok: true, value: p.value };
+  }
+
+  function collectFields() {
+    return {
+      valor_inicial: document.getElementById("valor_inicial").value,
+      tipo: document.getElementById("tipo").value,
+      acrescimos_previos: document.getElementById("acrescimos_previos").value,
+      supressoes_previas: document.getElementById("supressoes_previas").value,
+      acrescimo_proposto: document.getElementById("acrescimo_proposto").value,
+      supressao_proposta: document.getElementById("supressao_proposta").value
+    };
+  }
+  function persist() { T.saveState(TOOL, SCHEMA, collectFields()); }
+  function restore() {
+    var d = T.loadState(TOOL, SCHEMA);
+    if (!d) return;
+    Object.keys(d).forEach(function(k) {
+      var el = document.getElementById(k);
+      if (el && d[k] != null) el.value = d[k];
+    });
+  }
+
+  function panel(title, b) {
+    var pr = b.proposto != null ? b.proposto : b.proposta;
+    return '<div class="tool-limit-panel ' + (b.dentroDoLimite ? "is-ok" : "is-over") + '"><h3>' + title + '</h3><dl>' +
+      '<dt>Anteriores</dt><dd>' + T.brl(b.anteriores) + '</dd>' +
+      '<dt>Proposto</dt><dd>' + T.brl(pr) + '</dd>' +
+      '<dt>Total</dt><dd>' + T.brl(b.total) + '</dd>' +
+      '<dt>Limite</dt><dd>' + T.brl(b.limite) + '</dd>' +
+      '<dt>Saldo</dt><dd>' + T.brl(b.saldo) + '</dd>' +
+      '<dt>% utilizado</dt><dd>' + T.pct(b.percentualUtilizado) + '</dd>' +
+      '</dl><p class="tool-limit-status">' + b.labelStatus + '</p></div>';
+  }
+
+  document.getElementById("limite-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    var V = money("valor_inicial", true);
+    var acP = money("acrescimos_previos", false);
+    var suP = money("supressoes_previas", false);
+    var acN = money("acrescimo_proposto", false);
+    var suN = money("supressao_proposta", false);
+    if (!V.ok || !acP.ok || !suP.ok || !acN.ok || !suN.ok) {
+      var out = document.getElementById("resultado");
+      out.hidden = false; out.className = "tool-result-panel bad";
+      out.innerHTML = '<p class="tool-result-summary"><strong>Não foi possível calcular</strong>Corrija os valores inválidos. Os dados digitados foram mantidos.</p>';
+      if (T.focusFirstError) T.focusFirstError(document.getElementById("limite-form"));
+      return;
+    }
+    if (!(V.value > 0)) {
+      T.setFieldError(document.getElementById("valor_inicial"), "O valor inicial deve ser maior que zero.");
+      return;
+    }
+    var r = C.computeLimiteAditivo({
+      valorInicial: V.value,
+      tipo: document.getElementById("tipo").value === "reforma" ? "reforma" : "geral",
+      acrescimosPrevios: acP.value,
+      supressoesPrevias: suP.value,
+      acrescimoProposto: acN.value,
+      supressaoProposta: suN.value
+    });
+    var out = document.getElementById("resultado");
+    out.hidden = false; out.className = "tool-result-panel " + r.level;
+    var al = (r.alerts || []).map(function(a) { return '<li data-severity="' + a.severity + '">' + a.text + '</li>'; }).join("");
+    out.innerHTML = '<p class="tool-result-summary"><strong>Resultado orientativo dos saldos</strong>Cálculo numérico com os dados informados. Não equivale a validade jurídica do aditivo.</p>' +
+      '<div class="tool-limit-panels">' + panel("Acréscimos", r.acrescimos) + panel("Supressões", r.supressoes) + '</div>' +
+      (al ? '<h3>Alertas</h3><ul class="tool-alert-list">' + al + '</ul>' : '') +
+      '<p class="tool-disclaimer">Ferramenta orientativa. Confirme valor inicial atualizado e natureza do objeto no caso concreto.</p>' +
+      '<p class="tool-privacy-note">Gerado em ' + T.localNow() + '.</p>';
+    lastText = T.buildReport([
+      { title: "CONFENGE: limite de acréscimos e supressões", body: "Resultado orientativo (art. 125)" },
+      { title: "Acréscimos", lines: ["Anteriores: " + r.acrescimos.anteriores, "Proposto: " + r.acrescimos.proposto, "Total: " + r.acrescimos.total, "Limite: " + r.acrescimos.limite, "Saldo: " + r.acrescimos.saldo, r.acrescimos.labelStatus] },
+      { title: "Supressões", lines: ["Anteriores: " + r.supressoes.anteriores, "Proposta: " + r.supressoes.proposta, "Total: " + r.supressoes.total, "Limite: " + r.supressoes.limite, "Saldo: " + r.supressoes.saldo, r.supressoes.labelStatus] },
+      { title: "Aviso", body: "Cálculo orientativo. Não substitui análise do contrato concreto." }
+    ]);
+    document.getElementById("ra").hidden = false;
+    T.focusResult(out);
+    var cta = document.getElementById("cta");
+    cta.hidden = false;
+    cta.innerHTML = (!r.withinAc || !r.withinSu)
+      ? '<p>O total informado ultrapassa o limite numérico em pelo menos um eixo. Envie a memória de aditivos para revisão técnica.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/#contato?jornada=contrato">Solicitar revisão</a></div>'
+      : '<p>Saldos dentro do limite numérico informado.</p><div class="tool-actions"><a class="button button-secondary" data-tool-to-content href="/guias-contratos-obras/checklist-pedido-aditivo/">Checklist de aditivo</a></div>';
+    T.track("tool_complete", { tool: TOOL, level: r.level, tipo: r.tipo, within_ac: r.withinAc, within_su: r.withinSu });
+    persist();
+  });
+
+  document.getElementById("limite-form").addEventListener("change", persist);
+  document.getElementById("btn-dl").onclick = function() { T.downloadText("confenge-limite-aditivo.txt", lastText); };
+  document.getElementById("btn-copy").onclick = function() { T.copyText(lastText); };
+  document.getElementById("btn-print").onclick = function() { window.print(); };
+  document.getElementById("btn-reset").onclick = function() {
+    if (!confirm("Apagar respostas deste formulário neste navegador?")) return;
+    document.getElementById("limite-form").reset();
+    document.getElementById("valor_inicial").value = "";
+    ["acrescimos_previos","supressoes_previas","acrescimo_proposto","supressao_proposta"].forEach(function(id){ document.getElementById(id).value = "0"; });
+    document.getElementById("resultado").hidden = true;
+    document.getElementById("ra").hidden = true;
+    document.getElementById("cta").hidden = true;
+    lastText = "";
+    T.clearState(TOOL);
+  };
+  restore();
+})();
+</script>
+
 </body></html>

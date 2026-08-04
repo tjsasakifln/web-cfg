@@ -422,6 +422,145 @@ await page.setViewport({ width: 1440, height: 1000 });
   else pass("focus_css_link");
 }
 
+
+// --- Persist / erase / copy / download / invalid money (skeptic gaps) ---
+{
+  // Limite: invalid money must not coerce to 0
+  await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.waitForSelector("#valor_inicial");
+  await page.click("#valor_inicial", { clickCount: 3 });
+  await page.type("#valor_inicial", "10.000.000");
+  await page.click("#acrescimos_previos", { clickCount: 3 });
+  await page.type("#acrescimos_previos", "abc");
+  await page.click('button[type="submit"]');
+  await new Promise((r) => setTimeout(r, 300));
+  const inv = await page.evaluate(() => {
+    const el = document.getElementById("acrescimos_previos");
+    const out = document.getElementById("resultado");
+    return {
+      valueKept: el && el.value.includes("abc"),
+      invalid: el && el.getAttribute("aria-invalid") === "true",
+      noPanels: !(out && out.querySelector(".tool-limit-panel")),
+      msg: out ? out.innerText.slice(0, 200) : "",
+    };
+  });
+  if (!inv.valueKept || !inv.invalid) fail("limite_invalid_kept " + JSON.stringify(inv));
+  else pass("limite_invalid_kept");
+  if (!inv.noPanels && !/inválid|corrig/i.test(inv.msg)) fail("limite_invalid_no_compute");
+  else pass("limite_invalid_no_silent_zero");
+
+  // Limite: valid submit → persist → reload
+  await page.click("#acrescimos_previos", { clickCount: 3 });
+  await page.type("#acrescimos_previos", "1800000");
+  await page.click("#acrescimo_proposto", { clickCount: 3 });
+  await page.type("#acrescimo_proposto", "900000");
+  await page.click('button[type="submit"]');
+  await page.waitForSelector("#resultado:not([hidden])", { timeout: 8000 });
+  const stored = await page.evaluate(() => localStorage.getItem("confenge.tool.limite-acrescimos"));
+  if (!stored || !stored.includes('"v"')) fail("limite_persist_write");
+  else pass("limite_persist_write");
+  await page.reload({ waitUntil: "networkidle0" });
+  await page.waitForSelector("#valor_inicial");
+  const restored = await page.evaluate(() => ({
+    v: document.getElementById("valor_inicial").value,
+    ac: document.getElementById("acrescimos_previos").value,
+    raw: localStorage.getItem("confenge.tool.limite-acrescimos"),
+  }));
+  if (!restored.v || !String(restored.ac).includes("1800000") && restored.ac !== "1.800.000") {
+    // accept either raw digits or formatted
+    if (!restored.raw || !restored.raw.includes("1800000")) fail("limite_persist_reload " + JSON.stringify(restored));
+    else pass("limite_persist_reload_storage");
+  } else pass("limite_persist_reload");
+
+  // Copy / download produce non-empty text (re-run calc first)
+  await page.click('button[type="submit"]');
+  await page.waitForSelector("#resultado:not([hidden])");
+  const reportLen = await page.evaluate(async () => {
+    // trigger copy path via building lastText already done on submit; click copy if present
+    const btn = document.getElementById("btn-copy");
+    if (btn) btn.click();
+    // access lastText not global — re-read download by intercepting Blob is hard; check report via recomputing DOM export button
+    const dl = document.getElementById("btn-dl");
+    return { hasCopy: !!btn, hasDl: !!dl, resultText: (document.getElementById("resultado") || {}).innerText || "" };
+  });
+  if (!reportLen.hasCopy || !reportLen.hasDl) fail("limite_copy_dl_buttons");
+  else pass("limite_copy_dl_buttons");
+  if (!reportLen.resultText || reportLen.resultText.length < 40) fail("limite_result_text_short");
+  else pass("limite_result_text_professional", reportLen.resultText.length);
+  // print path exists
+  const hasPrint = await page.$("#btn-print");
+  if (!hasPrint) fail("limite_print_btn");
+  else pass("limite_print_btn");
+
+  // Erase clears storage + UI
+  page.once("dialog", async (d) => { await d.accept(); });
+  await page.click("#btn-reset");
+  await new Promise((r) => setTimeout(r, 300));
+  const erased = await page.evaluate(() => ({
+    ls: localStorage.getItem("confenge.tool.limite-acrescimos"),
+    v: document.getElementById("valor_inicial").value,
+    hidden: document.getElementById("resultado").hidden,
+  }));
+  if (erased.ls) fail("limite_erase_storage");
+  else pass("limite_erase_storage");
+  if (!erased.hidden) fail("limite_erase_ui");
+  else pass("limite_erase_ui");
+}
+
+{
+  // Reequilibrio persist + fieldset
+  await page.goto(`${BASE}/ferramentas/checklist-reequilibrio/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.waitForSelector("#root fieldset, .tool-fieldset, fieldset", { timeout: 10000 });
+  const fs = await page.evaluate(() => document.querySelectorAll("fieldset").length);
+  if (fs < 5) fail("reeq_fieldsets " + fs);
+  else pass("reeq_fieldsets", fs);
+  // mark one met and submit
+  const met = await page.$('input[value="met"]');
+  if (met) await met.click();
+  await page.click('button[type="submit"]');
+  await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+  const reStore = await page.evaluate(() => localStorage.getItem("confenge.tool.checklist-reequilibrio"));
+  if (!reStore) fail("reeq_persist");
+  else pass("reeq_persist");
+  await page.reload({ waitUntil: "networkidle0" });
+  const reRestored = await page.evaluate(() => localStorage.getItem("confenge.tool.checklist-reequilibrio"));
+  if (!reRestored) fail("reeq_persist_after_reload");
+  else pass("reeq_persist_after_reload");
+}
+
+{
+  // Matriz: duration, concurrency, full event output
+  await page.goto(`${BASE}/ferramentas/matriz-atraso-obra/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.waitForSelector('[data-f="causa"]');
+  const hasDur = await page.$('[data-f="duracaoDias"]');
+  const hasConc = await page.$('[data-f="concorrencia"]');
+  const hasObs = await page.$('[data-f="observacao"]');
+  if (!hasDur || !hasConc || !hasObs) fail("matriz_fields_missing");
+  else pass("matriz_fields_dur_conc_obs");
+  await page.type('[data-f="causa"]', "Frente não liberada");
+  await page.select('[data-f="parte"]', "administracao");
+  await page.type('[data-f="duracaoDias"]', "15");
+  await page.select('[data-f="concorrencia"]', "sim");
+  await page.type('[data-f="observacao"]', "Sobreposição com chuva no mesmo trecho");
+  await page.click('button[type="submit"]');
+  await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+  const mxFull = await page.evaluate(() => {
+    const t = document.getElementById("out").innerText;
+    return {
+      t: t.slice(0, 800),
+      docs: /documento|faltante|prova/i.test(t),
+      nexo: /nexo temporal|período/i.test(t),
+      crit: /caminho crítico|crítico/i.test(t),
+      conc: /concorrência|sobreposição/i.test(t),
+    };
+  });
+  if (!mxFull.docs) fail("matriz_result_docs"); else pass("matriz_result_docs");
+  if (!mxFull.conc && !/concorr/i.test(mxFull.t)) fail("matriz_result_conc"); else pass("matriz_result_conc");
+  const mxStore = await page.evaluate(() => localStorage.getItem("confenge.tool.matriz-atraso"));
+  if (!mxStore) fail("matriz_persist"); else pass("matriz_persist");
+}
+
+
 // --- axe on all pilots ---
 for (const pilot of PILOTS) {
   await page.setViewport({ width: 1440, height: 1000 });

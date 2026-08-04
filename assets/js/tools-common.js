@@ -50,7 +50,7 @@
     pct: function (n) { return Number.isFinite(n) ? (n * 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + "%" : "n/d"; },
     waLink: function (t) { return "https://wa.me/5548988344559?text=" + encodeURIComponent(t); },
     localNow: function () { try { return new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }); } catch (_) { return new Date().toISOString(); } },
-    saveState: function (id, v, d) { try { localStorage.setItem(P + id, JSON.stringify({ v: v || 1, savedAt: Date.now(), data: d })); } catch (_) {} },
+    saveState: function (id, v, d) { try { var packed = (typeof ConfengeToolPersist !== "undefined" && ConfengeToolPersist.packState) ? ConfengeToolPersist.packState(v, d) : (window.ConfengeToolPersist && window.ConfengeToolPersist.packState ? window.ConfengeToolPersist.packState(v, d) : { v: v || 1, savedAt: Date.now(), data: d }); localStorage.setItem(P + id, JSON.stringify(packed)); } catch (_) {} },
     loadState: function (id, v) {
       try {
         var r = localStorage.getItem(P + id); if (!r) return null;
