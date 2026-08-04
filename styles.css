@@ -199,3 +199,27 @@ html.js .form-step-fallback{display:none}
 }
 .lead-inline .button-primary,
 .lead-inline a.button-primary{color:#fff}
+
+/* ===== Editorial hero: single column (no empty 420px track squeezing title) ===== */
+.content-hero.article-hero .content-hero-grid,
+.article-hero .content-hero-grid{
+  grid-template-columns:minmax(0,1fr);
+  gap:0;
+}
+.content-hero.article-hero h1,
+.article-hero h1{
+  max-width:min(100%,46rem);
+  font-size:clamp(2rem,2.8vw,3.1rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+}
+.content-hero.article-hero .content-lead,
+.article-hero .content-lead{
+  max-width:40rem;
+}
+/* Checklist label text uses remaining row width (not shrink-to-fit only) */
+.checklist label span{
+  flex:1 1 auto;
+  min-width:0;
+  display:block;
+}
