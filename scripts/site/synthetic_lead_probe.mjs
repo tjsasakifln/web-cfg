@@ -2,8 +2,9 @@
  * Synthetic lead probe (no real PII) against a base URL.
  * Usage: node scripts/site/synthetic_lead_probe.mjs [baseUrl] [probeSecret]
  *
- * Validates: HTTP 201/200, lead_id, no secret leak, idempotency (second POST).
- * Exit 0 only when all pass. Does not stage commercial CRM.
+ * Requires: HTTP 201/200, lead_id, no secret leak, SAME lead_id on second POST
+ * with identical Idempotency-Key, and notify_status/email_status present.
+ * Exit non-zero if idempotency fails.
  */
 const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
@@ -54,26 +55,29 @@ async function postOnce() {
 }
 
 const first = await postOnce();
-const leaks = ["topic", "ntfy", "formsubmit", "delivery", "upstream", "confenge-prod-leads", "RESEND_API_KEY"].filter(
+const leaks = ["topic", "ntfy", "formsubmit", "upstream", "confenge-prod-leads", "RESEND_API_KEY"].filter(
   (k) => first.text.toLowerCase().includes(k.toLowerCase())
 );
 
 const second = await postOnce();
 const sameId =
   Boolean(first.data.lead_id) &&
+  Boolean(second.data.lead_id) &&
   second.data.lead_id === first.data.lead_id &&
   (second.res.status === 200 || second.res.status === 201);
-// Second call must succeed as a valid synthetic probe path (store may lack durable
-// idempotency map on some backends — same-id is preferred, second 2xx is required).
-const secondOk =
-  (second.res.status === 200 || second.res.status === 201) && second.data.ok === true && Boolean(second.data.lead_id);
+
+const allowedSt = /^(ok|pending|skipped|error)$/;
+const deliveryOk =
+  allowedSt.test(String(first.data.notify_status || "")) &&
+  allowedSt.test(String(first.data.email_status || ""));
 
 const ok =
   (first.res.status === 201 || first.res.status === 200) &&
   first.data.ok === true &&
   Boolean(first.data.lead_id || first.data.receipt_id) &&
   leaks.length === 0 &&
-  secondOk;
+  sameId &&
+  deliveryOk;
 
 const out = {
   ok,
@@ -84,7 +88,9 @@ const out = {
   leaks,
   idempotent_same_id: sameId,
   idempotent_http: second.res.status,
-  idempotent_second_ok: secondOk,
+  second_lead_id: second.data.lead_id || null,
+  notify_status: first.data.notify_status || null,
+  email_status: first.data.email_status || null,
   base,
   ts: new Date().toISOString(),
   checks: {
@@ -92,12 +98,9 @@ const out = {
     validation_ok_body: first.data.ok === true,
     persistence_lead_id: Boolean(first.data.lead_id),
     no_secret_leak: leaks.length === 0,
-    second_post_ok: secondOk,
     idempotency_same_id: sameId,
+    delivery_status_present: deliveryOk,
   },
-  note: sameId
-    ? "idempotency_hit"
-    : "second_post_ok_but_new_id — durable idempotency map may be unavailable; both remain synthetic probes",
 };
 console.log(JSON.stringify(out));
 if (!ok) process.exit(1);

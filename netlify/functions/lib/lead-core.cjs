@@ -198,7 +198,19 @@ function validateAndNormalize(data) {
   return { ok: true, honeypot: false, lead };
 }
 
-function generateLeadId(seedMaterial) {
+/**
+ * Lead id generation.
+ * When `deterministic: true` (preferred for explicit idempotency keys), same seed
+ * always yields the same id — critical for Netlify Blobs eventual-consistency races.
+ */
+function generateLeadId(seedMaterial, options = {}) {
+  if (options && options.deterministic) {
+    return crypto
+      .createHash("sha256")
+      .update(String(seedMaterial || "empty"))
+      .digest("hex")
+      .slice(0, 24);
+  }
   const material = [
     seedMaterial || "",
     String(Date.now()),
@@ -208,7 +220,13 @@ function generateLeadId(seedMaterial) {
 }
 
 function idempotencyKeyFor(lead, explicit) {
-  if (explicit) return `idk:${explicit}`;
+  if (explicit) {
+    // Normalize: strip accidental idk: prefix double-wrap; clamp length
+    let e = String(explicit).trim();
+    if (e.toLowerCase().startsWith("idk:")) e = e.slice(4);
+    e = e.slice(0, 120);
+    if (e) return `idk:${e}`;
+  }
   // 15-minute window bucket to collapse double-submit
   const bucket = Math.floor(Date.now() / (15 * 60 * 1000));
   const material = [
@@ -280,8 +298,17 @@ function corsHeaders(origin) {
 }
 
 /** Public response whitelist — never include channels, topics, tokens, PII. */
-function publicSuccessBody({ lead_id, received_at, journey, stage_category, status }) {
-  return {
+function publicSuccessBody({
+  lead_id,
+  received_at,
+  journey,
+  stage_category,
+  status,
+  notify_status,
+  email_status,
+  idempotent,
+}) {
+  const body = {
     ok: true,
     lead_id,
     receipt_id: lead_id, // back-compat for front-end
@@ -290,6 +317,11 @@ function publicSuccessBody({ lead_id, received_at, journey, stage_category, stat
     stage_category: stage_category ? String(stage_category).slice(0, 80) : undefined,
     status: status || "persisted",
   };
+  // Non-PII delivery status for probe/ops verification (never secrets/topics)
+  if (notify_status) body.notify_status = String(notify_status).slice(0, 24);
+  if (email_status) body.email_status = String(email_status).slice(0, 24);
+  if (idempotent === true) body.idempotent = true;
+  return body;
 }
 
 function publicErrorBody({ error, message }) {

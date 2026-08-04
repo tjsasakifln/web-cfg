@@ -131,15 +131,17 @@ class NetlifyBlobsStore {
       contentType: "application/json",
     });
   }
-  async _getJson(key) {
+  async _getJson(key, { strong = true } = {}) {
+    const getOpts = strong ? { type: "json", consistency: "strong" } : { type: "json" };
     try {
-      const asJson = await this.store.get(key, { type: "json" });
+      const asJson = await this.store.get(key, getOpts);
       if (asJson != null) return asJson;
     } catch {
       /* try text */
     }
     try {
-      const text = await this.store.get(key, { type: "text" });
+      const textOpts = strong ? { type: "text", consistency: "strong" } : { type: "text" };
+      const text = await this.store.get(key, textOpts);
       if (!text) return null;
       return JSON.parse(text);
     } catch {
@@ -149,7 +151,8 @@ class NetlifyBlobsStore {
   async getByIdempotency(key) {
     const h = crypto.createHash("sha256").update(key).digest("hex").slice(0, 40);
     try {
-      const raw = await this._getJson(`idem/${h}`);
+      // Strong consistency so a second POST within the same second can hit the map
+      const raw = await this._getJson(`idem/${h}`, { strong: true });
       if (!raw?.lead_id) return null;
       return this.get(raw.lead_id);
     } catch {
@@ -158,16 +161,26 @@ class NetlifyBlobsStore {
   }
   async get(id) {
     try {
-      return (await this._getJson(`leads/${id}`)) || null;
+      return (await this._getJson(`leads/${id}`, { strong: true })) || null;
     } catch {
       return null;
     }
   }
   async put(record) {
-    await this._setJson(`leads/${record.lead_id}`, record);
+    // Write idempotency map FIRST so concurrent retries can resolve the same lead_id
     if (record.idempotency_key) {
       const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
       await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
+    }
+    await this._setJson(`leads/${record.lead_id}`, record);
+    // Read-after-write: confirm idem map is visible under strong consistency
+    if (record.idempotency_key) {
+      const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
+      const check = await this._getJson(`idem/${h}`, { strong: true });
+      if (!check || check.lead_id !== record.lead_id) {
+        // Retry write once
+        await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
+      }
     }
     return record;
   }

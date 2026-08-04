@@ -154,7 +154,13 @@ _reset();
     if (bodyStr.includes("SECRET_MESSAGE") || bodyStr.includes("ntfy") || bodyStr.includes("topic") || bodyStr.includes("test-secret") || bodyStr.includes("example.com")) {
       fail("response_leak", data);
     }
+    // Full delivery object / secrets must not leak; notify_status/email_status are non-PII OK
     if (data.delivery || data.upstream || data.topic) fail("delivery_in_response", data);
+    if (!data.notify_status || !data.email_status) fail("delivery_status_fields", data);
+    const allowedSt = /^(ok|pending|skipped|error)$/;
+    if (!allowedSt.test(data.notify_status) || !allowedSt.test(data.email_status)) {
+      fail("delivery_status_values", data);
+    }
     const stored = await mem.get(data.lead_id);
     if (!stored) fail("not_in_store", data.lead_id);
     if (stored.nome !== "QA Journey A") fail("store_nome", stored);
@@ -180,12 +186,18 @@ _reset();
     consentimento: "true",
     idempotency_key: "fixed-key-abc-001",
   };
-  const r1 = await handler(event(payload));
+  const r1 = await handler(event(payload, "POST", { "Idempotency-Key": "fixed-key-abc-001" }));
   const d1 = JSON.parse(r1.body);
-  const r2 = await handler(event(payload));
+  const r2 = await handler(event(payload, "POST", { "Idempotency-Key": "fixed-key-abc-001" }));
   const d2 = JSON.parse(r2.body);
-  if (!d1.lead_id || d1.lead_id !== d2.lead_id) fail("idempotency", { d1, d2 });
-  pass("idempotency", { lead_id: d1.lead_id });
+  if (!d1.lead_id || d1.lead_id !== d2.lead_id) fail("idempotency", { d1, d2, s1: r1.statusCode, s2: r2.statusCode });
+  if (r2.statusCode !== 200 && r2.statusCode !== 201) fail("idempotency_status", r2.statusCode);
+  // Deterministic: same key always same id even without map hit
+  const { generateLeadId, idempotencyKeyFor } = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const k = idempotencyKeyFor({}, "fixed-key-abc-001");
+  const expected = generateLeadId(`idem|${k}`, { deterministic: true });
+  if (d1.lead_id !== expected) fail("idempotency_deterministic", { got: d1.lead_id, expected });
+  pass("idempotency", { lead_id: d1.lead_id, second_status: r2.statusCode });
 }
 
 // 7) email delivery failure does not destroy persisted lead

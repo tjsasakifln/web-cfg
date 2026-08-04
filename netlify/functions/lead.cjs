@@ -208,10 +208,14 @@ exports.handler = async (event) => {
   const idemKey = idempotencyKeyFor(lead, headerIdem || null);
   lead.idempotency_key = idemKey;
 
+  // Deterministic id from idempotency key — same key always same lead_id even if
+  // the idempotency map read is eventually consistent on first retry.
+  const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
+
   try {
     const existing = await store.getByIdempotency(idemKey);
     if (existing && existing.lead_id) {
-      safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id });
+      safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id, via: "idem_map" });
       return {
         statusCode: 200,
         headers,
@@ -222,6 +226,30 @@ exports.handler = async (event) => {
             journey: existing.jornada,
             stage_category: existing.estagio,
             status: existing.status || "persisted",
+            notify_status: existing.delivery?.notify?.status,
+            email_status: existing.delivery?.email?.status,
+            idempotent: true,
+          }),
+        ),
+      };
+    }
+    // Secondary path: deterministic id already present
+    const byId = await store.get(lead_id);
+    if (byId && byId.lead_id) {
+      safeLog("info", "lead_idempotent_hit", { lead_id: byId.lead_id, via: "deterministic_id" });
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(
+          publicSuccessBody({
+            lead_id: byId.lead_id,
+            received_at: byId.received_at,
+            journey: byId.jornada,
+            stage_category: byId.estagio,
+            status: byId.status || "persisted",
+            notify_status: byId.delivery?.notify?.status,
+            email_status: byId.delivery?.email?.status,
+            idempotent: true,
           }),
         ),
       };
@@ -233,7 +261,6 @@ exports.handler = async (event) => {
   }
 
   const received_at = new Date().toISOString();
-  const lead_id = generateLeadId(`${lead.jornada}|${idemKey}`);
   const ip_hash = crypto.createHash("sha256").update(ip + (process.env.IP_HASH_SALT || "confenge")).digest("hex").slice(0, 16);
 
   const record = buildLeadRecord({
@@ -260,7 +287,41 @@ exports.handler = async (event) => {
     if (!verified || verified.lead_id !== lead_id) {
       throw new Error("persist_verify_miss");
     }
+    // Confirm idempotency map (best-effort; deterministic id is the safety net)
+    try {
+      const again = await store.getByIdempotency(idemKey);
+      if (!again || again.lead_id !== lead_id) {
+        safeLog("warn", "idem_map_verify_miss", { lead_id });
+      }
+    } catch {
+      /* non-fatal */
+    }
   } catch (err) {
+    // Race: another request may have written the same deterministic id
+    try {
+      const raced = await store.get(lead_id);
+      if (raced && raced.lead_id === lead_id) {
+        safeLog("info", "lead_idempotent_race", { lead_id });
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(
+            publicSuccessBody({
+              lead_id: raced.lead_id,
+              received_at: raced.received_at,
+              journey: raced.jornada,
+              stage_category: raced.estagio,
+              status: raced.status || "persisted",
+              notify_status: raced.delivery?.notify?.status,
+              email_status: raced.delivery?.email?.status,
+              idempotent: true,
+            }),
+          ),
+        };
+      }
+    } catch {
+      /* fall through */
+    }
     safeLog("error", "persist_failed", {
       code: err && err.message ? String(err.message).slice(0, 120) : "error",
       name: err && err.name ? String(err.name).slice(0, 40) : undefined,
@@ -301,30 +362,32 @@ exports.handler = async (event) => {
     };
   }
 
+  // Normalize channel statuses for public non-PII surface
+  const notify_status = delivery?.notify?.status || "pending";
+  const email_status = delivery?.email?.status || "pending";
+
   try {
     await store.update(lead_id, {
       delivery: {
         notify: {
-          status: delivery.notify.status,
+          status: notify_status,
           attempts: 1,
           channels: delivery.notify.channels,
         },
         email: {
-          status: delivery.email.status,
+          status: email_status,
           attempts: 1,
         },
       },
       status:
-        delivery.notify.status === "ok" || delivery.email.status === "ok"
-          ? "persisted_notified"
-          : "persisted",
+        notify_status === "ok" || email_status === "ok" ? "persisted_notified" : "persisted",
       audit: [
         ...(record.audit || []),
         {
           at: new Date().toISOString(),
           event: "delivery_attempt",
-          notify: delivery.notify.status,
-          email: delivery.email.status,
+          notify: notify_status,
+          email: email_status,
         },
       ],
     });
@@ -335,7 +398,7 @@ exports.handler = async (event) => {
     });
   }
 
-  // Success: durable persist confirmed (email/notify optional)
+  // Success: durable persist confirmed (email/notify optional but status always reported)
   return {
     statusCode: 201,
     headers,
@@ -345,7 +408,10 @@ exports.handler = async (event) => {
         received_at,
         journey: record.jornada,
         stage_category: record.estagio,
-        status: "persisted",
+        status:
+          notify_status === "ok" || email_status === "ok" ? "persisted_notified" : "persisted",
+        notify_status,
+        email_status,
       }),
     ),
   };
