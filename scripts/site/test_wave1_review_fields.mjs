@@ -12,6 +12,10 @@ const pages = pkt.pages || [];
 ok("first_cohort_exactly_three", pages.length === 3, String(pages.length));
 ok("first_cohort_order", pages.map((p) => p.page_id).join(",") === expected.join(","));
 ok("commit_sha_informational", pkt.commit_sha_role === "informational_only");
+const reviewTarget = pkt.review_target || {};
+ok("preview_target_is_pr54", reviewTarget.preview_base_url === "https://deploy-preview-54--confenge.netlify.app");
+ok("production_review_forbidden", reviewTarget.production_urls_allowed === false);
+ok("runtime_preview_packet", /editorial-review-packet\.json$/.test(reviewTarget.runtime_evidence_url || ""));
 for (const p of pages) {
   const id = p.page_id;
   ok(`material_hash:${id}`, /^[a-f0-9]{64}$/.test(p.material_hash || ""));
@@ -19,6 +23,7 @@ for (const p of pages) {
   ok(`demand:${id}`, Boolean(p.demand_evidence));
   ok(`objective:${id}`, Boolean(p.objective));
   ok(`sources:${id}`, Array.isArray(p.legal_sources) && p.legal_sources.length > 0);
+  ok(`preview:${id}`, (p.preview || "").startsWith("https://deploy-preview-54--confenge.netlify.app/"));
   ok(`competitor:${id}`, Boolean(p.cannibalization && p.cannibalization.internal_competitor));
   ok(`cta:${id}`, Boolean(p.cta && p.cta.offer));
   ok(`human_command:${id}`, human.includes(`--page-id ${id}`) && human.includes(p.material_hash));
