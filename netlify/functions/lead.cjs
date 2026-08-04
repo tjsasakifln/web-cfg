@@ -282,8 +282,12 @@ exports.handler = async (event) => {
 
   try {
     await store.put(record);
-    // Read-back proves durable write (not only in-memory success)
-    const verified = await store.get(lead_id);
+    // Read-back proves durable write (retry once for eventual consistency)
+    let verified = await store.get(lead_id);
+    if (!verified || verified.lead_id !== lead_id) {
+      await new Promise((r) => setTimeout(r, 150));
+      verified = await store.get(lead_id);
+    }
     if (!verified || verified.lead_id !== lead_id) {
       throw new Error("persist_verify_miss");
     }

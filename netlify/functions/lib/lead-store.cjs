@@ -131,17 +131,18 @@ class NetlifyBlobsStore {
       contentType: "application/json",
     });
   }
-  async _getJson(key, { strong = true } = {}) {
-    const getOpts = strong ? { type: "json", consistency: "strong" } : { type: "json" };
+  async _getJson(key) {
+    // Use store default consistency. Do NOT force consistency:"strong" on get
+    // after an eventual set — that combination can miss the just-written key
+    // (persist_verify_miss in production).
     try {
-      const asJson = await this.store.get(key, getOpts);
+      const asJson = await this.store.get(key, { type: "json" });
       if (asJson != null) return asJson;
     } catch {
       /* try text */
     }
     try {
-      const textOpts = strong ? { type: "text", consistency: "strong" } : { type: "text" };
-      const text = await this.store.get(key, textOpts);
+      const text = await this.store.get(key, { type: "text" });
       if (!text) return null;
       return JSON.parse(text);
     } catch {
@@ -151,8 +152,7 @@ class NetlifyBlobsStore {
   async getByIdempotency(key) {
     const h = crypto.createHash("sha256").update(key).digest("hex").slice(0, 40);
     try {
-      // Strong consistency so a second POST within the same second can hit the map
-      const raw = await this._getJson(`idem/${h}`, { strong: true });
+      const raw = await this._getJson(`idem/${h}`);
       if (!raw?.lead_id) return null;
       return this.get(raw.lead_id);
     } catch {
@@ -161,7 +161,7 @@ class NetlifyBlobsStore {
   }
   async get(id) {
     try {
-      return (await this._getJson(`leads/${id}`, { strong: true })) || null;
+      return (await this._getJson(`leads/${id}`)) || null;
     } catch {
       return null;
     }
@@ -173,13 +173,16 @@ class NetlifyBlobsStore {
       await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
     }
     await this._setJson(`leads/${record.lead_id}`, record);
-    // Read-after-write: confirm idem map is visible under strong consistency
+    // Best-effort re-write of idem map if not visible yet (non-fatal)
     if (record.idempotency_key) {
       const h = crypto.createHash("sha256").update(record.idempotency_key).digest("hex").slice(0, 40);
-      const check = await this._getJson(`idem/${h}`, { strong: true });
-      if (!check || check.lead_id !== record.lead_id) {
-        // Retry write once
-        await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
+      try {
+        const check = await this._getJson(`idem/${h}`);
+        if (!check || check.lead_id !== record.lead_id) {
+          await this._setJson(`idem/${h}`, { lead_id: record.lead_id });
+        }
+      } catch {
+        /* non-fatal — deterministic lead_id remains the safety net */
       }
     }
     return record;
@@ -346,11 +349,17 @@ async function createStore(options = {}) {
         name: "confenge-leads",
         siteID,
         token,
+        // Prefer strong consistency when API supports it (read-your-writes).
+        consistency: "strong",
       });
       safeLog("info", "store_blobs_manual_creds", { site_len: siteID.length });
     } else {
       // Context from connectLambda(event) / NETLIFY_BLOBS_CONTEXT
-      store = blobs.getStore("confenge-leads");
+      try {
+        store = blobs.getStore({ name: "confenge-leads", consistency: "strong" });
+      } catch {
+        store = blobs.getStore("confenge-leads");
+      }
     }
     return new NetlifyBlobsStore(store);
   } catch (err) {
