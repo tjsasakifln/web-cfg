@@ -1,10 +1,19 @@
 {
   "ok": true,
-  "ts": "2026-08-04T14:38:00.093506+00:00",
+  "ts": "2026-08-04T23:03:40.801612+00:00",
   "valid_human_approved": 0,
   "page_ids": [],
-  "wave1_human_approved_truth": 0,
-  "wave1_indexable_truth": 0,
+  "approved_count": 0,
+  "released_count": 0,
+  "cohort_complete": false,
+  "released_page_ids": [],
+  "awaiting_page_ids": [
+    "lei-limite-25-50",
+    "guia-checklist-aditivo",
+    "lei-item-novo-desconto"
+  ],
+  "first_cohort_human_approved_truth": 0,
+  "first_cohort_indexable_truth": 0,
   "actions": [
     "noop"
   ],

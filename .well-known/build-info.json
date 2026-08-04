@@ -1,10 +1,10 @@
 {
   "schema_version": "1.1.0",
-  "commit": "73fa460a01e73bc389341d9b1501d3564c46fe20",
-  "build_time": "2026-08-04T14:36:35Z",
+  "commit": "8991c9f70244d181a3f09e8b76893702492b475b",
+  "build_time": "2026-08-04T23:00:30Z",
   "environment": "local",
   "site_schema_version": "1.1.0",
   "deploy_id": null,
-  "artifact_hash": "8a7be5fa354900855854edb39796da37eb9cd86946d7320a4d9f339f3b4d58e6",
+  "artifact_hash": "4a36866ad30198ac1f4451e3ee27051268b2a0bd0725508926d02578b888d54e",
   "source": "build_site.write_build_info"
 }

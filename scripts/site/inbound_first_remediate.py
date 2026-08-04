@@ -864,17 +864,22 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         flags=re.S,
     )
 
-    # Replace count claims
-    html = re.sub(r"\b120 guias\b", f"{idx_n} guias", html)
-    html = re.sub(r"\bTodos os 120 guias\b", f"Guias indexáveis ({idx_n})", html)
-    html = re.sub(r"\b120 conteúdos encontrados\b", f"{idx_n} conteúdos encontrados", html)
+    # Replace count claims (any stale N, not only the historic 120)
+    html = re.sub(r"\b\d+\s+guias\b", f"{idx_n} guias", html)
+    html = re.sub(r"\bTodos os \d+\s+guias\b", f"Todos os {idx_n} guias", html)
+    html = re.sub(r"\b\d+\s+conteúdos encontrados\b", f"{idx_n} conteúdos encontrados", html)
     html = re.sub(
-        r"120 guias organizados por problema e estágio",
+        r"\d+\s+guias organizados por problema e estágio",
         f"{idx_n} guias indexáveis organizados por problema e estágio (demais em revisão editorial)",
         html,
     )
     html = re.sub(
-        r"<strong>120</strong><span>perguntas técnicas</span>",
+        r"<strong>\d+</strong><span>perguntas técnicas</span>",
+        f"<strong>{idx_n}</strong><span>guias indexáveis</span>",
+        html,
+    )
+    html = re.sub(
+        r"<strong>\d+</strong><span>guias indexáveis</span>",
         f"<strong>{idx_n}</strong><span>guias indexáveis</span>",
         html,
     )

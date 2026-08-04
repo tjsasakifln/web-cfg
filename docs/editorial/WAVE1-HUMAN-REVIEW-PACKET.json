@@ -2,9 +2,9 @@
   "schema_version": "3.0.0",
   "decision_schema_version": "3.0.0",
   "title": "Primeira coorte editorial: revisão humana individual no deploy preview",
-  "commit_sha": "e5986c001c644fc650380cf1cb0c9c73cccad2ad",
+  "commit_sha": "8991c9f70244d181a3f09e8b76893702492b475b",
   "commit_sha_role": "informational_only",
-  "derived_at": "2026-08-04T22:01:24Z",
+  "derived_at": "2026-08-04T23:02:48Z",
   "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
   "review_target": {
     "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
@@ -191,7 +191,7 @@
       "search_intent": "Checklist operacional para protocolar pedido de aditivo de obra",
       "demand_evidence": "A query 'aditivos obra pública' teve 5 impressões; o peer /conteudos/erro-de-projeto-gera-aditivo-obra-publica/ teve 3 impressões e posição 2,33 no export GSC de 2026-07-30.",
       "objective": "Organizar o dossiê e seus bloqueadores antes do protocolo, sem vender um checklist como substituto de análise jurídica.",
-      "conclusion_summary": "Antes de protocolar um aditivo, reúna descrição técnica, nexo, planilha, memória de saldo (arts. 124 e 125), formação de preço de item sem preço unitário (art. 127), verificação de equilíbrio (art. 130), impacto de prazo e comunicações. O termo aditivo deve estar formalizado antes da execução determinada pela Administração, salvo antecipação excepcional justificada, cuja formalização deve ocorrer em até um mês (art. 132).",
+      "conclusion_summary": "Antes de protocolar um aditivo, reúna descrição técnica, nexo, planilha, memória de saldo (arts. 124 e 125), formação de preço de item sem preço unitário (art. 127), verificação de equilíbrio em alteração unilateral (art. 130), impacto de prazo e comunicações. A formalização do termo aditivo é condição para a execução, pelo contratado, das prestações determinadas pela Administração; a regra é formalizar antes da execução, salvo antecipação excepcional com necessidade justificada, cuja formalização deve ocorrer no prazo máximo de um mês (art. 132).",
       "legal_sources": [
         "lei-14133-art124",
         "lei-14133-art125",
@@ -294,10 +294,10 @@
         "whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
         "email_subject": "Análise inicial: dossiê de aditivo de obra"
       },
-      "material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
+      "material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
       "material_diff_since_last_packet": {
-        "previous_material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
-        "current_material_hash": "bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15",
+        "previous_material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+        "current_material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
         "changed": false,
         "reason": "v3 now commits every public page field plus resolved used-source identity."
       },

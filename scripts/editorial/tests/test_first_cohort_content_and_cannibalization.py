@@ -227,12 +227,51 @@ def test_checklist_carries_art_132_rule_and_deadline():
     assert {"art.127", "art.130", "art.132"} <= set(definition["legal_devices"])
     assert "lei-14133-art126-132" in definition["sources"]
     body = definition["body_markdown"]
+    answer = definition["direct_answer"]
+    material = "\n".join([answer, body, json.dumps(definition.get("checklist_items", []), ensure_ascii=False)])
     assert "formalização do termo aditivo é condição" in body
+    assert "pelo contratado" in body
+    assert "prestações determinadas pela Administração" in body
     assert "necessidade justificada de antecipar os efeitos" in body
     assert "prazo máximo de um mês" in body
+    assert "formalização prévia" in body or "formalizar antes" in answer
+    assert "não autoriza executar primeiro" in body or "fabricar justificativa" in body
+    # Wrong legal subject: Administração is not the executor of the prestations.
+    assert not re.search(r"execução,\s*pela\s+Administração", material, re.I)
+    assert not re.search(r"execução\s+pela\s+Administração", material, re.I)
+    assert "execução, pelo contratado" in body or "execução, pelo contratado" in answer
     labels = {row["id"]: row["label"] for row in definition["checklist_items"]}
     assert "justificativa" in labels["ad-28"].lower() and "um mês" in labels["ad-28"]
     assert "sem necessidade justificada" in labels["ad-30"].lower()
+    # Render path must preserve the correct executor roles.
+    html = render_page({**definition, "status": "EDITORIAL_REVIEWED"})
+    assert "pelo contratado" in html
+    assert "prestações determinadas pela Administração" in html
+    assert not re.search(r"execução,\s*pela\s+Administração", html, re.I)
+    assert "prazo máximo de um mês" in html or "em até um mês" in html
+
+
+def test_checklist_art_130_is_unilateral_and_covers_increase_and_decrease():
+    """Art. 130 is not a generic reajuste/repactuação/consensual-alteration rule."""
+    definition = page("guia-checklist-aditivo")
+    body = definition["body_markdown"]
+    answer = definition["direct_answer"]
+    material = f"{answer}\n{body}"
+    assert "art. 130" in material or "art.130" in material
+    assert "alteração unilateral" in material
+    assert re.search(r"aumentar\s+ou\s+diminuir", material, re.I)
+    assert "encargos do contratado" in material or "encargos da contratada" in material
+    assert "mesmo termo aditivo" in material
+    assert "equilíbrio econômico-financeiro" in material
+    # Must not collapse art. 130 into mere "if charges increase" without unilateral + decrease.
+    assert not re.search(
+        r"Se a alteração aumentar encargos da contratad[ao]",
+        material,
+    ), "art.130 must not omit unilateral scope and decrease of charges"
+    html = render_page({**definition, "status": "EDITORIAL_REVIEWED"})
+    assert "alteração unilateral" in html
+    assert re.search(r"aumentar\s+ou\s+diminuir", html, re.I)
+    assert "mesmo termo aditivo" in html
 
 
 def test_limits_page_segregates_sets_without_universalizing_agu_on_50():

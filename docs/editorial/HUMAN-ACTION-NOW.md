@@ -35,7 +35,7 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
 ## Checklist de pedido de aditivo em obra pública
 
 - Preview: https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/
-- Material hash v3: `bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15`
+- Material hash v3: `01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885`
 - Fontes a conferir: `lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024`
 - Concorrente interno: `/conteudos/erro-de-projeto-gera-aditivo-obra-publica/`
 - Risco de canibalização: parcial: diferenciar intenção (erro de projeto versus checklist transversal) e manter linkagem contextual.
@@ -47,7 +47,7 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
   --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
   --sources lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash bf7025d0d625cc79b55c2c6f1d2eeba2ac217802265ac52fe97eba6b4ebb6e15 \
+  --material-hash 01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885 \
   --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
