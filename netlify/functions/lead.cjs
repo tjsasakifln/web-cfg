@@ -305,11 +305,35 @@ exports.handler = async (event) => {
     }
   } catch (err) {
     if (err && err.code === "ALREADY_EXISTS") {
-      const existing = err.existing || (await store.get(lead_id).catch(() => null));
+      let existing = err.existing || null;
+      if (!existing || !existing.lead_id) {
+        for (let attempt = 0; attempt < 4 && (!existing || !existing.lead_id); attempt++) {
+          if (attempt > 0) await sleep(100 * attempt);
+          existing = await store.get(lead_id).catch(() => null);
+        }
+      }
       if (existing && existing.lead_id) {
         safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id, via: "only_if_new" });
         return idempotentOk(existing);
       }
+      // Key exists (412) but body not yet readable — still must not re-deliver.
+      safeLog("info", "lead_idempotent_hit", { lead_id, via: "only_if_new_body_pending" });
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(
+          publicSuccessBody({
+            lead_id,
+            received_at: new Date().toISOString(),
+            journey: record.jornada,
+            stage_category: record.estagio,
+            status: "persisted",
+            notify_status: "pending",
+            email_status: "pending",
+            idempotent: true,
+          }),
+        ),
+      };
     }
     // Race: another request may have written the same deterministic id
     try {

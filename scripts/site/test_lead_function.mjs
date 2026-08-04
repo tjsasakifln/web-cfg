@@ -249,6 +249,56 @@ _reset();
   }
 }
 
+// 6c) NetlifyBlobsStore uses set()+onlyIfNew (not setJSON) so create-only is real
+{
+  const { NetlifyBlobsStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+  const map = new Map();
+  let setOnlyIfNewCalls = 0;
+  let setJsonOnlyIfNewCalls = 0;
+  const fakeBlobs = {
+    async setJSON(key, value, opts = {}) {
+      // Simulate broken setJSON that ignores onlyIfNew (library bug we work around)
+      if (opts && opts.onlyIfNew) setJsonOnlyIfNewCalls += 1;
+      map.set(key, value);
+      return { modified: true, etag: "e1" };
+    },
+    async set(key, data, opts = {}) {
+      if (opts && opts.onlyIfNew) {
+        setOnlyIfNewCalls += 1;
+        if (map.has(key)) return { modified: false };
+      }
+      const val = typeof data === "string" ? JSON.parse(data) : data;
+      map.set(key, val);
+      return { modified: true, etag: "e2" };
+    },
+    async get(key, opts = {}) {
+      const v = map.get(key);
+      if (v == null) return null;
+      if (opts && opts.type === "json") return v;
+      if (opts && opts.type === "text") return JSON.stringify(v);
+      return typeof v === "string" ? v : JSON.stringify(v);
+    },
+  };
+  const bs = new NetlifyBlobsStore(fakeBlobs);
+  const rec = {
+    lead_id: "deadbeefdeadbeefdeadbeef",
+    idempotency_key: "k-blobs-oin",
+    nome: "X",
+    received_at: new Date().toISOString(),
+  };
+  await bs.put(rec, { onlyIfNew: true });
+  let threw = null;
+  try {
+    await bs.put({ ...rec, nome: "Y" }, { onlyIfNew: true });
+  } catch (e) {
+    threw = e;
+  }
+  if (!threw || threw.code !== "ALREADY_EXISTS") fail("blobs_onlyifnew_throw", threw);
+  if (setOnlyIfNewCalls < 2) fail("blobs_must_use_set_onlyifnew", { setOnlyIfNewCalls, setJsonOnlyIfNewCalls });
+  if (setJsonOnlyIfNewCalls !== 0) fail("blobs_must_not_use_setjson_onlyifnew", setJsonOnlyIfNewCalls);
+  pass("blobs_store_onlyifnew_uses_set", { setOnlyIfNewCalls });
+}
+
 // 7) email delivery failure does not destroy persisted lead
 {
   process.env.RESEND_API_KEY = "re_test_key";
