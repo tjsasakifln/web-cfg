@@ -1,262 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Verificador de limite de acréscimos e supressões | CONFENGE</title>
-<meta name="description" content="Calcule o saldo orientativo de acréscimos e supressões em contratos de obras públicas (art. 125 da Lei 14.133/2021). Resultado útil antes do contato."/>
-<meta name="robots" content="index,follow"/>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Verificador de limite de acréscimos e supressões | CONFENGE</title><meta name="description" content="Saldo orientativo de acréscimos e supressões (art. 125, Lei 14.133/2021)."/>
 <link rel="canonical" href="https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/"/>
-<meta property="og:title" content="Verificador de limite de acréscimos e supressões | CONFENGE"/>
-<meta property="og:description" content="Calcule o saldo orientativo de acréscimos e supressões em contratos de obras públicas (art. 125 da Lei 14.133/2021). Resultado útil antes do contato."/>
-<meta property="og:url" content="https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/"/>
-<meta property="og:type" content="website"/>
-<link rel="stylesheet" href="/styles.css"/>
-<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
 <meta content="#061a33" name="theme-color"/>
-<style>
-.tool-layout { max-width: 920px; }
-.tool-panel { background: var(--surface, #f6f8fb); border: 1px solid rgba(15,23,42,.08); border-radius: 12px; padding: 1.25rem 1.35rem; margin: 1rem 0; }
-.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem 1rem; }
-@media (max-width:700px) { .tool-grid { grid-template-columns: 1fr; } }
-.tool-panel label { display:block; font-weight:600; font-size:.9rem; margin-bottom:.25rem; }
-.tool-panel input, .tool-panel select, .tool-panel textarea { width:100%; padding:.55rem .65rem; border-radius:8px; border:1px solid rgba(15,23,42,.15); font:inherit; }
-.tool-result { border-left: 4px solid #0b5fff; background:#fff; padding:1rem 1.15rem; margin:1rem 0; border-radius:0 10px 10px 0; }
-.tool-result.ok { border-left-color:#059669; }
-.tool-result.warn { border-left-color:#d97706; }
-.tool-result.bad { border-left-color:#dc2626; }
-.tool-disclaimer { font-size:.9rem; color: var(--muted, #475569); border:1px dashed rgba(15,23,42,.15); padding:.85rem 1rem; border-radius:8px; margin:1rem 0; }
-.tool-actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1rem; }
-.checklist-item { display:flex; gap:.65rem; align-items:flex-start; padding:.55rem 0; border-bottom:1px solid rgba(15,23,42,.06); }
-.checklist-item input { width:auto; margin-top:.25rem; }
-.matrix-table { width:100%; border-collapse:collapse; font-size:.92rem; }
-.matrix-table th, .matrix-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .55rem; text-align:left; vertical-align:top; }
-.score-bar { height:10px; background:#e2e8f0; border-radius:99px; overflow:hidden; margin:.5rem 0; }
-.score-bar > span { display:block; height:100%; background:#0b5fff; }
-.tool-kicker { font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:#64748b; font-weight:700; }
-</style>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Verificador de limite de acréscimos e supressões | CONFENGE",
-  "url": "https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "BRL"
-  },
-  "provider": {
-    "@type": "Organization",
-    "name": "CONFENGE",
-    "url": "https://confenge.com.br/"
-  },
-  "description": "Calcule o saldo orientativo de acréscimos e supressões em contratos de obras públicas (art. 125 da Lei 14.133/2021). Resultado útil antes do contato."
-}
-</script>
-</head>
-<body>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Verificador de limite","url":"https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
+</head><body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
-<header class="site-header" id="inicio">
-<div class="container header-inner">
-<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="CONFENGE"><img alt="CONFENGE" height="208" width="800" src="/assets/logo-confenge.png"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
 <a href="/bid-room-licitacoes-obras/">Analisar licitação</a>
 <a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
 <a href="/diretoria-b2g/">Operação B2G</a>
 <a href="/conteudos/">Conteúdos</a>
+<a href="/ferramentas/" aria-current="true">Ferramentas</a>
 <a href="/especialista/tiago-jun-sasaki/">Especialista</a>
 </nav>
 <a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
-<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
-<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
-</button>
-</div>
-<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
-<a href="/bid-room-licitacoes-obras/">Analisar licitação</a><a href="/defesa-margem-contratos-publicos/">Proteger contrato</a><a href="/diretoria-b2g/">Operação B2G</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a>
-<a class="button button-primary" href="/#contato">Falar com a CONFENGE</a>
-</nav>
-</header>
-<main id="conteudo">
-<nav class="breadcrumbs container" aria-label="Navegação estrutural"><ol>
-<li><a href="/">Início</a><span aria-hidden="true">/</span></li>
-<li><a href="/ferramentas/">Ferramentas</a><span aria-hidden="true">/</span></li>
-<li aria-current="page">Verificador de limite de acréscimos e supressões</li>
-</ol></nav>
-<header class="content-hero container tool-layout">
-<p class="eyebrow">Ferramenta gratuita · Lei 14.133/2021 art. 125</p>
-<h1>Verificador de limite de acréscimos e supressões</h1>
-<p class="content-lead">Informe o valor inicial atualizado e os aditivos já feitos. Veja o saldo residual antes de protocolar o próximo termo.</p>
-</header>
-<div class="container tool-layout">
-
-<section class="tool-disclaimer">
-<strong>Premissas (Lei nº 14.133/2021, art. 125).</strong> O contratado fica obrigado a aceitar, nas mesmas condições contratuais, acréscimos ou supressões de até <strong>25%</strong> do valor inicial atualizado do contrato. Em reforma de edifício ou de equipamento, o limite de acréscimos é de até <strong>50%</strong>. Esta ferramenta é orientativa: o enquadramento (obra nova vs reforma; valor inicial atualizado; compensações; itens novos) depende do contrato e da jurisprudência administrativa aplicável. Não emite conclusão jurídica definitiva.
-</section>
-<form id="limite-form" class="tool-panel" novalidate>
-<p class="tool-kicker">Entradas do contrato</p>
+</div></header>
+<main id="conteudo"><nav class="breadcrumbs container"><ol><li><a href="/">Início</a></li><li><a href="/ferramentas/">Ferramentas</a></li><li aria-current="page">Limite</li></ol></nav>
+<header class="tool-page-hero"><div class="container tool-shell"><p class="eyebrow">Art. 125</p><h1>Verificador de limite de acréscimos e supressões</h1>
+<p class="content-lead">Saldos de acréscimo e supressão independentes, com o valor inicial atualizado informado.</p></div></header>
+<div class="container tool-shell">
+<details class="tool-premises"><summary>Premissas</summary><div class="tool-premises-body"><p>Valor inicial atualizado por reajustes. Limites 25%/25% ou 50% de acréscimo em reforma. Não zere saldos por compensação automática. Não é validade jurídica.</p></div></details>
+<form id="limite-form" class="tool-form" novalidate>
 <div class="tool-grid">
-<div>
-<label for="valor_inicial">Valor inicial atualizado do contrato (R$)</label>
-<input id="valor_inicial" name="valor_inicial" inputmode="decimal" required placeholder="ex.: 10000000" value="10000000"/>
+<div class="tool-field"><label for="valor_inicial">Valor inicial atualizado</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="valor_inicial" inputmode="decimal" required placeholder="ex.: 10.000.000,00"/></div></div>
+<div class="tool-field"><label for="tipo">Tipo</label><select id="tipo"><option value="geral">Geral 25%</option><option value="reforma">Reforma 50%</option></select></div>
+<div class="tool-field"><label for="acrescimos_previos">Acréscimos anteriores</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="acrescimos_previos" value="0"/></div></div>
+<div class="tool-field"><label for="supressoes_previas">Supressões anteriores</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="supressoes_previas" value="0"/></div></div>
+<div class="tool-field"><label for="acrescimo_proposto">Acréscimo proposto</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="acrescimo_proposto" value="0"/></div></div>
+<div class="tool-field"><label for="supressao_proposta">Supressão proposta</label><div class="tool-money"><span class="tool-money-prefix">R$</span><input id="supressao_proposta" value="0"/></div></div>
 </div>
-<div>
-<label for="tipo">Tipo predominante</label>
-<select id="tipo" name="tipo">
-<option value="geral">Obra/serviço geral (limite 25% acréscimo e 25% supressão)</option>
-<option value="reforma">Reforma de edifício ou equipamento (acréscimo até 50%; supressão 25%)</option>
-</select>
-</div>
-<div>
-<label for="acrescimos_previos">Σ acréscimos já formalizados (R$)</label>
-<input id="acrescimos_previos" inputmode="decimal" value="0"/>
-</div>
-<div>
-<label for="supressoes_previas">Σ supressões já formalizadas (R$)</label>
-<input id="supressoes_previas" inputmode="decimal" value="0"/>
-</div>
-<div>
-<label for="acrescimo_proposto">Acréscimo proposto agora (R$)</label>
-<input id="acrescimo_proposto" inputmode="decimal" value="0"/>
-</div>
-<div>
-<label for="supressao_proposta">Supressão proposta agora (R$)</label>
-<input id="supressao_proposta" inputmode="decimal" value="0"/>
-</div>
-</div>
-<p style="margin:.75rem 0 0;font-size:.9rem">Compensação entre acréscimo e supressão no mesmo aditivo não “zera” automaticamente o saldo legal — trate os saldos de acréscimo e de supressão de forma separada, salvo orientação jurídica do caso.</p>
-<div class="tool-actions">
-<button class="button button-primary" type="submit">Calcular saldos</button>
-<button class="button button-secondary" type="button" id="btn-reset">Limpar</button>
-</div>
+<p class="tool-privacy-note">Dados só neste navegador.</p>
+<div class="tool-actions"><button class="button button-primary tool-run" type="submit">Calcular saldos</button><button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar</button></div>
 </form>
-<div id="resultado" class="tool-result" hidden></div>
-<div class="tool-actions">
-<button type="button" class="button button-secondary" id="btn-download" data-tool-download="1" hidden>Baixar resultado (.txt)</button>
-</div>
-<section>
-<h2>O que verificar depois do cálculo</h2>
-<ul>
-<li>Memória de cálculo do valor inicial <em>atualizado</em> (reajustes, repactuações).</li>
-<li>Histórico de aditivos com percentuais acumulados e objetos.</li>
-<li>Se há item novo: incidência do desconto da proposta e composições.</li>
-<li>Se a alteração é qualitativa ou quantitativa e se há previsão no projeto/termo de referência.</li>
-<li>Arts. 124 e 125 da Lei 14.133/2021 e cláusulas do contrato/edital.</li>
-</ul>
-<p>Leitura relacionada: <a href="/conteudos/limite-aditivo-25-50-obra-publica/">limite de aditivo 25%/50%</a>, <a href="/conteudos/compensacao-acrescimo-supressao-aditivo/">compensação acréscimo/supressão</a>, <a href="/guias-contratos-obras/checklist-pedido-aditivo/">checklist de pedido de aditivo</a>.</p>
-</section>
-
-<section class="section">
-<h2>Quando a CONFENGE agrega valor</h2>
-<p>Esta ferramenta orienta a leitura do caso. Não substitui análise do contrato, planilhas, cronograma e comunicações oficiais. Se o limite estiver próximo, houver item novo, desconto da proposta, ou disputa de responsabilidade, o próximo passo é organizar o dossiê com engenharia + prova.</p>
-<div class="tool-actions">
-<a class="button button-primary" id="tool-cta-form" href="/#contato?jornada=contrato">Enviar contexto para análise inicial</a>
-<a class="button button-secondary" id="tool-cta-wa" rel="noopener" target="_blank" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Usei%20uma%20ferramenta%20da%20CONFENGE%20e%20quero%20validar%20o%20caso.">WhatsApp com contexto</a>
-</div>
-</section>
-</div>
-</main>
-<footer class="site-footer">
-<div class="container footer-top">
-<div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada.</p></div>
-<div class="footer-links"><strong>Ofertas</strong><a href="/diagnostico-b2g-360/">Diagnóstico B2G 360°</a><a href="/diretoria-b2g/">Diretoria B2G fracionada</a><a href="/bid-room-licitacoes-obras/">Bid Room</a><a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin</a></div>
-<div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
-<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
-</div>
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
-</footer>
+<div id="resultado" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
+<div class="tool-actions" id="ra" hidden><button type="button" id="btn-copy" data-tool-copy class="button button-secondary">Copiar</button><button type="button" id="btn-dl" data-tool-download class="button button-secondary">Baixar</button></div>
+<div class="tool-cta-contextual" id="cta" hidden></div>
+</div></main>
+<footer class="site-footer"><div class="container footer-bottom"><span>© 2026 CONFENGE</span></div></footer>
 <script src="/assets/js/tools-common.js"></script>
 <script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
-
 <script>
-(function(){
-  const T = window.ConfengeTools;
-  if (T.bindToolLifecycle) T.bindToolLifecycle({ tool: 'limite-acrescimos' });
-  const form = document.getElementById('limite-form');
-  const out = document.getElementById('resultado');
-  const dl = document.getElementById('btn-download');
-  let lastText = '';
-
-  function compute() {
-    const C = window.ConfengeToolCompute;
-    const raw = C.computeLimiteAditivo({
-      valorInicial: T.num(document.getElementById('valor_inicial')),
-      tipo: document.getElementById('tipo').value === 'reforma' ? 'reforma' : 'geral',
-      acrescimosPrevios: T.num(document.getElementById('acrescimos_previos')),
-      supressoesPrevias: T.num(document.getElementById('supressoes_previas')),
-      acrescimoProposto: T.num(document.getElementById('acrescimo_proposto')),
-      supressaoProposta: T.num(document.getElementById('supressao_proposta')),
-    });
-    if (!raw.ok) return { error: 'Informe o valor inicial atualizado do contrato.' };
-    const msgs = raw.msgs.map((m) => ({
-      acrescimos_acima_teto: 'Acréscimos acumulados ultrapassam o teto orientativo de ' + T.pct(raw.limAc) + ' do valor inicial atualizado.',
-      saldo_acrescimo_baixo: 'Saldo de acréscimo residual baixo (<2% do contrato). Planeje com folga documental.',
-      acrescimos_dentro_teto: 'Acréscimos acumulados dentro do teto orientativo de ' + T.pct(raw.limAc) + '.',
-      supressoes_acima_teto: 'Supressões acumuladas ultrapassam o teto orientativo de 25%.',
-      saldo_supressao_baixo: 'Saldo de supressão residual baixo.',
-      supressoes_dentro_teto: 'Supressões acumuladas dentro do teto orientativo de 25%.',
-    }[m] || m));
-    return { ...raw, msgs };
-  }
-
-  function render(r) {
-    if (r.error) {
-      out.hidden = false; out.className = 'tool-result bad';
-      out.innerHTML = '<p>' + r.error + '</p>';
-      dl.hidden = true;
-      return;
-    }
-    out.hidden = false;
-    out.className = 'tool-result ' + r.level;
-    out.innerHTML = `
-      <p class="tool-kicker">Resultado orientativo</p>
-      <p><strong>Teto acréscimo:</strong> ${T.pct(r.limAc)} → ${T.brl(r.maxAc)} · <strong>usado:</strong> ${T.brl(r.acTotal)} (${T.pct(r.pctAc)}) · <strong>saldo:</strong> ${T.brl(r.salAc)}</p>
-      <p><strong>Teto supressão:</strong> ${T.pct(r.limSu)} → ${T.brl(r.maxSu)} · <strong>usado:</strong> ${T.brl(r.suTotal)} (${T.pct(r.pctSu)}) · <strong>saldo:</strong> ${T.brl(r.salSu)}</p>
-      <ul>${r.msgs.map(m => '<li>' + m + '</li>').join('')}</ul>
-      <p><em>Não é autorização para assinar aditivo. Confirme valor inicial atualizado, natureza (reforma vs obra nova) e regime do contrato.</em></p>`;
-    lastText = [
-      'CONFENGE — verificador orientativo de acréscimos/supressões',
-      'Base legal de referência: Lei 14.133/2021 art. 125 (leitura orientativa)',
-      'Valor inicial atualizado: ' + r.V,
-      'Tipo: ' + r.tipo,
-      'Acréscimos total: ' + r.acTotal + ' / teto ' + r.maxAc + ' / saldo ' + r.salAc,
-      'Supressões total: ' + r.suTotal + ' / teto ' + r.maxSu + ' / saldo ' + r.salSu,
-      'Mensagens: ' + r.msgs.join(' | '),
-      'Gerado em: ' + new Date().toISOString(),
-      'Aviso: não substitui análise do contrato concreto.'
-    ].join('\\n');
-    dl.hidden = false;
-    const wa = document.getElementById('tool-cta-wa');
-    wa.href = T.waLink('Olá, Tiago. Usei o verificador de limite de acréscimos/supressões da CONFENGE. Valor contrato ~ ' + Math.round(r.V) + ', acréscimos acumulados ' + Math.round(r.acTotal) + ' (' + (r.pctAc*100).toFixed(1) + '%), saldo acréscimo ~ ' + Math.round(r.salAc) + '. Quero validar o dossiê.');
-    T.track('tool_complete', { tool: 'limite-acrescimos', level: r.level, tipo: r.tipo });
-  }
-
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    T.track('tool_start', { tool: 'limite-acrescimos' });
-    render(compute());
-  });
-  document.getElementById('btn-reset').addEventListener('click', function(){ form.reset(); out.hidden = true; dl.hidden = true; });
-  dl.addEventListener('click', function(){ T.downloadText('confenge-limite-aditivo.txt', lastText); T.track('tool_download', { tool: 'limite-acrescimos' }); });
-  // initial demo calc
-  render(compute());
-})();
-</script>
-
-<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
-<symbol id="i-arrow" viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
-<symbol id="i-check" viewbox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
-<symbol id="i-chart" viewbox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"></path></symbol>
-<symbol id="i-shield" viewbox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path></symbol>
-<symbol id="i-building" viewbox="0 0 24 24"><path d="M3 21h18M5 21V9m14 12V9M3 9h18L12 3 3 9Z"></path></symbol>
-<symbol id="i-file" viewbox="0 0 24 24"><path d="M6 2h8l4 4v16H6z"></path></symbol>
-<symbol id="i-menu" viewbox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
-<symbol id="i-close" viewbox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
-<symbol id="i-whatsapp" viewbox="0 0 24 24"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.6Z"></path></symbol>
-</svg>
-</body>
-</html>
+(function(){var T=window.ConfengeTools,C=window.ConfengeToolCompute,TOOL="limite-acrescimos",last="";
+if(T.bindToolLifecycle)T.bindToolLifecycle({tool:TOOL});
+function money(id){var el=document.getElementById(id),p=T.moneyFromField(el);if(!p.ok){T.setFieldError(el,"Valor inválido");return null;}T.setFieldError(el,"");return p.value;}
+function panel(t,b){var pr=b.proposto!=null?b.proposto:b.proposta;return '<div class="tool-limit-panel '+(b.dentroDoLimite?"is-ok":"is-over")+'"><h3>'+t+'</h3><dl><dt>Anteriores</dt><dd>'+T.brl(b.anteriores)+'</dd><dt>Proposto</dt><dd>'+T.brl(pr)+'</dd><dt>Total</dt><dd>'+T.brl(b.total)+'</dd><dt>Limite</dt><dd>'+T.brl(b.limite)+'</dd><dt>Saldo</dt><dd>'+T.brl(b.saldo)+'</dd><dt>%</dt><dd>'+T.pct(b.percentualUtilizado)+'</dd></dl><p class="tool-limit-status">'+b.labelStatus+'</p></div>';}
+document.getElementById("limite-form").onsubmit=function(e){e.preventDefault();
+var V=money("valor_inicial");if(V===null||!(V>0)){document.getElementById("resultado").hidden=false;document.getElementById("resultado").className="tool-result-panel bad";document.getElementById("resultado").innerHTML="<p>Informe valor inicial válido.</p>";return;}
+var r=C.computeLimiteAditivo({valorInicial:V,tipo:document.getElementById("tipo").value==="reforma"?"reforma":"geral",acrescimosPrevios:money("acrescimos_previos")||0,supressoesPrevias:money("supressoes_previas")||0,acrescimoProposto:money("acrescimo_proposto")||0,supressaoProposta:money("supressao_proposta")||0});
+var out=document.getElementById("resultado");out.hidden=false;out.className="tool-result-panel "+r.level;
+var al=(r.alerts||[]).map(function(a){return '<li data-severity="'+a.severity+'">'+a.text+"</li>";}).join("");
+out.innerHTML='<p class="tool-result-summary"><strong>Resultado orientativo</strong>Não equivale a validade jurídica.</p><div class="tool-limit-panels">'+panel("Acréscimos",r.acrescimos)+panel("Supressões",r.supressoes)+"</div>"+(al?'<ul class="tool-alert-list">'+al+"</ul>":"")+'<p class="tool-disclaimer">Orientativo.</p>';
+last=T.buildReport([{title:"Limite aditivo",body:r.acrescimos.labelStatus}]);document.getElementById("ra").hidden=false;T.focusResult(out);
+var cta=document.getElementById("cta");cta.hidden=false;cta.innerHTML=(!r.withinAc||!r.withinSu)?'<p>Revise a memória de aditivos.</p><a class="button button-primary" data-tool-to-form href="/#contato">Solicitar revisão</a>':'<a class="button button-secondary" data-tool-to-content href="/guias-contratos-obras/checklist-pedido-aditivo/">Checklist de aditivo</a>';
+T.track("tool_complete",{tool:TOOL,level:r.level,tipo:r.tipo,within_ac:r.withinAc,within_su:r.withinSu});};
+document.getElementById("btn-dl").onclick=function(){T.downloadText("limite.txt",last);};
+document.getElementById("btn-copy").onclick=function(){T.copyText(last);};
+document.getElementById("btn-reset").onclick=function(){if(confirm("Apagar?")){document.getElementById("limite-form").reset();document.getElementById("valor_inicial").value="";document.getElementById("resultado").hidden=true;}};
+})();</script>
+</body></html>

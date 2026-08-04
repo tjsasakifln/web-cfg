@@ -105,6 +105,10 @@
         "href": "/conteudos/"
       },
       {
+        "label": "Ferramentas",
+        "href": "/ferramentas/"
+      },
+      {
         "label": "Especialista",
         "href": "/especialista/tiago-jun-sasaki/"
       }
@@ -213,8 +217,16 @@
       "até 30 dias",
       "planejamento sem prazo imediato"
     ],
-    "step1_fields": ["nome", "telefone_ou_email", "estagio"],
-    "step2_fields": ["empresa", "urgencia", "mensagem"]
+    "step1_fields": [
+      "nome",
+      "telefone_ou_email",
+      "estagio"
+    ],
+    "step2_fields": [
+      "empresa",
+      "urgencia",
+      "mensagem"
+    ]
   },
   "forbidden_phrases": [
     "soluções personalizadas",

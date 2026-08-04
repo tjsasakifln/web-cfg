@@ -1,117 +1,74 @@
-/**
- * Shared helpers for CONFENGE high-intent tools.
- * No PII collection unless user explicitly submits lead form elsewhere.
- *
- * Canonical tool events (real-only analytics, no PII):
- *   tool_view, tool_start, tool_complete, tool_download,
- *   tool_to_offer, tool_to_whatsapp, tool_to_form, nurture_opt_in
- */
 (function () {
+  "use strict";
+  var P = "confenge.tool.", TTL = 864e5 * 30;
   function emit(name, props) {
-    const safe = props && typeof props === "object" ? props : {};
+    var safe = props && typeof props === "object" ? Object.assign({}, props) : {};
+    ["email","phone","valor","valorInicial","raw","nome"].forEach(function (k) { delete safe[k]; });
     try {
-      if (typeof window.confengeTrack === "function") {
-        window.confengeTrack(name, safe);
-        return;
-      }
-      if (typeof window.track === "function") {
-        window.track(name, safe);
-        return;
-      }
-      if (window.CONFENGE && typeof window.CONFENGE.track === "function") {
-        window.CONFENGE.track(name, safe);
-        return;
-      }
+      if (typeof window.confengeTrack === "function") return void window.confengeTrack(name, safe);
+      if (typeof window.track === "function") return void window.track(name, safe);
       if (window.dataLayer) window.dataLayer.push(Object.assign({ event: name }, safe));
-    } catch (_) {
-      /* never break tool */
-    }
+    } catch (_) {}
   }
-
-  function track(name, props) {
-    emit(name, props);
+  function parseMoney(raw) {
+    var C = window.ConfengeToolCompute;
+    return C && C.parseBRL ? C.parseBRL(raw) : { ok: false, error: "na" };
   }
-
-  function downloadText(filename, text, mime) {
-    const blob = new Blob([text], { type: mime || "text/plain;charset=utf-8" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  function setFieldError(el, message) {
+    if (!el) return;
+    el.setAttribute("aria-invalid", message ? "true" : "false");
+    el.classList.toggle("is-invalid", !!message);
+    var wrap = el.closest(".tool-field") || el.parentElement;
+    var err = wrap && wrap.querySelector(".tool-field-error");
+    if (!err && wrap) { err = document.createElement("p"); err.className = "tool-field-error"; err.setAttribute("role", "alert"); wrap.appendChild(err); }
+    if (err) { err.textContent = message || ""; err.hidden = !message; }
   }
-
-  function brl(n) {
-    if (!Number.isFinite(n)) return "—";
-    return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-  }
-
-  function pct(n) {
-    if (!Number.isFinite(n)) return "—";
-    return (n * 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + "%";
-  }
-
-  function num(el) {
-    if (!el) return 0;
-    let v = String(el.value || "0").trim();
-    if (v.includes(",") && v.includes(".")) {
-      v = v.replace(/\./g, "").replace(",", ".");
-    } else if (v.includes(",")) {
-      v = v.replace(",", ".");
-    }
-    const n = Number(v);
-    return Number.isFinite(n) ? n : 0;
-  }
-
-  function waLink(text) {
-    const msg = encodeURIComponent(text);
-    return "https://wa.me/5548988344559?text=" + msg;
-  }
-
-  /**
-   * Wire standard tool lifecycle on a page.
-   * @param {{ tool: string, startSelectors?: string, completeSelector?: string }} opts
-   */
   function bindToolLifecycle(opts) {
-    const tool = opts.tool || "unknown";
-    emit("tool_view", { tool });
-    let started = false;
-    function onStart() {
-      if (started) return;
-      started = true;
-      emit("tool_start", { tool });
-    }
-    document.querySelectorAll(opts.startSelectors || "input, select, textarea, button.tool-run").forEach((el) => {
+    var tool = opts.tool || "unknown";
+    emit("tool_view", { tool: tool });
+    var started = false;
+    function onStart() { if (started) return; started = true; emit("tool_start", { tool: tool }); }
+    document.querySelectorAll(opts.startSelectors || "input, select, textarea, button.tool-run").forEach(function (el) {
       el.addEventListener("focus", onStart, { once: true });
       el.addEventListener("change", onStart, { once: true });
     });
-    document.querySelectorAll("[data-tool-download]").forEach((el) => {
-      el.addEventListener("click", () => emit("tool_download", { tool }));
-    });
-    document.querySelectorAll("[data-tool-to-whatsapp], a[href*='wa.me']").forEach((el) => {
-      el.addEventListener("click", () => emit("tool_to_whatsapp", { tool }));
-    });
-    document.querySelectorAll("[data-tool-to-form], a[href*='#contato']").forEach((el) => {
-      el.addEventListener("click", () => emit("tool_to_form", { tool }));
-    });
-    document.querySelectorAll("[data-tool-to-offer]").forEach((el) => {
-      el.addEventListener("click", () =>
-        emit("tool_to_offer", { tool, offer: el.getAttribute("data-tool-to-offer") || "" })
-      );
-    });
-    document.querySelectorAll("[data-nurture-opt-in]").forEach((el) => {
-      el.addEventListener("click", () => emit("nurture_opt_in", { tool, source: "tool_page" }));
-    });
+    document.querySelectorAll("[data-tool-download]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_download", { tool: tool }); }); });
+    document.querySelectorAll("[data-tool-copy]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_copy", { tool: tool }); }); });
+    document.querySelectorAll("[data-tool-reset]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_reset", { tool: tool }); }); });
+    document.querySelectorAll("[data-tool-to-whatsapp], a[href*='wa.me']").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_whatsapp", { tool: tool }); }); });
+    document.querySelectorAll("[data-tool-to-form], a[href*='#contato']").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_form", { tool: tool }); }); });
+    document.querySelectorAll("[data-tool-to-offer]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_offer", { tool: tool, offer: el.getAttribute("data-tool-to-offer") || "" }); }); });
+    document.querySelectorAll("[data-tool-to-content]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_content", { tool: tool }); }); });
+    document.querySelectorAll("[data-nurture-opt-in]").forEach(function (el) { el.addEventListener("click", function () { emit("nurture_opt_in", { tool: tool, source: "tool_page" }); }); });
   }
-
   window.ConfengeTools = {
-    track,
-    emit,
-    downloadText,
-    brl,
-    pct,
-    num,
-    waLink,
-    bindToolLifecycle,
+    track: emit, emit: emit, bindToolLifecycle: bindToolLifecycle, parseMoney: parseMoney, setFieldError: setFieldError,
+    moneyFromField: function (el) { return el ? parseMoney(el.value) : { ok: false, error: "vazio" }; },
+    num: function (el) { var p = el ? parseMoney(el.value) : { ok: false }; return p.ok ? p.value : 0; },
+    brl: function (n) { return Number.isFinite(n) ? n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "n/d"; },
+    pct: function (n) { return Number.isFinite(n) ? (n * 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + "%" : "n/d"; },
+    waLink: function (t) { return "https://wa.me/5548988344559?text=" + encodeURIComponent(t); },
+    localNow: function () { try { return new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }); } catch (_) { return new Date().toISOString(); } },
+    saveState: function (id, v, d) { try { localStorage.setItem(P + id, JSON.stringify({ v: v || 1, savedAt: Date.now(), data: d })); } catch (_) {} },
+    loadState: function (id, v) {
+      try {
+        var r = localStorage.getItem(P + id); if (!r) return null;
+        var p = JSON.parse(r); if (v != null && p.v !== v) { localStorage.removeItem(P + id); return null; }
+        if (p.savedAt && Date.now() - p.savedAt > TTL) { localStorage.removeItem(P + id); return null; }
+        return p.data;
+      } catch (_) { return null; }
+    },
+    clearState: function (id) { try { localStorage.removeItem(P + id); } catch (_) {} },
+    copyText: function (t) { if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(function () { return true; }); return Promise.resolve(false); },
+    buildReport: function (secs) {
+      var lines = [];
+      (secs || []).forEach(function (s) { if (!s) return; if (s.title) lines.push(s.title); if (s.body) lines.push(s.body); if (s.lines) s.lines.forEach(function (l) { lines.push(l); }); lines.push(""); });
+      lines.push("Gerado em: " + window.ConfengeTools.localNow());
+      lines.push("Dados apenas neste navegador. Ferramenta orientativa da CONFENGE.");
+      return lines.join("\n").trim() + "\n";
+    },
+    downloadText: function (f, t) { var b = new Blob([t], { type: "text/plain;charset=utf-8" }), a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = f; a.click(); },
+    focusResult: function (el) { if (!el) return; el.hidden = false; if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1"); try { el.focus(); } catch (_) {} },
+    focusFirstError: function (r) { var el = (r || document).querySelector('[aria-invalid="true"]'); if (el) el.focus(); }
   };
 })();

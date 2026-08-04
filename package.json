@@ -2,7 +2,7 @@
   "name": "confenge-site",
   "private": true,
   "version": "1.0.0",
-  "description": "CONFENGE static site — SEO migration and host canonization tooling",
+  "description": "CONFENGE static site \u2014 SEO migration and host canonization tooling",
   "type": "module",
   "scripts": {
     "prepare": "bash scripts/install-git-filters.sh",
@@ -21,7 +21,7 @@
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "test:brand": "python3 scripts/site/test_brand_contract.py",
     "test:design": "python3 scripts/site/test_design_gates.py",
-    "test:copy": "python3 scripts/site/test_copy_gates.py",
+    "test:copy": "python3 scripts/site/test_copy_gates.py && python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json",
     "test:visual-structure": "python3 scripts/site/test_design_gates.py",
     "test:ui": "node scripts/site/test_ui_geometry.mjs",
     "test:screenshots": "node scripts/site/capture_screenshots.mjs",
@@ -87,7 +87,8 @@
     "editorial:recommend": "python3 scripts/editorial/machine_recommend.py",
     "editorial:release-approved": "python3 scripts/editorial/release_approved.py",
     "pseo:pilot-audit": "python3 scripts/pseo/pilot_audit.py",
-    "test:tool-events": "node scripts/site/test_tool_events.mjs"
+    "test:tool-events": "node scripts/site/test_tool_events.mjs",
+    "lint:editorial-copy": "python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json"
   },
   "engines": {
     "node": ">=18"
