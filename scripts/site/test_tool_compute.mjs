@@ -39,26 +39,68 @@ if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
   if (r.withinAc !== false || r.withinSu !== true) fail("indep"); else pass("indep");
 }
 
-// --- Reequilibrio with N/A and blockers ---
+// --- Reequilibrio with N/A, blockers, urgency order, ressalvas ---
 {
   const all = {};
   for (const cat of Object.values(C.REEQ_CATEGORIES)) for (const it of cat.items) all[it.key] = "met";
   const high = C.computeReequilibrio(all);
   if (high.readiness !== "alta") fail("reeq_high", high); else pass("reeq_high");
+  if (!Array.isArray(high.naKeys) || high.naKeys.length !== 0) fail("reeq_naKeys_empty", high.naKeys);
+  else pass("reeq_naKeys_empty");
 
   const blocked = C.computeReequilibrio({ ...all, fato_gerador: "missing" });
   if (blocked.readiness === "alta" || !blocked.hasCentralBlocker) fail("reeq_block", blocked);
   else pass("reeq_block", blocked.readiness);
+  if (!blocked.ressalvas || !blocked.ressalvas.some((s) => /bloqueador/i.test(s))) fail("reeq_ressalvas", blocked.ressalvas);
+  else pass("reeq_ressalvas");
 
-  // N/A on economic item should not force missing
+  // N/A must be returned in naKeys and not force missing / false blockers
   const withNa = { ...all, indices: "na", series: "na" };
   const naR = C.computeReequilibrio(withNa);
   if (!naR.ok) fail("reeq_na");
-  else if (naR.naKeys && naR.naKeys.length >= 2) pass("reeq_na_keys", naR.naKeys.length);
-  else pass("reeq_na", (naR.naKeys || []).join(","));
-  // high still possible with N/A on non-blockers
+  else if (!Array.isArray(naR.naKeys) || naR.naKeys.length < 2) fail("reeq_na_keys", naR.naKeys);
+  else if (!naR.naKeys.includes("indices") || !naR.naKeys.includes("series")) fail("reeq_na_keys_content", naR.naKeys);
+  else pass("reeq_na_keys", naR.naKeys.join(","));
   if (naR.hasCentralBlocker) fail("reeq_na_false_blocker");
   else pass("reeq_na_no_blocker");
+
+  // Urgency must reorder correction actions (alta ≠ baixa key sequence)
+  const partial = {
+    ...all,
+    fato_gerador: "missing",
+    contrato: "missing",
+    planilha: "missing",
+    pedido: "missing",
+    anexos: "missing",
+  };
+  const alta = C.computeReequilibrio(partial, { urgencia: "alta", materialidade: "alta" });
+  const baixa = C.computeReequilibrio(partial, { urgencia: "baixa", materialidade: "baixa" });
+  const altaKeys = (alta.correctionOrder || []).map((o) => o.key).join(",");
+  const baixaKeys = (baixa.correctionOrder || []).map((o) => o.key).join(",");
+  if (!altaKeys || !baixaKeys) fail("reeq_urgency_order_empty", { altaKeys, baixaKeys });
+  else if (altaKeys === baixaKeys) fail("reeq_urgency_order_same", altaKeys);
+  else pass("reeq_urgency_order_diff", "alta=" + altaKeys + " | baixa=" + baixaKeys);
+
+  // alta: blockers by criticality (fato_gerador before contrato), then economic, then process
+  const altaReasons = (alta.correctionOrder || []).map((o) => o.reason);
+  if (!altaReasons.some((r) => /urgente/.test(r))) fail("reeq_alta_reason", altaReasons);
+  else pass("reeq_alta_reason");
+  const iFato = alta.correctionOrder.findIndex((o) => o.key === "fato_gerador");
+  const iContrato = alta.correctionOrder.findIndex((o) => o.key === "contrato");
+  const iPlanilha = alta.correctionOrder.findIndex((o) => o.key === "planilha");
+  const iPedido = alta.correctionOrder.findIndex((o) => o.key === "pedido");
+  if (!(iFato < iContrato && iContrato < iPlanilha && iPlanilha < iPedido)) {
+    fail("reeq_alta_criticality", { iFato, iContrato, iPlanilha, iPedido, keys: altaKeys });
+  } else pass("reeq_alta_criticality");
+
+  // baixa: process before economic after blockers
+  const iPedidoB = baixa.correctionOrder.findIndex((o) => o.key === "pedido");
+  const iPlanilhaB = baixa.correctionOrder.findIndex((o) => o.key === "planilha");
+  if (!(iPedidoB < iPlanilhaB)) fail("reeq_baixa_process_before_econ", { iPedidoB, iPlanilhaB, keys: baixaKeys });
+  else pass("reeq_baixa_process_before_econ");
+
+  if (!alta.ressalvas || alta.ressalvas.length < 2) fail("reeq_alta_ressalvas_count", alta.ressalvas);
+  else pass("reeq_alta_ressalvas", alta.ressalvas.length);
 }
 
 // --- Matriz concurrent + no evidence ---

@@ -119,14 +119,19 @@
     });
     var out=document.getElementById("out");
     out.hidden=false; out.className="tool-result-panel "+r.level;
-    var order=(r.correctionOrder||[]).map(function(o){ return "<li><strong>"+o.label+"</strong> ("+o.reason+")</li>"; }).join("");
-    out.innerHTML='<p class="tool-result-summary"><strong>'+r.readinessLabel+"</strong>"+r.synthesis+"</p>"+
+    var esc=T.escapeHtml||function(s){return String(s==null?"":s);};
+    var order=(r.correctionOrder||[]).map(function(o){ return "<li><strong>"+esc(o.label)+"</strong> ("+esc(o.reason)+")</li>"; }).join("");
+    var ressalvasHtml=(r.ressalvas&&r.ressalvas.length)
+      ? '<h3>Ressalvas</h3><ul class="tool-evidence-list" data-ressalvas>'+r.ressalvas.map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("")+"</ul>"
+      : "";
+    out.innerHTML='<p class="tool-result-summary"><strong>'+esc(r.readinessLabel)+"</strong>"+esc(r.synthesis)+"</p>"+
       '<ul class="tool-evidence-list"><li>Cobertura ponderada: '+r.score_pct+"%</li>"+
       "<li>Bloqueadores: "+(r.missingBlockers||[]).length+"</li>"+
       "<li>Suporte econômico pendente: "+(r.missingImportant||[]).length+"</li>"+
       "<li>Organização pendente: "+(r.missingProcess||[]).length+"</li>"+
       "<li>Não aplicáveis: "+(r.naKeys?r.naKeys.length:0)+"</li></ul>"+
-      (order?'<h3>Ordem recomendada de correção</h3><ol class="tool-next-actions">'+order+"</ol>":"")+
+      ressalvasHtml+
+      (order?'<h3>Ordem recomendada de correção</h3><ol class="tool-next-actions" data-correction-order>'+order+"</ol>":"")+
       '<p class="tool-disclaimer">Diagnóstico documental orientativo. Cobertura alta não significa direito ao reequilíbrio.</p>'+
       '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
     lastText=T.buildReport([
@@ -140,6 +145,7 @@
         "Urgência: "+r.urgencia,
         "Materialidade: "+r.materialidade
       ]},
+      {title:"Ressalvas", lines:r.ressalvas||[]},
       {title:"Ordem de correção", lines:(r.correctionOrder||[]).map(function(o){return o.label+" ["+o.reason+"]";})},
       {title:"Aviso", body:"Diagnóstico documental orientativo."}
     ]);
