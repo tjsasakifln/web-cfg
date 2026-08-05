@@ -192,6 +192,17 @@ for (const l of leads) {
   }
 }
 
+// public CSS allowlist must ship tools + tokens
+{
+  const art = fs.readFileSync(path.join(root, "scripts/pseo/public_artifact.py"), "utf8");
+  for (const name of ["styles-tokens.css", "styles-tools.css"]) {
+    if (!art.includes(`"${name}"`)) fail(`public_allow_${name}`);
+    else pass(`public_allow_${name}`);
+  }
+  if (!fs.existsSync(path.join(root, "styles-tools.css"))) fail("styles_tools_missing");
+  else pass("styles_tools_file");
+}
+
 // tokens file
 {
   const tok = path.join(root, "styles-tokens.css");
