@@ -785,37 +785,22 @@ def remediate_conteudos_pages(brand: dict[str, Any]) -> dict[str, Any]:
 
 
 def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
+    """Rebuild /conteudos/ as problem-first navigation (visitor redesign).
+
+    Preserves URLs, indexable set equality, and JSON-LD numberOfItems.
+    Removes public taxonomy jargon (indexáveis, eixos, frentes, clusters as UX).
+    """
     hub_path = ROOT / "conteudos" / "index.html"
     html = _read(hub_path)
     idx_map = indexable_map()
     idx_n = sum(1 for v in idx_map.values() if v)
 
-    # Remove directory items for noindex
-    removed = 0
+    def plural_guias(n: int) -> str:
+        return "1 guia" if n == 1 else f"{n} guias"
 
-    def keep_item(m: re.Match[str]) -> str:
-        nonlocal removed
-        block = m.group(0)
-        hrefs = re.findall(r'href="(/conteudos/[^"]+/)"', block)
-        if not hrefs:
-            return block
-        href = hrefs[0]
-        if idx_map.get(href, False):
-            return block
-        removed += 1
-        return ""
-
-    html = re.sub(
-        r'<article class="content-directory-item"[^>]*>.*?</article>',
-        keep_item,
-        html,
-        flags=re.S,
-    )
-
-    # Featured: rebuild from indexable only
-    # Collect metadata from remaining items
-    items_meta = []
-    for p in (ROOT / "conteudos").glob("*/index.html"):
+    # --- Collect indexable guide metadata from files ---
+    items_meta: list[dict[str, Any]] = []
+    for p in sorted((ROOT / "conteudos").glob("*/index.html")):
         url = f"/conteudos/{p.parent.name}/"
         if not idx_map.get(url):
             continue
@@ -825,16 +810,95 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
             r'property="article:section"\s+content="([^"]+)"', t
         ) or re.search(r'content="([^"]+)"\s+property="article:section"', t)
         lead = re.search(r'class="content-lead">([^<]+)', t)
+        pillar = re.search(
+            r'href="/(medicoes-glosas-obras-publicas|aditivos-obras-publicas|reequilibrio-obras-publicas|atrasos-prorrogacao-obras-publicas|defesa-tecnica-contratos-publicos|acompanhamento-contratos-obras|diagnostico-pre-licitacao|auditoria-orcamento-licitacao)/"',
+            t,
+        )
         items_meta.append(
             {
                 "url": url,
+                "slug": p.parent.name,
                 "h1": h1.group(1).strip() if h1 else p.parent.name,
                 "section": section.group(1).strip() if section else "Guia técnico",
-                "lead": (lead.group(1).strip() if lead else "")[:120],
+                "lead": (lead.group(1).strip() if lead else ""),
+                "pillar": pillar.group(1) if pillar else "",
             }
         )
 
-    # Prefer known high-intent indexable first (never superseded redirects).
+    # Theme (pillar) counts — only public indexable
+    theme_counts: dict[str, int] = defaultdict(int)
+    theme_first: dict[str, str] = {}
+    for it in items_meta:
+        if it["pillar"]:
+            theme_counts[it["pillar"]] += 1
+            theme_first.setdefault(it["pillar"], it["h1"])
+
+    # Journey stages for problem navigation
+    stages: list[dict[str, Any]] = [
+        {
+            "id": "antes",
+            "title": "Antes de contratar",
+            "blurb": "Edital, proposta, habilitação, orçamento, BDI e exequibilidade.",
+            "themes": [
+                (
+                    "diagnostico-pre-licitacao",
+                    "Edital e proposta",
+                    "Leitura crítica do edital, habilitação e decisão de participar ou recusar.",
+                ),
+                (
+                    "auditoria-orcamento-licitacao",
+                    "Orçamento, BDI e preço",
+                    "Consistência orçamentária, BDI e exequibilidade da proposta.",
+                ),
+            ],
+        },
+        {
+            "id": "durante",
+            "title": "Durante a execução",
+            "blurb": "Medição, pagamento, prazo, diário de obra, escopo e aditivos.",
+            "themes": [
+                (
+                    "medicoes-glosas-obras-publicas",
+                    "Medição, glosa e pagamento",
+                    "Critérios de medição, glosas e direito ao recebimento.",
+                ),
+                (
+                    "aditivos-obras-publicas",
+                    "Aditivos e mudança de escopo",
+                    "Alterações quantitativas e qualitativas sem trabalho gratuito.",
+                ),
+                (
+                    "acompanhamento-contratos-obras",
+                    "Gestão contratual e diário",
+                    "Rotina de registros, comunicações e controle da execução.",
+                ),
+                (
+                    "atrasos-prorrogacao-obras-publicas",
+                    "Prazo, atraso e prorrogação",
+                    "Imputação de atraso, prorrogação e preservação de posição.",
+                ),
+            ],
+        },
+        {
+            "id": "conflito",
+            "title": "Quando há conflito ou perda",
+            "blurb": "Glosa contestada, notificação, sanção, reequilíbrio, paralisação e defesa.",
+            "themes": [
+                (
+                    "reequilibrio-obras-publicas",
+                    "Reequilíbrio econômico-financeiro",
+                    "Causalidade, prova e impacto quando a equação original se rompe.",
+                ),
+                (
+                    "defesa-tecnica-contratos-publicos",
+                    "Defesa técnica e sanções",
+                    "Notificações, multas, impedimento e reação tempestiva com prova.",
+                ),
+            ],
+        },
+    ]
+
+    # Featured: one lead + compact support (urgency / decision value)
     priority = [
         "/conteudos/atraso-pagamento-contrato-publico-suspender/",
         "/conteudos/glosa-por-qualidade-obra-publica/",
@@ -844,183 +908,321 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         "/conteudos/medicao-de-obra-publica-rejeitada/",
     ]
     by_url = {i["url"]: i for i in items_meta}
-    featured = []
+    featured: list[dict[str, Any]] = []
     for u in priority:
         if u in by_url:
             featured.append(by_url[u])
-        if len(featured) >= 6:
+        if len(featured) >= 5:
             break
     for i in items_meta:
         if i not in featured:
             featured.append(i)
-        if len(featured) >= 6:
+        if len(featured) >= 5:
             break
 
-    feat_html = []
-    for f in featured:
-        feat_html.append(
-            f'<a class="featured-content" href="{f["url"]}">'
-            f'<span>{html_lib.escape(f["section"][:60])}</span>'
-            f'<h2>{html_lib.escape(f["h1"])}</h2>'
-            f'<p>{html_lib.escape(f["lead"] or "Leitura técnica para decisão em contrato ou licitação.")}</p>'
-            f'<small>Ler guia <svg class="icon"><use href="#i-arrow"></use></svg></small></a>'
+    lead = featured[0] if featured else None
+    support = featured[1:] if len(featured) > 1 else []
+
+    # --- Build featured HTML ---
+    feat_parts: list[str] = ['<div class="featured-decision">']
+    if lead:
+        lead_desc = lead["lead"] or "Orientação técnica para decisão em contrato ou licitação."
+        feat_parts.append(
+            f'<article class="featured-lead">'
+            f'<p class="featured-kicker">{html_lib.escape(lead["section"])}</p>'
+            f'<h2 class="featured-lead-title"><a href="{lead["url"]}">{html_lib.escape(lead["h1"])}</a></h2>'
+            f'<p class="featured-lead-desc">{html_lib.escape(lead_desc)}</p>'
+            f'<a class="text-link" href="{lead["url"]}">Abrir análise</a>'
+            f"</article>"
         )
+    if support:
+        feat_parts.append('<ul class="featured-support">')
+        for f in support:
+            feat_parts.append(
+                f'<li><a href="{f["url"]}">'
+                f'<span class="featured-support-theme">{html_lib.escape(f["section"])}</span>'
+                f'<strong>{html_lib.escape(f["h1"])}</strong>'
+                f"</a></li>"
+            )
+        feat_parts.append("</ul>")
+    feat_parts.append("</div>")
+    feat_html = "".join(feat_parts)
+
+    # --- Build stage navigation (skip zero-content themes) ---
+    stage_parts = ['<div class="problem-stages">']
+    for st in stages:
+        theme_rows = []
+        for slug, title, blurb in st["themes"]:
+            n = theme_counts.get(slug, 0)
+            if n <= 0:
+                continue
+            theme_rows.append(
+                f'<li class="problem-theme">'
+                f'<a class="problem-theme-link" href="/{slug}/">'
+                f'<span class="problem-theme-title">{html_lib.escape(title)}</span>'
+                f'<span class="problem-theme-blurb">{html_lib.escape(blurb)}</span>'
+                f'<span class="problem-theme-count">{html_lib.escape(plural_guias(n))}</span>'
+                f"</a></li>"
+            )
+        if not theme_rows:
+            continue
+        stage_parts.append(
+            f'<section class="problem-stage" aria-labelledby="stage-{st["id"]}">'
+            f'<header class="problem-stage-head">'
+            f'<h3 id="stage-{st["id"]}">{html_lib.escape(st["title"])}</h3>'
+            f'<p>{html_lib.escape(st["blurb"])}</p>'
+            f"</header>"
+            f'<ul class="problem-theme-list">{"".join(theme_rows)}</ul>'
+            f"</section>"
+        )
+    stage_parts.append("</div>")
+    stage_html = "".join(stage_parts)
+
+    # --- Directory list ---
+    dir_parts = ['<div class="content-directory" id="diretorio" data-content-directory>']
+    for i, it in enumerate(items_meta, 1):
+        desc = it["lead"] or it["h1"]
+        # No fixed char cut mid-word — CSS line-clamp may apply with full text in DOM
+        dir_parts.append(
+            f'<article class="content-directory-item" data-content-item '
+            f'data-stage="" data-search="{html_lib.escape((it["h1"] + " " + it["section"] + " " + desc).lower())}">'
+            f'<div class="dir-body">'
+            f'<p class="dir-theme">{html_lib.escape(it["section"])}</p>'
+            f'<h3><a href="{it["url"]}">{html_lib.escape(it["h1"])}</a></h3>'
+            f'<p class="dir-desc">{html_lib.escape(desc)}</p>'
+            f"</div></article>"
+        )
+    dir_parts.append("</div>")
+    dir_html = "".join(dir_parts)
+
+    # --- JSON-LD ItemList elements ---
+    list_items = []
+    for pos, it in enumerate(items_meta, 1):
+        list_items.append(
+            {
+                "@type": "ListItem",
+                "position": pos,
+                "url": f"https://confenge.com.br{it['url']}",
+            }
+        )
+    item_list_json = json.dumps(list_items, ensure_ascii=False)
+
+    # --- Compose main body sections (replace from hub hero through directory) ---
+    hero_block = f"""<header class="content-hero hub-hero hub-hero--problem">
+<div class="container">
+<p class="eyebrow">Biblioteca técnica</p>
+<h1>Qual problema de licitação ou contrato você precisa resolver?</h1>
+<p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Busque pelo problema — não pela taxonomia interna.</p>
+<div class="hub-search-priority directory-search">
+<label for="hub-search">Buscar por problema</label>
+<input id="hub-search" name="q" type="search" autocomplete="off" placeholder="Ex.: aditivo, glosa, BDI, atraso, reequilíbrio" data-hub-search aria-controls="diretorio"/>
+</div>
+</div></header>"""
+
+    featured_block = f"""<section class="section featured-section section--tight" id="destaques">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Comece pela dor mais cara</p>
+<h2>Análises em destaque</h2>
+<p class="section-lead">Uma leitura principal e atalhos para situações que costumam travar caixa, prazo ou margem.</p>
+</header>
+{feat_html}
+</div></section>"""
+
+    stages_block = f"""<section class="section section--default" id="por-problema">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Navegação por situação</p>
+<h2>Onde você está no ciclo do contrato?</h2>
+<p class="section-lead">Três estágios. Temas sem conteúdo público não aparecem como opção principal.</p>
+</header>
+{stage_html}
+</div></section>"""
+
+    directory_block = f"""<section class="section directory-section section--loose" id="todos">
+<div class="container">
+<div class="directory-head">
+<div>
+<p class="eyebrow">Diretório</p>
+<h2>Todas as análises públicas</h2>
+</div>
+<p class="results-count" data-results-count>{idx_n} análises encontradas</p>
+</div>
+<div class="directory-filters" role="group" aria-label="Filtrar por estágio">
+<button type="button" class="dir-filter is-active" data-dir-filter="all">Todos</button>
+<button type="button" class="dir-filter" data-dir-filter="antes">Antes de contratar</button>
+<button type="button" class="dir-filter" data-dir-filter="durante">Durante a execução</button>
+<button type="button" class="dir-filter" data-dir-filter="conflito">Conflito ou perda</button>
+</div>
+{dir_html}
+</div></section>"""
+
+    # Replace old hero + sections with new architecture
+    # Strategy: replace from first content-hero hub-hero through end of directory-section
+    pattern = re.compile(
+        r'<header class="content-hero hub-hero".*?</header>'
+        r'.*?(?=<section class="content-cta"|<footer|<!-- INTELIGENCIA|$)',
+        re.S,
+    )
+    replacement = hero_block + featured_block + stages_block + directory_block + "\n"
+    html2, n_sub = pattern.subn(replacement, html, count=1)
+    if n_sub:
+        html = html2
+    else:
+        # Fallback: inject after <main>
+        html = re.sub(
+            r"(<main[^>]*>)",
+            r"\1\n" + replacement,
+            html,
+            count=1,
+        )
+        # Strip old featured/cluster/directory if still present
+        html = re.sub(
+            r'<section class="section featured-section">.*?</section>',
+            "",
+            html,
+            count=1,
+            flags=re.S,
+        )
+        html = re.sub(
+            r'<div class="cluster-grid">.*?</div>',
+            "",
+            html,
+            count=1,
+            flags=re.S,
+        )
+        html = re.sub(
+            r'<section class="section directory-section"[^>]*>.*?</section>',
+            "",
+            html,
+            count=1,
+            flags=re.S,
+        )
+
+    # Purge residual jargon and metrics tiles
+    for phrase in (
+        "guias indexáveis",
+        "conteúdos indexáveis",
+        "frentes de decisão",
+        "eixos integrados",
+        "página-pilar",
+        "pagina-pilar",
+        "revisão editorial (noindex)",
+        "revisão editorial",
+        "Wave 1",
+        "arquitetura de conteúdo",
+    ):
+        # only strip known metric tiles / lead claims; leave accidental technical attrs alone
+        pass
+
     html = re.sub(
-        r'<div class="featured-grid">.*?</div>',
-        f'<div class="featured-grid">{"".join(feat_html)}</div>',
+        r'<div class="hub-metrics">.*?</div>',
+        "",
+        html,
+        flags=re.S,
+    )
+    # Remove leftover cluster-grid blocks
+    html = re.sub(
+        r'<div class="cluster-grid">.*?</div>\s*',
+        "",
+        html,
+        flags=re.S,
+    )
+    html = re.sub(
+        r'<section class="section section-soft"[^>]*>\s*<div class="container">\s*'
+        r'<div class="section-heading">.*?</div>\s*</div>\s*</section>',
+        "",
         html,
         count=1,
         flags=re.S,
     )
 
-    # Replace hub-level count claims only — never rewrite cluster/local "N guias"
-    # cards globally (e.g. "Ver os 4 guias" must not become "Ver os {idx_n} guias").
-    html = re.sub(r"\b120 guias\b", f"{idx_n} guias", html)
-    html = re.sub(r"\bTodos os 120 guias\b", f"Todos os {idx_n} guias", html)
-    html = re.sub(r"\bTodos os \d+ guias\b", f"Todos os {idx_n} guias", html)
-    html = re.sub(r"\b120 conteúdos encontrados\b", f"{idx_n} conteúdos encontrados", html)
-    html = re.sub(
-        r'(class="results-count"[^>]*>)\d+ conteúdos encontrados',
-        rf"\g<1>{idx_n} conteúdos encontrados",
-        html,
-    )
-    html = re.sub(
-        r"120 guias organizados por problema e estágio",
-        f"{idx_n} guias indexáveis organizados por problema e estágio (demais em revisão editorial)",
-        html,
-    )
-    html = re.sub(
-        r"<strong>120</strong><span>perguntas técnicas</span>",
-        f"<strong>{idx_n}</strong><span>guias indexáveis</span>",
-        html,
-    )
-    # Hub metrics tile only (not cluster-card <strong>N guias</strong>)
-    html = re.sub(
-        r"(<div class=\"hub-metrics\">.*?<strong>)\d+(</strong><span>guias indexáveis</span>)",
-        rf"\g<1>{idx_n}\g<2>",
-        html,
-        count=1,
-        flags=re.S,
-    )
-    # JSON-LD ItemList numberOfItems
+    # Public copy: strip taxonomy jargon if any remains in visible body
+    html = re.sub(r"guias indexáveis", "análises técnicas", html, flags=re.I)
+    html = re.sub(r"conteúdos indexáveis", "análises técnicas", html, flags=re.I)
+    html = re.sub(r"frentes de decisão", "temas de decisão", html, flags=re.I)
+    html = re.sub(r"eixos integrados", "engenharia, contrato e impacto", html, flags=re.I)
+    html = re.sub(r"página-pilar", "página temática", html, flags=re.I)
+    html = re.sub(r"\b1 guias\b", "1 guia", html)
+    html = re.sub(r"\b0 guias\b", "", html)
+
+    # JSON-LD numberOfItems + ItemList rebuild (best-effort)
     html = re.sub(
         r'"numberOfItems"\s*:\s*\d+',
         f'"numberOfItems":{idx_n}',
         html,
     )
-    # Rebuild ItemList elements only for indexable (simple approach: replace whole ItemList if present)
-    # Drop any remaining noindex URLs from ItemList by filtering list items with noindex paths
-    def filter_list_item(m: re.Match[str]) -> str:
-        block = m.group(0)
-        url_m = re.search(r'"url"\s*:\s*"(https://confenge\.com\.br)?(/conteudos/[^"]+)"', block)
-        if not url_m:
-            return block
-        path = url_m.group(2)
-        if not path.endswith("/"):
-            path = path + "/"
-        if path == "/conteudos/":
-            return block
-        if idx_map.get(path, False):
-            return block
-        return ""
-
     html = re.sub(
-        r'\{\s*"@type"\s*:\s*"ListItem"[^}]*\}',
-        filter_list_item,
+        r'"itemListElement"\s*:\s*\[.*?\]',
+        f'"itemListElement":{item_list_json}',
         html,
+        count=1,
+        flags=re.S,
     )
-    # clean double commas in json
-    html = re.sub(r",\s*,+", ",", html)
-    html = re.sub(r"\[\s*,", "[", html)
-    html = re.sub(r",\s*\]", "]", html)
 
-    # Cluster card counts: recount indexable per data-cluster
-    cluster_counts: dict[str, int] = defaultdict(int)
-    for m in re.finditer(
-        r'data-cluster="([^"]+)"[^>]*data-search="[^"]*"[^>]*>.*?</article>',
-        html,
-        re.S,
-    ):
-        # only remaining items are indexable
-        cluster_counts[m.group(1)] += 1
-    # Also count from files
-    cluster_counts = defaultdict(int)
-    for p in (ROOT / "conteudos").glob("*/index.html"):
-        url = f"/conteudos/{p.parent.name}/"
-        if not idx_map.get(url):
-            continue
-        t = _read(p)
-        pillar = re.search(
-            r'href="/(medicoes-glosas-obras-publicas|aditivos-obras-publicas|reequilibrio-obras-publicas|atrasos-prorrogacao-obras-publicas|defesa-tecnica-contratos-publicos|acompanhamento-contratos-obras|diagnostico-pre-licitacao|auditoria-orcamento-licitacao)/"',
-            t,
-        )
-        if pillar:
-            cluster_counts[pillar.group(1)] += 1
-
-    def fix_cluster_card(m: re.Match[str]) -> str:
-        block = m.group(0)
-        href_m = re.search(r'href="(/[^"]+)/?"', block)
-        if not href_m:
-            return block
-        slug = href_m.group(1).strip("/").split("/")[-1]
-        n = cluster_counts.get(slug, 0)
-        block = re.sub(r"<strong>\d+\s*guias?</strong>", f"<strong>{n} guias</strong>", block)
-        return block
-
-    html = re.sub(r'<a class="cluster-card"[^>]*>.*?</a>', fix_cluster_card, html, flags=re.S)
+    # Filter directory / featured noindex leftovers already handled by building from idx_map
 
     html = patch_shell(html, brand, current="/conteudos/")
-    # Hub intro honesty — whole <p class="content-lead"> only (never partial attrs)
-    lead = (
-        f'<p class="content-lead">{idx_n} guias indexáveis e publicamente recomendados. '
-        f'Outros materiais permanecem em revisão editorial (noindex) e não entram nesta lista.</p>'
-    )
-    if re.search(r'<p class="content-lead">', html):
-        html = re.sub(r'<p class="content-lead">[^<]*</p>', lead, html, count=1)
-    elif re.search(r'<p R guias indexáveis', html) or re.search(
-        r'<p[^>]*>\s*R?\s*guias indexáveis', html
-    ):
-        html = re.sub(
-            r'<p[^>]*>\s*R?\s*guias indexáveis e publicamente recomendados\.[^<]*</p>',
-            lead,
-            html,
-            count=1,
-        )
-    elif "demais em revisão" not in html:
-        def _insert_lead(m: re.Match[str]) -> str:
-            return m.group(1) + lead
 
-        html = re.sub(
-            r'(<header class="content-hero hub-hero"[^>]*>.*?<h1>[^<]*</h1>)',
-            _insert_lead,
-            html,
-            count=1,
-            flags=re.S,
-        )
-    # Strip forbidden internal language / false inteligencia inventory claims
-    html = re.sub(r'\bdatalake\b', 'base pública de contratos', html, flags=re.I)
-    if 'agregados sanitizados' in html or 'publica páginas evergreen' in html:
+    # Strip forbidden internal language
+    html = re.sub(r"\bdatalake\b", "base pública de contratos", html, flags=re.I)
+    if "agregados sanitizados" in html or "publica páginas evergreen" in html:
         html = re.sub(
             r'<section class="section section-soft" id="inteligencia-pseo">.*?</section>',
             (
                 '<section class="section section-soft" id="inteligencia-pseo">'
                 '<div class="container">'
                 '<p class="eyebrow">Ferramentas e pesquisa</p>'
-                '<h2>Do guia à decisão com evidência</h2>'
-                '<p>Use as ferramentas gratuitas e o Radar aberto (metodologia e demanda verificável). '
-                'Páginas de inteligência de mercado só entram na navegação pública depois de revisão técnica '
-                'e critérios de singularidade.</p>'
+                "<h2>Do guia à decisão com evidência</h2>"
+                "<p>Use as ferramentas gratuitas e o Radar aberto (metodologia e demanda verificável). "
+                "Páginas de inteligência de mercado só entram na navegação pública depois de revisão técnica "
+                "e critérios de singularidade.</p>"
                 '<p><a class="button button-secondary" href="/ferramentas/">Abrir ferramentas</a> '
                 '<a class="button button-secondary" href="/radar/nacional-obras-publicas/">Radar Nacional</a></p>'
-                '</div></section>'
+                "</div></section>"
             ),
             html,
             count=1,
             flags=re.S,
         )
 
+    # Lightweight search filter script (progressive)
+    if "data-hub-search" in html and "hubSearchBoot" not in html:
+        html = html.replace(
+            "</main>",
+            """<script>
+(function(){
+  var input=document.querySelector('[data-hub-search]');
+  var dir=document.querySelector('[data-content-directory]');
+  var countEl=document.querySelector('[data-results-count]');
+  if(!input||!dir)return;
+  var items=[].slice.call(dir.querySelectorAll('[data-content-item]'));
+  function apply(){
+    var q=(input.value||'').trim().toLowerCase();
+    var n=0;
+    items.forEach(function(el){
+      var hay=el.getAttribute('data-search')||'';
+      var show=!q||hay.indexOf(q)!==-1;
+      el.hidden=!show;
+      if(show)n++;
+    });
+    if(countEl)countEl.textContent=n+(n===1?' análise encontrada':' análises encontradas');
+  }
+  input.addEventListener('input',apply);
+})();
+</script>
+</main>""",
+            1,
+        )
+
     _write(hub_path, html)
-    return {"removed_directory_items": removed, "indexable_count": idx_n, "featured": len(featured)}
+    return {
+        "removed_directory_items": 0,
+        "indexable_count": idx_n,
+        "featured": len(featured),
+        "themes_shown": sum(1 for s in stages for t in s["themes"] if theme_counts.get(t[0], 0) > 0),
+    }
+
 
 
 def remediate_feed() -> dict[str, Any]:
@@ -1179,6 +1381,25 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
         html = re.sub(r",\s*,+", ",", html)
         html = re.sub(r"\[\s*,", "[", html)
         html = re.sub(r",\s*\]", "]", html)
+
+        # Visitor language: remove dashboard metrics / taxonomy jargon from pillars
+        html = re.sub(
+            r'<div class="pillar-stat">.*?</div>',
+            (
+                f'<div class="pillar-evidence">'
+                f'<p class="pillar-evidence-count"><strong>{n_kept}</strong> '
+                f'{"guia público" if n_kept == 1 else "guias públicos"} neste tema</p>'
+                f'<p class="pillar-evidence-note">Engenharia, contrato e impacto econômico no mesmo enquadramento.</p>'
+                f'</div>'
+            ),
+            html,
+            count=1,
+            flags=re.S,
+        )
+        html = re.sub(r"eixos integrados", "engenharia, contrato e impacto", html, flags=re.I)
+        html = re.sub(r"frentes de decisão", "temas de decisão", html, flags=re.I)
+        html = re.sub(r"guias indexáveis", "guias públicos", html, flags=re.I)
+        html = re.sub(r"\b1 guias\b", "1 guia", html)
 
         html = patch_shell(html, brand, current=f"/{pillar}/")
         _write(p, html)
