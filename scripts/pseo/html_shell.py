@@ -102,15 +102,15 @@ SVG_SPRITE = """<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
 
 def _build_header() -> str:
     brand = _brand_safe()
+    # Approved visitor redesign shell (fallback matches data/site/brand.json).
     nav = (brand.get("navigation") or {}).get("desktop") or [
-        {"label": "Como atuamos", "href": "/#como-atuamos"},
-        {"label": "Diretoria B2G", "href": "/diretoria-b2g/"},
-        {"label": "Inteligência", "href": "/inteligencia/"},
-        {"label": "Conteúdos", "href": "/conteudos/"},
+        {"label": "Serviços", "href": "/#ofertas"},
+        {"label": "Problemas que resolvemos", "href": "/#jornadas"},
+        {"label": "Conteúdos e ferramentas", "href": "/conteudos/"},
         {"label": "Especialista", "href": "/especialista/tiago-jun-sasaki/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
-        "label": "Diagnosticar operação",
+        "label": "Analisar meu caso",
         "href": "/#contato",
     }
     links = "\n".join(f'<a href="{n["href"]}">{n["label"]}</a>' for n in nav)

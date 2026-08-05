@@ -2,6 +2,8 @@
 
 Visitor-facing progressive workflow (4 steps). Preserves all checklist items
 and legal compute logic; does not invent readiness scores beyond computeAditivoReadiness.
+
+Step assignment is an explicit item_id map (not old category passthrough).
 """
 from __future__ import annotations
 
@@ -9,37 +11,81 @@ from typing import Any
 
 from scripts.pseo.html_shell import e
 
-# Four visitor-facing stages (category → step). All 36 items remain in the DOM.
+# Four visitor-facing stages. Titles must cover every item assigned via ITEM_STEP.
 STEP_DEFS: list[dict[str, Any]] = [
     {
         "id": "identificacao",
         "num": 1,
         "title": "Identificação e fundamento",
-        "summary": "Contrato, órgão, valor, descrição da alteração e enquadramento.",
-        "cats": ("essential",),
+        "summary": "Contrato, processo, órgão, regime, valor, descrição, motivo, local, determinação e enquadramento.",
     },
     {
         "id": "planilha",
         "num": 2,
         "title": "Planilha, preço e impacto",
-        "summary": "Planilha do aditivo, composições, saldo e impacto de prazo ou valor.",
-        "cats": ("support",),
+        "summary": "Memória de saldo, planilha, itens novos, composições, desconto, data-base, índices e impacto no cronograma.",
     },
     {
         "id": "provas",
         "num": 3,
-        "title": "Provas, comunicações e exceções",
-        "summary": "Nexo de prova, comunicações oficiais e hipóteses condicionais.",
-        "cats": ("conditional",),
+        "title": "Provas e comunicações",
+        "summary": "Projetos, diário, fotos, OS, atas, pareceres, anexos, protocolo e responsáveis.",
     },
     {
         "id": "bloqueios",
         "num": 4,
-        "title": "Bloqueios e revisão final",
-        "summary": "Sinais de risco e checagem de fechamento antes de protocolar.",
-        "cats": ("blocker", "final"),
+        "title": "Exceções, bloqueios e revisão",
+        "summary": "Reforma, art. 127, antecipação do art. 132, sinais de bloqueio e conferência final.",
     },
 ]
+
+# Explicit item_id → step number (1..4). Exactly the 36 aditivo IDs; no category passthrough.
+ITEM_STEP: dict[str, int] = {
+    # Etapa 1 — Identificação e fundamento
+    "ad-01": 1,  # Número do contrato e processo
+    "ad-02": 1,  # Órgão e regime de execução
+    "ad-03": 1,  # Valor inicial e atualizado
+    "ad-04": 1,  # Descrição da alteração
+    "ad-05": 1,  # Motivo documentado
+    "ad-06": 1,  # Local na obra
+    "ad-07": 1,  # Data e autor da determinação
+    "ad-08": 1,  # Enquadramento art. 124
+    "ad-13": 1,  # Requerimento objetivo
+    "ad-15": 1,  # Gestor e fiscal
+    "ad-16": 1,  # Cláusulas de alteração
+    "ad-17": 1,  # Checagem art. 126
+    # Etapa 2 — Planilha, preço e impacto
+    "ad-09": 2,  # Teste art. 125 com memória de saldo
+    "ad-10": 2,  # Planilha do aditivo
+    "ad-11": 2,  # Composições de itens novos
+    "ad-12": 2,  # Impacto no cronograma
+    "ad-14": 2,  # Data-base e índices
+    "ad-18": 2,  # Desconto da proposta se aplicável
+    # Etapa 3 — Provas e comunicações
+    "ad-19": 3,  # Projetos antes/depois
+    "ad-20": 3,  # Diário de obra
+    "ad-21": 3,  # Fotos
+    "ad-22": 3,  # OS e atas
+    "ad-23": 3,  # Pareceres internos
+    "ad-24": 3,  # Anexos indexados
+    "ad-25": 3,  # Protocolo com data
+    # Etapa 4 — Exceções, bloqueios e revisão
+    "ad-26": 4,  # Reforma: limite 50%
+    "ad-27": 4,  # Art. 127 preço
+    "ad-28": 4,  # Antecipação art. 132
+    "ad-29": 4,  # Bloqueio: item novo sem composição
+    "ad-30": 4,  # Bloqueio: execução antes da formalização
+    "ad-31": 4,  # Bloqueio: falta determinação
+    "ad-32": 4,  # Bloqueio: memória de saldo ausente
+    "ad-33": 4,  # Bloqueio: justificativa genérica
+    "ad-34": 4,  # Final: índice confere
+    "ad-35": 4,  # Final: nexo relido
+    "ad-36": 4,  # Final: pendências tratadas
+}
+
+assert len(ITEM_STEP) == 36, f"ITEM_STEP must cover 36 ids, got {len(ITEM_STEP)}"
+assert len(set(ITEM_STEP.values())) == 4
+assert set(ITEM_STEP.keys()) == {f"ad-{i:02d}" for i in range(1, 37)}
 
 
 def _req_html(it: dict[str, Any], cid: str) -> str:
@@ -76,17 +122,28 @@ def render_structured_checklist(page: dict[str, Any]) -> str:
     items = page.get("checklist_items") or []
     if not items:
         return ""
-    cats = page.get("checklist_categories") or [
-        {"id": "essential", "label": "Requisitos essenciais", "description": ""},
-        {"id": "support", "label": "Documentos de suporte", "description": ""},
-        {"id": "conditional", "label": "Verificações condicionais", "description": ""},
-        {"id": "blocker", "label": "Sinais de bloqueio", "description": ""},
-        {"id": "final", "label": "Revisão final", "description": ""},
-    ]
-    cat_meta = {str(c.get("id") or ""): c for c in cats}
-    by_cat: dict[str, list] = {}
+
+    # Preserve original categories for compute (blocker vs essential etc.);
+    # UI step comes only from ITEM_STEP by item_id.
+    by_step: dict[int, list[dict]] = {1: [], 2: [], 3: [], 4: []}
+    seen_ids: set[str] = set()
     for it in items:
-        by_cat.setdefault(str(it.get("category") or "essential"), []).append(it)
+        iid = str(it.get("id") or "")
+        if not iid:
+            continue
+        if iid in seen_ids:
+            raise ValueError(f"Duplicate checklist item_id: {iid}")
+        seen_ids.add(iid)
+        step_num = ITEM_STEP.get(iid)
+        if step_num is None:
+            raise ValueError(f"checklist item_id not in ITEM_STEP map: {iid}")
+        by_step[step_num].append(it)
+
+    missing = set(ITEM_STEP) - seen_ids
+    if missing:
+        raise ValueError(f"checklist missing item_ids from ITEM_STEP: {sorted(missing)}")
+    if len(seen_ids) != 36:
+        raise ValueError(f"expected 36 unique checklist items, got {len(seen_ids)}")
 
     total = len(items)
     parts: list[str] = [
@@ -108,8 +165,11 @@ def render_structured_checklist(page: dict[str, Any]) -> str:
         "</ul>",
         '<button type="button" class="button button-primary button-lg" data-tool-start>'
         "Iniciar diagnóstico</button>",
-        '<p class="tool-privacy-note">Sem JavaScript, as etapas aparecem em sequência abaixo.</p>',
         "</div>",
+        # noscript: plain language only (no technical pipeline jargon)
+        "<noscript><p class=\"tool-noscript-note\">Para usar o diagnóstico interativo, "
+        "habilite o JavaScript do navegador. Os requisitos do checklist permanecem "
+        "listados abaixo para consulta.</p></noscript>",
         # Progress (form completion vs readiness are separate)
         '<div class="tool-progress-panel" data-tool-progress hidden>',
         '<p class="tool-step-status" data-step-status role="status" aria-live="polite">'
@@ -128,14 +188,10 @@ def render_structured_checklist(page: dict[str, Any]) -> str:
         "</div>",
     ]
 
-    # Steps
+    # Steps from explicit item_id map
     parts.append('<div class="tool-steps" data-tool-steps>')
     for step in STEP_DEFS:
-        cat_ids = step["cats"]
-        step_items: list[tuple[str, dict]] = []
-        for cid in cat_ids:
-            for it in by_cat.get(cid) or []:
-                step_items.append((cid, it))
+        step_items = by_step.get(step["num"]) or []
         if not step_items:
             continue
         parts.append(
@@ -147,17 +203,8 @@ def render_structured_checklist(page: dict[str, Any]) -> str:
             f'<p class="tool-step-summary">{e(step["summary"])}</p>'
             f"</header>"
         )
-        # Optional category subheads when step merges cats
-        current_cat = None
-        for cid, it in step_items:
-            if cid != current_cat and len(cat_ids) > 1:
-                current_cat = cid
-                meta = cat_meta.get(cid) or {}
-                parts.append(
-                    f'<h4 class="tool-subcat">{e(meta.get("label") or cid)}</h4>'
-                )
-                if meta.get("description"):
-                    parts.append(f'<p class="tool-subcat-desc">{e(meta["description"])}</p>')
+        for it in step_items:
+            cid = str(it.get("category") or "essential")
             parts.append(_req_html(it, cid))
         parts.append(
             '<div class="tool-step-nav">'

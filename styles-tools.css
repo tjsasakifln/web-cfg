@@ -36,7 +36,89 @@
   display: none;
 }
 
-/* --- Hub of tools (directory, not card soup) --- */
+/* --- Hub of tools: situation-first (not metadata inventory) --- */
+.tool-hub-situations {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem 0 2.5rem;
+}
+.tool-situation {
+  border: 1px solid var(--tool-line);
+  border-radius: var(--tool-radius);
+  background: #fff;
+  padding: 1.35rem 1.4rem 1.45rem;
+  display: grid;
+  gap: 0.85rem;
+}
+.tool-situation--recommended {
+  border-color: color-mix(in srgb, var(--tool-accent) 45%, var(--tool-line));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--tool-accent) 18%, transparent);
+  background: linear-gradient(180deg, #f7fbf7 0%, #fff 48%);
+}
+.tool-situation-badge {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--tool-accent);
+}
+.tool-situation-prompt {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+  font-weight: 750;
+  line-height: 1.25;
+  color: var(--tool-ink);
+  max-width: 28ch;
+}
+.tool-situation-body {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 58ch;
+}
+.tool-situation-problem,
+.tool-situation-result,
+.tool-situation-time {
+  margin: 0;
+  color: #314256;
+  line-height: 1.55;
+  font-size: 0.98rem;
+}
+.tool-situation-more {
+  margin-top: 0.35rem;
+  border-top: 1px solid var(--tool-line);
+  padding-top: 0.55rem;
+}
+.tool-situation-more > summary {
+  cursor: pointer;
+  color: var(--tool-muted);
+  font-size: 0.9rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+.tool-situation-more > summary::-webkit-details-marker {
+  display: none;
+}
+.tool-situation-more ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  color: #526275;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.tool-hub-situations .tool-disclaimer {
+  margin-top: 0.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--tool-line);
+  color: var(--tool-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+/* Legacy card list kept only if residual markup exists */
 .tool-card-list {
   list-style: none;
   margin: 0;
@@ -133,7 +215,7 @@ a.tool-card:focus-visible {
   font-size: 0.8rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #64748b;
+  color: #475569; /* ≥4.5:1 on tool-soft #f5f7f6 */
   font-weight: 700;
   margin: 0 0 0.5rem;
 }
@@ -419,7 +501,7 @@ a.tool-card:focus-visible {
   appearance: none;
   border: 0;
   background: none;
-  color: #647182;
+  color: #475569;
   font: inherit;
   font-size: 0.9rem;
   text-decoration: underline;
@@ -683,6 +765,111 @@ a.tool-card:focus-visible {
   border-radius: 0;
   background: transparent;
   max-width: 68ch;
+}
+
+/* --- Limit tool staged workflow --- */
+[data-limite-workflow] .tool-step[hidden] {
+  display: none !important;
+}
+[data-limite-workflow] .tool-step-head h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+.tool-axis-visual {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 0.25rem;
+  padding: 0.9rem 1rem;
+  background: #fff;
+  border: 1px solid var(--tool-line);
+  border-radius: var(--tool-radius);
+}
+.tool-axis {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 0.65rem;
+  align-items: center;
+}
+.tool-axis-label {
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: #425265;
+}
+.tool-axis-bar {
+  height: 10px;
+  background: #e8eef2;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.tool-axis-fill {
+  display: block;
+  height: 100%;
+  background: var(--tool-accent);
+  border-radius: 999px;
+  min-width: 0;
+  transition: width 0.2s ease;
+}
+.tool-axis--su .tool-axis-fill {
+  background: #0f4c81;
+}
+.tool-precalc-summary {
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  background: #fff;
+  border: 1px solid var(--tool-line);
+  border-radius: var(--tool-radius);
+  font-size: 0.95rem;
+  color: #314256;
+}
+.tool-precalc-list {
+  margin: 0.4rem 0 0;
+  padding-left: 1.15rem;
+  line-height: 1.55;
+}
+.tool-text-actions {
+  margin: 0.75rem 0 0;
+}
+.tool-result-dominant {
+  margin-top: 1.5rem;
+  padding: 1.35rem 1.4rem;
+  border-width: 2px;
+}
+.tool-result-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.25rem;
+}
+.tool-result-stat {
+  border: 1px solid var(--tool-line);
+  border-radius: var(--tool-radius);
+  padding: 0.75rem 0.85rem;
+  background: #fff;
+  display: grid;
+  gap: 0.25rem;
+}
+.tool-result-stat-label {
+  font-size: 0.78rem;
+  color: var(--tool-muted);
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.tool-result-stat strong {
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--tool-ink);
+}
+.tool-noscript-note {
+  margin: 0.75rem 0 1rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--tool-soft);
+  border: 1px solid var(--tool-line);
+  border-radius: var(--tool-radius);
+  color: #425265;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 @media print {

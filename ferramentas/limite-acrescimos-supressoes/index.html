@@ -14,18 +14,25 @@
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
-<header class="site-header"><div class="container header-inner">
-<a class="brand" href="/" aria-label="CONFENGE"><img alt="CONFENGE" height="208" width="800" src="/assets/logo-confenge.png"/></a>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
-<a href="/bid-room-licitacoes-obras/">Analisar licitação</a>
-<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
-<a href="/diretoria-b2g/">Operação B2G</a>
-<a href="/conteudos/">Conteúdos</a>
-<a href="/ferramentas/" aria-current="true">Ferramentas</a>
+<a href="/#ofertas">Serviços</a>
+<a href="/#jornadas">Problemas que resolvemos</a>
+<a href="/conteudos/">Conteúdos e ferramentas</a>
 <a href="/especialista/tiago-jun-sasaki/">Especialista</a>
 </nav>
-<a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
-</div></header>
+<a class="button button-primary header-cta" href="/#contato">Analisar meu caso</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a href="/#ofertas">Serviços</a><a href="/#jornadas">Problemas que resolvemos</a><a href="/conteudos/">Conteúdos e ferramentas</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+<a class="button button-primary" href="/#contato">Analisar meu caso</a>
+</nav>
+</header>
 <main id="conteudo">
 
 <nav class="breadcrumbs container" aria-label="breadcrumb"><ol>
@@ -34,29 +41,68 @@
 <header class="tool-page-hero"><div class="container tool-shell">
 <p class="eyebrow">Art. 125 · Lei 14.133/2021</p>
 <h1>Verificador de limite de acréscimos e supressões</h1>
-<p class="content-lead">Informe o valor inicial atualizado e os aditivos já formalizados. Veja saldos de acréscimo e de supressão de forma independente.</p>
+<p class="content-lead">Informe a base do contrato, o histórico formalizado e a alteração em análise. Veja saldos de acréscimo e de supressão de forma independente.</p>
 </div></header>
-<div class="container tool-shell">
-<details class="tool-premises"><summary>Premissas e valor inicial atualizado</summary>
-<div class="tool-premises-body">
-<p>Use o valor inicial do contrato atualizado por reajustes e repactuações previstos. Não confunda com o valor já acrescido por aditivos de quantitativo.</p>
-<p>Limites orientativos: 25% de acréscimo e 25% de supressão; em reforma de edifício ou equipamento, acréscimo até 50%. Compensação no mesmo aditivo não zera os saldos automaticamente.</p>
-</div></details>
-<form id="limite-form" class="tool-form" novalidate>
-<div class="tool-grid">
+
+<div class="container tool-shell" data-limite-workflow>
+<form id="limite-form" class="tool-form tool-workflow" novalidate data-tool-workflow>
+
+<div class="tool-progress-panel" data-limite-progress role="status" aria-live="polite">
+<p class="tool-step-status" data-limite-step-status>Etapa 1 de 3  -  Base do contrato</p>
+</div>
+
+<section class="tool-step is-active" data-limite-step="1" aria-labelledby="limite-step-1-title">
+<header class="tool-step-head">
+<p class="tool-kicker">Etapa 1 de 3</p>
+<h2 id="limite-step-1-title">Base do contrato</h2>
+<p class="tool-step-summary">Valor inicial atualizado e tipo do objeto. A base é o valor inicial do contrato atualizado por reajustes e repactuações previstos  -  não o valor já acrescido por aditivos de quantitativo.</p>
+</header>
+<div class="tool-grid tool-grid--base">
 <div class="tool-field"><label for="valor_inicial">Valor inicial atualizado</label>
 <div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
 <input id="valor_inicial" name="valor_inicial" inputmode="decimal" required autocomplete="off" placeholder="ex.: 10.000.000,00"/></div>
 <p class="tool-field-hint">Aceita 10000000, 10.000.000 ou 10.000.000,50</p></div>
 <div class="tool-field"><label for="tipo">Tipo predominante</label>
 <select id="tipo" name="tipo"><option value="geral">Geral (acréscimo 25%, supressão 25%)</option>
-<option value="reforma">Reforma de edifício ou equipamento (acréscimo 50%, supressão 25%)</option></select></div>
+<option value="reforma">Reforma de edifício ou equipamento (acréscimo 50%, supressão 25%)</option></select>
+<p class="tool-field-hint">Limites orientativos do art. 125. Compensação no mesmo aditivo não zera os saldos automaticamente.</p></div>
+</div>
+<div class="tool-step-nav">
+<button type="button" class="button button-primary" data-limite-next>Continuar</button>
+</div>
+</section>
+
+<section class="tool-step" data-limite-step="2" hidden aria-labelledby="limite-step-2-title">
+<header class="tool-step-head">
+<p class="tool-kicker">Etapa 2 de 3</p>
+<h2 id="limite-step-2-title">Histórico formalizado</h2>
+<p class="tool-step-summary">Acréscimos e supressões já formalizados. Os dois eixos são independentes  -  um não compensa o outro neste cálculo.</p>
+</header>
+<div class="tool-grid tool-grid--history">
 <div class="tool-field"><label for="acrescimos_previos">Acréscimos já formalizados</label>
 <div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
 <input id="acrescimos_previos" name="acrescimos_previos" inputmode="decimal" value="0" autocomplete="off"/></div></div>
 <div class="tool-field"><label for="supressoes_previas">Supressões já formalizadas</label>
 <div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
 <input id="supressoes_previas" name="supressoes_previas" inputmode="decimal" value="0" autocomplete="off"/></div></div>
+</div>
+<div class="tool-axis-visual" aria-hidden="true" data-axis-visual>
+<div class="tool-axis tool-axis--ac"><span class="tool-axis-label">Acréscimos</span><div class="tool-axis-bar"><span class="tool-axis-fill" data-axis-ac style="width:0%"></span></div></div>
+<div class="tool-axis tool-axis--su"><span class="tool-axis-label">Supressões</span><div class="tool-axis-bar"><span class="tool-axis-fill" data-axis-su style="width:0%"></span></div></div>
+</div>
+<div class="tool-step-nav">
+<button type="button" class="button button-secondary" data-limite-prev>Anterior</button>
+<button type="button" class="button button-primary" data-limite-next>Continuar</button>
+</div>
+</section>
+
+<section class="tool-step" data-limite-step="3" hidden aria-labelledby="limite-step-3-title">
+<header class="tool-step-head">
+<p class="tool-kicker">Etapa 3 de 3</p>
+<h2 id="limite-step-3-title">Alteração em análise</h2>
+<p class="tool-step-summary">Acréscimo e supressão propostos agora. Confira o resumo antes de calcular.</p>
+</header>
+<div class="tool-grid tool-grid--proposed">
 <div class="tool-field"><label for="acrescimo_proposto">Acréscimo proposto agora</label>
 <div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
 <input id="acrescimo_proposto" name="acrescimo_proposto" inputmode="decimal" value="0" autocomplete="off"/></div></div>
@@ -64,14 +110,19 @@
 <div class="tool-money"><span class="tool-money-prefix" aria-hidden="true">R$</span>
 <input id="supressao_proposta" name="supressao_proposta" inputmode="decimal" value="0" autocomplete="off"/></div></div>
 </div>
-<p class="tool-privacy-note">Os valores ficam apenas neste navegador e não são enviados à CONFENGE.</p>
-<div class="tool-actions">
+<div class="tool-precalc-summary" data-precalc-summary aria-live="polite"></div>
+<div class="tool-step-nav">
+<button type="button" class="button button-secondary" data-limite-prev>Anterior</button>
 <button class="button button-primary tool-run" type="submit">Calcular saldos</button>
-<button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
 </div>
+</section>
+
+<p class="tool-privacy-note">Os valores ficam apenas neste navegador e não são enviados à CONFENGE.</p>
+<p class="tool-text-actions"><button type="button" class="tool-text-action" id="btn-reset" data-tool-reset>Apagar respostas</button></p>
 </form>
-<div id="resultado" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
-<div class="tool-actions" id="ra" hidden>
+
+<div id="resultado" class="tool-result-panel tool-result-dominant" hidden tabindex="-1" aria-live="polite"></div>
+<div class="tool-actions tool-actions-secondary" id="ra" hidden>
 <button type="button" class="button button-secondary" id="btn-copy" data-tool-copy>Copiar</button>
 <button type="button" class="button button-secondary" id="btn-dl" data-tool-download>Baixar (.txt)</button>
 <button type="button" class="button button-secondary" id="btn-print">Imprimir</button>
@@ -88,8 +139,11 @@
 <script>
 (function(){
   var T = window.ConfengeTools, C = window.ConfengeToolCompute;
-  var TOOL = "limite-acrescimos", SCHEMA = 3, lastText = "";
-  if (T.bindToolLifecycle) T.bindToolLifecycle({ tool: TOOL });
+  var TOOL = "limite-acrescimos", SCHEMA = 4, lastText = "";
+  var root = document.querySelector("[data-limite-workflow]");
+  var form = document.getElementById("limite-form");
+  var current = 1;
+  if (T && T.bindToolLifecycle) T.bindToolLifecycle({ tool: TOOL });
 
   function money(id, required) {
     var el = document.getElementById(id);
@@ -115,17 +169,70 @@
       acrescimos_previos: document.getElementById("acrescimos_previos").value,
       supressoes_previas: document.getElementById("supressoes_previas").value,
       acrescimo_proposto: document.getElementById("acrescimo_proposto").value,
-      supressao_proposta: document.getElementById("supressao_proposta").value
+      supressao_proposta: document.getElementById("supressao_proposta").value,
+      __step: current
     };
   }
-  function persist() { T.saveState(TOOL, SCHEMA, collectFields()); }
+  function persist() { if (T && T.saveState) T.saveState(TOOL, SCHEMA, collectFields()); }
   function restore() {
+    if (!T || !T.loadState) return;
     var d = T.loadState(TOOL, SCHEMA);
     if (!d) return;
     Object.keys(d).forEach(function(k) {
+      if (k === "__step") return;
       var el = document.getElementById(k);
       if (el && d[k] != null) el.value = d[k];
     });
+    if (d.__step) showStep(parseInt(d.__step, 10) || 1);
+  }
+
+  var stepLabels = {
+    1: "Etapa 1 de 3  -  Base do contrato",
+    2: "Etapa 2 de 3  -  Histórico formalizado",
+    3: "Etapa 3 de 3  -  Alteração em análise"
+  };
+
+  function showStep(n) {
+    current = Math.max(1, Math.min(3, n));
+    form.querySelectorAll("[data-limite-step]").forEach(function(sec) {
+      var num = parseInt(sec.getAttribute("data-limite-step"), 10);
+      var active = num === current;
+      sec.classList.toggle("is-active", active);
+      sec.hidden = !active;
+    });
+    var st = form.querySelector("[data-limite-step-status]");
+    if (st) st.textContent = stepLabels[current] || ("Etapa " + current + " de 3");
+    if (current === 2) updateAxisVisual();
+    if (current === 3) updatePrecalc();
+    persist();
+  }
+
+  function updateAxisVisual() {
+    var ac = money("acrescimos_previos", false);
+    var su = money("supressoes_previas", false);
+    var base = money("valor_inicial", false);
+    var baseV = base.ok && base.value > 0 ? base.value : 1;
+    var acEl = form.querySelector("[data-axis-ac]");
+    var suEl = form.querySelector("[data-axis-su]");
+    if (acEl) acEl.style.width = Math.min(100, Math.round(((ac.ok ? ac.value : 0) / baseV) * 100)) + "%";
+    if (suEl) suEl.style.width = Math.min(100, Math.round(((su.ok ? su.value : 0) / baseV) * 100)) + "%";
+  }
+
+  function updatePrecalc() {
+    var box = form.querySelector("[data-precalc-summary]");
+    if (!box) return;
+    var tipo = document.getElementById("tipo");
+    var tipoLab = tipo && tipo.options[tipo.selectedIndex] ? tipo.options[tipo.selectedIndex].text : "";
+    box.innerHTML =
+      "<p><strong>Resumo antes de calcular</strong></p>" +
+      "<ul class=\"tool-precalc-list\">" +
+      "<li>Base: " + (document.getElementById("valor_inicial").value || " - ") + "</li>" +
+      "<li>Tipo: " + tipoLab + "</li>" +
+      "<li>Acréscimos anteriores: " + (document.getElementById("acrescimos_previos").value || "0") + "</li>" +
+      "<li>Supressões anteriores: " + (document.getElementById("supressoes_previas").value || "0") + "</li>" +
+      "<li>Acréscimo proposto: " + (document.getElementById("acrescimo_proposto").value || "0") + "</li>" +
+      "<li>Supressão proposta: " + (document.getElementById("supressao_proposta").value || "0") + "</li>" +
+      "</ul>";
   }
 
   function panel(title, b) {
@@ -135,12 +242,30 @@
       '<dt>Proposto</dt><dd>' + T.brl(pr) + '</dd>' +
       '<dt>Total</dt><dd>' + T.brl(b.total) + '</dd>' +
       '<dt>Limite</dt><dd>' + T.brl(b.limite) + '</dd>' +
-      '<dt>Saldo</dt><dd>' + T.brl(b.saldo) + '</dd>' +
+      '<dt>Saldo disponível</dt><dd>' + T.brl(b.saldo) + '</dd>' +
       '<dt>% utilizado</dt><dd>' + T.pct(b.percentualUtilizado) + '</dd>' +
       '</dl><p class="tool-limit-status">' + b.labelStatus + '</p></div>';
   }
 
-  document.getElementById("limite-form").addEventListener("submit", function(e) {
+  form.addEventListener("click", function(ev) {
+    var t = ev.target;
+    if (!t || !t.closest) return;
+    if (t.closest("[data-limite-next]")) {
+      if (current === 1) {
+        var V = money("valor_inicial", true);
+        if (!V.ok) return;
+        if (!(V.value > 0)) {
+          T.setFieldError(document.getElementById("valor_inicial"), "O valor inicial deve ser maior que zero.");
+          return;
+        }
+      }
+      if (current < 3) showStep(current + 1);
+    } else if (t.closest("[data-limite-prev]")) {
+      if (current > 1) showStep(current - 1);
+    }
+  });
+
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
     var V = money("valor_inicial", true);
     var acP = money("acrescimos_previos", false);
@@ -148,14 +273,15 @@
     var acN = money("acrescimo_proposto", false);
     var suN = money("supressao_proposta", false);
     if (!V.ok || !acP.ok || !suP.ok || !acN.ok || !suN.ok) {
-      var out = document.getElementById("resultado");
-      out.hidden = false; out.className = "tool-result-panel bad";
-      out.innerHTML = '<p class="tool-result-summary"><strong>Não foi possível calcular</strong>Corrija os valores inválidos. Os dados digitados foram mantidos.</p>';
-      if (T.focusFirstError) T.focusFirstError(document.getElementById("limite-form"));
+      var outBad = document.getElementById("resultado");
+      outBad.hidden = false; outBad.className = "tool-result-panel tool-result-dominant bad";
+      outBad.innerHTML = '<p class="tool-result-summary"><strong>Não foi possível calcular</strong>Corrija os valores inválidos. Os dados digitados foram mantidos.</p>';
+      if (T.focusFirstError) T.focusFirstError(form);
       return;
     }
     if (!(V.value > 0)) {
       T.setFieldError(document.getElementById("valor_inicial"), "O valor inicial deve ser maior que zero.");
+      showStep(1);
       return;
     }
     var r = C.computeLimiteAditivo({
@@ -167,11 +293,22 @@
       supressaoProposta: suN.value
     });
     var out = document.getElementById("resultado");
-    out.hidden = false; out.className = "tool-result-panel " + r.level;
+    out.hidden = false; out.className = "tool-result-panel tool-result-dominant " + r.level;
     var al = (r.alerts || []).map(function(a) { return '<li data-severity="' + a.severity + '">' + a.text + '</li>'; }).join("");
-    out.innerHTML = '<p class="tool-result-summary"><strong>Resultado orientativo dos saldos</strong>Cálculo numérico com os dados informados. Não equivale a validade jurídica do aditivo.</p>' +
+    var tipoLab = document.getElementById("tipo").value === "reforma"
+      ? "Reforma de edifício ou equipamento (acréscimo 50%)"
+      : "Geral (acréscimo 25%)";
+    out.innerHTML =
+      '<p class="tool-result-summary"><strong>Resultado orientativo dos saldos</strong>Cálculo numérico com os dados informados. Não equivale a validade jurídica do aditivo.</p>' +
+      '<div class="tool-result-highlights">' +
+      '<div class="tool-result-stat"><span class="tool-result-stat-label">% acréscimo utilizado</span><strong>' + T.pct(r.acrescimos.percentualUtilizado) + '</strong></div>' +
+      '<div class="tool-result-stat"><span class="tool-result-stat-label">Saldo acréscimo</span><strong>' + T.brl(r.acrescimos.saldo) + '</strong></div>' +
+      '<div class="tool-result-stat"><span class="tool-result-stat-label">Situação acréscimo</span><strong>' + r.acrescimos.labelStatus + '</strong></div>' +
+      '<div class="tool-result-stat"><span class="tool-result-stat-label">Situação supressão</span><strong>' + r.supressoes.labelStatus + '</strong></div>' +
+      '</div>' +
       '<div class="tool-limit-panels">' + panel("Acréscimos", r.acrescimos) + panel("Supressões", r.supressoes) + '</div>' +
       (al ? '<h3>Alertas</h3><ul class="tool-alert-list">' + al + '</ul>' : '') +
+      '<h3>Premissas usadas</h3><ul class="tool-precalc-list"><li>Base: ' + T.brl(V.value) + '</li><li>Tipo: ' + tipoLab + '</li></ul>' +
       '<p class="tool-disclaimer">Ferramenta orientativa. Confirme valor inicial atualizado e natureza do objeto no caso concreto.</p>' +
       '<p class="tool-privacy-note">Gerado em ' + T.localNow() + '.</p>';
     lastText = T.buildReport([
@@ -182,6 +319,7 @@
     ]);
     document.getElementById("ra").hidden = false;
     T.focusResult(out);
+    try { out.scrollIntoView({ behavior: "smooth", block: "nearest" }); } catch (err) {}
     var cta = document.getElementById("cta");
     cta.hidden = false;
     cta.innerHTML = (!r.withinAc || !r.withinSu)
@@ -191,22 +329,32 @@
     persist();
   });
 
-  document.getElementById("limite-form").addEventListener("change", persist);
+  form.addEventListener("change", function() {
+    persist();
+    if (current === 2) updateAxisVisual();
+    if (current === 3) updatePrecalc();
+  });
+  form.addEventListener("input", function() {
+    if (current === 2) updateAxisVisual();
+    if (current === 3) updatePrecalc();
+  });
   document.getElementById("btn-dl").onclick = function() { T.downloadText("confenge-limite-aditivo.txt", lastText); };
   document.getElementById("btn-copy").onclick = function() { T.copyText(lastText); };
   document.getElementById("btn-print").onclick = function() { window.print(); };
   document.getElementById("btn-reset").onclick = function() {
     if (!confirm("Apagar respostas deste formulário neste navegador?")) return;
-    document.getElementById("limite-form").reset();
+    form.reset();
     document.getElementById("valor_inicial").value = "";
     ["acrescimos_previos","supressoes_previas","acrescimo_proposto","supressao_proposta"].forEach(function(id){ document.getElementById(id).value = "0"; });
     document.getElementById("resultado").hidden = true;
     document.getElementById("ra").hidden = true;
     document.getElementById("cta").hidden = true;
     lastText = "";
-    T.clearState(TOOL);
+    if (T.clearState) T.clearState(TOOL);
+    showStep(1);
   };
   restore();
+  showStep(current);
 })();
 </script>
 

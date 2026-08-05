@@ -38,8 +38,60 @@ Evidência visual: `evidence/before/` (snippets/hash pré-mudança) e `evidence/
 | Chips de meta | Uma linha de autoria/atualização | Menos ruído |
 | Fontes em caixas clicáveis iguais | Lista com órgão/dispositivo quando houver | Confiança sem bibliografia dump |
 
+## Ferramentas `/ferramentas/` (rodada adversarial)
+
+| Antes | Depois | Por quê |
+|---|---|---|
+| Lista com 7 metadados por ferramenta (público, dados, tempo, resultado, estado, estágio, limitação) | Entrada por situação: “Preciso conferir um aditivo / reequilíbrio / atrasos” | Visitante escolhe pela dor, não por ficha técnica |
+| Três cards simétricos + “Estado só no navegador” repetido | Uma recomendada + duas secundárias; disclaimer único no fim | Hierarquia comercial e menos ruído |
+| CSS novo sobre inventário burocrático | Markup situation-first (`tool-situation`) | Redesign de fonte, não só folha de estilo |
+
+Evidência: `evidence/after/tools-hub-1440x900.png`, `tools-hub-390x844.png`.
+
+## Verificador de limites (etapas)
+
+| Antes | Depois | Por quê |
+|---|---|---|
+| Seis campos em grid plano | Etapa 1 base → Etapa 2 histórico com eixos visuais → Etapa 3 alteração + resumo pré-cálculo | Segue o raciocínio do orçamentista |
+| Resultado competia com formulário e ações | Resultado dominante (percentual, saldo, situação, alertas, premissas, próximo passo) | Decisão legível após calcular |
+| “Apagar respostas” como botão secundário forte | Ação textual de baixa ênfase; copiar/baixar/imprimir só após resultado | Hierarquia de ação |
+
+Evidência: `limite-empty-1440x900.png`, `limite-filled-1440x900.png`, `limite-result-1440x900.png`. Matemática/jurídico de `computeLimiteAditivo` preservados.
+
+## Hub `/conteudos/` — filtros por estágio
+
+| Antes | Depois | Por quê |
+|---|---|---|
+| `data-stage=""` em todos os 20 itens | `data-stage` ∈ {antes, durante, conflito} via mapa versionado `data/site/content-stage-classification.json` | Filtros passam a funcionar de verdade |
+| Busca ignorava estágio | Interseção busca ∩ filtro; limpar busca mantém estágio; empty state + `aria-live` no contador | Comportamento de diretório utilizável |
+
+Evidência: `hub-filter-durante-1440x900.png`, `hub-search-filter-1440x900.png`.
+
+## Página-pilar sem guias públicos
+
+| Antes | Depois | Por quê |
+|---|---|---|
+| “0 guias públicos neste tema” + biblioteca vazia | Sem contador, sem CTA para lista vazia, sem seção de biblioteca; nota técnica + ação de caso | Não publicar inventário vazio |
+
+Evidência: `pillar-empty-1440x900.png` (`/acompanhamento-contratos-obras/`). Gate global varre HTML público (não lista fixa de 4 arquivos).
+
+## Checklist — mapa semântico por `item_id`
+
+| Antes | Depois | Por quê |
+|---|---|---|
+| Etapas = categorias antigas (essential/support/…) | Mapa explícito `ITEM_STEP` dos 36 IDs em 4 etapas semânticas | Título da etapa coerente com os itens |
+| “Sem JavaScript, as etapas aparecem em sequência abaixo.” | `<noscript>` em linguagem útil; fallback técnico removido da UI normal | Visitante não vê jargão de pipeline |
+
+Evidência: `checklist-step1` … `checklist-step4-1440x900.png`.
+
+## Shell global
+
+| Antes | Depois | Por quê |
+|---|---|---|
+| `/ferramentas/*` com nav antiga (Analisar licitação, Proteger contrato, Operação B2G…) | Mesmos 4 itens + CTA **Analisar meu caso** via `brand.json` / `patch_shell` / `html_shell` | Superfície única; teste compara home, hub, pilares, artigos, ferramentas e comerciais |
+
 ## Compromissos
 
 - Não alteramos conteúdo jurídico material nem indexação.
 - Não fabricamos cases.
-- Aprovação final depende de revisão humana visual (não de contagem de classes).
+- Esta rodada **não declara** aprovação humana visual do redesign — apenas remove bloqueadores objetivos e deixa evidência para revisão.

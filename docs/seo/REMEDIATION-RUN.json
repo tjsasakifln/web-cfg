@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-04",
+  "date": "2026-08-05",
   "radar": "fixed",
   "superseded": {
     "pages_noindexed": 0
@@ -14,9 +14,9 @@
     "removed_items": 0
   },
   "conteudos": {
-    "shell": 0,
+    "shell": 105,
     "machine": 13,
-    "related": 0,
+    "related": 105,
     "journey": 20,
     "indexable": 20,
     "noindex": 100
@@ -59,6 +59,9 @@
     "total_removed": 0
   },
   "shell_other": 0,
+  "tools_shell": {
+    "pages": 0
+  },
   "hub_pass2": {
     "removed_directory_items": 0,
     "indexable_count": 20,
@@ -104,6 +107,9 @@
   },
   "feed_pass2": {
     "removed_items": 0
+  },
+  "tools_shell_pass2": {
+    "pages": 0
   },
   "inventory_rows": 154,
   "disposition_counts": {

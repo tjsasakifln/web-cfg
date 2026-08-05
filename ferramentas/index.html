@@ -27,18 +27,25 @@
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
-<header class="site-header"><div class="container header-inner">
-<a class="brand" href="/" aria-label="CONFENGE"><img alt="CONFENGE" height="208" width="800" src="/assets/logo-confenge.png"/></a>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
-<a href="/bid-room-licitacoes-obras/">Analisar licitação</a>
-<a href="/defesa-margem-contratos-publicos/">Proteger contrato</a>
-<a href="/diretoria-b2g/">Operação B2G</a>
-<a href="/conteudos/">Conteúdos</a>
-<a href="/ferramentas/" aria-current="true">Ferramentas</a>
+<a href="/#ofertas">Serviços</a>
+<a href="/#jornadas">Problemas que resolvemos</a>
+<a href="/conteudos/">Conteúdos e ferramentas</a>
 <a href="/especialista/tiago-jun-sasaki/">Especialista</a>
 </nav>
-<a class="button button-primary header-cta" href="/#contato">Falar com a CONFENGE</a>
-</div></header>
+<a class="button button-primary header-cta" href="/#contato">Analisar meu caso</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a href="/#ofertas">Serviços</a><a href="/#jornadas">Problemas que resolvemos</a><a href="/conteudos/">Conteúdos e ferramentas</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+<a class="button button-primary" href="/#contato">Analisar meu caso</a>
+</nav>
+</header>
 <main id="conteudo">
 
 <nav class="breadcrumbs container" aria-label="breadcrumb"><ol>
@@ -46,61 +53,67 @@
 </ol></nav>
 <header class="tool-hub-hero"><div class="container">
 <p class="eyebrow">Ferramentas</p>
-<h1>Instrumentos de decisão em contratos públicos</h1>
-<p class="content-lead">Cada ferramenta devolve um resultado útil no navegador a partir dos dados que você informa. Contato só se quiser validar o dossiê com a CONFENGE.</p>
+<h1>O que você precisa resolver agora?</h1>
+<p class="content-lead">Três instrumentos de decisão para aditivo, reequilíbrio e atraso. Cada um devolve um resultado útil no navegador a partir dos dados que você informa.</p>
 </div></header>
-<div class="container tool-shell">
-<ul class="tool-card-list">
-<li>
-<a class="tool-card" href="/ferramentas/limite-acrescimos-supressoes/">
-<strong>Verificador de limite de acréscimos e supressões</strong>
-<span>Calcula saldos numéricos orientativos do art. 125 da Lei 14.133/2021 antes do próximo termo aditivo, com acréscimos e supressões em painéis independentes.</span>
-<ul class="tool-card-meta">
-<li>Para: orçamentistas e engenharia de contrato</li>
+
+<div class="container tool-shell tool-hub-situations">
+<section class="tool-situation tool-situation--recommended" aria-labelledby="sit-limite">
+<p class="tool-situation-badge">Recomendada para a situação mais frequente</p>
+<p class="tool-situation-prompt" id="sit-limite">Preciso conferir um aditivo</p>
+<div class="tool-situation-body">
+<p class="tool-situation-problem"><strong>Problema resolvido:</strong> saber se o próximo acréscimo ou supressão ainda cabe no limite numérico do art. 125.</p>
+<p class="tool-situation-result"><strong>Resultado entregue:</strong> saldos, percentuais e alertas orientativos de acréscimo e supressão, em eixos independentes.</p>
+<p class="tool-situation-time"><strong>Tempo aproximado:</strong> cerca de 3 minutos</p>
+<a class="button button-primary" href="/ferramentas/limite-acrescimos-supressoes/">Usar ferramenta</a>
+<details class="tool-situation-more">
+<summary>Público, dados e limitações</summary>
+<ul>
+<li>Para orçamentistas e engenharia de contrato</li>
 <li>Dados: valor inicial atualizado e histórico de aditivos</li>
-<li>Tempo: ~3 min</li>
-<li>Resultado: saldos, percentuais e alertas numéricos</li>
-<li>Estado só no navegador</li>
-<li>Estágio: execução / aditivo</li>
 <li>Limitação: não emite validade jurídica nem classifica reforma vs obra nova</li>
 </ul>
-<span class="tool-card-cta">Abrir ferramenta</span>
-</a>
-</li>
-<li>
-<a class="tool-card" href="/ferramentas/checklist-reequilibrio/">
-<strong>Checklist de reequilíbrio</strong>
-<span>Organiza a prontidão documental do dossiê. Bloqueadores centrais impedem resultado alto; score não significa direito ao reequilíbrio.</span>
-<ul class="tool-card-meta">
-<li>Para: engenharia de contrato e diretoria técnica</li>
+</details>
+</div>
+</section>
+
+<section class="tool-situation" aria-labelledby="sit-reeq">
+<p class="tool-situation-prompt" id="sit-reeq">Preciso organizar um pedido de reequilíbrio</p>
+<div class="tool-situation-body">
+<p class="tool-situation-problem"><strong>Problema resolvido:</strong> enxergar se o dossiê documental está pronto ou se há bloqueadores centrais.</p>
+<p class="tool-situation-result"><strong>Resultado entregue:</strong> prontidão, bloqueadores e ordem de correção (sem quantificar crédito).</p>
+<p class="tool-situation-time"><strong>Tempo aproximado:</strong> cerca de 8 minutos</p>
+<a class="button button-secondary" href="/ferramentas/checklist-reequilibrio/">Usar ferramenta</a>
+<details class="tool-situation-more">
+<summary>Público, dados e limitações</summary>
+<ul>
+<li>Para engenharia de contrato e diretoria técnica</li>
 <li>Dados: presença de documentos e comunicações (sem valores monetários)</li>
-<li>Tempo: ~8 min</li>
-<li>Resultado: prontidão, bloqueadores e ordem de correção</li>
-<li>Estado só no navegador</li>
-<li>Estágio: execução / reequilíbrio</li>
-<li>Limitação: não quantifica crédito nem julga a tese jurídica</li>
+<li>Limitação: score não significa direito ao reequilíbrio nem julga a tese jurídica</li>
 </ul>
-<span class="tool-card-cta">Abrir ferramenta</span>
-</a>
-</li>
-<li>
-<a class="tool-card" href="/ferramentas/matriz-atraso-obra/">
-<strong>Matriz de atraso de obra</strong>
-<span>Registra eventos de atraso e devolve hipóteses preliminares e lacunas de prova. Sem veredito por contagem de causas.</span>
-<ul class="tool-card-meta">
-<li>Para: planejamento e engenharia de contratos</li>
+</details>
+</div>
+</section>
+
+<section class="tool-situation" aria-labelledby="sit-atraso">
+<p class="tool-situation-prompt" id="sit-atraso">Preciso registrar e analisar atrasos</p>
+<div class="tool-situation-body">
+<p class="tool-situation-problem"><strong>Problema resolvido:</strong> registrar eventos de atraso e ver hipóteses preliminares e lacunas de prova.</p>
+<p class="tool-situation-result"><strong>Resultado entregue:</strong> hipóteses por evento e pendências de registro (sem veredito por contagem).</p>
+<p class="tool-situation-time"><strong>Tempo aproximado:</strong> cerca de 10 minutos</p>
+<a class="button button-secondary" href="/ferramentas/matriz-atraso-obra/">Usar ferramenta</a>
+<details class="tool-situation-more">
+<summary>Público, dados e limitações</summary>
+<ul>
+<li>Para planejamento e engenharia de contratos</li>
 <li>Dados: eventos, datas, prova e vínculo ao caminho crítico</li>
-<li>Tempo: ~10 min</li>
-<li>Resultado: hipóteses por evento e pendências de registro</li>
-<li>Estado só no navegador</li>
-<li>Estágio: atraso / prorrogação / defesa</li>
 <li>Limitação: não soma dias automaticamente nem atribui culpa definitiva</li>
 </ul>
-<span class="tool-card-cta">Abrir ferramenta</span>
-</a>
-</li>
-</ul>
-<section class="tool-disclaimer">As ferramentas são orientativas. Não substituem a leitura do contrato concreto nem emitem parecer jurídico vinculante. Resultado no navegador, sem cadastro.</section>
+</details>
+</div>
+</section>
+
+<section class="tool-disclaimer">As ferramentas são orientativas. Não substituem a leitura do contrato concreto nem emitem parecer jurídico vinculante. Resultado no navegador, sem cadastro  -  o estado fica só no seu aparelho até você copiar, baixar ou abrir o contato.</section>
 </div>
 
 </main>

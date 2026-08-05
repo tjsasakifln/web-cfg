@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-04T15:05:23.084Z",
+  "generated_at": "2026-08-05T11:08:20.662Z",
   "base": "http://127.0.0.1:8795",
   "viewports": [
     "1440x1000",
@@ -325,14 +325,15 @@
     {
       "flow": "limite",
       "hidden": false,
-      "text": "Resultado orientativo dos saldos\nCálculo numérico com os dados informados. Não equivale a validade jurídica do aditivo.\n\nAcréscimos\nAnteriores\nR$ 1.800.000,00\nProposto\nR$ 900.000,00\nTotal\nR$ 2.700.000,00\nLimite\nR$ 2.500.000,00\nSaldo\n-R$ 200.000,00\n% utilizado\n27%\n\nAcima do limite numérico calculado com os dados informados.\n\nSupressões\nAnteriores\nR$ 0,00\nProposto\nR$ 0,00\nTotal\nR$ 0,00\nLimite\nR$ 2.500.000,00\nSaldo\nR$ 2.500.000,00\n% utilizado\n0%\n\nDentro do limite numérico calculado com os dados inf",
+      "text": "Resultado orientativo dos saldos\nCálculo numérico com os dados informados. Não equivale a validade jurídica do aditivo.\n\n% ACRÉSCIMO UTILIZADO\n27%\nSALDO ACRÉSCIMO\n-R$ 200.000,00\nSITUAÇÃO ACRÉSCIMO\nAcima do limite numérico calculado com os dados informados.\nSITUAÇÃO SUPRESSÃO\nDentro do limite numérico calculado com os dados informados.\nAcréscimos\nAnteriores\nR$ 1.800.000,00\nProposto\nR$ 900.000,00\nTotal\nR$ 2.700.000,00\nLimite\nR$ 2.500.000,00\nSaldo disponível\n-R$ 200.000,00\n% utilizado\n27%\n\nAcima do",
       "hasPanels": true,
-      "hasNumeric": true
+      "hasNumeric": true,
+      "hasSteps": true
     },
     {
       "flow": "reequilibrio",
       "hidden": false,
-      "text": "Prontidão documental baixa\nO dossiê ainda não está pronto para protocolar com segurança documental. Bloqueadores em aberto: Fato gerador definido, Cronologia, Nexo causal, Comunicação tempestiva, Memória de cálculo, Cláusulas contratuais e matriz de riscos.\n\nCobertura ponderada: 0%\nBloqueadores: 6\nSuporte econômico pendente: 5\nOrganização pendente: 4\nNão aplicáveis: 0\nOrdem recomendada de correção\nFato gerador definido (bloqueador)\nCronologia (bloqueador)\nNexo causal (bloqueador)\nComunicação tempestiva (bloqueador)\nMemória de cálculo (bloqueador)\nCláusulas contratuais e matriz de riscos (bloqu",
+      "text": "Prontidão documental baixa\nO dossiê ainda não está pronto para protocolar com segurança documental. Bloqueadores em aberto: Fato gerador definido, Cronologia, Nexo causal, Comunicação tempestiva, Memória de cálculo, Cláusulas contratuais e matriz de riscos.\n\nCobertura ponderada: 0%\nBloqueadores: 6\nSuporte econômico pendente: 5\nOrganização pendente: 4\nNão aplicáveis: 0\nRessalvas\nHá bloqueador(es) central(is) em aberto.\nOrdem recomendada de correção\nFato gerador definido (bloqueador)\nCronologia (bloqueador)\nNexo causal (bloqueador)\nComunicação tempestiva (bloqueador)\nMemória de cálculo (bloquead",
       "hasBlock": true
     },
     {
@@ -346,9 +347,9 @@
       "flow": "aditivo",
       "hasUi": true,
       "triState": true,
-      "resultVisible": true,
-      "text": "Prontidão documental baixa\nForam analisados 31 requisitos. 1 essenciais atendidos, 12 pendência(s) essencial(is) e 1 sinal(is) de bloqueio: Item novo sem composição?.\n\nAnalisados: 31\nEssenciais: 1\nPendências essenciais: 12\nSinais de bloqueio: 1\n\nDiagnóstico documental orientativo.",
-      "progress": "Prontidão documental baixa. Essenciais atendidos: 1; pendências: 12; bloqueios: 1.",
+      "resultVisible": false,
+      "text": "",
+      "progress": "Progresso do preenchimento (não é prontidão jurídica).",
       "not100": true
     }
   ],

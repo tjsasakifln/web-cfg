@@ -959,3 +959,7 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 @media(prefers-reduced-motion:reduce){
   .featured-content:hover,.related-card:hover,.cluster-card:hover,.journey-path:hover{transform:none}
 }
+
+.directory-empty{margin:1.25rem 0 0;padding:1rem 1.1rem;border:1px dashed var(--line);border-radius:4px;color:#425265;background:#f8faf9;font-size:.98rem;line-height:1.55}
+.directory-empty[hidden]{display:none!important}
+.content-directory-item[hidden]{display:none!important}

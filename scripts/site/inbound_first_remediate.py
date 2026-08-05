@@ -92,6 +92,52 @@ CLUSTER_OFFER = {
     "operacao": "diretoria-b2g",
 }
 
+# Versioned public stage classification (generation-time; never runtime title guesswork).
+STAGE_CLASSIFICATION_PATH = ROOT / "data" / "site" / "content-stage-classification.json"
+ALLOWED_STAGES = frozenset({"antes", "durante", "conflito"})
+_STAGE_CLASSIFICATION_CACHE: dict[str, Any] | None = None
+
+
+def load_stage_classification() -> dict[str, Any]:
+    """Load versioned slug/pillar → stage map from data/site."""
+    global _STAGE_CLASSIFICATION_CACHE
+    if _STAGE_CLASSIFICATION_CACHE is not None:
+        return _STAGE_CLASSIFICATION_CACHE
+    if not STAGE_CLASSIFICATION_PATH.exists():
+        raise FileNotFoundError(
+            f"Missing stage classification: {STAGE_CLASSIFICATION_PATH}"
+        )
+    data = json.loads(STAGE_CLASSIFICATION_PATH.read_text(encoding="utf-8"))
+    allowed = set(data.get("allowed_stages") or list(ALLOWED_STAGES))
+    if allowed != ALLOWED_STAGES:
+        raise ValueError(
+            f"content-stage-classification allowed_stages must be {sorted(ALLOWED_STAGES)}"
+        )
+    _STAGE_CLASSIFICATION_CACHE = data
+    return data
+
+
+def resolve_content_stage(
+    *,
+    slug: str,
+    pillar: str = "",
+    classification: dict[str, Any] | None = None,
+) -> str:
+    """Deterministic stage for a public guide. Prefers slug override, then pillar."""
+    data = classification or load_stage_classification()
+    overrides = data.get("slug_overrides") or {}
+    if slug in overrides:
+        stage = str(overrides[slug]).strip()
+    else:
+        pillar_map = data.get("pillar_to_stage") or {}
+        stage = str(pillar_map.get(pillar) or "").strip()
+    if stage not in ALLOWED_STAGES:
+        raise ValueError(
+            f"No valid stage for slug={slug!r} pillar={pillar!r} "
+            f"(got {stage!r}; allowed {sorted(ALLOWED_STAGES)})"
+        )
+    return stage
+
 
 def _read(p: Path) -> str:
     return p.read_text(encoding="utf-8", errors="replace")
@@ -777,6 +823,18 @@ def remediate_conteudos_pages(brand: dict[str, Any]) -> dict[str, Any]:
                 flags=re.I,
             )
 
+        # Strip internal taxonomy jargon from public visitor UI (all conteudos pages)
+        html = re.sub(r"Página-pilar", "Tema principal", html, flags=re.I)
+        html = re.sub(r"página-pilar", "página temática", html, flags=re.I)
+        html = re.sub(r"pagina-pilar", "pagina tematica", html, flags=re.I)
+        html = re.sub(r"guias indexáveis", "guias públicos", html, flags=re.I)
+        html = re.sub(r"conteúdos indexáveis", "análises técnicas", html, flags=re.I)
+        html = re.sub(r"frentes de decisão", "temas de decisão", html, flags=re.I)
+        html = re.sub(r"eixos integrados", "engenharia, contrato e impacto", html, flags=re.I)
+        html = re.sub(r"taxonomia interna", "categorias de inventário", html, flags=re.I)
+        html = re.sub(r"\b1 guias\b", "1 guia", html)
+        html = re.sub(r"\b0 guias\b", "", html, flags=re.I)
+
         if html != before:
             stats["shell"] += 1
             _write(p, html)
@@ -799,6 +857,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         return "1 guia" if n == 1 else f"{n} guias"
 
     # --- Collect indexable guide metadata from files ---
+    stage_class = load_stage_classification()
     items_meta: list[dict[str, Any]] = []
     for p in sorted((ROOT / "conteudos").glob("*/index.html")):
         url = f"/conteudos/{p.parent.name}/"
@@ -814,6 +873,12 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
             r'href="/(medicoes-glosas-obras-publicas|aditivos-obras-publicas|reequilibrio-obras-publicas|atrasos-prorrogacao-obras-publicas|defesa-tecnica-contratos-publicos|acompanhamento-contratos-obras|diagnostico-pre-licitacao|auditoria-orcamento-licitacao)/"',
             t,
         )
+        pillar_id = pillar.group(1) if pillar else ""
+        stage = resolve_content_stage(
+            slug=p.parent.name,
+            pillar=pillar_id,
+            classification=stage_class,
+        )
         items_meta.append(
             {
                 "url": url,
@@ -821,7 +886,8 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                 "h1": h1.group(1).strip() if h1 else p.parent.name,
                 "section": section.group(1).strip() if section else "Guia técnico",
                 "lead": (lead.group(1).strip() if lead else ""),
-                "pillar": pillar.group(1) if pillar else "",
+                "pillar": pillar_id,
+                "stage": stage,
             }
         )
 
@@ -978,14 +1044,16 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
     stage_parts.append("</div>")
     stage_html = "".join(stage_parts)
 
-    # --- Directory list ---
+    # --- Directory list (data-stage from versioned classification) ---
     dir_parts = ['<div class="content-directory" id="diretorio" data-content-directory>']
     for i, it in enumerate(items_meta, 1):
         desc = it["lead"] or it["h1"]
+        stage = it["stage"]
         # No fixed char cut mid-word — CSS line-clamp may apply with full text in DOM
         dir_parts.append(
             f'<article class="content-directory-item" data-content-item '
-            f'data-stage="" data-search="{html_lib.escape((it["h1"] + " " + it["section"] + " " + desc).lower())}">'
+            f'data-stage="{html_lib.escape(stage)}" '
+            f'data-search="{html_lib.escape((it["h1"] + " " + it["section"] + " " + desc).lower())}">'
             f'<div class="dir-body">'
             f'<p class="dir-theme">{html_lib.escape(it["section"])}</p>'
             f'<h3><a href="{it["url"]}">{html_lib.escape(it["h1"])}</a></h3>'
@@ -1013,7 +1081,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
 <div class="container">
 <p class="eyebrow">Biblioteca técnica</p>
 <h1>Qual problema de licitação ou contrato você precisa resolver?</h1>
-<p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Busque pelo problema, não pela taxonomia interna.</p>
+<p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Busque pelo problema concreto, não por categorias de inventário.</p>
 <div class="hub-search-priority directory-search">
 <label for="hub-search">Buscar por problema</label>
 <input id="hub-search" name="q" type="search" autocomplete="off" placeholder="Ex.: aditivo, glosa, BDI, atraso, reequilíbrio" data-hub-search aria-controls="diretorio"/>
@@ -1047,15 +1115,16 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
 <p class="eyebrow">Diretório</p>
 <h2>Todas as análises públicas</h2>
 </div>
-<p class="results-count" data-results-count>{idx_n} análises encontradas</p>
+<p class="results-count" data-results-count role="status" aria-live="polite">{idx_n} análises encontradas</p>
 </div>
 <div class="directory-filters" role="group" aria-label="Filtrar por estágio">
-<button type="button" class="dir-filter is-active" data-dir-filter="all">Todos</button>
-<button type="button" class="dir-filter" data-dir-filter="antes">Antes de contratar</button>
-<button type="button" class="dir-filter" data-dir-filter="durante">Durante a execução</button>
-<button type="button" class="dir-filter" data-dir-filter="conflito">Conflito ou perda</button>
+<button type="button" class="dir-filter is-active" data-dir-filter="all" aria-pressed="true">Todos</button>
+<button type="button" class="dir-filter" data-dir-filter="antes" aria-pressed="false">Antes de contratar</button>
+<button type="button" class="dir-filter" data-dir-filter="durante" aria-pressed="false">Durante a execução</button>
+<button type="button" class="dir-filter" data-dir-filter="conflito" aria-pressed="false">Conflito ou perda</button>
 </div>
 {dir_html}
+<p class="directory-empty" data-directory-empty hidden>Nenhuma análise encontrada para esta combinação de filtro e busca. Ajuste o estágio ou limpe a busca.</p>
 </div></section>"""
 
     body_core = hero_block + featured_block + stages_block + directory_block + "\n"
@@ -1083,20 +1152,46 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
   var input=document.querySelector('[data-hub-search]');
   var dir=document.querySelector('[data-content-directory]');
   var countEl=document.querySelector('[data-results-count]');
-  if(!input||!dir)return;
+  var emptyEl=document.querySelector('[data-directory-empty]');
+  var filters=[].slice.call(document.querySelectorAll('[data-dir-filter]'));
+  if(!dir)return;
   var items=[].slice.call(dir.querySelectorAll('[data-content-item]'));
+  var stage='all';
+  function setCount(n){
+    if(!countEl)return;
+    countEl.textContent=n+(n===1?' análise encontrada':' análises encontradas');
+  }
   function apply(){
-    var q=(input.value||'').trim().toLowerCase();
+    var q=input?((input.value||'').trim().toLowerCase()):'';
     var n=0;
     items.forEach(function(el){
       var hay=el.getAttribute('data-search')||'';
-      var show=!q||hay.indexOf(q)!==-1;
+      var st=el.getAttribute('data-stage')||'';
+      var stageOk=stage==='all'||st===stage;
+      var textOk=!q||hay.indexOf(q)!==-1;
+      var show=stageOk&&textOk;
       el.hidden=!show;
       if(show)n++;
     });
-    if(countEl)countEl.textContent=n+(n===1?' análise encontrada':' análises encontradas');
+    setCount(n);
+    if(emptyEl)emptyEl.hidden=n>0;
   }
-  input.addEventListener('input',apply);
+  filters.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      stage=btn.getAttribute('data-dir-filter')||'all';
+      filters.forEach(function(b){
+        var on=b===btn;
+        b.classList.toggle('is-active',on);
+        b.setAttribute('aria-pressed',on?'true':'false');
+      });
+      apply();
+    });
+  });
+  if(input){
+    input.addEventListener('input',apply);
+    input.addEventListener('search',apply);
+  }
+  apply();
 })();
 </script>
 """
@@ -1314,87 +1409,177 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
             flags=re.S,
         )
 
-        # pillar-stat / hero guide counts
-        html = re.sub(
-            r"(Ver os )\d+( guias)",
-            rf"\g<1>{n_kept}\2",
-            html,
-        )
-        # Replace first guide-count strong in pillar-stat
-        html = re.sub(
-            r'(class="pillar-stat">\s*<strong>)\d+(</strong>\s*<span>[^<]*guia[^<]*</span>)',
-            rf"\g<1>{n_kept}\2",
-            html,
-            count=1,
-            flags=re.I | re.S,
-        )
-        # Also plain "N guias" claims inside hero/stat when overstated
-        def fix_count_claim(m: re.Match[str]) -> str:
-            try:
-                val = int(m.group(1))
-            except ValueError:
-                return m.group(0)
-            if val > n_kept:
-                return f"{n_kept}{m.group(2)}"
-            return m.group(0)
-
-        html = re.sub(r"\b(\d{1,3})(\s+guias?\b)", fix_count_claim, html, flags=re.I)
-
-        # ItemList numberOfItems in pillar JSON-LD
-        html = re.sub(
-            r'"numberOfItems"\s*:\s*\d+',
-            f'"numberOfItems":{n_kept}',
-            html,
-        )
-
-        # Drop noindex ListItems from JSON-LD
-        def filter_list_item(m: re.Match[str]) -> str:
-            block = m.group(0)
-            url_m = re.search(
-                r'"url"\s*:\s*"(https://confenge\.com\.br)?(/conteudos/[^"]+)"', block
+        # When zero public guides: never publish "0 guias", empty library, or CTAs to empty lists.
+        if n_kept == 0:
+            html = re.sub(
+                r'<a[^>]*>\s*Ver os\s+\d+\s+guias?\s*</a>',
+                "",
+                html,
+                flags=re.I,
             )
-            if not url_m:
-                return block
-            path = url_m.group(2)
-            if not path.endswith("/"):
-                path = path + "/"
-            if idx_map.get(path, False):
-                return block
-            return ""
+            html = re.sub(
+                r'<section class="section library-section"[^>]*>.*?</section>',
+                "",
+                html,
+                count=1,
+                flags=re.S | re.I,
+            )
+            # Evidence block: technical note only — no counter
+            html = re.sub(
+                r'<div class="pillar-stat">.*?</div>',
+                (
+                    '<div class="pillar-evidence">'
+                    '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto — '
+                    "ainda sem guias públicos listados neste eixo.</p>"
+                    "</div>"
+                ),
+                html,
+                count=1,
+                flags=re.S,
+            )
+            html = re.sub(
+                r'<div class="pillar-evidence">.*?</div>',
+                (
+                    '<div class="pillar-evidence">'
+                    '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto — '
+                    "ainda sem guias públicos listados neste eixo.</p>"
+                    "</div>"
+                ),
+                html,
+                count=1,
+                flags=re.S,
+            )
+            # Strip any residual zero-count claims
+            html = re.sub(r"\b0\s+guias?\b", "", html, flags=re.I)
+            html = re.sub(r"Ver os\s+0\s+guias?", "", html, flags=re.I)
+            html = re.sub(
+                r"\d+\s+guias?\s+públicos?\s+neste\s+tema",
+                "",
+                html,
+                flags=re.I,
+            )
+            html = re.sub(
+                r'"numberOfItems"\s*:\s*\d+',
+                '"numberOfItems":0',
+                html,
+            )
+        else:
+            # pillar-stat / hero guide counts (only when there is public content)
+            html = re.sub(
+                r"(Ver os )\d+( guias)",
+                rf"\g<1>{n_kept}\2",
+                html,
+            )
+            html = re.sub(
+                r'(class="pillar-stat">\s*<strong>)\d+(</strong>\s*<span>[^<]*guia[^<]*</span>)',
+                rf"\g<1>{n_kept}\2",
+                html,
+                count=1,
+                flags=re.I | re.S,
+            )
 
-        html = re.sub(
-            r'\{\s*"@type"\s*:\s*"ListItem"[^}]*\}',
-            filter_list_item,
-            html,
-        )
-        html = re.sub(r",\s*,+", ",", html)
-        html = re.sub(r"\[\s*,", "[", html)
-        html = re.sub(r",\s*\]", "]", html)
+            def fix_count_claim(m: re.Match[str]) -> str:
+                try:
+                    val = int(m.group(1))
+                except ValueError:
+                    return m.group(0)
+                if val > n_kept:
+                    return f"{n_kept}{m.group(2)}"
+                return m.group(0)
+
+            html = re.sub(r"\b(\d{1,3})(\s+guias?\b)", fix_count_claim, html, flags=re.I)
+
+            html = re.sub(
+                r'"numberOfItems"\s*:\s*\d+',
+                f'"numberOfItems":{n_kept}',
+                html,
+            )
+
+            # Drop noindex ListItems from JSON-LD
+            def filter_list_item(m: re.Match[str]) -> str:
+                block = m.group(0)
+                url_m = re.search(
+                    r'"url"\s*:\s*"(https://confenge\.com\.br)?(/conteudos/[^"]+)"',
+                    block,
+                )
+                if not url_m:
+                    return block
+                path = url_m.group(2)
+                if not path.endswith("/"):
+                    path = path + "/"
+                if idx_map.get(path, False):
+                    return block
+                return ""
+
+            html = re.sub(
+                r'\{\s*"@type"\s*:\s*"ListItem"[^}]*\}',
+                filter_list_item,
+                html,
+            )
+            html = re.sub(r",\s*,+", ",", html)
+            html = re.sub(r"\[\s*,", "[", html)
+            html = re.sub(r",\s*\]", "]", html)
+
+            guide_word = "guia público" if n_kept == 1 else "guias públicos"
+            html = re.sub(
+                r'<div class="pillar-stat">.*?</div>',
+                (
+                    f'<div class="pillar-evidence">'
+                    f'<p class="pillar-evidence-count"><strong>{n_kept}</strong> '
+                    f"{guide_word} neste tema</p>"
+                    f'<p class="pillar-evidence-note">Engenharia, contrato e impacto econômico no mesmo enquadramento.</p>'
+                    f"</div>"
+                ),
+                html,
+                count=1,
+                flags=re.S,
+            )
+            # Keep evidence block in sync when already converted
+            html = re.sub(
+                r'<p class="pillar-evidence-count">.*?</p>',
+                f'<p class="pillar-evidence-count"><strong>{n_kept}</strong> {guide_word} neste tema</p>',
+                html,
+                count=1,
+                flags=re.S,
+            )
 
         # Visitor language: remove dashboard metrics / taxonomy jargon from pillars
-        html = re.sub(
-            r'<div class="pillar-stat">.*?</div>',
-            (
-                f'<div class="pillar-evidence">'
-                f'<p class="pillar-evidence-count"><strong>{n_kept}</strong> '
-                f'{"guia público" if n_kept == 1 else "guias públicos"} neste tema</p>'
-                f'<p class="pillar-evidence-note">Engenharia, contrato e impacto econômico no mesmo enquadramento.</p>'
-                f'</div>'
-            ),
-            html,
-            count=1,
-            flags=re.S,
-        )
         html = re.sub(r"eixos integrados", "engenharia, contrato e impacto", html, flags=re.I)
         html = re.sub(r"frentes de decisão", "temas de decisão", html, flags=re.I)
         html = re.sub(r"guias indexáveis", "guias públicos", html, flags=re.I)
         html = re.sub(r"\b1 guias\b", "1 guia", html)
+        html = re.sub(r"\b0 guias\b", "", html, flags=re.I)
 
         html = patch_shell(html, brand, current=f"/{pillar}/")
         _write(p, html)
         stats["pillars"][pillar] = {"kept": n_kept, "removed": removed}
         stats["total_removed"] += removed
     return stats
+
+
+def remediate_tools_shell(brand: dict[str, Any]) -> dict[str, Any]:
+    """Apply approved redesign shell to all public ferramentas pages."""
+    tools_root = ROOT / "ferramentas"
+    if not tools_root.exists():
+        return {"pages": 0}
+    n = 0
+    for p in sorted(tools_root.rglob("index.html")):
+        html = _read(p)
+        rel = "/" + p.parent.relative_to(ROOT).as_posix().rstrip("/") + "/"
+        if p.parent == tools_root:
+            rel = "/ferramentas/"
+        new = patch_shell(html, brand, current=rel if "ferramentas" in rel else "/ferramentas/")
+        # Force aria-current on ferramentas hub/tool paths when matching
+        if new != html:
+            _write(p, new)
+            n += 1
+        else:
+            # Still rewrite if old commercial nav labels remain
+            if "Analisar licitação" in html or "Proteger contrato" in html or "Operação B2G" in html:
+                new = patch_shell(html, brand, current="/ferramentas/")
+                _write(p, new)
+                n += 1
+    return {"pages": n}
 
 
 def remediate_editorial_and_commercial(brand: dict[str, Any]) -> int:
@@ -1732,11 +1917,13 @@ def main() -> int:
     report["conteudos"] = remediate_conteudos_pages(brand)
     report["pillars"] = remediate_pillars(brand)
     report["shell_other"] = remediate_editorial_and_commercial(brand)
+    report["tools_shell"] = remediate_tools_shell(brand)
 
     # Re-run hub + pillars after page rewrites so counts stay correct
     report["hub_pass2"] = remediate_hub(brand)
     report["pillars_pass2"] = remediate_pillars(brand)
     report["feed_pass2"] = remediate_feed()
+    report["tools_shell_pass2"] = remediate_tools_shell(brand)
 
     rows = build_inventory(brand)
     # After remediation, reclassify machine indexable as KEEP if clean
