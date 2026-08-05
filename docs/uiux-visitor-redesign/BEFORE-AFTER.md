@@ -91,6 +91,19 @@ Evidência: `checklist-step1` … `checklist-step4-1440x900.png`.
 |---|---|---|
 | `/ferramentas/*` com nav antiga (Analisar licitação, Proteger contrato, Operação B2G…) | Mesmos 4 itens + CTA **Analisar meu caso** via `brand.json` / `patch_shell` / `html_shell` | Superfície única; teste compara home, hub, pilares, artigos, ferramentas e comerciais |
 
+## Evidência recapturada (rodada adversarial)
+
+Recaptura completa em `evidence/after/` para revisão humana (sem declarar aprovação):
+
+| Superfície | Arquivos |
+|---|---|
+| `/ferramentas/` | `tools-hub-1440x900.png`, `tools-hub-390x844.png` |
+| Verificador de limites | `limite-empty-1440x900.png`, `limite-filled-1440x900.png`, `limite-result-1440x900.png` |
+| Hub filtro Durante | `hub-filter-durante-1440x900.png` |
+| Hub busca + filtro | `hub-search-filter-1440x900.png` |
+| Checklist etapas 1–4 | `checklist-step1` … `checklist-step4-1440x900.png` |
+| Pilar sem guias | `pillar-empty-1440x900.png`, `pillar-empty-390x844.png` (sem “Ver os”, sem “0 guias”) |
+
 ## Compromissos
 
 - Não alteramos conteúdo jurídico material nem indexação.

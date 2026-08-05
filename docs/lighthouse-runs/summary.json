@@ -1,18 +1,18 @@
 {
   "base": "http://127.0.0.1:8766",
-  "generated_at": "2026-08-05T11:10:48.807Z",
+  "generated_at": "2026-08-05T12:01:01.545Z",
   "results": [
     {
       "path": "/",
-      "performance": 97,
+      "performance": 99,
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 2274.1639999999998,
+      "lcp_ms": 2124.526,
       "cls": 0,
-      "tbt_ms": 83,
-      "fcp_ms": 1706.164,
-      "si_ms": 1706.164
+      "tbt_ms": 0,
+      "fcp_ms": 1224.526,
+      "si_ms": 1224.526
     },
     {
       "path": "/diretoria-b2g/",
@@ -20,11 +20,11 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 2198.1859999999997,
+      "lcp_ms": 2198.252,
       "cls": 0,
       "tbt_ms": 0,
-      "fcp_ms": 1223.186,
-      "si_ms": 1223.186
+      "fcp_ms": 1223.252,
+      "si_ms": 1223.252
     },
     {
       "path": "/conteudos/",
@@ -32,11 +32,11 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 2424.8559999999998,
+      "lcp_ms": 2428.1059999999998,
       "cls": 0,
       "tbt_ms": 0,
-      "fcp_ms": 1224.856,
-      "si_ms": 1224.856
+      "fcp_ms": 1228.106,
+      "si_ms": 1228.106
     }
   ]
 }
