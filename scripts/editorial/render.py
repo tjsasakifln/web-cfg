@@ -503,16 +503,18 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     mail_body = hub.get("cta_email_body") or (
         f"Olá, Tiago.\n\nAcessei {url} e gostaria de orientação sobre o tema do hub.\n"
     )
-    body = f"""
-{breadcrumbs_html(crumbs)}
-<header class="content-hero"><div class="container">
-<p class="eyebrow">Biblioteca técnica</p>
-<h1>{e(title)}</h1>
-<p class="content-lead">{e(desc)}</p>
-</div></header>
-<section class="section library-section"><div class="container">
-<div class="library-list">{''.join(cards) if cards else '<p>Nenhum conteúdo indexável neste hub ainda.</p>'}</div>
-<div class="lead-inline" style="margin-top:2rem" data-cta-position="hub-footer">
+    # Never publish an empty library section or "0 guias" / empty-index copy.
+    if cards:
+        library_block = (
+            '<section class="section library-section"><div class="container">'
+            f'<div class="library-list">{"".join(cards)}</div>'
+            "</div></section>"
+        )
+    else:
+        library_block = ""
+    case_cta = f"""
+<section class="section section--tight" data-hub-case-cta><div class="container">
+<div class="lead-inline" data-cta-position="hub-footer">
 <div class="lead-inline-copy"><span>Próximo passo</span><strong>Levou uma dúvida do hub para o seu contrato?</strong>
 <p>Envie o tema e os documentos principais. Retorno com enquadramento inicial.</p></div>
 <div class="lead-inline-actions">
@@ -520,6 +522,16 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
 <a class="button button-secondary" data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a>
 </div></div>
 </div></section>
+"""
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero"><div class="container">
+<p class="eyebrow">Biblioteca técnica</p>
+<h1>{e(title)}</h1>
+<p class="content-lead">{e(desc)}</p>
+</div></header>
+{library_block}
+{case_cta}
 """
     graph = [
         ORG_JSONLD,
