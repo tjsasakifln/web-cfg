@@ -890,6 +890,8 @@
           form_step: formStep,
         });
       }, true);
+      // Exposes readiness for deterministic UI verification after all handlers bind.
+      form.dataset.formReady = 'true';
     }
 
     // Thank-you page: real form success (Netlify redirect target)

@@ -17,14 +17,14 @@
       "editorial_audit": {
         "ok": true,
         "publish_fail_count": 0,
-        "p0_issue_count": 30
+        "p0_issue_count": 25
       }
     },
     "determinism": {
-      "first_hash": "b49477086c91dbc9e35c3ae5e6db8d4abe5a2ac5a52925aa1041a0623a362d68",
-      "second_hash": "b49477086c91dbc9e35c3ae5e6db8d4abe5a2ac5a52925aa1041a0623a362d68",
+      "first_hash": "b081093dfc3e9c083ec85308b7d65e72862a96b55907b6d3fb300a682fcaa4ec",
+      "second_hash": "b081093dfc3e9c083ec85308b7d65e72862a96b55907b6d3fb300a682fcaa4ec",
       "deterministic": true,
-      "page_count": 30
+      "page_count": 31
     },
     "tracking": {
       "events_declared_or_handled": [
@@ -43,7 +43,7 @@
     "regression": {
       "conteudos_pages": 120,
       "missing_pillars": [],
-      "main_sitemap_urls": 40,
+      "main_sitemap_urls": 48,
       "ok": true
     },
     "data_forbidden": {
@@ -55,7 +55,7 @@
       "generated_from": "data/pseo/registry.json",
       "page_count": 23,
       "publish_fail_count": 0,
-      "p0_issue_count": 30,
+      "p0_issue_count": 25,
       "pages": [
         {
           "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
@@ -293,12 +293,6 @@
               "evidence": "MRS-PREFEITURA"
             },
             {
-              "code": "internal_language_public",
-              "severity": "P0",
-              "message": "Linguagem interna de governança/pipeline no HTML público",
-              "evidence": "datalake"
-            },
-            {
               "code": "sample_concentration",
               "severity": "P0",
               "message": "Amostra concentrada/insuficiente: buyers<3",
@@ -356,12 +350,6 @@
               "evidence": "edificacoes-publicas"
             },
             {
-              "code": "internal_language_public",
-              "severity": "P0",
-              "message": "Linguagem interna de governança/pipeline no HTML público",
-              "evidence": "datalake"
-            },
-            {
               "code": "missing_accents",
               "severity": "P1",
               "message": "Termo técnico sem acentuação editorial",
@@ -406,12 +394,6 @@
           },
           "approval_recommendation": "reject_or_noindex",
           "issues": [
-            {
-              "code": "internal_language_public",
-              "severity": "P0",
-              "message": "Linguagem interna de governança/pipeline no HTML público",
-              "evidence": "datalake"
-            },
             {
               "code": "missing_accents",
               "severity": "P1",
@@ -464,12 +446,6 @@
               "evidence": "edificacoes-publicas"
             },
             {
-              "code": "internal_language_public",
-              "severity": "P0",
-              "message": "Linguagem interna de governança/pipeline no HTML público",
-              "evidence": "datalake"
-            },
-            {
               "code": "missing_accents",
               "severity": "P1",
               "message": "Termo técnico sem acentuação editorial",
@@ -513,14 +489,7 @@
             "intent": "validar_preco_margem"
           },
           "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "internal_language_public",
-              "severity": "P0",
-              "message": "Linguagem interna de governança/pipeline no HTML público",
-              "evidence": "datalake"
-            }
-          ],
+          "issues": [],
           "intent": "estimar_valores_dispersao",
           "evidence_kind": null,
           "direct_evidence_count": 0,
@@ -633,7 +602,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "562e4bb0301a3632cf95e941757183e8129ad77169485a72a46391ef36731927"
+          "page_material_hash": "3c51da9b37d54bae134468f10df0c9e123fff4021b11ab5ff1e8cf897f8ada07"
         },
         {
           "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
@@ -696,7 +665,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": "grok-build-editorial-audit",
-          "page_material_hash": "211f61e52226dae89aa9c9c912b500f9a8c49897451c2a2c5bbe1c7950cfefbd"
+          "page_material_hash": "805ca57d06a5dcb679bb67045248b390613743f10862b4580b3f219c95f6020b"
         },
         {
           "page_id": "radar-saneamento-hidraulica-sc",
@@ -747,7 +716,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "6bcec90b32a51d09103983fcd64d4f9c04dbb060ff592400f01f67829776d06f"
+          "page_material_hash": "e175f615a8048f4789d08d5077e23d3d58b1685db26d4fff290fd6ef51d174da"
         },
         {
           "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
@@ -798,7 +767,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "48fcd1fb675c59a8f73b520f121d5c3e9075fdef0cfaeaeb310c85e6b1924cd4"
+          "page_material_hash": "99df985a4a8fc4a1d6f3ce1505734956bf0be0e33f26eb044dcfb14d3e0d9c28"
         },
         {
           "page_id": "radar-edificacoes-publicas-sc",
@@ -849,7 +818,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "71c13e67a39a911cc69b82cc7d3491ef4e8dea552017914894cd2604fc6cc263"
+          "page_material_hash": "08970782dcf759cc64ddf9b70b7f41754ba7637bcf05782a2b34fa0ca364e39e"
         },
         {
           "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
@@ -900,7 +869,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "f886ef51975adef0d090fc09ac1d9c15921dcb9c0da469a0aa8c121a6bdfc2cf"
+          "page_material_hash": "b7fd39c71123209d2aaf1d75fdb032c2bda36813bf5b33fc47ca50c485e5dbfb"
         },
         {
           "page_id": "radar-edificacoes-publicas-rs",
@@ -951,7 +920,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "2e5eec1a0e46029af0f2d1121625dfdfb1bbcf7911a5729740f361914d351b86"
+          "page_material_hash": "425810cf20eddc6d1033b3abaab5e1e2df13f3e06a2839a75444c153d852103f"
         },
         {
           "page_id": "prob-orcamento-edital",

@@ -1,95 +1,50 @@
 {
-  "schema_version": "1.0.0",
-  "derived_at": "2026-08-04T15:41:18Z",
-  "commit_sha": "89bc270893cc8cd0ba94180e784cbbb0b8aa4526",
-  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "schema_version": "3.0.0",
+  "derived_at": "2026-08-05T01:19:12Z",
+  "commit_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
+  "commit_sha_role": "informational_only",
+  "terminal_status": "READY_FOR_RELEASE",
   "registry_counts": {
-    "EDITORIAL_REVIEWED": 11,
+    "INDEXABLE": 3,
+    "EDITORIAL_REVIEWED": 8,
     "REJECTED": 1
   },
+  "first_cohort": {
+    "total": 3,
+    "editorial_reviewed": 0,
+    "human_approved": 3,
+    "indexable": 3,
+    "page_ids": [
+      "lei-limite-25-50",
+      "guia-checklist-aditivo",
+      "lei-item-novo-desconto"
+    ]
+  },
   "wave1": {
-    "total": 11,
-    "editorial_reviewed": 11,
+    "total": 3,
+    "editorial_reviewed": 0,
+    "human_approved": 3,
+    "indexable": 3,
+    "page_ids": [
+      "lei-limite-25-50",
+      "guia-checklist-aditivo",
+      "lei-item-novo-desconto"
+    ]
+  },
+  "editorial_backlog": {
+    "total": 8,
+    "editorial_reviewed": 8,
     "human_approved": 0,
     "indexable": 0,
-    "pages": [
-      {
-        "page_id": "guia-checklist-aditivo",
-        "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "guia-docs-reequilibrio",
-        "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "guia-glosa",
-        "url": "/guias-contratos-obras/contestar-glosa-medicao/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "guia-notificacao-atraso",
-        "url": "/guias-contratos-obras/responder-notificacao-atraso/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "lei-art124-alteracao-obra",
-        "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "lei-atraso-administracao",
-        "url": "/lei-14133-obras/atraso-imputavel-administracao/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "lei-item-novo-desconto",
-        "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "lei-limite-25-50",
-        "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "lei-parcela-incontroversa",
-        "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "lei-reequilibrio-reajuste",
-        "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      },
-      {
-        "page_id": "lei-servico-sem-aditivo",
-        "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
-        "registry_status": "EDITORIAL_REVIEWED",
-        "robots": "noindex,follow",
-        "noindex": true
-      }
+    "page_ids": [
+      "guia-docs-reequilibrio",
+      "guia-glosa",
+      "guia-notificacao-atraso",
+      "lei-art124-alteracao-obra",
+      "lei-atraso-administracao",
+      "lei-parcela-incontroversa",
+      "lei-reequilibrio-reajuste",
+      "lei-servico-sem-aditivo"
     ]
   },
   "rejected": {
@@ -98,20 +53,357 @@
       "jur-sumula-260-art"
     ]
   },
+  "release": {
+    "approved_count": 3,
+    "released_count": 3,
+    "cohort_complete": true,
+    "released_page_ids": [
+      "lei-limite-25-50",
+      "guia-checklist-aditivo",
+      "lei-item-novo-desconto"
+    ],
+    "awaiting_page_ids": []
+  },
   "public_inventory": {
-    "conteudos_indexable": 22,
-    "hub_claimed_guides": 22,
-    "legacy_indexable_public_surface": 22,
-    "wave1_awaiting_approval": 11,
-    "wave1_published": 0,
-    "note": "Do not mix legacy indexable count with Wave 1 awaiting approval."
+    "conteudos_indexable": 20,
+    "hub_claimed_guides": 20,
+    "legacy_indexable_public_surface": 20,
+    "first_cohort_awaiting_approval": 0,
+    "first_cohort_published": 3,
+    "editorial_backlog_awaiting_approval": 8,
+    "note": "Only FIRST_COHORT_IDS may become indexable in this release."
   },
   "sitemaps": {
-    "editorial_locs": 0,
+    "editorial_locs": 5,
     "jurisprudencia_locs": 0,
-    "editorial_urls": []
+    "editorial_urls": [
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "/lei-14133-obras/",
+      "/guias-contratos-obras/"
+    ],
+    "expected_urls": [
+      "/guias-contratos-obras/",
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/",
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    ],
+    "valid_page_urls": [
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    ],
+    "approved_hubs": [
+      "/guias-contratos-obras/",
+      "/lei-14133-obras/"
+    ]
   },
-  "false_reviewer_stamps": [],
+  "surface_audit": [
+    {
+      "page_id": "guia-checklist-aditivo",
+      "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
+      "html_exists": true,
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": true
+    },
+    {
+      "page_id": "guia-docs-reequilibrio",
+      "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "sitemaps": [],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "guia-glosa",
+      "url": "/guias-contratos-obras/contestar-glosa-medicao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/",
+      "sitemaps": [],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "guia-notificacao-atraso",
+      "url": "/guias-contratos-obras/responder-notificacao-atraso/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/",
+      "sitemaps": [],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "jur-sumula-260-art",
+      "url": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "registry_status": "REJECTED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "sitemaps": [],
+      "hub": "/jurisprudencia-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-art124-alteracao-obra",
+      "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-atraso-administracao",
+      "url": "/lei-14133-obras/atraso-imputavel-administracao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-item-novo-desconto",
+      "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
+      "html_exists": true,
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": true
+    },
+    {
+      "page_id": "lei-limite-25-50",
+      "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
+      "html_exists": true,
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": true
+    },
+    {
+      "page_id": "lei-parcela-incontroversa",
+      "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-reequilibrio-reajuste",
+      "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-servico-sem-aditivo",
+      "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    }
+  ],
+  "wave1_pages": [
+    {
+      "page_id": "guia-checklist-aditivo",
+      "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
+      "html_exists": true,
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": true
+    },
+    {
+      "page_id": "guia-docs-reequilibrio",
+      "url": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/",
+      "sitemaps": [],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "guia-glosa",
+      "url": "/guias-contratos-obras/contestar-glosa-medicao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/",
+      "sitemaps": [],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "guia-notificacao-atraso",
+      "url": "/guias-contratos-obras/responder-notificacao-atraso/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/",
+      "sitemaps": [],
+      "hub": "/guias-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "jur-sumula-260-art",
+      "url": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "registry_status": "REJECTED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "sitemaps": [],
+      "hub": "/jurisprudencia-contratos-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-art124-alteracao-obra",
+      "url": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-atraso-administracao",
+      "url": "/lei-14133-obras/atraso-imputavel-administracao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-item-novo-desconto",
+      "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
+      "html_exists": true,
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": true
+    },
+    {
+      "page_id": "lei-limite-25-50",
+      "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
+      "html_exists": true,
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": true
+    },
+    {
+      "page_id": "lei-parcela-incontroversa",
+      "url": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-reequilibrio-reajuste",
+      "url": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    },
+    {
+      "page_id": "lei-servico-sem-aditivo",
+      "url": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "registry_status": "EDITORIAL_REVIEWED",
+      "valid_indexable": false,
+      "html_exists": true,
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+      "sitemaps": [],
+      "hub": "/lei-14133-obras/",
+      "hub_listed": false
+    }
+  ],
   "contradictions": [],
   "ok": true,
   "will_not_impersonate_named_human": true,

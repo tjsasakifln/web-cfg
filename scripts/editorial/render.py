@@ -18,6 +18,7 @@ from scripts.pseo.html_shell import (
 )
 from scripts.editorial.sources import load_manifest
 from scripts.editorial.checklist_ui import render_structured_checklist
+from scripts.editorial.registry import material_hash
 
 
 def _md_inline(text: str) -> str:
@@ -444,6 +445,7 @@ def render_page(page: dict[str, Any]) -> str:
 </aside>
 </div>
 """
+    current_material_hash = material_hash(page)
     return page_shell(
         title=full_title,
         description=desc,
@@ -460,6 +462,11 @@ def render_page(page: dict[str, Any]) -> str:
             "journey": page.get("journey") or "",
             "page-id": page.get("page_id") or "",
         },
+        extra_head=(
+            '<meta name="editorial-material-hash" content="'
+            + e(current_material_hash)
+            + '"/>'
+        ),
     )
 
 

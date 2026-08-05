@@ -32,23 +32,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from scripts.editorial.registry import load_registry, save_registry  # noqa: E402
+from scripts.editorial.registry import approval_is_current, load_registry, save_registry  # noqa: E402
+from scripts.editorial.cohort import FIRST_COHORT_IDS, FIRST_COHORT_SET  # noqa: E402
 from scripts.editorial.truth import derive_editorial_truth  # noqa: E402
 
 
 def valid_human_approved(pages: list[dict]) -> list[dict]:
-    out = []
-    for p in pages:
-        if p.get("status") not in {"HUMAN_APPROVED", "INDEXABLE"}:
-            continue
-        ap = p.get("approval") or {}
-        reviewer = str(ap.get("reviewer") or "")
-        if not reviewer or reviewer.lower() in {"tester", "ci", "bot", "agent", "operator"}:
-            continue
-        if p.get("page_id") == "jur-sumula-260-art":
-            continue
-        out.append(p)
-    return out
+    """Return only current, named-human approvals in the explicitly released cohort."""
+    return [
+        page
+        for page in pages
+        if page.get("page_id") in FIRST_COHORT_SET
+        and page.get("status") in {"HUMAN_APPROVED", "INDEXABLE"}
+        and approval_is_current(page)
+    ]
 
 
 def apply_cannibalization_dispositions(pages: list[dict], approved: list[dict]) -> list[str]:
@@ -89,8 +86,20 @@ def main() -> int:
         "ts": datetime.now(timezone.utc).isoformat(),
         "valid_human_approved": len(approved),
         "page_ids": [p.get("page_id") for p in approved],
-        "wave1_human_approved_truth": truth.get("wave1", {}).get("human_approved"),
-        "wave1_indexable_truth": truth.get("wave1", {}).get("indexable"),
+        # Explicitly distinguish an individual approval from a released URL.
+        "approved_count": len(approved),
+        "released_count": len(
+            [p for p in approved if p.get("status") in {"INDEXABLE", "PUBLISHED"}]
+        ),
+        "cohort_complete": False,
+        "released_page_ids": [
+            p.get("page_id") for p in approved if p.get("status") in {"INDEXABLE", "PUBLISHED"}
+        ],
+        "awaiting_page_ids": [
+            page_id for page_id in FIRST_COHORT_IDS if page_id not in {p.get("page_id") for p in approved}
+        ],
+        "first_cohort_human_approved_truth": truth.get("first_cohort", {}).get("human_approved"),
+        "first_cohort_indexable_truth": truth.get("first_cohort", {}).get("indexable"),
         "actions": [],
         "gsc_submit_candidates": [],
         "blocked": [],
@@ -145,8 +154,26 @@ def main() -> int:
             "sitemap_counts": br.get("sitemap_counts"),
         }
         for u in br.get("indexable_urls") or []:
-            report["gsc_submit_candidates"].append(u)
+            # Absolute production URLs for GSC human submit list
+            path = str(u)
+            if path.startswith("http://") or path.startswith("https://"):
+                report["gsc_submit_candidates"].append(path)
+            else:
+                report["gsc_submit_candidates"].append(
+                    f"https://confenge.com.br{path if path.startswith('/') else '/' + path}"
+                )
         report["actions"].append("robots_sitemaps_via_editorial_build")
+        post_truth = derive_editorial_truth(load_registry())
+        release = post_truth.get("release") or {}
+        report.update(
+            {
+                "approved_count": release.get("approved_count", report["approved_count"]),
+                "released_count": release.get("released_count", report["released_count"]),
+                "cohort_complete": release.get("cohort_complete", False),
+                "released_page_ids": release.get("released_page_ids", report["released_page_ids"]),
+                "awaiting_page_ids": release.get("awaiting_page_ids", report["awaiting_page_ids"]),
+            }
+        )
     except Exception as exc:  # noqa: BLE001
         report["ok"] = False
         report["blocked"].append(f"build_failed:{exc}")

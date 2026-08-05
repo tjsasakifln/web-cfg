@@ -24,9 +24,13 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Install dependencies
-        # Hard fail on lock desync — never soft-fallback to npm install
+      - name: Install dependencies (two clean installs)
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        # Keep two clean installs here to make lockfile determinism explicit.
         run: |
+          rm -rf node_modules
+          npm ci
+          rm -rf node_modules
           npm ci
           pip install pytest
       - name: Workflow gate shape
@@ -34,6 +38,7 @@ jobs:
       - name: Unit and brand/copy/design gates
         run: |
           npm run editorial:test
+          npm run editorial:build
           npm run test:inbound-gates
           npm run editorial:truth
           npm run test:brand
@@ -78,6 +83,10 @@ jobs:
           LH_PAGES: "/,/diretoria-b2g/,/conteudos/"
         run: npm run test:lighthouse
         continue-on-error: false
+      - name: Tools UI/UX E2E
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run test:tools-uiux-e2e
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v7
@@ -86,5 +95,6 @@ jobs:
           path: |
             docs/lighthouse-runs/
             docs/uiux-evidence/axe-report.json
+            docs/uiux-tools-remediation/evidence/
             seo/pseo-*.json
           if-no-files-found: ignore

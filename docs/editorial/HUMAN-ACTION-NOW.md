@@ -1,270 +1,77 @@
-# HUMAN ACTION NOW — Wave 1
+# Ação humana obrigatória — primeira coorte editorial
 
-Pacote curto para ato humano externo. **Não executar estes comandos como agente, CI, bot ou tester.**
+**Estado:** pronto apenas para revisão humana individual. Nenhum agente, CI ou bot aprova páginas, publica URLs ou faz merge.
 
-- Commit: `89bc270893cc8cd0ba94180e784cbbb0b8aa4526`
-- Terminal: `READY_FOR_NAMED_HUMAN_APPROVAL`
-- HUMAN_APPROVED=0
-- INDEXABLE_WAVE1=0
-- AWAITING_HUMAN=11
-- REJECTED=1
-- UI: https://confenge.com.br/ops/wave1-review.html
+A aprovação vale para o conteúdo material canônico, as fontes exatas e o deploy preview, não para uma URL de produção nem para um SHA meramente informativo.
 
-## Regras
+## Antes de cada decisão
 
-- Aprovar somente com checklist completo, hash material e --confirm.
-- Proibido approve-all / lote.
-- Proibido carimbar Tiago Sasaki sem ato humano real.
-- Resolver canibalização antes de indexar.
-- jur-sumula-260-art permanece REJECTED.
-- Substitua `SEU_NOME_REAL`.
+1. Atualize a branch do PR e execute `npm run editorial:preview -- --expected-head "$(git rev-parse HEAD)"`.
+2. Confirme HTTP 200 e o mesmo SHA em [https://deploy-preview-54--confenge.netlify.app/.well-known/build-info.json](https://deploy-preview-54--confenge.netlify.app/.well-known/build-info.json) e no [runtime packet](https://deploy-preview-54--confenge.netlify.app/.well-known/editorial-review-packet.json).
+3. Revise a URL de preview, as fontes e a decisão de canibalização da página abaixo.
+4. Rode somente um comando de aprovação por vez, fora de CI. O CLI volta a verificar o preview antes de gravar qualquer decisão.
 
-## NÃO APROVAR
+## Limite de 25% e 50% no art. 125: o que conta no aditivo de obra
 
-- **`jur-sumula-260-art`** — REJECTED.
-  - hash: `85c0b8f7dea0db73dd88354d7d87c0d241d19a8b16a1664d9d2998cb277b1dfe`
-
-## 11 páginas aguardando humano
-
-### guia-checklist-aditivo
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/
-3. **Fontes:** lei-14133-art124,lei-14133-art125,lei-14133-planalto,agu-alteracoes-contratuais-2024
-4. **Material hash:** `6d693bdf9d530603c30b633931c49be2fc6d358d299db74dd957652c32610824`
-5. **Canibalização:** POSSIBLE_OVERLAP_REVIEW · peers: /conteudos/erro-de-projeto-gera-aditivo-obra-publica/
-6. **Risco:** Dispositivos: art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
+- Preview: https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/limite-25-50-aditivo-obra/
+- Material hash v3: `52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5`
+- Fontes a conferir: `lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024,agu-on-50-2014`
+- Concorrente interno: `/conteudos/limite-aditivo-25-50-obra-publica/`
+- Risco de canibalização: alto: definir uma única canônica antes de indexar; 301 ou noindex do peer somente após decisão humana.
 
 ```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
+ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
+  --reviewer "<nome humano real>" \
+  --page-id lei-limite-25-50 \
+  --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
+  --sources lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024,agu-on-50-2014 \
+  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
+  --material-hash 52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5 \
+  --preview-base-url https://deploy-preview-54--confenge.netlify.app \
+  --confirm \
+  --indexable
+```
+
+## Checklist de pedido de aditivo em obra pública
+
+- Preview: https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/
+- Material hash v3: `01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885`
+- Fontes a conferir: `lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024`
+- Concorrente interno: `/conteudos/erro-de-projeto-gera-aditivo-obra-publica/`
+- Risco de canibalização: parcial: diferenciar intenção (erro de projeto versus checklist transversal) e manter linkagem contextual.
+
+```bash
+ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
+  --reviewer "<nome humano real>" \
   --page-id guia-checklist-aditivo \
-  --notes "Revisão humana de guia-checklist-aditivo; fontes e material_hash conferidos." \
-  --sources lei-14133-art124,lei-14133-art125,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 6d693bdf9d530603c30b633931c49be2fc6d358d299db74dd957652c32610824 \
-  --confirm \
-  --indexable
-```
-
-### guia-docs-reequilibrio
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/guias-contratos-obras/documentos-pedido-reequilibrio/
-3. **Fontes:** lei-14133-art130-131,lei-14133-art136,lei-14133-planalto
-4. **Material hash:** `31f1b2c6a085441f7d24423868d6fb8572a9d060faba2a0f62ba1ed5b0a6b1fa`
-5. **Canibalização:** PEER_NOINDEX_OR_LOW_RISK · peers: /conteudos/documentos-reequilibrio-obra-publica/
-6. **Risco:** Dispositivos: art.130, art.131 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id guia-docs-reequilibrio \
-  --notes "Revisão humana de guia-docs-reequilibrio; fontes e material_hash conferidos." \
-  --sources lei-14133-art130-131,lei-14133-art136,lei-14133-planalto \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 31f1b2c6a085441f7d24423868d6fb8572a9d060faba2a0f62ba1ed5b0a6b1fa \
-  --confirm \
-  --indexable
-```
-
-### guia-glosa
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/guias-contratos-obras/contestar-glosa-medicao/
-3. **Fontes:** lei-14133-art141-143,lei-14133-planalto
-4. **Material hash:** `f69bcafc8f7556ecaad49fc1a2eee538f373726f4fc950af2a221af6289cf350`
-5. **Canibalização:** POSSIBLE_OVERLAP_REVIEW · peers: /conteudos/glosa-de-medicao-obra-publica/
-6. **Risco:** Dispositivos: art.143 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id guia-glosa \
-  --notes "Revisão humana de guia-glosa; fontes e material_hash conferidos." \
-  --sources lei-14133-art141-143,lei-14133-planalto \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash f69bcafc8f7556ecaad49fc1a2eee538f373726f4fc950af2a221af6289cf350 \
-  --confirm \
-  --indexable
-```
-
-### guia-notificacao-atraso
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/guias-contratos-obras/responder-notificacao-atraso/
-3. **Fontes:** lei-14133-art115,lei-14133-planalto
-4. **Material hash:** `688321dceae242bc1c212fe2ae86fd21d8ba4aeea3c3a26ac49f7d3a211eab11`
-5. **Canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/resposta-notificacao-atraso-obra-publica/
-6. **Risco:** Dispositivos: art.115, art.155 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id guia-notificacao-atraso \
-  --notes "Revisão humana de guia-notificacao-atraso; fontes e material_hash conferidos." \
-  --sources lei-14133-art115,lei-14133-planalto \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 688321dceae242bc1c212fe2ae86fd21d8ba4aeea3c3a26ac49f7d3a211eab11 \
-  --confirm \
-  --indexable
-```
-
-### lei-art124-alteracao-obra
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/lei-14133-obras/art-124-alteracao-contratual-obra/
-3. **Fontes:** lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024
-4. **Material hash:** `07caf5f73084efe74e78e3ee4da3827403fd22fee7a6c4613e36f693a2306b30`
-5. **Canibalização:** POSSIBLE_OVERLAP_REVIEW · peers: /conteudos/erro-de-projeto-gera-aditivo-obra-publica/
-6. **Risco:** Dispositivos: art.124, art.125, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id lei-art124-alteracao-obra \
-  --notes "Revisão humana de lei-art124-alteracao-obra; fontes e material_hash conferidos." \
+  --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
   --sources lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 07caf5f73084efe74e78e3ee4da3827403fd22fee7a6c4613e36f693a2306b30 \
+  --material-hash 01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885 \
+  --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
 ```
 
-### lei-atraso-administracao
+## Item novo no aditivo: preço e relação proposta/orçamento-base
 
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/lei-14133-obras/atraso-imputavel-administracao/
-3. **Fontes:** lei-14133-art115,lei-14133-planalto,lei-14133-art130-131
-4. **Material hash:** `29023ca69d9d846fe8fa17563016af6c9c3f3aeb98a4f66e1f7992e52e94dda4`
-5. **Canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/atraso-obra-culpa-administracao/
-6. **Risco:** Dispositivos: art.115, art.124, art.130 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
+- Preview: https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/
+- Material hash v3: `06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f`
+- Fontes a conferir: `lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa`
+- Concorrente interno: `/conteudos/desconto-da-proposta-em-item-novo-aditivo/`
+- Risco de canibalização: alto: escolher canônica e impedir dual-index antes da publicação.
 
 ```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id lei-atraso-administracao \
-  --notes "Revisão humana de lei-atraso-administracao; fontes e material_hash conferidos." \
-  --sources lei-14133-art115,lei-14133-planalto,lei-14133-art130-131 \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 29023ca69d9d846fe8fa17563016af6c9c3f3aeb98a4f66e1f7992e52e94dda4 \
-  --confirm \
-  --indexable
-```
-
-### lei-item-novo-desconto
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/
-3. **Fontes:** lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa
-4. **Material hash:** `4c39b0ca89a6cd3ae34003efea5b5e56c248c702db7bdbd34c0e0f28543ae28c`
-5. **Canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/desconto-da-proposta-em-item-novo-aditivo/
-6. **Risco:** Dispositivos: art.127, art.124, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
+ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
+  --reviewer "<nome humano real>" \
   --page-id lei-item-novo-desconto \
-  --notes "Revisão humana de lei-item-novo-desconto; fontes e material_hash conferidos." \
+  --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
   --sources lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 4c39b0ca89a6cd3ae34003efea5b5e56c248c702db7bdbd34c0e0f28543ae28c \
+  --material-hash 06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f \
+  --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
 ```
 
-### lei-limite-25-50
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/
-3. **Fontes:** lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024
-4. **Material hash:** `c86f6e0dea8011c697990d419d13accfc4960775ab16132400d81529cf345465`
-5. **Canibalização:** BLOCKED_UNTIL_HUMAN_CHOOSES_CANONICAL · peers: /conteudos/limite-aditivo-25-50-obra-publica/
-6. **Risco:** Dispositivos: art.125, art.124, art.126 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id lei-limite-25-50 \
-  --notes "Revisão humana de lei-limite-25-50; fontes e material_hash conferidos." \
-  --sources lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash c86f6e0dea8011c697990d419d13accfc4960775ab16132400d81529cf345465 \
-  --confirm \
-  --indexable
-```
-
-### lei-parcela-incontroversa
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/lei-14133-obras/parcela-incontroversa-medicao-pagamento/
-3. **Fontes:** lei-14133-art141-143,lei-14133-planalto
-4. **Material hash:** `eea0bca5985695d3613b79422d1a7067c3abbb355507de7168a11dd3dae76cca`
-5. **Canibalização:** PEER_NOINDEX_OR_LOW_RISK · peers: /conteudos/parcela-incontroversa-medicao-contrato-publico/
-6. **Risco:** Dispositivos: art.143, art.141 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id lei-parcela-incontroversa \
-  --notes "Revisão humana de lei-parcela-incontroversa; fontes e material_hash conferidos." \
-  --sources lei-14133-art141-143,lei-14133-planalto \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash eea0bca5985695d3613b79422d1a7067c3abbb355507de7168a11dd3dae76cca \
-  --confirm \
-  --indexable
-```
-
-### lei-reequilibrio-reajuste
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/lei-14133-obras/reequilibrio-reajuste-repactuacao/
-3. **Fontes:** lei-14133-art130-131,lei-14133-art136,lei-14133-planalto
-4. **Material hash:** `0d2647d1bfcb957abf9ffc6c296598edbc0757c76aeb51d60f4c44f74a149223`
-5. **Canibalização:** NO_KNOWN_INDEXABLE_OVERLAP · peers: 
-6. **Risco:** Dispositivos: art.130, art.131, art.136 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id lei-reequilibrio-reajuste \
-  --notes "Revisão humana de lei-reequilibrio-reajuste; fontes e material_hash conferidos." \
-  --sources lei-14133-art130-131,lei-14133-art136,lei-14133-planalto \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 0d2647d1bfcb957abf9ffc6c296598edbc0757c76aeb51d60f4c44f74a149223 \
-  --confirm \
-  --indexable
-```
-
-### lei-servico-sem-aditivo
-
-1. **Máquina:** RECOMMEND_APPROVE (risk=low)
-2. **Preview:** https://confenge.com.br/lei-14133-obras/servico-executado-sem-termo-aditivo/
-3. **Fontes:** lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024
-4. **Material hash:** `4151ac67b83031339c3d708faaea24737b269ec1b697ea1b5ebc6c10042e5392`
-5. **Canibalização:** PEER_ALREADY_NOINDEX_OR_CONSOLIDATED · peers: /conteudos/servico-executado-sem-termo-aditivo/
-6. **Risco:** Dispositivos: art.124, art.132, art.125 · Conteúdo técnico-informativo; não substitui assessoria do caso concreto. · Ressalvas do packet: Conteúdo técnico-informativo; não substitui assessoria jurídica do caso concreto.
-7. **Comando:**
-
-```bash
-python3 scripts/editorial/approve_cli.py \
-  --reviewer "SEU_NOME_REAL" \
-  --page-id lei-servico-sem-aditivo \
-  --notes "Revisão humana de lei-servico-sem-aditivo; fontes e material_hash conferidos." \
-  --sources lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 4151ac67b83031339c3d708faaea24737b269ec1b697ea1b5ebc6c10042e5392 \
-  --confirm \
-  --indexable
-```
-
+As outras 8 páginas seguem `EDITORIAL_REVIEWED` e noindex; `jur-sumula-260-art` segue `REJECTED`. Após um commit não material, confirme e registre o novo preview com `python3 scripts/editorial/preview.py --reconfirm-approval --page-id PAGE_ID --expected-head "$(git rev-parse HEAD)"`; esse comando não cria aprovação. Qualquer mudança material remove a aprovação e retorna a página para `REVIEW_REQUIRED`.

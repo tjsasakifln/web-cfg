@@ -9,7 +9,7 @@ Coorte preparada: `docs/editorial/WAVE1-FIRST-COHORT.md`
 ## Pré-condições
 
 - [ ] `npm run editorial:truth` → `READY_FOR_NAMED_HUMAN_APPROVAL` ou estado coerente pós-approve
-- [ ] Material hashes do pack batem com `HUMAN-ACTION-NOW.md`
+- [ ] Material hashes do pacote batem com `WAVE1-HUMAN-REVIEW-PACKET.json` e o registro atual
 - [ ] Branch de trabalho limpa; sem force-push em `main`
 - [ ] Decisão de canibalização **por página** registrada em nota do approve
 
@@ -174,7 +174,7 @@ npm run editorial:release-approved
 
 ## O que este runbook não autoriza
 
-- Aprovar as 11 páginas de uma vez
+- Aprovar páginas fora da primeira coorte de três itens
 - Indexar `jur-sumula-260-art`
 - Indexar pilotos / inteligência em massa
 - Declarar tráfego/receita/leads sem export GSC/revops real

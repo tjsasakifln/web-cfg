@@ -28,12 +28,15 @@ from scripts.editorial.registry import (  # noqa: E402
     indexable_pages,
     load_registry,
     material_hash,
+    approval_is_current,
     revoke_auto_approvals,
     save_registry,
     upsert_page,
 )
 from scripts.editorial.render import render_hub, render_page  # noqa: E402
 from scripts.editorial.sources import load_manifest, page_sources_ok  # noqa: E402
+from scripts.editorial.cohort import FIRST_COHORT_IDS, FIRST_COHORT_SET  # noqa: E402
+from scripts.editorial.preview import write_preview_packet  # noqa: E402
 
 PAGES_DIR = ROOT / "data" / "editorial" / "pages"
 REPORT_PATH = ROOT / "seo" / "editorial-build-report.json"
@@ -245,17 +248,17 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
     """Build pages. Max automated status = EDITORIAL_REVIEWED."""
     defs = load_page_defs()
     reg = load_registry()
-    revoked = revoke_auto_approvals(reg)
     man = load_manifest()
+    revoked = revoke_auto_approvals(reg, source_manifest=man)
     bodies: list[str] = []
     results = []
 
     for page in defs:
-        page["material_hash"] = material_hash(page)
+        page["material_hash"] = material_hash(page, man)
         # Do not carry INDEXABLE from JSON defs
         page.pop("status", None)
         page.pop("approval", None)
-        upsert_page(reg, page)
+        upsert_page(reg, page, source_manifest=man)
 
     for page in defs:
         stored = get_page(reg, page["page_id"]) or page
@@ -280,6 +283,25 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                         "reason": "official_sumula_text_date_url_not_verified",
                     }
                 )
+
+        # This release has one explicit cohort. A valid approval outside it may
+        # remain HUMAN_APPROVED for a later release, but it cannot render/index now.
+        if merged.get("status") in INDEXABLE_STATES and merged.get("page_id") not in FIRST_COHORT_SET:
+            stored_outside = get_page(reg, merged["page_id"])
+            if stored_outside:
+                stored_outside["status"] = (
+                    "HUMAN_APPROVED"
+                    if approval_is_current(stored_outside, man)
+                    else "REVIEW_REQUIRED"
+                )
+                stored_outside.setdefault("history", []).append(
+                    {
+                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "event": "outside_first_cohort_indexing_blocked",
+                        "to": stored_outside["status"],
+                    }
+                )
+                merged = {**merged, **stored_outside}
 
         # Temporary status for gate (INDEXABLE only if truly approved)
         html = render_page(merged)
@@ -315,7 +337,9 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             }
         )
 
-    indexable = indexable_pages(reg)
+    indexable = indexable_pages(
+        reg, allowed_page_ids=FIRST_COHORT_SET, source_manifest=man
+    )
 
     hubs = [
         {
@@ -400,12 +424,15 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
     # Strip wave1 URLs from main sitemap.xml if not indexable
     _sync_main_sitemap(page_idx)
 
-    save_registry(reg)
+    save_registry(reg, source_manifest=man)
     docs_reg = ROOT / "docs" / "editorial" / "EDITORIAL-REGISTRY.json"
     if docs_reg.parent.exists():
         docs_reg.write_text(
             json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
+    # This deploy-bound runtime packet is copied into the public artifact by
+    # build:site and is the only acceptable human-review target for this PR.
+    write_preview_packet(reg)
 
     report = {
         "ok": not sm_issues,
@@ -420,12 +447,22 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
         "awaiting_human_approval": [
             r["url"]
             for r in results
-            if r["status"] == "EDITORIAL_REVIEWED" and r["gate_ok"]
+            if r["page_id"] in FIRST_COHORT_SET
+            and r["status"] == "EDITORIAL_REVIEWED"
+            and r["gate_ok"]
+        ],
+        "editorial_backlog_awaiting_human": [
+            r["url"]
+            for r in results
+            if r["page_id"] not in FIRST_COHORT_SET
+            and r["page_id"] != "jur-sumula-260-art"
+            and r["status"] == "EDITORIAL_REVIEWED"
+            and r["gate_ok"]
         ],
         "rejected": [r["url"] for r in results if r["status"] == "REJECTED"],
         "terminal_hint": (
-            "BLOCKED_WITH_EXACT_EXTERNAL_ACTIONS"
-            if len(indexable) == 0
+            "READY_FOR_NAMED_HUMAN_APPROVAL"
+            if len(indexable) == 0 and len([r for r in results if r["page_id"] in FIRST_COHORT_SET and r["status"] == "EDITORIAL_REVIEWED"]) == len(FIRST_COHORT_SET)
             else "PARTIAL_INDEXABLE"
         ),
         "fail_closed_intelligence_publishable": True,

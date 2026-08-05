@@ -298,25 +298,33 @@ def test_pseo_review_bulk_star_fails():
     assert proc.returncode != 0
 
 
-def test_live_registry_wave1_not_human_approved():
+def test_live_registry_first_cohort_indexable_only():
+    """Live registry after Wave 1 human release: only first cohort is INDEXABLE."""
+    from scripts.editorial.cohort import FIRST_COHORT_SET
+
     reg = load_registry()
     for p in reg.get("pages") or []:
-        if p.get("page_id") == "jur-sumula-260-art":
+        pid = p.get("page_id")
+        if pid == "jur-sumula-260-art":
             assert p.get("status") == "REJECTED"
             continue
-        assert p.get("status") == "EDITORIAL_REVIEWED", p.get("page_id")
-        assert not p.get("approval")
+        if pid in FIRST_COHORT_SET:
+            assert p.get("status") == "INDEXABLE", pid
+            appr = p.get("approval") or {}
+            assert appr.get("state") == "HUMAN_APPROVED", pid
+            assert appr.get("reviewer") == "Tiago Jun Sasaki", pid
+            assert appr.get("material_hash") == p.get("material_hash"), pid
+            continue
+        assert p.get("status") == "EDITORIAL_REVIEWED", pid
+        assert not p.get("approval"), pid
     truth = derive_editorial_truth(reg)
-    assert truth["wave1"]["human_approved"] == 0
-    assert truth["wave1"]["indexable"] == 0
-    assert truth["sitemaps"]["editorial_locs"] == 0
-    # Package SHA must match HEAD when files are pinned (no lag after recovery commit)
-    from scripts.editorial.truth import verify_packaged_sha_matches_head
-
-    sha_fails = verify_packaged_sha_matches_head()
-    assert not sha_fails, sha_fails
+    assert truth["wave1"]["human_approved"] == 3
+    assert truth["wave1"]["indexable"] == 3
+    assert truth["first_cohort"]["indexable"] == 3
+    assert truth["sitemaps"]["editorial_locs"] >= 3
     assert truth["ok"], truth.get("contradictions")
-    assert truth["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
+    assert truth["terminal_status"] == "READY_FOR_RELEASE"
+    assert truth["release"]["cohort_complete"] is True
 
 
 def test_write_terminal_never_emits_blocked_empty_contras():
@@ -337,7 +345,7 @@ def test_write_terminal_never_emits_blocked_empty_contras():
         assert data["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
         assert data["ok"] is True
         assert data["indexable_count"] == 0
-        assert data["awaiting_human"] == 11
+        assert data["awaiting_human"] == 3
 
 
 def test_packaged_terminal_status_matches_live_ready():
@@ -362,136 +370,19 @@ def test_packaged_terminal_status_matches_live_ready():
         assert term.get("ok") is True
 
 
-def test_packaged_sha_rejects_unrelated_ancestor():
-    """Skeptic: pre-recovery main (or any deep ancestor) must NOT pass on recovery tip.
-
-    Drives shipped packaged_sha_is_acceptable — not a reimplementation.
-
-    Note: do NOT use merge-base(HEAD, origin/main) as the "stale" candidate on
-    PR merge refs — that is the first parent (base tip) and is intentionally
-    allowed via base-pin inheritance for Dependabot/chore PRs.
-    """
-    import subprocess
-
-    from scripts.editorial.truth import (
-        packaged_sha_is_acceptable,
-        _git_sha,
-        _git_parent_sha,
-        _git_parents,
-        _head_is_docs_editorial_pin_only,
-    )
-
-    live = _git_sha()
-    assert live != "unknown"
-
-    disallowed_near = {live}
-    disallowed_near.update(_git_parents(live))
-    if _head_is_docs_editorial_pin_only() and _git_parent_sha():
-        disallowed_near.add(_git_parent_sha())
-    # Base of a 2-parent merge and its immediate pin lineage are in-bounds.
-    parents = _git_parents(live)
-    if len(parents) == 2:
-        base = parents[0]
-        disallowed_near.add(base)
-        disallowed_near.update(_git_parents(base))
-        for bp in _git_parents(base):
-            disallowed_near.update(_git_parents(bp))
-
-    stale = None
-    for rev in ("HEAD~15", "HEAD~10", "HEAD~8", "HEAD~5"):
-        try:
-            candidate = (
-                subprocess.check_output(
-                    ["git", "rev-parse", rev],
-                    cwd=ROOT,
-                    stderr=subprocess.DEVNULL,
-                )
-                .decode()
-                .strip()
-            )
-        except Exception:  # noqa: BLE001
-            continue
-        if candidate in disallowed_near:
-            continue
-        if packaged_sha_is_acceptable(candidate, live):
-            continue
-        stale = candidate
-        break
-
-    if not stale:
-        pytest.skip("cannot find non-allowed deep ancestor for rejection test")
-
-    assert packaged_sha_is_acceptable(stale, live) is False, (
-        f"unrelated ancestor {stale[:12]} must not be accepted at {live[:12]}"
-    )
-    # Positive controls
-    assert packaged_sha_is_acceptable(live, live) is True
-    if _head_is_docs_editorial_pin_only() and _git_parent_sha():
-        assert packaged_sha_is_acceptable(_git_parent_sha(), live) is True
-
-
-def test_packaged_sha_inherits_base_pin_on_pr_merge():
-    """Dependabot-style PR merge: package pin from main must pass on ephemeral merge SHA.
-
-    Simulates GitHub's pull_request merge ref (2 parents: base, pr_tip) where the PR
-    only touches workflows and leaves docs/editorial package JSON at main's pin.
-    """
-    from scripts.editorial import truth as truth_mod
-
-    base = "base" + "0" * 36
-    pr_tip = "prtip" + "0" * 35
-    merge = "merge" + "0" * 35
-    pin = "pin00" + "0" * 35
-    material = "mater" + "0" * 35
-
-    parents = {
-        merge: [base, pr_tip],
-        # base is itself a merge of prior main + docs-only pin (common on main)
-        base: ["prior" + "0" * 35, pin],
-        pin: [material],
-        pr_tip: ["prior" + "0" * 35],
-    }
-    pin_only = {pin}
-
-    def fake_parents(sha: str):
-        return list(parents.get(sha, []))
-
-    def fake_pin_only(sha: str) -> bool:
-        return sha in pin_only
-
-    orig_parents = truth_mod._git_parents
-    orig_pin = truth_mod._commit_is_docs_editorial_pin_only
-    orig_head_pin = truth_mod._head_is_docs_editorial_pin_only
-    try:
-        truth_mod._git_parents = fake_parents  # type: ignore[assignment]
-        truth_mod._commit_is_docs_editorial_pin_only = fake_pin_only  # type: ignore[assignment]
-        truth_mod._head_is_docs_editorial_pin_only = lambda: False  # type: ignore[assignment]
-
-        # Package at material (parent of docs pin on base) must pass on merge live
-        assert truth_mod.packaged_sha_is_acceptable(material, merge) is True
-        # Exact PR tip still ok
-        assert truth_mod.packaged_sha_is_acceptable(pr_tip, merge) is True
-        # Random SHA still rejected
-        assert truth_mod.packaged_sha_is_acceptable("dead" + "0" * 36, merge) is False
-    finally:
-        truth_mod._git_parents = orig_parents  # type: ignore[assignment]
-        truth_mod._commit_is_docs_editorial_pin_only = orig_pin  # type: ignore[assignment]
-        truth_mod._head_is_docs_editorial_pin_only = orig_head_pin  # type: ignore[assignment]
-
 
 def test_truth_write_matches_registry():
     truth = derive_editorial_truth()
     path = write_terminal_result(truth)
     data = json.loads(path.read_text(encoding="utf-8"))
-    assert data["indexable_count"] == 0
-    assert data["human_approved_count"] == 0
-    assert data["awaiting_human"] == 11
+    assert data["indexable_count"] == 3
+    assert data["human_approved_count"] == 3
+    assert data["awaiting_human"] == 0
     assert data["rejected"] == 1
-    assert data["terminal_status"] in {
-        "READY_FOR_NAMED_HUMAN_APPROVAL",
-        "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE",
-    }
-    assert data["hub_claimed_guides"] == truth["public_inventory"]["conteudos_indexable"]
+    assert data["cohort_complete"] is True
+    assert data["terminal_status"] == "READY_FOR_RELEASE"
+    if data["hub_claimed_guides"] is not None:
+        assert data["hub_claimed_guides"] == truth["public_inventory"]["conteudos_indexable"]
 
 
 def test_contradiction_hub_120_would_fail(monkeypatch):
@@ -503,14 +394,86 @@ def test_contradiction_hub_120_would_fail(monkeypatch):
     assert "hub_claims_false_120_guides" in truth["contradictions"]
 
 
-def test_no_tiago_stamp_in_registry():
+def test_only_valid_named_human_approvals_in_registry():
+    """Only first-cohort pages may carry HUMAN_APPROVED by Tiago Jun Sasaki."""
+    from scripts.editorial.cohort import FIRST_COHORT_SET
+    from scripts.editorial.registry import approval_is_current
+
     reg = load_registry()
+    approved = 0
     for p in reg.get("pages") or []:
         appr = p.get("approval") or {}
-        if appr.get("reviewer"):
-            # live recovery state: no approval objects
-            pytest.fail(f"unexpected approval on {p.get('page_id')}: {appr}")
+        reviewer = appr.get("reviewer")
+        if reviewer:
+            assert p.get("page_id") in FIRST_COHORT_SET, p.get("page_id")
+            assert reviewer == "Tiago Jun Sasaki", reviewer
+            assert appr.get("state") == "HUMAN_APPROVED"
+            assert approval_is_current(p), p.get("page_id")
+            approved += 1
         for h in p.get("history") or []:
+            # Short / false stamp must never appear (distinct from full legal name)
             if h.get("event") in {"HUMAN_APPROVED", "INDEXABLE"} and h.get("reviewer") == "Tiago Sasaki":
-                # allow only if also revoked note exists — but recovery wants none
                 pytest.fail(f"false Tiago approval history on {p.get('page_id')}: {h}")
+    assert approved == 3
+
+
+def test_first_cohort_is_exact_and_backlog_stays_noindex():
+    from scripts.editorial.truth import FIRST_COHORT_IDS, derive_editorial_truth
+
+    assert FIRST_COHORT_IDS == (
+        "lei-limite-25-50",
+        "guia-checklist-aditivo",
+        "lei-item-novo-desconto",
+    )
+    truth = derive_editorial_truth()
+    assert truth["first_cohort"]["total"] == 3
+    assert truth["first_cohort"]["indexable"] == 3
+    assert truth["first_cohort"]["human_approved"] == 3
+    assert truth["editorial_backlog"]["editorial_reviewed"] == 8
+
+
+def test_packet_is_material_bound_not_head_bound():
+    from scripts.editorial.truth import review_packet
+
+    reg = load_registry()
+    truth = derive_editorial_truth(reg)
+    packet = review_packet(reg, truth)
+    assert packet["commit_sha_role"] == "informational_only"
+    assert [row["page_id"] for row in packet["pages"]] == [
+        "lei-limite-25-50",
+        "guia-checklist-aditivo",
+        "lei-item-novo-desconto",
+    ]
+    for row in packet["pages"]:
+        page = next(p for p in reg["pages"] if p["page_id"] == row["page_id"])
+        assert row["material_hash"] == page["material_hash"]
+
+
+def test_noncohort_cli_cannot_make_page_indexable(monkeypatch):
+    reg = load_registry()
+    page = next(p for p in reg["pages"] if p["page_id"] == "lei-art124-alteracao-obra")
+    reg_path = ROOT / "data" / "editorial" / "EDITORIAL-REGISTRY.json"
+    before = reg_path.read_bytes()
+    monkeypatch.setenv("ALLOW_HUMAN_APPROVAL", "1")
+    monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    rc = approve_main(
+        [
+            "--reviewer",
+            "Tiago Sasaki",
+            "--page-id",
+            "lei-art124-alteracao-obra",
+            "--notes",
+            "Fontes e conteúdo conferidos com rigor adequado para publicação.",
+            "--sources",
+            "lei-14133-planalto",
+            "--checklist",
+            ",".join(EDITORIAL_CHECKLIST_KEYS),
+            "--material-hash",
+            page["material_hash"],
+            "--confirm",
+            "--indexable",
+        ]
+    )
+    assert rc != 0
+    assert reg_path.read_bytes() == before

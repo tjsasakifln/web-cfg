@@ -204,6 +204,13 @@ def main(argv: list[str] | None = None) -> int:
             errors.append(
                 "editorial_sitemap_issues:" + ",".join(editorial_report["sitemap_issues"][:5])
             )
+        # Material package must match the registry after editorial_build recalculates
+        # hashes. This prevents a changed page from carrying an old human decision.
+        from scripts.editorial.truth import assert_truth_consistent
+
+        truth_failures = assert_truth_consistent()
+        if truth_failures:
+            errors.extend(f"editorial_truth:{failure}" for failure in truth_failures)
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL-CLOSED editorial build: {exc}", file=sys.stderr)
         return 2
