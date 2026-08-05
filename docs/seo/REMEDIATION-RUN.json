@@ -1,21 +1,25 @@
 {
-  "date": "2026-08-03",
+  "date": "2026-08-04",
   "radar": "fixed",
+  "superseded": {
+    "pages_noindexed": 0
+  },
   "hub": {
     "removed_directory_items": 0,
-    "indexable_count": 22,
-    "featured": 7
+    "indexable_count": 20,
+    "featured": 6,
+    "themes_shown": 7
   },
   "feed": {
     "removed_items": 0
   },
   "conteudos": {
-    "shell": 22,
-    "machine": 14,
-    "related": 22,
-    "journey": 22,
-    "indexable": 22,
-    "noindex": 98
+    "shell": 0,
+    "machine": 13,
+    "related": 0,
+    "journey": 20,
+    "indexable": 20,
+    "noindex": 100
   },
   "pillars": {
     "pillars": {
@@ -57,8 +61,9 @@
   "shell_other": 0,
   "hub_pass2": {
     "removed_directory_items": 0,
-    "indexable_count": 22,
-    "featured": 7
+    "indexable_count": 20,
+    "featured": 6,
+    "themes_shown": 7
   },
   "pillars_pass2": {
     "pillars": {
@@ -97,11 +102,14 @@
     },
     "total_removed": 0
   },
+  "feed_pass2": {
+    "removed_items": 0
+  },
   "inventory_rows": 154,
   "disposition_counts": {
-    "KEEP_AND_IMPROVE": 35,
-    "RETAIN_NOINDEX": 98,
-    "BLOCKED_HUMAN_REVIEW": 11,
+    "KEEP_AND_IMPROVE": 36,
+    "RETAIN_NOINDEX": 100,
+    "BLOCKED_HUMAN_REVIEW": 8,
     "BLOCKED_MISSING_EVIDENCE": 1,
     "RETIRE_410": 6,
     "REDIRECT_301": 3
