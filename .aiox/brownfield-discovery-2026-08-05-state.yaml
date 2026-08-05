@@ -1,0 +1,120 @@
+# Brownfield Discovery Workflow State
+# Mode: YOLO (autonomous end-to-end) — COMPLETED
+
+workflow_id: brownfield-discovery
+instance_id: brownfield-discovery-2026-08-05
+status: completed
+mode: yolo
+started_at: "2026-08-05T12:00:00Z"
+completed_at: "2026-08-05T14:30:00Z"
+started_by: Orion (aiox-master)
+branch: feat/visitor-experience-redesign
+project: confenge-site
+
+steps:
+  - id: system_documentation
+    phase: 1
+    status: completed
+    agent: architect
+    creates: docs/architecture/system-architecture.md
+  - id: database_documentation
+    phase: 2
+    status: completed
+    agent: data-engineer
+    condition: adapted_data_plane_no_rdbms
+    creates:
+      - supabase/docs/SCHEMA.md
+      - supabase/docs/DB-AUDIT.md
+  - id: frontend_documentation
+    phase: 3
+    status: completed
+    agent: ux-design-expert
+    creates: docs/frontend/frontend-spec.md
+  - id: initial_consolidation
+    phase: 4
+    status: completed
+    agent: architect
+    creates: docs/prd/technical-debt-DRAFT.md
+  - id: database_specialist_review
+    phase: 5
+    status: completed
+    agent: data-engineer
+    creates: docs/reviews/db-specialist-review.md
+  - id: ux_specialist_review
+    phase: 6
+    status: completed
+    agent: ux-design-expert
+    creates: docs/reviews/ux-specialist-review.md
+  - id: qa_general_review
+    phase: 7
+    status: completed
+    agent: qa
+    creates: docs/reviews/qa-review.md
+    gate: APPROVED
+  - id: final_assessment
+    phase: 8
+    status: completed
+    agent: architect
+    creates: docs/prd/technical-debt-assessment.md
+  - id: executive_awareness_report
+    phase: 9
+    status: completed
+    agent: analyst
+    creates: docs/reports/TECHNICAL-DEBT-REPORT.md
+  - id: epic_creation
+    phase: 10
+    status: completed
+    agent: pm
+    creates: docs/stories/epic-technical-debt.md
+  - id: story_creation
+    phase: 10
+    status: completed
+    agent: pm
+    creates:
+      - docs/stories/story-1.1-fail-closed-lead-store.md
+      - docs/stories/story-1.2-ops-auth-hardening.md
+      - docs/stories/story-1.3-design-gates-quality-bar.md
+      - docs/stories/story-1.4-product-env-example.md
+      - docs/stories/story-1.5-lead-export-pipeline.md
+      - docs/stories/story-1.6-attribution-cohorts.md
+      - docs/stories/story-1.7-visitor-journey-residual.md
+      - docs/stories/story-1.8-form-a11y-tool-cta.md
+      - docs/stories/story-1.9-1.12-pack-p2.md
+
+current_step: end
+completed_count: 11
+total_steps: 11
+qa_gate: APPROVED
+decisions:
+  - "YOLO mode: autonomous end-to-end without human pauses"
+  - "Phase 2 adapted: Netlify Blobs + JSON data plane (no Supabase RDBMS)"
+  - "AIOX framework paths treated as tooling overlay, not product debt"
+  - "QA gate APPROVED — proceed to planning artifacts"
+  - "P0 first: store fail-closed, ops auth, design gates"
+
+artifacts_tree: |
+  docs/
+  ├── architecture/system-architecture.md
+  ├── frontend/frontend-spec.md
+  ├── reviews/
+  │   ├── db-specialist-review.md
+  │   ├── ux-specialist-review.md
+  │   └── qa-review.md
+  ├── prd/
+  │   ├── technical-debt-DRAFT.md
+  │   └── technical-debt-assessment.md
+  ├── reports/TECHNICAL-DEBT-REPORT.md
+  └── stories/
+      ├── epic-technical-debt.md
+      ├── story-1.1-fail-closed-lead-store.md
+      ├── story-1.2-ops-auth-hardening.md
+      ├── story-1.3-design-gates-quality-bar.md
+      ├── story-1.4-product-env-example.md
+      ├── story-1.5-lead-export-pipeline.md
+      ├── story-1.6-attribution-cohorts.md
+      ├── story-1.7-visitor-journey-residual.md
+      ├── story-1.8-form-a11y-tool-cta.md
+      └── story-1.9-1.12-pack-p2.md
+  supabase/docs/
+  ├── SCHEMA.md
+  └── DB-AUDIT.md
