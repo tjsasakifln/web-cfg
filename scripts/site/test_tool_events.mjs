@@ -73,7 +73,7 @@ else {
   else pass("no_auto_send");
 }
 
-// Wave1 recommendations exist; zero human approved still
+// Machine recommendations never mint human approvals (registry is the source of truth)
 const rec = resolve(ROOT, "docs/editorial/WAVE1-MACHINE-RECOMMENDATIONS.json");
 if (!existsSync(rec)) fail("wave1_rec");
 else {
@@ -84,15 +84,41 @@ else {
   else pass("wave1_pages", r.pages.length);
 }
 
-// release-approved script refuses empty approvals
+// release-approved: pre-approval is a noop; post first-cohort release is a clean green report
 import { execSync } from "child_process";
-const out = execSync("python3 scripts/editorial/release_approved.py", { cwd: ROOT, encoding: "utf8" });
-const j = JSON.parse(out);
-if (j.valid_human_approved !== 0) fail("release_has_approvals", j);
-else pass("release_noop_without_human");
-if (!(Array.isArray(j.blocked) ? j.blocked.join(" ") : String(j.blocked || "")).includes("no_valid_human")) {
-  fail("release_blocked_msg");
-} else pass("release_blocked_msg");
+function parseLastJsonObject(text) {
+  const start = text.lastIndexOf("\n{") >= 0 ? text.lastIndexOf("\n{") + 1 : text.indexOf("{");
+  if (start < 0) throw new Error("no_json_object");
+  return JSON.parse(text.slice(start));
+}
+const out = execSync("python3 scripts/editorial/release_approved.py", {
+  cwd: ROOT,
+  encoding: "utf8",
+  maxBuffer: 20 * 1024 * 1024,
+});
+const j = parseLastJsonObject(out);
+if (j.valid_human_approved === 0) {
+  pass("release_noop_without_human");
+  if (!(Array.isArray(j.blocked) ? j.blocked.join(" ") : String(j.blocked || "")).includes("no_valid_human")) {
+    fail("release_blocked_msg");
+  } else pass("release_blocked_msg");
+} else if (j.valid_human_approved === 3 && j.cohort_complete === true && Array.isArray(j.blocked) && j.blocked.length === 0) {
+  pass("release_first_cohort_complete", j.released_count);
+  const urls = j.gsc_submit_candidates || [];
+  const need = [
+    "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+    "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+  ];
+  if (need.every((u) => urls.includes(u))) pass("release_gsc_candidates");
+  else fail("release_gsc_candidates", urls);
+} else {
+  fail("release_unexpected_state", JSON.stringify({
+    valid_human_approved: j.valid_human_approved,
+    cohort_complete: j.cohort_complete,
+    blocked: j.blocked,
+  }));
+}
 
 // pilot audit
 const pilot = resolve(ROOT, "docs/pseo/PILOT-AUDIT.json");

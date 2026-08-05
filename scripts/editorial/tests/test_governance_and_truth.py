@@ -298,21 +298,33 @@ def test_pseo_review_bulk_star_fails():
     assert proc.returncode != 0
 
 
-def test_live_registry_wave1_not_human_approved():
+def test_live_registry_first_cohort_indexable_only():
+    """Live registry after Wave 1 human release: only first cohort is INDEXABLE."""
+    from scripts.editorial.cohort import FIRST_COHORT_SET
+
     reg = load_registry()
     for p in reg.get("pages") or []:
-        if p.get("page_id") == "jur-sumula-260-art":
+        pid = p.get("page_id")
+        if pid == "jur-sumula-260-art":
             assert p.get("status") == "REJECTED"
             continue
-        assert p.get("status") == "EDITORIAL_REVIEWED", p.get("page_id")
-        assert not p.get("approval")
+        if pid in FIRST_COHORT_SET:
+            assert p.get("status") == "INDEXABLE", pid
+            appr = p.get("approval") or {}
+            assert appr.get("state") == "HUMAN_APPROVED", pid
+            assert appr.get("reviewer") == "Tiago Jun Sasaki", pid
+            assert appr.get("material_hash") == p.get("material_hash"), pid
+            continue
+        assert p.get("status") == "EDITORIAL_REVIEWED", pid
+        assert not p.get("approval"), pid
     truth = derive_editorial_truth(reg)
-    assert truth["wave1"]["human_approved"] == 0
-    assert truth["wave1"]["indexable"] == 0
-    assert truth["sitemaps"]["editorial_locs"] == 0
-    # Reports can retain a historical commit_sha, but packet material must match.
+    assert truth["wave1"]["human_approved"] == 3
+    assert truth["wave1"]["indexable"] == 3
+    assert truth["first_cohort"]["indexable"] == 3
+    assert truth["sitemaps"]["editorial_locs"] >= 3
     assert truth["ok"], truth.get("contradictions")
-    assert truth["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
+    assert truth["terminal_status"] == "READY_FOR_RELEASE"
+    assert truth["release"]["cohort_complete"] is True
 
 
 def test_write_terminal_never_emits_blocked_empty_contras():
@@ -363,14 +375,12 @@ def test_truth_write_matches_registry():
     truth = derive_editorial_truth()
     path = write_terminal_result(truth)
     data = json.loads(path.read_text(encoding="utf-8"))
-    assert data["indexable_count"] == 0
-    assert data["human_approved_count"] == 0
-    assert data["awaiting_human"] == 3
+    assert data["indexable_count"] == 3
+    assert data["human_approved_count"] == 3
+    assert data["awaiting_human"] == 0
     assert data["rejected"] == 1
-    assert data["terminal_status"] in {
-        "READY_FOR_NAMED_HUMAN_APPROVAL",
-        "BLOCKED_CI_AND_EDITORIAL_GOVERNANCE",
-    }
+    assert data["cohort_complete"] is True
+    assert data["terminal_status"] == "READY_FOR_RELEASE"
     if data["hub_claimed_guides"] is not None:
         assert data["hub_claimed_guides"] == truth["public_inventory"]["conteudos_indexable"]
 
@@ -384,17 +394,27 @@ def test_contradiction_hub_120_would_fail(monkeypatch):
     assert "hub_claims_false_120_guides" in truth["contradictions"]
 
 
-def test_no_tiago_stamp_in_registry():
+def test_only_valid_named_human_approvals_in_registry():
+    """Only first-cohort pages may carry HUMAN_APPROVED by Tiago Jun Sasaki."""
+    from scripts.editorial.cohort import FIRST_COHORT_SET
+    from scripts.editorial.registry import approval_is_current
+
     reg = load_registry()
+    approved = 0
     for p in reg.get("pages") or []:
         appr = p.get("approval") or {}
-        if appr.get("reviewer"):
-            # live recovery state: no approval objects
-            pytest.fail(f"unexpected approval on {p.get('page_id')}: {appr}")
+        reviewer = appr.get("reviewer")
+        if reviewer:
+            assert p.get("page_id") in FIRST_COHORT_SET, p.get("page_id")
+            assert reviewer == "Tiago Jun Sasaki", reviewer
+            assert appr.get("state") == "HUMAN_APPROVED"
+            assert approval_is_current(p), p.get("page_id")
+            approved += 1
         for h in p.get("history") or []:
+            # Short / false stamp must never appear (distinct from full legal name)
             if h.get("event") in {"HUMAN_APPROVED", "INDEXABLE"} and h.get("reviewer") == "Tiago Sasaki":
-                # allow only if also revoked note exists — but recovery wants none
                 pytest.fail(f"false Tiago approval history on {p.get('page_id')}: {h}")
+    assert approved == 3
 
 
 def test_first_cohort_is_exact_and_backlog_stays_noindex():
@@ -407,7 +427,8 @@ def test_first_cohort_is_exact_and_backlog_stays_noindex():
     )
     truth = derive_editorial_truth()
     assert truth["first_cohort"]["total"] == 3
-    assert truth["first_cohort"]["indexable"] == 0
+    assert truth["first_cohort"]["indexable"] == 3
+    assert truth["first_cohort"]["human_approved"] == 3
     assert truth["editorial_backlog"]["editorial_reviewed"] == 8
 
 

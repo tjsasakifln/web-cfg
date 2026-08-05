@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-04T23:29:58Z",
+  "generated_at": "2026-08-05T01:19:01Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -58,7 +58,7 @@
       "body_markdown": "## Como usar\n\nPara cada requisito, escolha Atendido, Pendente ou Não aplicável. Os sinais de bloqueio são perguntas de risco: uma resposta positiva gera alerta e não aumenta o progresso da barra de prontidão documental.\n\nOs dados ficam só neste navegador e não são enviados à CONFENGE, salvo se você decidir copiar um resumo ou abrir o contato comercial por conta própria.\n\n## O que o dossiê precisa provar\n\nAntes de protocolar o pedido de aditivo, o dossiê deve deixar claro o que muda na obra, por que muda, quem determinou a mudança e com base em qual dispositivo do contrato e da Lei nº 14.133/2021. O art. 124 trata da alteração com justificativas; o art. 125 materializa os limites percentuais de acréscimo e de supressão sobre o valor inicial atualizado; e o art. 127 disciplina a formação de preço quando o contrato não contempla preço unitário para a obra ou o serviço que precisa ser aditado.\n\nSe uma alteração unilateral aumentar ou diminuir os encargos do contratado, a Administração deverá restabelecer, no mesmo termo aditivo, o equilíbrio econômico-financeiro inicial, conforme o art. 130. Sem planilha do aditivo, memória de saldo acumulado, composições de preço de itens sem preço unitário e comunicações oficiais (ordem de serviço, e-mail protocolado, ata), o pedido costuma voltar em diligência ou ser executado informalmente.\n\n## Formalização e antecipação excepcional\n\nPelo art. 132, a formalização do termo aditivo é condição para a execução, pelo contratado, das prestações determinadas pela Administração. A formalização prévia é a regra. A exceção exige necessidade justificada de antecipar os efeitos do aditivo; nessa situação, a formalização deve ocorrer no prazo máximo de um mês. A antecipação excepcional não autoriza executar primeiro e fabricar justificativa depois.\n\n## Documentos típicos\n\nReúna, quando existirem no processo: contrato e aditivos anteriores; planilha orçamentária da proposta; planilha do aditivo; composições de itens novos; projetos “antes” e “depois”; diário de obra; fotos e levantamentos; pareceres técnicos internos; índice de anexos numerados; requerimento objetivo com valor, prazo e enquadramento.\n\n## Depois do diagnóstico\n\nSe houver pendências essenciais ou sinais de bloqueio (item novo sem composição, execução antes da formalização sem justificativa, falta de determinação contemporânea, memória de saldo ausente, justificativa genérica), corrija a prova antes de protocolar só para cumprir rito.\n\nSe a cobertura documental estiver sólida, use o resumo gerado para montar o índice de anexos e o texto do requerimento.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Ritos, prazos e formulários do órgão prevalecem quando forem mais específicos. O verificador de limites de acréscimos e supressões da CONFENGE pode complementar a memória do art. 125, mas também é apenas orientativo.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Organizar o dossiê cedo evita reconstrução tardia de fatos e de comunicações.\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo entre o fato de campo e o quantitativo da planilha. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar o pedido junto à Administração.\n",
       "_source_file": "data/editorial/pages/guia-checklist-aditivo.json",
       "material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -89,6 +89,15 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-05T01:07:31Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Jun Sasaki"
+        },
+        {
+          "at": "2026-08-05T01:07:31Z",
+          "event": "INDEXABLE"
         }
       ],
       "interaction_type": "checklist",
@@ -300,7 +309,46 @@
           "category": "final",
           "label": "Pendências tratadas"
         }
-      ]
+      ],
+      "approval": {
+        "schema_version": "3.0.0",
+        "page_id": "guia-checklist-aditivo",
+        "state": "HUMAN_APPROVED",
+        "reviewer": "Tiago Jun Sasaki",
+        "at": "2026-08-05T01:07:31Z",
+        "notes": "Revisão humana concluída. Artigos 124, 125, 127, 130 e 132, executor correto no art. 132, alteração unilateral no art. 130, checklist, naturalidade, CTA e canibalização conferidos. O peer sobre erro de projeto tem intenção distinta e permanece noindex, self-canonical e sem redirect cruzado.",
+        "sources_verified": [
+          "agu-alteracoes-contratuais-2024",
+          "lei-14133-art124",
+          "lei-14133-art125",
+          "lei-14133-art126-132",
+          "lei-14133-planalto"
+        ],
+        "checklist": {
+          "sources_verified": true,
+          "legal_devices_checked": true,
+          "naturalness_ok": true,
+          "cta_contextual": true,
+          "no_fictitious_authorship": true,
+          "cannibalization_resolved_or_blocked": true,
+          "material_hash_confirmed": true,
+          "no_indecent_promise": true
+        },
+        "caveats": "",
+        "material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+        "preview": {
+          "build_info_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/build-info.json",
+          "material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+          "page_http_status": 200,
+          "page_id": "guia-checklist-aditivo",
+          "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
+          "preview_build_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
+          "preview_generated_at": "2026-08-05T01:07:30Z",
+          "review_packet_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/editorial-review-packet.json",
+          "review_target_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
+          "reviewed_url": "https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/"
+        }
+      }
     },
     {
       "page_id": "guia-docs-reequilibrio",
@@ -744,6 +792,36 @@
           "at": "2026-08-04T23:29:58Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-05T01:08:29Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-05T01:10:01Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-05T01:12:40Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-05T01:13:01Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-05T01:17:28Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-05T01:19:01Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
         }
       ],
       "publication_hold": true,
@@ -1001,7 +1079,7 @@
       "body_markdown": "## Quando o item novo aparece\n\nDemolição não prevista, drenagem extra, troca de sistema predial, serviço de contenção emergencial. A planilha original não tem o código. Alguém precisa de preço unitário “para ontem”.\n\n## Enquadramento legal do art. 127\n\nAlterações passam pelo **art. 124** e continuam sujeitas aos limites do **art. 125**. O **art. 127** disciplina a hipótese em que o contrato não contempla preços unitários para obras ou serviços cujo aditamento é necessário. Por paráfrase fiel do dispositivo: os preços são fixados pela aplicação da relação geral entre o valor da proposta e o orçamento-base da Administração aos preços referenciais ou de mercado vigentes na data do aditamento.\n\nA relação geral decorre da proposta original: ela pode expressar **desconto** ou **ágio**. Por isso, não há liberdade para escolher, caso a caso, se a relação será aplicada. Contrato e regulamentos podem disciplinar procedimento, referencial e composição, mas não podem transformar em opcional a regra expressa do art. 127.\n\n## Três situações que não devem ser misturadas\n\n1. **Item realmente sem preço unitário contratual:** quando o aditamento exige obra ou serviço que não tem preço unitário no contrato, aplica-se o art. 127, com a relação proposta/orçamento-base sobre os preços vigentes na data do aditamento.\n2. **Item existente ou análogo na planilha:** a análise pode exigir aproveitamento do preço e das condições já contratadas. Não se deve chamar de item novo aquilo que já possui referência contratual utilizável.\n3. **Reequilíbrio de preço de item existente:** é instituto distinto, ligado à recomposição econômico-financeira; não é instrumento para formar o preço de novo escopo.\n\n## O que a construtora precisa provar\n\n- Por que o item é necessário (nexo com projeto, campo ou determinação da Administração)\n- Que não existe preço unitário contratual para a obra ou o serviço que precisa ser aditado\n- Composição de custos (mão de obra, materiais, equipamentos, encargos)\n- Critério de BDI adotado e coerência com a proposta\n- Relação geral entre a proposta vencedora e o orçamento-base, demonstrada com memória de cálculo\n- Preço referencial ou de mercado vigente na data do aditamento, com a composição que o sustenta\n- Impacto no saldo percentual do art. 125\n\n## Erros que destroem a tese\n\n1. Aceitar preço “chutado” pelo fiscal em planilha sem composição  \n2. Afastar a relação proposta/orçamento-base como se o desconto da proposta fosse opcional  \n3. Usar referência de tabela errada (SINAPI onde o edital manda SICRO, ou o inverso)  \n4. Executar o serviço inteiro e só depois discutir preço  \n5. Misturar item novo com reequilíbrio de item existente sem separar causas  \n\n## Roteiro de precificação\n\n1. Descreva o serviço com unidade e critério de medição.  \n2. Monte composição analítica.  \n3. Aplique BDI conforme a disciplina do certame e do contrato.  \n4. Aplique aos preços vigentes a relação proposta/orçamento-base, seja ela desconto ou ágio.  \n5. Documente premissas (produtividade, distância, interferências).  \n6. Submeta no processo do aditivo **antes** da execução plena.  \n\n## Jogo de planilha e item novo\n\nFormar preço de item novo com distorção proposital em relação a itens semelhantes da planilha original é risco clássico de apontamento de controle. Se o item é análogo, examine o preço e as condições já contratadas; se é realmente sem preço unitário, aplique o art. 127. Em ambos os casos, a memória deve explicar produtividade, insumos e BDI.\n\n## Papel dos referenciais SINAPI/SICRO\n\nUse o referencial compatível com a natureza do serviço e com a disciplina aplicável ao contrato. Pavimentação e obras rodoviárias frequentemente usam o SICRO; edificações frequentemente usam o SINAPI. O referencial não elimina a necessidade de composição analítica quando o item foge do código padrão.\n",
       "_source_file": "data/editorial/pages/lei-item-novo-desconto.json",
       "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -1032,9 +1110,57 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-05T01:08:20Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Jun Sasaki"
+        },
+        {
+          "at": "2026-08-05T01:08:20Z",
+          "event": "INDEXABLE"
         }
       ],
-      "interaction_type": "article"
+      "interaction_type": "article",
+      "approval": {
+        "schema_version": "3.0.0",
+        "page_id": "lei-item-novo-desconto",
+        "state": "HUMAN_APPROVED",
+        "reviewer": "Tiago Jun Sasaki",
+        "at": "2026-08-05T01:08:20Z",
+        "notes": "Revisão humana concluída. Artigo 127, relação proposta/orçamento-base, desconto ou ágio, preços vigentes, distinção entre item novo, item análogo e reequilíbrio, naturalidade, CTA e canibalização conferidos. A URL Wave 1 é a canônica e o peer antigo permanece em 301 direto, sem dual-index.",
+        "sources_verified": [
+          "agu-alteracoes-contratuais-2024",
+          "lei-14133-art124",
+          "lei-14133-art126-132",
+          "lei-14133-planalto",
+          "sinapi-caixa"
+        ],
+        "checklist": {
+          "sources_verified": true,
+          "legal_devices_checked": true,
+          "naturalness_ok": true,
+          "cta_contextual": true,
+          "no_fictitious_authorship": true,
+          "cannibalization_resolved_or_blocked": true,
+          "material_hash_confirmed": true,
+          "no_indecent_promise": true
+        },
+        "caveats": "",
+        "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+        "preview": {
+          "build_info_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/build-info.json",
+          "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+          "page_http_status": 200,
+          "page_id": "lei-item-novo-desconto",
+          "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
+          "preview_build_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
+          "preview_generated_at": "2026-08-05T01:08:19Z",
+          "review_packet_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/editorial-review-packet.json",
+          "review_target_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
+          "reviewed_url": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/"
+        }
+      }
     },
     {
       "page_id": "lei-limite-25-50",
@@ -1100,7 +1226,7 @@
       "body_markdown": "## O problema real\n\nDiretoria e orçamento olham o último aditivo e perguntam: “ainda cabe?”. Fiscalização olha a necessidade da obra. Contabilidade olha empenho. Sem memória do **valor inicial atualizado** e do histórico, o debate vira achismo.\n\n## Texto do art. 125 (síntese operacional)\n\nNas alterações unilaterais do **art. 124, I**, o contratado aceita, nas mesmas condições contratuais:\n\n- acréscimos ou supressões de até **25%** do valor inicial atualizado do contrato (obras, serviços ou compras);\n- em **reforma de edifício ou de equipamento**, acréscimos de até **50%**.\n\nFonte: Lei nº 14.133/2021, art. 125. Planalto, verificação em 02/08/2026.\n\nO **art. 126** fecha a porta para alterações unilaterais que transfigurem o objeto. Percentual disponível não legitima obra diferente da contratada.\n\n## O que precisa entrar na conta do saldo\n\n- Valor inicial do contrato e critérios de atualização previstos\n- Cada termo aditivo, com valor, data e fundamento\n- Natureza da alteração (quantitativa, mudança de projeto/especificação ou outro regime aplicável)\n- Separação clara entre alteração quantitativa, item novo, reequilíbrio econômico-financeiro, reajuste e repactuação: todos podem ter impacto financeiro, mas não se misturam na mesma linha de cálculo só por isso\n- Hipótese de 50%: só se o objeto se enquadrar como reforma de edifício ou equipamento\n\n## Acréscimos e supressões: memória segregada\n\nNão trate uma supressão como crédito livre para novo acréscimo. Não se deve compensar automaticamente uma supressão com um acréscimo apenas para aparentar enquadramento no limite.\n\nA memória de cálculo deve manter acréscimos e supressões segregados. Para cada conjunto, demonstre separadamente:\n\n- a base de cálculo (valor inicial atualizado e critério de atualização);\n- os itens, quantitativos e preços de cada parcela;\n- a repercussão percentual de cada conjunto sobre a base;\n- o regime jurídico aplicável a cada alteração (alteração unilateral quantitativa ou de projeto, acordo, supressão consensual quando o caso exigir tratamento distinto, item novo, reequilíbrio, reajuste ou repactuação).\n\nA memória precisa permitir que um terceiro refaça o cálculo só com os documentos do processo, sem depender de narrativa oral.\n\nNo âmbito federal, a **Orientação Normativa AGU nº 50/2014** determina que os limites percentuais sejam aplicados isoladamente aos conjuntos de acréscimos e de supressões e veda a compensação entre itens distintos. A ON é orientação da AGU para seu âmbito de atuação; ela não converte, por si, essa disciplina em regra abstrata e idêntica para todos os entes. Estados e municípios podem ter regulamento ou orientação específica, que deve ser verificada no processo.\n\n## Exemplo aplicado (hipotético)\n\nContrato de pavimentação, valor inicial atualizado de R$ 10 milhões. Já houve acréscimo formal de R$ 1,8 milhão (18%). Novo acréscimo pretendido de R$ 1,0 milhão (10%) levaria o conjunto de acréscimos a 28%, acima de 25% se a medida for alteração unilateral quantitativa ou de projeto no mesmo enquadramento. Reequilíbrio econômico-financeiro não pode ser usado artificialmente para ocultar acréscimo de escopo, e fracionar ou reenquadrar parcelas para escapar do limite é prática indevida. Acima do limite, o caso exige análise jurídica e técnica específica; 28% não se regulariza automaticamente por trocar a nomenclatura da parcela.\n\n## Documentos mínimos\n\n1. Contrato e planilha inicial  \n2. Cronologia de aditivos e apostilas  \n3. Memória segregada dos percentuais de acréscimos e supressões  \n4. Projetos e OS que motivam a nova alteração  \n5. Justificativa técnica da Administração (quando existir)  \n6. Proposta vencedora para precificação de itens sem preço unitário  \n\n## Riscos de interpretação\n\n- Aplicar 50% a obra nova de edificação sem ser reforma\n- Ignorar atualização do valor inicial\n- Executar primeiro e formalizar depois quando o volume já estourou o teto\n- Confundir reajuste (art. 136) com aditivo quantitativo\n- Rebatizar acréscimo de escopo como reequilíbrio, ou fracionar parcelas, para aparentar respeito ao teto\n\n## Roteiro\n\n1. Atualize o valor base conforme o contrato.  \n2. Apure acréscimos e supressões em conjuntos segregados; não faça compensação automática.  \n3. Classifique a nova alteração.  \n4. Teste o teto do art. 125.  \n5. Se houver aumento de encargos, examine o art. 130 no mesmo instrumento.  \n6. Formalize antes de liberar frentes caras.  \n\n## Ressalva\n\nO caso concreto pode envolver regulamento do órgão, cláusulas específicas e entendimentos de controle. A ON AGU nº 50/2014 tem âmbito federal próprio; fora dele, verifique a disciplina aplicável ao ente. Esta página não esgota controvérsias sobre itens extracontratuais.\n",
       "_source_file": "data/editorial/pages/lei-limite-25-50.json",
       "material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "INDEXABLE",
       "history": [
         {
           "at": "2026-08-02T17:37:20Z",
@@ -1131,9 +1257,58 @@
           "event": "NOTE",
           "actor": "system",
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
+        },
+        {
+          "at": "2026-08-05T01:07:20Z",
+          "event": "HUMAN_APPROVED",
+          "reviewer": "Tiago Jun Sasaki"
+        },
+        {
+          "at": "2026-08-05T01:07:20Z",
+          "event": "INDEXABLE"
         }
       ],
-      "interaction_type": "article"
+      "interaction_type": "article",
+      "approval": {
+        "schema_version": "3.0.0",
+        "page_id": "lei-limite-25-50",
+        "state": "HUMAN_APPROVED",
+        "reviewer": "Tiago Jun Sasaki",
+        "at": "2026-08-05T01:07:20Z",
+        "notes": "Revisão humana concluída. Artigos 124, 125 e 126, memória segregada de acréscimos e supressões, âmbito da ON AGU 50/2014, naturalidade, CTA e canibalização conferidos. A URL Wave 1 é a canônica e o peer antigo permanece em 301 direto, sem dual-index.",
+        "sources_verified": [
+          "agu-alteracoes-contratuais-2024",
+          "agu-on-50-2014",
+          "lei-14133-art124",
+          "lei-14133-art125",
+          "lei-14133-art126-132",
+          "lei-14133-planalto"
+        ],
+        "checklist": {
+          "sources_verified": true,
+          "legal_devices_checked": true,
+          "naturalness_ok": true,
+          "cta_contextual": true,
+          "no_fictitious_authorship": true,
+          "cannibalization_resolved_or_blocked": true,
+          "material_hash_confirmed": true,
+          "no_indecent_promise": true
+        },
+        "caveats": "",
+        "material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
+        "preview": {
+          "build_info_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/build-info.json",
+          "material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
+          "page_http_status": 200,
+          "page_id": "lei-limite-25-50",
+          "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
+          "preview_build_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
+          "preview_generated_at": "2026-08-05T01:07:20Z",
+          "review_packet_url": "https://deploy-preview-54--confenge.netlify.app/.well-known/editorial-review-packet.json",
+          "review_target_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
+          "reviewed_url": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/limite-25-50-aditivo-obra/"
+        }
+      }
     },
     {
       "page_id": "lei-parcela-incontroversa",
@@ -1412,10 +1587,15 @@
     }
   ],
   "counts": {
-    "EDITORIAL_REVIEWED": 11,
+    "INDEXABLE": 3,
+    "EDITORIAL_REVIEWED": 8,
     "REJECTED": 1
   },
-  "indexable_urls": [],
+  "indexable_urls": [
+    "/guias-contratos-obras/checklist-pedido-aditivo/",
+    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+    "/lei-14133-obras/limite-25-50-aditivo-obra/"
+  ],
   "human_approval_required": true,
   "note": "INDEXABLE only after approve_cli.py with named human reviewer",
   "indexable_urls_scope": "global_valid_human_approvals_not_release_cohort"

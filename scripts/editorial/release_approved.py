@@ -154,7 +154,14 @@ def main() -> int:
             "sitemap_counts": br.get("sitemap_counts"),
         }
         for u in br.get("indexable_urls") or []:
-            report["gsc_submit_candidates"].append(u)
+            # Absolute production URLs for GSC human submit list
+            path = str(u)
+            if path.startswith("http://") or path.startswith("https://"):
+                report["gsc_submit_candidates"].append(path)
+            else:
+                report["gsc_submit_candidates"].append(
+                    f"https://confenge.com.br{path if path.startswith('/') else '/' + path}"
+                )
         report["actions"].append("robots_sitemaps_via_editorial_build")
         post_truth = derive_editorial_truth(load_registry())
         release = post_truth.get("release") or {}

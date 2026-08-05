@@ -1,18 +1,19 @@
 {
   "schema_version": "3.0.0",
-  "derived_at": "2026-08-04T23:28:07Z",
-  "commit_sha": "c31378daeacc5d3a60e1f77d2f6174990c9438e3",
+  "derived_at": "2026-08-05T01:19:12Z",
+  "commit_sha": "53f1e07a1751ce1cc707f4b2f9e6d0bfba6998cd",
   "commit_sha_role": "informational_only",
-  "terminal_status": "READY_FOR_NAMED_HUMAN_APPROVAL",
+  "terminal_status": "READY_FOR_RELEASE",
   "registry_counts": {
-    "EDITORIAL_REVIEWED": 11,
+    "INDEXABLE": 3,
+    "EDITORIAL_REVIEWED": 8,
     "REJECTED": 1
   },
   "first_cohort": {
     "total": 3,
-    "editorial_reviewed": 3,
-    "human_approved": 0,
-    "indexable": 0,
+    "editorial_reviewed": 0,
+    "human_approved": 3,
+    "indexable": 3,
     "page_ids": [
       "lei-limite-25-50",
       "guia-checklist-aditivo",
@@ -21,9 +22,9 @@
   },
   "wave1": {
     "total": 3,
-    "editorial_reviewed": 3,
-    "human_approved": 0,
-    "indexable": 0,
+    "editorial_reviewed": 0,
+    "human_approved": 3,
+    "indexable": 3,
     "page_ids": [
       "lei-limite-25-50",
       "guia-checklist-aditivo",
@@ -53,45 +54,66 @@
     ]
   },
   "release": {
-    "approved_count": 0,
-    "released_count": 0,
-    "cohort_complete": false,
-    "released_page_ids": [],
-    "awaiting_page_ids": [
+    "approved_count": 3,
+    "released_count": 3,
+    "cohort_complete": true,
+    "released_page_ids": [
       "lei-limite-25-50",
       "guia-checklist-aditivo",
       "lei-item-novo-desconto"
-    ]
+    ],
+    "awaiting_page_ids": []
   },
   "public_inventory": {
     "conteudos_indexable": 20,
     "hub_claimed_guides": 20,
     "legacy_indexable_public_surface": 20,
-    "first_cohort_awaiting_approval": 3,
-    "first_cohort_published": 0,
+    "first_cohort_awaiting_approval": 0,
+    "first_cohort_published": 3,
     "editorial_backlog_awaiting_approval": 8,
     "note": "Only FIRST_COHORT_IDS may become indexable in this release."
   },
   "sitemaps": {
-    "editorial_locs": 0,
+    "editorial_locs": 5,
     "jurisprudencia_locs": 0,
-    "editorial_urls": [],
-    "expected_urls": [],
-    "valid_page_urls": [],
-    "approved_hubs": []
+    "editorial_urls": [
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "/lei-14133-obras/",
+      "/guias-contratos-obras/"
+    ],
+    "expected_urls": [
+      "/guias-contratos-obras/",
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/",
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    ],
+    "valid_page_urls": [
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    ],
+    "approved_hubs": [
+      "/guias-contratos-obras/",
+      "/lei-14133-obras/"
+    ]
   },
   "surface_audit": [
     {
       "page_id": "guia-checklist-aditivo",
       "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "registry_status": "EDITORIAL_REVIEWED",
-      "valid_indexable": false,
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
       "html_exists": true,
-      "robots": "noindex,follow",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
-      "sitemaps": [],
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
       "hub": "/guias-contratos-obras/",
-      "hub_listed": false
+      "hub_listed": true
     },
     {
       "page_id": "guia-docs-reequilibrio",
@@ -168,26 +190,30 @@
     {
       "page_id": "lei-item-novo-desconto",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "registry_status": "EDITORIAL_REVIEWED",
-      "valid_indexable": false,
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
       "html_exists": true,
-      "robots": "noindex,follow",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "sitemaps": [],
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
       "hub": "/lei-14133-obras/",
-      "hub_listed": false
+      "hub_listed": true
     },
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "registry_status": "EDITORIAL_REVIEWED",
-      "valid_indexable": false,
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
       "html_exists": true,
-      "robots": "noindex,follow",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "sitemaps": [],
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
       "hub": "/lei-14133-obras/",
-      "hub_listed": false
+      "hub_listed": true
     },
     {
       "page_id": "lei-parcela-incontroversa",
@@ -230,14 +256,16 @@
     {
       "page_id": "guia-checklist-aditivo",
       "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "registry_status": "EDITORIAL_REVIEWED",
-      "valid_indexable": false,
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
       "html_exists": true,
-      "robots": "noindex,follow",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
-      "sitemaps": [],
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
       "hub": "/guias-contratos-obras/",
-      "hub_listed": false
+      "hub_listed": true
     },
     {
       "page_id": "guia-docs-reequilibrio",
@@ -314,26 +342,30 @@
     {
       "page_id": "lei-item-novo-desconto",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "registry_status": "EDITORIAL_REVIEWED",
-      "valid_indexable": false,
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
       "html_exists": true,
-      "robots": "noindex,follow",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "sitemaps": [],
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
       "hub": "/lei-14133-obras/",
-      "hub_listed": false
+      "hub_listed": true
     },
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "registry_status": "EDITORIAL_REVIEWED",
-      "valid_indexable": false,
+      "registry_status": "INDEXABLE",
+      "valid_indexable": true,
       "html_exists": true,
-      "robots": "noindex,follow",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "sitemaps": [],
+      "sitemaps": [
+        "sitemap-editorial.xml"
+      ],
       "hub": "/lei-14133-obras/",
-      "hub_listed": false
+      "hub_listed": true
     },
     {
       "page_id": "lei-parcela-incontroversa",
