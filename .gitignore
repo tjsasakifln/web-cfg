@@ -40,3 +40,26 @@ data/revops/schedule-runs/
 data/revops/gsc/last_sync.json
 data/revops/gsc/latest_import.json
 data/revops/gsc/daily/
+
+# Reversa
+.reversa/config.user.toml
+_reversa_sdd/
+
+# Environment & Secrets (AIOX)
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Dependencies (AIOX)
+node_modules
+
+# Build & Logs (AIOX)
+dist/
+build/
+logs/
+
+# AIOX Local (AIOX)
+.aiox-core/local/
+.claude/settings.local.json
+.aiox/install-log.txt

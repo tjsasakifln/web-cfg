@@ -1,0 +1,1237 @@
+{
+  "generated_at": "2026-08-05T13:06:55Z",
+  "doc_level": "detalhado",
+  "modules_analyzed": [
+    "pseo",
+    "editorial",
+    "lead-intake",
+    "revops",
+    "analytics",
+    "nurture",
+    "site-frontend",
+    "ferramentas",
+    "content-hubs",
+    "quality-gates",
+    "deploy-ci"
+  ],
+  "modules_pending": [],
+  "modules": [
+    {
+      "name": "pseo",
+      "path": "scripts/pseo",
+      "purpose": "Motor pSEO: snapshot → candidates com score e gates → HTML/hubs/sitemaps → artefato público isolado _site",
+      "primary_files": [
+        "scripts/pseo/score.py",
+        "scripts/pseo/build.py",
+        "scripts/pseo/build_site.py",
+        "scripts/pseo/render.py",
+        "scripts/pseo/schema.py",
+        "scripts/pseo/public_artifact.py",
+        "scripts/pseo/lifecycle.py",
+        "scripts/pseo/similarity.py",
+        "scripts/pseo/validate.py"
+      ],
+      "functions": [
+        {
+          "name": "validate_snapshot",
+          "file": "scripts/pseo/schema.py",
+          "params": [
+            "data_dir: Path",
+            "max_age_days?",
+            "now?",
+            "require_hash_match?"
+          ],
+          "returns": "dict snapshot context | raises SnapshotError",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "build_candidates",
+          "file": "scripts/pseo/score.py",
+          "params": [
+            "data: dict",
+            "manifest: dict"
+          ],
+          "returns": "list[Candidate]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "decide_status",
+          "file": "scripts/pseo/score.py",
+          "params": [
+            "score: number",
+            "mandatory_fail: list"
+          ],
+          "returns": "status string",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "apply_human_review_gate",
+          "file": "scripts/pseo/score.py",
+          "params": [
+            "cands",
+            "existing_reviews"
+          ],
+          "returns": "list[Candidate]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "apply_similarity_gate",
+          "file": "scripts/pseo/build.py",
+          "params": [
+            "cands"
+          ],
+          "returns": "list[Candidate]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "build",
+          "file": "scripts/pseo/build.py",
+          "params": [
+            "data_dir",
+            "dry_run?"
+          ],
+          "returns": "summary dict",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "assemble_public_artifact",
+          "file": "scripts/pseo/public_artifact.py",
+          "params": [
+            "root: Path"
+          ],
+          "returns": "Path _site",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "audit_public_artifact",
+          "file": "scripts/pseo/public_artifact.py",
+          "params": [
+            "root: Path"
+          ],
+          "returns": "audit result / raises on forbidden",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "transition",
+          "file": "scripts/pseo/lifecycle.py",
+          "params": [
+            "page_id",
+            "from_state",
+            "to_state",
+            "reason",
+            "actor?"
+          ],
+          "returns": "audit event dict | ValueError",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Candidate",
+          "fields": [
+            {
+              "name": "page_id",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "page_type",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "score",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "mandatory_fail",
+              "type": "string[]",
+              "required": true
+            },
+            {
+              "name": "human_review",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "SnapshotManifest",
+          "fields": [
+            {
+              "name": "schema_version",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "dataset_hash",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Score sozinho nunca indexa; human_review APPROVED|APPROVED_WITH_NOTES é obrigatório para publish",
+          "location": "scripts/pseo/build.py (docstring) + score.apply_human_review_gate",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "mandatory_fail semântico não é compensável por score alto",
+          "location": "scripts/pseo/score.py semantic_*_fails + decide_status",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Similaridade >= 0.88 no mesmo page_type consolida perdedor como reject",
+          "location": "scripts/pseo/build.py apply_similarity_gate SIM_THRESHOLD=0.88",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Mudança de material_signature demove APPROVED para PENDING",
+          "location": "scripts/pseo/build.py _attach_review_signatures / score.apply_human_review_gate",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Artefato público só inclui allowlist; proíbe data/, scripts/, secrets",
+          "location": "scripts/pseo/public_artifact.py",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "PUBLISH_MIN=80, PREVIEW_MIN=65",
+          "location": "scripts/pseo/score.py",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "content-hubs",
+        "deploy-ci",
+        "quality-gates"
+      ],
+      "algorithms": [
+        "indexability_score weighted 0-100",
+        "dataset_hash SHA-256 canonical JSON",
+        "similarity near-dup consolidation",
+        "material signature invalidation",
+        "public artifact allowlist assembly"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "editorial",
+      "path": "scripts/editorial",
+      "purpose": "Pipeline editorial Wave 1 com governança de aprovação humana, material_hash content-led e sitemaps segmentados",
+      "primary_files": [
+        "scripts/editorial/registry.py",
+        "scripts/editorial/build.py",
+        "scripts/editorial/gates.py",
+        "scripts/editorial/render.py",
+        "scripts/editorial/truth.py",
+        "scripts/editorial/approve_cli.py",
+        "data/editorial/EDITORIAL-REGISTRY.json"
+      ],
+      "functions": [
+        {
+          "name": "material_hash",
+          "file": "scripts/editorial/registry.py",
+          "params": [
+            "payload",
+            "source_manifest"
+          ],
+          "returns": "string hash",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "advance",
+          "file": "scripts/editorial/registry.py",
+          "params": [
+            "reg",
+            "page_id",
+            "target"
+          ],
+          "returns": "updated reg",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "approve_human",
+          "file": "scripts/editorial/registry.py",
+          "params": [
+            "reg",
+            "page_id",
+            "reviewer/checklist/preview..."
+          ],
+          "returns": "updated reg | deny",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "mark_indexable",
+          "file": "scripts/editorial/registry.py",
+          "params": [
+            "reg",
+            "page_id"
+          ],
+          "returns": "updated reg",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "evaluate_page",
+          "file": "scripts/editorial/gates.py",
+          "params": [
+            "page",
+            "html"
+          ],
+          "returns": "gate result",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "build",
+          "file": "scripts/editorial/build.py",
+          "params": [],
+          "returns": "report side-effects",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "derive_editorial_truth",
+          "file": "scripts/editorial/truth.py",
+          "params": [
+            "reg"
+          ],
+          "returns": "truth object",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "EditorialPage",
+          "fields": [
+            {
+              "name": "page_id",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "archetype",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "body_markdown",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "sources",
+              "type": "array",
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "enum",
+              "required": true
+            },
+            {
+              "name": "material_hash",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Build automático avança no máximo até EDITORIAL_REVIEWED",
+          "location": "scripts/editorial/build.py docstring + _auto_progress_to_editorial_reviewed",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "HUMAN_APPROVED/INDEXABLE exigem humano nomeado; bots/CI bloqueados",
+          "location": "scripts/editorial/registry.py BLOCKED_REVIEWER_PATTERNS + approve_human",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Aprovação é content-led via material_hash; SHA de repo não concede approval",
+          "location": "scripts/editorial/registry.py module docstring",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Só INDEXABLE/PUBLISHED entram em sitemaps segmentados",
+          "location": "scripts/editorial/build.py write_segmented_sitemaps + INDEXABLE_STATES",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "APPROVAL_SCHEMA_VERSION = 3.0.0",
+          "location": "scripts/editorial/registry.py",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "site-frontend",
+        "content-hubs",
+        "quality-gates",
+        "deploy-ci"
+      ],
+      "algorithms": [
+        "canonical material payload hashing",
+        "state machine PROGRESSION",
+        "segmented sitemap membership",
+        "editorial truth vs live audit"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "lead-intake",
+      "path": "netlify/functions",
+      "purpose": "Intake de leads: validação, rate limit, Turnstile, persistência durable-first, notify best-effort, estágio comercial inicial",
+      "primary_files": [
+        "netlify/functions/lead.cjs",
+        "netlify/functions/lib/lead-core.cjs",
+        "netlify/functions/lib/lead-store.cjs",
+        "netlify/functions/lib/lead-delivery.cjs",
+        "netlify/functions/lib/lead-rate-limit.cjs",
+        "netlify/functions/lib/lead-stages.cjs",
+        "netlify/functions/lib/record-kind.cjs"
+      ],
+      "functions": [
+        {
+          "name": "handler",
+          "file": "netlify/functions/lead.cjs",
+          "params": [
+            "event",
+            "context"
+          ],
+          "returns": "HTTP response",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "parseBody",
+          "file": "netlify/functions/lib/lead-core.cjs",
+          "params": [
+            "event"
+          ],
+          "returns": "{ok, data|error}",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "validateAndNormalize",
+          "file": "netlify/functions/lib/lead-core.cjs",
+          "params": [
+            "data"
+          ],
+          "returns": "normalized lead | error",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "createStore",
+          "file": "netlify/functions/lib/lead-store.cjs",
+          "params": [],
+          "returns": "Store | null",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "buildLeadRecord",
+          "file": "netlify/functions/lib/lead-store.cjs",
+          "params": [
+            "lead_id",
+            "lead",
+            "received_at",
+            "ip_hash",
+            "fingerprint",
+            "status",
+            "headers"
+          ],
+          "returns": "LeadRecord",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "verifyTurnstile",
+          "file": "netlify/functions/lib/lead-delivery.cjs",
+          "params": [
+            "token",
+            "ip"
+          ],
+          "returns": "{ok, error?}",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "deliverAll",
+          "file": "netlify/functions/lib/lead-delivery.cjs",
+          "params": [
+            "record",
+            "..."
+          ],
+          "returns": "delivery results best-effort",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "rateLimit",
+          "file": "netlify/functions/lib/lead-rate-limit.cjs",
+          "params": [
+            "ip",
+            "fingerprint"
+          ],
+          "returns": "allow/deny",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "applyStageChange",
+          "file": "netlify/functions/lib/lead-stages.cjs",
+          "params": [
+            "record",
+            "stage patch"
+          ],
+          "returns": "patch | throws",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "canTransition",
+          "file": "netlify/functions/lib/lead-stages.cjs",
+          "params": [
+            "from",
+            "to"
+          ],
+          "returns": "boolean",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "LeadRecord",
+          "fields": [
+            {
+              "name": "lead_id",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "record_kind",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "commercial_stage",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "nome",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "telefone",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "jornada",
+              "type": "enum",
+              "required": true
+            },
+            {
+              "name": "idempotency_key",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "ip_hash",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "delete_after",
+              "type": "ISO-date",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Persistir lead ANTES de responder sucesso; notify/email best-effort",
+          "location": "netlify/functions/lead.cjs header contract",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Sem 200 se não persistiu; store ephemeral em prod exige fallback flag",
+          "location": "netlify/functions/lead.cjs",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Form público só cria commercial_stage=lead_persisted",
+          "location": "netlify/functions/lib/lead-stages.cjs",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "record_kind != real => next_action exclude_from_commercial",
+          "location": "netlify/functions/lib/lead-store.cjs buildLeadRecord",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "lost exige loss_reason; won/lost terminais com reopen controlado",
+          "location": "netlify/functions/lib/lead-stages.cjs applyStageChange",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Honeypot retorna soft success (anti-enumeration)",
+          "location": "netlify/functions/lead.cjs + lead-core isHoneypot",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Resposta pública nunca inclui PII free-text/secrets",
+          "location": "netlify/functions/lead.cjs + publicSuccessBody/publicErrorBody",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "revops",
+        "analytics",
+        "nurture",
+        "site-frontend"
+      ],
+      "algorithms": [
+        "phone/email/journey normalization",
+        "idempotency key replay",
+        "rate limit IP+fingerprint",
+        "multi-backend store selection",
+        "record_kind classification",
+        "commercial stage machine"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "revops",
+      "path": "scripts/revops + netlify/functions/ops.cjs",
+      "purpose": "API ops autenticada, funnel real-only, record_kind, GSC observatory, schedules diários/semanais",
+      "primary_files": [
+        "netlify/functions/ops.cjs",
+        "netlify/functions/lib/record-kind.cjs",
+        "netlify/functions/lib/lead-stages.cjs",
+        "scripts/revops/search_demand_observatory.py",
+        "scripts/revops/scheduled_daily.mjs",
+        "scripts/revops/scheduled_weekly.mjs",
+        "scripts/revops/revenue_daily.mjs",
+        "scripts/revops/lead_cli.py",
+        "scripts/revops/backfill_record_kind.mjs"
+      ],
+      "functions": [
+        {
+          "name": "handler",
+          "file": "netlify/functions/ops.cjs",
+          "params": [
+            "event"
+          ],
+          "returns": "HTTP",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "resolveRecordKind",
+          "file": "netlify/functions/lib/record-kind.cjs",
+          "params": [
+            "input",
+            "options"
+          ],
+          "returns": "kind info",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "detectNonRealSignals",
+          "file": "netlify/functions/lib/record-kind.cjs",
+          "params": [
+            "input"
+          ],
+          "returns": "signals+kind",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "applyStageChange",
+          "file": "netlify/functions/lib/lead-stages.cjs",
+          "params": [
+            "record",
+            "patch"
+          ],
+          "returns": "patch",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "RecordKind",
+          "fields": [
+            {
+              "name": "record_kind",
+              "type": "enum real|synthetic|qa|spam|internal",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "GscInsight",
+          "fields": [
+            {
+              "name": "queries/pages metrics",
+              "type": "object",
+              "required": false
+            }
+          ],
+          "confidence": "inferred"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "OPS_TOKEN fail-closed; commercial metrics real-only",
+          "location": "ops.cjs",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "GSC insights never public static JSON",
+          "location": "ops.cjs header",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Never join single GSC query to individual lead",
+          "location": "search_demand_observatory.py",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Backfill non-real requires multi-signal",
+          "location": "record-kind.cjs classifyForBackfill",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "lead-intake",
+        "analytics",
+        "nurture",
+        "deploy-ci"
+      ],
+      "algorithms": [
+        "multi-signal record_kind",
+        "GSC cluster rules",
+        "scheduled orchestration"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "analytics",
+      "path": "netlify/functions/collect.cjs",
+      "purpose": "First-party analytics sem PII com scrub, Blobs e forward opcional Plausible",
+      "primary_files": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs",
+        "script.js"
+      ],
+      "functions": [
+        {
+          "name": "handler",
+          "file": "netlify/functions/collect.cjs",
+          "params": [
+            "event"
+          ],
+          "returns": "HTTP",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "scrubProps",
+          "file": "netlify/functions/collect.cjs",
+          "params": [
+            "props"
+          ],
+          "returns": "object",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "aggregateEvents",
+          "file": "netlify/functions/lib/analytics-agg.cjs",
+          "params": [
+            "events"
+          ],
+          "returns": "aggregates",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "track",
+          "file": "script.js",
+          "params": [
+            "eventName",
+            "params"
+          ],
+          "returns": "void",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "AnalyticsEvent",
+          "fields": [
+            {
+              "name": "event",
+              "type": "enum",
+              "required": true
+            },
+            {
+              "name": "props",
+              "type": "object",
+              "required": false
+            },
+            {
+              "name": "path",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "sid",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "No PII in props; forbidden keys stripped",
+          "location": "collect.cjs FORBIDDEN_KEYS",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Max 25 events / 16KB body",
+          "location": "collect.cjs",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "site-frontend",
+        "revops"
+      ],
+      "algorithms": [
+        "client queue flush",
+        "prop scrubbing",
+        "day aggregation"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "nurture",
+      "path": "netlify/functions/nurture.cjs",
+      "purpose": "Double opt-in e-mail sequences por jornada com stop comercial e tokens",
+      "primary_files": [
+        "netlify/functions/nurture.cjs",
+        "netlify/functions/lib/nurture-core.cjs",
+        "data/nurture/tracks.json"
+      ],
+      "functions": [
+        {
+          "name": "buildSubscription",
+          "file": "netlify/functions/lib/nurture-core.cjs",
+          "params": [
+            "email,track,consent,..."
+          ],
+          "returns": "record+tokens",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "confirmSubscription",
+          "file": "netlify/functions/lib/nurture-core.cjs",
+          "params": [
+            "rec",
+            "token"
+          ],
+          "returns": "active rec",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "nextDueMessage",
+          "file": "netlify/functions/lib/nurture-core.cjs",
+          "params": [
+            "rec",
+            "tracks"
+          ],
+          "returns": "message|null",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "sendResendNurture",
+          "file": "netlify/functions/lib/nurture-core.cjs",
+          "params": [
+            "..."
+          ],
+          "returns": "send result",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "NurtureSubscription",
+          "fields": [
+            {
+              "name": "subscription_id",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "track",
+              "type": "enum",
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "next_message_index",
+              "type": "int",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "consent required; double opt-in",
+          "location": "nurture-core buildSubscription",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Public responses never full email",
+          "location": "publicSubSummary",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Stop on commercial stage when configured",
+          "location": "shouldStopForCommercialStage",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "lead-intake",
+        "revops",
+        "site-frontend"
+      ],
+      "algorithms": [
+        "token hash pairs",
+        "day_offset scheduling",
+        "track templates"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "site-frontend",
+      "path": "index.html + script.js + styles.css",
+      "purpose": "UX visitante multi-page, CTAs, forms, analytics client, design system",
+      "primary_files": [
+        "index.html",
+        "script.js",
+        "styles.css",
+        "styles-tools.css",
+        "data/site/design-system.json"
+      ],
+      "functions": [
+        {
+          "name": "track",
+          "file": "script.js",
+          "params": [
+            "eventName",
+            "params"
+          ],
+          "returns": "void",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "flushAnalytics",
+          "file": "script.js",
+          "params": [],
+          "returns": "void",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [],
+      "business_rules": [
+        {
+          "description": "Client analytics never sends PII field names",
+          "location": "script.js PII_PARAM_KEYS",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "lead-intake",
+        "analytics",
+        "ferramentas",
+        "content-hubs"
+      ],
+      "algorithms": [
+        "session id",
+        "beacon flush"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "ferramentas",
+      "path": "ferramentas/ + assets/js/",
+      "purpose": "Tools client-side: limite aditivo art.125, checklist reequilíbrio, matriz atraso",
+      "primary_files": [
+        "assets/js/tool-compute.js",
+        "assets/js/tools-common.js",
+        "assets/js/tool-persist.js",
+        "ferramentas/limite-acrescimos-supressoes/index.html",
+        "ferramentas/checklist-reequilibrio/index.html",
+        "ferramentas/matriz-atraso-obra/index.html"
+      ],
+      "functions": [
+        {
+          "name": "parseBRL",
+          "file": "assets/js/tool-compute.js",
+          "params": [
+            "raw"
+          ],
+          "returns": "{ok,value}",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "computeLimiteAditivo",
+          "file": "assets/js/tool-compute.js",
+          "params": [
+            "input"
+          ],
+          "returns": "result+alerts",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "computeReequilibrio",
+          "file": "assets/js/tool-compute.js",
+          "params": [
+            "states",
+            "opts"
+          ],
+          "returns": "score+readiness",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "computeMatrizAtraso",
+          "file": "assets/js/tool-compute.js",
+          "params": [
+            "causes",
+            "dias",
+            "temMatriz"
+          ],
+          "returns": "matrix result",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [],
+      "business_rules": [
+        {
+          "description": "Acréscimo 25% obra / 50% reforma; supressão 25%",
+          "location": "computeLimiteAditivo",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Tool events strip email/phone/valor raw",
+          "location": "tools-common.js emit",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Score alto ≠ direito automático (copy domain)",
+          "location": "nurture tracks + tool UX",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "site-frontend",
+        "analytics"
+      ],
+      "algorithms": [
+        "BRL parse",
+        "weighted reequilibrio score",
+        "causa→parte map"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "content-hubs",
+      "path": "conteudos/ + service hubs + inteligencia/",
+      "purpose": "Inventário de conteúdo SEO/B2G e hubs comerciais (~120 conteudos + offers)",
+      "primary_files": [
+        "conteudos/",
+        "inteligencia/",
+        "guias-contratos-obras/",
+        "content-index.json"
+      ],
+      "functions": [],
+      "entities": [
+        {
+          "name": "ContentPage",
+          "fields": [
+            {
+              "name": "path/index.html",
+              "type": "html",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Abandoned products return 410 not soft-404",
+          "location": "_redirects",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Public top dirs allowlisted in public_artifact",
+          "location": "scripts/pseo/public_artifact.py",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "pseo",
+        "editorial",
+        "deploy-ci"
+      ],
+      "algorithms": [],
+      "complexity": "low"
+    },
+    {
+      "name": "quality-gates",
+      "path": "scripts/site/ + seo/scripts/",
+      "purpose": "Gates fail-closed sobre HTML/CSS/JSON reais: brand, design, copy, inbound, lead, tools, secrets",
+      "primary_files": [
+        "scripts/site/inbound_gates.py",
+        "scripts/site/test_design_gates.py",
+        "scripts/site/test_brand_contract.py",
+        "scripts/site/test_lead_function.mjs",
+        "scripts/site/test_secrets_scan.mjs",
+        "package.json scripts test"
+      ],
+      "functions": [
+        {
+          "name": "inbound_gates main",
+          "file": "scripts/site/inbound_gates.py",
+          "params": [
+            "--out"
+          ],
+          "returns": "report JSON",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [],
+      "business_rules": [
+        {
+          "description": "Tests drive shipped HTML not reimplementations",
+          "location": "test_design_gates docstring",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Machine/keyword-stuffed patterns fail inbound gates",
+          "location": "inbound_gates MACHINE_PATTERNS",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "site-frontend",
+        "editorial",
+        "pseo",
+        "deploy-ci"
+      ],
+      "algorithms": [
+        "pattern scan",
+        "contract asserts"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "deploy-ci",
+      "path": "netlify.toml + .github/workflows + _redirects",
+      "purpose": "Build Netlify determinístico, redirects edge, CI e schedules RevOps",
+      "primary_files": [
+        "netlify.toml",
+        "_redirects",
+        "_headers",
+        ".github/workflows/site-ci.yml",
+        ".github/workflows/pseo.yml",
+        ".github/workflows/revops-scheduled.yml",
+        "scripts/pseo/ignore_evidence_build.sh"
+      ],
+      "functions": [],
+      "entities": [],
+      "business_rules": [
+        {
+          "description": "Publish only _site public artifact; no private DB on Netlify build",
+          "location": "netlify.toml comments",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "ignore_evidence_build prevents SHA freeze from advancing live build identity",
+          "location": "netlify.toml ignore",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "npm ci twice for lock determinism in CI",
+          "location": "site-ci.yml",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "pseo",
+        "quality-gates",
+        "revops"
+      ],
+      "algorithms": [
+        "edge redirect table",
+        "scheduled cron"
+      ],
+      "complexity": "medium"
+    }
+  ],
+  "summary": {
+    "module_count": 11,
+    "primary_patterns": [
+      "fail-closed",
+      "public-private isolation",
+      "real-only commercial metrics",
+      "dual content pipelines"
+    ],
+    "persistence": [
+      "json_files",
+      "netlify_blobs"
+    ],
+    "sql_database": false
+  }
+}
