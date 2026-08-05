@@ -52,3 +52,12 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | --- | --- |
 | `COMMIT_REF` / `CACHED_COMMIT_REF` | Injetados pelo Netlify no build |
 | `CONTEXT` | `production` / `deploy-preview` |
+
+
+## Ops auth
+
+| Nome | Obrigatória | Descrição |
+| --- | --- | --- |
+| `OPS_TOKEN` | produção ops | Bearer / X-Ops-Token for sensitive ops actions |
+| `REVOPS_TOKEN` | opcional | Alternate accepted by ops (dual-key rotation window) |
+| `GSC_BACKUP_DIR` | opcional | Private directory for GSC insights backup export |

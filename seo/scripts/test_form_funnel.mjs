@@ -18,7 +18,6 @@ for (const needle of [
   'name="diagnostico-b2g"',
   "Enviar documentos para análise",
   "Enviar edital para triagem",
-  "Diagnosticar operação B2G",
   'data-set-journey="contrato"',
   'data-set-journey="edital"',
   'data-set-journey="operacao"',
@@ -30,6 +29,14 @@ for (const needle of [
     console.error("FAIL: home missing", needle);
     process.exit(1);
   }
+}
+// Journey operacao CTA (article optional: "a operação" vs "operação")
+if (
+  !home.includes("Diagnosticar operação B2G") &&
+  !home.includes("Diagnosticar a operação B2G")
+) {
+  console.error("FAIL: home missing Diagnosticar (a) operação B2G");
+  process.exit(1);
 }
 // No visitor-facing marketing metalinguage on the conversion surface
 for (const leak of ["Sem CTA genérico", "Jornada A", "Jornada B", "Jornada C", "Risco de não agir"]) {

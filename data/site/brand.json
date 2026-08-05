@@ -28,8 +28,8 @@
     "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
     "h1_html": "Licitação vencida não paga a conta. <span class=\"type-serif\">Contrato rentável, sim.</span>",
     "subheadline": "A CONFENGE ajuda construtoras a selecionar melhor as licitações, precificar com disciplina e proteger a margem durante a execução do contrato público.",
-    "cta_primary": "Diagnosticar a operação B2G",
-    "cta_secondary": "Problema urgente no contrato",
+    "cta_primary": "Analisar meu caso",
+    "cta_secondary": "Ver caminhos por situação",
     "cta_secondary_wa": "Olá, Tiago. Tenho um problema urgente em contrato público (glosa, medição, aditivo, reequilíbrio ou atraso) e preciso de análise inicial.",
     "microcopy": "Para construtoras e empresas de engenharia com licitações ou contratos públicos ativos.",
     "meta_title": "CONFENGE | Consultoria para licitações e contratos de obras públicas",
@@ -41,7 +41,7 @@
     {
       "id": "contrato",
       "code": "A",
-      "label": "Problema urgente em contrato",
+      "label": "Tenho um contrato sob pressão",
       "eyebrow": "Como podemos ajudar",
       "section_title": "Qual situação sua empresa precisa resolver agora?",
       "need": "glosa, medição retida, atraso de pagamento, notificação, multa, aditivo, reequilíbrio, paralisação ou divergência de projeto e orçamento",
@@ -58,7 +58,7 @@
     {
       "id": "edital",
       "code": "B",
-      "label": "Edital ou proposta em análise",
+      "label": "Estou analisando uma licitação",
       "need": "leitura crítica do edital, habilitação, acervo, orçamento, cronograma, riscos e decisão de participar ou recusar",
       "complement": "A triagem deve respeitar o prazo real da licitação e a capacidade de execução da empresa.",
       "cta": "Enviar edital para triagem",
@@ -73,10 +73,10 @@
     {
       "id": "operacao",
       "code": "C",
-      "label": "Operação B2G sem método",
+      "label": "Preciso organizar minha operação B2G",
       "need": "seleção de oportunidades, rotina comercial, orçamento, indicadores, responsabilidades e governança",
       "complement": "Mapeamos gargalos e definimos prioridades práticas para os próximos 90 dias.",
-      "cta": "Diagnosticar operação B2G",
+      "cta": "Diagnosticar a operação B2G",
       "cta_secondary": "Conhecer a atuação",
       "href": "/#contato",
       "href_params": "jornada=operacao",
@@ -89,24 +89,16 @@
   "navigation": {
     "desktop": [
       {
-        "label": "Analisar licitação",
-        "href": "/bid-room-licitacoes-obras/"
+        "label": "Serviços",
+        "href": "/#ofertas"
       },
       {
-        "label": "Proteger contrato",
-        "href": "/defesa-margem-contratos-publicos/"
+        "label": "Problemas que resolvemos",
+        "href": "/#jornadas"
       },
       {
-        "label": "Operação B2G",
-        "href": "/diretoria-b2g/"
-      },
-      {
-        "label": "Conteúdos",
+        "label": "Conteúdos e ferramentas",
         "href": "/conteudos/"
-      },
-      {
-        "label": "Ferramentas",
-        "href": "/ferramentas/"
       },
       {
         "label": "Especialista",
@@ -114,7 +106,7 @@
       }
     ],
     "cta": {
-      "label": "Falar com a CONFENGE",
+      "label": "Analisar meu caso",
       "href": "/#contato"
     }
   },
@@ -285,41 +277,49 @@
     "notificação de lead"
   ],
   "copy_leaks": [
+    "0 guias",
     "Arquitetura de ofertas",
-    "Sem preço público sem autorização",
-    "Sem cases fabricados",
-    "O que será medido em cada atuação",
-    "pipeline editorial",
-    "status de implementação",
-    "aprovado para publicação",
-    "critério interno",
-    "red team",
-    "post-mortem",
-    "sem inventar case",
-    "sem métrica fictícia",
-    "sem metrica ficticia",
-    "visual regression",
-    "arquétipo",
-    "legível sem JavaScript",
-    "Conversão com utilidade real",
-    "utilidade real",
-    "alta intenção",
-    "Prova próxima ao CTA",
-    "Nurture por intenção",
-    "Wave 1 noindex",
-    "QA interno",
-    "PILOTO · NOINDEX",
-    "Search Demand Observatory",
-    "pending_lineage",
-    "motor de inbound",
-    "ativo de conversão",
-    "jornada de decisão",
-    "prova de autoridade",
     "CTA contextual",
-    "Onboarding e horizonte",
+    "Conversão com utilidade real",
     "Este cluster",
+    "Nurture por intenção",
+    "O que será medido em cada atuação",
+    "Onboarding e horizonte",
+    "PILOTO · NOINDEX",
+    "Prova próxima ao CTA",
+    "QA interno",
+    "Search Demand Observatory",
+    "Sem cases fabricados",
+    "Sem preço público sem autorização",
+    "Wave 1",
+    "Wave 1 noindex",
+    "alta intenção",
+    "aprovado para publicação",
+    "arquitetura de conteúdo",
+    "arquétipo",
+    "ativo de conversão",
+    "conteúdos indexáveis",
+    "critério interno",
     "dados do lead",
-    "notificação de lead"
+    "eixos integrados",
+    "frentes de decisão",
+    "guias indexáveis",
+    "jornada de decisão",
+    "legível sem JavaScript",
+    "motor de inbound",
+    "notificação de lead",
+    "pending_lineage",
+    "pipeline editorial",
+    "post-mortem",
+    "prova de autoridade",
+    "página-pilar",
+    "red team",
+    "sem inventar case",
+    "sem metrica ficticia",
+    "sem métrica fictícia",
+    "status de implementação",
+    "utilidade real",
+    "visual regression"
   ],
   "copy_leak_word_boundaries": [
     "owners"

@@ -4,4 +4,4 @@ axe_critical=0
 axe_serious=0
 axe_moderate=0
 screenshots=/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after
-generated=2026-08-04T15:05:23.084Z
+generated=2026-08-05T11:59:13.087Z

@@ -64,9 +64,10 @@ def test_microcopy_preferences():
     # Client-facing journey section (not briefing metalinguage)
     assert "como podemos ajudar" in lower
     assert "qual situação sua empresa precisa resolver agora" in lower
-    assert "problema urgente em contrato" in lower
-    assert "edital ou proposta em análise" in lower
-    assert "operação b2g sem método" in lower
+    assert "tenho um contrato sob pressão" in lower
+    assert "estou analisando uma licitação" in lower
+    assert "preciso organizar minha operação b2g" in lower
+    assert "analisar meu caso" in lower
     assert "enviar documentos para análise" in lower
     assert "enviar edital para triagem" in lower
     assert "diagnosticar operação b2g" in lower or "diagnosticar a operação b2g" in lower

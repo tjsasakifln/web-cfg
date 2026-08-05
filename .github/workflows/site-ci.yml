@@ -48,6 +48,11 @@ jobs:
           npm run test:analytics
           npm run test:form-funnel
           npm run test:lead-function
+          npm run test:lead-store-production
+          npm run test:ops-auth
+          npm run test:env-example
+          npm run test:epic-td
+          npm run test:script-modules
           npm run test:secrets-scan
           npm run test:cta-whatsapp
           npm run test:release-filters

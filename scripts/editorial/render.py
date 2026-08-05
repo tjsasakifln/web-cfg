@@ -201,9 +201,18 @@ def _sources_html(page: dict[str, Any]) -> str:
             continue
         title = src.get("title") or sid
         url = src.get("url") or "#"
+        organ = src.get("organ") or src.get("issuer") or src.get("authority") or ""
+        device = src.get("device") or src.get("article") or src.get("legal_device") or ""
+        consulted = src.get("accessed") or src.get("date_consulted") or src.get("retrieved") or ""
+        meta_bits = [b for b in (organ, device, consulted and f"Consulta: {consulted}") if b]
+        meta = (
+            f'<span class="sources-meta">{e(" · ".join(meta_bits))}</span>'
+            if meta_bits
+            else ""
+        )
         items.append(
-            f'<li><a href="{e(url)}" rel="noopener noreferrer" target="_blank">{e(title)}'
-            f'<svg class="icon"><use href="#i-arrow"></use></svg></a></li>'
+            f'<li><a href="{e(url)}" rel="noopener noreferrer" target="_blank">'
+            f'<span class="sources-title">{e(title)}</span>{meta}</a></li>'
         )
     if not items:
         return ""
@@ -215,7 +224,8 @@ def _sources_html(page: dict[str, Any]) -> str:
         "depende do edital, do contrato e da documentação produzida na obra.</p>"
         f"<ul>{''.join(items)}</ul>"
         '<p class="technical-note">Conteúdo técnico-educacional. Não substitui análise individual '
-        "nem parecer jurídico quando necessário.</p>"
+        "nem parecer jurídico quando necessário. Âmbito: obras e contratos públicos sob a "
+        "Lei nº 14.133/2021 e regimes aplicáveis ao caso.</p>"
         "</section>"
     )
 
@@ -360,11 +370,11 @@ def render_page(page: dict[str, Any]) -> str:
         graph.append(faq_ld)
 
     meta_line = (
-        f'<div class="article-meta" role="list">'
-        f'<span class="article-meta-chip" role="listitem">{e(author_name)}</span>'
-        f'<span class="article-meta-chip" role="listitem">Publicado em <time datetime="{e(published)}">{e(format_date_br(published))}</time></span>'
-        f'<span class="article-meta-chip" role="listitem">Revisado em <time datetime="{e(modified)}">{e(format_date_br(modified))}</time></span>'
-        f"</div>"
+        f'<p class="article-meta-line">'
+        f'<span>{e(author_name)}</span>'
+        f'<span aria-hidden="true">·</span>'
+        f'<span>Atualizado em <time datetime="{e(modified)}">{e(format_date_br(modified))}</time></span>'
+        f"</p>"
     )
 
     checklist_script = ""
@@ -493,16 +503,18 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     mail_body = hub.get("cta_email_body") or (
         f"Olá, Tiago.\n\nAcessei {url} e gostaria de orientação sobre o tema do hub.\n"
     )
-    body = f"""
-{breadcrumbs_html(crumbs)}
-<header class="content-hero"><div class="container">
-<p class="eyebrow">Biblioteca técnica</p>
-<h1>{e(title)}</h1>
-<p class="content-lead">{e(desc)}</p>
-</div></header>
-<section class="section library-section"><div class="container">
-<div class="library-list">{''.join(cards) if cards else '<p>Nenhum conteúdo indexável neste hub ainda.</p>'}</div>
-<div class="lead-inline" style="margin-top:2rem" data-cta-position="hub-footer">
+    # Never publish an empty library section or "0 guias" / empty-index copy.
+    if cards:
+        library_block = (
+            '<section class="section library-section"><div class="container">'
+            f'<div class="library-list">{"".join(cards)}</div>'
+            "</div></section>"
+        )
+    else:
+        library_block = ""
+    case_cta = f"""
+<section class="section section--tight" data-hub-case-cta><div class="container">
+<div class="lead-inline" data-cta-position="hub-footer">
 <div class="lead-inline-copy"><span>Próximo passo</span><strong>Levou uma dúvida do hub para o seu contrato?</strong>
 <p>Envie o tema e os documentos principais. Retorno com enquadramento inicial.</p></div>
 <div class="lead-inline-actions">
@@ -510,6 +522,16 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
 <a class="button button-secondary" data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a>
 </div></div>
 </div></section>
+"""
+    body = f"""
+{breadcrumbs_html(crumbs)}
+<header class="content-hero"><div class="container">
+<p class="eyebrow">Biblioteca técnica</p>
+<h1>{e(title)}</h1>
+<p class="content-lead">{e(desc)}</p>
+</div></header>
+{library_block}
+{case_cta}
 """
     graph = [
         ORG_JSONLD,

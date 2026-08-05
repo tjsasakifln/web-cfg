@@ -1,0 +1,22 @@
+/* CONFENGE design tokens — single source of truth for palette/spacing primitives.
+ * Imported by styles.css and styles-tools.css. Do not invent a second palette.
+ * See docs/DESIGN-SYSTEM.md §Tokens and data/site/design-system.json.
+ */
+:root{
+  --navy-950:#031020;
+  --navy-900:#061a33;
+  --navy-800:#0a294b;
+  --green-700:#2d6f2d;
+  --green-600:#3d8238;
+  --green-100:#edf5ec;
+  --lime:#ced62a;
+  --ink:#071a31;
+  --text:#26374a;
+  --muted:#647182;
+  --line:#dce3e8;
+  --soft:#f5f7f6;
+  --white:#fff;
+  --container:1200px;
+  --radius:18px;
+  --shadow:0 24px 70px rgba(3,16,32,.12);
+}

@@ -329,8 +329,8 @@ async function main() {
     await page.setViewport({ width: 390, height: 844 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const matrix = await page.evaluate(() => {
-      const paths = document.querySelectorAll(".journey-path");
-      const grid = document.querySelector(".journey-paths");
+      const paths = document.querySelectorAll(".journey-path, .journey-row");
+      const grid = document.querySelector(".journey-paths, .journey-list");
       return {
         cardCount: paths.length,
         gridDisplay: grid ? getComputedStyle(grid).display : "missing",
@@ -407,15 +407,15 @@ async function main() {
         const overflow =
           document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
         const title = document.querySelector("#journeys-title");
-        const firstCard = document.querySelector(".journey-path");
-        const firstCta = document.querySelector(".journey-path .button");
+        const firstCard = document.querySelector(".journey-path, .journey-row");
+        const firstCta = document.querySelector(".journey-path .button, .journey-row .button");
         const floatEl = document.querySelector(".whatsapp-float, .contact-float .whatsapp-float");
         const header = document.querySelector(".site-header");
         const titleLines = title
           ? Math.round(title.getBoundingClientRect().height / (parseFloat(getComputedStyle(title).lineHeight) || 24))
           : 0;
         const titleFs = title ? parseFloat(getComputedStyle(title).fontSize) : 0;
-        const bodyP = document.querySelector(".journey-path > p");
+        const bodyP = document.querySelector(".journey-path > p, .journey-row-body > p");
         const bodyFs = bodyP ? parseFloat(getComputedStyle(bodyP).fontSize) : 0;
         const ctaBox = firstCta ? firstCta.getBoundingClientRect() : null;
         const floatBox = floatEl ? floatEl.getBoundingClientRect() : null;
@@ -435,7 +435,7 @@ async function main() {
           titleFs,
           bodyFs,
           headerH: header ? header.getBoundingClientRect().height : 0,
-          cardCount: document.querySelectorAll(".journey-path").length,
+          cardCount: document.querySelectorAll(".journey-path, .journey-row").length,
           ctaW: ctaBox?.width || 0,
           ctaH: ctaBox?.height || 0,
           ctaFullyInLayout: ctaBox ? ctaBox.width > 0 && ctaBox.right <= window.innerWidth + 1 : false,

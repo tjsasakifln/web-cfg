@@ -199,6 +199,8 @@ def test_trace_matrix_and_tension_present():
     # Client-facing journey section — no briefing metalinguage
     assert "Como podemos ajudar" in html
     assert "Qual situação sua empresa precisa resolver agora" in html
+    assert "Tenho um contrato sob pressão" in html
+    assert ("journey-list" in html or "journey-paths" in html)
     assert "Sem CTA genérico" not in html
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", html)
     assert "Risco de não agir" not in html
@@ -222,15 +224,16 @@ def test_primary_cta_not_spam():
     # header (+ mobile nav), hero, form submit — ≤4 semantic primaries
     assert primary <= 4, f"too many primary CTAs on home: {primary}"
     # Dominant CTA family (article optional)
+    assert "Analisar meu caso" in html
     assert "Diagnosticar a operação B2G" in html or "Diagnosticar operação B2G" in html
-    # WhatsApp secondary must not share primary button class in hero
+    # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
     # Urgent secondary path present (WhatsApp or critical decision)
-    assert "wa.me" in hero_html
-    assert "urgente" in hero_html.lower() or "cr%c3%adtica" in hero_html.lower() or "crítica" in hero_html.lower()
+    assert "jornadas" in hero_html or "caminhos" in hero_html.lower()
+    assert "evidence-matrix" in html or "hero-evidence" in html or "EESC-USP" in html
 
 
 def test_home_five_second_clarity():
@@ -243,7 +246,7 @@ def test_home_five_second_clarity():
     assert "margem" in lower
     assert "eesc-usp" in lower or "usp" in lower
     assert "#contato" in html or 'id="contato"' in html
-    assert "diagnosticar" in lower and "b2g" in lower
+    assert "analisar meu caso" in lower or ("diagnosticar" in lower and "b2g" in lower)
 
 
 def test_form_qualification_minimal():
@@ -271,8 +274,8 @@ def test_mobile_matrix_composition():
     assert "display:none" in css  # responsive hide rules remain
     html = HOME.read_text(encoding="utf-8")
     # Journey paths stack on narrow viewports (replacement for legacy trace-cards matrix)
-    assert "journey-path" in html or "journey-paths" in html
-    assert "journey-paths" in css or ".journey-path" in css
+    assert "journey-path" in html or "journey-paths" in html or "journey-list" in html or "journey-row" in html
+    assert "journey-paths" in css or ".journey-path" in css or "journey-list" in css or "journey-row" in css
     # Hero visual suppressed on narrow viewports
     assert "hero-visual{display:none}" in css.replace(" ", "") or ".hero-visual{display:none}" in css.replace(" ", "")
 

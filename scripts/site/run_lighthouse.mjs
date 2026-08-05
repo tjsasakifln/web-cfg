@@ -54,8 +54,21 @@ if (!BASE) {
 mkdirSync(OUT, { recursive: true });
 const results = [];
 
+async function waitForCdp(port, attempts = 40) {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/json/version`);
+      if (res.ok) return true;
+    } catch {
+      /* retry */
+    }
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  throw new Error(`Chrome CDP not ready on port ${port}`);
+}
+
 const chrome = await launchChrome({
-  chromePath: process.env.CHROME_PATH || undefined,
+  chromePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
   chromeFlags: [
     "--headless=new",
     "--no-sandbox",
@@ -63,7 +76,11 @@ const chrome = await launchChrome({
     "--disable-dev-shm-usage",
     "--disable-extensions",
   ],
+  connectionPollInterval: 250,
+  maxConnectionRetries: 50,
 });
+await waitForCdp(chrome.port);
+console.log("Chrome CDP ready on", chrome.port);
 
 try {
   for (const path of PAGES) {
@@ -74,6 +91,7 @@ try {
     try {
       const runnerResult = await lighthouse(url, {
         port: chrome.port,
+        hostname: "127.0.0.1",
         output: "json",
         logLevel: "error",
         onlyCategories: ["performance", "accessibility", "best-practices", "seo"],

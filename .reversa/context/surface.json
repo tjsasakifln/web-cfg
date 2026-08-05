@@ -1,0 +1,230 @@
+{
+  "generated_at": "2026-08-05T12:45:54Z",
+  "project_root": "/mnt/d/webcfg",
+  "project_name": "webcfg",
+  "package_name": "confenge-site",
+  "production_url": "https://confenge.com.br",
+  "languages": [
+    { "name": "HTML", "extensions": [".html"], "file_count": 220 },
+    { "name": "JSON", "extensions": [".json"], "file_count": 181 },
+    { "name": "Markdown", "extensions": [".md"], "file_count": 142 },
+    { "name": "Python", "extensions": [".py"], "file_count": 86 },
+    { "name": "JavaScript ESM", "extensions": [".mjs"], "file_count": 37 },
+    { "name": "JavaScript CommonJS", "extensions": [".cjs"], "file_count": 14 },
+    { "name": "JavaScript", "extensions": [".js"], "file_count": 4 },
+    { "name": "CSS", "extensions": [".css"], "file_count": 2 },
+    { "name": "YAML", "extensions": [".yml"], "file_count": 6 },
+    { "name": "Shell", "extensions": [".sh"], "file_count": 3 }
+  ],
+  "primary_language": "Python",
+  "secondary_runtime_language": "JavaScript",
+  "frameworks": [
+    { "name": "Netlify Functions", "version": null, "source": "netlify.toml" },
+    { "name": "Netlify Blobs", "version": "10.7.11", "source": "package.json" },
+    { "name": "Static HTML site (CONFENGE)", "version": "1.0.0", "source": "package.json" },
+    { "name": "pytest", "version": null, "source": "scripts/*/tests" },
+    { "name": "Lighthouse", "version": "12.8.2", "source": "package.json" },
+    { "name": "axe-core", "version": "4.10.0", "source": "package.json" },
+    { "name": "Puppeteer Core", "version": "23.0.0", "source": "package.json" }
+  ],
+  "package_manager": "npm",
+  "entry_points": [
+    { "path": "scripts/pseo/build_site.py", "type": "build_entry" },
+    { "path": "scripts/pseo/build.py", "type": "build_entry" },
+    { "path": "scripts/editorial/build.py", "type": "build_entry" },
+    { "path": "index.html", "type": "app_entry" },
+    { "path": "script.js", "type": "client_entry" },
+    { "path": "netlify/functions/lead.cjs", "type": "server_entry" },
+    { "path": "netlify/functions/ops.cjs", "type": "server_entry" },
+    { "path": "netlify/functions/collect.cjs", "type": "server_entry" },
+    { "path": "netlify/functions/nurture.cjs", "type": "server_entry" }
+  ],
+  "config_files": [
+    "package.json",
+    "package-lock.json",
+    "netlify.toml",
+    "_redirects",
+    "_headers",
+    ".env.example",
+    ".gitignore",
+    "robots.txt",
+    "sitemap.xml",
+    "llms.txt",
+    "manifest.webmanifest"
+  ],
+  "ci_cd": [
+    ".github/workflows/site-ci.yml",
+    ".github/workflows/pseo.yml",
+    ".github/workflows/revops-scheduled.yml",
+    ".github/workflows/codeql.yml",
+    ".github/dependabot.yml"
+  ],
+  "docker": {
+    "dockerfile": null,
+    "compose": null
+  },
+  "database_hints": [
+    {
+      "path": "netlify/functions/lib/lead-store.cjs",
+      "type": "netlify_blobs_store",
+      "note": "Persistência de leads via Netlify Blobs / filesystem / memory"
+    },
+    {
+      "path": "data/pseo/snapshots/",
+      "type": "json_snapshots_dir"
+    },
+    {
+      "path": "data/editorial/",
+      "type": "json_registry_dir"
+    },
+    {
+      "path": "data/revops/gsc/",
+      "type": "json_metrics_dir"
+    },
+    {
+      "path": "supabase/",
+      "type": "supabase_placeholder",
+      "note": "Pasta com docs apenas; sem schema de app confirmado"
+    }
+  ],
+  "test_framework": "pytest + node test scripts",
+  "test_file_count": 48,
+  "modules": [
+    "pseo",
+    "editorial",
+    "lead-intake",
+    "revops",
+    "analytics",
+    "nurture",
+    "site-frontend",
+    "ferramentas",
+    "content-hubs",
+    "quality-gates",
+    "deploy-ci"
+  ],
+  "module_details": [
+    {
+      "id": "pseo",
+      "paths": ["scripts/pseo/", "data/pseo/", "seo/"],
+      "summary": "Pipeline pSEO: snapshot, build, validate, public artifact, GSC gates"
+    },
+    {
+      "id": "editorial",
+      "paths": ["scripts/editorial/", "data/editorial/", "docs/editorial/"],
+      "summary": "Governança editorial Wave 1, aprovação humana, release INDEXABLE"
+    },
+    {
+      "id": "lead-intake",
+      "paths": ["netlify/functions/lead.cjs", "netlify/functions/lib/lead-core.cjs", "netlify/functions/lib/lead-store.cjs", "netlify/functions/lib/lead-delivery.cjs", "netlify/functions/lib/lead-rate-limit.cjs", "netlify/functions/lib/lead-stages.cjs"],
+      "summary": "Intake de leads com validação, rate limit, Turnstile e entrega"
+    },
+    {
+      "id": "revops",
+      "paths": ["netlify/functions/ops.cjs", "scripts/revops/", "data/revops/", "ops/"],
+      "summary": "API autenticada, stages, funnel, GSC insights, schedules"
+    },
+    {
+      "id": "analytics",
+      "paths": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "summary": "Coletor first-party sem PII e forward opcional Plausible"
+    },
+    {
+      "id": "nurture",
+      "paths": ["netlify/functions/nurture.cjs", "netlify/functions/lib/nurture-core.cjs", "data/nurture/", "nurture/"],
+      "summary": "Sequências de nurture e páginas associadas"
+    },
+    {
+      "id": "site-frontend",
+      "paths": ["index.html", "styles.css", "styles-tools.css", "script.js", "assets/"],
+      "summary": "UX visitante, CTAs, formulários, redesign visual"
+    },
+    {
+      "id": "ferramentas",
+      "paths": ["ferramentas/", "assets/js/"],
+      "summary": "Tools client-side de reequilíbrio, limites e matriz de atraso"
+    },
+    {
+      "id": "content-hubs",
+      "paths": ["conteudos/", "inteligencia/", "guias-contratos-obras/", "casos/", "reequilibrio-obras-publicas/", "aditivos-obras-publicas/", "lei-14133-obras/"],
+      "summary": "Hubs e páginas de conteúdo SEO/B2G"
+    },
+    {
+      "id": "quality-gates",
+      "paths": ["scripts/site/", "seo/scripts/", "docs/evidence/"],
+      "summary": "Gates de brand, design, copy, inbound, redirects, a11y, performance"
+    },
+    {
+      "id": "deploy-ci",
+      "paths": ["netlify.toml", "_redirects", "_headers", ".github/workflows/", ".well-known/"],
+      "summary": "Build Netlify, redirects, CI e artefatos de release"
+    }
+  ],
+  "external_integrations": [
+    { "name": "Netlify", "type": "hosting_functions_blobs" },
+    { "name": "Cloudflare Turnstile", "type": "bot_protection" },
+    { "name": "Resend", "type": "email" },
+    { "name": "Plausible", "type": "analytics_optional" },
+    { "name": "ntfy", "type": "notifications_optional" },
+    { "name": "Google Search Console", "type": "search_demand" },
+    { "name": "WhatsApp (wa.me)", "type": "commerce_cta" },
+    { "name": "GitHub Actions", "type": "ci_cd_scheduler" }
+  ],
+  "total_files": 1167,
+  "content_page_estimate": {
+    "conteudos_dirs": 120,
+    "editorial_page_defs": 12,
+    "service_hubs_index_html": 28
+  },
+  "organization_suggestion": {
+    "granularity": "hybrid",
+    "rationale": "Código de domínio em pastas (pseo, editorial, revops, site) coexiste com endpoints serverless (lead/ops/collect/nurture) e com hubs de conteúdo orientados a feature SEO.",
+    "signals": [
+      {
+        "type": "top_level_domain_folders",
+        "evidence": [
+          "scripts/pseo/",
+          "scripts/editorial/",
+          "scripts/revops/",
+          "scripts/site/",
+          "netlify/functions/"
+        ]
+      },
+      {
+        "type": "centralized_endpoint_routing",
+        "evidence": [
+          "netlify/functions/lead.cjs",
+          "netlify/functions/ops.cjs",
+          "netlify/functions/collect.cjs",
+          "netlify/functions/nurture.cjs"
+        ]
+      },
+      {
+        "type": "content_feature_hubs",
+        "evidence": [
+          "conteudos/",
+          "ferramentas/",
+          "inteligencia/",
+          "reequilibrio-obras-publicas/",
+          "aditivos-obras-publicas/"
+        ]
+      }
+    ],
+    "features": [
+      "pseo-pipeline",
+      "editorial-governance",
+      "lead-intake",
+      "revops-ops-api",
+      "first-party-analytics",
+      "nurture-sequences",
+      "visitor-site-ux",
+      "interactive-tools",
+      "seo-content-hubs",
+      "quality-gates-ci"
+    ]
+  },
+  "notes": [
+    "AIOX/agent framework paths (.aiox-core, .agents, .claude) are meta tooling, not CONFENGE product modules.",
+    "No traditional SQL database; durable runtime state is Netlify Blobs + versioned JSON under data/.",
+    "Public build must assemble isolated _site without private DB or commercial secrets."
+  ]
+}

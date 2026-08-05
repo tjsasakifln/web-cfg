@@ -352,10 +352,58 @@ class HttpStore {
   }
 }
 
+
+/**
+ * Production-like profile: Netlify production context or NODE_ENV=production.
+ * Memory fallback and LEAD_ALLOW_MEMORY_FALLBACK are forbidden here.
+ */
+function isProductionProfile(env = process.env) {
+  const nodeEnv = String(env.NODE_ENV || "").toLowerCase();
+  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").toLowerCase();
+  if (nodeEnv === "production") return true;
+  if (context === "production") return true;
+  return false;
+}
+
+function memoryFallbackAllowed(env = process.env) {
+  if (isProductionProfile(env)) return false;
+  if (env.LEAD_ALLOW_MEMORY_FALLBACK === "1") return true;
+  if (String(env.NODE_ENV || "").toLowerCase() === "test") return true;
+  return false;
+}
+
+function assertProductionStorePolicy(env = process.env) {
+  if (!isProductionProfile(env)) return { ok: true };
+  if (env.LEAD_ALLOW_MEMORY_FALLBACK === "1") {
+    return {
+      ok: false,
+      code: "memory_fallback_forbidden_in_production",
+      message: "LEAD_ALLOW_MEMORY_FALLBACK must not be set in production profile",
+    };
+  }
+  if (env.LEAD_STORE === "memory") {
+    return {
+      ok: false,
+      code: "memory_store_forbidden_in_production",
+      message: "LEAD_STORE=memory is forbidden in production profile",
+    };
+  }
+  return { ok: true };
+}
+
 async function createStore(options = {}) {
   if (options.store) return options.store;
+  const policy = assertProductionStorePolicy(process.env);
+  if (!policy.ok) {
+    safeLog("error", "store_policy_violation", { code: policy.code });
+    return null;
+  }
   if (process.env.LEAD_STORE === "memory" || options.forceMemory) {
-    return globalMemory;
+    if (isProductionProfile()) {
+      safeLog("error", "store_memory_blocked_production", {});
+      return null;
+    }
+    return Object.assign(globalMemory, { ephemeral: true });
   }
   if (process.env.LEAD_STORE_DIR) {
     return new FileStore(process.env.LEAD_STORE_DIR);
@@ -404,8 +452,8 @@ async function createStore(options = {}) {
       has_site: Boolean(process.env.SITE_ID || process.env.NETLIFY_SITE_ID),
     });
   }
-  // Last resort: memory (ephemeral) — handler must treat as non-durable for success policy
-  if (process.env.LEAD_ALLOW_MEMORY_FALLBACK === "1" || process.env.NODE_ENV === "test") {
+  // Last resort: memory (ephemeral) — never in production profile
+  if (memoryFallbackAllowed(process.env)) {
     return Object.assign(globalMemory, { ephemeral: true });
   }
   return null;
@@ -533,4 +581,7 @@ module.exports = {
   createStore,
   buildLeadRecord,
   globalMemory,
+  isProductionProfile,
+  memoryFallbackAllowed,
+  assertProductionStorePolicy,
 };

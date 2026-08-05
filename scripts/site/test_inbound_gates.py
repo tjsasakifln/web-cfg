@@ -131,7 +131,13 @@ def test_footer_not_legacy_atuacao_on_indexable():
     for p in samples:
         html = p.read_text(encoding="utf-8")
         assert "/#atuacao" not in html, p
-        assert "Analisar licitação" in html or "Proteger contrato" in html, p
+        # Visitor nav (redesign) or legacy service labels — never orphan /#atuacao
+        assert (
+            "Analisar meu caso" in html
+            or "Serviços" in html
+            or "Analisar licitação" in html
+            or "Proteger contrato" in html
+        ), p
 
 
 def test_brand_shell_on_indexable_conteudos():

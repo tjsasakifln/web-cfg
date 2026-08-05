@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "classification_version": "2026-08-05.1",
+  "description": "Versioned, deterministic public content stage map for /conteudos/ hub filters. Stages are assigned at generation time from pillar membership (not runtime title keywords).",
+  "allowed_stages": ["antes", "durante", "conflito"],
+  "pillar_to_stage": {
+    "diagnostico-pre-licitacao": "antes",
+    "auditoria-orcamento-licitacao": "antes",
+    "medicoes-glosas-obras-publicas": "durante",
+    "aditivos-obras-publicas": "durante",
+    "acompanhamento-contratos-obras": "durante",
+    "atrasos-prorrogacao-obras-publicas": "durante",
+    "reequilibrio-obras-publicas": "conflito",
+    "defesa-tecnica-contratos-publicos": "conflito"
+  },
+  "slug_overrides": {}
+}
