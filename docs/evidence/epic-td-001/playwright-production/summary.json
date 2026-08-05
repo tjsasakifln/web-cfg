@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "base": "https://confenge.com.br",
+  "runs": 2,
+  "per_run": [
+    {
+      "runId": 1,
+      "ok": true,
+      "fails": [],
+      "pass_count": 30,
+      "fail_count": 0
+    },
+    {
+      "runId": 2,
+      "ok": true,
+      "fails": [],
+      "pass_count": 30,
+      "fail_count": 0
+    }
+  ],
+  "consistent": true,
+  "at": "2026-08-05T14:40:30.471Z"
+}

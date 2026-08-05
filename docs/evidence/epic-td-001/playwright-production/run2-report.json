@@ -1,0 +1,159 @@
+{
+  "runId": 2,
+  "base": "https://confenge.com.br",
+  "at": "2026-08-05T14:40:30.470Z",
+  "rows": [
+    {
+      "ok": true,
+      "name": "home_http",
+      "detail": "status=200"
+    },
+    {
+      "ok": true,
+      "name": "home_title",
+      "detail": "CONFENGE | Consultoria para licitações e contratos de obras públicas"
+    },
+    {
+      "ok": true,
+      "name": "home_logo",
+      "detail": "224x58"
+    },
+    {
+      "ok": true,
+      "name": "home_h1",
+      "detail": "Licitação vencida não paga a conta.\nContrato rentável, sim."
+    },
+    {
+      "ok": true,
+      "name": "home_primary_cta",
+      "detail": "Analisar meu caso"
+    },
+    {
+      "ok": true,
+      "name": "home_form",
+      "detail": "present"
+    },
+    {
+      "ok": true,
+      "name": "home_nav",
+      "detail": "present"
+    },
+    {
+      "ok": true,
+      "name": "home_screenshot",
+      "detail": "/tmp/grok-goal-2cc2356beb6a/implementer/playwright-prod/run2-home.png"
+    },
+    {
+      "ok": true,
+      "name": "hub_http",
+      "detail": "status=200"
+    },
+    {
+      "ok": true,
+      "name": "hub_single_h1",
+      "detail": "Qual problema de licitação ou contrato você precisa resolver?"
+    },
+    {
+      "ok": true,
+      "name": "hub_items",
+      "detail": "count=20"
+    },
+    {
+      "ok": true,
+      "name": "hub_no_empty_deadend",
+      "detail": "ok"
+    },
+    {
+      "ok": true,
+      "name": "hub_screenshot",
+      "detail": "/tmp/grok-goal-2cc2356beb6a/implementer/playwright-prod/run2-hub.png"
+    },
+    {
+      "ok": true,
+      "name": "tools_http",
+      "detail": "status=200"
+    },
+    {
+      "ok": true,
+      "name": "tools_h1",
+      "detail": "O que você precisa resolver agora?"
+    },
+    {
+      "ok": true,
+      "name": "tools_tool_links",
+      "detail": "count=3"
+    },
+    {
+      "ok": true,
+      "name": "tools_screenshot",
+      "detail": "/tmp/grok-goal-2cc2356beb6a/implementer/playwright-prod/run2-tools.png"
+    },
+    {
+      "ok": true,
+      "name": "checklist_http",
+      "detail": "status=200"
+    },
+    {
+      "ok": true,
+      "name": "checklist_interactive",
+      "detail": "cats=3 reqs=15 radios=45"
+    },
+    {
+      "ok": true,
+      "name": "checklist_run_cta",
+      "detail": "Gerar diagnóstico"
+    },
+    {
+      "ok": true,
+      "name": "checklist_diagnosis_result",
+      "detail": "textLen=1011"
+    },
+    {
+      "ok": true,
+      "name": "checklist_css_styles-tools.css",
+      "detail": "200 text/css; charset=UTF-8"
+    },
+    {
+      "ok": true,
+      "name": "checklist_css_styles-tokens.css",
+      "detail": "200 text/css; charset=UTF-8"
+    },
+    {
+      "ok": true,
+      "name": "checklist_css_styles.css",
+      "detail": "200 text/css; charset=UTF-8"
+    },
+    {
+      "ok": true,
+      "name": "checklist_screenshot",
+      "detail": "/tmp/grok-goal-2cc2356beb6a/implementer/playwright-prod/run2-checklist.png"
+    },
+    {
+      "ok": true,
+      "name": "seo_shell_http",
+      "detail": "status=200"
+    },
+    {
+      "ok": true,
+      "name": "seo_shell_canonical",
+      "detail": "https://confenge.com.br/"
+    },
+    {
+      "ok": true,
+      "name": "seo_shell_robots_meta",
+      "detail": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    },
+    {
+      "ok": true,
+      "name": "seo_shell_screenshot",
+      "detail": "/tmp/grok-goal-2cc2356beb6a/implementer/playwright-prod/run2-seo_shell.png"
+    },
+    {
+      "ok": true,
+      "name": "console_errors",
+      "detail": "raw=0 hard=0"
+    }
+  ],
+  "consoleErrors": [],
+  "ok": true
+}
