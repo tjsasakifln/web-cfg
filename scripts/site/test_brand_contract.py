@@ -63,6 +63,10 @@ def test_home_has_canonical_copy():
     assert "Enviar edital para triagem" in html
     assert "Diagnosticar operação B2G" in html or "Diagnosticar a operação B2G" in html
     assert "Como podemos ajudar" in html
+    assert "Analisar meu caso" in html
+    assert "Tenho um contrato sob pressão" in html
+    assert "Estou analisando uma licitação" in html
+    assert "Preciso organizar minha operação B2G" in html
     assert "Sem CTA genérico" not in html
     for j in brand.get("journeys") or []:
         assert j["label"] in html, j["label"]

@@ -188,9 +188,29 @@ ok(
 
 // Counts derived from the independent policy set (not from counting the same HTML robots)
 ok(
-  `content_lead_${expected}`,
-  new RegExp(`class="content-lead">\\s*${expected} guias indexáveis`).test(hub),
-  `expected ${expected} guias indexáveis in content-lead`,
+  "content_lead_problem_first",
+  /Qual problema de licitação ou contrato você precisa resolver\?/.test(hub),
+  "hub hero must ask the visitor problem",
+);
+ok(
+  "no_public_indexable_jargon",
+  !/guias indexáveis|conteúdos indexáveis|frentes de decisão|eixos integrados|página-pilar/i.test(hub),
+  "taxonomy jargon must not appear on hub",
+);
+ok(
+  "hub_search_priority",
+  /data-hub-search|hub-search-priority|Buscar por problema/i.test(hub),
+  "problem search must be primary",
+);
+ok(
+  "no_zero_guias_public",
+  !/\b0\s*guias\b/i.test(hub),
+  "zero-count themes must not show 0 guias",
+);
+ok(
+  "plural_one_guia",
+  !/\b1\s*guias\b/i.test(hub),
+  "must use 1 guia not 1 guias",
 );
 ok(
   `numberOfItems_${expected}`,
@@ -199,11 +219,19 @@ ok(
 );
 // Hub metrics tile (not cluster cards)
 ok(
-  `hub_metrics_${expected}`,
-  new RegExp(
-    `<div class="hub-metrics">[\\s\\S]*?<strong>${expected}</strong><span>guias indexáveis</span>`,
-  ).test(hub),
-  `expected hub-metrics ${expected}`,
+  "no_hub_metrics_dashboard",
+  !/<div class="hub-metrics">/i.test(hub),
+  "hub-metrics dashboard tile should be gone",
+);
+ok(
+  "problem_stages_present",
+  /Antes de contratar/.test(hub) && /Durante a execução/.test(hub) && /Quando há conflito/.test(hub),
+  "three journey stages required",
+);
+ok(
+  "featured_lead_support",
+  /featured-decision|featured-lead/.test(hub),
+  "featured should be lead + support, not equal card grid",
 );
 
 // Superseded must never reappear as indexable or on the hub
@@ -224,14 +252,15 @@ for (const u of stillConsolidar) {
   ok(`still_consolidar_in_policy_${u}`, policySet.has(u));
 }
 
-// remediate must not use partial class= capture
+// remediate must not use partial class= capture; hub rebuild is problem-first
 const rem = readFileSync(REMEDIATE_PY, "utf8");
 ok("remediate_no_partial_attr_regex", !/\(class="content-lead">\)\(\[\^<\]\+\)/.test(rem));
 ok(
-  "remediate_whole_lead_paragraph",
-  /content-lead">\[\^<\]\*/.test(rem) ||
-    /content-lead">\[/.test(rem) ||
-    'content-lead">[^<]*</p>' in rem,
+  "remediate_hub_problem_first",
+  rem.includes("Qual problema de licitação ou contrato você precisa resolver") &&
+    rem.includes("problem-stages") &&
+    rem.includes("featured-lead"),
+  "remediate_hub must rebuild problem-first hub structure",
 );
 // Must not globally rewrite every "N guias" string to the hub total
 ok(
