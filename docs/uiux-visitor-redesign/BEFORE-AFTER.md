@@ -72,8 +72,9 @@ Evidência: `hub-filter-durante-1440x900.png`, `hub-search-filter-1440x900.png`.
 | Antes | Depois | Por quê |
 |---|---|---|
 | “0 guias públicos neste tema” + biblioteca vazia | Sem contador, sem CTA para lista vazia, sem seção de biblioteca; nota técnica + ação de caso | Não publicar inventário vazio |
+| Hero com `Ver os →` apontando a `#guias` mesmo com lista vazia (SVG no anchor) | Remoção do anchor inteiro (SVG-tolerante) + seções `library-section` sem `library-item` em qualquer HTML público | CTA quebrado e biblioteca vazia são proibidos |
 
-Evidência: `pillar-empty-1440x900.png` (`/acompanhamento-contratos-obras/`). Gate global varre HTML público (não lista fixa de 4 arquivos).
+Evidência: `pillar-empty-1440x900.png` / `pillar-empty-390x844.png` (`/acompanhamento-contratos-obras/`, sem “Ver os”). Gate global `remediate_empty_libraries_global` + testes de `library-section` sem item e de `href=#guias` com zero cards.
 
 ## Checklist — mapa semântico por `item_id`
 

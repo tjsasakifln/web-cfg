@@ -305,12 +305,40 @@ def test_global_no_zero_or_one_guias_plural_bugs():
     for path in _public_html_files():
         text = path.read_text(encoding="utf-8", errors="replace")
         lower = text.lower()
+        n_items = len(re.findall(r'class="[^"]*library-item', text))
         for phrase in BANNED_ZERO:
             if phrase.lower() in lower:
                 failures.append(f"{path.relative_to(ROOT)}: {phrase}")
-        # also catch "Ver os 0 guias" variants with extra spaces
         if re.search(r"ver os\s+0\s+guias", lower):
             failures.append(f"{path.relative_to(ROOT)}: Ver os 0 guias (regex)")
+        # When the page has no public library cards, ban #guias / "Ver os" CTAs entirely
+        if n_items == 0:
+            if re.search(r'href=["\']#guias["\']', text, re.I):
+                failures.append(f"{path.relative_to(ROOT)}: href=#guias with zero library-item")
+            if re.search(r"\bver os\b", lower):
+                failures.append(f"{path.relative_to(ROOT)}: Ver os CTA with zero library-item")
+            # Residue after "0" strip: "Ver os" then icon/end
+            if re.search(r">\s*ver os\s*<", lower):
+                failures.append(f"{path.relative_to(ROOT)}: orphan Ver os fragment")
+    assert not failures, failures[:30]
+
+
+def test_global_no_empty_library_sections():
+    """Any library-section in public HTML must contain ≥1 library-item."""
+    failures: list[str] = []
+    for path in _public_html_files():
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(
+            r'<section\b[^>]*\blibrary-section\b[^>]*>.*?</section>',
+            text,
+            flags=re.S | re.I,
+        ):
+            block = m.group(0)
+            if not re.search(r'class="[^"]*library-item', block):
+                failures.append(f"{path.relative_to(ROOT)}: empty library-section")
+        # empty-state copy for libraries is also banned
+        if re.search(r"nenhum conteúdo indexável", text, re.I):
+            failures.append(f"{path.relative_to(ROOT)}: empty library copy")
     assert not failures, failures[:30]
 
 
@@ -319,18 +347,39 @@ def test_empty_pillar_no_library_or_counter():
     assert pillar.exists()
     html = pillar.read_text(encoding="utf-8")
     assert "0 guias" not in html.lower()
-    assert "guias públicos neste tema" not in html.lower() or "0" not in re.findall(
-        r"(\d+)\s+guias?\s+públicos", html.lower()
-    )
-    # no empty library section
-    if 'class="section library-section"' in html:
-        # if present must contain at least one library-item
-        assert "library-item" in html
-    # no CTA to empty list
-    assert not re.search(r"Ver os\s+0\s+guias", html, re.I)
+    assert not re.search(r"\b0\s+guias?\b", html, re.I)
+    # no library section at all when empty
+    assert "library-section" not in html
+    assert "library-item" not in html
+    # no CTA to empty list — SVG-tolerant
+    assert not re.search(r'href=["\']#guias["\']', html, re.I)
+    assert not re.search(r"Ver os\b", html, re.I)
     # still presents technical theme + case action
     assert "Gestão contratual" in html or "gestão contratual" in html.lower()
     assert "Analisar meu caso" in html or "wa.me" in html or "/#contato" in html
+
+
+def test_strip_empty_library_generator_unit():
+    """Drive the shipped strip helper (not a reimplementation)."""
+    from scripts.site.inbound_first_remediate import strip_empty_library_surface
+
+    sample = (
+        '<div class="hero-actions">'
+        '<a class="button button-primary" href="/#contato">Analisar</a>'
+        '<a class="text-link" href="#guias">Ver os <svg class="icon"></svg></a>'
+        "</div>"
+        '<section class="section library-section" id="guias">'
+        "<div class=\"container\"><p>Nenhum conteúdo indexável neste hub ainda</p></div>"
+        "</section>"
+        '<p class="pillar-evidence-count"><strong>0</strong> guias públicos neste tema</p>'
+    )
+    out = strip_empty_library_surface(sample)
+    assert "#guias" not in out
+    assert "Ver os" not in out
+    assert "library-section" not in out
+    assert "0 guias" not in out.lower()
+    assert "Nenhum conteúdo" not in out
+    assert "Analisar" in out
 
 
 def test_public_taxonomy_jargon_absent():

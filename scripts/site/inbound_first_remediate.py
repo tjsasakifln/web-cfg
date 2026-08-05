@@ -1352,6 +1352,136 @@ PILLARS = (
 )
 
 
+def strip_empty_library_surface(html: str) -> str:
+    """Remove empty library sections and hero CTAs that point at empty guide lists.
+
+    SVG-tolerant: anchors often wrap an icon after the label, so we never require
+    a bare text-only match for \"Ver os N guias\".
+    """
+    # Drop entire empty library sections (no library-item articles)
+    def drop_empty_library(m: re.Match[str]) -> str:
+        block = m.group(0)
+        if re.search(r'class="[^"]*library-item', block):
+            return block
+        return ""
+
+    html = re.sub(
+        r'<section\b[^>]*\blibrary-section\b[^>]*>.*?</section>',
+        drop_empty_library,
+        html,
+        flags=re.S | re.I,
+    )
+    # Also bare class="section library-section" without word boundary quirks
+    html = re.sub(
+        r'<section class="section library-section"[^>]*>.*?</section>',
+        drop_empty_library,
+        html,
+        flags=re.S | re.I,
+    )
+
+    # Hero / inline CTAs to #guias (including SVG children)
+    html = re.sub(
+        r'<a\b[^>]*href=["\']#guias["\'][^>]*>.*?</a>',
+        "",
+        html,
+        flags=re.S | re.I,
+    )
+    # "Ver os … guias" links even without #guias or when count already stripped
+    html = re.sub(
+        r'<a\b[^>]*>\s*Ver os\b[\s\S]*?</a>',
+        "",
+        html,
+        flags=re.I,
+    )
+    # Residual text fragments left by partial rewrites
+    html = re.sub(r"\bVer os\s+\d*\s*guias?\b", "", html, flags=re.I)
+    html = re.sub(r"\bVer os\b(?=\s*<|\s*$|\s*</)", "", html, flags=re.I)
+    html = re.sub(r"\b0\s+guias?\b", "", html, flags=re.I)
+    html = re.sub(
+        r"\d+\s+guias?\s+públicos?\s+neste\s+tema",
+        "",
+        html,
+        flags=re.I,
+    )
+    # Empty evidence counters
+    html = re.sub(
+        r'<p class="pillar-evidence-count">\s*<strong>\s*0\s*</strong>\s*guias?[^<]*</p>',
+        "",
+        html,
+        flags=re.I,
+    )
+    # Prefer technical note over zero counter on evidence blocks that still claim 0
+    if re.search(r"pillar-evidence-count[\s\S]{0,80}\b0\b", html, re.I):
+        html = re.sub(
+            r'<div class="pillar-evidence">.*?</div>',
+            (
+                '<div class="pillar-evidence">'
+                '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto. '
+                "Ainda sem guias públicos listados neste eixo.</p>"
+                "</div>"
+            ),
+            html,
+            count=1,
+            flags=re.S,
+        )
+    # Evidence block when pillar-stat still present with zero
+    html = re.sub(
+        r'<div class="pillar-stat">.*?</div>',
+        (
+            '<div class="pillar-evidence">'
+            '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto. '
+            "Ainda sem guias públicos listados neste eixo.</p>"
+            "</div>"
+        ),
+        html,
+        count=1,
+        flags=re.S,
+    )
+    return html
+
+
+def remediate_empty_libraries_global() -> dict[str, Any]:
+    """Whole-tree public HTML scan: drop empty libraries and CTAs to empty lists."""
+    skip = {
+        "node_modules",
+        ".git",
+        "docs",
+        "scripts",
+        "data",
+        "seo",
+        "netlify",
+        "__pycache__",
+        ".well-known",
+        "_site",
+        "public",
+        "ops",
+        "private",
+        "coverage",
+        ".grok",
+    }
+    touched: list[str] = []
+    for p in sorted(ROOT.rglob("*.html")):
+        rel = p.relative_to(ROOT)
+        if any(part in skip for part in rel.parts):
+            continue
+        html = _read(p)
+        if "library-section" not in html and "#guias" not in html and "Ver os" not in html:
+            continue
+        # Count real guide cards in this page
+        n_items = len(re.findall(r'class="[^"]*library-item', html))
+        new = html
+        if n_items == 0:
+            new = strip_empty_library_surface(html)
+        else:
+            # Still purge orphaned "0 guias" claims if any
+            if re.search(r"\b0\s+guias?\b", new, re.I):
+                new = re.sub(r"\b0\s+guias?\b", "", new, flags=re.I)
+        if new != html:
+            _write(p, new)
+            touched.append(rel.as_posix())
+    return {"pages_touched": len(touched), "paths": touched}
+
+
 def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
     """Filter commercial pillar libraries to indexable guides only; align counts."""
     idx_map = indexable_map()
@@ -1411,53 +1541,7 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
 
         # When zero public guides: never publish "0 guias", empty library, or CTAs to empty lists.
         if n_kept == 0:
-            html = re.sub(
-                r'<a[^>]*>\s*Ver os\s+\d+\s+guias?\s*</a>',
-                "",
-                html,
-                flags=re.I,
-            )
-            html = re.sub(
-                r'<section class="section library-section"[^>]*>.*?</section>',
-                "",
-                html,
-                count=1,
-                flags=re.S | re.I,
-            )
-            # Evidence block: technical note only — no counter
-            html = re.sub(
-                r'<div class="pillar-stat">.*?</div>',
-                (
-                    '<div class="pillar-evidence">'
-                    '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto — '
-                    "ainda sem guias públicos listados neste eixo.</p>"
-                    "</div>"
-                ),
-                html,
-                count=1,
-                flags=re.S,
-            )
-            html = re.sub(
-                r'<div class="pillar-evidence">.*?</div>',
-                (
-                    '<div class="pillar-evidence">'
-                    '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto — '
-                    "ainda sem guias públicos listados neste eixo.</p>"
-                    "</div>"
-                ),
-                html,
-                count=1,
-                flags=re.S,
-            )
-            # Strip any residual zero-count claims
-            html = re.sub(r"\b0\s+guias?\b", "", html, flags=re.I)
-            html = re.sub(r"Ver os\s+0\s+guias?", "", html, flags=re.I)
-            html = re.sub(
-                r"\d+\s+guias?\s+públicos?\s+neste\s+tema",
-                "",
-                html,
-                flags=re.I,
-            )
+            html = strip_empty_library_surface(html)
             html = re.sub(
                 r'"numberOfItems"\s*:\s*\d+',
                 '"numberOfItems":0',
@@ -1918,12 +2002,14 @@ def main() -> int:
     report["pillars"] = remediate_pillars(brand)
     report["shell_other"] = remediate_editorial_and_commercial(brand)
     report["tools_shell"] = remediate_tools_shell(brand)
+    report["empty_libraries"] = remediate_empty_libraries_global()
 
     # Re-run hub + pillars after page rewrites so counts stay correct
     report["hub_pass2"] = remediate_hub(brand)
     report["pillars_pass2"] = remediate_pillars(brand)
     report["feed_pass2"] = remediate_feed()
     report["tools_shell_pass2"] = remediate_tools_shell(brand)
+    report["empty_libraries_pass2"] = remediate_empty_libraries_global()
 
     rows = build_inventory(brand)
     # After remediation, reclassify machine indexable as KEEP if clean

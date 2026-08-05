@@ -14,9 +14,9 @@
     "removed_items": 0
   },
   "conteudos": {
-    "shell": 105,
+    "shell": 0,
     "machine": 13,
-    "related": 105,
+    "related": 0,
     "journey": 20,
     "indexable": 20,
     "noindex": 100
@@ -61,6 +61,12 @@
   "shell_other": 0,
   "tools_shell": {
     "pages": 0
+  },
+  "empty_libraries": {
+    "pages_touched": 1,
+    "paths": [
+      "jurisprudencia-contratos-obras/index.html"
+    ]
   },
   "hub_pass2": {
     "removed_directory_items": 0,
@@ -110,6 +116,10 @@
   },
   "tools_shell_pass2": {
     "pages": 0
+  },
+  "empty_libraries_pass2": {
+    "pages_touched": 0,
+    "paths": []
   },
   "inventory_rows": 154,
   "disposition_counts": {
