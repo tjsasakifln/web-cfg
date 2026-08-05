@@ -1007,12 +1007,13 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         )
     item_list_json = json.dumps(list_items, ensure_ascii=False)
 
-    # --- Compose main body sections (replace from hub hero through directory) ---
+    # --- Compose main body (single H1; idempotent main rebuild) ---
+    # Avoid em-dash in public HTML (copy gate)
     hero_block = f"""<header class="content-hero hub-hero hub-hero--problem">
 <div class="container">
 <p class="eyebrow">Biblioteca técnica</p>
 <h1>Qual problema de licitação ou contrato você precisa resolver?</h1>
-<p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Busque pelo problema — não pela taxonomia interna.</p>
+<p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Busque pelo problema, não pela taxonomia interna.</p>
 <div class="hub-search-priority directory-search">
 <label for="hub-search">Buscar por problema</label>
 <input id="hub-search" name="q" type="search" autocomplete="off" placeholder="Ex.: aditivo, glosa, BDI, atraso, reequilíbrio" data-hub-search aria-controls="diretorio"/>
@@ -1057,47 +1058,62 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
 {dir_html}
 </div></section>"""
 
-    # Replace old hero + sections with new architecture
-    # Strategy: replace from first content-hero hub-hero through end of directory-section
-    pattern = re.compile(
-        r'<header class="content-hero hub-hero".*?</header>'
-        r'.*?(?=<section class="content-cta"|<footer|<!-- INTELIGENCIA|$)',
-        re.S,
+    body_core = hero_block + featured_block + stages_block + directory_block + "\n"
+
+    # Prefer keeping trailing CTA / inteligencia sections after core body once
+    cta_m = re.search(
+        r'(<section class="content-cta"[\s\S]*?</section>)',
+        html,
+        re.I,
     )
-    replacement = hero_block + featured_block + stages_block + directory_block + "\n"
-    html2, n_sub = pattern.subn(replacement, html, count=1)
-    if n_sub:
+    intel_m = re.search(
+        r'(<section[^>]*id="inteligencia-pseo"[\s\S]*?</section>)',
+        html,
+        re.I,
+    )
+    trailing = ""
+    if cta_m:
+        trailing += cta_m.group(1) + "\n"
+    if intel_m:
+        trailing += intel_m.group(1) + "\n"
+
+    search_script = """
+<script>
+(function(){
+  var input=document.querySelector('[data-hub-search]');
+  var dir=document.querySelector('[data-content-directory]');
+  var countEl=document.querySelector('[data-results-count]');
+  if(!input||!dir)return;
+  var items=[].slice.call(dir.querySelectorAll('[data-content-item]'));
+  function apply(){
+    var q=(input.value||'').trim().toLowerCase();
+    var n=0;
+    items.forEach(function(el){
+      var hay=el.getAttribute('data-search')||'';
+      var show=!q||hay.indexOf(q)!==-1;
+      el.hidden=!show;
+      if(show)n++;
+    });
+    if(countEl)countEl.textContent=n+(n===1?' análise encontrada':' análises encontradas');
+  }
+  input.addEventListener('input',apply);
+})();
+</script>
+"""
+
+    main_inner = body_core + trailing + search_script
+    html2, n_main = re.subn(
+        r"(<main\b[^>]*>)[\s\S]*?(</main>)",
+        rf"\1\n{main_inner}\n\2",
+        html,
+        count=1,
+        flags=re.I,
+    )
+    if n_main:
         html = html2
     else:
-        # Fallback: inject after <main>
-        html = re.sub(
-            r"(<main[^>]*>)",
-            r"\1\n" + replacement,
-            html,
-            count=1,
-        )
-        # Strip old featured/cluster/directory if still present
-        html = re.sub(
-            r'<section class="section featured-section">.*?</section>',
-            "",
-            html,
-            count=1,
-            flags=re.S,
-        )
-        html = re.sub(
-            r'<div class="cluster-grid">.*?</div>',
-            "",
-            html,
-            count=1,
-            flags=re.S,
-        )
-        html = re.sub(
-            r'<section class="section directory-section"[^>]*>.*?</section>',
-            "",
-            html,
-            count=1,
-            flags=re.S,
-        )
+        # Extremely defensive: no main found
+        html = html + f"<main id=\"conteudo\">\n{main_inner}\n</main>"
 
     # Purge residual jargon and metrics tiles
     for phrase in (
@@ -1186,34 +1202,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
             flags=re.S,
         )
 
-    # Lightweight search filter script (progressive)
-    if "data-hub-search" in html and "hubSearchBoot" not in html:
-        html = html.replace(
-            "</main>",
-            """<script>
-(function(){
-  var input=document.querySelector('[data-hub-search]');
-  var dir=document.querySelector('[data-content-directory]');
-  var countEl=document.querySelector('[data-results-count]');
-  if(!input||!dir)return;
-  var items=[].slice.call(dir.querySelectorAll('[data-content-item]'));
-  function apply(){
-    var q=(input.value||'').trim().toLowerCase();
-    var n=0;
-    items.forEach(function(el){
-      var hay=el.getAttribute('data-search')||'';
-      var show=!q||hay.indexOf(q)!==-1;
-      el.hidden=!show;
-      if(show)n++;
-    });
-    if(countEl)countEl.textContent=n+(n===1?' análise encontrada':' análises encontradas');
-  }
-  input.addEventListener('input',apply);
-})();
-</script>
-</main>""",
-            1,
-        )
+    # Search script embedded in main rebuild (idempotent).
 
     _write(hub_path, html)
     return {
