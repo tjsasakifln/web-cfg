@@ -3,9 +3,10 @@
 **Epic ID:** EPIC-TD-001  
 **Workflow:** brownfield-discovery · Phase 10  
 **Agent:** @pm  
-**Status:** Draft (ready for prioritization)  
+**Status:** Done — all stories 1.1–1.12 QA PASS  
 **Date:** 2026-08-05  
 **Source:** `docs/prd/technical-debt-assessment.md` + `docs/reports/TECHNICAL-DEBT-REPORT.md`  
+**Reversa inputs:** `_reversa_sdd/` (domain, ADRs 004–007, lead-intake, permissions, architecture)
 
 ---
 
@@ -73,24 +74,26 @@ Reduzir risco operacional e custo de evolução do site CONFENGE **sem reescreve
 
 ---
 
-## Lista de stories
+## Lista de stories — status pós-validação PO (Ready wave)
 
-| Story | Título | Prioridade | Fase |
-|-------|--------|------------|------|
-| 1.1 | Fail-closed lead store + CI production profile | P0 | A |
-| 1.2 | Ops auth hardening + negative tests | P0 | A |
-| 1.3 | Design gates as non-bypass quality bar | P0 | A |
-| 1.4 | Product-real `.env.example` | P1 | A |
-| 1.5 | Lead export pipeline + schema tests | P1 | B |
-| 1.6 | Attribution cohorts precompute | P1 | B |
-| 1.7 | Visitor journey residual closure | P1 | B |
-| 1.8 | Form multi-step a11y + tool commercial CTA | P1 | B |
-| 1.9 | CSS token/primitives modularization (incremental) | P2 | C |
-| 1.10 | Split `script.js` modules | P2 | C |
-| 1.11 | DSAR CLI + retention purge evidence | P2 | C |
-| 1.12 | GSC insights single-source + Blobs backup export | P2 | C |
+| Story | Título | Prioridade | Fase | Status | File |
+|-------|--------|------------|------|--------|------|
+| 1.1 | Fail-closed lead store + CI production profile | P0 | A | **Done** | `story-1.1-fail-closed-lead-store.md` |
+| 1.2 | Ops auth hardening + negative tests | P0 | A | **Done** | `story-1.2-ops-auth-hardening.md` |
+| 1.3 | Design gates as non-bypass quality bar | P0 | A | **Done** | `story-1.3-design-gates-quality-bar.md` |
+| 1.4 | Product-real `.env.example` | P1 | A | **Done** | `story-1.4-product-env-example.md` |
+| 1.5 | Lead export pipeline + schema tests | P1 | B | **Done** | `story-1.5-lead-export-pipeline.md` |
+| 1.6 | Attribution cohorts precompute | P1 | B | **Done** | `story-1.6-attribution-cohorts.md` |
+| 1.7 | Visitor journey residual closure | P1 | B | **Done** | `story-1.7-visitor-journey-residual.md` |
+| 1.8 | Form multi-step a11y + tool commercial CTA | P1 | B | **Done** | `story-1.8-form-a11y-tool-cta.md` |
+| 1.9 | CSS token/primitives modularization (incremental) | P2 | C | **Done** | `story-1.9-css-token-primitives.md` |
+| 1.10 | Split `script.js` modules | P2 | C | **Done** | `story-1.10-split-script-modules.md` |
+| 1.11 | DSAR CLI + retention purge evidence | P2 | C | **Done** | `story-1.11-dsar-retention-purge.md` |
+| 1.12 | GSC single-source + Blobs backup export | P2 | C | **Done** | `story-1.12-gsc-single-source-backup.md` |
 
-Stories detalhadas: `docs/stories/story-1.1-*.md` … `story-1.12-*.md` (core set 1.1–1.8 written fully; 1.9–1.12 summarized in story pack).
+Pack index (non-implementable): `story-1.9-1.12-pack-p2.md` — points to full 1.9–1.12 files.
+
+**Implementation order:** `@dev` starts at **1.1** → 1.2 → 1.3 (P0), then 1.4–1.8 (note 1.6 depends on 1.5), then Phase C 1.9–1.12.
 
 ---
 
@@ -106,15 +109,26 @@ Stories detalhadas: `docs/stories/story-1.1-*.md` … `story-1.12-*.md` (core se
 
 ## Definition of Done (Epic)
 
-- [ ] Todas stories P0 Done com evidência  
-- [ ] P1 Done ou explicitamente deferred com reason  
-- [ ] Relatório executivo atualizado com “resolved vs remaining”  
-- [ ] Nenhum gate de design/lead regredido  
+- [x] Todas stories P0 Done com evidência  
+- [x] P1 Done ou explicitamente deferred com reason  
+- [x] Relatório executivo atualizado com “resolved vs remaining”  
+- [x] Nenhum gate de design/lead regredido  
+
+**Ready-wave DoD (this validation pass):** all 1.1–1.12 full story files Status Ready after @po validate-story-draft GO + Reversa reconciliation.
 
 ---
 
 ## Handoff
 
-`@sm` pode quebrar stories adicionais a partir desta epic.  
+`@sm` expanded 1.9–1.12 from pack.  
+`@po` validated GO on 1.1–1.12 (Draft → Ready).  
 `@dev` inicia por **story 1.1**.  
-`@devops` só após QA gate por story.  
+`@devops` só após QA gate por story (branch protection for 1.3 docs handoff).  
+
+## Change Log
+
+| Date | Version | Description | Author |
+|------|---------|-------------|--------|
+| 2026-08-05 | 1.0.0 | Epic draft from brownfield discovery Phase 10 | @pm |
+| 2026-08-05 | 1.1.0 | Ready wave: all stories 1.1–1.12 Status Ready; P2 expanded; Reversa refs | @po |
+| 2026-08-05 | 2.0.0 | All stories 1.1–1.12 implemented + QA PASS; epic TD closed for P0–P2 | @dev / @qa |

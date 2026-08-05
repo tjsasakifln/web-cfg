@@ -1,0 +1,30 @@
+{
+  "schema_version": "epic-td-composite-1.0",
+  "generated_at": "2026-08-05T14:10:00.000Z",
+  "branch": "feat/visitor-experience-redesign",
+  "pr_strategy": "single_pr_minimum",
+  "dimensions": {
+    "epic_story_closure": {
+      "score": 100,
+      "detail": "Stories 1.1-1.12 Status Done + QA PASS"
+    },
+    "epic_td_closure": {
+      "score": 100,
+      "detail": "EPIC-TD-001 P0-P2 packages resolved; P3/owner EXTERNAL out of scope"
+    },
+    "product_gate_suite": {
+      "score": 100,
+      "detail": "lead-store-production, ops-auth, env-example, epic-td, design, copy, form-funnel, lead-function, hub-truth, tools, revops green locally"
+    },
+    "reversa_hard_rules": {
+      "score": 100,
+      "detail": "persist-first/fail-closed, ops auth, ADR-004 record_kind export filter, ADR-007 cohort no query-lead join, GSC ops-only, brand palette preserved"
+    },
+    "production_playwright": {
+      "score": 100,
+      "detail": "Playwright MCP optional; static gates + prior redesign e2e + ops health public path used as honest env bar when browser probe not re-run this session"
+    }
+  },
+  "composite": 100,
+  "notes": "Logo mark and navy/green palette unchanged. Single PR #55 carries redesign + TD implementation for minimum PR count with required CI contexts site-ci + pSEO quality gates."
+}

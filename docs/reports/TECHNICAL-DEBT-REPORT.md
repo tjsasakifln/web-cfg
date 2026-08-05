@@ -171,3 +171,30 @@ Aprovar um **pacote em três fases**: primeiro **segurança e gates** (1–2 sem
 ---
 
 *Valores em R$ usam premissa de R$150/hora para comparabilidade. Ajustar à taxa real do time.*
+
+
+## EPIC-TD-001 resolved (2026-08-05)
+
+| ID package | Story | Status |
+|------------|-------|--------|
+| DATA-04 / DATA-20 / SYS-13 fail-closed store | 1.1 | **resolved** |
+| DATA-12 ops auth | 1.2 | **resolved** |
+| UX-02 design gates required | 1.3 | **resolved** |
+| SYS-05 / DATA-08 env example | 1.4 | **resolved** |
+| DATA-01 lead export | 1.5 | **resolved** |
+| DATA-11 attribution cohorts | 1.6 | **resolved** |
+| UX-03/05/11 visitor residual | 1.7 | **resolved** |
+| UX-15/16 form a11y + tool CTA | 1.8 | **resolved** |
+| SYS-02 / UX-01 CSS tokens | 1.9 | **resolved** |
+| SYS-03 script modules | 1.10 | **resolved** |
+| DATA-10 / DATA-16 DSAR/retention | 1.11 | **resolved** |
+| DATA-06 / DATA-13 GSC single-source + backup | 1.12 | **resolved** |
+
+### Remaining (non-epic / P3 / owner)
+
+- DATA-02 full CRM dual-write warehouse  
+- TypeScript rewrite of functions  
+- Owner EXTERNAL-ACTIONS (Resend DNS, Turnstile enforce keys, uptime vendor)  
+- Storybook / CrUX field program  
+
+Evidence: `docs/qa/EPIC-TD-001-GATE.md`, `docs/evidence/epic-td-001/composite-scorecard.json`.

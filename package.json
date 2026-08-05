@@ -2,7 +2,7 @@
   "name": "confenge-site",
   "private": true,
   "version": "1.0.0",
-  "description": "CONFENGE static site \u2014 SEO migration and host canonization tooling",
+  "description": "CONFENGE static site — SEO migration and host canonization tooling",
   "type": "module",
   "scripts": {
     "prepare": "bash scripts/install-git-filters.sh",
@@ -40,7 +40,7 @@
     "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
-    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates && npm run test:workflow-gates && npm run test:ops-docs && npm run test:revops && npm run test:schedules && npm run test:tools && npm run test:nurture && npm run test:nurture-pages && npm run test:ferramentas-footer && npm run test:hub-truth && npm run test:tool-compute && npm run test:wave1-fields",
+    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates && npm run test:workflow-gates && npm run test:ops-docs && npm run test:revops && npm run test:schedules && npm run test:tools && npm run test:nurture && npm run test:nurture-pages && npm run test:ferramentas-footer && npm run test:hub-truth && npm run test:tool-compute && npm run test:wave1-fields && npm run test:lead-store-production && npm run test:ops-auth && npm run test:env-example && npm run test:epic-td && npm run test:script-modules",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "editorial:build": "python3 scripts/editorial/build.py",
     "editorial:approve": "python3 scripts/editorial/approve_cli.py",
@@ -93,7 +93,18 @@
     "test:tool-events": "node scripts/site/test_tool_events.mjs",
     "lint:editorial-copy": "python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json",
     "test:tools-uiux-e2e": "node scripts/site/verify_tools_uiux_e2e.mjs docs/uiux-tools-remediation/evidence",
-    "test:visitor-redesign": "python3 scripts/site/test_visitor_redesign.py"
+    "test:visitor-redesign": "python3 scripts/site/test_visitor_redesign.py",
+    "test:stories-ready": "python3 scripts/site/test_stories_ready.py",
+    "test:lead-store-production": "node scripts/site/test_lead_store_production_profile.mjs",
+    "test:ops-auth": "node scripts/site/test_ops_auth_matrix.mjs",
+    "test:env-example": "python3 scripts/site/test_env_example_honesty.py",
+    "test:epic-td": "node scripts/site/test_epic_td_suite.mjs",
+    "test:gsc-parity": "node scripts/revops/gsc_insights_sync.mjs --check",
+    "test:script-modules": "node scripts/site/build_script_modules.mjs",
+    "revops:export-leads": "node scripts/revops/export_leads.mjs",
+    "revops:cohorts": "node scripts/revops/attribution_cohorts.mjs",
+    "revops:dsar": "node scripts/revops/dsar_cli.mjs",
+    "revops:gsc-sync": "node scripts/revops/gsc_insights_sync.mjs"
   },
   "engines": {
     "node": ">=20 <21"

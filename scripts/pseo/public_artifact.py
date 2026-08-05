@@ -71,6 +71,7 @@ PUBLIC_ROOT_FILES = frozenset(
         "obrigado-edital.html",
         "obrigado-operacao.html",
         "styles.css",
+        "styles-tokens.css",
         "script.js",
         "robots.txt",
         "_redirects",

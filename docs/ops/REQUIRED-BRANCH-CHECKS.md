@@ -63,3 +63,23 @@ python3 scripts/site/test_workflow_gates.py
 - Screenshot of the GitHub UI (only API read-back was proved in this workstream)
 - CodeQL as a hard required check
 - That future Dependabot PRs will stay green without Node/engine alignment
+
+
+## Product quality bar inside `site-ci` (Story 1.3 / UX-02)
+
+GitHub required contexts remain **`site-ci`** + **`pSEO quality gates`**. The following are **non-bypass product gates** executed inside `site-ci` (merge cannot skip them without failing the job):
+
+| npm script | Role |
+|------------|------|
+| `test:design` | Design + visitor redesign gates (forbidden_patterns, journeys) |
+| `test:copy` | Public copy / jargon bar |
+| `test:brand` | Brand shell / logo contract |
+| `test:form-funnel` | Multi-step form structural + analytics scrub |
+| `test:lead-function` | Persist-first lead API |
+| `test:lead-store-production` | Production fail-closed store (Story 1.1) |
+| `test:ops-auth` | Ops unauth matrix (Story 1.2) |
+| `test:inbound-gates` | Inbound SEO honesty |
+
+**Gates are law:** do not weaken `forbidden_patterns` or design/copy scripts without an ADR note under `_reversa_sdd/adrs/` or `docs/`.
+
+Developer note also in `docs/DESIGN-SYSTEM.md` §Gates.

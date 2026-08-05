@@ -211,3 +211,6 @@ TypeScript functions, storybook, CrUX program, person-level CRM merge
 ---
 
 **Finalized by:** Orion orchestration / @architect role · 2026-08-05  
+
+
+> **Update 2026-08-05:** EPIC-TD-001 P0–P2 packages closed — see `docs/reports/TECHNICAL-DEBT-REPORT.md`.

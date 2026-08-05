@@ -125,3 +125,14 @@ Entrada sutil, foco de etapa, revelação de linha. Sem parallax exagerado, cont
 - Tokens em CSS (`:root` em `styles.css`) devem espelhar este JSON.
 - Gates em `scripts/site/test_design_gates.py` leem HTML real e este JSON.
 - Ofertas: profundidade mínima e ritmo de seções distintos entre as quatro páginas.
+
+
+## Gates are law (Story 1.3)
+
+`npm run test:design` (includes visitor redesign) and `npm run test:copy` are **required quality bars** for any change to public HTML/CSS/copy. They run in CI via `site-ci` and must not be bypassed, skipped, or weakened without an ADR.
+
+- Design/forbidden patterns: `scripts/site/test_design_gates.py`, `scripts/site/test_visitor_redesign.py`
+- Copy: `scripts/site/test_copy_gates.py`
+- Tokens single source: `styles-tokens.css` (imported by `styles.css` / `styles-tools.css`)
+
+If a PR changes visitor UX and these are green, it still needs human visual review for aesthetic approval — gates prevent regression to card-soup/dashboard patterns; they do not replace brand owner sign-off.

@@ -1,3 +1,8 @@
+/* CONFENGE public site JS — modular source under js/modules/ (SYS-03).
+ * Source of truth partitions: analytics.js, nav.js, form.js
+ * Public entry remains this single file for static pages (no bundler).
+ * Rebuild check: node scripts/site/build_script_modules.mjs --check
+ */
 (() => {
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
@@ -606,10 +611,15 @@
           ind.classList.toggle('is-active', sn === n);
           ind.classList.toggle('is-done', sn < n);
         });
-        const focusTarget = n === 2
-          ? form.querySelector('#empresa') || form.querySelector('#urgencia')
-          : nomeEl;
-        focusTarget?.focus();
+        const stepHeading = form.querySelector(`[data-form-step="${n}"] h2, [data-form-step="${n}"] h3, [data-form-step="${n}"] [data-step-heading]`);
+        const focusTarget = stepHeading
+          || (n === 2
+            ? form.querySelector('#empresa') || form.querySelector('#urgencia')
+            : nomeEl);
+        if (focusTarget) {
+          if (stepHeading && !focusTarget.hasAttribute('tabindex')) focusTarget.setAttribute('tabindex', '-1');
+          try { focusTarget.focus({ preventScroll: false }); } catch (_) { focusTarget.focus(); }
+        }
       };
 
       const clearContactValidity = () => {
@@ -657,6 +667,17 @@
         }
         if (!ok) {
           form.reportValidity();
+          const firstInvalid = form.querySelector('.is-invalid, :invalid');
+          const errSummary = form.querySelector('[data-form-error-summary], #form-status, [role="alert"]');
+          if (firstInvalid && typeof firstInvalid.focus === 'function') {
+            try { firstInvalid.focus({ preventScroll: false }); } catch (_) { firstInvalid.focus(); }
+            if (typeof firstInvalid.scrollIntoView === 'function') {
+              firstInvalid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+          } else if (errSummary && typeof errSummary.focus === 'function') {
+            if (!errSummary.hasAttribute('tabindex')) errSummary.setAttribute('tabindex', '-1');
+            try { errSummary.focus({ preventScroll: false }); } catch (_) { errSummary.focus(); }
+          }
           track('lead_form_error', {
             page_path: pagePath,
             content_cluster: defaultCluster,

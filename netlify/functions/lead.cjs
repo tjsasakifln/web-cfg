@@ -187,6 +187,37 @@ exports.handler = async (event) => {
     };
   }
 
+  // Production profile: never acknowledge success on ephemeral store
+  try {
+    const { isProductionProfile, assertProductionStorePolicy } = require("./lib/lead-store.cjs");
+    const pol = assertProductionStorePolicy(process.env);
+    if (!pol.ok) {
+      safeLog("error", "store_policy_violation", { code: pol.code });
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify(
+          publicErrorBody({
+            error: "store_unavailable",
+            message: "Serviço temporariamente indisponível. Use o WhatsApp ou tente em instantes.",
+          }),
+        ),
+      };
+    }
+    if (store.ephemeral && isProductionProfile()) {
+      safeLog("error", "store_ephemeral_blocked_production", {});
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify(
+          publicErrorBody({
+            error: "store_unavailable",
+            message: "Serviço temporariamente indisponível. Use o WhatsApp ou tente em instantes.",
+          }),
+        ),
+      };
+    }
+  } catch (_) { /* keep legacy path */ }
   // Ephemeral memory without explicit allow is only for tests
   if (store.ephemeral && process.env.LEAD_ALLOW_MEMORY_FALLBACK !== "1" && process.env.NODE_ENV !== "test") {
     safeLog("error", "store_ephemeral_blocked", {});
