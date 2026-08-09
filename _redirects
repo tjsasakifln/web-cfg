@@ -22,7 +22,7 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /blog                      /conteudos/       301
 /contato                   /#contato         301
 /servicos                  /#como-atuamos    301
-/trabalhe-conosco          /#contato         301
+/trabalhe-conosco          /404.html         410
 
 # --- Abandoned products (410 Gone + custom body; never soft-404 to home) ---
 /vision     /404.html  410

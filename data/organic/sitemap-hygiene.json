@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "issues": [],
+  "url_count": 53,
+  "unique_paths": 53,
+  "member_sitemaps": [
+    "https://confenge.com.br/sitemap.xml",
+    "https://confenge.com.br/sitemap-editorial.xml",
+    "https://confenge.com.br/sitemap-jurisprudencia.xml",
+    "https://confenge.com.br/sitemap-inteligencia.xml"
+  ],
+  "robots_sitemaps": [
+    "https://confenge.com.br/sitemap-index.xml"
+  ]
+}

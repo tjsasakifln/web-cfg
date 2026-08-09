@@ -36,7 +36,7 @@ com **X > 0** (esperado ~12–14). Se aparecer `0`, o arquivo `_redirects` não 
 | `/privacy-policy` | `/privacidade/` | 301 |
 | `/politica-de-privacidade` | `/privacidade/` | 301 |
 | `/terms-and-conditions` | `/termos-de-uso/` | 301 |
-| `/trabalhe-conosco` | `/#contato` | 301 |
+| `/trabalhe-conosco` | `/404.html` | **410** (sem carreiras; não é contato comercial) |
 | `/privacidade.html` | `/privacidade/` | 301! |
 
 ## Path — abandonados (C)

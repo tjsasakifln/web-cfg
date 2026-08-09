@@ -1,0 +1,9 @@
+{
+  "export_date": "2026-08-09",
+  "window_days": 7,
+  "aggregate_clicks": 10,
+  "aggregate_impressions": 384,
+  "pages_table_impressions_sum_note": "Dimensional page rows may not equal aggregate chart (GSC privacy/aggregation).",
+  "source": "goal-baseline-snapshot",
+  "page_device_matrix": "estimated_from_device_share_when_api_matrix_absent"
+}

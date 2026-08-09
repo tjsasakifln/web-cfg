@@ -1,7 +1,7 @@
 {
   "schema_version": "seo-opportunities-v1",
-  "generated_at": "2026-08-09T05:52:44Z",
-  "as_of": "2026-08-01",
+  "generated_at": "2026-08-09T20:12:02Z",
+  "as_of": "2026-08-09",
   "north_star": "receita_esperada_atribuivel_ao_inbound_organico",
   "scoring": {
     "model": "content_value_score",
@@ -15,47 +15,671 @@
       "competitive_opportunity": 5
     }
   },
+  "serp_ctr_config_ref": "data/organic/serp-ctr-config.json",
+  "serp_ctr_opportunities": [
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
+      "title_length": 61,
+      "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+      "h1": "SINAPI desonerado ou não desonerado: qual usar?",
+      "above_the_fold_lead": "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Use a versão que o edital fixa (ou a planilha modelo do órgão), alinha BDI e regime da empresa à mesma base e confira data-base, misturar tabelas sem memória de cálculo distorce preço e exequibilidade",
+      "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "orcamento-bdi": {
+            "cluster_id": "orcamento-bdi",
+            "hits": [
+              "sinapi",
+              "desonerad"
+            ],
+            "hit_count": 2,
+            "service_path": "/auditoria-orcamento-licitacao/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "orcamento-bdi",
+        "service_path": "/auditoria-orcamento-licitacao/",
+        "service_slug": "auditoria-orcamento-licitacao",
+        "tools": [],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando o orçamento do edital vira risco de proposta",
+        "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
+        "cta_label": "Ver auditoria de orçamento e edital"
+      },
+      "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_desktop",
+        "title_long_mobile_truncation_risk"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 89.0,
+        "clicks": 1.0,
+        "position": 7.27,
+        "ctr": 0.011235955056179775,
+        "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/"
+      },
+      "ctr_gap": {
+        "is_opportunity": true,
+        "ctr": 0.01124,
+        "expected_ctr": 0.04,
+        "gap": 0.02876,
+        "reasons": [
+          "ctr_below_45%_of_expected",
+          "ctr_below_absolute_floor"
+        ],
+        "priority_force_include": false
+      },
+      "confidence": 0.55,
+      "sample_quality": "low_moderate",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "ctr_gap"
+    },
+    {
+      "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "Chuva justifica prorrogação de prazo? Critério e prova | CONFENGE",
+      "title_length": 65,
+      "meta_description": "Chuva ordinária não basta. O que separa pedido aceito de risco ordinário: caminho crítico, dados e documentos contemporâneos.",
+      "h1": "Chuva justifica prorrogação de prazo em obra pública?",
+      "above_the_fold_lead": "Da visão de atrasos e prorrogações à decisão de canteiro, leitura prática de prorrogação por chuva.",
+      "canonical": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "robots": "noindex,follow",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "atrasos-prorrogacao": {
+            "cluster_id": "atrasos-prorrogacao",
+            "hits": [
+              "prorroga",
+              "chuva"
+            ],
+            "hit_count": 2,
+            "service_path": "/atrasos-prorrogacao-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "atrasos-prorrogacao",
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "service_slug": "atrasos-prorrogacao-obras-publicas",
+        "tools": [
+          "/ferramentas/matriz-atraso-obra/"
+        ],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando o atraso deixa de ser só cronograma",
+        "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
+        "cta_label": "Ver serviço de prazos e prorrogações"
+      },
+      "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_desktop",
+        "title_long_mobile_truncation_risk",
+        "robots_noindex"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "Chuva justifica prorrogação de prazo? Critério e prova",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 17.0,
+        "clicks": 0.0,
+        "position": 3.35,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/"
+      },
+      "ctr_gap": {
+        "is_opportunity": true,
+        "ctr": 0.0,
+        "expected_ctr": 0.08,
+        "gap": 0.08,
+        "reasons": [
+          "ctr_below_45%_of_expected",
+          "ctr_below_absolute_floor"
+        ],
+        "priority_force_include": false
+      },
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "ctr_gap"
+    },
+    {
+      "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "Aditivo qualitativo vs quantitativo: o que muda no pleito | CONFENGE",
+      "title_length": 68,
+      "meta_description": "A classificação define base de preço, limite e prova. Como enquadrar a mudança sem misturar quantidade com mudança de projeto.",
+      "h1": "Aditivo qualitativo ou quantitativo: a diferença que muda o pleito",
+      "above_the_fold_lead": "Quando surge aditivo qualitativo e quantitativo na obra, a ordem é prova, enquadramento contratual e quantificação do impacto.",
+      "canonical": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/",
+      "robots": "noindex,follow",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "aditivos": {
+            "cluster_id": "aditivos",
+            "hits": [
+              "aditivo",
+              "qualitativo",
+              "quantitativo"
+            ],
+            "hit_count": 3,
+            "service_path": "/aditivos-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "aditivos",
+        "service_path": "/aditivos-obras-publicas/",
+        "service_slug": "aditivos-obras-publicas",
+        "tools": [
+          "/ferramentas/limite-acrescimos-supressoes/"
+        ],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando o aditivo passa a afetar margem",
+        "bridge_body": "Mudança de escopo, item novo ou limite de 25%/50% deixa de ser dúvida de planilha quando a decisão formal define preço, prazo e exposição. Aí vale enquadrar o fato antes de executar ou assinar.",
+        "cta_label": "Ver serviço de aditivos"
+      },
+      "alternate_landing_candidate": "/aditivos-obras-publicas/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_desktop",
+        "title_long_mobile_truncation_risk",
+        "robots_noindex"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "Aditivo qualitativo vs quantitativo: o que muda no pleito",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 22.0,
+        "clicks": 0.0,
+        "position": 6.09,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/"
+      },
+      "ctr_gap": {
+        "is_opportunity": true,
+        "ctr": 0.0,
+        "expected_ctr": 0.04,
+        "gap": 0.04,
+        "reasons": [
+          "ctr_below_45%_of_expected",
+          "ctr_below_absolute_floor"
+        ],
+        "priority_force_include": false
+      },
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "ctr_gap"
+    },
+    {
+      "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "Prazo de vigência vs prazo de execução no contrato | CONFENGE",
+      "title_length": 61,
+      "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
+      "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
+      "above_the_fold_lead": "Quando surge prazo de vigência e de execução na obra, a ordem é prova, enquadramento contratual e quantificação do impacto.",
+      "canonical": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "robots": "noindex,follow",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "atrasos-prorrogacao": {
+            "cluster_id": "atrasos-prorrogacao",
+            "hits": [
+              "prazo-vigencia",
+              "prazo-execucao"
+            ],
+            "hit_count": 2,
+            "service_path": "/atrasos-prorrogacao-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "atrasos-prorrogacao",
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "service_slug": "atrasos-prorrogacao-obras-publicas",
+        "tools": [
+          "/ferramentas/matriz-atraso-obra/"
+        ],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando o atraso deixa de ser só cronograma",
+        "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
+        "cta_label": "Ver serviço de prazos e prorrogações"
+      },
+      "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_desktop",
+        "title_long_mobile_truncation_risk",
+        "robots_noindex"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "Prazo de vigência vs prazo de execução no contrato",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 18.0,
+        "clicks": 0.0,
+        "position": 7.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/"
+      },
+      "ctr_gap": {
+        "is_opportunity": true,
+        "ctr": 0.0,
+        "expected_ctr": 0.04,
+        "gap": 0.04,
+        "reasons": [
+          "ctr_below_45%_of_expected",
+          "ctr_below_absolute_floor"
+        ],
+        "priority_force_include": false
+      },
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "ctr_gap"
+    },
+    {
+      "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+      "title_length": 72,
+      "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
+      "h1": "Prorrogação de prazo: documentos que não podem faltar",
+      "above_the_fold_lead": "Liste os documentos que sustentam pedido de prorrogação: causa, cronologia, impacto e comunicação, sem dossiê genérico.",
+      "canonical": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "atrasos-prorrogacao": {
+            "cluster_id": "atrasos-prorrogacao",
+            "hits": [
+              "prorroga"
+            ],
+            "hit_count": 1,
+            "service_path": "/atrasos-prorrogacao-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "atrasos-prorrogacao",
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "service_slug": "atrasos-prorrogacao-obras-publicas",
+        "tools": [
+          "/ferramentas/matriz-atraso-obra/"
+        ],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando o atraso deixa de ser só cronograma",
+        "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
+        "cta_label": "Ver serviço de prazos e prorrogações"
+      },
+      "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_desktop",
+        "title_long_mobile_truncation_risk"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "Prorrogação de prazo em obra pública: checklist de document…",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 15.0,
+        "clicks": 0.0,
+        "position": 9.2,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/"
+      },
+      "ctr_gap": {
+        "is_opportunity": true,
+        "ctr": 0.0,
+        "expected_ctr": 0.025,
+        "gap": 0.025,
+        "reasons": [
+          "ctr_below_45%_of_expected",
+          "ctr_below_absolute_floor"
+        ],
+        "priority_force_include": false
+      },
+      "confidence": 0.3,
+      "sample_quality": "very_low",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "ctr_gap"
+    },
+    {
+      "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
+      "title_length": 69,
+      "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
+      "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
+      "above_the_fold_lead": "Os limites de 25% e 50% nos aditivos não são só percentual na ponta do lápis: o que entra na conta, o tipo de alteração e o saldo acumulado definem se o teto estoura.",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "robots": "noindex,follow",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "match_source": "tokens",
+        "confidence": "medium",
+        "ambiguous": false,
+        "token_scores": {
+          "aditivos": {
+            "cluster_id": "aditivos",
+            "hits": [
+              "aditivo"
+            ],
+            "hit_count": 1,
+            "service_path": "/aditivos-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "aditivos",
+        "service_path": "/aditivos-obras-publicas/",
+        "service_slug": "aditivos-obras-publicas",
+        "tools": [
+          "/ferramentas/limite-acrescimos-supressoes/"
+        ],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando o aditivo passa a afetar margem",
+        "bridge_body": "Mudança de escopo, item novo ou limite de 25%/50% deixa de ser dúvida de planilha quando a decisão formal define preço, prazo e exposição. Aí vale enquadrar o fato antes de executar ou assinar.",
+        "cta_label": "Ver serviço de aditivos"
+      },
+      "alternate_landing_candidate": "/aditivos-obras-publicas/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_desktop",
+        "title_long_mobile_truncation_risk",
+        "robots_noindex"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 14.0,
+        "clicks": 0.0,
+        "position": 11.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
+      },
+      "ctr_gap": {
+        "is_opportunity": true,
+        "ctr": 0.0,
+        "expected_ctr": 0.025,
+        "gap": 0.025,
+        "reasons": [
+          "ctr_below_45%_of_expected",
+          "ctr_below_absolute_floor"
+        ],
+        "priority_force_include": false
+      },
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "ctr_gap"
+    },
+    {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+      "title_length": 51,
+      "meta_description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
+      "h1": "Atraso na medição: como proteger o caixa",
+      "above_the_fold_lead": "Serviço executado sem medição processada é caixa parado. Protocolo, prazo e parcela incontroversa são o núcleo da proteção.",
+      "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/atraso-na-medicao-obra-publica/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "medicoes-pagamentos": {
+            "cluster_id": "medicoes-pagamentos",
+            "hits": [
+              "medicao",
+              "atraso-na-medicao"
+            ],
+            "hit_count": 2,
+            "service_path": "/medicoes-glosas-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "medicoes-pagamentos",
+        "service_path": "/medicoes-glosas-obras-publicas/",
+        "service_slug": "medicoes-glosas-obras-publicas",
+        "tools": [],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando a glosa ou a medição vira problema de caixa",
+        "bridge_body": "Critério de medição contestado, glosa sem nexo ou parcela retida vira risco de fluxo se a equipe não organiza prova contemporânea e contesta no tempo certo.",
+        "cta_label": "Ver serviço de medições e glosas"
+      },
+      "alternate_landing_candidate": "/medicoes-glosas-obras-publicas/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_mobile_truncation_risk"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "Atraso na medição: como proteger o caixa",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 10.0,
+        "clicks": 0.0,
+        "position": 8.1,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/"
+      },
+      "ctr_gap": {
+        "is_opportunity": true,
+        "ctr": 0.0,
+        "expected_ctr": 0.025,
+        "gap": 0.025,
+        "reasons": [
+          "ctr_below_45%_of_expected",
+          "ctr_below_absolute_floor"
+        ],
+        "priority_force_include": false
+      },
+      "confidence": 0.3,
+      "sample_quality": "very_low",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "ctr_gap"
+    },
+    {
+      "path": "/conteudos/bdi-diferenciado-obra-publica/",
+      "query_intent": "informational",
+      "related_queries": [],
+      "intent_page_mismatch": false,
+      "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
+      "title_length": 68,
+      "meta_description": "Quando o edital ou a natureza do item autoriza BDI distinto, e o risco de aplicar o mesmo percentual em tudo.",
+      "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
+      "above_the_fold_lead": "BDI diferenciado em materiais e equipamentos só se sustenta quando a decomposição reflete fornecimento, logística e risco reais, não como atalho para maquiar margem.",
+      "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "structured_data_present": true,
+      "breadcrumb_present": true,
+      "organization_schema_present": true,
+      "site_name": "CONFENGE",
+      "service_fit": {
+        "path": "/conteudos/bdi-diferenciado-obra-publica/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "orcamento-bdi": {
+            "cluster_id": "orcamento-bdi",
+            "hits": [
+              "bdi"
+            ],
+            "hit_count": 1,
+            "service_path": "/auditoria-orcamento-licitacao/"
+          }
+        },
+        "tied_clusters": [],
+        "matched": true,
+        "cluster_id": "orcamento-bdi",
+        "service_path": "/auditoria-orcamento-licitacao/",
+        "service_slug": "auditoria-orcamento-licitacao",
+        "tools": [],
+        "specialist": "/especialista/tiago-jun-sasaki/",
+        "bridge_title": "Quando o orçamento do edital vira risco de proposta",
+        "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
+        "cta_label": "Ver auditoria de orçamento e edital"
+      },
+      "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
+      "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+      "issues": [
+        "title_long_desktop",
+        "title_long_mobile_truncation_risk"
+      ],
+      "clickbait_flags": [],
+      "recommended_title": "BDI diferenciado em materiais e equipamentos: quando usar",
+      "recommended_description": null,
+      "gsc": {
+        "impressions": 11.0,
+        "clicks": 2.0,
+        "position": 6.27,
+        "ctr": 0.18181818181818182,
+        "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
+      },
+      "ctr_gap": {
+        "is_opportunity": false,
+        "ctr": 0.18182,
+        "expected_ctr": 0.04,
+        "gap": -0.14182,
+        "reasons": [
+          "priority_path_benchmark_healthy_ctr"
+        ],
+        "priority_force_include": true
+      },
+      "confidence": 0.3,
+      "sample_quality": "very_low",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+      "html_present": true,
+      "kind": "priority_benchmark"
+    }
+  ],
   "counts": {
-    "total": 27,
+    "total": 31,
     "by_action": {
-      "improve": 18,
-      "keep": 5,
+      "improve": 24,
+      "keep": 3,
       "create": 4
     },
     "by_intent": {
       "bofu": 4,
-      "mofu": 11,
+      "mofu": 15,
       "tofu": 12
     },
     "by_publishability": {
-      "indexable_candidate": 19,
-      "blocked_by_gate": 8
+      "indexable_candidate": 17,
+      "blocked_by_gate": 14
     },
     "bofu": 4,
-    "data_driven": 11
+    "data_driven": 11,
+    "serp_ctr_gap": 7,
+    "serp_priority_benchmarks": 1
   },
   "demand_map_ref": "persona → problem → question → intent → service",
   "opportunities": [
     {
-      "id": "opp-need-edital-orcamento",
-      "topic": "Participar, impugnar ou auditar a planilha antes da proposta?",
-      "cluster": "edital-proposta",
+      "id": "opp-need-reequilibrio-pleito",
+      "topic": "Quando cabe reequilíbrio e como estruturar um pleito defensável?",
+      "cluster": "reequilibrio",
       "intent": "bofu",
-      "persona": "licitacoes",
-      "jtbd": "Decidir se a licitação é economicamente segura",
+      "persona": "diretor-construtora",
+      "jtbd": "Proteger margem e decidir se vale montar pleito de reequilíbrio agora",
       "commercial_fit": 0.95,
-      "service_fit": "auditoria-orcamento-licitacao",
-      "service_path": "/auditoria-orcamento-licitacao/",
+      "service_fit": "reequilibrio-obras-publicas",
+      "service_path": "/reequilibrio-obras-publicas/",
       "demand_signal": {
-        "strength": 0.557,
+        "strength": 0.767,
         "source": "gsc"
       },
       "search_console_evidence": {
-        "impressions": 1.0,
-        "clicks": 0.0,
-        "position": 9.0,
+        "impressions": 11.0,
+        "clicks": 2.0,
+        "position": 5.9363636363636365,
         "matched_queries": [
-          "ia"
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública"
         ]
       },
       "datalake_evidence": {
@@ -82,31 +706,31 @@
         "risk": false,
         "urls": []
       },
-      "proposed_url": "/auditoria-orcamento-licitacao/",
-      "existing_url": "/auditoria-orcamento-licitacao/",
+      "proposed_url": "/reequilibrio-obras-publicas/",
+      "existing_url": "/reequilibrio-obras-publicas/",
       "action": "improve",
-      "score": 68,
+      "score": 72,
       "score_breakdown": {
         "commercial_intent": 25,
         "service_fit": 19,
         "data_moat": 3,
-        "demand_evidence": 8,
+        "demand_evidence": 12,
         "topical_authority": 8,
         "freshness_trigger": 2,
         "competitive_opportunity": 3
       },
       "score_penalties": {},
-      "rationale": "Necessidade canônica do grafo de demanda (need-edital-orcamento): Edital com orçamento inconsistente ou referência duvidosa",
-      "suggested_cta": "Auditar edital e orçamento",
+      "rationale": "Necessidade canônica do grafo de demanda (need-reequilibrio-pleito): Contrato de obra pública virou prejuízo ou a equação original se rompeu",
+      "suggested_cta": "Analisar viabilidade de reequilíbrio",
       "suggested_internal_links": [
-        "/auditoria-orcamento-licitacao/",
-        "/auditoria-orcamento-licitacao/"
+        "/reequilibrio-obras-publicas/",
+        "/reequilibrio-obras-publicas/"
       ],
       "confidence": 0.75,
       "source": "demand_graph",
       "service_fit_score": 0.95,
       "data_moat_score": 0.15,
-      "demand_strength": 0.557,
+      "demand_strength": 0.767,
       "topical_authority_score": 0.75,
       "freshness_score": 0.4,
       "competitive_score": 0.55,
@@ -122,7 +746,92 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-1695738",
+      "id": "opp-need-medicao-glosa",
+      "topic": "Como contestar glosa e proteger o fluxo de caixa?",
+      "cluster": "medicoes-pagamentos",
+      "intent": "bofu",
+      "persona": "engenheiro-obra",
+      "jtbd": "Recuperar medição e documentar nexo com o contrato",
+      "commercial_fit": 0.95,
+      "service_fit": "medicoes-glosas-obras-publicas",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.676,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 8.0,
+        "clicks": 1.0,
+        "position": 4.0,
+        "matched_queries": [
+          "glosa de medição obra pública"
+        ]
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.55
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/medicoes-glosas-obras-publicas/",
+      "existing_url": "/medicoes-glosas-obras-publicas/",
+      "action": "improve",
+      "score": 70,
+      "score_breakdown": {
+        "commercial_intent": 25,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 10,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-medicao-glosa): Medição glosada, critério inventado ou parcela retida",
+      "suggested_cta": "Revisar medição e glosa",
+      "suggested_internal_links": [
+        "/medicoes-glosas-obras-publicas/",
+        "/medicoes-glosas-obras-publicas/"
+      ],
+      "confidence": 0.75,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.676,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.55,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-gsc-ctr-1679425",
       "topic": "CTR opportunity: /conteudos/sinapi-desonerado-nao-desonerado/",
       "cluster": "orcamento-bdi",
       "intent": "mofu",
@@ -136,23 +845,46 @@
         "source": "gsc"
       },
       "search_console_evidence": {
+        "impressions": 89.0,
+        "clicks": 1.0,
+        "position": 7.27,
+        "ctr": 0.011235955056179775,
         "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
-        "clicks": 0.0,
-        "impressions": 88.0,
-        "position": 7.75
+        "serp_diagnosis": {
+          "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
+          "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+          "h1": "SINAPI desonerado ou não desonerado: qual usar?",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk"
+          ],
+          "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.01124,
+            "expected_ctr": 0.04,
+            "gap": 0.02876,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
       },
       "datalake_evidence": {
         "dataset": "web-cfg-editorial",
         "as_of": "gsc",
         "record_count": 1,
-        "methodology": "GSC page-level striking distance / CTR signal",
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
         "limitations": [
-          "Amostra GSC limitada no export disponível."
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
         ],
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.75
+        "confidence": 0.55
       },
       "unique_data_available": false,
       "freshness": {
@@ -179,13 +911,13 @@
         "competitive_opportunity": 3
       },
       "score_penalties": {},
-      "rationale": "Muitas impressões (88.0) e CTR ~0 na posição 7.8 — reescrever title/meta e reforçar CTA.",
-      "suggested_cta": "Auditar orçamento e BDI do edital",
+      "rationale": "CTR gap configurável: impr=89.0 cliques=1.0 pos=7.27 ctr=0.01124 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk",
+      "suggested_cta": "Ver auditoria de orçamento e edital",
       "suggested_internal_links": [
         "/conteudos/sinapi-desonerado-nao-desonerado/",
         "/auditoria-orcamento-licitacao/"
       ],
-      "confidence": 0.8,
+      "confidence": 0.55,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,
@@ -215,20 +947,16 @@
       "service_fit": "auditoria-orcamento-licitacao",
       "service_path": "/auditoria-orcamento-licitacao/",
       "demand_signal": {
-        "strength": 0.889,
+        "strength": 0.9,
         "source": "gsc"
       },
       "search_console_evidence": {
-        "impressions": 27.0,
-        "clicks": 0.0,
-        "position": 8.222962962962962,
+        "impressions": 40.0,
+        "clicks": 1.0,
+        "position": 7.185,
         "matched_queries": [
           "desonerado e não desonerado",
-          "não desonerado",
-          "sinapi desonerado ou não desonerado qual usar",
-          "desonerado ou não desonerado",
-          "nao desonerado",
-          "desonerado e não desonerado sinapi"
+          "sinapi desonerado"
         ]
       },
       "datalake_evidence": {
@@ -258,12 +986,12 @@
       "proposed_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
       "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
       "action": "improve",
-      "score": 66,
+      "score": 67,
       "score_breakdown": {
         "commercial_intent": 18,
         "service_fit": 19,
         "data_moat": 3,
-        "demand_evidence": 13,
+        "demand_evidence": 14,
         "topical_authority": 8,
         "freshness_trigger": 2,
         "competitive_opportunity": 3
@@ -279,10 +1007,392 @@
       "source": "demand_graph",
       "service_fit_score": 0.95,
       "data_moat_score": 0.15,
-      "demand_strength": 0.8890000000000001,
+      "demand_strength": 0.9,
       "topical_authority_score": 0.75,
       "freshness_score": 0.4,
       "competitive_score": 0.55,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-gsc-ctr-4030622",
+      "topic": "CTR opportunity: /conteudos/aditivo-qualitativo-quantitativo/",
+      "cluster": "aditivos",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "aditivos-obras-publicas",
+      "service_path": "/aditivos-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.854,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 22.0,
+        "clicks": 0.0,
+        "position": 6.09,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/",
+        "serp_diagnosis": {
+          "title": "Aditivo qualitativo vs quantitativo: o que muda no pleito | CONFENGE",
+          "meta_description": "A classificação define base de preço, limite e prova. Como enquadrar a mudança sem misturar quantidade com mudança de projeto.",
+          "h1": "Aditivo qualitativo ou quantitativo: a diferença que muda o pleito",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk",
+            "robots_noindex"
+          ],
+          "alternate_landing_candidate": "/aditivos-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.04,
+            "gap": 0.04,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "existing_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "action": "improve",
+      "score": 65,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 13,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=22.0 cliques=0.0 pos=6.09 ctr=0.0 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
+      "suggested_cta": "Ver serviço de aditivos",
+      "suggested_internal_links": [
+        "/conteudos/aditivo-qualitativo-quantitativo/",
+        "/aditivos-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.8540000000000001,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-need-atraso-prorrogacao",
+      "topic": "Como documentar prorrogação e responder notificação?",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Proteger prazo e evitar sanção indevida",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.77,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 10.0,
+        "clicks": 0.0,
+        "position": 3.5,
+        "matched_queries": [
+          "prorrogação prazo obra pública chuva"
+        ]
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.55
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/atrasos-prorrogacao-obras-publicas/",
+      "existing_url": "/atrasos-prorrogacao-obras-publicas/",
+      "action": "improve",
+      "score": 65,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 12,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-atraso-prorrogacao): Atraso imputável à Administração ou risco de notificação",
+      "suggested_cta": "Montar defesa de prazo",
+      "suggested_internal_links": [
+        "/atrasos-prorrogacao-obras-publicas/",
+        "/ferramentas/matriz-atraso-obra/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.75,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.7699999999999999,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.55,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-gsc-ctr-5489243",
+      "topic": "CTR opportunity: /conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.819,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 17.0,
+        "clicks": 0.0,
+        "position": 3.35,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "serp_diagnosis": {
+          "title": "Chuva justifica prorrogação de prazo? Critério e prova | CONFENGE",
+          "meta_description": "Chuva ordinária não basta. O que separa pedido aceito de risco ordinário: caminho crítico, dados e documentos contemporâneos.",
+          "h1": "Chuva justifica prorrogação de prazo em obra pública?",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk",
+            "robots_noindex"
+          ],
+          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.08,
+            "gap": 0.08,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "existing_url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "action": "improve",
+      "score": 64,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 12,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=17.0 cliques=0.0 pos=3.35 ctr=0.0 expected=0.08 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
+      "suggested_cta": "Ver serviço de prazos e prorrogações",
+      "suggested_internal_links": [
+        "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.819,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-need-edital-orcamento",
+      "topic": "Participar, impugnar ou auditar a planilha antes da proposta?",
+      "cluster": "edital-proposta",
+      "intent": "bofu",
+      "persona": "licitacoes",
+      "jtbd": "Decidir se a licitação é economicamente segura",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.35
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/auditoria-orcamento-licitacao/",
+      "existing_url": "/auditoria-orcamento-licitacao/",
+      "action": "keep",
+      "score": 64,
+      "score_breakdown": {
+        "commercial_intent": 25,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 5,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-edital-orcamento): Edital com orçamento inconsistente ou referência duvidosa",
+      "suggested_cta": "Auditar edital e orçamento",
+      "suggested_internal_links": [
+        "/auditoria-orcamento-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.55,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.35,
       "penalties": [],
       "indexability_gate": {
         "indexable": true,
@@ -373,163 +1483,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-need-medicao-glosa",
-      "topic": "Como contestar glosa e proteger o fluxo de caixa?",
-      "cluster": "medicoes-pagamentos",
-      "intent": "bofu",
-      "persona": "engenheiro-obra",
-      "jtbd": "Recuperar medição e documentar nexo com o contrato",
-      "commercial_fit": 0.95,
-      "service_fit": "medicoes-glosas-obras-publicas",
-      "service_path": "/medicoes-glosas-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.35,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "site",
-        "record_count": 1,
-        "methodology": "Página de serviço/editorial já publicada no site Confenge",
-        "limitations": [
-          "Não é agregação do datalake; autoridade editorial + serviço."
-        ],
-        "sources": [
-          "site-confenge"
-        ],
-        "confidence": 0.8
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.4
-      },
-      "competition": {
-        "score": 0.35
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/medicoes-glosas-obras-publicas/",
-      "existing_url": "/medicoes-glosas-obras-publicas/",
-      "action": "keep",
-      "score": 64,
-      "score_breakdown": {
-        "commercial_intent": 25,
-        "service_fit": 19,
-        "data_moat": 3,
-        "demand_evidence": 5,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Necessidade canônica do grafo de demanda (need-medicao-glosa): Medição glosada, critério inventado ou parcela retida",
-      "suggested_cta": "Revisar medição e glosa",
-      "suggested_internal_links": [
-        "/medicoes-glosas-obras-publicas/",
-        "/medicoes-glosas-obras-publicas/"
-      ],
-      "confidence": 0.55,
-      "source": "demand_graph",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.15,
-      "demand_strength": 0.35,
-      "topical_authority_score": 0.75,
-      "freshness_score": 0.4,
-      "competitive_score": 0.35,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
-      "id": "opp-need-reequilibrio-pleito",
-      "topic": "Quando cabe reequilíbrio e como estruturar um pleito defensável?",
-      "cluster": "reequilibrio",
-      "intent": "bofu",
-      "persona": "diretor-construtora",
-      "jtbd": "Proteger margem e decidir se vale montar pleito de reequilíbrio agora",
-      "commercial_fit": 0.95,
-      "service_fit": "reequilibrio-obras-publicas",
-      "service_path": "/reequilibrio-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.35,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "site",
-        "record_count": 1,
-        "methodology": "Página de serviço/editorial já publicada no site Confenge",
-        "limitations": [
-          "Não é agregação do datalake; autoridade editorial + serviço."
-        ],
-        "sources": [
-          "site-confenge"
-        ],
-        "confidence": 0.8
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.4
-      },
-      "competition": {
-        "score": 0.35
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/reequilibrio-obras-publicas/",
-      "existing_url": "/reequilibrio-obras-publicas/",
-      "action": "keep",
-      "score": 64,
-      "score_breakdown": {
-        "commercial_intent": 25,
-        "service_fit": 19,
-        "data_moat": 3,
-        "demand_evidence": 5,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Necessidade canônica do grafo de demanda (need-reequilibrio-pleito): Contrato de obra pública virou prejuízo ou a equação original se rompeu",
-      "suggested_cta": "Analisar viabilidade de reequilíbrio",
-      "suggested_internal_links": [
-        "/reequilibrio-obras-publicas/",
-        "/reequilibrio-obras-publicas/"
-      ],
-      "confidence": 0.55,
-      "source": "demand_graph",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.15,
-      "demand_strength": 0.35,
-      "topical_authority_score": 0.75,
-      "freshness_score": 0.4,
-      "competitive_score": 0.35,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
-      "id": "opp-gsc-ctr-6441327",
+      "id": "opp-gsc-ctr-1146523",
       "topic": "CTR opportunity: /conteudos/limite-aditivo-25-50-obra-publica/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -539,27 +1493,51 @@
       "service_fit": "aditivos-obras-publicas",
       "service_path": "/aditivos-obras-publicas/",
       "demand_signal": {
-        "strength": 0.568,
+        "strength": 0.648,
         "source": "gsc"
       },
       "search_console_evidence": {
-        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "impressions": 14.0,
         "clicks": 0.0,
-        "impressions": 24.0,
-        "position": 17.0
+        "position": 11.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "serp_diagnosis": {
+          "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
+          "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
+          "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk",
+            "robots_noindex"
+          ],
+          "alternate_landing_candidate": "/aditivos-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.025,
+            "gap": 0.025,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
       },
       "datalake_evidence": {
         "dataset": "web-cfg-editorial",
         "as_of": "gsc",
         "record_count": 1,
-        "methodology": "GSC page-level striking distance / CTR signal",
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
         "limitations": [
-          "Amostra GSC limitada no export disponível."
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
         ],
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.75
+        "confidence": 0.3
       },
       "unique_data_available": false,
       "freshness": {
@@ -575,6 +1553,330 @@
       "proposed_url": "/conteudos/limite-aditivo-25-50-obra-publica/",
       "existing_url": "/conteudos/limite-aditivo-25-50-obra-publica/",
       "action": "improve",
+      "score": 62,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 10,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=14.0 cliques=0.0 pos=11.0 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
+      "suggested_cta": "Ver serviço de aditivos",
+      "suggested_internal_links": [
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/aditivos-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.648,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-3260573",
+      "topic": "CTR opportunity: /conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.655,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 15.0,
+        "clicks": 0.0,
+        "position": 9.2,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "serp_diagnosis": {
+          "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+          "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
+          "h1": "Prorrogação de prazo: documentos que não podem faltar",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk"
+          ],
+          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.025,
+            "gap": 0.025,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "existing_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "action": "improve",
+      "score": 62,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 10,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=15.0 cliques=0.0 pos=9.2 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk",
+      "suggested_cta": "Ver serviço de prazos e prorrogações",
+      "suggested_internal_links": [
+        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.655,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-5929950",
+      "topic": "CTR opportunity: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.676,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 18.0,
+        "clicks": 0.0,
+        "position": 7.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "serp_diagnosis": {
+          "title": "Prazo de vigência vs prazo de execução no contrato | CONFENGE",
+          "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
+          "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk",
+            "robots_noindex"
+          ],
+          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.04,
+            "gap": 0.04,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "existing_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "action": "improve",
+      "score": 62,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 10,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=18.0 cliques=0.0 pos=7.0 ctr=0.0 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
+      "suggested_cta": "Ver serviço de prazos e prorrogações",
+      "suggested_internal_links": [
+        "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.676,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-9675358",
+      "topic": "CTR opportunity: /conteudos/atraso-na-medicao-obra-publica/",
+      "cluster": "medicoes-pagamentos",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "medicoes-glosas-obras-publicas",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.62,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 10.0,
+        "clicks": 0.0,
+        "position": 8.1,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+        "serp_diagnosis": {
+          "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+          "meta_description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
+          "h1": "Atraso na medição: como proteger o caixa",
+          "issues": [
+            "title_long_mobile_truncation_risk"
+          ],
+          "alternate_landing_candidate": "/medicoes-glosas-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.025,
+            "gap": 0.025,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/atraso-na-medicao-obra-publica/",
+      "existing_url": "/conteudos/atraso-na-medicao-obra-publica/",
+      "action": "improve",
       "score": 61,
       "score_breakdown": {
         "commercial_intent": 18,
@@ -586,30 +1888,32 @@
         "competitive_opportunity": 3
       },
       "score_penalties": {},
-      "rationale": "Muitas impressões (24.0) e CTR ~0 na posição 17.0 — reescrever title/meta e reforçar CTA.",
-      "suggested_cta": "Analisar meu caso com a CONFENGE",
+      "rationale": "CTR gap configurável: impr=10.0 cliques=0.0 pos=8.1 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_mobile_truncation_risk",
+      "suggested_cta": "Ver serviço de medições e glosas",
       "suggested_internal_links": [
-        "/conteudos/limite-aditivo-25-50-obra-publica/",
-        "/aditivos-obras-publicas/"
+        "/conteudos/atraso-na-medicao-obra-publica/",
+        "/medicoes-glosas-obras-publicas/"
       ],
-      "confidence": 0.8,
+      "confidence": 0.3,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,
-      "demand_strength": 0.568,
+      "demand_strength": 0.62,
       "topical_authority_score": 0.6,
       "freshness_score": 0.7,
       "competitive_score": 0.6,
       "penalties": [],
       "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
         "warnings": [
           "sample_thin_margin"
         ]
       },
-      "publishability": "indexable_candidate"
+      "publishability": "blocked_by_gate"
     },
     {
       "id": "opp-ps-prob-aditivos-margem",
@@ -628,7 +1932,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "site-confenge-guides",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 48,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -721,7 +2025,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "site-confenge-guides",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 22,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -814,7 +2118,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts,site-confenge-guides",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 48,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -908,7 +2212,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts,site-confenge-guides",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 28,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -1002,7 +2306,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "site-confenge-guides,pncp_supplier_contracts",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 48,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -1096,7 +2400,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 13,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -1202,7 +2506,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 13,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -1308,7 +2612,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 12,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -1408,15 +2712,15 @@
       "service_fit": "aditivos-obras-publicas",
       "service_path": "/aditivos-obras-publicas/",
       "demand_signal": {
-        "strength": 0.285,
+        "strength": 0.292,
         "source": "gsc"
       },
       "search_console_evidence": {
-        "impressions": 5.0,
+        "impressions": 6.0,
         "clicks": 0.0,
-        "position": 66.2,
+        "position": 35.0,
         "matched_queries": [
-          "aditivos obra pública"
+          "aditivos obras públicas"
         ]
       },
       "datalake_evidence": {
@@ -1468,7 +2772,7 @@
       "source": "demand_graph",
       "service_fit_score": 0.95,
       "data_moat_score": 0.15,
-      "demand_strength": 0.285,
+      "demand_strength": 0.292,
       "topical_authority_score": 0.75,
       "freshness_score": 0.4,
       "competitive_score": 0.55,
@@ -1500,7 +2804,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 10,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -1590,85 +2894,6 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-need-atraso-prorrogacao",
-      "topic": "Como documentar prorrogação e responder notificação?",
-      "cluster": "atrasos-prorrogacao",
-      "intent": "mofu",
-      "persona": "gerente-contratos",
-      "jtbd": "Proteger prazo e evitar sanção indevida",
-      "commercial_fit": 0.95,
-      "service_fit": "atrasos-prorrogacao-obras-publicas",
-      "service_path": "/atrasos-prorrogacao-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.2,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "site",
-        "record_count": 1,
-        "methodology": "Página de serviço/editorial já publicada no site Confenge",
-        "limitations": [
-          "Não é agregação do datalake; autoridade editorial + serviço."
-        ],
-        "sources": [
-          "site-confenge"
-        ],
-        "confidence": 0.8
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.4
-      },
-      "competition": {
-        "score": 0.35
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/atrasos-prorrogacao-obras-publicas/",
-      "existing_url": "/atrasos-prorrogacao-obras-publicas/",
-      "action": "keep",
-      "score": 55,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 3,
-        "demand_evidence": 3,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Necessidade canônica do grafo de demanda (need-atraso-prorrogacao): Atraso imputável à Administração ou risco de notificação",
-      "suggested_cta": "Montar defesa de prazo",
-      "suggested_internal_links": [
-        "/atrasos-prorrogacao-obras-publicas/",
-        "/ferramentas/matriz-atraso-obra/",
-        "/atrasos-prorrogacao-obras-publicas/"
-      ],
-      "confidence": 0.55,
-      "source": "demand_graph",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.15,
-      "demand_strength": 0.2,
-      "topical_authority_score": 0.75,
-      "freshness_score": 0.4,
-      "competitive_score": 0.35,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
       "id": "opp-radar-radar-edificacoes-publicas-pr",
       "topic": "Radar: radar-edificacoes-publicas-pr (15 abertas)",
       "cluster": "radar-oportunidades",
@@ -1685,7 +2910,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 15,
         "historical_count": 48,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -1781,7 +3006,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 3,
         "historical_count": 73,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -1878,7 +3103,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 4,
         "historical_count": 56,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -1975,7 +3200,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 4,
         "historical_count": 47,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -2072,7 +3297,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 4,
         "historical_count": 42,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -2169,7 +3394,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 7,
         "historical_count": 80,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -2266,7 +3491,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-01",
+        "as_of": "2026-08-09",
         "record_count": 5,
         "historical_count": 21,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -2345,88 +3570,6 @@
         ]
       },
       "publishability": "blocked_by_gate"
-    },
-    {
-      "id": "opp-gsc-ctr-3604249",
-      "topic": "CTR opportunity: /",
-      "cluster": "gsc-feedback",
-      "intent": "mofu",
-      "persona": "orcamentista",
-      "jtbd": "Corrigir título/meta para capturar impressões existentes",
-      "commercial_fit": 0.2,
-      "service_fit": null,
-      "service_path": null,
-      "demand_signal": {
-        "strength": 0.554,
-        "source": "gsc"
-      },
-      "search_console_evidence": {
-        "url": "https://confenge.com.br/",
-        "clicks": 0.0,
-        "impressions": 22.0,
-        "position": 17.45
-      },
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "gsc",
-        "record_count": 1,
-        "methodology": "GSC page-level striking distance / CTR signal",
-        "limitations": [
-          "Amostra GSC limitada no export disponível."
-        ],
-        "sources": [
-          "google-search-console"
-        ],
-        "confidence": 0.75
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.7
-      },
-      "competition": {
-        "score": 0.6
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/",
-      "existing_url": "/",
-      "action": "improve",
-      "score": 45,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 4,
-        "data_moat": 2,
-        "demand_evidence": 8,
-        "topical_authority": 6,
-        "freshness_trigger": 4,
-        "competitive_opportunity": 3
-      },
-      "score_penalties": {},
-      "rationale": "Muitas impressões (22.0) e CTR ~0 na posição 17.4 — reescrever title/meta e reforçar CTA.",
-      "suggested_cta": "Analisar meu caso com a CONFENGE",
-      "suggested_internal_links": [
-        "/"
-      ],
-      "confidence": 0.8,
-      "source": "gsc_page",
-      "service_fit_score": 0.2,
-      "data_moat_score": 0.1,
-      "demand_strength": 0.554,
-      "topical_authority_score": 0.6,
-      "freshness_score": 0.7,
-      "competitive_score": 0.6,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "indexable_candidate"
     },
     {
       "id": "opp-need-benchmark-mercado",
@@ -2713,5 +3856,98 @@
       ]
     },
     "principle": "Agrupar variantes textuais da mesma necessidade em um único nó. Não criar uma página por keyword."
+  },
+  "commercial_exposure_metrics": {
+    "schema_version": "commercial-exposure-metrics-v1",
+    "totals": {
+      "impressions": 373.0,
+      "clicks": 10.0,
+      "informational_impressions": 286.0,
+      "informational_clicks": 8.0,
+      "commercial_impressions": 29.0,
+      "commercial_clicks": 0.0
+    },
+    "informational_impression_share": 0.7668,
+    "commercial_impression_share": 0.0777,
+    "commercial_click_share": 0.0,
+    "serp_ctr_gap": {
+      "opportunity_count": 7,
+      "mean_gap": 0.03768
+    },
+    "commercial_bridge_coverage": 0.2857,
+    "content_to_service_link_coverage": 0.9714,
+    "service_to_supporting_content_coverage": 1.0,
+    "indexable_commercial_bridge_coverage": 1.0,
+    "indexable_content_to_service_link_coverage": 1.0,
+    "organic_assisted_conversion": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_service_page_entry": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_content_to_service_transition": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_content_to_lead": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_service_to_lead": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "note": "Impression/click shares from GSC page table. Funnel metrics need collect/attribution exports; do not invent conversion rates."
+  },
+  "link_coverage": {
+    "content_to_service_link_coverage": 0.9714,
+    "commercial_bridge_coverage": 0.2857,
+    "service_to_supporting_content_coverage": 1.0,
+    "indexable_content_to_service_link_coverage": 1.0,
+    "indexable_commercial_bridge_coverage": 1.0,
+    "indexable_mapped": 20,
+    "mapped": 70,
+    "content_pages_scanned": 120
+  },
+  "gsc_export": {
+    "dir": "seo/gsc-2026-08-09",
+    "export_id": "gsc-2026-08-09",
+    "totals": {
+      "pages_impressions_sum": 373.0,
+      "pages_clicks_sum": 10.0,
+      "queries_impressions_sum": 108.0,
+      "queries_clicks_sum": 6.0,
+      "devices_impressions_sum": 384.0,
+      "devices_clicks_sum": 10.0
+    },
+    "devices": [
+      {
+        "device": "Computador",
+        "device_key": "desktop",
+        "clicks": 10.0,
+        "impressions": 290.0,
+        "position": 8.71,
+        "ctr": 0.0345
+      },
+      {
+        "device": "Celular",
+        "device_key": "mobile",
+        "clicks": 0.0,
+        "impressions": 94.0,
+        "position": 10.39,
+        "ctr": 0.0
+      },
+      {
+        "device": "Tablet",
+        "device_key": "tablet",
+        "clicks": 0.0,
+        "impressions": 0.0,
+        "position": 0.0,
+        "ctr": 0.0
+      }
+    ],
+    "aggregation_note": "GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality."
   }
 }

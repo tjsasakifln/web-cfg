@@ -58,9 +58,15 @@ ok("servicos_301", byFrom["/servicos"]?.status === "301", byFrom["/servicos"]?.s
 ok("vision_410", byFrom["/vision"]?.status === "410", JSON.stringify(byFrom["/vision"]));
 ok("nexgen_410", byFrom["/nexgen"]?.status === "410", JSON.stringify(byFrom["/nexgen"]));
 ok("avcbclcb_410", byFrom["/avcbclcb"]?.status === "410", JSON.stringify(byFrom["/avcbclcb"]));
+// Careers page does not exist — 410 is honest; do not 301 careers intent to commercial contact.
+ok(
+  "trabalhe_conosco_410",
+  byFrom["/trabalhe-conosco"]?.status === "410",
+  JSON.stringify(byFrom["/trabalhe-conosco"])
+);
 
 // No soft-404 of abandoned products to bare home
-for (const path of ["/vision", "/nexgen", "/avcbclcb", "/avcb", "/ia", "/avaliacoes"]) {
+for (const path of ["/vision", "/nexgen", "/avcbclcb", "/avcb", "/ia", "/avaliacoes", "/trabalhe-conosco"]) {
   const r = byFrom[path];
   if (!r) continue;
   ok(
