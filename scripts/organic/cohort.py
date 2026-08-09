@@ -55,7 +55,7 @@ def _ensure_data_insight_block(html: str, insight: dict[str, Any]) -> str:
     """Inject a provenance-aware insight callout if missing."""
     if "data-organic-insight" in html:
         return html
-    headline = insight.get("headline") or "Insight proprietário (datalake)"
+    headline = insight.get("headline") or "Insight proprietário de contratos públicos"
     as_of = insight.get("data_as_of") or insight.get("as_of") or ""
     n = insight.get("record_count") or (insight.get("result") or {}).get("contract_count") or ""
     method = insight.get("methodology") or ""
@@ -63,7 +63,7 @@ def _ensure_data_insight_block(html: str, insight: dict[str, Any]) -> str:
     lim_html = "".join(f"<li>{_esc(str(x))}</li>" for x in limits[:4])
     block = f"""
 <aside class="data-insight" data-organic-insight="1" aria-label="Insight de dados proprietários">
-  <p class="eyebrow">Evidência do datalake</p>
+  <p class="eyebrow">Evidência de contratos públicos</p>
   <p><strong>{_esc(str(headline))}</strong></p>
   <p class="muted">Corte: {_esc(str(as_of))} · Registros: {_esc(str(n))}</p>
   <p>{_esc(str(method)[:320])}</p>
@@ -117,7 +117,7 @@ def materialize_cohort_item(root: Path, item: dict[str, Any], *, apply: bool) ->
         "index_decision": item.get("publishability"),
         "gate": (item.get("indexability_gate") or {}).get("decision"),
         "differential": (
-            "datalake insight + provenance"
+            "contract-data insight + provenance"
             if item.get("unique_data_available")
             else "demand-graph + commercial intent"
         ),
