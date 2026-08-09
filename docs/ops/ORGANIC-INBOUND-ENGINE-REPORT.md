@@ -124,7 +124,7 @@ npm run organic:test
 
 | Ação | O quê |
 |------|--------|
-| **Melhorado** | `/conteudos/*` com insight de problem_service (aditivo, reequilíbrio, glosa, orçamento edital); `/aditivos-obras-publicas/` tool link; `/auditoria-orcamento-licitacao/` bloco They Ask You Answer; `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/` insight proprietário com corte/mediana/limites |
+| **Melhorado** | `/auditoria-orcamento-licitacao/` bloco They Ask You Answer; tool link em aditivos; **insights de contratos só em markets/radar com agregação real** (ex. `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/`, `/radar/edificacoes-publicas-pr/`). problem_service normativo **não** recebe eyebrow “Evidência de contratos públicos” nem `unique_data_available` |
 | **Melhorado (pré-existente coorte GSC)** | Titles/CTAs SINAPI desonerado, limite aditivo, critério medição, prorrogação, notificação atraso |
 | **Mantido noindex** | Massa thin `/conteudos/` + pSEO reject; radar com gate falho permanece não-indexável como candidato fraco |
 | **Não criado em massa** | Zero farm de URLs por UF/órgão sem gate |

@@ -1,8 +1,8 @@
 {
   "schema_version": "organic-pilot-cohort-v1",
-  "generated_at": "2026-08-09T05:09:08Z",
+  "generated_at": "2026-08-09T05:52:44Z",
   "apply": true,
-  "selection_rule": "diversity slots + content value score",
+  "selection_rule": "diversity slots + content value score + contract-moat honesty",
   "items": [
     {
       "id": "opp-need-edital-orcamento",
@@ -18,13 +18,14 @@
       "gate": "indexable_candidate",
       "differential": "demand-graph + commercial intent",
       "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
       "changes": [
         "no_html_delta"
       ],
       "path_resolved": "/mnt/d/webcfg/auditoria-orcamento-licitacao/index.html"
     },
     {
-      "id": "opp-gsc-ctr-2599563",
+      "id": "opp-gsc-ctr-1695738",
       "cohort_slot": "mofu",
       "intent": "mofu",
       "action": "improve",
@@ -37,48 +38,51 @@
       "gate": "indexable_candidate",
       "differential": "demand-graph + commercial intent",
       "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
       "changes": [
         "no_html_delta"
       ],
       "path_resolved": "/mnt/d/webcfg/conteudos/sinapi-desonerado-nao-desonerado/index.html"
     },
     {
-      "id": "opp-ps-prob-aditivos-margem",
+      "id": "opp-need-medicao-glosa",
       "cohort_slot": "pillar_service",
-      "intent": "mofu",
-      "action": "improve",
-      "score": 67,
-      "existing_url": "/conteudos/aditivo-qualitativo-quantitativo/",
-      "proposed_url": "/conteudos/aditivo-qualitativo-quantitativo/",
-      "cluster": "aditivos",
-      "cta": "Ver serviço: aditivos-obras-publicas",
+      "intent": "bofu",
+      "action": "keep",
+      "score": 64,
+      "existing_url": "/medicoes-glosas-obras-publicas/",
+      "proposed_url": "/medicoes-glosas-obras-publicas/",
+      "cluster": "medicoes-pagamentos",
+      "cta": "Revisar medição e glosa",
       "index_decision": "indexable_candidate",
       "gate": "indexable_candidate",
-      "differential": "datalake insight + provenance",
-      "proprietary_data": true,
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
       "changes": [
         "no_html_delta"
       ],
-      "path_resolved": "/mnt/d/webcfg/conteudos/aditivo-qualitativo-quantitativo/index.html"
+      "path_resolved": "/mnt/d/webcfg/medicoes-glosas-obras-publicas/index.html"
     },
     {
-      "id": "opp-ps-prob-medicao-glosa",
+      "id": "opp-market-pavimentacao-infraestrutura-viaria-pi",
       "cohort_slot": "data_driven",
-      "intent": "mofu",
-      "action": "improve",
-      "score": 67,
-      "existing_url": "/conteudos/glosa-de-medicao-obra-publica/",
-      "proposed_url": "/conteudos/glosa-de-medicao-obra-publica/",
-      "cluster": "medicao-glosa",
-      "cta": "Ver serviço: medicoes-glosas-obras-publicas",
+      "intent": "tofu",
+      "action": "create",
+      "score": 58,
+      "existing_url": null,
+      "proposed_url": "/radar/pavimentacao-infraestrutura-viaria-pi/",
+      "cluster": "inteligencia-mercado",
+      "cta": "Ver metodologia e limites da inteligência de mercado",
       "index_decision": "indexable_candidate",
       "gate": "indexable_candidate",
-      "differential": "datalake insight + provenance",
+      "differential": "contract-data insight + provenance",
       "proprietary_data": true,
+      "insight_kind": "contract",
       "changes": [
-        "no_html_delta"
+        "url_not_on_disk_skip_html"
       ],
-      "path_resolved": "/mnt/d/webcfg/conteudos/glosa-de-medicao-obra-publica/index.html"
+      "path_resolved": null
     },
     {
       "id": "opp-need-aditivo-limite",
@@ -94,14 +98,14 @@
       "gate": "indexable_candidate",
       "differential": "demand-graph + commercial intent",
       "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
       "changes": [
-        "injected_tool_link",
-        "file_written"
+        "no_html_delta"
       ],
       "path_resolved": "/mnt/d/webcfg/aditivos-obras-publicas/index.html"
     },
     {
-      "id": "opp-gsc-ctr-4252011",
+      "id": "opp-gsc-ctr-6441327",
       "cohort_slot": "gsc_improve",
       "intent": "mofu",
       "action": "improve",
@@ -114,29 +118,31 @@
       "gate": "indexable_candidate",
       "differential": "demand-graph + commercial intent",
       "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
       "changes": [
         "no_html_delta"
       ],
       "path_resolved": "/mnt/d/webcfg/conteudos/limite-aditivo-25-50-obra-publica/index.html"
     },
     {
-      "id": "opp-ps-prob-orcamento-edital",
+      "id": "opp-need-sinapi-desonerado",
       "cohort_slot": "improve_existing",
       "intent": "mofu",
       "action": "improve",
-      "score": 67,
-      "existing_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
-      "proposed_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
-      "cluster": "orcamento-edital",
-      "cta": "Ver serviço: auditoria-orcamento-licitacao",
+      "score": 66,
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "proposed_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "cluster": "orcamento-bdi",
+      "cta": "Auditar orçamento e BDI do edital",
       "index_decision": "indexable_candidate",
       "gate": "indexable_candidate",
-      "differential": "datalake insight + provenance",
-      "proprietary_data": true,
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
       "changes": [
         "no_html_delta"
       ],
-      "path_resolved": "/mnt/d/webcfg/conteudos/orcamento-incompleto-edital-obra-publica/index.html"
+      "path_resolved": "/mnt/d/webcfg/conteudos/sinapi-desonerado-nao-desonerado/index.html"
     },
     {
       "id": "opp-radar-radar-edificacoes-publicas-pr",
@@ -150,9 +156,12 @@
       "cta": "Avaliar se a licitação cabe no perfil da construtora",
       "index_decision": "blocked_by_gate",
       "gate": "noindex",
-      "differential": "datalake insight + provenance",
+      "differential": "contract-data insight + provenance",
       "proprietary_data": true,
+      "insight_kind": "contract",
       "changes": [
+        "stripped_previous_insight_block",
+        "injected_contract_insight_block",
         "no_html_delta"
       ],
       "path_resolved": "/mnt/d/webcfg/radar/edificacoes-publicas-pr/index.html"
@@ -175,7 +184,7 @@
       "blocked_by_gate": 8
     },
     "bofu": 4,
-    "data_driven": 16
+    "data_driven": 11
   },
-  "note": "Indexação editorial/pSEO continua human-gated. Cohort materializa melhorias seguras e documenta decisões."
+  "note": "Indexação editorial/pSEO continua human-gated. unique_data_available / contract insights only for genuine contract aggregates."
 }

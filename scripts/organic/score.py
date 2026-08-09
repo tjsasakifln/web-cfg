@@ -92,14 +92,7 @@ def compute_content_value_score(
         "competitive_opportunity": _clamp01(competitive_opportunity),
     }
 
-    breakdown = {
-        k: _clamp100(comps[k] * w.get(k, 0) * scale / 100.0 * 100)
-        if False
-        else int(round(comps[k] * (w.get(k, 0) * scale)))
-        for k in w
-        if k in comps
-    }
-    # Fix: weighted contribution = component * weight * (100/sum)
+    # Weighted contribution = component_0_1 * weight * (100/sum_weights)
     breakdown = {
         k: int(round(_clamp01(comps[k]) * w.get(k, 0) * scale))
         for k in w

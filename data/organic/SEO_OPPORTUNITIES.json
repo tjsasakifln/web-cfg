@@ -1,6 +1,6 @@
 {
   "schema_version": "seo-opportunities-v1",
-  "generated_at": "2026-08-09T05:09:08Z",
+  "generated_at": "2026-08-09T05:52:44Z",
   "as_of": "2026-08-01",
   "north_star": "receita_esperada_atribuivel_ao_inbound_organico",
   "scoring": {
@@ -32,7 +32,7 @@
       "blocked_by_gate": 8
     },
     "bofu": 4,
-    "data_driven": 16
+    "data_driven": 11
   },
   "demand_map_ref": "persona → problem → question → intent → service",
   "opportunities": [
@@ -122,7 +122,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-2599563",
+      "id": "opp-gsc-ctr-1695738",
       "topic": "CTR opportunity: /conteudos/sinapi-desonerado-nao-desonerado/",
       "cluster": "orcamento-bdi",
       "intent": "mofu",
@@ -201,459 +201,6 @@
         "warnings": [
           "sample_thin_margin"
         ]
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
-      "id": "opp-ps-prob-aditivos-margem",
-      "topic": "Aditivos, serviços extras e erosão de margem",
-      "cluster": "aditivos",
-      "intent": "mofu",
-      "persona": "gerente-contratos",
-      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
-      "commercial_fit": 0.95,
-      "service_fit": "aditivos-obras-publicas",
-      "service_path": "/aditivos-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.45,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "site-confenge-guides",
-        "as_of": "2026-08-01",
-        "record_count": 48,
-        "methodology": "Padrão editorial-normativo ancorado em contagem de evidências e arquétipos recorrentes no datalake; não é ranking comercial.",
-        "limitations": [
-          "Não estima taxa de aditivo por órgão sem denominador documental completo."
-        ],
-        "sources": [
-          "site-confenge-guides"
-        ],
-        "confidence": 0.7,
-        "result": {
-          "problem_label": "Aditivos, serviços extras e erosão de margem",
-          "service_slug": "aditivos-obras-publicas",
-          "observed_pattern": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
-          "evidence_kind": "normative_editorial",
-          "technical_guide_paths": [
-            "/conteudos/aditivo-qualitativo-quantitativo/",
-            "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
-            "/conteudos/limite-aditivo-25-50-obra-publica/"
-          ]
-        },
-        "insight_id": "insight-prob-aditivos-e-risco-de-margem"
-      },
-      "unique_data_available": true,
-      "freshness": {
-        "score": 0.5
-      },
-      "competition": {
-        "score": 0.5
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/aditivo-qualitativo-quantitativo/",
-      "existing_url": "/conteudos/aditivo-qualitativo-quantitativo/",
-      "action": "improve",
-      "score": 67,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 11,
-        "demand_evidence": 7,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
-      "suggested_cta": "Ver serviço: aditivos-obras-publicas",
-      "suggested_internal_links": [
-        "/conteudos/aditivo-qualitativo-quantitativo/",
-        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
-        "/conteudos/limite-aditivo-25-50-obra-publica/",
-        "/aditivos-obras-publicas/"
-      ],
-      "confidence": 0.7,
-      "source": "datalake_problem_service",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.55,
-      "demand_strength": 0.45,
-      "topical_authority_score": 0.8,
-      "freshness_score": 0.5,
-      "competitive_score": 0.5,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": []
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
-      "id": "opp-ps-prob-medicao-glosa",
-      "topic": "Medição e glosa em contratos com execução contínua",
-      "cluster": "medicao-glosa",
-      "intent": "mofu",
-      "persona": "gerente-contratos",
-      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
-      "commercial_fit": 0.95,
-      "service_fit": "medicoes-glosas-obras-publicas",
-      "service_path": "/medicoes-glosas-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.45,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "site-confenge-guides",
-        "as_of": "2026-08-01",
-        "record_count": 22,
-        "methodology": "Padrão editorial-normativo ancorado em contagem de evidências e arquétipos recorrentes no datalake; não é ranking comercial.",
-        "limitations": [
-          "Padrão qualitativo cruzado com densidade de contratos recorrentes no datalake."
-        ],
-        "sources": [
-          "site-confenge-guides"
-        ],
-        "confidence": 0.7,
-        "result": {
-          "problem_label": "Medição e glosa em contratos com execução contínua",
-          "service_slug": "medicoes-glosas-obras-publicas",
-          "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
-          "evidence_kind": "normative_editorial",
-          "technical_guide_paths": [
-            "/conteudos/glosa-de-medicao-obra-publica/",
-            "/conteudos/medicao-de-obra-publica-rejeitada/",
-            "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
-          ]
-        },
-        "insight_id": "insight-prob-medicao-glosa-contratos-recorrentes"
-      },
-      "unique_data_available": true,
-      "freshness": {
-        "score": 0.5
-      },
-      "competition": {
-        "score": 0.5
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/glosa-de-medicao-obra-publica/",
-      "existing_url": "/conteudos/glosa-de-medicao-obra-publica/",
-      "action": "improve",
-      "score": 67,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 11,
-        "demand_evidence": 7,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
-      "suggested_cta": "Ver serviço: medicoes-glosas-obras-publicas",
-      "suggested_internal_links": [
-        "/conteudos/glosa-de-medicao-obra-publica/",
-        "/conteudos/medicao-de-obra-publica-rejeitada/",
-        "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
-        "/medicoes-glosas-obras-publicas/"
-      ],
-      "confidence": 0.7,
-      "source": "datalake_problem_service",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.55,
-      "demand_strength": 0.45,
-      "topical_authority_score": 0.8,
-      "freshness_score": 0.5,
-      "competitive_score": 0.5,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": []
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
-      "id": "opp-ps-prob-orcamento-edital",
-      "topic": "Inconsistência entre orçamento de referência e edital",
-      "cluster": "orcamento-edital",
-      "intent": "mofu",
-      "persona": "gerente-contratos",
-      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
-      "commercial_fit": 0.95,
-      "service_fit": "auditoria-orcamento-licitacao",
-      "service_path": "/auditoria-orcamento-licitacao/",
-      "demand_signal": {
-        "strength": 0.45,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "pncp_supplier_contracts,site-confenge-guides",
-        "as_of": "2026-08-01",
-        "record_count": 48,
-        "methodology": "Padrão editorial-normativo ancorado em contagem de evidências e arquétipos recorrentes no datalake; não é ranking comercial.",
-        "limitations": [
-          "Página de enquadramento problema→serviço; não substitui análise do edital concreto."
-        ],
-        "sources": [
-          "pncp_supplier_contracts",
-          "site-confenge-guides"
-        ],
-        "confidence": 0.7,
-        "result": {
-          "problem_label": "Inconsistência entre orçamento de referência e edital",
-          "service_slug": "auditoria-orcamento-licitacao",
-          "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
-          "evidence_kind": "normative_editorial",
-          "technical_guide_paths": [
-            "/conteudos/orcamento-incompleto-edital-obra-publica/",
-            "/conteudos/sinapi-ou-sicro-obra-publica/",
-            "/conteudos/analise-edital-obra-publica-construtora/"
-          ]
-        },
-        "insight_id": "insight-prob-inconsistencia-orcamento-edital"
-      },
-      "unique_data_available": true,
-      "freshness": {
-        "score": 0.5
-      },
-      "competition": {
-        "score": 0.5
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
-      "existing_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
-      "action": "improve",
-      "score": 67,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 11,
-        "demand_evidence": 7,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
-      "suggested_cta": "Ver serviço: auditoria-orcamento-licitacao",
-      "suggested_internal_links": [
-        "/conteudos/orcamento-incompleto-edital-obra-publica/",
-        "/conteudos/sinapi-ou-sicro-obra-publica/",
-        "/conteudos/analise-edital-obra-publica-construtora/",
-        "/auditoria-orcamento-licitacao/"
-      ],
-      "confidence": 0.7,
-      "source": "datalake_problem_service",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.55,
-      "demand_strength": 0.45,
-      "topical_authority_score": 0.8,
-      "freshness_score": 0.5,
-      "competitive_score": 0.5,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": []
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
-      "id": "opp-ps-prob-reequilibrio",
-      "topic": "Reequilíbrio diante de dispersão de preços e insumos",
-      "cluster": "reequilibrio",
-      "intent": "mofu",
-      "persona": "gerente-contratos",
-      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
-      "commercial_fit": 0.95,
-      "service_fit": "reequilibrio-obras-publicas",
-      "service_path": "/reequilibrio-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.45,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "pncp_supplier_contracts,site-confenge-guides",
-        "as_of": "2026-08-01",
-        "record_count": 28,
-        "methodology": "Padrão editorial-normativo ancorado em contagem de evidências e arquétipos recorrentes no datalake; não é ranking comercial.",
-        "limitations": [
-          "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
-        ],
-        "sources": [
-          "pncp_supplier_contracts",
-          "site-confenge-guides"
-        ],
-        "confidence": 0.7,
-        "result": {
-          "problem_label": "Reequilíbrio diante de dispersão de preços e insumos",
-          "service_slug": "reequilibrio-obras-publicas",
-          "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
-          "evidence_kind": "normative_editorial",
-          "technical_guide_paths": [
-            "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
-            "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
-            "/conteudos/documentos-reequilibrio-obra-publica/"
-          ]
-        },
-        "insight_id": "insight-prob-reequilibrio-e-dispersao-de-precos"
-      },
-      "unique_data_available": true,
-      "freshness": {
-        "score": 0.5
-      },
-      "competition": {
-        "score": 0.5
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
-      "existing_url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
-      "action": "improve",
-      "score": 67,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 11,
-        "demand_evidence": 7,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
-      "suggested_cta": "Ver serviço: reequilibrio-obras-publicas",
-      "suggested_internal_links": [
-        "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
-        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
-        "/conteudos/documentos-reequilibrio-obra-publica/",
-        "/reequilibrio-obras-publicas/"
-      ],
-      "confidence": 0.7,
-      "source": "datalake_problem_service",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.55,
-      "demand_strength": 0.45,
-      "topical_authority_score": 0.8,
-      "freshness_score": 0.5,
-      "competitive_score": 0.5,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": []
-      },
-      "publishability": "indexable_candidate"
-    },
-    {
-      "id": "opp-ps-prob-sinapi-sicro",
-      "topic": "Referência SINAPI/SICRO e risco de margem na proposta",
-      "cluster": "sinapi-sicro",
-      "intent": "mofu",
-      "persona": "gerente-contratos",
-      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
-      "commercial_fit": 0.95,
-      "service_fit": "auditoria-orcamento-licitacao",
-      "service_path": "/auditoria-orcamento-licitacao/",
-      "demand_signal": {
-        "strength": 0.45,
-        "source": "inferred"
-      },
-      "search_console_evidence": {},
-      "datalake_evidence": {
-        "dataset": "site-confenge-guides,pncp_supplier_contracts",
-        "as_of": "2026-08-01",
-        "record_count": 48,
-        "methodology": "Padrão editorial-normativo ancorado em contagem de evidências e arquétipos recorrentes no datalake; não é ranking comercial.",
-        "limitations": [
-          "Não publica coeficientes proprietários; orienta critério de escolha da referência."
-        ],
-        "sources": [
-          "site-confenge-guides",
-          "pncp_supplier_contracts"
-        ],
-        "confidence": 0.7,
-        "result": {
-          "problem_label": "Referência SINAPI/SICRO e risco de margem na proposta",
-          "service_slug": "auditoria-orcamento-licitacao",
-          "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
-          "evidence_kind": "normative_editorial",
-          "technical_guide_paths": [
-            "/conteudos/sinapi-ou-sicro-obra-publica/",
-            "/conteudos/produtividade-sinapi-obra-publica/",
-            "/conteudos/bdi-obra-publica/"
-          ]
-        },
-        "insight_id": "insight-prob-referencia-sinapi-sicro-margem"
-      },
-      "unique_data_available": true,
-      "freshness": {
-        "score": 0.5
-      },
-      "competition": {
-        "score": 0.5
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
-      "existing_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
-      "action": "improve",
-      "score": 67,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 11,
-        "demand_evidence": 7,
-        "topical_authority": 8,
-        "freshness_trigger": 2,
-        "competitive_opportunity": 2
-      },
-      "score_penalties": {},
-      "rationale": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
-      "suggested_cta": "Ver serviço: auditoria-orcamento-licitacao",
-      "suggested_internal_links": [
-        "/conteudos/sinapi-ou-sicro-obra-publica/",
-        "/conteudos/produtividade-sinapi-obra-publica/",
-        "/conteudos/bdi-obra-publica/",
-        "/auditoria-orcamento-licitacao/"
-      ],
-      "confidence": 0.7,
-      "source": "datalake_problem_service",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.55,
-      "demand_strength": 0.45,
-      "topical_authority_score": 0.8,
-      "freshness_score": 0.5,
-      "competitive_score": 0.5,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
-        "warnings": []
       },
       "publishability": "indexable_candidate"
     },
@@ -982,7 +529,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-4252011",
+      "id": "opp-gsc-ctr-6441327",
       "topic": "CTR opportunity: /conteudos/limite-aditivo-25-50-obra-publica/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -1065,6 +612,474 @@
       "publishability": "indexable_candidate"
     },
     {
+      "id": "opp-ps-prob-aditivos-margem",
+      "topic": "Aditivos, serviços extras e erosão de margem",
+      "cluster": "aditivos",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "aditivos-obras-publicas",
+      "service_path": "/aditivos-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 48,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Não estima taxa de aditivo por órgão sem denominador documental completo."
+        ],
+        "sources": [
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Aditivos, serviços extras e erosão de margem",
+          "service_slug": "aditivos-obras-publicas",
+          "observed_pattern": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/aditivo-qualitativo-quantitativo/",
+            "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+            "/conteudos/limite-aditivo-25-50-obra-publica/"
+          ]
+        },
+        "insight_id": "insight-prob-aditivos-e-risco-de-margem",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "existing_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+      "suggested_cta": "Ver serviço: aditivos-obras-publicas",
+      "suggested_internal_links": [
+        "/conteudos/aditivo-qualitativo-quantitativo/",
+        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/aditivos-obras-publicas/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-medicao-glosa",
+      "topic": "Medição e glosa em contratos com execução contínua",
+      "cluster": "medicao-glosa",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "medicoes-glosas-obras-publicas",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 22,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Padrão qualitativo cruzado com densidade de contratos recorrentes no datalake."
+        ],
+        "sources": [
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Medição e glosa em contratos com execução contínua",
+          "service_slug": "medicoes-glosas-obras-publicas",
+          "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/glosa-de-medicao-obra-publica/",
+            "/conteudos/medicao-de-obra-publica-rejeitada/",
+            "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+          ]
+        },
+        "insight_id": "insight-prob-medicao-glosa-contratos-recorrentes",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/glosa-de-medicao-obra-publica/",
+      "existing_url": "/conteudos/glosa-de-medicao-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+      "suggested_cta": "Ver serviço: medicoes-glosas-obras-publicas",
+      "suggested_internal_links": [
+        "/conteudos/glosa-de-medicao-obra-publica/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "/medicoes-glosas-obras-publicas/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-orcamento-edital",
+      "topic": "Inconsistência entre orçamento de referência e edital",
+      "cluster": "orcamento-edital",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts,site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 48,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Página de enquadramento problema→serviço; não substitui análise do edital concreto."
+        ],
+        "sources": [
+          "pncp_supplier_contracts",
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Inconsistência entre orçamento de referência e edital",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/orcamento-incompleto-edital-obra-publica/",
+            "/conteudos/sinapi-ou-sicro-obra-publica/",
+            "/conteudos/analise-edital-obra-publica-construtora/"
+          ]
+        },
+        "insight_id": "insight-prob-inconsistencia-orcamento-edital",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "existing_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
+      "suggested_cta": "Ver serviço: auditoria-orcamento-licitacao",
+      "suggested_internal_links": [
+        "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/analise-edital-obra-publica-construtora/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-reequilibrio",
+      "topic": "Reequilíbrio diante de dispersão de preços e insumos",
+      "cluster": "reequilibrio",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "reequilibrio-obras-publicas",
+      "service_path": "/reequilibrio-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts,site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 28,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
+        ],
+        "sources": [
+          "pncp_supplier_contracts",
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Reequilíbrio diante de dispersão de preços e insumos",
+          "service_slug": "reequilibrio-obras-publicas",
+          "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+            "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+            "/conteudos/documentos-reequilibrio-obra-publica/"
+          ]
+        },
+        "insight_id": "insight-prob-reequilibrio-e-dispersao-de-precos",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "existing_url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+      "suggested_cta": "Ver serviço: reequilibrio-obras-publicas",
+      "suggested_internal_links": [
+        "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "/conteudos/documentos-reequilibrio-obra-publica/",
+        "/reequilibrio-obras-publicas/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-sinapi-sicro",
+      "topic": "Referência SINAPI/SICRO e risco de margem na proposta",
+      "cluster": "sinapi-sicro",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "site-confenge-guides,pncp_supplier_contracts",
+        "as_of": "2026-08-01",
+        "record_count": 48,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Não publica coeficientes proprietários; orienta critério de escolha da referência."
+        ],
+        "sources": [
+          "site-confenge-guides",
+          "pncp_supplier_contracts"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Referência SINAPI/SICRO e risco de margem na proposta",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/sinapi-ou-sicro-obra-publica/",
+            "/conteudos/produtividade-sinapi-obra-publica/",
+            "/conteudos/bdi-obra-publica/"
+          ]
+        },
+        "insight_id": "insight-prob-referencia-sinapi-sicro-margem",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "existing_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
+      "suggested_cta": "Ver serviço: auditoria-orcamento-licitacao",
+      "suggested_internal_links": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/produtividade-sinapi-obra-publica/",
+        "/conteudos/bdi-obra-publica/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
       "id": "opp-market-pavimentacao-infraestrutura-viaria-pi",
       "topic": "Analisamos 13 contratos públicos de obras em PI (Pavimentação e infraestrutura viária) mediana R$ 996.225.",
       "cluster": "inteligencia-mercado",
@@ -1113,7 +1128,10 @@
             "Oportunidades abertas no radar (mesmo recorte): 0."
           ]
         },
-        "insight_id": "insight-market-pavimentacao-infraestrutura-viaria-pi"
+        "insight_id": "insight-market-pavimentacao-infraestrutura-viaria-pi",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
       },
       "unique_data_available": true,
       "freshness": {
@@ -1216,7 +1234,10 @@
             "Oportunidades abertas no radar (mesmo recorte): 7."
           ]
         },
-        "insight_id": "insight-market-pavimentacao-infraestrutura-viaria-sc"
+        "insight_id": "insight-market-pavimentacao-infraestrutura-viaria-sc",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
       },
       "unique_data_available": true,
       "freshness": {
@@ -1319,7 +1340,10 @@
             "Oportunidades abertas no radar (mesmo recorte): 0."
           ]
         },
-        "insight_id": "insight-market-edificacoes-publicas-mg"
+        "insight_id": "insight-market-edificacoes-publicas-mg",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
       },
       "unique_data_available": true,
       "freshness": {
@@ -1508,7 +1532,10 @@
             "Oportunidades abertas no radar (mesmo recorte): 3."
           ]
         },
-        "insight_id": "insight-market-edificacoes-publicas-rs"
+        "insight_id": "insight-market-edificacoes-publicas-rs",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
       },
       "unique_data_available": true,
       "freshness": {
@@ -1661,7 +1688,7 @@
         "as_of": "2026-08-01",
         "record_count": 15,
         "historical_count": 48,
-        "methodology": "Open-status filter on bids; never treat history as open",
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
         "limitations": [
           "Status pode mudar após o corte; sempre verificar fonte oficial."
         ],
@@ -1679,7 +1706,10 @@
           "source_unavailable": false,
           "status": "warning",
           "warning_hours": 24
-        }
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
       },
       "unique_data_available": true,
       "freshness": {
@@ -1754,7 +1784,7 @@
         "as_of": "2026-08-01",
         "record_count": 3,
         "historical_count": 73,
-        "methodology": "Open-status filter on bids; never treat history as open",
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
         "limitations": [
           "Status pode mudar após o corte; sempre verificar fonte oficial."
         ],
@@ -1772,7 +1802,10 @@
           "source_unavailable": false,
           "status": "warning",
           "warning_hours": 24
-        }
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
       },
       "unique_data_available": true,
       "freshness": {
@@ -1848,7 +1881,7 @@
         "as_of": "2026-08-01",
         "record_count": 4,
         "historical_count": 56,
-        "methodology": "Open-status filter on bids; never treat history as open",
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
         "limitations": [
           "Status pode mudar após o corte; sempre verificar fonte oficial."
         ],
@@ -1866,7 +1899,10 @@
           "source_unavailable": false,
           "status": "warning",
           "warning_hours": 24
-        }
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
       },
       "unique_data_available": true,
       "freshness": {
@@ -1942,7 +1978,7 @@
         "as_of": "2026-08-01",
         "record_count": 4,
         "historical_count": 47,
-        "methodology": "Open-status filter on bids; never treat history as open",
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
         "limitations": [
           "Status pode mudar após o corte; sempre verificar fonte oficial."
         ],
@@ -1960,7 +1996,10 @@
           "source_unavailable": false,
           "status": "warning",
           "warning_hours": 24
-        }
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
       },
       "unique_data_available": true,
       "freshness": {
@@ -2036,7 +2075,7 @@
         "as_of": "2026-08-01",
         "record_count": 4,
         "historical_count": 42,
-        "methodology": "Open-status filter on bids; never treat history as open",
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
         "limitations": [
           "Status pode mudar após o corte; sempre verificar fonte oficial."
         ],
@@ -2054,7 +2093,10 @@
           "source_unavailable": false,
           "status": "warning",
           "warning_hours": 24
-        }
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
       },
       "unique_data_available": true,
       "freshness": {
@@ -2130,7 +2172,7 @@
         "as_of": "2026-08-01",
         "record_count": 7,
         "historical_count": 80,
-        "methodology": "Open-status filter on bids; never treat history as open",
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
         "limitations": [
           "Status pode mudar após o corte; sempre verificar fonte oficial."
         ],
@@ -2148,7 +2190,10 @@
           "source_unavailable": false,
           "status": "warning",
           "warning_hours": 24
-        }
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
       },
       "unique_data_available": true,
       "freshness": {
@@ -2224,7 +2269,7 @@
         "as_of": "2026-08-01",
         "record_count": 5,
         "historical_count": 21,
-        "methodology": "Open-status filter on bids; never treat history as open",
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
         "limitations": [
           "Status pode mudar após o corte; sempre verificar fonte oficial."
         ],
@@ -2242,7 +2287,10 @@
           "source_unavailable": false,
           "status": "warning",
           "warning_hours": 24
-        }
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
       },
       "unique_data_available": true,
       "freshness": {
@@ -2299,7 +2347,7 @@
       "publishability": "blocked_by_gate"
     },
     {
-      "id": "opp-gsc-ctr-7788326",
+      "id": "opp-gsc-ctr-3604249",
       "topic": "CTR opportunity: /",
       "cluster": "gsc-feedback",
       "intent": "mofu",
