@@ -1,0 +1,201 @@
+{
+  "schema_version": "organic-demand-v1",
+  "model": "persona → problem → question → intent → service",
+  "nodes": [
+    {
+      "id": "need-reequilibrio-pleito",
+      "persona": "diretor-construtora",
+      "problem": "Contrato de obra pública virou prejuízo ou a equação original se rompeu",
+      "question": "Quando cabe reequilíbrio e como estruturar um pleito defensável?",
+      "intent": "bofu",
+      "jtbd": "Proteger margem e decidir se vale montar pleito de reequilíbrio agora",
+      "cluster": "reequilibrio",
+      "service_slug": "reequilibrio-obras-publicas",
+      "service_path": "/reequilibrio-obras-publicas/",
+      "related_queries": [
+        "reequilíbrio econômico financeiro obra pública",
+        "pedido de reequilíbrio contrato público",
+        "reajuste ou reequilíbrio obra pública"
+      ],
+      "cta": "Analisar viabilidade de reequilíbrio",
+      "funnel": "bofu",
+      "existing_url": "/reequilibrio-obras-publicas/"
+    },
+    {
+      "id": "need-aditivo-limite",
+      "persona": "engenheiro-contratos",
+      "problem": "Acréscimos/supressões se aproximam dos limites legais",
+      "question": "Como contar o limite de 25%/50% e o que documentar no aditivo?",
+      "intent": "mofu",
+      "jtbd": "Calcular saldo de aditivo e evitar pedido sem base",
+      "cluster": "aditivos",
+      "service_slug": "aditivos-obras-publicas",
+      "service_path": "/aditivos-obras-publicas/",
+      "related_queries": [
+        "aditivos obra pública",
+        "limite aditivo 25 50 obra pública",
+        "acréscimo e supressão contrato público"
+      ],
+      "cta": "Revisar estratégia de aditivo",
+      "funnel": "mofu",
+      "tool_path": "/ferramentas/limite-acrescimos-supressoes/",
+      "existing_url": "/aditivos-obras-publicas/"
+    },
+    {
+      "id": "need-medicao-glosa",
+      "persona": "engenheiro-obra",
+      "problem": "Medição glosada, critério inventado ou parcela retida",
+      "question": "Como contestar glosa e proteger o fluxo de caixa?",
+      "intent": "bofu",
+      "jtbd": "Recuperar medição e documentar nexo com o contrato",
+      "cluster": "medicoes-pagamentos",
+      "service_slug": "medicoes-glosas-obras-publicas",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "related_queries": [
+        "glosa de medição obra pública",
+        "medição de obra pública rejeitada",
+        "parcela incontroversa medição"
+      ],
+      "cta": "Revisar medição e glosa",
+      "funnel": "bofu",
+      "existing_url": "/medicoes-glosas-obras-publicas/"
+    },
+    {
+      "id": "need-sinapi-desonerado",
+      "persona": "orcamentista",
+      "problem": "Dúvida sobre base SINAPI desonerada vs não desonerada no edital",
+      "question": "Qual base usar e como alinhar BDI e encargos?",
+      "intent": "mofu",
+      "jtbd": "Evitar erro de base que destrói margem na proposta",
+      "cluster": "orcamento-bdi",
+      "service_slug": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "related_queries": [
+        "desonerado e não desonerado",
+        "sinapi desonerado ou não desonerado",
+        "desonerado ou não desonerado"
+      ],
+      "cta": "Auditar orçamento e BDI do edital",
+      "funnel": "mofu",
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/"
+    },
+    {
+      "id": "need-atraso-prorrogacao",
+      "persona": "gerente-contratos",
+      "problem": "Atraso imputável à Administração ou risco de notificação",
+      "question": "Como documentar prorrogação e responder notificação?",
+      "intent": "mofu",
+      "jtbd": "Proteger prazo e evitar sanção indevida",
+      "cluster": "atrasos-prorrogacao",
+      "service_slug": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "related_queries": [
+        "prorrogação prazo obra pública",
+        "notificação atraso obra pública",
+        "atraso imputável administração"
+      ],
+      "cta": "Montar defesa de prazo",
+      "funnel": "mofu",
+      "tool_path": "/ferramentas/matriz-atraso-obra/",
+      "existing_url": "/atrasos-prorrogacao-obras-publicas/"
+    },
+    {
+      "id": "need-edital-orcamento",
+      "persona": "licitacoes",
+      "problem": "Edital com orçamento inconsistente ou referência duvidosa",
+      "question": "Participar, impugnar ou auditar a planilha antes da proposta?",
+      "intent": "bofu",
+      "jtbd": "Decidir se a licitação é economicamente segura",
+      "cluster": "edital-proposta",
+      "service_slug": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "related_queries": [
+        "orçamento incompleto edital obra pública",
+        "auditoria orçamento licitação",
+        "sinapi ou sicro obra pública"
+      ],
+      "cta": "Auditar edital e orçamento",
+      "funnel": "bofu",
+      "existing_url": "/auditoria-orcamento-licitacao/"
+    },
+    {
+      "id": "need-benchmark-mercado",
+      "persona": "diretor-construtora",
+      "problem": "Não sabe se valor/duração/alterações do contrato são 'normais'",
+      "question": "Isso é normal no mercado público de obras?",
+      "intent": "tofu",
+      "jtbd": "Comparar o próprio caso com evidência agregada do mercado",
+      "cluster": "inteligencia-mercado",
+      "service_slug": "metodologia-inteligencia",
+      "service_path": "/metodologia-inteligencia/",
+      "related_queries": [
+        "benchmark contratos obras públicas",
+        "mediana valor contrato obra pública"
+      ],
+      "cta": "Entender como a inteligência de mercado apoia decisões",
+      "funnel": "tofu",
+      "requires_data_moat": true
+    },
+    {
+      "id": "need-gestao-contratual",
+      "persona": "proprietario-construtora",
+      "problem": "Contratos públicos sem rotina de gestão geram prejuízo silencioso",
+      "question": "Quando vale consultoria de acompanhamento contratual vs equipe própria?",
+      "intent": "bofu",
+      "jtbd": "Decidir se contrata apoio externo para gestão B2G",
+      "cluster": "gestao-contratual",
+      "service_slug": "acompanhamento-contratos-obras",
+      "service_path": "/acompanhamento-contratos-obras/",
+      "related_queries": [
+        "consultoria B2G engenharia construtora",
+        "gestão de contratos de obras públicas"
+      ],
+      "cta": "Diagnosticar gestão contratual B2G",
+      "funnel": "bofu",
+      "existing_url": "/acompanhamento-contratos-obras/"
+    }
+  ],
+  "by_cluster": {
+    "reequilibrio": [
+      "need-reequilibrio-pleito"
+    ],
+    "aditivos": [
+      "need-aditivo-limite"
+    ],
+    "medicoes-pagamentos": [
+      "need-medicao-glosa"
+    ],
+    "orcamento-bdi": [
+      "need-sinapi-desonerado"
+    ],
+    "atrasos-prorrogacao": [
+      "need-atraso-prorrogacao"
+    ],
+    "edital-proposta": [
+      "need-edital-orcamento"
+    ],
+    "inteligencia-mercado": [
+      "need-benchmark-mercado"
+    ],
+    "gestao-contratual": [
+      "need-gestao-contratual"
+    ]
+  },
+  "by_intent": {
+    "bofu": [
+      "need-reequilibrio-pleito",
+      "need-medicao-glosa",
+      "need-edital-orcamento",
+      "need-gestao-contratual"
+    ],
+    "mofu": [
+      "need-aditivo-limite",
+      "need-sinapi-desonerado",
+      "need-atraso-prorrogacao"
+    ],
+    "tofu": [
+      "need-benchmark-mercado"
+    ]
+  },
+  "principle": "Agrupar variantes textuais da mesma necessidade em um único nó. Não criar uma página por keyword."
+}

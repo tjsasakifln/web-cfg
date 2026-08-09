@@ -1,0 +1,2717 @@
+{
+  "schema_version": "seo-opportunities-v1",
+  "generated_at": "2026-08-09T05:52:44Z",
+  "as_of": "2026-08-01",
+  "north_star": "receita_esperada_atribuivel_ao_inbound_organico",
+  "scoring": {
+    "model": "content_value_score",
+    "weights": {
+      "commercial_intent": 25,
+      "service_fit": 20,
+      "data_moat": 20,
+      "demand_evidence": 15,
+      "topical_authority": 10,
+      "freshness_trigger": 5,
+      "competitive_opportunity": 5
+    }
+  },
+  "counts": {
+    "total": 27,
+    "by_action": {
+      "improve": 18,
+      "keep": 5,
+      "create": 4
+    },
+    "by_intent": {
+      "bofu": 4,
+      "mofu": 11,
+      "tofu": 12
+    },
+    "by_publishability": {
+      "indexable_candidate": 19,
+      "blocked_by_gate": 8
+    },
+    "bofu": 4,
+    "data_driven": 11
+  },
+  "demand_map_ref": "persona → problem → question → intent → service",
+  "opportunities": [
+    {
+      "id": "opp-need-edital-orcamento",
+      "topic": "Participar, impugnar ou auditar a planilha antes da proposta?",
+      "cluster": "edital-proposta",
+      "intent": "bofu",
+      "persona": "licitacoes",
+      "jtbd": "Decidir se a licitação é economicamente segura",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 0.557,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 1.0,
+        "clicks": 0.0,
+        "position": 9.0,
+        "matched_queries": [
+          "ia"
+        ]
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.55
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/auditoria-orcamento-licitacao/",
+      "existing_url": "/auditoria-orcamento-licitacao/",
+      "action": "improve",
+      "score": 68,
+      "score_breakdown": {
+        "commercial_intent": 25,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 8,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-edital-orcamento): Edital com orçamento inconsistente ou referência duvidosa",
+      "suggested_cta": "Auditar edital e orçamento",
+      "suggested_internal_links": [
+        "/auditoria-orcamento-licitacao/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.75,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.557,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.55,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-gsc-ctr-1695738",
+      "topic": "CTR opportunity: /conteudos/sinapi-desonerado-nao-desonerado/",
+      "cluster": "orcamento-bdi",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 1.0,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+        "clicks": 0.0,
+        "impressions": 88.0,
+        "position": 7.75
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level striking distance / CTR signal",
+        "limitations": [
+          "Amostra GSC limitada no export disponível."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.75
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "action": "improve",
+      "score": 67,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 15,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Muitas impressões (88.0) e CTR ~0 na posição 7.8 — reescrever title/meta e reforçar CTA.",
+      "suggested_cta": "Auditar orçamento e BDI do edital",
+      "suggested_internal_links": [
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.8,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 1.0,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-need-sinapi-desonerado",
+      "topic": "Qual base usar e como alinhar BDI e encargos?",
+      "cluster": "orcamento-bdi",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Evitar erro de base que destrói margem na proposta",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 0.889,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 27.0,
+        "clicks": 0.0,
+        "position": 8.222962962962962,
+        "matched_queries": [
+          "desonerado e não desonerado",
+          "não desonerado",
+          "sinapi desonerado ou não desonerado qual usar",
+          "desonerado ou não desonerado",
+          "nao desonerado",
+          "desonerado e não desonerado sinapi"
+        ]
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.55
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "action": "improve",
+      "score": 66,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 13,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-sinapi-desonerado): Dúvida sobre base SINAPI desonerada vs não desonerada no edital",
+      "suggested_cta": "Auditar orçamento e BDI do edital",
+      "suggested_internal_links": [
+        "/auditoria-orcamento-licitacao/",
+        "/conteudos/sinapi-desonerado-nao-desonerado/"
+      ],
+      "confidence": 0.75,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.8890000000000001,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.55,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-need-gestao-contratual",
+      "topic": "Quando vale consultoria de acompanhamento contratual vs equipe própria?",
+      "cluster": "gestao-contratual",
+      "intent": "bofu",
+      "persona": "proprietario-construtora",
+      "jtbd": "Decidir se contrata apoio externo para gestão B2G",
+      "commercial_fit": 0.95,
+      "service_fit": "acompanhamento-contratos-obras",
+      "service_path": "/acompanhamento-contratos-obras/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.35
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/acompanhamento-contratos-obras/",
+      "existing_url": "/acompanhamento-contratos-obras/",
+      "action": "keep",
+      "score": 64,
+      "score_breakdown": {
+        "commercial_intent": 25,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 5,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-gestao-contratual): Contratos públicos sem rotina de gestão geram prejuízo silencioso",
+      "suggested_cta": "Diagnosticar gestão contratual B2G",
+      "suggested_internal_links": [
+        "/acompanhamento-contratos-obras/",
+        "/acompanhamento-contratos-obras/"
+      ],
+      "confidence": 0.55,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.35,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-need-medicao-glosa",
+      "topic": "Como contestar glosa e proteger o fluxo de caixa?",
+      "cluster": "medicoes-pagamentos",
+      "intent": "bofu",
+      "persona": "engenheiro-obra",
+      "jtbd": "Recuperar medição e documentar nexo com o contrato",
+      "commercial_fit": 0.95,
+      "service_fit": "medicoes-glosas-obras-publicas",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.35
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/medicoes-glosas-obras-publicas/",
+      "existing_url": "/medicoes-glosas-obras-publicas/",
+      "action": "keep",
+      "score": 64,
+      "score_breakdown": {
+        "commercial_intent": 25,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 5,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-medicao-glosa): Medição glosada, critério inventado ou parcela retida",
+      "suggested_cta": "Revisar medição e glosa",
+      "suggested_internal_links": [
+        "/medicoes-glosas-obras-publicas/",
+        "/medicoes-glosas-obras-publicas/"
+      ],
+      "confidence": 0.55,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.35,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-need-reequilibrio-pleito",
+      "topic": "Quando cabe reequilíbrio e como estruturar um pleito defensável?",
+      "cluster": "reequilibrio",
+      "intent": "bofu",
+      "persona": "diretor-construtora",
+      "jtbd": "Proteger margem e decidir se vale montar pleito de reequilíbrio agora",
+      "commercial_fit": 0.95,
+      "service_fit": "reequilibrio-obras-publicas",
+      "service_path": "/reequilibrio-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.35
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/reequilibrio-obras-publicas/",
+      "existing_url": "/reequilibrio-obras-publicas/",
+      "action": "keep",
+      "score": 64,
+      "score_breakdown": {
+        "commercial_intent": 25,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 5,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-reequilibrio-pleito): Contrato de obra pública virou prejuízo ou a equação original se rompeu",
+      "suggested_cta": "Analisar viabilidade de reequilíbrio",
+      "suggested_internal_links": [
+        "/reequilibrio-obras-publicas/",
+        "/reequilibrio-obras-publicas/"
+      ],
+      "confidence": 0.55,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.35,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-gsc-ctr-6441327",
+      "topic": "CTR opportunity: /conteudos/limite-aditivo-25-50-obra-publica/",
+      "cluster": "aditivos",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "aditivos-obras-publicas",
+      "service_path": "/aditivos-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.568,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "clicks": 0.0,
+        "impressions": 24.0,
+        "position": 17.0
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level striking distance / CTR signal",
+        "limitations": [
+          "Amostra GSC limitada no export disponível."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.75
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "existing_url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 9,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Muitas impressões (24.0) e CTR ~0 na posição 17.0 — reescrever title/meta e reforçar CTA.",
+      "suggested_cta": "Analisar meu caso com a CONFENGE",
+      "suggested_internal_links": [
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/aditivos-obras-publicas/"
+      ],
+      "confidence": 0.8,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.568,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-aditivos-margem",
+      "topic": "Aditivos, serviços extras e erosão de margem",
+      "cluster": "aditivos",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "aditivos-obras-publicas",
+      "service_path": "/aditivos-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 48,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Não estima taxa de aditivo por órgão sem denominador documental completo."
+        ],
+        "sources": [
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Aditivos, serviços extras e erosão de margem",
+          "service_slug": "aditivos-obras-publicas",
+          "observed_pattern": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/aditivo-qualitativo-quantitativo/",
+            "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+            "/conteudos/limite-aditivo-25-50-obra-publica/"
+          ]
+        },
+        "insight_id": "insight-prob-aditivos-e-risco-de-margem",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "existing_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Obras de edificações e saneamento concentram alterações de projeto e quantitativo. Sem registro contemporâneo, o aditivo vira custo absorvido.",
+      "suggested_cta": "Ver serviço: aditivos-obras-publicas",
+      "suggested_internal_links": [
+        "/conteudos/aditivo-qualitativo-quantitativo/",
+        "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/aditivos-obras-publicas/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-medicao-glosa",
+      "topic": "Medição e glosa em contratos com execução contínua",
+      "cluster": "medicao-glosa",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "medicoes-glosas-obras-publicas",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 22,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Padrão qualitativo cruzado com densidade de contratos recorrentes no datalake."
+        ],
+        "sources": [
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Medição e glosa em contratos com execução contínua",
+          "service_slug": "medicoes-glosas-obras-publicas",
+          "observed_pattern": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/glosa-de-medicao-obra-publica/",
+            "/conteudos/medicao-de-obra-publica-rejeitada/",
+            "/conteudos/parcela-incontroversa-medicao-contrato-publico/"
+          ]
+        },
+        "insight_id": "insight-prob-medicao-glosa-contratos-recorrentes",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/glosa-de-medicao-obra-publica/",
+      "existing_url": "/conteudos/glosa-de-medicao-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Arquétipos de manutenção predial e edificações com múltiplas medições concentram disputas de critério, diário de obra e parcela incontroversa.",
+      "suggested_cta": "Ver serviço: medicoes-glosas-obras-publicas",
+      "suggested_internal_links": [
+        "/conteudos/glosa-de-medicao-obra-publica/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "/medicoes-glosas-obras-publicas/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-orcamento-edital",
+      "topic": "Inconsistência entre orçamento de referência e edital",
+      "cluster": "orcamento-edital",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts,site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 48,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Página de enquadramento problema→serviço; não substitui análise do edital concreto."
+        ],
+        "sources": [
+          "pncp_supplier_contracts",
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Inconsistência entre orçamento de referência e edital",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "observed_pattern": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/orcamento-incompleto-edital-obra-publica/",
+            "/conteudos/sinapi-ou-sicro-obra-publica/",
+            "/conteudos/analise-edital-obra-publica-construtora/"
+          ]
+        },
+        "insight_id": "insight-prob-inconsistencia-orcamento-edital",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "existing_url": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Contratos e editais de edificações e infraestrutura frequentemente exigem auditoria de planilha, data-base e composições antes da proposta. O padrão aparece em objetos com alta dispersão de valor no mesmo arquétipo.",
+      "suggested_cta": "Ver serviço: auditoria-orcamento-licitacao",
+      "suggested_internal_links": [
+        "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/analise-edital-obra-publica-construtora/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-reequilibrio",
+      "topic": "Reequilíbrio diante de dispersão de preços e insumos",
+      "cluster": "reequilibrio",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "reequilibrio-obras-publicas",
+      "service_path": "/reequilibrio-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts,site-confenge-guides",
+        "as_of": "2026-08-01",
+        "record_count": 28,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Dispersão de valor contratual não prova, por si, desequilíbrio em um contrato específico."
+        ],
+        "sources": [
+          "pncp_supplier_contracts",
+          "site-confenge-guides"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Reequilíbrio diante de dispersão de preços e insumos",
+          "service_slug": "reequilibrio-obras-publicas",
+          "observed_pattern": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+            "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+            "/conteudos/documentos-reequilibrio-obra-publica/"
+          ]
+        },
+        "insight_id": "insight-prob-reequilibrio-e-dispersao-de-precos",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "existing_url": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Alta dispersão (IQR) em benchmarks regionais sinaliza sensibilidade a insumos e logística — cenário em que reequilíbrio e matriz de riscos precisam estar preparados antes da execução.",
+      "suggested_cta": "Ver serviço: reequilibrio-obras-publicas",
+      "suggested_internal_links": [
+        "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "/conteudos/documentos-reequilibrio-obra-publica/",
+        "/reequilibrio-obras-publicas/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-ps-prob-sinapi-sicro",
+      "topic": "Referência SINAPI/SICRO e risco de margem na proposta",
+      "cluster": "sinapi-sicro",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Enquadrar o problema no serviço Confenge certo com evidência",
+      "commercial_fit": 0.95,
+      "service_fit": "auditoria-orcamento-licitacao",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "demand_signal": {
+        "strength": 0.45,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "site-confenge-guides,pncp_supplier_contracts",
+        "as_of": "2026-08-01",
+        "record_count": 48,
+        "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
+        "limitations": [
+          "Não publica coeficientes proprietários; orienta critério de escolha da referência."
+        ],
+        "sources": [
+          "site-confenge-guides",
+          "pncp_supplier_contracts"
+        ],
+        "confidence": 0.7,
+        "result": {
+          "problem_label": "Referência SINAPI/SICRO e risco de margem na proposta",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "observed_pattern": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
+          "evidence_kind": "normative_editorial",
+          "technical_guide_paths": [
+            "/conteudos/sinapi-ou-sicro-obra-publica/",
+            "/conteudos/produtividade-sinapi-obra-publica/",
+            "/conteudos/bdi-obra-publica/"
+          ]
+        },
+        "insight_id": "insight-prob-referencia-sinapi-sicro-margem",
+        "evidence_kind": "normative_editorial",
+        "is_contract_aggregate": false,
+        "public_label": "editorial_pattern"
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.5
+      },
+      "competition": {
+        "score": 0.5
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "existing_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "action": "improve",
+      "score": 61,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 5,
+        "demand_evidence": 7,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Mercados de pavimentação e edificações usam referências distintas por natureza de serviço. Erro de referência ou produtividade vira deságio real após a assinatura.",
+      "suggested_cta": "Ver serviço: auditoria-orcamento-licitacao",
+      "suggested_internal_links": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/produtividade-sinapi-obra-publica/",
+        "/conteudos/bdi-obra-publica/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.7,
+      "source": "datalake_problem_service",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.25,
+      "demand_strength": 0.45,
+      "topical_authority_score": 0.8,
+      "freshness_score": 0.5,
+      "competitive_score": 0.5,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": []
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-market-pavimentacao-infraestrutura-viaria-pi",
+      "topic": "Analisamos 13 contratos públicos de obras em PI (Pavimentação e infraestrutura viária) mediana R$ 996.225.",
+      "cluster": "inteligencia-mercado",
+      "intent": "tofu",
+      "persona": "diretor-construtora",
+      "jtbd": "Comparar o próprio mercado com evidência agregada proprietária",
+      "commercial_fit": 0.7,
+      "service_fit": "metodologia-inteligencia",
+      "service_path": "/metodologia-inteligencia/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts",
+        "as_of": "2026-08-01",
+        "record_count": 13,
+        "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
+        "limitations": [
+          "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em PI; multi-rótulo entra só no primário.",
+          "Não representa o universo total de contratações.",
+          "Valores nominais sem deflacionamento.",
+          "Objetos heterogêneos; mediana não é preço unitário.",
+          "Percentis exatos via SQLite spill (sem vetor O(N) em RAM).",
+          "Não afirma irregularidade, crédito devido ou erro de órgão/fornecedor.",
+          "Valores nominais; objetos heterogêneos — mediana não é preço unitário."
+        ],
+        "sources": [
+          "pncp_contracts"
+        ],
+        "confidence": 0.55,
+        "result": {
+          "contract_count": 13,
+          "buyer_count": 6,
+          "supplier_count": 13,
+          "median_value": 996225.26,
+          "p25_value": 744003.0,
+          "p75_value": 1463918.41,
+          "open_opportunity_count": 0,
+          "region": "PI",
+          "segment": "Pavimentação e infraestrutura viária",
+          "interpretation_hooks": [
+            "Concentração em 6 órgãos compradores distintos.",
+            "13 fornecedores observados no recorte.",
+            "Oportunidades abertas no radar (mesmo recorte): 0."
+          ]
+        },
+        "insight_id": "insight-market-pavimentacao-infraestrutura-viaria-pi",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.8
+      },
+      "competition": {
+        "score": 0.65
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/pavimentacao-infraestrutura-viaria-pi/",
+      "existing_url": null,
+      "action": "create",
+      "score": 58,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 14,
+        "data_moat": 15,
+        "demand_evidence": 5,
+        "topical_authority": 7,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Benchmark proprietário a partir do datalake; information gain que LLM genérico não reproduz sem os mesmos dados e corte.",
+      "suggested_cta": "Ver metodologia e limites da inteligência de mercado",
+      "suggested_internal_links": [
+        "/metodologia-inteligencia/",
+        "/radar/",
+        "/inteligencia/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.55,
+      "source": "datalake_market",
+      "service_fit_score": 0.7,
+      "data_moat_score": 0.7250000000000001,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.7,
+      "freshness_score": 0.8,
+      "competitive_score": 0.65,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-market-pavimentacao-infraestrutura-viaria-sc",
+      "topic": "Analisamos 13 contratos públicos de obras em SC (Pavimentação e infraestrutura viária) mediana R$ 310.911.",
+      "cluster": "inteligencia-mercado",
+      "intent": "tofu",
+      "persona": "diretor-construtora",
+      "jtbd": "Comparar o próprio mercado com evidência agregada proprietária",
+      "commercial_fit": 0.7,
+      "service_fit": "metodologia-inteligencia",
+      "service_path": "/metodologia-inteligencia/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts",
+        "as_of": "2026-08-01",
+        "record_count": 13,
+        "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
+        "limitations": [
+          "Base: 13 contratos com arquétipo primário pavimentacao-infraestrutura-viaria em SC; multi-rótulo entra só no primário.",
+          "Não representa o universo total de contratações.",
+          "Valores nominais sem deflacionamento.",
+          "Objetos heterogêneos; mediana não é preço unitário.",
+          "Percentis exatos via SQLite spill (sem vetor O(N) em RAM).",
+          "Não afirma irregularidade, crédito devido ou erro de órgão/fornecedor.",
+          "Valores nominais; objetos heterogêneos — mediana não é preço unitário."
+        ],
+        "sources": [
+          "pncp_contracts"
+        ],
+        "confidence": 0.55,
+        "result": {
+          "contract_count": 13,
+          "buyer_count": 11,
+          "supplier_count": 11,
+          "median_value": 310910.94,
+          "p25_value": 205000.0,
+          "p75_value": 635000.0,
+          "open_opportunity_count": 7,
+          "region": "SC",
+          "segment": "Pavimentação e infraestrutura viária",
+          "interpretation_hooks": [
+            "Concentração em 11 órgãos compradores distintos.",
+            "11 fornecedores observados no recorte.",
+            "Oportunidades abertas no radar (mesmo recorte): 7."
+          ]
+        },
+        "insight_id": "insight-market-pavimentacao-infraestrutura-viaria-sc",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.8
+      },
+      "competition": {
+        "score": 0.65
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+      "existing_url": null,
+      "action": "create",
+      "score": 58,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 14,
+        "data_moat": 15,
+        "demand_evidence": 5,
+        "topical_authority": 7,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Benchmark proprietário a partir do datalake; information gain que LLM genérico não reproduz sem os mesmos dados e corte.",
+      "suggested_cta": "Ver metodologia e limites da inteligência de mercado",
+      "suggested_internal_links": [
+        "/metodologia-inteligencia/",
+        "/radar/",
+        "/inteligencia/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.55,
+      "source": "datalake_market",
+      "service_fit_score": 0.7,
+      "data_moat_score": 0.7250000000000001,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.7,
+      "freshness_score": 0.8,
+      "competitive_score": 0.65,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-market-edificacoes-publicas-mg",
+      "topic": "Analisamos 12 contratos públicos de obras em MG (Edificações públicas) mediana R$ 545.585.",
+      "cluster": "inteligencia-mercado",
+      "intent": "tofu",
+      "persona": "diretor-construtora",
+      "jtbd": "Comparar o próprio mercado com evidência agregada proprietária",
+      "commercial_fit": 0.7,
+      "service_fit": "metodologia-inteligencia",
+      "service_path": "/metodologia-inteligencia/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts",
+        "as_of": "2026-08-01",
+        "record_count": 12,
+        "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
+        "limitations": [
+          "Base: 12 contratos com arquétipo primário edificacoes-publicas em MG; multi-rótulo entra só no primário.",
+          "Não representa o universo total de contratações.",
+          "Valores nominais sem deflacionamento.",
+          "Objetos heterogêneos; mediana não é preço unitário.",
+          "Percentis exatos via SQLite spill (sem vetor O(N) em RAM).",
+          "Não afirma irregularidade, crédito devido ou erro de órgão/fornecedor.",
+          "Valores nominais; objetos heterogêneos — mediana não é preço unitário."
+        ],
+        "sources": [
+          "pncp_contracts"
+        ],
+        "confidence": 0.55,
+        "result": {
+          "contract_count": 12,
+          "buyer_count": 10,
+          "supplier_count": 11,
+          "median_value": 545585.4,
+          "p25_value": 412900.0,
+          "p75_value": 1300000.0,
+          "open_opportunity_count": 0,
+          "region": "MG",
+          "segment": "Edificações públicas",
+          "interpretation_hooks": [
+            "Concentração em 10 órgãos compradores distintos.",
+            "11 fornecedores observados no recorte.",
+            "Oportunidades abertas no radar (mesmo recorte): 0."
+          ]
+        },
+        "insight_id": "insight-market-edificacoes-publicas-mg",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.8
+      },
+      "competition": {
+        "score": 0.65
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/edificacoes-publicas-mg/",
+      "existing_url": null,
+      "action": "create",
+      "score": 57,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 14,
+        "data_moat": 14,
+        "demand_evidence": 5,
+        "topical_authority": 7,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Benchmark proprietário a partir do datalake; information gain que LLM genérico não reproduz sem os mesmos dados e corte.",
+      "suggested_cta": "Ver metodologia e limites da inteligência de mercado",
+      "suggested_internal_links": [
+        "/metodologia-inteligencia/",
+        "/radar/",
+        "/inteligencia/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.55,
+      "source": "datalake_market",
+      "service_fit_score": 0.7,
+      "data_moat_score": 0.7,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.7,
+      "freshness_score": 0.8,
+      "competitive_score": 0.65,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-need-aditivo-limite",
+      "topic": "Como contar o limite de 25%/50% e o que documentar no aditivo?",
+      "cluster": "aditivos",
+      "intent": "mofu",
+      "persona": "engenheiro-contratos",
+      "jtbd": "Calcular saldo de aditivo e evitar pedido sem base",
+      "commercial_fit": 0.95,
+      "service_fit": "aditivos-obras-publicas",
+      "service_path": "/aditivos-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.285,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 5.0,
+        "clicks": 0.0,
+        "position": 66.2,
+        "matched_queries": [
+          "aditivos obra pública"
+        ]
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.55
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/aditivos-obras-publicas/",
+      "existing_url": "/aditivos-obras-publicas/",
+      "action": "improve",
+      "score": 57,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 4,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-aditivo-limite): Acréscimos/supressões se aproximam dos limites legais",
+      "suggested_cta": "Revisar estratégia de aditivo",
+      "suggested_internal_links": [
+        "/aditivos-obras-publicas/",
+        "/ferramentas/limite-acrescimos-supressoes/",
+        "/aditivos-obras-publicas/"
+      ],
+      "confidence": 0.75,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.285,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.55,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-market-edificacoes-publicas-rs",
+      "topic": "Analisamos 10 contratos públicos de obras em RS (Edificações públicas) mediana R$ 300.880.",
+      "cluster": "inteligencia-mercado",
+      "intent": "tofu",
+      "persona": "diretor-construtora",
+      "jtbd": "Comparar o próprio mercado com evidência agregada proprietária",
+      "commercial_fit": 0.7,
+      "service_fit": "metodologia-inteligencia",
+      "service_path": "/metodologia-inteligencia/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_supplier_contracts",
+        "as_of": "2026-08-01",
+        "record_count": 10,
+        "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
+        "limitations": [
+          "Base: 10 contratos com arquétipo primário edificacoes-publicas em RS; multi-rótulo entra só no primário.",
+          "Não representa o universo total de contratações.",
+          "Valores nominais sem deflacionamento.",
+          "Objetos heterogêneos; mediana não é preço unitário.",
+          "Percentis exatos via SQLite spill (sem vetor O(N) em RAM).",
+          "Não afirma irregularidade, crédito devido ou erro de órgão/fornecedor.",
+          "Valores nominais; objetos heterogêneos — mediana não é preço unitário."
+        ],
+        "sources": [
+          "pncp_contracts"
+        ],
+        "confidence": 0.55,
+        "result": {
+          "contract_count": 10,
+          "buyer_count": 10,
+          "supplier_count": 10,
+          "median_value": 300879.55,
+          "p25_value": 199500.0,
+          "p75_value": 1390000.0,
+          "open_opportunity_count": 3,
+          "region": "RS",
+          "segment": "Edificações públicas",
+          "interpretation_hooks": [
+            "Concentração em 10 órgãos compradores distintos.",
+            "10 fornecedores observados no recorte.",
+            "Oportunidades abertas no radar (mesmo recorte): 3."
+          ]
+        },
+        "insight_id": "insight-market-edificacoes-publicas-rs",
+        "evidence_kind": "market_benchmark",
+        "is_contract_aggregate": true,
+        "public_label": "contract_aggregate"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.8
+      },
+      "competition": {
+        "score": 0.65
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/edificacoes-publicas-rs/",
+      "existing_url": null,
+      "action": "create",
+      "score": 56,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 14,
+        "data_moat": 13,
+        "demand_evidence": 5,
+        "topical_authority": 7,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Benchmark proprietário a partir do datalake; information gain que LLM genérico não reproduz sem os mesmos dados e corte.",
+      "suggested_cta": "Ver metodologia e limites da inteligência de mercado",
+      "suggested_internal_links": [
+        "/metodologia-inteligencia/",
+        "/radar/",
+        "/inteligencia/",
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "confidence": 0.55,
+      "source": "datalake_market",
+      "service_fit_score": 0.7,
+      "data_moat_score": 0.65,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.7,
+      "freshness_score": 0.8,
+      "competitive_score": 0.65,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-need-atraso-prorrogacao",
+      "topic": "Como documentar prorrogação e responder notificação?",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "gerente-contratos",
+      "jtbd": "Proteger prazo e evitar sanção indevida",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.2,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.35
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/atrasos-prorrogacao-obras-publicas/",
+      "existing_url": "/atrasos-prorrogacao-obras-publicas/",
+      "action": "keep",
+      "score": 55,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 3,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-atraso-prorrogacao): Atraso imputável à Administração ou risco de notificação",
+      "suggested_cta": "Montar defesa de prazo",
+      "suggested_internal_links": [
+        "/atrasos-prorrogacao-obras-publicas/",
+        "/ferramentas/matriz-atraso-obra/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.55,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.2,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.35,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-radar-radar-edificacoes-publicas-pr",
+      "topic": "Radar: radar-edificacoes-publicas-pr (15 abertas)",
+      "cluster": "radar-oportunidades",
+      "intent": "tofu",
+      "persona": "licitacoes",
+      "jtbd": "Monitorar editais/contratos abertos no recorte com evidência fresca",
+      "commercial_fit": 0.95,
+      "service_fit": "bid-room-licitacoes-obras",
+      "service_path": "/bid-room-licitacoes-obras/",
+      "demand_signal": {
+        "strength": 0.3,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_open_opportunities",
+        "as_of": "2026-08-01",
+        "record_count": 15,
+        "historical_count": 48,
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
+        "limitations": [
+          "Status pode mudar após o corte; sempre verificar fonte oficial."
+        ],
+        "sources": [
+          "pncp"
+        ],
+        "confidence": 0.65,
+        "freshness": {
+          "age_hours": 48.0,
+          "data_as_of": "2026-07-31",
+          "evaluated_at": "2026-08-02",
+          "fail_hours": 72,
+          "now_source": "provided_date",
+          "reason": "age_hours=48.0",
+          "source_unavailable": false,
+          "status": "warning",
+          "warning_hours": 24
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.6
+      },
+      "competition": {
+        "score": 0.45
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/edificacoes-publicas-pr/",
+      "existing_url": "/radar/edificacoes-publicas-pr/",
+      "action": "improve",
+      "score": 53,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 19,
+        "data_moat": 10,
+        "demand_evidence": 4,
+        "topical_authority": 5,
+        "freshness_trigger": 3,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Radar data-driven; só indexável com volume mínimo de itens abertos, freshness e interpretação — não template por UF.",
+      "suggested_cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "suggested_internal_links": [
+        "/radar/",
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "confidence": 0.65,
+      "source": "datalake_radar",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.5,
+      "demand_strength": 0.3,
+      "topical_authority_score": 0.5,
+      "freshness_score": 0.6,
+      "competitive_score": 0.45,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "score<55"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-radar-radar-edificacoes-publicas-rs",
+      "topic": "Radar: radar-edificacoes-publicas-rs (3 abertas)",
+      "cluster": "radar-oportunidades",
+      "intent": "tofu",
+      "persona": "licitacoes",
+      "jtbd": "Monitorar editais/contratos abertos no recorte com evidência fresca",
+      "commercial_fit": 0.95,
+      "service_fit": "bid-room-licitacoes-obras",
+      "service_path": "/bid-room-licitacoes-obras/",
+      "demand_signal": {
+        "strength": 0.3,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_open_opportunities",
+        "as_of": "2026-08-01",
+        "record_count": 3,
+        "historical_count": 73,
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
+        "limitations": [
+          "Status pode mudar após o corte; sempre verificar fonte oficial."
+        ],
+        "sources": [
+          "pncp"
+        ],
+        "confidence": 0.65,
+        "freshness": {
+          "age_hours": 48.0,
+          "data_as_of": "2026-07-31",
+          "evaluated_at": "2026-08-02",
+          "fail_hours": 72,
+          "now_source": "provided_date",
+          "reason": "age_hours=48.0",
+          "source_unavailable": false,
+          "status": "warning",
+          "warning_hours": 24
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.6
+      },
+      "competition": {
+        "score": 0.45
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/edificacoes-publicas-rs/",
+      "existing_url": "/radar/edificacoes-publicas-rs/",
+      "action": "improve",
+      "score": 53,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 19,
+        "data_moat": 10,
+        "demand_evidence": 4,
+        "topical_authority": 5,
+        "freshness_trigger": 3,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Radar data-driven; só indexável com volume mínimo de itens abertos, freshness e interpretação — não template por UF.",
+      "suggested_cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "suggested_internal_links": [
+        "/radar/",
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "confidence": 0.65,
+      "source": "datalake_radar",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.5,
+      "demand_strength": 0.3,
+      "topical_authority_score": 0.5,
+      "freshness_score": 0.6,
+      "competitive_score": 0.45,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "do_not_create",
+        "fails": [
+          "sample<8",
+          "score<55"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-radar-radar-edificacoes-publicas-sc",
+      "topic": "Radar: radar-edificacoes-publicas-sc (4 abertas)",
+      "cluster": "radar-oportunidades",
+      "intent": "tofu",
+      "persona": "licitacoes",
+      "jtbd": "Monitorar editais/contratos abertos no recorte com evidência fresca",
+      "commercial_fit": 0.95,
+      "service_fit": "bid-room-licitacoes-obras",
+      "service_path": "/bid-room-licitacoes-obras/",
+      "demand_signal": {
+        "strength": 0.3,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_open_opportunities",
+        "as_of": "2026-08-01",
+        "record_count": 4,
+        "historical_count": 56,
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
+        "limitations": [
+          "Status pode mudar após o corte; sempre verificar fonte oficial."
+        ],
+        "sources": [
+          "pncp"
+        ],
+        "confidence": 0.65,
+        "freshness": {
+          "age_hours": 48.0,
+          "data_as_of": "2026-07-31",
+          "evaluated_at": "2026-08-02",
+          "fail_hours": 72,
+          "now_source": "provided_date",
+          "reason": "age_hours=48.0",
+          "source_unavailable": false,
+          "status": "warning",
+          "warning_hours": 24
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.6
+      },
+      "competition": {
+        "score": 0.45
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/edificacoes-publicas-sc/",
+      "existing_url": "/radar/edificacoes-publicas-sc/",
+      "action": "improve",
+      "score": 53,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 19,
+        "data_moat": 10,
+        "demand_evidence": 4,
+        "topical_authority": 5,
+        "freshness_trigger": 3,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Radar data-driven; só indexável com volume mínimo de itens abertos, freshness e interpretação — não template por UF.",
+      "suggested_cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "suggested_internal_links": [
+        "/radar/",
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "confidence": 0.65,
+      "source": "datalake_radar",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.5,
+      "demand_strength": 0.3,
+      "topical_authority_score": 0.5,
+      "freshness_score": 0.6,
+      "competitive_score": 0.45,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "do_not_create",
+        "fails": [
+          "sample<8",
+          "score<55"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-radar-radar-pavimentacao-infraestrutura-viaria-pr",
+      "topic": "Radar: radar-pavimentacao-infraestrutura-viaria-pr (4 abertas)",
+      "cluster": "radar-oportunidades",
+      "intent": "tofu",
+      "persona": "licitacoes",
+      "jtbd": "Monitorar editais/contratos abertos no recorte com evidência fresca",
+      "commercial_fit": 0.95,
+      "service_fit": "bid-room-licitacoes-obras",
+      "service_path": "/bid-room-licitacoes-obras/",
+      "demand_signal": {
+        "strength": 0.3,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_open_opportunities",
+        "as_of": "2026-08-01",
+        "record_count": 4,
+        "historical_count": 47,
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
+        "limitations": [
+          "Status pode mudar após o corte; sempre verificar fonte oficial."
+        ],
+        "sources": [
+          "pncp"
+        ],
+        "confidence": 0.65,
+        "freshness": {
+          "age_hours": 48.0,
+          "data_as_of": "2026-07-31",
+          "evaluated_at": "2026-08-02",
+          "fail_hours": 72,
+          "now_source": "provided_date",
+          "reason": "age_hours=48.0",
+          "source_unavailable": false,
+          "status": "warning",
+          "warning_hours": 24
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.6
+      },
+      "competition": {
+        "score": 0.45
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
+      "existing_url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
+      "action": "improve",
+      "score": 53,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 19,
+        "data_moat": 10,
+        "demand_evidence": 4,
+        "topical_authority": 5,
+        "freshness_trigger": 3,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Radar data-driven; só indexável com volume mínimo de itens abertos, freshness e interpretação — não template por UF.",
+      "suggested_cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "suggested_internal_links": [
+        "/radar/",
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "confidence": 0.65,
+      "source": "datalake_radar",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.5,
+      "demand_strength": 0.3,
+      "topical_authority_score": 0.5,
+      "freshness_score": 0.6,
+      "competitive_score": 0.45,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "do_not_create",
+        "fails": [
+          "sample<8",
+          "score<55"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-radar-radar-pavimentacao-infraestrutura-viaria-rs",
+      "topic": "Radar: radar-pavimentacao-infraestrutura-viaria-rs (4 abertas)",
+      "cluster": "radar-oportunidades",
+      "intent": "tofu",
+      "persona": "licitacoes",
+      "jtbd": "Monitorar editais/contratos abertos no recorte com evidência fresca",
+      "commercial_fit": 0.95,
+      "service_fit": "bid-room-licitacoes-obras",
+      "service_path": "/bid-room-licitacoes-obras/",
+      "demand_signal": {
+        "strength": 0.3,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_open_opportunities",
+        "as_of": "2026-08-01",
+        "record_count": 4,
+        "historical_count": 42,
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
+        "limitations": [
+          "Status pode mudar após o corte; sempre verificar fonte oficial."
+        ],
+        "sources": [
+          "pncp"
+        ],
+        "confidence": 0.65,
+        "freshness": {
+          "age_hours": 48.0,
+          "data_as_of": "2026-07-31",
+          "evaluated_at": "2026-08-02",
+          "fail_hours": 72,
+          "now_source": "provided_date",
+          "reason": "age_hours=48.0",
+          "source_unavailable": false,
+          "status": "warning",
+          "warning_hours": 24
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.6
+      },
+      "competition": {
+        "score": 0.45
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
+      "existing_url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
+      "action": "improve",
+      "score": 53,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 19,
+        "data_moat": 10,
+        "demand_evidence": 4,
+        "topical_authority": 5,
+        "freshness_trigger": 3,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Radar data-driven; só indexável com volume mínimo de itens abertos, freshness e interpretação — não template por UF.",
+      "suggested_cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "suggested_internal_links": [
+        "/radar/",
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "confidence": 0.65,
+      "source": "datalake_radar",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.5,
+      "demand_strength": 0.3,
+      "topical_authority_score": 0.5,
+      "freshness_score": 0.6,
+      "competitive_score": 0.45,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "do_not_create",
+        "fails": [
+          "sample<8",
+          "score<55"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-radar-radar-pavimentacao-infraestrutura-viaria-sc",
+      "topic": "Radar: radar-pavimentacao-infraestrutura-viaria-sc (7 abertas)",
+      "cluster": "radar-oportunidades",
+      "intent": "tofu",
+      "persona": "licitacoes",
+      "jtbd": "Monitorar editais/contratos abertos no recorte com evidência fresca",
+      "commercial_fit": 0.95,
+      "service_fit": "bid-room-licitacoes-obras",
+      "service_path": "/bid-room-licitacoes-obras/",
+      "demand_signal": {
+        "strength": 0.3,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_open_opportunities",
+        "as_of": "2026-08-01",
+        "record_count": 7,
+        "historical_count": 80,
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
+        "limitations": [
+          "Status pode mudar após o corte; sempre verificar fonte oficial."
+        ],
+        "sources": [
+          "pncp"
+        ],
+        "confidence": 0.65,
+        "freshness": {
+          "age_hours": 48.0,
+          "data_as_of": "2026-07-31",
+          "evaluated_at": "2026-08-02",
+          "fail_hours": 72,
+          "now_source": "provided_date",
+          "reason": "age_hours=48.0",
+          "source_unavailable": false,
+          "status": "warning",
+          "warning_hours": 24
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.6
+      },
+      "competition": {
+        "score": 0.45
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+      "existing_url": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+      "action": "improve",
+      "score": 53,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 19,
+        "data_moat": 10,
+        "demand_evidence": 4,
+        "topical_authority": 5,
+        "freshness_trigger": 3,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Radar data-driven; só indexável com volume mínimo de itens abertos, freshness e interpretação — não template por UF.",
+      "suggested_cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "suggested_internal_links": [
+        "/radar/",
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "confidence": 0.65,
+      "source": "datalake_radar",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.5,
+      "demand_strength": 0.3,
+      "topical_authority_score": 0.5,
+      "freshness_score": 0.6,
+      "competitive_score": 0.45,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "do_not_create",
+        "fails": [
+          "sample<8",
+          "score<55"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-radar-radar-saneamento-hidraulica-sc",
+      "topic": "Radar: radar-saneamento-hidraulica-sc (5 abertas)",
+      "cluster": "radar-oportunidades",
+      "intent": "tofu",
+      "persona": "licitacoes",
+      "jtbd": "Monitorar editais/contratos abertos no recorte com evidência fresca",
+      "commercial_fit": 0.95,
+      "service_fit": "bid-room-licitacoes-obras",
+      "service_path": "/bid-room-licitacoes-obras/",
+      "demand_signal": {
+        "strength": 0.3,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "pncp_open_opportunities",
+        "as_of": "2026-08-01",
+        "record_count": 5,
+        "historical_count": 21,
+        "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
+        "limitations": [
+          "Status pode mudar após o corte; sempre verificar fonte oficial."
+        ],
+        "sources": [
+          "pncp"
+        ],
+        "confidence": 0.65,
+        "freshness": {
+          "age_hours": 48.0,
+          "data_as_of": "2026-07-31",
+          "evaluated_at": "2026-08-02",
+          "fail_hours": 72,
+          "now_source": "provided_date",
+          "reason": "age_hours=48.0",
+          "source_unavailable": false,
+          "status": "warning",
+          "warning_hours": 24
+        },
+        "evidence_kind": "open_opportunity_radar",
+        "is_contract_aggregate": true,
+        "public_label": "open_radar"
+      },
+      "unique_data_available": true,
+      "freshness": {
+        "score": 0.6
+      },
+      "competition": {
+        "score": 0.45
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/radar/saneamento-hidraulica-sc/",
+      "existing_url": "/radar/saneamento-hidraulica-sc/",
+      "action": "improve",
+      "score": 53,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 19,
+        "data_moat": 10,
+        "demand_evidence": 4,
+        "topical_authority": 5,
+        "freshness_trigger": 3,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Radar data-driven; só indexável com volume mínimo de itens abertos, freshness e interpretação — não template por UF.",
+      "suggested_cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "suggested_internal_links": [
+        "/radar/",
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/"
+      ],
+      "confidence": 0.65,
+      "source": "datalake_radar",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.5,
+      "demand_strength": 0.3,
+      "topical_authority_score": 0.5,
+      "freshness_score": 0.6,
+      "competitive_score": 0.45,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "do_not_create",
+        "fails": [
+          "sample<8",
+          "score<55"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-3604249",
+      "topic": "CTR opportunity: /",
+      "cluster": "gsc-feedback",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.2,
+      "service_fit": null,
+      "service_path": null,
+      "demand_signal": {
+        "strength": 0.554,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "url": "https://confenge.com.br/",
+        "clicks": 0.0,
+        "impressions": 22.0,
+        "position": 17.45
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level striking distance / CTR signal",
+        "limitations": [
+          "Amostra GSC limitada no export disponível."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.75
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/",
+      "existing_url": "/",
+      "action": "improve",
+      "score": 45,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 4,
+        "data_moat": 2,
+        "demand_evidence": 8,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "Muitas impressões (22.0) e CTR ~0 na posição 17.4 — reescrever title/meta e reforçar CTA.",
+      "suggested_cta": "Analisar meu caso com a CONFENGE",
+      "suggested_internal_links": [
+        "/"
+      ],
+      "confidence": 0.8,
+      "source": "gsc_page",
+      "service_fit_score": 0.2,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.554,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
+    },
+    {
+      "id": "opp-need-benchmark-mercado",
+      "topic": "Isso é normal no mercado público de obras?",
+      "cluster": "inteligencia-mercado",
+      "intent": "tofu",
+      "persona": "diretor-construtora",
+      "jtbd": "Comparar o próprio caso com evidência agregada do mercado",
+      "commercial_fit": 0.7,
+      "service_fit": "metodologia-inteligencia",
+      "service_path": "/metodologia-inteligencia/",
+      "demand_signal": {
+        "strength": 0.2,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.35
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/metodologia-inteligencia/",
+      "existing_url": "/metodologia-inteligencia/",
+      "action": "keep",
+      "score": 25,
+      "score_breakdown": {
+        "commercial_intent": 10,
+        "service_fit": 14,
+        "data_moat": 3,
+        "demand_evidence": 3,
+        "topical_authority": 6,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {
+        "commodity_content": 15
+      },
+      "rationale": "Necessidade canônica do grafo de demanda (need-benchmark-mercado): Não sabe se valor/duração/alterações do contrato são 'normais'",
+      "suggested_cta": "Entender como a inteligência de mercado apoia decisões",
+      "suggested_internal_links": [
+        "/metodologia-inteligencia/",
+        "/metodologia-inteligencia/"
+      ],
+      "confidence": 0.55,
+      "source": "demand_graph",
+      "service_fit_score": 0.7,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.2,
+      "topical_authority_score": 0.55,
+      "freshness_score": 0.4,
+      "competitive_score": 0.35,
+      "penalties": [
+        "commodity_content"
+      ],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "score<40"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    }
+  ],
+  "demand_map": {
+    "schema_version": "organic-demand-v1",
+    "model": "persona → problem → question → intent → service",
+    "nodes": [
+      {
+        "id": "need-reequilibrio-pleito",
+        "persona": "diretor-construtora",
+        "problem": "Contrato de obra pública virou prejuízo ou a equação original se rompeu",
+        "question": "Quando cabe reequilíbrio e como estruturar um pleito defensável?",
+        "intent": "bofu",
+        "jtbd": "Proteger margem e decidir se vale montar pleito de reequilíbrio agora",
+        "cluster": "reequilibrio",
+        "service_slug": "reequilibrio-obras-publicas",
+        "service_path": "/reequilibrio-obras-publicas/",
+        "related_queries": [
+          "reequilíbrio econômico financeiro obra pública",
+          "pedido de reequilíbrio contrato público",
+          "reajuste ou reequilíbrio obra pública"
+        ],
+        "cta": "Analisar viabilidade de reequilíbrio",
+        "funnel": "bofu",
+        "existing_url": "/reequilibrio-obras-publicas/"
+      },
+      {
+        "id": "need-aditivo-limite",
+        "persona": "engenheiro-contratos",
+        "problem": "Acréscimos/supressões se aproximam dos limites legais",
+        "question": "Como contar o limite de 25%/50% e o que documentar no aditivo?",
+        "intent": "mofu",
+        "jtbd": "Calcular saldo de aditivo e evitar pedido sem base",
+        "cluster": "aditivos",
+        "service_slug": "aditivos-obras-publicas",
+        "service_path": "/aditivos-obras-publicas/",
+        "related_queries": [
+          "aditivos obra pública",
+          "limite aditivo 25 50 obra pública",
+          "acréscimo e supressão contrato público"
+        ],
+        "cta": "Revisar estratégia de aditivo",
+        "funnel": "mofu",
+        "tool_path": "/ferramentas/limite-acrescimos-supressoes/",
+        "existing_url": "/aditivos-obras-publicas/"
+      },
+      {
+        "id": "need-medicao-glosa",
+        "persona": "engenheiro-obra",
+        "problem": "Medição glosada, critério inventado ou parcela retida",
+        "question": "Como contestar glosa e proteger o fluxo de caixa?",
+        "intent": "bofu",
+        "jtbd": "Recuperar medição e documentar nexo com o contrato",
+        "cluster": "medicoes-pagamentos",
+        "service_slug": "medicoes-glosas-obras-publicas",
+        "service_path": "/medicoes-glosas-obras-publicas/",
+        "related_queries": [
+          "glosa de medição obra pública",
+          "medição de obra pública rejeitada",
+          "parcela incontroversa medição"
+        ],
+        "cta": "Revisar medição e glosa",
+        "funnel": "bofu",
+        "existing_url": "/medicoes-glosas-obras-publicas/"
+      },
+      {
+        "id": "need-sinapi-desonerado",
+        "persona": "orcamentista",
+        "problem": "Dúvida sobre base SINAPI desonerada vs não desonerada no edital",
+        "question": "Qual base usar e como alinhar BDI e encargos?",
+        "intent": "mofu",
+        "jtbd": "Evitar erro de base que destrói margem na proposta",
+        "cluster": "orcamento-bdi",
+        "service_slug": "auditoria-orcamento-licitacao",
+        "service_path": "/auditoria-orcamento-licitacao/",
+        "related_queries": [
+          "desonerado e não desonerado",
+          "sinapi desonerado ou não desonerado",
+          "desonerado ou não desonerado"
+        ],
+        "cta": "Auditar orçamento e BDI do edital",
+        "funnel": "mofu",
+        "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/"
+      },
+      {
+        "id": "need-atraso-prorrogacao",
+        "persona": "gerente-contratos",
+        "problem": "Atraso imputável à Administração ou risco de notificação",
+        "question": "Como documentar prorrogação e responder notificação?",
+        "intent": "mofu",
+        "jtbd": "Proteger prazo e evitar sanção indevida",
+        "cluster": "atrasos-prorrogacao",
+        "service_slug": "atrasos-prorrogacao-obras-publicas",
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "related_queries": [
+          "prorrogação prazo obra pública",
+          "notificação atraso obra pública",
+          "atraso imputável administração"
+        ],
+        "cta": "Montar defesa de prazo",
+        "funnel": "mofu",
+        "tool_path": "/ferramentas/matriz-atraso-obra/",
+        "existing_url": "/atrasos-prorrogacao-obras-publicas/"
+      },
+      {
+        "id": "need-edital-orcamento",
+        "persona": "licitacoes",
+        "problem": "Edital com orçamento inconsistente ou referência duvidosa",
+        "question": "Participar, impugnar ou auditar a planilha antes da proposta?",
+        "intent": "bofu",
+        "jtbd": "Decidir se a licitação é economicamente segura",
+        "cluster": "edital-proposta",
+        "service_slug": "auditoria-orcamento-licitacao",
+        "service_path": "/auditoria-orcamento-licitacao/",
+        "related_queries": [
+          "orçamento incompleto edital obra pública",
+          "auditoria orçamento licitação",
+          "sinapi ou sicro obra pública"
+        ],
+        "cta": "Auditar edital e orçamento",
+        "funnel": "bofu",
+        "existing_url": "/auditoria-orcamento-licitacao/"
+      },
+      {
+        "id": "need-benchmark-mercado",
+        "persona": "diretor-construtora",
+        "problem": "Não sabe se valor/duração/alterações do contrato são 'normais'",
+        "question": "Isso é normal no mercado público de obras?",
+        "intent": "tofu",
+        "jtbd": "Comparar o próprio caso com evidência agregada do mercado",
+        "cluster": "inteligencia-mercado",
+        "service_slug": "metodologia-inteligencia",
+        "service_path": "/metodologia-inteligencia/",
+        "related_queries": [
+          "benchmark contratos obras públicas",
+          "mediana valor contrato obra pública"
+        ],
+        "cta": "Entender como a inteligência de mercado apoia decisões",
+        "funnel": "tofu",
+        "requires_data_moat": true
+      },
+      {
+        "id": "need-gestao-contratual",
+        "persona": "proprietario-construtora",
+        "problem": "Contratos públicos sem rotina de gestão geram prejuízo silencioso",
+        "question": "Quando vale consultoria de acompanhamento contratual vs equipe própria?",
+        "intent": "bofu",
+        "jtbd": "Decidir se contrata apoio externo para gestão B2G",
+        "cluster": "gestao-contratual",
+        "service_slug": "acompanhamento-contratos-obras",
+        "service_path": "/acompanhamento-contratos-obras/",
+        "related_queries": [
+          "consultoria B2G engenharia construtora",
+          "gestão de contratos de obras públicas"
+        ],
+        "cta": "Diagnosticar gestão contratual B2G",
+        "funnel": "bofu",
+        "existing_url": "/acompanhamento-contratos-obras/"
+      }
+    ],
+    "by_cluster": {
+      "reequilibrio": [
+        "need-reequilibrio-pleito"
+      ],
+      "aditivos": [
+        "need-aditivo-limite"
+      ],
+      "medicoes-pagamentos": [
+        "need-medicao-glosa"
+      ],
+      "orcamento-bdi": [
+        "need-sinapi-desonerado"
+      ],
+      "atrasos-prorrogacao": [
+        "need-atraso-prorrogacao"
+      ],
+      "edital-proposta": [
+        "need-edital-orcamento"
+      ],
+      "inteligencia-mercado": [
+        "need-benchmark-mercado"
+      ],
+      "gestao-contratual": [
+        "need-gestao-contratual"
+      ]
+    },
+    "by_intent": {
+      "bofu": [
+        "need-reequilibrio-pleito",
+        "need-medicao-glosa",
+        "need-edital-orcamento",
+        "need-gestao-contratual"
+      ],
+      "mofu": [
+        "need-aditivo-limite",
+        "need-sinapi-desonerado",
+        "need-atraso-prorrogacao"
+      ],
+      "tofu": [
+        "need-benchmark-mercado"
+      ]
+    },
+    "principle": "Agrupar variantes textuais da mesma necessidade em um único nó. Não criar uma página por keyword."
+  }
+}

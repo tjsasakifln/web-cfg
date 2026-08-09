@@ -1,0 +1,190 @@
+{
+  "schema_version": "organic-pilot-cohort-v1",
+  "generated_at": "2026-08-09T05:52:44Z",
+  "apply": true,
+  "selection_rule": "diversity slots + content value score + contract-moat honesty",
+  "items": [
+    {
+      "id": "opp-need-edital-orcamento",
+      "cohort_slot": "bofu",
+      "intent": "bofu",
+      "action": "improve",
+      "score": 68,
+      "existing_url": "/auditoria-orcamento-licitacao/",
+      "proposed_url": "/auditoria-orcamento-licitacao/",
+      "cluster": "edital-proposta",
+      "cta": "Auditar edital e orçamento",
+      "index_decision": "indexable_candidate",
+      "gate": "indexable_candidate",
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
+      "changes": [
+        "no_html_delta"
+      ],
+      "path_resolved": "/mnt/d/webcfg/auditoria-orcamento-licitacao/index.html"
+    },
+    {
+      "id": "opp-gsc-ctr-1695738",
+      "cohort_slot": "mofu",
+      "intent": "mofu",
+      "action": "improve",
+      "score": 67,
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "proposed_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "cluster": "orcamento-bdi",
+      "cta": "Auditar orçamento e BDI do edital",
+      "index_decision": "indexable_candidate",
+      "gate": "indexable_candidate",
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
+      "changes": [
+        "no_html_delta"
+      ],
+      "path_resolved": "/mnt/d/webcfg/conteudos/sinapi-desonerado-nao-desonerado/index.html"
+    },
+    {
+      "id": "opp-need-medicao-glosa",
+      "cohort_slot": "pillar_service",
+      "intent": "bofu",
+      "action": "keep",
+      "score": 64,
+      "existing_url": "/medicoes-glosas-obras-publicas/",
+      "proposed_url": "/medicoes-glosas-obras-publicas/",
+      "cluster": "medicoes-pagamentos",
+      "cta": "Revisar medição e glosa",
+      "index_decision": "indexable_candidate",
+      "gate": "indexable_candidate",
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
+      "changes": [
+        "no_html_delta"
+      ],
+      "path_resolved": "/mnt/d/webcfg/medicoes-glosas-obras-publicas/index.html"
+    },
+    {
+      "id": "opp-market-pavimentacao-infraestrutura-viaria-pi",
+      "cohort_slot": "data_driven",
+      "intent": "tofu",
+      "action": "create",
+      "score": 58,
+      "existing_url": null,
+      "proposed_url": "/radar/pavimentacao-infraestrutura-viaria-pi/",
+      "cluster": "inteligencia-mercado",
+      "cta": "Ver metodologia e limites da inteligência de mercado",
+      "index_decision": "indexable_candidate",
+      "gate": "indexable_candidate",
+      "differential": "contract-data insight + provenance",
+      "proprietary_data": true,
+      "insight_kind": "contract",
+      "changes": [
+        "url_not_on_disk_skip_html"
+      ],
+      "path_resolved": null
+    },
+    {
+      "id": "opp-need-aditivo-limite",
+      "cohort_slot": "tool",
+      "intent": "mofu",
+      "action": "improve",
+      "score": 57,
+      "existing_url": "/aditivos-obras-publicas/",
+      "proposed_url": "/aditivos-obras-publicas/",
+      "cluster": "aditivos",
+      "cta": "Revisar estratégia de aditivo",
+      "index_decision": "indexable_candidate",
+      "gate": "indexable_candidate",
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
+      "changes": [
+        "no_html_delta"
+      ],
+      "path_resolved": "/mnt/d/webcfg/aditivos-obras-publicas/index.html"
+    },
+    {
+      "id": "opp-gsc-ctr-6441327",
+      "cohort_slot": "gsc_improve",
+      "intent": "mofu",
+      "action": "improve",
+      "score": 61,
+      "existing_url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "proposed_url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "cluster": "aditivos",
+      "cta": "Analisar meu caso com a CONFENGE",
+      "index_decision": "indexable_candidate",
+      "gate": "indexable_candidate",
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
+      "changes": [
+        "no_html_delta"
+      ],
+      "path_resolved": "/mnt/d/webcfg/conteudos/limite-aditivo-25-50-obra-publica/index.html"
+    },
+    {
+      "id": "opp-need-sinapi-desonerado",
+      "cohort_slot": "improve_existing",
+      "intent": "mofu",
+      "action": "improve",
+      "score": 66,
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "proposed_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "cluster": "orcamento-bdi",
+      "cta": "Auditar orçamento e BDI do edital",
+      "index_decision": "indexable_candidate",
+      "gate": "indexable_candidate",
+      "differential": "demand-graph + commercial intent",
+      "proprietary_data": false,
+      "insight_kind": "editorial_or_none",
+      "changes": [
+        "no_html_delta"
+      ],
+      "path_resolved": "/mnt/d/webcfg/conteudos/sinapi-desonerado-nao-desonerado/index.html"
+    },
+    {
+      "id": "opp-radar-radar-edificacoes-publicas-pr",
+      "cohort_slot": "pseo_radar",
+      "intent": "tofu",
+      "action": "improve",
+      "score": 53,
+      "existing_url": "/radar/edificacoes-publicas-pr/",
+      "proposed_url": "/radar/edificacoes-publicas-pr/",
+      "cluster": "radar-oportunidades",
+      "cta": "Avaliar se a licitação cabe no perfil da construtora",
+      "index_decision": "blocked_by_gate",
+      "gate": "noindex",
+      "differential": "contract-data insight + provenance",
+      "proprietary_data": true,
+      "insight_kind": "contract",
+      "changes": [
+        "stripped_previous_insight_block",
+        "injected_contract_insight_block",
+        "no_html_delta"
+      ],
+      "path_resolved": "/mnt/d/webcfg/radar/edificacoes-publicas-pr/index.html"
+    }
+  ],
+  "source_counts": {
+    "total": 27,
+    "by_action": {
+      "improve": 18,
+      "keep": 5,
+      "create": 4
+    },
+    "by_intent": {
+      "bofu": 4,
+      "mofu": 11,
+      "tofu": 12
+    },
+    "by_publishability": {
+      "indexable_candidate": 19,
+      "blocked_by_gate": 8
+    },
+    "bofu": 4,
+    "data_driven": 11
+  },
+  "note": "Indexação editorial/pSEO continua human-gated. unique_data_available / contract insights only for genuine contract aggregates."
+}

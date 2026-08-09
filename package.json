@@ -104,7 +104,11 @@
     "revops:export-leads": "node scripts/revops/export_leads.mjs",
     "revops:cohorts": "node scripts/revops/attribution_cohorts.mjs",
     "revops:dsar": "node scripts/revops/dsar_cli.mjs",
-    "revops:gsc-sync": "node scripts/revops/gsc_insights_sync.mjs"
+    "revops:gsc-sync": "node scripts/revops/gsc_insights_sync.mjs",
+    "organic:run": "python3 -m scripts.organic run",
+    "organic:diagnose": "python3 -m scripts.organic diagnose",
+    "organic:cohort": "python3 -m scripts.organic cohort",
+    "organic:test": "python3 -m pytest scripts/organic/tests -q"
   },
   "engines": {
     "node": ">=20 <21"
