@@ -163,6 +163,15 @@ Gates unitários: thin/sem provenance → não indexável mesmo com score 99.
 
 ---
 
+
+
+### PRs
+
+| Repo | PR | CI |
+|------|-----|-----|
+| web-cfg | https://github.com/tjsasakifln/web-cfg/pull/56 | site-ci ✅ · pSEO gates ✅ · Netlify preview ✅ · CodeQL ❌ **ambiental** (code scanning não habilitado no repositório — não é regressão do engine) |
+| extra-cli | https://github.com/tjsasakifln/extra-cli/pull/210 | **all checks green** (ruff, mypy, full suite, confenge structural, …) |
+
 ## H. Riscos conhecidos
 
 1. **GSC sample pequeno** — sinais de demanda frágeis; não overfit em 20 queries.  
