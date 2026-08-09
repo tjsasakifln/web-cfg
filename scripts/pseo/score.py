@@ -865,7 +865,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="market",
                 url=url,
                 title=f"Mercado de {m['segment']} em {m['region_label']}: contratos e órgãos | CONFENGE",
-                h1=f"Quanto o poder público contratou em {m['segment']} — {m['region_label']}",
+                h1=f"Quanto o poder público contratou em {m['segment']} ({m['region_label']})",
                 description=(
                     f"Inteligência de mercado: {m['contract_count']} contratos, "
                     f"{m['buyer_count']} órgãos em {m['region_label']}. "
@@ -1023,7 +1023,7 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="price",
                 url=url,
                 title=f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))} | CONFENGE",
-                h1=f"Valores de contratos — {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
+                h1=f"Valores de contratos: {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
                 description=(
                     f"Faixa de valores: {_clean_price_label(p.get('object_label'))} em "
                     f"{_clean_price_label(p.get('region_label'))} "
@@ -1101,11 +1101,11 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="competition",
                 url=url,
                 title=f"Concorrência observada: {c['segment']} em {c['region_label']} | CONFENGE",
-                h1=f"Fornecedores observados em {c['segment']} — {c['region_label']}",
+                h1=f"Fornecedores observados em {c['segment']} ({c['region_label']})",
                 description=(
                     f"Concorrência observada em {c['segment']} ({c['region_label']}): "
                     f"{c['supplier_count']} fornecedores e {c['contract_count']} contratos "
-                    f"no recorte público — sem juízo de qualidade."
+                    f"no recorte público, sem juízo de qualidade."
                 ),
                 archetype=arch,
                 segment=c.get("segment"),
@@ -1187,11 +1187,11 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_type="radar",
                 url=url,
                 title=f"Radar de oportunidades: {o['segment']} em {o['region_label']} | CONFENGE",
-                h1=f"Oportunidades abertas em {o['segment']} — {o['region_label']}",
+                h1=f"Oportunidades abertas em {o['segment']} ({o['region_label']})",
                 description=(
                     f"Radar de {o['segment']} em {o['region_label']}: "
                     f"{open_n} oportunidades abertas "
-                    f"(verificado em {as_of}). Página evergreen — não é URL por edital."
+                    f"(verificado em {as_of}). Página evergreen: não é URL por edital."
                 ),
                 archetype=arch,
                 segment=o.get("segment"),

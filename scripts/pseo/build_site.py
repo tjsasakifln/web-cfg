@@ -194,7 +194,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL-CLOSED build exception: {exc}", file=sys.stderr)
         return 2
 
-    # Wave 1+ editorial engine — automated max status EDITORIAL_REVIEWED (no auto HUMAN_APPROVED)
+    # Wave 1+ editorial engine - automated max status EDITORIAL_REVIEWED (no auto HUMAN_APPROVED)
     editorial_report: dict = {}
     try:
         from scripts.editorial.build import build as editorial_build
@@ -213,6 +213,23 @@ def main(argv: list[str] | None = None) -> int:
             errors.extend(f"editorial_truth:{failure}" for failure in truth_failures)
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL-CLOSED editorial build: {exc}", file=sys.stderr)
+        return 2
+
+    # Public copy: strip AI-tell em-dashes from visitor HTML after generators run.
+    # Official source titles (Planalto/TCU/Lei…) may keep —.
+    try:
+        from scripts.site.scrub_em_dashes import iter_public_html, scrub_html
+
+        scrubbed = 0
+        for path in iter_public_html(ROOT):
+            raw = path.read_text(encoding="utf-8")
+            cleaned = scrub_html(raw)
+            if cleaned != raw:
+                path.write_text(cleaned, encoding="utf-8")
+                scrubbed += 1
+        print(f"public copy scrub: rewrote {scrubbed} html file(s)")
+    except Exception as exc:  # noqa: BLE001
+        print(f"FAIL-CLOSED public copy scrub: {exc}", file=sys.stderr)
         return 2
 
     man_path = write_public_manifest(summary, snap)

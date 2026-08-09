@@ -3,7 +3,7 @@
 
 Fail-closed:
 - Automated build may advance at most to EDITORIAL_REVIEWED when gates pass.
-- HUMAN_APPROVED / INDEXABLE require a real named human via CLI/tools — never CI.
+- HUMAN_APPROVED / INDEXABLE require a real named human via CLI/tools, never CI.
 - Only INDEXABLE pages (with human approval) enter segmented sitemaps.
 """
 
@@ -20,8 +20,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.editorial.gates import evaluate_page, sitemap_membership_ok  # noqa: E402
-from scripts.editorial.registry import (  # noqa: E402
+from scripts.editorial.gates import evaluate_page, sitemap_membership_ok # noqa: E402
+from scripts.editorial.registry import (# noqa: E402
     INDEXABLE_STATES,
     advance,
     get_page,
@@ -33,10 +33,10 @@ from scripts.editorial.registry import (  # noqa: E402
     save_registry,
     upsert_page,
 )
-from scripts.editorial.render import render_hub, render_page  # noqa: E402
-from scripts.editorial.sources import load_manifest, page_sources_ok  # noqa: E402
-from scripts.editorial.cohort import FIRST_COHORT_IDS, FIRST_COHORT_SET  # noqa: E402
-from scripts.editorial.preview import write_preview_packet  # noqa: E402
+from scripts.editorial.render import render_hub, render_page # noqa: E402
+from scripts.editorial.sources import load_manifest, page_sources_ok # noqa: E402
+from scripts.editorial.cohort import FIRST_COHORT_IDS, FIRST_COHORT_SET # noqa: E402
+from scripts.editorial.preview import write_preview_packet # noqa: E402
 
 PAGES_DIR = ROOT / "data" / "editorial" / "pages"
 REPORT_PATH = ROOT / "seo" / "editorial-build-report.json"
@@ -72,11 +72,11 @@ def _urlset(urls: list[tuple[str, str]]) -> str:
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     for loc, lastmod in urls:
-        parts.append("  <url>")
-        parts.append(f"    <loc>{xml_escape(loc)}</loc>")
+        parts.append(" <url>")
+        parts.append(f" <loc>{xml_escape(loc)}</loc>")
         if lastmod:
-            parts.append(f"    <lastmod>{xml_escape(lastmod)}</lastmod>")
-        parts.append("  </url>")
+            parts.append(f" <lastmod>{xml_escape(lastmod)}</lastmod>")
+        parts.append(" </url>")
     parts.append("</urlset>")
     parts.append("")
     return "\n".join(parts)
@@ -106,7 +106,7 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
         ("/lei-14133-obras/", "lei_14133"),
         ("/guias-contratos-obras/", "guia"),
         ("/jurisprudencia-contratos-obras/", "jurisprudencia"),
-    )
+)
     for hub_path, arch in hub_map:
         if by_arch.get(arch, 0) > 0 and (ROOT / hub_path.strip("/") / "index.html").exists():
             editorial.append((f"{SITE}{hub_path}", _now_date()))
@@ -120,22 +120,22 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
     index_parts = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        "  <sitemap>",
-        f"    <loc>{SITE}/sitemap.xml</loc>",
-        f"    <lastmod>{today}</lastmod>",
-        "  </sitemap>",
-        "  <sitemap>",
-        f"    <loc>{SITE}/sitemap-editorial.xml</loc>",
-        f"    <lastmod>{today}</lastmod>",
-        "  </sitemap>",
-        "  <sitemap>",
-        f"    <loc>{SITE}/sitemap-jurisprudencia.xml</loc>",
-        f"    <lastmod>{today}</lastmod>",
-        "  </sitemap>",
-        "  <sitemap>",
-        f"    <loc>{SITE}/sitemap-inteligencia.xml</loc>",
-        f"    <lastmod>{today}</lastmod>",
-        "  </sitemap>",
+        " <sitemap>",
+        f" <loc>{SITE}/sitemap.xml</loc>",
+        f" <lastmod>{today}</lastmod>",
+        " </sitemap>",
+        " <sitemap>",
+        f" <loc>{SITE}/sitemap-editorial.xml</loc>",
+        f" <lastmod>{today}</lastmod>",
+        " </sitemap>",
+        " <sitemap>",
+        f" <loc>{SITE}/sitemap-jurisprudencia.xml</loc>",
+        f" <lastmod>{today}</lastmod>",
+        " </sitemap>",
+        " <sitemap>",
+        f" <loc>{SITE}/sitemap-inteligencia.xml</loc>",
+        f" <lastmod>{today}</lastmod>",
+        " </sitemap>",
         "</sitemapindex>",
         "",
     ]
@@ -172,7 +172,7 @@ def _auto_progress_to_editorial_reviewed(
     man: dict[str, Any],
     page: dict[str, Any],
 ) -> str:
-    """Machine may validate sources/tech/editorial quality only — never HUMAN_APPROVED."""
+    """Machine may validate sources/tech/editorial quality only, never HUMAN_APPROVED."""
     stored = get_page(reg, page_id)
     if not stored:
         return "DRAFT"
@@ -190,7 +190,7 @@ def _auto_progress_to_editorial_reviewed(
         if st not in {"REJECTED", "REVIEW_REQUIRED"}:
             # keep prior work; do not advance
             pass
-        return get_page(reg, page_id).get("status") or "DRAFT"  # type: ignore[union-attr]
+        return get_page(reg, page_id).get("status") or "DRAFT" # type: ignore[union-attr]
 
     # Forced reject for incomplete jurisprudence identity
     if page.get("archetype") == "jurisprudencia":
@@ -199,7 +199,7 @@ def _auto_progress_to_editorial_reviewed(
             or "consultar" in str(page.get("decision_date") or "").lower()
             or not page.get("relator")
             and page.get("decision_number", "").lower().startswith("súmula") is False
-        ):
+):
             # Súmula may lack relator, but need concrete date + specific official URL
             url = page.get("official_source_url") or ""
             if (
@@ -208,7 +208,7 @@ def _auto_progress_to_editorial_reviewed(
                 or url.rstrip("/").endswith("/jurisprudencia")
                 or "jurisprudencia/" == url.rstrip("/").split(".br")[-1]
                 or url.endswith("jurisprudencia/")
-            ):
+):
                 stored["status"] = "REJECTED"
                 stored.setdefault("history", []).append(
                     {
@@ -216,7 +216,7 @@ def _auto_progress_to_editorial_reviewed(
                         "event": "REJECTED",
                         "reason": "jurisprudence_source_incomplete",
                     }
-                )
+)
                 return "REJECTED"
 
     actor = "editorial-build-gates"
@@ -240,7 +240,7 @@ def _auto_progress_to_editorial_reviewed(
             advance(reg, page_id, "EDITORIAL_REVIEWED", actor=actor, notes="re-validation")
             st = "EDITORIAL_REVIEWED"
     except ValueError:
-        st = get_page(reg, page_id).get("status") or st  # type: ignore[union-attr]
+        st = get_page(reg, page_id).get("status") or st # type: ignore[union-attr]
     return st
 
 
@@ -282,7 +282,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                         "event": "REJECTED",
                         "reason": "official_sumula_text_date_url_not_verified",
                     }
-                )
+)
 
         # This release has one explicit cohort. A valid approval outside it may
         # remain HUMAN_APPROVED for a later release, but it cannot render/index now.
@@ -293,14 +293,14 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                     "HUMAN_APPROVED"
                     if approval_is_current(stored_outside, man)
                     else "REVIEW_REQUIRED"
-                )
+)
                 stored_outside.setdefault("history", []).append(
                     {
                         "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                         "event": "outside_first_cohort_indexing_blocked",
                         "to": stored_outside["status"],
                     }
-                )
+)
                 merged = {**merged, **stored_outside}
 
         # Temporary status for gate (INDEXABLE only if truly approved)
@@ -311,7 +311,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
         if merged.get("status") != "REJECTED":
             st = _auto_progress_to_editorial_reviewed(
                 reg, merged["page_id"], gate_ok=gate["ok"], man=man, page=merged
-            )
+)
             merged["status"] = st
             # re-render with correct robots (noindex unless INDEXABLE)
             stored2 = get_page(reg, merged["page_id"]) or merged
@@ -335,11 +335,11 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                 "gate_ok": gate["ok"],
                 "issues": gate["issues"],
             }
-        )
+)
 
     indexable = indexable_pages(
         reg, allowed_page_ids=FIRST_COHORT_SET, source_manifest=man
-    )
+)
 
     hubs = [
         {
@@ -348,8 +348,8 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "title": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia",
             "description": (
                 "Aplicações cotidianas da nova lei de licitações em aditivos, prazos, medições, "
-                "pagamentos e reequilíbrio — com foco na decisão da construtora."
-            ),
+                "pagamentos e reequilíbrio, com foco na decisão da construtora."
+),
             "topic": "lei-14133",
             "journey": "execucao",
         },
@@ -359,8 +359,8 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "title": "Jurisprudência aplicada a contratos de obras públicas",
             "description": (
                 "Análises operacionais de decisões relevantes para aditivos, medições, BDI, "
-                "prazos e sanções — com limites do precedente e documentos necessários."
-            ),
+                "prazos e sanções, com limites do precedente e documentos necessários."
+),
             "topic": "jurisprudencia",
             "journey": "defesa",
         },
@@ -371,7 +371,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "description": (
                 "Roteiros utilizáveis na obra e no escritório: documentos para aditivo, glosa, "
                 "reequilíbrio, notificação e defesa de margem."
-            ),
+),
             "topic": "guias",
             "journey": "operacao",
         },
@@ -384,7 +384,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                 (hub["id"] == "hub-lei" and p.get("archetype") == "lei_14133")
                 or (hub["id"] == "hub-jur" and p.get("archetype") == "jurisprudencia")
                 or (hub["id"] == "hub-guias" and p.get("archetype") == "guia")
-            )
+)
         ]
         html = render_hub(hub, relevant)
         # Hub noindex when zero indexable children of that type
@@ -399,7 +399,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                 'content="index,follow"',
                 'content="noindex,follow"',
                 1,
-            )
+)
         write_html(hub["url"], html)
 
     sm_counts = write_segmented_sitemaps(indexable)
@@ -415,7 +415,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                 path = urlparse(u).path
                 if path.rstrip("/").endswith(
                     ("lei-14133-obras", "jurisprudencia-contratos-obras", "guias-contratos-obras")
-                ):
+):
                     continue
                 sm_paths.append(path)
     page_idx = [p["url"] for p in indexable]
@@ -429,7 +429,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
     if docs_reg.parent.exists():
         docs_reg.write_text(
             json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
+)
     # This deploy-bound runtime packet is copied into the public artifact by
     # build:site and is the only acceptable human-review target for this PR.
     write_preview_packet(reg)
@@ -464,12 +464,12 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "READY_FOR_NAMED_HUMAN_APPROVAL"
             if len(indexable) == 0 and len([r for r in results if r["page_id"] in FIRST_COHORT_SET and r["status"] == "EDITORIAL_REVIEWED"]) == len(FIRST_COHORT_SET)
             else "PARTIAL_INDEXABLE"
-        ),
+),
         "fail_closed_intelligence_publishable": True,
         "note": (
             "Automated build never sets HUMAN_APPROVED. "
             "Use: python3 scripts/editorial/approve_cli.py --reviewer NAME --page-id ID"
-        ),
+),
     }
     REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report
@@ -491,8 +491,8 @@ def _sync_main_sitemap(indexable_urls: list[str]) -> None:
                 "/lei-14133-obras/",
                 "/jurisprudencia-contratos-obras/",
                 "/guias-contratos-obras/",
-            )
-        )
+)
+)
         if not is_wave:
             return True
         return path in indexable_urls or path in {
@@ -501,7 +501,7 @@ def _sync_main_sitemap(indexable_urls: list[str]) -> None:
             "/guias-contratos-obras/",
         } and any(
             u.startswith(path.rstrip("/") + "/") or u == path for u in indexable_urls
-        )
+)
 
     # Rebuild url entries
     blocks = re.findall(r"\s*<url>\s*<loc>([^<]+)</loc>.*?</url>", text, flags=re.S)
@@ -523,7 +523,7 @@ def main(argv: list[str] | None = None) -> int:
         print(
             "ERROR: --auto-approve removed. Human approval required via approve_cli.py",
             file=sys.stderr,
-        )
+)
         return 2
     report = build()
     print(
@@ -536,8 +536,8 @@ def main(argv: list[str] | None = None) -> int:
                 "terminal_hint": report.get("terminal_hint"),
             },
             ensure_ascii=False,
-        )
-    )
+)
+)
     return 0
 
 

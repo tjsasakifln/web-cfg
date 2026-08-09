@@ -12,4 +12,20 @@
 | Quando a CONFENGE agrega valor | Removido; CTA contextual após resultado |
 | Score alto ≠ direito (tom de aforismo repetido) | Prontidão documental + ressalva única no resultado |
 
-Travessões restantes apenas em **títulos de fontes oficiais** (Planalto/AGU) no bloco Fontes — citação externa, não prosa CONFENGE.
+Travessões restantes apenas em **títulos de fontes oficiais** (Planalto/AGU/TCU/CAIXA) no bloco Fontes: citação externa, não prosa CONFENGE.
+
+## Extensão pública (radar, conteúdos, inteligência, pilares)
+
+Utilitário: `scripts/site/scrub_em_dashes.py` (`npm run scrub:em-dashes` / `scrub:em-dashes:check`).
+
+| Antes | Depois |
+|-------|--------|
+| operação — não para o mercado | operação, não para o mercado |
+| empresa — capacidade, acervo… — para | empresa (capacidade, acervo…) para |
+| Delimite o problema — valor… — antes | Delimite o problema (valor…) antes |
+| próximos passos — sem cadastro | próximos passos, sem cadastro |
+| CONFENGE — Conteúdos | CONFENGE · Conteúdos |
+| Edificações públicas — PR | Edificações públicas (PR) |
+| Placeholder de dado `—` | `n/d` |
+
+Geradores alinhados: `scripts/pseo/build.py`, `scripts/pseo/render.py`, `scripts/site/inbound_first_remediate.py`.

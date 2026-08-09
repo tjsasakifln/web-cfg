@@ -88,7 +88,7 @@ def test_llms_consistent():
 
 
 def test_concordance_and_forbidden_microcopy():
-    """Gate for already-identified grammar/CTA defects — not a substitute for human review."""
+    """Gate for already-identified grammar/CTA defects; not a substitute for human review."""
     commercial = [
         ROOT / "index.html",
         ROOT / "diretoria-b2g" / "index.html",
@@ -115,6 +115,34 @@ def test_concordance_and_forbidden_microcopy():
             assert phrase not in text, f"{path}: forbidden microcopy {phrase!r}"
         # no em-dash (travessão) in user-facing commercial HTML
         assert "—" not in text, f"{path}: em-dash/travessão present"
+
+
+def test_public_surfaces_have_no_prose_em_dashes():
+    """Radar, conteudos, inteligencia and pillars: no CONFENGE prose travessão.
+
+    Official source titles (Planalto/TCU/AGU/…) may still use —.
+    """
+    from scripts.site.scrub_em_dashes import residual_em_dashes
+
+    samples = [
+        ROOT / "radar" / "index.html",
+        ROOT / "radar" / "edificacoes-publicas-sc" / "index.html",
+        ROOT / "conteudos" / "index.html",
+        ROOT / "conteudos" / "comprovacao-exequibilidade-proposta-obra" / "index.html",
+        ROOT / "inteligencia" / "index.html",
+        ROOT / "aditivos-obras-publicas" / "index.html",
+    ]
+    for path in samples:
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        residual = residual_em_dashes(text)
+        assert residual == [], f"{path}: prose em-dash residual {residual[:3]!r}"
+    # Radar hub should show human punctuation (spot regression of generator copy)
+    radar = (ROOT / "radar" / "index.html").read_text(encoding="utf-8")
+    assert "operação, não para o mercado inteiro" in radar
+    assert "perfil da empresa (capacidade, acervo" in radar
+    assert "calibrar o recorte, não assinar" in radar
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Premissas e decisões ficam registradas" in home
     assert "confrontada posteriormente com o resultado" in home or "confrontada depois com o resultado" in home
@@ -298,6 +326,7 @@ if __name__ == "__main__":
         test_microcopy_preferences,
         test_llms_consistent,
         test_concordance_and_forbidden_microcopy,
+        test_public_surfaces_have_no_prose_em_dashes,
         test_whatsapp_float_in_landmark,
         test_public_backstage_language_absent,
         test_ferramentas_eyebrow_client_facing,

@@ -22,16 +22,16 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.pseo.render import render_candidate, render_hub  # noqa: E402
-from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
-from scripts.pseo.score import (  # noqa: E402
+from scripts.pseo.render import render_candidate, render_hub # noqa: E402
+from scripts.pseo.schema import SnapshotError, validate_snapshot # noqa: E402
+from scripts.pseo.score import (# noqa: E402
     APPROVED_REVIEWS,
     Candidate,
     apply_human_review_gate,
     build_candidates,
     resolve_related_urls,
 )
-from scripts.pseo.similarity import find_similar_pairs  # noqa: E402
+from scripts.pseo.similarity import find_similar_pairs # noqa: E402
 
 SITE = "https://confenge.com.br"
 SIM_THRESHOLD = 0.88
@@ -78,13 +78,13 @@ def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
 
 
 def apply_similarity_gate(cands: list[Candidate]) -> list[Candidate]:
-    """Consolidate near-duplicates (similarity only — no numeric publish cap)."""
+    """Consolidate near-duplicates (similarity only, no numeric publish cap)."""
     by_id = {c.page_id: c for c in cands}
     publishable = [c for c in cands if c.status in {"publish", "noindex", "eligible"}]
     pairs = find_similar_pairs(
         [(c.page_id, c.body_text + " " + c.h1) for c in publishable],
         threshold=SIM_THRESHOLD,
-    )
+)
     for a, b, s in pairs:
         ca, cb = by_id[a], by_id[b]
         if ca.page_type != cb.page_type:
@@ -132,7 +132,7 @@ def _attach_review_signatures(registry: dict, cands: list, root: Path) -> None:
                             p["reasons"].append(f"approval_invalidated_material:{k}")
                         p["status"] = "noindex" if p.get("status") == "publish" else p.get("status")
                         break
-            # Record current render hash for diagnostics only — do not demote
+            # Record current render hash for diagnostics only, do not demote
             url = (p.get("url") or "").strip("/")
             hp = root / url / "index.html"
             if hp.exists():
@@ -140,7 +140,7 @@ def _attach_review_signatures(registry: dict, cands: list, root: Path) -> None:
         # Always expose quality metrics
         p["data_quality_metrics"] = (c.data_ref or {}).get("sample_metrics") or p.get(
             "data_quality_metrics"
-        )
+)
 
 
 
@@ -154,10 +154,10 @@ def write_registry(
     existing_reviews = existing_reviews or {}
     dataset_hash = manifest.get("dataset_hash")
     rows = []
-    from scripts.pseo.score import (  # local import avoids cycles at module load
+    from scripts.pseo.score import (# local import avoids cycles at module load
         _material_signature,
         page_material_hash,
-    )
+)
 
     for c in cands:
         prev = existing_reviews.get(c.page_id) or {}
@@ -167,7 +167,7 @@ def write_registry(
         cur_hash = page_material_hash(cur_sig)
         prev_hash = prev.get("page_material_hash") or page_material_hash(
             prev.get("reviewed_material_signature") or {}
-        )
+)
         material_changed = bool(prev_hash and prev_hash != cur_hash and prev.get("reviewed_material_signature"))
         rows.append(
             {
@@ -176,7 +176,7 @@ def write_registry(
                 "source_run_id": manifest.get("source_run_id"),
                 "last_material_change": material_date if material_changed else (
                     prev.get("last_material_change") or material_date
-                ),
+),
                 "canonical_related": (c.related_urls or [None])[0],
                 "human_review": human,
                 "reviewer": prev.get("reviewer"),
@@ -200,7 +200,7 @@ def write_registry(
                 "cannibalization_checked": prev.get("cannibalization_checked"),
                 "editorial_issues": prev.get("editorial_issues"),
             }
-        )
+)
     registry = {
         "generated_at": material_date,
         "dataset_hash": dataset_hash,
@@ -220,7 +220,7 @@ def write_registry(
 
 
 def _sitemap_lastmod(manifest: dict[str, Any]) -> str:
-    """W3C date for sitemap lastmod — never in the future (GSC hard-rejects that).
+    """W3C date for sitemap lastmod, never in the future (GSC hard-rejects that).
 
     Prefer data_as_of (export verification date). Do NOT use data_period_end:
     open-bid end dates often sit months ahead of as_of and poison lastmod.
@@ -232,7 +232,7 @@ def _sitemap_lastmod(manifest: dict[str, Any]) -> str:
         (manifest.get("freshness") or {}).get("data_as_of"),
         (manifest.get("freshness") or {}).get("generated_at"),
         manifest.get("generated_at"),
-    ):
+):
         if not raw:
             continue
         s = str(raw)[:10]
@@ -274,11 +274,11 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
     for c in sorted(pubs, key=lambda x: x.url):
         lm = _hub_lastmod_for_page(c, lastmod)
         urls.append(
-            f"  <url>\n    <loc>{SITE}{c.url}</loc>\n    <lastmod>{lm}</lastmod>\n  </url>"
-        )
+            f" <url>\n <loc>{SITE}{c.url}</loc>\n <lastmod>{lm}</lastmod>\n </url>"
+)
 
     hub_defs = [
-        ("/inteligencia/", None),  # root hub always if any publish or own editorial
+        ("/inteligencia/", None), # root hub always if any publish or own editorial
         ("/inteligencia/mercados/", "market"),
         ("/inteligencia/orgaos/", "agency"),
         ("/inteligencia/precos/", "price"),
@@ -296,8 +296,8 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
                 continue
         urls.insert(
             0,
-            f"  <url>\n    <loc>{SITE}{hpath}</loc>\n    <lastmod>{lastmod}</lastmod>\n  </url>",
-        )
+            f" <url>\n <loc>{SITE}{hpath}</loc>\n <lastmod>{lastmod}</lastmod>\n </url>",
+)
     seen = set()
     final = []
     for u in urls:
@@ -317,15 +317,15 @@ def write_sitemap_index(lastmod: str) -> Path:
     """Single entry point for GSC: index of main + inteligência urlsets."""
     # Use sitemapindex so one submit covers both files (recommended by Google)
     parts = [
-        f"  <sitemap>\n    <loc>{SITE}/sitemap.xml</loc>\n    <lastmod>{lastmod}</lastmod>\n  </sitemap>",
-        f"  <sitemap>\n    <loc>{SITE}/sitemap-inteligencia.xml</loc>\n    <lastmod>{lastmod}</lastmod>\n  </sitemap>",
+        f" <sitemap>\n <loc>{SITE}/sitemap.xml</loc>\n <lastmod>{lastmod}</lastmod>\n </sitemap>",
+        f" <sitemap>\n <loc>{SITE}/sitemap-inteligencia.xml</loc>\n <lastmod>{lastmod}</lastmod>\n </sitemap>",
     ]
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "\n".join(parts)
         + "\n</sitemapindex>\n"
-    )
+)
     path = ROOT / "sitemap-index.xml"
     path.write_text(xml, encoding="utf-8")
     return path
@@ -391,7 +391,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Mercados, órgãos, preços e concorrência como evidência para decisões de participação, preço e proteção de margem.",
             "Contratos, órgãos, preços, concorrência e oportunidades só criam valor quando são confrontados "
             "com a capacidade, o risco e a estratégia da empresa. Esta área organiza evidências públicas "
-            "para apoiar decisões comerciais e técnicas — sem confundir frequência histórica com certeza futura.",
+            "para apoiar decisões comerciais e técnicas, sem confundir frequência histórica com certeza futura.",
             [
                 ("/inteligencia/mercados/", "Mercados", "Onde a demanda se concentra", "Demanda e órgãos"),
                 ("/inteligencia/orgaos/", "Órgãos", "Quem contrata o que importa", "Dossiês compradores"),
@@ -402,18 +402,18 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             ],
             [("Início", "/"), ("Inteligência", None)],
             None,
-        ),
+),
         (
             "/inteligencia/mercados/",
             "Mercados públicos de engenharia | CONFENGE",
             "Mercados por segmento e região",
-            "Contratos, órgãos e evolução — para priorizar onde atuar.",
+            "Contratos, órgãos e evolução: para priorizar onde atuar.",
             "Lista de mercados com massa mínima de contratos e compradores. "
             "Use para decidir em quais UFs e segmentos alocar esforço comercial.",
             items_for("market"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Mercados", None)],
             "market",
-        ),
+),
         (
             "/inteligencia/orgaos/",
             "Órgãos compradores de engenharia | CONFENGE",
@@ -424,27 +424,27 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             items_for("agency"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Órgãos", None)],
             "agency",
-        ),
+),
         (
             "/inteligencia/precos/",
             "Benchmarks de valores contratados | CONFENGE",
             "Preços e dispersão contratual",
-            "Medianas e quartis com critérios de inclusão — sem média cega.",
+            "Medianas e quartis com critérios de inclusão, sem média cega.",
             "Benchmarks de contratos integrais comparáveis. Não são preços unitários SINAPI/SICRO.",
             items_for("price"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Preços", None)],
             "price",
-        ),
+),
         (
             "/inteligencia/concorrencia/",
             "Concorrência observada em obras públicas | CONFENGE",
             "Concorrência observada",
             "Fornecedores e concentração no recorte público.",
-            "Frequência neutra de fornecedores no recorte — observação pública, não ranking comercial.",
+            "Frequência neutra de fornecedores no recorte, observação pública, não ranking comercial.",
             items_for("competition"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Concorrência", None)],
             "competition",
-        ),
+),
         (
             "/inteligencia/cenarios/",
             "Cenários técnicos para decisão | CONFENGE",
@@ -455,21 +455,21 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             items_for("problem_service"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Cenários", None)],
             "problem_service",
-        ),
+),
         (
             "/radar/",
             "Radar de oportunidades B2G | CONFENGE",
-            "Radar de oportunidades para a sua operação — não para o mercado inteiro.",
+            "Radar de oportunidades para a sua operação, não para o mercado inteiro.",
             "Monitoramento estruturado do mercado público calibrado ao perfil da construtora.",
             "O radar da CONFENGE não é um feed genérico de editais. Ele precisa do perfil da empresa "
-            "— capacidade, acervo, órgãos-alvo, faixas de valor e apetite de risco — para filtrar o que "
+            "(capacidade, acervo, órgãos-alvo, faixas de valor e apetite de risco) para filtrar o que "
             "merece atenção. Sem cobertura integral prometida. Sem fingir disponibilidade quando o "
             "recorte ainda não está publicado para o visitante.",
             # Only list publish radar children publicly; noindex previews stay out of hub promo
             [it for it in items_for("radar") if it[3] == "publicada"],
             [("Início", "/"), ("Radar", None)],
             "radar",
-        ),
+),
     ]
     from scripts.pseo.html_shell import wa_link as _wa_link
 
@@ -479,20 +479,20 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
         wa = (
             "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE "
             "à decisão da minha empresa."
-        )
+)
         if path == "/radar/":
             eyebrow = "Monitoramento estruturado"
             wa = (
                 "Olá, Tiago. Quero configurar o radar de oportunidades com o perfil "
                 "da minha construtora."
-            )
+)
             if not items:
                 empty_cta = {
                     "title": "Sem perfil da empresa, o radar vira ruído.",
                     "body": (
                         "Se você já disputa ou executa contratos públicos, o caminho certo é "
-                        "calibrar o recorte — não assinar mais um alerta genérico."
-                    ),
+                        "calibrar o recorte, não assinar mais um alerta genérico."
+),
                     "primary_label": "Configurar meu radar de oportunidades",
                     "primary_href": _wa_link(wa),
                     "secondary_label": "Começar pelo diagnóstico B2G",
@@ -510,7 +510,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             eyebrow=eyebrow,
             wa_message=wa,
             empty_cta=empty_cta,
-        )
+)
         out = url_to_path(path)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(html, encoding="utf-8")
@@ -531,7 +531,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
     registry_path = data_dir / "registry.json"
     existing_reviews = load_existing_reviews(registry_path)
 
-    # Baseline URLs known BEFORE registry rewrite / HTML wipe — freeze new reject paths.
+    # Baseline URLs known BEFORE registry rewrite / HTML wipe, freeze new reject paths.
     prior_urls: set[str] = set()
     if registry_path.exists():
         try:
@@ -553,7 +553,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
 
     cands = build_candidates(data, manifest)
     cands = apply_similarity_gate(cands)
-    # Human review is a hard gate — never publish PENDING
+    # Human review is a hard gate, never publish PENDING
     cands = apply_human_review_gate(cands, existing_reviews, dataset_hash=manifest.get("dataset_hash"))
     cands = resolve_related_urls(cands, site_root=ROOT)
 
@@ -603,12 +603,12 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                     "path": str(path.relative_to(ROOT)),
                     "skipped_new_reject_path": True,
                 }
-            )
+)
             continue
         # Only status=publish enters the intelligence sitemap.
         try:
             html = render_candidate(c, manifest)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc: # noqa: BLE001
             if c.status == "reject":
                 continue
             raise
@@ -622,7 +622,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                 "score": c.score,
                 "path": str(path.relative_to(ROOT)),
             }
-        )
+)
 
     if not dry_run:
         # After HTML is on disk, attach signatures / invalidate approvals on render change
@@ -630,10 +630,10 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
         registry_path.write_text(
             json.dumps(registry, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
-        )
+)
 
     hubs = [] if dry_run else render_hubs(cands)
-    # lastmod = when the snapshot was verified — never use bid data_period_end
+    # lastmod = when the snapshot was verified, never use bid data_period_end
     # (open-bid end dates can be months in the future and GSC rejects future lastmod).
     lastmod = _sitemap_lastmod(manifest)
     sm = None if dry_run else write_sitemap(cands, lastmod)

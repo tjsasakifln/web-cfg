@@ -560,7 +560,7 @@ _SCRIPT = r"""
         if (T.copyText && T.buildReport) {
           var body =
             ((window.__aditivoLast || {}).readinessLabel || "") +
-            " — " +
+            ": " +
             ((window.__aditivoLast || {}).synthesis || "");
           T.copyText(T.buildReport([{ title: "Checklist aditivo", body: body }]));
         }
@@ -573,7 +573,7 @@ _SCRIPT = r"""
         if (T.downloadText && T.buildReport) {
           var body =
             ((window.__aditivoLast || {}).readinessLabel || "") +
-            " — " +
+            ": " +
             ((window.__aditivoLast || {}).synthesis || "");
           T.downloadText(
             "checklist-aditivo.txt",

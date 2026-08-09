@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Sequências técnicas por e-mail | CONFENGE</title>
-<meta name="description" content="Cinco e-mails técnicos por trilha: contrato sob pressão, edital em análise ou operação B2G. Prova, dossiê e decisão — com confirmação e descadastro."/>
+<meta name="description" content="Cinco e-mails técnicos por trilha: contrato sob pressão, edital em análise ou operação B2G. Prova, dossiê e decisão, com confirmação e descadastro."/>
 <meta name="robots" content="index,follow"/>
 <link rel="canonical" href="https://confenge.com.br/nurture/"/>
 <link rel="stylesheet" href="/styles.css"/>
@@ -52,13 +52,13 @@
 <main id="conteudo" class="container n-wrap" style="padding:2rem 1rem 4rem">
 
 <p class="eyebrow">E-mails técnicos · double opt-in</p>
-<h1>Cinco e-mails úteis — não newsletter genérica</h1>
-<p class="content-lead">Sequências curtas para o problema que a construtora enfrenta agora: contrato sob pressão, edital em análise ou operação B2G sem método. Cada mensagem aponta prova, dossiê ou decisão — e liga a ferramentas e páginas de apoio da CONFENGE.</p>
+<h1>Cinco e-mails úteis, não newsletter genérica</h1>
+<p class="content-lead">Sequências curtas para o problema que a construtora enfrenta agora: contrato sob pressão, edital em análise ou operação B2G sem método. Cada mensagem aponta prova, dossiê ou decisão, e liga a ferramentas e páginas de apoio da CONFENGE.</p>
 
 <div class="n-card">
 <h2>Para quem é (e para quem não é)</h2>
 <p><strong>É para</strong> engenheiros, orçamentistas e diretores de construtoras com licitação ou contrato público ativo que precisam de rotina técnica (cronologia, nexo, cálculo, filtro de edital).</p>
-<p><strong>Não é</strong> newsletter de motivação, “dicas de produtividade”, promessa de vitória em licitação nem de recuperação financeira. A CONFENGE complementa o jurídico da empresa — não o substitui.</p>
+<p><strong>Não é</strong> newsletter de motivação, “dicas de produtividade”, promessa de vitória em licitação nem de recuperação financeira. A CONFENGE complementa o jurídico da empresa, não o substitui.</p>
 </div>
 
 <section aria-labelledby="trilhas-heading">
@@ -73,7 +73,7 @@
 <li>Glosa e medição: o que separa discussão de dossiê</li>
 <li>Aditivo: saldo orientativo do art. 125 antes de protocolar</li>
 <li>Reequilíbrio: checklist de prontidão do dossiê (score honesto)</li>
-<li>Quando a CONFENGE agrega — e quando não</li>
+<li>Quando a CONFENGE agrega, e quando não</li>
 </ul>
 <p class="n-meta">Ferramenta: <a href="/ferramentas/matriz-atraso-obra/">matriz de atraso</a> · Oferta: <a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin</a></p>
 </div>
@@ -95,7 +95,7 @@
 <h3>3. Estruturação da operação B2G</h3>
 <p class="n-meta">Para volume de editais sem filtro e rotina comercial sem indicadores.</p>
 <ul class="n-track-list">
-<li>Volume de editais não é estratégia — filtro com critérios da empresa</li>
+<li>Volume de editais não é estratégia, filtro com critérios da empresa</li>
 <li>Radar e demanda: o que o Google já mostra (sem inventar mercado)</li>
 <li>Indicadores que a direção precisa ver</li>
 <li>Aprendizado pós-resultado (ganhou ou perdeu)</li>
@@ -111,7 +111,7 @@
 <li><strong>Escolha a trilha</strong> do problema atual (não as três de uma vez).</li>
 <li><strong>Confirme o e-mail</strong> (double opt-in obrigatório).</li>
 <li><strong>Receba até 5 mensagens</strong> com links para ferramentas e páginas de apoio.</li>
-<li><strong>Saia quando quiser</strong> — link em todo e-mail ou em <a href="/nurture/sair/">/nurture/sair/</a>.</li>
+<li><strong>Saia quando quiser</strong>, link em todo e-mail ou em <a href="/nurture/sair/">/nurture/sair/</a>.</li>
 <li>Se você marcar <strong>reunião ou proposta</strong> com a CONFENGE, a sequência comercial é interrompida.</li>
 </ol>
 </section>
@@ -137,7 +137,7 @@
 
 <section aria-labelledby="agora-heading">
 <h2 id="agora-heading">Problema urgente agora?</h2>
-<p>Se o contrato ou o edital não espera a sequência, envie o contexto para análise inicial — sem documentos sensíveis no primeiro contato.</p>
+<p>Se o contrato ou o edital não espera a sequência, envie o contexto para análise inicial: sem documentos sensíveis no primeiro contato.</p>
 <div class="n-cta-row">
 <a class="button button-primary" href="/#contato">Enviar contexto para análise</a>
 <a class="button button-secondary" rel="noopener" target="_blank" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20an%C3%A1lise%20inicial%20de%20contrato%20ou%20edital%20(vi%20a%20p%C3%A1gina%20de%20e-mails%20t%C3%A9cnicos).">WhatsApp com contexto</a>
@@ -147,23 +147,23 @@
 
 <script>
 document.getElementById('nurture-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const status = document.getElementById('status');
-  status.hidden = false; status.textContent = 'Enviando…';
-  try {
-    const res = await fetch('/.netlify/functions/nurture?action=subscribe', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        email: document.getElementById('email').value,
-        track: document.getElementById('track').value,
-        consent: document.getElementById('consent').checked,
-        source: 'nurture_landing', landing_page: '/nurture/'
-      })
-    });
-    const j = await res.json();
-    if (!res.ok) throw new Error(j.message || j.error || 'falha');
-    status.textContent = j.message || 'Verifique seu e-mail para confirmar.';
-  } catch (err) { status.textContent = 'Não foi possível inscrever: ' + (err.message || err); }
+ e.preventDefault();
+ const status = document.getElementById('status');
+ status.hidden = false; status.textContent = 'Enviando…';
+ try {
+ const res = await fetch('/.netlify/functions/nurture?action=subscribe', {
+ method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+ body: JSON.stringify({
+ email: document.getElementById('email').value,
+ track: document.getElementById('track').value,
+ consent: document.getElementById('consent').checked,
+ source: 'nurture_landing', landing_page: '/nurture/'
+ })
+ });
+ const j = await res.json();
+ if (!res.ok) throw new Error(j.message || j.error || 'falha');
+ status.textContent = j.message || 'Verifique seu e-mail para confirmar.';
+ } catch (err) { status.textContent = 'Não foi possível inscrever: ' + (err.message || err); }
 });
 </script>
 
