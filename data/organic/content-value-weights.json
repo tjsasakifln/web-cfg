@@ -1,0 +1,24 @@
+{
+  "weights": {
+    "commercial_intent": 25,
+    "service_fit": 20,
+    "data_moat": 20,
+    "demand_evidence": 15,
+    "topical_authority": 10,
+    "freshness_trigger": 5,
+    "competitive_opportunity": 5
+  },
+  "penalties": {
+    "commodity_content": 15,
+    "serp_incompatible": 12,
+    "missing_evidence": 18,
+    "low_confidence": 10,
+    "cannibalization": 14,
+    "thin_content": 20,
+    "low_differentiation": 12,
+    "off_positioning": 25,
+    "legal_risk": 30,
+    "purely_speculative": 22
+  },
+  "sum": 100
+}

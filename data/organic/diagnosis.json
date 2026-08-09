@@ -1,0 +1,256 @@
+{
+  "schema_version": "organic-diagnosis-v1",
+  "generated_at": "2026-08-09T05:07:19Z",
+  "stack": {
+    "web_cfg": "static HTML + Netlify functions (lead/collect/ops/nurture)",
+    "build": "python scripts/pseo/build_site.py, editorial/build.py",
+    "extra_cli": "Postgres datalake → python -m scripts.pseo.export_web_cfg → data/pseo",
+    "organic_engine": "python -m scripts.organic (this module) + extra-cli scripts.organic"
+  },
+  "inventory": {
+    "conteudos_html": 121,
+    "radar_html": 9,
+    "inteligencia_html": 22,
+    "ferramentas_html": 4,
+    "lei_14133_html": 8,
+    "guias_html": 5,
+    "service_paths_expected": [
+      "/reequilibrio-obras-publicas/",
+      "/aditivos-obras-publicas/",
+      "/medicoes-glosas-obras-publicas/",
+      "/atrasos-prorrogacao-obras-publicas/",
+      "/auditoria-orcamento-licitacao/",
+      "/bid-room-licitacoes-obras/",
+      "/defesa-margem-contratos-publicos/",
+      "/defesa-tecnica-contratos-publicos/",
+      "/acompanhamento-contratos-obras/",
+      "/diretoria-b2g/",
+      "/diagnostico-pre-licitacao/",
+      "/diagnostico-b2g-360/"
+    ],
+    "pseo_markets": 4,
+    "pseo_problem_service": 5,
+    "pseo_registry_pages": 23,
+    "pseo_status": {
+      "reject": 18,
+      "noindex": 5
+    },
+    "editorial_pages": 12,
+    "editorial_status": {
+      "INDEXABLE": 3,
+      "EDITORIAL_REVIEWED": 8,
+      "REJECTED": 1
+    },
+    "content_disposition_library": {
+      "noindex": 97,
+      "manter": 21,
+      "consolidar": 2
+    }
+  },
+  "clusters": [
+    {
+      "id": "reequilibrio",
+      "pillar": "/reequilibrio-obras-publicas/",
+      "service": "reequilibrio-obras-publicas"
+    },
+    {
+      "id": "aditivos",
+      "pillar": "/aditivos-obras-publicas/",
+      "service": "aditivos-obras-publicas"
+    },
+    {
+      "id": "medicoes-pagamentos",
+      "pillar": "/medicoes-glosas-obras-publicas/",
+      "service": "medicoes-glosas-obras-publicas"
+    },
+    {
+      "id": "atrasos-prorrogacao",
+      "pillar": "/atrasos-prorrogacao-obras-publicas/",
+      "service": "atrasos-prorrogacao-obras-publicas"
+    },
+    {
+      "id": "orcamento-bdi",
+      "pillar": "/auditoria-orcamento-licitacao/",
+      "service": "auditoria-orcamento-licitacao"
+    },
+    {
+      "id": "edital-proposta",
+      "pillar": "/diagnostico-pre-licitacao/",
+      "service": "bid-room-licitacoes-obras"
+    },
+    {
+      "id": "gestao-contratual",
+      "pillar": "/acompanhamento-contratos-obras/",
+      "service": "acompanhamento-contratos-obras"
+    },
+    {
+      "id": "inteligencia-mercado",
+      "pillar": "/inteligencia/",
+      "service": "metodologia-inteligencia"
+    },
+    {
+      "id": "lei-14133",
+      "pillar": "/lei-14133-obras/",
+      "service": "defesa-margem-contratos-publicos"
+    }
+  ],
+  "gsc_baseline": {
+    "export_dir": "seo/gsc-2026-07-30",
+    "page_rows": 59,
+    "query_rows": 20,
+    "total_clicks": 10.0,
+    "total_impressions": 364.0,
+    "top_pages": [
+      {
+        "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+        "clicks": 0.0,
+        "impressions": 88.0,
+        "position": 7.75
+      },
+      {
+        "url": "http://confenge.com.br/",
+        "clicks": 1.0,
+        "impressions": 27.0,
+        "position": 5.85
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+        "clicks": 2.0,
+        "impressions": 24.0,
+        "position": 9.29
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "clicks": 0.0,
+        "impressions": 24.0,
+        "position": 17.0
+      },
+      {
+        "url": "https://confenge.com.br/",
+        "clicks": 0.0,
+        "impressions": 22.0,
+        "position": 17.45
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "clicks": 1.0,
+        "impressions": 12.0,
+        "position": 6.67
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/",
+        "clicks": 0.0,
+        "impressions": 10.0,
+        "position": 7.0
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "clicks": 0.0,
+        "impressions": 10.0,
+        "position": 8.4
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+        "clicks": 0.0,
+        "impressions": 10.0,
+        "position": 24.4
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/",
+        "clicks": 0.0,
+        "impressions": 9.0,
+        "position": 6.89
+      }
+    ],
+    "top_queries": [
+      {
+        "query": "desonerado e não desonerado",
+        "impressions": 10.0,
+        "position": 9.2
+      },
+      {
+        "query": "não desonerado",
+        "impressions": 6.0,
+        "position": 6.67
+      },
+      {
+        "query": "sinapi desonerado ou não desonerado qual usar",
+        "impressions": 5.0,
+        "position": 6.6
+      },
+      {
+        "query": "aditivos obra pública",
+        "impressions": 5.0,
+        "position": 66.2
+      },
+      {
+        "query": "desonerado ou não desonerado",
+        "impressions": 4.0,
+        "position": 9.0
+      },
+      {
+        "query": "como calcular mobilização e desmobilização de obra",
+        "impressions": 4.0,
+        "position": 31.5
+      },
+      {
+        "query": "avcb",
+        "impressions": 3.0,
+        "position": 4.33
+      },
+      {
+        "query": "empreitada por preço unitário",
+        "impressions": 2.0,
+        "position": 16.0
+      },
+      {
+        "query": "bdi diferenciado",
+        "impressions": 2.0,
+        "position": 20.0
+      },
+      {
+        "query": "mobilização de obra",
+        "impressions": 2.0,
+        "position": 47.0
+      }
+    ]
+  },
+  "bottlenecks": [
+    {
+      "id": "gsc-baseline-thin",
+      "severity": "high",
+      "detail": "GSC export 2026-07-30: ~10 clicks / ~364 impressions — discovery still early."
+    },
+    {
+      "id": "conteudos-noindex-mass",
+      "severity": "high",
+      "detail": "Content library disposition: noindex=97, manter=21, consolidar=2."
+    },
+    {
+      "id": "pseo-fail-closed",
+      "severity": "medium",
+      "detail": "pSEO registry pages=23 statuses={'reject': 18, 'noindex': 5}; 0 publish without human+quality."
+    },
+    {
+      "id": "editorial-human-gate",
+      "severity": "medium",
+      "detail": "Editorial pages=12 statuses={'INDEXABLE': 3, 'EDITORIAL_REVIEWED': 8, 'REJECTED': 1}; INDEXABLE only after named human approve_cli."
+    },
+    {
+      "id": "ctr-striking-distance",
+      "severity": "high",
+      "detail": "sinapi-desonerado-nao-desonerado ~88 impressions / 0 clicks @ pos~7.75 — highest GSC improve lever."
+    },
+    {
+      "id": "organic-engine-gap",
+      "severity": "high",
+      "detail": "Prior state had pSEO export + GSC observatory but no unified SEO_OPPORTUNITIES scored by commercial value."
+    }
+  ],
+  "governance": {
+    "pseo": "fail-closed; score advisory; human review for publish",
+    "editorial": "automated max EDITORIAL_REVIEWED; INDEXABLE via approve_cli named human",
+    "organic": "HTML generation ≠ index permission; Indexability Quality Gate mandatory"
+  },
+  "markdown": "# Organic Inbound — Diagnóstico reproduzível\n\nGerado em: `2026-08-09T05:07:19Z`\n\n## Stack\n\n- **web_cfg**: static HTML + Netlify functions (lead/collect/ops/nurture)\n- **build**: python scripts/pseo/build_site.py, editorial/build.py\n- **extra_cli**: Postgres datalake → python -m scripts.pseo.export_web_cfg → data/pseo\n- **organic_engine**: python -m scripts.organic (this module) + extra-cli scripts.organic\n\n## Inventário\n\n- Conteúdos HTML: 121\n- Radar: 9 · Inteligência: 22 · Ferramentas: 4\n- pSEO markets: 4 · problem_service: 5\n- pSEO registry: 23 → {'reject': 18, 'noindex': 5}\n- Editorial: 12 → {'INDEXABLE': 3, 'EDITORIAL_REVIEWED': 8, 'REJECTED': 1}\n- Disposition biblioteca: {'noindex': 97, 'manter': 21, 'consolidar': 2}\n\n## Baseline GSC\n\n- Export: `seo/gsc-2026-07-30`\n- Cliques: **10.0** · Impressões: **364.0**\n\n## Clusters canônicos\n\n- `reequilibrio` → pilar `/reequilibrio-obras-publicas/` · serviço `reequilibrio-obras-publicas`\n- `aditivos` → pilar `/aditivos-obras-publicas/` · serviço `aditivos-obras-publicas`\n- `medicoes-pagamentos` → pilar `/medicoes-glosas-obras-publicas/` · serviço `medicoes-glosas-obras-publicas`\n- `atrasos-prorrogacao` → pilar `/atrasos-prorrogacao-obras-publicas/` · serviço `atrasos-prorrogacao-obras-publicas`\n- `orcamento-bdi` → pilar `/auditoria-orcamento-licitacao/` · serviço `auditoria-orcamento-licitacao`\n- `edital-proposta` → pilar `/diagnostico-pre-licitacao/` · serviço `bid-room-licitacoes-obras`\n- `gestao-contratual` → pilar `/acompanhamento-contratos-obras/` · serviço `acompanhamento-contratos-obras`\n- `inteligencia-mercado` → pilar `/inteligencia/` · serviço `metodologia-inteligencia`\n- `lei-14133` → pilar `/lei-14133-obras/` · serviço `defesa-margem-contratos-publicos`\n\n## Gargalos\n\n- **[high]** gsc-baseline-thin: GSC export 2026-07-30: ~10 clicks / ~364 impressions — discovery still early.\n- **[high]** conteudos-noindex-mass: Content library disposition: noindex=97, manter=21, consolidar=2.\n- **[medium]** pseo-fail-closed: pSEO registry pages=23 statuses={'reject': 18, 'noindex': 5}; 0 publish without human+quality.\n- **[medium]** editorial-human-gate: Editorial pages=12 statuses={'INDEXABLE': 3, 'EDITORIAL_REVIEWED': 8, 'REJECTED': 1}; INDEXABLE only after named human approve_cli.\n- **[high]** ctr-striking-distance: sinapi-desonerado-nao-desonerado ~88 impressions / 0 clicks @ pos~7.75 — highest GSC improve lever.\n- **[high]** organic-engine-gap: Prior state had pSEO export + GSC observatory but no unified SEO_OPPORTUNITIES scored by commercial value.\n\n## Governança\n\n- **pseo**: fail-closed; score advisory; human review for publish\n- **editorial**: automated max EDITORIAL_REVIEWED; INDEXABLE via approve_cli named human\n- **organic**: HTML generation ≠ index permission; Indexability Quality Gate mandatory\n"
+}
