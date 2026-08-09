@@ -27,6 +27,8 @@ OFFICIAL_SOURCE_RE = re.compile(
     r"Planalto|TCU|AGU|CAIXA|Compras\.gov(?:\.br)?"
     r"|Senado|Câmara|Camara|STF|STJ|CNJ|CGU|PNCP"
     r"|Ministério|Ministerio|SEAP|INSS|IBGE"
+    r"|Lei\s+n[ºo°.]?\s*\d+"  # Lei nº 14.133/2021 — art. …
+    r"|Decreto\s+n[ºo°.]?\s*\d+"
     r")\s*" + EM + r"\s*",
     re.I,
 )
@@ -307,26 +309,43 @@ def iter_public_html(root: Path = ROOT) -> list[Path]:
 
 
 def residual_em_dashes(html: str) -> list[str]:
-    """Return snippets of remaining em-dashes that are NOT official source titles."""
+    """Return snippets of remaining em-dashes that are NOT official source titles.
+
+    Ignores script/style blocks (not visitor prose). Official citation labels may keep —.
+    """
     if EM not in html:
         return []
-    # strip protected official anchors for check
-    work = html
-    held: list[str] = []
+    work = re.sub(r"<script\b[^>]*>[\s\S]*?</script>", " ", html, flags=re.I)
+    work = re.sub(r"<style\b[^>]*>[\s\S]*?</style>", " ", work, flags=re.I)
 
     def _drop_official_a(m: re.Match[str]) -> str:
         full = m.group(0)
         inner = re.sub(r"<[^>]+>", "", full)
         if is_official_source_title(inner) or OFFICIAL_SOURCE_RE.search(inner):
-            held.append(full)
             return " "
         return full
 
     work = re.sub(r"<a\b[^>]*>[\s\S]*?</a>", _drop_official_a, work, flags=re.I)
-    work, held2 = _protect_official(work)
+    work, _held = _protect_official(work)
     snippets: list[str] = []
     for m in re.finditer(EM, work):
-        snippets.append(work[max(0, m.start() - 40) : m.start() + 40].replace("\n", " "))
+        ctx = work[max(0, m.start() - 48) : m.start() + 48].replace("\n", " ")
+        after = work[m.end() : m.end() + 24]
+        before = work[max(0, m.start() - 24) : m.start()]
+        # Official law / portal citations (may appear outside <a>)
+        if re.search(r"Lei\s+n?|Decreto\s+n?|texto compilado|\bart\.?\s*\d", ctx, re.I):
+            continue
+        if re.match(r"\s*Lei\b", after, re.I) or re.search(r"\bLei\s+\d", after, re.I):
+            continue
+        if re.search(
+            r"\b(Planalto|TCU|AGU|CAIXA|Compras\.gov|SINAPI|SICRO)\b",
+            ctx,
+            re.I,
+        ):
+            continue
+        if re.search(r"Engenharia\s*$", before, re.I) and re.match(r"\s*Lei\b", after, re.I):
+            continue
+        snippets.append(ctx)
     return snippets
 
 
