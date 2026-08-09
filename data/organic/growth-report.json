@@ -1,6 +1,6 @@
 {
   "schema_version": "organic-growth-report-v1",
-  "generated_at": "2026-08-09T19:25:39Z",
+  "generated_at": "2026-08-09T20:12:04Z",
   "gsc_export": "gsc-2026-08-09",
   "gsc_totals": {
     "pages_impressions_sum": 373.0,
@@ -28,8 +28,8 @@
       "opportunity_count": 7,
       "mean_gap": 0.03768
     },
-    "commercial_bridge_coverage": 0.241,
-    "content_to_service_link_coverage": 0.988,
+    "commercial_bridge_coverage": 0.2857,
+    "content_to_service_link_coverage": 0.9714,
     "service_to_supporting_content_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
     "indexable_content_to_service_link_coverage": 1.0,
@@ -57,9 +57,9 @@
   },
   "link_coverage": {
     "content_pages_scanned": 120,
-    "mapped": 83,
-    "content_to_service_link_coverage": 0.988,
-    "commercial_bridge_coverage": 0.241,
+    "mapped": 70,
+    "content_to_service_link_coverage": 0.9714,
+    "commercial_bridge_coverage": 0.2857,
     "indexable_mapped": 20,
     "indexable_content_to_service_link_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
@@ -170,6 +170,21 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "orcamento-bdi": {
+              "cluster_id": "orcamento-bdi",
+              "hits": [
+                "sinapi",
+                "desonerad"
+              ],
+              "hit_count": 2,
+              "service_path": "/auditoria-orcamento-licitacao/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",
@@ -238,6 +253,21 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "atrasos-prorrogacao": {
+              "cluster_id": "atrasos-prorrogacao",
+              "hits": [
+                "prorroga",
+                "chuva"
+              ],
+              "hit_count": 2,
+              "service_path": "/atrasos-prorrogacao-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "atrasos-prorrogacao",
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
@@ -305,6 +335,22 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "aditivos": {
+              "cluster_id": "aditivos",
+              "hits": [
+                "aditivo",
+                "qualitativo",
+                "quantitativo"
+              ],
+              "hit_count": 3,
+              "service_path": "/aditivos-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "aditivos",
           "service_path": "/aditivos-obras-publicas/",
@@ -372,6 +418,21 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "atrasos-prorrogacao": {
+              "cluster_id": "atrasos-prorrogacao",
+              "hits": [
+                "prazo-vigencia",
+                "prazo-execucao"
+              ],
+              "hit_count": 2,
+              "service_path": "/atrasos-prorrogacao-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "atrasos-prorrogacao",
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
@@ -443,6 +504,20 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "atrasos-prorrogacao": {
+              "cluster_id": "atrasos-prorrogacao",
+              "hits": [
+                "prorroga"
+              ],
+              "hit_count": 1,
+              "service_path": "/atrasos-prorrogacao-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "atrasos-prorrogacao",
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
@@ -513,6 +588,20 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+          "match_source": "tokens",
+          "confidence": "medium",
+          "ambiguous": false,
+          "token_scores": {
+            "aditivos": {
+              "cluster_id": "aditivos",
+              "hits": [
+                "aditivo"
+              ],
+              "hit_count": 1,
+              "service_path": "/aditivos-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "aditivos",
           "service_path": "/aditivos-obras-publicas/",
@@ -583,6 +672,21 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/atraso-na-medicao-obra-publica/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "medicoes-pagamentos": {
+              "cluster_id": "medicoes-pagamentos",
+              "hits": [
+                "medicao",
+                "atraso-na-medicao"
+              ],
+              "hit_count": 2,
+              "service_path": "/medicoes-glosas-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "medicoes-pagamentos",
           "service_path": "/medicoes-glosas-obras-publicas/",
@@ -651,6 +755,20 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/bdi-diferenciado-obra-publica/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "orcamento-bdi": {
+              "cluster_id": "orcamento-bdi",
+              "hits": [
+                "bdi"
+              ],
+              "hit_count": 1,
+              "service_path": "/auditoria-orcamento-licitacao/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",
@@ -921,6 +1039,21 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "orcamento-bdi": {
+              "cluster_id": "orcamento-bdi",
+              "hits": [
+                "sinapi",
+                "desonerad"
+              ],
+              "hit_count": 2,
+              "service_path": "/auditoria-orcamento-licitacao/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",
@@ -989,6 +1122,20 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "atrasos-prorrogacao": {
+              "cluster_id": "atrasos-prorrogacao",
+              "hits": [
+                "prorroga"
+              ],
+              "hit_count": 1,
+              "service_path": "/atrasos-prorrogacao-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "atrasos-prorrogacao",
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
@@ -1058,6 +1205,21 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/atraso-na-medicao-obra-publica/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "medicoes-pagamentos": {
+              "cluster_id": "medicoes-pagamentos",
+              "hits": [
+                "medicao",
+                "atraso-na-medicao"
+              ],
+              "hit_count": 2,
+              "service_path": "/medicoes-glosas-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "medicoes-pagamentos",
           "service_path": "/medicoes-glosas-obras-publicas/",
@@ -1124,6 +1286,20 @@
         "site_name": "CONFENGE",
         "service_fit": {
           "path": "/conteudos/bdi-diferenciado-obra-publica/",
+          "match_source": "override",
+          "confidence": "high",
+          "ambiguous": false,
+          "token_scores": {
+            "orcamento-bdi": {
+              "cluster_id": "orcamento-bdi",
+              "hits": [
+                "bdi"
+              ],
+              "hit_count": 1,
+              "service_path": "/auditoria-orcamento-licitacao/"
+            }
+          },
+          "tied_clusters": [],
           "matched": true,
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",

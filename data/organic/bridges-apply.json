@@ -1,107 +1,167 @@
 {
   "schema_version": "commercial-bridges-v1",
-  "note": "soft mode when article-aside present",
+  "note": "soft mode when article-aside present; services from path_overrides registry",
   "count": 20,
   "results": [
     {
       "path": "/conteudos/aditivo-empreitada-por-preco-global/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "aditivos",
+      "service_path": "/aditivos-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/administracao-local-orcamento-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "orcamento-bdi",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/atraso-na-medicao-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "medicoes-pagamentos",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/atraso-obra-culpa-administracao/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "atrasos-prorrogacao",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "medicoes-pagamentos",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/bdi-diferenciado-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "orcamento-bdi",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "edital-proposta",
+      "service_path": "/diagnostico-pre-licitacao/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "orcamento-bdi",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/demolicao-nao-prevista-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "aditivos",
+      "service_path": "/aditivos-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/empreitada-preco-global-preco-unitario/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "edital-proposta",
+      "service_path": "/diagnostico-pre-licitacao/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "medicoes-pagamentos",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/glosa-por-qualidade-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "medicoes-pagamentos",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "reequilibrio",
+      "service_path": "/reequilibrio-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/medicao-por-evento-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "medicoes-pagamentos",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "orcamento-bdi",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "medicoes-pagamentos",
+      "service_path": "/medicoes-glosas-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "atrasos-prorrogacao",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/resposta-notificacao-atraso-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "defesa-sancoes",
+      "service_path": "/defesa-tecnica-contratos-publicos/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "orcamento-bdi",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "match_source": "override"
     },
     {
       "path": "/conteudos/sinapi-ou-sicro-obra-publica/",
       "status": "present",
-      "mode": "soft"
+      "mode": "soft",
+      "cluster_id": "orcamento-bdi",
+      "service_path": "/auditoria-orcamento-licitacao/",
+      "match_source": "override"
     }
   ]
 }

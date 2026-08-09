@@ -1,4 +1,11 @@
-"""Extensible content → service_fit mapping (testable, data-driven)."""
+"""Extensible content → service_fit mapping (testable, data-driven).
+
+Canonical registry: data/organic/content-service-map.json
+Resolution order:
+  1. path_overrides (explicit, high confidence)
+  2. unique token-hit winner (fallback, medium confidence)
+  3. tie / multi-cluster equal top score → unmatched (never JSON order)
+"""
 
 from __future__ import annotations
 
@@ -16,34 +23,131 @@ def load_service_map(path: Path | str | None = None) -> dict[str, Any]:
     return json.loads(p.read_text(encoding="utf-8"))
 
 
-def resolve_cluster(path: str, smap: dict[str, Any] | None = None) -> dict[str, Any] | None:
-    """Map a site path to a cluster entry (service_fit)."""
-    smap = smap or load_service_map()
+def normalize_path(path: str) -> str:
+    """Normalize site path for override lookup."""
     path_n = path if path.startswith("/") else f"/{path}"
     if not path_n.endswith("/") and "." not in path_n.rsplit("/", 1)[-1]:
         path_n = path_n + "/"
-    overrides = smap.get("path_overrides") or {}
-    cluster_id = overrides.get(path_n)
-    clusters = {c["id"]: c for c in smap.get("clusters") or []}
-    if cluster_id and cluster_id in clusters:
-        return dict(clusters[cluster_id])
-    blob = path_n.lower()
-    best = None
-    best_hits = 0
+    return path_n
+
+
+def score_clusters(path: str, smap: dict[str, Any] | None = None) -> dict[str, dict[str, Any]]:
+    """Return per-cluster token hit details for a path (audit / ambiguity checks)."""
+    smap = smap or load_service_map()
+    blob = normalize_path(path).lower()
+    scores: dict[str, dict[str, Any]] = {}
     for c in smap.get("clusters") or []:
-        hits = sum(1 for t in c.get("tokens") or [] if t.lower() in blob)
-        if hits > best_hits:
-            best_hits = hits
-            best = c
-    return dict(best) if best and best_hits > 0 else None
+        hits = [t for t in (c.get("tokens") or []) if t.lower() in blob]
+        if hits:
+            scores[c["id"]] = {
+                "cluster_id": c["id"],
+                "hits": hits,
+                "hit_count": len(hits),
+                "service_path": c.get("service_path"),
+            }
+    return scores
+
+
+def resolve_cluster_result(
+    path: str, smap: dict[str, Any] | None = None
+) -> dict[str, Any]:
+    """Resolve path → cluster with explicit match metadata.
+
+    Returns:
+      {
+        cluster: dict | None,
+        match_source: "override" | "tokens" | None,
+        confidence: "high" | "medium" | "low" | "none",
+        ambiguous: bool,
+        token_scores: dict,
+        path: str,
+      }
+    """
+    smap = smap or load_service_map()
+    path_n = normalize_path(path)
+    overrides = smap.get("path_overrides") or {}
+    clusters = {c["id"]: c for c in smap.get("clusters") or []}
+    token_scores = score_clusters(path_n, smap)
+
+    cluster_id = overrides.get(path_n)
+    if cluster_id and cluster_id in clusters:
+        return {
+            "cluster": dict(clusters[cluster_id]),
+            "match_source": "override",
+            "confidence": "high",
+            "ambiguous": False,
+            "token_scores": token_scores,
+            "path": path_n,
+        }
+    if cluster_id and cluster_id not in clusters:
+        # Broken override — do not fall through silently to tokens for known paths
+        return {
+            "cluster": None,
+            "match_source": None,
+            "confidence": "none",
+            "ambiguous": False,
+            "token_scores": token_scores,
+            "path": path_n,
+            "error": f"unknown_override_cluster:{cluster_id}",
+        }
+
+    if not token_scores:
+        return {
+            "cluster": None,
+            "match_source": None,
+            "confidence": "none",
+            "ambiguous": False,
+            "token_scores": {},
+            "path": path_n,
+        }
+
+    max_hits = max(s["hit_count"] for s in token_scores.values())
+    leaders = [cid for cid, s in token_scores.items() if s["hit_count"] == max_hits]
+    if len(leaders) > 1:
+        # Tie: never pick by JSON cluster order
+        return {
+            "cluster": None,
+            "match_source": None,
+            "confidence": "none",
+            "ambiguous": True,
+            "token_scores": token_scores,
+            "path": path_n,
+            "tied_clusters": leaders,
+        }
+
+    winner_id = leaders[0]
+    multi = len(token_scores) > 1
+    return {
+        "cluster": dict(clusters[winner_id]),
+        "match_source": "tokens",
+        "confidence": "low" if multi else "medium",
+        "ambiguous": False,
+        "token_scores": token_scores,
+        "path": path_n,
+    }
+
+
+def resolve_cluster(path: str, smap: dict[str, Any] | None = None) -> dict[str, Any] | None:
+    """Map a site path to a cluster entry (service_fit). Back-compat wrapper."""
+    result = resolve_cluster_result(path, smap)
+    return result.get("cluster")
 
 
 def map_content_to_service(path: str, smap: dict[str, Any] | None = None) -> dict[str, Any]:
     smap = smap or load_service_map()
-    cluster = resolve_cluster(path, smap)
+    result = resolve_cluster_result(path, smap)
+    cluster = result.get("cluster")
+    base = {
+        "path": result.get("path") or path,
+        "match_source": result.get("match_source"),
+        "confidence": result.get("confidence") or "none",
+        "ambiguous": bool(result.get("ambiguous")),
+        "token_scores": result.get("token_scores") or {},
+        "tied_clusters": result.get("tied_clusters") or [],
+    }
     if not cluster:
         return {
-            "path": path,
+            **base,
             "matched": False,
             "cluster_id": None,
             "service_path": None,
@@ -52,7 +156,7 @@ def map_content_to_service(path: str, smap: dict[str, Any] | None = None) -> dic
             "specialist": smap.get("default_specialist"),
         }
     return {
-        "path": path,
+        **base,
         "matched": True,
         "cluster_id": cluster["id"],
         "service_path": cluster.get("service_path"),
@@ -81,6 +185,100 @@ def html_has_commercial_bridge(html: str) -> bool:
             re.I,
         )
     )
+
+
+def extract_principal_aside_service(html: str, known_services: set[str] | None = None) -> str | None:
+    """Principal commercial service linked from article-aside (if any)."""
+    if not html:
+        return None
+    aside = re.search(
+        r'<aside[^>]*class=["\'][^"\']*article-aside[^"\']*["\'][^>]*>.*?</aside>',
+        html,
+        flags=re.I | re.S,
+    )
+    if not aside:
+        return None
+    block = aside.group(0)
+    services = known_services or set()
+    if not services:
+        # discover from default map
+        smap = load_service_map()
+        services = {
+            (c.get("service_path") or "").rstrip("/") + "/"
+            for c in smap.get("clusters") or []
+            if c.get("service_path")
+        }
+    for href in re.findall(r'href=["\']([^"\']+)["\']', block):
+        base = href.split("?")[0].split("#")[0]
+        if not base.endswith("/"):
+            base = base + "/"
+        if base in services:
+            return base
+    return None
+
+
+def extract_related_section_service(html: str, known_services: set[str] | None = None) -> str | None:
+    """Principal cluster service from related-section 'Ver todos em …' link."""
+    if not html:
+        return None
+    section = re.search(
+        r'class=["\'][^"\']*related-section[^"\']*["\'][^>]*>.*?</section>',
+        html,
+        flags=re.I | re.S,
+    )
+    if not section:
+        return None
+    block = section.group(0)
+    smap = load_service_map()
+    services = known_services or {
+        (c.get("service_path") or "").rstrip("/") + "/"
+        for c in smap.get("clusters") or []
+        if c.get("service_path")
+    }
+    # Prefer explicit "Ver todos" text-link
+    for m in re.finditer(r'href=["\']([^"\']+)["\'][^>]*>\s*Ver todos', block, re.I):
+        base = m.group(1).split("?")[0].split("#")[0]
+        if not base.endswith("/"):
+            base = base + "/"
+        if base in services:
+            return base
+    for href in re.findall(r'href=["\']([^"\']+)["\']', block):
+        base = href.split("?")[0].split("#")[0]
+        if not base.endswith("/"):
+            base = base + "/"
+        if base in services:
+            return base
+    return None
+
+
+def extract_bridge_service(html: str) -> str | None:
+    """Service destination of commercial bridge CTA (origem query stripped)."""
+    if not html:
+        return None
+    bridge = re.search(
+        r'<aside[^>]*commercial-bridge[^>]*>.*?</aside>',
+        html,
+        flags=re.I | re.S,
+    )
+    if not bridge:
+        return None
+    m = re.search(
+        r'data-cta-position=["\']organic_bridge["\'][^>]*href=["\']([^"\']+)["\']'
+        r'|href=["\']([^"\']+)["\'][^>]*data-cta-position=["\']organic_bridge["\']',
+        bridge.group(0),
+        re.I,
+    )
+    if not m:
+        m = re.search(r'href=["\']([^"\']+)["\']', bridge.group(0))
+        href = m.group(1) if m else None
+    else:
+        href = m.group(1) or m.group(2)
+    if not href:
+        return None
+    base = href.split("?")[0].split("#")[0]
+    if not base.endswith("/"):
+        base = base + "/"
+    return base
 
 
 def audit_link_coverage(
@@ -126,6 +324,7 @@ def audit_link_coverage(
                 "path": rel,
                 "matched": fit["matched"],
                 "service_path": fit.get("service_path"),
+                "match_source": fit.get("match_source"),
                 "has_service_link": has_link,
                 "has_commercial_bridge": has_bridge,
                 "indexable": not robots_noindex,

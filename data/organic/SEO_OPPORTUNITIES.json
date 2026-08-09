@@ -1,6 +1,6 @@
 {
   "schema_version": "seo-opportunities-v1",
-  "generated_at": "2026-08-09T19:25:37Z",
+  "generated_at": "2026-08-09T20:12:02Z",
   "as_of": "2026-08-09",
   "north_star": "receita_esperada_atribuivel_ao_inbound_organico",
   "scoring": {
@@ -35,6 +35,21 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "orcamento-bdi": {
+            "cluster_id": "orcamento-bdi",
+            "hits": [
+              "sinapi",
+              "desonerad"
+            ],
+            "hit_count": 2,
+            "service_path": "/auditoria-orcamento-licitacao/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "orcamento-bdi",
         "service_path": "/auditoria-orcamento-licitacao/",
@@ -96,6 +111,21 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "atrasos-prorrogacao": {
+            "cluster_id": "atrasos-prorrogacao",
+            "hits": [
+              "prorroga",
+              "chuva"
+            ],
+            "hit_count": 2,
+            "service_path": "/atrasos-prorrogacao-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "atrasos-prorrogacao",
         "service_path": "/atrasos-prorrogacao-obras-publicas/",
@@ -160,6 +190,22 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "aditivos": {
+            "cluster_id": "aditivos",
+            "hits": [
+              "aditivo",
+              "qualitativo",
+              "quantitativo"
+            ],
+            "hit_count": 3,
+            "service_path": "/aditivos-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "aditivos",
         "service_path": "/aditivos-obras-publicas/",
@@ -224,6 +270,21 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "atrasos-prorrogacao": {
+            "cluster_id": "atrasos-prorrogacao",
+            "hits": [
+              "prazo-vigencia",
+              "prazo-execucao"
+            ],
+            "hit_count": 2,
+            "service_path": "/atrasos-prorrogacao-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "atrasos-prorrogacao",
         "service_path": "/atrasos-prorrogacao-obras-publicas/",
@@ -288,6 +349,20 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "atrasos-prorrogacao": {
+            "cluster_id": "atrasos-prorrogacao",
+            "hits": [
+              "prorroga"
+            ],
+            "hit_count": 1,
+            "service_path": "/atrasos-prorrogacao-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "atrasos-prorrogacao",
         "service_path": "/atrasos-prorrogacao-obras-publicas/",
@@ -351,6 +426,20 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "match_source": "tokens",
+        "confidence": "medium",
+        "ambiguous": false,
+        "token_scores": {
+          "aditivos": {
+            "cluster_id": "aditivos",
+            "hits": [
+              "aditivo"
+            ],
+            "hit_count": 1,
+            "service_path": "/aditivos-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "aditivos",
         "service_path": "/aditivos-obras-publicas/",
@@ -415,6 +504,21 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/atraso-na-medicao-obra-publica/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "medicoes-pagamentos": {
+            "cluster_id": "medicoes-pagamentos",
+            "hits": [
+              "medicao",
+              "atraso-na-medicao"
+            ],
+            "hit_count": 2,
+            "service_path": "/medicoes-glosas-obras-publicas/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "medicoes-pagamentos",
         "service_path": "/medicoes-glosas-obras-publicas/",
@@ -475,6 +579,20 @@
       "site_name": "CONFENGE",
       "service_fit": {
         "path": "/conteudos/bdi-diferenciado-obra-publica/",
+        "match_source": "override",
+        "confidence": "high",
+        "ambiguous": false,
+        "token_scores": {
+          "orcamento-bdi": {
+            "cluster_id": "orcamento-bdi",
+            "hits": [
+              "bdi"
+            ],
+            "hit_count": 1,
+            "service_path": "/auditoria-orcamento-licitacao/"
+          }
+        },
+        "tied_clusters": [],
         "matched": true,
         "cluster_id": "orcamento-bdi",
         "service_path": "/auditoria-orcamento-licitacao/",
@@ -713,7 +831,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-6641883",
+      "id": "opp-gsc-ctr-1679425",
       "topic": "CTR opportunity: /conteudos/sinapi-desonerado-nao-desonerado/",
       "cluster": "orcamento-bdi",
       "intent": "mofu",
@@ -905,7 +1023,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-9412300",
+      "id": "opp-gsc-ctr-4030622",
       "topic": "CTR opportunity: /conteudos/aditivo-qualitativo-quantitativo/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -1100,7 +1218,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-5293858",
+      "id": "opp-gsc-ctr-5489243",
       "topic": "CTR opportunity: /conteudos/chuva-prorrogacao-prazo-obra-publica/",
       "cluster": "atrasos-prorrogacao",
       "intent": "mofu",
@@ -1365,224 +1483,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-1299754",
-      "topic": "CTR opportunity: /conteudos/prorrogacao-prazo-obra-publica-documentos/",
-      "cluster": "atrasos-prorrogacao",
-      "intent": "mofu",
-      "persona": "orcamentista",
-      "jtbd": "Corrigir título/meta para capturar impressões existentes",
-      "commercial_fit": 0.95,
-      "service_fit": "atrasos-prorrogacao-obras-publicas",
-      "service_path": "/atrasos-prorrogacao-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.655,
-        "source": "gsc"
-      },
-      "search_console_evidence": {
-        "impressions": 15.0,
-        "clicks": 0.0,
-        "position": 9.2,
-        "ctr": 0.0,
-        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-        "serp_diagnosis": {
-          "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
-          "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
-          "h1": "Prorrogação de prazo: documentos que não podem faltar",
-          "issues": [
-            "title_long_desktop",
-            "title_long_mobile_truncation_risk"
-          ],
-          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
-          "ctr_gap": {
-            "is_opportunity": true,
-            "ctr": 0.0,
-            "expected_ctr": 0.025,
-            "gap": 0.025,
-            "reasons": [
-              "ctr_below_45%_of_expected",
-              "ctr_below_absolute_floor"
-            ],
-            "priority_force_include": false
-          }
-        }
-      },
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "gsc",
-        "record_count": 1,
-        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
-        "limitations": [
-          "Amostra GSC limitada no export disponível.",
-          "expected_ctr é heurística operacional, não garantia do Google."
-        ],
-        "sources": [
-          "google-search-console"
-        ],
-        "confidence": 0.3
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.7
-      },
-      "competition": {
-        "score": 0.6
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-      "existing_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-      "action": "improve",
-      "score": 62,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 2,
-        "demand_evidence": 10,
-        "topical_authority": 6,
-        "freshness_trigger": 4,
-        "competitive_opportunity": 3
-      },
-      "score_penalties": {},
-      "rationale": "CTR gap configurável: impr=15.0 cliques=0.0 pos=9.2 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk",
-      "suggested_cta": "Ver serviço de prazos e prorrogações",
-      "suggested_internal_links": [
-        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-        "/atrasos-prorrogacao-obras-publicas/"
-      ],
-      "confidence": 0.3,
-      "source": "gsc_page",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.1,
-      "demand_strength": 0.655,
-      "topical_authority_score": 0.6,
-      "freshness_score": 0.7,
-      "competitive_score": 0.6,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": false,
-        "decision": "noindex",
-        "fails": [
-          "low_data_confidence"
-        ],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "blocked_by_gate"
-    },
-    {
-      "id": "opp-gsc-ctr-3847445",
-      "topic": "CTR opportunity: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-      "cluster": "atrasos-prorrogacao",
-      "intent": "mofu",
-      "persona": "orcamentista",
-      "jtbd": "Corrigir título/meta para capturar impressões existentes",
-      "commercial_fit": 0.95,
-      "service_fit": "atrasos-prorrogacao-obras-publicas",
-      "service_path": "/atrasos-prorrogacao-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.676,
-        "source": "gsc"
-      },
-      "search_console_evidence": {
-        "impressions": 18.0,
-        "clicks": 0.0,
-        "position": 7.0,
-        "ctr": 0.0,
-        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-        "serp_diagnosis": {
-          "title": "Prazo de vigência vs prazo de execução no contrato | CONFENGE",
-          "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
-          "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
-          "issues": [
-            "title_long_desktop",
-            "title_long_mobile_truncation_risk",
-            "robots_noindex"
-          ],
-          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
-          "ctr_gap": {
-            "is_opportunity": true,
-            "ctr": 0.0,
-            "expected_ctr": 0.04,
-            "gap": 0.04,
-            "reasons": [
-              "ctr_below_45%_of_expected",
-              "ctr_below_absolute_floor"
-            ],
-            "priority_force_include": false
-          }
-        }
-      },
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "gsc",
-        "record_count": 1,
-        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
-        "limitations": [
-          "Amostra GSC limitada no export disponível.",
-          "expected_ctr é heurística operacional, não garantia do Google."
-        ],
-        "sources": [
-          "google-search-console"
-        ],
-        "confidence": 0.3
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.7
-      },
-      "competition": {
-        "score": 0.6
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-      "existing_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-      "action": "improve",
-      "score": 62,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 2,
-        "demand_evidence": 10,
-        "topical_authority": 6,
-        "freshness_trigger": 4,
-        "competitive_opportunity": 3
-      },
-      "score_penalties": {},
-      "rationale": "CTR gap configurável: impr=18.0 cliques=0.0 pos=7.0 ctr=0.0 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
-      "suggested_cta": "Ver serviço de prazos e prorrogações",
-      "suggested_internal_links": [
-        "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-        "/atrasos-prorrogacao-obras-publicas/"
-      ],
-      "confidence": 0.3,
-      "source": "gsc_page",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.1,
-      "demand_strength": 0.676,
-      "topical_authority_score": 0.6,
-      "freshness_score": 0.7,
-      "competitive_score": 0.6,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": false,
-        "decision": "noindex",
-        "fails": [
-          "low_data_confidence"
-        ],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "blocked_by_gate"
-    },
-    {
-      "id": "opp-gsc-ctr-8471718",
+      "id": "opp-gsc-ctr-1146523",
       "topic": "CTR opportunity: /conteudos/limite-aditivo-25-50-obra-publica/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -1691,7 +1592,224 @@
       "publishability": "blocked_by_gate"
     },
     {
-      "id": "opp-gsc-ctr-1459005",
+      "id": "opp-gsc-ctr-3260573",
+      "topic": "CTR opportunity: /conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.655,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 15.0,
+        "clicks": 0.0,
+        "position": 9.2,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "serp_diagnosis": {
+          "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+          "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
+          "h1": "Prorrogação de prazo: documentos que não podem faltar",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk"
+          ],
+          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.025,
+            "gap": 0.025,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "existing_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "action": "improve",
+      "score": 62,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 10,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=15.0 cliques=0.0 pos=9.2 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk",
+      "suggested_cta": "Ver serviço de prazos e prorrogações",
+      "suggested_internal_links": [
+        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.655,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-5929950",
+      "topic": "CTR opportunity: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.676,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 18.0,
+        "clicks": 0.0,
+        "position": 7.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "serp_diagnosis": {
+          "title": "Prazo de vigência vs prazo de execução no contrato | CONFENGE",
+          "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
+          "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk",
+            "robots_noindex"
+          ],
+          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.04,
+            "gap": 0.04,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "existing_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "action": "improve",
+      "score": 62,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 10,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=18.0 cliques=0.0 pos=7.0 ctr=0.0 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
+      "suggested_cta": "Ver serviço de prazos e prorrogações",
+      "suggested_internal_links": [
+        "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.676,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-9675358",
       "topic": "CTR opportunity: /conteudos/atraso-na-medicao-obra-publica/",
       "cluster": "medicoes-pagamentos",
       "intent": "mofu",
@@ -3756,8 +3874,8 @@
       "opportunity_count": 7,
       "mean_gap": 0.03768
     },
-    "commercial_bridge_coverage": 0.241,
-    "content_to_service_link_coverage": 0.988,
+    "commercial_bridge_coverage": 0.2857,
+    "content_to_service_link_coverage": 0.9714,
     "service_to_supporting_content_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
     "indexable_content_to_service_link_coverage": 1.0,
@@ -3784,13 +3902,13 @@
     "note": "Impression/click shares from GSC page table. Funnel metrics need collect/attribution exports; do not invent conversion rates."
   },
   "link_coverage": {
-    "content_to_service_link_coverage": 0.988,
-    "commercial_bridge_coverage": 0.241,
+    "content_to_service_link_coverage": 0.9714,
+    "commercial_bridge_coverage": 0.2857,
     "service_to_supporting_content_coverage": 1.0,
     "indexable_content_to_service_link_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
     "indexable_mapped": 20,
-    "mapped": 83,
+    "mapped": 70,
     "content_pages_scanned": 120
   },
   "gsc_export": {

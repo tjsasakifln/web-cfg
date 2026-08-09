@@ -2,10 +2,15 @@
   "schema_version": "content-service-map-v1",
   "model": "content ↔ problem ↔ service ↔ tool ↔ specialist ↔ evidence",
   "default_specialist": "/especialista/tiago-jun-sasaki/",
+  "notes": [
+    "Canonical registry: path_overrides is the source of truth for known editorial pages.",
+    "Token matching is fallback only for unmapped paths; ties never resolve by JSON order.",
+    "Primary commercial signal on a page must match cluster_id + service_path here."
+  ],
   "clusters": [
     {
       "id": "reequilibrio",
-      "tokens": ["reequil", "reajuste", "repactua", "desequil", "curva-abc", "aumento-material", "matriz-de-riscos-reequil"],
+      "tokens": ["reequil", "repactua", "desequil", "curva-abc", "aumento-material", "matriz-de-riscos-reequil"],
       "service_path": "/reequilibrio-obras-publicas/",
       "service_slug": "reequilibrio-obras-publicas",
       "tools": [],
@@ -25,7 +30,7 @@
     },
     {
       "id": "medicoes-pagamentos",
-      "tokens": ["medicao", "medição", "glosa", "pagamento", "parcela", "fiscal-nao-assina", "rejeitad"],
+      "tokens": ["medicao", "medição", "glosa", "parcela", "fiscal-nao-assina", "rejeitad", "pagamento-parcial", "atraso-pagamento", "atraso-na-medicao"],
       "service_path": "/medicoes-glosas-obras-publicas/",
       "service_slug": "medicoes-glosas-obras-publicas",
       "tools": [],
@@ -35,7 +40,7 @@
     },
     {
       "id": "orcamento-bdi",
-      "tokens": ["sinapi", "sicro", "bdi", "orcamento", "orçamento", "desonerad", "composicao", "preco", "preço", "administracao-local", "mobilizacao"],
+      "tokens": ["sinapi", "sicro", "bdi", "orcamento", "orçamento", "desonerad", "composicao", "administracao-local", "mobilizacao", "data-base-orcamento"],
       "service_path": "/auditoria-orcamento-licitacao/",
       "service_slug": "auditoria-orcamento-licitacao",
       "tools": [],
@@ -45,7 +50,7 @@
     },
     {
       "id": "atrasos-prorrogacao",
-      "tokens": ["atraso", "prorroga", "chuva", "paralis", "notificacao", "notificação", "prazo-vigencia", "prazo-execucao", "ordem-servico"],
+      "tokens": ["prorroga", "chuva", "paralis", "prazo-vigencia", "prazo-execucao", "ordem-servico", "atraso-obra", "culpa-administracao"],
       "service_path": "/atrasos-prorrogacao-obras-publicas/",
       "service_slug": "atrasos-prorrogacao-obras-publicas",
       "tools": ["/ferramentas/matriz-atraso-obra/"],
@@ -55,13 +60,23 @@
     },
     {
       "id": "edital-proposta",
-      "tokens": ["edital", "licita", "proposta", "exequib", "empreitada-preco", "capacidade-tecnica", "diagnostico-pre"],
+      "tokens": ["edital", "licita", "exequib", "empreitada-preco", "capacidade-tecnica", "diagnostico-pre", "comprovacao-exequibilidade"],
       "service_path": "/diagnostico-pre-licitacao/",
       "service_slug": "diagnostico-pre-licitacao",
       "tools": [],
       "bridge_title": "Quando o risco do edital deve ser decidido antes do preço",
       "bridge_body": "Regime de execução, matriz de riscos e inconsistências de projeto/orçamento definem se vale participar, impugnar ou ajustar a estrutura da proposta.",
       "cta_label": "Ver diagnóstico pré-licitação"
+    },
+    {
+      "id": "defesa-sancoes",
+      "tokens": ["defesa-tecnica", "sancion", "notificacao-atraso", "resposta-notificacao", "processo-sancionador"],
+      "service_path": "/defesa-tecnica-contratos-publicos/",
+      "service_slug": "defesa-tecnica-contratos-publicos",
+      "tools": [],
+      "bridge_title": "Quando a notificação vira risco de sanção",
+      "bridge_body": "Resposta a notificação, defesa técnica e processo sancionador exigem cronologia, nexo e prova contemporânea antes que a exposição vire multa, impedimento ou extinção contratual.",
+      "cta_label": "Ver serviço de defesa técnica"
     },
     {
       "id": "carteira-operacao",
@@ -75,13 +90,31 @@
     }
   ],
   "path_overrides": {
-    "/conteudos/sinapi-desonerado-nao-desonerado/": "orcamento-bdi",
-    "/conteudos/bdi-diferenciado-obra-publica/": "orcamento-bdi",
+    "/conteudos/aditivo-empreitada-por-preco-global/": "aditivos",
     "/conteudos/aditivo-qualitativo-quantitativo/": "aditivos",
+    "/conteudos/administracao-local-orcamento-obra-publica/": "orcamento-bdi",
+    "/conteudos/atraso-na-medicao-obra-publica/": "medicoes-pagamentos",
+    "/conteudos/atraso-obra-culpa-administracao/": "atrasos-prorrogacao",
+    "/conteudos/atraso-pagamento-contrato-publico-suspender/": "medicoes-pagamentos",
+    "/conteudos/bdi-diferenciado-obra-publica/": "orcamento-bdi",
     "/conteudos/chuva-prorrogacao-prazo-obra-publica/": "atrasos-prorrogacao",
-    "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/": "atrasos-prorrogacao",
+    "/conteudos/comprovacao-exequibilidade-proposta-obra/": "edital-proposta",
+    "/conteudos/curva-abc-reequilibrio-contrato/": "reequilibrio",
+    "/conteudos/data-base-orcamento-reajuste-obra-publica/": "orcamento-bdi",
+    "/conteudos/demolicao-nao-prevista-obra-publica/": "aditivos",
+    "/conteudos/empreitada-preco-global-preco-unitario/": "edital-proposta",
+    "/conteudos/fiscal-nao-assina-medicao-obra-publica/": "medicoes-pagamentos",
     "/conteudos/glosa-de-medicao-obra-publica/": "medicoes-pagamentos",
+    "/conteudos/glosa-por-qualidade-obra-publica/": "medicoes-pagamentos",
+    "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/": "reequilibrio",
     "/conteudos/medicao-de-obra-publica-rejeitada/": "medicoes-pagamentos",
-    "/conteudos/curva-abc-reequilibrio-contrato/": "reequilibrio"
+    "/conteudos/medicao-por-evento-obra-publica/": "medicoes-pagamentos",
+    "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/": "orcamento-bdi",
+    "/conteudos/pagamento-parcial-etapa-empreitada-global/": "medicoes-pagamentos",
+    "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/": "atrasos-prorrogacao",
+    "/conteudos/prorrogacao-prazo-obra-publica-documentos/": "atrasos-prorrogacao",
+    "/conteudos/resposta-notificacao-atraso-obra-publica/": "defesa-sancoes",
+    "/conteudos/sinapi-desonerado-nao-desonerado/": "orcamento-bdi",
+    "/conteudos/sinapi-ou-sicro-obra-publica/": "orcamento-bdi"
   }
 }

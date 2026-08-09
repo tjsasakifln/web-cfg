@@ -1,6 +1,6 @@
 # Organic Growth Report
 
-**generated_at:** 2026-08-09T19:25:39Z
+**generated_at:** 2026-08-09T20:12:04Z
 **gsc_export:** gsc-2026-08-09
 
 > GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality.
@@ -13,8 +13,8 @@
 - commercial_impression_share: `0.0777`
 - commercial_click_share: `0.0`
 - serp_ctr_gap opportunities: `7`
-- content_to_service_link_coverage: `0.988`
-- commercial_bridge_coverage: `0.241`
+- content_to_service_link_coverage: `0.9714`
+- commercial_bridge_coverage: `0.2857`
 - service_to_supporting_content_coverage: `1.0`
 
 ## Ações recomendadas
