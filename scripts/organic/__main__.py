@@ -62,10 +62,16 @@ def cmd_run(args: argparse.Namespace) -> int:
         as_of=args.as_of or gsc.get("meta", {}).get("export_date"),
     )
     coverage = audit_link_coverage(ROOT)
+    serp_all = doc.get("serp_ctr_opportunities") or []
+    serp_real_gaps = [
+        d
+        for d in serp_all
+        if d.get("kind") == "ctr_gap" or (d.get("ctr_gap") or {}).get("is_opportunity")
+    ]
     metrics = commercial_exposure_metrics(
         gsc["pages"],
         link_coverage=coverage,
-        ctr_opportunities=doc.get("serp_ctr_opportunities") or [],
+        ctr_opportunities=serp_real_gaps,
     )
     doc["commercial_exposure_metrics"] = metrics
     doc["link_coverage"] = {

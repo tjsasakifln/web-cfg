@@ -34,9 +34,14 @@ def build_growth_report(
     ctr_opps = find_ctr_opportunities(
         pages, root=root, config=config, queries=queries, force_priority=True
     )
+    real_gap_opps = [
+        o
+        for o in ctr_opps
+        if o.get("kind") == "ctr_gap" or (o.get("ctr_gap") or {}).get("is_opportunity")
+    ]
     coverage = audit_link_coverage(root)
     metrics = commercial_exposure_metrics(
-        pages, config=config, link_coverage=coverage, ctr_opportunities=ctr_opps
+        pages, config=config, link_coverage=coverage, ctr_opportunities=real_gap_opps
     )
 
     # Emerging rank: position 4–15, impressions growing (use current snapshot)
@@ -103,28 +108,38 @@ def build_growth_report(
     }
 
     actions: list[dict[str, Any]] = []
-    for opp in ctr_opps[:15]:
+    for opp in real_gap_opps[:15]:
         path = opp["path"]
+        g = opp.get("gsc") or {}
+        gap = opp.get("ctr_gap") or {}
+        clicks = float(g.get("clicks") or 0)
+        ctr = float(gap.get("ctr") or g.get("ctr") or 0)
+        exp = float(gap.get("expected_ctr") or 0)
+        if clicks <= 0:
+            why = "Impressões competitivas com zero cliques: autoridade emergente sem captura de clique"
+        else:
+            why = (
+                f"CTR {ctr:.2%} abaixo do esperado ~{exp:.2%} na faixa de posição: "
+                "há clique, mas o snippet pode estar subcapturando impressões"
+            )
+        action_text = "Revisar title/meta front-loaded; não clickbait; "
+        if "robots_noindex" in (opp.get("issues") or []):
+            action_text += "candidata a indexação humana (não auto-indexar)"
+        else:
+            action_text += "otimizar snippet com base no gap de CTR"
         actions.append(
             {
                 "what_happened": (
-                    f"URL em posição {opp.get('gsc', {}).get('position')} com "
-                    f"{opp.get('gsc', {}).get('impressions')} impressões e CTR "
-                    f"{(opp.get('ctr_gap') or {}).get('ctr')}"
+                    f"URL em posição {g.get('position')} com "
+                    f"{g.get('impressions')} impressões, {int(clicks)} clique(s), CTR {ctr:.2%} "
+                    f"(esperado ~{exp:.2%})"
                 ),
-                "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+                "why_it_matters": why,
                 "url": path,
-                "evidence": opp.get("gsc"),
-                "recommended_action": (
-                    "Revisar title/meta front-loaded; não clickbait; "
-                    + (
-                        "candidata a indexação humana"
-                        if "robots_noindex" in (opp.get("issues") or [])
-                        else "otimizar snippet"
-                    )
-                ),
+                "evidence": g,
+                "recommended_action": action_text,
                 "related_service": (opp.get("service_fit") or {}).get("service_path"),
-                "expected_commercial_impact": "medium" if float((opp.get("gsc") or {}).get("impressions") or 0) >= 20 else "low",
+                "expected_commercial_impact": "medium" if float(g.get("impressions") or 0) >= 20 else "low",
                 "confidence": opp.get("confidence"),
                 "class": "ctr_gap",
                 "serp_diagnosis": {
@@ -190,7 +205,10 @@ def build_growth_report(
         },
         "sections": {
             "emerging_rank": emerging[:20],
-            "ctr_gap": ctr_opps,
+            "ctr_gap": real_gap_opps,
+            "priority_benchmarks": [
+                o for o in ctr_opps if o.get("kind") == "priority_benchmark"
+            ],
             "emerging_queries": sorted(
                 queries, key=lambda q: -float(q.get("impressions") or 0)
             )[:25],

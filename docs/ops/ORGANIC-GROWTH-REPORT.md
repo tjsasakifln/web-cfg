@@ -1,6 +1,6 @@
 # Organic Growth Report
 
-**generated_at:** 2026-08-09T18:51:50Z
+**generated_at:** 2026-08-09T19:06:15Z
 **gsc_export:** gsc-2026-08-09
 
 > GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality.
@@ -10,7 +10,7 @@
 - informational_impression_share: `0.7668`
 - commercial_impression_share: `0.0777`
 - commercial_click_share: `0.0`
-- serp_ctr_gap opportunities: `8`
+- serp_ctr_gap opportunities: `7`
 - content_to_service_link_coverage: `0.988`
 - commercial_bridge_coverage: `0.241`
 - service_to_supporting_content_coverage: `1.0`
@@ -18,66 +18,58 @@
 ## Ações recomendadas
 
 ### ctr_gap: `/conteudos/sinapi-desonerado-nao-desonerado/`
-- **O que aconteceu:** URL em posição 7.27 com 89.0 impressões e CTR 0.01124
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet
+- **O que aconteceu:** URL em posição 7.27 com 89.0 impressões, 1 clique(s), CTR 1.12% (esperado ~4.00%)
+- **Por que importa:** CTR 1.12% abaixo do esperado ~4.00% na faixa de posição: há clique, mas o snippet pode estar subcapturando impressões
+- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR
 - **Serviço:** /auditoria-orcamento-licitacao/
 - **Impacto comercial esperado:** medium
 - **Confiança:** 0.75
 
 ### ctr_gap: `/conteudos/chuva-prorrogacao-prazo-obra-publica/`
-- **O que aconteceu:** URL em posição 3.35 com 17.0 impressões e CTR 0.0
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana
+- **O que aconteceu:** URL em posição 3.35 com 17.0 impressões, 0 clique(s), CTR 0.00% (esperado ~8.00%)
+- **Por que importa:** Impressões competitivas com zero cliques: autoridade emergente sem captura de clique
+- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** low
 - **Confiança:** 0.4
 
 ### ctr_gap: `/conteudos/aditivo-qualitativo-quantitativo/`
-- **O que aconteceu:** URL em posição 6.09 com 22.0 impressões e CTR 0.0
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana
+- **O que aconteceu:** URL em posição 6.09 com 22.0 impressões, 0 clique(s), CTR 0.00% (esperado ~4.00%)
+- **Por que importa:** Impressões competitivas com zero cliques: autoridade emergente sem captura de clique
+- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /aditivos-obras-publicas/
 - **Impacto comercial esperado:** medium
 - **Confiança:** 0.45
 
 ### ctr_gap: `/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/`
-- **O que aconteceu:** URL em posição 7.0 com 18.0 impressões e CTR 0.0
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana
+- **O que aconteceu:** URL em posição 7.0 com 18.0 impressões, 0 clique(s), CTR 0.00% (esperado ~4.00%)
+- **Por que importa:** Impressões competitivas com zero cliques: autoridade emergente sem captura de clique
+- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** low
 - **Confiança:** 0.4
 
 ### ctr_gap: `/conteudos/prorrogacao-prazo-obra-publica-documentos/`
-- **O que aconteceu:** URL em posição 9.2 com 15.0 impressões e CTR 0.0
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet
+- **O que aconteceu:** URL em posição 9.2 com 15.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)
+- **Por que importa:** Impressões competitivas com zero cliques: autoridade emergente sem captura de clique
+- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** low
 - **Confiança:** 0.4
 
 ### ctr_gap: `/conteudos/limite-aditivo-25-50-obra-publica/`
-- **O que aconteceu:** URL em posição 11.0 com 14.0 impressões e CTR 0.0
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana
+- **O que aconteceu:** URL em posição 11.0 com 14.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)
+- **Por que importa:** Impressões competitivas com zero cliques: autoridade emergente sem captura de clique
+- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /aditivos-obras-publicas/
 - **Impacto comercial esperado:** low
 - **Confiança:** 0.4
 
 ### ctr_gap: `/conteudos/atraso-na-medicao-obra-publica/`
-- **O que aconteceu:** URL em posição 8.1 com 10.0 impressões e CTR 0.0
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet
+- **O que aconteceu:** URL em posição 8.1 com 10.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)
+- **Por que importa:** Impressões competitivas com zero cliques: autoridade emergente sem captura de clique
+- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR
 - **Serviço:** /medicoes-glosas-obras-publicas/
-- **Impacto comercial esperado:** low
-- **Confiança:** 0.4
-
-### ctr_gap: `/conteudos/bdi-diferenciado-obra-publica/`
-- **O que aconteceu:** URL em posição 6.27 com 11.0 impressões e CTR 0.18182
-- **Por que importa:** Impressões competitivas sem clique desperdiçam autoridade emergente
-- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet
-- **Serviço:** /auditoria-orcamento-licitacao/
 - **Impacto comercial esperado:** low
 - **Confiança:** 0.4
 

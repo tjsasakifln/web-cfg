@@ -1,6 +1,6 @@
 {
   "schema_version": "organic-growth-report-v1",
-  "generated_at": "2026-08-09T18:51:50Z",
+  "generated_at": "2026-08-09T19:06:15Z",
   "gsc_export": "gsc-2026-08-09",
   "gsc_totals": {
     "pages_impressions_sum": 373.0,
@@ -25,8 +25,8 @@
     "commercial_impression_share": 0.0777,
     "commercial_click_share": 0.0,
     "serp_ctr_gap": {
-      "opportunity_count": 8,
-      "mean_gap": 0.01524
+      "opportunity_count": 7,
+      "mean_gap": 0.03768
     },
     "commercial_bridge_coverage": 0.241,
     "content_to_service_link_coverage": 0.988,
@@ -184,12 +184,9 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
         "recommended_description": null,
         "gsc": {
@@ -207,10 +204,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.75,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
@@ -254,12 +253,9 @@
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Chuva justifica prorrogação de prazo? Critério e prova",
         "recommended_description": null,
         "gsc": {
@@ -277,10 +273,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/aditivo-qualitativo-quantitativo/",
@@ -320,12 +318,9 @@
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Aditivo qualitativo vs quantitativo: o que muda no pleito",
         "recommended_description": null,
         "gsc": {
@@ -343,10 +338,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.45,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
@@ -385,12 +382,9 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Prazo de vigência ≠ prazo de execução no contrato",
         "recommended_description": null,
         "gsc": {
@@ -408,10 +402,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
@@ -454,12 +450,9 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Prorrogação de prazo em obra pública: checklist de document…",
         "recommended_description": null,
         "gsc": {
@@ -477,10 +470,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
@@ -524,12 +519,9 @@
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133",
         "recommended_description": null,
         "gsc": {
@@ -547,10 +539,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/atraso-na-medicao-obra-publica/",
@@ -589,12 +583,9 @@
         "alternate_landing_candidate": "/medicoes-glosas-obras-publicas/",
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Atraso na medição: como proteger o caixa",
         "recommended_description": null,
         "gsc": {
@@ -612,11 +603,15 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.4,
-        "html_present": true
-      },
+        "html_present": true,
+        "kind": "ctr_gap"
+      }
+    ],
+    "priority_benchmarks": [
       {
         "path": "/conteudos/bdi-diferenciado-obra-publica/",
         "query_intent": "informational",
@@ -655,12 +650,9 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "BDI diferenciado em materiais e equipamentos: quando usar",
         "recommended_description": null,
         "gsc": {
@@ -676,12 +668,13 @@
           "expected_ctr": 0.04,
           "gap": -0.14182,
           "reasons": [
-            "priority_path_baseline"
+            "priority_path_benchmark_healthy_ctr"
           ],
           "priority_force_include": true
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "priority_benchmark"
       }
     ],
     "emerging_queries": [
@@ -925,12 +918,9 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
         "recommended_description": null,
         "gsc": {
@@ -948,10 +938,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.75,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
@@ -994,12 +986,9 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Prorrogação de prazo em obra pública: checklist de document…",
         "recommended_description": null,
         "gsc": {
@@ -1017,10 +1006,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/atraso-na-medicao-obra-publica/",
@@ -1059,12 +1050,9 @@
         "alternate_landing_candidate": "/medicoes-glosas-obras-publicas/",
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "Atraso na medição: como proteger o caixa",
         "recommended_description": null,
         "gsc": {
@@ -1082,10 +1070,12 @@
           "reasons": [
             "ctr_below_45%_of_expected",
             "ctr_below_absolute_floor"
-          ]
+          ],
+          "priority_force_include": false
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "ctr_gap"
       },
       {
         "path": "/conteudos/bdi-diferenciado-obra-publica/",
@@ -1125,12 +1115,9 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
-        "clickbait_flags": [
-          "\\|\\s*confenge\\s*$"
-        ],
+        "clickbait_flags": [],
         "recommended_title": "BDI diferenciado em materiais e equipamentos: quando usar",
         "recommended_description": null,
         "gsc": {
@@ -1146,12 +1133,13 @@
           "expected_ctr": 0.04,
           "gap": -0.14182,
           "reasons": [
-            "priority_path_baseline"
+            "priority_path_benchmark_healthy_ctr"
           ],
           "priority_force_include": true
         },
         "confidence": 0.4,
-        "html_present": true
+        "html_present": true,
+        "kind": "priority_benchmark"
       }
     ],
     "internal_linking_opportunities": [
@@ -1186,8 +1174,8 @@
   },
   "actions": [
     {
-      "what_happened": "URL em posição 7.27 com 89.0 impressões e CTR 0.01124",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "what_happened": "URL em posição 7.27 com 89.0 impressões, 1 clique(s), CTR 1.12% (esperado ~4.00%)",
+      "why_it_matters": "CTR 1.12% abaixo do esperado ~4.00% na faixa de posição: há clique, mas o snippet pode estar subcapturando impressões",
       "url": "/conteudos/sinapi-desonerado-nao-desonerado/",
       "evidence": {
         "impressions": 89.0,
@@ -1196,7 +1184,7 @@
         "ctr": 0.011200000000000002,
         "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR",
       "related_service": "/auditoria-orcamento-licitacao/",
       "expected_commercial_impact": "medium",
       "confidence": 0.75,
@@ -1204,8 +1192,7 @@
       "serp_diagnosis": {
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
         "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
         "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
@@ -1213,8 +1200,8 @@
       }
     },
     {
-      "what_happened": "URL em posição 3.35 com 17.0 impressões e CTR 0.0",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "what_happened": "URL em posição 3.35 com 17.0 impressões, 0 clique(s), CTR 0.00% (esperado ~8.00%)",
+      "why_it_matters": "Impressões competitivas com zero cliques: autoridade emergente sem captura de clique",
       "url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
       "evidence": {
         "impressions": 17.0,
@@ -1223,7 +1210,7 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)",
       "related_service": "/atrasos-prorrogacao-obras-publicas/",
       "expected_commercial_impact": "low",
       "confidence": 0.4,
@@ -1232,8 +1219,7 @@
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
         "title": "Chuva justifica prorrogação de prazo? Critério e prova | CONFENGE",
         "meta_description": "Chuva ordinária não basta. O que separa pedido aceito de risco ordinário: caminho crítico, dados e documentos contemporâneos.",
@@ -1241,8 +1227,8 @@
       }
     },
     {
-      "what_happened": "URL em posição 6.09 com 22.0 impressões e CTR 0.0",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "what_happened": "URL em posição 6.09 com 22.0 impressões, 0 clique(s), CTR 0.00% (esperado ~4.00%)",
+      "why_it_matters": "Impressões competitivas com zero cliques: autoridade emergente sem captura de clique",
       "url": "/conteudos/aditivo-qualitativo-quantitativo/",
       "evidence": {
         "impressions": 22.0,
@@ -1251,7 +1237,7 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)",
       "related_service": "/aditivos-obras-publicas/",
       "expected_commercial_impact": "medium",
       "confidence": 0.45,
@@ -1260,8 +1246,7 @@
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
         "title": "Aditivo qualitativo vs quantitativo: o que muda no pleito | CONFENGE",
         "meta_description": "A classificação define base de preço, limite e prova. Como enquadrar a mudança sem misturar quantidade com mudança de projeto.",
@@ -1269,8 +1254,8 @@
       }
     },
     {
-      "what_happened": "URL em posição 7.0 com 18.0 impressões e CTR 0.0",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "what_happened": "URL em posição 7.0 com 18.0 impressões, 0 clique(s), CTR 0.00% (esperado ~4.00%)",
+      "why_it_matters": "Impressões competitivas com zero cliques: autoridade emergente sem captura de clique",
       "url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
       "evidence": {
         "impressions": 18.0,
@@ -1279,7 +1264,7 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)",
       "related_service": "/atrasos-prorrogacao-obras-publicas/",
       "expected_commercial_impact": "low",
       "confidence": 0.4,
@@ -1287,8 +1272,7 @@
       "serp_diagnosis": {
         "issues": [
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
         "title": "Prazo de vigência ≠ prazo de execução no contrato | CONFENGE",
         "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
@@ -1296,8 +1280,8 @@
       }
     },
     {
-      "what_happened": "URL em posição 9.2 com 15.0 impressões e CTR 0.0",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "what_happened": "URL em posição 9.2 com 15.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)",
+      "why_it_matters": "Impressões competitivas com zero cliques: autoridade emergente sem captura de clique",
       "url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
       "evidence": {
         "impressions": 15.0,
@@ -1306,7 +1290,7 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR",
       "related_service": "/atrasos-prorrogacao-obras-publicas/",
       "expected_commercial_impact": "low",
       "confidence": 0.4,
@@ -1314,8 +1298,7 @@
       "serp_diagnosis": {
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
         "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
         "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
@@ -1323,8 +1306,8 @@
       }
     },
     {
-      "what_happened": "URL em posição 11.0 com 14.0 impressões e CTR 0.0",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "what_happened": "URL em posição 11.0 com 14.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)",
+      "why_it_matters": "Impressões competitivas com zero cliques: autoridade emergente sem captura de clique",
       "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
       "evidence": {
         "impressions": 14.0,
@@ -1333,7 +1316,7 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)",
       "related_service": "/aditivos-obras-publicas/",
       "expected_commercial_impact": "low",
       "confidence": 0.4,
@@ -1342,8 +1325,7 @@
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex",
-          "clickbait_title_pattern"
+          "robots_noindex"
         ],
         "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
         "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
@@ -1351,8 +1333,8 @@
       }
     },
     {
-      "what_happened": "URL em posição 8.1 com 10.0 impressões e CTR 0.0",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "what_happened": "URL em posição 8.1 com 10.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)",
+      "why_it_matters": "Impressões competitivas com zero cliques: autoridade emergente sem captura de clique",
       "url": "/conteudos/atraso-na-medicao-obra-publica/",
       "evidence": {
         "impressions": 10.0,
@@ -1361,46 +1343,18 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR",
       "related_service": "/medicoes-glosas-obras-publicas/",
       "expected_commercial_impact": "low",
       "confidence": 0.4,
       "class": "ctr_gap",
       "serp_diagnosis": {
         "issues": [
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
+          "title_long_mobile_truncation_risk"
         ],
         "title": "Atraso na medição: como proteger o caixa | CONFENGE",
         "meta_description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
         "h1": "Atraso na medição: como proteger o caixa"
-      }
-    },
-    {
-      "what_happened": "URL em posição 6.27 com 11.0 impressões e CTR 0.18182",
-      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
-      "url": "/conteudos/bdi-diferenciado-obra-publica/",
-      "evidence": {
-        "impressions": 11.0,
-        "clicks": 2.0,
-        "position": 6.27,
-        "ctr": 0.1818,
-        "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
-      },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
-      "related_service": "/auditoria-orcamento-licitacao/",
-      "expected_commercial_impact": "low",
-      "confidence": 0.4,
-      "class": "ctr_gap",
-      "serp_diagnosis": {
-        "issues": [
-          "title_long_desktop",
-          "title_long_mobile_truncation_risk",
-          "clickbait_title_pattern"
-        ],
-        "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
-        "meta_description": "Quando o edital ou a natureza do item autoriza BDI distinto, e o risco de aplicar o mesmo percentual em tudo.",
-        "h1": "BDI diferenciado em materiais e equipamentos: quando usar"
       }
     },
     {
@@ -1564,7 +1518,7 @@
     }
   ],
   "opportunities_engine_ref": {
-    "total": 32,
+    "total": 31,
     "bofu": 4
   },
   "hypotheses_not_proven": [

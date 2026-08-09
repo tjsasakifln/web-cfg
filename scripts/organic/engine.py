@@ -604,12 +604,15 @@ def build_opportunities(
         force_priority=True,
     )
 
-    for diag in serp_diagnoses:
+    real_gaps = [
+        d
+        for d in serp_diagnoses
+        if d.get("kind") == "ctr_gap" or (d.get("ctr_gap") or {}).get("is_opportunity")
+    ]
+    for diag in real_gaps:
         path = diag.get("path") or ""
         g = diag.get("gsc") or {}
         gap = diag.get("ctr_gap") or {}
-        if not gap.get("is_opportunity") and not gap.get("priority_force_include"):
-            continue
         svc_slug, svc_path, cluster = _service_from_path(path)
         fit = diag.get("service_fit") or {}
         if fit.get("service_slug"):
@@ -717,7 +720,11 @@ def build_opportunities(
             "by_publishability": _count_by(ranked, "publishability"),
             "bofu": sum(1 for o in ranked if o["intent"] == "bofu"),
             "data_driven": sum(1 for o in ranked if o.get("unique_data_available")),
-            "serp_ctr_gap": len(serp_diagnoses),
+            # Only true gaps — priority benchmarks with healthy CTR are excluded
+            "serp_ctr_gap": len(real_gaps),
+            "serp_priority_benchmarks": sum(
+                1 for d in serp_diagnoses if d.get("kind") == "priority_benchmark"
+            ),
         },
         "demand_map_ref": "persona → problem → question → intent → service",
         "opportunities": ranked,

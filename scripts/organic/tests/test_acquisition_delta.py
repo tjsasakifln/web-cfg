@@ -56,14 +56,100 @@ def test_baseline_priority_urls_in_gsc_2026_08_09():
 def test_find_ctr_opportunities_includes_baseline_low_ctr():
     gsc = load_gsc_dir(ROOT / "seo" / "gsc-2026-08-09")
     opps = find_ctr_opportunities(gsc["pages"], root=ROOT, queries=gsc["queries"])
-    paths = {o["path"] for o in opps}
-    # low CTR competitive pages
-    assert "/conteudos/chuva-prorrogacao-prazo-obra-publica/" in paths
-    assert "/conteudos/aditivo-qualitativo-quantitativo/" in paths
+    real_gaps = [o for o in opps if o.get("kind") == "ctr_gap"]
+    gap_paths = {o["path"] for o in real_gaps}
+    # low CTR competitive pages must be real gaps
+    assert "/conteudos/chuva-prorrogacao-prazo-obra-publica/" in gap_paths
+    assert "/conteudos/aditivo-qualitativo-quantitativo/" in gap_paths
     # each has structured diagnosis fields
-    sample = next(o for o in opps if "sinapi" in o["path"] or "chuva" in o["path"])
+    sample = next(o for o in real_gaps if "sinapi" in o["path"] or "chuva" in o["path"])
     for key in ("title", "h1", "issues", "ctr_gap", "service_fit", "canonical"):
         assert key in sample
+
+
+def test_brand_suffix_title_not_clickbait():
+    from scripts.organic.serp_ctr import diagnose_page_html
+
+    html = (
+        "<html><head><title>SINAPI desonerado ou não: qual base o edital exige | CONFENGE</title>"
+        '<meta name="description" content="Diferença nos encargos."/>'
+        '<link rel="canonical" href="https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/"/>'
+        "</head><body><h1>SINAPI desonerado</h1></body></html>"
+    )
+    diag = diagnose_page_html(
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        html,
+        gsc={"impressions": 89, "clicks": 1, "position": 7.27, "ctr": 0.0112},
+    )
+    assert "clickbait_title_pattern" not in (diag.get("issues") or [])
+    assert not diag.get("clickbait_flags")
+
+
+def test_high_ctr_priority_not_ctr_gap_action():
+    """bdi-diferenciado has high CTR — must not be classed as ctr_gap with zero-click narrative."""
+    from scripts.organic.growth_report import build_growth_report
+
+    gsc_dir = ROOT / "seo" / "gsc-2026-08-09"
+    doc = build_growth_report(ROOT, gsc_dir)
+    gap_urls = {a["url"] for a in doc["actions"] if a.get("class") == "ctr_gap"}
+    assert "/conteudos/bdi-diferenciado-obra-publica/" not in gap_urls
+    # section ctr_gap must only list real gaps
+    for o in doc["sections"]["ctr_gap"]:
+        assert o.get("kind") == "ctr_gap" or (o.get("ctr_gap") or {}).get("is_opportunity")
+        assert "sem clique" not in (o.get("kind") or "")
+    # healthy high-CTR priority may appear as benchmark only
+    bench_paths = {o["path"] for o in doc["sections"].get("priority_benchmarks") or []}
+    if "/conteudos/bdi-diferenciado-obra-publica/" in {
+        p["path"] for p in (load_gsc_dir(gsc_dir)["pages"])
+    }:
+        # if force-included as benchmark, it is not a gap
+        bdi = next(
+            (
+                o
+                for o in (doc["sections"].get("priority_benchmarks") or [])
+                if "bdi-diferenciado" in o["path"]
+            ),
+            None,
+        )
+        if bdi:
+            assert bdi.get("kind") == "priority_benchmark"
+            assert not (bdi.get("ctr_gap") or {}).get("is_opportunity")
+    # no action claims "sem clique" for pages that have clicks
+    for a in doc["actions"]:
+        if a.get("class") != "ctr_gap":
+            continue
+        clicks = float((a.get("evidence") or {}).get("clicks") or 0)
+        if clicks > 0:
+            assert "zero cliques" not in (a.get("why_it_matters") or "").lower()
+            assert "sem clique" not in (a.get("why_it_matters") or "").lower()
+
+
+def test_priority_og_title_matches_title():
+    import re
+
+    priority = [
+        "conteudos/sinapi-desonerado-nao-desonerado",
+        "conteudos/chuva-prorrogacao-prazo-obra-publica",
+        "conteudos/aditivo-qualitativo-quantitativo",
+        "conteudos/prazo-vigencia-prazo-execucao-contrato-obra",
+        "conteudos/glosa-de-medicao-obra-publica",
+        "conteudos/medicao-de-obra-publica-rejeitada",
+        "conteudos/curva-abc-reequilibrio-contrato",
+        "conteudos/bdi-diferenciado-obra-publica",
+    ]
+    for rel in priority:
+        html = (ROOT / rel / "index.html").read_text(encoding="utf-8")
+        title = re.search(r"<title>([^<]+)</title>", html, re.I)
+        assert title, rel
+        og = re.search(
+            r'property=["\']og:title["\'][^>]+content=["\']([^"\']*)["\']', html, re.I
+        ) or re.search(
+            r'content=["\']([^"\']*)["\'][^>]+property=["\']og:title["\']', html, re.I
+        )
+        assert og, f"missing og:title on {rel}"
+        assert title.group(1).strip() == og.group(1).strip(), (
+            f"{rel}: title={title.group(1)!r} og={og.group(1)!r}"
+        )
 
 
 def test_content_service_map_examples():

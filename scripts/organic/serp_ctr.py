@@ -12,12 +12,13 @@ from scripts.organic.service_map import map_content_to_service
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG = ROOT / "data" / "organic" / "serp-ctr-config.json"
 
+# Site-standard brand suffix "| CONFENGE" is NOT clickbait.
 CLICKBAIT_PATTERNS = [
     re.compile(r"guia\s+completo\s+20\d{2}", re.I),
     re.compile(r"saiba\s+tudo", re.I),
-    re.compile(r"\|\s*confenge\s*$", re.I),  # not always bad; flagged only with keyword list
     re.compile(r"tudo\s+sobre\s+.+\s+neste\s+guia", re.I),
     re.compile(r"imperdivel|imperdível|clique\s+aqui|voce\s+nao\s+vai\s+acreditar", re.I),
+    re.compile(r"\b(clickbait|voce\s+precisa\s+ver|n[aã]o\s+vai\s+acreditar)\b", re.I),
 ]
 
 
@@ -260,10 +261,16 @@ def find_ctr_opportunities(
     queries: list[dict[str, Any]] | None = None,
     force_priority: bool = True,
 ) -> list[dict[str, Any]]:
-    """Build CTR-gap opportunity list with full SERP diagnosis."""
+    """Build SERP diagnosis list for CTR-gap + optional priority benchmarks.
+
+    - Real gaps: ctr_gap.is_opportunity=True, kind='ctr_gap'
+    - Priority paths with enough impressions but healthy CTR (when force_priority):
+      kind='priority_benchmark' — for comparison only, NOT a CTR-gap action.
+    """
     config = config or load_ctr_config()
     root = root or ROOT
     priority = set(config.get("priority_paths") or [])
+    min_imp = float(config.get("min_impressions") or 10)
     out: list[dict[str, Any]] = []
     for p in pages:
         path = p.get("path") or p.get("url") or ""
@@ -271,14 +278,21 @@ def find_ctr_opportunities(
             from scripts.organic.gsc_loader import normalize_path
 
             path = normalize_path(path)
+        impressions = float(p.get("impressions") or 0)
+        clicks = float(p.get("clicks") or 0)
+        position = float(p.get("position") or 0)
         gap = is_ctr_gap(
-            impressions=float(p.get("impressions") or 0),
-            clicks=float(p.get("clicks") or 0),
-            position=float(p.get("position") or 0),
+            impressions=impressions,
+            clicks=clicks,
+            position=position,
             config=config,
         )
         is_priority = path in priority
-        if not gap["is_opportunity"] and not (force_priority and is_priority and float(p.get("impressions") or 0) >= float(config.get("min_impressions") or 10)):
+        is_real_gap = bool(gap.get("is_opportunity"))
+        is_priority_benchmark = bool(
+            force_priority and is_priority and impressions >= min_imp and not is_real_gap
+        )
+        if not is_real_gap and not is_priority_benchmark:
             continue
         # load HTML if present
         rel = path.strip("/")
@@ -290,26 +304,44 @@ def find_ctr_opportunities(
             path,
             html,
             gsc={
-                "impressions": p.get("impressions"),
-                "clicks": p.get("clicks"),
-                "position": p.get("position"),
-                "ctr": p.get("ctr"),
+                "impressions": impressions,
+                "clicks": clicks,
+                "position": position,
+                "ctr": p.get("ctr") if p.get("ctr") is not None else (clicks / impressions if impressions else 0.0),
                 "url": p.get("url"),
             },
             config=config,
             queries=queries,
         )
-        if is_priority and not gap["is_opportunity"]:
+        if is_real_gap:
+            diag["kind"] = "ctr_gap"
+            diag["ctr_gap"]["priority_force_include"] = False
+        else:
+            # Healthy-CTR priority page: keep diagnosis, do not claim CTR gap
+            diag["kind"] = "priority_benchmark"
             diag["ctr_gap"]["priority_force_include"] = True
+            diag["ctr_gap"]["is_opportunity"] = False
             diag["ctr_gap"]["reasons"] = list(diag["ctr_gap"].get("reasons") or []) + [
-                "priority_path_baseline"
+                "priority_path_benchmark_healthy_ctr"
             ]
         out.append(diag)
-    # sort by gap * impressions
+    # real gaps first (by gap*impressions), then benchmarks
     out.sort(
-        key=lambda d: -(
-            float((d.get("ctr_gap") or {}).get("gap") or 0)
-            * float((d.get("gsc") or {}).get("impressions") or 0)
+        key=lambda d: (
+            0 if d.get("kind") == "ctr_gap" else 1,
+            -(
+                float((d.get("ctr_gap") or {}).get("gap") or 0)
+                * float((d.get("gsc") or {}).get("impressions") or 0)
+            ),
         )
     )
     return out
+
+
+def real_ctr_gaps(diagnoses: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Filter to diagnoses that are true CTR-gap opportunities."""
+    return [
+        d
+        for d in diagnoses
+        if d.get("kind") == "ctr_gap" or (d.get("ctr_gap") or {}).get("is_opportunity")
+    ]
