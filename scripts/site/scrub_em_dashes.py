@@ -26,6 +26,7 @@ OFFICIAL_SOURCE_RE = re.compile(
     r"\b("
     r"Planalto|TCU|AGU|CAIXA|Compras\.gov(?:\.br)?"
     r"|Senado|Câmara|Camara|STF|STJ|CNJ|CGU|PNCP"
+    r"|Portal Nacional de Contrata[cç][oõ]es P[uú]blicas"
     r"|Ministério|Ministerio|SEAP|INSS|IBGE"
     r"|Lei\s+n[ºo°.]?\s*\d+"  # Lei nº 14.133/2021 — art. …
     r"|Decreto\s+n[ºo°.]?\s*\d+"
@@ -52,9 +53,11 @@ REGION_AFTER_EM = re.compile(
     re.I,
 )
 
-# Parenthetical pair: "empresa — capacidade, acervo — para"
+# Parenthetical pair only when the middle looks like an appositive list
+# (contains a comma), e.g. "empresa — capacidade, acervo — para".
+# Do NOT span unrelated em-dashes across a page.
 PAREN_PAIR = re.compile(
-    EM + r"\s*([^" + EM + r"]{2,120}?)\s*" + EM + r"(?=\s)"
+    EM + r"\s*([^" + EM + r",]{0,40},[^" + EM + r"]{1,80}?)\s*" + EM + r"(?=\s)"
 )
 
 # Contrast / afterthought: "X — não Y", "X — sem Y", "X — mas Y"
@@ -195,8 +198,9 @@ def scrub_prose(text: str) -> str:
     out = ALONE_EM.sub("n/d", out)
     out = JSON_ALONE_EM.sub(r"\1n/d\2", out)
 
-    # Any remaining spaced em-dash → comma+space (safe default for prose)
+    # Any remaining em-dash (spaced or bare) → comma+space
     out = SPACED_EM.sub(", ", out)
+    out = out.replace(EM, ", ")
 
     # Cleanup spacing artifacts (never leave " ," or " (")
     out = re.sub(r" {2,}", " ", out)
