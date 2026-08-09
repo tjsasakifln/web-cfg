@@ -1,8 +1,11 @@
-# Copy final review (pt-BR commercial surfaces)
+# Copy final review (pt-BR commercial + public surfaces)
 
 ## Scope
 
-Home, four offers, especialista, obrigado, header, mobile menu, footer, forms, metadata/OG/JSON-LD, validation-adjacent microcopy. User-facing em-dashes (travessões) removed from commercial HTML.
+1. **Commercial:** home, four offers, especialista, obrigado, header, mobile menu, footer, forms, metadata/OG/JSON-LD, validation-adjacent microcopy.
+2. **Public content (em-dash pass):** `/radar/*`, `/conteudos/*`, `/inteligencia/*`, pilares técnicos, casos, legal pages, piloto.
+
+User-facing em-dashes (travessões, U+2014) removed from CONFENGE prose. Official source titles (Planalto, TCU, AGU, CAIXA, Compras.gov.br) may keep `—` as external citation labels.
 
 ## Corrections applied
 
@@ -18,7 +21,12 @@ Home, four offers, especialista, obrigado, header, mobile menu, footer, forms, m
 | Enquadrar um risco contratual | Avaliar contrato sob pressão |
 | sala de guerra | coordenação da proposta / coordenação intensiva (explained) |
 | Workstreams | Frentes de trabalho |
-| Travessões (—) in commercial HTML | commas / parentheses / colons |
+| Travessões (`—`) in commercial HTML | commas / parentheses / colons |
+| `…operação — não para o mercado…` (radar) | `…operação, não para o mercado…` |
+| `empresa — A, B, C — para` | `empresa (A, B, C) para` |
+| `Delimite o problema — valor… — antes` | `Delimite o problema (valor…) antes` |
+| `CONFENGE — Conteúdos` (RSS chrome) | `CONFENGE · Conteúdos` |
+| Placeholder de dado ausente `—` | `n/d` |
 
 ## Offer identity (primary CTA)
 
@@ -29,7 +37,10 @@ Home, four offers, especialista, obrigado, header, mobile menu, footer, forms, m
 
 ## Gate
 
-`scripts/site/test_copy_gates.py` → `test_concordance_and_forbidden_microcopy` + landmark check. Regex gate covers known defects only; not a substitute for human review.
+- `scripts/site/test_copy_gates.py` → commercial microcopy + `test_public_surfaces_have_no_prose_em_dashes`
+- `scripts/site/lint_editorial_copy.py` → editorial JSON, ferramentas, and public HTML residual check
+- `scripts/site/scrub_em_dashes.py --check` / `--write` → scrub + verify public HTML
+- Generators must not reintroduce prose `—`: `scripts/pseo/build.py`, `scripts/pseo/render.py`, `scripts/site/inbound_first_remediate.py`
 
 ## Specialist chrome
 

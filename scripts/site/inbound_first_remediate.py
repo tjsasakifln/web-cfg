@@ -30,13 +30,13 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.site.brand import (  # noqa: E402
+from scripts.site.brand import (# noqa: E402
     footer_blurb,
     load_brand,
     org_description,
     wa_url,
 )
-from scripts.site.inbound_gates import (  # noqa: E402
+from scripts.site.inbound_gates import (# noqa: E402
     is_indexable_html,
     is_noindex,
     path_to_url,
@@ -106,13 +106,13 @@ def load_stage_classification() -> dict[str, Any]:
     if not STAGE_CLASSIFICATION_PATH.exists():
         raise FileNotFoundError(
             f"Missing stage classification: {STAGE_CLASSIFICATION_PATH}"
-        )
+)
     data = json.loads(STAGE_CLASSIFICATION_PATH.read_text(encoding="utf-8"))
     allowed = set(data.get("allowed_stages") or list(ALLOWED_STAGES))
     if allowed != ALLOWED_STAGES:
         raise ValueError(
             f"content-stage-classification allowed_stages must be {sorted(ALLOWED_STAGES)}"
-        )
+)
     _STAGE_CLASSIFICATION_CACHE = data
     return data
 
@@ -135,7 +135,7 @@ def resolve_content_stage(
         raise ValueError(
             f"No valid stage for slug={slug!r} pillar={pillar!r} "
             f"(got {stage!r}; allowed {sorted(ALLOWED_STAGES)})"
-        )
+)
     return stage
 
 
@@ -184,13 +184,13 @@ def force_noindex_superseded_pages() -> dict[str, Any]:
             'name="robots" content="noindex,follow"',
             new,
             count=1,
-        )
+)
         new = re.sub(
             r'content="[^"]+" name="robots"',
             'content="noindex,follow" name="robots"',
             new,
             count=1,
-        )
+)
         if new != html:
             _write(p, new)
             touched += 1
@@ -215,7 +215,7 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
     mobile = "".join(mobile_parts)
     cta_html = (
         f'<a class="button button-primary header-cta" href="{cta["href"]}">{cta["label"]}</a>'
-    )
+)
     mobile_cta = f'<a class="button button-primary" href="{cta["href"]}">{cta["label"]}</a>'
     header = f"""<header class="site-header" id="inicio">
 <div class="container header-inner">
@@ -237,7 +237,7 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
 
 
 def _footer_nav_html(brand: dict[str, Any]) -> str:
-    """Build footer navigation links from brand.json — never legacy /#atuacao anchors."""
+    """Build footer navigation links from brand.json, never legacy /#atuacao anchors."""
     nav = (brand.get("navigation") or {}).get("desktop") or []
     parts = ['<a href="/">Início</a>']
     seen = {"/"}
@@ -272,7 +272,7 @@ def patch_shell(html: str, brand: dict[str, Any], *, current: str | None = None)
         html,
         count=1,
         flags=re.S,
-    )
+)
     if n:
         html = html2
 
@@ -284,7 +284,7 @@ def patch_shell(html: str, brand: dict[str, Any], *, current: str | None = None)
         rf"\1<p>{html_lib.escape(foot)}</p>",
         html,
         count=1,
-    )
+)
 
     # Footer navigation: replace whole link block under Navegação
     footer_links = _footer_nav_html(brand)
@@ -294,7 +294,7 @@ def patch_shell(html: str, brand: dict[str, Any], *, current: str | None = None)
         html,
         count=1,
         flags=re.S,
-    )
+)
     if n:
         html = html2
     # Safety: strip any residual legacy anchors anywhere in public HTML
@@ -315,240 +315,240 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     "atraso-na-medicao-obra-publica": [
         (
             "A medição atrasada autoriza cobrar juros ou reter serviço?",
-            "Depende do contrato e da prova do atraso. Isole o valor executado, a data de envio do boletim e a obrigação da fiscalização de apreciar. Juros e medidas de preservação exigem cronologia e comunicação formal — não basta reclamação oral.",
-        ),
+            "Depende do contrato e da prova do atraso. Isole o valor executado, a data de envio do boletim e a obrigação da fiscalização de apreciar. Juros e medidas de preservação exigem cronologia e comunicação formal, não basta reclamação oral.",
+),
         (
             "Quais documentos montar primeiro quando a medição não anda?",
             "Contrato e critério de medição, boletim assinado ou protocolado, diário de obra, fotos e comprovante de entrega. Em seguida, notificação pedindo apreciação em prazo razoável.",
-        ),
+),
         (
             "O maior risco prático é qual?",
             "Continuar executando sem registro do impasse e misturar glosa com atraso de apreciação. Isso enfraquece cobrança e confunde o que é direito líquido com o que ainda está em controvérsia.",
-        ),
+),
     ],
     "atraso-obra-culpa-administracao": [
         (
             "Como provar que o atraso é da Administração?",
             "Ligue o evento (projeto, desapropriação, frente não liberada, pagamento etc.) ao caminho crítico com cronograma, diário, comunicações e impacto de prazo. Sem nexo, a tese não sustenta prorrogação nem custo.",
-        ),
+),
         (
             "O que reunir antes de pedir prazo ou custo?",
             "Cronograma contratual e atualizado, registros contemporâneos do evento, notificações, medições afetadas e memória de cálculo do impacto. Formalize o pedido antes do vencimento cego do prazo.",
-        ),
+),
         (
             "Qual o erro mais caro neste cenário?",
             "Aceitar multa ou absorver atraso sem protestar a causa. Depois a narrativa da Administração fica unilateral e a empresa perde margem e prazo.",
-        ),
+),
     ],
     "aditivo-empreitada-por-preco-global": [
         (
             "Empreitada global impede aditivo?",
             "Não automaticamente. O regime define como se mede o objeto, mas alterações de projeto, quantitativos ou condições supervenientes ainda precisam de enquadramento nos arts. 124 e 125 da Lei 14.133 e no contrato.",
-        ),
+),
         (
             "O que provar antes de protocolar o aditivo?",
             "Descrição técnica da mudança, nexo com o projeto ou ordem da Administração, planilha do impacto e saldo percentual de alterações. Sem isso o pedido vira diligência eterna.",
-        ),
+),
         (
             "Qual o risco de executar sem termo?",
             "Serviço fora do papel vira disputa de preço e de legitimidade. Registre ordem, execute só o indispensável à segurança quando couber, e formalize o termo sem demora.",
-        ),
+),
     ],
     "administracao-local-orcamento-obra-publica": [
         (
             "Administração local vai no BDI ou em item próprio?",
             "Depende da metodologia do edital e da natureza do custo. O erro é duplicar ou omitir. Compare planilha, composições e regras de BDI do órgão antes de fechar a proposta.",
-        ),
+),
         (
             "O que validar primeiro na planilha?",
             "Critério do edital para custos indiretos, composições de canteiro/equipe local e coerência com o prazo. Só então discuta se o valor está no BDI ou em item discriminado.",
-        ),
+),
         (
             "Qual o risco prático?",
             "Proposta com administração local incoerente vira glosa na execução ou rejeição na análise de preços. Documente a premissa usada na oferta.",
-        ),
+),
     ],
     "comprovacao-exequibilidade-proposta-obra": [
         (
             "Quando a Administração pode exigir prova de exequibilidade?",
-            "Quando o preço aparenta inexequível perante o edital e a legislação aplicável. A resposta deve mostrar composições, produtividade, BDI e premissas — sem fragilizar a planilha com improviso.",
-        ),
+            "Quando o preço aparenta inexequível perante o edital e a legislação aplicável. A resposta deve mostrar composições, produtividade, BDI e premissas, sem fragilizar a planilha com improviso.",
+),
         (
             "O que enviar na comprovação?",
             "Memórias de cálculo, cotações relevantes, premissas de produtividade e regime tributário coerente com a proposta. Evite anexos genéricos que não conversam com os itens questionados.",
-        ),
+),
         (
             "Qual o risco de uma resposta frágil?",
             "Desclassificação ou, pior, adjudicação de preço que a empresa não executa. Trate a comprovação como decisão de margem, não como formulário.",
-        ),
+),
     ],
     "data-base-orcamento-reajuste-obra-publica": [
         (
             "Por que a data-base importa tanto?",
             "Ela ancora reajuste e leitura de preços. Data-base errada distorce unitários e a margem ao longo do contrato.",
-        ),
+),
         (
             "O que checar no edital e na proposta?",
             "Data-base do orçamento de referência, índices de reajuste, periodicidade e se a proposta preserva a mesma lógica. Divergence vira glosa ou reajuste indevido.",
-        ),
+),
         (
             "Qual o erro mais comum?",
             "Assumir reajuste automático sem conferir índice, periodicidade e limites do contrato. Formalize a memória a cada ciclo.",
-        ),
+),
     ],
     "demolicao-nao-prevista-obra-publica": [
         (
             "Demolição fora da planilha é paga como?",
             "Como serviço não previsto ou alteração de escopo, se houver nexo com o projeto ou determinação da Administração. Sem registro, vira custo absorvido.",
-        ),
+),
         (
             "Quais provas reunir?",
             "Projeto, ordem ou interferência que gerou a demolição, medição do volume, fotos e comunicação tempestiva pedindo aditivo ou autorização.",
-        ),
+),
         (
             "Qual o risco de demolir e medir depois?",
             "Perder o nexo causal e o preço de referência. Avise antes, meça com fiscal e amarre ao termo aditivo quando couber.",
-        ),
+),
     ],
     "desconto-da-proposta-em-item-novo-aditivo": [
         (
             "O desconto da licitação se aplica a item novo?",
             "Em regra a Administração exige coerência com o desconto global da proposta, mas a formação do preço do item novo deve considerar composição real e o regime legal. Não há atalho automático sem base no edital/contrato.",
-        ),
+),
         (
             "Como montar o preço do item novo?",
             "Composição unitária, produtividade, BDI coerente e memória que explique desvios em relação à referência. Documente o desconto aplicado ou a justificativa técnica de não aplicar cegamente.",
-        ),
+),
         (
             "Qual o risco?",
             "Aceitar preço defasado para 'passar' o aditivo e destruir margem, ou inflar item e gerar glosa. Trate como formação de preço, não como barganha informal.",
-        ),
+),
     ],
     "empreitada-preco-global-preco-unitario": [
         (
             "Global ou unitária: o que muda na gestão?",
             "No global, o objeto e o risco de quantitativo pesam mais; no unitário, a medição item a item. A escolha do edital define como se prova e se altera o contrato.",
-        ),
+),
         (
             "O que a construtora deve ler no edital?",
             "Regime de execução, critério de medição, limites de alteração e matriz de riscos. Isso define se um desvio vira aditivo, reequilíbrio ou risco absorvido.",
-        ),
+),
         (
             "Qual o erro prático?",
             "Gerir um contrato global como se fosse unitário (ou o contrário) e perder prova de medição. Adapte diário, boletim e controle ao regime.",
-        ),
+),
     ],
     "fiscal-nao-assina-medicao-obra-publica": [
         (
             "Sem assinatura do fiscal a medição nunca pode ser cobrada?",
             "A falta de assinatura não apaga o serviço executado, mas enfraquece o recebimento se não houver registro contemporâneo, medições parciais, diário e notificação do impasse.",
-        ),
+),
         (
             "O que fazer nas primeiras 48 horas?",
             "Protocolar o boletim, registrar no diário a recusa ou o silêncio, notificar pedindo apreciação e preservar fotos/quantitativos. Não deixe o impasse só no WhatsApp.",
-        ),
+),
         (
             "Quando escalar?",
             "Quando o silêncio compromete caixa ou prazo e já há prova mínima de execução e de tentativa de regularizar a medição.",
-        ),
+),
     ],
     "glosa-por-qualidade-obra-publica": [
         (
             "A Administração pode glosar a medição inteira por qualidade?",
-            "Glosa deve ser proporcional ao defeito demonstrado e ao critério contratual. Glosa total sem laudo ou sem oportunidade de saneamento costuma ser frágil — mas contestar exige prova técnica, não só indignação.",
-        ),
+            "Glosa deve ser proporcional ao defeito demonstrado e ao critério contratual. Glosa total sem laudo ou sem oportunidade de saneamento costuma ser frágil, mas contestar exige prova técnica, não só indignação.",
+),
         (
             "O que anexar na contestação?",
             "Critério de aceite do contrato, laudos/ensaios, diário, fotos e memória do trecho glosado versus o executado. Peça liberação da parcela incontroversa se houver.",
-        ),
+),
         (
             "Qual o risco de aceitar glosa calado?",
             "Criar precedente e corroer margem em medições futuras. Conteste no prazo e separe o que é retrabalho legítimo do que é glosa indevida.",
-        ),
+),
     ],
     "matriz-de-riscos-reequilibrio-economico-financeiro": [
         (
             "A matriz de riscos impede todo reequilíbrio?",
             "Não. Ela aloca riscos, mas não apaga eventos fora da alocação, onerosidade excessiva ou fatos da Administração. Leia a matriz junto com o contrato e a prova do evento.",
-        ),
+),
         (
             "O que provar no pedido?",
             "Evento, nexo com a execução, quantificação e por que o risco não era da contratada segundo a matriz e a lei. Sem isso o pedido vira narrativa genérica.",
-        ),
+),
         (
             "Qual o erro comum?",
             "Pedir reequilíbrio sem confrontar a cláusula de matriz. A Administração responde com a alocação e o processo morre na origem.",
-        ),
+),
     ],
     "medicao-por-evento-obra-publica": [
         (
             "Medição por evento muda a prova?",
             "Sim. Em vez de quantitativo contínuo, o gatilho é o marco/evento contratado. Sem evidência do evento e do aceite, o pagamento trava.",
-        ),
+),
         (
             "O que controlar no canteiro?",
             "Definição clara do evento, registro de conclusão, aceite da fiscalização e impacto em cronograma. Evite ambiguidade de 'quase pronto'.",
-        ),
+),
         (
             "Qual o risco?",
             "Executar além do evento sem formalizar e não conseguir medir. Trave escopo e aceite por escrito.",
-        ),
+),
     ],
     "pagamento-parcial-etapa-empreitada-global": [
         (
             "Dá para receber parcial em empreitada global?",
             "Quando o contrato e o critério de medição permitem etapas ou percentuais de avanço. Sem base contratual, o 'parcial' vira favor informal e frágil.",
-        ),
+),
         (
             "Como documentar o avanço?",
             "Critério de medição, memorial de cálculo do percentual, boletim e evidências de campo. Separe o que é incontroverso do que ainda está em disputa.",
-        ),
+),
         (
             "Qual o risco de aceitar parcial sem ressalva?",
             "Abrir mão de diferenças e de juros sobre o restante. Reserve direitos por escrito ao receber.",
-        ),
+),
     ],
     "prorrogacao-prazo-obra-publica-documentos": [
         (
             "Quais documentos não podem faltar no pedido de prazo?",
             "Cronograma, nexo causal do evento, diário, comunicações e impacto no caminho crítico. Pedido genérico de 'mais prazo' costuma ser indeferido.",
-        ),
+),
         (
             "Quando protocolar?",
             "Antes do vencimento do prazo e assim que o evento impactante estiver caracterizado. Demora da empresa enfraquece a tese.",
-        ),
+),
         (
             "Prazo e custo andam juntos?",
             "Muitas vezes sim, mas são pedidos com provas distintas. Organize a memória de custo à parte se houver ociosidade ou prolongamento de indiretos.",
-        ),
+),
     ],
     "resposta-notificacao-atraso-obra-publica": [
         (
             "Como estruturar a resposta à notificação de atraso?",
             "Admita fatos corretos, conteste incorretos, apresente cronologia, causas e pedidos objetivos (prazo, exclusão de multa, etc.). Tom agressivo sem prova piora a posição.",
-        ),
+),
         (
             "O que anexar?",
             "Cronograma, diário, comunicações à Administração, evidências de fatos externos e memória de impacto. Respeite o prazo da notificação.",
-        ),
+),
         (
             "Posso ignorar notificação informal?",
             "Não trate como irrelevante. Formalize o recebimento e responda no canal adequado. Silêncio vira confissão prática.",
-        ),
+),
     ],
     "sinapi-ou-sicro-obra-publica": [
         (
             "SINAPI ou SICRO: qual vale?",
-            "A que o edital e a natureza do serviço indicarem. Rodovia e infraestrutura pesada costumam puxar SICRO; edificações, SINAPI — mas a regra do certame manda.",
-        ),
+            "A que o edital e a natureza do serviço indicarem. Rodovia e infraestrutura pesada costumam puxar SICRO; edificações, SINAPI, mas a regra do certame manda.",
+),
         (
             "O que confrontar na proposta?",
             "Referência do edital, composições, BDI e ajustes locais. Misturar bases sem critério gera inexequibilidade aparente ou glosa.",
-        ),
+),
         (
             "Qual o risco de copiar composição genérica?",
             "Preço de referência incompatível com o serviço real. Ajuste produtividade e logística ao canteiro.",
-        ),
+),
     ],
 }
 
@@ -558,8 +558,8 @@ def natural_converta_replacement(topic_phrase: str) -> str:
     topic = topic_phrase.strip()
     # Light cleanup: ensure readable
     return (
-        f"Delimite o problema — valor, período, serviço afetado, decisão necessária e "
-        f"responsável — antes de discutir {topic}. Objeto vago gera resposta vaga."
+        f"Delimite o problema (valor, período, serviço afetado, decisão necessária e "
+        f"responsável) antes de discutir {topic}. Objeto vago gera resposta vaga."
     )
 
 
@@ -575,41 +575,41 @@ def rewrite_machine_copy(html: str, slug: str, h1: str) -> str:
         repl_converta,
         html,
         flags=re.I,
-    )
+)
     # "O caso de {slug tokens} só se sustenta..." (allow inline tags)
     html = re.sub(
         r"O caso de\s+(?:<[^>]+>)?[a-záàâãéêíóôõúç0-9\s\-]{8,80}(?:</[^>]+>)?\s+s[oó] se sustenta[^.]*\.",
-        "O desfecho depende de prova contemporânea, enquadramento contratual e quantificação do impacto — não de narrativa genérica.",
+        "O desfecho depende de prova contemporânea, enquadramento contratual e quantificação do impacto, não de narrativa genérica.",
         html,
         flags=re.I,
-    )
+)
     # "absorver custo ou risco de {slug} sem prova"
     html = re.sub(
         r"absorver custo ou risco de\s+[a-záàâãéêíóôõúç0-9\s\-]{8,60}\s+sem prova",
         "absorver custo ou risco sem prova documental suficiente",
         html,
         flags=re.I,
-    )
+)
 
     faqs = NATURAL_FAQ.get(slug)
     if not faqs:
-        # Generic natural FAQ from H1 — only if machine FAQ present
+        # Generic natural FAQ from H1, only if machine FAQ present
         if not re.search(r"Qual documento deve ser lido primeiro em um caso de", html, re.I):
             return html
         title = h1.split("|")[0].strip()
         faqs = [
             (
                 f"O que decide o desfecho em {title.lower()}?",
-                "A prova contemporânea, o enquadramento contratual e a quantificação do impacto. Sem nexo entre fato, cláusula e valor, o pedido não se sustenta — qualquer que seja o tema.",
-            ),
+                "A prova contemporânea, o enquadramento contratual e a quantificação do impacto. Sem nexo entre fato, cláusula e valor, o pedido não se sustenta, qualquer que seja o tema.",
+),
             (
                 "Quais documentos reunir primeiro?",
                 "Contrato e anexos, registros de campo (diário, fotos, medições), comunicações oficiais e memória de cálculo do impacto. Depois, enquadre o pedido (aditivo, prazo, pagamento, defesa).",
-            ),
+),
             (
                 "Quando buscar apoio especializado?",
                 "Quando o valor, o prazo ou o risco de sanção já supera o improviso interno, ou quando a Administração já formalizou glosa, notificação ou indeferimento.",
-            ),
+),
         ]
 
     faq_items = []
@@ -617,26 +617,26 @@ def rewrite_machine_copy(html: str, slug: str, h1: str) -> str:
     for q, a in faqs:
         faq_items.append(
             f"<details><summary>{html_lib.escape(q)}</summary><p>{html_lib.escape(a)}</p></details>"
-        )
+)
         ld_entities.append(
             {
                 "@type": "Question",
                 "name": q,
                 "acceptedAnswer": {"@type": "Answer", "text": a},
             }
-        )
+)
     new_faq_html = (
         '<section class="article-faq"><p class="eyebrow">Perguntas frequentes</p>'
         "<h2>Dúvidas objetivas</h2>"
         f'<div class="faq-list">{"".join(faq_items)}</div></section>'
-    )
+)
     html2, n = re.subn(
         r'<section class="article-faq">.*?</section>',
         new_faq_html,
         html,
         count=1,
         flags=re.S,
-    )
+)
     if n:
         html = html2
 
@@ -656,7 +656,7 @@ def rewrite_machine_copy(html: str, slug: str, h1: str) -> str:
                 '<script type="application/ld+json">'
                 + json.dumps(data, ensure_ascii=False, separators=(",", ":"))
                 + "</script>"
-            )
+)
         return m.group(0)
 
     html = re.sub(
@@ -664,7 +664,7 @@ def rewrite_machine_copy(html: str, slug: str, h1: str) -> str:
         patch_script,
         html,
         flags=re.S,
-    )
+)
     return html
 
 
@@ -699,7 +699,7 @@ def filter_related_links(html: str, indexable: dict[str, bool]) -> str:
         filter_section,
         html,
         flags=re.S,
-    )
+)
 
 
 def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic: str, origem: str) -> str:
@@ -715,7 +715,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
             rf'<body\1 data-journey="{journey_id}" data-content-cluster="{html_lib.escape(topic[:40])}">',
             html,
             count=1,
-        )
+)
     # Soft-replace generic "Quer validar este cenário" lead with journey-aware next step
     cta = j.get("cta") or "Enviar documentos para análise"
     next_step = j.get("next_step") or ""
@@ -727,7 +727,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'data-journey="{journey_id}">'
         f'<div class="lead-inline-copy"><span>Próximo passo</span>'
         f"<strong>{html_lib.escape(cta)}</strong>"
-        f"<p>{html_lib.escape(next_step or 'Envie os documentos essenciais. Retorno com enquadramento técnico — sem promessa de resultado.')}</p>"
+        f"<p>{html_lib.escape(next_step or 'Envie os documentos essenciais. Retorno com enquadramento técnico, sem promessa de resultado.')}</p>"
         f"</div>"
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" data-cta-position="inline" data-journey="{journey_id}" '
@@ -735,14 +735,14 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'<a class="button button-secondary" data-cta-position="form" data-journey="{journey_id}" '
         f'href="{form}">Continuar pelo formulário</a>'
         f"</div></section>"
-    )
+)
     html2, n = re.subn(
         r'<section class="lead-inline"[^>]*>.*?</section>',
         new_lead,
         html,
         count=1,
         flags=re.S,
-    )
+)
     if n:
         html = html2
     return html
@@ -765,10 +765,10 @@ def remediate_conteudos_pages(brand: dict[str, Any]) -> dict[str, Any]:
         section_m = re.search(
             r'property="article:section"\s+content="([^"]+)"',
             html,
-        ) or re.search(
+) or re.search(
             r'content="([^"]+)"\s+property="article:section"',
             html,
-        )
+)
         # infer cluster from related pillar link
         pillar = re.search(r'href="/(medicoes-glosas-obras-publicas|aditivos-obras-publicas|reequilibrio-obras-publicas|atrasos-prorrogacao-obras-publicas|defesa-tecnica-contratos-publicos|acompanhamento-contratos-obras|diagnostico-pre-licitacao|auditoria-orcamento-licitacao)/"', html)
         cluster = pillar.group(1) if pillar else "acompanhamento-contratos-obras"
@@ -785,17 +785,17 @@ def remediate_conteudos_pages(brand: dict[str, Any]) -> dict[str, Any]:
                 r"primeiro risco pr[aá]tico em um caso de|O caso de\s+.{8,80}?\s+s[oó] se sustenta|"
                 r"absorver custo ou risco de\s+[a-záàâãéêíóôõúç0-9\s\-]{8,60}\s+sem prova",
                 re.I,
-            )
+)
             if machine_re.search(html):
                 html = rewrite_machine_copy(html, slug, h1)
-            # JSON-LD about.name often dumps raw slug tokens — naturalize for indexable pages
+            # JSON-LD about.name often dumps raw slug tokens, naturalize for indexable pages
             natural_about = h1.split("|")[0].strip()
             html = re.sub(
                 r'("about"\s*:\s*\[\s*\{\s*"@type"\s*:\s*"Thing"\s*,\s*"name"\s*:\s*")([^"]+)(")',
                 lambda m: m.group(1) + natural_about + m.group(3),
                 html,
                 count=1,
-            )
+)
             # Delimite/Converta soft replacements may still leave raw slug token runs in body
             slug_tokens = [t for t in slug.split("-") if len(t) > 2]
             if len(slug_tokens) >= 5:
@@ -807,7 +807,7 @@ def remediate_conteudos_pages(brand: dict[str, Any]) -> dict[str, Any]:
                         natural_about.lower(),
                         html,
                         flags=re.I,
-                    )
+)
                 stats["machine"] += 1
             html = filter_related_links(html, idx_map)
             html = inject_journey_cta(html, brand, journey, h1, url)
@@ -821,7 +821,7 @@ def remediate_conteudos_pages(brand: dict[str, Any]) -> dict[str, Any]:
                 lambda m: natural_converta_replacement(m.group(1)),
                 html,
                 flags=re.I,
-            )
+)
 
         # Strip internal taxonomy jargon from public visitor UI (all conteudos pages)
         html = re.sub(r"Página-pilar", "Tema principal", html, flags=re.I)
@@ -867,18 +867,18 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         h1 = re.search(r"<h1>([^<]+)</h1>", t)
         section = re.search(
             r'property="article:section"\s+content="([^"]+)"', t
-        ) or re.search(r'content="([^"]+)"\s+property="article:section"', t)
+) or re.search(r'content="([^"]+)"\s+property="article:section"', t)
         lead = re.search(r'class="content-lead">([^<]+)', t)
         pillar = re.search(
             r'href="/(medicoes-glosas-obras-publicas|aditivos-obras-publicas|reequilibrio-obras-publicas|atrasos-prorrogacao-obras-publicas|defesa-tecnica-contratos-publicos|acompanhamento-contratos-obras|diagnostico-pre-licitacao|auditoria-orcamento-licitacao)/"',
             t,
-        )
+)
         pillar_id = pillar.group(1) if pillar else ""
         stage = resolve_content_stage(
             slug=p.parent.name,
             pillar=pillar_id,
             classification=stage_class,
-        )
+)
         items_meta.append(
             {
                 "url": url,
@@ -889,9 +889,9 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                 "pillar": pillar_id,
                 "stage": stage,
             }
-        )
+)
 
-    # Theme (pillar) counts — only public indexable
+    # Theme (pillar) counts, only public indexable
     theme_counts: dict[str, int] = defaultdict(int)
     theme_first: dict[str, str] = {}
     for it in items_meta:
@@ -910,12 +910,12 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                     "diagnostico-pre-licitacao",
                     "Edital e proposta",
                     "Leitura crítica do edital, habilitação e decisão de participar ou recusar.",
-                ),
+),
                 (
                     "auditoria-orcamento-licitacao",
                     "Orçamento, BDI e preço",
                     "Consistência orçamentária, BDI e exequibilidade da proposta.",
-                ),
+),
             ],
         },
         {
@@ -927,22 +927,22 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                     "medicoes-glosas-obras-publicas",
                     "Medição, glosa e pagamento",
                     "Critérios de medição, glosas e direito ao recebimento.",
-                ),
+),
                 (
                     "aditivos-obras-publicas",
                     "Aditivos e mudança de escopo",
                     "Alterações quantitativas e qualitativas sem trabalho gratuito.",
-                ),
+),
                 (
                     "acompanhamento-contratos-obras",
                     "Gestão contratual e diário",
                     "Rotina de registros, comunicações e controle da execução.",
-                ),
+),
                 (
                     "atrasos-prorrogacao-obras-publicas",
                     "Prazo, atraso e prorrogação",
                     "Imputação de atraso, prorrogação e preservação de posição.",
-                ),
+),
             ],
         },
         {
@@ -954,12 +954,12 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                     "reequilibrio-obras-publicas",
                     "Reequilíbrio econômico-financeiro",
                     "Causalidade, prova e impacto quando a equação original se rompe.",
-                ),
+),
                 (
                     "defesa-tecnica-contratos-publicos",
                     "Defesa técnica e sanções",
                     "Notificações, multas, impedimento e reação tempestiva com prova.",
-                ),
+),
             ],
         },
     ]
@@ -1000,7 +1000,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
             f'<p class="featured-lead-desc">{html_lib.escape(lead_desc)}</p>'
             f'<a class="text-link" href="{lead["url"]}">Abrir análise</a>'
             f"</article>"
-        )
+)
     if support:
         feat_parts.append('<ul class="featured-support">')
         for f in support:
@@ -1009,7 +1009,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                 f'<span class="featured-support-theme">{html_lib.escape(f["section"])}</span>'
                 f'<strong>{html_lib.escape(f["h1"])}</strong>'
                 f"</a></li>"
-            )
+)
         feat_parts.append("</ul>")
     feat_parts.append("</div>")
     feat_html = "".join(feat_parts)
@@ -1029,7 +1029,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                 f'<span class="problem-theme-blurb">{html_lib.escape(blurb)}</span>'
                 f'<span class="problem-theme-count">{html_lib.escape(plural_guias(n))}</span>'
                 f"</a></li>"
-            )
+)
         if not theme_rows:
             continue
         stage_parts.append(
@@ -1040,7 +1040,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
             f"</header>"
             f'<ul class="problem-theme-list">{"".join(theme_rows)}</ul>'
             f"</section>"
-        )
+)
     stage_parts.append("</div>")
     stage_html = "".join(stage_parts)
 
@@ -1049,7 +1049,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
     for i, it in enumerate(items_meta, 1):
         desc = it["lead"] or it["h1"]
         stage = it["stage"]
-        # No fixed char cut mid-word — CSS line-clamp may apply with full text in DOM
+        # No fixed char cut mid-word, CSS line-clamp may apply with full text in DOM
         dir_parts.append(
             f'<article class="content-directory-item" data-content-item '
             f'data-stage="{html_lib.escape(stage)}" '
@@ -1059,7 +1059,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
             f'<h3><a href="{it["url"]}">{html_lib.escape(it["h1"])}</a></h3>'
             f'<p class="dir-desc">{html_lib.escape(desc)}</p>'
             f"</div></article>"
-        )
+)
     dir_parts.append("</div>")
     dir_html = "".join(dir_parts)
 
@@ -1072,7 +1072,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                 "position": pos,
                 "url": f"https://confenge.com.br{it['url']}",
             }
-        )
+)
     item_list_json = json.dumps(list_items, ensure_ascii=False)
 
     # --- Compose main body (single H1; idempotent main rebuild) ---
@@ -1134,12 +1134,12 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         r'(<section class="content-cta"[\s\S]*?</section>)',
         html,
         re.I,
-    )
+)
     intel_m = re.search(
         r'(<section[^>]*id="inteligencia-pseo"[\s\S]*?</section>)',
         html,
         re.I,
-    )
+)
     trailing = ""
     if cta_m:
         trailing += cta_m.group(1) + "\n"
@@ -1203,7 +1203,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         html,
         count=1,
         flags=re.I,
-    )
+)
     if n_main:
         html = html2
     else:
@@ -1222,7 +1222,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         "revisão editorial",
         "Wave 1",
         "arquitetura de conteúdo",
-    ):
+):
         # only strip known metric tiles / lead claims; leave accidental technical attrs alone
         pass
 
@@ -1231,14 +1231,14 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         "",
         html,
         flags=re.S,
-    )
+)
     # Remove leftover cluster-grid blocks
     html = re.sub(
         r'<div class="cluster-grid">.*?</div>\s*',
         "",
         html,
         flags=re.S,
-    )
+)
     html = re.sub(
         r'<section class="section section-soft"[^>]*>\s*<div class="container">\s*'
         r'<div class="section-heading">.*?</div>\s*</div>\s*</section>',
@@ -1246,7 +1246,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         html,
         count=1,
         flags=re.S,
-    )
+)
 
     # Public copy: strip taxonomy jargon if any remains in visible body
     html = re.sub(r"guias indexáveis", "análises técnicas", html, flags=re.I)
@@ -1262,14 +1262,14 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
         r'"numberOfItems"\s*:\s*\d+',
         f'"numberOfItems":{idx_n}',
         html,
-    )
+)
     html = re.sub(
         r'"itemListElement"\s*:\s*\[.*?\]',
         f'"itemListElement":{item_list_json}',
         html,
         count=1,
         flags=re.S,
-    )
+)
 
     # Filter directory / featured noindex leftovers already handled by building from idx_map
 
@@ -1291,11 +1291,11 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                 '<p><a class="button button-secondary" href="/ferramentas/">Abrir ferramentas</a> '
                 '<a class="button button-secondary" href="/radar/nacional-obras-publicas/">Radar Nacional</a></p>'
                 "</div></section>"
-            ),
+),
             html,
             count=1,
             flags=re.S,
-        )
+)
 
     # Search script embedded in main rebuild (idempotent).
 
@@ -1370,14 +1370,14 @@ def strip_empty_library_surface(html: str) -> str:
         drop_empty_library,
         html,
         flags=re.S | re.I,
-    )
+)
     # Also bare class="section library-section" without word boundary quirks
     html = re.sub(
         r'<section class="section library-section"[^>]*>.*?</section>',
         drop_empty_library,
         html,
         flags=re.S | re.I,
-    )
+)
 
     # Hero / inline CTAs to #guias (including SVG children)
     html = re.sub(
@@ -1385,14 +1385,14 @@ def strip_empty_library_surface(html: str) -> str:
         "",
         html,
         flags=re.S | re.I,
-    )
+)
     # "Ver os … guias" links even without #guias or when count already stripped
     html = re.sub(
         r'<a\b[^>]*>\s*Ver os\b[\s\S]*?</a>',
         "",
         html,
         flags=re.I,
-    )
+)
     # Residual text fragments left by partial rewrites
     html = re.sub(r"\bVer os\s+\d*\s*guias?\b", "", html, flags=re.I)
     html = re.sub(r"\bVer os\b(?=\s*<|\s*$|\s*</)", "", html, flags=re.I)
@@ -1402,14 +1402,14 @@ def strip_empty_library_surface(html: str) -> str:
         "",
         html,
         flags=re.I,
-    )
+)
     # Empty evidence counters
     html = re.sub(
         r'<p class="pillar-evidence-count">\s*<strong>\s*0\s*</strong>\s*guias?[^<]*</p>',
         "",
         html,
         flags=re.I,
-    )
+)
     # Prefer technical note over zero counter on evidence blocks that still claim 0
     if re.search(r"pillar-evidence-count[\s\S]{0,80}\b0\b", html, re.I):
         html = re.sub(
@@ -1419,11 +1419,11 @@ def strip_empty_library_surface(html: str) -> str:
                 '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto. '
                 "Ainda sem guias públicos listados neste eixo.</p>"
                 "</div>"
-            ),
+),
             html,
             count=1,
             flags=re.S,
-        )
+)
     # Evidence block when pillar-stat still present with zero
     html = re.sub(
         r'<div class="pillar-stat">.*?</div>',
@@ -1432,11 +1432,11 @@ def strip_empty_library_surface(html: str) -> str:
             '<p class="pillar-evidence-note">Proposta técnica do tema e análise do caso concreto. '
             "Ainda sem guias públicos listados neste eixo.</p>"
             "</div>"
-        ),
+),
         html,
         count=1,
         flags=re.S,
-    )
+)
     return html
 
 
@@ -1510,13 +1510,13 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
             keep_library_item,
             html,
             flags=re.S,
-        )
+)
         html = html2
 
         # Renumber ranks and recount
         kept = list(
             re.finditer(r'<article class="library-item"[^>]*>.*?</article>', html, re.S)
-        )
+)
         n_kept = len(kept)
         # rewrite ranks 01..n
         rank = 0
@@ -1530,14 +1530,14 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                 f'<div class="library-rank">{rank:02d}</div>',
                 block,
                 count=1,
-            )
+)
 
         html = re.sub(
             r'<article class="library-item"[^>]*>.*?</article>',
             renumber,
             html,
             flags=re.S,
-        )
+)
 
         # When zero public guides: never publish "0 guias", empty library, or CTAs to empty lists.
         if n_kept == 0:
@@ -1546,21 +1546,21 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                 r'"numberOfItems"\s*:\s*\d+',
                 '"numberOfItems":0',
                 html,
-            )
+)
         else:
             # pillar-stat / hero guide counts (only when there is public content)
             html = re.sub(
-                r"(Ver os )\d+( guias)",
+                r"(Ver os)\d+(guias)",
                 rf"\g<1>{n_kept}\2",
                 html,
-            )
+)
             html = re.sub(
                 r'(class="pillar-stat">\s*<strong>)\d+(</strong>\s*<span>[^<]*guia[^<]*</span>)',
                 rf"\g<1>{n_kept}\2",
                 html,
                 count=1,
                 flags=re.I | re.S,
-            )
+)
 
             def fix_count_claim(m: re.Match[str]) -> str:
                 try:
@@ -1577,7 +1577,7 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                 r'"numberOfItems"\s*:\s*\d+',
                 f'"numberOfItems":{n_kept}',
                 html,
-            )
+)
 
             # Drop noindex ListItems from JSON-LD
             def filter_list_item(m: re.Match[str]) -> str:
@@ -1585,7 +1585,7 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                 url_m = re.search(
                     r'"url"\s*:\s*"(https://confenge\.com\.br)?(/conteudos/[^"]+)"',
                     block,
-                )
+)
                 if not url_m:
                     return block
                 path = url_m.group(2)
@@ -1599,7 +1599,7 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                 r'\{\s*"@type"\s*:\s*"ListItem"[^}]*\}',
                 filter_list_item,
                 html,
-            )
+)
             html = re.sub(r",\s*,+", ",", html)
             html = re.sub(r"\[\s*,", "[", html)
             html = re.sub(r",\s*\]", "]", html)
@@ -1613,11 +1613,11 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                     f"{guide_word} neste tema</p>"
                     f'<p class="pillar-evidence-note">Engenharia, contrato e impacto econômico no mesmo enquadramento.</p>'
                     f"</div>"
-                ),
+),
                 html,
                 count=1,
                 flags=re.S,
-            )
+)
             # Keep evidence block in sync when already converted
             html = re.sub(
                 r'<p class="pillar-evidence-count">.*?</p>',
@@ -1625,7 +1625,7 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                 html,
                 count=1,
                 flags=re.S,
-            )
+)
 
         # Visitor language: remove dashboard metrics / taxonomy jargon from pillars
         html = re.sub(r"eixos integrados", "engenharia, contrato e impacto", html, flags=re.I)
@@ -1680,8 +1680,8 @@ def remediate_editorial_and_commercial(brand: dict[str, Any]) -> int:
         *PILLARS,
         "especialista",
         "metodologia-inteligencia",
-        # Note: do NOT walk inteligencia/* bulk org pages — only hub if present
-    ):
+        # Note: do NOT walk inteligencia/* bulk org pages, only hub if present
+):
         b = ROOT / base
         if not b.exists():
             continue
@@ -1723,34 +1723,34 @@ def fix_radar(brand: dict[str, Any]) -> None:
         'content="noindex,follow"',
         html,
         count=1,
-    )
+)
     html = re.sub(
         r'name="robots" content="[^"]+"',
         'name="robots" content="noindex,follow"',
         html,
         count=1,
-    )
+)
     html = re.sub(
         r'content="[^"]+" name="robots"',
         'content="noindex,follow" name="robots"',
         html,
         count=1,
-    )
+)
     if "Configurar meu radar" not in html:
         wa = wa_url(
             "Olá, Tiago. Quero configurar o radar de oportunidades com o perfil da minha construtora."
-        )
+)
         cta = (
             '<section class="lead-inline" id="radar-cta">'
             '<div class="lead-inline-copy"><span>Próximo passo</span>'
             "<strong>Sem perfil da empresa, o radar vira ruído.</strong>"
-            "<p>Calibre o recorte à capacidade, acervo e órgãos-alvo — não assine mais um alerta genérico.</p>"
+            "<p>Calibre o recorte à capacidade, acervo e órgãos-alvo, não assine mais um alerta genérico.</p>"
             "</div><div class=\"lead-inline-actions\">"
             f'<a class="button button-primary" href="{wa}" rel="noopener" target="_blank">'
             "Configurar meu radar de oportunidades</a>"
             '<a class="button button-secondary" href="/diagnostico-b2g-360/">Começar pelo diagnóstico B2G</a>'
             "</div></section>"
-        )
+)
         if "</main>" in html:
             html = html.replace("</main>", cta + "</main>", 1)
         else:
@@ -1775,7 +1775,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
         journey: str = "",
         notes: str = "",
         path: str = "",
-    ) -> None:
+) -> None:
         rows.append(
             {
                 "url": url,
@@ -1786,7 +1786,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "http_status_production": "UNVERIFIED",
                 "canonical": f"{SITE}{url}" if url.startswith("/") else url,
                 "robots": robots,
-                "in_sitemap": False,  # filled later
+                "in_sitemap": False, # filled later
                 "in_hub": False,
                 "in_feed": False,
                 "internal_links_in": "",
@@ -1802,7 +1802,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "notes": notes,
                 "path": path,
             }
-        )
+)
 
     # Home + commercial
     add("/", "home", "Homepage CONFENGE", robots="index,follow", disposition="KEEP_AND_IMPROVE", journey="operacao")
@@ -1815,9 +1815,9 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
             disposition="KEEP_AND_IMPROVE",
             journey="operacao" if "diretoria" in (o.get("id") or "") or "diagnostico" in (o.get("id") or "") else (
                 "edital" if "bid" in (o.get("id") or "") else "contrato"
-            ),
+),
             notes=f"offer_id={o.get('id')}",
-        )
+)
 
     # Pillars
     for slug, cluster in [
@@ -1843,7 +1843,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 cluster=cluster,
                 journey=CLUSTER_JOURNEY.get(slug, "contrato"),
                 path=str(p.relative_to(ROOT)),
-            )
+)
 
     # Conteudos
     for p in sorted((ROOT / "conteudos").glob("*/index.html")):
@@ -1857,8 +1857,8 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 r"Converta a discuss|Qual documento deve ser lido primeiro em um caso de|primeiro risco pr[aá]tico em um caso de",
                 t,
                 re.I,
-            )
-        )
+)
+)
         if not is_indexable_html(t):
             disp = "RETAIN_NOINDEX"
             notes = "noindex; excluded from hub/sitemap/feed after remediation"
@@ -1870,7 +1870,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
         pillar = re.search(
             r'href="/(medicoes-glosas-obras-publicas|aditivos-obras-publicas|reequilibrio-obras-publicas|atrasos-prorrogacao-obras-publicas|defesa-tecnica-contratos-publicos|acompanhamento-contratos-obras|diagnostico-pre-licitacao|auditoria-orcamento-licitacao)/"',
             t,
-        )
+)
         cluster = pillar.group(1) if pillar else ""
         add(
             url,
@@ -1882,7 +1882,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
             journey=CLUSTER_JOURNEY.get(cluster, "contrato"),
             notes=notes,
             path=str(p.relative_to(ROOT)),
-        )
+)
 
     # Editorial wave1
     reg_path = ROOT / "data" / "editorial" / "EDITORIAL-REGISTRY.json"
@@ -1922,7 +1922,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "similarity_notes": "",
                 "disposition": disp,
                 "journey": "contrato" if page.get("journey") == "execucao" else page.get("journey") or "contrato",
-                "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+                "notes": "Wave 1: approval path is Tiago-only (PR #10)",
                 "path": "",
             }
             rows.append(row)
@@ -1946,7 +1946,7 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
             robots="n/a",
             disposition=disp,
             notes=f"expected {code} per _redirects; production proof separate",
-        )
+)
 
     # Sitemap membership
     sm_urls = set()
@@ -2022,7 +2022,7 @@ def main() -> int:
                     r"Converta a discuss|Qual documento deve ser lido primeiro em um caso de|primeiro risco pr[aá]tico em um caso de",
                     t,
                     re.I,
-                ):
+):
                     row["disposition"] = "KEEP_AND_IMPROVE"
                     row["notes"] = "indexable; machine FAQ/CTA residue remediated"
     write_inventory(rows)

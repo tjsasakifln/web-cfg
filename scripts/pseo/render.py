@@ -27,7 +27,7 @@ from scripts.pseo.score import Candidate
 def br_date(iso: str | None) -> str:
     """Visible Brazilian date; empty if missing."""
     if not iso:
-        return "—"
+        return "n/d"
     s = str(iso).strip()
     d = s[:10]
     if len(d) == 10 and d[4] == "-" and d[7] == "-":
@@ -37,7 +37,7 @@ def br_date(iso: str | None) -> str:
 
 def br_datetime(iso: str | None) -> str:
     if not iso:
-        return "—"
+        return "n/d"
     s = str(iso).strip()
     date_part = br_date(s)
     if "T" in s:
@@ -49,7 +49,7 @@ def br_datetime(iso: str | None) -> str:
 
 
 def _scrub_criteria(items: list | None) -> list[str]:
-    """Visitor-facing inclusion/exclusion lines — no pipeline / datalake jargon."""
+    """Visitor-facing inclusion/exclusion lines, no pipeline / datalake jargon."""
     out = []
     for raw in items or []:
         s = str(raw)
@@ -65,7 +65,7 @@ def _scrub_criteria(items: list | None) -> list[str]:
                 r"\b(pavimentacao-infraestrutura-viaria|edificacoes-publicas|manutencao-predial-engenharia|climatizacao-instalacoes|saneamento-hidraulica)\b",
                 "segmento de engenharia",
                 s,
-            )
+)
         s = s.replace("typology=", "tipologia: ").replace("scope=", "escopo: ").replace("nature=", "natureza: ")
         s = s.replace("manutencao", "manutenção").replace("paralelepipedo", "paralelepípedo")
         s = s.replace("somente aec_confirmed", "somente objetos AEC confirmados")
@@ -85,7 +85,7 @@ def _scrub_limitations(items: list | None) -> list[str]:
             r"manutencao-predial-engenharia|climatizacao-instalacoes|saneamento-hidraulica)\b",
             "deste segmento",
             s,
-        )
+)
         s = re.sub(r"arquétipo primário\s+deste segmento", "segmento primário", s, flags=re.I)
         s = re.sub(r"\barquétipo\b", "segmento", s, flags=re.I)
         s = re.sub(r"\bdatalake\b", "base pública de contratos", s, flags=re.I)
@@ -131,7 +131,7 @@ def safe_http_url(url: str | None) -> str | None:
         p = urlparse(s)
         if not p.netloc or p.netloc.startswith("."):
             return None
-    except Exception:  # noqa: BLE001
+    except Exception: # noqa: BLE001
         return None
     return s
 
@@ -176,7 +176,7 @@ def guide_path_label(path: str | None) -> str:
         ("aditivo", "aditivo"),
         ("obra", "obra"),
         ("planilha", "planilha"),
-    )
+)
     for a, b in repl:
         s = re.sub(rf"\b{a}\b", b, s, flags=re.I)
     small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o", "as", "os", "na", "no"}
@@ -203,33 +203,33 @@ def _problem_decision_copy(p: dict) -> str:
             "em tempo real (diário, comunicação formal, medições) ou absorve custo sem cobertura. "
             "O recorte público ajuda a enxergar onde a exposição é maior; "
             "não estima taxa de aditivo por órgão."
-        )
+)
     if "sinapi" in theme or "sicro" in theme:
         return (
             f"Em {label}, a decisão é qual referência de custo (e produtividade) usar na proposta "
             "e como justificar desvios. SINAPI e SICRO cobrem naturezas distintas; erro de base "
             "vira deságio real após a assinatura."
-        )
+)
     if "orcamento" in theme or "edital" in theme:
         return (
             f"Em {label}, a decisão é participar, pedir esclarecimento/impugnação ou recusar o edital "
             "quando planilha e texto não batem. A massa de contratos no recorte indica mercados "
-            "onde o problema aparece com frequência — não prova inconsistência no edital X."
-        )
+            "onde o problema aparece com frequência, não prova inconsistência no edital X."
+)
     if "medicao" in theme or "glosa" in theme:
         return (
             f"Em {label}, a decisão é como reagir a glosa ou medição rejeitada nas primeiras 48h: "
             "critério, diário de obra, parcela incontroversa e trilha de comunicação."
-        )
+)
     if "reequilibr" in theme:
         return (
             f"Em {label}, a decisão é se cabe reajuste, repactuação ou reequilíbrio e qual memória "
             "de cálculo sustenta a equação econômico-financeira."
-        )
+)
     return (
         f"Em {label}, a decisão é qual ação comercial/técnica tomar com base em evidência "
-        "documental específica — não em volume de mercado sem vínculo ao caso."
-    )
+        "documental específica, não em volume de mercado sem vínculo ao caso."
+)
 
 
 def _problem_action_copy(p: dict) -> str:
@@ -239,31 +239,31 @@ def _problem_action_copy(p: dict) -> str:
             "Organize o dossiê de alteração (projeto, quantitativos, comunicações e medições) "
             "antes de executar o serviço extra. Se o volume for material, acione a trilha de "
             "aditivos e serviços extras da CONFENGE."
-        )
+)
     if "sinapi" in theme or "sicro" in theme:
         return (
             "Confronte a referência do edital com a natureza do serviço, a data-base e a "
             "produtividade local. Monte memória de BDI e itens críticos antes de fechar deságio."
-        )
+)
     if "orcamento" in theme or "edital" in theme:
         return (
             "Liste divergências planilha×memorial×caderno, quantifique materialidade e defina "
             "se o caminho é esclarecimento, impugnação ou proposta com ressalvas documentadas."
-        )
+)
     if "medicao" in theme or "glosa" in theme:
         return (
             "Registre o critério da glosa, separe o incontroverso e reúna diário/fotos/medição "
             "parcial nas primeiras 48 horas."
-        )
+)
     if "reequilibr" in theme:
         return (
             "Separe o que é reajuste contratual do que é revisão por fato extraordinário e "
             "prepare memória de impacto com índices e cronograma."
-        )
+)
     return (
         "Reúna o edital/contrato, a planilha e a trilha de comunicações; defina a decisão "
         "e o prazo antes de precificar ou executar."
-    )
+)
 
 
 def _problem_help_copy(p: dict) -> str:
@@ -273,20 +273,20 @@ def _problem_help_copy(p: dict) -> str:
         return (
             f"A CONFENGE estrutura o dossiê de alteração e a narrativa técnica para {svc.lower()}, "
             "sem substituir o jurídico da empresa."
-        )
+)
     if "sinapi" in theme or "sicro" in theme:
         return (
             f"A CONFENGE revisa planilha, BDI e referências ({svc}) para reduzir risco de margem "
             "na proposta."
-        )
+)
     if "orcamento" in theme or "edital" in theme:
         return (
             f"A CONFENGE faz o diagnóstico de inconsistência edital×orçamento e o caminho "
             f"documental via {svc.lower()}."
-        )
+)
     return (
         f"A CONFENGE conecta o problema observado à trilha documental e ao serviço {svc.lower()}."
-    )
+)
 
 
 def _normalize_evidence_kind(p: dict) -> str:
@@ -327,7 +327,7 @@ def _problem_mass_copy(p: dict) -> str:
     arches = ", ".join(
         _ARCH_LABEL.get(str(a), str(a).replace("-", " "))
         for a in (p.get("related_archetypes") or [])[:3]
-    ) or "engenharia pública"
+) or "engenharia pública"
 
     # Direct evidence may cite observed counts tied to the problem
     if kind == "direct_problem_evidence" and n > 0:
@@ -335,17 +335,17 @@ def _problem_mass_copy(p: dict) -> str:
             return (
                 f"Foram observados {n} registros documentais de alteração/aditivo "
                 f"em {arches} no recorte analisado."
-            )
+)
         if "sinapi" in theme or "sicro" in theme:
             return (
                 f"Foram identificados {n} sinais documentais de referência de custo "
                 f"(SINAPI/SICRO ou correlatos) em {arches}."
-            )
+)
         if "orcamento" in theme or "edital" in theme:
             return (
                 f"Foram identificadas {n} divergências documentais entre orçamento e edital "
                 f"em {arches}."
-            )
+)
         return f"Evidência direta: {n} ocorrências ligadas ao problema em {arches}."
 
     # Contextual market evidence may show market size with explicit non-causal framing
@@ -354,37 +354,37 @@ def _problem_mass_copy(p: dict) -> str:
             f"O mercado relacionado em {arches} concentra atividade contratual relevante "
             f"({n} contratos no recorte). Esse número contextualiza exposição de mercado e "
             f"não mede a frequência do problema nesta página."
-        )
+)
 
-    # normative_editorial — no decorative contract counts
+    # normative_editorial, no decorative contract counts
     if "aditiv" in theme:
         return (
             f"Em {arches}, alterações de projeto e quantitativo são o ponto em que a margem "
-            "se perde quando o registro contemporâneo falha — a orientação abaixo é "
+            "se perde quando o registro contemporâneo falha, a orientação abaixo é "
             "normativa e documental, não uma taxa de aditivo."
-        )
+)
     if "sinapi" in theme or "sicro" in theme:
         return (
             f"Em {arches}, a escolha da referência de custo (e da produtividade) define "
             "deságio real após a assinatura; a página orienta o critério, não o preço unitário "
             "da sua planilha."
-        )
+)
     if "orcamento" in theme or "edital" in theme:
         return (
             f"Em {arches}, inconsistência entre planilha de referência e edital costuma "
             "aparecer antes da proposta; a orientação é documental e legal, sem extrapolar "
             "frequência estatística do problema."
-        )
+)
     if "medicao" in theme or "glosa" in theme:
         return (
             f"Em contratos de {arches} com execução recorrente, disputas de critério de "
             "medição e glosa se resolvem com diário, memória de cálculo e parcela "
-            "incontroversa — não com volume de mercado sem vínculo ao caso."
-        )
+            "incontroversa, não com volume de mercado sem vínculo ao caso."
+)
     return (
         f"Orientação técnica para {arches} com base em legislação, guias e prática "
-        "profissional — sem usar volume de mercado como prova do problema concreto."
-    )
+        "profissional, sem usar volume de mercado como prova do problema concreto."
+)
 
 
 def money_or_ni(v, value_status: str | None = None) -> str:
@@ -477,8 +477,8 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         f"{m.get('buyer_count')} órgãos, com valor total de {money(m.get('total_value'))}. "
         f"A mediana contratual é {money(m.get('median_value'))} (P25 {money(m.get('p25_value'))}, "
         f"P75 {money(m.get('p75_value'))}). Para uma empresa do ICP, o dado serve para "
-        f"priorizar órgãos, calibrar ticket e preparar proposta — não como preço unitário."
-    )
+        f"priorizar órgãos, calibrar ticket e preparar proposta, não como preço unitário."
+)
     inds = indicators_html(
         [
             ("Contratos", str(m.get("contract_count")), "classificados no segmento"),
@@ -488,11 +488,11 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
             ("Fornecedores", str(m.get("supplier_count")), "observados"),
             ("Oportunidades", str(m.get("open_opportunity_count")), "no radar (mesmo recorte)"),
         ]
-    )
+)
     buyer_rows = [
         [
-            b.get("name") or "—",
-            b.get("municipio") or "—",
+            b.get("name") or "n/d",
+            b.get("municipio") or "n/d",
             b.get("contract_count"),
             money(b.get("total_value")),
         ]
@@ -502,7 +502,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         ["Órgão", "Município", "Contratos", "Valor total"],
         buyer_rows,
         caption="Principais órgãos compradores no recorte",
-    )
+)
     obj_rows = [
         [o.get("label"), o.get("count"), (o.get("example_objeto") or "")[:80]]
         for o in (m.get("top_objects") or [])[:6]
@@ -511,7 +511,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         ["Objeto (rótulo)", "N", "Exemplo público"],
         obj_rows,
         caption="Objetos mais recorrentes",
-    )
+)
     year_rows = [
         [y.get("year"), y.get("contract_count"), money(y.get("total_value"))]
         for y in (m.get("value_by_year") or [])
@@ -526,7 +526,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         f"({len(years)} anos com registro)."
         if len(years) >= 2
         else "A série anual é curta no recorte exportado."
-    )
+)
     p25, p75 = m.get("p25_value"), m.get("p75_value")
     ratio = None
     try:
@@ -535,35 +535,35 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     except (TypeError, ValueError):
         ratio = None
     disp = (
-        f"P75/P25 ≈ {ratio:.1f}× — dispersão alta; misturar portes distorce qualquer 'preço médio'."
+        f"P75/P25 ≈ {ratio:.1f}×, dispersão alta; misturar portes distorce qualquer 'preço médio'."
         if ratio and ratio >= 3
         else "Dispersão moderada no recorte; ainda assim objetos não são unitariamente comparáveis."
-    )
+)
     interpretation = (
         f"Em {m.get('region_label')}, o segmento {m.get('segment')} concentra "
         f"{m.get('contract_count')} contratos e {m.get('buyer_count')} órgãos. "
         f"O comprador mais frequente no recorte é {top_buyer.get('name') or 'não identificado'} "
         f"({top_buyer.get('contract_count') or 0} contratos, {money(top_buyer.get('total_value'))}). "
-        f"Objeto recorrente de referência: «{top_obj.get('label') or '—'}» "
+        f"Objeto recorrente de referência: «{top_obj.get('label') or 'n/d'}» "
         f"({top_obj.get('count') or 0} ocorrências). {year_note} {disp}"
-    )
+)
     implications = (
         f"Para atuar em {m.get('region')}: (1) priorize órgãos com frequência ≥3 no recorte; "
         f"(2) ancore porte pela mediana {money(m.get('median_value'))}, nunca por média; "
         f"(3) cruze {m.get('open_opportunity_count')} oportunidades do radar com capacidade "
         f"técnica e de documentação; (4) rode auditoria de planilha antes de deságio agressivo."
-    )
+)
     related = _related_section(c.related_urls)
     crumbs = [
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
         ("Mercados", "/inteligencia/mercados/"),
-        (f"{m.get('segment')} — {m.get('region')}", None),
+        (f"{m.get('segment')}, {m.get('region')}", None),
     ]
     wa = (
         f"Olá, Tiago. Vi a página de inteligência de mercado de {m.get('segment')} "
         f"em {m.get('region_label')} e gostaria de um mapa aplicado à minha empresa."
-    )
+)
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
@@ -586,7 +586,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
     "A CONFENGE transforma este recorte em mapa aplicado à sua carteira: órgãos prioritários, "
-    "objetos compatíveis, riscos de planilha e roteiro de abordagem — sem ranking proprietário público.",
+    "objetos compatíveis, riscos de planilha e roteiro de abordagem, sem ranking proprietário público.",
 )}
 {cta_block(meta, c.cta_label, wa, f"Mercado {m.get('segment')} {m.get('region')}")}
 {methodology_block(m.get("period_start"), m.get("period_end"), m.get("sources") or [], _scrub_limitations(m.get("limitations")))}
@@ -644,7 +644,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
             "pseo-page-type": c.page_type,
             "content-cluster": "pseo",
         },
-    )
+)
 
 
 def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
@@ -652,37 +652,37 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     agency_display = humanize_agency(a.get('agency_name')) or a.get('agency_name') or ''
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"{agency_display} ({a.get('municipio') or '—'}, {a.get('uf') or '—'}) "
+        f"{agency_display} ({a.get('municipio') or 'n/d'}, {a.get('uf') or 'n/d'}) "
         f"aparece com {a.get('contract_count')} contratos classificados em engenharia/obras "
         f"no recorte público, totalizando {money(a.get('total_value'))}. Mediana {money(a.get('median_value'))}. "
         f"{a.get('supplier_count')} fornecedores distintos foram observados. "
-        f"Use o histórico para preparar estratégia de disputa — não como garantia de demanda futura."
-    )
+        f"Use o histórico para preparar estratégia de disputa, não como garantia de demanda futura."
+)
     inds = indicators_html(
         [
             ("Contratos", str(a.get("contract_count")), "no histórico classificado"),
             ("Valor total", money(a.get("total_value")), "nominal"),
             ("Mediana", money(a.get("median_value")), None),
             ("Fornecedores", str(a.get("supplier_count")), "distintos"),
-            ("UF", str(a.get("uf") or "—"), a.get("municipio")),
+            ("UF", str(a.get("uf") or "n/d"), a.get("municipio")),
             ("Oportunidades abertas", str(len(a.get("open_opportunities") or [])), "no snapshot"),
         ]
-    )
+)
     def _arch_label(aid: str | None) -> str:
         if not aid:
-            return "—"
+            return "n/d"
         s = str(aid).replace("-", " ").strip().lower()
         s = (
             s.replace("manutencao predial engenharia", "manutenção predial e engenharia")
-            .replace("manutencao predial", "manutenção predial")
-            .replace("pavimentacao infraestrutura viaria", "pavimentação e infraestrutura viária")
-            .replace("edificacoes publicas", "edificações públicas")
-            .replace("climatizacao instalacoes", "climatização e instalações")
-            .replace("saneamento hidraulica", "saneamento e hidráulica")
-            .replace("manutencao", "manutenção")
-            .replace("pavimentacao", "pavimentação")
-            .replace("edificacoes", "edificações")
-        )
+.replace("manutencao predial", "manutenção predial")
+.replace("pavimentacao infraestrutura viaria", "pavimentação e infraestrutura viária")
+.replace("edificacoes publicas", "edificações públicas")
+.replace("climatizacao instalacoes", "climatização e instalações")
+.replace("saneamento hidraulica", "saneamento e hidráulica")
+.replace("manutencao", "manutenção")
+.replace("pavimentacao", "pavimentação")
+.replace("edificacoes", "edificações")
+)
         small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o"}
         parts = []
         for i, w in enumerate(s.split()):
@@ -699,7 +699,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         [
             (o.get("objeto") or "")[:60],
             money(o.get("valor_estimado")),
-            o.get("modalidade") or "—",
+            o.get("modalidade") or "n/d",
             br_date(o.get("data_encerramento") or o.get("closing_at")),
         ]
         for o in (a.get("open_opportunities") or [])[:6]
@@ -708,9 +708,9 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         table_html(["Objeto", "Valor est.", "Modalidade", "Encerramento"], open_rows, "Oportunidades abertas")
         if open_rows
         else "<p>Sem oportunidades abertas vinculadas a este órgão no snapshot.</p>"
-    )
+)
     notes = "".join(f"<li>{e(n)}</li>" for n in (a.get("practical_notes") or []))
-    # Portal homes are navigation aids — not per-contract deep-links
+    # Portal homes are navigation aids, not per-contract deep-links
     channel_items = []
     for ch in a.get("official_channels") or []:
         url = ch.get("url") or ""
@@ -719,17 +719,17 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
             channel_items.append(
                 f'<li><a href="{e(url)}" rel="nofollow noopener noreferrer" target="_blank" '
                 f'data-pseo-event="pseo_source_open">{e(name)}</a> '
-                f"<small>(portal de consulta — não é ficha de contrato individual)</small></li>"
-            )
+                f"<small>(portal de consulta, não é ficha de contrato individual)</small></li>"
+)
         else:
             channel_items.append(
                 f"<li><span>{e(name)}</span> "
-                f"<small>(fonte oficial indisponível no snapshot — não inventamos URL)</small></li>"
-            )
+                f"<small>(fonte oficial indisponível no snapshot, não inventamos URL)</small></li>"
+)
     if not channel_items:
         channel_items.append(
-            "<li><small>Fonte oficial indisponível no snapshot — não inventamos URL de órgão.</small></li>"
-        )
+            "<li><small>Fonte oficial indisponível no snapshot, não inventamos URL de órgão.</small></li>"
+)
     channels = "".join(channel_items)
     # Open opportunities: deep-link when present, else explicit unavailable
     open_link_items = []
@@ -742,15 +742,15 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
                 f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
                 f'data-pseo-event="pseo_source_open">{e(label)}</a>'
                 f'{" <small>ID " + e(oid) + "</small>" if oid else ""}</li>'
-            )
+)
         else:
             open_link_items.append(
                 f'<li><span>{e(label) or "Oportunidade"}</span> '
-                f'<small>(fonte oficial indisponível — ID {e(oid) or "n/d"})</small></li>'
-            )
+                f'<small>(fonte oficial indisponível (ID) {e(oid) or "n/d"})</small></li>'
+)
     open_links_html = (
         f'<ul class="document-list">{"".join(open_link_items)}</ul>' if open_link_items else ""
-    )
+)
     crumbs = [
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
@@ -760,13 +760,13 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     wa = (
         f"Olá, Tiago. Quero avaliar estratégia para disputar contratos de "
         f"{agency_display} (página de inteligência CONFENGE)."
-    )
+)
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
 <p class="eyebrow">Dossiê de comprador público</p>
 <h1>{e(c.h1)}</h1>
-<p class="content-lead">Histórico de contratação em engenharia — evidência pública, sem score comercial.</p>
+<p class="content-lead">Histórico de contratação em engenharia, evidência pública, sem score comercial.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(a.get('municipio'))} / {e(a.get('uf'))}</span>
 <span><time datetime="{e(a.get('period_start'))}">{e(br_date(a.get('period_start')))}</time> – <time datetime="{e(a.get('period_end'))}">{e(br_date(a.get('period_end')))}</time></span>
@@ -813,7 +813,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         {
             "@type": "Dataset",
             "@id": f"{SITE}{c.url}#dataset",
-            "name": f"Histórico de contratos — {agency_display}",
+            "name": f"Histórico de contratos: {agency_display}",
             "description": c.description,
             "creator": {"@id": f"{SITE}/#organization"},
             "identifier": c.page_id,
@@ -840,7 +840,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         body_main=body,
         wa_message=wa,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "agency", "content-cluster": "pseo"},
-    )
+)
 
 
 def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
@@ -854,7 +854,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
         f"{money(p.get('median_value'))}, com P25 {money(p.get('p25_value'))} e P75 "
         f"{money(p.get('p75_value'))}. IQR = {money(p.get('dispersion_iqr'))}. "
         f"Estes números descrevem contratos integrais, não preços unitários de serviço."
-    )
+)
     inds = indicators_html(
         [
             ("Observações", str(p.get("observation_count")), "após filtros"),
@@ -864,16 +864,16 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
             ("IQR", money(p.get("dispersion_iqr")), "dispersão"),
             ("Máximo", money(p.get("max_value")), "no recorte"),
         ]
-    )
+)
     ex_rows = [
         [
-            x.get("contrato_id") or "—",
+            x.get("contrato_id") or "n/d",
             (x.get("objeto") or "")[:60],
             money(x.get("valor")),
-            x.get("municipio") or "—",
-            x.get("orgao_nome") or "—",
+            x.get("municipio") or "n/d",
+            x.get("orgao_nome") or "n/d",
             br_date(x.get("data_publicacao")),
-            x.get("source") or "—",
+            x.get("source") or "n/d",
         ]
         for x in (p.get("public_examples") or [])[:5]
     ]
@@ -881,7 +881,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
         ["ID", "Objeto", "Valor", "Município", "Órgão", "Data", "Fonte"],
         ex_rows,
         "Exemplos públicos auditáveis (maior valor no recorte)",
-    )
+)
     conf = p.get("comparison_confidence")
     conf_note = (
         f"<p><strong>Comparabilidade:</strong> recorte semântico de contratos integrais "
@@ -890,7 +890,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
         f"Denominador: ticket contratual (não preço unitário).</p>"
         if conf is not None or p.get("denominator_type")
         else ""
-    )
+)
     example_link_items = []
     for x in (p.get("public_examples") or [])[:5]:
         href = x.get("link_oficial") or x.get("link_pncp")
@@ -901,13 +901,13 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
                 f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
                 f'data-pseo-event="pseo_source_open">Fonte oficial · {e(label)}</a>'
                 f'{" <small>ID " + e(cid) + "</small>" if cid else ""}</li>'
-            )
+)
         else:
             example_link_items.append(
                 f'<li><span>Fonte oficial indisponível no snapshot</span> '
-                f'<small>— ID {e(cid) or "n/d"} · órgão {e((x.get("orgao_nome") or "n/d")[:40])} '
+                f'<small> (ID) {e(cid) or "n/d"} · órgão {e((x.get("orgao_nome") or "n/d")[:40])} '
                 f'· não inventamos URL</small></li>'
-            )
+)
     example_links = "".join(example_link_items)
     inc = "".join(f"<li>{e(x)}</li>" for x in _scrub_criteria(p.get("inclusion_criteria")))
     exc = "".join(f"<li>{e(x)}</li>" for x in _scrub_criteria(p.get("exclusion_criteria")))
@@ -915,18 +915,18 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
         ("Preços", "/inteligencia/precos/"),
-        (f"{p.get('object_label')} — {p.get('region')}", None),
+        (f"{p.get('object_label')}, {p.get('region')}", None),
     ]
     wa = (
         f"Olá, Tiago. Quero validar preço, risco e margem com base no benchmark de "
         f"{p.get('object_label')} em {p.get('region_label')}."
-    )
+)
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
 <p class="eyebrow">Benchmark de contratação</p>
 <h1>{e(c.h1)}</h1>
-<p class="content-lead">Mediana, quartis e dispersão — com advertência explícita contra comparação cega.</p>
+<p class="content-lead">Mediana, quartis e dispersão, com advertência explícita contra comparação cega.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(p.get('period_start'))} – {e(p.get('period_end'))}</span></div>
 </div></div></header>
@@ -1003,7 +1003,7 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
         body_main=body,
         wa_message=wa,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "price", "content-cluster": "pseo"},
-    )
+)
 
 
 def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
@@ -1014,7 +1014,7 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
         f"foram observados em {d.get('contract_count')} contratos públicos classificados. "
         f"Os três mais frequentes concentram {float(d.get('concentration_top3_share') or 0)*100:.1f}% "
         f"dos contratos do recorte. Linguagem neutra: frequência observada, não qualidade."
-    )
+)
     inds = indicators_html(
         [
             ("Fornecedores", str(d.get("supplier_count")), "observados"),
@@ -1022,7 +1022,7 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
             ("Top-3 share", f"{float(d.get('concentration_top3_share') or 0)*100:.1f}%", "contratos"),
             ("Órgãos", str(d.get("agencies_with_activity")), "com atividade"),
         ]
-    )
+)
     sup_rows = [
         [
             s.get("display_name"),
@@ -1037,23 +1037,23 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
         ["Fornecedor (público)", "Contratos", "Valor", "Órgãos", "Faixa"],
         sup_rows,
         "Fornecedores observados",
-    )
+)
     bands = table_html(
         ["Faixa", "Contratos"],
         [[b.get("band"), b.get("contract_count")] for b in (d.get("value_bands") or [])],
         "Faixas de valor contratual",
-    )
+)
     changes = "".join(f"<li>{e(x)}</li>" for x in (d.get("recent_changes") or []))
     crumbs = [
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
         ("Concorrência", "/inteligencia/concorrencia/"),
-        (f"{d.get('segment')} — {d.get('region')}", None),
+        (f"{d.get('segment')}, {d.get('region')}", None),
     ]
     wa = (
         f"Olá, Tiago. Vi a página de concorrência observada em {d.get('segment')} "
         f"({d.get('region_label')}) e quero um mapa aplicado à minha empresa."
-    )
+)
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
@@ -1074,7 +1074,7 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
 Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco reputacional.</p></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/inteligencia/mercados/"],
-    "Ajudamos a posicionar sua empresa em relação ao recorte público — com estratégia de objeto e órgão, não com lista fria de cold call.",
+    "Ajudamos a posicionar sua empresa em relação ao recorte público, com estratégia de objeto e órgão, não com lista fria de cold call.",
 )}
 {cta_block(meta, c.cta_label, wa, f"Concorrência {d.get('segment')} {d.get('region')}")}
 {methodology_block(d.get("period_start"), d.get("period_end"), d.get("sources") or [], d.get("limitations") or [])}
@@ -1109,7 +1109,7 @@ Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco
         body_main=body,
         wa_message=wa,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "competition", "content-cluster": "pseo"},
-    )
+)
 
 
 def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
@@ -1118,7 +1118,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     o = c.data_ref
     meta = _meta(c, manifest)
     as_of = o.get("as_of") or o.get("verified_at") or ""
-    as_of_br = br_date(as_of) if as_of else "—"
+    as_of_br = br_date(as_of) if as_of else "n/d"
     open_n = o.get("open_count")
     hist_n = o.get("historical_count")
     summary = _exec_summary(
@@ -1126,7 +1126,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         f"{open_n} oportunidades classificadas no recorte de {as_of_br}. "
         f"Esta URL não representa um edital individual; editais entram e saem da lista. "
         f"Confirme sempre no portal de origem antes de precificar."
-    )
+)
     inds = indicators_html(
         [
             ("Abertas", str(open_n), f"referência {as_of_br}"),
@@ -1134,14 +1134,14 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
             ("UF", str(o.get("region")), o.get("region_label")),
             ("Itens listados", str(len(o.get("items") or [])), "nesta página"),
         ]
-    )
+)
     rows = [
         [
             (i.get("objeto") or "")[:70],
             money_or_ni(i.get("valor_estimado"), i.get("value_status")),
-            i.get("modalidade") or "—",
-            i.get("municipio") or "—",
-            i.get("orgao_nome") or "—",
+            i.get("modalidade") or "n/d",
+            i.get("municipio") or "n/d",
+            i.get("orgao_nome") or "n/d",
             br_date(i.get("closing_at") or i.get("data_encerramento")),
         ]
         for i in (o.get("items") or [])[:20]
@@ -1150,8 +1150,8 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         ["Objeto", "Valor est.", "Modalidade", "Município", "Órgão", "Encerramento"],
         rows,
         f"Oportunidades no recorte {as_of_br}",
-    )
-    # Official links only when present — never invent portal home URLs
+)
+    # Official links only when present, never invent portal home URLs
     link_items = []
     unavailable = 0
     for i in (o.get("items") or [])[:8]:
@@ -1159,35 +1159,35 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         label = (i.get("objeto") or "")[:80]
         item_meta = (
             f"{e(i.get('status_bucket') or 'aberta')} · encerra {e(br_date(i.get('closing_at') or i.get('data_encerramento')))}"
-        )
+)
         if href:
             link_items.append(
                 f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
                 f'data-pseo-event="pseo_source_open">{e(label)}</a>'
                 f' <small>({item_meta})</small></li>'
-            )
+)
         else:
             unavailable += 1
             link_items.append(
                 f'<li><span>{e(label) or "Oportunidade sem link no snapshot"}</span> '
-                f'<small>({item_meta} · fonte oficial indisponível — não inventamos URL; confira no portal com o ID '
+                f'<small>({item_meta} · fonte oficial indisponível, não inventamos URL; confira no portal com o ID '
                 f'{e(i.get("pncp_id") or "n/d")})</small></li>'
-            )
+)
     links = "".join(link_items)
     if unavailable:
         links += (
             f'<li class="muted"><small>{unavailable} item(ns) sem deep-link no snapshot; '
             f"listados com ID/órgão para verificação manual.</small></li>"
-        )
+)
     crumbs = [
         ("Início", "/"),
         ("Radar", "/radar/"),
-        (f"{o.get('segment')} — {o.get('region')}", None),
+        (f"{o.get('segment')}, {o.get('region')}", None),
     ]
     wa = (
         f"Olá, Tiago. Quero analisar um edital do radar de {o.get('segment')} "
         f"em {o.get('region_label')} antes da proposta."
-    )
+)
     market_link = o.get("related_market_slug")
     # Only link to market pages that exist on disk (reject/no-build siblings omitted)
     market_html = ""
@@ -1200,16 +1200,16 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
             market_html = (
                 f'<p>Mercado correspondente: <a href="/inteligencia/mercados/{e(market_link)}/" '
                 f'data-pseo-event="pseo_related_page_click">ver inteligência de mercado</a>.</p>'
-            )
+)
     verified = o.get("verified_at") or as_of
-    verified_br = br_date(verified) if verified else "—"
-    # Historical count is contextual market mass — never as causal field-name dump
+    verified_br = br_date(verified) if verified else "n/d"
+    # Historical count is contextual market mass, never as causal field-name dump
     hist_sentence = (
         f"No recorte há registro de {e(hist_n)} oportunidades históricas no mesmo "
         f"segmento/UF; essa massa contextualiza o radar e não se confunde com as abertas listadas."
         if hist_n not in (None, "", 0, "0")
         else "Itens encerrados deixam de figurar na lista aberta na próxima atualização."
-    )
+)
     pub_limits = scrub_public_limitations(o.get("limitations") or [])
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -1266,7 +1266,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         body_main=body,
         wa_message=wa,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "radar", "content-cluster": "pseo"},
-    )
+)
 
 
 def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
@@ -1277,14 +1277,14 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     summary = _exec_summary(
         f"{p.get('problem_label')}: {p.get('observed_pattern')} "
         f"Trilha CONFENGE relacionada: {svc_label}."
-    )
+)
     guides = "".join(
         f'<li><a href="{e(g if str(g).startswith("/") else "/" + str(g).strip("/") + "/")}" '
         f'data-pseo-event="pseo_related_page_click">'
         f'{e(guide_path_label(str(g)))}</a></li>'
         for g in (p.get("technical_guide_paths") or [])
-    )
-    # Official normative/methodology references — auditável, not invented contract deep-links
+)
+    # Official normative/methodology references, auditável, not invented contract deep-links
     ref_items = []
     for ref in p.get("official_references") or []:
         href = safe_http_url(ref.get("url") if isinstance(ref, dict) else None)
@@ -1293,17 +1293,17 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
             ref_items.append(
                 f'<li><a href="{e(href)}" rel="nofollow noopener noreferrer" target="_blank" '
                 f'data-pseo-event="pseo_source_open">{e(name)}</a></li>'
-            )
+)
         else:
             ref_items.append(
                 f"<li><span>{e(name)}</span> "
-                f"<small>(fonte oficial indisponível no snapshot — não inventamos URL)</small></li>"
-            )
+                f"<small>(fonte oficial indisponível no snapshot, não inventamos URL)</small></li>"
+)
     if not ref_items:
         ref_items.append(
             "<li><small>Referências normativas não listadas neste snapshot; "
             "consulte os guias técnicos internos e a legislação aplicável.</small></li>"
-        )
+)
     refs_html = "".join(ref_items)
     _ARCH_LABEL = {
         "edificacoes-publicas": "edificações públicas",
@@ -1315,7 +1315,7 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     arches = ", ".join(
         _ARCH_LABEL.get(str(a), str(a).replace("-", " ").strip())
         for a in (p.get("related_archetypes") or [])
-    )
+)
     crumbs = [
         ("Início", "/"),
         ("Inteligência", "/inteligencia/"),
@@ -1325,8 +1325,8 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     wa = (
         f"Olá, Tiago. Preciso enquadrar risco e decisão em um cenário de "
         f"{p.get('problem_label')} e proteger a margem da operação."
-    )
-    # Scrub limitations for public display — never ship pipeline template phrases
+)
+    # Scrub limitations for public display, never ship pipeline template phrases
     pub_limits = []
     for lim in p.get("limitations") or ["Sem limitações declaradas."]:
         t = str(lim)
@@ -1335,7 +1335,7 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
             "Enquadramento técnico-público; ",
             t,
             flags=re.I,
-        )
+)
         t = t.replace("problema→serviço", "problema e decisão")
         t = t.replace("problema e serviço", "problema e decisão")
         t = re.sub(r"\bdatalake\b", "base pública de contratos", t, flags=re.I)
@@ -1348,12 +1348,12 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
         mass_extra = (
             f"<p>Ocorrências documentais ligadas ao problema no recorte: "
             f"<strong>{e(p.get('evidence_count'))}</strong>.</p>"
-        )
+)
     elif kind == "contextual_market_evidence" and p.get("evidence_count"):
         mass_extra = (
             f"<p>Dimensão de mercado relacionada (contexto, não prova do problema): "
             f"<strong>{e(p.get('evidence_count'))}</strong> contratos no recorte.</p>"
-        )
+)
     else:
         mass_extra = ""
 
@@ -1420,11 +1420,11 @@ Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
         body_main=body,
         wa_message=wa,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "problem_service", "content-cluster": "pseo"},
-    )
+)
 
 
 def _human_path_label(url: str) -> str:
-    """Editorial label from path — never expose raw multi-hyphen taxonomy IDs."""
+    """Editorial label from path, never expose raw multi-hyphen taxonomy IDs."""
     parts = [p for p in (url or "").strip("/").split("/") if p]
     if not parts:
         return "Página relacionada"
@@ -1449,16 +1449,16 @@ def _human_path_label(url: str) -> str:
     words = last.replace("-", " ").strip()
     words = (
         words.replace("pavimentacao infraestrutura viaria", "pavimentação e infraestrutura viária")
-        .replace("edificacoes publicas", "edificações públicas")
-        .replace("manutencao predial engenharia", "manutenção predial")
-        .replace("manutencao predial", "manutenção predial")
-        .replace("paralelepipedo", "paralelepípedo")
-        .replace("climatizacao instalacoes", "climatização e instalações")
-        .replace("saneamento hidraulica", "saneamento e hidráulica")
-        .replace("inconsistencia orcamento edital", "inconsistência orçamento × edital")
-        .replace("referencia sinapi sicro margem", "referência SINAPI/SICRO e margem")
-        .replace("aditivos e risco de margem", "aditivos e risco de margem")
-    )
+.replace("edificacoes publicas", "edificações públicas")
+.replace("manutencao predial engenharia", "manutenção predial")
+.replace("manutencao predial", "manutenção predial")
+.replace("paralelepipedo", "paralelepípedo")
+.replace("climatizacao instalacoes", "climatização e instalações")
+.replace("saneamento hidraulica", "saneamento e hidráulica")
+.replace("inconsistencia orcamento edital", "inconsistência orçamento × edital")
+.replace("referencia sinapi sicro margem", "referência SINAPI/SICRO e margem")
+.replace("aditivos e risco de margem", "aditivos e risco de margem")
+)
     small = {"de", "da", "do", "das", "dos", "e", "em", "a", "o", "na", "no"}
     out = []
     for i, w in enumerate(words.split()):
@@ -1480,7 +1480,7 @@ def _related_section(urls: list[str]) -> str:
         cards.append(
             f'<a class="related-card" href="{e(u)}" data-pseo-event="pseo_related_page_click">'
             f"<span>Relacionado</span><strong>{e(label)}</strong><small>Link interno</small></a>"
-        )
+)
     if not cards:
         return ""
     return f"""<section class="related-section"><p class="eyebrow">Malha</p><h2>Páginas relacionadas</h2>
@@ -1509,7 +1509,7 @@ def render_hub(
         cards += (
             f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
             f"<small>{e(meta)}</small></a>"
-        )
+)
     if cards:
         grid = f'<div class="related-grid" style="margin:2rem 0">{cards}</div>'
     elif empty_cta:
@@ -1519,7 +1519,7 @@ def render_hub(
             secondary = (
                 f'<a class="button button-secondary" href="{e(empty_cta["secondary_href"])}">'
                 f'{e(empty_cta["secondary_label"])}</a>'
-            )
+)
         is_wa = "wa.me" in primary_href
         target = ' rel="noopener" target="_blank"' if is_wa else ""
         grid = f"""<div class="commercial-bridge" style="margin:2rem 0">
@@ -1531,7 +1531,7 @@ def render_hub(
 </div>
 </div>"""
     else:
-        # Durable fallback — never "nenhum item publicado nesta onda"
+        # Durable fallback, never "nenhum item publicado nesta onda"
         grid = (
             '<div class="commercial-bridge" style="margin:2rem 0">'
             "<h2>Evidência pública só vira valor com a capacidade da empresa.</h2>"
@@ -1541,12 +1541,12 @@ def render_hub(
             '<a class="button button-primary" href="/diretoria-b2g/">Conhecer a Diretoria B2G</a>'
             '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico B2G</a>'
             "</div></div>"
-        )
+)
     back = (
         '<p><a class="text-link" href="/">Voltar ao início</a></p>'
         if path.rstrip("/") == "/inteligencia"
         else '<p><a class="text-link" href="/inteligencia/">Voltar ao hub de inteligência</a></p>'
-    )
+)
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero"><div class="container"><p class="eyebrow">{e(eyebrow)}</p>
@@ -1575,7 +1575,7 @@ def render_hub(
         wa_message=wa_message
         or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa.",
         data_attrs={"content-cluster": "pseo", "pseo-page-type": "hub"},
-    )
+)
 
 
 def _pad_items(items):
