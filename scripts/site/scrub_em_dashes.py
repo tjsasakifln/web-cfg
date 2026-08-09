@@ -218,46 +218,55 @@ def scrub_prose(text: str) -> str:
 def scrub_html(html: str) -> str:
     """Scrub em-dashes in an HTML document, preserving official source link labels.
 
-    Strategy: protect entire <a>...</a> whose visible text starts with an official
-    source name and contains em-dash; scrub the rest of the document as text
-    (including attributes and JSON-LD), then restore protected anchors.
+    Strategy:
+    1. Extract <script> and <style> blocks intact (never rewrite JS/CSS).
+    2. Protect official-source <a> labels and bare official titles.
+    3. scrub_prose on the remaining markup (body, meta, JSON-LD).
+    4. Restore protected anchors and script/style blocks.
     """
     if not html or EM not in html:
         return html
+
+    held_blocks: list[str] = []
+
+    def _hold_block(m: re.Match[str]) -> str:
+        held_blocks.append(m.group(0))
+        return f"\u0000B{len(held_blocks) - 1}\u0000"
+
+    # Keep scripts/styles untouched (scrub must not break JS ternaries / braces)
+    work = re.sub(
+        r"<script\b[^>]*>[\s\S]*?</script>",
+        _hold_block,
+        html,
+        flags=re.I,
+    )
+    work = re.sub(
+        r"<style\b[^>]*>[\s\S]*?</style>",
+        _hold_block,
+        work,
+        flags=re.I,
+    )
 
     held_anchors: list[str] = []
 
     def _protect_anchor(m: re.Match[str]) -> str:
         full = m.group(0)
-        # strip tags for text check
         inner = re.sub(r"<[^>]+>", "", full)
         if is_official_source_title(inner) or OFFICIAL_SOURCE_RE.search(inner):
             held_anchors.append(full)
             return f"\u0000A{len(held_anchors) - 1}\u0000"
         return full
 
-    # Protect anchors that look like official sources
-    work = re.sub(
-        r"<a\b[^>]*>[\s\S]*?</a>",
-        _protect_anchor,
-        html,
-        flags=re.I,
-    )
-
-    # Also protect bare official prefixes still in free text (Fontes without <a> edge cases)
+    work = re.sub(r"<a\b[^>]*>[\s\S]*?</a>", _protect_anchor, work, flags=re.I)
     work, held_src = _protect_official(work)
-
-    # Run prose scrub on chunks separated by protected tokens so we do not
-    # re-open official titles; scrub_prose itself protects again — safe.
-    # Whole-document scrub is fine after protections.
     work = scrub_prose(work)
-
     work = _restore_official(work, held_src)
     for i, original in enumerate(held_anchors):
         work = work.replace(f"\u0000A{i}\u0000", original)
+    for i, original in enumerate(held_blocks):
+        work = work.replace(f"\u0000B{i}\u0000", original)
 
     return work
-
 
 # Public HTML roots to scan / write (relative to repo root).
 PUBLIC_ROOTS = (
