@@ -298,7 +298,16 @@ def test_normalize_path_http_https():
 
 
 def test_gsc_loader_adversarial_decimals_total_bom(tmp_path: Path):
-    from scripts.organic.gsc_loader import load_csv, load_pages, load_gsc_dir
+    import csv as csv_mod
+
+    from scripts.organic.gsc_loader import (
+        _is_total_or_junk_label,
+        load_csv,
+        load_devices,
+        load_gsc_dir,
+        load_page_device,
+        load_pages,
+    )
 
     # comma decimal + % + TOTAL row + BOM
     csv_body = (
@@ -319,6 +328,31 @@ def test_gsc_loader_adversarial_decimals_total_bom(tmp_path: Path):
     assert abs(a["ctr"] - 0.05) < 1e-6
     assert abs(a["position"] - 3.5) < 1e-6
 
+    # TOTAL device row must not inflate devices_impressions_sum (TOTAL 100 + rows)
+    dev_csv = (
+        "Dispositivo,Cliques,Impressões,CTR,Posição\n"
+        "TOTAL,10,100,10%,1\n"
+        "Celular,2,20,10%,5\n"
+        "Computador,8,80,10%,3\n"
+    )
+    devices = load_devices(list(csv_mod.DictReader(dev_csv.splitlines())))
+    assert len(devices) == 2
+    assert sum(d["impressions"] for d in devices) == 100  # not 200 with TOTAL
+    assert all(d["device_key"] in {"mobile", "desktop"} for d in devices)
+    assert not any(_is_total_or_junk_label(d["device"]) for d in devices)
+
+    # TOTAL page×device must not become path /TOTAL/
+    pd_csv = (
+        "Página,Dispositivo,Cliques,Impressões,CTR,Posição\n"
+        "TOTAL,Celular,1,50,2%,4\n"
+        "https://confenge.com.br/conteudos/a/,Celular,1,20,5%,3.5\n"
+        "https://confenge.com.br/conteudos/a/,TOTAL,1,20,5%,3.5\n"
+    )
+    pd_rows = load_page_device(list(csv_mod.DictReader(pd_csv.splitlines())))
+    assert len(pd_rows) == 1
+    assert pd_rows[0]["path"] == "/conteudos/a/"
+    assert not any("/total" in (r.get("path") or "").lower() for r in pd_rows)
+
     # empty dir still loads
     empty = tmp_path / "gsc-empty"
     empty.mkdir()
@@ -328,7 +362,6 @@ def test_gsc_loader_adversarial_decimals_total_bom(tmp_path: Path):
     # missing device CSVs are empty, not fatal
     assert g["devices"] == []
     assert g["page_device"] == []
-
 
 def test_parse_redirects_netlify_variants():
     text = """

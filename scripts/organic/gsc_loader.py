@@ -124,7 +124,7 @@ def load_devices(rows: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for r in rows or []:
         device = _s(r, "device", "Dispositivo")
-        if not device:
+        if not device or _is_total_or_junk_label(device):
             continue
         clicks = _f(r, "clicks", "Cliques")
         impressions = _f(r, "impressions", "Impressões")
@@ -161,6 +161,8 @@ def load_page_device(rows: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
         url = _s(r, "page", "Página", "Páginas principais", "URL")
         device = _s(r, "device", "Dispositivo")
         if not url or not device:
+            continue
+        if _is_total_or_junk_label(url) or _is_total_or_junk_label(device):
             continue
         clicks = _f(r, "clicks", "Cliques")
         impressions = _f(r, "impressions", "Impressões")

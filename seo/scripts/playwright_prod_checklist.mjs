@@ -18,7 +18,8 @@ const legacy = [
   ["/privacy-policy", 301, "privacidade"],
   ["/politica-de-privacidade", 301, "privacidade"],
   ["/contato", 301, "contato"],
-  ["/trabalhe-conosco", 301, "contato"],
+  // Careers page does not exist — 410, not 301 to commercial contact.
+  ["/trabalhe-conosco", 410, ""],
   ["/terms-and-conditions", 301, "termos-de-uso"],
   ["/avcbclcb", 410, ""],
   ["/vision", 410, ""],
