@@ -53,6 +53,15 @@
   "notes": [
     "expected_ctr is a planning heuristic for opportunity ranking, not a Google guarantee.",
     "Small GSC samples inflate noise; confidence must stay low when impressions < 30.",
+    "min_impressions=10 only qualifies a hypothesis for the worklist — never treat it as statistical significance.",
+    "priority_paths are review candidates, not automatic rewrites; healthy CTR → priority_benchmark only.",
     "Aggregation mismatch between GSC tables is expected and must not be force-reconciled."
-  ]
+  ],
+  "confidence_bands": {
+    "anecdotal_max_impressions": 9,
+    "very_low_max_impressions": 29,
+    "low_max_impressions": 49,
+    "low_moderate_max_impressions": 99,
+    "note": "Maps to serp_ctr.diagnose_page_html sample_quality; does not auto-rewrite titles."
+  }
 }

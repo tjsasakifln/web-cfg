@@ -1,6 +1,6 @@
 {
   "schema_version": "seo-opportunities-v1",
-  "generated_at": "2026-08-09T19:06:13Z",
+  "generated_at": "2026-08-09T19:25:37Z",
   "as_of": "2026-08-09",
   "north_star": "receita_esperada_atribuivel_ao_inbound_organico",
   "scoring": {
@@ -72,7 +72,9 @@
         ],
         "priority_force_include": false
       },
-      "confidence": 0.75,
+      "confidence": 0.55,
+      "sample_quality": "low_moderate",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
     },
@@ -134,7 +136,9 @@
         ],
         "priority_force_include": false
       },
-      "confidence": 0.4,
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
     },
@@ -196,7 +200,9 @@
         ],
         "priority_force_include": false
       },
-      "confidence": 0.45,
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
     },
@@ -205,8 +211,8 @@
       "query_intent": "informational",
       "related_queries": [],
       "intent_page_mismatch": false,
-      "title": "Prazo de vigência ≠ prazo de execução no contrato | CONFENGE",
-      "title_length": 60,
+      "title": "Prazo de vigência vs prazo de execução no contrato | CONFENGE",
+      "title_length": 61,
       "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
       "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
       "above_the_fold_lead": "Quando surge prazo de vigência e de execução na obra, a ordem é prova, enquadramento contratual e quantificação do impacto.",
@@ -233,11 +239,12 @@
       "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
       "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
       "issues": [
+        "title_long_desktop",
         "title_long_mobile_truncation_risk",
         "robots_noindex"
       ],
       "clickbait_flags": [],
-      "recommended_title": "Prazo de vigência ≠ prazo de execução no contrato",
+      "recommended_title": "Prazo de vigência vs prazo de execução no contrato",
       "recommended_description": null,
       "gsc": {
         "impressions": 18.0,
@@ -257,7 +264,9 @@
         ],
         "priority_force_include": false
       },
-      "confidence": 0.4,
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
     },
@@ -318,7 +327,9 @@
         ],
         "priority_force_include": false
       },
-      "confidence": 0.4,
+      "confidence": 0.3,
+      "sample_quality": "very_low",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
     },
@@ -380,7 +391,9 @@
         ],
         "priority_force_include": false
       },
-      "confidence": 0.4,
+      "confidence": 0.3,
+      "sample_quality": "very_low+noindex",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
     },
@@ -438,7 +451,9 @@
         ],
         "priority_force_include": false
       },
-      "confidence": 0.4,
+      "confidence": 0.3,
+      "sample_quality": "very_low",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
     },
@@ -496,7 +511,9 @@
         ],
         "priority_force_include": true
       },
-      "confidence": 0.4,
+      "confidence": 0.3,
+      "sample_quality": "very_low",
+      "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "priority_benchmark"
     }
@@ -514,8 +531,8 @@
       "tofu": 12
     },
     "by_publishability": {
-      "indexable_candidate": 18,
-      "blocked_by_gate": 13
+      "indexable_candidate": 17,
+      "blocked_by_gate": 14
     },
     "bofu": 4,
     "data_driven": 11,
@@ -696,7 +713,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-6340079",
+      "id": "opp-gsc-ctr-6641883",
       "topic": "CTR opportunity: /conteudos/sinapi-desonerado-nao-desonerado/",
       "cluster": "orcamento-bdi",
       "intent": "mofu",
@@ -749,7 +766,7 @@
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.75
+        "confidence": 0.55
       },
       "unique_data_available": false,
       "freshness": {
@@ -782,7 +799,7 @@
         "/conteudos/sinapi-desonerado-nao-desonerado/",
         "/auditoria-orcamento-licitacao/"
       ],
-      "confidence": 0.75,
+      "confidence": 0.55,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,
@@ -888,7 +905,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-3743330",
+      "id": "opp-gsc-ctr-9412300",
       "topic": "CTR opportunity: /conteudos/aditivo-qualitativo-quantitativo/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -942,7 +959,7 @@
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.45
+        "confidence": 0.3
       },
       "unique_data_available": false,
       "freshness": {
@@ -975,7 +992,7 @@
         "/conteudos/aditivo-qualitativo-quantitativo/",
         "/aditivos-obras-publicas/"
       ],
-      "confidence": 0.45,
+      "confidence": 0.3,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,
@@ -985,14 +1002,16 @@
       "competitive_score": 0.6,
       "penalties": [],
       "indexability_gate": {
-        "indexable": true,
-        "decision": "indexable_candidate",
-        "fails": [],
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
         "warnings": [
           "sample_thin_margin"
         ]
       },
-      "publishability": "indexable_candidate"
+      "publishability": "blocked_by_gate"
     },
     {
       "id": "opp-need-atraso-prorrogacao",
@@ -1081,7 +1100,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-3627993",
+      "id": "opp-gsc-ctr-5293858",
       "topic": "CTR opportunity: /conteudos/chuva-prorrogacao-prazo-obra-publica/",
       "cluster": "atrasos-prorrogacao",
       "intent": "mofu",
@@ -1135,7 +1154,7 @@
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.4
+        "confidence": 0.3
       },
       "unique_data_available": false,
       "freshness": {
@@ -1168,7 +1187,7 @@
         "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
         "/atrasos-prorrogacao-obras-publicas/"
       ],
-      "confidence": 0.4,
+      "confidence": 0.3,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,
@@ -1346,7 +1365,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-2311024",
+      "id": "opp-gsc-ctr-1299754",
       "topic": "CTR opportunity: /conteudos/prorrogacao-prazo-obra-publica-documentos/",
       "cluster": "atrasos-prorrogacao",
       "intent": "mofu",
@@ -1399,7 +1418,7 @@
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.4
+        "confidence": 0.3
       },
       "unique_data_available": false,
       "freshness": {
@@ -1432,7 +1451,7 @@
         "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
         "/atrasos-prorrogacao-obras-publicas/"
       ],
-      "confidence": 0.4,
+      "confidence": 0.3,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,
@@ -1454,7 +1473,116 @@
       "publishability": "blocked_by_gate"
     },
     {
-      "id": "opp-gsc-ctr-4432991",
+      "id": "opp-gsc-ctr-3847445",
+      "topic": "CTR opportunity: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.676,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 18.0,
+        "clicks": 0.0,
+        "position": 7.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "serp_diagnosis": {
+          "title": "Prazo de vigência vs prazo de execução no contrato | CONFENGE",
+          "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
+          "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk",
+            "robots_noindex"
+          ],
+          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.04,
+            "gap": 0.04,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "existing_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "action": "improve",
+      "score": 62,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 10,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=18.0 cliques=0.0 pos=7.0 ctr=0.0 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
+      "suggested_cta": "Ver serviço de prazos e prorrogações",
+      "suggested_internal_links": [
+        "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.676,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-8471718",
       "topic": "CTR opportunity: /conteudos/limite-aditivo-25-50-obra-publica/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -1508,7 +1636,7 @@
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.4
+        "confidence": 0.3
       },
       "unique_data_available": false,
       "freshness": {
@@ -1541,7 +1669,7 @@
         "/conteudos/limite-aditivo-25-50-obra-publica/",
         "/aditivos-obras-publicas/"
       ],
-      "confidence": 0.4,
+      "confidence": 0.3,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,
@@ -1563,115 +1691,7 @@
       "publishability": "blocked_by_gate"
     },
     {
-      "id": "opp-gsc-ctr-4456041",
-      "topic": "CTR opportunity: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-      "cluster": "atrasos-prorrogacao",
-      "intent": "mofu",
-      "persona": "orcamentista",
-      "jtbd": "Corrigir título/meta para capturar impressões existentes",
-      "commercial_fit": 0.95,
-      "service_fit": "atrasos-prorrogacao-obras-publicas",
-      "service_path": "/atrasos-prorrogacao-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.676,
-        "source": "gsc"
-      },
-      "search_console_evidence": {
-        "impressions": 18.0,
-        "clicks": 0.0,
-        "position": 7.0,
-        "ctr": 0.0,
-        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-        "serp_diagnosis": {
-          "title": "Prazo de vigência ≠ prazo de execução no contrato | CONFENGE",
-          "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
-          "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
-          "issues": [
-            "title_long_mobile_truncation_risk",
-            "robots_noindex"
-          ],
-          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
-          "ctr_gap": {
-            "is_opportunity": true,
-            "ctr": 0.0,
-            "expected_ctr": 0.04,
-            "gap": 0.04,
-            "reasons": [
-              "ctr_below_45%_of_expected",
-              "ctr_below_absolute_floor"
-            ],
-            "priority_force_include": false
-          }
-        }
-      },
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "gsc",
-        "record_count": 1,
-        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
-        "limitations": [
-          "Amostra GSC limitada no export disponível.",
-          "expected_ctr é heurística operacional, não garantia do Google."
-        ],
-        "sources": [
-          "google-search-console"
-        ],
-        "confidence": 0.4
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.7
-      },
-      "competition": {
-        "score": 0.6
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-      "existing_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-      "action": "improve",
-      "score": 62,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 2,
-        "demand_evidence": 10,
-        "topical_authority": 6,
-        "freshness_trigger": 4,
-        "competitive_opportunity": 3
-      },
-      "score_penalties": {},
-      "rationale": "CTR gap configurável: impr=18.0 cliques=0.0 pos=7.0 ctr=0.0 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_mobile_truncation_risk,robots_noindex",
-      "suggested_cta": "Ver serviço de prazos e prorrogações",
-      "suggested_internal_links": [
-        "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
-        "/atrasos-prorrogacao-obras-publicas/"
-      ],
-      "confidence": 0.4,
-      "source": "gsc_page",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.1,
-      "demand_strength": 0.676,
-      "topical_authority_score": 0.6,
-      "freshness_score": 0.7,
-      "competitive_score": 0.6,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": false,
-        "decision": "noindex",
-        "fails": [
-          "low_data_confidence"
-        ],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "blocked_by_gate"
-    },
-    {
-      "id": "opp-gsc-ctr-1976826",
+      "id": "opp-gsc-ctr-1459005",
       "topic": "CTR opportunity: /conteudos/atraso-na-medicao-obra-publica/",
       "cluster": "medicoes-pagamentos",
       "intent": "mofu",
@@ -1723,7 +1743,7 @@
         "sources": [
           "google-search-console"
         ],
-        "confidence": 0.4
+        "confidence": 0.3
       },
       "unique_data_available": false,
       "freshness": {
@@ -1756,7 +1776,7 @@
         "/conteudos/atraso-na-medicao-obra-publica/",
         "/medicoes-glosas-obras-publicas/"
       ],
-      "confidence": 0.4,
+      "confidence": 0.3,
       "source": "gsc_page",
       "service_fit_score": 0.95,
       "data_moat_score": 0.1,

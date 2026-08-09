@@ -1,9 +1,11 @@
 # Organic Growth Report
 
-**generated_at:** 2026-08-09T19:06:15Z
+**generated_at:** 2026-08-09T19:25:39Z
 **gsc_export:** gsc-2026-08-09
 
 > GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality.
+
+> GSC window is short and low-volume. CTR-gap and expected_ctr are ranking hypotheses for human review, not automatic proof. Do not treat impressions < 30 as statistically significant.
 
 ## Métricas de exposição
 
@@ -23,7 +25,7 @@
 - **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR
 - **Serviço:** /auditoria-orcamento-licitacao/
 - **Impacto comercial esperado:** medium
-- **Confiança:** 0.75
+- **Confiança:** 0.55 (low_moderate)
 
 ### ctr_gap: `/conteudos/chuva-prorrogacao-prazo-obra-publica/`
 - **O que aconteceu:** URL em posição 3.35 com 17.0 impressões, 0 clique(s), CTR 0.00% (esperado ~8.00%)
@@ -31,7 +33,7 @@
 - **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** low
-- **Confiança:** 0.4
+- **Confiança:** 0.3 (very_low+noindex)
 
 ### ctr_gap: `/conteudos/aditivo-qualitativo-quantitativo/`
 - **O que aconteceu:** URL em posição 6.09 com 22.0 impressões, 0 clique(s), CTR 0.00% (esperado ~4.00%)
@@ -39,7 +41,7 @@
 - **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /aditivos-obras-publicas/
 - **Impacto comercial esperado:** medium
-- **Confiança:** 0.45
+- **Confiança:** 0.3 (very_low+noindex)
 
 ### ctr_gap: `/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/`
 - **O que aconteceu:** URL em posição 7.0 com 18.0 impressões, 0 clique(s), CTR 0.00% (esperado ~4.00%)
@@ -47,7 +49,7 @@
 - **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** low
-- **Confiança:** 0.4
+- **Confiança:** 0.3 (very_low+noindex)
 
 ### ctr_gap: `/conteudos/prorrogacao-prazo-obra-publica-documentos/`
 - **O que aconteceu:** URL em posição 9.2 com 15.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)
@@ -55,7 +57,7 @@
 - **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** low
-- **Confiança:** 0.4
+- **Confiança:** 0.3 (very_low)
 
 ### ctr_gap: `/conteudos/limite-aditivo-25-50-obra-publica/`
 - **O que aconteceu:** URL em posição 11.0 com 14.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)
@@ -63,7 +65,7 @@
 - **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
 - **Serviço:** /aditivos-obras-publicas/
 - **Impacto comercial esperado:** low
-- **Confiança:** 0.4
+- **Confiança:** 0.3 (very_low+noindex)
 
 ### ctr_gap: `/conteudos/atraso-na-medicao-obra-publica/`
 - **O que aconteceu:** URL em posição 8.1 com 10.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)
@@ -71,7 +73,7 @@
 - **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR
 - **Serviço:** /medicoes-glosas-obras-publicas/
 - **Impacto comercial esperado:** low
-- **Confiança:** 0.4
+- **Confiança:** 0.3 (very_low)
 
 ### low_service_exposure: `/aditivos-obras-publicas/`
 - **O que aconteceu:** Serviço com baixa exposição: /aditivos-obras-publicas/
@@ -79,7 +81,7 @@
 - **Ação:** Reforçar internal links e supporting content; não forçar ranking genérico
 - **Serviço:** /aditivos-obras-publicas/
 - **Impacto comercial esperado:** high
-- **Confiança:** 0.5
+- **Confiança:** 0.5 (n/a)
 
 ### low_service_exposure: `/medicoes-glosas-obras-publicas/`
 - **O que aconteceu:** Serviço com baixa exposição: /medicoes-glosas-obras-publicas/
@@ -87,7 +89,7 @@
 - **Ação:** Reforçar internal links e supporting content; não forçar ranking genérico
 - **Serviço:** /medicoes-glosas-obras-publicas/
 - **Impacto comercial esperado:** high
-- **Confiança:** 0.5
+- **Confiança:** 0.5 (n/a)
 
 ### low_service_exposure: `/reequilibrio-obras-publicas/`
 - **O que aconteceu:** Serviço com baixa exposição: /reequilibrio-obras-publicas/
@@ -95,7 +97,7 @@
 - **Ação:** Reforçar internal links e supporting content; não forçar ranking genérico
 - **Serviço:** /reequilibrio-obras-publicas/
 - **Impacto comercial esperado:** high
-- **Confiança:** 0.5
+- **Confiança:** 0.5 (n/a)
 
 ### low_service_exposure: `/auditoria-orcamento-licitacao/`
 - **O que aconteceu:** Serviço com baixa exposição: /auditoria-orcamento-licitacao/
@@ -103,7 +105,7 @@
 - **Ação:** Reforçar internal links e supporting content; não forçar ranking genérico
 - **Serviço:** /auditoria-orcamento-licitacao/
 - **Impacto comercial esperado:** high
-- **Confiança:** 0.5
+- **Confiança:** 0.5 (n/a)
 
 ### low_service_exposure: `/diagnostico-b2g-360/`
 - **O que aconteceu:** Serviço com baixa exposição: /diagnostico-b2g-360/
@@ -111,7 +113,7 @@
 - **Ação:** Reforçar internal links e supporting content; não forçar ranking genérico
 - **Serviço:** /diagnostico-b2g-360/
 - **Impacto comercial esperado:** high
-- **Confiança:** 0.5
+- **Confiança:** 0.5 (n/a)
 
 ### low_service_exposure: `/diagnostico-pre-licitacao/`
 - **O que aconteceu:** Serviço com baixa exposição: /diagnostico-pre-licitacao/
@@ -119,7 +121,7 @@
 - **Ação:** Reforçar internal links e supporting content; não forçar ranking genérico
 - **Serviço:** /diagnostico-pre-licitacao/
 - **Impacto comercial esperado:** high
-- **Confiança:** 0.5
+- **Confiança:** 0.5 (n/a)
 
 ### high_traffic_low_commercial_link: `/conteudos/aditivo-qualitativo-quantitativo/`
 - **O que aconteceu:** Conteúdo com tráfego e ponte comercial fraca: /conteudos/aditivo-qualitativo-quantitativo/
@@ -127,7 +129,7 @@
 - **Ação:** Bridge editorial + link semântico ao serviço
 - **Serviço:** /aditivos-obras-publicas/
 - **Impacto comercial esperado:** medium
-- **Confiança:** 0.55
+- **Confiança:** 0.55 (n/a)
 
 ### high_traffic_low_commercial_link: `/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/`
 - **O que aconteceu:** Conteúdo com tráfego e ponte comercial fraca: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/
@@ -135,7 +137,7 @@
 - **Ação:** Bridge editorial + link semântico ao serviço
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** medium
-- **Confiança:** 0.55
+- **Confiança:** 0.55 (n/a)
 
 ### high_traffic_low_commercial_link: `/conteudos/chuva-prorrogacao-prazo-obra-publica/`
 - **O que aconteceu:** Conteúdo com tráfego e ponte comercial fraca: /conteudos/chuva-prorrogacao-prazo-obra-publica/
@@ -143,7 +145,7 @@
 - **Ação:** Bridge editorial + link semântico ao serviço
 - **Serviço:** /atrasos-prorrogacao-obras-publicas/
 - **Impacto comercial esperado:** medium
-- **Confiança:** 0.55
+- **Confiança:** 0.55 (n/a)
 
 ## Hipóteses (não medidas)
 

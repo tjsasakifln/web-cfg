@@ -13,15 +13,34 @@ NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
 
 def parse_redirects(text: str) -> list[dict[str, str]]:
+    """Parse Netlify ``_redirects`` syntax without silent false negatives.
+
+    Supported shapes (path rules):
+    - ``/from  /to``                          → status defaults to 301
+    - ``/from  /to  301`` / ``410`` / ``200``
+    - ``/from  /to  301!``                    → force flag preserved on status
+    - host rules with ``http(s)://…`` from/to
+    - splats / wildcards (``/*``, ``:splat``) kept as-is for source matching
+
+    Query-parameter and shadowing rules are accepted when they have ≥2 tokens.
+    Lines with fewer than 2 non-comment tokens are skipped (malformed).
+    """
     rules: list[dict[str, str]] = []
     for line in text.splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
         parts = line.split()
-        if len(parts) < 3:
+        if len(parts) < 2:
             continue
-        rules.append({"from": parts[0], "to": parts[1], "status": parts[2]})
+        from_path = parts[0]
+        to_path = parts[1]
+        status = "301"
+        if len(parts) >= 3:
+            # status may be "301", "301!", "410", "200" — keep force marker
+            status = parts[2]
+        # Optional further tokens (Role conditions, country, language) ignored for hygiene
+        rules.append({"from": from_path, "to": to_path, "status": status})
     return rules
 
 

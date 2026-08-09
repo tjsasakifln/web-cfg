@@ -33,15 +33,16 @@
     },
     {
       "legacy_url": "https://confenge.com.br/trabalhe-conosco",
-      "status": "301_redirect",
-      "current_action": "301",
-      "destination": "/#contato",
-      "canonical": "https://confenge.com.br/",
+      "status": "410_gone",
+      "current_action": "410",
+      "destination": "/404.html",
+      "canonical": null,
       "sitemap_membership": false,
       "internal_backlinks": "none",
       "external_backlinks_known": "unknown",
-      "action": "keep_301_to_contact_anchor_no_careers_page",
-      "gsc_signal": "4 impressions, avg pos ~2"
+      "action": "410_no_careers_page_not_commercial_contact",
+      "gsc_signal": "4 impressions, avg pos ~2",
+      "rationale": "Careers intent is not semantically equivalent to commercial contact. No recruitment page exists; 410 is more honest than 301 to /#contato."
     },
     {
       "legacy_url": "https://confenge.com.br/avcb",

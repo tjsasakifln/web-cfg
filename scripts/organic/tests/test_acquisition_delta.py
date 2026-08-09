@@ -291,3 +291,153 @@ def test_cli_growth_and_run(tmp_path: Path):
 def test_normalize_path_http_https():
     assert normalize_path("http://confenge.com.br/blog") == "/blog/"
     assert normalize_path("https://confenge.com.br/conteudos/x/") == "/conteudos/x/"
+    # query/fragment must not create duplicate indexable paths
+    assert normalize_path("https://confenge.com.br/conteudos/x/?utm=1") == "/conteudos/x/"
+    assert normalize_path("https://confenge.com.br/conteudos/x/#section") == "/conteudos/x/"
+    assert normalize_path("https://www.confenge.com.br/blog") == "/blog/"
+
+
+def test_gsc_loader_adversarial_decimals_total_bom(tmp_path: Path):
+    from scripts.organic.gsc_loader import load_csv, load_pages, load_gsc_dir
+
+    # comma decimal + % + TOTAL row + BOM
+    csv_body = (
+        "\ufeffPáginas principais,Cliques,Impressões,CTR,Posição\n"
+        "https://confenge.com.br/conteudos/a/,1,20,\"5,00%\",\"3,5\"\n"
+        "TOTAL,10,100,10%,1\n"
+        "https://confenge.com.br/conteudos/b/?q=1,0,12,0%,8.2\n"
+    )
+    p = tmp_path / "Paginas.csv"
+    p.write_text(csv_body, encoding="utf-8")
+    rows = load_csv(p)
+    pages = load_pages(rows)
+    paths = {x["path"] for x in pages}
+    assert "/conteudos/a/" in paths
+    assert "/conteudos/b/" in paths
+    assert not any("total" in (x.get("url") or "").lower() for x in pages)
+    a = next(x for x in pages if x["path"] == "/conteudos/a/")
+    assert abs(a["ctr"] - 0.05) < 1e-6
+    assert abs(a["position"] - 3.5) < 1e-6
+
+    # empty dir still loads
+    empty = tmp_path / "gsc-empty"
+    empty.mkdir()
+    g = load_gsc_dir(empty)
+    assert g["pages"] == []
+    assert "aggregation_note" in g
+    # missing device CSVs are empty, not fatal
+    assert g["devices"] == []
+    assert g["page_device"] == []
+
+
+def test_parse_redirects_netlify_variants():
+    text = """
+# comment
+/from-a  /to-a
+/from-b  /to-b  301
+/from-c  /to-c  301!
+/from-d  /404.html  410
+https://old.example/*  https://new.example/:splat  301!
+/path  /other?x=1  301
+"""
+    rules = parse_redirects(text)
+    by_from = {r["from"]: r for r in rules}
+    assert by_from["/from-a"]["status"] == "301"  # default
+    assert by_from["/from-a"]["to"] == "/to-a"
+    assert by_from["/from-b"]["status"] == "301"
+    assert by_from["/from-c"]["status"] == "301!"
+    assert by_from["/from-d"]["status"] == "410"
+    assert "https://old.example/*" in by_from
+    assert by_from["/path"]["to"] == "/other?x=1"
+    # 2-token rules must NOT be silently dropped
+    assert len(rules) == 6
+
+
+def test_origem_preserves_query_and_fragment():
+    from scripts.organic.bridges import with_origem
+
+    assert with_origem("/svc/", "/conteudos/x/") == "/svc/?origem=/conteudos/x"
+    # existing query
+    out = with_origem("/svc/?foo=1", "/conteudos/x/")
+    assert "foo=1" in out and "origem=" in out and out.startswith("/svc/?")
+    # fragment
+    out2 = with_origem("/#contato", "/conteudos/x/")
+    assert out2.startswith("?") or "?origem=" in out2
+    assert out2.endswith("#contato")
+    # query + fragment
+    out3 = with_origem("/svc/?a=1#sec", "/conteudos/y/")
+    assert "a=1" in out3 and "origem=" in out3 and out3.endswith("#sec")
+
+
+def test_soft_bridge_when_article_aside_present():
+    from scripts.organic.bridges import inject_bridge, render_bridge_html
+
+    fit = map_content_to_service("/conteudos/sinapi-desonerado-nao-desonerado/")
+    # full button when no aside
+    full = render_bridge_html(fit, source_path="/conteudos/sinapi-desonerado-nao-desonerado/", soft=False)
+    assert "button-secondary" in full
+    assert 'data-bridge-mode="soft"' not in full
+    # soft when aside already commercial
+    soft = render_bridge_html(fit, source_path="/conteudos/sinapi-desonerado-nao-desonerado/", soft=True)
+    assert "button-secondary" not in soft
+    assert 'data-bridge-mode="soft"' in soft
+    assert "text-link" in soft
+
+    base = (
+        "<html><body><article><p>body</p></article>"
+        '<aside class="article-aside"><div class="aside-card">'
+        '<a class="button button-primary" href="https://wa.me/1">WA</a>'
+        '<a href="/auditoria-orcamento-licitacao/">svc</a></div></aside>'
+        "</body></html>"
+    )
+    new, changed = inject_bridge(
+        base, fit, source_path="/conteudos/sinapi-desonerado-nao-desonerado/"
+    )
+    assert changed
+    assert 'data-bridge-mode="soft"' in new
+    assert new.count("button-secondary") == 0  # no second commercial button
+
+
+def test_small_sample_confidence_is_low():
+    from scripts.organic.serp_ctr import diagnose_page_html
+
+    html = (
+        "<html><head><title>T | CONFENGE</title>"
+        '<meta name="description" content="d"/>'
+        '<link rel="canonical" href="https://confenge.com.br/conteudos/x/"/>'
+        "</head><body><h1>T</h1></body></html>"
+    )
+    diag = diagnose_page_html(
+        "/conteudos/x/",
+        html,
+        gsc={"impressions": 12, "clicks": 0, "position": 4.0, "ctr": 0.0},
+    )
+    assert diag["confidence"] <= 0.35
+    assert diag["sample_quality"] in {"very_low", "anecdotal", "very_low+noindex"}
+    assert "hypothesis" in (diag.get("evidence_note") or "").lower() or "heuristic" in (
+        diag.get("evidence_note") or ""
+    ).lower()
+
+
+def test_trabalhe_conosco_is_410_not_commercial_contact():
+    inv = json.loads((ROOT / "data" / "organic" / "legacy-url-inventory.json").read_text(encoding="utf-8"))
+    item = next(i for i in inv["items"] if "trabalhe-conosco" in i["legacy_url"])
+    assert item["current_action"] == "410"
+    rules = parse_redirects((ROOT / "_redirects").read_text(encoding="utf-8"))
+    rule = next(r for r in rules if r["from"].rstrip("/") == "/trabalhe-conosco")
+    assert rule["status"].startswith("410")
+
+
+def test_live_bridges_soft_when_aside_present():
+    """Shipped sinapi page must not stack a second commercial button next to article-aside."""
+    html = (ROOT / "conteudos/sinapi-desonerado-nao-desonerado/index.html").read_text(encoding="utf-8")
+    assert 'data-commercial-bridge="1"' in html
+    assert 'data-bridge-mode="soft"' in html
+    # extract bridge block only
+    import re
+
+    m = re.search(r'<aside class="editorial-bridge commercial-bridge".*?</aside>', html, re.S | re.I)
+    assert m
+    bridge = m.group(0)
+    assert "button-secondary" not in bridge
+    assert "origem=" in bridge

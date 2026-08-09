@@ -37,7 +37,16 @@ def load_csv(path: Path) -> list[dict[str, str]]:
 
 
 def normalize_path(url: str) -> str:
+    """Normalize GSC page URL → site path.
+
+    Strips host (http/https, www), drops query string and fragment, and applies
+    trailing-slash convention for directory-like paths.
+    """
     u = (url or "").strip()
+    if "?" in u:
+        u = u.split("?", 1)[0]
+    if "#" in u:
+        u = u.split("#", 1)[0]
     for prefix in (
         "https://confenge.com.br",
         "http://confenge.com.br",
@@ -55,11 +64,16 @@ def normalize_path(url: str) -> str:
     return u
 
 
+def _is_total_or_junk_label(value: str) -> bool:
+    v = (value or "").strip().lower()
+    return v in {"", "total", "totais", "totals", "soma", "—", "-", "n/a", "na"}
+
+
 def load_pages(rows: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for r in rows or []:
         url = _s(r, "page", "Páginas principais", "Páginas", "URL")
-        if not url:
+        if not url or _is_total_or_junk_label(url):
             continue
         clicks = _f(r, "clicks", "Cliques")
         impressions = _f(r, "impressions", "Impressões")
@@ -87,7 +101,7 @@ def load_queries(rows: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for r in rows or []:
         q = _s(r, "query", "Top consultas", "Consultas")
-        if not q:
+        if not q or _is_total_or_junk_label(q):
             continue
         clicks = _f(r, "clicks", "Cliques")
         impressions = _f(r, "impressions", "Impressões")

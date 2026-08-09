@@ -15,7 +15,7 @@ Redirects: `_redirects`
 |--------|------|---------|
 | `http://confenge.com.br/` | host HTTPS canônico | `https://confenge.com.br/` |
 | `/blog` | 301 | `/conteudos/` |
-| `/trabalhe-conosco` | 301 | `/#contato` |
+| `/trabalhe-conosco` | 410 | `/404.html` (sem página de carreiras; não é contato comercial) |
 | `/avcb`, `/avcbclcb`, `/vision`, `/nexgen` | 410 | `/404.html` |
 | `/contato`, `/servicos` | 301 | âncoras da home |
 | `/sobre` | 301 | `/especialista/tiago-jun-sasaki/` |

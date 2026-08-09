@@ -203,16 +203,29 @@ def diagnose_page_html(
                 "Problema concreto + critério técnico + o que documentar — sem genérico de SEO."
             )
 
-    confidence = 0.35
+    # Small GSC windows are hypotheses, not statistical proof.
+    # Thresholds mirror serp-ctr-config notes (low when impressions < 30).
+    confidence = 0.25
     imp = float(gsc.get("impressions") or 0)
-    if imp >= 50:
-        confidence = 0.75
-    elif imp >= 20:
+    sample_quality = "insufficient"
+    if imp >= 100:
+        confidence = 0.7
+        sample_quality = "moderate"
+    elif imp >= 50:
         confidence = 0.55
+        sample_quality = "low_moderate"
+    elif imp >= 30:
+        confidence = 0.45
+        sample_quality = "low"
     elif imp >= 10:
-        confidence = 0.4
+        confidence = 0.3
+        sample_quality = "very_low"
+    else:
+        confidence = 0.15
+        sample_quality = "anecdotal"
     if robots and "noindex" in robots.lower():
-        confidence = min(confidence, 0.45)
+        confidence = min(confidence, 0.35)
+        sample_quality = f"{sample_quality}+noindex"
 
     gap_info = is_ctr_gap(
         impressions=float(gsc.get("impressions") or 0),
@@ -249,6 +262,12 @@ def diagnose_page_html(
         "gsc": gsc,
         "ctr_gap": gap_info,
         "confidence": confidence,
+        "sample_quality": sample_quality,
+        "evidence_note": (
+            "expected_ctr is a planning heuristic, not a Google guarantee. "
+            "CTR-gap flags are ranking hypotheses for human review when sample_quality "
+            "is low/very_low/anecdotal — not automatic proof of a title problem."
+        ),
         "html_present": bool(html),
     }
 

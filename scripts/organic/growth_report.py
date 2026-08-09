@@ -141,6 +141,8 @@ def build_growth_report(
                 "related_service": (opp.get("service_fit") or {}).get("service_path"),
                 "expected_commercial_impact": "medium" if float(g.get("impressions") or 0) >= 20 else "low",
                 "confidence": opp.get("confidence"),
+                "sample_quality": opp.get("sample_quality"),
+                "evidence_note": opp.get("evidence_note"),
                 "class": "ctr_gap",
                 "serp_diagnosis": {
                     "issues": opp.get("issues"),
@@ -240,6 +242,11 @@ def build_growth_report(
             "Commercial bridges will lift content→service transitions — needs analytics",
             "Mobile 0-click is SERP-side; layout not causal without post-click evidence",
         ],
+        "sample_disclaimer": (
+            "GSC window is short and low-volume. CTR-gap and expected_ctr are ranking "
+            "hypotheses for human review, not automatic proof. Do not treat "
+            "impressions < 30 as statistically significant."
+        ),
     }
     return doc
 
@@ -253,6 +260,8 @@ def render_growth_markdown(doc: dict[str, Any]) -> str:
         f"**gsc_export:** {doc.get('gsc_export')}",
         "",
         f"> {doc.get('aggregation_note')}",
+        "",
+        f"> {doc.get('sample_disclaimer')}",
         "",
         "## Métricas de exposição",
         "",
@@ -276,7 +285,7 @@ def render_growth_markdown(doc: dict[str, Any]) -> str:
                 f"- **Ação:** {a.get('recommended_action')}",
                 f"- **Serviço:** {a.get('related_service')}",
                 f"- **Impacto comercial esperado:** {a.get('expected_commercial_impact')}",
-                f"- **Confiança:** {a.get('confidence')}",
+                f"- **Confiança:** {a.get('confidence')} ({a.get('sample_quality') or 'n/a'})",
                 "",
             ]
         )
