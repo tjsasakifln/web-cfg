@@ -1,0 +1,1575 @@
+{
+  "schema_version": "organic-growth-report-v1",
+  "generated_at": "2026-08-09T18:51:50Z",
+  "gsc_export": "gsc-2026-08-09",
+  "gsc_totals": {
+    "pages_impressions_sum": 373.0,
+    "pages_clicks_sum": 10.0,
+    "queries_impressions_sum": 108.0,
+    "queries_clicks_sum": 6.0,
+    "devices_impressions_sum": 384.0,
+    "devices_clicks_sum": 10.0
+  },
+  "aggregation_note": "GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality.",
+  "metrics": {
+    "schema_version": "commercial-exposure-metrics-v1",
+    "totals": {
+      "impressions": 373.0,
+      "clicks": 10.0,
+      "informational_impressions": 286.0,
+      "informational_clicks": 8.0,
+      "commercial_impressions": 29.0,
+      "commercial_clicks": 0.0
+    },
+    "informational_impression_share": 0.7668,
+    "commercial_impression_share": 0.0777,
+    "commercial_click_share": 0.0,
+    "serp_ctr_gap": {
+      "opportunity_count": 8,
+      "mean_gap": 0.01524
+    },
+    "commercial_bridge_coverage": 0.241,
+    "content_to_service_link_coverage": 0.988,
+    "service_to_supporting_content_coverage": 1.0,
+    "indexable_commercial_bridge_coverage": 1.0,
+    "indexable_content_to_service_link_coverage": 1.0,
+    "organic_assisted_conversion": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_service_page_entry": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_content_to_service_transition": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_content_to_lead": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "organic_service_to_lead": {
+      "status": "requires_analytics_export",
+      "value": null
+    },
+    "note": "Impression/click shares from GSC page table. Funnel metrics need collect/attribution exports; do not invent conversion rates."
+  },
+  "link_coverage": {
+    "content_pages_scanned": 120,
+    "mapped": 83,
+    "content_to_service_link_coverage": 0.988,
+    "commercial_bridge_coverage": 0.241,
+    "indexable_mapped": 20,
+    "indexable_content_to_service_link_coverage": 1.0,
+    "indexable_commercial_bridge_coverage": 1.0,
+    "service_to_supporting_content_coverage": 1.0
+  },
+  "sections": {
+    "emerging_rank": [
+      {
+        "url": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/",
+        "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "clicks": 0.0,
+        "impressions": 22.0,
+        "position": 6.09,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+        "path": "/conteudos/bdi-diferenciado-obra-publica/",
+        "clicks": 2.0,
+        "impressions": 11.0,
+        "position": 6.27,
+        "ctr": 0.1818
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "path": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "clicks": 1.0,
+        "impressions": 12.0,
+        "position": 6.5,
+        "ctr": 0.0833
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "clicks": 0.0,
+        "impressions": 18.0,
+        "position": 7.0,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+        "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "clicks": 1.0,
+        "impressions": 89.0,
+        "position": 7.27,
+        "ctr": 0.011200000000000002
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+        "path": "/conteudos/atraso-na-medicao-obra-publica/",
+        "clicks": 0.0,
+        "impressions": 10.0,
+        "position": 8.1,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "clicks": 0.0,
+        "impressions": 15.0,
+        "position": 9.2,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/",
+        "path": "/",
+        "clicks": 2.0,
+        "impressions": 35.0,
+        "position": 9.5,
+        "ctr": 0.0571
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "clicks": 0.0,
+        "impressions": 14.0,
+        "position": 11.0,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/",
+        "path": "/conteudos/",
+        "clicks": 1.0,
+        "impressions": 40.0,
+        "position": 12.0,
+        "ctr": 0.025
+      }
+    ],
+    "ctr_gap": [
+      {
+        "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "query_intent": "informational",
+        "related_queries": [
+          "desonerado e não desonerado",
+          "sinapi desonerado"
+        ],
+        "intent_page_mismatch": false,
+        "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
+        "title_length": 61,
+        "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+        "h1": "SINAPI desonerado ou não desonerado: qual usar?",
+        "above_the_fold_lead": "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Use a versão que o edital fixa (ou a planilha modelo do órgão), alinha BDI e regime da empresa à mesma base e confira data-base, misturar tabelas sem memória de cálculo distorce preço e exequibilidade",
+        "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+          "matched": true,
+          "cluster_id": "orcamento-bdi",
+          "service_path": "/auditoria-orcamento-licitacao/",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "tools": [],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o orçamento do edital vira risco de proposta",
+          "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
+          "cta_label": "Ver auditoria de orçamento e edital"
+        },
+        "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 89.0,
+          "clicks": 1.0,
+          "position": 7.27,
+          "ctr": 0.011200000000000002,
+          "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.01124,
+          "expected_ctr": 0.04,
+          "gap": 0.02876,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.75,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "prazo de vigência e prazo de execução",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Chuva justifica prorrogação de prazo? Critério e prova | CONFENGE",
+        "title_length": 65,
+        "meta_description": "Chuva ordinária não basta. O que separa pedido aceito de risco ordinário: caminho crítico, dados e documentos contemporâneos.",
+        "h1": "Chuva justifica prorrogação de prazo em obra pública?",
+        "above_the_fold_lead": "Da visão de atrasos e prorrogações à decisão de canteiro, leitura prática de prorrogação por chuva.",
+        "canonical": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "robots": "noindex,follow",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+          "matched": true,
+          "cluster_id": "atrasos-prorrogacao",
+          "service_path": "/atrasos-prorrogacao-obras-publicas/",
+          "service_slug": "atrasos-prorrogacao-obras-publicas",
+          "tools": [
+            "/ferramentas/matriz-atraso-obra/"
+          ],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o atraso deixa de ser só cronograma",
+          "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
+          "cta_label": "Ver serviço de prazos e prorrogações"
+        },
+        "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Chuva justifica prorrogação de prazo? Critério e prova",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 17.0,
+          "clicks": 0.0,
+          "position": 3.35,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.08,
+          "gap": 0.08,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.4,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "query_intent": "informational",
+        "related_queries": [
+          "aditivo qualitativo e quantitativo",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Aditivo qualitativo vs quantitativo: o que muda no pleito | CONFENGE",
+        "title_length": 68,
+        "meta_description": "A classificação define base de preço, limite e prova. Como enquadrar a mudança sem misturar quantidade com mudança de projeto.",
+        "h1": "Aditivo qualitativo ou quantitativo: a diferença que muda o pleito",
+        "above_the_fold_lead": "Quando surge aditivo qualitativo e quantitativo na obra, a ordem é prova, enquadramento contratual e quantificação do impacto.",
+        "canonical": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/",
+        "robots": "noindex,follow",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+          "matched": true,
+          "cluster_id": "aditivos",
+          "service_path": "/aditivos-obras-publicas/",
+          "service_slug": "aditivos-obras-publicas",
+          "tools": [
+            "/ferramentas/limite-acrescimos-supressoes/"
+          ],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o aditivo passa a afetar margem",
+          "bridge_body": "Mudança de escopo, item novo ou limite de 25%/50% deixa de ser dúvida de planilha quando a decisão formal define preço, prazo e exposição. Aí vale enquadrar o fato antes de executar ou assinar.",
+          "cta_label": "Ver serviço de aditivos"
+        },
+        "alternate_landing_candidate": "/aditivos-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Aditivo qualitativo vs quantitativo: o que muda no pleito",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 22.0,
+          "clicks": 0.0,
+          "position": 6.09,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.04,
+          "gap": 0.04,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.45,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "prazo de vigência e prazo de execução"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Prazo de vigência ≠ prazo de execução no contrato | CONFENGE",
+        "title_length": 60,
+        "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
+        "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras",
+        "above_the_fold_lead": "Quando surge prazo de vigência e de execução na obra, a ordem é prova, enquadramento contratual e quantificação do impacto.",
+        "canonical": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "robots": "noindex,follow",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+          "matched": true,
+          "cluster_id": "atrasos-prorrogacao",
+          "service_path": "/atrasos-prorrogacao-obras-publicas/",
+          "service_slug": "atrasos-prorrogacao-obras-publicas",
+          "tools": [
+            "/ferramentas/matriz-atraso-obra/"
+          ],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o atraso deixa de ser só cronograma",
+          "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
+          "cta_label": "Ver serviço de prazos e prorrogações"
+        },
+        "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Prazo de vigência ≠ prazo de execução no contrato",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 18.0,
+          "clicks": 0.0,
+          "position": 7.0,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.04,
+          "gap": 0.04,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.4,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "prazo de vigência e prazo de execução",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+        "title_length": 72,
+        "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
+        "h1": "Prorrogação de prazo: documentos que não podem faltar",
+        "above_the_fold_lead": "Liste os documentos que sustentam pedido de prorrogação: causa, cronologia, impacto e comunicação, sem dossiê genérico.",
+        "canonical": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+          "matched": true,
+          "cluster_id": "atrasos-prorrogacao",
+          "service_path": "/atrasos-prorrogacao-obras-publicas/",
+          "service_slug": "atrasos-prorrogacao-obras-publicas",
+          "tools": [
+            "/ferramentas/matriz-atraso-obra/"
+          ],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o atraso deixa de ser só cronograma",
+          "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
+          "cta_label": "Ver serviço de prazos e prorrogações"
+        },
+        "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Prorrogação de prazo em obra pública: checklist de document…",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 15.0,
+          "clicks": 0.0,
+          "position": 9.2,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.025,
+          "gap": 0.025,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.4,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "query_intent": "informational",
+        "related_queries": [
+          "aditivo qualitativo e quantitativo",
+          "prorrogação prazo obra pública chuva",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
+        "title_length": 69,
+        "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
+        "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
+        "above_the_fold_lead": "Os limites de 25% e 50% nos aditivos não são só percentual na ponta do lápis: o que entra na conta, o tipo de alteração e o saldo acumulado definem se o teto estoura.",
+        "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "robots": "noindex,follow",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+          "matched": true,
+          "cluster_id": "aditivos",
+          "service_path": "/aditivos-obras-publicas/",
+          "service_slug": "aditivos-obras-publicas",
+          "tools": [
+            "/ferramentas/limite-acrescimos-supressoes/"
+          ],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o aditivo passa a afetar margem",
+          "bridge_body": "Mudança de escopo, item novo ou limite de 25%/50% deixa de ser dúvida de planilha quando a decisão formal define preço, prazo e exposição. Aí vale enquadrar o fato antes de executar ou assinar.",
+          "cta_label": "Ver serviço de aditivos"
+        },
+        "alternate_landing_candidate": "/aditivos-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 14.0,
+          "clicks": 0.0,
+          "position": 11.0,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.025,
+          "gap": 0.025,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.4,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/atraso-na-medicao-obra-publica/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+        "title_length": 51,
+        "meta_description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
+        "h1": "Atraso na medição: como proteger o caixa",
+        "above_the_fold_lead": "Serviço executado sem medição processada é caixa parado. Protocolo, prazo e parcela incontroversa são o núcleo da proteção.",
+        "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/atraso-na-medicao-obra-publica/",
+          "matched": true,
+          "cluster_id": "medicoes-pagamentos",
+          "service_path": "/medicoes-glosas-obras-publicas/",
+          "service_slug": "medicoes-glosas-obras-publicas",
+          "tools": [],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando a glosa ou a medição vira problema de caixa",
+          "bridge_body": "Critério de medição contestado, glosa sem nexo ou parcela retida vira risco de fluxo se a equipe não organiza prova contemporânea e contesta no tempo certo.",
+          "cta_label": "Ver serviço de medições e glosas"
+        },
+        "alternate_landing_candidate": "/medicoes-glosas-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Atraso na medição: como proteger o caixa",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 10.0,
+          "clicks": 0.0,
+          "position": 8.1,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.025,
+          "gap": 0.025,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.4,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/bdi-diferenciado-obra-publica/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
+        "title_length": 68,
+        "meta_description": "Quando o edital ou a natureza do item autoriza BDI distinto, e o risco de aplicar o mesmo percentual em tudo.",
+        "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
+        "above_the_fold_lead": "BDI diferenciado em materiais e equipamentos só se sustenta quando a decomposição reflete fornecimento, logística e risco reais, não como atalho para maquiar margem.",
+        "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/bdi-diferenciado-obra-publica/",
+          "matched": true,
+          "cluster_id": "orcamento-bdi",
+          "service_path": "/auditoria-orcamento-licitacao/",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "tools": [],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o orçamento do edital vira risco de proposta",
+          "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
+          "cta_label": "Ver auditoria de orçamento e edital"
+        },
+        "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "BDI diferenciado em materiais e equipamentos: quando usar",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 11.0,
+          "clicks": 2.0,
+          "position": 6.27,
+          "ctr": 0.1818,
+          "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
+        },
+        "ctr_gap": {
+          "is_opportunity": false,
+          "ctr": 0.18182,
+          "expected_ctr": 0.04,
+          "gap": -0.14182,
+          "reasons": [
+            "priority_path_baseline"
+          ],
+          "priority_force_include": true
+        },
+        "confidence": 0.4,
+        "html_present": true
+      }
+    ],
+    "emerging_queries": [
+      {
+        "query": "desonerado e não desonerado",
+        "clicks": 0.0,
+        "impressions": 22.0,
+        "position": 7.5,
+        "ctr": 0.0
+      },
+      {
+        "query": "sinapi desonerado",
+        "clicks": 1.0,
+        "impressions": 18.0,
+        "position": 6.8,
+        "ctr": 0.0556
+      },
+      {
+        "query": "aditivo qualitativo e quantitativo",
+        "clicks": 0.0,
+        "impressions": 12.0,
+        "position": 6.1,
+        "ctr": 0.0
+      },
+      {
+        "query": "prorrogação prazo obra pública chuva",
+        "clicks": 0.0,
+        "impressions": 10.0,
+        "position": 3.5,
+        "ctr": 0.0
+      },
+      {
+        "query": "prazo de vigência e prazo de execução",
+        "clicks": 0.0,
+        "impressions": 9.0,
+        "position": 7.0,
+        "ctr": 0.0
+      },
+      {
+        "query": "glosa de medição obra pública",
+        "clicks": 1.0,
+        "impressions": 8.0,
+        "position": 4.0,
+        "ctr": 0.125
+      },
+      {
+        "query": "bdi diferenciado obra pública",
+        "clicks": 1.0,
+        "impressions": 6.0,
+        "position": 6.3,
+        "ctr": 0.16670000000000001
+      },
+      {
+        "query": "aditivos obras públicas",
+        "clicks": 0.0,
+        "impressions": 6.0,
+        "position": 35.0,
+        "ctr": 0.0
+      },
+      {
+        "query": "curva abc reequilíbrio",
+        "clicks": 1.0,
+        "impressions": 5.0,
+        "position": 4.4,
+        "ctr": 0.2
+      },
+      {
+        "query": "medição rejeitada obra pública",
+        "clicks": 1.0,
+        "impressions": 5.0,
+        "position": 5.5,
+        "ctr": 0.2
+      },
+      {
+        "query": "confenge",
+        "clicks": 1.0,
+        "impressions": 4.0,
+        "position": 1.5,
+        "ctr": 0.25
+      },
+      {
+        "query": "avcb",
+        "clicks": 0.0,
+        "impressions": 3.0,
+        "position": 40.0,
+        "ctr": 0.0
+      }
+    ],
+    "high_traffic_low_commercial_link": [
+      {
+        "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "impressions": 22.0,
+        "service_path": "/aditivos-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      },
+      {
+        "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "impressions": 18.0,
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      },
+      {
+        "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "impressions": 17.0,
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      }
+    ],
+    "low_service_exposure": [
+      {
+        "url": "https://confenge.com.br/aditivos-obras-publicas/",
+        "path": "/aditivos-obras-publicas/",
+        "clicks": 0.0,
+        "impressions": 12.0,
+        "position": 49.25,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+        "path": "/medicoes-glosas-obras-publicas/",
+        "clicks": 0.0,
+        "impressions": 8.0,
+        "position": 7.88,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "path": "/reequilibrio-obras-publicas/",
+        "clicks": 0.0,
+        "impressions": 4.0,
+        "position": 7.75,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+        "path": "/auditoria-orcamento-licitacao/",
+        "clicks": 0.0,
+        "impressions": 3.0,
+        "position": 9.0,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/diagnostico-b2g-360/",
+        "path": "/diagnostico-b2g-360/",
+        "clicks": 0.0,
+        "impressions": 1.0,
+        "position": 15.0,
+        "ctr": 0.0
+      },
+      {
+        "url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+        "path": "/diagnostico-pre-licitacao/",
+        "clicks": 0.0,
+        "impressions": 1.0,
+        "position": 18.0,
+        "ctr": 0.0
+      }
+    ],
+    "cannibalization_clusters": {
+      "orcamento-bdi": [
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/conteudos/bdi-diferenciado-obra-publica/",
+        "/conteudos/bdi-obra-publica/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/"
+      ],
+      "medicoes-pagamentos": [
+        "/conteudos/glosa-de-medicao-obra-publica/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "/conteudos/atraso-na-medicao-obra-publica/"
+      ]
+    },
+    "decay": [],
+    "desktop_mobile": {
+      "devices": [
+        {
+          "device": "Computador",
+          "device_key": "desktop",
+          "clicks": 10.0,
+          "impressions": 290.0,
+          "position": 8.71,
+          "ctr": 0.0345
+        },
+        {
+          "device": "Celular",
+          "device_key": "mobile",
+          "clicks": 0.0,
+          "impressions": 94.0,
+          "position": 10.39,
+          "ctr": 0.0
+        },
+        {
+          "device": "Tablet",
+          "device_key": "tablet",
+          "clicks": 0.0,
+          "impressions": 0.0,
+          "position": 0.0,
+          "ctr": 0.0
+        }
+      ],
+      "page_device_rows": 16,
+      "page_device_estimated": false,
+      "interpretation": "SERP CTR occurs before visit. Mobile zero-click with impressions is first a snippet/position/intent question, not automatic layout proof."
+    },
+    "refresh_opportunities": [
+      {
+        "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "query_intent": "informational",
+        "related_queries": [
+          "desonerado e não desonerado",
+          "sinapi desonerado"
+        ],
+        "intent_page_mismatch": false,
+        "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
+        "title_length": 61,
+        "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+        "h1": "SINAPI desonerado ou não desonerado: qual usar?",
+        "above_the_fold_lead": "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Use a versão que o edital fixa (ou a planilha modelo do órgão), alinha BDI e regime da empresa à mesma base e confira data-base, misturar tabelas sem memória de cálculo distorce preço e exequibilidade",
+        "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+          "matched": true,
+          "cluster_id": "orcamento-bdi",
+          "service_path": "/auditoria-orcamento-licitacao/",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "tools": [],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o orçamento do edital vira risco de proposta",
+          "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
+          "cta_label": "Ver auditoria de orçamento e edital"
+        },
+        "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 89.0,
+          "clicks": 1.0,
+          "position": 7.27,
+          "ctr": 0.011200000000000002,
+          "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.01124,
+          "expected_ctr": 0.04,
+          "gap": 0.02876,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.75,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "prazo de vigência e prazo de execução",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+        "title_length": 72,
+        "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
+        "h1": "Prorrogação de prazo: documentos que não podem faltar",
+        "above_the_fold_lead": "Liste os documentos que sustentam pedido de prorrogação: causa, cronologia, impacto e comunicação, sem dossiê genérico.",
+        "canonical": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+          "matched": true,
+          "cluster_id": "atrasos-prorrogacao",
+          "service_path": "/atrasos-prorrogacao-obras-publicas/",
+          "service_slug": "atrasos-prorrogacao-obras-publicas",
+          "tools": [
+            "/ferramentas/matriz-atraso-obra/"
+          ],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o atraso deixa de ser só cronograma",
+          "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
+          "cta_label": "Ver serviço de prazos e prorrogações"
+        },
+        "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Prorrogação de prazo em obra pública: checklist de document…",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 15.0,
+          "clicks": 0.0,
+          "position": 9.2,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.025,
+          "gap": 0.025,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.4,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/atraso-na-medicao-obra-publica/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+        "title_length": 51,
+        "meta_description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
+        "h1": "Atraso na medição: como proteger o caixa",
+        "above_the_fold_lead": "Serviço executado sem medição processada é caixa parado. Protocolo, prazo e parcela incontroversa são o núcleo da proteção.",
+        "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/atraso-na-medicao-obra-publica/",
+          "matched": true,
+          "cluster_id": "medicoes-pagamentos",
+          "service_path": "/medicoes-glosas-obras-publicas/",
+          "service_slug": "medicoes-glosas-obras-publicas",
+          "tools": [],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando a glosa ou a medição vira problema de caixa",
+          "bridge_body": "Critério de medição contestado, glosa sem nexo ou parcela retida vira risco de fluxo se a equipe não organiza prova contemporânea e contesta no tempo certo.",
+          "cta_label": "Ver serviço de medições e glosas"
+        },
+        "alternate_landing_candidate": "/medicoes-glosas-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "Atraso na medição: como proteger o caixa",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 10.0,
+          "clicks": 0.0,
+          "position": 8.1,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.025,
+          "gap": 0.025,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ]
+        },
+        "confidence": 0.4,
+        "html_present": true
+      },
+      {
+        "path": "/conteudos/bdi-diferenciado-obra-publica/",
+        "query_intent": "informational",
+        "related_queries": [
+          "prorrogação prazo obra pública chuva",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
+        "title_length": 68,
+        "meta_description": "Quando o edital ou a natureza do item autoriza BDI distinto, e o risco de aplicar o mesmo percentual em tudo.",
+        "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
+        "above_the_fold_lead": "BDI diferenciado em materiais e equipamentos só se sustenta quando a decomposição reflete fornecimento, logística e risco reais, não como atalho para maquiar margem.",
+        "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/bdi-diferenciado-obra-publica/",
+          "matched": true,
+          "cluster_id": "orcamento-bdi",
+          "service_path": "/auditoria-orcamento-licitacao/",
+          "service_slug": "auditoria-orcamento-licitacao",
+          "tools": [],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o orçamento do edital vira risco de proposta",
+          "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
+          "cta_label": "Ver auditoria de orçamento e edital"
+        },
+        "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "clickbait_flags": [
+          "\\|\\s*confenge\\s*$"
+        ],
+        "recommended_title": "BDI diferenciado em materiais e equipamentos: quando usar",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 11.0,
+          "clicks": 2.0,
+          "position": 6.27,
+          "ctr": 0.1818,
+          "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
+        },
+        "ctr_gap": {
+          "is_opportunity": false,
+          "ctr": 0.18182,
+          "expected_ctr": 0.04,
+          "gap": -0.14182,
+          "reasons": [
+            "priority_path_baseline"
+          ],
+          "priority_force_include": true
+        },
+        "confidence": 0.4,
+        "html_present": true
+      }
+    ],
+    "internal_linking_opportunities": [
+      {
+        "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "impressions": 22.0,
+        "service_path": "/aditivos-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      },
+      {
+        "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "impressions": 18.0,
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      },
+      {
+        "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "impressions": 17.0,
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      }
+    ],
+    "new_content_only_if_evidenced": [
+      {
+        "rule": "Só propor URL nova se intent distinto + evidência GSC/datalake + gate indexability",
+        "candidates": []
+      }
+    ]
+  },
+  "actions": [
+    {
+      "what_happened": "URL em posição 7.27 com 89.0 impressões e CTR 0.01124",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "evidence": {
+        "impressions": 89.0,
+        "clicks": 1.0,
+        "position": 7.27,
+        "ctr": 0.011200000000000002,
+        "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
+      "related_service": "/auditoria-orcamento-licitacao/",
+      "expected_commercial_impact": "medium",
+      "confidence": 0.75,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
+        "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+        "h1": "SINAPI desonerado ou não desonerado: qual usar?"
+      }
+    },
+    {
+      "what_happened": "URL em posição 3.35 com 17.0 impressões e CTR 0.0",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "evidence": {
+        "impressions": 17.0,
+        "clicks": 0.0,
+        "position": 3.35,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "related_service": "/atrasos-prorrogacao-obras-publicas/",
+      "expected_commercial_impact": "low",
+      "confidence": 0.4,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "title": "Chuva justifica prorrogação de prazo? Critério e prova | CONFENGE",
+        "meta_description": "Chuva ordinária não basta. O que separa pedido aceito de risco ordinário: caminho crítico, dados e documentos contemporâneos.",
+        "h1": "Chuva justifica prorrogação de prazo em obra pública?"
+      }
+    },
+    {
+      "what_happened": "URL em posição 6.09 com 22.0 impressões e CTR 0.0",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "evidence": {
+        "impressions": 22.0,
+        "clicks": 0.0,
+        "position": 6.09,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "related_service": "/aditivos-obras-publicas/",
+      "expected_commercial_impact": "medium",
+      "confidence": 0.45,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "title": "Aditivo qualitativo vs quantitativo: o que muda no pleito | CONFENGE",
+        "meta_description": "A classificação define base de preço, limite e prova. Como enquadrar a mudança sem misturar quantidade com mudança de projeto.",
+        "h1": "Aditivo qualitativo ou quantitativo: a diferença que muda o pleito"
+      }
+    },
+    {
+      "what_happened": "URL em posição 7.0 com 18.0 impressões e CTR 0.0",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "evidence": {
+        "impressions": 18.0,
+        "clicks": 0.0,
+        "position": 7.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "related_service": "/atrasos-prorrogacao-obras-publicas/",
+      "expected_commercial_impact": "low",
+      "confidence": 0.4,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "title": "Prazo de vigência ≠ prazo de execução no contrato | CONFENGE",
+        "meta_description": "Confundir os dois trava aditivo, medição e prorrogação. Diferença prática e o que documentar antes do vencimento.",
+        "h1": "Prazo de vigência e prazo de execução: a diferença que trava obras"
+      }
+    },
+    {
+      "what_happened": "URL em posição 9.2 com 15.0 impressões e CTR 0.0",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "evidence": {
+        "impressions": 15.0,
+        "clicks": 0.0,
+        "position": 9.2,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
+      "related_service": "/atrasos-prorrogacao-obras-publicas/",
+      "expected_commercial_impact": "low",
+      "confidence": 0.4,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+        "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
+        "h1": "Prorrogação de prazo: documentos que não podem faltar"
+      }
+    },
+    {
+      "what_happened": "URL em posição 11.0 com 14.0 impressões e CTR 0.0",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "evidence": {
+        "impressions": 14.0,
+        "clicks": 0.0,
+        "position": 11.0,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana",
+      "related_service": "/aditivos-obras-publicas/",
+      "expected_commercial_impact": "low",
+      "confidence": 0.4,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "robots_noindex",
+          "clickbait_title_pattern"
+        ],
+        "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
+        "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
+        "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133"
+      }
+    },
+    {
+      "what_happened": "URL em posição 8.1 com 10.0 impressões e CTR 0.0",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/atraso-na-medicao-obra-publica/",
+      "evidence": {
+        "impressions": 10.0,
+        "clicks": 0.0,
+        "position": 8.1,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
+      "related_service": "/medicoes-glosas-obras-publicas/",
+      "expected_commercial_impact": "low",
+      "confidence": 0.4,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+        "meta_description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
+        "h1": "Atraso na medição: como proteger o caixa"
+      }
+    },
+    {
+      "what_happened": "URL em posição 6.27 com 11.0 impressões e CTR 0.18182",
+      "why_it_matters": "Impressões competitivas sem clique desperdiçam autoridade emergente",
+      "url": "/conteudos/bdi-diferenciado-obra-publica/",
+      "evidence": {
+        "impressions": 11.0,
+        "clicks": 2.0,
+        "position": 6.27,
+        "ctr": 0.1818,
+        "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
+      },
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet",
+      "related_service": "/auditoria-orcamento-licitacao/",
+      "expected_commercial_impact": "low",
+      "confidence": 0.4,
+      "class": "ctr_gap",
+      "serp_diagnosis": {
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "clickbait_title_pattern"
+        ],
+        "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
+        "meta_description": "Quando o edital ou a natureza do item autoriza BDI distinto, e o risco de aplicar o mesmo percentual em tudo.",
+        "h1": "BDI diferenciado em materiais e equipamentos: quando usar"
+      }
+    },
+    {
+      "what_happened": "Serviço com baixa exposição: /aditivos-obras-publicas/",
+      "why_it_matters": "BOFU fraco enquanto TOFU/MOFU concentra impressões",
+      "url": "/aditivos-obras-publicas/",
+      "evidence": {
+        "url": "https://confenge.com.br/aditivos-obras-publicas/",
+        "path": "/aditivos-obras-publicas/",
+        "clicks": 0.0,
+        "impressions": 12.0,
+        "position": 49.25,
+        "ctr": 0.0
+      },
+      "recommended_action": "Reforçar internal links e supporting content; não forçar ranking genérico",
+      "related_service": "/aditivos-obras-publicas/",
+      "expected_commercial_impact": "high",
+      "confidence": 0.5,
+      "class": "low_service_exposure"
+    },
+    {
+      "what_happened": "Serviço com baixa exposição: /medicoes-glosas-obras-publicas/",
+      "why_it_matters": "BOFU fraco enquanto TOFU/MOFU concentra impressões",
+      "url": "/medicoes-glosas-obras-publicas/",
+      "evidence": {
+        "url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+        "path": "/medicoes-glosas-obras-publicas/",
+        "clicks": 0.0,
+        "impressions": 8.0,
+        "position": 7.88,
+        "ctr": 0.0
+      },
+      "recommended_action": "Reforçar internal links e supporting content; não forçar ranking genérico",
+      "related_service": "/medicoes-glosas-obras-publicas/",
+      "expected_commercial_impact": "high",
+      "confidence": 0.5,
+      "class": "low_service_exposure"
+    },
+    {
+      "what_happened": "Serviço com baixa exposição: /reequilibrio-obras-publicas/",
+      "why_it_matters": "BOFU fraco enquanto TOFU/MOFU concentra impressões",
+      "url": "/reequilibrio-obras-publicas/",
+      "evidence": {
+        "url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "path": "/reequilibrio-obras-publicas/",
+        "clicks": 0.0,
+        "impressions": 4.0,
+        "position": 7.75,
+        "ctr": 0.0
+      },
+      "recommended_action": "Reforçar internal links e supporting content; não forçar ranking genérico",
+      "related_service": "/reequilibrio-obras-publicas/",
+      "expected_commercial_impact": "high",
+      "confidence": 0.5,
+      "class": "low_service_exposure"
+    },
+    {
+      "what_happened": "Serviço com baixa exposição: /auditoria-orcamento-licitacao/",
+      "why_it_matters": "BOFU fraco enquanto TOFU/MOFU concentra impressões",
+      "url": "/auditoria-orcamento-licitacao/",
+      "evidence": {
+        "url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+        "path": "/auditoria-orcamento-licitacao/",
+        "clicks": 0.0,
+        "impressions": 3.0,
+        "position": 9.0,
+        "ctr": 0.0
+      },
+      "recommended_action": "Reforçar internal links e supporting content; não forçar ranking genérico",
+      "related_service": "/auditoria-orcamento-licitacao/",
+      "expected_commercial_impact": "high",
+      "confidence": 0.5,
+      "class": "low_service_exposure"
+    },
+    {
+      "what_happened": "Serviço com baixa exposição: /diagnostico-b2g-360/",
+      "why_it_matters": "BOFU fraco enquanto TOFU/MOFU concentra impressões",
+      "url": "/diagnostico-b2g-360/",
+      "evidence": {
+        "url": "https://confenge.com.br/diagnostico-b2g-360/",
+        "path": "/diagnostico-b2g-360/",
+        "clicks": 0.0,
+        "impressions": 1.0,
+        "position": 15.0,
+        "ctr": 0.0
+      },
+      "recommended_action": "Reforçar internal links e supporting content; não forçar ranking genérico",
+      "related_service": "/diagnostico-b2g-360/",
+      "expected_commercial_impact": "high",
+      "confidence": 0.5,
+      "class": "low_service_exposure"
+    },
+    {
+      "what_happened": "Serviço com baixa exposição: /diagnostico-pre-licitacao/",
+      "why_it_matters": "BOFU fraco enquanto TOFU/MOFU concentra impressões",
+      "url": "/diagnostico-pre-licitacao/",
+      "evidence": {
+        "url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+        "path": "/diagnostico-pre-licitacao/",
+        "clicks": 0.0,
+        "impressions": 1.0,
+        "position": 18.0,
+        "ctr": 0.0
+      },
+      "recommended_action": "Reforçar internal links e supporting content; não forçar ranking genérico",
+      "related_service": "/diagnostico-pre-licitacao/",
+      "expected_commercial_impact": "high",
+      "confidence": 0.5,
+      "class": "low_service_exposure"
+    },
+    {
+      "what_happened": "Conteúdo com tráfego e ponte comercial fraca: /conteudos/aditivo-qualitativo-quantitativo/",
+      "why_it_matters": "Autoridade informacional não transfere para serviço",
+      "url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "evidence": {
+        "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "impressions": 22.0,
+        "service_path": "/aditivos-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      },
+      "recommended_action": "Bridge editorial + link semântico ao serviço",
+      "related_service": "/aditivos-obras-publicas/",
+      "expected_commercial_impact": "medium",
+      "confidence": 0.55,
+      "class": "high_traffic_low_commercial_link"
+    },
+    {
+      "what_happened": "Conteúdo com tráfego e ponte comercial fraca: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "why_it_matters": "Autoridade informacional não transfere para serviço",
+      "url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "evidence": {
+        "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "impressions": 18.0,
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      },
+      "recommended_action": "Bridge editorial + link semântico ao serviço",
+      "related_service": "/atrasos-prorrogacao-obras-publicas/",
+      "expected_commercial_impact": "medium",
+      "confidence": 0.55,
+      "class": "high_traffic_low_commercial_link"
+    },
+    {
+      "what_happened": "Conteúdo com tráfego e ponte comercial fraca: /conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "why_it_matters": "Autoridade informacional não transfere para serviço",
+      "url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "evidence": {
+        "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "impressions": 17.0,
+        "service_path": "/atrasos-prorrogacao-obras-publicas/",
+        "has_service_link": true,
+        "has_bridge": false
+      },
+      "recommended_action": "Bridge editorial + link semântico ao serviço",
+      "related_service": "/atrasos-prorrogacao-obras-publicas/",
+      "expected_commercial_impact": "medium",
+      "confidence": 0.55,
+      "class": "high_traffic_low_commercial_link"
+    }
+  ],
+  "opportunities_engine_ref": {
+    "total": 32,
+    "bofu": 4
+  },
+  "hypotheses_not_proven": [
+    "Title/meta changes will lift CTR — validate with post-deploy GSC export",
+    "Commercial bridges will lift content→service transitions — needs analytics",
+    "Mobile 0-click is SERP-side; layout not causal without post-click evidence"
+  ]
+}

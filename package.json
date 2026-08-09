@@ -108,6 +108,9 @@
     "organic:run": "python3 -m scripts.organic run",
     "organic:diagnose": "python3 -m scripts.organic diagnose",
     "organic:cohort": "python3 -m scripts.organic cohort",
+    "organic:growth": "python3 -m scripts.organic growth",
+    "organic:bridges": "python3 -m scripts.organic bridges",
+    "organic:sitemap-audit": "python3 -m scripts.organic sitemap-audit",
     "organic:test": "python3 -m pytest scripts/organic/tests -q",
     "scrub:em-dashes": "python3 scripts/site/scrub_em_dashes.py --write",
     "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check"

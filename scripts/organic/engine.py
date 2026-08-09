@@ -586,58 +586,102 @@ def build_opportunities(
     opps.extend(opportunities_from_problem_service(problems, as_of=as_of))
     opps.extend(opportunities_from_radar(radar, as_of=as_of))
 
-    # Attach page-level improve actions for high-impression low-CTR URLs
+    # SERP / CTR gap layer — thresholds from data/organic/serp-ctr-config.json
+    from scripts.organic.gsc_loader import normalize_path
+    from scripts.organic.serp_ctr import find_ctr_opportunities, is_ctr_gap, load_ctr_config
+
+    ctr_config = load_ctr_config()
+    normalized_pages: list[dict[str, Any]] = []
     for ps in page_signals:
-        if ps["impressions"] >= 15 and ps["clicks"] <= 0 and ps["url"]:
-            path = ps["url"].replace("https://confenge.com.br", "").replace("http://confenge.com.br", "")
-            if not path.startswith("/"):
-                path = "/" + path
-            # Map path fragment → service for contextual CTA
-            svc_slug, svc_path, cluster = _service_from_path(path)
-            opps.append(
-                _base_opportunity(
-                    oid=f"opp-gsc-ctr-{abs(hash(path)) % 10_000_000}",
-                    topic=f"CTR opportunity: {path}",
-                    cluster=cluster or "gsc-feedback",
-                    intent="mofu",
-                    persona="orcamentista",
-                    jtbd="Corrigir título/meta para capturar impressões existentes",
-                    service_slug=svc_slug,
-                    service_path=svc_path,
-                    action="improve",
-                    rationale=(
-                        f"Muitas impressões ({ps['impressions']}) e CTR ~0 na posição "
-                        f"{ps['position']:.1f} — reescrever title/meta e reforçar CTA."
-                    ),
-                    proposed_url=path,
-                    existing_url=path,
-                    suggested_cta=(
+        path = normalize_path(ps["url"]) if ps.get("url") else ""
+        row = {**ps, "path": path, "ctr": (ps["clicks"] / ps["impressions"]) if ps["impressions"] else 0.0}
+        normalized_pages.append(row)
+
+    serp_diagnoses = find_ctr_opportunities(
+        normalized_pages,
+        config=ctr_config,
+        queries=gsc_queries,
+        force_priority=True,
+    )
+
+    for diag in serp_diagnoses:
+        path = diag.get("path") or ""
+        g = diag.get("gsc") or {}
+        gap = diag.get("ctr_gap") or {}
+        if not gap.get("is_opportunity") and not gap.get("priority_force_include"):
+            continue
+        svc_slug, svc_path, cluster = _service_from_path(path)
+        fit = diag.get("service_fit") or {}
+        if fit.get("service_slug"):
+            svc_slug = fit.get("service_slug") or svc_slug
+            svc_path = fit.get("service_path") or svc_path
+            cluster = fit.get("cluster_id") or cluster
+        issues = diag.get("issues") or []
+        opps.append(
+            _base_opportunity(
+                oid=f"opp-gsc-ctr-{abs(hash(path)) % 10_000_000}",
+                topic=f"CTR opportunity: {path}",
+                cluster=cluster or "gsc-feedback",
+                intent="mofu",
+                persona="orcamentista",
+                jtbd="Corrigir título/meta para capturar impressões existentes",
+                service_slug=svc_slug,
+                service_path=svc_path,
+                action="improve",
+                rationale=(
+                    f"CTR gap configurável: impr={g.get('impressions')} cliques={g.get('clicks')} "
+                    f"pos={g.get('position')} ctr={gap.get('ctr')} expected={gap.get('expected_ctr')} "
+                    f"reasons={','.join(gap.get('reasons') or [])} issues={','.join(issues[:6])}"
+                ),
+                proposed_url=path,
+                existing_url=path,
+                suggested_cta=(
+                    fit.get("cta_label")
+                    or (
                         "Auditar orçamento e BDI do edital"
                         if "sinapi" in path or "bdi" in path or "orcamento" in path
                         else "Analisar meu caso com a CONFENGE"
+                    )
+                ),
+                suggested_internal_links=[p for p in [path, svc_path] if p],
+                unique_data=False,
+                datalake_evidence={
+                    "dataset": "web-cfg-editorial",
+                    "as_of": "gsc",
+                    "record_count": 1,
+                    "methodology": (
+                        "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json "
+                        "(min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio)."
                     ),
-                    suggested_internal_links=[p for p in [path, svc_path] if p],
-                    unique_data=False,
-                    datalake_evidence={
-                        "dataset": "web-cfg-editorial",
-                        "as_of": "gsc",
-                        "record_count": 1,
-                        "methodology": "GSC page-level striking distance / CTR signal",
-                        "limitations": ["Amostra GSC limitada no export disponível."],
-                        "sources": ["google-search-console"],
-                        "confidence": 0.75,
-                    },
-                    gsc_evidence=ps,
-                    demand_strength=_gsc_demand_strength(ps["impressions"], ps["clicks"], ps["position"]),
-                    data_moat=0.1,
-                    topical=0.6,
-                    freshness=0.7,
-                    competitive=0.6,
-                    penalties=[],
-                    confidence=0.8,
-                    source="gsc_page",
-                )
+                    "limitations": [
+                        "Amostra GSC limitada no export disponível.",
+                        "expected_ctr é heurística operacional, não garantia do Google.",
+                    ],
+                    "sources": ["google-search-console"],
+                    "confidence": diag.get("confidence") or 0.55,
+                },
+                gsc_evidence={**g, "serp_diagnosis": {
+                    "title": diag.get("title"),
+                    "meta_description": diag.get("meta_description"),
+                    "h1": diag.get("h1"),
+                    "issues": issues,
+                    "alternate_landing_candidate": diag.get("alternate_landing_candidate"),
+                    "ctr_gap": gap,
+                }},
+                demand_strength=_gsc_demand_strength(
+                    float(g.get("impressions") or 0),
+                    float(g.get("clicks") or 0),
+                    float(g.get("position") or 0),
+                ),
+                data_moat=0.1,
+                topical=0.6,
+                freshness=0.7,
+                competitive=0.6,
+                penalties=[],
+                confidence=float(diag.get("confidence") or 0.55),
+                source="gsc_page",
             )
+        )
 
     # Dedupe by id, keep highest score
     by_id: dict[str, dict[str, Any]] = {}
@@ -664,6 +708,8 @@ def build_opportunities(
                 "competitive_opportunity": 5,
             },
         },
+        "serp_ctr_config_ref": "data/organic/serp-ctr-config.json",
+        "serp_ctr_opportunities": serp_diagnoses,
         "counts": {
             "total": len(ranked),
             "by_action": _count_by(ranked, "action"),
@@ -671,6 +717,7 @@ def build_opportunities(
             "by_publishability": _count_by(ranked, "publishability"),
             "bofu": sum(1 for o in ranked if o["intent"] == "bofu"),
             "data_driven": sum(1 for o in ranked if o.get("unique_data_available")),
+            "serp_ctr_gap": len(serp_diagnoses),
         },
         "demand_map_ref": "persona → problem → question → intent → service",
         "opportunities": ranked,
@@ -686,14 +733,24 @@ def _count_by(rows: list[dict[str, Any]], key: str) -> dict[str, int]:
 
 
 def _service_from_path(path: str) -> tuple[str | None, str | None, str | None]:
+    """Prefer data/organic/content-service-map.json; keep token fallback for edge paths."""
+    try:
+        from scripts.organic.service_map import map_content_to_service
+
+        fit = map_content_to_service(path)
+        if fit.get("matched"):
+            return fit.get("service_slug"), fit.get("service_path"), fit.get("cluster_id")
+    except Exception:
+        pass
     p = path.lower()
     rules = [
-        (("reequil", "reajuste", "repactua"), "reequilibrio-obras-publicas", "/reequilibrio-obras-publicas/", "reequilibrio"),
-        (("aditivo", "acréscimo", "acrescimo", "supress"), "aditivos-obras-publicas", "/aditivos-obras-publicas/", "aditivos"),
+        (("reequil", "reajuste", "repactua", "curva-abc"), "reequilibrio-obras-publicas", "/reequilibrio-obras-publicas/", "reequilibrio"),
+        (("aditivo", "acréscimo", "acrescimo", "supress", "qualitativo", "quantitativo"), "aditivos-obras-publicas", "/aditivos-obras-publicas/", "aditivos"),
         (("medicao", "medição", "glosa", "pagamento"), "medicoes-glosas-obras-publicas", "/medicoes-glosas-obras-publicas/", "medicoes-pagamentos"),
-        (("atraso", "prorroga", "notificacao", "notificação"), "atrasos-prorrogacao-obras-publicas", "/atrasos-prorrogacao-obras-publicas/", "atrasos-prorrogacao"),
+        (("atraso", "prorroga", "notificacao", "notificação", "chuva", "vigencia", "vigência"), "atrasos-prorrogacao-obras-publicas", "/atrasos-prorrogacao-obras-publicas/", "atrasos-prorrogacao"),
         (("sinapi", "sicro", "bdi", "orcamento", "orçamento", "desonerad"), "auditoria-orcamento-licitacao", "/auditoria-orcamento-licitacao/", "orcamento-bdi"),
-        (("edital", "licita", "proposta"), "bid-room-licitacoes-obras", "/bid-room-licitacoes-obras/", "edital-proposta"),
+        (("edital", "licita", "proposta", "pre-licitacao", "pré-licitacao"), "diagnostico-pre-licitacao", "/diagnostico-pre-licitacao/", "edital-proposta"),
+        (("b2g-360", "diagnostico-b2g"), "diagnostico-b2g-360", "/diagnostico-b2g-360/", "carteira-operacao"),
     ]
     for keys, slug, spath, cluster in rules:
         if any(k in p for k in keys):

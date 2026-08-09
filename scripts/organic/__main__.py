@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI: python -m scripts.organic [run|diagnose|cohort]
+"""CLI: python -m scripts.organic [run|diagnose|cohort|growth|bridges|sitemap-audit]
 
 Default: run engine against data/pseo + seo/gsc export → data/organic/SEO_OPPORTUNITIES.json
 """
@@ -7,10 +7,8 @@ Default: run engine against data/pseo + seo/gsc export → data/organic/SEO_OPPO
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -19,30 +17,82 @@ if str(ROOT) not in sys.path:
 
 PSEO = ROOT / "data" / "pseo"
 ORGANIC = ROOT / "data" / "organic"
-GSC_DEFAULT = ROOT / "seo" / "gsc-2026-07-30"
-
-
-def _load_csv(path: Path) -> list[dict]:
-    if not path.exists():
-        return []
-    with path.open(encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+# Prefer newest export; fallback to prior
+GSC_DEFAULT = ROOT / "seo" / "gsc-2026-08-09"
+if not GSC_DEFAULT.exists():
+    GSC_DEFAULT = ROOT / "seo" / "gsc-2026-07-30"
 
 
 def cmd_run(args: argparse.Namespace) -> int:
     from scripts.organic.engine import run_engine
     from scripts.organic.demand_graph import demand_map
+    from scripts.organic.gsc_loader import load_gsc_dir
+    from scripts.organic.metrics import commercial_exposure_metrics
+    from scripts.organic.service_map import audit_link_coverage
 
     gsc_dir = Path(args.gsc_dir) if args.gsc_dir else GSC_DEFAULT
     out = Path(args.out) if args.out else ORGANIC / "SEO_OPPORTUNITIES.json"
+    gsc = load_gsc_dir(gsc_dir)
+    # Engine still accepts raw CSV-shaped dicts; pass normalized page rows as gsc_pages
+    # with Portuguese keys for backward compatibility
+    gsc_pages = [
+        {
+            "Páginas principais": p["url"],
+            "Cliques": p["clicks"],
+            "Impressões": p["impressions"],
+            "Posição": p["position"],
+            "CTR": f"{p['ctr']*100:.2f}%",
+        }
+        for p in gsc["pages"]
+    ]
+    gsc_queries = [
+        {
+            "Top consultas": q["query"],
+            "Cliques": q["clicks"],
+            "Impressões": q["impressions"],
+            "Posição": q["position"],
+        }
+        for q in gsc["queries"]
+    ]
     doc = run_engine(
         pseo_dir=Path(args.pseo_dir) if args.pseo_dir else PSEO,
-        out_path=out,
-        gsc_queries=_load_csv(gsc_dir / "Consultas.csv") or None,
-        gsc_pages=_load_csv(gsc_dir / "Paginas.csv") or None,
-        as_of=args.as_of,
+        out_path=None,  # write after enriching
+        gsc_queries=gsc_queries or None,
+        gsc_pages=gsc_pages or None,
+        as_of=args.as_of or gsc.get("meta", {}).get("export_date"),
     )
-    # Write demand map alongside
+    coverage = audit_link_coverage(ROOT)
+    metrics = commercial_exposure_metrics(
+        gsc["pages"],
+        link_coverage=coverage,
+        ctr_opportunities=doc.get("serp_ctr_opportunities") or [],
+    )
+    doc["commercial_exposure_metrics"] = metrics
+    doc["link_coverage"] = {
+        k: coverage[k]
+        for k in (
+            "content_to_service_link_coverage",
+            "commercial_bridge_coverage",
+            "service_to_supporting_content_coverage",
+            "indexable_content_to_service_link_coverage",
+            "indexable_commercial_bridge_coverage",
+            "indexable_mapped",
+            "mapped",
+            "content_pages_scanned",
+        )
+        if k in coverage
+    }
+    doc["gsc_export"] = {
+        "dir": gsc["dir"],
+        "export_id": gsc["export_id"],
+        "totals": gsc["totals"],
+        "devices": gsc["devices"],
+        "aggregation_note": gsc["aggregation_note"],
+    }
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
     dm_path = ORGANIC / "demand-map.json"
     dm_path.parent.mkdir(parents=True, exist_ok=True)
     dm_path.write_text(
@@ -54,9 +104,11 @@ def cmd_run(args: argparse.Namespace) -> int:
                 "ok": True,
                 "out": str(out),
                 "demand_map": str(dm_path),
+                "gsc_export": gsc["export_id"],
                 "total": doc["counts"]["total"],
                 "bofu": doc["counts"]["bofu"],
-                "data_driven": doc["counts"]["data_driven"],
+                "serp_ctr_gap": doc["counts"].get("serp_ctr_gap"),
+                "commercial_impression_share": metrics.get("commercial_impression_share"),
                 "top3": [
                     {"id": o["id"], "score": o["score"], "action": o["action"], "intent": o["intent"]}
                     for o in doc["opportunities"][:3]
@@ -87,7 +139,6 @@ def cmd_cohort(args: argparse.Namespace) -> int:
 
     opps_path = Path(args.opportunities) if args.opportunities else ORGANIC / "SEO_OPPORTUNITIES.json"
     if not opps_path.exists():
-        # generate first
         cmd_run(argparse.Namespace(pseo_dir=None, gsc_dir=None, out=str(opps_path), as_of=None))
     doc = json.loads(opps_path.read_text(encoding="utf-8"))
     cohort = select_and_materialize_cohort(ROOT, doc, apply=bool(args.apply))
@@ -95,6 +146,60 @@ def cmd_cohort(args: argparse.Namespace) -> int:
     out.write_text(json.dumps(cohort, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"ok": True, "out": str(out), "n": len(cohort.get("items") or [])}, ensure_ascii=False))
     return 0
+
+
+def cmd_growth(args: argparse.Namespace) -> int:
+    from scripts.organic.growth_report import write_growth_report
+
+    gsc_dir = Path(args.gsc_dir) if args.gsc_dir else GSC_DEFAULT
+    out_json = Path(args.out) if args.out else ORGANIC / "growth-report.json"
+    out_md = Path(args.md) if args.md else ROOT / "docs" / "ops" / "ORGANIC-GROWTH-REPORT.md"
+    opps_path = ORGANIC / "SEO_OPPORTUNITIES.json"
+    opps = json.loads(opps_path.read_text(encoding="utf-8")) if opps_path.exists() else None
+    doc = write_growth_report(
+        ROOT, gsc_dir, out_json=out_json, out_md=out_md, opportunities_doc=opps
+    )
+    print(
+        json.dumps(
+            {
+                "ok": True,
+                "json": str(out_json),
+                "md": str(out_md),
+                "actions": len(doc.get("actions") or []),
+                "ctr_gaps": len((doc.get("sections") or {}).get("ctr_gap") or []),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
+    return 0
+
+
+def cmd_bridges(args: argparse.Namespace) -> int:
+    from scripts.organic.bridges import apply_bridges
+
+    paths = args.paths.split(",") if args.paths else None
+    result = apply_bridges(
+        ROOT,
+        only_indexable=not bool(args.include_noindex),
+        paths=paths,
+        dry_run=bool(args.dry_run),
+    )
+    out = ORGANIC / "bridges-apply.json"
+    out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"ok": True, "out": str(out), "applied": result.get("applied")}, ensure_ascii=False))
+    return 0
+
+
+def cmd_sitemap_audit(args: argparse.Namespace) -> int:
+    from scripts.organic.sitemap_hygiene import audit_sitemaps
+
+    report = audit_sitemaps(ROOT)
+    out = Path(args.out) if args.out else ORGANIC / "sitemap-hygiene.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"ok": report.get("ok"), "out": str(out), "issues": len(report.get("issues") or [])}, ensure_ascii=False))
+    return 0 if report.get("ok") or args.allow_fail else 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -116,6 +221,23 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--opportunities", default=None)
     c.add_argument("--apply", action="store_true", help="Apply safe HTML improvements")
     c.set_defaults(func=cmd_cohort)
+
+    g = sub.add_parser("growth", help="Write ORGANIC-GROWTH-REPORT from GSC export")
+    g.add_argument("--gsc-dir", default=None)
+    g.add_argument("--out", default=None)
+    g.add_argument("--md", default=None)
+    g.set_defaults(func=cmd_growth)
+
+    b = sub.add_parser("bridges", help="Apply editorial commercial bridges on content")
+    b.add_argument("--paths", default=None, help="Comma-separated paths")
+    b.add_argument("--include-noindex", action="store_true")
+    b.add_argument("--dry-run", action="store_true")
+    b.set_defaults(func=cmd_bridges)
+
+    s = sub.add_parser("sitemap-audit", help="Audit sitemap hygiene")
+    s.add_argument("--out", default=None)
+    s.add_argument("--allow-fail", action="store_true")
+    s.set_defaults(func=cmd_sitemap_audit)
 
     args = p.parse_args(argv)
     if not args.cmd:

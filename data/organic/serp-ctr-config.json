@@ -1,0 +1,58 @@
+{
+  "schema_version": "serp-ctr-config-v1",
+  "description": "Thresholds explícitos para SERP Opportunity / CTR Gap. Não hardcodar magic numbers no engine — carregar este arquivo.",
+  "documentation": "docs/ops/ORGANIC-ENGINE.md#serp-ctr-gap",
+  "min_impressions": 10,
+  "max_position_for_opportunity": 12.0,
+  "min_position_for_opportunity": 1.0,
+  "ctr_gap_ratio": 0.45,
+  "absolute_ctr_floor": 0.02,
+  "expected_ctr_by_position_band": [
+    {"position_max": 3.0, "expected_ctr": 0.12},
+    {"position_max": 5.0, "expected_ctr": 0.08},
+    {"position_max": 8.0, "expected_ctr": 0.04},
+    {"position_max": 12.0, "expected_ctr": 0.025},
+    {"position_max": 20.0, "expected_ctr": 0.015},
+    {"position_max": 100.0, "expected_ctr": 0.008}
+  ],
+  "title_soft_max_chars_desktop": 60,
+  "title_soft_max_chars_mobile": 42,
+  "description_soft_max_chars": 155,
+  "priority_paths": [
+    "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+    "/conteudos/aditivo-qualitativo-quantitativo/",
+    "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+    "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "/conteudos/bdi-diferenciado-obra-publica/",
+    "/conteudos/glosa-de-medicao-obra-publica/",
+    "/conteudos/curva-abc-reequilibrio-contrato/",
+    "/conteudos/medicao-de-obra-publica-rejeitada/"
+  ],
+  "commercial_path_prefixes": [
+    "/aditivos-obras-publicas/",
+    "/reequilibrio-obras-publicas/",
+    "/medicoes-glosas-obras-publicas/",
+    "/auditoria-orcamento-licitacao/",
+    "/diagnostico-b2g-360/",
+    "/diagnostico-pre-licitacao/",
+    "/atrasos-prorrogacao-obras-publicas/",
+    "/bid-room-licitacoes-obras/",
+    "/acompanhamento-contratos-obras/",
+    "/defesa-margem-contratos-publicos/",
+    "/defesa-tecnica-contratos-publicos/",
+    "/diretoria-b2g/"
+  ],
+  "informational_path_prefixes": [
+    "/conteudos/",
+    "/guias-contratos-obras/",
+    "/lei-14133-obras/",
+    "/jurisprudencia-contratos-obras/",
+    "/inteligencia/",
+    "/radar/"
+  ],
+  "notes": [
+    "expected_ctr is a planning heuristic for opportunity ranking, not a Google guarantee.",
+    "Small GSC samples inflate noise; confidence must stay low when impressions < 30.",
+    "Aggregation mismatch between GSC tables is expected and must not be force-reconciled."
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "schema_version": "legacy-url-inventory-v1",
+  "as_of": "2026-08-09",
+  "rule": "301 only to true semantic equivalent; 404/410 when permanently gone; never soft-home topical content just to preserve SEO.",
+  "notes": [
+    "GSC may still show residual impressions for redirected or gone URLs; residual ≠ indexation failure.",
+    "http:// host rows in GSC are property aggregation noise when https canonical is enforced at edge."
+  ],
+  "items": [
+    {
+      "legacy_url": "http://confenge.com.br/",
+      "status": "canonical_host_https",
+      "current_action": "edge_https_canonical",
+      "destination": "https://confenge.com.br/",
+      "canonical": "https://confenge.com.br/",
+      "sitemap_membership": false,
+      "internal_backlinks": "n/a (host)",
+      "external_backlinks_known": "unknown",
+      "action": "keep_https_force_via_netlify_host_rules",
+      "gsc_signal": "7 impressions residual on http host row"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/blog",
+      "status": "301_redirect",
+      "current_action": "301",
+      "destination": "/conteudos/",
+      "canonical": "https://confenge.com.br/conteudos/",
+      "sitemap_membership": false,
+      "internal_backlinks": "none expected after rewrite",
+      "external_backlinks_known": "possible residual from old CMS",
+      "action": "keep_301_to_library_hub",
+      "gsc_signal": "4 impressions, avg pos ~1"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/trabalhe-conosco",
+      "status": "301_redirect",
+      "current_action": "301",
+      "destination": "/#contato",
+      "canonical": "https://confenge.com.br/",
+      "sitemap_membership": false,
+      "internal_backlinks": "none",
+      "external_backlinks_known": "unknown",
+      "action": "keep_301_to_contact_anchor_no_careers_page",
+      "gsc_signal": "4 impressions, avg pos ~2"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/avcb",
+      "status": "410_gone",
+      "current_action": "410",
+      "destination": "/404.html",
+      "canonical": null,
+      "sitemap_membership": false,
+      "internal_backlinks": "must be zero on public marketing pages",
+      "external_backlinks_known": "legacy product",
+      "action": "keep_410_abandoned_product",
+      "gsc_signal": "query avcb residual; entity cleanup intentional"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/avcbclcb",
+      "status": "410_gone",
+      "current_action": "410",
+      "destination": "/404.html",
+      "canonical": null,
+      "sitemap_membership": false,
+      "action": "keep_410"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/vision",
+      "status": "410_gone",
+      "current_action": "410",
+      "destination": "/404.html",
+      "canonical": null,
+      "sitemap_membership": false,
+      "action": "keep_410"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/nexgen",
+      "status": "410_gone",
+      "current_action": "410",
+      "destination": "/404.html",
+      "canonical": null,
+      "sitemap_membership": false,
+      "action": "keep_410"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/contato",
+      "status": "301_redirect",
+      "current_action": "301",
+      "destination": "/#contato",
+      "canonical": "https://confenge.com.br/",
+      "sitemap_membership": false,
+      "action": "keep_301"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/servicos",
+      "status": "301_redirect",
+      "current_action": "301",
+      "destination": "/#como-atuamos",
+      "canonical": "https://confenge.com.br/",
+      "sitemap_membership": false,
+      "action": "keep_301"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/sobre",
+      "status": "301_redirect",
+      "current_action": "301",
+      "destination": "/especialista/tiago-jun-sasaki/",
+      "canonical": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+      "sitemap_membership": false,
+      "action": "keep_301_to_specialist"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "status": "301_redirect",
+      "current_action": "301!",
+      "destination": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "sitemap_membership": false,
+      "action": "keep_editorial_canonical_consolidation"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+      "status": "301_redirect",
+      "current_action": "301!",
+      "destination": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "sitemap_membership": false,
+      "action": "keep_editorial_canonical_consolidation"
+    }
+  ]
+}
