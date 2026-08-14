@@ -1,3 +1,5 @@
+> **Authoritative architecture notice (2026-08-14):** [ADR-STRAT-002](ADR-STRAT-002-confenge-canonical-public-surface.md) governs current cross-repository ownership. `confenge.com.br` / `web-cfg` is the sole public surface, `extra-cli` is the truth plane, `warmbly` is the action plane, and SmartLic is only a legacy migration source. Where this brownfield snapshot conflicts, ADR-STRAT-002 wins.
+
 # System Architecture — CONFENGE (confenge-site)
 
 **Workflow:** brownfield-discovery · Phase 1  
