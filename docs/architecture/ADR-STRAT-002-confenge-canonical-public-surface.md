@@ -53,6 +53,7 @@ Priority is assessed with a shared model: `(demand × commercial relevance × re
 
 ## Execution anchors
 
+- [Runtime authority map](RUNTIME-AUTHORITY.md)
 - [#61 — central epic](https://github.com/tjsasakifln/web-cfg/issues/61)
 - [#60 — first public B2G vertical](https://github.com/tjsasakifln/web-cfg/issues/60)
 - [#62 — equity migration](https://github.com/tjsasakifln/web-cfg/issues/62)
