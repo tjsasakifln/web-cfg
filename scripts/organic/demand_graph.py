@@ -8,6 +8,102 @@ from __future__ import annotations
 
 from typing import Any
 
+DEMAND_INPUTS: list[dict[str, Any]] = [
+    {
+        "id": "gsc-current",
+        "kind": "google_search_console",
+        "path": "data/revops/gsc/insights_latest.json",
+        "as_of": "2026-07-30",
+        "limitations": "Aggregate search evidence; never joined query-to-lead.",
+    },
+    {
+        "id": "smartlic-historical",
+        "kind": "pending_migration_evidence",
+        "path": "https://github.com/tjsasakifln/web-cfg/pull/68",
+        "as_of": "2026-08-14",
+        "state": "PENDING_ACCEPTANCE",
+        "limitations": "SmartLic donor GSC exports exist only in unmerged PR #68; current SmartLic GSC API state is UNKNOWN.",
+    },
+    {
+        "id": "live-serp-2026-08-14",
+        "kind": "live_search_observation",
+        "path": "data/organic/search-baseline-2026-08-14.json",
+        "as_of": "2026-08-14",
+        "limitations": "Observed result sample, not rank tracking or exhaustive index coverage.",
+    },
+    {
+        "id": "commercial-jobs",
+        "kind": "commercial_questions_and_objections",
+        "path": "index.html#jornadas",
+        "as_of": "2026-08-14",
+        "limitations": "Current positioning and operator knowledge; win/loss denominators are UNKNOWN.",
+    },
+    {
+        "id": "public-read-v1",
+        "kind": "public_data_capability",
+        "path": "https://github.com/tjsasakifln/extra-cli/blob/main/docs/contracts/public-read-v1.md",
+        "as_of": "2026-08-14",
+        "limitations": "SELECT-only producer contract; live consumer query health must be verified separately.",
+    },
+    {
+        "id": "service-economics",
+        "kind": "commercial_economics",
+        "path": None,
+        "as_of": "2026-08-14",
+        "state": "UNKNOWN",
+        "limitations": "No versioned ticket, close-rate or contribution-margin baseline was available.",
+    },
+]
+
+STAGE_BY_INTENT = {
+    "tofu": "problem_awareness",
+    "mofu": "solution_evaluation",
+    "bofu": "commercial_decision",
+}
+
+NODE_DECISION_FIELDS: dict[str, dict[str, Any]] = {
+    "need-reequilibrio-pleito": {
+        "asset": "/ferramentas/checklist-reequilibrio/",
+        "unique_utility": "Fail-closed documentary readiness check with central blockers, correction order and local-only answers.",
+        "hypothesis": "A contractor facing margin erosion will use a private readiness check before requesting a technical second reading.",
+    },
+    "need-aditivo-limite": {
+        "asset": "/ferramentas/limite-acrescimos-supressoes/",
+        "unique_utility": "Separates additions and suppressions and exposes the decision inputs instead of returning a context-free percentage.",
+        "hypothesis": "A contract engineer near an amendment limit will value a transparent calculation and request case review when assumptions are uncertain.",
+    },
+    "need-medicao-glosa": {
+        "asset": "/medicoes-glosas-obras-publicas/",
+        "unique_utility": "Connects measurement facts, proof and cash impact to an engineering-specific evidence workflow.",
+        "hypothesis": "A contractor with retained cash will prefer an evidence workflow over generic legal copy and request a measurement review.",
+    },
+    "need-sinapi-desonerado": {
+        "asset": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "unique_utility": "Relates the selected SINAPI regime to BDI, payroll charges and proposal-margin consequences.",
+        "hypothesis": "An estimator comparing SINAPI regimes will progress to an audit when the page makes the margin consequence explicit.",
+    },
+    "need-atraso-prorrogacao": {
+        "asset": "/ferramentas/matriz-atraso-obra/",
+        "unique_utility": "Structures cause, responsibility, evidence and time impact without asserting an unsupported legal conclusion.",
+        "hypothesis": "A contract manager under schedule pressure will use the matrix to find evidence gaps and request a second reading.",
+    },
+    "need-edital-orcamento": {
+        "asset": "/auditoria-orcamento-licitacao/",
+        "unique_utility": "Frames bid/no-bid around budget provenance, executability and margin rather than tender volume.",
+        "hypothesis": "A bid team with an inconsistent budget will seek a technical audit before committing proposal capital.",
+    },
+    "need-benchmark-mercado": {
+        "asset": "/radar/nacional-obras-publicas/",
+        "unique_utility": "Uses normalized contract evidence with visible methodology and limitations for reuse and comparison.",
+        "hypothesis": "Original, reusable contract evidence will earn citations and create qualified market-intelligence conversations.",
+    },
+    "need-gestao-contratual": {
+        "asset": "/acompanhamento-contratos-obras/",
+        "unique_utility": "Maps recurring contract-control failures to an explicit continuous operating routine and next decision.",
+        "hypothesis": "A director with recurring contract leakage will choose a diagnostic when continuous-routine fit is made concrete.",
+    },
+}
+
 # Canonical demand nodes grounded in CONFENGE service inventory
 DEMAND_NODES: list[dict[str, Any]] = [
     {
@@ -169,13 +265,46 @@ def demand_map() -> dict[str, Any]:
     """Export demand graph as versioned artifact structure."""
     by_cluster: dict[str, list[str]] = {}
     by_intent: dict[str, list[str]] = {}
-    for n in DEMAND_NODES:
+    nodes: list[dict[str, Any]] = []
+    for raw in DEMAND_NODES:
+        n = dict(raw)
+        decision = NODE_DECISION_FIELDS[n["id"]]
+        n.update(
+            {
+                "icp": n["persona"],
+                "stage": STAGE_BY_INTENT[n["intent"]],
+                "asset": decision["asset"],
+                "unique_utility": decision["unique_utility"],
+                "evidence": ["gsc-current", "smartlic-historical", "live-serp-2026-08-14", "commercial-jobs"],
+                "confenge_offer": n["service_path"],
+                "success_metric": "qualified_commercial_opportunity_created",
+                "experiment": {
+                    "decision_state": "VALIDATE",
+                    "hypothesis": decision["hypothesis"],
+                    "target_query_job": n["jtbd"],
+                    "commercial_offer": n["service_path"],
+                    "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+                    "publication_canary_size": "one canonical asset or family",
+                    "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+                    "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+                    "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+                    "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+                    "evidence_plan": {
+                        "day_7": "crawl, index coverage, tool completion and attribution integrity",
+                        "day_28": "engaged usage, citations/links and qualified commercial signals",
+                        "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision",
+                    },
+                },
+            }
+        )
+        nodes.append(n)
         by_cluster.setdefault(n["cluster"], []).append(n["id"])
         by_intent.setdefault(n["intent"], []).append(n["id"])
-    return {
-        "schema_version": "organic-demand-v1",
-        "model": "persona → problem → question → intent → service",
-        "nodes": DEMAND_NODES,
+    graph = {
+        "schema_version": "organic-demand-v2",
+        "model": "query/problem → user job → ICP → stage → asset → unique utility → evidence → CTA → CONFENGE offer → success metric",
+        "inputs": DEMAND_INPUTS,
+        "nodes": nodes,
         "by_cluster": by_cluster,
         "by_intent": by_intent,
         "principle": (
@@ -183,6 +312,36 @@ def demand_map() -> dict[str, Any]:
             "Não criar uma página por keyword."
         ),
     }
+    validate_demand_map(graph)
+    return graph
+
+
+def validate_demand_map(graph: dict[str, Any]) -> None:
+    """Fail closed when a proposed asset lacks a commercial decision chain."""
+    required = {
+        "problem",
+        "jtbd",
+        "icp",
+        "stage",
+        "asset",
+        "unique_utility",
+        "evidence",
+        "cta",
+        "confenge_offer",
+        "success_metric",
+        "experiment",
+    }
+    input_ids = {row.get("id") for row in graph.get("inputs", [])}
+    if "service-economics" not in input_ids:
+        raise ValueError("demand graph must preserve service economics as evidence or UNKNOWN")
+    for node in graph.get("nodes", []):
+        missing = sorted(key for key in required if not node.get(key))
+        if missing:
+            raise ValueError(f"{node.get('id', 'UNKNOWN')} missing required demand fields: {', '.join(missing)}")
+        experiment = node["experiment"]
+        for key in ("hypothesis", "publication_canary_size", "promotion_threshold", "kill_deindex_threshold", "maintenance_owner", "maintenance_cost", "evidence_plan"):
+            if not experiment.get(key):
+                raise ValueError(f"{node['id']} missing experiment.{key}")
 
 
 def match_queries_to_nodes(queries: list[dict[str, Any]]) -> list[dict[str, Any]]:
