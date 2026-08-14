@@ -1,6 +1,6 @@
 # AGENTS.md — public-surface guardrails
 
-Read [ADR-STRAT-002](docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md) before changing public architecture, data contracts, SEO templates or conversion flows.
+Read [ADR-STRAT-002](docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md) and [MARKET-CAPTURE-OS](docs/strategy/MARKET-CAPTURE-OS.md) before changing public architecture, market strategy, data contracts, SEO templates or conversion flows.
 
 ## Non-negotiable boundaries
 
@@ -15,3 +15,7 @@ Read [ADR-STRAT-002](docs/architecture/ADR-STRAT-002-confenge-canonical-public-s
 ## Pull-request evidence
 
 State the visitor job, acquisition/conversion hypothesis, data owner/contract, quality-gate result, analytics, rollback and affected ADR. If a change crosses a boundary, update the ADR before implementation.
+
+## Market-capture gate
+
+P0/P1 work must name its decision state (EXECUTE_NOW/VALIDATE/DEFER/SUNSET/SUPERSEDED), executive front, time to evidence and at least one leverage type: revenue, distribution, data, automation, trust or customer. Ask whether 100 repetitions improve the system or merely create 100 units of work. Qualified commercial opportunities—not development volume, raw leads, messages or page count—are the corporate North Star.
