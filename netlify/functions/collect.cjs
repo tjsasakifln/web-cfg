@@ -57,6 +57,12 @@ const ALLOWED_EVENTS = new Set([
   "web_vital",
   "tool_use",
   "tool_result",
+  "organic_landing",
+  "asset_view",
+  "contract_selected",
+  "contract_analyzed",
+  "lead_created",
+  "qualified_lead",
 ]);
 
 function originOk(event) {

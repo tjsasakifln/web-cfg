@@ -431,6 +431,54 @@
           "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
         }
       }
+    },
+    {
+      "id": "need-defesa-margem-diagnostico",
+      "persona": "diretor-construtora",
+      "problem": "Contrato público em execução sem leitura factual de margem, prazos e eventos",
+      "question": "O que este contrato público já mostra — e o que permanece UNKNOWN — antes de pedir uma segunda leitura?",
+      "intent": "bofu",
+      "jtbd": "Partir de um contrato real e decidir se vale pedir segunda leitura técnica",
+      "cluster": "defesa-margem",
+      "service_slug": "defesa-margem-contratos-publicos",
+      "service_path": "/defesa-margem-contratos-publicos/",
+      "related_queries": [
+        "defesa de margem contrato público",
+        "diagnóstico contrato obra pública",
+        "segunda leitura contrato público"
+      ],
+      "cta": "Quero uma segunda leitura deste contrato",
+      "funnel": "bofu",
+      "existing_url": "/ferramentas/diagnostico-defesa-margem/",
+      "icp": "diretor-construtora",
+      "stage": "commercial_decision",
+      "asset": "/ferramentas/diagnostico-defesa-margem/",
+      "unique_utility": "Turns a public contract identifier into a provenance-bearing factual reading that preserves UNKNOWN instead of inventing legal credit.",
+      "evidence": [
+        "gsc-current",
+        "smartlic-historical",
+        "live-serp-2026-08-14",
+        "commercial-jobs"
+      ],
+      "confenge_offer": "/defesa-margem-contratos-publicos/",
+      "success_metric": "qualified_commercial_opportunity_created",
+      "experiment": {
+        "decision_state": "VALIDATE",
+        "hypothesis": "A contractor with a named public contract will request a CONFENGE second reading after seeing official facts and explicit UNKNOWN gaps.",
+        "target_query_job": "Partir de um contrato real e decidir se vale pedir segunda leitura técnica",
+        "commercial_offer": "/defesa-margem-contratos-publicos/",
+        "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+        "publication_canary_size": "one canonical asset or family",
+        "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+        "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+        "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+        "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+        "evidence_plan": {
+          "day_7": "crawl, index coverage, tool completion and attribution integrity",
+          "day_28": "engaged usage, citations/links and qualified commercial signals",
+          "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+        }
+      }
     }
   ],
   "by_cluster": {
@@ -457,6 +505,9 @@
     ],
     "gestao-contratual": [
       "need-gestao-contratual"
+    ],
+    "defesa-margem": [
+      "need-defesa-margem-diagnostico"
     ]
   },
   "by_intent": {
@@ -464,7 +515,8 @@
       "need-reequilibrio-pleito",
       "need-medicao-glosa",
       "need-edital-orcamento",
-      "need-gestao-contratual"
+      "need-gestao-contratual",
+      "need-defesa-margem-diagnostico"
     ],
     "mofu": [
       "need-aditivo-limite",

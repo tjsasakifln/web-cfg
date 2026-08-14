@@ -11,6 +11,7 @@ The public build includes:
 
 ```text
 https://confenge.com.br/.well-known/indexnow-key.txt
+https://confenge.com.br/01ce18c7219b7c7dcb2ab06e226c2681.txt
 ```
 
 The key is an ownership token, not a credential. The submitter refuses URLs

@@ -25,6 +25,11 @@ const MAX_FIELD = {
   content_cluster: 80,
   idempotency_key: 80,
   turnstile_token: 2048,
+  asset_id: 80,
+  route_family: 80,
+  public_contract_id: 80,
+  public_entity_id: 80,
+  cta_id: 80,
 };
 
 const ALLOWED_JOURNEYS = new Set(["contrato", "edital", "operacao", "conteudo", "pseo", "outro"]);
@@ -193,6 +198,11 @@ function validateAndNormalize(data) {
     content_cluster: clamp(data.content_cluster, MAX_FIELD.content_cluster) || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
+    asset_id: clamp(data.asset_id, MAX_FIELD.asset_id) || null,
+    route_family: clamp(data.route_family, MAX_FIELD.route_family) || null,
+    public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
+    public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
+    cta_id: clamp(data.cta_id, MAX_FIELD.cta_id) || null,
   };
 
   return { ok: true, honeypot: false, lead };
