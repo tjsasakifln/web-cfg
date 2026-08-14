@@ -1,6 +1,6 @@
 # AGENTS.md — public-surface guardrails
 
-Read [ADR-STRAT-002](docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md) and [MARKET-CAPTURE-OS](docs/strategy/MARKET-CAPTURE-OS.md) before changing public architecture, market strategy, data contracts, SEO templates or conversion flows.
+Read [ADR-STRAT-002](docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md), [RUNTIME-AUTHORITY](docs/architecture/RUNTIME-AUTHORITY.md) and [MARKET-CAPTURE-OS](docs/strategy/MARKET-CAPTURE-OS.md) before changing public architecture, market strategy, data contracts, SEO templates or conversion flows.
 
 ## Non-negotiable boundaries
 
