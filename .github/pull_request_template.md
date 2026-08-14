@@ -1,17 +1,26 @@
 ## Summary
 
-<!-- What and why -->
+<!-- What visitor/business job does this solve, and why now? -->
+
+## Architecture and acquisition evidence
+
+- Visitor job:
+- Growth motor: Revenue Now / Inbound Core / Inbound Compounding / Supporting Infrastructure
+- Data owner and versioned contract:
+- Acquisition/conversion hypothesis:
+- ADR affected: none / link
 
 ## Checklist
 
-- [ ] Segurança: sem segredos; lead path validado (`npm run test:lead-function` + `test:secrets-scan`)
-- [ ] Conversão: formulário / WhatsApp / mailto / confirmação
-- [ ] Analytics: sem PII (`npm run test:analytics`)
-- [ ] SEO: redirects, sitemap, robots se tocados
-- [ ] pSEO: não amplia onda sem gate editorial
-- [ ] CI verde
-- [ ] Produção: plano de deploy + verificação `build-info.json`
-
-## Risk
-
-<!-- Low / Med / High + rollback note -->
+- [ ] Read `docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md`
+- [ ] Keeps `confenge.com.br` as the only public brand/domain; no SmartLic brand, handoff, CTA or runtime
+- [ ] Does not add a crawler, parallel DataLake or competing identity model
+- [ ] Uses normalized source `CONFENGE_WEB` and preserves attribution/next action when applicable
+- [ ] Security: no secrets; lead path validated (`npm run test:lead-function` + `test:secrets-scan`)
+- [ ] Conversion: form / WhatsApp / mailto / confirmation validated
+- [ ] Analytics: no PII (`npm run test:analytics`)
+- [ ] SEO: canonical, redirects, sitemap and robots validated if touched
+- [ ] Public intelligence: distinct utility, source/provenance, freshness and empty/error states
+- [ ] pSEO: no wave expansion without editorial/data quality gate
+- [ ] Rollback or reversible migration path documented
+- [ ] CI green
