@@ -48,4 +48,4 @@ Guias em https://confenge.com.br/conteudos/ sobre problemas reais de obra públi
 
 ## Canonical public-intelligence architecture
 
-CONFENGE publishes public B2G intelligence, tools, datasets and acquisition journeys only at https://confenge.com.br/. Canonical facts and provenance are supplied by versioned contracts owned by extra-cli; commercial next actions are orchestrated by Warmbly. SmartLic is not an active product or public brand: its useful assets and search equity are being selectively migrated, redirected or retired under ADR-STRAT-002.
+CONFENGE publishes public B2G intelligence, tools, datasets and acquisition journeys only at https://confenge.com.br/. Canonical facts and provenance are supplied through versioned, server-side public-data contracts; commercial next actions are orchestrated by CONFENGE's internal systems. SmartLic is not an active product or public brand: its useful assets and search equity are being selectively migrated, redirected or retired under ADR-STRAT-002.
