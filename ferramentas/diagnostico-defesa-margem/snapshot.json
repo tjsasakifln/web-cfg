@@ -1,0 +1,108 @@
+{
+  "contract_version": "contract-margin-event-v1.0.0",
+  "producer": "public_read_export",
+  "producer_contracts": [
+    "public_read_v1@v1.0.0",
+    "pseo-export@1.1.0"
+  ],
+  "as_of": "2026-07-31",
+  "source_updated_at": "2026-07-31",
+  "snapshot_id": "pseo-20260802T032433Z-47e7e07c",
+  "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+  "export_entrypoint": "python -m scripts.pseo.export_web_cfg",
+  "limitations": [
+    "Projection of the versioned public export already vendored for this site.",
+    "public_read_v1.contracts does not emit vigência, anniversary, aditivos, reajuste, medições or payments.",
+    "CONTRACT_MARGIN_EVENT producer family is not in public_read_v1; margin_events stay empty.",
+    "valor_estimado is an estimated figure, not a signed contract_value.",
+    "Absence of an event is UNKNOWN, not proof that the event did not occur."
+  ],
+  "records": [
+    {
+      "public_id": "01619104000141-1-000123/2026",
+      "public_id_slug": "qc-caixa-dagua-2026",
+      "process_key": "01619104000141-1-000123/2026",
+      "official_number": "01619104000141-1-000123/2026",
+      "event_type": "contract_lifecycle",
+      "status_code": null,
+      "title": "CONTRATAÇÃO DE EMPRESA DO RAMO PARA EXECUÇÃO DA OBRA DE CONSTRUÇÃO DE UMA BASE PARA CAIXA D’ÁGUA DE 20.000L NA COMUNIDADE PORTO II, NO MUNICÍPIO DE QUARTO CENTENÁRIO, DE ACORDO COM MEMORIAL, PLANILHA ORÇAMENTÁRIA E DOCUM",
+      "contract_value": null,
+      "estimated_value": 111304.87,
+      "vigencia_start": null,
+      "vigencia_end": null,
+      "data_assinatura": null,
+      "publication_at": null,
+      "organ": {
+        "display_name": "MUNICIPIO DE QUARTO CENTENARIO",
+        "tax_identifier_export": null,
+        "entity_type": "organ"
+      },
+      "supplier": null,
+      "uf": "PR",
+      "municipio": "Quarto Centenário",
+      "source": "pncp",
+      "source_uri": "https://pncp.gov.br/app/contratos/01619104000141/2026/123",
+      "as_of": "2026-07-31",
+      "source_updated_at": "2026-07-31",
+      "completeness": "PARTIAL",
+      "reason_codes": [
+        "contract_value_not_in_producer_projection",
+        "vigencia_not_in_producer_projection",
+        "margin_events_not_in_public_read_v1"
+      ],
+      "uncertainty": true,
+      "provenance": {
+        "producer_export": "pseo-export@1.1.0",
+        "source_run_id": "pseo-20260802T032433Z-47e7e07c",
+        "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+        "snapshot_id": "pseo-20260802T032433Z-47e7e07c",
+        "opportunity_id": "radar-edificacoes-publicas-pr",
+        "verified_at": "2026-07-31"
+      },
+      "margin_events": []
+    },
+    {
+      "public_id": "80888688000127-1-000040/2026",
+      "public_id_slug": "lz-ponte-kaiser-2026",
+      "process_key": "80888688000127-1-000040/2026",
+      "official_number": "80888688000127-1-000040/2026",
+      "event_type": "contract_lifecycle",
+      "status_code": null,
+      "title": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA NO RAMO DE ENGENHARIA PARA EXECUÇÃO DA OBRA DE CONSTRUÇÃO DA PONTE CHICO KAISER, SOBRE O RIO SÃO DOMINGOS, NO MUNICÍPIO DE LUIZIANA/PR, COMPREENDENDO O FORNECIMENTO DE MATERIAIS, MÃO",
+      "contract_value": null,
+      "estimated_value": 522568.04,
+      "vigencia_start": null,
+      "vigencia_end": null,
+      "data_assinatura": null,
+      "publication_at": null,
+      "organ": {
+        "display_name": "MUNICIPIO DE LUIZIANA",
+        "tax_identifier_export": null,
+        "entity_type": "organ"
+      },
+      "supplier": null,
+      "uf": "PR",
+      "municipio": "Luiziana",
+      "source": "pncp",
+      "source_uri": "https://pncp.gov.br/app/contratos/80888688000127/2026/40",
+      "as_of": "2026-07-31",
+      "source_updated_at": "2026-07-31",
+      "completeness": "PARTIAL",
+      "reason_codes": [
+        "contract_value_not_in_producer_projection",
+        "vigencia_not_in_producer_projection",
+        "margin_events_not_in_public_read_v1"
+      ],
+      "uncertainty": true,
+      "provenance": {
+        "producer_export": "pseo-export@1.1.0",
+        "source_run_id": "pseo-20260802T032433Z-47e7e07c",
+        "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+        "snapshot_id": "pseo-20260802T032433Z-47e7e07c",
+        "opportunity_id": "radar-edificacoes-publicas-pr",
+        "verified_at": "2026-07-31"
+      },
+      "margin_events": []
+    }
+  ]
+}

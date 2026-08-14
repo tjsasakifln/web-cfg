@@ -102,6 +102,11 @@ NODE_DECISION_FIELDS: dict[str, dict[str, Any]] = {
         "unique_utility": "Maps recurring contract-control failures to an explicit continuous operating routine and next decision.",
         "hypothesis": "A director with recurring contract leakage will choose a diagnostic when continuous-routine fit is made concrete.",
     },
+    "need-defesa-margem-diagnostico": {
+        "asset": "/ferramentas/diagnostico-defesa-margem/",
+        "unique_utility": "Turns a public contract identifier into a provenance-bearing factual reading that preserves UNKNOWN instead of inventing legal credit.",
+        "hypothesis": "A contractor with a named public contract will request a CONFENGE second reading after seeing official facts and explicit UNKNOWN gaps.",
+    },
 }
 
 # Canonical demand nodes grounded in CONFENGE service inventory
@@ -257,6 +262,25 @@ DEMAND_NODES: list[dict[str, Any]] = [
         "cta": "Diagnosticar gestão contratual B2G",
         "funnel": "bofu",
         "existing_url": "/acompanhamento-contratos-obras/",
+    },
+    {
+        "id": "need-defesa-margem-diagnostico",
+        "persona": "diretor-construtora",
+        "problem": "Contrato público em execução sem leitura factual de margem, prazos e eventos",
+        "question": "O que este contrato público já mostra — e o que permanece UNKNOWN — antes de pedir uma segunda leitura?",
+        "intent": "bofu",
+        "jtbd": "Partir de um contrato real e decidir se vale pedir segunda leitura técnica",
+        "cluster": "defesa-margem",
+        "service_slug": "defesa-margem-contratos-publicos",
+        "service_path": "/defesa-margem-contratos-publicos/",
+        "related_queries": [
+            "defesa de margem contrato público",
+            "diagnóstico contrato obra pública",
+            "segunda leitura contrato público",
+        ],
+        "cta": "Quero uma segunda leitura deste contrato",
+        "funnel": "bofu",
+        "existing_url": "/ferramentas/diagnostico-defesa-margem/",
     },
 ]
 

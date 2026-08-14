@@ -1,0 +1,54 @@
+{
+  "asset": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+  "gate": {
+    "indexable": false,
+    "decision": "noindex",
+    "fails": [
+      "low_data_confidence"
+    ],
+    "warnings": [
+      "sample_thin_margin"
+    ],
+    "checks": {
+      "distinct_intent": true,
+      "own_information": true,
+      "sample_sufficient": true,
+      "semantic_differentiation": true,
+      "independent_utility": true,
+      "data_confidence": false,
+      "non_redundant": true,
+      "no_cannibalization": true,
+      "has_context_interpretation": true,
+      "identifiable_update": true,
+      "useful_internal_links": true,
+      "contextual_cta": true,
+      "has_provenance": true,
+      "legal_safe": true,
+      "content_value_floor": true
+    },
+    "note": "Indexability Quality Gate is mandatory. Score cannot compensate for failed criteria. Generated HTML is not index permission."
+  },
+  "inputs": {
+    "distinct_intent": true,
+    "own_information": true,
+    "sample_size": 1,
+    "semantic_differentiation": 0.7,
+    "independent_utility": true,
+    "data_confidence": 0.4,
+    "non_redundant": true,
+    "no_cannibalization": true,
+    "has_context_interpretation": true,
+    "identifiable_update": true,
+    "useful_internal_links": true,
+    "contextual_cta": true,
+    "has_provenance": true,
+    "legal_safe": true,
+    "content_value_score": 70,
+    "min_sample": 1,
+    "min_score": 55
+  },
+  "in_sitemap": false,
+  "html_noindex": true,
+  "policy": "omit_from_sitemap_and_noindex",
+  "consistent": true
+}

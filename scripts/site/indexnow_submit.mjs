@@ -28,7 +28,7 @@ export function buildPayload(values, key) {
   return {
     host: HOST,
     key: cleanKey,
-    keyLocation: `https://${HOST}/.well-known/indexnow-key.txt`,
+    keyLocation: `https://${HOST}/${cleanKey}.txt`,
     urlList: normalizeUrls(values),
   };
 }

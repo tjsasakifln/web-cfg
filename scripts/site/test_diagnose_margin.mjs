@@ -1,0 +1,121 @@
+/**
+ * Drives the shipped diagnose-margin transform and selectContract.
+ * No reimplementation, no hardcoded legal conclusions.
+ */
+import assert from "node:assert/strict";
+import { createRequire } from "node:module";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const require = createRequire(import.meta.url);
+const {
+  diagnoseMargin,
+  selectContract,
+  evaluateIndexability,
+  OFFICIAL,
+  DERIVED,
+  UNKNOWN,
+} = require(resolve(root, "assets/js/diagnose-margin.cjs"));
+
+const snapshot = JSON.parse(
+  readFileSync(resolve(root, "data/extra-cli/public-read-v1/contracts-margin-snapshot.json"), "utf8"),
+);
+const publicSnap = JSON.parse(
+  readFileSync(resolve(root, "ferramentas/diagnostico-defesa-margem/snapshot.json"), "utf8"),
+);
+assert.deepEqual(
+  publicSnap.records.map((r) => r.public_id),
+  snapshot.records.map((r) => r.public_id),
+);
+
+const real = snapshot.records[0];
+const first = diagnoseMargin(real);
+const firstAgain = diagnoseMargin(real);
+assert.deepEqual(first, firstAgain, "diagnosis must be deterministic");
+
+assert.equal(first.public_id.classification, OFFICIAL);
+assert.equal(first.public_id.value, real.public_id);
+assert.equal(first.titulo.classification, OFFICIAL);
+assert.equal(first.orgao.classification, OFFICIAL);
+assert.equal(first.valor_contratual.classification, UNKNOWN);
+assert.equal(first.valor_estimado.classification, OFFICIAL);
+assert.equal(first.valor_estimado.qualifier, "estimated_not_signed");
+assert.equal(first.vigencia_inicio.classification, UNKNOWN);
+assert.equal(first.vigencia_fim.classification, UNKNOWN);
+assert.equal(first.aniversario_contratual.classification, UNKNOWN);
+assert.equal(first.as_of.classification, OFFICIAL);
+assert.ok(first.provenance && first.provenance.dataset_hash);
+assert.ok(first.eventos_defesa_margem.every((e) => e.classification === UNKNOWN));
+assert.equal(first.eventos_derivados.length, 0);
+assert.ok(first.unknown_count > 0);
+assert.ok(!JSON.stringify(first).toLowerCase().includes("pode ter direito"));
+assert.ok(!JSON.stringify(first).toLowerCase().includes("tese jurídica"));
+
+const selected = selectContract(snapshot, "01619104000141-1-000123/2026");
+assert.equal(selected.ok, true);
+assert.equal(selected.record.public_id, real.public_id);
+const byText = selectContract(snapshot, "quarto centenario");
+assert.equal(byText.ok, true, JSON.stringify(byText));
+const missing = selectContract(snapshot, "contrato-inexistente-xyz");
+assert.equal(missing.ok, false);
+assert.equal(missing.reason, "not_in_snapshot");
+
+const incomplete = diagnoseMargin({
+  public_id: null,
+  title: null,
+  as_of: null,
+  provenance: null,
+  source: null,
+  margin_events: [],
+});
+assert.equal(incomplete.public_id.classification, UNKNOWN);
+assert.equal(incomplete.titulo.classification, UNKNOWN);
+assert.equal(incomplete.as_of.classification, UNKNOWN);
+assert.ok(incomplete.unknown_count > first.unknown_count);
+
+const derived = diagnoseMargin({
+  ...real,
+  data_assinatura: "2024-03-15",
+  vigencia_start: "2024-03-01",
+  vigencia_end: "2026-03-01",
+  contract_value: 150000,
+  margin_events: [
+    {
+      family: "aditivo",
+      classification: "OFFICIAL",
+      effective_at: "2025-01-10",
+      value_delta: 10000,
+      source: "pncp",
+      source_uri: real.source_uri,
+      as_of: "2026-07-31",
+      provenance: real.provenance,
+    },
+  ],
+});
+assert.equal(derived.aniversario_contratual.classification, DERIVED);
+assert.equal(derived.aniversario_contratual.value, "03-15");
+assert.equal(derived.aniversario_contratual.derived_from[0], "data_assinatura");
+assert.equal(derived.valor_contratual.classification, OFFICIAL);
+assert.equal(derived.vigencia_inicio.classification, OFFICIAL);
+assert.equal(derived.eventos_defesa_margem.filter((e) => e.family === "aditivo")[0].classification, OFFICIAL);
+assert.ok(derived.alteracoes_prazo_valor.length === 1);
+
+const mixed = diagnoseMargin({
+  ...real,
+  margin_events: [{ family: "aditivo", classification: "DERIVED", reason: "calendar_only" }],
+});
+assert.equal(mixed.eventos_derivados[0].classification, DERIVED);
+assert.ok(!mixed.alteracoes_prazo_valor.some((e) => e.classification === DERIVED));
+
+const gateInputs = evaluateIndexability(first, { sample_size: 1 });
+assert.equal(gateInputs.has_provenance, true);
+assert.equal(gateInputs.legal_safe, true);
+assert.ok(gateInputs.data_confidence < 0.45, "partial producer must not look complete");
+
+console.log("DIAGNOSE_MARGIN_OK", {
+  official: first.official_count,
+  unknown: first.unknown_count,
+  slug: first.public_id_slug,
+});

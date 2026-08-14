@@ -15,7 +15,7 @@ const payload = buildPayload(
 
 assert.equal(payload.host, "confenge.com.br");
 assert.equal(payload.key, key);
-assert.equal(payload.keyLocation, `https://confenge.com.br/.well-known/indexnow-key.txt`);
+assert.equal(payload.keyLocation, `https://confenge.com.br/${key}.txt`);
 assert.deepEqual(payload.urlList, [
   "https://confenge.com.br/",
   "https://confenge.com.br/ferramentas/checklist-reequilibrio/",
