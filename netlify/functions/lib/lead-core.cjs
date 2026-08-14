@@ -71,15 +71,21 @@ const ATTR_ALLOWLIST = [
   "content_cluster",
 ];
 
-function looksLikePii(value) {
+function looksLikePii(value, key) {
   const s = String(value || "");
-  return /@/.test(s) || /\+?\d{10,}/.test(s);
+  if (!s) return false;
+  if (/@/.test(s)) return true;
+  if (key === "correlation_id") return false;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
+  if (s.startsWith("c-")) return false;
+  const compact = s.replace(/[\s()-]/g, "");
+  return /^\+?\d{10,15}$/.test(compact);
 }
 
-function sanitizeAttributionValue(val, maxLen) {
+function sanitizeAttributionValue(val, maxLen, key) {
   if (val == null) return "";
   const s = stripControl(val).slice(0, maxLen || 180);
-  if (!s || looksLikePii(s)) return "";
+  if (!s || looksLikePii(s, key)) return "";
   return s;
 }
 
@@ -92,7 +98,7 @@ function pickAttribution(data) {
   for (const key of ATTR_ALLOWLIST) {
     if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
     const max = MAX_FIELD[key] || 180;
-    const v = sanitizeAttributionValue(src[key], max);
+    const v = sanitizeAttributionValue(src[key], max, key);
     if (v) out[key] = v;
   }
   return out;
@@ -264,10 +270,10 @@ function validateAndNormalize(data) {
     utm_content: clamp(data.utm_content, MAX_FIELD.utm_content) || null,
     utm_term: clamp(data.utm_term, MAX_FIELD.utm_term) || null,
     content_cluster: clamp(data.content_cluster, MAX_FIELD.content_cluster) || null,
-    route_family: sanitizeAttributionValue(data.route_family, MAX_FIELD.route_family) || null,
-    cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id) || null,
-    asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id) || null,
-    correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id) || null,
+    route_family: sanitizeAttributionValue(data.route_family, MAX_FIELD.route_family, "route_family") || null,
+    cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id, "cta_id") || null,
+    asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id") || null,
+    correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id, "correlation_id") || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
     asset_id: clamp(data.asset_id, MAX_FIELD.asset_id) || null,

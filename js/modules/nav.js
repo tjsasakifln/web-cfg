@@ -111,12 +111,27 @@
       return `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
     };
     const PSEO_STORAGE_KEY = 'confenge_pseo_attribution';
-    const sanitizeAttr = (val) => {
+    const isUuidLike = (s) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+    const isPhoneLike = (s) => {
+      const compact = String(s || '').replace(/[\s()-]/g, '');
+      return /^\+?\d{10,15}$/.test(compact);
+    };
+    const sanitizeAttr = (val, key) => {
       if (val == null) return '';
       const s = String(val).slice(0, 180);
-      // block PII-looking values from attribution store
-      if (/@|\+?\d{10,}/.test(s)) return '';
+      if (!s) return '';
+      if (/@/.test(s)) return '';
+      // correlation ids / UUIDs are not PII — UUID last group is 12 hex digits
+      if (key === 'correlation_id' || isUuidLike(s) || s.startsWith('c-')) return s;
+      if (isPhoneLike(s)) return '';
       return s;
+    };
+    const firstNonEmpty = (key, ...vals) => {
+      for (const val of vals) {
+        const s = sanitizeAttr(val, key);
+        if (s) return s;
+      }
+      return '';
     };
     const readStoredPseo = () => {
       try {
@@ -131,7 +146,7 @@
         const clean = {};
         Object.keys(obj || {}).forEach((k) => {
           if (!PSEO_ATTR_KEYS.includes(k) && k !== 'tema' && k !== 'saved_at') return;
-          const v = sanitizeAttr(obj[k]);
+          const v = sanitizeAttr(obj[k], k);
           if (v) clean[k] = v;
         });
         if (Object.keys(clean).length) {
@@ -142,30 +157,49 @@
     };
     // Capture attribution from URL into sessionStorage (survives home form landing).
     // Only allowlisted keys persist — arbitrary query params are dropped.
+    // First-touch: empty values on the current page must not wipe a stored landing/family.
+    const storedPrior = readStoredPseo();
     const fromUrl = {};
     PSEO_ATTR_KEYS.forEach((name) => {
       const v = searchParams.get(name) || hashParams.get(name);
-      if (v) fromUrl[name] = sanitizeAttr(v);
+      if (v) {
+        const s = sanitizeAttr(v, name);
+        if (s) fromUrl[name] = s;
+      }
     });
     const tema = searchParams.get('tema') || hashParams.get('tema');
-    if (tema) fromUrl.tema = sanitizeAttr(tema);
+    if (tema) {
+      const t = sanitizeAttr(tema, 'tema');
+      if (t) fromUrl.tema = t;
+    }
     const bodyDs = (document.body && document.body.dataset) || {};
     const pathFamily = routeFamilyFromPath(window.location.pathname || '/');
-    fromUrl.route_family = fromUrl.route_family
-      || sanitizeAttr(bodyDs.routeFamily)
-      || sanitizeAttr(pathFamily);
-    fromUrl.asset_id = fromUrl.asset_id || sanitizeAttr(bodyDs.assetId);
-    fromUrl.cta_id = fromUrl.cta_id || sanitizeAttr(bodyDs.ctaId);
-    fromUrl.landing_url = fromUrl.landing_url || sanitizeAttr(window.location.pathname || '/');
+    const currentFamily = firstNonEmpty('route_family', fromUrl.route_family, bodyDs.routeFamily, pathFamily);
+    if (currentFamily) fromUrl.route_family = currentFamily;
+    else if (storedPrior.route_family) fromUrl.route_family = storedPrior.route_family;
+    const currentAsset = firstNonEmpty('asset_id', fromUrl.asset_id, bodyDs.assetId);
+    if (currentAsset) fromUrl.asset_id = currentAsset;
+    else if (storedPrior.asset_id) fromUrl.asset_id = storedPrior.asset_id;
+    const currentCta = firstNonEmpty('cta_id', fromUrl.cta_id, bodyDs.ctaId);
+    if (currentCta) fromUrl.cta_id = currentCta;
+    else if (storedPrior.cta_id) fromUrl.cta_id = storedPrior.cta_id;
+    fromUrl.landing_url = firstNonEmpty(
+      'landing_url',
+      fromUrl.landing_url,
+      storedPrior.landing_url,
+      window.location.pathname || '/',
+    );
     if (!fromUrl.origin_url && fromUrl.origem) fromUrl.origin_url = fromUrl.origem;
-    const storedForCorr = readStoredPseo();
-    fromUrl.correlation_id = fromUrl.correlation_id
-      || storedForCorr.correlation_id
-      || newCorrelationId();
-    if (fromUrl.referrer == null || fromUrl.referrer === '') {
-      try { fromUrl.referrer = sanitizeAttr(document.referrer || ''); } catch (_) { /* ignore */ }
+    fromUrl.correlation_id = firstNonEmpty(
+      'correlation_id',
+      fromUrl.correlation_id,
+      storedPrior.correlation_id,
+      newCorrelationId(),
+    );
+    if (!fromUrl.referrer) {
+      try { fromUrl.referrer = sanitizeAttr(document.referrer || '', 'referrer'); } catch (_) { /* ignore */ }
     }
-    writeStoredPseo({ ...storedForCorr, ...fromUrl });
+    writeStoredPseo({ ...storedPrior, ...fromUrl });
     window.confengeAttribution = {
       ALLOWLIST: PSEO_ATTR_KEYS.slice(),
       sanitize: sanitizeAttr,
