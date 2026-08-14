@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Checklist de documentação para reequilíbrio | CONFENGE</title><meta name="description" content="Checklist de prontidão do dossiê de reequilíbrio com bloqueadores centrais."/>
+<title>Checklist de documentação para reequilíbrio | CONFENGE</title><meta name="description" content="Avalie a prontidão documental do pedido de reequilíbrio, encontre bloqueadores centrais e organize a próxima correção sem enviar dados."/>
 <link rel="canonical" href="https://confenge.com.br/ferramentas/checklist-reequilibrio/"/>
 <link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
 <meta content="#061a33" name="theme-color"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Checklist de reequilíbrio","url":"https://confenge.com.br/ferramentas/checklist-reequilibrio/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Checklist de documentação para reequilíbrio","url":"https://confenge.com.br/ferramentas/checklist-reequilibrio/","description":"Avaliação orientativa da prontidão documental de um dossiê de reequilíbrio.","applicationCategory":"BusinessApplication","operatingSystem":"Web","dateModified":"2026-08-14","author":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"},"isBasedOn":["https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm","https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"],"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
 </head><body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <header class="site-header" id="inicio">
@@ -37,6 +37,18 @@
 <p class="content-lead">Marque o que já existe. Bloqueadores centrais impedem prontidão alta. A urgência ordena a correção; a materialidade só classifica a gravidade em faixas.</p>
 </div></header>
 <div class="container tool-shell">
+<section class="tool-method" aria-labelledby="metodo-checklist">
+<p class="eyebrow">Método e limites</p>
+<h2 id="metodo-checklist">O que este diagnóstico verifica</h2>
+<p>O checklist organiza três frentes: fato e nexo, suporte econômico e instrução do pedido. Respostas não marcadas entram como pendentes; um bloqueador central impede prontidão alta. O resultado ordena lacunas documentais, mas não conclui se existe direito ao reequilíbrio.</p>
+<ul class="tool-evidence-list">
+<li><strong>Base normativa:</strong> Lei nº 14.133/2021, especialmente a alocação de riscos e o art. 124.</li>
+<li><strong>Referência de interpretação:</strong> Manual de Licitações e Contratos do TCU, capítulo de reequilíbrio econômico-financeiro.</li>
+<li><strong>Privacidade:</strong> respostas e relatório permanecem neste navegador até você copiar, baixar ou apagar.</li>
+<li><strong>Revisão:</strong> método revisto em <time datetime="2026-08-14">14 de agosto de 2026</time>.</li>
+</ul>
+<p><a href="https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" rel="external noopener" target="_blank">Consultar a Lei nº 14.133/2021</a> · <a href="https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/" rel="external noopener" target="_blank">Consultar o manual do TCU</a></p>
+</section>
 <form id="f" class="tool-form">
 <div id="root"></div>
 <div class="tool-grid" style="margin-top:1rem">
@@ -161,7 +173,7 @@
     var cta=document.getElementById("cta");
     cta.hidden=false;
     cta.innerHTML=r.hasCentralBlocker
-      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/#contato?jornada=contrato">Organizar dossiê</a></div>'
+      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/?jornada=contrato&amp;tema=checklist-reequilibrio&amp;origem=%2Fferramentas%2Fchecklist-reequilibrio%2F#contato">Organizar dossiê</a></div>'
       : '<p><a class="button button-secondary" data-tool-to-content href="/conteudos/calculo-reequilibrio-economico-financeiro/">Cálculo de reequilíbrio</a></p>';
     T.track("tool_complete",{tool:TOOL,readiness:r.readiness,level:r.level,blockers:(r.missingBlockers||[]).length,urgencia:r.urgencia,materialidade:r.materialidade});
     persist();

@@ -1,0 +1,36 @@
+{
+  "schema_version": "search-baseline-v1",
+  "observed_at": "2026-08-14",
+  "scope": "Focused live result sample for Day-D entity and priority-demand checks",
+  "observations": [
+    {
+      "query": "site:confenge.com.br CONFENGE licitações contratos obras públicas",
+      "state": "STALE_ENTITY_SNIPPET",
+      "evidence": "The visible CONFENGE home result still described the former evaluations, AVCB, real-estate and broad AI company.",
+      "next_action": "Keep retired URLs at 410, refresh the canonical home, submit changed canonical URLs and inspect in GSC/Bing Webmaster Tools."
+    },
+    {
+      "query": "site:confenge.com.br/reequilibrio-obras-publicas",
+      "state": "NO_CURRENT_ASSET_RESULT_OBSERVED",
+      "evidence": "No current reequilíbrio asset result was observed in the focused sample.",
+      "next_action": "Verify URL inspection and sitemap processing; do not claim unindexed from a search sample alone."
+    },
+    {
+      "query": "site:smartlic.tech SmartLic licitações contratos",
+      "state": "LEGACY_INDEX_POLLUTION",
+      "evidence": "Supplier, buyer, contract, blog, signup and demo URLs remained visible with SmartLic product language.",
+      "next_action": "Execute only the approved URL-specific bridge; return 410 for retired URLs and notify removals from the SmartLic host."
+    },
+    {
+      "query": "reequilíbrio contrato obra pública consultoria",
+      "state": "CONFENGE_NOT_OBSERVED",
+      "evidence": "The focused result sample did not show the current CONFENGE margin-defense asset.",
+      "next_action": "Improve discovery and earn relevant citations; do not create keyword variants."
+    }
+  ],
+  "limitations": [
+    "Search-result samples are location, engine, personalization and time dependent.",
+    "Absence in this sample is not proof of non-indexation.",
+    "Search Console and Bing Webmaster URL inspection remain authoritative for owned-property index diagnostics."
+  ]
+}
