@@ -5,9 +5,13 @@
 ## Architecture and acquisition evidence
 
 - Visitor job:
-- Growth motor: Revenue Now / Inbound Core / Inbound Compounding / Supporting Infrastructure
+- Executive front: REVENUE NOW / INBOUND ENGINE / MARKET INTELLIGENCE MOAT / COMPOUNDING SYSTEM / SCALE-SUNSET
+- Decision state: EXECUTE_NOW / VALIDATE / DEFER / SUNSET / SUPERSEDED
+- Leverage: revenue / distribution / data / automation / trust / customer
+- Time to evidence:
 - Data owner and versioned contract:
 - Acquisition/conversion hypothesis:
+- After 100 repetitions, what becomes easier/better?
 - ADR affected: none / link
 
 ## Checklist
