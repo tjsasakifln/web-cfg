@@ -1,0 +1,3173 @@
+{
+  "schema": "smartlic-gsc-queries-v1",
+  "as_of": "2026-04-27",
+  "source": {
+    "repo": "tjsasakifln/SmartLic",
+    "path": "gsc-perf-queries-28d.txt",
+    "git_commit": "22ca3d06192f811c15a0d98da017b3c443e7c80f",
+    "git_date": "2026-04-27T19:25:36-03:00",
+    "note": "Merged with non-URL rows from gsc-perf-pages-28d.txt. Live GSC API not queried."
+  },
+  "rows": [
+    {
+      "key": "licitações públicas para o ano de 2026",
+      "clicks": 0.0,
+      "impressions": 93.0,
+      "ctr": "0%",
+      "position": 4.7,
+      "query": "licitações públicas para o ano de 2026"
+    },
+    {
+      "key": "69034668000156",
+      "clicks": 0.0,
+      "impressions": 13.0,
+      "ctr": "0%",
+      "position": 10.9,
+      "query": "69034668000156"
+    },
+    {
+      "key": "licitação de projetos de engenharia 2026",
+      "clicks": 0.0,
+      "impressions": 13.0,
+      "ctr": "0%",
+      "position": 5.1,
+      "query": "licitação de projetos de engenharia 2026"
+    },
+    {
+      "key": "pncp contratos",
+      "clicks": 0.0,
+      "impressions": 12.0,
+      "ctr": "0%",
+      "position": 8.6,
+      "query": "pncp contratos"
+    },
+    {
+      "key": "funeraria são josé são gabriel rs",
+      "clicks": 0.0,
+      "impressions": 11.0,
+      "ctr": "0%",
+      "position": 6.1,
+      "query": "funeraria são josé são gabriel rs"
+    },
+    {
+      "key": "licitações públicas ano 2026",
+      "clicks": 0.0,
+      "impressions": 11.0,
+      "ctr": "0%",
+      "position": 4.2,
+      "query": "licitações públicas ano 2026"
+    },
+    {
+      "key": "tekis",
+      "clicks": 0.0,
+      "impressions": 11.0,
+      "ctr": "0%",
+      "position": 8.9,
+      "query": "tekis"
+    },
+    {
+      "key": "labbrasil",
+      "clicks": 0.0,
+      "impressions": 10.0,
+      "ctr": "0%",
+      "position": 6.6,
+      "query": "labbrasil"
+    },
+    {
+      "key": "smartlic",
+      "clicks": 6.0,
+      "impressions": 9.0,
+      "ctr": "66,7%",
+      "position": 1.0,
+      "query": "smartlic"
+    },
+    {
+      "key": "supra distribuidora de materiais hospitalares ltda",
+      "clicks": 1.0,
+      "impressions": 8.0,
+      "ctr": "12,5%",
+      "position": 7.4,
+      "query": "supra distribuidora de materiais hospitalares ltda"
+    },
+    {
+      "key": "licitação desenvolvimento de software 2026",
+      "clicks": 0.0,
+      "impressions": 8.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "licitação desenvolvimento de software 2026"
+    },
+    {
+      "key": "smart lic",
+      "clicks": 0.0,
+      "impressions": 7.0,
+      "ctr": "0%",
+      "position": 59.6,
+      "query": "smart lic"
+    },
+    {
+      "key": "tecnocenter materiais medicos hospitalares ltda",
+      "clicks": 0.0,
+      "impressions": 7.0,
+      "ctr": "0%",
+      "position": 12.1,
+      "query": "tecnocenter materiais medicos hospitalares ltda"
+    },
+    {
+      "key": "astemh",
+      "clicks": 0.0,
+      "impressions": 6.0,
+      "ctr": "0%",
+      "position": 9.2,
+      "query": "astemh"
+    },
+    {
+      "key": "licitações públicas 2026",
+      "clicks": 0.0,
+      "impressions": 6.0,
+      "ctr": "0%",
+      "position": 4.2,
+      "query": "licitações públicas 2026"
+    },
+    {
+      "key": "pncp consulta contratos",
+      "clicks": 0.0,
+      "impressions": 6.0,
+      "ctr": "0%",
+      "position": 6.3,
+      "query": "pncp consulta contratos"
+    },
+    {
+      "key": "01914765000108",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "01914765000108"
+    },
+    {
+      "key": "03874953000177",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 10.2,
+      "query": "03874953000177"
+    },
+    {
+      "key": "04907604000177",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 6.8,
+      "query": "04907604000177"
+    },
+    {
+      "key": "27486182000109",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 10.8,
+      "query": "27486182000109"
+    },
+    {
+      "key": "consulta contratos pncp",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 8.4,
+      "query": "consulta contratos pncp"
+    },
+    {
+      "key": "copan panificadora",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "copan panificadora"
+    },
+    {
+      "key": "imagem midia",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 9.2,
+      "query": "imagem midia"
+    },
+    {
+      "key": "longevity pharma",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 10.8,
+      "query": "longevity pharma"
+    },
+    {
+      "key": "neumann madeireira ltda",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 10.4,
+      "query": "neumann madeireira ltda"
+    },
+    {
+      "key": "panificadora copan",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "panificadora copan"
+    },
+    {
+      "key": "planservice pelotas",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "planservice pelotas"
+    },
+    {
+      "key": "pncp licitações",
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "ctr": "0%",
+      "position": 31.4,
+      "query": "pncp licitações"
+    },
+    {
+      "key": "24.039.073/0001-55",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "24.039.073/0001-55"
+    },
+    {
+      "key": "24706364000150",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 8.8,
+      "query": "24706364000150"
+    },
+    {
+      "key": "60.637.667/0001-21",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 9.5,
+      "query": "60.637.667/0001-21"
+    },
+    {
+      "key": "arte sutil persianas e cortinas ltda",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 9.2,
+      "query": "arte sutil persianas e cortinas ltda"
+    },
+    {
+      "key": "asus implementos cnpj",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "asus implementos cnpj"
+    },
+    {
+      "key": "auto peças mambai",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 10.2,
+      "query": "auto peças mambai"
+    },
+    {
+      "key": "cez engenharia",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 9.2,
+      "query": "cez engenharia"
+    },
+    {
+      "key": "cnpj 03094629000136",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 10.2,
+      "query": "cnpj 03094629000136"
+    },
+    {
+      "key": "cnpj 69034668000156",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "cnpj 69034668000156"
+    },
+    {
+      "key": "cnpj eco diagnostica",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "cnpj eco diagnostica"
+    },
+    {
+      "key": "consulta ceis cnpj",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "consulta ceis cnpj"
+    },
+    {
+      "key": "eco diagnostica cnpj",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 8.2,
+      "query": "eco diagnostica cnpj"
+    },
+    {
+      "key": "essencial (licitação or edital or rfp or pregão or concurso)",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 4.8,
+      "query": "essencial (licitação or edital or rfp or pregão or concurso)"
+    },
+    {
+      "key": "funerária são josé são gabriel rs",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "funerária são josé são gabriel rs"
+    },
+    {
+      "key": "hella comercio e servicos ltda",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 7.2,
+      "query": "hella comercio e servicos ltda"
+    },
+    {
+      "key": "ls distribuidora de medicamentos e material hospitalar",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 8.5,
+      "query": "ls distribuidora de medicamentos e material hospitalar"
+    },
+    {
+      "key": "multitruck itatiba",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 11.5,
+      "query": "multitruck itatiba"
+    },
+    {
+      "key": "plasag",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "plasag"
+    },
+    {
+      "key": "pncp licitação",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 27.2,
+      "query": "pncp licitação"
+    },
+    {
+      "key": "posto de molas sapiranga",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "posto de molas sapiranga"
+    },
+    {
+      "key": "riva gas",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "riva gas"
+    },
+    {
+      "key": "royal atacadista e comercio ltda",
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "ctr": "0%",
+      "position": 8.8,
+      "query": "royal atacadista e comercio ltda"
+    },
+    {
+      "key": "\"art. 105\" \"lei 14.133\" duração dos contratos",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "\"art. 105\" \"lei 14.133\" duração dos contratos"
+    },
+    {
+      "key": "\"art. 71\" \"lei 14.133\" adjudicação homologação",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 8.7,
+      "query": "\"art. 71\" \"lei 14.133\" adjudicação homologação"
+    },
+    {
+      "key": "00028986000108",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 8.7,
+      "query": "00028986000108"
+    },
+    {
+      "key": "01754239000896",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "01754239000896"
+    },
+    {
+      "key": "03094629000136",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.7,
+      "query": "03094629000136"
+    },
+    {
+      "key": "03264927000127",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 9.7,
+      "query": "03264927000127"
+    },
+    {
+      "key": "03506307000157",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 10.7,
+      "query": "03506307000157"
+    },
+    {
+      "key": "05.003.729/0004-88",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 9.3,
+      "query": "05.003.729/0004-88"
+    },
+    {
+      "key": "05102155000586",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.7,
+      "query": "05102155000586"
+    },
+    {
+      "key": "17140820000777",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 10.7,
+      "query": "17140820000777"
+    },
+    {
+      "key": "20501854000169",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 9.3,
+      "query": "20501854000169"
+    },
+    {
+      "key": "42.692.703/0001-78",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "42.692.703/0001-78"
+    },
+    {
+      "key": "69034668000156 cnpj",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "69034668000156 cnpj"
+    },
+    {
+      "key": "alipaticos",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 4.3,
+      "query": "alipaticos"
+    },
+    {
+      "key": "cnpj 88630413000281",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 10.7,
+      "query": "cnpj 88630413000281"
+    },
+    {
+      "key": "cnpj planservice",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "cnpj planservice"
+    },
+    {
+      "key": "comercial merlo",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 11.7,
+      "query": "comercial merlo"
+    },
+    {
+      "key": "como encontrar contratos de licitações publicas para ver preços e fornecedores",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 19.7,
+      "query": "como encontrar contratos de licitações publicas para ver preços e fornecedores"
+    },
+    {
+      "key": "consulta pncp contratos",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "consulta pncp contratos"
+    },
+    {
+      "key": "contrato emergencial são leopoldo 2026",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 6.3,
+      "query": "contrato emergencial são leopoldo 2026"
+    },
+    {
+      "key": "contratos de ti",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 80.3,
+      "query": "contratos de ti"
+    },
+    {
+      "key": "d camp alimentos ltda",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "d camp alimentos ltda"
+    },
+    {
+      "key": "dalo empreendimentos ltda",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 8.3,
+      "query": "dalo empreendimentos ltda"
+    },
+    {
+      "key": "densitom",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 17.3,
+      "query": "densitom"
+    },
+    {
+      "key": "extinrosa",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 9.7,
+      "query": "extinrosa"
+    },
+    {
+      "key": "hidro saneamento materiais hidraulicos ltda",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 9.7,
+      "query": "hidro saneamento materiais hidraulicos ltda"
+    },
+    {
+      "key": "high quality clothes ltda",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 8.7,
+      "query": "high quality clothes ltda"
+    },
+    {
+      "key": "izzy distribuidora",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "izzy distribuidora"
+    },
+    {
+      "key": "licitações",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "licitações"
+    },
+    {
+      "key": "munl",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 6.3,
+      "query": "munl"
+    },
+    {
+      "key": "ncg gases",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "ncg gases"
+    },
+    {
+      "key": "netware internet",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "netware internet"
+    },
+    {
+      "key": "new med importadora e distribuidora de materiais medicos ltda",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "new med importadora e distribuidora de materiais medicos ltda"
+    },
+    {
+      "key": "nw informatica",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 10.7,
+      "query": "nw informatica"
+    },
+    {
+      "key": "planeje tecnologia e servicos ltda",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.3,
+      "query": "planeje tecnologia e servicos ltda"
+    },
+    {
+      "key": "planservice cnpj",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "planservice cnpj"
+    },
+    {
+      "key": "pncp busca editais",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 8.7,
+      "query": "pncp busca editais"
+    },
+    {
+      "key": "sifamaq",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 5.7,
+      "query": "sifamaq"
+    },
+    {
+      "key": "tecnocenter material médico hospitalar ltda joão pessoa",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 11.7,
+      "query": "tecnocenter material médico hospitalar ltda joão pessoa"
+    },
+    {
+      "key": "tecnoset cnpj",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "tecnoset cnpj"
+    },
+    {
+      "key": "tekton construtora ltda",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 15.0,
+      "query": "tekton construtora ltda"
+    },
+    {
+      "key": "topsan",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 2.0,
+      "query": "topsan"
+    },
+    {
+      "key": "usipatos",
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "usipatos"
+    },
+    {
+      "key": "\"império assessoria e concursos\"",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 6.5,
+      "query": "\"império assessoria e concursos\""
+    },
+    {
+      "key": "14.378.714/0001-42",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "14.378.714/0001-42"
+    },
+    {
+      "key": "26.702.164/0001-54",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "26.702.164/0001-54"
+    },
+    {
+      "key": "30500671000182",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "30500671000182"
+    },
+    {
+      "key": "34.223.536/0001-98",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "34.223.536/0001-98"
+    },
+    {
+      "key": "53859112000169",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "53859112000169"
+    },
+    {
+      "key": "58055343000133",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "58055343000133"
+    },
+    {
+      "key": "72381189001001",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "72381189001001"
+    },
+    {
+      "key": "92559830000171",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.5,
+      "query": "92559830000171"
+    },
+    {
+      "key": "agrosuco",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "agrosuco"
+    },
+    {
+      "key": "alrantech importacoes e comercio ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "alrantech importacoes e comercio ltda"
+    },
+    {
+      "key": "b gyn",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "b gyn"
+    },
+    {
+      "key": "bec bolsa eletrônica",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.5,
+      "query": "bec bolsa eletrônica"
+    },
+    {
+      "key": "bella editora e grafica ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "bella editora e grafica ltda"
+    },
+    {
+      "key": "best pharma curitiba",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "best pharma curitiba"
+    },
+    {
+      "key": "bolsa bec",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "bolsa bec"
+    },
+    {
+      "key": "bolsa eletrônica de compras",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 20.0,
+      "query": "bolsa eletrônica de compras"
+    },
+    {
+      "key": "bolsa eletrônica de compras bec",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "bolsa eletrônica de compras bec"
+    },
+    {
+      "key": "borges e gomes engenharia",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "borges e gomes engenharia"
+    },
+    {
+      "key": "br paving",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "br paving"
+    },
+    {
+      "key": "calux comercial ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 28.0,
+      "query": "calux comercial ltda"
+    },
+    {
+      "key": "ccomex",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 27.5,
+      "query": "ccomex"
+    },
+    {
+      "key": "cepar ferragens",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "cepar ferragens"
+    },
+    {
+      "key": "cobenge 2024",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 25.5,
+      "query": "cobenge 2024"
+    },
+    {
+      "key": "controllab cnpj",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "controllab cnpj"
+    },
+    {
+      "key": "curso de licitações e contratos",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "curso de licitações e contratos"
+    },
+    {
+      "key": "d. camp alimentos ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "d. camp alimentos ltda"
+    },
+    {
+      "key": "difapi comercio e servicos ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "difapi comercio e servicos ltda"
+    },
+    {
+      "key": "embacom ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 11.5,
+      "query": "embacom ltda"
+    },
+    {
+      "key": "extinrosa limeira",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "extinrosa limeira"
+    },
+    {
+      "key": "globali",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "globali"
+    },
+    {
+      "key": "gyn brasil suprimentos",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "gyn brasil suprimentos"
+    },
+    {
+      "key": "health max ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "health max ltda"
+    },
+    {
+      "key": "ideal construção e pavimentação ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "ideal construção e pavimentação ltda"
+    },
+    {
+      "key": "imediata distribuidora de produtos para a saude ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.5,
+      "query": "imediata distribuidora de produtos para a saude ltda"
+    },
+    {
+      "key": "importire importadora e distribuidora de pneus ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 5.0,
+      "query": "importire importadora e distribuidora de pneus ltda"
+    },
+    {
+      "key": "imprimatech",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 7.5,
+      "query": "imprimatech"
+    },
+    {
+      "key": "integrado distribuidor frigorifico ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.5,
+      "query": "integrado distribuidor frigorifico ltda"
+    },
+    {
+      "key": "las do brasil comercio de produtos analiticos e laboratoriais ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "las do brasil comercio de produtos analiticos e laboratoriais ltda"
+    },
+    {
+      "key": "liscon",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "liscon"
+    },
+    {
+      "key": "ludwig biotecnologia",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "ludwig biotecnologia"
+    },
+    {
+      "key": "manual pncp",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 29.5,
+      "query": "manual pncp"
+    },
+    {
+      "key": "mare informatica",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "mare informatica"
+    },
+    {
+      "key": "mcn comercio e importacao de produtos cirurgicos ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "mcn comercio e importacao de produtos cirurgicos ltda"
+    },
+    {
+      "key": "medical life comercio de produtos hospitalares ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "medical life comercio de produtos hospitalares ltda"
+    },
+    {
+      "key": "migra distribuidora",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "migra distribuidora"
+    },
+    {
+      "key": "multi truck itatiba",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "multi truck itatiba"
+    },
+    {
+      "key": "neobel",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "neobel"
+    },
+    {
+      "key": "netware telecomunicacoes e informatica ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.5,
+      "query": "netware telecomunicacoes e informatica ltda"
+    },
+    {
+      "key": "norclean industria e comercio ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "norclean industria e comercio ltda"
+    },
+    {
+      "key": "oncoexo cnpj",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 11.5,
+      "query": "oncoexo cnpj"
+    },
+    {
+      "key": "only up cnpj",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.5,
+      "query": "only up cnpj"
+    },
+    {
+      "key": "oxynobre",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 28.0,
+      "query": "oxynobre"
+    },
+    {
+      "key": "oyster comercio de equipamentos ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "oyster comercio de equipamentos ltda"
+    },
+    {
+      "key": "pensalab cnpj",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "pensalab cnpj"
+    },
+    {
+      "key": "play pharma",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 6.5,
+      "query": "play pharma"
+    },
+    {
+      "key": "pncp",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.5,
+      "query": "pncp"
+    },
+    {
+      "key": "pncp 2026",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "pncp 2026"
+    },
+    {
+      "key": "pncp api editais",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "pncp api editais"
+    },
+    {
+      "key": "pncp area de trabalho",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 24.0,
+      "query": "pncp area de trabalho"
+    },
+    {
+      "key": "pncp consulta licitações",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 12.5,
+      "query": "pncp consulta licitações"
+    },
+    {
+      "key": "pnpc contratos",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "pnpc contratos"
+    },
+    {
+      "key": "posto celeste",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "posto celeste"
+    },
+    {
+      "key": "rcb paineis eletricos",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "rcb paineis eletricos"
+    },
+    {
+      "key": "sempre hospitalar ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "sempre hospitalar ltda"
+    },
+    {
+      "key": "sim",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 17.0,
+      "query": "sim"
+    },
+    {
+      "key": "simplifique pneus",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 12.5,
+      "query": "simplifique pneus"
+    },
+    {
+      "key": "sislam esteio",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "sislam esteio"
+    },
+    {
+      "key": "societe comercio de veiculos ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "societe comercio de veiculos ltda"
+    },
+    {
+      "key": "teltex tecnologia cnpj",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "teltex tecnologia cnpj"
+    },
+    {
+      "key": "tiserv",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "tiserv"
+    },
+    {
+      "key": "trede center commerce ltda",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 10.5,
+      "query": "trede center commerce ltda"
+    },
+    {
+      "key": "x digital brasil",
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "x digital brasil"
+    },
+    {
+      "key": "\"art. 105\" \"lei 14.133\" vigência dos contratos",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "\"art. 105\" \"lei 14.133\" vigência dos contratos"
+    },
+    {
+      "key": "\"art. 54\" \"lei 14.133\" edital",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "\"art. 54\" \"lei 14.133\" edital"
+    },
+    {
+      "key": "\"art. 71\" \"lei 14.133\" adjudicação",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 4.0,
+      "query": "\"art. 71\" \"lei 14.133\" adjudicação"
+    },
+    {
+      "key": "\"império assessoria e concursos\" banca",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "\"império assessoria e concursos\" banca"
+    },
+    {
+      "key": "00604122000197",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "00604122000197"
+    },
+    {
+      "key": "01104751000110",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "01104751000110"
+    },
+    {
+      "key": "02302100000106",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "02302100000106"
+    },
+    {
+      "key": "04.907.604/0001-77",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "04.907.604/0001-77"
+    },
+    {
+      "key": "05340639000130",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "05340639000130"
+    },
+    {
+      "key": "05872814000130",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "05872814000130"
+    },
+    {
+      "key": "07.616.162/0001-06",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "07.616.162/0001-06"
+    },
+    {
+      "key": "14007211000160",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "14007211000160"
+    },
+    {
+      "key": "16701716000156",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "16701716000156"
+    },
+    {
+      "key": "2 via demae caldas novas",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 50.0,
+      "query": "2 via demae caldas novas"
+    },
+    {
+      "key": "33654831000136",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "33654831000136"
+    },
+    {
+      "key": "34028316002823",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "34028316002823"
+    },
+    {
+      "key": "40.435.095/0001-90",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "40.435.095/0001-90"
+    },
+    {
+      "key": "47.673.948/0001-71",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "47.673.948/0001-71"
+    },
+    {
+      "key": "55.972.087/0001-50",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "55.972.087/0001-50"
+    },
+    {
+      "key": "59.095.876/0001-01",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "59.095.876/0001-01"
+    },
+    {
+      "key": "59.777.691/0001-87",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "59.777.691/0001-87"
+    },
+    {
+      "key": "68314830000127",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "68314830000127"
+    },
+    {
+      "key": "79052122000181",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "79052122000181"
+    },
+    {
+      "key": "83675413000101",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "83675413000101"
+    },
+    {
+      "key": "88630413000281",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "88630413000281"
+    },
+    {
+      "key": "adjudicada licitação",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 22.0,
+      "query": "adjudicada licitação"
+    },
+    {
+      "key": "adjudicar licitação",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 68.0,
+      "query": "adjudicar licitação"
+    },
+    {
+      "key": "ads comercial do brasil ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "ads comercial do brasil ltda"
+    },
+    {
+      "key": "agebox",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "agebox"
+    },
+    {
+      "key": "agencia futura df",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "agencia futura df"
+    },
+    {
+      "key": "alfa medico hospitalar",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "alfa medico hospitalar"
+    },
+    {
+      "key": "alfa tecnologia em engenharia e infraestrutura de redes ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "alfa tecnologia em engenharia e infraestrutura de redes ltda"
+    },
+    {
+      "key": "alpha eletronicos",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 55.0,
+      "query": "alpha eletronicos"
+    },
+    {
+      "key": "alrantech",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "alrantech"
+    },
+    {
+      "key": "anjomedi distribuidora de medicamentos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "anjomedi distribuidora de medicamentos ltda"
+    },
+    {
+      "key": "análise de licitações tecnologia b2g erione",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "análise de licitações tecnologia b2g erione"
+    },
+    {
+      "key": "aquabona",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "aquabona"
+    },
+    {
+      "key": "area de trabalho pncp",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "area de trabalho pncp"
+    },
+    {
+      "key": "arthur embalagens lençóis paulista",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "arthur embalagens lençóis paulista"
+    },
+    {
+      "key": "ata aerotaxi abaete",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 48.0,
+      "query": "ata aerotaxi abaete"
+    },
+    {
+      "key": "atacado virtual max ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "atacado virtual max ltda"
+    },
+    {
+      "key": "ats produtos medico cirurgicos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "ats produtos medico cirurgicos ltda"
+    },
+    {
+      "key": "aufran",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "aufran"
+    },
+    {
+      "key": "ação serviços",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 13.0,
+      "query": "ação serviços"
+    },
+    {
+      "key": "b.e.c",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "b.e.c"
+    },
+    {
+      "key": "bankfort vigilancia privada ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "bankfort vigilancia privada ltda"
+    },
+    {
+      "key": "barra de proteção eletrônica para porta elevador atlas schindler",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "barra de proteção eletrônica para porta elevador atlas schindler"
+    },
+    {
+      "key": "bec bolsa",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "bec bolsa"
+    },
+    {
+      "key": "bec bolsa eletrônica de compras",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "bec bolsa eletrônica de compras"
+    },
+    {
+      "key": "bella soluções comerciais ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "bella soluções comerciais ltda"
+    },
+    {
+      "key": "best bra",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "best bra"
+    },
+    {
+      "key": "bolsa eletrônica bec",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "bolsa eletrônica bec"
+    },
+    {
+      "key": "bonato diesel",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "bonato diesel"
+    },
+    {
+      "key": "boynton importação e exportação ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "boynton importação e exportação ltda"
+    },
+    {
+      "key": "camero dracena",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "camero dracena"
+    },
+    {
+      "key": "captar consultoria",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 33.0,
+      "query": "captar consultoria"
+    },
+    {
+      "key": "caroline embalagens",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 76.0,
+      "query": "caroline embalagens"
+    },
+    {
+      "key": "casa do psicopedagogo ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "casa do psicopedagogo ltda"
+    },
+    {
+      "key": "catedral de servicos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 17.0,
+      "query": "catedral de servicos ltda"
+    },
+    {
+      "key": "centro automotivo agudos",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "centro automotivo agudos"
+    },
+    {
+      "key": "ceprof",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "ceprof"
+    },
+    {
+      "key": "cez engenharia ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 4.0,
+      "query": "cez engenharia ltda"
+    },
+    {
+      "key": "chail distribuidora de veiculos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 29.0,
+      "query": "chail distribuidora de veiculos ltda"
+    },
+    {
+      "key": "cigon",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 5.0,
+      "query": "cigon"
+    },
+    {
+      "key": "cimev",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 83.0,
+      "query": "cimev"
+    },
+    {
+      "key": "cimoveis comercio de moveis ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "cimoveis comercio de moveis ltda"
+    },
+    {
+      "key": "cnpj 08324196000181",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "cnpj 08324196000181"
+    },
+    {
+      "key": "cnpj 16701716000156",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "cnpj 16701716000156"
+    },
+    {
+      "key": "cnpj 69.034.668/0001-56",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 19.0,
+      "query": "cnpj 69.034.668/0001-56"
+    },
+    {
+      "key": "cnpj 72.381.189/0010-01",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "cnpj 72.381.189/0010-01"
+    },
+    {
+      "key": "cnpj fepese",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "cnpj fepese"
+    },
+    {
+      "key": "cnpj iaupe",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "cnpj iaupe"
+    },
+    {
+      "key": "cnpj seec rn",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "cnpj seec rn"
+    },
+    {
+      "key": "cnpj tecnoset",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "cnpj tecnoset"
+    },
+    {
+      "key": "cobrasin vinhedo",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 4.0,
+      "query": "cobrasin vinhedo"
+    },
+    {
+      "key": "como consultar preços no pncp",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "como consultar preços no pncp"
+    },
+    {
+      "key": "concursos e licitações comunicação pública tecnologia inovação 2026",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "concursos e licitações comunicação pública tecnologia inovação 2026"
+    },
+    {
+      "key": "consulta editais pncp",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 4.0,
+      "query": "consulta editais pncp"
+    },
+    {
+      "key": "consultar contratos pncp",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "consultar contratos pncp"
+    },
+    {
+      "key": "contratos uepg",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "contratos uepg"
+    },
+    {
+      "key": "cony engenharia",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 53.0,
+      "query": "cony engenharia"
+    },
+    {
+      "key": "cqi vistoria",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "cqi vistoria"
+    },
+    {
+      "key": "cross bid",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 2.0,
+      "query": "cross bid"
+    },
+    {
+      "key": "danialex tec - material medico hospitalar ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "danialex tec - material medico hospitalar ltda"
+    },
+    {
+      "key": "datamed ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 26.0,
+      "query": "datamed ltda"
+    },
+    {
+      "key": "deltaway",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "deltaway"
+    },
+    {
+      "key": "densitom jaraguá do sul",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "densitom jaraguá do sul"
+    },
+    {
+      "key": "desentupidora valdir",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 25.0,
+      "query": "desentupidora valdir"
+    },
+    {
+      "key": "destaque distribuidora de veiculos e pecas ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "destaque distribuidora de veiculos e pecas ltda"
+    },
+    {
+      "key": "destaque persianas",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "destaque persianas"
+    },
+    {
+      "key": "dipar ferragens eireli",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "dipar ferragens eireli"
+    },
+    {
+      "key": "disk car locacao de veiculos sa",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "disk car locacao de veiculos sa"
+    },
+    {
+      "key": "dm serviços de climatização e aquecimento ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "dm serviços de climatização e aquecimento ltda"
+    },
+    {
+      "key": "dna comercio e representacoes ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "dna comercio e representacoes ltda"
+    },
+    {
+      "key": "drogamed",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "drogamed"
+    },
+    {
+      "key": "e em 2025?",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "e em 2025?"
+    },
+    {
+      "key": "edenred solucoes de mobilidade e instituicao de pagamento hu s.a",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "edenred solucoes de mobilidade e instituicao de pagamento hu s.a"
+    },
+    {
+      "key": "edital de licitação",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "edital de licitação"
+    },
+    {
+      "key": "edital social 2026",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "edital social 2026"
+    },
+    {
+      "key": "elite comercio de maquinas e veiculos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "elite comercio de maquinas e veiculos ltda"
+    },
+    {
+      "key": "elite digital ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "elite digital ltda"
+    },
+    {
+      "key": "expo iguatama 2026",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "expo iguatama 2026"
+    },
+    {
+      "key": "ferragista nacional",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 84.0,
+      "query": "ferragista nacional"
+    },
+    {
+      "key": "fidalgo tech",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 36.0,
+      "query": "fidalgo tech"
+    },
+    {
+      "key": "filgueira & filgueira ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "filgueira & filgueira ltda"
+    },
+    {
+      "key": "freedom veiculos eletricos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 23.0,
+      "query": "freedom veiculos eletricos ltda"
+    },
+    {
+      "key": "freedom veículos elétricos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 32.0,
+      "query": "freedom veículos elétricos ltda"
+    },
+    {
+      "key": "futura agencia de viagens e turismo ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "futura agencia de viagens e turismo ltda"
+    },
+    {
+      "key": "global g7",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "global g7"
+    },
+    {
+      "key": "gno marketing e publicidade ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 13.0,
+      "query": "gno marketing e publicidade ltda"
+    },
+    {
+      "key": "grando pneus",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "grando pneus"
+    },
+    {
+      "key": "gve sc",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 23.0,
+      "query": "gve sc"
+    },
+    {
+      "key": "gçu",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 21.0,
+      "query": "gçu"
+    },
+    {
+      "key": "health max home care",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "health max home care"
+    },
+    {
+      "key": "heli brasil cnpj",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "heli brasil cnpj"
+    },
+    {
+      "key": "hidrosaneamento",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "hidrosaneamento"
+    },
+    {
+      "key": "holhl",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 4.0,
+      "query": "holhl"
+    },
+    {
+      "key": "hts home care",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 17.0,
+      "query": "hts home care"
+    },
+    {
+      "key": "iaupe cnpj",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "iaupe cnpj"
+    },
+    {
+      "key": "imagem mídia",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "imagem mídia"
+    },
+    {
+      "key": "importire",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "importire"
+    },
+    {
+      "key": "impressione solucoes em copias e impressoes ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "impressione solucoes em copias e impressoes ltda"
+    },
+    {
+      "key": "informata",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 54.0,
+      "query": "informata"
+    },
+    {
+      "key": "informobile",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 14.0,
+      "query": "informobile"
+    },
+    {
+      "key": "inforshop suprimentos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 40.0,
+      "query": "inforshop suprimentos ltda"
+    },
+    {
+      "key": "infoshop41 teleinformatica ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "infoshop41 teleinformatica ltda"
+    },
+    {
+      "key": "instituicao only up",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "instituicao only up"
+    },
+    {
+      "key": "interprise instrumentos analiticos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "interprise instrumentos analiticos ltda"
+    },
+    {
+      "key": "iob online juridico",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 25.0,
+      "query": "iob online juridico"
+    },
+    {
+      "key": "iob síntese",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 26.0,
+      "query": "iob síntese"
+    },
+    {
+      "key": "ipml",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "ipml"
+    },
+    {
+      "key": "juar brindes ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "juar brindes ltda"
+    },
+    {
+      "key": "justice ai ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "justice ai ltda"
+    },
+    {
+      "key": "jvl jatai",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 16.0,
+      "query": "jvl jatai"
+    },
+    {
+      "key": "licitapro consultoria ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "licitapro consultoria ltda"
+    },
+    {
+      "key": "licitação",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 5.0,
+      "query": "licitação"
+    },
+    {
+      "key": "licitação pública",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 82.0,
+      "query": "licitação pública"
+    },
+    {
+      "key": "licitações abertas",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "licitações abertas"
+    },
+    {
+      "key": "licitações em aberto",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "licitações em aberto"
+    },
+    {
+      "key": "licitações pncp",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 17.0,
+      "query": "licitações pncp"
+    },
+    {
+      "key": "licitações públicas 2026 brasil",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 4.0,
+      "query": "licitações públicas 2026 brasil"
+    },
+    {
+      "key": "licitações públicas brasil 2026",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 4.0,
+      "query": "licitações públicas brasil 2026"
+    },
+    {
+      "key": "licitações software",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 38.0,
+      "query": "licitações software"
+    },
+    {
+      "key": "licite saude comercio de produtos hospitalares ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "licite saude comercio de produtos hospitalares ltda"
+    },
+    {
+      "key": "live medical",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "live medical"
+    },
+    {
+      "key": "log distribuidora de produtos hospitalar e higiene pessoal ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "log distribuidora de produtos hospitalar e higiene pessoal ltda"
+    },
+    {
+      "key": "lopes kalil engenharia e comercio ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 25.0,
+      "query": "lopes kalil engenharia e comercio ltda"
+    },
+    {
+      "key": "lotus central de distribuicao de higienicos ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 14.0,
+      "query": "lotus central de distribuicao de higienicos ltda"
+    },
+    {
+      "key": "lr novo visual",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "lr novo visual"
+    },
+    {
+      "key": "ls distribuidora de medicamentos e material hospitalar ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "ls distribuidora de medicamentos e material hospitalar ltda"
+    },
+    {
+      "key": "lumiere veiculos",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 43.0,
+      "query": "lumiere veiculos"
+    },
+    {
+      "key": "lupmed",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 24.0,
+      "query": "lupmed"
+    },
+    {
+      "key": "lupmed comercial distribuicao e importacao ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "lupmed comercial distribuicao e importacao ltda"
+    },
+    {
+      "key": "marmed",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 41.0,
+      "query": "marmed"
+    },
+    {
+      "key": "memory projetos e desenvolvimento de sistemas ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "memory projetos e desenvolvimento de sistemas ltda"
+    },
+    {
+      "key": "meps led atacado e distribuidora ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "meps led atacado e distribuidora ltda"
+    },
+    {
+      "key": "mercadão do produtor januária",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "mercadão do produtor januária"
+    },
+    {
+      "key": "meta x industria e comercio ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 16.0,
+      "query": "meta x industria e comercio ltda"
+    },
+    {
+      "key": "mhedica service comercio e manutencao ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "mhedica service comercio e manutencao ltda"
+    },
+    {
+      "key": "moveplast",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "moveplast"
+    },
+    {
+      "key": "mrb distribuidora",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "mrb distribuidora"
+    },
+    {
+      "key": "mscon",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "mscon"
+    },
+    {
+      "key": "nefrocenter",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 28.0,
+      "query": "nefrocenter"
+    },
+    {
+      "key": "noar turismo",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "noar turismo"
+    },
+    {
+      "key": "nort med produtos hospitalares ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "nort med produtos hospitalares ltda"
+    },
+    {
+      "key": "nota de empenho",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 3.0,
+      "query": "nota de empenho"
+    },
+    {
+      "key": "nucleo de informacao e coordenacao do ponto br",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 79.0,
+      "query": "nucleo de informacao e coordenacao do ponto br"
+    },
+    {
+      "key": "nucleo saude ambiental e agropecuaria ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "nucleo saude ambiental e agropecuaria ltda"
+    },
+    {
+      "key": "o que é nota de empenho",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 2.0,
+      "query": "o que é nota de empenho"
+    },
+    {
+      "key": "o que é nota de empenho?",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "o que é nota de empenho?"
+    },
+    {
+      "key": "o que é pncp?",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "o que é pncp?"
+    },
+    {
+      "key": "ok promo cnpj",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 3.0,
+      "query": "ok promo cnpj"
+    },
+    {
+      "key": "okpromo",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "okpromo"
+    },
+    {
+      "key": "onde está agora?",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 2.0,
+      "query": "onde está agora?"
+    },
+    {
+      "key": "oxi morena",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "oxi morena"
+    },
+    {
+      "key": "paupedra concreto usinado",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "paupedra concreto usinado"
+    },
+    {
+      "key": "pgli",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "pgli"
+    },
+    {
+      "key": "play tecnologia e telefonia movel ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "play tecnologia e telefonia movel ltda"
+    },
+    {
+      "key": "playpharma",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "playpharma"
+    },
+    {
+      "key": "plusmed distribuidora de medicamentos e produtos hospitalares ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 20.0,
+      "query": "plusmed distribuidora de medicamentos e produtos hospitalares ltda"
+    },
+    {
+      "key": "pncp busca de editais",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "pncp busca de editais"
+    },
+    {
+      "key": "pncp consulta licitação",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 44.0,
+      "query": "pncp consulta licitação"
+    },
+    {
+      "key": "pncp contrato",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "pncp contrato"
+    },
+    {
+      "key": "pncp contratos consulta",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "pncp contratos consulta"
+    },
+    {
+      "key": "pncp licitacao",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 56.0,
+      "query": "pncp licitacao"
+    },
+    {
+      "key": "pncp licitacoes",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 30.0,
+      "query": "pncp licitacoes"
+    },
+    {
+      "key": "practice gases",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "practice gases"
+    },
+    {
+      "key": "preciso criar um site",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "preciso criar um site"
+    },
+    {
+      "key": "prlv industria de suplementos alimentares ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 2.0,
+      "query": "prlv industria de suplementos alimentares ltda"
+    },
+    {
+      "key": "psc engenharia",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "psc engenharia"
+    },
+    {
+      "key": "public thinker",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "public thinker"
+    },
+    {
+      "key": "public thinker treinamentos",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "public thinker treinamentos"
+    },
+    {
+      "key": "qeite",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 6.0,
+      "query": "qeite"
+    },
+    {
+      "key": "qualys diagnosticos comercio s.a",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "qualys diagnosticos comercio s.a"
+    },
+    {
+      "key": "qualys diagnósticos",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "qualys diagnósticos"
+    },
+    {
+      "key": "quem é henry freitas",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 3.0,
+      "query": "quem é henry freitas"
+    },
+    {
+      "key": "rbs zero hora editora jornalistica sa",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 30.0,
+      "query": "rbs zero hora editora jornalistica sa"
+    },
+    {
+      "key": "resgatecnica comercio de equipamentos de resgate ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 19.0,
+      "query": "resgatecnica comercio de equipamentos de resgate ltda"
+    },
+    {
+      "key": "rivagas",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "rivagas"
+    },
+    {
+      "key": "rj distribuidora de auto pecas ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "rj distribuidora de auto pecas ltda"
+    },
+    {
+      "key": "rochedo hospitalar",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "rochedo hospitalar"
+    },
+    {
+      "key": "roldao braga ribeiro ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "roldao braga ribeiro ltda"
+    },
+    {
+      "key": "roriz instrumentos musicais",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 20.0,
+      "query": "roriz instrumentos musicais"
+    },
+    {
+      "key": "segville",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "segville"
+    },
+    {
+      "key": "sem licitante",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 22.0,
+      "query": "sem licitante"
+    },
+    {
+      "key": "serv pref",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "serv pref"
+    },
+    {
+      "key": "significado de adjudicação",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 1.0,
+      "query": "significado de adjudicação"
+    },
+    {
+      "key": "softplan cnpj",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "softplan cnpj"
+    },
+    {
+      "key": "soma engenharia e construções ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 12.0,
+      "query": "soma engenharia e construções ltda"
+    },
+    {
+      "key": "startractor",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "startractor"
+    },
+    {
+      "key": "supplement labs ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "supplement labs ltda"
+    },
+    {
+      "key": "suprema sertãozinho",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "suprema sertãozinho"
+    },
+    {
+      "key": "tci teloes",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "tci teloes"
+    },
+    {
+      "key": "teletex computadores e sistemas ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "teletex computadores e sistemas ltda"
+    },
+    {
+      "key": "torcida brasileira industria e comercio ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "torcida brasileira industria e comercio ltda"
+    },
+    {
+      "key": "total cafe",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "total cafe"
+    },
+    {
+      "key": "trena terraplenagem e construções s.a",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 9.0,
+      "query": "trena terraplenagem e construções s.a"
+    },
+    {
+      "key": "unitec hospitalar",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 25.0,
+      "query": "unitec hospitalar"
+    },
+    {
+      "key": "uniwear",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "uniwear"
+    },
+    {
+      "key": "ursa comercial ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "ursa comercial ltda"
+    },
+    {
+      "key": "valeria malhas",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "valeria malhas"
+    },
+    {
+      "key": "vear tecnologia ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 11.0,
+      "query": "vear tecnologia ltda"
+    },
+    {
+      "key": "velmax tatui",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 29.0,
+      "query": "velmax tatui"
+    },
+    {
+      "key": "versa engenharia ambiental ltda",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 29.0,
+      "query": "versa engenharia ambiental ltda"
+    },
+    {
+      "key": "vitor diogo wendling",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 8.0,
+      "query": "vitor diogo wendling"
+    },
+    {
+      "key": "vo nino embalagens",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 10.0,
+      "query": "vo nino embalagens"
+    },
+    {
+      "key": "www.animoengenharia.com.br",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 47.0,
+      "query": "www.animoengenharia.com.br"
+    },
+    {
+      "key": "zero hora editora jornalistica sa",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 37.0,
+      "query": "zero hora editora jornalistica sa"
+    },
+    {
+      "key": "znec produções",
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "ctr": "0%",
+      "position": 7.0,
+      "query": "znec produções"
+    }
+  ]
+}
