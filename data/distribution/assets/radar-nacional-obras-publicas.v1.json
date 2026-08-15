@@ -1,0 +1,221 @@
+{
+  "schema": "earned_distribution_v1",
+  "version": 1,
+  "auto_send": false,
+  "human_send_only": true,
+  "decision_state": "VALIDATE",
+  "issue": 66,
+  "lane": "A",
+  "asset": {
+    "id": "radar-nacional-obras-publicas",
+    "name": "Radar Nacional de Obras Públicas",
+    "canonical_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+    "indexable": true,
+    "do_not_index": false,
+    "needs_data": false,
+    "press_allowed": true,
+    "verdict": "PUBLISHED_OPEN_METHODOLOGY",
+    "owner": "Tiago Sasaki",
+    "source": "live /radar/nacional-obras-publicas/ + data/distribution/radar-outreach-kit.json (PR #25) + /imprensa/",
+    "date": "2026-08-15",
+    "utility": {
+      "distinct_user_utility": true,
+      "utility_note": "Metodologia reproduzível, amostra GSC rastreável, downloads sem PII. Séries nacionais de contratos permanecem em preparação — não são o gancho de distribuição.",
+      "invented_national_contract_stats": false
+    },
+    "citation_primitives": {
+      "stable_citation_link": {
+        "status": "already_present",
+        "url": "https://confenge.com.br/radar/nacional-obras-publicas/"
+      },
+      "quotable_stat": {
+        "status": "already_present",
+        "as_of": "2026-07-30",
+        "source": "seo/gsc-2026-07-30",
+        "text": "Na amostra GSC de referência seo/gsc-2026-07-30, /conteudos/sinapi-desonerado-nao-desonerado/ teve 88 impressões e 0 cliques; a consulta «desonerado e não desonerado» teve 10 impressões e posição média 9,2. Não é censo de contratos nacionais."
+      },
+      "chart_card_metadata": {
+        "status": "already_present",
+        "page_section": "2. O que a demanda orgânica já mostra",
+        "note": "Tabelas HTML de páginas e consultas GSC na página canônica; sem card PNG separado (site não restilizado)."
+      },
+      "source_method_block": {
+        "status": "already_present",
+        "url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+        "page_section": "1. Metodologia (reproduzível)"
+      },
+      "safe_download": {
+        "status": "already_present",
+        "pii": false,
+        "links": [
+          "https://confenge.com.br/radar/nacional-obras-publicas/gsc-demand-sample.json",
+          "https://confenge.com.br/radar/nacional-obras-publicas/radar-nacional.pdf"
+        ]
+      }
+    }
+  },
+  "inherited_packs": [
+    {
+      "path": "data/distribution/radar-outreach-kit.json",
+      "schema": "distribution_outreach_v1",
+      "origin": "PR #25",
+      "auto_send": false,
+      "role": "audited_source_not_a_second_farm"
+    }
+  ],
+  "audited_but_not_registered": [
+    {
+      "path": "data/distribution/edicao-zero-research-pack.json",
+      "origin": "PR #73 (open, mergeable_state dirty)",
+      "verdict": "NEEDS_DATA",
+      "indexable": false,
+      "press": "do_not_fire",
+      "role": "preview_only_utility_gate_must_fail_closed",
+      "not_this_proof_asset": true
+    }
+  ],
+  "targets": [
+    {
+      "id": "cbic",
+      "target_class": "associação",
+      "target_nominal": "CBIC",
+      "org": "Câmara Brasileira da Indústria da Construção",
+      "public_url": "https://cbic.org.br",
+      "editorial_angle": "Oferecer o Radar como recorte metodológico citável (amostra GSC + limites explícitos da série contratual) para associados que precisam de contexto operacional, não de volume nacional inventado.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=1 (PR #25)",
+      "date": "2026-08-15",
+      "fit": true,
+      "fit_reason": "Organização pública da indústria da construção; audiência de construtoras com contratos públicos."
+    },
+    {
+      "id": "sinduscon-sp",
+      "target_class": "associação",
+      "target_nominal": "SINDUSCON-SP",
+      "org": "Sindicato da Construção Civil de SP",
+      "public_url": "https://sindusconsp.com.br",
+      "editorial_angle": "Mesmo gancho metodológico, com ênfase em construtoras paulistas que operam contratos públicos e precisam de um link estável para citar limitações e demanda observada.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=2 (PR #25)",
+      "date": "2026-08-15",
+      "fit": true,
+      "fit_reason": "Sindicato público e identificável; base de construtoras com contratos públicos em SP."
+    },
+    {
+      "id": "adn",
+      "target_class": "imprensa",
+      "target_nominal": "ADN da Construção",
+      "org": "Portal ADN",
+      "public_url": "https://adndaconstrucao.com.br",
+      "editorial_angle": "Pauta técnica: como citar um observatório que recusa inventar censo nacional e publica método + amostra GSC.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=7 (PR #25)",
+      "date": "2026-08-15",
+      "fit": true,
+      "fit_reason": "Portal de engenharia identificável com audiência de gestão de obras."
+    },
+    {
+      "id": "infraroi",
+      "target_class": "imprensa",
+      "target_nominal": "InfraROI",
+      "org": "InfraROI",
+      "public_url": "https://infraroi.com.br",
+      "editorial_angle": "Recorte útil a quem cobre infraestrutura e contratos: método aberto e o que o Radar ainda não afirma.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=9 (PR #25)",
+      "date": "2026-08-15",
+      "fit": true,
+      "fit_reason": "Veículo identificável com foco em infraestrutura e contratos."
+    },
+    {
+      "id": "o-empreiteiro",
+      "target_class": "imprensa",
+      "target_nominal": "Revista O Empreiteiro",
+      "org": "O Empreiteiro",
+      "public_url": "https://www.oempreiteiro.com.br",
+      "editorial_angle": "Material factual para audiência tradicional de empreiteiras: link canônico, data de referência e downloads sem PII.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=10 (PR #25)",
+      "date": "2026-08-15",
+      "fit": true,
+      "fit_reason": "Mídia tradicional identificável de empreiteiras."
+    },
+    {
+      "id": "ibape",
+      "target_class": "associação",
+      "target_nominal": "IBAPE",
+      "org": "IBAPE",
+      "public_url": "https://ibape-nacional.com.br",
+      "editorial_angle": "Citação metodológica para peritos e engenheiros de avaliação/obras que precisam de fonte com limitações explícitas.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=28 (PR #25)",
+      "date": "2026-08-15",
+      "fit": true,
+      "fit_reason": "Associação pública de peritos e engenheiros de avaliação/obras."
+    },
+    {
+      "id": "folha-mesa-generica",
+      "target_class": "imprensa",
+      "target_nominal": null,
+      "inherited_label": "Redação Folha Mercado",
+      "public_url": "https://www.folha.uol.com.br",
+      "editorial_angle": "Não há jornalista ou editoria nominalmente identificada para este ativo.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=21 (PR #25)",
+      "date": "2026-08-15",
+      "fit": false,
+      "fit_reason": "Mesa genérica sem jornalista identificável; spray de redação nacional não é fit editorial."
+    },
+    {
+      "id": "linkedin-generico",
+      "target_class": "especialista",
+      "target_nominal": null,
+      "inherited_label": "Coluna infraestrutura generica B2B",
+      "public_url": "https://www.linkedin.com",
+      "editorial_angle": "Sem especialista nominalmente identificável.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=23 (PR #25)",
+      "date": "2026-08-15",
+      "fit": false,
+      "fit_reason": "Rótulo genérico de LinkedIn; host não editorial; nominal não identificável."
+    },
+    {
+      "id": "sinduscon-rs",
+      "target_class": "associação",
+      "target_nominal": "SINDUSCON-RS",
+      "org": "Sindicato da Construção Civil do RS",
+      "public_url": "https://sinduscon-rs.com.br",
+      "editorial_angle": "Ângulo regional exigiria recorte contratual do RS. Esse recorte permanece em preparação no Radar.",
+      "citation_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "data/distribution/radar-outreach-kit.json#id=3 (PR #25)",
+      "date": "2026-08-15",
+      "fit": false,
+      "fit_reason": "Sindicato regional identificável, mas o ativo não publica recorte contratual do RS; sem fit editorial agora."
+    }
+  ],
+  "metrics_observed": {},
+  "kill_gates": {
+    "no_utility_do_not_distribute": true,
+    "no_fit_do_not_contact": true,
+    "non_response_is_not_causal_failure": true,
+    "backlink_target_count_is_not_kpi": true
+  }
+}
