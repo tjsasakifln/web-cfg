@@ -63,10 +63,25 @@ function fact(field, classification, value, extra) {
   return row;
 }
 
+function hasOfficialBacking(record) {
+  return Boolean(
+    present(record && record.source) &&
+      present(record && record.as_of) &&
+      present(record && record.provenance),
+  );
+}
+
 function official(field, value, record, extra) {
   if (!present(value)) {
     return fact(field, UNKNOWN, null, {
       reason: (extra && extra.missing_reason) || "producer_field_absent",
+      as_of: record && record.as_of,
+      provenance: record && record.provenance,
+    });
+  }
+  if (!hasOfficialBacking(record)) {
+    return fact(field, UNKNOWN, null, {
+      reason: "missing_source_provenance_or_as_of",
       as_of: record && record.as_of,
       provenance: record && record.provenance,
     });
@@ -83,9 +98,9 @@ function official(field, value, record, extra) {
 
 function anniversaryFrom(record) {
   const raw = record.data_assinatura || record.vigencia_start;
-  if (!present(raw)) {
+  if (!present(raw) || !hasOfficialBacking(record)) {
     return fact("aniversario_contratual", UNKNOWN, null, {
-      reason: "no_official_start_or_signature_date",
+      reason: present(raw) ? "missing_source_provenance_or_as_of" : "no_official_start_or_signature_date",
       as_of: record.as_of,
       provenance: record.provenance,
     });
@@ -156,15 +171,26 @@ function classifyEvent(event, record) {
   };
 }
 
-function emptyEvents(record) {
-  return MARGIN_FAMILIES.map((family) => ({
+function emptyEvent(family, record) {
+  return {
     family,
     classification: UNKNOWN,
     reason: "margin_event_family_not_in_public_read_v1",
     as_of: record.as_of,
     provenance: record.provenance || null,
     official: false,
-  }));
+  };
+}
+
+function eventsForRecord(record) {
+  const incoming = Array.isArray(record.margin_events) ? record.margin_events : [];
+  const byFamily = {};
+  for (const event of incoming) {
+    const row = classifyEvent(event, record);
+    if (MARGIN_FAMILIES.indexOf(row.family) === -1) continue;
+    byFamily[row.family] = row;
+  }
+  return MARGIN_FAMILIES.map((family) => byFamily[family] || emptyEvent(family, record));
 }
 
 function valueFacts(record) {
@@ -222,8 +248,7 @@ function diagnoseMargin(record) {
     throw new Error("record required");
   }
   const values = valueFacts(record);
-  const eventsIn = Array.isArray(record.margin_events) ? record.margin_events : [];
-  const eventos = eventsIn.length ? eventsIn.map((event) => classifyEvent(event, record)) : emptyEvents(record);
+  const eventos = eventsForRecord(record);
   const officialEvents = eventos.filter((event) => event.classification === OFFICIAL);
   const derivedEvents = eventos.filter((event) => event.classification === DERIVED || event.classification === INFERRED);
 
@@ -364,6 +389,8 @@ module.exports = {
   selectContract,
   evaluateIndexability,
   anniversaryFrom,
+  eventsForRecord,
+  hasOfficialBacking,
 };
 
   root.ConfengeDiagnoseMargin = module.exports;

@@ -1,7 +1,6 @@
-/* CONFENGE public site JS — modular source under js/modules/ (SYS-03).
- * Source of truth partitions: analytics.js, nav.js, form.js
- * Public entry remains this single file for static pages (no bundler).
- * Rebuild check: node scripts/site/build_script_modules.mjs --check
+/* CONFENGE public site JS — modular assembly (SYS-03).
+ * Source modules: js/modules/analytics.js, nav.js, form.js
+ * Rebuild: node scripts/site/build_script_modules.mjs --write
  */
 (() => {
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -169,6 +168,7 @@
   };
 
   const init = () => {
+
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
     const closeMenu = (returnFocus = false) => {
@@ -523,6 +523,7 @@
           offer_view: 1,
           proof_expand: 1,
           comparison_view: 1,
+          cta_click: 1,
         };
         if (!eventName || !allowed[eventName]) return;
         track(eventName, {
@@ -535,6 +536,15 @@
             || document.body?.getAttribute('data-offer-id')
             || '',
           source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
+          asset_id: el.getAttribute('data-asset-id')
+            || document.body?.getAttribute('data-asset-id')
+            || '',
+          route_family: el.getAttribute('data-route-family')
+            || document.body?.getAttribute('data-route-family')
+            || '',
+          cta_id: el.getAttribute('data-cta-id')
+            || el.closest?.('[data-cta-id]')?.getAttribute('data-cta-id')
+            || '',
         });
       });
     });
@@ -569,6 +579,7 @@
     // Form funnel (multi-step progressive enhancement)
     if (form) {
       let formStarted = false;
+
       let formStep = 1;
       const multi = form.getAttribute('data-form-multistep') === 'true';
       const step1 = form.querySelector('[data-form-step="1"]');
@@ -774,6 +785,10 @@
           || stageToJourney(estagioEl?.value);
         applyJourneyToForm(journey);
         showFormStatus('', '');
+        const assetId = (form.querySelector('[name="asset_id"]')?.value || '').slice(0, 80);
+        const routeFamily = (form.querySelector('[name="route_family"]')?.value || '').slice(0, 80);
+        const publicSlug = (form.querySelector('[name="public_id_slug"]')?.value || '').slice(0, 80);
+        const ctaId = (form.querySelector('[name="cta_id"]')?.value || '').slice(0, 80);
         track('lead_form_submit', {
           page_path: pagePath,
           content_cluster: defaultCluster,
@@ -784,6 +799,14 @@
           journey: journey || '',
           cta_label: (estagioEl?.value || '').slice(0, 80),
         });
+        if (assetId) {
+          track('cta_click', {
+            page_path: pagePath,
+            route_family: routeFamily,
+            asset_id: assetId,
+            cta_id: ctaId,
+          });
+        }
 
         // Progressive enhancement: POST to production lead function (receipt-bearing),
         // then FormSubmit/Netlify Forms, then WhatsApp operational fallback.
@@ -815,6 +838,13 @@
               content_cluster: defaultCluster,
               journey: journey || '',
               conversion: 'lead_persisted',
+            });
+            track('lead_created', {
+              page_path: pagePath,
+              route_family: routeFamily,
+              asset_id: assetId,
+              public_id_slug: publicSlug,
+              source: 'CONFENGE_WEB',
             });
             try {
               if (protocol) sessionStorage.setItem('confenge_last_receipt', protocol);

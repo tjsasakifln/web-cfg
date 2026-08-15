@@ -72,7 +72,7 @@
     "revops:gsc:sync:fixture": "python3 scripts/revops/search_demand_observatory.py sync --fixture",
     "test:prod-build-info": "node scripts/site/test_prod_build_info.mjs",
     "test:indexnow": "node scripts/site/test_indexnow.mjs",
-    "test:diagnose-margin": "node scripts/site/test_diagnose_margin.mjs && node scripts/site/test_money_asset_lead.mjs && python3 scripts/money_asset/indexability.py",
+    "test:diagnose-margin": "node scripts/site/test_diagnose_margin.mjs && node scripts/site/test_money_asset_lead.mjs && node scripts/site/test_money_asset_page_events.mjs && python3 scripts/money_asset/indexability.py",
     "indexnow:submit": "node scripts/site/indexnow_submit.mjs",
     "revops:gsc:import": "python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-2026-07-30",
     "revops:gsc:analyze": "python3 scripts/revops/search_demand_observatory.py analyze",

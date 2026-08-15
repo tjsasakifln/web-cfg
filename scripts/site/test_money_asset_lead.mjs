@@ -84,6 +84,7 @@ if (stored.route_family !== "defesa-margem-diagnostico") throw new Error("route_
 if (stored.public_contract_id !== "01619104000141-1-000123/2026") throw new Error("public_contract_id missing");
 if (stored.public_entity_id !== "org-quarto-centenario") throw new Error("public_entity_id missing");
 if (stored.jornada !== "contrato") throw new Error("journey missing");
+if (stored.source !== "CONFENGE_WEB") throw new Error("source CONFENGE_WEB missing");
 
 const r2 = await handler(event(payload));
 const d2 = JSON.parse(r2.body);
