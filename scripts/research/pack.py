@@ -328,8 +328,8 @@ def _methodology(snapshot: dict[str, Any]) -> dict[str, Any]:
         "query_versions": manifest.get("query_versions"),
         "classifier": (snapshot.get("icp_methodology") or {}).get("classifier"),
         "steps": [
-            "Preferir o export versionado extra-cli #400 (research_aggregate_v1) quando presente.",
-            "Se o export #400 estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.",
+            "Preferir o export versionado public-read-research-flagship/1.0 quando presente.",
+            "Se o export estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.",
             "Não copiar datalake; não executar crawler; não inventar coverage nacional.",
             "Restringir findings do preview aos 4 mercados publicados + fatia de agência/concorrência.",
             "Tratar national-candidate-inventory como lacuna de cobertura, não como fato publicado.",
@@ -376,7 +376,7 @@ def build_pack(
         "edition": "edicao-zero",
         "title": (
             "EDIÇÃO ZERO — pavimentação e edificações públicas no recorte "
-            "pré-nacional extra-cli (SC, PI, MG, RS)"
+            "pré-nacional (SC, PI, MG, RS)"
         ),
         "wedge": WEDGE,
         "dataset_hash": meta["dataset_hash"],
@@ -409,7 +409,7 @@ def build_pack(
             "Mediana não é preço unitário nem faixa nacional de preço praticado.",
             "Inventário-candidato (54k aec_confirmed / 4,4M records available) não é finding.",
             resolved["extra_cli_public_read_note"],
-            "Preview permanece noindex até extra-cli #400 passar o national claim gate.",
+            "Preview permanece noindex até o contrato public-read-research-flagship/1.0 passar o national claim gate.",
         ],
         "offers": {
             "discrete": True,
@@ -427,7 +427,7 @@ def build_pack(
             "reason": (
                 "National claim gate passed; human quality gate still applies."
                 if indexable
-                else "Quality gate extra-cli #400 não passou; verdict != PUBLISH."
+                else "Quality gate public-read-research-flagship/1.0 não passou; verdict != PUBLISH."
             ),
         },
         "national_claim_gate": gate.as_dict(),

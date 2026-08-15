@@ -1,3 +1,5 @@
+> SUPERSEDED by [consumer-contract-extra-cli-402.md](consumer-contract-extra-cli-402.md). extra-cli #402 is the live shipped contract (`public-read-research-flagship/1.0`).
+
 # Consumer contract — extra-cli #400
 
 Status: **consumer-ready, producer absent.**  

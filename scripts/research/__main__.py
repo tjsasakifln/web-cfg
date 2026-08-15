@@ -99,7 +99,7 @@ def main(argv: list[str] | None = None) -> int:
     build.add_argument("--snapshot", help="Snapshot directory (default data/pseo)")
     build.add_argument(
         "--read-model",
-        help="Path to extra-cli #400 research_aggregate_v1 export",
+        help="Path to extra-cli #402 public-read-research-flagship export",
     )
     build.add_argument("--out", help="Output directory for pack.json")
     build.add_argument(
@@ -113,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
     validate.add_argument("--snapshot", help="Snapshot directory (default data/pseo)")
     validate.add_argument(
         "--read-model",
-        help="Path to extra-cli #400 research_aggregate_v1 export",
+        help="Path to extra-cli #402 public-read-research-flagship export",
     )
     validate.add_argument("--pack", help="Validate an existing pack.json")
     validate.set_defaults(func=cmd_validate)

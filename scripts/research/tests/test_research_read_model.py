@@ -85,10 +85,12 @@ def test_stale_fixture_rejects_national_even_with_27_ufs(snapshot):
     assert gate.passed is False
     assert REASON_FRESHNESS_STALE in gate.reason_codes
     assert gate.freshness_age_days is not None
-    assert gate.freshness_age_days > export["freshness"]["max_age_days"]
+    assert gate.freshness_age_hours is not None
+    assert gate.freshness_age_hours > export["freshness"]["max_age_hours"]
     # Coverage shape is national-looking; freshness still blocks PUBLISH.
     assert export["coverage"]["national_universe_complete"] is True
     assert export["coverage"]["uf_count"] == 27
+    assert export["claim"]["nacional_completo"] is True
 
     pack = build_pack(snapshot, read_model=export, now=NOW)
     assert pack["verdict"] == "NEEDS_DATA"
@@ -107,8 +109,10 @@ def test_national_fresh_fixture_passes_gate_but_is_not_live_source():
     gate = evaluate_national_claim_gate(export, now=NOW)
     assert gate.passed is True
     assert gate.consumed is True
-    live = ROOT / "data/extra-cli/research-aggregate-v1/export.json"
-    assert not live.is_file(), "live #400 export must not be faked from fixtures"
+    live = ROOT / "data/extra-cli/research-export.json"
+    legacy = ROOT / "data/extra-cli/research-aggregate-v1/export.json"
+    assert not live.is_file(), "live #402 export must not be faked from fixtures"
+    assert not legacy.is_file(), "legacy #400 export path must stay empty"
 
 
 def test_dataset_schema_only_when_download_is_real(snapshot):

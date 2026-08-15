@@ -13,7 +13,7 @@
 
 Contrato consumidor extra-cli #400: `docs/research/edicao-zero-4uf/consumer-contract-extra-cli-400.md`.
 `extra_cli_public_read_export_consumed`: `False`.
-Nota: No versioned extra-cli #400 research_aggregate_v1 export is present. This pack consumes the web-cfg `data/pseo` snapshot only, as preview.
+Nota: No versioned public-read-research-flagship/1.0 export is present. This pack consumes the web-cfg `data/pseo` snapshot only, as preview.
 
 A pasta `data/pseo/snapshots/pre-national-2026-07-31/` tem
 `dataset_hash` distinto (`137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b`).
@@ -21,8 +21,8 @@ Esta edição usa o snapshot vivo cujo hash está no `manifest.json` atual.
 
 ## Passos
 
-- Preferir o export versionado extra-cli #400 (research_aggregate_v1) quando presente.
-- Se o export #400 estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.
+- Preferir o export versionado public-read-research-flagship/1.0 quando presente.
+- Se o export estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.
 - Não copiar datalake; não executar crawler; não inventar coverage nacional.
 - Restringir findings do preview aos 4 mercados publicados + fatia de agência/concorrência.
 - Tratar national-candidate-inventory como lacuna de cobertura, não como fato publicado.

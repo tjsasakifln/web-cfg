@@ -2,14 +2,14 @@
   "schema": "confenge-research-citation-v1",
   "edition": "edicao-zero",
   "permalink": "https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/",
-  "citation": "CONFENGE. EDIÇÃO ZERO — Pavimentação e edificações públicas no recorte extra-cli pré-nacional (SC, PI, MG, RS). dataset_hash 0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30; data_as_of 2026-07-31. Veredito NEEDS_DATA. Não descreve o Brasil. https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/",
+  "citation": "CONFENGE. EDIÇÃO ZERO — Pavimentação e edificações públicas no recorte pré-nacional (SC, PI, MG, RS). dataset_hash 0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30; data_as_of 2026-07-31. Veredito NEEDS_DATA. Não descreve o Brasil. https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/",
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "data_as_of": "2026-07-31",
   "verdict": "NEEDS_DATA",
-  "verdict_reason": "Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência da base canônica de contratos. PUBLISH exige extra-cli #400 com cobertura de 27 UFs, denominator explícito e freshness no SLA. Bloqueio: RESEARCH_READ_MODEL_ABSENT.",
+  "verdict_reason": "Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência da base canônica de contratos. PUBLISH exige o export versionado public-read-research-flagship/1.0 com national_claim_allowed, cobertura de 27 UFs, denominator explícito e freshness no SLA. Bloqueio: RESEARCH_READ_MODEL_ABSENT.",
   "wedge": {
     "id": "pavimentacao-edificacoes-4uf-pre-nacional",
-    "label": "Pavimentação e edificações públicas no recorte extra-cli pré-nacional (SC, PI, MG, RS)",
+    "label": "Pavimentação e edificações públicas no recorte pré-nacional (SC, PI, MG, RS)",
     "why": "Único recorte publicado no snapshot versionado com dois arquétipos do ICP CONFENGE, quatro UFs e agregados de volume, ticket e contagem de compradores/fornecedores. Não é censo do Brasil.",
     "ufs": [
       "SC",
@@ -50,8 +50,8 @@
     "value_semantics": "Valores são contrato integral nominal em BRL. Não são preço unitário, preço praticado nacional, nem valor deflacionado.",
     "dedup_logic": "O exportador atribui um arquétipo primário por contrato. Este pack não re-deduplica linhas brutas; não há microdados no snapshot.",
     "steps": [
-      "Preferir o export versionado extra-cli #400 (research_aggregate_v1) quando presente.",
-      "Se o export #400 estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.",
+      "Preferir o export versionado public-read-research-flagship/1.0 quando presente.",
+      "Se o export estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.",
       "Não copiar datalake; não executar crawler; não inventar coverage nacional.",
       "Restringir findings do preview aos 4 mercados publicados + fatia de agência/concorrência.",
       "Tratar national-candidate-inventory como lacuna de cobertura, não como fato publicado.",
@@ -306,17 +306,19 @@
     "consumer": null,
     "as_of": null,
     "freshness_age_days": null,
-    "max_age_days": 30,
+    "freshness_age_hours": null,
+    "max_age_days": 2,
+    "max_age_hours": 48,
     "uf_count": 0,
     "ufs": [],
     "national_universe_complete": false,
     "national_denominator": null,
-    "note": "No versioned extra-cli #400 research_aggregate_v1 export. Fall back to the 4-UF data/pseo snapshot as preview only."
+    "note": "No versioned public-read-research-flagship/1.0 export. Fall back to the 4-UF data/pseo snapshot as preview only."
   },
   "indexation": {
     "indexable": false,
     "robots": "noindex,nofollow",
     "sitemap": false,
-    "reason": "Quality gate extra-cli #400 não passou; verdict != PUBLISH."
+    "reason": "Quality gate public-read-research-flagship/1.0 não passou; verdict != PUBLISH."
   }
 }

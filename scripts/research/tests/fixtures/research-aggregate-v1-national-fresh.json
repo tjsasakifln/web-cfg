@@ -1,19 +1,52 @@
 {
-  "schema": "extra-cli.public_read.research_aggregate.v1",
-  "schema_version": "1.0.0",
-  "consumer": "web-cfg/flagship-research",
-  "producer": "extra-cli",
-  "producer_issue": "tjsasakifln/extra-cli#400",
-  "dataset_hash": "fixture-national-fresh-not-a-live-hash",
-  "data_as_of": "2026-08-01",
-  "generated_at": "2026-08-01T12:00:00Z",
-  "grain": {
-    "keys": ["uf", "archetype_id", "period_start", "period_end"],
-    "unit": "published market cell"
+  "schema": "public-read-research-flagship/1.0",
+  "contract_version": "v1.1.0",
+  "contract_path": "docs/contracts/public-read-research-flagship-v1.json",
+  "consumer": {
+    "id": "web-cfg/flagship-research",
+    "repository": "tjsasakifln/web-cfg",
+    "issues": ["#65"],
+    "pull_requests": ["#73"]
   },
+  "wedge": {
+    "id": "contracts-prices-margin-defense",
+    "label": "Public-contract volume and integral ticket for margin-defense research"
+  },
+  "grain": "competence × geography_kind × geography_code × archetype_id",
+  "keys": ["competence", "geography_kind", "geography_code", "archetype_id"],
+  "source_families": ["public_read_v1.contracts", "canonical_public_observations", "national_universe/1.0"],
   "value_semantics": {
-    "contract_count": "distinct contract instruments; UNKNOWN stays null",
-    "total_value_brl": "nominal BRL of the instrument; not unit price"
+    "contract_value": "integral nominal BRL of the contract instrument",
+    "ticket_percentiles": "nearest-rank P25/median/P75 of integral nominal BRL in the cell",
+    "unknown_policy": "UNKNOWN remains UNKNOWN"
+  },
+  "as_of": "2026-08-15T12:00:00+00:00",
+  "freshness": {
+    "policy": "contracts-freshness-slo-v1",
+    "layer": "publication",
+    "max_age_hours": 48
+  },
+  "completeness": "COMPLETE",
+  "denominator": {
+    "authority": "national_universe/1.0",
+    "extra_1093_used_as_denominator": false,
+    "expected_partitions": 27,
+    "closed_partitions": 27
+  },
+  "provenance": {
+    "fixture_id": "national-fresh",
+    "catalog_hash": "fixture-catalog",
+    "reconciliation_hash": "fixture-reconciliation",
+    "national_universe_id": "fixture-universe",
+    "method": "synthetic fixture proving the gate can pass; not a live SELECT"
+  },
+  "claim": {
+    "national_claim_allowed": true,
+    "nacional_completo": true,
+    "reason_codes": [],
+    "extra_1093_used_as_denominator": false,
+    "publishable_geography": "BR",
+    "publishable_claim": "Series covers the closed publishing-org denominator."
   },
   "coverage": {
     "ufs": [
@@ -22,8 +55,6 @@
       "RS", "RO", "RR", "SC", "SP", "SE", "TO"
     ],
     "uf_count": 27,
-    "period_start": "2026-01-01",
-    "period_end": "2026-07-31",
     "national_universe_complete": true,
     "national_denominator": {
       "id": "fixture-national-denominator-fresh",
@@ -31,32 +62,10 @@
       "source": "fixture",
       "expected_ufs": 27,
       "observed_ufs": 27,
-      "competence": "2026-07"
+      "competence": "2026-08"
     }
   },
-  "freshness": {
-    "as_of": "2026-08-01",
-    "max_age_days": 30,
-    "stale": false
-  },
-  "provenance": {
-    "tables": ["fixture_only"],
-    "query_versions": {"fixture": "national-fresh"},
-    "method": "synthetic fixture proving the gate can pass; not a live SELECT",
-    "source_commit_sha": "fixture-national-fresh",
-    "source_run_id": "fixture-national-fresh"
-  },
-  "unknowns": {
-    "reason_codes": [],
-    "suppressed_fields": []
-  },
-  "limitations": [
-    "Synthetic shape-only fixture. Not copied into the live consumer path.",
-    "Not a Brazilian census. Not used by python3 -m scripts.research build."
-  ],
-  "denominators": {
-    "aec_confirmed_contracts": null,
-    "contracts_total_loaded": null
-  },
-  "series": []
+  "series": [],
+  "unknown": {"policy": "UNKNOWN remains UNKNOWN", "reason_codes": []},
+  "content_hash": "fixture-national-fresh-not-a-live-hash"
 }

@@ -1,10 +1,10 @@
 {
   "schema": "confenge-research-pack-v1",
   "edition": "edicao-zero",
-  "title": "EDIÇÃO ZERO — pavimentação e edificações públicas no recorte pré-nacional extra-cli (SC, PI, MG, RS)",
+  "title": "EDIÇÃO ZERO — pavimentação e edificações públicas no recorte pré-nacional (SC, PI, MG, RS)",
   "wedge": {
     "id": "pavimentacao-edificacoes-4uf-pre-nacional",
-    "label": "Pavimentação e edificações públicas no recorte extra-cli pré-nacional (SC, PI, MG, RS)",
+    "label": "Pavimentação e edificações públicas no recorte pré-nacional (SC, PI, MG, RS)",
     "why": "Único recorte publicado no snapshot versionado com dois arquétipos do ICP CONFENGE, quatro UFs e agregados de volume, ticket e contagem de compradores/fornecedores. Não é censo do Brasil.",
     "ufs": [
       "SC",
@@ -27,9 +27,9 @@
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "data_as_of": "2026-07-31",
   "generated_at_snapshot": "2026-08-02T03:24:33Z",
-  "pack_built_at": "2026-08-15T16:55:03Z",
+  "pack_built_at": "2026-08-15T18:49:44Z",
   "reproducibility": {
-    "snapshot_dir": "/tmp/grok-goal-4dc584f13fa7/implementer/web-cfg/data/pseo",
+    "snapshot_dir": "/tmp/grok-goal-61959829f7a7/implementer/web-cfg-73/data/pseo",
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
     "data_as_of": "2026-07-31",
     "source_commit_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
@@ -39,7 +39,7 @@
     "entry_point": "python3 -m scripts.research build",
     "edition_source": "pseo_snapshot_4uf_preview",
     "extra_cli_public_read_export_consumed": false,
-    "extra_cli_public_read_note": "No versioned extra-cli #400 research_aggregate_v1 export is present. This pack consumes the web-cfg `data/pseo` snapshot only, as preview."
+    "extra_cli_public_read_note": "No versioned public-read-research-flagship/1.0 export is present. This pack consumes the web-cfg `data/pseo` snapshot only, as preview."
   },
   "coverage": {
     "ufs": [
@@ -63,12 +63,14 @@
       "consumer": null,
       "as_of": null,
       "freshness_age_days": null,
-      "max_age_days": 30,
+      "freshness_age_hours": null,
+      "max_age_days": 2,
+      "max_age_hours": 48,
       "uf_count": 0,
       "ufs": [],
       "national_universe_complete": false,
       "national_denominator": null,
-      "note": "No versioned extra-cli #400 research_aggregate_v1 export. Fall back to the 4-UF data/pseo snapshot as preview only."
+      "note": "No versioned public-read-research-flagship/1.0 export. Fall back to the 4-UF data/pseo snapshot as preview only."
     },
     "snapshot_aec_confirmed_contracts": 233,
     "snapshot_raw_contracts": 11931,
@@ -111,8 +113,8 @@
       ]
     },
     "steps": [
-      "Preferir o export versionado extra-cli #400 (research_aggregate_v1) quando presente.",
-      "Se o export #400 estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.",
+      "Preferir o export versionado public-read-research-flagship/1.0 quando presente.",
+      "Se o export estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.",
       "Não copiar datalake; não executar crawler; não inventar coverage nacional.",
       "Restringir findings do preview aos 4 mercados publicados + fatia de agência/concorrência.",
       "Tratar national-candidate-inventory como lacuna de cobertura, não como fato publicado.",
@@ -1679,8 +1681,8 @@
     "Este pack descreve um recorte de 4 UFs. Não é censo do Brasil.",
     "Mediana não é preço unitário nem faixa nacional de preço praticado.",
     "Inventário-candidato (54k aec_confirmed / 4,4M records available) não é finding.",
-    "No versioned extra-cli #400 research_aggregate_v1 export is present. This pack consumes the web-cfg `data/pseo` snapshot only, as preview.",
-    "Preview permanece noindex até extra-cli #400 passar o national claim gate."
+    "No versioned public-read-research-flagship/1.0 export is present. This pack consumes the web-cfg `data/pseo` snapshot only, as preview.",
+    "Preview permanece noindex até o contrato public-read-research-flagship/1.0 passar o national claim gate."
   ],
   "offers": {
     "discrete": true,
@@ -1696,7 +1698,7 @@
     "indexable": false,
     "robots": "noindex,nofollow",
     "sitemap": false,
-    "reason": "Quality gate extra-cli #400 não passou; verdict != PUBLISH."
+    "reason": "Quality gate public-read-research-flagship/1.0 não passou; verdict != PUBLISH."
   },
   "national_claim_gate": {
     "passed": false,
@@ -1709,21 +1711,23 @@
     "consumer": null,
     "as_of": null,
     "freshness_age_days": null,
-    "max_age_days": 30,
+    "freshness_age_hours": null,
+    "max_age_days": 2,
+    "max_age_hours": 48,
     "uf_count": 0,
     "ufs": [],
     "national_universe_complete": false,
     "national_denominator": null,
-    "note": "No versioned extra-cli #400 research_aggregate_v1 export. Fall back to the 4-UF data/pseo snapshot as preview only."
+    "note": "No versioned public-read-research-flagship/1.0 export. Fall back to the 4-UF data/pseo snapshot as preview only."
   },
   "verdict": "NEEDS_DATA",
-  "verdict_reason": "Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência da base canônica de contratos. PUBLISH exige extra-cli #400 com cobertura de 27 UFs, denominator explícito e freshness no SLA. Bloqueio: RESEARCH_READ_MODEL_ABSENT.",
-  "next_action": "Bloqueio extra-cli #400 (RESEARCH_READ_MODEL_ABSENT). Obter o export versionado `extra-cli.public_read.research_aggregate.v1` com cobertura nacional (27 UFs), denominator explícito e freshness dentro do SLA (30 dias). Regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa.",
+  "verdict_reason": "Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência da base canônica de contratos. PUBLISH exige o export versionado public-read-research-flagship/1.0 com national_claim_allowed, cobertura de 27 UFs, denominator explícito e freshness no SLA. Bloqueio: RESEARCH_READ_MODEL_ABSENT.",
+  "next_action": "Bloqueio RESEARCH_READ_MODEL_ABSENT. Obter o export versionado `public-read-research-flagship/1.0` com national_claim_allowed, denominador nacional fechado e freshness dentro do SLA (48h). Regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa.",
   "published_market_count": 4,
   "citation": {
     "permalink": "https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/",
     "permalink_path": "/radar/pesquisa/edicao-zero-4uf/",
-    "text": "CONFENGE. EDIÇÃO ZERO — Pavimentação e edificações públicas no recorte extra-cli pré-nacional (SC, PI, MG, RS). dataset_hash 0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30; data_as_of 2026-07-31. Veredito NEEDS_DATA. Não descreve o Brasil. https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/",
+    "text": "CONFENGE. EDIÇÃO ZERO — Pavimentação e edificações públicas no recorte pré-nacional (SC, PI, MG, RS). dataset_hash 0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30; data_as_of 2026-07-31. Veredito NEEDS_DATA. Não descreve o Brasil. https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/",
     "methodology_anchor": "#metodologia",
     "data_as_of": "2026-07-31",
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -1742,7 +1746,7 @@
         "data_as_of"
       ],
       "excludes": [
-        "extra-cli datalake rows",
+        "producer datalake rows",
         "public_read_v1 entity internals",
         "national-candidate-inventory"
       ]

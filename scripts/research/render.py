@@ -488,7 +488,7 @@ Não descreve o Brasil.
 <p><strong>Permalink:</strong> <a href="{escape(citation.get('permalink') or 'https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/')}">{escape(citation.get('permalink_path') or '/radar/pesquisa/edicao-zero-4uf/')}</a></p>
 <p><strong>Como citar:</strong> {escape(citation.get('text') or '')}</p>
 <p><strong>Versão:</strong> {escape(str(citation.get('version_label') or pack.get('data_as_of')))}</p>
-<p><strong>Download:</strong> <a href="{escape(DOWNLOAD_FILENAME)}">{escape(DOWNLOAD_FILENAME)}</a> (pack de citação versionado; não é dump do extra-cli)</p>
+<p><strong>Download:</strong> <a href="{escape(DOWNLOAD_FILENAME)}">{escape(DOWNLOAD_FILENAME)}</a> (pack de citação versionado; não é dump de microdados)</p>
 </div>
 <div class="method-box" id="metodologia">
 <p><strong>dataset_hash:</strong> <code>{escape(pack['dataset_hash'])}</code></p>

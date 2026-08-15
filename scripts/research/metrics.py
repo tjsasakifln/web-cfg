@@ -11,7 +11,7 @@ from typing import Any
 WEDGE = {
     "id": "pavimentacao-edificacoes-4uf-pre-nacional",
     "label": (
-        "Pavimentação e edificações públicas no recorte extra-cli pré-nacional "
+        "Pavimentação e edificações públicas no recorte pré-nacional "
         "(SC, PI, MG, RS)"
     ),
     "why": (
@@ -696,7 +696,8 @@ def decide_verdict(
                 f"e {coverage['published_markets']} mercado(s) publicados. "
                 "O manifest declara cobertura incompleta frente ao conjunto "
                 "de referência da base canônica de contratos. "
-                "PUBLISH exige extra-cli #400 com cobertura de 27 UFs, "
+                "PUBLISH exige o export versionado public-read-research-flagship/1.0 "
+                "com national_claim_allowed, cobertura de 27 UFs, "
                 "denominator explícito e freshness no SLA. "
                 f"Bloqueio: {', '.join(codes)}."
             ),
@@ -715,5 +716,5 @@ def decide_verdict(
         }
     return {
         "verdict": "PUBLISH",
-        "reason": "Coverage+denominator+freshness do extra-cli #400 sustentam tese nacional.",
+        "reason": "Coverage+denominator+freshness do contrato public-read-research-flagship/1.0 sustentam tese nacional.",
     }

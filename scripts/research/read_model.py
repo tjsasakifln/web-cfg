@@ -1,4 +1,4 @@
-"""I/O adapter for the extra-cli #400 research_aggregate_v1 read model.
+"""I/O adapter for the extra-cli #402 public-read-research-flagship export.
 
 Loads a versioned export when present. Does not copy a datalake. Fail-closed
 onto the existing 4-UF snapshot as preview when the export is absent,
@@ -18,7 +18,8 @@ from scripts.research.contract import (
     evaluate_national_claim_gate,
 )
 
-DEFAULT_EXPORT_PATH = Path("data/extra-cli/research-aggregate-v1/export.json")
+DEFAULT_EXPORT_PATH = Path("data/extra-cli/research-export.json")
+LEGACY_EXPORT_PATH = Path("data/extra-cli/research-aggregate-v1/export.json")
 
 
 class ReadModelError(ValueError):
@@ -46,10 +47,11 @@ def load_research_read_model(
         return _parse_export(resolved)
     if not search_default:
         return None
-    default = _repo_root() / DEFAULT_EXPORT_PATH
-    if not default.is_file():
-        return None
-    return _parse_export(default)
+    for rel in (DEFAULT_EXPORT_PATH, LEGACY_EXPORT_PATH):
+        default = _repo_root() / rel
+        if default.is_file():
+            return _parse_export(default)
+    return None
 
 
 def _parse_export(path: Path) -> dict[str, Any]:
@@ -78,13 +80,15 @@ def adapt_research_aggregate_to_snapshot(export: dict[str, Any]) -> dict[str, An
     for row in series:
         if not isinstance(row, dict):
             continue
+        uf = row.get("geography_code") or row.get("uf")
         markets.append(
             {
                 "id": row.get("id")
-                or f"market-{row.get('archetype_id')}-{row.get('uf')}".lower(),
+                or row.get("series_key")
+                or f"market-{row.get('archetype_id')}-{uf}".lower(),
                 "slug": row.get("slug")
-                or f"{row.get('archetype_id')}-{str(row.get('uf') or '').lower()}",
-                "region": row.get("uf"),
+                or f"{row.get('archetype_id')}-{str(uf or '').lower()}",
+                "region": uf,
                 "archetype_id": row.get("archetype_id"),
                 "segment": row.get("segment") or row.get("archetype_id"),
                 "contract_count": row.get("contract_count"),
@@ -93,8 +97,8 @@ def adapt_research_aggregate_to_snapshot(export: dict[str, Any]) -> dict[str, An
                 else row.get("total_value"),
                 "buyer_count": row.get("buyer_count"),
                 "supplier_count": row.get("supplier_count"),
-                "period_start": row.get("period_start"),
-                "period_end": row.get("period_end"),
+                "period_start": row.get("period_start") or row.get("competence"),
+                "period_end": row.get("period_end") or row.get("as_of"),
                 "value_by_year": row.get("value_by_year") or [],
                 "privacy": row.get("privacy") or {},
                 "top_buyers": row.get("top_buyers") or [],
@@ -119,13 +123,13 @@ def adapt_research_aggregate_to_snapshot(export: dict[str, Any]) -> dict[str, An
                 "reason_codes": list(row.get("reason_codes") or []),
             }
         )
-    dataset_hash = export.get("dataset_hash")
-    data_as_of = export.get("data_as_of") or freshness.get("as_of")
+    dataset_hash = export.get("content_hash") or export.get("dataset_hash")
+    data_as_of = export.get("as_of") or export.get("data_as_of") or freshness.get("as_of")
     manifest = {
         "dataset_hash": dataset_hash,
         "data_as_of": data_as_of,
         "generated_at": export.get("generated_at"),
-        "source_repository": export.get("producer") or "extra-cli",
+        "source_repository": export.get("producer") or "public_read",
         "source_commit_sha": provenance.get("source_commit_sha"),
         "source_run_id": provenance.get("source_run_id"),
         "export_version": export.get("schema_version"),
@@ -189,7 +193,7 @@ def resolve_edition_source(
     if evaluated.passed and export is not None:
         adapted = adapt_research_aggregate_to_snapshot(export)
         return {
-            "source": "research_aggregate_v1",
+            "source": "public_read_research_flagship_v1",
             "snapshot": adapted,
             "gate": evaluated,
             "extra_cli_public_read_export_consumed": True,
@@ -200,13 +204,13 @@ def resolve_edition_source(
     meta["extra_cli_public_read_export_consumed"] = False
     if not evaluated.present:
         meta["extra_cli_public_read_note"] = (
-            "No versioned extra-cli #400 research_aggregate_v1 export is present. "
+            "No versioned public-read-research-flagship/1.0 export is present. "
             "This pack consumes the web-cfg `data/pseo` snapshot only, as preview."
         )
     else:
         meta["extra_cli_public_read_note"] = (
-            "A versioned extra-cli #400 export was present but failed the "
-            "national claim gate ("
+            "A versioned public-read-research-flagship/1.0 export was present "
+            "but failed the national claim gate ("
             + ", ".join(evaluated.reason_codes)
             + "). Preview stays on the 4-UF snapshot."
         )

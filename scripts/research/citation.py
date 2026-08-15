@@ -44,7 +44,7 @@ def citation_block(pack: dict[str, Any], *, download_present: bool) -> dict[str,
                 "data_as_of",
             ],
             "excludes": [
-                "extra-cli datalake rows",
+                "producer datalake rows",
                 "public_read_v1 entity internals",
                 "national-candidate-inventory",
             ],

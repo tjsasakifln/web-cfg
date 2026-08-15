@@ -8,7 +8,7 @@
   "preview_url": "/radar/pesquisa/edicao-zero-4uf/",
   "does_not_replace": "/radar/nacional-obras-publicas/",
   "verdict": "NEEDS_DATA",
-  "tese": "Pavimentação e edificações públicas no recorte extra-cli pré-nacional (SC, PI, MG, RS)",
+  "tese": "Pavimentação e edificações públicas no recorte pré-nacional (SC, PI, MG, RS)",
   "findings": [
     {
       "id": "F1",
@@ -105,5 +105,5 @@
     "/aditivos-obras-publicas/",
     "/defesa-margem-contratos-publicos/"
   ],
-  "next_action": "Bloqueio extra-cli #400 (RESEARCH_READ_MODEL_ABSENT). Obter o export versionado `extra-cli.public_read.research_aggregate.v1` com cobertura nacional (27 UFs), denominator explícito e freshness dentro do SLA (30 dias). Regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa."
+  "next_action": "Bloqueio RESEARCH_READ_MODEL_ABSENT. Obter o export versionado `public-read-research-flagship/1.0` com national_claim_allowed, denominador nacional fechado e freshness dentro do SLA (48h). Regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa."
 }
