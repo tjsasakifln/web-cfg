@@ -7,6 +7,9 @@
   "scripts": {
     "prepare": "bash scripts/install-git-filters.sh",
     "test:release-filters": "python3 scripts/site/test_release_result_filters.py",
+    "research:build": "python3 -m scripts.research build",
+    "research:validate": "python3 -m scripts.research validate",
+    "test:research-pack": "python3 -m pytest scripts/research/tests -q",
     "audit:migration": "node scripts/audit-migration.mjs",
     "audit:public-artifact": "python3 scripts/pseo/public_artifact.py audit",
     "validate:seo": "python3 seo/scripts/validate_seo.py",
@@ -45,7 +48,7 @@
     "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
-    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:inbound-handoff && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:authority && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates && npm run test:workflow-gates && npm run test:ops-docs && npm run test:revops && npm run test:schedules && npm run test:tools && npm run test:nurture && npm run test:nurture-pages && npm run test:ferramentas-footer && npm run test:hub-truth && npm run test:tool-compute && npm run test:wave1-fields && npm run test:lead-store-production && npm run test:ops-auth && npm run test:env-example && npm run test:epic-td && npm run test:script-modules && npm run test:indexnow && npm run test:diagnose-margin",
+    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:inbound-handoff && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:authority && npm run test:design && npm run test:copy && npm run test:ui && npm run test:inbound-gates && npm run test:workflow-gates && npm run test:ops-docs && npm run test:revops && npm run test:schedules && npm run test:tools && npm run test:nurture && npm run test:nurture-pages && npm run test:ferramentas-footer && npm run test:hub-truth && npm run test:tool-compute && npm run test:wave1-fields && npm run test:lead-store-production && npm run test:ops-auth && npm run test:env-example && npm run test:epic-td && npm run test:script-modules && npm run test:indexnow && npm run test:diagnose-margin && npm run test:research-pack",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "editorial:build": "python3 scripts/editorial/build.py",
     "editorial:approve": "python3 scripts/editorial/approve_cli.py",

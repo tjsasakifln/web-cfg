@@ -1,0 +1,157 @@
+{
+  "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+  "data_as_of": "2026-07-31",
+  "charts": [
+    {
+      "id": "C1",
+      "pergunta": "Qual o volume e o valor observado de contratos AEC confirmados nos mercados publicados do recorte?",
+      "dados": [
+        {
+          "label": "SC · pavimentacao-infraestrutura-viaria",
+          "contract_count": 13,
+          "total_value_brl": 15206416.82
+        },
+        {
+          "label": "PI · pavimentacao-infraestrutura-viaria",
+          "contract_count": 13,
+          "total_value_brl": 26172058.65
+        },
+        {
+          "label": "MG · edificacoes-publicas",
+          "contract_count": 12,
+          "total_value_brl": 16767654.94
+        },
+        {
+          "label": "RS · edificacoes-publicas",
+          "contract_count": 10,
+          "total_value_brl": 12146242.83
+        }
+      ],
+      "unidade": "BRL nominal (contrato integral)",
+      "source": "data/pseo/markets.json + data/pseo/manifest.json",
+      "method": "Exporter keeps one primary archetype per contract; multi-label objects enter only the primary market cell",
+      "caveat": "Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência da base canônica de contratos.",
+      "takeaway": "O valor observado vive em 4 células mercado×UF. Somar as células descreve o recorte publicado, não o Brasil."
+    },
+    {
+      "id": "C2",
+      "pergunta": "Como se comparam contratos, compradores e fornecedores por mercado?",
+      "dados": [
+        {
+          "label": "SC · pavimentacao-infraestrutura-viaria",
+          "contracts": 13,
+          "buyers": 11,
+          "suppliers": 11
+        },
+        {
+          "label": "PI · pavimentacao-infraestrutura-viaria",
+          "contracts": 13,
+          "buyers": 6,
+          "suppliers": 13
+        },
+        {
+          "label": "MG · edificacoes-publicas",
+          "contracts": 12,
+          "buyers": 10,
+          "suppliers": 11
+        },
+        {
+          "label": "RS · edificacoes-publicas",
+          "contracts": 10,
+          "buyers": 10,
+          "suppliers": 10
+        }
+      ],
+      "unidade": "contagem",
+      "source": "data/pseo/markets.json",
+      "method": "buyer identity as ingested (CNPJ8/name); no cross-UF merge",
+      "caveat": "Contagens de compradores são por célula mercado×UF. Identidades nominais dos top buyers estão suprimidas neste snapshot.",
+      "takeaway": "Compradores e fornecedores são quase 1:1 na maior parte das células. Isso é n pequeno, não prova atomização nacional."
+    },
+    {
+      "id": "C3",
+      "pergunta": "Qual o tamanho típico do contrato (P25, mediana, P75) por mercado, e o que esse número não significa?",
+      "dados": [
+        {
+          "label": "MG · Edificações públicas",
+          "n": 15,
+          "p25": 412900.0,
+          "median": 504997.83,
+          "p75": 1300000.0
+        },
+        {
+          "label": "PI · Pavimentação e infraestrutura viária",
+          "n": 13,
+          "p25": 744003.0,
+          "median": 996225.26,
+          "p75": 1463918.41
+        },
+        {
+          "label": "RS · Edificações públicas",
+          "n": 12,
+          "p25": 199500.0,
+          "median": 415499.99,
+          "p75": 1390000.0
+        },
+        {
+          "label": "SC · Pavimentação e infraestrutura viária",
+          "n": 12,
+          "p25": 224135.0,
+          "median": 345532.53,
+          "p75": 635000.0
+        }
+      ],
+      "unidade": "BRL nominal; P25/mediana/P75 da célula de preço (prices.json)",
+      "source": "data/pseo/prices.json (percentiles); markets.json only as a distinct comparison population",
+      "method": "one contract instrument per observation; SQLite ORDER BY + OFFSET percentiles",
+      "caveat": "prices.json e markets.json são populações de query distintas. n e percentis divergem nos dois sentidos e não se explica o desvio pelo piso de 5000 BRL (esse piso é critério da célula de preço, não uma prova de que n_preço < n_mercado). Células de preço sem mercado publicado (ex.: manutenção predial) não entram no wedge. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.",
+      "takeaway": "A mediana de C3 vem de prices.json, população distinta de markets.json. É contrato integral, não preço unitário nem faixa nacional de preço praticado."
+    },
+    {
+      "id": "C4",
+      "pergunta": "Quanto do snapshot publicado chega aos 4 mercados do wedge?",
+      "dados": [
+        {
+          "stage": "contratos carregados (snapshot)",
+          "n": 11931
+        },
+        {
+          "stage": "aec_confirmed no snapshot",
+          "n": 233
+        },
+        {
+          "stage": "contratos nos 4 mercados publicados",
+          "n": 48
+        }
+      ],
+      "unidade": "contratos",
+      "source": "data/pseo/markets.json + data/pseo/manifest.json",
+      "method": "Exporter keeps one primary archetype per contract; multi-label objects enter only the primary market cell",
+      "caveat": "Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência da base canônica de contratos.",
+      "takeaway": "A maior parte do snapshot não entra no wedge. Tratar os 4 mercados como Brasil inverteria o funil."
+    },
+    {
+      "id": "C5",
+      "pergunta": "Há concentração mensurável de compradores ou fornecedores no recorte?",
+      "dados": [
+        {
+          "label": "contratos no órgão",
+          "n": 49
+        },
+        {
+          "label": "fornecedores observados",
+          "n": 1
+        },
+        {
+          "label": "objetos rotulados reajuste",
+          "n": 13
+        }
+      ],
+      "unidade": "contratos / fornecedores no órgão publicado",
+      "source": "data/pseo/agencies.json + data/pseo/competition.json",
+      "method": "public export does not split ATA/ordem de serviço/reajuste; each ingested contract row is one count",
+      "caveat": "Concentração só é mensurável na fatia Caxias do Sul / manutenção predial (1 dia civil, 1 órgão, 1 fornecedor dominante). HHI dos 4 mercados publicados é nulo; top buyers estão suprimidos.",
+      "takeaway": "A única concentração mensurável é um órgão em um dia, com reajustes misturados a ordens de serviço."
+    }
+  ]
+}

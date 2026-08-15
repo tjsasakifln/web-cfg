@@ -1,0 +1,109 @@
+{
+  "schema": "research-distribution-pack-v1",
+  "edition": "edicao-zero",
+  "as_of": "2026-07-31",
+  "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+  "auto_send": false,
+  "indexable": false,
+  "preview_url": "/radar/pesquisa/edicao-zero-4uf/",
+  "does_not_replace": "/radar/nacional-obras-publicas/",
+  "verdict": "NEEDS_DATA",
+  "tese": "Pavimentação e edificações públicas no recorte pré-nacional (SC, PI, MG, RS)",
+  "findings": [
+    {
+      "id": "F1",
+      "status": "answered",
+      "claim": "Os 4 mercados publicados somam 48 contratos e 70292373.24 BRL nominais (data_as_of do snapshot). O snapshot classifica 233 contratos aec_confirmed em 11931 carregados.",
+      "question_id": "Q1",
+      "evidence": {
+        "question_id": "Q1",
+        "anchor": "#Q1",
+        "source": "data/pseo/markets.json + data/pseo/manifest.json",
+        "denominator": "published markets in markets.json (not aec_confirmed universe, not raw PNCP load)"
+      }
+    },
+    {
+      "id": "F2",
+      "status": "answered",
+      "claim": "Compradores distintos por mercado publicado: SC pavimentacao=11, PI pavimentacao=6, MG edificacoes=10, RS edificacoes=10. Identidades nominais dos top buyers estão suprimidas.",
+      "question_id": "Q2",
+      "evidence": {
+        "question_id": "Q2",
+        "anchor": "#Q2",
+        "source": "data/pseo/markets.json",
+        "denominator": "distinct buyer identifiers counted by the exporter per market cell"
+      }
+    },
+    {
+      "id": "F3",
+      "status": "answered",
+      "claim": "Fornecedores observados por mercado publicado: SC=11, PI=13, MG=11, RS=10.",
+      "question_id": "Q3",
+      "evidence": {
+        "question_id": "Q3",
+        "anchor": "#Q3",
+        "source": "data/pseo/markets.json + data/pseo/competition.json",
+        "denominator": "distinct supplier identifiers counted per published market cell"
+      }
+    },
+    {
+      "id": "F4",
+      "status": "partial",
+      "claim": "Concentração mensurável só na fatia MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL (RS): 49 contratos, 1 fornecedor(es), top3_share=1.0, período 2026-07-03–2026-07-03. 13 objetos rotulados reajuste.",
+      "question_id": "Q4",
+      "evidence": {
+        "question_id": "Q4",
+        "anchor": "#Q4",
+        "source": "data/pseo/agencies.json + data/pseo/competition.json",
+        "denominator": "contracts in the single published agency/competition slice"
+      }
+    },
+    {
+      "id": "F5",
+      "status": "answered",
+      "claim": "Tickets (piso 5000 BRL, contrato integral): MG Edificações públicas n=15 P25=412900.0 mediana=504997.83 P75=1300000.0; PI Pavimentação e infraestrutura viária n=13 P25=744003.0 mediana=996225.26 P75=1463918.41; RS Edificações públicas n=12 P25=199500.0 mediana=415499.99 P75=1390000.0; SC Pavimentação e infraestrutura viária n=12 P25=224135.0 mediana=345532.53 P75=635000.0. Não é preço unitário.",
+      "question_id": "Q7",
+      "evidence": {
+        "question_id": "Q7",
+        "anchor": "#Q7",
+        "source": "data/pseo/prices.json (percentiles); markets.json only as a distinct comparison population",
+        "denominator": "price-cell observations as published in prices.json (inclusion_criteria of that file, including valor_total >= 5000 BRL)"
+      }
+    },
+    {
+      "id": "F6",
+      "status": "unsupported",
+      "claim": "Evolução temporal do recorte: não sustentado. Série anual insuficiente: 3 de 4 mercados publicados têm um único ano (pavimentacao-infraestrutura-viaria-sc, pavimentacao-infraestrutura-viaria-pi, edificacoes-publicas-mg). Apenas 1 mercado cruza dois anos civis, com n anual baixo e janelas de poucas semanas. Evolução do recorte: não sustentado.",
+      "question_id": "Q8",
+      "evidence": {
+        "question_id": "Q8",
+        "anchor": "#Q8",
+        "source": "data/pseo/markets.json value_by_year",
+        "denominator": "n/a — pergunta não sustentada neste snapshot"
+      }
+    }
+  ],
+  "linkedin": [
+    "48 contratos e 70292373.24 BRL no recorte publicado SC/PI/MG/RS. Não é o Brasil. hash 0d8757f7cda3 as_of 2026-07-31.",
+    "Mediana neste snapshot é contrato integral com piso de 5000 BRL, não preço de m² e não faixa nacional de preço praticado.",
+    "Concentração nacional: não sustentado. A fatia mensurável é um órgão, um dia, com reajuste misturado a ordem de serviço."
+  ],
+  "press_pitch": "EDIÇÃO ZERO CONFENGE: volume e ticket de pavimentação e edificações em 4 UFs, com método aberto. Sem censo inventado.",
+  "emails": {
+    "editorial": "Pack + metodologia para crítica do denominator.",
+    "abm": "Ticket P25–P75 da UF da empresa + Bid Room / auditoria."
+  },
+  "videos": [
+    "Funil de cobertura; encerrar com o recorte de 4 UFs.",
+    "Ticket P25/mediana/P75; riscar preço de m².",
+    "Caxias: 1 órgão, 1 dia, reajustes."
+  ],
+  "link_earning_thesis": "Citação vem da recusa honesta do número nacional, não do maior total.",
+  "internal_link_destinations": [
+    "/bid-room-licitacoes-obras/",
+    "/auditoria-orcamento-licitacao/",
+    "/aditivos-obras-publicas/",
+    "/defesa-margem-contratos-publicos/"
+  ],
+  "next_action": "Bloqueio RESEARCH_READ_MODEL_ABSENT. Obter o export versionado `public-read-research-flagship/1.0` com national_claim_allowed, denominador nacional fechado e freshness dentro do SLA (48h). Regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa."
+}
