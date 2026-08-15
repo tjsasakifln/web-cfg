@@ -33,3 +33,9 @@ invented from the `public_id` prefix or the organ display name.
 Never send `nome`, `email`, `telefone`, `mensagem`, raw CNPJ or free-text
 identifier in analytics. `public_id_slug` is a digit-sparse slug, not the
 official number.
+
+Authenticated ops (`analytics_summary` and `inbound_handoff`) expose the
+operational chain as `money_asset.events` plus `money_asset.handoff`.
+Local/dev with `LEAD_STORE_DIR` also stores collect batches under
+`$LEAD_STORE_DIR/analytics/events/<day>/` so the same ops path is queryable
+without Blobs.

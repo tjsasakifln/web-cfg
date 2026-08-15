@@ -73,3 +73,33 @@ Site-static rollback: [ROLLBACK.md](./ROLLBACK.md). Blobs of persisted leads are
 ## Synthetic
 
 Only when the inbound URL is reachable, the shared secret is set on both sides, and Warmbly auto-send is proven off. Use a clearly labeled synthetic (`SYNTHETIC-INBOUND`, `@example.com`). Do not generate a real contact. If any precondition is missing, record the exact blocker — do not fake INBOUND NOW.
+
+Non-real records persist and **SKIP** Warmbly. A synthetic 201 is capture proof, not INBOUND NOW.
+
+### Money-asset proof harness
+
+```text
+node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br
+# or
+npm run probe:money-asset:prod
+```
+
+This is the #60 probe (not `probe:lead`, which is jornada=operacao). It writes PROVEN/BLOCKED/UNKNOWN per step and exits non-zero unless capture + replay + INBOUND NOW + auto-send OFF are all proven.
+
+If env is missing here:
+
+```text
+# Netlify production
+CONFENGE_INBOUND_WEBHOOK_URL=https://<warmbly-host>/api/v1/webhooks/confenge/inbound
+CONFENGE_INBOUND_WEBHOOK_SECRET=<shared>
+# Warmbly
+CONFENGE_AUTO_SEND_ENABLED=false
+# This shell, to read ops counters
+export OPS_TOKEN='<production ops token>'
+export CONFENGE_AUTO_SEND_EVIDENCE=OFF
+node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br /tmp/prod-proof.json
+```
+
+Ops chain (auth): `GET /.netlify/functions/ops?action=inbound_handoff` and `analytics_summary` expose `money_asset.events` (`asset_view` → `contract_analyzed` → `cta_view` → `cta_click` → `lead_created`) plus `money_asset.handoff` (`delivered`/`blocked`/`pending`/`retryable`/`skipped`/`dead`). No PII.
+
+The next irreversible proof is a real qualified lead or a real rejection — not another synthetic.

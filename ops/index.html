@@ -208,6 +208,7 @@
  const an = await api("analytics_summary");
  $("analytics-pre").textContent = JSON.stringify({
  events_loaded: an.events_loaded,
+ money_asset: an.money_asset,
  web_vitals: an.aggregate && an.aggregate.web_vitals,
  daily: (an.aggregate && an.aggregate.daily || []).slice(-7),
  cta: an.aggregate && an.aggregate.cta_totals,
