@@ -84,14 +84,54 @@
       'pseo_page_id', 'page_type', 'archetype', 'segment', 'region',
       'agency_id', 'intent', 'source_run_id', 'dataset_hash', 'cta_position',
       'origem', 'origin_url', 'landing_url',
+      'route_family', 'cta_id', 'asset_id', 'correlation_id', 'referrer',
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
     ];
+    const ROUTE_FAMILY_BY_PREFIX = [
+      ['/defesa-margem-contratos-publicos/', 'margin-defense'],
+      ['/reequilibrio-obras-publicas/', 'reequilibrio'],
+      ['/aditivos-obras-publicas/', 'aditivos'],
+      ['/medicoes-glosas-obras-publicas/', 'medicoes-glosas'],
+      ['/atrasos-prorrogacao-obras-publicas/', 'atrasos'],
+      ['/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/', 'matriz-riscos'],
+      ['/conteudos/atraso-pagamento-contrato-publico-suspender/', 'atraso-pagamento'],
+      ['/conteudos/bdi-diferenciado-obra-publica/', 'bdi'],
+    ];
+    const routeFamilyFromPath = (pathname) => {
+      const p = String(pathname || '/');
+      const hit = ROUTE_FAMILY_BY_PREFIX.find(([prefix]) => p === prefix || p.startsWith(prefix));
+      return hit ? hit[1] : '';
+    };
+    const newCorrelationId = () => {
+      try {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+          return window.crypto.randomUUID();
+        }
+      } catch (_) { /* ignore */ }
+      return `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+    };
     const PSEO_STORAGE_KEY = 'confenge_pseo_attribution';
-    const sanitizeAttr = (val) => {
+    const isUuidLike = (s) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+    const isPhoneLike = (s) => {
+      const compact = String(s || '').replace(/[\s()-]/g, '');
+      return /^\+?\d{10,15}$/.test(compact);
+    };
+    const sanitizeAttr = (val, key) => {
       if (val == null) return '';
       const s = String(val).slice(0, 180);
-      // block PII-looking values from attribution store
-      if (/@|\+?\d{10,}/.test(s)) return '';
+      if (!s) return '';
+      if (/@/.test(s)) return '';
+      // correlation ids / UUIDs are not PII — UUID last group is 12 hex digits
+      if (key === 'correlation_id' || isUuidLike(s) || s.startsWith('c-')) return s;
+      if (isPhoneLike(s)) return '';
       return s;
+    };
+    const firstNonEmpty = (key, ...vals) => {
+      for (const val of vals) {
+        const s = sanitizeAttr(val, key);
+        if (s) return s;
+      }
+      return '';
     };
     const readStoredPseo = () => {
       try {
@@ -106,7 +146,7 @@
         const clean = {};
         Object.keys(obj || {}).forEach((k) => {
           if (!PSEO_ATTR_KEYS.includes(k) && k !== 'tema' && k !== 'saved_at') return;
-          const v = sanitizeAttr(obj[k]);
+          const v = sanitizeAttr(obj[k], k);
           if (v) clean[k] = v;
         });
         if (Object.keys(clean).length) {
@@ -115,19 +155,68 @@
         }
       } catch (_) { /* private mode */ }
     };
-    // Capture attribution from URL into sessionStorage (survives home form landing)
+    // Capture attribution from URL into sessionStorage (survives home form landing).
+    // Only allowlisted keys persist — arbitrary query params are dropped.
+    // First-touch: empty values on the current page must not wipe a stored landing/family.
+    const storedPrior = readStoredPseo();
     const fromUrl = {};
     PSEO_ATTR_KEYS.forEach((name) => {
       const v = searchParams.get(name) || hashParams.get(name);
-      if (v) fromUrl[name] = sanitizeAttr(v);
+      if (v) {
+        const s = sanitizeAttr(v, name);
+        if (s) fromUrl[name] = s;
+      }
     });
     const tema = searchParams.get('tema') || hashParams.get('tema');
-    if (tema) fromUrl.tema = sanitizeAttr(tema);
-    if (fromUrl.pseo_page_id || fromUrl.origem || fromUrl.page_type) {
-      fromUrl.landing_url = sanitizeAttr(window.location.pathname || '/');
-      if (!fromUrl.origin_url && fromUrl.origem) fromUrl.origin_url = fromUrl.origem;
-      writeStoredPseo({ ...readStoredPseo(), ...fromUrl });
+    if (tema) {
+      const t = sanitizeAttr(tema, 'tema');
+      if (t) fromUrl.tema = t;
     }
+    const bodyDs = (document.body && document.body.dataset) || {};
+    const pathFamily = routeFamilyFromPath(window.location.pathname || '/');
+    const currentFamily = firstNonEmpty('route_family', fromUrl.route_family, bodyDs.routeFamily, pathFamily);
+    if (currentFamily) fromUrl.route_family = currentFamily;
+    else if (storedPrior.route_family) fromUrl.route_family = storedPrior.route_family;
+    const currentAsset = firstNonEmpty('asset_id', fromUrl.asset_id, bodyDs.assetId);
+    if (currentAsset) fromUrl.asset_id = currentAsset;
+    else if (storedPrior.asset_id) fromUrl.asset_id = storedPrior.asset_id;
+    const currentCta = firstNonEmpty('cta_id', fromUrl.cta_id, bodyDs.ctaId);
+    if (currentCta) fromUrl.cta_id = currentCta;
+    else if (storedPrior.cta_id) fromUrl.cta_id = storedPrior.cta_id;
+    fromUrl.landing_url = firstNonEmpty(
+      'landing_url',
+      fromUrl.landing_url,
+      storedPrior.landing_url,
+      window.location.pathname || '/',
+    );
+    if (!fromUrl.origin_url && fromUrl.origem) fromUrl.origin_url = fromUrl.origem;
+    fromUrl.correlation_id = firstNonEmpty(
+      'correlation_id',
+      fromUrl.correlation_id,
+      storedPrior.correlation_id,
+      newCorrelationId(),
+    );
+    if (!fromUrl.referrer) {
+      try { fromUrl.referrer = sanitizeAttr(document.referrer || '', 'referrer'); } catch (_) { /* ignore */ }
+    }
+    writeStoredPseo({ ...storedPrior, ...fromUrl });
+    window.confengeAttribution = {
+      ALLOWLIST: PSEO_ATTR_KEYS.slice(),
+      sanitize: sanitizeAttr,
+      pickFromSearch: (search) => {
+        const params = new URLSearchParams(search || '');
+        const out = {};
+        PSEO_ATTR_KEYS.forEach((name) => {
+          const v = params.get(name);
+          if (v) {
+            const s = sanitizeAttr(v);
+            if (s) out[name] = s;
+          }
+        });
+        return out;
+      },
+      routeFamilyFromPath,
+    };
     const storedPseo = readStoredPseo();
     const origem = fromUrl.origem || storedPseo.origem
       || searchParams.get('origem') || hashParams.get('origem');

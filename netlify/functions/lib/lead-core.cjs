@@ -23,17 +23,82 @@ const MAX_FIELD = {
   utm_content: 80,
   utm_term: 80,
   content_cluster: 80,
+  route_family: 80,
+  cta_id: 80,
+  asset_id: 80,
+  correlation_id: 80,
+  landing_url: 240,
   idempotency_key: 80,
   turnstile_token: 2048,
-  asset_id: 80,
-  route_family: 80,
   public_contract_id: 80,
   public_entity_id: 80,
   public_id_slug: 80,
-  cta_id: 80,
-  correlation_id: 80,
   cnpj: 20,
 };
+
+/** Query/body keys that may persist as attribution. Everything else is dropped. */
+const ATTR_ALLOWLIST = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+  "jornada",
+  "origem",
+  "origin_url",
+  "landing_url",
+  "landing_page",
+  "referrer",
+  "route_family",
+  "cta_id",
+  "asset_id",
+  "correlation_id",
+  "tema",
+  "pseo_page_id",
+  "page_type",
+  "archetype",
+  "segment",
+  "region",
+  "agency_id",
+  "intent",
+  "source_run_id",
+  "dataset_hash",
+  "cta_position",
+  "content_cluster",
+];
+
+function looksLikePii(value, key) {
+  const s = String(value || "");
+  if (!s) return false;
+  if (/@/.test(s)) return true;
+  if (key === "correlation_id") return false;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
+  if (s.startsWith("c-")) return false;
+  const compact = s.replace(/[\s()-]/g, "");
+  return /^\+?\d{10,15}$/.test(compact);
+}
+
+function sanitizeAttributionValue(val, maxLen, key) {
+  if (val == null) return "";
+  const s = stripControl(val).slice(0, maxLen || 180);
+  if (!s || looksLikePii(s, key)) return "";
+  return s;
+}
+
+/**
+ * Keep only allowlisted attribution keys. Drops arbitrary query params and PII.
+ */
+function pickAttribution(data) {
+  const src = data && typeof data === "object" ? data : {};
+  const out = {};
+  for (const key of ATTR_ALLOWLIST) {
+    if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
+    const max = MAX_FIELD[key] || 180;
+    const v = sanitizeAttributionValue(src[key], max, key);
+    if (v) out[key] = v;
+  }
+  return out;
+}
 
 const ALLOWED_JOURNEYS = new Set(["contrato", "edital", "operacao", "conteudo", "pseo", "outro"]);
 const ALLOWED_ORIGINS = new Set([
@@ -191,7 +256,9 @@ function validateAndNormalize(data) {
     mensagem: clamp(data.mensagem || data.message, MAX_FIELD.mensagem) || null,
     consentimento: true,
     origem: clamp(data.origem, MAX_FIELD.origem) || null,
-    landing_page: clamp(data.landing_page || data.landing, MAX_FIELD.landing_page) || null,
+    landing_page:
+      clamp(data.landing_page || data.landing || data.landing_url, MAX_FIELD.landing_page) || null,
+    landing_url: clamp(data.landing_url || data.landing_page, MAX_FIELD.landing_url) || null,
     referrer: clamp(data.referrer || data.ref, MAX_FIELD.referrer) || null,
     utm_source: clamp(data.utm_source, MAX_FIELD.utm_source) || null,
     utm_medium: clamp(data.utm_medium, MAX_FIELD.utm_medium) || null,
@@ -199,15 +266,15 @@ function validateAndNormalize(data) {
     utm_content: clamp(data.utm_content, MAX_FIELD.utm_content) || null,
     utm_term: clamp(data.utm_term, MAX_FIELD.utm_term) || null,
     content_cluster: clamp(data.content_cluster, MAX_FIELD.content_cluster) || null,
+    route_family: sanitizeAttributionValue(data.route_family, MAX_FIELD.route_family, "route_family") || null,
+    cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id, "cta_id") || null,
+    asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id") || null,
+    correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id, "correlation_id") || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
-    asset_id: clamp(data.asset_id, MAX_FIELD.asset_id) || null,
-    route_family: clamp(data.route_family, MAX_FIELD.route_family) || null,
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     public_id_slug: clamp(data.public_id_slug, MAX_FIELD.public_id_slug) || null,
-    cta_id: clamp(data.cta_id, MAX_FIELD.cta_id) || null,
-    correlation_id: clamp(data.correlation_id, MAX_FIELD.correlation_id) || null,
     cnpj: clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
     source: "CONFENGE_WEB",
   };
@@ -372,8 +439,12 @@ function retentionPolicy() {
 module.exports = {
   MAX_BODY_BYTES,
   MAX_FIELD,
+  ATTR_ALLOWLIST,
   ALLOWED_ORIGINS,
   ALLOWED_JOURNEYS,
+  looksLikePii,
+  sanitizeAttributionValue,
+  pickAttribution,
   parseBody,
   isHoneypot,
   validateAndNormalize,
