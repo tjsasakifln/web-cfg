@@ -140,6 +140,7 @@
 <input name="asset_id" type="hidden" value="diagnostico-defesa-margem"/>
 <input name="route_family" type="hidden" value="defesa-margem-diagnostico"/>
 <input name="public_contract_id" id="public-contract-id" type="hidden" value="01619104000141-1-000123/2026"/>
+<input name="public_id_slug" id="public-id-slug" type="hidden" value="qc-caixa-dagua-2026"/>
 <input name="cta_id" type="hidden" value="segunda-leitura-contrato"/>
 <input name="landing_page" type="hidden" value="/ferramentas/diagnostico-defesa-margem/"/>
 <p class="honeypot"><label for="empresa-site">Não preencha este campo</label><input autocomplete="off" id="empresa-site" name="empresa-site" tabindex="-1"/></p>
@@ -152,7 +153,7 @@
 <div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" rows="3" placeholder="O que precisa ser conferido neste contrato. Não cole dados pessoais desnecessários."></textarea></div>
 <label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
 <p class="form-status" hidden></p>
-<button class="button button-primary button-lg form-submit" type="submit" data-cta-position="money-asset" data-event-name="cta_click">Quero uma segunda leitura deste contrato</button>
+<button class="button button-primary button-lg form-submit" type="submit" data-cta-position="money-asset" data-event-name="cta_click" data-asset-id="diagnostico-defesa-margem" data-route-family="defesa-margem-diagnostico" data-cta-id="segunda-leitura-contrato">Quero uma segunda leitura deste contrato</button>
 </form>
 </section>
 
@@ -188,6 +189,8 @@
   }
   function render(diagnosis){
     document.getElementById("public-contract-id").value = diagnosis.public_id.value || "";
+    var slugEl = document.getElementById("public-id-slug");
+    if (slugEl) slugEl.value = diagnosis.public_id_slug || "";
     document.getElementById("out-identificacao").innerHTML =
       "<dt>Identificador público</dt><dd>" + fmt(diagnosis.public_id) + "</dd>" +
       "<dt>Órgão</dt><dd>" + fmt(diagnosis.orgao) + "</dd>" +
@@ -247,19 +250,41 @@
     e.preventDefault();
     analyze(document.getElementById("qid").value);
   });
-  if (typeof window.confengeTrack === "function") {
-    window.confengeTrack("asset_view", {
+  function moneyAssetProps(){
+    return {
       page_path: "/ferramentas/diagnostico-defesa-margem/",
       route_family: "defesa-margem-diagnostico",
       asset_id: "diagnostico-defesa-margem"
-    });
-    window.confengeTrack("organic_landing", {
-      page_path: "/ferramentas/diagnostico-defesa-margem/",
-      route_family: "defesa-margem-diagnostico",
-      asset_id: "diagnostico-defesa-margem",
-      source: document.referrer ? "referrer" : "direct"
+    };
+  }
+  function whenTrackReady(fn){
+    if (typeof window.confengeTrack === "function") {
+      fn(window.confengeTrack);
+      return;
+    }
+    document.addEventListener("DOMContentLoaded", function(){
+      if (typeof window.confengeTrack === "function") fn(window.confengeTrack);
     });
   }
+  whenTrackReady(function(track){
+    track("asset_view", moneyAssetProps());
+    track("organic_landing", Object.assign(moneyAssetProps(), {
+      source: document.referrer ? "referrer" : "direct"
+    }));
+    var cta = document.getElementById("segunda-leitura");
+    if (cta && typeof IntersectionObserver === "function") {
+      var seen = false;
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (seen || !entry.isIntersecting) return;
+          seen = true;
+          track("cta_view", Object.assign(moneyAssetProps(), { cta_id: "segunda-leitura-contrato" }));
+          io.disconnect();
+        });
+      }, { threshold: 0.25 });
+      io.observe(cta);
+    }
+  });
   fetch(SNAP, { credentials: "same-origin" }).then(function(r){ return r.json(); }).then(function(data){
     snapshot = data;
     var params = new URLSearchParams(window.location.search);

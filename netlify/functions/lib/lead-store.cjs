@@ -567,6 +567,7 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     route_family: lead.route_family || null,
     public_contract_id: lead.public_contract_id || null,
     public_entity_id: lead.public_entity_id || null,
+    source: "CONFENGE_WEB",
     idempotency_key: lead.idempotency_key,
     ip_hash,
     fingerprint,

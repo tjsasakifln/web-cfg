@@ -206,6 +206,10 @@
           || stageToJourney(estagioEl?.value);
         applyJourneyToForm(journey);
         showFormStatus('', '');
+        const assetId = (form.querySelector('[name="asset_id"]')?.value || '').slice(0, 80);
+        const routeFamily = (form.querySelector('[name="route_family"]')?.value || '').slice(0, 80);
+        const publicSlug = (form.querySelector('[name="public_id_slug"]')?.value || '').slice(0, 80);
+        const ctaId = (form.querySelector('[name="cta_id"]')?.value || '').slice(0, 80);
         track('lead_form_submit', {
           page_path: pagePath,
           content_cluster: defaultCluster,
@@ -216,6 +220,14 @@
           journey: journey || '',
           cta_label: (estagioEl?.value || '').slice(0, 80),
         });
+        if (assetId) {
+          track('cta_click', {
+            page_path: pagePath,
+            route_family: routeFamily,
+            asset_id: assetId,
+            cta_id: ctaId,
+          });
+        }
 
         // Progressive enhancement: POST to production lead function (receipt-bearing),
         // then FormSubmit/Netlify Forms, then WhatsApp operational fallback.
@@ -247,6 +259,13 @@
               content_cluster: defaultCluster,
               journey: journey || '',
               conversion: 'lead_persisted',
+            });
+            track('lead_created', {
+              page_path: pagePath,
+              route_family: routeFamily,
+              asset_id: assetId,
+              public_id_slug: publicSlug,
+              source: 'CONFENGE_WEB',
             });
             try {
               if (protocol) sessionStorage.setItem('confenge_last_receipt', protocol);

@@ -203,6 +203,7 @@ function validateAndNormalize(data) {
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     cta_id: clamp(data.cta_id, MAX_FIELD.cta_id) || null,
+    source: "CONFENGE_WEB",
   };
 
   return { ok: true, honeypot: false, lead };

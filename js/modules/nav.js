@@ -355,6 +355,7 @@
           offer_view: 1,
           proof_expand: 1,
           comparison_view: 1,
+          cta_click: 1,
         };
         if (!eventName || !allowed[eventName]) return;
         track(eventName, {
@@ -367,6 +368,15 @@
             || document.body?.getAttribute('data-offer-id')
             || '',
           source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
+          asset_id: el.getAttribute('data-asset-id')
+            || document.body?.getAttribute('data-asset-id')
+            || '',
+          route_family: el.getAttribute('data-route-family')
+            || document.body?.getAttribute('data-route-family')
+            || '',
+          cta_id: el.getAttribute('data-cta-id')
+            || el.closest?.('[data-cta-id]')?.getAttribute('data-cta-id')
+            || '',
         });
       });
     });

@@ -17,6 +17,7 @@ const {
   OFFICIAL,
   DERIVED,
   UNKNOWN,
+  MARGIN_FAMILIES,
 } = require(resolve(root, "assets/js/diagnose-margin.cjs"));
 
 const snapshot = JSON.parse(
@@ -75,6 +76,17 @@ assert.equal(incomplete.titulo.classification, UNKNOWN);
 assert.equal(incomplete.as_of.classification, UNKNOWN);
 assert.ok(incomplete.unknown_count > first.unknown_count);
 
+const titleOnly = diagnoseMargin({
+  public_id: "unbacked-id",
+  title: "Contrato sem proveniência",
+  source: null,
+  as_of: null,
+  provenance: null,
+});
+assert.equal(titleOnly.titulo.classification, UNKNOWN);
+assert.equal(titleOnly.public_id.classification, UNKNOWN);
+assert.equal(titleOnly.titulo.value, null);
+
 const derived = diagnoseMargin({
   ...real,
   data_assinatura: "2024-03-15",
@@ -101,6 +113,13 @@ assert.equal(derived.valor_contratual.classification, OFFICIAL);
 assert.equal(derived.vigencia_inicio.classification, OFFICIAL);
 assert.equal(derived.eventos_defesa_margem.filter((e) => e.family === "aditivo")[0].classification, OFFICIAL);
 assert.ok(derived.alteracoes_prazo_valor.length === 1);
+assert.equal(derived.eventos_defesa_margem.length, MARGIN_FAMILIES.length);
+assert.deepEqual(
+  derived.eventos_defesa_margem.map((e) => e.family).sort(),
+  [...MARGIN_FAMILIES].sort(),
+);
+assert.equal(derived.eventos_defesa_margem.filter((e) => e.family === "reajuste")[0].classification, UNKNOWN);
+assert.equal(derived.eventos_defesa_margem.filter((e) => e.family === "medicao")[0].classification, UNKNOWN);
 
 const mixed = diagnoseMargin({
   ...real,
