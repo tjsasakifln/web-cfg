@@ -27,9 +27,9 @@
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "data_as_of": "2026-07-31",
   "generated_at_snapshot": "2026-08-02T03:24:33Z",
-  "pack_built_at": "2026-08-15T18:49:44Z",
+  "pack_built_at": "2026-08-15T21:40:51Z",
   "reproducibility": {
-    "snapshot_dir": "/tmp/grok-goal-61959829f7a7/implementer/web-cfg-73/data/pseo",
+    "snapshot_dir": "data/pseo",
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
     "data_as_of": "2026-07-31",
     "source_commit_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",

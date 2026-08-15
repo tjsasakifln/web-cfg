@@ -285,6 +285,24 @@ def test_cli_validate_and_build_exit_zero(tmp_path):
     assert validate.returncode == 0, validate.stderr
 
 
+def test_preview_survives_pseo_wipe():
+    """Drive the shipped pSEO wipe gate. Preview must not be unlinked on build:site."""
+    from scripts.pseo.build import is_preserved_static_surface
+
+    preview_rel = "radar/pesquisa/edicao-zero-4uf/index.html"
+    assert is_preserved_static_surface(preview_rel) is True
+    assert is_preserved_static_surface("radar/nacional-obras-publicas/index.html") is True
+    assert is_preserved_static_surface("radar/edificacoes-publicas-pr/index.html") is False
+    assert (ROOT / preview_rel).is_file()
+    would_wipe = []
+    for index in (ROOT / "radar").rglob("index.html"):
+        rel = index.relative_to(ROOT).as_posix()
+        if not is_preserved_static_surface(rel):
+            would_wipe.append(rel)
+    assert preview_rel not in would_wipe
+    assert any(rel.startswith("radar/") and rel not in {preview_rel} for rel in would_wipe)
+
+
 def test_preview_is_noindex_and_absent_from_sitemaps():
     preview = ROOT / "radar/pesquisa/edicao-zero-4uf/index.html"
     if not preview.is_file():
@@ -335,6 +353,10 @@ def test_live_pack_does_not_consume_missing_400(pack):
     assert pack["reproducibility"]["extra_cli_public_read_export_consumed"] is False
     assert pack["national_claim_gate"]["passed"] is False
     assert "RESEARCH_READ_MODEL_ABSENT" in pack["national_claim_gate"]["reason_codes"]
+    snapshot_dir = pack["reproducibility"]["snapshot_dir"]
+    assert snapshot_dir == "data/pseo"
+    assert not snapshot_dir.startswith("/")
+    assert "grok-goal" not in snapshot_dir
     assert pack["verdict"] == "NEEDS_DATA"
 
 

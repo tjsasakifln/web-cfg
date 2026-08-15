@@ -101,8 +101,13 @@ def load_snapshot(snapshot_dir: Path | None = None) -> dict[str, Any]:
     ]
     extra_contract_path = next((p for p in extra_candidates if p.is_file()), None)
 
+    try:
+        snapshot_dir_meta = directory.relative_to(root).as_posix()
+    except ValueError:
+        snapshot_dir_meta = str(directory)
+
     files["meta"] = {
-        "snapshot_dir": str(directory),
+        "snapshot_dir": snapshot_dir_meta,
         "dataset_hash": manifest.get("dataset_hash"),
         "data_as_of": manifest.get("data_as_of"),
         "generated_at": manifest.get("generated_at"),

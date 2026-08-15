@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 40,
+        "scanned": 44,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,14 +14,14 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 40
+        "sitemap_locs": 57
       }
     },
     "brand_shell": {
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 27,
+        "scanned": 28,
         "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
         "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
       }
@@ -30,7 +30,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 22,
+        "scanned": 20,
         "journeys": [
           "contrato",
           "edital",
@@ -47,10 +47,18 @@
     },
     "similarity": {
       "ok": true,
-      "findings": [],
+      "findings": [
+        {
+          "gate": "similarity",
+          "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+          "reason": "similar_to:conteudos/pagamento-parcial-etapa-empreitada-global/index.html",
+          "excerpt": "jaccard6=0.561",
+          "severity": "warn"
+        }
+      ],
       "stats": {
-        "pages": 22,
-        "pairs": 231,
+        "pages": 20,
+        "pairs": 190,
         "threshold": 0.55
       }
     }
