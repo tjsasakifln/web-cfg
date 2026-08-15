@@ -62,15 +62,25 @@ else {
   else pass("cohort_five", c.improvements.length);
 }
 
-// Distribution kit 30 contacts
+// Distribution: auto_send stays false. Contact-list size is not a success KPI.
 const kit = resolve(ROOT, "data/distribution/radar-outreach-kit.json");
 if (!existsSync(kit)) fail("dist_kit");
 else {
   const k = JSON.parse(readFileSync(kit, "utf8"));
-  if (!k.contacts || k.contacts.length < 30) fail("contacts_30", k.contacts?.length);
-  else pass("contacts_30", k.contacts.length);
   if (k.auto_send !== false) fail("no_auto_send");
   else pass("no_auto_send");
+  if (!Array.isArray(k.contacts)) fail("contacts_shape");
+  else pass("contacts_present_not_kpi", k.contacts.length);
+}
+const registry = resolve(
+  ROOT,
+  "data/distribution/assets/radar-nacional-obras-publicas.v1.json",
+);
+if (!existsSync(registry)) fail("dist_registry");
+else {
+  const r = JSON.parse(readFileSync(registry, "utf8"));
+  if (r.auto_send !== false) fail("registry_no_auto_send");
+  else pass("registry_no_auto_send");
 }
 
 // Machine recommendations never mint human approvals (registry is the source of truth)
