@@ -5,12 +5,12 @@
 <title>Diagnóstico de Defesa de Margem em Contratos Públicos | CONFENGE</title>
 <meta name="description" content="Leitura factual de um contrato público: identificação, valor, vigência, eventos, fontes, UNKNOWN e o que merece conferência humana. Sem cadastro."/>
 <link rel="canonical" href="https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"/>
-<meta name="robots" content="noindex,follow"/>
+<meta name="robots" content="index,follow"/>
 <link rel="stylesheet" href="/styles.css"/>
 <link rel="stylesheet" href="/styles-tools.css"/>
 <meta content="#061a33" name="theme-color"/>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"Diagnóstico de Defesa de Margem em Contratos Públicos","url":"https://confenge.com.br/ferramentas/diagnostico-defesa-margem/","description":"Leitura factual de contrato público a partir de exportação pública versionada, com fontes, data de revisão e UNKNOWN explícito.","applicationCategory":"BusinessApplication","operatingSystem":"Web","dateModified":"2026-08-14","author":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"},"isBasedOn":"https://pncp.gov.br/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
+{"@context":"https://schema.org","@type":"WebApplication","name":"Diagnóstico de Defesa de Margem em Contratos Públicos","url":"https://confenge.com.br/ferramentas/diagnostico-defesa-margem/","description":"Leitura factual de contrato público a partir de exportação pública versionada, com fontes, data de revisão e UNKNOWN explícito.","applicationCategory":"BusinessApplication","operatingSystem":"Web","dateModified":"2026-08-15","author":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"},"isBasedOn":"https://pncp.gov.br/","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
 </script>
 </head>
 <body data-route-family="defesa-margem-diagnostico" data-asset-id="diagnostico-defesa-margem" data-journey="contrato">
@@ -48,11 +48,11 @@
 <section class="tool-method" aria-labelledby="metodo-diagnostico">
 <p class="eyebrow">Método e limites</p>
 <h2 id="metodo-diagnostico">Como esta leitura é feita</h2>
-<p>O diagnóstico consome um recorte público versionado da exportação usada pelo site (família de contratos públicos com proveniência). Cada campo leva fonte, data de revisão e classificação. Campo ausente permanece UNKNOWN. Ausência não é prova de que o evento não ocorreu.</p>
+<p>O diagnóstico consome um recorte público versionado de contratos oficiais (contrato public-read-margin-defense/1.0). Cada campo leva fonte, data de revisão e classificação. Campo ausente permanece UNKNOWN. Ausência não é prova de que o evento não ocorreu.</p>
 <ul class="tool-evidence-list">
-<li><strong>Fonte oficial consultada no recorte:</strong> PNCP (portal nacional de contratações públicas).</li>
-<li><strong>Método:</strong> projeção SELECT-only; fatos oficiais não se misturam com derivados.</li>
-<li><strong>Revisão:</strong> recorte com <time datetime="2026-07-31">31 de julho de 2026</time>; página revista em <time datetime="2026-08-14">14 de agosto de 2026</time>.</li>
+<li><strong>Fonte oficial consultada no recorte:</strong> PNCP (contratos de fornecedor publicados no portal nacional).</li>
+<li><strong>Método:</strong> projeção SELECT-only; fatos oficiais não se misturam com derivados. Aniversário contratual é o único derivado: mês-dia da data de assinatura oficial.</li>
+<li><strong>Revisão:</strong> recorte com <time datetime="2026-08-14">14 de agosto de 2026</time>; página revista em <time datetime="2026-08-15">15 de agosto de 2026</time>.</li>
 <li><strong>Identidade:</strong> CONFENGE — consultoria de engenharia para contratos de obras públicas. Esta página não é parecer jurídico.</li>
 </ul>
 </section>
@@ -60,7 +60,7 @@
 <form id="lookup" class="tool-form" role="search">
 <div class="tool-field">
 <label for="qid">Contrato, CNPJ, identificador ou contexto público</label>
-<input id="qid" name="q" type="search" autocomplete="off" placeholder="Ex.: 01619104000141-1-000123/2026 ou Quarto Centenário"/>
+<input id="qid" name="q" type="search" autocomplete="off" placeholder="Ex.: 83102277000152-2-000626/2026 ou Itajaí"/>
 <p class="tool-field-hint">A busca ocorre neste recorte público. Não envia o identificador para analytics.</p>
 </div>
 <div class="tool-actions">
@@ -72,61 +72,65 @@
 <section id="identificacao" aria-labelledby="h-identificacao">
 <h2 id="h-identificacao">Identificação do contrato</h2>
 <dl class="stage-meta" id="out-identificacao">
-<dt>Identificador público</dt><dd>01619104000141-1-000123/2026</dd>
-<dt>Órgão</dt><dd>MUNICIPIO DE QUARTO CENTENARIO</dd>
-<dt>Objeto</dt><dd>Construção de base para caixa d’água de 20.000 L na comunidade Porto II, Quarto Centenário/PR.</dd>
+<dt>Identificador público</dt><dd>83102277000152-2-000626/2026</dd>
+<dt>Órgão</dt><dd>PREFEITURA MUNICIPAL DE ITAJAÍ - SC</dd>
+<dt>Contratado</dt><dd>GHIMM TEC LTDA</dd>
+<dt>Objeto</dt><dd>Serviços de engenharia comum para reforma do auditório do prédio da Prefeitura Municipal de Itajaí, incluindo telhado e reforma interna.</dd>
 </dl>
 </section>
 
 <section id="resumo-executivo" aria-labelledby="h-resumo">
 <h2 id="h-resumo">Resumo executivo factual</h2>
 <ul id="out-resumo">
-<li>Contrato/processo identificado no recorte público do PNCP.</li>
-<li>Valor estimado na fonte pública: R$ 111.304,87 (não é valor assinado).</li>
-<li>Valor contratual assinado: UNKNOWN.</li>
-<li>Vigência e aniversário contratual: UNKNOWN.</li>
-<li>Freshness as_of: 2026-07-31.</li>
+<li>Contrato/processo: CONTRATAÇÃO DE EMPRESA PARA PRESTAÇÃO DE SERVIÇOS DE ENGENHARIA COMUM PARA EXECUÇÃO DA REFORMA DO AUDITÓRIO.</li>
+<li>Órgão: PREFEITURA MUNICIPAL DE ITAJAÍ - SC.</li>
+<li>Valor contratual (oficial): 740874.59 BRL nominais do instrumento.</li>
+<li>Vigência: 2026-08-13 → 2027-01-10. Aniversário (derivado da assinatura): 08-13.</li>
+<li>Freshness as_of: 2026-08-14.</li>
 </ul>
 </section>
 
 <section id="timeline" aria-labelledby="h-timeline">
 <h2 id="h-timeline">Timeline</h2>
 <ol class="journey-stages" id="out-timeline">
-<li class="journey-stage"><span class="type-mono">as_of</span><h3>2026-07-31</h3><p>Data de revisão do recorte público. Datas de assinatura e vigência permanecem UNKNOWN.</p></li>
+<li class="journey-stage"><span class="type-mono">as_of</span><h3>2026-08-14</h3><p>Data de revisão do recorte público versionado.</p></li>
+<li class="journey-stage"><span class="type-mono">assinatura / início</span><h3>2026-08-13</h3><p>Data oficial de assinatura e início de vigência neste recorte.</p></li>
+<li class="journey-stage"><span class="type-mono">fim</span><h3>2027-01-10</h3><p>Data oficial de fim de vigência neste recorte.</p></li>
 </ol>
 </section>
 
 <section id="eventos-defesa-margem" aria-labelledby="h-eventos">
 <h2 id="h-eventos">Eventos de defesa de margem</h2>
 <ul id="out-eventos">
-<li>Aditivo: UNKNOWN</li>
-<li>Apostilamento: UNKNOWN</li>
-<li>Prorrogação: UNKNOWN</li>
-<li>Reajuste / reequilíbrio: UNKNOWN</li>
-<li>Medição / pagamento: UNKNOWN</li>
+<li>Aditivo: UNKNOWN (no_amendment_signal)</li>
+<li>Apostilamento: UNKNOWN (no_amendment_signal)</li>
+<li>Prorrogação: UNKNOWN (no_amendment_signal)</li>
+<li>Reajuste: UNKNOWN (no_explicit_adjustment_document)</li>
+<li>Reequilíbrio: UNKNOWN (no_explicit_adjustment_rule)</li>
+<li>Medição: UNKNOWN (source_does_not_offer_measurements)</li>
+<li>Pagamento: UNKNOWN (source_does_not_offer_payments)</li>
 </ul>
 </section>
 
 <section id="evidencias-fontes" aria-labelledby="h-fontes">
 <h2 id="h-fontes">Evidências e fontes</h2>
 <ul id="out-fontes">
-<li><a href="https://pncp.gov.br/app/contratos/01619104000141/2026/123" rel="external noopener" target="_blank">Registro no PNCP</a> · fonte oficial · as_of 2026-07-31</li>
-<li>Exportação pública versionada (dataset hash 0d8757f7…, run pseo-20260802T032433Z-47e7e07c).</li>
+<li>Fonte: pncp_supplier_contracts:83102277000152-2-000626/2026 · as_of 2026-08-14</li>
+<li>Exportação pública versionada public-read-margin-defense/1.0 (content hash b46ec394df0da1a269d6b6aee180779dac60c89e880cea32b9200a0574e0e113).</li>
 </ul>
 </section>
 
 <section id="o-que-merece-conferencia" aria-labelledby="h-conferencia">
 <h2 id="h-conferencia">O que merece conferência</h2>
 <ul id="out-conferencia">
-<li>Conferir o valor global assinado no instrumento e nos extratos oficiais.</li>
-<li>Conferir datas de início e fim de vigência no contrato e em termos aditivos.</li>
 <li>Conferir no PNCP e no diário oficial se existem aditivos, reajustes, medições ou pagamentos. A ausência neste recorte não prova que o evento não ocorreu.</li>
+<li>O recorte marca incerteza nas famílias de evento. Tratar cada UNKNOWN como pendência de prova, não como fato negativo.</li>
 </ul>
 </section>
 
 <section id="limites-unknown" aria-labelledby="h-unknown">
 <h2 id="h-unknown">Limites e UNKNOWN</h2>
-<p id="out-unknown">Este recorte não emite aniversário, vigência, aditivos, reajuste/reequilíbrio, medições ou pagamentos. UNKNOWN está preservado de propósito. Esta página não fabrica direito nem trata silêncio da fonte como evidência.</p>
+<p id="out-unknown">Identidade, objeto, órgão, contratado, valor nominal assinado e vigência estão no recorte oficial. Aditivos, reajuste, medições e pagamentos permanecem UNKNOWN com reason_code do produtor. Esta página não fabrica direito nem trata silêncio da fonte como evidência.</p>
 </section>
 
 <section id="segunda-leitura" class="tool-cta-contextual" aria-labelledby="h-cta" data-cta-id="segunda-leitura-contrato">
@@ -139,8 +143,8 @@
 <input name="estagio" type="hidden" value="problema urgente em contrato"/>
 <input name="asset_id" type="hidden" value="diagnostico-defesa-margem"/>
 <input name="route_family" type="hidden" value="defesa-margem-diagnostico"/>
-<input name="public_contract_id" id="public-contract-id" type="hidden" value="01619104000141-1-000123/2026"/>
-<input name="public_id_slug" id="public-id-slug" type="hidden" value="qc-caixa-dagua-2026"/>
+<input name="public_contract_id" id="public-contract-id" type="hidden" value="83102277000152-2-000626/2026"/>
+<input name="public_id_slug" id="public-id-slug" type="hidden" value="md-8569b618"/>
 <input name="cta_id" type="hidden" value="segunda-leitura-contrato"/>
 <input name="landing_page" type="hidden" value="/ferramentas/diagnostico-defesa-margem/"/>
 <p class="honeypot"><label for="empresa-site">Não preencha este campo</label><input autocomplete="off" id="empresa-site" name="empresa-site" tabindex="-1"/></p>
@@ -294,10 +298,10 @@
 })();
 </script>
 <section class="authority-method container" id="metodo" data-surface-type="ferramenta">
-<p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência (as of): <time datetime="2026-08-14">14 de agosto de 2026</time></p>
-<p>Método: leitura factual a partir de exportação pública versionada, com fontes, data de revisão e UNKNOWN explícito quando o fato não está no contrato de dados.</p>
-<p>Fonte: PNCP e contratos de leitura pública versionados. Não inventa cobertura.</p>
-<p>Limitação: não é parecer jurídico e não estima margem contábil de terceiros.</p>
+<p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência (as of): <time datetime="2026-08-14">14 de agosto de 2026</time> · Página revista em <time datetime="2026-08-15">15 de agosto de 2026</time></p>
+<p>Método: leitura factual a partir de exportação pública versionada public-read-margin-defense/1.0, com fontes, data de revisão e UNKNOWN explícito quando o fato não está no contrato de dados.</p>
+<p>Fonte: PNCP (contratos de fornecedor). Refresh owner: CONFENGE editorial + recorte versionado. Não inventa cobertura.</p>
+<p>Limitação: não é parecer jurídico e não estima margem contábil de terceiros. Aditivos, reajuste, medições e pagamentos ficam UNKNOWN até o produtor emitir o fato.</p>
 <p>Como citar: CONFENGE. Diagnóstico de Defesa de Margem em Contratos Públicos. https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ (as of 2026-08-14).</p>
 </section>
 <footer class="site-footer">

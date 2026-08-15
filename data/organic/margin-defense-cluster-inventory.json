@@ -1,0 +1,111 @@
+{
+  "schema": "margin-defense-cluster-inventory/1.0",
+  "as_of": "2026-08-15",
+  "refresh_owner": "CONFENGE editorial + extra-cli public-read-margin-defense/1.0",
+  "money_asset": "/ferramentas/diagnostico-defesa-margem/",
+  "commercial_hub": "/defesa-margem-contratos-publicos/",
+  "policy": "One canonical URL per primary intent. No thin pSEO. Page count is not success.",
+  "intents": [
+    {
+      "intent": "reajuste",
+      "disposition": "CONSOLIDATE",
+      "canonical": "/reequilibrio-obras-publicas/",
+      "supporting": [
+        "/lei-14133-obras/reequilibrio-reajuste-repactuacao/"
+      ],
+      "notes": "Lei 14.133 distinction page is noindex. Do not create /reajuste-obras-publicas/.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "reequilibrio",
+      "disposition": "IMPROVE",
+      "canonical": "/reequilibrio-obras-publicas/",
+      "supporting": [
+        "/ferramentas/checklist-reequilibrio/",
+        "/guias-contratos-obras/documentos-pedido-reequilibrio/"
+      ],
+      "notes": "Keep pillar. Point exploration to money asset.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "aditivos",
+      "disposition": "IMPROVE",
+      "canonical": "/aditivos-obras-publicas/",
+      "supporting": [
+        "/ferramentas/limite-acrescimos-supressoes/",
+        "/lei-14133-obras/limite-25-50-aditivo-obra/"
+      ],
+      "notes": "Keep pillar + limit calculator.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "medicao_glosa",
+      "disposition": "IMPROVE",
+      "canonical": "/medicoes-glosas-obras-publicas/",
+      "supporting": [
+        "/guias-contratos-obras/contestar-glosa-medicao/"
+      ],
+      "notes": "Keep pillar.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "prazo_atraso_pagamento",
+      "disposition": "IMPROVE",
+      "canonical": "/atrasos-prorrogacao-obras-publicas/",
+      "supporting": [
+        "/ferramentas/matriz-atraso-obra/"
+      ],
+      "notes": "Keep pillar + delay matrix.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "bdi",
+      "disposition": "KEEP",
+      "canonical": "/auditoria-orcamento-licitacao/",
+      "supporting": [
+        "/conteudos/bdi-diferenciado-obra-publica/"
+      ],
+      "notes": "Existing orçamento/BDI pillar.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "matriz_de_riscos",
+      "disposition": "KEEP",
+      "canonical": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "supporting": [
+        "/reequilibrio-obras-publicas/"
+      ],
+      "notes": "Practical page already exists.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "alteracao_de_escopo",
+      "disposition": "CONSOLIDATE",
+      "canonical": "/aditivos-obras-publicas/",
+      "supporting": [
+        "/lei-14133-obras/art-124-alteracao-contratual-obra/"
+      ],
+      "notes": "Scope change is the aditivo family.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "sinapi_referenciais",
+      "disposition": "CONSOLIDATE",
+      "canonical": "/auditoria-orcamento-licitacao/",
+      "supporting": [],
+      "notes": "No distinct SINAPI utility. Defer new URL.",
+      "refresh_owner": "CONFENGE editorial"
+    },
+    {
+      "intent": "diagnostico_factual",
+      "disposition": "IMPROVE",
+      "canonical": "/ferramentas/diagnostico-defesa-margem/",
+      "supporting": [
+        "/defesa-margem-contratos-publicos/",
+        "/metodologia-inteligencia/"
+      ],
+      "notes": "Money asset. Indexable after 1.0 cleared 0.45.",
+      "refresh_owner": "CONFENGE editorial + extra-cli export-margin"
+    }
+  ]
+}

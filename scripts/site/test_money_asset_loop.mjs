@@ -59,11 +59,16 @@ const indexability = JSON.parse(
   const utilityIdx = pageHtml.indexOf("id=\"identificacao\"");
   const ctaIdx = pageHtml.indexOf("id=\"segunda-leitura\"");
   if (utilityIdx < 0 || ctaIdx < 0 || utilityIdx > ctaIdx) fail("utility_before_cta", { utilityIdx, ctaIdx });
-  if (!pageHtml.includes('content="noindex,follow"')) fail("noindex_missing");
-  if (sitemap.includes("diagnostico-defesa-margem")) fail("sitemap_must_omit_while_not_indexable");
-  if (indexability.gate.indexable === true) fail("gate_unexpectedly_indexable", indexability.gate);
-  if (indexability.html_noindex !== true || indexability.in_sitemap !== false) {
-    fail("indexability_inconsistent", indexability);
+  const indexable = indexability.gate && indexability.gate.indexable === true;
+  if (indexable) {
+    if (pageHtml.includes("noindex")) fail("noindex_must_drop_when_gate_passes", indexability.gate);
+    if (!sitemap.includes("https://confenge.com.br/ferramentas/diagnostico-defesa-margem/")) fail("sitemap_must_include_when_indexable");
+    if (indexability.html_noindex !== false || indexability.in_sitemap !== true) fail("indexability_inconsistent", indexability);
+    if (indexability.inputs.min_score !== 55 || Number(indexability.inputs.data_confidence) < 0.45) fail("gate_floors_changed", indexability.inputs);
+  } else {
+    if (!pageHtml.includes('content="noindex,follow"')) fail("noindex_missing");
+    if (sitemap.includes("diagnostico-defesa-margem")) fail("sitemap_must_omit_while_not_indexable");
+    if (indexability.html_noindex !== true || indexability.in_sitemap !== false) fail("indexability_inconsistent", indexability);
   }
   if (!pageHtml.includes("Quero uma segunda leitura deste contrato")) fail("cta_copy");
   if (!pageHtml.includes('rel="canonical"') || !pageHtml.includes("diagnostico-defesa-margem")) {
@@ -286,8 +291,8 @@ function moneyPayload(extra = {}) {
     landing_page: "/ferramentas/diagnostico-defesa-margem/",
     asset_id: "diagnostico-defesa-margem",
     route_family: "defesa-margem-diagnostico",
-    public_contract_id: "01619104000141-1-000123/2026",
-    public_id_slug: "qc-caixa-dagua-2026",
+    public_contract_id: "83102277000152-2-000626/2026",
+    public_id_slug: "md-8569b618",
     cta_id: "segunda-leitura-contrato",
     mensagem: extra.mensagem || "PII_MUST_NOT_LEAK",
     ...extra,
@@ -311,16 +316,16 @@ const hidden = [
 const fields = {
   "lookup-status": makeEl({ id: "lookup-status" }),
   lookup: makeEl({ id: "lookup", tagName: "FORM" }),
-  qid: makeEl({ id: "qid", name: "q", value: "01619104000141-1-000123/2026" }),
+  qid: makeEl({ id: "qid", name: "q", value: "83102277000152-2-000626/2026" }),
   "public-contract-id": makeEl({
     id: "public-contract-id",
     name: "public_contract_id",
-    value: "01619104000141-1-000123/2026",
+    value: "83102277000152-2-000626/2026",
   }),
   "public-id-slug": makeEl({
     id: "public-id-slug",
     name: "public_id_slug",
-    value: "qc-caixa-dagua-2026",
+    value: "md-8569b618",
   }),
   "out-identificacao": makeEl({ id: "out-identificacao" }),
   "out-resumo": makeEl({ id: "out-resumo" }),
@@ -631,10 +636,10 @@ const collectBatch = await collect.handler({
   body: JSON.stringify({
     events: [
       { event: "asset_view", props: { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico", nome: "Maria Costa", email: "maria.costa@construtora-norte.com.br" }, path: "/ferramentas/diagnostico-defesa-margem/" },
-      { event: "contract_analyzed", props: { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico", public_id_slug: "qc-caixa-dagua-2026" }, path: "/ferramentas/diagnostico-defesa-margem/" },
+      { event: "contract_analyzed", props: { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico", public_id_slug: "md-8569b618" }, path: "/ferramentas/diagnostico-defesa-margem/" },
       { event: "cta_view", props: { asset_id: "diagnostico-defesa-margem", cta_id: "segunda-leitura-contrato" }, path: "/ferramentas/diagnostico-defesa-margem/" },
       { event: "cta_click", props: { asset_id: "diagnostico-defesa-margem", cta_id: "segunda-leitura-contrato" }, path: "/ferramentas/diagnostico-defesa-margem/" },
-      { event: "lead_created", props: { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico", public_id_slug: "qc-caixa-dagua-2026" }, path: "/ferramentas/diagnostico-defesa-margem/" },
+      { event: "lead_created", props: { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico", public_id_slug: "md-8569b618" }, path: "/ferramentas/diagnostico-defesa-margem/" },
     ],
   }),
 });

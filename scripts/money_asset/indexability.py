@@ -21,8 +21,8 @@ const { readFileSync } = require("fs");
 const { resolve } = require("path");
 const root = process.cwd();
 const { diagnoseMargin, evaluateIndexability, diagnoseProducerBlock } = require(resolve(root, "assets/js/diagnose-margin.cjs"));
-const snap = JSON.parse(readFileSync(resolve(root, "data/extra-cli/public-read-v1/contracts-margin-snapshot.json"), "utf8"));
-const d = diagnoseMargin(snap.records[0]);
+const snap = JSON.parse(readFileSync(resolve(root, "data/extra-cli/public-read-margin-defense/1.0/margem-export.json"), "utf8"));
+const d = diagnoseMargin(snap.records[0], snap);
 const inputs = evaluateIndexability(d, { sample_size: 1 });
 process.stdout.write(JSON.stringify({
   diagnosis: d,

@@ -1,0 +1,14 @@
+{
+  "schema": "public-read-margin-defense/1.0",
+  "contract_version": "v1.0.0",
+  "producer": "extra-cli",
+  "producer_sha": "d8bb521e8cb49d96c9c3ecfe87a4588242d16699",
+  "producer_pr": "https://github.com/tjsasakifln/extra-cli/pull/406",
+  "export_entrypoint": "python3 -m scripts.public_read export-margin --payload select-payload.json --out DIR",
+  "content_hash": "b46ec394df0da1a269d6b6aee180779dac60c89e880cea32b9200a0574e0e113",
+  "file_sha256": "e182c0d4b1468e381ded89c359ffef8738f3f6743f6aceeeb86bdd1f2a68d157",
+  "record_count": 16,
+  "as_of": "2026-08-14T11:27:51+02:00",
+  "source_family": "pncp_supplier_contracts",
+  "mode": "SELECT-only"
+}
