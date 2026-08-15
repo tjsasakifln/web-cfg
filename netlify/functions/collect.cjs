@@ -4,6 +4,8 @@
  * Optional forward to Plausible events API when PLAUSIBLE_DOMAIN + PLAUSIBLE_API_URL set.
  */
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const { corsHeaders, clientIp, safeLog, ALLOWED_ORIGINS } = require("./lib/lead-core.cjs");
 
 const MAX_EVENTS = 25;
@@ -103,6 +105,23 @@ const recent = [];
 function pushRecent(ev) {
   recent.push(ev);
   if (recent.length > 200) recent.shift();
+}
+
+/** Local/dev durable sample when LEAD_STORE_DIR is set (same dir as FileStore). */
+function persistAnalyticsLocal(accepted) {
+  const dir = process.env.LEAD_STORE_DIR;
+  if (!dir || !accepted.length) return;
+  try {
+    const day = new Date().toISOString().slice(0, 10);
+    const dest = path.join(dir, "analytics", "events", day);
+    fs.mkdirSync(dest, { recursive: true });
+    const key = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}.json`;
+    fs.writeFileSync(path.join(dest, key), JSON.stringify({ events: accepted }), "utf8");
+  } catch (err) {
+    safeLog("warn", "analytics_local_store_skip", {
+      reason: err && err.message ? String(err.message).slice(0, 80) : "skip",
+    });
+  }
 }
 
 exports.handler = async (event) => {
@@ -216,6 +235,8 @@ exports.handler = async (event) => {
       }
     }
   }
+
+  persistAnalyticsLocal(accepted);
 
   // Best-effort durable sample store
   if (accepted.length && process.env.LEAD_STORE !== "memory") {

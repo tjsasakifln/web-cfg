@@ -18,6 +18,17 @@ const FUNNEL_EVENTS = [
   "web_vital",
 ];
 
+const MONEY_ASSET_ID = "diagnostico-defesa-margem";
+const MONEY_ASSET_ROUTE = "defesa-margem-diagnostico";
+const MONEY_ASSET_PATH = "/ferramentas/diagnostico-defesa-margem";
+const MONEY_ASSET_EVENT_NAMES = [
+  "asset_view",
+  "contract_analyzed",
+  "cta_view",
+  "cta_click",
+  "lead_created",
+];
+
 function dayKey(iso) {
   return String(iso || new Date().toISOString()).slice(0, 10);
 }
@@ -101,6 +112,9 @@ function aggregateEvents(events) {
       pr.cta_click += 1;
       const cta = String(props.cta_id || props.position || "unknown").slice(0, 80);
       ctas.set(cta, (ctas.get(cta) || 0) + 1);
+    }
+    if (MONEY_ASSET_EVENT_NAMES.includes(name) && isMoneyAssetEvent(ev)) {
+      pr[name] = (pr[name] || 0) + 1;
     }
     if (name === "whatsapp_click") {
       dayRow.whatsapp_clicks += 1;
@@ -242,11 +256,88 @@ function attributeLeads(leads, events) {
   return rows;
 }
 
+function isMoneyAssetEvent(ev) {
+  const props = (ev && ev.props) || {};
+  const asset = String(props.asset_id || "");
+  const route = String(props.route_family || "");
+  const path = String((ev && ev.path) || props.page_path || "");
+  return (
+    asset === MONEY_ASSET_ID ||
+    route === MONEY_ASSET_ROUTE ||
+    path.includes(MONEY_ASSET_PATH)
+  );
+}
+
+function isMoneyAssetLead(lead) {
+  if (!lead || typeof lead !== "object") return false;
+  const landing = String(lead.landing_page || lead.origem || "");
+  return (
+    lead.asset_id === MONEY_ASSET_ID ||
+    lead.route_family === MONEY_ASSET_ROUTE ||
+    landing.includes(MONEY_ASSET_PATH)
+  );
+}
+
+/**
+ * Operational chain for Diagnóstico de Defesa de Margem.
+ * Event counts from collect; handoff counts from persisted leads.
+ * Never includes nome/email/telefone/mensagem.
+ */
+function summarizeMoneyAssetLoop(events, leads) {
+  const event_counters = {
+    asset_view: 0,
+    contract_analyzed: 0,
+    cta_view: 0,
+    cta_click: 0,
+    lead_created: 0,
+  };
+  for (const ev of events || []) {
+    const name = String(ev && ev.event || "");
+    if (!(name in event_counters)) continue;
+    if (isMoneyAssetEvent(ev)) event_counters[name] += 1;
+  }
+
+  const handoff = {
+    delivered: 0,
+    blocked: 0,
+    pending: 0,
+    retryable: 0,
+    skipped: 0,
+    dead: 0,
+  };
+  let persisted = 0;
+  for (const lead of leads || []) {
+    if (!isMoneyAssetLead(lead)) continue;
+    persisted += 1;
+    const status = String((lead.handoff && lead.handoff.status) || "").toUpperCase();
+    if (status === "DELIVERED") handoff.delivered += 1;
+    else if (status === "BLOCKED") handoff.blocked += 1;
+    else if (status === "PENDING") handoff.pending += 1;
+    else if (status === "RETRYABLE") handoff.retryable += 1;
+    else if (status === "SKIPPED") handoff.skipped += 1;
+    else if (status === "DEAD") handoff.dead += 1;
+  }
+
+  return {
+    asset_id: MONEY_ASSET_ID,
+    route_family: MONEY_ASSET_ROUTE,
+    events: event_counters,
+    lead_created_persisted: persisted,
+    handoff,
+  };
+}
+
 module.exports = {
   FUNNEL_EVENTS,
+  MONEY_ASSET_ID,
+  MONEY_ASSET_ROUTE,
+  MONEY_ASSET_EVENT_NAMES,
   dayKey,
   weekKey,
   aggregateEvents,
   attributeLeads,
   summarizeVitals,
+  isMoneyAssetEvent,
+  isMoneyAssetLead,
+  summarizeMoneyAssetLoop,
 };

@@ -13,6 +13,7 @@ PAGES = [
     ROOT / "diagnostico-b2g-360" / "index.html",
     ROOT / "bid-room-licitacoes-obras" / "index.html",
     ROOT / "defesa-margem-contratos-publicos" / "index.html",
+    ROOT / "ferramentas" / "diagnostico-defesa-margem" / "index.html",
 ]
 
 
@@ -27,18 +28,20 @@ def check_page(path: Path) -> list[str]:
         errors.append("missing main landmark")
     if 'id="conteudo"' not in html:
         errors.append("missing #conteudo")
-    # form labels if form present
-    if "<form" in html:
+    # Home contact form fields are only required on the site home page.
+    if path == ROOT / "index.html":
         for field in ("nome", "empresa", "email", "estagio", "urgencia", "mensagem"):
             if f'for="{field}"' not in html and f'id="{field}"' not in html:
-                # only required on home contact
-                if path.name == "index.html":
-                    errors.append(f"form field labeling: {field}")
-    if path.name == "index.html":
+                errors.append(f"form field labeling: {field}")
         if not re.search(r"<h1[\s>]", html):
             errors.append("missing h1")
         if "aria-label" not in html:
             errors.append("expected some aria-labels")
+    elif "<form" in html:
+        if 'id="nome"' in html and f'for="nome"' not in html:
+            errors.append("form field labeling: nome")
+        if 'id="email"' in html and f'for="email"' not in html:
+            errors.append("form field labeling: email")
     return errors
 
 

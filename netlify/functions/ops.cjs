@@ -45,7 +45,7 @@ const {
   isCommercialReal,
   normalizeKind,
 } = require("./lib/record-kind.cjs");
-const { aggregateEvents, attributeLeads } = require("./lib/analytics-agg.cjs");
+const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require("./lib/analytics-agg.cjs");
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
 const {
   drainPendingHandoffs,
@@ -189,7 +189,36 @@ async function listLeads(store) {
   return [];
 }
 
+function loadLocalAnalytics() {
+  const dir = process.env.LEAD_STORE_DIR;
+  if (!dir) return [];
+  const rootDir = path.join(dir, "analytics", "events");
+  if (!fs.existsSync(rootDir)) return [];
+  const events = [];
+  for (let i = 0; i < 14; i++) {
+    const day = new Date(Date.now() - i * 864e5).toISOString().slice(0, 10);
+    const dayDir = path.join(rootDir, day);
+    let names = [];
+    try {
+      names = fs.readdirSync(dayDir);
+    } catch {
+      continue;
+    }
+    for (const name of names.slice(0, 200)) {
+      if (!name.endsWith(".json")) continue;
+      try {
+        const data = JSON.parse(fs.readFileSync(path.join(dayDir, name), "utf8"));
+        if (data && Array.isArray(data.events)) events.push(...data.events);
+      } catch {
+        /* skip file */
+      }
+    }
+  }
+  return events;
+}
+
 async function loadRecentAnalytics(event) {
+  const events = loadLocalAnalytics();
   try {
     bindBlobs(event);
     const { getStore } = require("@netlify/blobs");
@@ -203,7 +232,6 @@ async function loadRecentAnalytics(event) {
       siteID && token
         ? getStore({ name: "confenge-analytics", siteID, token })
         : getStore({ name: "confenge-analytics" });
-    const events = [];
     if (typeof store.list === "function") {
       // last ~14 days prefixes
       const days = [];
@@ -233,7 +261,7 @@ async function loadRecentAnalytics(event) {
     safeLog("warn", "ops_analytics_load_skip", {
       reason: err && err.message ? String(err.message).slice(0, 80) : "skip",
     });
-    return [];
+    return events;
   }
 }
 
@@ -469,17 +497,20 @@ exports.handler = async (event) => {
     const events = await loadRecentAnalytics(event);
     const agg = aggregateEvents(events);
     let attribution = [];
+    let leads = [];
     if (store) {
-      const leads = await listLeads(store);
+      leads = await listLeads(store);
       // Attribution cohorts use real commercial leads only
       attribution = attributeLeads(filterCommercialLeads(leads), events);
     }
+    const money_asset = summarizeMoneyAssetLoop(events, leads);
     return json(
       200,
       {
         ok: true,
         events_loaded: events.length,
         aggregate: agg,
+        money_asset,
         attribution_cohorts: attribution,
         note: agg.attribution_note,
       },
@@ -716,11 +747,14 @@ exports.handler = async (event) => {
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const leads = await listLeads(store);
     const counters = summarizeHandoffs(leads);
+    const events = await loadRecentAnalytics(event);
+    const money_asset = summarizeMoneyAssetLoop(events, leads);
     return json(
       200,
       {
         ok: true,
         counters,
+        money_asset,
         ts: new Date().toISOString(),
         note: "Operational counters only. No PII. Warmbly auto-send is not controlled here.",
       },
