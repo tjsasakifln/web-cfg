@@ -26,6 +26,10 @@ netlify api listSiteDeploys --data '{"site_id":"<SITE_ID>"}'
 netlify api restoreSiteDeploy --data '{"site_id":"<SITE_ID>","deploy_id":"<DEPLOY_ID>"}'
 ```
 
+## Warmbly inbound (sem rollback de site)
+
+Para desligar só o handoff comercial: remover `CONFENGE_INBOUND_WEBHOOK_URL` / `CONFENGE_INBOUND_WEBHOOK_SECRET` no painel. A captura local continua. Não redirecionar `OPS_WEBHOOK_URL` para `/api/v1/webhooks/confenge/inbound`.
+
 ## Limites
 
 - Funções e env vars: rollback de assets não reverte secrets do painel.

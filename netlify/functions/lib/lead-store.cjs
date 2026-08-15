@@ -124,6 +124,21 @@ class FileStore {
     }
     return true;
   }
+  async list() {
+    const out = [];
+    let names = [];
+    try {
+      names = fs.readdirSync(this.dir);
+    } catch {
+      return out;
+    }
+    for (const name of names) {
+      if (!name.endsWith(".json") || name.startsWith(".")) continue;
+      const rec = await this.get(name.replace(/\.json$/, ""));
+      if (rec && rec.lead_id) out.push(rec);
+    }
+    return out;
+  }
 }
 
 class NetlifyBlobsStore {
@@ -567,6 +582,9 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     route_family: lead.route_family || null,
     public_contract_id: lead.public_contract_id || null,
     public_entity_id: lead.public_entity_id || null,
+    public_id_slug: lead.public_id_slug || null,
+    correlation_id: lead.correlation_id || null,
+    cnpj: lead.cnpj || null,
     source: "CONFENGE_WEB",
     idempotency_key: lead.idempotency_key,
     ip_hash,

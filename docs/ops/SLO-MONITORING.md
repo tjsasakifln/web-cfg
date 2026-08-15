@@ -10,6 +10,7 @@
 | Taxa sucesso persistência | 100% dos 201 | contrato da API |
 | Taxa entrega notify (quando configurado) | ≥ 95% | delivery.status |
 | Taxa entrega e-mail (quando configurado) | ≥ 95% | Resend dashboard |
+| Handoff inbound (quando URL+secret) | pending → delivered; DEAD/BLOCKED alertáveis | `ops?action=inbound_handoff` |
 | Tempo detecção incidente site | ≤ 15 min | alerta uptime |
 | Tempo resposta incidente P1 | ≤ 4 h úteis | processo ops |
 

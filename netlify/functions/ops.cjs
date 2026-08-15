@@ -21,6 +21,8 @@
  *   GET  gsc_insights        (auth required)
  *   POST backfill_record_kind { dry_run?, apply_ids? }
  *   POST rollback_record_kind { snapshot_id }
+ *   GET  inbound_handoff
+ *   POST drain_inbound
  */
 const crypto = require("crypto");
 const fs = require("fs");
@@ -45,6 +47,10 @@ const {
 } = require("./lib/record-kind.cjs");
 const { aggregateEvents, attributeLeads } = require("./lib/analytics-agg.cjs");
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
+const {
+  drainPendingHandoffs,
+  summarizeHandoffs,
+} = require("./lib/inbound-handoff.cjs");
 
 /** Simple per-IP rate limit for authenticated ops (in-memory, best-effort). */
 const _opsHits = new Map();
@@ -704,6 +710,36 @@ exports.handler = async (event) => {
       restored += 1;
     }
     return json(200, { ok: true, restored, snapshot_id }, origin);
+  }
+
+  if (action === "inbound_handoff" && event.httpMethod === "GET") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const leads = await listLeads(store);
+    const counters = summarizeHandoffs(leads);
+    return json(
+      200,
+      {
+        ok: true,
+        counters,
+        ts: new Date().toISOString(),
+        note: "Operational counters only. No PII. Warmbly auto-send is not controlled here.",
+      },
+      origin
+    );
+  }
+
+  if (action === "drain_inbound" && event.httpMethod === "POST") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const body = parseBody(event) || {};
+    const limit = Math.min(50, Math.max(1, Number(body.limit || 20)));
+    const result = await drainPendingHandoffs(store, { limit });
+    safeLog("info", "ops_drain_inbound", {
+      attempted: result.attempted,
+      delivered: result.delivered,
+      retryable: result.retryable,
+      dead: result.dead,
+    });
+    return json(200, { ok: true, ...result }, origin);
   }
 
   // prevent unused import lint in some bundlers

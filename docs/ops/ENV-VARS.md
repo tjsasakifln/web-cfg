@@ -6,9 +6,14 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 
 | Nome | Obrigatória | Descrição |
 | --- | --- | --- |
-| `OPS_WEBHOOK_URL` | recomendada | URL HTTPS autenticada para notificação ops |
+| `OPS_WEBHOOK_URL` | recomendada | URL HTTPS autenticada para notificação ops (Slack-style `confenge.lead`; **not** Warmbly inbound) |
 | `OPS_WEBHOOK_SECRET` | recomendada | HMAC SHA-256 do body (`X-Confenge-Signature`) |
 | `OPS_WEBHOOK_BEARER` | opcional | Bearer token alternativo/adicional |
+| `CONFENGE_INBOUND_WEBHOOK_URL` | para INBOUND NOW | HTTPS `…/api/v1/webhooks/confenge/inbound`. Fail-closed sem HTTPS em staging/prod. Sem PII na query. |
+| `CONFENGE_INBOUND_WEBHOOK_SECRET` | com inbound URL | Segredo HMAC compartilhado com Warmbly (`X-Warmbly-Signature`). Somente server env. |
+| `CONFENGE_INBOUND_ALLOWED_HOSTS` | recomendada em prod | Allowlist de hosts (vírgula). Vazio + URL HTTPS válida é aceito. |
+| `CONFENGE_INBOUND_MAX_ATTEMPTS` | opcional | Default 8. Depois `DEAD`. |
+| `CONFENGE_INBOUND_TIMEOUT_MS` | opcional | Default 8000 |
 | `RESEND_API_KEY` | para e-mail real | API key Resend |
 | `LEAD_FROM_EMAIL` | para e-mail | Remetente, ex. `CONFENGE Leads <leads@confenge.com.br>` |
 | `LEAD_NOTIFY_EMAIL` | para e-mail | Destino ops, ex. `tiago.sasaki@confenge.com.br` |

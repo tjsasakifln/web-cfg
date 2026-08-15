@@ -23,6 +23,8 @@ delete process.env.NTFY_TOPIC;
 delete process.env.FORMSUBMIT_URL;
 delete process.env.RESEND_API_KEY;
 delete process.env.OPS_WEBHOOK_URL;
+delete process.env.CONFENGE_INBOUND_WEBHOOK_URL;
+delete process.env.CONFENGE_INBOUND_WEBHOOK_SECRET;
 delete process.env.TURNSTILE_SECRET_KEY;
 delete process.env.LEAD_REQUIRE_TURNSTILE;
 
