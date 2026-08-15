@@ -369,10 +369,17 @@ def render_page(page: dict[str, Any]) -> str:
     if faq_ld:
         graph.append(faq_ld)
 
+    published_span = ""
+    if published and published != modified:
+        published_span = (
+            f'<span>Publicado em <time datetime="{e(published)}">{e(format_date_br(published))}</time></span>'
+            f'<span aria-hidden="true">·</span>'
+        )
     meta_line = (
         f'<p class="article-meta-line">'
         f'<span>{e(author_name)}</span>'
         f'<span aria-hidden="true">·</span>'
+        f"{published_span}"
         f'<span>Atualizado em <time datetime="{e(modified)}">{e(format_date_br(modified))}</time></span>'
         f"</p>"
     )

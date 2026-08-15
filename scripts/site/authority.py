@@ -356,7 +356,7 @@ def has_material_legal_claim(html: str, surface: str | None = None) -> bool:
         return True
     return bool(
         re.search(
-            r"(lei\s*n[ºo°]?\s*14\.?133|art\.\s*\d+|s[uú]mula|jurisprud[eê]ncia)",
+            r"(lei\s*(?:n[ºo°]?\s*)?14\.?133|art\.\s*\d+|s[uú]mula|jurisprud[eê]ncia)",
             blob,
         )
     )

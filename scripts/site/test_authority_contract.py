@@ -28,7 +28,9 @@ from scripts.site.authority import (  # noqa: E402
     chrome_pages,
     classify_surface,
     extract_jsonld_blocks,
+    extract_visible_authority,
     footer_authority_nav,
+    has_material_legal_claim,
     load_governance,
     load_matrix,
     load_signals_baseline,
@@ -114,6 +116,23 @@ def test_fail_closed_reviewer_absent_when_legal_claim():
     assert "reviewer_absent" not in check_required_slots(html_ok, "conteudo_tecnico")
 
 
+def test_fail_closed_reviewer_absent_when_lei_14133_without_numero_or_artigo():
+    """Site copy often says 'Lei 14.133' with neither nº nor art. Still a legal claim."""
+    html = _fixture(
+        "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
+        "<time datetime='2026-08-15'>15 de agosto de 2026</time>"
+        "<h1>Limite de aditivo na Lei 14.133</h1>"
+        "<p>O teto de 25% e 50% na Lei 14.133 limita o saldo.</p>"
+        "<p>Limitação: não é parecer jurídico.</p>"
+        "<a href='/correcoes/'>Correções</a>"
+    )
+    assert "art." not in html.lower()
+    assert "nº" not in html and "n°" not in html
+    assert has_material_legal_claim(html) is True
+    errors = check_required_slots(html, "conteudo_tecnico")
+    assert "reviewer_absent" in errors
+
+
 def test_fail_closed_schema_diverges_from_visible():
     html = _fixture(
         "<p>Autor visível: Engº Tiago Sasaki</p><time datetime='2026-08-01'>1 de agosto de 2026</time>",
@@ -193,6 +212,26 @@ def test_real_pages_pass_surface_gates_and_schema_mirror():
         assert "Review" not in html or "não é" in html.lower()
         assert "AggregateRating" not in html
         assert "ratingValue" not in html
+
+
+def test_lei_14133_page_schema_mirrors_visible_published_date():
+    path = ROOT / "lei-14133-obras" / "limite-25-50-aditivo-obra" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    errors = check_schema_mirrors_visible(html)
+    assert not errors, errors
+    visible = extract_visible_authority(html)
+    assert "2026-08-02" in visible["dates"]
+    assert "2026-08-04" in visible["dates"]
+    assert "publicado em" in visible["norm"]
+
+
+def test_conteudos_lei_14133_guide_triggers_reviewer_slot():
+    path = ROOT / "conteudos" / "limite-aditivo-25-50-obra-publica" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    assert has_material_legal_claim(html) is True
+    errors = check_required_slots(html, "conteudo_tecnico")
+    assert "reviewer_absent" not in errors
+    assert not errors, errors
 
 
 def test_specialist_credentials_are_subset_of_public_verified_proof():
