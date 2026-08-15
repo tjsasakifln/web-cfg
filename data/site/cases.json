@@ -1,6 +1,32 @@
 {
-  "schema_version": "1.0.0",
-  "updated_at": "2026-08-01",
+  "schema_version": "1.1.0",
+  "updated_at": "2026-08-15",
   "cases": [],
-  "notes": "Nenhum case APPROVED. Seção pública deve usar indicadores mensuráveis, não resultados inventados."
+  "notes": "Nenhum case APPROVED. Seção pública deve usar indicadores mensuráveis, não resultados inventados. Páginas /casos/ são demonstrativos hipotéticos, não clientes.",
+  "permission_classes": [
+    "demonstrativo",
+    "consented",
+    "confidential",
+    "redacted"
+  ],
+  "published_surfaces": [
+    {
+      "path": "/casos/",
+      "permission_class": "demonstrativo",
+      "client_authorized": false,
+      "public_status": "DEMONSTRATIVE"
+    },
+    {
+      "path": "/casos/aditivo-art125-demonstrativo/",
+      "permission_class": "demonstrativo",
+      "client_authorized": false,
+      "public_status": "DEMONSTRATIVE"
+    },
+    {
+      "path": "/casos/medicao-glosa-demonstrativo/",
+      "permission_class": "demonstrativo",
+      "client_authorized": false,
+      "public_status": "DEMONSTRATIVE"
+    }
+  ]
 }

@@ -23,6 +23,30 @@ except Exception:  # noqa: BLE001 ,  keep pSEO build resilient
     _org_description = None  # type: ignore[assignment]
     _footer_blurb = None  # type: ignore[assignment]
 
+try:
+    from scripts.site.authority import footer_authority_nav as _footer_authority_nav
+except Exception:  # noqa: BLE001
+    _footer_authority_nav = None  # type: ignore[assignment]
+
+_FOOTER_AUTHORITY_FALLBACK = (
+    '<nav class="footer-authority" aria-label="Autoridade e políticas">'
+    '<a href="/politica-editorial/">Política editorial</a>'
+    '<a href="/correcoes/">Correções</a>'
+    '<a href="/uso-de-ia/">Uso de IA</a>'
+    '<a href="/conflitos/">Conflitos</a>'
+    '<a href="/privacidade/">Privacidade</a>'
+    "</nav>"
+)
+
+
+def _authority_nav() -> str:
+    if _footer_authority_nav is None:
+        return _FOOTER_AUTHORITY_FALLBACK
+    try:
+        return _footer_authority_nav() or _FOOTER_AUTHORITY_FALLBACK
+    except Exception:  # noqa: BLE001
+        return _FOOTER_AUTHORITY_FALLBACK
+
 SITE = "https://confenge.com.br"
 WA_BASE = "https://wa.me/5548988344559"
 
@@ -150,9 +174,9 @@ def _build_footer() -> str:
 <div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>{html.escape(blurb)}</p></div>
 <div class="footer-links"><strong>Ofertas</strong>{offer_links}</div>
 <div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
-<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="/metodologia-inteligencia/">Metodologia</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
 </div>
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span>{_authority_nav()}</div>
 </footer>"""
 
 
