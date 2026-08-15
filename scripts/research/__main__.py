@@ -15,6 +15,7 @@ from scripts.research.pack import (
     validate_pack,
     write_pack,
 )
+from scripts.research.read_model import ReadModelError, load_research_read_model
 from scripts.research.render import render_all
 from scripts.research.snapshot import SnapshotError, load_snapshot
 
@@ -23,9 +24,15 @@ def _root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def _load_export(args: argparse.Namespace):
+    if getattr(args, "read_model", None):
+        return load_research_read_model(Path(args.read_model))
+    return load_research_read_model()
+
+
 def cmd_build(args: argparse.Namespace) -> int:
     snapshot = load_snapshot(Path(args.snapshot) if args.snapshot else None)
-    pack = build_pack(snapshot)
+    pack = build_pack(snapshot, read_model=_load_export(args))
     out_dir = Path(args.out) if args.out else _root() / DEFAULT_OUT_DIR
     path = write_pack(pack, out_dir)
     artifacts = {}
@@ -39,6 +46,10 @@ def cmd_build(args: argparse.Namespace) -> int:
                 "dataset_hash": pack["dataset_hash"],
                 "data_as_of": pack["data_as_of"],
                 "verdict": pack["verdict"],
+                "extra_cli_public_read_export_consumed": pack["reproducibility"][
+                    "extra_cli_public_read_export_consumed"
+                ],
+                "national_claim_gate": pack.get("national_claim_gate"),
                 "questions": len(pack["questions"]),
                 "charts": len(pack["charts"]),
                 "artifacts": {key: str(value) for key, value in artifacts.items()},
@@ -55,7 +66,10 @@ def cmd_validate(args: argparse.Namespace) -> int:
     if args.pack:
         pack = json.loads(Path(args.pack).read_text(encoding="utf-8"))
     else:
-        pack = build_pack(load_snapshot(Path(args.snapshot) if args.snapshot else None))
+        pack = build_pack(
+            load_snapshot(Path(args.snapshot) if args.snapshot else None),
+            read_model=_load_export(args),
+        )
     validate_pack(pack)
     print(
         json.dumps(
@@ -64,6 +78,10 @@ def cmd_validate(args: argparse.Namespace) -> int:
                 "dataset_hash": pack["dataset_hash"],
                 "data_as_of": pack["data_as_of"],
                 "verdict": pack["verdict"],
+                "extra_cli_public_read_export_consumed": pack["reproducibility"][
+                    "extra_cli_public_read_export_consumed"
+                ],
+                "national_claim_gate": pack.get("national_claim_gate"),
                 "observable": observable_metric_values(pack),
             },
             ensure_ascii=False,
@@ -79,6 +97,10 @@ def main(argv: list[str] | None = None) -> int:
 
     build = sub.add_parser("build", help="Emit pack + docs + noindex preview")
     build.add_argument("--snapshot", help="Snapshot directory (default data/pseo)")
+    build.add_argument(
+        "--read-model",
+        help="Path to extra-cli #400 research_aggregate_v1 export",
+    )
     build.add_argument("--out", help="Output directory for pack.json")
     build.add_argument(
         "--pack-only",
@@ -89,13 +111,17 @@ def main(argv: list[str] | None = None) -> int:
 
     validate = sub.add_parser("validate", help="Fail closed on provenance or overclaim")
     validate.add_argument("--snapshot", help="Snapshot directory (default data/pseo)")
+    validate.add_argument(
+        "--read-model",
+        help="Path to extra-cli #400 research_aggregate_v1 export",
+    )
     validate.add_argument("--pack", help="Validate an existing pack.json")
     validate.set_defaults(func=cmd_validate)
 
     args = parser.parse_args(argv)
     try:
         return args.func(args)
-    except (SnapshotError, PackError, OSError, json.JSONDecodeError) as exc:
+    except (SnapshotError, PackError, ReadModelError, OSError, json.JSONDecodeError) as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
         return 1
 

@@ -8,7 +8,9 @@ from pathlib import Path
 from typing import Any
 
 from scripts.research.adversarial import review
+from scripts.research.citation import citation_block
 from scripts.research.claims import validate_claim_gate
+from scripts.research.contract import evaluate_national_claim_gate, next_action_for_gate
 from scripts.research.metrics import (
     WEDGE,
     answer_questions,
@@ -16,7 +18,10 @@ from scripts.research.metrics import (
     decide_verdict,
     published_markets,
 )
+from scripts.research.read_model import load_research_read_model, resolve_edition_source
 from scripts.research.snapshot import load_snapshot
+
+_UNSET = object()
 
 PACK_SCHEMA = "confenge-research-pack-v1"
 DEFAULT_OUT_DIR = Path("data/research/edicao-zero-2026-07-31")
@@ -109,6 +114,8 @@ def _charts(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "pergunta": q1["question"],
             "dados": value_series,
             "unidade": "BRL nominal (contrato integral)",
+            "source": q1.get("source"),
+            "method": q1.get("dedup_logic"),
             "caveat": q1["limitation"],
             "takeaway": (
                 "O valor observado vive em 4 células mercado×UF. "
@@ -120,6 +127,8 @@ def _charts(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "pergunta": "Como se comparam contratos, compradores e fornecedores por mercado?",
             "dados": actor_series,
             "unidade": "contagem",
+            "source": q2.get("source"),
+            "method": q2.get("dedup_logic"),
             "caveat": q2["limitation"],
             "takeaway": (
                 "Compradores e fornecedores são quase 1:1 na maior parte das "
@@ -131,6 +140,8 @@ def _charts(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "pergunta": q7["question"],
             "dados": ticket_series,
             "unidade": "BRL nominal; P25/mediana/P75 da célula de preço (prices.json)",
+            "source": q7.get("source"),
+            "method": q7.get("dedup_logic"),
             "caveat": q7["limitation"],
             "takeaway": (
                 "A mediana de C3 vem de prices.json, população distinta de "
@@ -143,6 +154,8 @@ def _charts(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "pergunta": "Quanto do snapshot publicado chega aos 4 mercados do wedge?",
             "dados": funnel,
             "unidade": "contratos",
+            "source": q1.get("source"),
+            "method": q1.get("dedup_logic"),
             "caveat": q1["limitation"],
             "takeaway": (
                 "A maior parte do snapshot não entra no wedge. Tratar os 4 "
@@ -154,6 +167,8 @@ def _charts(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "pergunta": q4["question"],
             "dados": concentration,
             "unidade": "contratos / fornecedores no órgão publicado",
+            "source": q4.get("source"),
+            "method": q4.get("dedup_logic"),
             "caveat": q4["limitation"],
             "takeaway": (
                 "A única concentração mensurável é um órgão em um dia, com "
@@ -182,6 +197,12 @@ def _findings(questions: list[dict[str, Any]], adversarial: dict[str, Any]) -> l
                 f"em {q1['raw_contracts_loaded']} carregados."
             ),
             "question_id": "Q1",
+            "evidence": {
+                "question_id": "Q1",
+                "anchor": "#Q1",
+                "source": by_id["Q1"].get("source"),
+                "denominator": by_id["Q1"].get("denominator"),
+            },
         },
         {
             "id": "F2",
@@ -195,6 +216,12 @@ def _findings(questions: list[dict[str, Any]], adversarial: dict[str, Any]) -> l
                 + ". Identidades nominais dos top buyers estão suprimidas."
             ),
             "question_id": "Q2",
+            "evidence": {
+                "question_id": "Q2",
+                "anchor": "#Q2",
+                "source": by_id["Q2"].get("source"),
+                "denominator": by_id["Q2"].get("denominator"),
+            },
         },
         {
             "id": "F3",
@@ -208,6 +235,12 @@ def _findings(questions: list[dict[str, Any]], adversarial: dict[str, Any]) -> l
                 + "."
             ),
             "question_id": "Q3",
+            "evidence": {
+                "question_id": "Q3",
+                "anchor": "#Q3",
+                "source": by_id["Q3"].get("source"),
+                "denominator": by_id["Q3"].get("denominator"),
+            },
         },
         {
             "id": "F4",
@@ -222,6 +255,12 @@ def _findings(questions: list[dict[str, Any]], adversarial: dict[str, Any]) -> l
                 f"{slice_.get('reajuste_object_count')} objetos rotulados reajuste."
             ),
             "question_id": "Q4",
+            "evidence": {
+                "question_id": "Q4",
+                "anchor": "#Q4",
+                "source": by_id["Q4"].get("source"),
+                "denominator": by_id["Q4"].get("denominator"),
+            },
         },
         {
             "id": "F5",
@@ -241,6 +280,12 @@ def _findings(questions: list[dict[str, Any]], adversarial: dict[str, Any]) -> l
                 + ". Não é preço unitário."
             ),
             "question_id": "Q7",
+            "evidence": {
+                "question_id": "Q7",
+                "anchor": "#Q7",
+                "source": by_id["Q7"].get("source"),
+                "denominator": by_id["Q7"].get("denominator"),
+            },
         },
         {
             "id": "F6",
@@ -250,6 +295,12 @@ def _findings(questions: list[dict[str, Any]], adversarial: dict[str, Any]) -> l
                 + q8["limitation"]
             ),
             "question_id": "Q8",
+            "evidence": {
+                "question_id": "Q8",
+                "anchor": "#Q8",
+                "source": q8.get("source"),
+                "denominator": q8.get("denominator"),
+            },
         },
     ]
     for lens in adversarial.get("lenses") or []:
@@ -277,11 +328,13 @@ def _methodology(snapshot: dict[str, Any]) -> dict[str, Any]:
         "query_versions": manifest.get("query_versions"),
         "classifier": (snapshot.get("icp_methodology") or {}).get("classifier"),
         "steps": [
-            "Consumir somente o snapshot versionado em data/pseo (checksums do manifest).",
-            "Não copiar datalake; não executar crawler; não consultar public_read_v1 ao vivo.",
-            "Restringir findings aos 4 mercados publicados + fatia de agência/concorrência.",
+            "Preferir o export versionado extra-cli #400 (research_aggregate_v1) quando presente.",
+            "Se o export #400 estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.",
+            "Não copiar datalake; não executar crawler; não inventar coverage nacional.",
+            "Restringir findings do preview aos 4 mercados publicados + fatia de agência/concorrência.",
             "Tratar national-candidate-inventory como lacuna de cobertura, não como fato publicado.",
             "Responder pergunta só com proveniência completa; senão marcar unsupported.",
+            "Bloquear linguagem de claim quando o denominator não sustentar a afirmação.",
             "Rodar revisão adversarial e o claim-language gate antes de gravar o pack.",
         ],
         "value_semantics": (
@@ -296,15 +349,28 @@ def _methodology(snapshot: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_pack(snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
+def build_pack(
+    snapshot: dict[str, Any] | None = None,
+    *,
+    read_model: Any = _UNSET,
+    now: Any = None,
+) -> dict[str, Any]:
     loaded = snapshot or load_snapshot()
-    questions = answer_questions(loaded)
-    coverage = coverage_block(loaded)
-    adversarial = review(loaded)
-    verdict = decide_verdict(loaded, questions)
+    if read_model is _UNSET:
+        export = load_research_read_model()
+    else:
+        export = read_model
+    gate = evaluate_national_claim_gate(export, now=now)
+    resolved = resolve_edition_source(loaded, export, now=now, gate=gate)
+    edition = resolved["snapshot"]
+    questions = answer_questions(edition)
+    coverage = coverage_block(edition, gate=gate)
+    adversarial = review(edition)
+    verdict = decide_verdict(edition, questions, gate=gate)
     findings = _findings(questions, adversarial)
     charts = _charts(questions)
-    meta = loaded["meta"]
+    meta = edition["meta"]
+    indexable = verdict["verdict"] == "PUBLISH" and gate.passed
     pack = {
         "schema": PACK_SCHEMA,
         "edition": "edicao-zero",
@@ -326,10 +392,11 @@ def build_pack(snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
             "dated_folder_dataset_hash": meta["dated_folder_dataset_hash"],
             "dated_folder_is_live": meta["dated_folder_is_live"],
             "entry_point": "python3 -m scripts.research build",
-            "extra_cli_public_read_export_consumed": meta[
+            "edition_source": resolved["source"],
+            "extra_cli_public_read_export_consumed": resolved[
                 "extra_cli_public_read_export_consumed"
             ],
-            "extra_cli_public_read_note": meta["extra_cli_public_read_note"],
+            "extra_cli_public_read_note": resolved["extra_cli_public_read_note"],
         },
         "coverage": coverage,
         "methodology": _methodology(loaded),
@@ -341,8 +408,8 @@ def build_pack(snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
             "Este pack descreve um recorte de 4 UFs. Não é censo do Brasil.",
             "Mediana não é preço unitário nem faixa nacional de preço praticado.",
             "Inventário-candidato (54k aec_confirmed / 4,4M records available) não é finding.",
-            "public_read_v1 extra-cli não foi consultado; não há export local dessa família.",
-            "Preview, se existir, permanece noindex até quality gate humano.",
+            resolved["extra_cli_public_read_note"],
+            "Preview permanece noindex até extra-cli #400 passar o national claim gate.",
         ],
         "offers": {
             "discrete": True,
@@ -354,21 +421,22 @@ def build_pack(snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
             ),
         },
         "indexation": {
-            "indexable": False,
-            "robots": "noindex,nofollow",
-            "sitemap": False,
-            "reason": "Quality gate humano pendente; verdict != PUBLISH.",
+            "indexable": indexable,
+            "robots": "index,follow" if indexable else "noindex,nofollow",
+            "sitemap": indexable,
+            "reason": (
+                "National claim gate passed; human quality gate still applies."
+                if indexable
+                else "Quality gate extra-cli #400 não passou; verdict != PUBLISH."
+            ),
         },
+        "national_claim_gate": gate.as_dict(),
         "verdict": verdict["verdict"],
         "verdict_reason": verdict["reason"],
-        "next_action": (
-            "Obter um export extra-cli public_read_v1 versionado com cobertura "
-            "nacional documentada (ou ≥12 UFs com denominator explícito e "
-            "completude), regenerar o pack e só então reavaliar PUBLISH. "
-            "Não indexar, não promover sitemap, não disparar imprensa nesta edição."
-        ),
-        "published_market_count": len(published_markets(loaded)),
+        "next_action": next_action_for_gate(gate),
+        "published_market_count": len(published_markets(edition)),
     }
+    pack["citation"] = citation_block(pack, download_present=True)
     return pack
 
 

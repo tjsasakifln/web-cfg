@@ -6,6 +6,8 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 
 - **Pergunta:** Qual o volume e o valor observado de contratos AEC confirmados nos mercados publicados do recorte?
 - **Unidade:** BRL nominal (contrato integral)
+- **Fonte:** data/pseo/markets.json + data/pseo/manifest.json
+- **Método:** Exporter keeps one primary archetype per contract; multi-label objects enter only the primary market cell
 - **Caveat:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência da base canônica de contratos.
 - **Takeaway:** O valor observado vive em 4 células mercado×UF. Somar as células descreve o recorte publicado, não o Brasil.
 - **Dados:**
@@ -39,6 +41,8 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 
 - **Pergunta:** Como se comparam contratos, compradores e fornecedores por mercado?
 - **Unidade:** contagem
+- **Fonte:** data/pseo/markets.json
+- **Método:** buyer identity as ingested (CNPJ8/name); no cross-UF merge
 - **Caveat:** Contagens de compradores são por célula mercado×UF. Identidades nominais dos top buyers estão suprimidas neste snapshot.
 - **Takeaway:** Compradores e fornecedores são quase 1:1 na maior parte das células. Isso é n pequeno, não prova atomização nacional.
 - **Dados:**
@@ -76,6 +80,8 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 
 - **Pergunta:** Qual o tamanho típico do contrato (P25, mediana, P75) por mercado, e o que esse número não significa?
 - **Unidade:** BRL nominal; P25/mediana/P75 da célula de preço (prices.json)
+- **Fonte:** data/pseo/prices.json (percentiles); markets.json only as a distinct comparison population
+- **Método:** one contract instrument per observation; SQLite ORDER BY + OFFSET percentiles
 - **Caveat:** prices.json e markets.json são populações de query distintas. n e percentis divergem nos dois sentidos e não se explica o desvio pelo piso de 5000 BRL (esse piso é critério da célula de preço, não uma prova de que n_preço < n_mercado). Células de preço sem mercado publicado (ex.: manutenção predial) não entram no wedge. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.
 - **Takeaway:** A mediana de C3 vem de prices.json, população distinta de markets.json. É contrato integral, não preço unitário nem faixa nacional de preço praticado.
 - **Dados:**
@@ -117,6 +123,8 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 
 - **Pergunta:** Quanto do snapshot publicado chega aos 4 mercados do wedge?
 - **Unidade:** contratos
+- **Fonte:** data/pseo/markets.json + data/pseo/manifest.json
+- **Método:** Exporter keeps one primary archetype per contract; multi-label objects enter only the primary market cell
 - **Caveat:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência da base canônica de contratos.
 - **Takeaway:** A maior parte do snapshot não entra no wedge. Tratar os 4 mercados como Brasil inverteria o funil.
 - **Dados:**
@@ -142,6 +150,8 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 
 - **Pergunta:** Há concentração mensurável de compradores ou fornecedores no recorte?
 - **Unidade:** contratos / fornecedores no órgão publicado
+- **Fonte:** data/pseo/agencies.json + data/pseo/competition.json
+- **Método:** public export does not split ATA/ordem de serviço/reajuste; each ingested contract row is one count
 - **Caveat:** Concentração só é mensurável na fatia Caxias do Sul / manutenção predial (1 dia civil, 1 órgão, 1 fornecedor dominante). HHI dos 4 mercados publicados é nulo; top buyers estão suprimidos.
 - **Takeaway:** A única concentração mensurável é um órgão em um dia, com reajustes misturados a ordens de serviço.
 - **Dados:**

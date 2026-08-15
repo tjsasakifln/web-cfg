@@ -7,25 +7,37 @@ aparecem quando o status é `unsupported`.
 
 Os 4 mercados publicados somam 48 contratos e 70292373.24 BRL nominais (data_as_of do snapshot). O snapshot classifica 233 contratos aec_confirmed em 11931 carregados.
 
+Evidência: [Q1](#Q1)
+
 ### F2 (answered)
 
 Compradores distintos por mercado publicado: SC pavimentacao=11, PI pavimentacao=6, MG edificacoes=10, RS edificacoes=10. Identidades nominais dos top buyers estão suprimidas.
+
+Evidência: [Q2](#Q2)
 
 ### F3 (answered)
 
 Fornecedores observados por mercado publicado: SC=11, PI=13, MG=11, RS=10.
 
+Evidência: [Q3](#Q3)
+
 ### F4 (partial)
 
 Concentração mensurável só na fatia MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL (RS): 49 contratos, 1 fornecedor(es), top3_share=1.0, período 2026-07-03–2026-07-03. 13 objetos rotulados reajuste.
+
+Evidência: [Q4](#Q4)
 
 ### F5 (answered)
 
 Tickets (piso 5000 BRL, contrato integral): MG Edificações públicas n=15 P25=412900.0 mediana=504997.83 P75=1300000.0; PI Pavimentação e infraestrutura viária n=13 P25=744003.0 mediana=996225.26 P75=1463918.41; RS Edificações públicas n=12 P25=199500.0 mediana=415499.99 P75=1390000.0; SC Pavimentação e infraestrutura viária n=12 P25=224135.0 mediana=345532.53 P75=635000.0. Não é preço unitário.
 
+Evidência: [Q7](#Q7)
+
 ### F6 (unsupported)
 
 Evolução temporal do recorte: não sustentado. Série anual insuficiente: 3 de 4 mercados publicados têm um único ano (pavimentacao-infraestrutura-viaria-sc, pavimentacao-infraestrutura-viaria-pi, edificacoes-publicas-mg). Apenas 1 mercado cruza dois anos civis, com n anual baixo e janelas de poucas semanas. Evolução do recorte: não sustentado.
+
+Evidência: [Q8](#Q8)
 
 
 ## Perguntas

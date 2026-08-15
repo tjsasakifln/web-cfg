@@ -1,0 +1,55 @@
+{
+  "schema": "extra-cli.public_read.research_aggregate.v1",
+  "schema_version": "1.0.0",
+  "consumer": "web-cfg/flagship-research",
+  "producer": "extra-cli",
+  "producer_issue": "tjsasakifln/extra-cli#400",
+  "dataset_hash": "fixture-insufficient-coverage-not-a-live-hash",
+  "data_as_of": "2026-08-01",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "grain": {
+    "keys": ["uf", "archetype_id", "period_start", "period_end"],
+    "unit": "published market cell"
+  },
+  "value_semantics": {
+    "contract_count": "distinct contract instruments; UNKNOWN stays null",
+    "total_value_brl": "nominal BRL of the instrument; not unit price"
+  },
+  "coverage": {
+    "ufs": ["SC", "PI", "MG", "RS"],
+    "uf_count": 4,
+    "period_start": "2026-01-01",
+    "period_end": "2026-07-31",
+    "national_universe_complete": false,
+    "national_denominator": null
+  },
+  "freshness": {
+    "as_of": "2026-08-01",
+    "max_age_days": 30,
+    "stale": false
+  },
+  "provenance": {
+    "tables": ["fixture_only"],
+    "query_versions": {"fixture": "insufficient-coverage"},
+    "method": "synthetic fixture for consumer gate; not a live SELECT",
+    "source_commit_sha": "fixture-insufficient",
+    "source_run_id": "fixture-insufficient-coverage"
+  },
+  "unknowns": {
+    "reason_codes": ["FIXTURE_INSUFFICIENT_COVERAGE"],
+    "suppressed_fields": []
+  },
+  "limitations": [
+    "Synthetic 4-UF fixture. National totals are UNKNOWN.",
+    "Not copied from the extra-cli datalake."
+  ],
+  "series": [
+    {
+      "uf": "SC",
+      "archetype_id": "pavimentacao-infraestrutura-viaria",
+      "contract_count": null,
+      "total_value_brl": null,
+      "reason_codes": ["UNKNOWN"]
+    }
+  ]
+}

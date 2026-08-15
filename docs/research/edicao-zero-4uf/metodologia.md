@@ -11,9 +11,9 @@
 - run: `pseo-20260802T032433Z-47e7e07c`
 - Tabelas de origem do export: pncp_supplier_contracts, pncp_raw_bids, sc_public_entities
 
-`public_read_v1` extra-cli **não** foi consultado. Não há export local dessa
-família. O contrato em extra-cli `docs/contracts/public-read-v1.md` foi lido
-só como documentação.
+Contrato consumidor extra-cli #400: `docs/research/edicao-zero-4uf/consumer-contract-extra-cli-400.md`.
+`extra_cli_public_read_export_consumed`: `False`.
+Nota: No versioned extra-cli #400 research_aggregate_v1 export is present. This pack consumes the web-cfg `data/pseo` snapshot only, as preview.
 
 A pasta `data/pseo/snapshots/pre-national-2026-07-31/` tem
 `dataset_hash` distinto (`137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b`).
@@ -21,11 +21,13 @@ Esta edição usa o snapshot vivo cujo hash está no `manifest.json` atual.
 
 ## Passos
 
-- Consumir somente o snapshot versionado em data/pseo (checksums do manifest).
-- Não copiar datalake; não executar crawler; não consultar public_read_v1 ao vivo.
-- Restringir findings aos 4 mercados publicados + fatia de agência/concorrência.
+- Preferir o export versionado extra-cli #400 (research_aggregate_v1) quando presente.
+- Se o export #400 estiver ausente, ilegível, com cobertura insuficiente ou stale, falhar fechado no snapshot 4-UF como preview.
+- Não copiar datalake; não executar crawler; não inventar coverage nacional.
+- Restringir findings do preview aos 4 mercados publicados + fatia de agência/concorrência.
 - Tratar national-candidate-inventory como lacuna de cobertura, não como fato publicado.
 - Responder pergunta só com proveniência completa; senão marcar unsupported.
+- Bloquear linguagem de claim quando o denominator não sustentar a afirmação.
 - Rodar revisão adversarial e o claim-language gate antes de gravar o pack.
 
 ## Semântica de valor

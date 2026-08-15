@@ -16,6 +16,8 @@
 - [data-quality.md](data-quality.md)
 - [visual-spec.md](visual-spec.md)
 - [distribution.md](distribution.md)
+- [consumer-contract-extra-cli-400.md](consumer-contract-extra-cli-400.md)
 - Machine-readable: `data/research/edicao-zero-2026-07-31/pack.json`
+- Citação pública: `radar/pesquisa/edicao-zero-4uf/edicao-zero-citation.json`
 
-Próxima ação: Obter um export extra-cli public_read_v1 versionado com cobertura nacional documentada (ou ≥12 UFs com denominator explícito e completude), regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa nesta edição.
+Próxima ação: Bloqueio extra-cli #400 (RESEARCH_READ_MODEL_ABSENT). Obter o export versionado `extra-cli.public_read.research_aggregate.v1` com cobertura nacional (27 UFs), denominator explícito e freshness dentro do SLA (30 dias). Regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa.

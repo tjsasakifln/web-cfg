@@ -152,7 +152,15 @@ def test_question_count_and_chart_cap(pack):
     assert 5 <= len(pack["questions"]) <= 8
     assert 1 <= len(pack["charts"]) <= 5
     for chart in pack["charts"]:
-        for field in ("pergunta", "dados", "unidade", "caveat", "takeaway"):
+        for field in (
+            "pergunta",
+            "dados",
+            "unidade",
+            "caveat",
+            "takeaway",
+            "source",
+            "method",
+        ):
             assert chart.get(field), field
 
 
@@ -283,6 +291,13 @@ def test_preview_is_noindex_and_absent_from_sitemaps():
         pytest.skip("preview not generated yet")
     html = preview.read_text(encoding="utf-8")
     assert 'content="noindex,nofollow"' in html
+    assert "Como citar:" in html
+    assert "id=\"metodologia\"" in html or "id='metodologia'" in html
+    assert "dataset_hash" in html
+    assert "evidência Q1" in html
+    assert "<strong>Fonte.</strong>" in html
+    assert "<strong>Método.</strong>" in html
+    assert "DataCatalog" not in html
     needle = "/radar/pesquisa/edicao-zero-4uf/"
     for name in (
         "sitemap.xml",
@@ -294,6 +309,33 @@ def test_preview_is_noindex_and_absent_from_sitemaps():
         path = ROOT / name
         if path.is_file():
             assert needle not in path.read_text(encoding="utf-8")
+
+
+def test_findings_trace_to_questions(pack):
+    question_ids = {item["id"] for item in pack["questions"]}
+    for item in pack["findings"]:
+        if str(item["id"]).startswith("ADV-"):
+            continue
+        assert item.get("question_id") in question_ids
+        assert (item.get("evidence") or {}).get("question_id") == item["question_id"]
+        assert (item.get("evidence") or {}).get("anchor") == f"#{item['question_id']}"
+
+
+def test_citation_block_present(pack):
+    citation = pack["citation"]
+    assert citation["permalink"].endswith("/radar/pesquisa/edicao-zero-4uf/")
+    assert citation["text"]
+    assert pack["dataset_hash"] in citation["text"]
+    assert pack["data_as_of"] in citation["text"]
+    assert "Não descreve o Brasil" in citation["text"]
+    assert citation["download"]["path"].endswith("edicao-zero-citation.json")
+
+
+def test_live_pack_does_not_consume_missing_400(pack):
+    assert pack["reproducibility"]["extra_cli_public_read_export_consumed"] is False
+    assert pack["national_claim_gate"]["passed"] is False
+    assert "RESEARCH_READ_MODEL_ABSENT" in pack["national_claim_gate"]["reason_codes"]
+    assert pack["verdict"] == "NEEDS_DATA"
 
 
 def test_scan_claim_language_helper_on_clean_pack(pack):

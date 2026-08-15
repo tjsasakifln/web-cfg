@@ -7,6 +7,11 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
+from scripts.research.citation import (
+    DOWNLOAD_FILENAME,
+    citation_download_payload,
+    dataset_jsonld,
+)
 from scripts.research.metrics import WEDGE
 
 DOCS_DIR = Path("docs/research/edicao-zero-4uf")
@@ -89,9 +94,9 @@ com proveniência, sobre pavimentação e edificações públicas em SC, PI, MG 
 - run: `{pack['methodology'].get('source_run_id')}`
 - Tabelas de origem do export: {", ".join(pack['methodology'].get('tables') or [])}
 
-`public_read_v1` extra-cli **não** foi consultado. Não há export local dessa
-família. O contrato em extra-cli `docs/contracts/public-read-v1.md` foi lido
-só como documentação.
+Contrato consumidor extra-cli #400: `docs/research/edicao-zero-4uf/consumer-contract-extra-cli-400.md`.
+`extra_cli_public_read_export_consumed`: `{pack['reproducibility'].get('extra_cli_public_read_export_consumed')}`.
+Nota: {pack['reproducibility'].get('extra_cli_public_read_note')}
 
 A pasta `data/pseo/snapshots/pre-national-2026-07-31/` tem
 `dataset_hash` distinto (`{pack['reproducibility'].get('dated_folder_dataset_hash')}`).
@@ -142,7 +147,15 @@ Inventário-candidato (mesmo `dataset_hash`, **não** usado como fato publicado)
     for item in pack["findings"]:
         if str(item["id"]).startswith("ADV-"):
             continue
-        finding_lines.append(f"### {item['id']} ({item['status']})\n\n{item['claim']}\n")
+        evidence = item.get("evidence") or {}
+        evidence_ref = evidence.get("anchor") or (
+            f"#{item.get('question_id')}" if item.get("question_id") else ""
+        )
+        finding_lines.append(
+            f"### {item['id']} ({item['status']})\n\n"
+            f"{item['claim']}\n\n"
+            f"Evidência: [{item.get('question_id') or 'n/d'}]({evidence_ref})\n"
+        )
     findings_md = f"""# Findings
 
 Nenhum finding abaixo afirma cobertura de 27 UFs. Frases sem número só
@@ -184,6 +197,8 @@ coverage gaps, outliers, viés temporal.
             f"### {chart['id']}\n\n"
             f"- **Pergunta:** {chart['pergunta']}\n"
             f"- **Unidade:** {chart['unidade']}\n"
+            f"- **Fonte:** {chart.get('source')}\n"
+            f"- **Método:** {chart.get('method')}\n"
             f"- **Caveat:** {chart['caveat']}\n"
             f"- **Takeaway:** {chart['takeaway']}\n"
             f"- **Dados:**\n\n```json\n"
@@ -291,7 +306,9 @@ Peça citável: `pack.json` + `metodologia.md` + `data-quality.md`.
 - [data-quality.md](data-quality.md)
 - [visual-spec.md](visual-spec.md)
 - [distribution.md](distribution.md)
+- [consumer-contract-extra-cli-400.md](consumer-contract-extra-cli-400.md)
 - Machine-readable: `data/research/edicao-zero-2026-07-31/pack.json`
+- Citação pública: `radar/pesquisa/edicao-zero-4uf/edicao-zero-citation.json`
 
 Próxima ação: {pack['next_action']}
 """
@@ -378,12 +395,43 @@ def render_preview(pack: dict[str, Any]) -> Path:
     root = _root()
     directory = root / PREVIEW_DIR
     directory.mkdir(parents=True, exist_ok=True)
+    download_payload = citation_download_payload(pack)
+    download_path = directory / DOWNLOAD_FILENAME
+    download_path.write_text(
+        json.dumps(download_payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    jsonld = dataset_jsonld(pack, download_present=True)
+    jsonld_tag = (
+        f'<script type="application/ld+json">{json.dumps(jsonld, ensure_ascii=False)}</script>'
+        if jsonld
+        else ""
+    )
+    citation = pack.get("citation") or {}
     q1 = next(item for item in pack["questions"] if item["id"] == "Q1")["value"]
     findings_html = "".join(
-        f"<li><strong>{escape(str(item['id']))}</strong> "
-        f"({escape(str(item['status']))}): {escape(item['claim'])}</li>"
+        (
+            f"<li id=\"finding-{escape(str(item['id']))}\">"
+            f"<strong>{escape(str(item['id']))}</strong> "
+            f"({escape(str(item['status']))}): {escape(item['claim'])} "
+            f"<a href=\"{(item.get('evidence') or {}).get('anchor') or '#' + str(item.get('question_id') or '')}\">"
+            f"evidência {escape(str(item.get('question_id') or ''))}</a></li>"
+        )
         for item in pack["findings"]
         if not str(item["id"]).startswith("ADV-")
+    )
+    questions_html = "".join(
+        (
+            f"<section id=\"{escape(question['id'])}\">"
+            f"<h3>{escape(question['id'])} — {escape(question['theme'])}</h3>"
+            f"<p><strong>Pergunta.</strong> {escape(question['question'])}</p>"
+            f"<p><strong>Status.</strong> {escape(question['status'])}</p>"
+            f"<p><strong>Fonte.</strong> {escape(str(question.get('source') or ''))}</p>"
+            f"<p><strong>Denominator.</strong> {escape(str(question.get('denominator') or ''))}</p>"
+            f"<p><strong>Limitação.</strong> {escape(str(question.get('limitation') or ''))}</p>"
+            "</section>"
+        )
+        for question in pack["questions"]
     )
     charts_html = "".join(
         f"<section id=\"{escape(chart['id'])}\">"
@@ -391,11 +439,14 @@ def render_preview(pack: dict[str, Any]) -> Path:
         f"<p><strong>Pergunta.</strong> {escape(chart['pergunta'])}</p>"
         f"{_chart_table(chart)}"
         f"<p><strong>Unidade.</strong> {escape(chart['unidade'])}</p>"
+        f"<p><strong>Fonte.</strong> {escape(str(chart.get('source') or ''))}</p>"
+        f"<p><strong>Método.</strong> {escape(str(chart.get('method') or ''))}</p>"
         f"<p><strong>Caveat.</strong> {escape(chart['caveat'])}</p>"
         f"<p><strong>Takeaway.</strong> {escape(chart['takeaway'])}</p>"
         "</section>"
         for chart in pack["charts"]
     )
+    robots = pack["indexation"]["robots"]
     html = f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -403,22 +454,24 @@ def render_preview(pack: dict[str, Any]) -> Path:
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>EDIÇÃO ZERO (preview noindex) | CONFENGE</title>
 <meta name="description" content="Preview interno do research pack pré-nacional SC/PI/MG/RS. Sem indexação."/>
-<meta name="robots" content="noindex,nofollow"/>
+<meta name="robots" content="{escape(robots)}"/>
 <link rel="canonical" href="https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/"/>
 <link rel="stylesheet" href="/styles.css"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+{jsonld_tag}
 <style>
 .radar-table {{ width:100%; border-collapse:collapse; font-size:.92rem; margin:1rem 0; }}
 .radar-table th,.radar-table td {{ border:1px solid rgba(15,23,42,.1); padding:.5rem .6rem; text-align:left; }}
 .radar-table th {{ background:#f1f5f9; }}
 .note-box {{ background:#fffbeb; border:1px solid #fcd34d; padding:1rem; border-radius:10px; margin:1rem 0; }}
 .method-box {{ background:#f8fafc; border:1px solid #e2e8f0; padding:1rem 1.15rem; border-radius:10px; margin:1rem 0; }}
+.cite-box {{ background:#eef2ff; border:1px solid #c7d2fe; padding:1rem 1.15rem; border-radius:10px; margin:1rem 0; }}
 </style>
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <main id="conteudo" class="container" style="max-width:900px;padding:2rem 1rem 4rem">
-<p class="eyebrow">Preview interno · noindex · EDIÇÃO ZERO</p>
+<p class="eyebrow">Preview interno · {escape(robots)} · EDIÇÃO ZERO</p>
 <h1>Pavimentação e edificações no recorte pré-nacional (SC, PI, MG, RS)</h1>
 <p class="content-lead">
 Research pack factual. {q1['published_market_contract_count']} contratos e
@@ -428,15 +481,25 @@ Não descreve o Brasil.
 <div class="note-box">
 <p><strong>Veredito:</strong> {escape(pack['verdict'])}</p>
 <p>{escape(pack['verdict_reason'])}</p>
-<p><strong>Indexação:</strong> {escape(pack['indexation']['robots'])}. Fora do sitemap.</p>
+<p><strong>Indexação:</strong> {escape(robots)}. Fora do sitemap enquanto o gate nacional não passar.</p>
+<p><strong>Bloqueio:</strong> {escape(str(pack.get('next_action') or ''))}</p>
 </div>
-<div class="method-box">
+<div class="cite-box" id="citacao">
+<p><strong>Permalink:</strong> <a href="{escape(citation.get('permalink') or 'https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/')}">{escape(citation.get('permalink_path') or '/radar/pesquisa/edicao-zero-4uf/')}</a></p>
+<p><strong>Como citar:</strong> {escape(citation.get('text') or '')}</p>
+<p><strong>Versão:</strong> {escape(str(citation.get('version_label') or pack.get('data_as_of')))}</p>
+<p><strong>Download:</strong> <a href="{escape(DOWNLOAD_FILENAME)}">{escape(DOWNLOAD_FILENAME)}</a> (pack de citação versionado; não é dump do extra-cli)</p>
+</div>
+<div class="method-box" id="metodologia">
 <p><strong>dataset_hash:</strong> <code>{escape(pack['dataset_hash'])}</code></p>
 <p><strong>data_as_of:</strong> {escape(str(pack['data_as_of']))}</p>
+<p><strong>Semântica:</strong> {escape(str((pack.get('methodology') or {}).get('value_semantics') or ''))}</p>
 <p><strong>Reprodução:</strong> <code>python3 -m scripts.research build</code></p>
 </div>
 <h2>Findings</h2>
 <ul>{findings_html}</ul>
+<h2>Perguntas e evidência</h2>
+{questions_html}
 <h2>Gráficos essenciais</h2>
 {charts_html}
 <h2>Ofertas (depois dos fatos)</h2>

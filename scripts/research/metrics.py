@@ -606,18 +606,36 @@ def answer_questions(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
     return answers
 
 
-def coverage_block(snapshot: dict[str, Any]) -> dict[str, Any]:
+def coverage_block(snapshot: dict[str, Any], gate: Any | None = None) -> dict[str, Any]:
     manifest = snapshot["manifest"]
     markets = published_markets(snapshot)
     inventory = snapshot.get("national_candidate_inventory") or {}
     inv_denoms = inventory.get("denominators") or {}
     ufs = sorted({item.get("region") for item in markets if item.get("region")})
+    complete = False
+    denom = None
+    gate_dict = None
+    if gate is not None:
+        gate_dict = gate.as_dict() if hasattr(gate, "as_dict") else dict(gate)
+        if gate_dict.get("passed") is True:
+            complete = True
+            denom = gate_dict.get("national_denominator")
+            gate_ufs = list(gate_dict.get("ufs") or [])
+            if gate_ufs:
+                ufs = sorted(gate_ufs)
     return {
         "ufs": ufs,
         "uf_count": len(ufs),
         "published_markets": len(markets),
-        "national_universe_complete": False,
-        "national_denominator": None,
+        "national_universe_complete": complete,
+        "national_denominator": denom,
+        "claim_gate": gate_dict
+        or {
+            "passed": False,
+            "present": False,
+            "consumed": False,
+            "reason_codes": ["RESEARCH_READ_MODEL_ABSENT"],
+        },
         "snapshot_aec_confirmed_contracts": (
             manifest.get("denominators") or {}
         ).get("aec_confirmed_contracts"),
@@ -650,9 +668,13 @@ def coverage_block(snapshot: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def decide_verdict(snapshot: dict[str, Any], questions: list[dict[str, Any]]) -> dict[str, Any]:
+def decide_verdict(
+    snapshot: dict[str, Any],
+    questions: list[dict[str, Any]],
+    gate: Any | None = None,
+) -> dict[str, Any]:
     markets = published_markets(snapshot)
-    coverage = coverage_block(snapshot)
+    coverage = coverage_block(snapshot, gate=gate)
     if not markets:
         return {
             "verdict": "KILL",
@@ -663,6 +685,21 @@ def decide_verdict(snapshot: dict[str, Any], questions: list[dict[str, Any]]) ->
         return {
             "verdict": "KILL",
             "reason": "Menos de 3 perguntas sustentadas. Sem tese citável.",
+        }
+    gate_dict = coverage.get("claim_gate") or {}
+    if gate_dict.get("passed") is not True:
+        codes = gate_dict.get("reason_codes") or ["RESEARCH_READ_MODEL_ABSENT"]
+        return {
+            "verdict": "NEEDS_DATA",
+            "reason": (
+                f"Wedge sustentável apenas como recorte de {coverage['uf_count']} UF(s) "
+                f"e {coverage['published_markets']} mercado(s) publicados. "
+                "O manifest declara cobertura incompleta frente ao conjunto "
+                "de referência da base canônica de contratos. "
+                "PUBLISH exige extra-cli #400 com cobertura de 27 UFs, "
+                "denominator explícito e freshness no SLA. "
+                f"Bloqueio: {', '.join(codes)}."
+            ),
         }
     if not coverage["national_universe_complete"] or coverage["uf_count"] < 27:
         return {
@@ -678,5 +715,5 @@ def decide_verdict(snapshot: dict[str, Any], questions: list[dict[str, Any]]) ->
         }
     return {
         "verdict": "PUBLISH",
-        "reason": "Coverage+denominator sustentam tese nacional.",
+        "reason": "Coverage+denominator+freshness do extra-cli #400 sustentam tese nacional.",
     }

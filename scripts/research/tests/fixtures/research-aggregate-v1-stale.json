@@ -1,0 +1,58 @@
+{
+  "schema": "extra-cli.public_read.research_aggregate.v1",
+  "schema_version": "1.0.0",
+  "consumer": "web-cfg/flagship-research",
+  "producer": "extra-cli",
+  "producer_issue": "tjsasakifln/extra-cli#400",
+  "dataset_hash": "fixture-stale-freshness-not-a-live-hash",
+  "data_as_of": "2026-01-01",
+  "generated_at": "2026-01-02T00:00:00Z",
+  "grain": {
+    "keys": ["uf", "archetype_id", "period_start", "period_end"],
+    "unit": "published market cell"
+  },
+  "value_semantics": {
+    "contract_count": "distinct contract instruments; UNKNOWN stays null",
+    "total_value_brl": "nominal BRL of the instrument; not unit price"
+  },
+  "coverage": {
+    "ufs": [
+      "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+      "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+      "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+    ],
+    "uf_count": 27,
+    "period_start": "2025-01-01",
+    "period_end": "2025-12-31",
+    "national_universe_complete": true,
+    "national_denominator": {
+      "id": "fixture-national-denominator-stale",
+      "label": "synthetic national denominator (stale fixture)",
+      "source": "fixture",
+      "expected_ufs": 27,
+      "observed_ufs": 27,
+      "competence": "2025-12"
+    }
+  },
+  "freshness": {
+    "as_of": "2026-01-01",
+    "max_age_days": 30,
+    "stale": true
+  },
+  "provenance": {
+    "tables": ["fixture_only"],
+    "query_versions": {"fixture": "stale"},
+    "method": "synthetic fixture for consumer freshness gate; not a live SELECT",
+    "source_commit_sha": "fixture-stale",
+    "source_run_id": "fixture-stale-freshness"
+  },
+  "unknowns": {
+    "reason_codes": ["FIXTURE_STALE"],
+    "suppressed_fields": []
+  },
+  "limitations": [
+    "Synthetic national-shaped fixture with expired as_of.",
+    "Must fail FRESHNESS_STALE. Not a live extra-cli export."
+  ],
+  "series": []
+}

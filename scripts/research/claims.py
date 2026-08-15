@@ -69,12 +69,20 @@ def _walk_strings(obj: Any) -> Iterable[tuple[str, str]]:
 
 
 def coverage_allows_national(pack: dict[str, Any]) -> bool:
-    """National wording is allowed only when coverage+denominator say so."""
+    """National wording is allowed only when coverage+denominator+gate say so."""
     coverage = pack.get("coverage") or {}
+    gate = pack.get("national_claim_gate") or coverage.get("claim_gate") or {}
+    if gate.get("passed") is not True:
+        return False
     ufs = coverage.get("ufs") or []
     complete = coverage.get("national_universe_complete") is True
-    denom = str(coverage.get("national_denominator") or "")
-    return bool(complete and len(ufs) >= 27 and denom)
+    denom = coverage.get("national_denominator")
+    denom_text = ""
+    if isinstance(denom, dict):
+        denom_text = str(denom.get("id") or denom.get("label") or "")
+    else:
+        denom_text = str(denom or "")
+    return bool(complete and len(ufs) >= 27 and denom_text)
 
 
 def scan_claim_language(pack: dict[str, Any]) -> list[dict[str, str]]:
@@ -108,6 +116,48 @@ def answered_metric_missing_provenance(metric: dict[str, Any]) -> list[str]:
     return missing
 
 
+def findings_missing_evidence(
+    findings: list[dict[str, Any]], questions: list[dict[str, Any]]
+) -> list[str]:
+    """Non-adversarial findings must point at a real question."""
+    question_ids = {item.get("id") for item in questions if item.get("id")}
+    bad: list[str] = []
+    for item in findings:
+        finding_id = str(item.get("id") or "")
+        if finding_id.startswith("ADV-"):
+            continue
+        question_id = item.get("question_id")
+        evidence = item.get("evidence") or {}
+        evidence_qid = evidence.get("question_id") or question_id
+        if not evidence_qid or evidence_qid not in question_ids:
+            bad.append(finding_id or "unknown")
+    return bad
+
+
+def finding_denominator_cannot_sustain(
+    pack: dict[str, Any],
+) -> list[str]:
+    """Block answered claims whose linked question has no usable denominator."""
+    questions = {item.get("id"): item for item in pack.get("questions") or []}
+    allow_national = coverage_allows_national(pack)
+    bad: list[str] = []
+    for item in pack.get("findings") or []:
+        finding_id = str(item.get("id") or "")
+        if finding_id.startswith("ADV-"):
+            continue
+        if item.get("status") == "unsupported":
+            continue
+        question = questions.get(item.get("question_id")) or {}
+        denom = str(question.get("denominator") or "").strip()
+        if not denom or denom.lower().startswith("n/a"):
+            bad.append(f"{finding_id} missing usable denominator")
+            continue
+        claim = str(item.get("claim") or "")
+        if NATIONAL_OVERCLAIM_RE.search(claim) and not allow_national:
+            bad.append(f"{finding_id} national claim without national denominator")
+    return bad
+
+
 def findings_without_number_or_unsupported(findings: list[dict[str, Any]]) -> list[str]:
     bad: list[str] = []
     for item in findings:
@@ -137,7 +187,15 @@ def validate_claim_gate(pack: dict[str, Any]) -> list[str]:
     if len(charts) > 5:
         errors.append(f"expected at most 5 charts, got {len(charts)}")
     for chart in charts:
-        for field in ("pergunta", "dados", "unidade", "caveat", "takeaway"):
+        for field in (
+            "pergunta",
+            "dados",
+            "unidade",
+            "caveat",
+            "takeaway",
+            "source",
+            "method",
+        ):
             if not chart.get(field):
                 errors.append(f"chart {chart.get('id')} missing {field}")
 
@@ -158,6 +216,20 @@ def validate_claim_gate(pack: dict[str, Any]) -> list[str]:
 
     if verdict == "PUBLISH" and not coverage_allows_national(pack):
         errors.append("PUBLISH requires national_universe_complete coverage+denominator")
+
+    indexation = pack.get("indexation") or {}
+    if indexation.get("indexable") is True and not coverage_allows_national(pack):
+        errors.append("indexable=true requires a passing national claim gate")
+    if verdict != "PUBLISH" and indexation.get("indexable") is True:
+        errors.append("indexable=true is forbidden unless verdict is PUBLISH")
+
+    for finding_id in findings_missing_evidence(
+        pack.get("findings") or [], pack.get("questions") or []
+    ):
+        errors.append(f"finding {finding_id} is not traced to a question/evidence")
+
+    for message in finding_denominator_cannot_sustain(pack):
+        errors.append(message)
 
     for violation in scan_claim_language(pack):
         errors.append(f"{violation['kind']} at {violation['path']}: {violation['excerpt']}")

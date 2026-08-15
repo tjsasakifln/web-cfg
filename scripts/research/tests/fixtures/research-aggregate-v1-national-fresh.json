@@ -1,0 +1,62 @@
+{
+  "schema": "extra-cli.public_read.research_aggregate.v1",
+  "schema_version": "1.0.0",
+  "consumer": "web-cfg/flagship-research",
+  "producer": "extra-cli",
+  "producer_issue": "tjsasakifln/extra-cli#400",
+  "dataset_hash": "fixture-national-fresh-not-a-live-hash",
+  "data_as_of": "2026-08-01",
+  "generated_at": "2026-08-01T12:00:00Z",
+  "grain": {
+    "keys": ["uf", "archetype_id", "period_start", "period_end"],
+    "unit": "published market cell"
+  },
+  "value_semantics": {
+    "contract_count": "distinct contract instruments; UNKNOWN stays null",
+    "total_value_brl": "nominal BRL of the instrument; not unit price"
+  },
+  "coverage": {
+    "ufs": [
+      "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+      "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+      "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+    ],
+    "uf_count": 27,
+    "period_start": "2026-01-01",
+    "period_end": "2026-07-31",
+    "national_universe_complete": true,
+    "national_denominator": {
+      "id": "fixture-national-denominator-fresh",
+      "label": "synthetic national denominator (gate-shape only)",
+      "source": "fixture",
+      "expected_ufs": 27,
+      "observed_ufs": 27,
+      "competence": "2026-07"
+    }
+  },
+  "freshness": {
+    "as_of": "2026-08-01",
+    "max_age_days": 30,
+    "stale": false
+  },
+  "provenance": {
+    "tables": ["fixture_only"],
+    "query_versions": {"fixture": "national-fresh"},
+    "method": "synthetic fixture proving the gate can pass; not a live SELECT",
+    "source_commit_sha": "fixture-national-fresh",
+    "source_run_id": "fixture-national-fresh"
+  },
+  "unknowns": {
+    "reason_codes": [],
+    "suppressed_fields": []
+  },
+  "limitations": [
+    "Synthetic shape-only fixture. Not copied into the live consumer path.",
+    "Not a Brazilian census. Not used by python3 -m scripts.research build."
+  ],
+  "denominators": {
+    "aec_confirmed_contracts": null,
+    "contracts_total_loaded": null
+  },
+  "series": []
+}
