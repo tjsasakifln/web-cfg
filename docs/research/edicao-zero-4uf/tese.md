@@ -13,6 +13,6 @@ com proveniência, sobre pavimentação e edificações públicas em SC, PI, MG 
 
 **Veredito desta edição:** `NEEDS_DATA`
 
-Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência do datalake. PUBLISH exigiria export public_read versionado com cobertura de 27 UFs documentada e denominator explícito.
+Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência da base canônica de contratos. PUBLISH exigiria export public_read versionado com cobertura de 27 UFs documentada e denominator explícito.
 
 **Próxima ação:** Obter um export extra-cli public_read_v1 versionado com cobertura nacional documentada (ou ≥12 UFs com denominator explícito e completude), regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa nesta edição.

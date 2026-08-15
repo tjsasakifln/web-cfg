@@ -6,7 +6,7 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 
 - **Pergunta:** Qual o volume e o valor observado de contratos AEC confirmados nos mercados publicados do recorte?
 - **Unidade:** BRL nominal (contrato integral)
-- **Caveat:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake.
+- **Caveat:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência da base canônica de contratos.
 - **Takeaway:** O valor observado vive em 4 células mercado×UF. Somar as células descreve o recorte publicado, não o Brasil.
 - **Dados:**
 
@@ -117,7 +117,7 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 
 - **Pergunta:** Quanto do snapshot publicado chega aos 4 mercados do wedge?
 - **Unidade:** contratos
-- **Caveat:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake.
+- **Caveat:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência da base canônica de contratos.
 - **Takeaway:** A maior parte do snapshot não entra no wedge. Tratar os 4 mercados como Brasil inverteria o funil.
 - **Dados:**
 

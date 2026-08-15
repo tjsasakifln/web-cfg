@@ -36,7 +36,7 @@ Evolução temporal do recorte: não sustentado. Série anual insuficiente: 3 de
 
 **Status:** `answered`
 
-**Limitação:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake.
+**Limitação:** Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência da base canônica de contratos.
 
 ### Q2 — compradores
 

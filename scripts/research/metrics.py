@@ -228,7 +228,7 @@ def answer_questions(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
                 "Os contratos dos 4 mercados publicados não equivalem ao "
                 "conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. "
                 "O manifest declara cobertura incompleta frente ao conjunto "
-                "nacional de referência do datalake."
+                "nacional de referência da base canônica de contratos."
             ),
         )
     )
@@ -630,7 +630,7 @@ def coverage_block(snapshot: dict[str, Any]) -> dict[str, Any]:
                 for item in manifest.get("limitations") or []
                 if "national universe" in item.lower() or "universo" in item.lower()
             ),
-            "Datalake coverage is incomplete relative to the national universe.",
+            "Canonical contract-data coverage is incomplete relative to the national universe.",
         ),
         "inventory_not_used_as_published_fact": {
             "present": bool(inventory),
@@ -671,7 +671,7 @@ def decide_verdict(snapshot: dict[str, Any], questions: list[dict[str, Any]]) ->
                 f"Wedge sustentável apenas como recorte de {coverage['uf_count']} UF(s) "
                 f"e {coverage['published_markets']} mercado(s) publicados. "
                 "O manifest declara cobertura incompleta frente ao conjunto "
-                "de referência do datalake. "
+                "de referência da base canônica de contratos. "
                 "PUBLISH exigiria export public_read versionado com cobertura "
                 "de 27 UFs documentada e denominator explícito."
             ),
