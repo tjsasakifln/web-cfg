@@ -248,7 +248,7 @@
         public_id_slug: hit.record.public_id_slug || ""
       });
     }
-    render(D.diagnoseMargin(hit.record));
+    render(D.diagnoseMargin(hit.record, snapshot));
   }
   document.getElementById("lookup").addEventListener("submit", function(e){
     e.preventDefault();
