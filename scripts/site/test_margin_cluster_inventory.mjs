@@ -13,19 +13,40 @@ for (const intent of required) {
   assert.ok(byIntent[intent].canonical.startsWith("/"));
 }
 assert.equal(inventory.intents.filter((row) => row.disposition === "CREATE").length, 0);
+function assertAuthority(html, path) {
+  assert.ok(/Método:/.test(html), `${path} missing Método`);
+  assert.ok(/Fonte:/.test(html), `${path} missing Fonte`);
+  assert.ok(/Limitação:/.test(html), `${path} missing Limitação`);
+  assert.ok(/Sem revisão independente|segundo revisor|Revisado em/.test(html), `${path} missing revisão disclosure`);
+  assert.ok(/<time datetime="\d{4}-\d{2}-\d{2}">/.test(html), `${path} missing updated_at time`);
+  assert.ok(!/href="\/(vision|nexgen|avcb|clcb|avaliacoes|ia)\//.test(html), path);
+}
+
+const audited = [];
 for (const row of inventory.intents) {
   const file = resolve(root, row.canonical.replace(/^\//, ""), "index.html");
   assert.ok(existsSync(file), row.canonical);
   const html = readFileSync(file, "utf8");
+  if (/noindex/i.test(html)) continue;
+  assertAuthority(html, row.canonical);
   if (row.canonical === inventory.money_asset) {
-    assert.ok(!/noindex/i.test(html));
     assert.ok(html.includes('rel="canonical"'));
     assert.ok(html.includes("application/ld+json"));
     assert.ok(html.includes("UNKNOWN"));
-  } else if (!/noindex/i.test(html)) {
+    assert.ok(!/pncp_supplier_contracts/i.test(html), "money asset must not leak internal source family");
+  } else {
     assert.ok(html.includes("diagnostico-defesa-margem") || row.disposition === "KEEP", row.intent);
-    assert.ok(!/href="\/(vision|nexgen|avcb|clcb|avaliacoes|ia)\//.test(html));
   }
+  audited.push({
+    intent: row.intent,
+    disposition: row.disposition,
+    canonical: row.canonical,
+    method: /Método:/.test(html),
+    fonte: /Fonte:/.test(html),
+    limitations: /Limitação:/.test(html),
+    review: /Sem revisão independente|segundo revisor|Revisado em/.test(html),
+    updated_at: /<time datetime="\d{4}-\d{2}-\d{2}">/.test(html),
+  });
 }
 const sitemap = readFileSync(resolve(root, "sitemap.xml"), "utf8");
 assert.ok(sitemap.includes("https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"));
@@ -33,4 +54,4 @@ assert.ok(!/\/vision|\/nexgen|\/avcb|\/clcb|\/avaliacoes|\/ia\//.test(sitemap));
 const redirects = readFileSync(resolve(root, "_redirects"), "utf8");
 assert.match(redirects, /^\/servicos\s+\/#como-atuamos\s+301/m);
 assert.match(redirects, /^\/vision\s+\/404\.html\s+410/m);
-console.log("MARGIN_CLUSTER_INVENTORY_OK", inventory.intents.map((r)=>r.intent+":"+r.disposition));
+console.log("MARGIN_CLUSTER_INVENTORY_OK", audited);

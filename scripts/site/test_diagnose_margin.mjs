@@ -34,10 +34,13 @@ const publicSnap = JSON.parse(
 );
 assert.equal(snapshot.schema, MARGIN_DEFENSE_SCHEMA);
 assert.equal(publicSnap.schema, MARGIN_DEFENSE_SCHEMA);
-assert.equal(snapshot.content_hash, publicSnap.content_hash);
 assert.deepEqual(
   publicSnap.records.map((r) => r.canonical_contract_id),
   snapshot.records.map((r) => r.canonical_contract_id),
+);
+assert.ok(
+  !JSON.stringify(publicSnap).includes("pncp_supplier_contracts"),
+  "public snapshot must not leak internal source family",
 );
 assert.ok(snapshot.records.length >= 2);
 
@@ -65,6 +68,8 @@ assert.equal(first.vigencia_inicio.classification, OFFICIAL);
 assert.equal(first.vigencia_fim.classification, OFFICIAL);
 assert.equal(first.aniversario_contratual.classification, DERIVED);
 assert.equal(first.as_of.classification, OFFICIAL);
+assert.match(String(first.fontes.value), /^PNCP /);
+assert.ok(!JSON.stringify(first).includes("pncp_supplier_contracts"));
 assert.ok(first.provenance && first.provenance.dataset_hash === snapshot.content_hash);
 assert.match(first.public_id_slug, /^md-[0-9a-f]{8}$/);
 assert.ok(!/\d{11,}/.test(first.public_id_slug));

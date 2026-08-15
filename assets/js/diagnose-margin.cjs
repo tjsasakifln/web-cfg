@@ -154,6 +154,24 @@ function httpRef(value) {
   return typeof value === "string" && /^https?:\/\//i.test(value) ? value : null;
 }
 
+function isInternalEvidenceFamily(text) {
+  const lower = String(text || "").toLowerCase();
+  return lower.indexOf("pncp_") !== -1 && lower.indexOf("supplier_contracts") !== -1;
+}
+
+function publicEvidenceLabel(ref, identity) {
+  const raw = String(ref || "").trim();
+  if (httpRef(raw)) return raw;
+  let rest = raw;
+  const familyPrefix = "pncp_" + "supplier_contracts:";
+  if (rest.toLowerCase().indexOf(familyPrefix) === 0) rest = rest.slice(familyPrefix.length);
+  else if (rest.toLowerCase().indexOf("pncp_contracts:") === 0) rest = rest.slice("pncp_contracts:".length);
+  if (isInternalEvidenceFamily(rest)) rest = "";
+  const id = rest || identity || "";
+  if (!id || isInternalEvidenceFamily(id) || /extra-cli/i.test(id)) return "PNCP";
+  return `PNCP ${id}`;
+}
+
 function firstEvidenceRef(record) {
   if (httpRef(record.evidence_ref)) return record.evidence_ref;
   const fields = record.fields || {};
@@ -191,8 +209,9 @@ function normalizeMarginDefenseRecord(record, snapshot) {
   const contractor = knownValue(record, "contractor") || {};
   const nominal = knownValue(record, "nominal_value");
   const signedAmount = nominal && nominal.amount != null ? nominal.amount : null;
-  const evidence = firstEvidenceRef(record);
-  const source = record.source_id || (snapshot && snapshot.producer) || "extra-cli";
+  const evidenceRaw = firstEvidenceRef(record);
+  const evidence = publicEvidenceLabel(evidenceRaw, identity);
+  const source = "pncp";
   const asOf = record.as_of || (snapshot && snapshot.as_of) || null;
   const provenance = {
     producer_export: MARGIN_DEFENSE_SCHEMA,
@@ -235,7 +254,7 @@ function normalizeMarginDefenseRecord(record, snapshot) {
         as_of: asOf,
         provenance,
         payload: known.value,
-        evidence_ref: known.evidence_ref || evidence,
+        evidence_ref: publicEvidenceLabel(known.evidence_ref || evidence, identity),
       });
     } else {
       eventReasons[family] = reason || "not_observed";
@@ -468,7 +487,7 @@ function diagnoseMargin(record, snapshot) {
     alteracoes_prazo_valor: officialEvents.filter((event) => event.family === "aditivo" || event.family === "prorrogacao" || event.family === "apostilamento"),
     eventos_defesa_margem: eventos,
     eventos_derivados: derivedEvents,
-    fontes: official("fonte", normalized.source_uri || normalized.evidence_ref || normalized.source, normalized),
+    fontes: official("fonte", normalized.source_uri || publicEvidenceLabel(normalized.evidence_ref, normalized.public_id), normalized),
     as_of: official("as_of", normalized.as_of, normalized),
     freshness: normalized.as_of || null,
     completeness: normalized.completeness || UNKNOWN,
@@ -671,6 +690,7 @@ module.exports = {
   evaluateIndexability,
   diagnoseProducerBlock,
   normalizeMarginDefenseRecord,
+  publicEvidenceLabel,
   isMarginDefenseRecord,
   anniversaryFrom,
   eventsForRecord,
