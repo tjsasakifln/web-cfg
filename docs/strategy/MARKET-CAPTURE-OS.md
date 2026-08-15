@@ -1,21 +1,30 @@
 # CONFENGE market-capture operating system
 
 **Status:** authoritative operating thesis  
-**Date:** 2026-08-14  
+**Date:** 2026-08-15
 **Architecture:** [ADR-STRAT-002](../architecture/ADR-STRAT-002-confenge-canonical-public-surface.md)  
 **Executive experiment:** [#64](https://github.com/tjsasakifln/web-cfg/issues/64)
 
 ## Corporate thesis and North Star
 
 CONFENGE is a B2G intelligence company applied to engineering that monetizes
-through high-value services. The North Star is **Qualified Commercial
-Opportunities Created per Week**, not leads, emails, pages, commits or closed
-issues.
+through high-value services. The corporate North Star is **Inbound Qualified
+Pipeline per Month**, not leads, emails, pages, impressions, commits or closed
+issues. Qualified Commercial Opportunities remain the upstream operating unit;
+they are not a substitute for attributable pipeline.
 
 A QCO requires a valid account, a specific evidenced problem/opportunity, an
 applicable offer, a why-now trigger and a plausible decision unit with a
 defensible route. UNKNOWN remains UNKNOWN; WON requires human or documentary
 evidence.
+
+The category ambition is to make CONFENGE unavoidable to people interested in
+AEC B2G and respected as a technical house, not another consultancy. That must
+be earned through original data, explicit methods, expert authorship/review,
+correction history, permissioned proof and repeated third-party citation. Track
+branded search, qualified mentions, relevant referring domains, dataset/chart
+reuse and direct/returning demand as moat signals, never as vanity substitutes
+for pipeline.
 
 ## Revenue path
 
@@ -68,11 +77,12 @@ extra-cli #370 or Warmbly #39/#41/#43.
 
 ## Compounding lanes
 
-web-cfg #66 has three independent decision lanes:
+web-cfg #66 has four independent decision lanes:
 
-1. **Customer Expansion Engine:** client → event → next service → renewal/expansion.
-2. **Partner Distribution Engine:** one partner → many ICP accounts.
-3. **Proof Engine:** delivery/outcome → permissioned proof → institutional trust.
+1. **Earned Distribution:** original asset → reuse/citation → brand demand → lead.
+2. **Proof Engine:** delivery/outcome → permissioned proof → institutional trust.
+3. **Partner Distribution:** one partner → many ICP accounts.
+4. **Customer Expansion:** client → event → next service → renewal/expansion.
 
 Pricing remains VALIDATE and subordinate to offer/outcome evidence. Do not build
 a partner portal, CRM or sophisticated forecast.
@@ -83,7 +93,7 @@ a partner portal, CRM or sophisticated forecast.
 2. [web-cfg #64](https://github.com/tjsasakifln/web-cfg/issues/64): close the first ICP × trigger × offer learning cycle.
 3. [extra-cli #372](https://github.com/tjsasakifln/extra-cli/issues/372): deliver decision-unit reachability/operator pack.
 4. [web-cfg #60](https://github.com/tjsasakifln/web-cfg/issues/60): ship the margin-defense vertical on `confenge.com.br`.
-5. [extra-cli #346](https://github.com/tjsasakifln/extra-cli/issues/346): rank measured commercial misses before adapters.
+5. [Warmbly #67](https://github.com/tjsasakifln/warmbly/issues/67): make manual call/WhatsApp copy safe before its next use.
 
 ## Stop doing
 
