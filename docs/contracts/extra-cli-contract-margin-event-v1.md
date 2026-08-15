@@ -91,3 +91,15 @@ field, or promoting `UNKNOWN` to a legal conclusion, requires `v2`.
 `data/extra-cli/public-read-v1/contracts-margin-snapshot.json`
 
 This file is a versioned SELECT-only projection. It is not a crawler cache.
+
+## Producer-block diagnosis
+
+`scripts/money_asset/indexability.py` writes `data/organic/money-asset-producer-block.json` whenever the shipped gate fails `low_data_confidence`. The diagnosis is computed by `diagnoseProducerBlock` in `assets/js/diagnose-margin.cjs` from the live snapshot — it does not invent facts.
+
+Blocking official fields on the current projection (`public_read_v1@v1.0.0` + `pseo-export@1.1.0`):
+
+- `vigencia_start` / `vigencia_end` — not emitted by `public_read_v1.contracts`
+- `data_assinatura` — not emitted; required to derive aniversário
+- `contract_value` — column exists on the producer view but this snapshot has null (signed value not in the pSEO projection)
+
+Reserved `CONTRACT_MARGIN_EVENT` families (aditivo, apostilamento, prorrogação, reajuste, reequilíbrio, medição, pagamento) stay UNKNOWN until extra-cli emits them. They are not required to clear the 0.45 data-confidence floor. Filling vigência + signed `contract_value` on a versioned public-read export is enough for the existing consumer and gate to flip indexable without relaxing epistemology.

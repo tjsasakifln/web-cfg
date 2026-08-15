@@ -54,6 +54,12 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 **Gate: BLOCKED.** Do not change DNS until a named proxy + cert + rollback record exist. This handoff does not authorize Railway usage-limit work.
 
+### Post-#68 revalidation (2026-08-15)
+
+`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18`. Manifesto bytes and pin **UNCHANGED** (`c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d`).
+
+Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonical host `confenge.com.br`, indexable, no SmartLic brand, no redirect chain, no soft-404. SmartLic production 301s / DNS / TLS / Cloudflare / Railway were **not** changed and were **not** observed. Cutover remains unobserved. #62 stays OPEN. Counterpart SmartLic#2115 / PR #2133 may start the bridge against this pin; web-cfg does not own that deploy.
+
 ## Observation window
 
 - **Duration:** 28 days after the first production 301 of this hash.

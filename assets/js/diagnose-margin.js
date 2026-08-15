@@ -379,15 +379,199 @@ function evaluateIndexability(diagnosis, options) {
   };
 }
 
+/**
+ * Official fields the consumer already knows how to render.
+ * `emitted_by_public_read_v1` is the producer view today (v1.0.0 contracts
+ * family). Absence here is a producer gap, not a consumer gap.
+ */
+const PRODUCER_FIELD_CATALOG = [
+  {
+    field: "vigencia_start",
+    official_name: "vigencia",
+    consumer_field: "vigencia_inicio",
+    producer_family: "public_read_v1.contracts",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: true,
+    reason: "vigencia_not_in_producer_projection",
+  },
+  {
+    field: "vigencia_end",
+    official_name: "vigencia",
+    consumer_field: "vigencia_fim",
+    producer_family: "public_read_v1.contracts",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: true,
+    reason: "vigencia_not_in_producer_projection",
+  },
+  {
+    field: "data_assinatura",
+    official_name: "aniversario/reajuste calendar",
+    consumer_field: "aniversario_contratual",
+    producer_family: "public_read_v1.contracts",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: true,
+    reason: "no_official_start_or_signature_date",
+  },
+  {
+    field: "contract_value",
+    official_name: "valor contratual assinado",
+    consumer_field: "valor_contratual",
+    producer_family: "public_read_v1.contracts",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: true,
+    blocks_indexability: true,
+    reason: "signed_contract_value_not_in_producer_projection",
+  },
+  {
+    field: "margin_events.aditivo",
+    official_name: "aditivos",
+    consumer_field: "evento:aditivo",
+    producer_family: "CONTRACT_MARGIN_EVENT",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: false,
+    reason: "margin_event_family_not_in_public_read_v1",
+  },
+  {
+    field: "margin_events.apostilamento",
+    official_name: "alteracao de escopo / apostilamento",
+    consumer_field: "evento:apostilamento",
+    producer_family: "CONTRACT_MARGIN_EVENT",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: false,
+    reason: "margin_event_family_not_in_public_read_v1",
+  },
+  {
+    field: "margin_events.prorrogacao",
+    official_name: "eventos de prazo",
+    consumer_field: "evento:prorrogacao",
+    producer_family: "CONTRACT_MARGIN_EVENT",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: false,
+    reason: "margin_event_family_not_in_public_read_v1",
+  },
+  {
+    field: "margin_events.reajuste",
+    official_name: "reajuste",
+    consumer_field: "evento:reajuste",
+    producer_family: "CONTRACT_MARGIN_EVENT",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: false,
+    reason: "margin_event_family_not_in_public_read_v1",
+  },
+  {
+    field: "margin_events.reequilibrio",
+    official_name: "reequilibrio",
+    consumer_field: "evento:reequilibrio",
+    producer_family: "CONTRACT_MARGIN_EVENT",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: false,
+    reason: "margin_event_family_not_in_public_read_v1",
+  },
+  {
+    field: "margin_events.medicao",
+    official_name: "medicoes",
+    consumer_field: "evento:medicao",
+    producer_family: "CONTRACT_MARGIN_EVENT",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: false,
+    reason: "margin_event_family_not_in_public_read_v1",
+  },
+  {
+    field: "margin_events.pagamento",
+    official_name: "pagamentos",
+    consumer_field: "evento:pagamento",
+    producer_family: "CONTRACT_MARGIN_EVENT",
+    producer_version: "v1.0.0",
+    emitted_by_public_read_v1: false,
+    blocks_indexability: false,
+    reason: "margin_event_family_not_in_public_read_v1",
+  },
+];
+
+function _fieldState(diagnosis, spec) {
+  if (spec.consumer_field.indexOf("evento:") === 0) {
+    const family = spec.consumer_field.slice("evento:".length);
+    const event = (diagnosis.eventos_defesa_margem || []).find((row) => row.family === family);
+    return {
+      classification: event ? event.classification : UNKNOWN,
+      reason: event && event.reason ? event.reason : spec.reason,
+    };
+  }
+  const row = diagnosis[spec.consumer_field];
+  return {
+    classification: row && row.classification ? row.classification : UNKNOWN,
+    reason: row && row.reason ? row.reason : spec.reason,
+  };
+}
+
+function diagnoseProducerBlock(snapshot, diagnosis, gateInputs) {
+  const inputs = gateInputs || evaluateIndexability(diagnosis, { sample_size: 1 });
+  const records = (snapshot && snapshot.records) || [];
+  const missing = [];
+  for (const spec of PRODUCER_FIELD_CATALOG) {
+    const state = _fieldState(diagnosis, spec);
+    if (state.classification === OFFICIAL || state.classification === DERIVED) continue;
+    missing.push({
+      field: spec.field,
+      official_name: spec.official_name,
+      consumer_field: spec.consumer_field,
+      producer_family: spec.producer_family,
+      producer_version: spec.producer_version,
+      emitted_by_public_read_v1: spec.emitted_by_public_read_v1,
+      blocks_indexability: spec.blocks_indexability,
+      classification: state.classification,
+      reason: state.reason,
+    });
+  }
+  const blocking = missing.filter((row) => row.blocks_indexability);
+  const reserved = missing.filter((row) => !row.blocks_indexability);
+  const dataConfidence = Number(inputs.data_confidence);
+  const indexableByConfidence = dataConfidence >= 0.45;
+  return {
+    asset: "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+    gate_fail: indexableByConfidence ? null : "low_data_confidence",
+    indexable_by_data_confidence: indexableByConfidence,
+    data_confidence: dataConfidence,
+    producer: (snapshot && snapshot.producer) || "extra-cli",
+    producer_contracts: (snapshot && snapshot.producer_contracts) || [],
+    consumer_contract: (snapshot && snapshot.contract_version) || "contract-margin-event-v1.0.0",
+    snapshot_id: snapshot && snapshot.snapshot_id,
+    snapshot_as_of: snapshot && snapshot.as_of,
+    record_count: records.length,
+    completeness: diagnosis && diagnosis.completeness,
+    official_count: diagnosis && diagnosis.official_count,
+    unknown_count: diagnosis && diagnosis.unknown_count,
+    blocking_official_fields: blocking,
+    reserved_margin_event_fields: reserved,
+    do_not_relax_gate: true,
+    consumer_ready: true,
+    next_action:
+      blocking.length === 0
+        ? "Producer facts already satisfy the data-confidence floor. Re-run indexability.py; do not invent remaining event families."
+        : "extra-cli must emit the blocking official fields on a versioned public_read family (vigência, signed contract_value, and/or data_assinatura). web-cfg already renders them. Do not lower the 0.45 floor.",
+  };
+}
+
 module.exports = {
   OFFICIAL,
   DERIVED,
   INFERRED,
   UNKNOWN,
   MARGIN_FAMILIES,
+  PRODUCER_FIELD_CATALOG,
   diagnoseMargin,
   selectContract,
   evaluateIndexability,
+  diagnoseProducerBlock,
   anniversaryFrom,
   eventsForRecord,
   hasOfficialBacking,

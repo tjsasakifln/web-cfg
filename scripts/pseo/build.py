@@ -36,6 +36,32 @@ from scripts.pseo.similarity import find_similar_pairs # noqa: E402
 SITE = "https://confenge.com.br"
 SIM_THRESHOLD = 0.88
 
+# Hand-authored surfaces under inteligencia/radar. pSEO generation wipes other
+# index.html files in those trees and rewrites them from the snapshot.
+PRESERVED_STATIC_INDEXES = frozenset(
+    {
+        "inteligencia/index.html",
+        "inteligencia/mercados/index.html",
+        "inteligencia/orgaos/index.html",
+        "inteligencia/precos/index.html",
+        "inteligencia/concorrencia/index.html",
+        "inteligencia/cenarios/index.html",
+        "radar/index.html",
+        "radar/nacional-obras-publicas/index.html",
+    }
+)
+
+
+def is_preserved_static_surface(rel: str) -> bool:
+    """True for hand-authored pages the pSEO wipe must not delete."""
+    norm = str(rel).replace("\\", "/").lstrip("./")
+    if norm in PRESERVED_STATIC_INDEXES:
+        return True
+    # Flagship research preview (NEEDS_DATA, noindex). Not a pSEO template.
+    if norm.startswith("radar/pesquisa/"):
+        return True
+    return False
+
 
 def url_to_path(url: str) -> Path:
     rel = url.strip("/")
@@ -569,17 +595,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                 continue
             for index in base.rglob("index.html"):
                 rel = index.relative_to(ROOT).as_posix()
-                if rel in {
-                    "inteligencia/index.html",
-                    "inteligencia/mercados/index.html",
-                    "inteligencia/orgaos/index.html",
-                    "inteligencia/precos/index.html",
-                    "inteligencia/concorrencia/index.html",
-                    "inteligencia/cenarios/index.html",
-                    "radar/index.html",
-                    # Hand-authored research asset (not pSEO template output)
-                    "radar/nacional-obras-publicas/index.html",
-                }:
+                if is_preserved_static_surface(rel):
                     continue
                 # Record path as prior URL before wipe
                 url_guess = "/" + str(index.parent.relative_to(ROOT)).replace("\\", "/") + "/"

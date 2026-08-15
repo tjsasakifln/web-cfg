@@ -1,5 +1,5 @@
 {
-  "snapshot_dir": "/tmp/grok-goal-61959829f7a7/implementer/web-cfg-73/data/pseo",
+  "snapshot_dir": "data/pseo",
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "data_as_of": "2026-07-31",
   "source_commit_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",

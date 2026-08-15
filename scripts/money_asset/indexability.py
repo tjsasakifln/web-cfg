@@ -20,10 +20,15 @@ const { createRequire } = require("module");
 const { readFileSync } = require("fs");
 const { resolve } = require("path");
 const root = process.cwd();
-const { diagnoseMargin, evaluateIndexability } = require(resolve(root, "assets/js/diagnose-margin.cjs"));
+const { diagnoseMargin, evaluateIndexability, diagnoseProducerBlock } = require(resolve(root, "assets/js/diagnose-margin.cjs"));
 const snap = JSON.parse(readFileSync(resolve(root, "data/extra-cli/public-read-v1/contracts-margin-snapshot.json"), "utf8"));
 const d = diagnoseMargin(snap.records[0]);
-process.stdout.write(JSON.stringify({ diagnosis: d, inputs: evaluateIndexability(d, { sample_size: 1 }) }));
+const inputs = evaluateIndexability(d, { sample_size: 1 });
+process.stdout.write(JSON.stringify({
+  diagnosis: d,
+  inputs,
+  producer_block: diagnoseProducerBlock(snap, d, inputs),
+}));
 """
     raw = subprocess.check_output(["node", "-e", script], cwd=ROOT, text=True)
     return json.loads(raw)
@@ -54,7 +59,23 @@ def main() -> int:
     }
     out = ROOT / "data/organic/money-asset-indexability.json"
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"ok": result["consistent"], "indexable": gate["indexable"], "fails": gate["fails"]}, ensure_ascii=False))
+    block = payload.get("producer_block") or {}
+    if not gate["indexable"]:
+        block_path = ROOT / "data/organic/money-asset-producer-block.json"
+        block_path.write_text(json.dumps(block, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(
+        json.dumps(
+            {
+                "ok": result["consistent"],
+                "indexable": gate["indexable"],
+                "fails": gate["fails"],
+                "producer_block_fields": [
+                    row.get("field") for row in (block.get("blocking_official_fields") or [])
+                ],
+            },
+            ensure_ascii=False,
+        )
+    )
     if not result["consistent"]:
         return 1
     return 0

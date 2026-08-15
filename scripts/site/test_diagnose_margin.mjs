@@ -14,6 +14,8 @@ const {
   diagnoseMargin,
   selectContract,
   evaluateIndexability,
+  diagnoseProducerBlock,
+  PRODUCER_FIELD_CATALOG,
   OFFICIAL,
   DERIVED,
   UNKNOWN,
@@ -133,8 +135,53 @@ assert.equal(gateInputs.has_provenance, true);
 assert.equal(gateInputs.legal_safe, true);
 assert.ok(gateInputs.data_confidence < 0.45, "partial producer must not look complete");
 
+const block = diagnoseProducerBlock(snapshot, first, gateInputs);
+assert.equal(block.gate_fail, "low_data_confidence");
+assert.equal(block.do_not_relax_gate, true);
+assert.equal(block.consumer_ready, true);
+assert.equal(block.producer, "extra-cli");
+assert.ok(block.producer_contracts.includes("public_read_v1@v1.0.0"));
+assert.equal(block.consumer_contract, snapshot.contract_version);
+const blockingNames = block.blocking_official_fields.map((row) => row.field);
+assert.ok(blockingNames.includes("vigencia_start"), JSON.stringify(blockingNames));
+assert.ok(blockingNames.includes("vigencia_end"));
+assert.ok(blockingNames.includes("data_assinatura"));
+assert.ok(blockingNames.includes("contract_value"));
+const reservedNames = block.reserved_margin_event_fields.map((row) => row.field);
+assert.ok(reservedNames.includes("margin_events.aditivo"));
+assert.ok(reservedNames.includes("margin_events.reajuste"));
+assert.ok(reservedNames.includes("margin_events.medicao"));
+assert.ok(reservedNames.includes("margin_events.pagamento"));
+assert.ok(PRODUCER_FIELD_CATALOG.some((row) => row.field === "vigencia_start" && row.emitted_by_public_read_v1 === false));
+
+const readyRecord = {
+  ...real,
+  vigencia_start: "2024-03-01",
+  vigencia_end: "2026-03-01",
+  data_assinatura: "2024-03-15",
+  contract_value: 150000,
+};
+const readyDiagnosis = diagnoseMargin(readyRecord);
+const readyInputs = evaluateIndexability(readyDiagnosis, { sample_size: 1 });
+assert.ok(
+  readyInputs.data_confidence >= 0.45,
+  `consumer must flip the floor when official vigencia + signed value arrive: ${readyInputs.data_confidence}`,
+);
+const readyBlock = diagnoseProducerBlock({ ...snapshot, records: [readyRecord] }, readyDiagnosis, readyInputs);
+assert.equal(readyBlock.gate_fail, null);
+assert.equal(readyBlock.blocking_official_fields.length, 0);
+assert.ok(readyBlock.reserved_margin_event_fields.length > 0, "event families stay UNKNOWN until producer emits them");
+assert.equal(readyDiagnosis.vigencia_inicio.classification, OFFICIAL);
+assert.equal(readyDiagnosis.aniversario_contratual.classification, DERIVED);
+
+const browserSrc = readFileSync(resolve(root, "assets/js/diagnose-margin.js"), "utf8");
+assert.ok(browserSrc.includes("function diagnoseProducerBlock"));
+assert.ok(browserSrc.includes("PRODUCER_FIELD_CATALOG"));
+
 console.log("DIAGNOSE_MARGIN_OK", {
   official: first.official_count,
   unknown: first.unknown_count,
   slug: first.public_id_slug,
+  producer_block: blockingNames,
+  ready_confidence: readyInputs.data_confidence,
 });

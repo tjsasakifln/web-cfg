@@ -1,0 +1,146 @@
+{
+  "asset": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+  "gate_fail": "low_data_confidence",
+  "indexable_by_data_confidence": false,
+  "data_confidence": 0.4,
+  "producer": "extra-cli",
+  "producer_contracts": [
+    "public_read_v1@v1.0.0",
+    "pseo-export@1.1.0"
+  ],
+  "consumer_contract": "contract-margin-event-v1.0.0",
+  "snapshot_id": "pseo-20260802T032433Z-47e7e07c",
+  "snapshot_as_of": "2026-07-31",
+  "record_count": 2,
+  "completeness": "PARTIAL",
+  "official_count": 10,
+  "unknown_count": 15,
+  "blocking_official_fields": [
+    {
+      "field": "vigencia_start",
+      "official_name": "vigencia",
+      "consumer_field": "vigencia_inicio",
+      "producer_family": "public_read_v1.contracts",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": true,
+      "classification": "UNKNOWN",
+      "reason": "vigencia_not_in_producer_projection"
+    },
+    {
+      "field": "vigencia_end",
+      "official_name": "vigencia",
+      "consumer_field": "vigencia_fim",
+      "producer_family": "public_read_v1.contracts",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": true,
+      "classification": "UNKNOWN",
+      "reason": "vigencia_not_in_producer_projection"
+    },
+    {
+      "field": "data_assinatura",
+      "official_name": "aniversario/reajuste calendar",
+      "consumer_field": "aniversario_contratual",
+      "producer_family": "public_read_v1.contracts",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": true,
+      "classification": "UNKNOWN",
+      "reason": "no_official_start_or_signature_date"
+    },
+    {
+      "field": "contract_value",
+      "official_name": "valor contratual assinado",
+      "consumer_field": "valor_contratual",
+      "producer_family": "public_read_v1.contracts",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": true,
+      "blocks_indexability": true,
+      "classification": "UNKNOWN",
+      "reason": "signed_contract_value_not_in_producer_projection"
+    }
+  ],
+  "reserved_margin_event_fields": [
+    {
+      "field": "margin_events.aditivo",
+      "official_name": "aditivos",
+      "consumer_field": "evento:aditivo",
+      "producer_family": "CONTRACT_MARGIN_EVENT",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": false,
+      "classification": "UNKNOWN",
+      "reason": "margin_event_family_not_in_public_read_v1"
+    },
+    {
+      "field": "margin_events.apostilamento",
+      "official_name": "alteracao de escopo / apostilamento",
+      "consumer_field": "evento:apostilamento",
+      "producer_family": "CONTRACT_MARGIN_EVENT",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": false,
+      "classification": "UNKNOWN",
+      "reason": "margin_event_family_not_in_public_read_v1"
+    },
+    {
+      "field": "margin_events.prorrogacao",
+      "official_name": "eventos de prazo",
+      "consumer_field": "evento:prorrogacao",
+      "producer_family": "CONTRACT_MARGIN_EVENT",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": false,
+      "classification": "UNKNOWN",
+      "reason": "margin_event_family_not_in_public_read_v1"
+    },
+    {
+      "field": "margin_events.reajuste",
+      "official_name": "reajuste",
+      "consumer_field": "evento:reajuste",
+      "producer_family": "CONTRACT_MARGIN_EVENT",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": false,
+      "classification": "UNKNOWN",
+      "reason": "margin_event_family_not_in_public_read_v1"
+    },
+    {
+      "field": "margin_events.reequilibrio",
+      "official_name": "reequilibrio",
+      "consumer_field": "evento:reequilibrio",
+      "producer_family": "CONTRACT_MARGIN_EVENT",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": false,
+      "classification": "UNKNOWN",
+      "reason": "margin_event_family_not_in_public_read_v1"
+    },
+    {
+      "field": "margin_events.medicao",
+      "official_name": "medicoes",
+      "consumer_field": "evento:medicao",
+      "producer_family": "CONTRACT_MARGIN_EVENT",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": false,
+      "classification": "UNKNOWN",
+      "reason": "margin_event_family_not_in_public_read_v1"
+    },
+    {
+      "field": "margin_events.pagamento",
+      "official_name": "pagamentos",
+      "consumer_field": "evento:pagamento",
+      "producer_family": "CONTRACT_MARGIN_EVENT",
+      "producer_version": "v1.0.0",
+      "emitted_by_public_read_v1": false,
+      "blocks_indexability": false,
+      "classification": "UNKNOWN",
+      "reason": "margin_event_family_not_in_public_read_v1"
+    }
+  ],
+  "do_not_relax_gate": true,
+  "consumer_ready": true,
+  "next_action": "extra-cli must emit the blocking official fields on a versioned public_read family (vigência, signed contract_value, and/or data_assinatura). web-cfg already renders them. Do not lower the 0.45 floor."
+}
