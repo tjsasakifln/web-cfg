@@ -19,5 +19,11 @@ Issue remains **OPEN**. 28-day observation is planned, not complete.
 
 ## Verdict
 
+| Lane | State |
+|---|---|
+| In-repo 11-row accept | READY_FOR_HUMAN_ACCEPTANCE (rebased onto `origin/main` `f2f7f1e4`; manifesto pin UNCHANGED) |
+| DNS / TLS / Cloudflare / Railway cutover | BLOCKED (not authorized; Railway fallback 404; www TLS SAN mismatch) |
+| 28-day GSC Change-of-Address | HUMAN ACTION REQUIRED after cutover (window not started) |
+
 **BLOCKED** for cutover (DNS/TLS/bridge not authorized).  
-In-repo authoritative half is complete and reviewable.
+In-repo authoritative half is complete and reviewable. Do not merge until a human accepts the 11-row execute set.

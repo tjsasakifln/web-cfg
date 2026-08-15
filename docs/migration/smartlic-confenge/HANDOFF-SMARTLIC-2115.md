@@ -7,6 +7,12 @@
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  
 **Do not execute against any other file, branch, or unhashed edit.**
 
+### Pin reconciliation 2026-08-15 (PR #68 rebase)
+
+Manifesto bytes and execute set are **UNCHANGED**. SmartLic PR #2133 must keep pin `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d` and the same 11 ready 301s / default 410. Do **not** regenerate the bridge map for this rebase.
+
+The pre-rebase web-cfg commit `3f112bfbd9e6b042691e1c09812af00f42735adb` is no longer on this branch after replay onto `origin/main` `f2f7f1e4`. The manifesto-carrying commit is now `dad3414c` (same `manifesto.v1.json` / `.sha256`). Counterpart may update the cited web-cfg SHA; the hash/pin does not change.
+
 Recompute: `python3 -c "from pathlib import Path; import hashlib; print(hashlib.sha256(Path('data/migration/smartlic-confenge/manifesto.v1.json').read_bytes()).hexdigest())"`  
 Must match `data/migration/smartlic-confenge/manifesto.v1.sha256`.
 
