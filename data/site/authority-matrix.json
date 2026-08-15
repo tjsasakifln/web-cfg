@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-08-15",
+  "adr": "ADR-STRAT-002",
+  "issue": 74,
+  "audit_chain": [
+    "quem_afirma",
+    "competencia",
+    "metodo_dado",
+    "revisao",
+    "atualizacao",
+    "limitacoes",
+    "como_corrigir"
+  ],
+  "reviewer_trigger": {
+    "required_when": [
+      "lei_14133_page",
+      "jurisprudencia_page",
+      "material_legal_claim"
+    ],
+    "definition": "Revisor independente é obrigatório quando a superfície faz afirmação normativa material (lei, jurisprudência ou enquadramento prescritivo) e não declara, de forma visível, que não há segundo revisor nomeado.",
+    "solo_responsible_allowed": true,
+    "solo_disclosure_tokens": [
+      "responsável técnico",
+      "responsavel tecnico",
+      "sem revisão independente",
+      "sem revisao independente",
+      "não há segundo revisor",
+      "nao ha segundo revisor",
+      "não há segundo revisor nomeado",
+      "biblioteca técnica confenge"
+    ],
+    "not_required_when": [
+      "service_positioning_without_prescriptive_legal_claim",
+      "tool_howto_without_legal_opinion",
+      "demonstrative_case_labeled_as_such"
+    ]
+  },
+  "permission_classes": [
+    "demonstrativo",
+    "consented",
+    "confidential",
+    "redacted"
+  ],
+  "surfaces": {
+    "servico": {
+      "label": "página de serviço",
+      "author": "required",
+      "reviewer": "optional_unless_legal_claim",
+      "evidence": "required_if_credential_or_proof",
+      "update_history": "required",
+      "methodology": "optional",
+      "as_of": "optional",
+      "coverage": "optional",
+      "limitations": "recommended",
+      "permission_class": "not_applicable",
+      "correction_link": "required",
+      "examples": [
+        "/diretoria-b2g/",
+        "/diagnostico-b2g-360/",
+        "/bid-room-licitacoes-obras/",
+        "/defesa-margem-contratos-publicos/"
+      ]
+    },
+    "conteudo_tecnico": {
+      "label": "conteúdo técnico",
+      "author": "required",
+      "reviewer": "required_if_legal_claim",
+      "evidence": "required",
+      "update_history": "required",
+      "methodology": "recommended",
+      "as_of": "recommended",
+      "coverage": "optional",
+      "limitations": "required",
+      "permission_class": "not_applicable",
+      "correction_link": "required",
+      "examples": [
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/lei-14133-obras/limite-25-50-aditivo-obra/"
+      ]
+    },
+    "ferramenta": {
+      "label": "ferramenta",
+      "author": "required",
+      "reviewer": "optional_unless_legal_claim",
+      "evidence": "required",
+      "update_history": "required",
+      "methodology": "required",
+      "as_of": "required",
+      "coverage": "recommended",
+      "limitations": "required",
+      "permission_class": "not_applicable",
+      "citation_link": "required",
+      "correction_link": "required",
+      "examples": [
+        "/ferramentas/limite-acrescimos-supressoes/"
+      ]
+    },
+    "pesquisa_dataset": {
+      "label": "pesquisa/dataset",
+      "author": "required",
+      "reviewer": "optional",
+      "evidence": "required",
+      "update_history": "required",
+      "methodology": "required",
+      "as_of": "required",
+      "coverage": "required",
+      "limitations": "required",
+      "permission_class": "not_applicable",
+      "citation_link": "required",
+      "correction_link": "required",
+      "examples": [
+        "/metodologia-inteligencia/",
+        "/radar/nacional-obras-publicas/"
+      ]
+    },
+    "caso_proof": {
+      "label": "caso/proof",
+      "author": "required",
+      "reviewer": "optional",
+      "evidence": "required",
+      "update_history": "required",
+      "methodology": "required",
+      "as_of": "recommended",
+      "coverage": "optional",
+      "limitations": "required",
+      "permission_class": "required",
+      "correction_link": "required",
+      "examples": [
+        "/casos/",
+        "/casos/aditivo-art125-demonstrativo/",
+        "/casos/medicao-glosa-demonstrativo/"
+      ]
+    }
+  }
+}

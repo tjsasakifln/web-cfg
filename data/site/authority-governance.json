@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-08-15",
+  "issue": 74,
+  "canonical_org": {
+    "name": "CONFENGE",
+    "legal_name": "CONFENGE",
+    "url": "https://confenge.com.br/",
+    "id": "https://confenge.com.br/#organization",
+    "cnpj": "52.407.089/0001-09"
+  },
+  "canonical_person": {
+    "name": "Engº Tiago Sasaki",
+    "url": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+    "id": "https://confenge.com.br/#tiago",
+    "job_title": "Engenheiro Civil e consultor B2G"
+  },
+  "correction": {
+    "owner_name": "Engº Tiago Sasaki",
+    "owner_email": "tiago.sasaki@confenge.com.br",
+    "acknowledge_sla": "até 2 dias úteis após o recebimento do pedido identificável",
+    "publish_sla": "até 10 dias úteis após a confirmação do erro material",
+    "channel": "mailto:tiago.sasaki@confenge.com.br?subject=Correcao%20editorial%20CONFENGE",
+    "public_path": "/correcoes/"
+  },
+  "refresh": {
+    "owner_name": "Engº Tiago Sasaki",
+    "owner_email": "tiago.sasaki@confenge.com.br",
+    "sla": "páginas com data as_of ou dateModified visível; recortes de dados só sobem com fonte e período; UNKNOWN permanece UNKNOWN"
+  },
+  "editorial": {
+    "owner_name": "Engº Tiago Sasaki",
+    "public_path": "/politica-editorial/"
+  },
+  "ai_use": {
+    "public_path": "/uso-de-ia/"
+  },
+  "conflicts": {
+    "public_path": "/conflitos/"
+  },
+  "methodology": {
+    "public_path": "/metodologia-inteligencia/"
+  },
+  "policies": [
+    {
+      "id": "editorial",
+      "label": "Política editorial",
+      "path": "/politica-editorial/"
+    },
+    {
+      "id": "corrections",
+      "label": "Correções",
+      "path": "/correcoes/"
+    },
+    {
+      "id": "ai_use",
+      "label": "Uso de IA",
+      "path": "/uso-de-ia/"
+    },
+    {
+      "id": "conflicts",
+      "label": "Conflitos",
+      "path": "/conflitos/"
+    },
+    {
+      "id": "privacy",
+      "label": "Privacidade",
+      "path": "/privacidade/"
+    }
+  ],
+  "footer_authority_paths": [
+    "/politica-editorial/",
+    "/correcoes/",
+    "/uso-de-ia/",
+    "/conflitos/",
+    "/privacidade/"
+  ]
+}

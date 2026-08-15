@@ -1,0 +1,46 @@
+{
+  "schema_version": "authority-signals-v1",
+  "observed_at": "2026-08-15",
+  "issue": 74,
+  "notes": "Baseline of already-available authority signals. A metric without an in-repo source that actually measures that metric is the literal UNKNOWN. GSC samples and organic search-result checks are not branded-search, direct/returning, referring-domain or citation series.",
+  "signals": {
+    "branded_search": {
+      "value": "UNKNOWN",
+      "source": null,
+      "source_date": null,
+      "limitation": "No in-repo branded-query time series (Search Console branded filter, or equivalent) is published. data/organic/search-baseline-2026-08-14.json is a focused live SERP sample, not branded-search volume."
+    },
+    "direct_returning": {
+      "value": "UNKNOWN",
+      "source": null,
+      "source_date": null,
+      "limitation": "No first-party analytics extract of direct or returning sessions is stored in this repository. Telemetry exists as an operational collector; it is not a published authority series."
+    },
+    "qualified_referring_domains": {
+      "value": "UNKNOWN",
+      "source": null,
+      "source_date": null,
+      "limitation": "No reviewed referring-domain list with qualification criteria is checked in. Do not infer domains from GSC query samples."
+    },
+    "citation_reuse": {
+      "value": "UNKNOWN",
+      "source": null,
+      "source_date": null,
+      "limitation": "No observed third-party citation or reuse record is stored. Self-citation on CONFENGE pages is not reuse."
+    }
+  },
+  "related_sources_not_used_as_these_metrics": [
+    {
+      "path": "data/organic/search-baseline-2026-08-14.json",
+      "observed_at": "2026-08-14",
+      "what_it_is": "Focused live search-result sample for entity and priority-demand checks",
+      "what_it_is_not": "Branded search volume, direct/returning traffic, referring domains, or citation/reuse"
+    },
+    {
+      "path": "seo/gsc-2026-07-30",
+      "observed_at": "2026-07-30",
+      "what_it_is": "Search Console Performance export used by the open Radar recorte",
+      "what_it_is_not": "Branded-search, direct/returning, qualified referring domains, or third-party citation"
+    }
+  ]
+}
