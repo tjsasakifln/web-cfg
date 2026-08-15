@@ -75,9 +75,9 @@ Não é um dashboard. Cada série existe para sustentar uma pergunta executiva.
 ### C3
 
 - **Pergunta:** Qual o tamanho típico do contrato (P25, mediana, P75) por mercado, e o que esse número não significa?
-- **Unidade:** BRL nominal; P25/mediana/P75; piso 5000
-- **Caveat:** n por célula de preço (12–19) é menor que n do mercado correspondente porque o piso de 5000 BRL remove tickets menores. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.
-- **Takeaway:** A mediana é o contrato integral no recorte com piso de 5000 BRL, não preço unitário nem faixa nacional de preço praticado.
+- **Unidade:** BRL nominal; P25/mediana/P75 da célula de preço (prices.json)
+- **Caveat:** prices.json e markets.json são populações de query distintas. n e percentis divergem nos dois sentidos e não se explica o desvio pelo piso de 5000 BRL (esse piso é critério da célula de preço, não uma prova de que n_preço < n_mercado). Células de preço sem mercado publicado (ex.: manutenção predial) não entram no wedge. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.
+- **Takeaway:** A mediana de C3 vem de prices.json, população distinta de markets.json. É contrato integral, não preço unitário nem faixa nacional de preço praticado.
 - **Dados:**
 
 ```json

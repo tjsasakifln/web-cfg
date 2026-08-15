@@ -130,11 +130,12 @@ def _charts(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "id": "C3",
             "pergunta": q7["question"],
             "dados": ticket_series,
-            "unidade": "BRL nominal; P25/mediana/P75; piso 5000",
+            "unidade": "BRL nominal; P25/mediana/P75 da célula de preço (prices.json)",
             "caveat": q7["limitation"],
             "takeaway": (
-                "A mediana é o contrato integral no recorte com piso de 5000 BRL, "
-                "não preço unitário nem faixa nacional de preço praticado."
+                "A mediana de C3 vem de prices.json, população distinta de "
+                "markets.json. É contrato integral, não preço unitário nem "
+                "faixa nacional de preço praticado."
             ),
         },
         {

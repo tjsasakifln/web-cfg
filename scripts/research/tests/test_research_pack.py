@@ -78,6 +78,68 @@ def test_every_answered_metric_has_provenance(pack):
             assert metric.get(field), f"{metric['id']} missing {field}"
 
 
+def _price_n_ge_market_n_exists(snapshot) -> bool:
+    markets = {item.get("slug"): item for item in snapshot["markets"]}
+    for price in snapshot["prices"]:
+        market = markets.get(price.get("slug"))
+        if not market:
+            continue
+        price_n = price.get("n") or price.get("observation_count")
+        market_n = market.get("contract_count")
+        if price_n is None or market_n is None:
+            continue
+        if int(price_n) >= int(market_n):
+            return True
+    return False
+
+
+def test_q7_does_not_claim_price_n_below_market_when_snapshot_says_otherwise(snapshot):
+    """Q7/C3 must not invent 'price n < market n because of the 5000 floor'.
+
+    Drives shipped answer_questions + build_pack on the live snapshot. If any
+    overlapping slug has price n >= market n, the limitation/caveat cannot
+    claim the price cell is smaller than the matching market.
+    """
+    questions = answer_questions(snapshot)
+    q7 = next(item for item in questions if item["id"] == "Q7")
+    pack = build_pack(snapshot)
+    c3 = next(item for item in pack["charts"] if item["id"] == "C3")
+    blob = " ".join(
+        [
+            q7.get("limitation") or "",
+            c3.get("caveat") or "",
+            c3.get("takeaway") or "",
+        ]
+    ).lower()
+
+    vs = (q7.get("value") or {}).get("price_vs_market") or []
+    assert vs, "Q7 must expose price_vs_market from the live snapshot"
+    for row in vs:
+        price_n = row["price_n"]
+        market_n = row["market_n"]
+        slug = row["slug"]
+        live_price = next(
+            item for item in snapshot["prices"] if item.get("slug") == slug
+        )
+        live_market = next(
+            item for item in snapshot["markets"] if item.get("slug") == slug
+        )
+        live_price_n = live_price.get("n") or live_price.get("observation_count")
+        assert price_n == live_price_n
+        assert market_n == live_market.get("contract_count")
+
+    if _price_n_ge_market_n_exists(snapshot):
+        forbidden = (
+            "menor que n do mercado",
+            "n do mercado correspondente porque o piso",
+            "remove tickets menores",
+            "é menor que n do mercado",
+        )
+        for phrase in forbidden:
+            assert phrase not in blob, phrase
+        assert "populações de query distintas" in (q7.get("limitation") or "")
+
+
 def test_unsupported_questions_are_marked(pack):
     unsupported = [item for item in pack["questions"] if item["status"] == "unsupported"]
     assert unsupported, "evolution must be unsupported on this snapshot"

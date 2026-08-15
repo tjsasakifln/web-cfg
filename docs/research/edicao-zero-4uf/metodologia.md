@@ -46,7 +46,7 @@ O exportador atribui um arquétipo primário por contrato. Este pack não re-ded
 | Q4 | concentracao | partial | data/pseo/agencies.json + data/pseo/competition.json | contracts in the single published agency/competition slice |
 | Q5 | regional | answered | data/pseo/markets.json | the 4 published market cells |
 | Q6 | categorias | answered | data/pseo/archetypes.json + data/pseo/markets.json | evidence_contract_count of each archetype object; published markets are a subset |
-| Q7 | tamanho_tipico | answered | data/pseo/prices.json | contracts in the price cell with valor_total >= 5000 BRL |
+| Q7 | tamanho_tipico | answered | data/pseo/prices.json (percentiles); markets.json only as a distinct comparison population | price-cell observations as published in prices.json (inclusion_criteria of that file, including valor_total >= 5000 BRL) |
 | Q8 | evolucao | unsupported | data/pseo/markets.json value_by_year | n/a — pergunta não sustentada neste snapshot |
 
 ### Campos obrigatórios de cada métrica respondida

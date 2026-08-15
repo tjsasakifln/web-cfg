@@ -483,28 +483,57 @@ def answer_questions(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
     )
     answers.append(q6)
 
-    # Q7 typical size
-    price_rows = [
-        {
-            "slug": item.get("slug"),
+    # Q7 typical size — prices.json is a distinct query from markets.json
+    markets_by_slug = {item.get("slug"): item for item in markets}
+    price_vs_market = []
+    price_rows = []
+    for item in prices:
+        slug = item.get("slug")
+        market = markets_by_slug.get(slug) or {}
+        price_n = item.get("n") or item.get("observation_count")
+        market_n = market.get("contract_count")
+        row = {
+            "slug": slug,
             "uf": item.get("region"),
             "object_label": item.get("object_label"),
-            "n": item.get("n") or item.get("observation_count"),
+            "n": price_n,
             "min": item.get("min_value") or item.get("min"),
             "p25": item.get("p25_value") or item.get("p25"),
             "median": item.get("median_value") or item.get("mediana"),
             "p75": item.get("p75_value") or item.get("p75"),
             "max": item.get("max_value") or item.get("max"),
-            "floor_brl": 5000,
+            "price_floor_brl": 5000,
+            "published_market": bool(market),
+            "market_contract_count": market_n,
+            "market_median": market.get("median_value"),
+            "market_p25": market.get("p25_value"),
+            "market_p75": market.get("p75_value"),
             "unit_price": False,
         }
-        for item in prices
-    ]
+        price_rows.append(row)
+        if market:
+            price_vs_market.append(
+                {
+                    "slug": slug,
+                    "price_n": price_n,
+                    "market_n": market_n,
+                    "price_n_minus_market_n": (
+                        None
+                        if price_n is None or market_n is None
+                        else int(price_n) - int(market_n)
+                    ),
+                }
+            )
     q7 = {
         **specs["Q7"],
         "status": "answered",
         "value": {
             "by_price_cell": price_rows,
+            "price_vs_market": price_vs_market,
+            "populations": (
+                "prices.json and markets.json are distinct exporter queries "
+                "on the same snapshot; n and percentiles are not interchangeable"
+            ),
             "not_unit_price": True,
             "not_practiced_price_band": True,
         },
@@ -513,22 +542,30 @@ def answer_questions(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
     q7.update(
         _prov(
             snapshot,
-            source="data/pseo/prices.json",
-            denominator="contracts in the price cell with valor_total >= 5000 BRL",
+            source="data/pseo/prices.json (percentiles); markets.json only as a distinct comparison population",
+            denominator=(
+                "price-cell observations as published in prices.json "
+                "(inclusion_criteria of that file, including valor_total >= 5000 BRL)"
+            ),
             filters=(
-                "aec_confirmed + matching archetype + UF + valor_total >= 5000; "
-                "mean is not published"
+                "aec_confirmed + matching archetype + UF as stated on each "
+                "price cell; mean is not published. Do not reuse markets.json n."
             ),
             dedup_logic="one contract instrument per observation; SQLite ORDER BY + OFFSET percentiles",
             value_semantics=(
-                "P25/mediana/P75 of the integral contract value in nominal BRL; "
-                "not a unit price and not a national practiced-price band"
+                "P25/mediana/P75 of the integral contract value in nominal BRL "
+                "inside the price-cell query; not a unit price, not a "
+                "practiced-price band, and not the markets.json median"
             ),
-            exclusions="null, zero, or below 5000 BRL; unclassified objects; arithmetic mean",
+            exclusions="null, zero, or below 5000 BRL inside the price query; unclassified objects; arithmetic mean",
             limitation=(
-                "n por célula de preço (12–19) é menor que n do mercado correspondente "
-                "porque o piso de 5000 BRL remove tickets menores. "
-                "Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis."
+                "prices.json e markets.json são populações de query distintas. "
+                "n e percentis divergem nos dois sentidos e não se explica o "
+                "desvio pelo piso de 5000 BRL (esse piso é critério da célula "
+                "de preço, não uma prova de que n_preço < n_mercado). "
+                "Células de preço sem mercado publicado (ex.: manutenção predial) "
+                "não entram no wedge. Objetos do mesmo arquétipo podem ser "
+                "tecnicamente incomparáveis."
             ),
         )
     )

@@ -27,7 +27,7 @@
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "data_as_of": "2026-07-31",
   "generated_at_snapshot": "2026-08-02T03:24:33Z",
-  "pack_built_at": "2026-08-15T02:29:52Z",
+  "pack_built_at": "2026-08-15T02:39:14Z",
   "reproducibility": {
     "snapshot_dir": "/mnt/d/webcfg/data/pseo",
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -767,7 +767,12 @@
             "median": 15268.5,
             "p75": 23400.0,
             "max": 47759.63,
-            "floor_brl": 5000,
+            "price_floor_brl": 5000,
+            "published_market": false,
+            "market_contract_count": null,
+            "market_median": null,
+            "market_p25": null,
+            "market_p75": null,
             "unit_price": false
           },
           {
@@ -780,7 +785,12 @@
             "median": 504997.83,
             "p75": 1300000.0,
             "max": 9690000.0,
-            "floor_brl": 5000,
+            "price_floor_brl": 5000,
+            "published_market": true,
+            "market_contract_count": 12,
+            "market_median": 545585.4,
+            "market_p25": 412900.0,
+            "market_p75": 1300000.0,
             "unit_price": false
           },
           {
@@ -793,7 +803,12 @@
             "median": 996225.26,
             "p75": 1463918.41,
             "max": 13975273.02,
-            "floor_brl": 5000,
+            "price_floor_brl": 5000,
+            "published_market": true,
+            "market_contract_count": 13,
+            "market_median": 996225.26,
+            "market_p25": 744003.0,
+            "market_p75": 1463918.41,
             "unit_price": false
           },
           {
@@ -806,7 +821,12 @@
             "median": 415499.99,
             "p75": 1390000.0,
             "max": 6740000.0,
-            "floor_brl": 5000,
+            "price_floor_brl": 5000,
+            "published_market": true,
+            "market_contract_count": 10,
+            "market_median": 300879.55,
+            "market_p25": 199500.0,
+            "market_p75": 1390000.0,
             "unit_price": false
           },
           {
@@ -819,10 +839,42 @@
             "median": 345532.53,
             "p75": 635000.0,
             "max": 8782202.6,
-            "floor_brl": 5000,
+            "price_floor_brl": 5000,
+            "published_market": true,
+            "market_contract_count": 13,
+            "market_median": 310910.94,
+            "market_p25": 205000.0,
+            "market_p75": 635000.0,
             "unit_price": false
           }
         ],
+        "price_vs_market": [
+          {
+            "slug": "edificacoes-publicas-mg",
+            "price_n": 15,
+            "market_n": 12,
+            "price_n_minus_market_n": 3
+          },
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-pi",
+            "price_n": 13,
+            "market_n": 13,
+            "price_n_minus_market_n": 0
+          },
+          {
+            "slug": "edificacoes-publicas-rs",
+            "price_n": 12,
+            "market_n": 10,
+            "price_n_minus_market_n": 2
+          },
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-sc",
+            "price_n": 12,
+            "market_n": 13,
+            "price_n_minus_market_n": -1
+          }
+        ],
+        "populations": "prices.json and markets.json are distinct exporter queries on the same snapshot; n and percentiles are not interchangeable",
         "not_unit_price": true,
         "not_practiced_price_band": true
       },
@@ -837,7 +889,12 @@
           "median": 15268.5,
           "p75": 23400.0,
           "max": 47759.63,
-          "floor_brl": 5000,
+          "price_floor_brl": 5000,
+          "published_market": false,
+          "market_contract_count": null,
+          "market_median": null,
+          "market_p25": null,
+          "market_p75": null,
           "unit_price": false
         },
         {
@@ -850,7 +907,12 @@
           "median": 504997.83,
           "p75": 1300000.0,
           "max": 9690000.0,
-          "floor_brl": 5000,
+          "price_floor_brl": 5000,
+          "published_market": true,
+          "market_contract_count": 12,
+          "market_median": 545585.4,
+          "market_p25": 412900.0,
+          "market_p75": 1300000.0,
           "unit_price": false
         },
         {
@@ -863,7 +925,12 @@
           "median": 996225.26,
           "p75": 1463918.41,
           "max": 13975273.02,
-          "floor_brl": 5000,
+          "price_floor_brl": 5000,
+          "published_market": true,
+          "market_contract_count": 13,
+          "market_median": 996225.26,
+          "market_p25": 744003.0,
+          "market_p75": 1463918.41,
           "unit_price": false
         },
         {
@@ -876,7 +943,12 @@
           "median": 415499.99,
           "p75": 1390000.0,
           "max": 6740000.0,
-          "floor_brl": 5000,
+          "price_floor_brl": 5000,
+          "published_market": true,
+          "market_contract_count": 10,
+          "market_median": 300879.55,
+          "market_p25": 199500.0,
+          "market_p75": 1390000.0,
           "unit_price": false
         },
         {
@@ -889,20 +961,25 @@
           "median": 345532.53,
           "p75": 635000.0,
           "max": 8782202.6,
-          "floor_brl": 5000,
+          "price_floor_brl": 5000,
+          "published_market": true,
+          "market_contract_count": 13,
+          "market_median": 310910.94,
+          "market_p25": 205000.0,
+          "market_p75": 635000.0,
           "unit_price": false
         }
       ],
-      "source": "data/pseo/prices.json",
+      "source": "data/pseo/prices.json (percentiles); markets.json only as a distinct comparison population",
       "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
       "as_of": "2026-07-31",
       "cutoff": "2026-10-07",
-      "denominator": "contracts in the price cell with valor_total >= 5000 BRL",
-      "filters": "aec_confirmed + matching archetype + UF + valor_total >= 5000; mean is not published",
+      "denominator": "price-cell observations as published in prices.json (inclusion_criteria of that file, including valor_total >= 5000 BRL)",
+      "filters": "aec_confirmed + matching archetype + UF as stated on each price cell; mean is not published. Do not reuse markets.json n.",
       "dedup_logic": "one contract instrument per observation; SQLite ORDER BY + OFFSET percentiles",
-      "value_semantics": "P25/mediana/P75 of the integral contract value in nominal BRL; not a unit price and not a national practiced-price band",
-      "exclusions": "null, zero, or below 5000 BRL; unclassified objects; arithmetic mean",
-      "limitation": "n por célula de preço (12–19) é menor que n do mercado correspondente porque o piso de 5000 BRL remove tickets menores. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis."
+      "value_semantics": "P25/mediana/P75 of the integral contract value in nominal BRL inside the price-cell query; not a unit price, not a practiced-price band, and not the markets.json median",
+      "exclusions": "null, zero, or below 5000 BRL inside the price query; unclassified objects; arithmetic mean",
+      "limitation": "prices.json e markets.json são populações de query distintas. n e percentis divergem nos dois sentidos e não se explica o desvio pelo piso de 5000 BRL (esse piso é critério da célula de preço, não uma prova de que n_preço < n_mercado). Células de preço sem mercado publicado (ex.: manutenção predial) não entram no wedge. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis."
     },
     {
       "id": "Q8",
@@ -1225,9 +1302,9 @@
           "p75": 635000.0
         }
       ],
-      "unidade": "BRL nominal; P25/mediana/P75; piso 5000",
-      "caveat": "n por célula de preço (12–19) é menor que n do mercado correspondente porque o piso de 5000 BRL remove tickets menores. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.",
-      "takeaway": "A mediana é o contrato integral no recorte com piso de 5000 BRL, não preço unitário nem faixa nacional de preço praticado."
+      "unidade": "BRL nominal; P25/mediana/P75 da célula de preço (prices.json)",
+      "caveat": "prices.json e markets.json são populações de query distintas. n e percentis divergem nos dois sentidos e não se explica o desvio pelo piso de 5000 BRL (esse piso é critério da célula de preço, não uma prova de que n_preço < n_mercado). Células de preço sem mercado publicado (ex.: manutenção predial) não entram no wedge. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.",
+      "takeaway": "A mediana de C3 vem de prices.json, população distinta de markets.json. É contrato integral, não preço unitário nem faixa nacional de preço praticado."
     },
     {
       "id": "C4",

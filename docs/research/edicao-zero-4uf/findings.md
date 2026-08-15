@@ -84,7 +84,7 @@ Evolução temporal do recorte: não sustentado. Série anual insuficiente: 3 de
 
 **Status:** `answered`
 
-**Limitação:** n por célula de preço (12–19) é menor que n do mercado correspondente porque o piso de 5000 BRL remove tickets menores. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.
+**Limitação:** prices.json e markets.json são populações de query distintas. n e percentis divergem nos dois sentidos e não se explica o desvio pelo piso de 5000 BRL (esse piso é critério da célula de preço, não uma prova de que n_preço < n_mercado). Células de preço sem mercado publicado (ex.: manutenção predial) não entram no wedge. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.
 
 ### Q8 — evolucao
 
