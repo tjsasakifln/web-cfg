@@ -30,13 +30,9 @@ const MAX_FIELD = {
   landing_url: 240,
   idempotency_key: 80,
   turnstile_token: 2048,
-  asset_id: 80,
-  route_family: 80,
   public_contract_id: 80,
   public_entity_id: 80,
   public_id_slug: 80,
-  cta_id: 80,
-  correlation_id: 80,
   cnpj: 20,
 };
 
@@ -276,13 +272,9 @@ function validateAndNormalize(data) {
     correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id, "correlation_id") || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
-    asset_id: clamp(data.asset_id, MAX_FIELD.asset_id) || null,
-    route_family: clamp(data.route_family, MAX_FIELD.route_family) || null,
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     public_id_slug: clamp(data.public_id_slug, MAX_FIELD.public_id_slug) || null,
-    cta_id: clamp(data.cta_id, MAX_FIELD.cta_id) || null,
-    correlation_id: clamp(data.correlation_id, MAX_FIELD.correlation_id) || null,
     cnpj: clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
     source: "CONFENGE_WEB",
   };
