@@ -28,6 +28,7 @@ const {
 const { createStore, buildLeadRecord } = require("./lib/lead-store.cjs");
 const { rateLimit } = require("./lib/lead-rate-limit.cjs");
 const { verifyTurnstile, deliverAll } = require("./lib/lead-delivery.cjs");
+const { initialHandoff, attemptInboundHandoff } = require("./lib/inbound-handoff.cjs");
 
 // Allow tests to inject store
 let _storeOverride = null;
@@ -305,6 +306,7 @@ exports.handler = async (event) => {
     headers: event.headers || {},
   });
   record.retention = retentionPolicy();
+  record.handoff = initialHandoff(process.env, record);
   // Safe operational log: kind only, never PII
   safeLog("info", "lead_record_kind", {
     lead_id,
@@ -399,7 +401,19 @@ exports.handler = async (event) => {
     has_phone: Boolean(record.telefone),
     has_email: Boolean(record.email),
     utm_source: record.utm_source || null,
+    handoff: record.handoff && record.handoff.status,
   });
+
+  // Warmbly inbound after persist + outbox row. Failures never drop the lead
+  // or change the visitor capture response.
+  try {
+    await attemptInboundHandoff(store, record);
+  } catch (err) {
+    safeLog("error", "inbound_handoff_unexpected", {
+      lead_id,
+      code: err && err.message ? String(err.message).slice(0, 80) : "error",
+    });
+  }
 
   // Delivery after persist — failures update status, never drop the lead
   let delivery;

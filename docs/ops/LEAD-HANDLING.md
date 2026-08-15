@@ -2,9 +2,12 @@
 
 ## Entrada
 
-1. Formulário → `POST /.netlify/functions/lead` → persistência Blobs → `lead_id`
-2. Notificação ops (webhook/ntfy auth) e/ou e-mail Resend
-3. Clique WhatsApp / mailto (sem persistência automática — conversão distinta)
+1. Formulário → `POST /.netlify/functions/lead` → persistência Blobs → `lead_id` / `receipt_id`
+2. Outbox inbound `PENDING` e POST `confenge.inbound.v1` para Warmbly (HMAC server-side). Warmbly fora **não** falha a captura.
+3. Notificação ops Slack-style (`OPS_WEBHOOK_URL`) e/ou e-mail Resend
+4. Clique WhatsApp / mailto (sem persistência automática — conversão distinta)
+
+Handoff Warmbly: [WARMBLY-INBOUND.md](./WARMBLY-INBOUND.md). Não usar `OPS_WEBHOOK_URL` como destino inbound.
 
 ## Estados
 
@@ -13,6 +16,8 @@
 | `persisted` | Gravado; notify/email ainda não OK |
 | `persisted_notified` | Gravado e pelo menos um canal de notificação OK |
 | `suppressed` | Honeypot (não é lead real) |
+
+Handoff (campo `handoff.status`, independente do status de captura): `PENDING` → `DELIVERED` / `RETRYABLE` / `DEAD` / `BLOCKED` / `SKIPPED`.
 
 ## Qualificação e prioridade
 

@@ -21,6 +21,8 @@ Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner.
 | `TURNSTILE_SECRET_KEY` | secret Cloudflare | Antiabuso primário | ver §4 |
 | `LEAD_REQUIRE_TURNSTILE` | `1` **somente após** sitekey no HTML | Força verify | POST sem token → **403** |
 | `LEAD_PROBE_SECRET` | random | Smoke sintético | `X-Confenge-Probe` header |
+| `CONFENGE_INBOUND_WEBHOOK_URL` | HTTPS `…/api/v1/webhooks/confenge/inbound` | Handoff `confenge.inbound.v1` (Warmbly PR #71) | Synthetic persist + ops `inbound_handoff` delivered |
+| `CONFENGE_INBOUND_WEBHOOK_SECRET` | mesmo valor no Warmbly | HMAC `X-Warmbly-Signature` | Destino 201; 401 se secreto divergir |
 
 **Status 2026-08-02:** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`, `IP_HASH_SALT` set via Netlify CLI (production). Redeploy `6a6f7027381c29f8c55c70d1` live. E-mail lead **Delivered** (Resend UI). Ainda OPEN: `OPS_WEBHOOK_*`, Turnstile, probe secret.
 

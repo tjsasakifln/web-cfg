@@ -188,6 +188,25 @@ if (TOKEN) {
   check("gsc_insights_auth", gsc.status === 200 && gsc.body.ok === true, `http=${gsc.status}`, {
     critical: false,
   });
+
+  const inbound = await j("/.netlify/functions/ops?action=inbound_handoff");
+  check(
+    "inbound_handoff_counters",
+    inbound.status === 200 && inbound.body.ok === true,
+    JSON.stringify(inbound.body.counters || {}),
+    { critical: false }
+  );
+  out.inbound_handoff = inbound.body.counters || null;
+  const drain = await j("/.netlify/functions/ops?action=drain_inbound", {
+    method: "POST",
+    body: JSON.stringify({ limit: 20 }),
+  });
+  check(
+    "inbound_handoff_drain",
+    drain.status === 200 && drain.body.ok === true,
+    `attempted=${drain.body.attempted || 0} delivered=${drain.body.delivered || 0}`,
+    { critical: false }
+  );
 } else {
   check("ops_token", true, "OPS_TOKEN not set — commercial checks skipped (set OPS_TOKEN for full daily)", {
     critical: false,

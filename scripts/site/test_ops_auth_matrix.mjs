@@ -20,6 +20,8 @@ const SENSITIVE = [
   "funnel",
   "gsc_insights",
   "backfill_record_kind",
+  "inbound_handoff",
+  "drain_inbound",
 ];
 
 function load() {
