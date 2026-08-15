@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>EDIÇÃO ZERO (preview noindex) | CONFENGE</title>
+<meta name="description" content="Preview interno do research pack pré-nacional SC/PI/MG/RS. Sem indexação."/>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="canonical" href="https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/"/>
+<link rel="stylesheet" href="/styles.css"/>
+<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<style>
+.radar-table { width:100%; border-collapse:collapse; font-size:.92rem; margin:1rem 0; }
+.radar-table th,.radar-table td { border:1px solid rgba(15,23,42,.1); padding:.5rem .6rem; text-align:left; }
+.radar-table th { background:#f1f5f9; }
+.note-box { background:#fffbeb; border:1px solid #fcd34d; padding:1rem; border-radius:10px; margin:1rem 0; }
+.method-box { background:#f8fafc; border:1px solid #e2e8f0; padding:1rem 1.15rem; border-radius:10px; margin:1rem 0; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<main id="conteudo" class="container" style="max-width:900px;padding:2rem 1rem 4rem">
+<p class="eyebrow">Preview interno · noindex · EDIÇÃO ZERO</p>
+<h1>Pavimentação e edificações no recorte pré-nacional (SC, PI, MG, RS)</h1>
+<p class="content-lead">
+Research pack factual. 48 contratos e
+R$ 70.292.373,24 nos 4 mercados publicados.
+Não descreve o Brasil.
+</p>
+<div class="note-box">
+<p><strong>Veredito:</strong> NEEDS_DATA</p>
+<p>Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência do datalake. PUBLISH exigiria export public_read versionado com cobertura de 27 UFs documentada e denominator explícito.</p>
+<p><strong>Indexação:</strong> noindex,nofollow. Fora do sitemap.</p>
+</div>
+<div class="method-box">
+<p><strong>dataset_hash:</strong> <code>0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30</code></p>
+<p><strong>data_as_of:</strong> 2026-07-31</p>
+<p><strong>Reprodução:</strong> <code>python3 -m scripts.research build</code></p>
+</div>
+<h2>Findings</h2>
+<ul><li><strong>F1</strong> (answered): Os 4 mercados publicados somam 48 contratos e 70292373.24 BRL nominais (data_as_of do snapshot). O snapshot classifica 233 contratos aec_confirmed em 11931 carregados.</li><li><strong>F2</strong> (answered): Compradores distintos por mercado publicado: SC pavimentacao=11, PI pavimentacao=6, MG edificacoes=10, RS edificacoes=10. Identidades nominais dos top buyers estão suprimidas.</li><li><strong>F3</strong> (answered): Fornecedores observados por mercado publicado: SC=11, PI=13, MG=11, RS=10.</li><li><strong>F4</strong> (partial): Concentração mensurável só na fatia MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL (RS): 49 contratos, 1 fornecedor(es), top3_share=1.0, período 2026-07-03–2026-07-03. 13 objetos rotulados reajuste.</li><li><strong>F5</strong> (answered): Tickets (piso 5000 BRL, contrato integral): MG Edificações públicas n=15 P25=412900.0 mediana=504997.83 P75=1300000.0; PI Pavimentação e infraestrutura viária n=13 P25=744003.0 mediana=996225.26 P75=1463918.41; RS Edificações públicas n=12 P25=199500.0 mediana=415499.99 P75=1390000.0; SC Pavimentação e infraestrutura viária n=12 P25=224135.0 mediana=345532.53 P75=635000.0. Não é preço unitário.</li><li><strong>F6</strong> (unsupported): Evolução temporal do recorte: não sustentado. Série anual insuficiente: 3 de 4 mercados publicados têm um único ano (pavimentacao-infraestrutura-viaria-sc, pavimentacao-infraestrutura-viaria-pi, edificacoes-publicas-mg). Apenas 1 mercado cruza dois anos civis, com n anual baixo e janelas de poucas semanas. Evolução do recorte: não sustentado.</li></ul>
+<h2>Gráficos essenciais</h2>
+<section id="C1"><h3>C1</h3><p><strong>Pergunta.</strong> Qual o volume e o valor observado de contratos AEC confirmados nos mercados publicados do recorte?</p><table class="radar-table"><thead><tr><th>label</th><th>contract_count</th><th>total_value_brl</th></tr></thead><tbody><tr><td>SC · pavimentacao-infraestrutura-viaria</td><td>13</td><td>15206416.82</td></tr><tr><td>PI · pavimentacao-infraestrutura-viaria</td><td>13</td><td>26172058.65</td></tr><tr><td>MG · edificacoes-publicas</td><td>12</td><td>16767654.94</td></tr><tr><td>RS · edificacoes-publicas</td><td>10</td><td>12146242.83</td></tr></tbody></table><p><strong>Unidade.</strong> BRL nominal (contrato integral)</p><p><strong>Caveat.</strong> Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake.</p><p><strong>Takeaway.</strong> O valor observado vive em 4 células mercado×UF. Somar as células descreve o recorte publicado, não o Brasil.</p></section><section id="C2"><h3>C2</h3><p><strong>Pergunta.</strong> Como se comparam contratos, compradores e fornecedores por mercado?</p><table class="radar-table"><thead><tr><th>label</th><th>contracts</th><th>buyers</th><th>suppliers</th></tr></thead><tbody><tr><td>SC · pavimentacao-infraestrutura-viaria</td><td>13</td><td>11</td><td>11</td></tr><tr><td>PI · pavimentacao-infraestrutura-viaria</td><td>13</td><td>6</td><td>13</td></tr><tr><td>MG · edificacoes-publicas</td><td>12</td><td>10</td><td>11</td></tr><tr><td>RS · edificacoes-publicas</td><td>10</td><td>10</td><td>10</td></tr></tbody></table><p><strong>Unidade.</strong> contagem</p><p><strong>Caveat.</strong> Contagens de compradores são por célula mercado×UF. Identidades nominais dos top buyers estão suprimidas neste snapshot.</p><p><strong>Takeaway.</strong> Compradores e fornecedores são quase 1:1 na maior parte das células. Isso é n pequeno, não prova atomização nacional.</p></section><section id="C3"><h3>C3</h3><p><strong>Pergunta.</strong> Qual o tamanho típico do contrato (P25, mediana, P75) por mercado, e o que esse número não significa?</p><table class="radar-table"><thead><tr><th>label</th><th>n</th><th>p25</th><th>median</th><th>p75</th></tr></thead><tbody><tr><td>MG · Edificações públicas</td><td>15</td><td>412900.0</td><td>504997.83</td><td>1300000.0</td></tr><tr><td>PI · Pavimentação e infraestrutura viária</td><td>13</td><td>744003.0</td><td>996225.26</td><td>1463918.41</td></tr><tr><td>RS · Edificações públicas</td><td>12</td><td>199500.0</td><td>415499.99</td><td>1390000.0</td></tr><tr><td>SC · Pavimentação e infraestrutura viária</td><td>12</td><td>224135.0</td><td>345532.53</td><td>635000.0</td></tr></tbody></table><p><strong>Unidade.</strong> BRL nominal; P25/mediana/P75; piso 5000</p><p><strong>Caveat.</strong> n por célula de preço (12–19) é menor que n do mercado correspondente porque o piso de 5000 BRL remove tickets menores. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.</p><p><strong>Takeaway.</strong> A mediana é o contrato integral no recorte com piso de 5000 BRL, não preço unitário nem faixa nacional de preço praticado.</p></section><section id="C4"><h3>C4</h3><p><strong>Pergunta.</strong> Quanto do snapshot publicado chega aos 4 mercados do wedge?</p><table class="radar-table"><thead><tr><th>stage</th><th>n</th></tr></thead><tbody><tr><td>contratos carregados (snapshot)</td><td>11931</td></tr><tr><td>aec_confirmed no snapshot</td><td>233</td></tr><tr><td>contratos nos 4 mercados publicados</td><td>48</td></tr></tbody></table><p><strong>Unidade.</strong> contratos</p><p><strong>Caveat.</strong> Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake.</p><p><strong>Takeaway.</strong> A maior parte do snapshot não entra no wedge. Tratar os 4 mercados como Brasil inverteria o funil.</p></section><section id="C5"><h3>C5</h3><p><strong>Pergunta.</strong> Há concentração mensurável de compradores ou fornecedores no recorte?</p><table class="radar-table"><thead><tr><th>label</th><th>n</th></tr></thead><tbody><tr><td>contratos no órgão</td><td>49</td></tr><tr><td>fornecedores observados</td><td>1</td></tr><tr><td>objetos rotulados reajuste</td><td>13</td></tr></tbody></table><p><strong>Unidade.</strong> contratos / fornecedores no órgão publicado</p><p><strong>Caveat.</strong> Concentração só é mensurável na fatia Caxias do Sul / manutenção predial (1 dia civil, 1 órgão, 1 fornecedor dominante). HHI dos 4 mercados publicados é nulo; top buyers estão suprimidos.</p><p><strong>Takeaway.</strong> A única concentração mensurável é um órgão em um dia, com reajustes misturados a ordens de serviço.</p></section>
+<h2>Ofertas (depois dos fatos)</h2>
+<ul>
+<li><a href="/bid-room-licitacoes-obras/">bid-room-licitacoes-obras</a></li><li><a href="/auditoria-orcamento-licitacao/">auditoria-orcamento-licitacao</a></li><li><a href="/aditivos-obras-publicas/">aditivos-obras-publicas</a></li><li><a href="/defesa-margem-contratos-publicos/">defesa-margem-contratos-publicos</a></li>
+</ul>
+<p><a href="/radar/nacional-obras-publicas/">Radar GSC (página distinta, não substituída)</a></p>
+</main>
+</body>
+</html>

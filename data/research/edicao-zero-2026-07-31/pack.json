@@ -1,0 +1,1561 @@
+{
+  "schema": "confenge-research-pack-v1",
+  "edition": "edicao-zero",
+  "title": "EDIÇÃO ZERO — pavimentação e edificações públicas no recorte pré-nacional extra-cli (SC, PI, MG, RS)",
+  "wedge": {
+    "id": "pavimentacao-edificacoes-4uf-pre-nacional",
+    "label": "Pavimentação e edificações públicas no recorte extra-cli pré-nacional (SC, PI, MG, RS)",
+    "why": "Único recorte publicado no snapshot versionado com dois arquétipos do ICP CONFENGE, quatro UFs e agregados de volume, ticket e contagem de compradores/fornecedores. Não é censo do Brasil.",
+    "ufs": [
+      "SC",
+      "PI",
+      "MG",
+      "RS"
+    ],
+    "archetypes": [
+      "pavimentacao-infraestrutura-viaria",
+      "edificacoes-publicas"
+    ],
+    "commercial_fit": [
+      "bid-room-licitacoes-obras",
+      "auditoria-orcamento-licitacao",
+      "aditivos-obras-publicas",
+      "defesa-margem-contratos-publicos"
+    ],
+    "national_claim": false
+  },
+  "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+  "data_as_of": "2026-07-31",
+  "generated_at_snapshot": "2026-08-02T03:24:33Z",
+  "pack_built_at": "2026-08-15T02:29:52Z",
+  "reproducibility": {
+    "snapshot_dir": "/mnt/d/webcfg/data/pseo",
+    "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+    "data_as_of": "2026-07-31",
+    "source_commit_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
+    "source_run_id": "pseo-20260802T032433Z-47e7e07c",
+    "dated_folder_dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
+    "dated_folder_is_live": false,
+    "entry_point": "python3 -m scripts.research build",
+    "extra_cli_public_read_export_consumed": false,
+    "extra_cli_public_read_note": "No versioned public_read_v1 query export is present locally. This pack consumes the web-cfg `data/pseo` snapshot only. The extra-cli contract at docs/contracts/public-read-v1.md was read as documentation, not as a live SELECT."
+  },
+  "coverage": {
+    "ufs": [
+      "MG",
+      "PI",
+      "RS",
+      "SC"
+    ],
+    "uf_count": 4,
+    "published_markets": 4,
+    "national_universe_complete": false,
+    "national_denominator": null,
+    "snapshot_aec_confirmed_contracts": 233,
+    "snapshot_raw_contracts": 11931,
+    "manifest_limitation": "Datalake coverage is incomplete relative to the national universe.",
+    "inventory_not_used_as_published_fact": {
+      "present": true,
+      "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "generated_at": "2026-08-01T04:00:55Z",
+      "n_candidates": 2049,
+      "national_records_available": 4479442,
+      "aec_confirmed_contracts_in_inventory": 54055,
+      "why_excluded": "Inventário-candidato (QUALITY_ELIGIBLE / human_review PENDING). Não passou pelo recorte público de markets.json. Serve só como evidência de lacuna de cobertura, não como finding."
+    }
+  },
+  "methodology": {
+    "title": "Metodologia EDIÇÃO ZERO — recorte pré-nacional",
+    "producer": "python -m scripts.pseo.export_web_cfg",
+    "producer_version": "1.1.0",
+    "source_repository": "extra-cli",
+    "source_commit_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
+    "source_run_id": "pseo-20260802T032433Z-47e7e07c",
+    "tables": [
+      "pncp_supplier_contracts",
+      "pncp_raw_bids",
+      "sc_public_entities"
+    ],
+    "query_versions": {
+      "pncp_raw_bids": "v2_with_encerramento_and_status",
+      "pncp_supplier_contracts": "v2_public_fields_valor_gt_0",
+      "sc_public_entities": "v1_count_only"
+    },
+    "classifier": {
+      "indexable_class": "aec_confirmed",
+      "labels": [
+        "aec_confirmed",
+        "aec_probable",
+        "non_aec",
+        "ambiguous",
+        "insufficient_context"
+      ]
+    },
+    "steps": [
+      "Consumir somente o snapshot versionado em data/pseo (checksums do manifest).",
+      "Não copiar datalake; não executar crawler; não consultar public_read_v1 ao vivo.",
+      "Restringir findings aos 4 mercados publicados + fatia de agência/concorrência.",
+      "Tratar national-candidate-inventory como lacuna de cobertura, não como fato publicado.",
+      "Responder pergunta só com proveniência completa; senão marcar unsupported.",
+      "Rodar revisão adversarial e o claim-language gate antes de gravar o pack."
+    ],
+    "value_semantics": "Valores são contrato integral nominal em BRL. Não são preço unitário, preço praticado nacional, nem valor deflacionado.",
+    "dedup_logic": "O exportador atribui um arquétipo primário por contrato. Este pack não re-deduplica linhas brutas; não há microdados no snapshot.",
+    "limitations": [
+      "Export is aggregated and sanitized; no commercial pipeline fields.",
+      "Datalake coverage is incomplete relative to the national universe.",
+      "Do not interpret medians as unit prices.",
+      "Only aec_confirmed records feed market/price/competition aggregates.",
+      "Open opportunities require data_encerramento >= data_as_of and compatible status.",
+      "Freshness uses record dates, not only generated_at."
+    ]
+  },
+  "questions": [
+    {
+      "id": "Q1",
+      "theme": "volume_valor",
+      "question": "Qual o volume e o valor observado de contratos AEC confirmados nos mercados publicados do recorte?",
+      "status": "answered",
+      "value": {
+        "published_market_contract_count": 48,
+        "published_market_total_value_brl": 70292373.24,
+        "aec_confirmed_contracts_in_snapshot": 233,
+        "raw_contracts_loaded": 11931,
+        "published_markets": 4,
+        "by_market": [
+          {
+            "id": "market-pavimentacao-infraestrutura-viaria-sc",
+            "slug": "pavimentacao-infraestrutura-viaria-sc",
+            "uf": "SC",
+            "archetype_id": "pavimentacao-infraestrutura-viaria",
+            "segment": "Pavimentação e infraestrutura viária",
+            "contract_count": 13,
+            "total_value": 15206416.82,
+            "period_start": "2026-01-09",
+            "period_end": "2026-07-08"
+          },
+          {
+            "id": "market-pavimentacao-infraestrutura-viaria-pi",
+            "slug": "pavimentacao-infraestrutura-viaria-pi",
+            "uf": "PI",
+            "archetype_id": "pavimentacao-infraestrutura-viaria",
+            "segment": "Pavimentação e infraestrutura viária",
+            "contract_count": 13,
+            "total_value": 26172058.65,
+            "period_start": "2026-06-03",
+            "period_end": "2026-07-08"
+          },
+          {
+            "id": "market-edificacoes-publicas-mg",
+            "slug": "edificacoes-publicas-mg",
+            "uf": "MG",
+            "archetype_id": "edificacoes-publicas",
+            "segment": "Edificações públicas",
+            "contract_count": 12,
+            "total_value": 16767654.94,
+            "period_start": "2026-06-15",
+            "period_end": "2026-07-08"
+          },
+          {
+            "id": "market-edificacoes-publicas-rs",
+            "slug": "edificacoes-publicas-rs",
+            "uf": "RS",
+            "archetype_id": "edificacoes-publicas",
+            "segment": "Edificações públicas",
+            "contract_count": 10,
+            "total_value": 12146242.83,
+            "period_start": "2025-11-25",
+            "period_end": "2026-07-08"
+          }
+        ]
+      },
+      "series": [
+        {
+          "id": "market-pavimentacao-infraestrutura-viaria-sc",
+          "slug": "pavimentacao-infraestrutura-viaria-sc",
+          "uf": "SC",
+          "archetype_id": "pavimentacao-infraestrutura-viaria",
+          "segment": "Pavimentação e infraestrutura viária",
+          "contract_count": 13,
+          "total_value": 15206416.82,
+          "period_start": "2026-01-09",
+          "period_end": "2026-07-08"
+        },
+        {
+          "id": "market-pavimentacao-infraestrutura-viaria-pi",
+          "slug": "pavimentacao-infraestrutura-viaria-pi",
+          "uf": "PI",
+          "archetype_id": "pavimentacao-infraestrutura-viaria",
+          "segment": "Pavimentação e infraestrutura viária",
+          "contract_count": 13,
+          "total_value": 26172058.65,
+          "period_start": "2026-06-03",
+          "period_end": "2026-07-08"
+        },
+        {
+          "id": "market-edificacoes-publicas-mg",
+          "slug": "edificacoes-publicas-mg",
+          "uf": "MG",
+          "archetype_id": "edificacoes-publicas",
+          "segment": "Edificações públicas",
+          "contract_count": 12,
+          "total_value": 16767654.94,
+          "period_start": "2026-06-15",
+          "period_end": "2026-07-08"
+        },
+        {
+          "id": "market-edificacoes-publicas-rs",
+          "slug": "edificacoes-publicas-rs",
+          "uf": "RS",
+          "archetype_id": "edificacoes-publicas",
+          "segment": "Edificações públicas",
+          "contract_count": 10,
+          "total_value": 12146242.83,
+          "period_start": "2025-11-25",
+          "period_end": "2026-07-08"
+        }
+      ],
+      "source": "data/pseo/markets.json + data/pseo/manifest.json",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-10-07",
+      "denominator": "published markets in markets.json (not aec_confirmed universe, not raw PNCP load)",
+      "filters": "aec_confirmed only; primary archetype in {pavimentacao-infraestrutura-viaria, edificacoes-publicas}; UFs in {SC, PI, MG, RS}",
+      "dedup_logic": "Exporter keeps one primary archetype per contract; multi-label objects enter only the primary market cell",
+      "value_semantics": "valor_total nominal BRL of the contract instrument as ingested; not unit price, not practiced price, not deflated",
+      "exclusions": "aec_probable, ambiguous, insufficient_context, non_aec; markets not promoted to the public 4-cell set; manutenção predial (agency/competition slice)",
+      "limitation": "Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake."
+    },
+    {
+      "id": "Q2",
+      "theme": "compradores",
+      "question": "Quantos órgãos compradores distintos o recorte observa por mercado?",
+      "status": "answered",
+      "value": {
+        "by_market": [
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-sc",
+            "uf": "SC",
+            "buyer_count": 11,
+            "suppressed_buyer_cells": 8,
+            "named_buyers_published": []
+          },
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-pi",
+            "uf": "PI",
+            "buyer_count": 6,
+            "suppressed_buyer_cells": 6,
+            "named_buyers_published": []
+          },
+          {
+            "slug": "edificacoes-publicas-mg",
+            "uf": "MG",
+            "buyer_count": 10,
+            "suppressed_buyer_cells": 8,
+            "named_buyers_published": []
+          },
+          {
+            "slug": "edificacoes-publicas-rs",
+            "uf": "RS",
+            "buyer_count": 10,
+            "suppressed_buyer_cells": 8,
+            "named_buyers_published": []
+          }
+        ],
+        "named_buyer_identities_available": false
+      },
+      "series": [
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-sc",
+          "uf": "SC",
+          "buyer_count": 11,
+          "suppressed_buyer_cells": 8,
+          "named_buyers_published": []
+        },
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-pi",
+          "uf": "PI",
+          "buyer_count": 6,
+          "suppressed_buyer_cells": 6,
+          "named_buyers_published": []
+        },
+        {
+          "slug": "edificacoes-publicas-mg",
+          "uf": "MG",
+          "buyer_count": 10,
+          "suppressed_buyer_cells": 8,
+          "named_buyers_published": []
+        },
+        {
+          "slug": "edificacoes-publicas-rs",
+          "uf": "RS",
+          "buyer_count": 10,
+          "suppressed_buyer_cells": 8,
+          "named_buyers_published": []
+        }
+      ],
+      "source": "data/pseo/markets.json",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-10-07",
+      "denominator": "distinct buyer identifiers counted by the exporter per market cell",
+      "filters": "same published-market filter as Q1",
+      "dedup_logic": "buyer identity as ingested (CNPJ8/name); no cross-UF merge",
+      "value_semantics": "count of distinct organs, not spend share",
+      "exclusions": "buyer names with cell count < 5 are bucketed as 'outros (células suprimidas)'; values of suppressed cells are 0",
+      "limitation": "Contagens de compradores são por célula mercado×UF. Identidades nominais dos top buyers estão suprimidas neste snapshot."
+    },
+    {
+      "id": "Q3",
+      "theme": "fornecedores",
+      "question": "Quantos fornecedores o recorte observa por mercado?",
+      "status": "answered",
+      "value": {
+        "by_market": [
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-sc",
+            "uf": "SC",
+            "supplier_count": 11
+          },
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-pi",
+            "uf": "PI",
+            "supplier_count": 13
+          },
+          {
+            "slug": "edificacoes-publicas-mg",
+            "uf": "MG",
+            "supplier_count": 11
+          },
+          {
+            "slug": "edificacoes-publicas-rs",
+            "uf": "RS",
+            "supplier_count": 10
+          }
+        ],
+        "competition_slices": [
+          {
+            "slug": "manutencao-predial-engenharia-rs",
+            "uf": "RS",
+            "supplier_count": 2,
+            "contract_count": 50,
+            "observed_suppliers": [
+              {
+                "display_name": "FOR…",
+                "contract_count": 49,
+                "total_value": 403758.04
+              },
+              {
+                "display_name": "DPM…",
+                "contract_count": 1,
+                "total_value": 699.0
+              }
+            ]
+          }
+        ]
+      },
+      "series": [
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-sc",
+          "uf": "SC",
+          "supplier_count": 11
+        },
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-pi",
+          "uf": "PI",
+          "supplier_count": 13
+        },
+        {
+          "slug": "edificacoes-publicas-mg",
+          "uf": "MG",
+          "supplier_count": 11
+        },
+        {
+          "slug": "edificacoes-publicas-rs",
+          "uf": "RS",
+          "supplier_count": 10
+        }
+      ],
+      "source": "data/pseo/markets.json + data/pseo/competition.json",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-10-07",
+      "denominator": "distinct supplier identifiers counted per published market cell",
+      "filters": "same published-market filter as Q1; competition is a separate slice",
+      "dedup_logic": "supplier display names are truncated in the public export; no quality ranking",
+      "value_semantics": "observed suppliers in the ingested contracts, not market share of Brazil",
+      "exclusions": "suppliers absent from the ingested slice; no inference of non-activity",
+      "limitation": "Ausência na lista não implica ausência de atuação. O recorte de concorrência publicado é 1 célula (manutenção predial RS)."
+    },
+    {
+      "id": "Q4",
+      "theme": "concentracao",
+      "question": "Há concentração mensurável de compradores ou fornecedores no recorte?",
+      "status": "partial",
+      "value": {
+        "market_hhi_available": false,
+        "market_top_buyers_named": false,
+        "measurable_slice": {
+          "kind": "agency_competition",
+          "agency_name": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+          "uf": "RS",
+          "contract_count": 49,
+          "supplier_count": 1,
+          "total_value": 403758.04,
+          "period_start": "2026-07-03",
+          "period_end": "2026-07-03",
+          "concentration_top3_share": 1.0,
+          "reajuste_object_count": 13
+        }
+      },
+      "series": [
+        {
+          "slice": "mrs-prefeitura-municipal-de-caxias-do-sul-rs",
+          "contract_count": 49,
+          "supplier_count": 1,
+          "concentration_top3_share": 1.0
+        }
+      ],
+      "source": "data/pseo/agencies.json + data/pseo/competition.json",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-07-03",
+      "denominator": "contracts in the single published agency/competition slice",
+      "filters": "manutencao-predial-engenharia + UF=RS + mass-critical agency cell",
+      "dedup_logic": "public export does not split ATA/ordem de serviço/reajuste; each ingested contract row is one count",
+      "value_semantics": "concentration_top3_share is the share of the slice held by the top 3 observed suppliers, not a national HHI",
+      "exclusions": "4 published pavimentação/edificações markets (buyer names suppressed)",
+      "limitation": "Concentração só é mensurável na fatia Caxias do Sul / manutenção predial (1 dia civil, 1 órgão, 1 fornecedor dominante). HHI dos 4 mercados publicados é nulo; top buyers estão suprimidos."
+    },
+    {
+      "id": "Q5",
+      "theme": "regional",
+      "question": "Como os mercados publicados se comparam entre as UFs do recorte?",
+      "status": "answered",
+      "value": {
+        "ufs_in_published_markets": [
+          "MG",
+          "PI",
+          "RS",
+          "SC"
+        ],
+        "by_market": [
+          {
+            "id": "market-pavimentacao-infraestrutura-viaria-sc",
+            "slug": "pavimentacao-infraestrutura-viaria-sc",
+            "uf": "SC",
+            "archetype_id": "pavimentacao-infraestrutura-viaria",
+            "segment": "Pavimentação e infraestrutura viária",
+            "contract_count": 13,
+            "total_value": 15206416.82,
+            "period_start": "2026-01-09",
+            "period_end": "2026-07-08"
+          },
+          {
+            "id": "market-pavimentacao-infraestrutura-viaria-pi",
+            "slug": "pavimentacao-infraestrutura-viaria-pi",
+            "uf": "PI",
+            "archetype_id": "pavimentacao-infraestrutura-viaria",
+            "segment": "Pavimentação e infraestrutura viária",
+            "contract_count": 13,
+            "total_value": 26172058.65,
+            "period_start": "2026-06-03",
+            "period_end": "2026-07-08"
+          },
+          {
+            "id": "market-edificacoes-publicas-mg",
+            "slug": "edificacoes-publicas-mg",
+            "uf": "MG",
+            "archetype_id": "edificacoes-publicas",
+            "segment": "Edificações públicas",
+            "contract_count": 12,
+            "total_value": 16767654.94,
+            "period_start": "2026-06-15",
+            "period_end": "2026-07-08"
+          },
+          {
+            "id": "market-edificacoes-publicas-rs",
+            "slug": "edificacoes-publicas-rs",
+            "uf": "RS",
+            "archetype_id": "edificacoes-publicas",
+            "segment": "Edificações públicas",
+            "contract_count": 10,
+            "total_value": 12146242.83,
+            "period_start": "2025-11-25",
+            "period_end": "2026-07-08"
+          }
+        ],
+        "compares_brazil_regions": false
+      },
+      "series": [
+        {
+          "id": "market-pavimentacao-infraestrutura-viaria-sc",
+          "slug": "pavimentacao-infraestrutura-viaria-sc",
+          "uf": "SC",
+          "archetype_id": "pavimentacao-infraestrutura-viaria",
+          "segment": "Pavimentação e infraestrutura viária",
+          "contract_count": 13,
+          "total_value": 15206416.82,
+          "period_start": "2026-01-09",
+          "period_end": "2026-07-08"
+        },
+        {
+          "id": "market-pavimentacao-infraestrutura-viaria-pi",
+          "slug": "pavimentacao-infraestrutura-viaria-pi",
+          "uf": "PI",
+          "archetype_id": "pavimentacao-infraestrutura-viaria",
+          "segment": "Pavimentação e infraestrutura viária",
+          "contract_count": 13,
+          "total_value": 26172058.65,
+          "period_start": "2026-06-03",
+          "period_end": "2026-07-08"
+        },
+        {
+          "id": "market-edificacoes-publicas-mg",
+          "slug": "edificacoes-publicas-mg",
+          "uf": "MG",
+          "archetype_id": "edificacoes-publicas",
+          "segment": "Edificações públicas",
+          "contract_count": 12,
+          "total_value": 16767654.94,
+          "period_start": "2026-06-15",
+          "period_end": "2026-07-08"
+        },
+        {
+          "id": "market-edificacoes-publicas-rs",
+          "slug": "edificacoes-publicas-rs",
+          "uf": "RS",
+          "archetype_id": "edificacoes-publicas",
+          "segment": "Edificações públicas",
+          "contract_count": 10,
+          "total_value": 12146242.83,
+          "period_start": "2025-11-25",
+          "period_end": "2026-07-08"
+        }
+      ],
+      "source": "data/pseo/markets.json",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-10-07",
+      "denominator": "the 4 published market cells",
+      "filters": "same as Q1",
+      "dedup_logic": "one primary market cell per contract",
+      "value_semantics": "side-by-side UF×archetype comparison inside the recorte",
+      "exclusions": "23 UFs sem mercado publicado; inventário-candidato não entra no valor",
+      "limitation": "Comparação regional restrita a SC, PI, MG e RS. Não é ranking de regiões brasileiras."
+    },
+    {
+      "id": "Q6",
+      "theme": "categorias",
+      "question": "Quais categorias/arquétipos o snapshot publica, e com que massa?",
+      "status": "answered",
+      "value": {
+        "published_market_archetypes": [
+          "edificacoes-publicas",
+          "pavimentacao-infraestrutura-viaria"
+        ],
+        "archetypes_in_snapshot": [
+          {
+            "id": "pavimentacao-infraestrutura-viaria",
+            "label": "Pavimentação e infraestrutura viária",
+            "evidence_contract_count": 78,
+            "evidence_buyer_count": 65,
+            "ufs_observed": [
+              "SC",
+              "PI",
+              "MG",
+              "SP",
+              "CE",
+              "BA",
+              "GO",
+              "MT",
+              "RO",
+              "PA",
+              "PR",
+              "RN"
+            ],
+            "published_as_market": true
+          },
+          {
+            "id": "edificacoes-publicas",
+            "label": "Edificações públicas",
+            "evidence_contract_count": 78,
+            "evidence_buyer_count": 70,
+            "ufs_observed": [
+              "MG",
+              "RS",
+              "SC",
+              "PR",
+              "GO",
+              "PA",
+              "MT",
+              "PI",
+              "SP",
+              "PB",
+              "BA",
+              "RJ"
+            ],
+            "published_as_market": true
+          },
+          {
+            "id": "saneamento-hidraulica",
+            "label": "Saneamento e hidráulica",
+            "evidence_contract_count": 25,
+            "evidence_buyer_count": 22,
+            "ufs_observed": [
+              "SP",
+              "SC",
+              "MG",
+              "RS",
+              "PB",
+              "CE",
+              "RJ",
+              "PR"
+            ],
+            "published_as_market": false
+          },
+          {
+            "id": "climatizacao-instalacoes",
+            "label": "Climatização e instalações prediais",
+            "evidence_contract_count": 13,
+            "evidence_buyer_count": 8,
+            "ufs_observed": [
+              "SP",
+              "RS",
+              "SC",
+              "MG"
+            ],
+            "published_as_market": false
+          },
+          {
+            "id": "manutencao-predial-engenharia",
+            "label": "Manutenção predial e serviços de engenharia",
+            "evidence_contract_count": 66,
+            "evidence_buyer_count": 16,
+            "ufs_observed": [
+              "RS",
+              "SP",
+              "SC",
+              "BA",
+              "CE",
+              "AP",
+              "AM",
+              "MT",
+              "DF"
+            ],
+            "published_as_market": false
+          }
+        ]
+      },
+      "series": [
+        {
+          "id": "pavimentacao-infraestrutura-viaria",
+          "label": "Pavimentação e infraestrutura viária",
+          "evidence_contract_count": 78,
+          "evidence_buyer_count": 65,
+          "ufs_observed": [
+            "SC",
+            "PI",
+            "MG",
+            "SP",
+            "CE",
+            "BA",
+            "GO",
+            "MT",
+            "RO",
+            "PA",
+            "PR",
+            "RN"
+          ],
+          "published_as_market": true
+        },
+        {
+          "id": "edificacoes-publicas",
+          "label": "Edificações públicas",
+          "evidence_contract_count": 78,
+          "evidence_buyer_count": 70,
+          "ufs_observed": [
+            "MG",
+            "RS",
+            "SC",
+            "PR",
+            "GO",
+            "PA",
+            "MT",
+            "PI",
+            "SP",
+            "PB",
+            "BA",
+            "RJ"
+          ],
+          "published_as_market": true
+        },
+        {
+          "id": "saneamento-hidraulica",
+          "label": "Saneamento e hidráulica",
+          "evidence_contract_count": 25,
+          "evidence_buyer_count": 22,
+          "ufs_observed": [
+            "SP",
+            "SC",
+            "MG",
+            "RS",
+            "PB",
+            "CE",
+            "RJ",
+            "PR"
+          ],
+          "published_as_market": false
+        },
+        {
+          "id": "climatizacao-instalacoes",
+          "label": "Climatização e instalações prediais",
+          "evidence_contract_count": 13,
+          "evidence_buyer_count": 8,
+          "ufs_observed": [
+            "SP",
+            "RS",
+            "SC",
+            "MG"
+          ],
+          "published_as_market": false
+        },
+        {
+          "id": "manutencao-predial-engenharia",
+          "label": "Manutenção predial e serviços de engenharia",
+          "evidence_contract_count": 66,
+          "evidence_buyer_count": 16,
+          "ufs_observed": [
+            "RS",
+            "SP",
+            "SC",
+            "BA",
+            "CE",
+            "AP",
+            "AM",
+            "MT",
+            "DF"
+          ],
+          "published_as_market": false
+        }
+      ],
+      "source": "data/pseo/archetypes.json + data/pseo/markets.json",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-10-07",
+      "denominator": "evidence_contract_count of each archetype object; published markets are a subset",
+      "filters": "textual object-pattern classification; aec_confirmed for public aggregates",
+      "dedup_logic": "a contract may match more than one archetype pattern; published markets use the primary label only",
+      "value_semantics": "category mass inside the snapshot, not a national category mix",
+      "exclusions": "inventory-only archetypes (candidato) are not treated as published markets",
+      "limitation": "Arquétipos listam UFs além de SC/PI/MG/RS com n pequeno. Essas UFs não viram mercado publicado e não sustentam recorte nacional."
+    },
+    {
+      "id": "Q7",
+      "theme": "tamanho_tipico",
+      "question": "Qual o tamanho típico do contrato (P25, mediana, P75) por mercado, e o que esse número não significa?",
+      "status": "answered",
+      "value": {
+        "by_price_cell": [
+          {
+            "slug": "manutencao-predial-engenharia-rs",
+            "uf": "RS",
+            "object_label": "Manutenção predial e serviços de engenharia",
+            "n": 19,
+            "min": 5366.25,
+            "p25": 5967.0,
+            "median": 15268.5,
+            "p75": 23400.0,
+            "max": 47759.63,
+            "floor_brl": 5000,
+            "unit_price": false
+          },
+          {
+            "slug": "edificacoes-publicas-mg",
+            "uf": "MG",
+            "object_label": "Edificações públicas",
+            "n": 15,
+            "min": 94299.99,
+            "p25": 412900.0,
+            "median": 504997.83,
+            "p75": 1300000.0,
+            "max": 9690000.0,
+            "floor_brl": 5000,
+            "unit_price": false
+          },
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-pi",
+            "uf": "PI",
+            "object_label": "Pavimentação e infraestrutura viária",
+            "n": 13,
+            "min": 410836.92,
+            "p25": 744003.0,
+            "median": 996225.26,
+            "p75": 1463918.41,
+            "max": 13975273.02,
+            "floor_brl": 5000,
+            "unit_price": false
+          },
+          {
+            "slug": "edificacoes-publicas-rs",
+            "uf": "RS",
+            "object_label": "Edificações públicas",
+            "n": 12,
+            "min": 6000.0,
+            "p25": 199500.0,
+            "median": 415499.99,
+            "p75": 1390000.0,
+            "max": 6740000.0,
+            "floor_brl": 5000,
+            "unit_price": false
+          },
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-sc",
+            "uf": "SC",
+            "object_label": "Pavimentação e infraestrutura viária",
+            "n": 12,
+            "min": 52157.79,
+            "p25": 224135.0,
+            "median": 345532.53,
+            "p75": 635000.0,
+            "max": 8782202.6,
+            "floor_brl": 5000,
+            "unit_price": false
+          }
+        ],
+        "not_unit_price": true,
+        "not_practiced_price_band": true
+      },
+      "series": [
+        {
+          "slug": "manutencao-predial-engenharia-rs",
+          "uf": "RS",
+          "object_label": "Manutenção predial e serviços de engenharia",
+          "n": 19,
+          "min": 5366.25,
+          "p25": 5967.0,
+          "median": 15268.5,
+          "p75": 23400.0,
+          "max": 47759.63,
+          "floor_brl": 5000,
+          "unit_price": false
+        },
+        {
+          "slug": "edificacoes-publicas-mg",
+          "uf": "MG",
+          "object_label": "Edificações públicas",
+          "n": 15,
+          "min": 94299.99,
+          "p25": 412900.0,
+          "median": 504997.83,
+          "p75": 1300000.0,
+          "max": 9690000.0,
+          "floor_brl": 5000,
+          "unit_price": false
+        },
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-pi",
+          "uf": "PI",
+          "object_label": "Pavimentação e infraestrutura viária",
+          "n": 13,
+          "min": 410836.92,
+          "p25": 744003.0,
+          "median": 996225.26,
+          "p75": 1463918.41,
+          "max": 13975273.02,
+          "floor_brl": 5000,
+          "unit_price": false
+        },
+        {
+          "slug": "edificacoes-publicas-rs",
+          "uf": "RS",
+          "object_label": "Edificações públicas",
+          "n": 12,
+          "min": 6000.0,
+          "p25": 199500.0,
+          "median": 415499.99,
+          "p75": 1390000.0,
+          "max": 6740000.0,
+          "floor_brl": 5000,
+          "unit_price": false
+        },
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-sc",
+          "uf": "SC",
+          "object_label": "Pavimentação e infraestrutura viária",
+          "n": 12,
+          "min": 52157.79,
+          "p25": 224135.0,
+          "median": 345532.53,
+          "p75": 635000.0,
+          "max": 8782202.6,
+          "floor_brl": 5000,
+          "unit_price": false
+        }
+      ],
+      "source": "data/pseo/prices.json",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-10-07",
+      "denominator": "contracts in the price cell with valor_total >= 5000 BRL",
+      "filters": "aec_confirmed + matching archetype + UF + valor_total >= 5000; mean is not published",
+      "dedup_logic": "one contract instrument per observation; SQLite ORDER BY + OFFSET percentiles",
+      "value_semantics": "P25/mediana/P75 of the integral contract value in nominal BRL; not a unit price and not a national practiced-price band",
+      "exclusions": "null, zero, or below 5000 BRL; unclassified objects; arithmetic mean",
+      "limitation": "n por célula de preço (12–19) é menor que n do mercado correspondente porque o piso de 5000 BRL remove tickets menores. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis."
+    },
+    {
+      "id": "Q8",
+      "theme": "evolucao",
+      "question": "Há série temporal suficiente para afirmar evolução do recorte?",
+      "status": "unsupported",
+      "value": {
+        "by_market_years": [
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-sc",
+            "years": [
+              {
+                "contract_count": 13,
+                "total_value": 15206416.82,
+                "year": "2026"
+              }
+            ],
+            "year_count": 1
+          },
+          {
+            "slug": "pavimentacao-infraestrutura-viaria-pi",
+            "years": [
+              {
+                "contract_count": 13,
+                "total_value": 26172058.65,
+                "year": "2026"
+              }
+            ],
+            "year_count": 1
+          },
+          {
+            "slug": "edificacoes-publicas-mg",
+            "years": [
+              {
+                "contract_count": 12,
+                "total_value": 16767654.94,
+                "year": "2026"
+              }
+            ],
+            "year_count": 1
+          },
+          {
+            "slug": "edificacoes-publicas-rs",
+            "years": [
+              {
+                "contract_count": 2,
+                "total_value": 5380542.27,
+                "year": "2025"
+              },
+              {
+                "contract_count": 8,
+                "total_value": 6765700.56,
+                "year": "2026"
+              }
+            ],
+            "year_count": 2
+          }
+        ],
+        "multi_year_markets": [
+          {
+            "slug": "edificacoes-publicas-rs",
+            "years": [
+              {
+                "contract_count": 2,
+                "total_value": 5380542.27,
+                "year": "2025"
+              },
+              {
+                "contract_count": 8,
+                "total_value": 6765700.56,
+                "year": "2026"
+              }
+            ],
+            "year_count": 2
+          }
+        ]
+      },
+      "series": [
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-sc",
+          "years": [
+            {
+              "contract_count": 13,
+              "total_value": 15206416.82,
+              "year": "2026"
+            }
+          ],
+          "year_count": 1
+        },
+        {
+          "slug": "pavimentacao-infraestrutura-viaria-pi",
+          "years": [
+            {
+              "contract_count": 13,
+              "total_value": 26172058.65,
+              "year": "2026"
+            }
+          ],
+          "year_count": 1
+        },
+        {
+          "slug": "edificacoes-publicas-mg",
+          "years": [
+            {
+              "contract_count": 12,
+              "total_value": 16767654.94,
+              "year": "2026"
+            }
+          ],
+          "year_count": 1
+        },
+        {
+          "slug": "edificacoes-publicas-rs",
+          "years": [
+            {
+              "contract_count": 2,
+              "total_value": 5380542.27,
+              "year": "2025"
+            },
+            {
+              "contract_count": 8,
+              "total_value": 6765700.56,
+              "year": "2026"
+            }
+          ],
+          "year_count": 2
+        }
+      ],
+      "source": "data/pseo/markets.json value_by_year",
+      "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+      "as_of": "2026-07-31",
+      "cutoff": "2026-10-07",
+      "denominator": "n/a — pergunta não sustentada neste snapshot",
+      "filters": "n/a",
+      "dedup_logic": "n/a",
+      "value_semantics": "n/a",
+      "exclusions": "n/a",
+      "limitation": "Série anual insuficiente: 3 de 4 mercados publicados têm um único ano (pavimentacao-infraestrutura-viaria-sc, pavimentacao-infraestrutura-viaria-pi, edificacoes-publicas-mg). Apenas 1 mercado cruza dois anos civis, com n anual baixo e janelas de poucas semanas. Evolução do recorte: não sustentado."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "status": "answered",
+      "claim": "Os 4 mercados publicados somam 48 contratos e 70292373.24 BRL nominais (data_as_of do snapshot). O snapshot classifica 233 contratos aec_confirmed em 11931 carregados.",
+      "question_id": "Q1"
+    },
+    {
+      "id": "F2",
+      "status": "answered",
+      "claim": "Compradores distintos por mercado publicado: SC pavimentacao=11, PI pavimentacao=6, MG edificacoes=10, RS edificacoes=10. Identidades nominais dos top buyers estão suprimidas.",
+      "question_id": "Q2"
+    },
+    {
+      "id": "F3",
+      "status": "answered",
+      "claim": "Fornecedores observados por mercado publicado: SC=11, PI=13, MG=11, RS=10.",
+      "question_id": "Q3"
+    },
+    {
+      "id": "F4",
+      "status": "partial",
+      "claim": "Concentração mensurável só na fatia MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL (RS): 49 contratos, 1 fornecedor(es), top3_share=1.0, período 2026-07-03–2026-07-03. 13 objetos rotulados reajuste.",
+      "question_id": "Q4"
+    },
+    {
+      "id": "F5",
+      "status": "answered",
+      "claim": "Tickets (piso 5000 BRL, contrato integral): MG Edificações públicas n=15 P25=412900.0 mediana=504997.83 P75=1300000.0; PI Pavimentação e infraestrutura viária n=13 P25=744003.0 mediana=996225.26 P75=1463918.41; RS Edificações públicas n=12 P25=199500.0 mediana=415499.99 P75=1390000.0; SC Pavimentação e infraestrutura viária n=12 P25=224135.0 mediana=345532.53 P75=635000.0. Não é preço unitário.",
+      "question_id": "Q7"
+    },
+    {
+      "id": "F6",
+      "status": "unsupported",
+      "claim": "Evolução temporal do recorte: não sustentado. Série anual insuficiente: 3 de 4 mercados publicados têm um único ano (pavimentacao-infraestrutura-viaria-sc, pavimentacao-infraestrutura-viaria-pi, edificacoes-publicas-mg). Apenas 1 mercado cruza dois anos civis, com n anual baixo e janelas de poucas semanas. Evolução do recorte: não sustentado.",
+      "question_id": "Q8"
+    },
+    {
+      "id": "ADV-duplicidade",
+      "status": "flagged",
+      "claim": "A fatia de agência MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL conta 49 contratos no mesmo dia 2026-07-03, dos quais 36 são o mesmo objeto de manutenção predial sob demanda e 13 são rotulados como reajuste. O export público não separa ATA, ordem de serviço e reajuste. Contar 49 como 49 obras distintas inflaria volume.",
+      "question_id": null
+    },
+    {
+      "id": "ADV-consorcios",
+      "status": "flagged",
+      "claim": "Texto de objeto menciona consórcio em 1 ocorrência(s) dos top_objects publicados. Não há flag estruturado de consórcio no snapshot. Participação de consórcio não é quantificável.",
+      "question_id": null
+    },
+    {
+      "id": "ADV-aditivos",
+      "status": "flagged",
+      "claim": "top_objects dos 4 mercados têm 0 menção(ões) a aditivo e 3 a registro de preços. A fatia Caxias tem 13 contratos rotulados Reajuste. Sem campo estruturado de termo aditivo, esses instrumentos não entram como métrica de aditivo.",
+      "question_id": null
+    },
+    {
+      "id": "ADV-zeros_nulos",
+      "status": "flagged",
+      "claim": "A query pública declara valor_gt_0. Células de preço excluem nulo, zero e valor < 5000 BRL. Compradores suprimidos publicam total_value=0 nos mercados ['pavimentacao-infraestrutura-viaria-sc', 'pavimentacao-infraestrutura-viaria-pi', 'edificacoes-publicas-mg', 'edificacoes-publicas-rs']. Esse zero é política de privacidade, não valor econômico.",
+      "question_id": null
+    },
+    {
+      "id": "ADV-aliases",
+      "status": "flagged",
+      "claim": "Nomes de órgão variam no próprio recorte (ao menos 4 grafias nos exemplos públicos: MRS-PREFEITURA, PREFEITURA MUNICIPAL, Unidade Única, PM VENANACIO AIRES). buyer_count usa o identificador do exportador; aliases cadastrais podem fragmentar ou colapsar órgãos.",
+      "question_id": null
+    },
+    {
+      "id": "ADV-coverage_gaps",
+      "status": "flagged",
+      "claim": "Snapshot publicado: 4 mercados, UFs ['MG', 'PI', 'RS', 'SC'], 233 aec_confirmed, 11931 contratos carregados. Radar de oportunidades inclui UFs ['PR', 'RS', 'SC'] (PR não é mercado publicado). Inventário-candidato no mesmo dataset_hash reporta national_records_available=4479442 e aec_confirmed_contracts=54055, mas permanece PENDING / QUALITY_ELIGIBLE e não alimenta findings.",
+      "question_id": null
+    },
+    {
+      "id": "ADV-outliers",
+      "status": "flagged",
+      "claim": "Células de preço declaram outlier_count=0, mas o máximo chega a várias vezes a mediana (pavimentação PI e SC, edificações MG). Sem regra de outlier no export, o máximo é um contrato integral heterogêneo, não um erro estatístico removido.",
+      "question_id": null
+    },
+    {
+      "id": "ADV-vies_temporal",
+      "status": "flagged",
+      "claim": "Três mercados publicados cabem em janelas de semanas de 2026. A agência/concorrência de Caxias é um único dia (2026-07-03). Edificações RS é o único com 2025+2026 e ainda assim com n anual baixo. O recorte reflete ingestão recente, não um ano-calendário comparável.",
+      "question_id": null
+    }
+  ],
+  "charts": [
+    {
+      "id": "C1",
+      "pergunta": "Qual o volume e o valor observado de contratos AEC confirmados nos mercados publicados do recorte?",
+      "dados": [
+        {
+          "label": "SC · pavimentacao-infraestrutura-viaria",
+          "contract_count": 13,
+          "total_value_brl": 15206416.82
+        },
+        {
+          "label": "PI · pavimentacao-infraestrutura-viaria",
+          "contract_count": 13,
+          "total_value_brl": 26172058.65
+        },
+        {
+          "label": "MG · edificacoes-publicas",
+          "contract_count": 12,
+          "total_value_brl": 16767654.94
+        },
+        {
+          "label": "RS · edificacoes-publicas",
+          "contract_count": 10,
+          "total_value_brl": 12146242.83
+        }
+      ],
+      "unidade": "BRL nominal (contrato integral)",
+      "caveat": "Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake.",
+      "takeaway": "O valor observado vive em 4 células mercado×UF. Somar as células descreve o recorte publicado, não o Brasil."
+    },
+    {
+      "id": "C2",
+      "pergunta": "Como se comparam contratos, compradores e fornecedores por mercado?",
+      "dados": [
+        {
+          "label": "SC · pavimentacao-infraestrutura-viaria",
+          "contracts": 13,
+          "buyers": 11,
+          "suppliers": 11
+        },
+        {
+          "label": "PI · pavimentacao-infraestrutura-viaria",
+          "contracts": 13,
+          "buyers": 6,
+          "suppliers": 13
+        },
+        {
+          "label": "MG · edificacoes-publicas",
+          "contracts": 12,
+          "buyers": 10,
+          "suppliers": 11
+        },
+        {
+          "label": "RS · edificacoes-publicas",
+          "contracts": 10,
+          "buyers": 10,
+          "suppliers": 10
+        }
+      ],
+      "unidade": "contagem",
+      "caveat": "Contagens de compradores são por célula mercado×UF. Identidades nominais dos top buyers estão suprimidas neste snapshot.",
+      "takeaway": "Compradores e fornecedores são quase 1:1 na maior parte das células. Isso é n pequeno, não prova atomização nacional."
+    },
+    {
+      "id": "C3",
+      "pergunta": "Qual o tamanho típico do contrato (P25, mediana, P75) por mercado, e o que esse número não significa?",
+      "dados": [
+        {
+          "label": "MG · Edificações públicas",
+          "n": 15,
+          "p25": 412900.0,
+          "median": 504997.83,
+          "p75": 1300000.0
+        },
+        {
+          "label": "PI · Pavimentação e infraestrutura viária",
+          "n": 13,
+          "p25": 744003.0,
+          "median": 996225.26,
+          "p75": 1463918.41
+        },
+        {
+          "label": "RS · Edificações públicas",
+          "n": 12,
+          "p25": 199500.0,
+          "median": 415499.99,
+          "p75": 1390000.0
+        },
+        {
+          "label": "SC · Pavimentação e infraestrutura viária",
+          "n": 12,
+          "p25": 224135.0,
+          "median": 345532.53,
+          "p75": 635000.0
+        }
+      ],
+      "unidade": "BRL nominal; P25/mediana/P75; piso 5000",
+      "caveat": "n por célula de preço (12–19) é menor que n do mercado correspondente porque o piso de 5000 BRL remove tickets menores. Objetos do mesmo arquétipo podem ser tecnicamente incomparáveis.",
+      "takeaway": "A mediana é o contrato integral no recorte com piso de 5000 BRL, não preço unitário nem faixa nacional de preço praticado."
+    },
+    {
+      "id": "C4",
+      "pergunta": "Quanto do snapshot publicado chega aos 4 mercados do wedge?",
+      "dados": [
+        {
+          "stage": "contratos carregados (snapshot)",
+          "n": 11931
+        },
+        {
+          "stage": "aec_confirmed no snapshot",
+          "n": 233
+        },
+        {
+          "stage": "contratos nos 4 mercados publicados",
+          "n": 48
+        }
+      ],
+      "unidade": "contratos",
+      "caveat": "Os contratos dos 4 mercados publicados não equivalem ao conjunto aec_confirmed do snapshot nem a um recorte de 27 UFs. O manifest declara cobertura incompleta frente ao conjunto nacional de referência do datalake.",
+      "takeaway": "A maior parte do snapshot não entra no wedge. Tratar os 4 mercados como Brasil inverteria o funil."
+    },
+    {
+      "id": "C5",
+      "pergunta": "Há concentração mensurável de compradores ou fornecedores no recorte?",
+      "dados": [
+        {
+          "label": "contratos no órgão",
+          "n": 49
+        },
+        {
+          "label": "fornecedores observados",
+          "n": 1
+        },
+        {
+          "label": "objetos rotulados reajuste",
+          "n": 13
+        }
+      ],
+      "unidade": "contratos / fornecedores no órgão publicado",
+      "caveat": "Concentração só é mensurável na fatia Caxias do Sul / manutenção predial (1 dia civil, 1 órgão, 1 fornecedor dominante). HHI dos 4 mercados publicados é nulo; top buyers estão suprimidos.",
+      "takeaway": "A única concentração mensurável é um órgão em um dia, com reajustes misturados a ordens de serviço."
+    }
+  ],
+  "adversarial": {
+    "lenses": [
+      {
+        "id": "duplicidade",
+        "status": "flagged",
+        "finding": "A fatia de agência MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL conta 49 contratos no mesmo dia 2026-07-03, dos quais 36 são o mesmo objeto de manutenção predial sob demanda e 13 são rotulados como reajuste. O export público não separa ATA, ordem de serviço e reajuste. Contar 49 como 49 obras distintas inflaria volume.",
+        "evidence": {
+          "agency_contract_count": 49,
+          "supplier_count": 1,
+          "period_start": "2026-07-03",
+          "period_end": "2026-07-03",
+          "manutencao_object_count": 36,
+          "reajuste_object_count": 13
+        }
+      },
+      {
+        "id": "consorcios",
+        "status": "flagged",
+        "finding": "Texto de objeto menciona consórcio em 1 ocorrência(s) dos top_objects publicados. Não há flag estruturado de consórcio no snapshot. Participação de consórcio não é quantificável.",
+        "evidence": {
+          "object_text_hits": 1
+        }
+      },
+      {
+        "id": "aditivos",
+        "status": "flagged",
+        "finding": "top_objects dos 4 mercados têm 0 menção(ões) a aditivo e 3 a registro de preços. A fatia Caxias tem 13 contratos rotulados Reajuste. Sem campo estruturado de termo aditivo, esses instrumentos não entram como métrica de aditivo.",
+        "evidence": {
+          "aditivo_object_hits": 0,
+          "registro_precos_hits": 3,
+          "reajuste_object_count": 13
+        }
+      },
+      {
+        "id": "zeros_nulos",
+        "status": "flagged",
+        "finding": "A query pública declara valor_gt_0. Células de preço excluem nulo, zero e valor < 5000 BRL. Compradores suprimidos publicam total_value=0 nos mercados ['pavimentacao-infraestrutura-viaria-sc', 'pavimentacao-infraestrutura-viaria-pi', 'edificacoes-publicas-mg', 'edificacoes-publicas-rs']. Esse zero é política de privacidade, não valor econômico.",
+        "evidence": {
+          "query_versions": {
+            "pncp_raw_bids": "v2_with_encerramento_and_status",
+            "pncp_supplier_contracts": "v2_public_fields_valor_gt_0",
+            "sc_public_entities": "v1_count_only"
+          },
+          "markets_with_suppressed_value_zero": [
+            "pavimentacao-infraestrutura-viaria-sc",
+            "pavimentacao-infraestrutura-viaria-pi",
+            "edificacoes-publicas-mg",
+            "edificacoes-publicas-rs"
+          ]
+        }
+      },
+      {
+        "id": "aliases",
+        "status": "flagged",
+        "finding": "Nomes de órgão variam no próprio recorte (ao menos 4 grafias nos exemplos públicos: MRS-PREFEITURA, PREFEITURA MUNICIPAL, Unidade Única, PM VENANACIO AIRES). buyer_count usa o identificador do exportador; aliases cadastrais podem fragmentar ou colapsar órgãos.",
+        "evidence": {
+          "agency_name": "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+          "sample_orgao_nomes": [
+            [
+              "MRS-PREFEITURA MUNICIPAL DE CAXIAS DO SUL",
+              "RS"
+            ],
+            [
+              "Unidade Única",
+              "MG"
+            ],
+            [
+              "SECRETARIA DE DESEN.REG.A.M.E ENER.RENOVAVEIS",
+              "PI"
+            ],
+            [
+              "PM VENANACIO AIRES",
+              "RS"
+            ],
+            [
+              "SECRETARIA DE INFRA-ESTRUTURA",
+              "SC"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "coverage_gaps",
+        "status": "flagged",
+        "finding": "Snapshot publicado: 4 mercados, UFs ['MG', 'PI', 'RS', 'SC'], 233 aec_confirmed, 11931 contratos carregados. Radar de oportunidades inclui UFs ['PR', 'RS', 'SC'] (PR não é mercado publicado). Inventário-candidato no mesmo dataset_hash reporta national_records_available=4479442 e aec_confirmed_contracts=54055, mas permanece PENDING / QUALITY_ELIGIBLE e não alimenta findings.",
+        "evidence": {
+          "published_ufs": [
+            "MG",
+            "PI",
+            "RS",
+            "SC"
+          ],
+          "opportunity_ufs": [
+            "PR",
+            "RS",
+            "SC"
+          ],
+          "classification_counts": {
+            "aec_confirmed": 233,
+            "aec_probable": 57,
+            "ambiguous": 655,
+            "bid_status_aberta": 37,
+            "bid_status_closed_retained": 319,
+            "bid_status_closed_total": 319,
+            "bid_status_encerrada": 318,
+            "bid_status_historico": 1,
+            "bid_status_open_retained": 37,
+            "bid_status_open_total": 37,
+            "insufficient_context": 5832,
+            "non_aec": 5154
+          },
+          "inventory_n_candidates": 2049,
+          "inventory_denominators": {
+            "aec_confirmed_bids": 287,
+            "aec_confirmed_contracts": 54055,
+            "bids_total_loaded": 1713,
+            "classified_share_note": "Only multi-layer aec_confirmed objects enter public aggregates.",
+            "contracts_total_loaded": 214630,
+            "export_filter": "valor_gt0_and_aec_keyword_prefilter",
+            "national_records_available": 4479442,
+            "national_records_considered": 4402632,
+            "national_records_considered_over_available": 0.982853,
+            "open_bids_after_status_filter": 287
+          },
+          "manifest_limitations": [
+            "Export is aggregated and sanitized; no commercial pipeline fields.",
+            "Datalake coverage is incomplete relative to the national universe.",
+            "Do not interpret medians as unit prices.",
+            "Only aec_confirmed records feed market/price/competition aggregates.",
+            "Open opportunities require data_encerramento >= data_as_of and compatible status.",
+            "Freshness uses record dates, not only generated_at."
+          ]
+        }
+      },
+      {
+        "id": "outliers",
+        "status": "flagged",
+        "finding": "Células de preço declaram outlier_count=0, mas o máximo chega a várias vezes a mediana (pavimentação PI e SC, edificações MG). Sem regra de outlier no export, o máximo é um contrato integral heterogêneo, não um erro estatístico removido.",
+        "evidence": {
+          "max_over_median": [
+            {
+              "slug": "manutencao-predial-engenharia-rs",
+              "n": 19,
+              "median": 15268.5,
+              "max": 47759.63,
+              "max_over_median": 3.13,
+              "exporter_outlier_count": 0
+            },
+            {
+              "slug": "edificacoes-publicas-mg",
+              "n": 15,
+              "median": 504997.83,
+              "max": 9690000.0,
+              "max_over_median": 19.19,
+              "exporter_outlier_count": 0
+            },
+            {
+              "slug": "pavimentacao-infraestrutura-viaria-pi",
+              "n": 13,
+              "median": 996225.26,
+              "max": 13975273.02,
+              "max_over_median": 14.03,
+              "exporter_outlier_count": 0
+            },
+            {
+              "slug": "edificacoes-publicas-rs",
+              "n": 12,
+              "median": 415499.99,
+              "max": 6740000.0,
+              "max_over_median": 16.22,
+              "exporter_outlier_count": 0
+            },
+            {
+              "slug": "pavimentacao-infraestrutura-viaria-sc",
+              "n": 12,
+              "median": 345532.53,
+              "max": 8782202.6,
+              "max_over_median": 25.42,
+              "exporter_outlier_count": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "vies_temporal",
+        "status": "flagged",
+        "finding": "Três mercados publicados cabem em janelas de semanas de 2026. A agência/concorrência de Caxias é um único dia (2026-07-03). Edificações RS é o único com 2025+2026 e ainda assim com n anual baixo. O recorte reflete ingestão recente, não um ano-calendário comparável.",
+        "evidence": {
+          "market_spans": [
+            {
+              "slug": "pavimentacao-infraestrutura-viaria-sc",
+              "period_start": "2026-01-09",
+              "period_end": "2026-07-08",
+              "years": [
+                "2026"
+              ]
+            },
+            {
+              "slug": "pavimentacao-infraestrutura-viaria-pi",
+              "period_start": "2026-06-03",
+              "period_end": "2026-07-08",
+              "years": [
+                "2026"
+              ]
+            },
+            {
+              "slug": "edificacoes-publicas-mg",
+              "period_start": "2026-06-15",
+              "period_end": "2026-07-08",
+              "years": [
+                "2026"
+              ]
+            },
+            {
+              "slug": "edificacoes-publicas-rs",
+              "period_start": "2025-11-25",
+              "period_end": "2026-07-08",
+              "years": [
+                "2025",
+                "2026"
+              ]
+            }
+          ],
+          "agency_span": {
+            "start": "2026-07-03",
+            "end": "2026-07-03"
+          },
+          "competition_span": {
+            "start": "2026-07-03",
+            "end": "2026-07-03"
+          },
+          "freshness": {
+            "by_dataset": {
+              "bids_radar": {
+                "as_of": "2026-07-31",
+                "n_classified": 356,
+                "n_open": 37,
+                "policy_fail_hours": 72,
+                "policy_warning_hours": 24
+              },
+              "contracts": {
+                "max_date": "2026-07-09",
+                "min_date": "2024-04-19",
+                "n": 233,
+                "policy_fail_days": 90,
+                "policy_warning_days": 30
+              }
+            },
+            "data_as_of": "2026-07-31",
+            "data_period_end": "2026-10-07",
+            "data_period_start": "2024-04-19",
+            "generated_at": "2026-08-02T03:24:33Z",
+            "max_age_days_policy": 180,
+            "note": "Record ages from data_publicacao/data_encerramento, not only generated_at."
+          }
+        }
+      }
+    ]
+  },
+  "caveats": [
+    "Este pack descreve um recorte de 4 UFs. Não é censo do Brasil.",
+    "Mediana não é preço unitário nem faixa nacional de preço praticado.",
+    "Inventário-candidato (54k aec_confirmed / 4,4M records available) não é finding.",
+    "public_read_v1 extra-cli não foi consultado; não há export local dessa família.",
+    "Preview, se existir, permanece noindex até quality gate humano."
+  ],
+  "offers": {
+    "discrete": true,
+    "paths": [
+      "bid-room-licitacoes-obras",
+      "auditoria-orcamento-licitacao",
+      "aditivos-obras-publicas",
+      "defesa-margem-contratos-publicos"
+    ],
+    "note": "Ofertas CONFENGE entram só como próximo passo operacional ( Bid Room, auditoria de orçamento, aditivos, defesa de margem ), depois dos fatos do recorte. Sem CTA de ranking nacional."
+  },
+  "indexation": {
+    "indexable": false,
+    "robots": "noindex,nofollow",
+    "sitemap": false,
+    "reason": "Quality gate humano pendente; verdict != PUBLISH."
+  },
+  "verdict": "NEEDS_DATA",
+  "verdict_reason": "Wedge sustentável apenas como recorte de 4 UF(s) e 4 mercado(s) publicados. O manifest declara cobertura incompleta frente ao conjunto de referência do datalake. PUBLISH exigiria export public_read versionado com cobertura de 27 UFs documentada e denominator explícito.",
+  "next_action": "Obter um export extra-cli public_read_v1 versionado com cobertura nacional documentada (ou ≥12 UFs com denominator explícito e completude), regenerar o pack e só então reavaliar PUBLISH. Não indexar, não promover sitemap, não disparar imprensa nesta edição.",
+  "published_market_count": 4
+}

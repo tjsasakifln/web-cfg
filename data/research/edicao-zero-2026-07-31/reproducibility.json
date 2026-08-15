@@ -1,0 +1,12 @@
+{
+  "snapshot_dir": "/mnt/d/webcfg/data/pseo",
+  "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
+  "data_as_of": "2026-07-31",
+  "source_commit_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
+  "source_run_id": "pseo-20260802T032433Z-47e7e07c",
+  "dated_folder_dataset_hash": "137528d496ee56786a05fdf93ab403be6a055807caedad5c69229e305752f12b",
+  "dated_folder_is_live": false,
+  "entry_point": "python3 -m scripts.research build",
+  "extra_cli_public_read_export_consumed": false,
+  "extra_cli_public_read_note": "No versioned public_read_v1 query export is present locally. This pack consumes the web-cfg `data/pseo` snapshot only. The extra-cli contract at docs/contracts/public-read-v1.md was read as documentation, not as a live SELECT."
+}
