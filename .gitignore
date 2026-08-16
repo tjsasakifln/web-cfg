@@ -18,6 +18,10 @@ __pycache__/
 
 # Generated at build/deploy (Netlify npm run build:site). Do not self-hash-commit.
 .well-known/pseo-build.json
+.well-known/build-info.json
+.well-known/release-result.json
+.well-known/build-manifest.json
+seo/REPRODUCIBLE-BUILD-MANIFEST.json
 
 # Isolated public artifact (Netlify publish directory)
 _site/
