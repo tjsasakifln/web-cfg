@@ -11,6 +11,12 @@ import os from "node:os";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import {
+  isConfengeMoneyAssetLoc,
+  MONEY_ASSET_CANONICAL,
+  MONEY_ASSET_LOC_SPOOFS,
+  sitemapHasMoneyAssetLoc,
+} from "./money_asset_loc.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -62,7 +68,14 @@ const indexability = JSON.parse(
   const indexable = indexability.gate && indexability.gate.indexable === true;
   if (indexable) {
     if (pageHtml.includes("noindex")) fail("noindex_must_drop_when_gate_passes", indexability.gate);
-    if (!sitemap.includes("https://confenge.com.br/ferramentas/diagnostico-defesa-margem/")) fail("sitemap_must_include_when_indexable");
+    if (!isConfengeMoneyAssetLoc(MONEY_ASSET_CANONICAL)) fail("canonical_loc_must_parse");
+    for (const spoof of MONEY_ASSET_LOC_SPOOFS) {
+      if (isConfengeMoneyAssetLoc(spoof)) fail("spoof_loc_accepted", spoof);
+      if (sitemapHasMoneyAssetLoc(`<urlset><url><loc>${spoof}</loc></url></urlset>`)) {
+        fail("spoof_sitemap_loc_accepted", spoof);
+      }
+    }
+    if (!sitemapHasMoneyAssetLoc(sitemap)) fail("sitemap_must_include_when_indexable");
     if (indexability.html_noindex !== false || indexability.in_sitemap !== true) fail("indexability_inconsistent", indexability);
     if (indexability.inputs.min_score !== 55 || Number(indexability.inputs.data_confidence) < 0.45) fail("gate_floors_changed", indexability.inputs);
   } else {

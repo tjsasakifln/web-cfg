@@ -2,6 +2,12 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  isConfengeMoneyAssetLoc,
+  MONEY_ASSET_CANONICAL,
+  MONEY_ASSET_LOC_SPOOFS,
+  sitemapHasMoneyAssetLoc,
+} from "./money_asset_loc.mjs";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const inventory = JSON.parse(readFileSync(resolve(root, "data/organic/margin-defense-cluster-inventory.json"), "utf8"));
 assert.equal(inventory.money_asset, "/ferramentas/diagnostico-defesa-margem/");
@@ -49,7 +55,16 @@ for (const row of inventory.intents) {
   });
 }
 const sitemap = readFileSync(resolve(root, "sitemap.xml"), "utf8");
-assert.ok(sitemap.includes("https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"));
+assert.equal(isConfengeMoneyAssetLoc(MONEY_ASSET_CANONICAL), true);
+for (const spoof of MONEY_ASSET_LOC_SPOOFS) {
+  assert.equal(isConfengeMoneyAssetLoc(spoof), false, spoof);
+  assert.equal(
+    sitemapHasMoneyAssetLoc(`<urlset><url><loc>${spoof}</loc></url></urlset>`),
+    false,
+    spoof,
+  );
+}
+assert.ok(sitemapHasMoneyAssetLoc(sitemap), "sitemap must contain parsed money-asset loc");
 assert.ok(!/\/vision|\/nexgen|\/avcb|\/clcb|\/avaliacoes|\/ia\//.test(sitemap));
 const redirects = readFileSync(resolve(root, "_redirects"), "utf8");
 assert.match(redirects, /^\/servicos\s+\/#como-atuamos\s+301/m);
