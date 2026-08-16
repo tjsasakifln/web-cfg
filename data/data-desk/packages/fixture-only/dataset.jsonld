@@ -1,0 +1,26 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "creator": {
+    "@type": "Organization",
+    "name": "CONFENGE",
+    "url": "https://confenge.com.br/"
+  },
+  "dateModified": "2026-08-16",
+  "description": "Two-row aggregated table that exists so Dataset/DataDownload can be emitted only when a real distribution file is present. Not production data.",
+  "distribution": {
+    "@type": "DataDownload",
+    "contentUrl": "/internal/data-desk/fixture-only/table.csv",
+    "encodingFormat": "text/csv",
+    "name": "table.csv"
+  },
+  "identifier": "fixture-only-citation-kit",
+  "isAccessibleForFree": true,
+  "license": "https://confenge.com.br/termos-de-uso/",
+  "name": "Fixture aggregated counts",
+  "publisher": {
+    "@type": "Organization",
+    "name": "CONFENGE",
+    "url": "https://confenge.com.br/"
+  }
+}

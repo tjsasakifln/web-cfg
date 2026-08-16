@@ -1,0 +1,7 @@
+{
+  "schema": "discovery_observed_v1",
+  "version": 1,
+  "generated_at": "2026-08-16T00:00:00Z",
+  "note": "No GSC/Bing/Generative AI/citation overlay is wired yet. Missing values stay UNKNOWN. Do not invent counts.",
+  "assets": {}
+}
