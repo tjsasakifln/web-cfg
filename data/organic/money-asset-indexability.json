@@ -22,7 +22,8 @@
       "contextual_cta": true,
       "has_provenance": true,
       "legal_safe": true,
-      "content_value_floor": true
+      "content_value_floor": true,
+      "visible_parity": true
     },
     "note": "Indexability Quality Gate is mandatory. Score cannot compensate for failed criteria. Generated HTML is not index permission."
   },

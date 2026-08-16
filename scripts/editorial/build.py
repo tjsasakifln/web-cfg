@@ -89,8 +89,18 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
     intel: list[tuple[str, str]] = []
     by_arch = {"lei_14133": 0, "guia": 0, "jurisprudencia": 0, "inteligencia": 0}
 
+    from scripts.site.visible_parity import index_eligibility
+
     for p in indexable:
         loc = f"{SITE}{p['url']}"
+        html_path = ROOT / str(p["url"]).strip("/") / "index.html"
+        if html_path.is_file():
+            elig = index_eligibility(
+                html_path.read_text(encoding="utf-8"),
+                url=loc,
+            )
+            if not elig.get("sitemap_include"):
+                continue
         lm = p.get("date_modified") or p.get("date_published") or _now_date()
         arch = p.get("archetype") or "guia"
         by_arch[arch] = by_arch.get(arch, 0) + 1

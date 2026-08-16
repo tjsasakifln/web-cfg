@@ -487,6 +487,37 @@ def gate_index_surface() -> GateReport:
                     )
                 )
 
+    # Overclaim / invalid schema withdraws INDEX: sitemap members must pass parity.
+    from scripts.site.visible_parity import index_eligibility
+
+    for loc in all_locs:
+        path_part = urlparse(loc).path
+        if not path_part or path_part == "/":
+            local = ROOT / "index.html"
+        else:
+            local = ROOT / path_part.strip("/") / "index.html"
+            if not local.exists():
+                local = ROOT / path_part.strip("/")
+        if not (local.exists() and local.suffix == ".html"):
+            if local.exists() and (local / "index.html").exists():
+                local = local / "index.html"
+            else:
+                continue
+        html = local.read_text(encoding="utf-8", errors="replace")
+        if is_noindex(html):
+            continue
+        elig = index_eligibility(html, url=loc)
+        if not elig.get("sitemap_include"):
+            codes = ",".join(d.get("code") or "" for d in (elig.get("defects") or []))
+            findings.append(
+                Finding(
+                    gate="index_surface",
+                    path=str(local.relative_to(ROOT)),
+                    reason="visible_parity_overclaim",
+                    excerpt=f"{loc} {codes}",
+                )
+            )
+
     # Indexable pages need self-canonical
     for p in indexable_public_pages():
         if "inteligencia/" in str(p) and p.name != "index.html":
