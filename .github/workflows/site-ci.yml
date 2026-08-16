@@ -108,6 +108,8 @@ jobs:
           path: _site
           if-no-files-found: error
           retention-days: 1
+          # .well-known/pseo-build.json is required by audit:public-artifact
+          include-hidden-files: true
 
   security:
     name: security

@@ -186,6 +186,11 @@ def test_site_ci_shape():
     build = _job_block(text, "build")
     if "site-ci-site" not in build or "upload-artifact" not in build:
         errors.append("build job must upload _site artifact site-ci-site")
+    if not re.search(r"(?m)^\s+include-hidden-files:\s*true\s*$", build):
+        errors.append(
+            "build _site artifact must set include-hidden-files: true "
+            "(.well-known/pseo-build.json is a required public file)"
+        )
     for job_id in ("security", "e2e", "performance"):
         block = _job_block(text, job_id)
         if "download-artifact" not in block or "site-ci-site" not in block:
