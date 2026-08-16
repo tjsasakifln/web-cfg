@@ -106,7 +106,8 @@ PAGES = {
         "description": "Quem afirma, com qual competência, com qual método, quando atualiza e como corrigir o conteúdo público da CONFENGE.",
         "body": """
 <h2 id="escopo">O que esta política cobre</h2>
-<p>Aplica-se a páginas de serviço, conteúdos técnicos, ferramentas, pesquisas/datasets e casos/provas publicados em confenge.com.br. Não cria diretório de especialistas, selo, ranking nem avaliação de clientes.</p>
+<p>Aplica-se a páginas de serviço, conteúdos técnicos, ferramentas, pesquisas/datasets, análises técnicas de contrato público e casos/provas publicados em confenge.com.br. Não cria diretório de especialistas, selo, ranking nem avaliação de clientes.</p>
+<p><strong>ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</strong> e <strong>CASO CONFENGE</strong> são classes mutuamente exclusivas. Análise editorial de fato público não é case, review nem customer success e não implica relação comercial com o órgão, o contratado ou as partes. Caso CONFENGE só publica com classe de permissão e consentimento/autorização reais.</p>
 <p>Cada claim relevante deve poder ser auditado na cadeia: quem afirma → competência → método/dado → revisão → atualização → limitações → como corrigir.</p>
 <h2 id="identidade">Identidade canônica</h2>
 <p>A organização pública é a CONFENGE (CNPJ 52.407.089/0001-09). O responsável técnico nomeado é <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>. Não há segunda marca pública nem handoff de visitante para outro runtime.</p>
@@ -204,6 +205,17 @@ PAGES = {
 }
 
 
+def render_analysis_hub() -> Path:
+    """Do not overwrite the consume hub. Residual slots live in contract_analysis.render."""
+    dest = ROOT / "analises-contratos-publicos" / "index.html"
+    if not dest.is_file():
+        raise FileNotFoundError(
+            "analysis hub is owned by scripts.contract_analysis.render; "
+            "run python3 -m scripts.contract_analysis build"
+        )
+    return dest
+
+
 def render_all() -> list[Path]:
     written: list[Path] = []
     for slug, spec in PAGES.items():
@@ -224,5 +236,6 @@ def render_all() -> list[Path]:
 
 
 if __name__ == "__main__":
-    for p in render_all():
+    written = render_all()
+    for p in written:
         print("wrote", p.relative_to(ROOT))

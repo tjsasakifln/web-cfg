@@ -17,9 +17,14 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.authority import (  # noqa: E402
     FOOTER_AUTHORITY_NAV,
+    REQUIRED_SLOT_KEYS,
     SURFACE_TYPES,
+    audit_public_families,
+    check_analysis_not_case,
     check_case_permission_class,
+    check_consent_slot,
     check_credentials_against_proof,
+    check_matrix_slot_coverage,
     check_published_cases_permission,
     check_required_slots,
     check_research_method_as_of,
@@ -29,7 +34,10 @@ from scripts.site.authority import (  # noqa: E402
     classify_surface,
     extract_jsonld_blocks,
     extract_visible_authority,
+    extract_visible_crumbs,
+    flatten_jsonld_nodes,
     footer_authority_nav,
+    _types_of,
     has_material_legal_claim,
     load_governance,
     load_matrix,
@@ -95,7 +103,16 @@ def test_matrix_names_five_surfaces_and_audit_chain():
     assert analise["permission_class"] == "not_applicable"
     assert analise["methodology"] == "required"
     assert analise["as_of"] == "required"
+    assert analise["ai_disclosure"] == "required"
+    assert analise["consent"] == "not_applicable"
     assert analise["mutually_exclusive_with"] == "caso_proof"
+    assert caso["consent"] == "required"
+    assert caso["mutually_exclusive_with"] == "analise_tecnica_contrato"
+    assert caso["ai_disclosure"] == "recommended"
+    assert check_matrix_slot_coverage(matrix) == []
+    for spec in matrix["surfaces"].values():
+        for key in REQUIRED_SLOT_KEYS:
+            assert key in spec, key
 
 
 def test_fail_closed_author_absent():
@@ -328,8 +345,224 @@ def test_classify_surface_from_real_paths():
     assert classify_surface("/radar/nacional-obras-publicas/") == "pesquisa_dataset"
     assert classify_surface("/casos/aditivo-art125-demonstrativo/") == "caso_proof"
     assert classify_surface("/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/") == "analise_tecnica_contrato"
+    assert classify_surface("/analises-contratos-publicos/") == "analise_tecnica_contrato"
     assert classify_surface("/analises-contratos-publicos/") != "caso_proof"
+    assert classify_surface("/aditivos-obras-publicas/") == "servico"
     assert classify_surface("/politica-editorial/") is None
+
+
+def test_fail_closed_missing_ai_disclosure_slot():
+    html = _fixture(
+        "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
+        "<time datetime='2026-08-16'>16 de agosto de 2026</time>"
+        "<h2>Método</h2><p>Fonte: PNCP. Limitação: não é censo.</p>"
+        "<p>Como citar: CONFENGE.</p>"
+        "<a href='/correcoes/'>Correções</a>"
+    )
+    errors = check_required_slots(html, "ferramenta")
+    assert "ai_disclosure_absent" in errors
+    ok = html.replace("</body>", '<a href="/uso-de-ia/">Uso de IA</a></body>')
+    assert "ai_disclosure_absent" not in check_required_slots(ok, "ferramenta")
+
+
+def test_fail_closed_analysis_requires_on_page_ai_disclosure():
+    footer_only = _fixture(
+        '<p data-surface-type="analise_tecnica_contrato">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
+        "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
+        "<p>Responsável técnico: Engº Tiago Sasaki. Sem revisão independente: não há segundo revisor nomeado.</p>"
+        "<time datetime='2026-08-16'>16 de agosto de 2026</time>"
+        "<h2>Método</h2><p>Fonte: instrumento público. Limitação: não é parecer jurídico.</p>"
+        "<p>Não é Caso CONFENGE e não implica relação comercial com o órgão ou o contratado.</p>"
+        "<p>Como citar: CONFENGE.</p>"
+        "<a href='/correcoes/'>Correções</a>"
+        '<footer><a href="/uso-de-ia/">Uso de IA</a></footer>'
+    )
+    errors = check_required_slots(footer_only, "analise_tecnica_contrato")
+    assert "ai_disclosure_absent" in errors
+    on_page = footer_only.replace(
+        "<h2>Método</h2>",
+        '<p id="ai-disclosure" data-ai-disclosure="assistive">Uso de IA: assistência de redação; responsável técnico humano. Política: <a href="/uso-de-ia/">Uso de IA</a>.</p><h2>Método</h2>',
+    )
+    assert "ai_disclosure_absent" not in check_required_slots(on_page, "analise_tecnica_contrato")
+
+
+def test_fail_closed_caso_confenge_without_consent():
+    html = _fixture("<h1>CASO CONFENGE</h1><p>Recuperamos margem do cliente sem autorização.</p>")
+    errors = check_consent_slot(html, "caso_proof")
+    assert "consent_absent" in errors
+    assert "caso_confenge_without_consent" in errors
+    demo = _fixture(
+        '<p class="case-badge" data-permission-class="demonstrativo">'
+        "CASO TÉCNICO DEMONSTRATIVO · NÃO É CASE DE CLIENTE</p>"
+    )
+    assert check_consent_slot(demo, "caso_proof") == []
+    fake_client = _fixture(
+        '<p data-permission-class="demonstrativo">CASO CONFENGE · customer success</p>'
+    )
+    fake_errors = check_consent_slot(fake_client, "caso_proof")
+    assert "demonstrativo_labeled_caso_confenge" in fake_errors
+
+
+def test_fail_closed_analysis_labeled_as_caso_confenge():
+    html = _fixture(
+        '<p data-surface-type="analise_tecnica_contrato">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
+        "<p>Este é um Caso CONFENGE de customer success.</p>"
+        '<script type="application/ld+json">{"@type":"CaseStudy","name":"Vitória"}</script>'
+    )
+    errors = check_analysis_not_case(html)
+    assert "analysis_labeled_caso_confenge" in errors
+    assert "analysis_customer_success_copy" in errors
+    assert "analysis_disclaimer_absent" in errors
+    assert any(e.startswith("analysis_schema_case_or_review") for e in errors)
+
+
+def test_official_analysis_disclaimer_is_not_a_caso_confenge_label():
+    html = _fixture(
+        '<p data-surface-type="analise_tecnica_contrato">Análise técnica de contrato público</p>'
+        "<p>Esta é uma análise técnica editorial independente de fonte pública. "
+        "Não implica relação comercial da CONFENGE com o órgão, o contratado "
+        "ou qualquer parte, e não é um caso CONFENGE.</p>"
+        "<p>Análises editoriais independentes de contratos públicos. Não são casos CONFENGE.</p>"
+    )
+    assert check_analysis_not_case(html) == []
+
+
+def test_fail_closed_invented_reviewer_award_association_rating():
+    html = _fixture(
+        "<p>Autor visível: Engº Tiago Sasaki</p><p>CONFENGE</p>",
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Article",
+                    "author": {"@type": "Person", "name": "Engº Tiago Sasaki"},
+                    "reviewedBy": {"@type": "Person", "name": "Revisor Inventado"},
+                },
+                {
+                    "@type": "Person",
+                    "name": "Engº Tiago Sasaki",
+                    "award": "Prêmio Inventado",
+                    "memberOf": {"@type": "Organization", "name": "Conselho Fantasma"},
+                },
+                {"@type": "Award", "name": "Selo Fantasma"},
+                {
+                    "@type": "Organization",
+                    "name": "CONFENGE",
+                    "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5"},
+                },
+            ],
+        },
+    )
+    errors = check_schema_mirrors_visible(html)
+    assert any(e.startswith("schema_invented_reviewer") for e in errors)
+    assert "schema_invented_award" in errors
+    assert any(e.startswith("schema_invented_association") for e in errors)
+    assert any("AggregateRating" in e or "review_or_rating" in e for e in errors)
+
+
+def test_fail_closed_breadcrumb_and_dataset_must_match_visible():
+    html = _fixture(
+        '<nav class="breadcrumbs container" aria-label="Navegação estrutural">'
+        "<ol><li><a href='/'>Início</a></li><li aria-current='page'>Radar</li></ol></nav>"
+        "<h1>Radar Nacional</h1><p>Recorte metodológico sem dataset inventado.</p>",
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {"@type": "ListItem", "position": 1, "name": "Início"},
+                        {"@type": "ListItem", "position": 2, "name": "Página Fantasma"},
+                    ],
+                },
+                {
+                    "@type": "Dataset",
+                    "name": "Série nacional secreta de contratos premiados",
+                },
+            ],
+        },
+    )
+    crumbs = extract_visible_crumbs(html)
+    assert "Início" in crumbs
+    assert "Radar" in crumbs
+    schema_errors = check_schema_mirrors_visible(html)
+    assert any(e.startswith("schema_breadcrumb_not_visible") for e in schema_errors)
+    assert any(e.startswith("schema_dataset_not_visible") or "dataset_without_visible" in e for e in schema_errors)
+    honest = _fixture(
+        '<nav class="breadcrumbs container"><ol><li><a href="/">Início</a></li>'
+        "<li aria-current='page'>Radar Nacional de Obras Públicas e Margem Contratual</li></ol></nav>"
+        "<h1>Radar Nacional de Obras Públicas e Margem Contratual</h1>"
+        "<p>Metodologia reproduzível. Recorte aberto. as_of 2026-08-03.</p>",
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {"@type": "ListItem", "position": 1, "name": "Início"},
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "Radar Nacional de Obras Públicas e Margem Contratual",
+                        },
+                    ],
+                },
+                {
+                    "@type": "Dataset",
+                    "name": "Radar Nacional de Obras Públicas e Margem Contratual",
+                },
+            ],
+        },
+    )
+    assert check_schema_mirrors_visible(honest) == []
+
+
+def test_family_audit_fails_closed_on_unclassified_and_covers_matrix():
+    audit = audit_public_families()
+    assert audit["matrix_errors"] == []
+    assert set(audit["families"]) == set(SURFACE_TYPES)
+    for name, rec in audit["families"].items():
+        assert rec["required_slots"]
+        for key in REQUIRED_SLOT_KEYS:
+            assert key in rec["required_slots"], f"{name}.{key}"
+        assert rec["status"] in {"pass", "fail", "fail_closed", "unseen"}
+        if rec["status"] == "unseen":
+            raise AssertionError(f"{name} left unseen")
+    for row in audit["unclassified_public"]:
+        assert row["status"] == "fail_closed"
+        assert row["code"] == "unclassified_public_family"
+        assert row["status"] != "pass"
+    pages = representative_pages()
+    for kind, path in pages.items():
+        assert path.exists(), path
+        rec = audit["families"][kind]
+        match = [p for p in rec["pages"] if p["path"].rstrip("/") == "/" + str(path.parent.relative_to(ROOT)).replace("\\", "/")]
+        assert match, f"representative {kind} missing from audit"
+        assert match[0]["status"] == "pass", match[0]
+
+
+def test_real_schema_types_mirror_visible_copy():
+    samples = {
+        "Organization": ROOT / "diretoria-b2g" / "index.html",
+        "Person": ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
+        "Article": ROOT
+        / "analises-contratos-publicos"
+        / "bdi-composicao-vs-referencia-sc"
+        / "index.html",
+        "Dataset": ROOT / "radar" / "nacional-obras-publicas" / "index.html",
+        "BreadcrumbList": ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
+    }
+    seen: set[str] = set()
+    for expected, path in samples.items():
+        html = path.read_text(encoding="utf-8")
+        errors = check_schema_mirrors_visible(html)
+        assert not errors, f"{path} {expected}: {errors}"
+        types = set()
+        for node in flatten_jsonld_nodes(extract_jsonld_blocks(html)):
+            types |= _types_of(node)
+        assert expected in types, f"{path} missing {expected} in {types}"
+        seen.add(expected)
+    assert seen == set(samples)
 
 
 def test_jsonld_extractor_reads_shipped_markup():

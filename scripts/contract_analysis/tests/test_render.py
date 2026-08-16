@@ -18,7 +18,11 @@ from scripts.contract_analysis.render import (
     render_hub_html,
 )
 from scripts.contract_analysis.tests.helpers import complete_live_record
-from scripts.site.authority import check_schema_mirrors_visible, extract_jsonld_blocks
+from scripts.site.authority import (
+    check_required_slots,
+    check_schema_mirrors_visible,
+    extract_jsonld_blocks,
+)
 
 
 def _html(rec=None):
@@ -106,6 +110,36 @@ def test_cta_url_has_no_cnpj_or_email():
     assert "52407089000109" not in cta_chunk
     assert "52.407.089" not in cta_chunk
     assert "@" not in cta_chunk.split("href=")[1].split(">")[0]
+
+
+def test_hub_and_analysis_expose_residual_authority_slots():
+    rec, _decision, analysis_html = _html(
+        complete_live_record(reviewer={}, solo_reviewer_disclosure=True)
+    )
+    assert "não há segundo revisor nomeado" in analysis_html
+    assert "Revisor Técnico Independente" not in analysis_html
+    assert 'id="ai-disclosure"' in analysis_html
+    assert 'data-ai-disclosure="assistive"' in analysis_html
+    assert "as_of" in analysis_html
+    assert "/correcoes/" in analysis_html
+    assert rec["title"] in analysis_html
+    assert "CaseStudy" not in analysis_html
+    assert '"@type":"Review"' not in analysis_html
+    assert check_required_slots(analysis_html, "analise_tecnica_contrato") == []
+
+    hub = render_hub_html([], index_count=0)
+    assert 'content="noindex' in hub
+    assert "não há segundo revisor nomeado" in hub
+    assert 'id="ai-disclosure"' in hub
+    assert 'id="metodo"' in hub
+    assert "ANÁLISE TÉCNICA DE CONTRATO PÚBLICO" in hub
+    assert "NÃO É CASO CONFENGE" in hub
+    assert "/correcoes/" in hub
+    assert '"@type":"CollectionPage"' in hub or '"@type": "CollectionPage"' in hub
+    assert "CaseStudy" not in hub
+    assert '"@type":"Review"' not in hub
+    assert check_required_slots(hub, "analise_tecnica_contrato") == []
+    assert check_schema_mirrors_visible(hub) == []
 
 
 def test_hub_collectionpage_description_matches_visible_meta():

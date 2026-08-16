@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -28,7 +29,40 @@ SURFACE_TYPES = (
 
 PERMISSION_CLASSES = ("demonstrativo", "consented", "confidential", "redacted")
 
-FORBIDDEN_SCHEMA_TYPES = frozenset({"Review", "AggregateRating"})
+REQUIRED_SLOT_KEYS = (
+    "author",
+    "reviewer",
+    "evidence",
+    "update_history",
+    "ai_disclosure",
+    "consent",
+)
+
+FORBIDDEN_SCHEMA_TYPES = frozenset({"Review", "AggregateRating", "CaseStudy"})
+FORBIDDEN_INVENTED_ASSOCIATION_KEYS = ("memberOf", "affiliation", "award", "awards")
+
+ANALYSIS_CASE_TOKENS = (
+    "caso confenge",
+    "case de cliente",
+    "customer success",
+    "caso de sucesso",
+    "depoimento de cliente",
+)
+
+ANALYSIS_DISCLAIMER_TOKENS = (
+    "sem relação comercial",
+    "sem relacao comercial",
+    "não implica relação comercial",
+    "nao implica relacao comercial",
+    "não é caso confenge",
+    "nao e caso confenge",
+    "não é um caso confenge",
+    "nao e um caso confenge",
+    "não são casos confenge",
+    "nao sao casos confenge",
+    "não é case de cliente",
+    "nao e case de cliente",
+)
 
 # Visible credential-like claims that are not independently verified and
 # must not appear unless listed on a public VERIFIED proof record.
@@ -62,6 +96,54 @@ _PATH_RULES: tuple[tuple[str, str], ...] = (
     ("/diretoria-b2g/", "servico"),
     ("/bid-room-licitacoes-obras/", "servico"),
     ("/defesa-margem-contratos-publicos/", "servico"),
+    ("/acompanhamento-contratos-obras/", "servico"),
+    ("/aditivos-obras-publicas/", "servico"),
+    ("/atrasos-prorrogacao-obras-publicas/", "servico"),
+    ("/auditoria-orcamento-licitacao/", "servico"),
+    ("/defesa-tecnica-contratos-publicos/", "servico"),
+    ("/diagnostico-pre-licitacao/", "servico"),
+    ("/medicoes-glosas-obras-publicas/", "servico"),
+    ("/reequilibrio-obras-publicas/", "servico"),
+)
+
+PUBLIC_FAMILY_ROOTS = (
+    "acompanhamento-contratos-obras",
+    "aditivos-obras-publicas",
+    "analises-contratos-publicos",
+    "atrasos-prorrogacao-obras-publicas",
+    "auditoria-orcamento-licitacao",
+    "bid-room-licitacoes-obras",
+    "casos",
+    "conteudos",
+    "defesa-margem-contratos-publicos",
+    "defesa-tecnica-contratos-publicos",
+    "diagnostico-b2g-360",
+    "diagnostico-pre-licitacao",
+    "diretoria-b2g",
+    "ferramentas",
+    "guias-contratos-obras",
+    "inteligencia",
+    "jurisprudencia-contratos-obras",
+    "lei-14133-obras",
+    "medicoes-glosas-obras-publicas",
+    "metodologia-inteligencia",
+    "radar",
+    "reequilibrio-obras-publicas",
+)
+
+CHROME_EXEMPT_PREFIXES = (
+    "/politica-editorial/",
+    "/correcoes/",
+    "/uso-de-ia/",
+    "/conflitos/",
+    "/privacidade/",
+    "/termos-de-uso/",
+    "/especialista/",
+    "/imprensa/",
+    "/nurture/",
+    "/piloto/",
+    "/ops/",
+    "/obrigado",
 )
 
 FOOTER_AUTHORITY_NAV = (
@@ -114,7 +196,7 @@ def footer_authority_nav() -> str:
 
 
 def classify_surface(path: str, html: str | None = None) -> str | None:
-    """Return one of the matrix types, or None for identity/policy/other."""
+    """Return one matrix type, or None for identity/policy/other (fail-closed)."""
     raw = (path or "").strip()
     if raw.startswith("http"):
         raw = urlparse(raw).path
@@ -441,6 +523,144 @@ def visible_permission_class(html: str) -> str | None:
     return None
 
 
+def _main_without_footer(html: str) -> str:
+    raw = html or ""
+    cut = re.split(r"<footer\b", raw, maxsplit=1, flags=re.I)
+    return cut[0] if cut else raw
+
+
+def has_visible_ai_disclosure(html: str, *, on_page_only: bool = False) -> bool:
+    """Footer /uso-de-ia/ counts unless the surface requires on-page disclosure."""
+    scope = _main_without_footer(html) if on_page_only else (html or "")
+    if re.search(r'data-ai-disclosure="[^"]+"', scope, flags=re.I):
+        return True
+    if re.search(r'id="ai-disclosure"|class="[^"]*ai-disclosure', scope, flags=re.I):
+        return True
+    blob = _norm(_strip_tags(scope))
+    if "/uso-de-ia/" in scope or "uso de ia" in blob:
+        return True
+    return bool(re.search(r"intelig[eê]ncia artificial", blob))
+
+
+def has_visible_consent_record(html: str) -> bool:
+    blob = _norm(_strip_tags(html or ""))
+    return bool(
+        re.search(
+            r"(registro de consentimento|consentimento (escrito|formal|documentado)|autoriza[cç][aã]o (do cliente|formal))",
+            blob,
+        )
+    )
+
+
+def has_analysis_class_label(html: str) -> bool:
+    raw = html or ""
+    if re.search(r'data-surface-type="analise_tecnica_contrato"', raw):
+        return True
+    blob = _norm(_strip_tags(raw))
+    return "análise técnica de contrato público" in blob or "analise tecnica de contrato publico" in blob
+
+
+def has_analysis_disclaimer(html: str) -> bool:
+    blob = _norm(_strip_tags(html or ""))
+    return any(tok in blob for tok in ANALYSIS_DISCLAIMER_TOKENS)
+
+
+def _labels_caso_confenge(blob: str) -> bool:
+    if re.search(r"n[aã]o (é|e|s[aã]o|sao) (um )?casos? confenge", blob):
+        return False
+    return "caso confenge" in blob or "casos confenge" in blob
+
+
+def check_consent_slot(html: str, surface_type: str = "caso_proof") -> list[str]:
+    """Caso CONFENGE needs permission class + real consent; demonstrativo is not consent."""
+    del surface_type
+    errors: list[str] = []
+    klass = visible_permission_class(html)
+    blob = _norm(_strip_tags(_without_scripts(html or "")))
+    labeled_caso_confenge = _labels_caso_confenge(blob)
+    if not klass:
+        errors.append("consent_absent")
+        if labeled_caso_confenge:
+            errors.append("caso_confenge_without_consent")
+        return errors
+    if klass == "demonstrativo":
+        if labeled_caso_confenge:
+            errors.append("demonstrativo_labeled_caso_confenge")
+        if "customer success" in blob or "caso de sucesso" in blob:
+            errors.append("demonstrativo_claims_client")
+        return errors
+    if klass in {"consented", "confidential", "redacted"}:
+        if not has_visible_consent_record(html):
+            errors.append("consent_record_absent")
+        if labeled_caso_confenge and not has_visible_consent_record(html):
+            errors.append("caso_confenge_without_consent")
+        return errors
+    errors.append(f"unknown_permission_class:{klass}")
+    return errors
+
+
+def check_analysis_not_case(html: str) -> list[str]:
+    """ANÁLISE TÉCNICA never uses Caso CONFENGE / review / customer-success semantics."""
+    errors: list[str] = []
+    blob = _norm(_strip_tags(_without_scripts(html or "")))
+    if not has_analysis_class_label(html):
+        errors.append("analysis_class_label_absent")
+    if not has_analysis_disclaimer(html):
+        errors.append("analysis_disclaimer_absent")
+    if _labels_caso_confenge(blob):
+        errors.append("analysis_labeled_caso_confenge")
+    if ("customer success" in blob or "caso de sucesso" in blob) and not re.search(
+        r"(n[aã]o [eé] customer success|n[aã]o [eé] caso de sucesso)",
+        blob,
+    ):
+        errors.append("analysis_customer_success_copy")
+    negated_case = "não é case de cliente" in blob or "nao e case de cliente" in blob
+    if "case de cliente" in blob and not negated_case:
+        errors.append("analysis_client_case_copy")
+    nodes = flatten_jsonld_nodes(extract_jsonld_blocks(html))
+    for node in nodes:
+        types = _types_of(node)
+        banned = types & {"CaseStudy", "Review", "AggregateRating"}
+        if banned:
+            errors.append(f"analysis_schema_case_or_review:{sorted(banned)}")
+        if node.get("reviewedBy") and not has_named_reviewer(html) and not has_solo_reviewer_disclosure(html):
+            errors.append("schema_invented_reviewer")
+    return errors
+
+
+def check_case_not_analysis(html: str) -> list[str]:
+    """A caso-proof page must not wear the analysis class as its type."""
+    if re.search(r'data-surface-type="analise_tecnica_contrato"', html or ""):
+        return ["case_labeled_as_analysis"]
+    return []
+
+
+def check_matrix_slot_coverage(matrix: dict[str, Any] | None = None) -> list[str]:
+    """Every matrix family must name author/reviewer/evidence/update/AI/consent."""
+    m = matrix or load_matrix()
+    errors: list[str] = []
+    declared = tuple(m.get("required_slot_keys") or ())
+    if declared != REQUIRED_SLOT_KEYS:
+        errors.append("matrix_required_slot_keys_mismatch")
+    surfaces = m.get("surfaces") or {}
+    if not surfaces:
+        return ["matrix_surfaces_absent"]
+    for name, spec in surfaces.items():
+        if name not in SURFACE_TYPES:
+            errors.append(f"unknown_surface:{name}")
+            continue
+        for key in REQUIRED_SLOT_KEYS:
+            if key not in spec:
+                errors.append(f"matrix_slot_absent:{name}.{key}")
+        if name == "analise_tecnica_contrato" and spec.get("mutually_exclusive_with") != "caso_proof":
+            errors.append("analysis_not_exclusive_with_caso")
+        if name == "caso_proof" and spec.get("mutually_exclusive_with") != "analise_tecnica_contrato":
+            errors.append("caso_not_exclusive_with_analysis")
+    for name in sorted(set(SURFACE_TYPES) - set(surfaces)):
+        errors.append(f"matrix_family_absent:{name}")
+    return errors
+
+
 def check_required_slots(
     html: str,
     surface_type: str,
@@ -476,6 +696,16 @@ def check_required_slots(
                 errors.append("citation_link_absent")
     if _is_required(spec.get("correction_link") or "") and not has_correction_link(html):
         errors.append("correction_link_absent")
+    if _is_required(spec.get("ai_disclosure") or "") and not has_visible_ai_disclosure(
+        html, on_page_only=(surface_type == "analise_tecnica_contrato")
+    ):
+        errors.append("ai_disclosure_absent")
+    if _is_required(spec.get("consent") or ""):
+        errors.extend(check_consent_slot(html, surface_type))
+    if surface_type == "analise_tecnica_contrato":
+        errors.extend(check_analysis_not_case(html))
+    if surface_type == "caso_proof":
+        errors.extend(check_case_not_analysis(html))
     return errors
 
 
@@ -627,7 +857,101 @@ def check_schema_mirrors_visible(html: str) -> list[str]:
                 continue
             errors.append(f"schema_date_not_visible:{key}={val}")
 
+        reviewer = node.get("reviewedBy")
+        if reviewer:
+            rname = _node_name(reviewer, by_id)
+            if rname and not _name_visible(rname, vis, raw_html):
+                errors.append(f"schema_invented_reviewer:{rname}")
+
+        if "Award" in types and not _visible_award(vis):
+            errors.append("schema_invented_award")
+
+        if "Person" in types or "Organization" in types:
+            for key in FORBIDDEN_INVENTED_ASSOCIATION_KEYS:
+                if node.get(key) and not _visible_association(vis, key, node.get(key)):
+                    errors.append(f"schema_invented_association:{key}")
+
+        if "Dataset" in types:
+            errors.extend(check_dataset_mirrors_visible(node, vis, raw_html))
+
+        if "BreadcrumbList" in types:
+            errors.extend(check_breadcrumb_mirrors_visible(node, raw_html))
+
     return errors
+
+
+def extract_visible_crumbs(html: str) -> list[str]:
+    crumbs: list[str] = []
+    nav = re.search(
+        r'<nav[^>]*class="[^"]*breadcrumbs[^"]*"[^>]*>(.*?)</nav>',
+        html or "",
+        flags=re.I | re.S,
+    )
+    chunk = nav.group(1) if nav else ""
+    for item in re.findall(r"<li[^>]*>(.*?)</li>", chunk, flags=re.I | re.S):
+        text = unescape(re.sub(r"<[^>]+>", " ", item))
+        text = re.sub(r"\s+", " ", text).strip(" /")
+        if text:
+            crumbs.append(text)
+    return crumbs
+
+
+def check_breadcrumb_mirrors_visible(node: dict[str, Any], html: str) -> list[str]:
+    """BreadcrumbList names must be a subset of visible crumb labels."""
+    visible = {_norm(c) for c in extract_visible_crumbs(html)}
+    errors: list[str] = []
+    elements = node.get("itemListElement") or []
+    if isinstance(elements, dict):
+        elements = [elements]
+    for el in elements:
+        if not isinstance(el, dict):
+            continue
+        name = str(el.get("name") or "").strip()
+        if name and _norm(name) not in visible:
+            errors.append(f"schema_breadcrumb_not_visible:{name}")
+    return errors
+
+
+def check_dataset_mirrors_visible(
+    node: dict[str, Any],
+    vis: dict[str, Any],
+    html: str,
+) -> list[str]:
+    """Dataset JSON-LD is allowed only when the page visibly identifies a dataset."""
+    errors: list[str] = []
+    blob = vis["norm"]
+    identity_ok = bool(
+        re.search(r"(dataset|recorte|radar|pesquisa|as[_ -]?of|metodologia reproduz)", blob)
+    )
+    name = str(node.get("name") or "").strip()
+    if name and not _name_visible(name, vis, html):
+        tokens = [t for t in re.split(r"[^a-z0-9áéíóúâêôãõç]+", _norm(name)) if len(t) > 3]
+        overlap = sum(1 for t in tokens if t in blob)
+        if overlap < min(2, len(tokens) or 2):
+            errors.append(f"schema_dataset_not_visible:{name}")
+            identity_ok = False
+    if not identity_ok:
+        errors.append("schema_dataset_without_visible_identity")
+    return errors
+
+
+def _visible_award(vis: dict[str, Any]) -> bool:
+    return bool(re.search(r"\b(pr[eê]mio|award|selo concedido)\b", vis["norm"]))
+
+
+def _visible_association(vis: dict[str, Any], key: str, value: Any) -> bool:
+    del key
+    blob = vis["norm"]
+    name = ""
+    if isinstance(value, dict):
+        name = str(value.get("name") or "")
+    elif isinstance(value, str):
+        name = value
+    elif isinstance(value, list) and value:
+        return any(_visible_association(vis, "memberOf", item) for item in value)
+    if name and _norm(name) in blob:
+        return True
+    return bool(re.search(r"(membro de|filia[cç][aã]o|associa[cç][aã]o)", blob))
 
 
 def _name_visible(name: str, vis: dict[str, Any], html: str) -> bool:
@@ -695,6 +1019,107 @@ def check_signals_baseline(data: dict[str, Any] | None = None) -> list[str]:
         if not source:
             errors.append(f"signal_value_without_source:{key}")
     return errors
+
+
+def normalize_public_path(path: str) -> str:
+    raw = (path or "").strip()
+    if raw.startswith("http"):
+        raw = urlparse(raw).path
+    if not raw.startswith("/"):
+        raw = "/" + raw
+    if raw.endswith("index.html"):
+        raw = raw[: -len("index.html")]
+    if raw != "/" and not raw.endswith("/"):
+        raw += "/"
+    return raw
+
+
+def is_chrome_exempt(path: str) -> bool:
+    raw = normalize_public_path(path)
+    if raw == "/":
+        return True
+    return any(raw.startswith(prefix) for prefix in CHROME_EXEMPT_PREFIXES)
+
+
+def public_html_paths() -> list[tuple[str, Path]]:
+    """Shipped public HTML under known family roots (not _site, not piloto/ops)."""
+    found: list[tuple[str, Path]] = []
+    for root_name in PUBLIC_FAMILY_ROOTS:
+        base = ROOT / root_name
+        if not base.exists():
+            continue
+        for path in sorted(base.rglob("index.html")):
+            rel = "/" + str(path.relative_to(ROOT)).replace("\\", "/")
+            found.append((normalize_public_path(rel), path))
+    return found
+
+
+def audit_public_families(
+    *,
+    matrix: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Classify every public family page or fail closed.
+
+    Unclassified is never a pass. Wave1 material-hash pages that miss a slot
+    stay listed as fail, not silently rewritten.
+    """
+    m = matrix or load_matrix()
+    families: dict[str, Any] = {}
+    for name, spec in (m.get("surfaces") or {}).items():
+        families[name] = {
+            "label": spec.get("label"),
+            "required_slots": {k: spec.get(k) for k in REQUIRED_SLOT_KEYS},
+            "status": "unseen",
+            "pages": [],
+            "errors": [],
+        }
+    unclassified: list[dict[str, Any]] = []
+    for url, path in public_html_paths():
+        html = path.read_text(encoding="utf-8")
+        kind = classify_surface(url, html)
+        if kind is None:
+            unclassified.append(
+                {
+                    "path": url,
+                    "status": "fail_closed",
+                    "code": "unclassified_public_family",
+                    "errors": ["unclassified_public_family"],
+                }
+            )
+            continue
+        rec = families.setdefault(
+            kind,
+            {
+                "label": kind,
+                "required_slots": {},
+                "status": "unseen",
+                "pages": [],
+                "errors": [],
+            },
+        )
+        page_errors = check_required_slots(html, kind, matrix=m) + check_schema_mirrors_visible(html)
+        rec["pages"].append(
+            {
+                "path": url,
+                "status": "fail" if page_errors else "pass",
+                "errors": page_errors,
+            }
+        )
+        rec["errors"].extend(page_errors)
+    for rec in families.values():
+        if not rec["pages"]:
+            rec["status"] = "fail_closed"
+            rec["errors"] = ["family_has_no_public_page"]
+        elif any(p["status"] == "fail" for p in rec["pages"]):
+            rec["status"] = "fail"
+        else:
+            rec["status"] = "pass"
+        rec["errors"] = sorted(set(rec["errors"]))
+    return {
+        "families": families,
+        "unclassified_public": unclassified,
+        "matrix_errors": check_matrix_slot_coverage(m),
+    }
 
 
 def representative_pages() -> dict[str, Path]:
