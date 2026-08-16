@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -346,6 +348,41 @@ class TestStampPublishIdentity(unittest.TestCase):
                     content_hash(site / rel, rel=rel),
                     rel,
                 )
+
+
+class TestCliAuditEntrypoint(unittest.TestCase):
+    def test_script_audit_imports_hash_helper_without_package_path(self):
+        """CI runs `python3 scripts/pseo/public_artifact.py audit` as a script.
+
+        Pytest imports this module with ROOT on sys.path, so the package import
+        succeeds there. The shipped CLI path must work without PYTHONPATH.
+        """
+        script = ROOT / "scripts" / "pseo" / "public_artifact.py"
+        with tempfile.TemporaryDirectory() as td:
+            site = Path(td) / "_site"
+            _write(site / "index.html", "<html>ok</html>\n")
+            _write(site / "robots.txt", "User-agent: *\nDisallow:\n")
+            _write(site / "_redirects", "/old /new 301\n")
+            _write(site / "styles.css", "body{}\n")
+            _write(site / "script.js", "console.log(1)\n")
+            _json(site / ".well-known" / "pseo-build.json", {"schema_version": "1.1.0"})
+            env = os.environ.copy()
+            env.pop("PYTHONPATH", None)
+            proc = subprocess.run(
+                [sys.executable, str(script), "audit", "--root", td],
+                cwd=td,
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        combined = proc.stdout + proc.stderr
+        self.assertNotIn("ModuleNotFoundError", combined)
+        self.assertNotIn("No module named 'scripts'", combined)
+        self.assertEqual(proc.returncode, 0, combined)
+        payload = json.loads(proc.stdout)
+        self.assertTrue(payload.get("ok"), payload)
+        self.assertEqual(len(payload["public_artifact_hash"]), 64)
 
 
 if __name__ == "__main__":
