@@ -1,0 +1,165 @@
+{
+  "schema": "public-read-contract-analysis/1.0",
+  "contract_version": "v1.0.0",
+  "public_read_base": "v1.0.0",
+  "compatibility": "additive_nullable_within_v1",
+  "consumer": {
+    "id": "web-cfg/contract-analysis",
+    "family": "web-cfg / contract-analysis family",
+    "repository": "tjsasakifln/web-cfg",
+    "issues": ["#83"],
+    "decision": "May consume official FACTUAL analysis facts. Extra-cli never emits INDEX. DATA_READY is not permission to index. Consumer owns any editorial INDEX / SEO / CTA decision. Must not treat UNKNOWN as zero. Must not infer right, imbalance, loss or that an adjustment is due."
+  },
+  "wedge": {
+    "id": "contract-intelligence-publishing",
+    "label": "Fan-in of candidate score, evidence pack and comparable contracts into a consumer-bound FACTUAL pack",
+    "reuse": "Adapters bind existing producer families; this projection does not rescore, rebuild evidence or recompute peers"
+  },
+  "grain": "analysis_candidate_id",
+  "keys": ["analysis_candidate_id"],
+  "source_families": [
+    "contract-publication-candidate/1.0",
+    "contract-evidence-pack/1.0",
+    "comparable-contracts/1.0"
+  ],
+  "producer_contracts": {
+    "score": {
+      "schema": "contract-publication-candidate/1.0",
+      "accepted_schemas": ["contract-publication-candidate/1.0"],
+      "accepted_versions": ["1.0", "v1.0.0"],
+      "formula_version": "publication-value-score/1.0",
+      "issue": "#414"
+    },
+    "evidence_pack": {
+      "schema": "contract-evidence-pack/1.0",
+      "accepted_schemas": ["contract-evidence-pack/1.0", "contract_evidence_pack/1.0"],
+      "accepted_versions": ["1.0", "v1.0.0", "1.0.0"],
+      "issue": "#414"
+    },
+    "peer_group": {
+      "schema": "comparable-contracts/1.0",
+      "accepted_schemas": ["comparable-contracts/1.0", "public-read-comparable-contracts/1.0"],
+      "accepted_versions": ["1.0", "v1.0.0"],
+      "optional": true,
+      "issue": "#415"
+    }
+  },
+  "payload_fields": [
+    "analysis_candidate_id",
+    "canonical_contract_ids",
+    "candidate_score",
+    "reason_summary",
+    "evidence_pack_version",
+    "evidence_pack_hash",
+    "peer_group",
+    "timeline",
+    "official_refs",
+    "calculations",
+    "epistemic_classes",
+    "as_of",
+    "freshness",
+    "coverage",
+    "limitations",
+    "safety_flags",
+    "data_state",
+    "data_state_facts",
+    "reason_codes"
+  ],
+  "data_state": {
+    "enum": ["DATA_READY", "DATA_HOLD", "DATA_REJECT"],
+    "forbidden": ["INDEX", "PUBLISHABLE_INDEX", "PUBLISHABLE_NOINDEX"],
+    "owner": "extra-cli emits only DATA_*; editorial INDEX is owned by the consumer",
+    "data_ready_is_not_index_permission": true
+  },
+  "epistemic_classes": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+  "peer_status_enum": ["PEER_VALID", "PEER_WEAK", "NOT_COMPARABLE", "ABSENT"],
+  "reason_codes": [
+    "producer_missing",
+    "stale_evidence",
+    "score_version_mismatch",
+    "source_conflict",
+    "contract_updated_after_evidence_pack",
+    "material_observation_after_pack",
+    "candidate_rejected_after_refresh",
+    "fixture_as_live",
+    "NOT_COMPARABLE"
+  ],
+  "hold_reason_codes": ["stale_evidence", "material_observation_after_pack"],
+  "reject_reason_codes": [
+    "producer_missing",
+    "score_version_mismatch",
+    "source_conflict",
+    "contract_updated_after_evidence_pack",
+    "candidate_rejected_after_refresh",
+    "fixture_as_live"
+  ],
+  "informational_reason_codes": ["NOT_COMPARABLE"],
+  "peer_optional": true,
+  "as_of": "source_as_of from the evidence pack; never wall-clock",
+  "freshness": {
+    "policy": "contracts-freshness-slo-v1",
+    "layer": "publication",
+    "max_age_hours": 48,
+    "generated_at": "declared export timestamp from the input payload; never wall-clock",
+    "source_as_of": "evidence-pack snapshot cutoff",
+    "expires_rule": "source_as_of plus max_age_hours",
+    "stale_rule": "generated_at minus source_as_of exceeds max_age_hours, or source_as_of is unparseable",
+    "invalidation_triggers": [
+      "canonical contract identity, value or dates change after the evidence pack source_as_of",
+      "document set of the evidence pack changes after source_as_of",
+      "material new observation after source_as_of",
+      "producer score, evidence pack or peer-group hash/version changes"
+    ],
+    "invalidation_scope": "only affected analysis_candidate_id payloads; previous hashed payload retained under analyses/previous/",
+    "refresh": "re-run python3 -m scripts.public_read export-contract-analysis; no new scheduler"
+  },
+  "canary": {
+    "min": 5,
+    "max": 10,
+    "quality_first": true,
+    "angles": [
+      "preco_bdi",
+      "reajuste_reequilibrio",
+      "aditivos_valor",
+      "prazo",
+      "comparavel",
+      "exceptional"
+    ],
+    "empty_angles_omitted": true,
+    "diversity_never_overrides_quality_gate": true
+  },
+  "value_semantics": {
+    "unknown_policy": "UNKNOWN remains UNKNOWN; absence of evidence is never zero",
+    "not": [
+      "unit price",
+      "deflated BRL",
+      "adjustment due",
+      "economic imbalance",
+      "loss",
+      "INDEX"
+    ]
+  },
+  "catalog_mode": {
+    "fixture": "labeled fixture; never consumed or labeled as live",
+    "official_live": "only when producers are live official artifacts and claimed_live is true"
+  },
+  "forbidden_public_language": [
+    "CONFENGE",
+    "extra-cli",
+    "scripts.public_read",
+    "Extra 1093",
+    "extra_1093"
+  ],
+  "forbidden_conclusion_fields": [
+    "has_right",
+    "imbalance",
+    "loss",
+    "should_adjust",
+    "direito",
+    "desequilibrio",
+    "perda",
+    "deveria_reajustar",
+    "INDEX"
+  ],
+  "branding": "truth plane and export are source-agnostic; brand marks and internal repo jargon are forbidden in public consumer fields"
+}
