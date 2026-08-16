@@ -31,6 +31,12 @@ def test_ready_targets_are_live_confenge_pages_on_disk():
         assert "noindex" not in robots
         assert row.get("soft_404") is False
         assert row.get("chain") is False
+        assert row.get("loop") is False
+        assert "/consultoria-b2g" not in (row.get("canonical") or "")
+        host = (row.get("canonical") or "").split("/")[2] if "://" in (row.get("canonical") or "") else ""
+        assert host == "confenge.com.br"
+        path = "/" + "/".join((row.get("canonical") or "").split("/")[3:])
+        assert path.rstrip("/") not in {"", "/"}
 
 
 def test_hold_rows_are_not_fetched_as_redirects():

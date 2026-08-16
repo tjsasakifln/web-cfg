@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from legacy_equity.inventory import (  # noqa: E402
+    DEFAULT_QUERY_STRING_POLICY,
     INVENTORY_PATH,
     MANIFESTO_PATH,
     inventory_sha256,
@@ -31,25 +32,7 @@ LEGACY_ORIGIN = "https://smartlic.tech"
 CONFENGE = "https://confenge.com.br"
 STABLE_GENERATED_AT = "2026-08-16T00:00:00Z"
 
-QUERY_RULE = {
-    "mode": "allowlist",
-    "persist": [
-        "utm_source",
-        "utm_medium",
-        "utm_campaign",
-        "utm_content",
-        "utm_term",
-        "jornada",
-        "origem",
-        "route_family",
-        "cta_id",
-        "asset_id",
-        "correlation_id",
-        "tema",
-    ],
-    "drop": "all_other_query_parameters",
-    "pii": "never persist email/phone/name/cnpj/cpf or free-text identity in URL, analytics or logs",
-}
+QUERY_RULE = DEFAULT_QUERY_STRING_POLICY
 
 FRAGMENT_BEHAVIOR = "not forwarded — fragments are client-only and never appear in Location"
 TRAILING_SLASH_POLICY = "legacy path is normalized by stripping a trailing slash except for /"
@@ -273,6 +256,23 @@ HOLD_PERGUNTAS = {
     ),
 }
 
+# WEB-017 nominal review: one v2 ready row targeted a different visitor job.
+# Payment-delay risk is the atraso-de-pagamento article, not work-delay/prorrogação.
+READY_TARGET_OVERRIDES: dict[str, dict[str, str]] = {
+    "/blog/orgaos-risco-atraso-pagamento-licitacao": {
+        "target": f"{CONFENGE}/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "semantic_equivalence": (
+            "Legacy post is about payment-delay risk in public contracts. "
+            "CONFENGE article answers late public-contract payment and the "
+            "contractor's documented response — not work-delay/prorrogação."
+        ),
+        "unique_utility": (
+            "Indexable #60 payment-pressure article with next action. "
+            "/atrasos-prorrogacao-obras-publicas/ is a different job (prazo/caminho crítico)."
+        ),
+    },
+}
+
 HOLD_GLOSSARIO = {
     "pncp": (
         "CONFENGE PNCP glossary/explainer (not live)",
@@ -391,10 +391,21 @@ def _project_entry(src: dict) -> dict:
     if is_ready_redirect:
         action = "REDIRECT_301"
         status = "ready"
-        target = src.get("target_url")
+        override = READY_TARGET_OVERRIDES.get(path)
+        target = (override or {}).get("target") or src.get("target_url") or src.get("target")
         http = 301
-        reason = src.get("semantic_equivalence") or src.get("equivalence_utility") or ""
-        unique = src.get("equivalence_utility") or src.get("semantic_equivalence") or ""
+        reason = (
+            (override or {}).get("semantic_equivalence")
+            or src.get("semantic_equivalence")
+            or src.get("equivalence_utility")
+            or ""
+        )
+        unique = (
+            (override or {}).get("unique_utility")
+            or src.get("equivalence_utility")
+            or src.get("semantic_equivalence")
+            or ""
+        )
         owner = src.get("owner") or "web-cfg (@dev) — CONFENGE public surface"
         observation = "NOT_STARTED — 28-day window starts at first production 301 of this hash"
     elif hold:
@@ -449,8 +460,8 @@ def _project_entry(src: dict) -> dict:
         "observation_status": observation,
         "evidence": evidence,
         "target_absence_justification": "" if action == "REDIRECT_301" else reason,
-        "semantic_equivalence": src.get("semantic_equivalence") if action == "REDIRECT_301" else "none — no live 1:1",
-        "equivalence_utility": src.get("equivalence_utility") or "",
+        "semantic_equivalence": reason if action == "REDIRECT_301" else "none — no live 1:1",
+        "equivalence_utility": unique if action == "REDIRECT_301" else "",
         "preconditions": src.get("preconditions") or [],
         "status": status,
         "expected_http": http,
@@ -467,7 +478,7 @@ def _project_entry(src: dict) -> dict:
             {
                 "legacy_exact_or_pattern": "exact",
                 "destination_canonical": target,
-                "equivalence_rationale": src.get("semantic_equivalence") or "",
+                "equivalence_rationale": reason,
                 "http_status": 301,
                 "no_chain": True,
                 "no_loop": True,
@@ -515,9 +526,12 @@ def build(source: dict) -> dict:
                 "schema": "smartlic-confenge-manifesto-v1",
                 "sha256": "c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d",
                 "note": (
-                    "v2 keeps the same 11 ready CONFENGE 301s. Vocabulary expands to six "
-                    "actions. Previously-RETIRE rows whose job has a named future surface "
-                    "are HOLD_TARGET_NOT_READY (fail-closed 410, no Location)."
+                    "v2 keeps 11 ready CONFENGE 301s. Vocabulary expands to six actions. "
+                    "Previously-RETIRE rows whose job has a named future surface are "
+                    "HOLD_TARGET_NOT_READY (fail-closed 410, no Location). WEB-017 remapped "
+                    "/blog/orgaos-risco-atraso-pagamento-licitacao from "
+                    "/atrasos-prorrogacao-obras-publicas/ to "
+                    "/conteudos/atraso-pagamento-contrato-publico-suspender/ (payment-delay job)."
                 ),
             },
             "economic_rule": (

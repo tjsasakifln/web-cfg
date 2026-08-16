@@ -23,3 +23,6 @@ def test_ready_targets_exist_and_are_confenge_only():
         assert not row["has_smartlic_brand"]
         robots = (row.get("robots") or "").lower()
         assert "noindex" not in robots
+        assert row.get("soft_404") is False
+        assert row.get("chain") is False
+        assert row.get("loop") is False

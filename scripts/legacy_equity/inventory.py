@@ -12,7 +12,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 INVENTORY_PATH = ROOT / "data/migrations/smartlic-url-map/inventory.v2.json"
@@ -110,6 +110,30 @@ PARENT_HUB_SUFFIXES = (
     "/inteligencia/",
     "/guias-contratos-obras/",
 )
+
+ALLOWLIST_QUERY_KEYS = (
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_content",
+    "utm_term",
+    "jornada",
+    "origem",
+    "route_family",
+    "cta_id",
+    "asset_id",
+    "correlation_id",
+    "tema",
+)
+PII_QUERY_KEYS = frozenset(
+    {"email", "phone", "telefone", "name", "nome", "cnpj", "cpf"}
+)
+DEFAULT_QUERY_STRING_POLICY = {
+    "mode": "allowlist",
+    "persist": list(ALLOWLIST_QUERY_KEYS),
+    "drop": "all_other_query_parameters",
+    "pii": "never persist email/phone/name/cnpj/cpf or free-text identity in URL, analytics or logs",
+}
 
 
 def canonicalize_action(value: str | None) -> str | None:
@@ -333,3 +357,28 @@ def priority_entries(data: dict | None = None) -> list[dict]:
         if pri in {"P0", "P1"} or has_clicks or e.get("status") in READY_STATUSES:
             out.append(e)
     return out
+
+
+def apply_query_string_policy(
+    target: str,
+    query: str,
+    persist: list[str] | None = None,
+) -> str:
+    """Build Location from target + incoming query using the shipped allowlist.
+
+    PII keys (email/phone/name/cnpj/cpf and aliases) are never forwarded.
+    Fragments are never forwarded. Only `persist` keys survive.
+    """
+    persist_set = set(persist or ALLOWLIST_QUERY_KEYS)
+    parts = urlsplit(target)
+    incoming = parse_qsl(query.lstrip("?"), keep_blank_values=True)
+    kept: list[tuple[str, str]] = []
+    for key, value in incoming:
+        lowered = key.lower()
+        if lowered in PII_QUERY_KEYS:
+            continue
+        if key in persist_set:
+            kept.append((key, value))
+    return urlunsplit(
+        (parts.scheme, parts.netloc, parts.path, urlencode(kept), "")
+    )
