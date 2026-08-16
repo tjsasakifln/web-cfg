@@ -173,6 +173,40 @@ def test_pseo_shape():
     assert not errors, "pseo shape failures:\n- " + "\n- ".join(errors)
 
 
+def _on_block(text: str) -> str:
+    """YAML `on:` mapping only — used to forbid path filters that skip merge."""
+    m = re.search(r"(?m)^on:\n", text)
+    assert m, "workflow missing top-level on:"
+    start = m.start()
+    rest = text[start + 1 :]
+    m2 = re.search(r"(?m)^[A-Za-z0-9_-]+:\n", rest)
+    end = start + 1 + (m2.start() if m2 else len(rest))
+    return text[start:end]
+
+
+def test_merge_workflows_have_no_path_skip():
+    """site-ci and pSEO must not skip on path filters. test:affected is local only."""
+    for label, path in (("site-ci", SITE_CI), ("pseo", PSEO)):
+        text = _read(path)
+        on = _on_block(text)
+        if re.search(r"(?m)^\s+paths:\s*$", on) or re.search(r"(?m)^\s+paths:\s*\[", on):
+            raise AssertionError(f"{label} on.paths would skip merge work")
+        if re.search(r"(?m)^\s+paths-ignore:", on):
+            raise AssertionError(f"{label} on.paths-ignore would skip merge work")
+        if "test:affected" in text:
+            raise AssertionError(
+                f"{label} must not run test:affected (local feedback only; merge stays full)"
+            )
+
+
+def test_pseo_still_requires_full_npm_test():
+    text = _read(PSEO)
+    if "npm test" not in text:
+        raise AssertionError("pseo.yml must keep the full `npm test` merge gate")
+    if re.search(r"npm test\s*\|\|", text) or "npm run test:affected" in text:
+        raise AssertionError("pseo.yml must not soften or replace npm test with test:affected")
+
+
 def test_codeql_soft_fail_is_explicit():
     """CodeQL may soft-fail only while code scanning is org-disabled — must stay honest."""
     text = _read(CODEQL)
@@ -195,6 +229,8 @@ def main() -> int:
     tests = [
         test_site_ci_shape,
         test_pseo_shape,
+        test_merge_workflows_have_no_path_skip,
+        test_pseo_still_requires_full_npm_test,
         test_codeql_soft_fail_is_explicit,
         test_deliberate_force_fail_env,
     ]
