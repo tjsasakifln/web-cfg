@@ -25,13 +25,20 @@ def test_pick_keeps_family_and_drops_pii():
     payload["email"] = "ceo@empresa.com.br"
     payload["nome"] = "Alice"
     payload["telefone"] = "+5548988344559"
+    payload["cnpj"] = "52.407.089/0001-09"
     payload["arbitrary"] = "drop"
+    payload["referrer"] = "https://www.google.com/"
+    payload["query_class"] = "analise_tecnica_contrato"
     kept = pick_attribution(payload)
     assert kept["analysis_id"] == rec["id"]
     assert kept["evidence_pack_version"] == "1.0"
     assert kept["asset_family"]
     assert kept["correlation_id"] == "corr-1"
+    assert kept["query_class"] == "analise_tecnica_contrato"
+    assert kept["referrer"] == "https://www.google.com/"
     assert "email" not in kept
     assert "nome" not in kept
     assert "telefone" not in kept
+    assert "cnpj" not in kept
     assert "arbitrary" not in kept
+    assert "52.407.089" not in " ".join(kept.values())

@@ -121,7 +121,7 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     hub = ROOT / "analises-contratos-publicos" / "index.html"
     assert hub.is_file()
     html = hub.read_text(encoding="utf-8")
-    assert 'content="noindex,nofollow"' in html
+    assert 'content="noindex' in html
     assert "/correcoes/" in html
     pages = list((ROOT / "analises-contratos-publicos").rglob("index.html"))
     assert pages
@@ -131,3 +131,24 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
         assert "CaseStudy" not in body
         assert '"@type":"Review"' not in body and '"@type": "Review"' not in body
     assert analysis_urls_in_sitemaps(ROOT) == []
+
+
+def test_robots_and_headers_block_fixture_family():
+    robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
+    headers = (ROOT / "_headers").read_text(encoding="utf-8")
+    assert "Disallow: /analises-contratos-publicos/" in robots
+    assert "/analises-contratos-publicos/*" in headers
+    assert "X-Robots-Tag: noindex" in headers
+    sitemap_files = [
+        ROOT / "sitemap.xml",
+        ROOT / "sitemap-index.xml",
+        ROOT / "sitemap-editorial.xml",
+        ROOT / "sitemap-inteligencia.xml",
+        ROOT / "sitemap.txt",
+        ROOT / "sitemap-analises-contratos.xml",
+    ]
+    for path in sitemap_files:
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        assert "analises-contratos-publicos" not in text

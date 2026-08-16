@@ -162,6 +162,37 @@ def test_expired_or_stale_extra_cli_freshness_cannot_index():
     assert "freshness_max_age_hours" in hours_decision.reason_codes
 
 
+def test_missing_evidence_hash_freshness_coverage_cannot_index():
+    knockouts = {
+        "evidence_pack_hash": {"evidence_pack_hash": ""},
+        "evidence_pack_version": {"evidence_pack_version": ""},
+        "content_hash": {"content_hash": ""},
+        "coverage": {"coverage": {}},
+        "freshness_absent": {"as_of": "", "freshness": {}},
+        "evidence_refs": {"sources": []},
+    }
+    expected = {
+        "evidence_pack_hash": "evidence_pack_hash_absent",
+        "evidence_pack_version": "evidence_pack_version_absent",
+        "content_hash": "content_hash_absent",
+        "coverage": "coverage_absent",
+        "freshness_absent": "freshness_absent",
+        "evidence_refs": "evidence_refs_absent",
+    }
+    for name, override in knockouts.items():
+        rec = complete_live_record(**override)
+        decision = evaluate_publication(rec, cohort=[rec])
+        assert decision.state != "PUBLISHABLE_INDEX", (name, decision.state, decision.reason_codes)
+        assert expected[name] in decision.reason_codes, (name, decision.reason_codes)
+
+
+def test_producer_status_not_official_live_cannot_index():
+    rec = complete_live_record(producer_status="claimed_live", catalog_mode="official_live")
+    decision = evaluate_publication(rec, cohort=[rec])
+    assert decision.state != "PUBLISHABLE_INDEX"
+    assert "producer_status_not_official_live" in decision.reason_codes
+
+
 def test_near_duplicate_pair_cannot_index():
     rec = complete_live_record()
     clone = entity_swap_clone(rec)

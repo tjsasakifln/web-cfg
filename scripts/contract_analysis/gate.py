@@ -20,6 +20,13 @@ from scripts.contract_analysis import (
     SOURCE_OFFICIAL_LIVE,
 )
 from scripts.contract_analysis.approval import approval_allows_index
+from scripts.contract_analysis.consume import (
+    INTEGRITY_REASON_CODES,
+    _has_coverage,
+    _has_evidence_refs,
+    _has_freshness,
+    producer_status_of,
+)
 from scripts.contract_analysis.reputation import check_reputational_safety
 from scripts.contract_analysis.taxonomy import check_taxonomy
 from scripts.contract_analysis.unique_content import check_unique_content
@@ -150,6 +157,39 @@ def _is_fixture(record: dict[str, Any]) -> bool:
     return False
 
 
+def _producer_integrity_reasons(record: dict[str, Any]) -> list[str]:
+    """INDEX blockers for missing evidence/hash/freshness/coverage. Presence-only here.
+
+    Hash equality is verified at consume against the producer bundle and attached
+    as `producer_integrity_reasons`. Re-hashing the editorial projection would
+    be a false mismatch.
+    """
+    attached = [str(code) for code in (record.get("producer_integrity_reasons") or [])]
+    reasons: list[str] = []
+    if not _text(record.get("evidence_pack_hash")):
+        reasons.append("evidence_pack_hash_absent")
+    if not _text(record.get("evidence_pack_version")):
+        reasons.append("evidence_pack_version_absent")
+    if not _has_evidence_refs(record):
+        reasons.append("evidence_refs_absent")
+    if not _has_freshness(record):
+        reasons.append("freshness_absent")
+    if not _has_coverage(record):
+        reasons.append("coverage_absent")
+    if not _text(record.get("content_hash")):
+        reasons.append("content_hash_absent")
+    if record.get("content_hash_verified") is False and _text(record.get("content_hash")):
+        reasons.append("content_hash_mismatch")
+    status = producer_status_of(record)
+    if status and status != SOURCE_OFFICIAL_LIVE:
+        reasons.append("producer_status_not_official_live")
+    if record.get("withdrawn"):
+        reasons.append("withdrawn")
+    if record.get("correction_invalidated"):
+        reasons.append("correction_invalidated")
+    return sorted(set(attached + reasons) & (set(INTEGRITY_REASON_CODES) | {"withdrawn", "correction_invalidated", "schema_additive_1x"}))
+
+
 def evaluate_conditions(
     record: dict[str, Any],
     *,
@@ -163,6 +203,9 @@ def evaluate_conditions(
     taxonomy_errors = check_taxonomy(record, rendered_html=rendered_html, schema=schema)
     reputation_errors = check_reputational_safety(record, rendered_html=rendered_html)
     unique_errors = check_unique_content(record, cohort)
+    integrity_errors = [
+        code for code in _producer_integrity_reasons(record) if code != "schema_additive_1x"
+    ]
 
     facts = _items(record.get("facts"))
     sources = _items(record.get("sources"))
@@ -190,6 +233,19 @@ def evaluate_conditions(
     ):
         extra_ok = False
         reasons.append("fixture_as_live")
+    if integrity_errors:
+        reasons.extend(integrity_errors)
+
+    live_integrity_blockers = []
+    if not _is_fixture(record) or _source_kind(record) == SOURCE_OFFICIAL_LIVE:
+        live_integrity_blockers = [
+            code
+            for code in integrity_errors
+            if code
+            not in {
+                "producer_status_not_official_live",
+            }
+        ]
 
     data_ready = (
         extra_ok
@@ -197,6 +253,7 @@ def evaluate_conditions(
         and bool(facts)
         and bool(_text(ficha.get("objeto") or record.get("objeto")))
         and as_of is not None
+        and not live_integrity_blockers
     )
     if record.get("data_incomplete") and extra_state != "DATA_READY":
         reasons.append("data_incomplete")
@@ -351,8 +408,16 @@ def decide_state(
     taxonomy_hit = any(code.startswith("taxonomy_") for code in reasons)
     reputation_hit = any(code.startswith("reputation_") for code in reasons)
     extra_state = _data_state(record)
-    if taxonomy_hit or reputation_hit or extra_state == "DATA_REJECT" or "fixture_as_live" in reasons:
+    if (
+        taxonomy_hit
+        or reputation_hit
+        or extra_state == "DATA_REJECT"
+        or "fixture_as_live" in reasons
+        or "withdrawn" in reasons
+    ):
         return "REJECT"
+    if "correction_invalidated" in reasons:
+        return "EDITORIAL_REVIEW"
     if (
         not conditions["data_readiness"]
         or not conditions["source_provenance"]
@@ -375,7 +440,8 @@ def decide_state(
     fixture = _is_fixture(record)
     approved, approval_reasons = approval_allows_index(record)
     reasons.extend(approval_reasons)
-    all_ok = all(conditions[name] for name in INDEX_CONDITIONS)
+    integrity_block = any(code in INTEGRITY_REASON_CODES for code in reasons)
+    all_ok = all(conditions[name] for name in INDEX_CONDITIONS) and not integrity_block
     live = _source_kind(record) == SOURCE_OFFICIAL_LIVE and not fixture
     if all_ok and live and approved:
         return "PUBLISHABLE_INDEX"

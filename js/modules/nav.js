@@ -86,7 +86,7 @@
       'origem', 'origin_url', 'landing_url',
       'route_family', 'cta_id', 'asset_id', 'correlation_id', 'referrer',
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
-      'analysis_id', 'evidence_pack_version', 'asset_family',
+      'analysis_id', 'evidence_pack_version', 'asset_family', 'query_class',
     ];
     const ROUTE_FAMILY_BY_PREFIX = [
       ['/defesa-margem-contratos-publicos/', 'margin-defense'],

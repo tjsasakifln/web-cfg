@@ -37,6 +37,7 @@ const MAX_FIELD = {
   analysis_id: 120,
   evidence_pack_version: 80,
   asset_family: 80,
+  query_class: 80,
 };
 
 /** Query/body keys that may persist as attribution. Everything else is dropped. */
@@ -71,6 +72,7 @@ const ATTR_ALLOWLIST = [
   "analysis_id",
   "evidence_pack_version",
   "asset_family",
+  "query_class",
 ];
 
 function looksLikePii(value, key) {
@@ -283,6 +285,7 @@ function validateAndNormalize(data) {
       "evidence_pack_version",
     ) || null,
     asset_family: sanitizeAttributionValue(data.asset_family, MAX_FIELD.asset_family, "asset_family") || null,
+    query_class: sanitizeAttributionValue(data.query_class, MAX_FIELD.query_class, "query_class") || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,

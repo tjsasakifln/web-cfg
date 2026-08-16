@@ -71,7 +71,45 @@ def test_fixture_render_is_noindex():
     )
     _, decision, html = _html(rec)
     assert decision.state != "PUBLISHABLE_INDEX"
-    assert 'content="noindex,nofollow"' in html
+    assert 'content="noindex' in html
+    assert "noarchive" in html
+
+
+def test_fixture_preview_has_visible_banner_and_no_casestudy():
+    rec = complete_live_record(
+        is_fixture=True,
+        source_kind="test_only_fixture",
+        catalog_mode="fixture",
+        approved_for_index=True,
+    )
+    _, decision, html = _html(rec)
+    assert decision.state != "PUBLISHABLE_INDEX"
+    assert "Prévia editorial de teste" in html
+    assert "não deve ser indexada" in html.lower() or "nao deve ser indexada" in html.lower()
+    assert "CaseStudy" not in html
+    assert "noarchive" in html
+
+
+def test_cta_url_has_no_cnpj_or_email():
+    rec = complete_live_record()
+    rec["ficha"] = dict(rec["ficha"], cnpj="52407089000109")
+    _, _, html = _html(rec)
+    assert 'id="proximo-passo"' in html
+    assert "analysis_id=live-bdi-alpha" in html
+    href_start = html.find('id="proximo-passo"')
+    cta_chunk = html[href_start : href_start + 1200]
+    assert "52407089000109" not in cta_chunk
+    assert "52.407.089" not in cta_chunk
+    assert "@" not in cta_chunk.split("href=")[1].split(">")[0]
+
+
+def test_headings_and_table_accessibility():
+    rec, _, html = _html()
+    assert html.count("<h1>") == 1
+    assert "<h2>" in html
+    assert "scope='row'" in html or 'scope="row"' in html
+    assert "skip-link" in html
+    assert 'lang="pt-BR"' in html
 
 
 def test_epistemic_labels_are_visible():

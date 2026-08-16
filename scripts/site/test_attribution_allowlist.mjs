@@ -55,14 +55,19 @@ const analysisPicked = core.pickAttribution({
   evidence_pack_version: "1.0",
   asset_family: "analise-tecnica-contrato-publico",
   correlation_id: "corr-analysis-1",
+  query_class: "analise_tecnica_contrato",
+  referrer: "https://www.google.com/search?q=bdi",
   email: "leak@x.com",
   nome: "Alice",
+  cnpj: "52407089000109",
 });
-if (analysisPicked.email || analysisPicked.nome) fail("analysis_pii_leaked", analysisPicked);
+if (analysisPicked.email || analysisPicked.nome || analysisPicked.cnpj) fail("analysis_pii_leaked", analysisPicked);
 if (analysisPicked.analysis_id !== "cand-preco-01") fail("analysis_id", analysisPicked);
 if (analysisPicked.evidence_pack_version !== "1.0") fail("evidence_pack_version", analysisPicked);
 if (analysisPicked.asset_family !== "analise-tecnica-contrato-publico") fail("asset_family", analysisPicked);
 if (analysisPicked.correlation_id !== "corr-analysis-1") fail("analysis_correlation", analysisPicked);
+if (analysisPicked.query_class !== "analise_tecnica_contrato") fail("query_class", analysisPicked);
+if (analysisPicked.referrer !== "https://www.google.com/search?q=bdi") fail("referrer", analysisPicked);
 pass("pickAttribution_keeps_analysis_family");
 if (picked.correlation_id !== "corr-test-001") fail("correlation", picked);
 pass("pickAttribution_drops_unlisted_and_pii");

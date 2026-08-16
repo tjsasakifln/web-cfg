@@ -9,3 +9,7 @@ User-agent: *
 Disallow: /ops/
 Disallow: /.netlify/
 Disallow: /piloto/
+
+# Contract-analysis canary: fixture/preview family stays off crawlers
+# until an official_live PUBLISHABLE_INDEX page exists.
+Disallow: /analises-contratos-publicos/

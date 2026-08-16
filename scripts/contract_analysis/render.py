@@ -313,11 +313,20 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         (title, None),
     ]
     sections: list[str] = []
+    fixture_banner = ""
+    if record.get("is_fixture") or decision.is_fixture or decision.source_kind == "test_only_fixture":
+        fixture_banner = (
+            '<p class="ca-fixture-banner" role="status">'
+            "Prévia editorial de teste (fixture). Não é um contrato real, "
+            "não implica relação comercial e não deve ser indexada."
+            "</p>"
+        )
     sections.append(
         '<header class="article-hero container">'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
         f"<h1>{e(title)}</h1>"
         f'<p class="ca-disclaimer">{e(DISCLAIMER_PT)}</p>'
+        f"{fixture_banner}"
         "</header>"
     )
     sections.append(breadcrumbs_html(crumbs))
@@ -392,6 +401,8 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     body = "".join(s for s in sections if s)
     schema = build_schema(record, decision)
     robots = decision.robots
+    if not decision.indexable and "noarchive" not in robots:
+        robots = f"{robots},noarchive" if robots else "noindex,nofollow,noarchive"
     return page_shell(
         title=f"{title} | CONFENGE",
         description=description or DISCLAIMER_PT,
@@ -422,7 +433,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
 
 
 def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, index_count: int) -> str:
-    robots = "index,follow" if index_count else "noindex,nofollow"
+    robots = "index,follow" if index_count else "noindex,nofollow,noarchive"
     cards = []
     for record, decision in items:
         if decision.state not in {"PUBLISHABLE_NOINDEX", "PUBLISHABLE_INDEX"}:

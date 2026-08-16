@@ -19,6 +19,8 @@ KEEP_LIST = (
     "route_family",
     "asset_id",
     "cta_id",
+    "referrer",
+    "query_class",
 )
 
 PII_KEYS = (
@@ -45,6 +47,15 @@ def attribution_payload(record: dict[str, Any], *, correlation_id: str = "") -> 
     }
 
 
+def _looks_like_cnpj_or_name(text: str) -> bool:
+    compact = "".join(ch for ch in text if ch.isdigit())
+    if len(compact) == 14:
+        return True
+    if any(tok in text.lower() for tok in ("@", "telefone", "whatsapp")):
+        return True
+    return False
+
+
 def pick_attribution(data: dict[str, Any]) -> dict[str, str]:
     """Keep only the analysis family keys; drop PII and arbitrary fields."""
     out: dict[str, str] = {}
@@ -53,7 +64,7 @@ def pick_attribution(data: dict[str, Any]) -> dict[str, str]:
         if val is None:
             continue
         text = str(val).strip()
-        if not text or "@" in text:
+        if not text or "@" in text or _looks_like_cnpj_or_name(text):
             continue
         out[key] = text[:180]
     return out

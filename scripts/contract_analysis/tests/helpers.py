@@ -119,6 +119,9 @@ def complete_live_record(**overrides: Any) -> dict[str, Any]:
         "rollback": "git:HEAD:contract-analysis-canary",
         "evidence_pack_version": "1.0",
         "evidence_pack_hash": "testhash",
+        "content_hash": "live-content-hash-alpha",
+        "coverage": {"status": "DECLARED", "record_count": 1, "as_of": "2026-08-01"},
+        "producer_status": "official_live",
         "date_published": "2026-08-16",
         "date_modified": "2026-08-16",
         "cta": {

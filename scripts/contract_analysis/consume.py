@@ -8,7 +8,9 @@ are labeled test-only and cannot reach PUBLISHABLE_INDEX.
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +24,23 @@ from scripts.contract_analysis import (
 
 LIVE_SCHEMA = PUBLIC_READ_SCHEMA
 FIXTURE_SCHEMA = "confenge-contract-analysis-fixture/1.0"
+SCHEMA_PREFIX = "public-read-contract-analysis/"
+INTEGRITY_REASON_CODES = (
+    "schema_absent",
+    "schema_unsupported",
+    "contract_version_unsupported",
+    "evidence_pack_hash_absent",
+    "evidence_pack_version_absent",
+    "evidence_refs_absent",
+    "freshness_absent",
+    "coverage_absent",
+    "content_hash_absent",
+    "content_hash_mismatch",
+    "manifest_hash_mismatch",
+    "producer_status_not_official_live",
+)
+_SCHEMA_1X = re.compile(r"^public-read-contract-analysis/1(?:\.\d+)?$")
+_CONTRACT_V1 = re.compile(r"^v?1(?:\.\d+){0,2}$")
 
 DEFAULT_LIVE_DIRS = (
     Path("data/extra-cli/public-read-contract-analysis/1.0"),
@@ -55,6 +74,132 @@ def _rel(path: Path) -> str:
         return str(path.relative_to(root))
     except ValueError:
         return str(path)
+
+
+def canonical_dumps(payload: Any) -> str:
+    """Byte-stable JSON matching extra-cli `canonical_dumps`."""
+    return json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def content_hash_of(document: dict[str, Any]) -> str:
+    """SHA-256 of the document with `content_hash` and consumer `_` keys stripped."""
+    body = {
+        key: value
+        for key, value in document.items()
+        if key != "content_hash" and not str(key).startswith("_")
+    }
+    return hashlib.sha256(canonical_dumps(body).encode("utf-8")).hexdigest()
+
+
+def verify_content_hash(document: dict[str, Any]) -> bool:
+    declared = str(document.get("content_hash") or "").strip()
+    if not declared:
+        return False
+    return declared == content_hash_of(document)
+
+
+def negotiate_schema(
+    schema: Any,
+    contract_version: Any = None,
+) -> tuple[bool, list[str]]:
+    """Accept `public-read-contract-analysis/1.0` and additive 1.x. Reject v2/unknown."""
+    reasons: list[str] = []
+    text = str(schema or "").strip()
+    if not text:
+        return False, ["schema_absent"]
+    if text == LIVE_SCHEMA:
+        ok = True
+    elif _SCHEMA_1X.fullmatch(text):
+        ok = True
+        reasons.append("schema_additive_1x")
+    else:
+        return False, ["schema_unsupported"]
+    version = str(contract_version or "").strip()
+    if version and not _CONTRACT_V1.fullmatch(version):
+        return False, ["contract_version_unsupported"]
+    return ok, reasons
+
+
+def producer_status_of(payload: dict[str, Any]) -> str:
+    """Additive Goal 03 field. Falls back to catalog_mode; never invents official_live."""
+    raw = payload.get("producer_status")
+    if raw is not None and str(raw).strip():
+        return str(raw).strip()
+    return catalog_mode_of(payload)
+
+
+def _has_evidence_refs(payload: dict[str, Any]) -> bool:
+    for key in ("evidence_refs", "source_refs", "official_refs"):
+        val = payload.get(key)
+        if isinstance(val, list) and any(val):
+            return True
+        if isinstance(val, str) and val.strip():
+            return True
+    sources = payload.get("sources")
+    if isinstance(sources, list):
+        for src in sources:
+            if not isinstance(src, dict):
+                continue
+            if src.get("url") or src.get("document_id") or src.get("pncp_id"):
+                return True
+    return False
+
+
+def _has_freshness(payload: dict[str, Any]) -> bool:
+    freshness = payload.get("freshness") if isinstance(payload.get("freshness"), dict) else {}
+    return bool(
+        str(freshness.get("source_as_of") or freshness.get("as_of") or payload.get("as_of") or "").strip()
+    )
+
+
+def _has_coverage(payload: dict[str, Any]) -> bool:
+    coverage = payload.get("coverage")
+    if coverage is None or coverage == "" or coverage == {}:
+        return False
+    if isinstance(coverage, dict):
+        return any(value not in (None, "", [], {}) for value in coverage.values())
+    if isinstance(coverage, list):
+        return bool(coverage)
+    return bool(str(coverage).strip())
+
+
+def inspect_producer_integrity(
+    payload: dict[str, Any],
+    *,
+    manifest: dict[str, Any] | None = None,
+) -> list[str]:
+    """Nominal reason codes for missing evidence/hash/freshness/coverage. Never invent fields."""
+    reasons: list[str] = []
+    ok, schema_reasons = negotiate_schema(payload.get("schema"), payload.get("contract_version"))
+    if not ok:
+        reasons.extend(schema_reasons)
+    if not str(payload.get("evidence_pack_hash") or "").strip():
+        reasons.append("evidence_pack_hash_absent")
+    if not str(payload.get("evidence_pack_version") or "").strip():
+        reasons.append("evidence_pack_version_absent")
+    if not _has_evidence_refs(payload):
+        reasons.append("evidence_refs_absent")
+    if not _has_freshness(payload):
+        reasons.append("freshness_absent")
+    if not _has_coverage(payload):
+        reasons.append("coverage_absent")
+    declared_hash = str(payload.get("content_hash") or "").strip()
+    if not declared_hash:
+        reasons.append("content_hash_absent")
+    elif payload.get("_content_hash_ok") is False:
+        reasons.append("content_hash_mismatch")
+    elif payload.get("_content_hash_ok") is True:
+        pass
+    elif payload.get("schema") == LIVE_SCHEMA and not verify_content_hash(payload):
+        reasons.append("content_hash_mismatch")
+    if manifest is not None:
+        declared = str(manifest.get("content_hash") or "").strip()
+        if declared and not verify_content_hash(manifest):
+            reasons.append("manifest_hash_mismatch")
+    status = producer_status_of(payload)
+    if status and status != SOURCE_OFFICIAL_LIVE:
+        reasons.append("producer_status_not_official_live")
+    return sorted(set(reasons))
 
 
 def data_state_of(payload: dict[str, Any]) -> str | None:
@@ -92,6 +237,9 @@ def fixture_as_live(payload: dict[str, Any]) -> bool:
 
 def source_kind_of(payload: dict[str, Any]) -> str:
     if fixture_as_live(payload) or is_fixture_catalog(payload):
+        return SOURCE_FIXTURE
+    status = producer_status_of(payload)
+    if status != SOURCE_OFFICIAL_LIVE:
         return SOURCE_FIXTURE
     mode = catalog_mode_of(payload)
     if mode == SOURCE_OFFICIAL_LIVE and claimed_live_of(payload) and not is_fixture_catalog(payload):
@@ -157,8 +305,12 @@ def load_export_dir(path: Path) -> dict[str, Any]:
         raise ConsumeError(f"not an extra-cli contract-analysis export dir: {resolved}")
     manifest = _parse_json(resolved / "manifest.json")
     manifest["_source_path"] = _rel(resolved)
-    if str(manifest.get("schema") or "") != LIVE_SCHEMA:
-        raise ConsumeError(f"unexpected export schema: {manifest.get('schema')}")
+    schema_ok, schema_reasons = negotiate_schema(manifest.get("schema"), manifest.get("contract_version"))
+    if not schema_ok:
+        raise ConsumeError(
+            f"unsupported export schema: {manifest.get('schema')} "
+            f"reasons={','.join(schema_reasons)}"
+        )
     entries = manifest.get("analyses") or []
     canary = manifest.get("canary") if isinstance(manifest.get("canary"), dict) else {}
     selected = list(canary.get("selected_ids") or canary.get("selected_candidate_ids") or [])
@@ -174,6 +326,9 @@ def load_export_dir(path: Path) -> dict[str, Any]:
         if not bundle_path.is_file():
             raise ConsumeError(f"missing analysis bundle: {bundle_path}")
         bundle = _parse_json(bundle_path)
+        bundle["_content_hash_ok"] = (
+            not bundle.get("content_hash") or verify_content_hash(bundle)
+        )
         bundle.setdefault("analysis_candidate_id", aid)
         bundle.setdefault("catalog_mode", catalog_mode_of(manifest))
         bundle.setdefault("claimed_live", claimed_live_of(manifest))
@@ -405,6 +560,13 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         "data_incomplete": state != "DATA_READY",
         "canonical_contract_ids": ids,
     }
+    integrity = inspect_producer_integrity(bundle, manifest=env if env.get("content_hash") or env.get("schema") else None)
+    rec["producer_status"] = producer_status_of({**envelope, **bundle})
+    rec["coverage"] = bundle.get("coverage")
+    rec["producer_integrity_reasons"] = integrity
+    rec["content_hash_verified"] = (
+        bool(bundle.get("content_hash")) and "content_hash_mismatch" not in integrity
+    )
     if fixture_as_live(envelope):
         rec["reason_codes"] = sorted(set(rec["reason_codes"] + ["fixture_as_live"]))
         rec["publication_readiness"] = rec["publication_readiness"] or "DATA_REJECT"
