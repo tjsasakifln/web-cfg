@@ -671,6 +671,15 @@ def compare_visible_parity(html: str, *, url: str | None = None) -> dict[str, An
             defects.append(
                 _defect("schema_date_stale", "date", err.split(":", 1)[-1], ",".join(visible["dates"]))
             )
+        elif err.startswith("schema_breadcrumb_not_visible"):
+            defects.append(
+                _defect(
+                    "schema_breadcrumb_name_not_visible",
+                    "BreadcrumbList",
+                    err.split(":", 1)[-1],
+                    "",
+                )
+            )
         elif "invented" in err or err.startswith("schema_invented"):
             defects.append(_defect("schema_false_case_study", "review", err, ""))
         else:
