@@ -19,12 +19,16 @@ from scripts.site.authority import (  # noqa: E402
     FOOTER_AUTHORITY_NAV,
     REQUIRED_SLOT_KEYS,
     SURFACE_TYPES,
+    archived_policy_pages,
     audit_public_families,
     check_analysis_not_case,
     check_case_permission_class,
     check_consent_slot,
     check_credentials_against_proof,
     check_matrix_slot_coverage,
+    check_policy_links,
+    check_policy_version_consistency,
+    check_policy_visible_disclosure,
     check_published_cases_permission,
     check_required_slots,
     check_research_method_as_of,
@@ -32,6 +36,9 @@ from scripts.site.authority import (  # noqa: E402
     check_signals_baseline,
     chrome_pages,
     classify_surface,
+    combined_policy_html,
+    current_policy_version,
+    data_analysis_policy_pages,
     extract_jsonld_blocks,
     extract_visible_authority,
     extract_visible_crumbs,
@@ -39,6 +46,7 @@ from scripts.site.authority import (  # noqa: E402
     footer_authority_nav,
     _types_of,
     has_material_legal_claim,
+    load_editorial_policy,
     load_governance,
     load_matrix,
     load_signals_baseline,
@@ -300,8 +308,14 @@ def test_public_policies_state_owner_sla_and_are_linked_from_chrome():
     conflicts = pages["conflicts"].read_text(encoding="utf-8")
     assert "Engº Tiago Sasaki" in editorial
     assert gov["correction"]["owner_email"] in corrections
-    assert "2 dias úteis" in corrections
-    assert "10 dias úteis" in corrections
+    assert gov["correction"]["prazo"] == "UNKNOWN"
+    assert gov["correction"]["acknowledge_sla"] == "UNKNOWN"
+    assert gov["correction"]["publish_sla"] == "UNKNOWN"
+    assert "2 dias úteis" not in corrections
+    assert "10 dias úteis" not in corrections
+    assert "2 dias úteis" not in editorial
+    assert "10 dias úteis" not in editorial
+    assert "UNKNOWN" in corrections
     assert "inteligência artificial" in ai.lower() or "uso de ia" in ai.lower()
     assert "conflito" in conflicts.lower()
     nav = footer_authority_nav()
@@ -318,6 +332,53 @@ def test_public_policies_state_owner_sla_and_are_linked_from_chrome():
         html = path.read_text(encoding="utf-8")
         assert "/politica-editorial/" in html, path
         assert "/correcoes/" in html, path
+
+
+def test_policy_version_consistency_and_visible_disclosure():
+    policy = load_editorial_policy()
+    version = current_policy_version(policy)
+    assert version
+    assert policy["prazo"] == "UNKNOWN"
+    assert set(policy["epistemic_classes"]) == {"FACT", "CALCULATION", "INFERENCE", "UNKNOWN"}
+    errors = check_policy_version_consistency(policy, policy_pages())
+    assert not errors, errors
+    combined = combined_policy_html()
+    disclosure = check_policy_visible_disclosure(combined, policy)
+    assert not disclosure, disclosure
+    assert "2 dias úteis" not in combined
+    assert "10 dias úteis" not in combined
+    assert "IA que vence" not in combined
+    archives = archived_policy_pages()
+    assert archives["historico"].exists()
+    assert archives["v1.0.0"].exists()
+    historic = archives["v1.0.0"].read_text(encoding="utf-8")
+    assert "1.0.0" in historic
+    assert "2 dias úteis" in historic
+    assert "10 dias úteis" in historic
+    fake = json.loads(json.dumps(policy))
+    fake["current_version"] = "9.9.9"
+    bumped = check_policy_version_consistency(fake, policy_pages())
+    assert "current_version_missing_from_changelog" in bumped
+    overwritten = json.loads(json.dumps(policy))
+    overwritten["changelog"][0]["summary"] = "história reescrita em silêncio"
+    rewritten = check_policy_version_consistency(overwritten, policy_pages())
+    assert any(e.startswith("changelog_entry_rewritten") for e in rewritten), rewritten
+
+
+def test_data_analysis_surfaces_link_policy_version():
+    policy = load_editorial_policy()
+    version = current_policy_version(policy)
+    surfaces = data_analysis_policy_pages()
+    assert surfaces
+    for name, path in surfaces.items():
+        assert path.exists(), path
+        html = path.read_text(encoding="utf-8")
+        link_errors = check_policy_links(html, policy)
+        assert not link_errors, f"{name}: {link_errors}"
+        assert version in html
+        assert f'data-policy-version="{version}"' in html
+        assert "/politica-editorial/" in html
+        assert "/correcoes/" in html
 
 
 def test_signals_baseline_unknown_without_invented_numbers():

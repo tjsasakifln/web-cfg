@@ -39,7 +39,7 @@
     "test:pseo-attribution": "node seo/scripts/test_pseo_attribution.mjs",
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "test:brand": "python3 scripts/site/test_brand_contract.py",
-    "test:authority": "python3 scripts/site/test_authority_contract.py",
+    "test:authority": "python3 scripts/site/test_authority_contract.py && node scripts/site/test_correction_request.mjs",
     "test:design": "python3 scripts/site/test_design_gates.py && python3 scripts/site/test_visitor_redesign.py",
     "test:copy": "python3 scripts/site/test_copy_gates.py && python3 scripts/site/scrub_em_dashes.py --write && python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json && python3 scripts/site/test_scrub_em_dashes.py && python3 scripts/site/scrub_em_dashes.py --check",
     "test:visual-structure": "python3 scripts/site/test_design_gates.py",

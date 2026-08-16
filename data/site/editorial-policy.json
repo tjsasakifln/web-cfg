@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "issue": 74,
+  "campaign": "WEB-010",
+  "current_version": "1.1.0",
+  "effective_at": "2026-08-16",
+  "canonical_path": "/politica-editorial/",
+  "historico_path": "/politica-editorial/historico/",
+  "prazo": "UNKNOWN",
+  "prazo_note": "Nenhum prazo de acuse, revisão ou publicação foi medido. UNKNOWN permanece UNKNOWN até existir série observada de pedidos reais.",
+  "epistemic_classes": [
+    "FACT",
+    "CALCULATION",
+    "INFERENCE",
+    "UNKNOWN"
+  ],
+  "required_visible_tokens": [
+    "fontes",
+    "FACT",
+    "CALCULATION",
+    "INFERENCE",
+    "UNKNOWN",
+    "revisão",
+    "conflitos",
+    "uso de IA",
+    "atualização",
+    "contestação",
+    "correção",
+    "retirada"
+  ],
+  "forbidden_current_tokens": [
+    "2 dias úteis",
+    "10 dias úteis",
+    "IA que vence"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "effective_at": "2026-08-15",
+      "summary": "Primeira publicação das políticas públicas (#78). Registrava prazos de 2 e 10 dias úteis sem série medida.",
+      "archive_path": "/politica-editorial/v/1.0.0/",
+      "content_sha256": "0f6248be0ee5cde743d1b1a56836165b55f00181f6b83dec7977e705bad371d4",
+      "entry_sha256": "7d97710e6f854e01186208a92a467d3aa9a4f02d053f9892e8ba2676f3f799f4"
+    },
+    {
+      "version": "1.1.0",
+      "effective_at": "2026-08-16",
+      "summary": "Classes epistêmicas FACT/CALCULATION/INFERENCE/UNKNOWN; prazo UNKNOWN; canal de contestação com recibo e PII mínima; política de retirada; uso material de IA. Substitui prazos não medidos da 1.0.0 sem apagá-los do histórico.",
+      "archive_path": "/politica-editorial/",
+      "content_sha256": "d254620670f41de081837f3c1abc1f034150b29fa74b55faae5c8b189cd68bf1",
+      "entry_sha256": "9c5218871b239c0888c63b3ab4ce81bf0eeb254f7b64855a9fb0132a292e1a8e"
+    }
+  ],
+  "versions": {
+    "1.0.0": {
+      "effective_at": "2026-08-15",
+      "prazo_then": "2/10 dias úteis (não medido; histórico)",
+      "pages": {
+        "editorial": {
+          "title": "Política editorial",
+          "description": "Quem afirma, com qual competência, com qual método, quando atualiza e como corrigir o conteúdo público da CONFENGE.",
+          "body": "<h2 id=\"escopo\">O que esta política cobre</h2>\n<p>Aplica-se a páginas de serviço, conteúdos técnicos, ferramentas, pesquisas/datasets e casos/provas publicados em confenge.com.br. Não cria diretório de especialistas, selo, ranking nem avaliação de clientes.</p>\n<p>Cada claim relevante deve poder ser auditado na cadeia: quem afirma → competência → método/dado → revisão → atualização → limitações → como corrigir.</p>\n<h2 id=\"identidade\">Identidade canônica</h2>\n<p>A organização pública é a CONFENGE (CNPJ 52.407.089/0001-09). O responsável técnico nomeado é Engº Tiago Sasaki. Não há segunda marca pública nem handoff de visitante para outro runtime.</p>\n<h2 id=\"autoria\">Autoria</h2>\n<p>Toda superfície coberta pela matriz de autoridade deve exibir autor visível (pessoa ou Biblioteca técnica CONFENGE). Structured data de autor só entra quando o nome correspondente aparece no HTML visível.</p>\n<h2 id=\"revisao\">Revisão técnica</h2>\n<p>Revisor independente é exigido quando o texto faz afirmação normativa material (lei, jurisprudência ou enquadramento prescritivo) e não declara a ausência de segundo revisor. A CONFENGE é prática individual: quando não há segundo revisor nomeado, a página deve dizer isso de forma explícita. Não se inventa revisor.</p>\n<h2 id=\"fontes\">Fontes e evidência</h2>\n<p>Afirmações legais rastreiam a metodologia de inteligência e a política interna de fontes jurídicas. Ferramentas e datasets mostram método, fonte, data de referência e limitações. UNKNOWN permanece UNKNOWN.</p>\n<h2 id=\"ia\">Uso de IA</h2>\n<p>O uso de sistemas de assistência à redação e à operação está descrito em Uso de IA. A responsabilidade editorial permanece humana.</p>\n<h2 id=\"conflitos\">Conflitos</h2>\n<p>A CONFENGE é consultoria comercial. A política de conflitos está em Conflitos.</p>\n<h2 id=\"correcoes\">Correções e atualização</h2>\n<p>Pedido de correção, dono e prazos: Correções. Owner de correção e de refresh: Engº Tiago Sasaki. Acuse de recebimento em até 2 dias úteis; correção material publicada em até 10 dias úteis após a confirmação do erro.</p>"
+        },
+        "corrections": {
+          "title": "Política de correções",
+          "description": "Canal, dono e prazos para corrigir erro material no site da CONFENGE.",
+          "body": "<h2 id=\"canal\">Canal</h2>\n<p>Escreva para tiago.sasaki@confenge.com.br com a URL, o trecho contestado e a correção proposta.</p>\n<h2 id=\"sla\">Prazos (SLA)</h2>\n<ul>\n<li><strong>Acuse de recebimento:</strong> até 2 dias úteis após o pedido identificável.</li>\n<li><strong>Publicação da correção material:</strong> até 10 dias úteis após a confirmação do erro.</li>\n</ul>"
+        },
+        "ai_use": {
+          "title": "Uso de IA",
+          "description": "Assistência de redação e operação não substitui responsável técnico, fonte nem consentimento.",
+          "body": "<p>Sistemas de IA podem ajudar a redigir, classificar, revisar consistência ou operar infraestrutura. Não assinam o conteúdo.</p>"
+        },
+        "conflicts": {
+          "title": "Conflitos de interesse",
+          "description": "A CONFENGE é consultoria comercial.",
+          "body": "<p>A CONFENGE vende diagnóstico, rotina B2G, sala de decisão de proposta e defesa de margem. Isso é declarado, não oculto.</p>"
+        }
+      }
+    },
+    "1.1.0": {
+      "effective_at": "2026-08-16",
+      "prazo": "UNKNOWN",
+      "pages": {
+        "editorial": {
+          "slug": "politica-editorial",
+          "title": "Política editorial",
+          "h1": "Política editorial",
+          "eyebrow": "Governança",
+          "description": "Como a CONFENGE classifica fontes e afirmações, revisa, atualiza, contesta, corrige e retira o que publica em confenge.com.br.",
+          "body": "<h2 id=\"escopo\">O que esta política cobre</h2>\n<p>Aplica-se a páginas de serviço, conteúdos técnicos, ferramentas, pesquisas, datasets, análises técnicas de contrato público e casos/provas publicados em confenge.com.br. Não cria diretório de especialistas, ranking nem avaliação de clientes. Não é um selo de qualidade autoatribuído.</p>\n<p><strong>ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</strong> e <strong>CASO CONFENGE</strong> são classes mutuamente exclusivas. Análise editorial de fato público não é case, review nem customer success e não implica relação comercial com o órgão, o contratado ou as partes. Caso CONFENGE só publica com classe de permissão e consentimento/autorização reais.</p>\n<p>Cada afirmação relevante deve poder ser lida na cadeia: quem afirma, com qual competência, com qual método ou dado, com qual revisão, em qual atualização, com quais limitações e como corrigir.</p>\n<h2 id=\"identidade\">Identidade</h2>\n<p>A organização pública é a CONFENGE (CNPJ 52.407.089/0001-09). O responsável técnico nomeado é <a href=\"/especialista/tiago-jun-sasaki/\">Engº Tiago Sasaki</a>. Não há segunda marca pública.</p>\n<h2 id=\"autoria\">Autoria</h2>\n<p>Toda superfície coberta pela matriz de autoridade deve exibir autor visível (pessoa ou Biblioteca técnica CONFENGE). Structured data de autor só entra quando o nome correspondente aparece no HTML visível.</p>\n<h2 id=\"fontes\">Fontes</h2>\n<p>Fontes públicas (lei, jurisprudência, portais de contratação, exportes nomeados) entram com identificação e período. Fatos canônicos vêm de contratos de leitura públicos versionados. Esta superfície não cria um segundo acervo. Sem fonte rastreável, o trecho fica UNKNOWN ou não sobe.</p>\n<h2 id=\"classes-epistemicas\">Classes epistêmicas</h2>\n<p>O texto público distingue quatro classes. FACT é um dado atribuído a fonte e período. CALCULATION é um resultado derivado de premissas e fórmula visíveis. INFERENCE é uma leitura humana a partir de fatos e cálculos, sem se passar por fato. UNKNOWN é ausência de evidência suficiente: permanece UNKNOWN, sem preenchimento por estimativa.</p>\n<h2 id=\"revisao\">Revisão</h2>\n<p>Revisor independente é exigido quando o texto faz afirmação normativa material (lei, jurisprudência ou enquadramento prescritivo) e não declara a ausência de segundo revisor. A CONFENGE é prática individual: quando não há segundo revisor nomeado, a página diz isso. Não se inventa revisor. Não há prazo medido de revisão.</p>\n<h2 id=\"conflitos\">Conflitos</h2>\n<p>A CONFENGE é consultoria comercial. A política de conflitos está em <a href=\"/conflitos/\">Conflitos</a>.</p>\n<h2 id=\"uso-de-ia\">Uso de IA</h2>\n<p>O uso material de IA na redação e na operação está em <a href=\"/uso-de-ia/\">Uso de IA</a>. A responsabilidade editorial permanece humana.</p>\n<h2 id=\"atualizacao\">Atualização</h2>\n<p>Páginas com data visível (as_of ou dateModified) declaram a referência. Recortes de dados só sobem com fonte e período. Uma atualização não reescreve em silêncio a versão anterior desta política: o <a href=\"/politica-editorial/historico/\">changelog</a> registra a mudança.</p>\n<h2 id=\"contestacao\">Contestação</h2>\n<p>Qualquer pessoa pode contestar um trecho publicado. O canal, o recibo e a PII mínima estão em <a href=\"/correcoes/\">Correções</a>.</p>\n<h2 id=\"correcao\">Correção</h2>\n<p>Correção material (autoria, data, método, cobertura, limitação, texto legal, schema que contradiga o visível, credencial ou caso sem base) é publicada na própria superfície ou em nota visível. O prazo de acuse e de publicação é UNKNOWN até existir série medida de pedidos reais.</p>\n<h2 id=\"retirada\">Retirada</h2>\n<p>Se a verificação exigir fonte ainda indisponível, ou se o trecho não puder ser sustentado, ele é limitado ou retirado. Retirada é preferível a preencher lacuna. A versão anterior desta política permanece legível no histórico.</p>\n<h2 id=\"changelog\">Versão e changelog</h2>\n<p>Esta é a versão 1.1.0, vigente em 16 de agosto de 2026. Versões anteriores: <a href=\"/politica-editorial/v/1.0.0/\">1.0.0</a> (15 de agosto de 2026). Histórico completo: <a href=\"/politica-editorial/historico/\">changelog</a>.</p>"
+        },
+        "corrections": {
+          "slug": "correcoes",
+          "title": "Correções e contestação",
+          "h1": "Como contestar e corrigir",
+          "eyebrow": "Correções",
+          "description": "Canal de contestação com recibo, PII mínima e prazo UNKNOWN até existir série medida.",
+          "body": "<h2 id=\"canal\">Canal</h2>\n<p>Use o formulário abaixo ou escreva para <a href=\"mailto:tiago.sasaki@confenge.com.br?subject=Correcao%20editorial%20CONFENGE\">tiago.sasaki@confenge.com.br</a>. Informe a URL, o trecho contestado, a correção proposta e um contato suficiente para resposta. WhatsApp operacional também aceita o pedido, desde que identifique a página.</p>\n<h2 id=\"pii\">PII mínima</h2>\n<p>Pedimos só o necessário para localizar o trecho e responder: URL, trecho, correção proposta e e-mail ou WhatsApp. Não envie CPF, RG, data de nascimento nem endereço residencial. Campos extras com esses dados são recusados.</p>\n<h2 id=\"recibo\">Recibo</h2>\n<p>Um pedido válido devolve um identificador de recibo. O recibo prova que o pedido entrou, não que a correção foi aceita.</p>\n<h2 id=\"prazo\">Prazo</h2>\n<p>O prazo de acuse, revisão e publicação é <strong>UNKNOWN</strong>. Não há série medida de pedidos reais. Esta página não promete dias úteis.</p>\n<h2 id=\"contestacao\">O que é uma contestação</h2>\n<p>Contestação é o pedido de reexame de um trecho publicado. Pode resultar em correção, limitação, retirada ou manutenção com nota. Manutenção também fica registrada internamente com o recibo.</p>\n<h2 id=\"correcao\">O que conta como correção material</h2>\n<ul>\n<li>Erro de autoria, data, método, cobertura ou limitação</li>\n<li>Credencial ou caso publicado sem base no registro de prova ou permissão</li>\n<li>Schema.org que afirme autor, data, avaliação ou organização diferentes do visível</li>\n<li>Texto legal que atribua à lei ou à jurisprudência o que elas não dizem</li>\n<li>Classe epistêmica trocada (FACT no lugar de INFERENCE, ou número no lugar de UNKNOWN)</li>\n</ul>\n<h2 id=\"retirada\">Retirada</h2>\n<p>Se a fonte não estiver disponível ou o trecho não puder ser sustentado, ele é limitado ou retirado. Não se preenche lacuna com chute.</p>\n<h2 id=\"dono\">Dono</h2>\n<p>Owner de correção e de refresh: <strong>Engº Tiago Sasaki</strong>, responsável técnico da CONFENGE.</p>\n<h2 id=\"o-que-nao-e\">O que não é correção</h2>\n<p>Pedido de remover limitação verdadeira, de inventar resultado comercial ou de transformar demonstrativo em case de cliente.</p>\n<p>Política editorial vigente: <a href=\"/politica-editorial/\">versão 1.1.0</a>.</p>"
+        },
+        "ai_use": {
+          "slug": "uso-de-ia",
+          "title": "Uso material de IA",
+          "h1": "Uso material de inteligência artificial",
+          "eyebrow": "Uso de IA",
+          "description": "Onde a IA entra na produção pública da CONFENGE, o que ela não faz e quem responde pelo texto publicado.",
+          "body": "<h2 id=\"principio\">Princípio</h2>\n<p>Sistemas de IA podem ajudar a redigir, classificar, revisar consistência ou operar infraestrutura. Esse uso é material quando altera o texto ou o recorte que o visitante lê. Não assinam o conteúdo. Não geram case, avaliação, credencial, volume de mercado ou resultado financeiro.</p>\n<h2 id=\"responsavel\">Responsável</h2>\n<p>O responsável técnico pelo que está publicado é <a href=\"/especialista/tiago-jun-sasaki/\">Engº Tiago Sasaki</a>. Se a página não puder nomear autor humano ou biblioteca técnica, ela não deve ir ao ar.</p>\n<h2 id=\"classes\">IA e classes epistêmicas</h2>\n<p>IA não transforma INFERENCE em FACT nem preenche UNKNOWN. Cálculos publicados precisam de premissas e fórmula visíveis, ainda que a redação tenha tido assistência.</p>\n<h2 id=\"proibicoes\">O que a IA não faz aqui</h2>\n<ul>\n<li>Inventar cliente, depoimento, nota, selo ou jurisprudência</li>\n<li>Preencher UNKNOWN com estimativa sem fonte</li>\n<li>Publicar schema de Review ou AggregateRating sem o mesmo conteúdo visível</li>\n<li>Tratar texto gerado como parecer jurídico</li>\n<li>Apresentar-se como ranking proprietário ou como garantia de resultado</li>\n</ul>\n<h2 id=\"transparencia\">Transparência</h2>\n<p>Esta página é a declaração pública de uso material de IA. Não há ranking proprietário apresentado como verdade. Correções: <a href=\"/correcoes/\">como contestar</a>. Política: <a href=\"/politica-editorial/\">versão 1.1.0</a>.</p>"
+        },
+        "conflicts": {
+          "slug": "conflitos",
+          "title": "Conflitos de interesse",
+          "h1": "Conflitos e interesses comerciais",
+          "eyebrow": "Conflitos",
+          "description": "A CONFENGE é consultoria comercial. Conteúdo técnico pode apoiar ofertas; conflito não declarado pode ser contestado.",
+          "body": "<h2 id=\"natureza\">Natureza comercial</h2>\n<p>A CONFENGE vende diagnóstico, rotina B2G, sala de decisão de proposta e defesa de margem. Páginas técnicas, ferramentas e pesquisas existem para decidir melhor e, quando fizer sentido, conversar com a empresa. Isso é declarado, não oculto.</p>\n<h2 id=\"o-que-nao-ha\">O que não há</h2>\n<ul>\n<li>Review paga, nota de cliente ou selo de terceiro inventado</li>\n<li>Patrocínio não declarado de página técnica</li>\n<li>Case com nome de cliente sem classe de permissão e autorização</li>\n<li>Independência editorial fingida em relação às ofertas da própria CONFENGE</li>\n</ul>\n<h2 id=\"casos\">Casos e prova</h2>\n<p>As páginas em <a href=\"/casos/\">/casos/</a> são demonstrativos hipotéticos até existir registro de consentimento. Classes possíveis: demonstrativo, consented, confidential, redacted. Sem classe, não publica.</p>\n<h2 id=\"contestacao\">Como contestar um conflito</h2>\n<p>Se um conflito não declarado aparecer no site, use <a href=\"/correcoes/\">Correções</a>. Owner: Engº Tiago Sasaki, <a href=\"mailto:tiago.sasaki@confenge.com.br\">tiago.sasaki@confenge.com.br</a>.</p>\n<p>Política editorial vigente: <a href=\"/politica-editorial/\">versão 1.1.0</a>.</p>"
+        }
+      }
+    }
+  }
+}

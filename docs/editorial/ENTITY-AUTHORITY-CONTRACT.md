@@ -9,7 +9,8 @@ Decision state: **VALIDATE**. Leverage: trust. This is not a page-count or badge
 | Artifact | Role |
 |---|---|
 | `data/site/authority-matrix.json` | Requirements by surface type |
-| `data/site/authority-governance.json` | Owner, SLA, policy URLs |
+| `data/site/authority-governance.json` | Owner, prazo UNKNOWN, policy URLs |
+| `data/site/editorial-policy.json` | Versioned public policy, changelog, epistemic classes |
 | `data/site/authority-signals-baseline-2026-08-15.json` | Measurable signals or `UNKNOWN` |
 | `data/site/brand.json` | Canonical org copy |
 | `data/site/proof.json` | Allowed public claims (self-attested unless noted) |
