@@ -16,7 +16,6 @@ from __future__ import annotations
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -34,14 +33,11 @@ from scripts.pseo.public_artifact import (  # noqa: E402
 from scripts.pseo.reproducible import (  # noqa: E402
     VERSIONED_TIMESTAMP_FIELDS,
     allowlist_public_build_info,
-    build_reproducible_manifest,
     build_timestamp,
     collect_input_shas,
     collect_tool_versions,
-    content_tree_hash,
-    emit_manifest_files,
-    file_hashes,
     present_env_names,
+    stamp_publish_identity,
     wipe_generated_identity,
 )
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
@@ -264,7 +260,7 @@ def main(argv: list[str] | None = None) -> int:
     if not artifact.get("ok"):
         errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
 
-    # Re-emit identity + input/output manifest after assemble (normalized hash).
+    # Write identity, then hash the final publish tree, then stamp those hashes.
     repro_manifest: dict = {}
     try:
         man = json.loads(man_path.read_text(encoding="utf-8"))
@@ -274,38 +270,20 @@ def main(argv: list[str] | None = None) -> int:
             or os.environ.get("NODE_ENV")
             or "local"
         )
-        site_dir = ROOT / PUBLIC_DIR_NAME
-        artifact_hash = content_tree_hash(site_dir)
-        generated = file_hashes(site_dir)
-        repro_manifest = build_reproducible_manifest(
+        stamped = stamp_publish_identity(
+            ROOT,
             commit=_deploy_commit(),
-            artifact_hash=artifact_hash,
             inputs=input_shas,
             tools=tool_versions,
             env_names=env_names,
-            generated_files=generated,
-        )
-        emit_manifest_files(ROOT, repro_manifest, public_dir_name=PUBLIC_DIR_NAME)
-        write_build_info(
-            _deploy_commit(),
-            man.get("generated_at") or build_timestamp(),
-            env_name,
-            man.get("schema_version"),
+            generated_at=man.get("generated_at") or build_timestamp(),
+            environment=env_name,
+            schema_version=man.get("schema_version"),
             deploy_id=os.environ.get("DEPLOY_ID") or os.environ.get("NETLIFY_DEPLOY_ID"),
-            artifact_hash=artifact_hash,
-            manifest_hash=repro_manifest.get("manifest_hash"),
+            public_dir_name=PUBLIC_DIR_NAME,
         )
-        # Ensure _site carries the enriched identity (not the pre-hash stub).
-        wk_src = ROOT / ".well-known" / "build-info.json"
-        wk_dest = ROOT / PUBLIC_DIR_NAME / ".well-known" / "build-info.json"
-        if wk_src.is_file() and site_dir.is_dir():
-            wk_dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(wk_src, wk_dest)
-            for name in ("release-result.json", "build-manifest.json"):
-                src = ROOT / ".well-known" / name
-                if src.is_file():
-                    shutil.copy2(src, wk_dest.parent / name)
-        artifact["public_artifact_hash"] = artifact_hash
+        repro_manifest = stamped.get("manifest") or {}
+        artifact["public_artifact_hash"] = stamped.get("artifact_hash")
     except Exception as exc:  # noqa: BLE001
         errors.append(f"build_info_enrich_failed:{exc}")
 

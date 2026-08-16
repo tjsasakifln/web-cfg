@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import shutil
 import sys
 import tempfile
 import unittest
@@ -32,6 +31,7 @@ from scripts.pseo.reproducible import (
     scan_text_for_leaks,
     sha256_bytes,
     sha256_file,
+    stamp_publish_identity,
     wipe_generated_identity,
 )
 
@@ -306,6 +306,46 @@ class TestShippedTreeHashUsesNormalize(unittest.TestCase):
             _write(b / "index.html", "x")
             self.assertEqual(content_tree_hash(a), content_tree_hash(b))
             self.assertEqual(file_hashes(a)["index.html"], file_hashes(b)["index.html"])
+
+
+class TestStampPublishIdentity(unittest.TestCase):
+    def test_final_tree_hash_equals_stamped_artifact_hash(self):
+        """Shipped emit+hash: content_tree_hash(final _site) == stamped hashes."""
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            site = root / "_site"
+            _write(site / "index.html", "<html>ok</html>\n")
+            _json(site / ".well-known" / "pseo-build.json", {"schema_version": "1.1.0"})
+            stamped = stamp_publish_identity(
+                root,
+                commit="abc123def456",
+                inputs={
+                    "files": {"data/pseo/manifest.json": "aa"},
+                    "trees": {},
+                    "file_count": 1,
+                    "tree_count": 0,
+                },
+                tools={"python": "3.12.3", "node": None, "npm": None},
+                env_names=["NODE_ENV"],
+                generated_at="2026-08-16T00:00:00Z",
+                environment="test",
+                schema_version="1.1.0",
+            )
+            info = json.loads((site / ".well-known" / "build-info.json").read_text())
+            man = json.loads((site / ".well-known" / "build-manifest.json").read_text())
+            final = content_tree_hash(site)
+            self.assertEqual(final, info["artifact_hash"])
+            self.assertEqual(info["artifact_hash"], man["artifact_hash"])
+            self.assertEqual(final, stamped["artifact_hash"])
+            self.assertIn(".well-known/build-manifest.json", man["generated_files"])
+            self.assertEqual(man["generated_file_count"], len(man["generated_files"]))
+            self.assertEqual(man["generated_file_count"], len(file_hashes(site)))
+            for rel, digest in man["generated_files"].items():
+                self.assertEqual(
+                    digest,
+                    content_hash(site / rel, rel=rel),
+                    rel,
+                )
 
 
 if __name__ == "__main__":

@@ -167,18 +167,36 @@ def normalize_file_bytes(
     path: Path,
     data: bytes | None = None,
     fields: frozenset[str] | set[str] = NORMALIZE_FIELDS,
+    *,
+    rel: str | None = None,
 ) -> bytes:
     raw = data if data is not None else path.read_bytes()
-    if path.suffix.lower() in JSON_SUFFIXES:
-        return normalize_json_bytes(raw, fields)
-    return raw
+    if path.suffix.lower() not in JSON_SUFFIXES:
+        return raw
+    try:
+        parsed = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return raw
+    parsed = normalize_json_value(parsed, fields)
+    # A file's listing of its own hash is derived — empty it so the stamp
+    # is not circular (same idea as DERIVED_HASH_FIELDS).
+    if rel and isinstance(parsed, dict):
+        listed = parsed.get("generated_files")
+        if isinstance(listed, dict) and rel in listed:
+            listed = dict(listed)
+            listed[rel] = None
+            parsed = dict(parsed)
+            parsed["generated_files"] = listed
+    return canonical_json_bytes(parsed)
 
 
 def content_hash(
     path: Path,
     fields: frozenset[str] | set[str] = NORMALIZE_FIELDS,
+    *,
+    rel: str | None = None,
 ) -> str:
-    return sha256_bytes(normalize_file_bytes(path, fields=fields))
+    return sha256_bytes(normalize_file_bytes(path, fields=fields, rel=rel))
 
 
 def file_hashes(
@@ -192,7 +210,7 @@ def file_hashes(
     for path in sorted(tree.rglob("*")):
         if path.is_file():
             rel = path.relative_to(tree).as_posix()
-            out[rel] = content_hash(path, fields)
+            out[rel] = content_hash(path, fields, rel=rel)
     return out
 
 
@@ -549,7 +567,7 @@ def manifest_hash_of(payload: dict[str, Any]) -> str:
 def build_reproducible_manifest(
     *,
     commit: str,
-    artifact_hash: str,
+    artifact_hash: str | None,
     inputs: dict[str, Any],
     tools: dict[str, str | None],
     env_names: list[str],
@@ -615,6 +633,84 @@ def emit_manifest_files(
         "private": private.relative_to(root).as_posix(),
         "public": public.relative_to(root).as_posix(),
         "published": copied.relative_to(root).as_posix() if copied else "",
+    }
+
+
+def _copy_identity_to_site(root: Path, site_dir: Path) -> None:
+    if not site_dir.is_dir():
+        return
+    dest_dir = site_dir / ".well-known"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for name in ("build-info.json", "release-result.json", "build-manifest.json"):
+        src = root / ".well-known" / name
+        if src.is_file():
+            dest_dir.joinpath(name).write_bytes(src.read_bytes())
+
+
+def stamp_publish_identity(
+    root: Path,
+    *,
+    commit: str,
+    inputs: dict[str, Any],
+    tools: dict[str, str | None],
+    env_names: list[str],
+    generated_at: str,
+    environment: str,
+    schema_version: str | None,
+    deploy_id: str | None = None,
+    public_dir_name: str = "_site",
+) -> dict[str, Any]:
+    """Write public identity, hash the final publish tree, then stamp those hashes.
+
+    `artifact_hash` is `content_tree_hash` of `_site` after identity files exist.
+    `generated_files` lists every published path, including build-manifest.json.
+    """
+    from scripts.pseo.build_site import write_build_info
+
+    site_dir = root / public_dir_name
+
+    def _emit(artifact_hash: str | None, generated: dict[str, str]) -> dict[str, Any]:
+        manifest = build_reproducible_manifest(
+            commit=commit,
+            artifact_hash=artifact_hash,
+            inputs=inputs,
+            tools=tools,
+            env_names=env_names,
+            generated_files=generated,
+        )
+        if artifact_hash is None:
+            manifest["artifact_hash"] = None
+            manifest["manifest_hash"] = None
+        emit_manifest_files(root, manifest, public_dir_name=public_dir_name)
+        write_build_info(
+            commit,
+            generated_at,
+            environment,
+            schema_version,
+            deploy_id=deploy_id,
+            artifact_hash=artifact_hash,
+            manifest_hash=manifest.get("manifest_hash"),
+            root=root,
+        )
+        _copy_identity_to_site(root, site_dir)
+        return manifest
+
+    # 1. Emit identity so the publish tree contains every public path.
+    _emit(None, file_hashes(site_dir))
+    # 2. Record per-file hashes of that complete tree (includes build-manifest).
+    generated = file_hashes(site_dir)
+    _emit(None, generated)
+    # 3. Hash AFTER identity emit; stamp those hashes (derived fields only).
+    artifact_hash = content_tree_hash(site_dir)
+    generated_final = file_hashes(site_dir)
+    manifest = _emit(artifact_hash, generated_final)
+    return {
+        "ok": True,
+        "manifest": manifest,
+        "artifact_hash": artifact_hash,
+        "manifest_hash": manifest.get("manifest_hash"),
+        "generated_files": generated_final,
+        "public_artifact_hash": artifact_hash,
     }
 
 
