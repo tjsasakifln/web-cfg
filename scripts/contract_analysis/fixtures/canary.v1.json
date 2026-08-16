@@ -1,0 +1,435 @@
+{
+  "schema": "confenge-contract-analysis-fixture/1.0",
+  "test_only": true,
+  "never_index": true,
+  "as_of": "2026-08-01",
+  "note": "Test-only canary. Not an extra-cli public-read export. Must stay noindex and off sitemap.",
+  "analyses": [
+    {
+      "id": "ca-bdi-composicao-referencia",
+      "slug": "bdi-composicao-vs-referencia-sc",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Composição de BDI concentrada em uma linha de administração local",
+      "meta_description": "Leitura técnica da composição de BDI publicada em contrato de edificação: concentração de indiretos versus estrutura de referência. Não é caso CONFENGE.",
+      "executive_summary": "A planilha publicada concentra a maior parte dos custos indiretos em uma única linha de administração local. A estrutura de referência usada para o mesmo recorte de objeto costuma separar canteiro, equipe de apoio, mobilização e riscos em contas distintas. Isso é um achado de composição. Não se afirma sobrepreço.",
+      "why_analysis": "Construtoras leem BDI agregado como se fosse um único percentual comparável. Quando a composição não se deixa decompor, a decisão de participar e o posterior pedido de reequilíbrio perdem âncora. A análise separa o que a planilha mostra daquilo que um índice de referência não pode provar.",
+      "insight_singular": "O ponto informacional não é o percentual total de BDI e sim o fato de a administração local absorver o papel que a estrutura de referência reserva a quatro contas distintas. Sem essa decomposição, qualquer comparação de preço global com a amostra vira ruído.",
+      "utility_beyond_source": "A fonte pública entrega o percentual e as linhas. A análise entrega um protocolo: pedir memória de cálculo da administração local antes de tratar o BDI como comparável e antes de protocolar reequilíbrio por insumo isolado.",
+      "intent": "bdi",
+      "ficha": {
+        "empresa": "Construtora Fixture Alfa Ltda",
+        "orgao": "Prefeitura Municipal de Fixture Sul",
+        "municipio": "Fixture Sul",
+        "uf": "SC",
+        "objeto": "Reforma e ampliação de unidade escolar municipal",
+        "valor_label": "valor publicado no recorte de teste",
+        "pncp_id": "FIXTURE-BDI-001",
+        "regime": "empreitada por preço unitário"
+      },
+      "timeline": [
+        {"date": "2025-11-02", "text": "Publicação do edital e da planilha orçamentária."},
+        {"date": "2026-01-18", "text": "Homologação e contrato com a mesma composição de BDI do edital."}
+      ],
+      "facts": [
+        {"kind": "FACT", "text": "A planilha publica BDI discriminado e reserva uma única linha para administração local, sem detalhar equipe de canteiro, vigilância ou mobilização.", "source_ref": "planilha-orcamentaria"},
+        {"kind": "FACT", "text": "O objeto contratado é reforma de edificação escolar em regime de preço unitário, com quantitativos abertos por serviço.", "source_ref": "instrumento-contratual"}
+      ],
+      "calculations": [
+        {"kind": "CALCULATION", "text": "Somando as linhas de indiretos publicadas, a administração local responde pela maior fatia do BDI; as demais contas de apoio aparecem zeradas ou omitidas, o que impede rateio posterior por frente de serviço."}
+      ],
+      "comparisons": [
+        {"kind": "INFERENCE", "text": "A estrutura de referência do recorte (edificações públicas, mesmo regime) costuma abrir administração local, canteiro, mobilização e contingência. A comparação é de arquitetura de contas, não de preço unitário."}
+      ],
+      "interpretation": [
+        {"kind": "INFERENCE", "text": "A concentração é atípica em relação à estrutura de referência do recorte. Atípico descreve forma de apresentar custo indireto; não autoriza concluir sobrepreço, fraude ou má execução."},
+        {"kind": "UNKNOWN", "text": "Não há memória de cálculo da administração local no pacote público. Sem ela, a causa da concentração permanece UNKNOWN."}
+      ],
+      "cannot_conclude": "Não é possível afirmar que o preço global está acima ou abaixo de um mercado nacional, nem que houve irregularidade, culpa ou ilegalidade. Também não se conclui que a contratada aplicará aquela composição na execução.",
+      "sources": [
+        {"label": "Planilha orçamentária do edital (recorte de teste)", "url": "https://www.gov.br/pncp", "as_of": "2026-08-01", "document_id": "FIXTURE-BDI-001-planilha"},
+        {"label": "Instrumento contratual publicado", "url": "https://www.gov.br/pncp", "as_of": "2026-08-01", "document_id": "FIXTURE-BDI-001-contrato"}
+      ],
+      "methodology": "Leitura das linhas de BDI publicadas no instrumento e confronto estrutural com a árvore de contas usada no recorte de edificações. Não se reestima preço e não se extrai microdado fora do pacote.",
+      "limitations": "Fixture de teste. Sem acesso à memória de cálculo interna da contratada nem à planilha de medição. A estrutura de referência não é um teto legal de BDI.",
+      "as_of": "2026-08-01",
+      "freshness": {"as_of": "2026-08-01", "max_age_days": 180},
+      "date_published": "2026-08-16",
+      "date_modified": "2026-08-16",
+      "author": {"name": "Engº Tiago Sasaki", "url": "/especialista/tiago-jun-sasaki/"},
+      "reviewer": {"name": "Engº Tiago Sasaki"},
+      "solo_reviewer_disclosure": true,
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "update_history": [
+        {"date": "2026-08-16", "text": "Canário inicial em fixture de teste; sem indexação."}
+      ],
+      "cta": {
+        "label": "Ver Diagnóstico de Defesa de Margem",
+        "href": "/ferramentas/diagnostico-defesa-margem/",
+        "text": "Se a sua empresa precisa decompor BDI e indiretos de um contrato próprio, use a ferramenta. Esta página não analisa o seu contrato e não é prova de atuação."
+      },
+      "editorial_status": "approved",
+      "approved_for_index": false,
+      "is_fixture": true,
+      "test_only": true
+    },
+    {
+      "id": "ca-reajuste-serie-descontinuada",
+      "slug": "reajuste-aniversario-serie-indice",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Aniversário de reajuste cita série de índice que deixou de ser publicada",
+      "meta_description": "A cláusula de reajuste aponta uma série descontinuada. A análise separa lacuna documental de atraso de pagamento. Não é caso CONFENGE.",
+      "executive_summary": "A cláusula de reajuste ancora o aniversário em uma série de índice que deixou de ser divulgada antes da data-base. O pacote público não traz termo aditivo de substituição de índice. O achado é de lacuna de cláusula, não de reajuste devido e não pago.",
+      "why_analysis": "Equipes de contrato tratam 'passar do aniversário' como evento automático de crédito. Quando a série some, o evento vira outra coisa: falta de parâmetro. Publicar essa distinção evita protocolar pedido sem base e evita ler silêncio da Administração como recusa de direito.",
+      "insight_singular": "O fato operacionalmente útil é a descontinuidade da série antes da data-base, não o calendário do aniversário em si. Sem índice sucessor pactuado, o cálculo de reajuste não tem denominador. Isso é um problema de cláusula, não um laudo de inadimplemento.",
+      "utility_beyond_source": "A fonte mostra a cláusula e a data-base. A análise mostra o protocolo: localizar ato de substituição de índice ou registrar UNKNOWN antes de montar memória de reajuste e antes de falar em mora.",
+      "intent": "reajuste",
+      "ficha": {
+        "empresa": "Engenharia Fixture Beta S.A.",
+        "orgao": "Departamento Estadual de Obras Fixture",
+        "municipio": "Fixture Norte",
+        "uf": "RS",
+        "objeto": "Pavimentação asfáltica de vias urbanas",
+        "valor_label": "valor publicado no recorte de teste",
+        "pncp_id": "FIXTURE-REAJ-002",
+        "regime": "empreitada por preço unitário"
+      },
+      "timeline": [
+        {"date": "2024-09-10", "text": "Assinatura com cláusula de reajuste anual pela série citada."},
+        {"date": "2026-03-01", "text": "Data-base do primeiro aniversário; série já sem divulgação regular."}
+      ],
+      "facts": [
+        {"kind": "FACT", "text": "A cláusula nomeia expressamente a série de índice e a periodicidade anual a contar da data-base.", "source_ref": "minuta-contrato"},
+        {"kind": "FACT", "text": "Não há termo aditivo publicado substituindo a série nem apontando índice sucessor.", "source_ref": "instrumentos-publicados"}
+      ],
+      "calculations": [
+        {"kind": "CALCULATION", "text": "Sem cotação da série na competência da data-base, a variação percentual não é computável a partir dos documentos do pacote. Qualquer número de reajuste exigiria fonte externa não autorizada neste canário."}
+      ],
+      "comparisons": [],
+      "interpretation": [
+        {"kind": "INFERENCE", "text": "A combinação 'aniversário atingido + série muda ou some + ausência de aditivo' cria um vazio de parâmetro. Não autoriza afirmar que a Administração atrasou pagamento de reajuste."},
+        {"kind": "UNKNOWN", "text": "Não se sabe se houve comunicação interna de substituição de índice fora do pacote público."}
+      ],
+      "cannot_conclude": "Não se conclui valor devido, mora, culpa ou ilegalidade. Também não se conclui que o contrato ficou irreequilibrável: reajuste e reequilíbrio são institutos distintos e o segundo não foi examinado aqui.",
+      "sources": [
+        {"label": "Cláusula de reajuste do contrato publicado", "url": "https://www.gov.br/pncp", "as_of": "2026-07-20", "document_id": "FIXTURE-REAJ-002-clausa"},
+        {"label": "Lista pública de instrumentos do processo", "url": "https://www.gov.br/pncp", "as_of": "2026-07-20", "document_id": "FIXTURE-REAJ-002-lista"}
+      ],
+      "methodology": "Confrontar o texto da cláusula de reajuste com a disponibilidade da série na competência da data-base e com a existência de aditivo de substituição no pacote público.",
+      "limitations": "Não se reconstrói a série histórica nem se estima variação. Fixture de teste sem acesso a ofícios internos.",
+      "as_of": "2026-07-20",
+      "freshness": {"as_of": "2026-07-20", "max_age_days": 180},
+      "date_published": "2026-08-16",
+      "date_modified": "2026-08-16",
+      "author": {"name": "Engº Tiago Sasaki", "url": "/especialista/tiago-jun-sasaki/"},
+      "solo_reviewer_disclosure": true,
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "update_history": [
+        {"date": "2026-08-16", "text": "Canário inicial em fixture de teste; sem indexação."}
+      ],
+      "cta": {
+        "label": "Abrir a vertical de Defesa de Margem",
+        "href": "/defesa-margem-contratos-publicos/",
+        "text": "Se o seu contrato tem aniversário de reajuste sem parâmetro claro, a vertical organiza o dossiê da sua empresa. Esta análise não é o seu caso."
+      },
+      "editorial_status": "approved",
+      "approved_for_index": false,
+      "is_fixture": true
+    },
+    {
+      "id": "ca-aditivo-teto-item-novo",
+      "slug": "aditivo-saldo-art125-item-novo",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Saldo de aditivo próximo do teto quantitativo com serviço novo à parte",
+      "meta_description": "Aditivos já assinados consomem quase o teto quantitativo; o serviço extra pendente parece item novo. A análise não mistura as caixas. Não é caso CONFENGE.",
+      "executive_summary": "Os termos aditivos já publicados consomem a maior parte do espaço quantitativo usualmente lido no art. 125. Há um serviço extra em discussão cuja especificação não existia na planilha original. Tratar esse extra como acréscimo quantitativo do mesmo item é uma leitura distinta de tratá-lo como item novo.",
+      "why_analysis": "Canteiro e fiscalização frequentemente somam qualquer extra no mesmo 'saldo de 25%'. Quando o extra muda a especificação, a conta errada gera ou recusa indevida ou aditivo frágil. A análise torna a bifurcação visível antes do protocolo.",
+      "insight_singular": "O valor informacional está na incompatibilidade de caixas: o saldo quantitativo residual não comporta o extra se ele for lido como acréscimo do item original, mas a descrição do extra é de serviço que não constava da planilha. A decisão correta depende de enquadrar o extra, não de somar percentuais no escuro.",
+      "utility_beyond_source": "A fonte lista aditivos e o pedido. A análise entrega o teste: o extra reproduz item existente com quantitativo maior, ou cria especificação nova? Só depois se fala em teto ou em preço de item novo com desconto da proposta.",
+      "intent": "aditivo",
+      "ficha": {
+        "empresa": "Consórcio Fixture Gama",
+        "orgao": "Autarquia Municipal de Habitação Fixture",
+        "municipio": "Fixture Centro",
+        "uf": "MG",
+        "objeto": "Construção de conjunto habitacional de interesse social",
+        "valor_label": "valor publicado no recorte de teste",
+        "pncp_id": "FIXTURE-ADT-003",
+        "regime": "empreitada por preço global"
+      },
+      "timeline": [
+        {"date": "2025-04-12", "text": "Primeiro aditivo quantitativo assinado."},
+        {"date": "2026-02-03", "text": "Segundo aditivo quantitativo assinado."},
+        {"date": "2026-06-11", "text": "Pedido de serviço extra com especificação ausente da planilha original."}
+      ],
+      "facts": [
+        {"kind": "FACT", "text": "Dois termos aditivos publicados alteram quantitativos de serviços já existentes na planilha.", "source_ref": "termos-aditivos"},
+        {"kind": "FACT", "text": "O pedido pendente descreve serviço com especificação que não aparece no orçamento de licitação.", "source_ref": "pedido-extra"}
+      ],
+      "calculations": [
+        {"kind": "CALCULATION", "text": "A soma dos aditivos já assinados consome a maior parte do espaço quantitativo residual. Se o extra pendente fosse somado na mesma caixa, o conjunto ultrapassaria o teto usualmente associado ao art. 125. Essa conta só vale se o extra for o mesmo item."}
+      ],
+      "comparisons": [],
+      "interpretation": [
+        {"kind": "INFERENCE", "text": "Há indício documental de que o extra é item novo, o que desloca a discussão para preço de serviço não previsto e para o desconto da proposta, não para o teto quantitativo isolado."},
+        {"kind": "UNKNOWN", "text": "O pacote não traz parecer da fiscalização classificando o extra. Sem esse enquadramento, a caixa correta permanece em aberto."}
+      ],
+      "cannot_conclude": "Não se conclui que o aditivo é válido ou inválido, nem que alguém ultrapassou limite legal. Não se afirma irregularidade. Também não se precifica o item novo.",
+      "sources": [
+        {"label": "Termos aditivos publicados", "url": "https://www.gov.br/pncp", "as_of": "2026-07-28", "document_id": "FIXTURE-ADT-003-aditivos"},
+        {"label": "Pedido de serviço extra juntado ao processo", "url": "https://www.gov.br/pncp", "as_of": "2026-07-28", "document_id": "FIXTURE-ADT-003-pedido"}
+      ],
+      "methodology": "Somar aditivos quantitativos já assinados e contrastar a descrição do extra pendente com a planilha original para testar se a caixa é acréscimo do mesmo item ou item novo.",
+      "limitations": "Sem acesso ao projeto executivo completo nem à memória de quantitativo da fiscalização. Fixture de teste.",
+      "as_of": "2026-07-28",
+      "freshness": {"as_of": "2026-07-28", "max_age_days": 180},
+      "date_published": "2026-08-16",
+      "date_modified": "2026-08-16",
+      "author": {"name": "Engº Tiago Sasaki", "url": "/especialista/tiago-jun-sasaki/"},
+      "solo_reviewer_disclosure": true,
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "update_history": [
+        {"date": "2026-08-16", "text": "Canário inicial em fixture de teste; sem indexação."}
+      ],
+      "cta": {
+        "label": "Usar o verificador de acréscimos e supressões",
+        "href": "/ferramentas/limite-acrescimos-supressoes/",
+        "text": "Para um contrato da sua empresa, o verificador ajuda a separar teto quantitativo de item novo. Esta página não substitui o seu dossiê."
+      },
+      "editorial_status": "approved",
+      "approved_for_index": false,
+      "is_fixture": true
+    },
+    {
+      "id": "ca-atraso-diario-sem-comunicacao",
+      "slug": "atraso-eventos-sem-comunicacao-contemporanea",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Paralisações no diário sem comunicação contemporânea da Administração",
+      "meta_description": "O diário registra três interrupções; só uma tem comunicação contemporânea. A cronologia não imputa atraso. Não é caso CONFENGE.",
+      "executive_summary": "O diário de medição registra três interrupções de frente. Apenas uma está acompanhada de comunicação contemporânea da Administração no pacote público. As outras duas existem como anotação da contratada. Os documentos sustentam uma cronologia, não uma imputação.",
+      "why_analysis": "Pedidos de prorrogação e defesas de atraso colapsam quando o fato 'parou' é tratado como prova de quem parou. Separar anotação unilateral de comunicação contemporânea é o trabalho editorial que a fonte bruta não faz.",
+      "insight_singular": "A assimetria documental é o insight: uma interrupção tem lastro bilateral contemporâneo e duas não. Essa diferença muda o que um pedido de prazo pode afirmar com honestidade. Não muda, por si, a responsabilidade pelo cronograma.",
+      "utility_beyond_source": "A fonte lista datas. A análise lista o que cada data consegue carregar num expediente: fato bilateral, anotação unilateral ou UNKNOWN. Isso evita protocolar narrativa que o processo não sustenta.",
+      "intent": "prazo",
+      "ficha": {
+        "empresa": "Fixture Delta Construções Ltda",
+        "orgao": "Secretaria Municipal de Infraestrutura Fixture",
+        "municipio": "Fixture Leste",
+        "uf": "PR",
+        "objeto": "Drenagem e recomposição de vias em bairro consolidado",
+        "valor_label": "valor publicado no recorte de teste",
+        "pncp_id": "FIXTURE-PRAZO-004",
+        "regime": "empreitada por preço unitário"
+      },
+      "timeline": [
+        {"date": "2025-08-19", "text": "Primeira interrupção anotada no diário, com ofício da fiscalização no mesmo dia."},
+        {"date": "2025-10-07", "text": "Segunda interrupção anotada apenas pela contratada."},
+        {"date": "2026-01-22", "text": "Terceira interrupção anotada apenas pela contratada."}
+      ],
+      "facts": [
+        {"kind": "FACT", "text": "O diário de medição descreve três interrupções de frente em datas distintas.", "source_ref": "diario-medicao"},
+        {"kind": "FACT", "text": "Somente a primeira interrupção tem ofício contemporâneo da fiscalização no pacote.", "source_ref": "oficio-fiscalizacao"}
+      ],
+      "calculations": [
+        {"kind": "CALCULATION", "text": "Somando os intervalos descritos no diário, as três interrupções cobrem um bloco relevante do calendário contratual. Sem critério de imputação, esse bloco não se converte em dias prorrogáveis."}
+      ],
+      "comparisons": [],
+      "interpretation": [
+        {"kind": "INFERENCE", "text": "A primeira interrupção admite narrativa de fato bilateral. As outras duas, no estado do pacote, são anotação unilateral e devem ser tratadas como hipótese a documentar, não como atraso imputável."},
+        {"kind": "UNKNOWN", "text": "Não há no pacote resposta da Administração às duas anotações posteriores, nem registro de que a frente estava livre."}
+      ],
+      "cannot_conclude": "Não se conclui atraso imputável à Administração, à contratada ou a terceiro. Não se afirma culpa, incapacidade ou ilegalidade. Não se calcula novo prazo.",
+      "sources": [
+        {"label": "Diário de medição publicado", "url": "https://www.gov.br/pncp", "as_of": "2026-08-05", "document_id": "FIXTURE-PRAZO-004-diario"},
+        {"label": "Ofício contemporâneo da fiscalização", "url": "https://www.gov.br/pncp", "as_of": "2026-08-05", "document_id": "FIXTURE-PRAZO-004-oficio"}
+      ],
+      "methodology": "Cruzar cada evento de interrupção do diário com a existência de comunicação contemporânea da outra parte no mesmo pacote. Evento sem lastro bilateral permanece hipótese.",
+      "limitations": "Diário pode ser incompleto. Fixture de teste sem acesso ao livro de ordem físico nem a e-mails fora do processo.",
+      "as_of": "2026-08-05",
+      "freshness": {"as_of": "2026-08-05", "max_age_days": 180},
+      "date_published": "2026-08-16",
+      "date_modified": "2026-08-16",
+      "author": {"name": "Engº Tiago Sasaki", "url": "/especialista/tiago-jun-sasaki/"},
+      "solo_reviewer_disclosure": true,
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "update_history": [
+        {"date": "2026-08-16", "text": "Canário inicial em fixture de teste; sem indexação."}
+      ],
+      "cta": {
+        "label": "Abrir a matriz de atraso",
+        "href": "/ferramentas/matriz-atraso-obra/",
+        "text": "Para organizar eventos do seu contrato, use a matriz. Esta análise não imputa atraso a ninguém e não é um caso CONFENGE."
+      },
+      "editorial_status": "approved",
+      "approved_for_index": false,
+      "is_fixture": true
+    },
+    {
+      "id": "ca-comparavel-regime-distinto",
+      "slug": "comparaveis-rejeitados-regime-distinto",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Grupo de pares rejeitado: mesmo objeto-chave, regime contratual distinto",
+      "meta_description": "Pares da mesma UF e faixa de valor não são comparáveis porque o regime e a discriminação de BDI divergem. NOT_COMPARABLE. Não é caso CONFENGE.",
+      "executive_summary": "O pacote sugere pares na mesma UF, mesmo arquétipo e faixa de valor próxima. Os pares compartilham palavras do objeto, mas divergem no regime (preço global versus preço unitário) e na discriminação de BDI. A comparabilidade é rejeitada com status NOT_COMPARABLE.",
+      "why_analysis": "Faixas de preço 'de mercado' vazam para propostas e para discussões de superfaturação informal. Se o par não compartilha regime e estrutura de indiretos, a faixa não é informação: é porta de entrada. A análise documenta a recusa.",
+      "insight_singular": "A recusa é o insight. Palavras de objeto e UF comum não autorizam usar a mediana dos pares como preço de referência deste contrato. O regime e a visibilidade do BDI quebram o denominador antes de qualquer estatística de ticket.",
+      "utility_beyond_source": "A fonte lista pares. A análise entrega o motivo explícito da recusa e o que faria um par voltar à mesa: mesmo regime, mesma regra de BDI e mesmo recorte de quantitativo. Sem isso, a mediana não entra em proposta nem em dossiê.",
+      "intent": "comparacao",
+      "ficha": {
+        "empresa": "Fixture Épsilon Engenharia Ltda",
+        "orgao": "Companhia Estadual de Saneamento Fixture",
+        "municipio": "Fixture Oeste",
+        "uf": "SC",
+        "objeto": "Substituição de redes de água em área urbana consolidada",
+        "valor_label": "valor publicado no recorte de teste",
+        "pncp_id": "FIXTURE-CMP-005",
+        "regime": "empreitada por preço global"
+      },
+      "timeline": [],
+      "facts": [
+        {"kind": "FACT", "text": "Os pares sugeridos estão na mesma UF e no mesmo arquétipo de saneamento, com objeto descrito por palavras próximas.", "source_ref": "grupo-pares"},
+        {"kind": "FACT", "text": "O contrato analisado é preço global com BDI embutido; os pares publicados são preço unitário com BDI discriminado.", "source_ref": "instrumentos-pares"}
+      ],
+      "calculations": [
+        {"kind": "CALCULATION", "text": "Não se calcula mediana nem intervalo interquartil. O status NOT_COMPARABLE encerra a estatística antes da conta, porque o denominador (regime + estrutura de indiretos) não é compartilhado."}
+      ],
+      "comparisons": [
+        {"kind": "INFERENCE", "text": "NOT_COMPARABLE: regime distinto e BDI com visibilidade distinta. Palavras de objeto não restauram comparabilidade.", "status": "NOT_COMPARABLE"}
+      ],
+      "interpretation": [
+        {"kind": "INFERENCE", "text": "Usar a faixa dos pares como 'preço de mercado' deste contrato inverteria o teste de comparabilidade. A leitura honesta é ausência de par, não preço baixo ou alto."},
+        {"kind": "UNKNOWN", "text": "Não se sabe se existe outro grupo de pares, fora deste pacote, com o mesmo regime."}
+      ],
+      "cannot_conclude": "Não se conclui sobrepreço, subpreço, prática concertada ou qualquer juízo de mercado nacional. Não há preço de referência publicável a partir destes pares.",
+      "sources": [
+        {"label": "Instrumento do contrato analisado", "url": "https://www.gov.br/pncp", "as_of": "2026-08-02", "document_id": "FIXTURE-CMP-005-contrato"},
+        {"label": "Descritores dos pares sugeridos no pacote", "url": "https://www.gov.br/pncp", "as_of": "2026-08-02", "document_id": "FIXTURE-CMP-005-pares"}
+      ],
+      "methodology": "Aplicar teste de comparabilidade (UF, arquétipo, regime, visibilidade de BDI, unidade de quantitativo) antes de qualquer estatística de preço. Falha em regime ou BDI produz NOT_COMPARABLE.",
+      "limitations": "O grupo de pares é o do pacote de teste. Não é censo. Fixture; extra-cli #415 ainda não está neste repositório.",
+      "as_of": "2026-08-02",
+      "freshness": {"as_of": "2026-08-02", "max_age_days": 180},
+      "date_published": "2026-08-16",
+      "date_modified": "2026-08-16",
+      "author": {"name": "Engº Tiago Sasaki", "url": "/especialista/tiago-jun-sasaki/"},
+      "solo_reviewer_disclosure": true,
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "update_history": [
+        {"date": "2026-08-16", "text": "Canário inicial em fixture de teste; sem indexação."}
+      ],
+      "cta": {
+        "label": "Ver inteligência de preços (recorte publicado)",
+        "href": "/inteligencia/precos/",
+        "text": "Recortes publicados de preço não autorizam mediana nacional nem substituem o teste de comparabilidade desta análise."
+      },
+      "editorial_status": "approved",
+      "approved_for_index": false,
+      "is_fixture": true
+    },
+    {
+      "id": "ca-unsafe-irregular",
+      "slug": "unsafe-irregular-sem-base",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Desvio de composição configuraria irregularidade da contratada",
+      "executive_summary": "O desvio de BDI é atípico e portanto irregular, o que configuraria má-fé e incapacidade técnica da contratada sem peça sancionatória no pacote.",
+      "why_analysis": "Texto propositalmente inseguro para o canário do gate.",
+      "insight_singular": "Este registro existe para o teste de segurança reputacional: linguagem de irregularidade e má-fé sem base documental deve ser rejeitada, não indexada.",
+      "utility_beyond_source": "Serve apenas como caso negativo do gate editorial, não como análise publicável.",
+      "intent": "bdi",
+      "ficha": {
+        "empresa": "Fixture Ômega Ltda",
+        "orgao": "Prefeitura de Fixture Errada",
+        "municipio": "Fixture Errada",
+        "uf": "SP",
+        "objeto": "Serviço genérico de manutenção",
+        "pncp_id": "FIXTURE-UNSAFE-006"
+      },
+      "facts": [
+        {"kind": "FACT", "text": "Há uma linha de BDI publicada.", "source_ref": "planilha"}
+      ],
+      "calculations": [
+        {"kind": "CALCULATION", "text": "A linha de BDI é atípica e portanto irregular."}
+      ],
+      "interpretation": [
+        {"kind": "INFERENCE", "text": "A atipicidade configura irregularidade, culpa e ilegalidade da contratada."}
+      ],
+      "cannot_conclude": "Na verdade o gate deve recusar o texto acima.",
+      "sources": [
+        {"label": "Planilha", "url": "https://www.gov.br/pncp", "as_of": "2026-08-01", "document_id": "x"}
+      ],
+      "methodology": "Registro adversário para o checker de linguagem. Não deve passar.",
+      "limitations": "Intencionalmente inseguro.",
+      "as_of": "2026-08-01",
+      "author": {"name": "Engº Tiago Sasaki"},
+      "solo_reviewer_disclosure": true,
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "editorial_status": "approved",
+      "approved_for_index": false,
+      "is_fixture": true
+    },
+    {
+      "id": "ca-hold-sem-fonte",
+      "slug": "hold-sem-proveniencia",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Contrato sem fonte recuperável no pacote",
+      "executive_summary": "Há menção a um contrato de drenagem, mas o pacote não traz URL, identificador público nem fatos lastreados. O registro deve permanecer em HOLD_FOR_DATA.",
+      "why_analysis": "O canário precisa de um item que falhe data readiness e proveniência sem inventar documento.",
+      "insight_singular": "Sem fonte recuperável não existe análise publicável, por mais que o objeto soe específico. A ausência de proveniência é o único achado honesto.",
+      "utility_beyond_source": "Demonstra o fail-closed: não se completa ficha nem se indexa para 'não deixar buraco' no canário.",
+      "intent": "medicao",
+      "ficha": {
+        "objeto": "Drenagem urbana sem documento anexo"
+      },
+      "facts": [],
+      "sources": [],
+      "methodology": "Não há método aplicável sem fonte.",
+      "limitations": "Pacote vazio de documentos.",
+      "data_incomplete": true,
+      "as_of": "",
+      "author": {"name": "Engº Tiago Sasaki"},
+      "solo_reviewer_disclosure": true,
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "editorial_status": "approved",
+      "is_fixture": true
+    },
+    {
+      "id": "ca-review-sem-autor",
+      "slug": "review-sem-autor",
+      "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
+      "title": "Medição com glosa parcial e sem autoria nomeada",
+      "executive_summary": "O processo publica uma glosa parcial em medição de terraplenagem. Há fatos e fonte, mas este registro propositalmente omite autor e revisor para exercitar EDITORIAL_REVIEW.",
+      "why_analysis": "Glosa parcial é um evento de caixa e de prazo. Sem autoria e revisão o texto não pode sair de revisão editorial.",
+      "insight_singular": "A glosa atinge apenas parte dos serviços apontados, o que muda o pedido: parcela incontroversa versus item contestado. Sem responsável técnico nomeado, esse insight não autoriza publicação indexável.",
+      "utility_beyond_source": "Se viesse com autoria, a utilidade seria separar o que já pode ser faturado do que depende de prova contemporânea. Neste canário a utilidade é mostrar o estado EDITORIAL_REVIEW.",
+      "intent": "glosa",
+      "ficha": {
+        "empresa": "Fixture Zeta Terraplenagem",
+        "orgao": "Prefeitura de Fixture Vale",
+        "municipio": "Fixture Vale",
+        "uf": "RS",
+        "objeto": "Terraplenagem e regularização de platô",
+        "pncp_id": "FIXTURE-REV-008"
+      },
+      "facts": [
+        {"kind": "FACT", "text": "A medição publicada aponta glosa em parte dos serviços de terraplenagem e aceita o restante.", "source_ref": "boletim-medicao"}
+      ],
+      "calculations": [
+        {"kind": "CALCULATION", "text": "A parcela aceita e a parcela glosada são linhas distintas no boletim; somá-las como se a glosa fosse total apagaria a parcela incontroversa."}
+      ],
+      "interpretation": [
+        {"kind": "INFERENCE", "text": "A leitura técnica é de glosa parcial, não de recusa integral da medição."}
+      ],
+      "cannot_conclude": "Não se conclui se a glosa é procedente. Não se afirma irregularidade.",
+      "sources": [
+        {"label": "Boletim de medição publicado", "url": "https://www.gov.br/pncp", "as_of": "2026-08-03", "document_id": "FIXTURE-REV-008-boletim"}
+      ],
+      "methodology": "Separar no boletim as linhas aceitas das linhas glosadas e recusar o colapso em um único percentual de recusa.",
+      "limitations": "Sem caderneta de campo. Autoria propositalmente omitida neste registro.",
+      "as_of": "2026-08-03",
+      "freshness": {"as_of": "2026-08-03", "max_age_days": 180},
+      "author": {"name": ""},
+      "maintenance_owner": "tiago.sasaki@confenge.com.br",
+      "editorial_status": "pending",
+      "is_fixture": true
+    }
+  ]
+}

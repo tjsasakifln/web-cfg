@@ -254,6 +254,7 @@
       'origem', 'origin_url', 'landing_url',
       'route_family', 'cta_id', 'asset_id', 'correlation_id', 'referrer',
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+      'analysis_id', 'evidence_pack_version', 'asset_family',
     ];
     const ROUTE_FAMILY_BY_PREFIX = [
       ['/defesa-margem-contratos-publicos/', 'margin-defense'],
@@ -264,6 +265,7 @@
       ['/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/', 'matriz-riscos'],
       ['/conteudos/atraso-pagamento-contrato-publico-suspender/', 'atraso-pagamento'],
       ['/conteudos/bdi-diferenciado-obra-publica/', 'bdi'],
+      ['/analises-contratos-publicos/', 'analise-tecnica-contrato'],
     ];
     const routeFamilyFromPath = (pathname) => {
       const p = String(pathname || '/');
@@ -348,6 +350,19 @@
     const currentAsset = firstNonEmpty('asset_id', fromUrl.asset_id, bodyDs.assetId);
     if (currentAsset) fromUrl.asset_id = currentAsset;
     else if (storedPrior.asset_id) fromUrl.asset_id = storedPrior.asset_id;
+    const currentAnalysis = firstNonEmpty('analysis_id', fromUrl.analysis_id, bodyDs.analysisId);
+    if (currentAnalysis) fromUrl.analysis_id = currentAnalysis;
+    else if (storedPrior.analysis_id) fromUrl.analysis_id = storedPrior.analysis_id;
+    const currentPack = firstNonEmpty(
+      'evidence_pack_version',
+      fromUrl.evidence_pack_version,
+      bodyDs.evidencePackVersion,
+    );
+    if (currentPack) fromUrl.evidence_pack_version = currentPack;
+    else if (storedPrior.evidence_pack_version) fromUrl.evidence_pack_version = storedPrior.evidence_pack_version;
+    const currentAssetFamily = firstNonEmpty('asset_family', fromUrl.asset_family, bodyDs.assetFamily);
+    if (currentAssetFamily) fromUrl.asset_family = currentAssetFamily;
+    else if (storedPrior.asset_family) fromUrl.asset_family = storedPrior.asset_family;
     const currentCta = firstNonEmpty('cta_id', fromUrl.cta_id, bodyDs.ctaId);
     if (currentCta) fromUrl.cta_id = currentCta;
     else if (storedPrior.cta_id) fromUrl.cta_id = storedPrior.cta_id;

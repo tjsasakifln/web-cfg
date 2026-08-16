@@ -49,6 +49,21 @@ if (picked.arbitrary_debug || picked.fbclid || picked.gclid || picked.email || p
 if (picked.utm_source !== "gsc" || picked.route_family !== "reequilibrio") {
   fail("kept_allowlisted", picked);
 }
+
+const analysisPicked = core.pickAttribution({
+  analysis_id: "cand-preco-01",
+  evidence_pack_version: "1.0",
+  asset_family: "analise-tecnica-contrato-publico",
+  correlation_id: "corr-analysis-1",
+  email: "leak@x.com",
+  nome: "Alice",
+});
+if (analysisPicked.email || analysisPicked.nome) fail("analysis_pii_leaked", analysisPicked);
+if (analysisPicked.analysis_id !== "cand-preco-01") fail("analysis_id", analysisPicked);
+if (analysisPicked.evidence_pack_version !== "1.0") fail("evidence_pack_version", analysisPicked);
+if (analysisPicked.asset_family !== "analise-tecnica-contrato-publico") fail("asset_family", analysisPicked);
+if (analysisPicked.correlation_id !== "corr-analysis-1") fail("analysis_correlation", analysisPicked);
+pass("pickAttribution_keeps_analysis_family");
 if (picked.correlation_id !== "corr-test-001") fail("correlation", picked);
 pass("pickAttribution_drops_unlisted_and_pii");
 

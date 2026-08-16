@@ -1,0 +1,63 @@
+{
+  "analyses": [
+    {
+      "analysis_candidate_id": "cand-preco-01",
+      "angle": "preco_bdi",
+      "content_hash": "0ce68e9c527e88a51ae661744387dc2dc2ee5ed7d97db0d472e622eb8281901f",
+      "path": "analyses/cand-preco-01.json",
+      "publication_readiness": "DATA_REJECT"
+    }
+  ],
+  "canary": {
+    "selected_ids": [
+      "cand-preco-01"
+    ],
+    "size": 1,
+    "angles": [],
+    "shortfall": true,
+    "reason_codes": [
+      "producer_missing"
+    ]
+  },
+  "catalog_mode": "fixture",
+  "claimed_live": false,
+  "consumer": {
+    "family": "web-cfg / contract-analysis family",
+    "id": "web-cfg/contract-analysis"
+  },
+  "content_hash": "664ba44a88bd15fe277ca05f932a435377f54d1868d7e3159845f0d08e53eb55",
+  "contract_version": "v1.0.0",
+  "generated_at": "2026-08-16T00:00:00+00:00",
+  "grain": "analysis_candidate_id",
+  "schema": "public-read-contract-analysis/1.0",
+  "source_as_of": "2026-08-15T00:00:00+00:00",
+  "status_report": {
+    "angles": [
+      "preco_bdi",
+      "reajuste_reequilibrio",
+      "aditivos_valor",
+      "prazo",
+      "comparavel",
+      "exceptional"
+    ],
+    "catalog_mode": "fixture",
+    "claimed_live": false,
+    "generated_at": "2026-08-16T00:00:00+00:00",
+    "reason_codes": [],
+    "schema": "public-read-contract-analysis/1.0",
+    "selected_candidate_ids": [
+      "cand-preco-01",
+      "cand-reajuste-01",
+      "cand-aditivo-01",
+      "cand-prazo-01",
+      "cand-comparavel-01",
+      "cand-exceptional-01",
+      "cand-preco-02",
+      "cand-prazo-02"
+    ],
+    "selected_count": 8,
+    "shortfall": false,
+    "target_max": 10,
+    "target_min": 5
+  }
+}
