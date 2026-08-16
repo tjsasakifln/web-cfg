@@ -93,7 +93,7 @@ If env is missing here:
 
 ```text
 # Netlify production
-CONFENGE_INBOUND_WEBHOOK_URL=https://<warmbly-host>/api/v1/webhooks/confenge/inbound
+CONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound
 CONFENGE_INBOUND_WEBHOOK_SECRET=<shared>
 # Warmbly
 CONFENGE_AUTO_SEND_ENABLED=false
