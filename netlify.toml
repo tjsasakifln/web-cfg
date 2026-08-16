@@ -20,7 +20,7 @@
   # Keep Blobs client unbundled so Netlify can inject NETLIFY_BLOBS_CONTEXT at runtime
   external_node_modules = ["@netlify/blobs"]
   # Private GSC insights for authenticated ops?action=gsc_insights (not public static)
-  included_files = ["netlify/functions/data/**", "data/ops/**"]
+  included_files = ["netlify/functions/data/**", "data/ops/**", "data/conversion/**", "docs/contracts/intent-action/**"]
 
 # Optional: keep host rule here as belt-and-suspenders for domain-level match.
 # _redirects already contains the same rule first (processed before toml).

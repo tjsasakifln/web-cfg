@@ -49,3 +49,7 @@
 /ops/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+
+# Contract-analysis canary: fixture preview cannot be indexed
+/analises-contratos-publicos/*
+  X-Robots-Tag: noindex, nofollow, noarchive

@@ -1,0 +1,1 @@
+CONFENGE. Data Desk fixture (FIXTURE_ONLY). method_version 1; schema data_desk_asset_v1; data_version fixture-1; as_of 2026-08-16. Não citar publicamente. Não é um recorte de mercado.

@@ -1,0 +1,134 @@
+{
+  "schema": "public-read-market-answer/1.0",
+  "contract_version": "v1.0.0",
+  "public_read_base": "v1.0.0",
+  "consumer": {
+    "id": "web-cfg / market-answer / valor-típico-contratos-pavimentacao",
+    "repository": "tjsasakifln/web-cfg",
+    "issues": ["#84"]
+  },
+  "question_id": "valor-tipico-contratos-pavimentacao",
+  "typology_id": "pavimentacao-infraestrutura-viaria",
+  "method_id": "ticket-integral-nominal-quartiles/1.0",
+  "grain": "valor_integral_nominal",
+  "grain_label": "valor integral nominal do instrumento",
+  "not_grain": ["custo_por_km", "preco_unitario", "custo/km"],
+  "statistics": {
+    "median": 845000,
+    "p25": 318500,
+    "p75": 2140000,
+    "n": 48,
+    "currency": "BRL",
+    "unit": "ticket_contratual_integral"
+  },
+  "period": {
+    "start": "2024-01-01",
+    "end": "2025-12-31",
+    "label": "2024–2025"
+  },
+  "geography": {
+    "scope": "ufs_publicadas",
+    "ufs": ["SC", "RS"],
+    "national_claim_allowed": false,
+    "label": "Santa Catarina e Rio Grande do Sul (recorte publicado)"
+  },
+  "distribution": {
+    "unit": "ticket_contratual_integral",
+    "buckets": [
+      {"label": "até 250 mil", "count": 8, "share": 0.167},
+      {"label": "250–600 mil", "count": 12, "share": 0.25},
+      {"label": "600 mil–1,5 mi", "count": 14, "share": 0.292},
+      {"label": "1,5–4 mi", "count": 9, "share": 0.188},
+      {"label": "acima de 4 mi", "count": 5, "share": 0.104}
+    ]
+  },
+  "contract_refs": [
+    {
+      "id": "FIXTURE-PAV-001",
+      "label": "Recapeamento asfáltico municipal — SC (fixture)",
+      "nominal_value_brl": 412000,
+      "uf": "SC",
+      "analysis_id": null
+    },
+    {
+      "id": "FIXTURE-PAV-002",
+      "label": "Pavimentação de vias urbanas — RS (fixture)",
+      "nominal_value_brl": 1280000,
+      "uf": "RS",
+      "analysis_id": null
+    },
+    {
+      "id": "FIXTURE-PAV-003",
+      "label": "Restauração de rodovia vicinal — SC (fixture)",
+      "nominal_value_brl": 3560000,
+      "uf": "SC",
+      "analysis_id": null
+    }
+  ],
+  "evidence_refs": [
+    {
+      "id": "FIXTURE-EV-PNCP-SLICE",
+      "kind": "public_contract_slice",
+      "note": "Labeled fixture refs. Not official_live documents."
+    }
+  ],
+  "peer_group": {
+    "ref": "comparable-contracts/1.0",
+    "status": "HOLD_FOR_DATA",
+    "reason_codes": ["official_peer_group_absent", "extra_cli_415_unmerged"]
+  },
+  "method_refs": [
+    {
+      "id": "ticket-integral-nominal-quartiles/1.0",
+      "note": "SQLite-style ordered percentiles on one instrument per row. No unit-price conversion."
+    }
+  ],
+  "method_short": "Mediana e quartis do valor integral nominal do instrumento, tipologia de pavimentação, recorte SC+RS 2024–2025. Não converte ticket em custo por km.",
+  "as_of": "2026-07-31",
+  "coverage": {
+    "status": "INSUFFICIENT",
+    "partitions_expected": 98437,
+    "partitions_observed": 2,
+    "national_universe_complete": false,
+    "stale": false,
+    "min_n": 30,
+    "reason_codes": [
+      "national_denominator_incomplete",
+      "typology_precision_unreviewed",
+      "extra_cli_302_open"
+    ]
+  },
+  "freshness": {
+    "as_of": "2026-07-31",
+    "generated_at": "2026-07-31T00:00:00Z",
+    "max_age_hours": 48,
+    "status": "STALE_FOR_INDEX"
+  },
+  "missingness": {
+    "physical_quantity": "UNKNOWN",
+    "unit_price": "UNKNOWN",
+    "custo_por_km": "UNKNOWN",
+    "demand_evidence": "UNKNOWN"
+  },
+  "limitations": [
+    "Recorte de duas UFs publicadas. Não descreve o Brasil.",
+    "Ticket contratual não é custo por km nem preço unitário.",
+    "Tipologia de pavimentação ainda não teve precisão amostral revisada na fonte factual publicada.",
+    "Peer group oficial (#415) ausente: status HOLD_FOR_DATA.",
+    "Números deste arquivo são CONTRACT_FIXTURE e não podem ser citados como fato oficial."
+  ],
+  "unknown_fields": ["custo_por_km", "demand_evidence", "national_denominator"],
+  "reason_codes": ["CONTRACT_FIXTURE", "official_live_absent", "coverage_insufficient"],
+  "claim": {
+    "authorization_state": "FIXTURE_NOT_AUTHORIZABLE",
+    "national_claim_allowed": false,
+    "current_publication_allowed": false
+  },
+  "official_live": false,
+  "producer_status": "CONTRACT_FIXTURE",
+  "catalog_mode": "fixture",
+  "claimed_live": false,
+  "test_only": true,
+  "never_index": true,
+  "producer_sha": "CONTRACT_FIXTURE"
+}

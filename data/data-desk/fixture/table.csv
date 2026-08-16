@@ -1,0 +1,3 @@
+category,count,unit,note
+rehearsal_rows,2,count,FIXTURE_ONLY aggregated — not a market census
+rehearsal_marker,1,flag,Do not syndicate or index

@@ -65,6 +65,13 @@ const ALLOWED_EVENTS = new Set([
   "contract_analyzed",
   "lead_created",
   "qualified_lead",
+  "answer_view",
+  "method_open",
+  "evidence_drilldown",
+  "analysis_click",
+  "xray_start",
+  "lead_receipt_correlated",
+  "correction_open",
 ]);
 
 function originOk(event) {

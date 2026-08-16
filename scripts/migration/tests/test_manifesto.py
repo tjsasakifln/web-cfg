@@ -19,7 +19,7 @@ from manifesto_lib import (  # noqa: E402
 
 def test_loader_reads_committed_file():
     data = load_manifesto()
-    assert data["meta"]["version"] == "v1"
+    assert data["meta"]["version"] == "v2"
     assert data["entries"], "manifesto has no entries"
     assert manifesto_sha256()
 
@@ -46,7 +46,7 @@ def test_ready_rows_have_targets_and_no_generic_home():
 def test_retire_is_410_not_301_home():
     data = load_manifesto()
     for entry in data["entries"]:
-        if entry["decision"] != "RETIRE":
+        if entry["decision"] not in {"RETIRE", "RETIRE_410"}:
             continue
         assert entry["target_url"] is None
         assert entry["expected_http"] in (410, 404)
@@ -64,7 +64,9 @@ def test_handoff_pins_manifesto_hash():
     pin = (ROOT / "data/migration/smartlic-confenge/manifesto.v1.sha256").read_text().strip()
     assert pin == digest
     handoff = (ROOT / "docs/migration/smartlic-confenge/HANDOFF-SMARTLIC-2115.md").read_text()
+    new_handoff = (ROOT / "docs/migrations/smartlic/HANDOFF-2115.md").read_text()
     assert digest in handoff
+    assert digest in new_handoff
     assert "https://confenge.com.br/" in handoff
     assert "28" in handoff
     # execute set must not tell #2115 to dump home

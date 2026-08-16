@@ -176,6 +176,12 @@ function mapLeadToInboundV1(record) {
   if (message) body.message = message;
   const correlation = clampText(record.correlation_id, 160);
   if (correlation) body.correlation_id = correlation;
+  const analysisId = clampText(record.analysis_id, 120);
+  if (analysisId) body.analysis_id = analysisId;
+  const evidencePackVersion = clampText(record.evidence_pack_version, 80);
+  if (evidencePackVersion) body.evidence_pack_version = evidencePackVersion;
+  const assetFamily = clampText(record.asset_family, 80);
+  if (assetFamily) body.asset_family = assetFamily;
 
   return body;
 }

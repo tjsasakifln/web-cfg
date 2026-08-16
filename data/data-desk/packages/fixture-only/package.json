@@ -1,0 +1,201 @@
+{
+  "as_of": "2026-08-16",
+  "canonical": null,
+  "citation_text": "CONFENGE. Data Desk fixture (FIXTURE_ONLY). method_version 1; schema data_desk_asset_v1; data_version fixture-1; as_of 2026-08-16. Não citar publicamente. Não é um recorte de mercado.",
+  "correction_link": "https://confenge.com.br/correcoes/",
+  "correction_owner": "Tiago Sasaki",
+  "coverage": "Synthetic two-row aggregated counts used only to exercise the generator. Not a census of contracts, organs or Brazil.",
+  "creator": "CONFENGE",
+  "csv_included": true,
+  "csv_sha256": "8a748f92d714931fc99620ce31e1e5a2c41973fbc24a0c2a2c21992e82a8b2d0",
+  "csv_url": "/internal/data-desk/fixture-only/table.csv",
+  "data_version": "fixture-1",
+  "dataset": {
+    "description": "Two-row aggregated table that exists so Dataset/DataDownload can be emitted only when a real distribution file is present. Not production data.",
+    "download_filename": "table.csv",
+    "encoding_format": "text/csv",
+    "name": "Fixture aggregated counts"
+  },
+  "dataset_jsonld": {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "creator": {
+      "@type": "Organization",
+      "name": "CONFENGE",
+      "url": "https://confenge.com.br/"
+    },
+    "dateModified": "2026-08-16",
+    "description": "Two-row aggregated table that exists so Dataset/DataDownload can be emitted only when a real distribution file is present. Not production data.",
+    "distribution": {
+      "@type": "DataDownload",
+      "contentUrl": "/internal/data-desk/fixture-only/table.csv",
+      "encodingFormat": "text/csv",
+      "name": "table.csv"
+    },
+    "identifier": "fixture-only-citation-kit",
+    "isAccessibleForFree": true,
+    "license": "https://confenge.com.br/termos-de-uso/",
+    "name": "Fixture aggregated counts",
+    "publisher": {
+      "@type": "Organization",
+      "name": "CONFENGE",
+      "url": "https://confenge.com.br/"
+    }
+  },
+  "embed_html": "<figure class=\"confenge-embed\" data-tracker=\"none\" data-embed=\"confenge-data-desk\">\n  <p class=\"confenge-embed-watermark\">FIXTURE_ONLY</p>\n  <div class=\"confenge-embed-body\"><svg xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" width=\"480\" height=\"240\" viewBox=\"0 0 480 240\">\n  <title>CONFENGE Data Desk fixture chart (FIXTURE_ONLY)</title>\n  <desc>Two aggregated rehearsal bars. Not a public statistic. Source: CONFENGE Data Desk fixture.</desc>\n  <rect width=\"480\" height=\"240\" fill=\"#f8fafc\"/>\n  <text x=\"24\" y=\"32\" font-family=\"system-ui,sans-serif\" font-size=\"16\" fill=\"#061a33\">FIXTURE_ONLY — not for citation</text>\n  <rect x=\"80\" y=\"80\" width=\"80\" height=\"100\" fill=\"#0f4c81\"/>\n  <rect x=\"220\" y=\"120\" width=\"80\" height=\"60\" fill=\"#94a3b8\"/>\n  <text x=\"80\" y=\"200\" font-family=\"system-ui,sans-serif\" font-size=\"12\" fill=\"#334155\">rows=2</text>\n  <text x=\"220\" y=\"200\" font-family=\"system-ui,sans-serif\" font-size=\"12\" fill=\"#334155\">marker=1</text>\n</svg></div>\n  <figcaption class=\"confenge-embed-source\">Source: <a href=\"/internal/data-desk/fixture-only/\" rel=\"noopener\">/internal/data-desk/fixture-only/</a> · CONFENGE Data Desk fixture (not a public asset)</figcaption>\n</figure>\n",
+  "external_distribution": false,
+  "fixture": true,
+  "generated_at": "2026-08-16",
+  "has_dataset": true,
+  "id": "fixture-only-citation-kit",
+  "identifier": "fixture-only-citation-kit",
+  "indexable": false,
+  "license": "https://confenge.com.br/termos-de-uso/",
+  "limitations": "FIXTURE_ONLY. No public canonical. Absent from sitemap. Not for press, partners, embeds in the wild, or IndexNow.",
+  "method_version": "1",
+  "package_hash": "ed4cbf8409f6061a1416d81e76283ff2acae757bb5029d7819236ef9897cdf08",
+  "package_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+  "permalink": "/internal/data-desk/fixture-only/",
+  "png_included": false,
+  "png_sha256": null,
+  "previous_package_hash": null,
+  "provenance": "Hand-authored fixture for issues #86/#89. Not extra-cli producer output.",
+  "public_canonical": null,
+  "publisher": "CONFENGE",
+  "request_contract": {
+    "allowed_fields": [
+      "finalidade",
+      "organization",
+      "role",
+      "work_email",
+      "consent",
+      "asset_id",
+      "attribution",
+      "intended_publication"
+    ],
+    "api": false,
+    "asset_id": "fixture-only-citation-kit",
+    "attribution": {
+      "must_preserve_canonical_or_permalink": true,
+      "required": true
+    },
+    "automatic_promise": false,
+    "consent_required": true,
+    "correlation_id": {
+      "generated_from": [
+        "finalidade",
+        "organization",
+        "asset_id",
+        "as_of"
+      ],
+      "required": true
+    },
+    "default_state": "UNKNOWN",
+    "forbidden_fields": [
+      "contract_scan",
+      "cpf",
+      "date_of_birth",
+      "home_address",
+      "personal_phone",
+      "raw_document",
+      "rg"
+    ],
+    "minimum_fields": [
+      "finalidade",
+      "organization",
+      "role",
+      "consent",
+      "prazo",
+      "correlation_id",
+      "attribution"
+    ],
+    "mode": "prepare-only",
+    "pii_minimized": true,
+    "prazo": "UNKNOWN",
+    "prazo_note": "SLA stays UNKNOWN until measured against real requests.",
+    "registry_outcome": "UNKNOWN until a human records FULFILLED|DECLINED|NEEDS_SCOPE",
+    "schema": "data_desk_request_contract_v1",
+    "states": [
+      "DECLINED",
+      "FULFILLED",
+      "NEEDS_SCOPE",
+      "UNKNOWN"
+    ],
+    "watermark": "FIXTURE_ONLY"
+  },
+  "schema": "data_desk_package_v1",
+  "schema_version": "data_desk_asset_v1",
+  "sitemap": false,
+  "svg_included": true,
+  "svg_sha256": "11a2c87bd6590df235fd9cdc467cf9fe0aaf4fbc6380a3702c73134f14b3d472",
+  "syndication": {
+    "asset_id": "fixture-only-citation-kit",
+    "auto_send": false,
+    "external_distribution": false,
+    "schema": "data_desk_syndication_v1",
+    "sent": false,
+    "smtp_called": false,
+    "targets": [
+      {
+        "angle": "UNNAMED",
+        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "audience_type": "UNNAMED",
+        "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+        "id": "target-1",
+        "outcome": "UNKNOWN",
+        "owner": "Tiago Sasaki",
+        "status": "PREPARED",
+        "target_nominal": null
+      },
+      {
+        "angle": "UNNAMED",
+        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "audience_type": "UNNAMED",
+        "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+        "id": "target-2",
+        "outcome": "UNKNOWN",
+        "owner": "Tiago Sasaki",
+        "status": "PREPARED",
+        "target_nominal": null
+      },
+      {
+        "angle": "UNNAMED",
+        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "audience_type": "UNNAMED",
+        "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+        "id": "target-3",
+        "outcome": "UNKNOWN",
+        "owner": "Tiago Sasaki",
+        "status": "PREPARED",
+        "target_nominal": null
+      },
+      {
+        "angle": "UNNAMED",
+        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "audience_type": "UNNAMED",
+        "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+        "id": "target-4",
+        "outcome": "UNKNOWN",
+        "owner": "Tiago Sasaki",
+        "status": "PREPARED",
+        "target_nominal": null
+      },
+      {
+        "angle": "UNNAMED",
+        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "audience_type": "UNNAMED",
+        "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+        "id": "target-5",
+        "outcome": "UNKNOWN",
+        "owner": "Tiago Sasaki",
+        "status": "PREPARED",
+        "target_nominal": null
+      }
+    ],
+    "watermark": "FIXTURE_ONLY",
+    "webhook_called": false
+  },
+  "title": "CONFENGE Data Desk fixture (not a public asset)",
+  "usage_guidance": "Internal rehearsal only. To swap an approved asset, change this registry entry — do not redesign the generator.",
+  "watermark": "FIXTURE_ONLY"
+}

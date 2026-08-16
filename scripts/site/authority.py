@@ -23,6 +23,7 @@ SURFACE_TYPES = (
     "ferramenta",
     "pesquisa_dataset",
     "caso_proof",
+    "analise_tecnica_contrato",
 )
 
 PERMISSION_CLASSES = ("demonstrativo", "consented", "confidential", "redacted")
@@ -47,6 +48,7 @@ INVENTED_CREDENTIAL_PATTERNS = (
 )
 
 _PATH_RULES: tuple[tuple[str, str], ...] = (
+    ("/analises-contratos-publicos/", "analise_tecnica_contrato"),
     ("/casos/", "caso_proof"),
     ("/ferramentas/", "ferramenta"),
     ("/inteligencia/", "pesquisa_dataset"),
@@ -112,7 +114,7 @@ def footer_authority_nav() -> str:
 
 
 def classify_surface(path: str, html: str | None = None) -> str | None:
-    """Return one of the five matrix types, or None for identity/policy/other."""
+    """Return one of the matrix types, or None for identity/policy/other."""
     raw = (path or "").strip()
     if raw.startswith("http"):
         raw = urlparse(raw).path
@@ -703,6 +705,10 @@ def representative_pages() -> dict[str, Path]:
         "ferramenta": ROOT / "ferramentas" / "limite-acrescimos-supressoes" / "index.html",
         "pesquisa_dataset": ROOT / "radar" / "nacional-obras-publicas" / "index.html",
         "caso_proof": ROOT / "casos" / "aditivo-art125-demonstrativo" / "index.html",
+        "analise_tecnica_contrato": ROOT
+        / "analises-contratos-publicos"
+        / "bdi-composicao-vs-referencia-sc"
+        / "index.html",
     }
 
 

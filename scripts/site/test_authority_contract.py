@@ -67,6 +67,7 @@ def test_matrix_names_five_surfaces_and_audit_chain():
     assert "ferramenta" in labels
     assert "pesquisa/dataset" in labels
     assert "caso/proof" in labels
+    assert "análise técnica de contrato público" in labels
     chain = matrix["audit_chain"]
     assert chain == [
         "quem_afirma",
@@ -90,6 +91,11 @@ def test_matrix_names_five_surfaces_and_audit_chain():
     assert caso["permission_class"] == "required"
     tecnico = matrix["surfaces"]["conteudo_tecnico"]
     assert tecnico["reviewer"] == "required_if_legal_claim"
+    analise = matrix["surfaces"]["analise_tecnica_contrato"]
+    assert analise["permission_class"] == "not_applicable"
+    assert analise["methodology"] == "required"
+    assert analise["as_of"] == "required"
+    assert analise["mutually_exclusive_with"] == "caso_proof"
 
 
 def test_fail_closed_author_absent():
@@ -321,6 +327,8 @@ def test_classify_surface_from_real_paths():
     assert classify_surface("/ferramentas/limite-acrescimos-supressoes/") == "ferramenta"
     assert classify_surface("/radar/nacional-obras-publicas/") == "pesquisa_dataset"
     assert classify_surface("/casos/aditivo-art125-demonstrativo/") == "caso_proof"
+    assert classify_surface("/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/") == "analise_tecnica_contrato"
+    assert classify_surface("/analises-contratos-publicos/") != "caso_proof"
     assert classify_surface("/politica-editorial/") is None
 
 

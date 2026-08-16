@@ -131,6 +131,25 @@
         "/casos/aditivo-art125-demonstrativo/",
         "/casos/medicao-glosa-demonstrativo/"
       ]
+    },
+    "analise_tecnica_contrato": {
+      "label": "análise técnica de contrato público",
+      "author": "required",
+      "reviewer": "required",
+      "evidence": "required",
+      "update_history": "required",
+      "methodology": "required",
+      "as_of": "required",
+      "coverage": "recommended",
+      "limitations": "required",
+      "permission_class": "not_applicable",
+      "citation_link": "required",
+      "correction_link": "required",
+      "mutually_exclusive_with": "caso_proof",
+      "examples": [
+        "/analises-contratos-publicos/",
+        "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/"
+      ]
     }
   }
 }

@@ -1,24 +1,25 @@
 # Handoff — SmartLic#2115 execute set
 
-**Pinned manifesto:** `data/migration/smartlic-confenge/manifesto.v1.json`  
-**SHA-256:** `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d`  
-**Version:** `v1`  
+Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smartlic/HANDOFF-2115.md).
+
+**Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
+**Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
+**SHA-256:** `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023`  
+**Version:** `v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  
 **Do not execute against any other file, branch, or unhashed edit.**
 
-### Pin reconciliation 2026-08-15 (PR #68 rebase)
+### Pin reconciliation 2026-08-16 (six-action inventory)
 
-Manifesto bytes and execute set are **UNCHANGED**. SmartLic PR #2133 must keep pin `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d` and the same 11 ready 301s / default 410. Do **not** regenerate the bridge map for this rebase.
+Supersedes `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d`. The 11 ready 301s are unchanged. 54 rows move from RETIRE to HOLD_TARGET_NOT_READY (still 410, no Location). SmartLic#2115 must re-pin both repos together.
 
-The pre-rebase web-cfg commit `3f112bfbd9e6b042691e1c09812af00f42735adb` is no longer on this branch after replay onto `origin/main` `f2f7f1e4`. The manifesto-carrying commit is now `dad3414c` (same `manifesto.v1.json` / `.sha256`). Counterpart may update the cited web-cfg SHA; the hash/pin does not change.
-
-Recompute: `python3 -c "from pathlib import Path; import hashlib; print(hashlib.sha256(Path('data/migration/smartlic-confenge/manifesto.v1.json').read_bytes()).hexdigest())"`  
-Must match `data/migration/smartlic-confenge/manifesto.v1.sha256`.
+Recompute: `python3 -c "from pathlib import Path; import hashlib; print(hashlib.sha256(Path('data/migrations/smartlic-url-map/inventory.v2.json').read_bytes()).hexdigest())"`  
+Must match `data/migrations/smartlic-url-map/inventory.v2.sha256` and `data/migration/smartlic-confenge/manifesto.v1.sha256`.
 
 ## Scope of this handoff
 
-**Only the ready REDIRECT rows below.** 1.244 RETIRE URLs are decided (expected **410**, not 301-to-home) but are **not** an execute list of 301s. If the bridge needs a default for unlisted paths, serve **410** (404 acceptable until 410 is wired). Never 301 leftover traffic to `https://confenge.com.br/` or `/consultoria-b2g/`.
+**Only the ready REDIRECT_301 rows below.** 1.190 RETIRE_410 URLs and 54 HOLD_TARGET_NOT_READY URLs are decided (expected **410**, not 301-to-home) but are **not** an execute list of 301s. If the bridge needs a default for unlisted paths, serve **410**. Never 301 leftover traffic to `https://confenge.com.br/` or `/consultoria-b2g/`.
 
 No SmartLic-branded destination. No SaaS recovery. No Railway token/limit/redeploy. No Netcup application rebuild.
 
@@ -56,7 +57,7 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 ### Post-#68 revalidation (2026-08-15)
 
-`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18`. Manifesto bytes and pin **UNCHANGED** (`c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d`).
+`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023` (same 11 ready 301s; HOLD fail-closed added).
 
 Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonical host `confenge.com.br`, indexable, no SmartLic brand, no redirect chain, no soft-404. SmartLic production 301s / DNS / TLS / Cloudflare / Railway were **not** changed and were **not** observed. Cutover remains unobserved. #62 stays OPEN. Counterpart SmartLic#2115 / PR #2133 may start the bridge against this pin; web-cfg does not own that deploy.
 

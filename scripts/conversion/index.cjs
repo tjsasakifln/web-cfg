@@ -1,0 +1,15 @@
+module.exports = {
+  ...require("./matrix.cjs"),
+  ...require("./cnpj.cjs"),
+  ...require("./xray.cjs"),
+  ...require("./next-action.cjs"),
+  ...require("./attribution.cjs"),
+  ...require("./persist-order.cjs"),
+  ...require("./copy.cjs"),
+  ...require("./experiment.cjs"),
+  ...require("./minimize.cjs"),
+  ...require("./flag.cjs"),
+  journey: require("./journey.cjs"),
+  adapter: require("./adapter.cjs"),
+  intake: require("./intake-core.cjs"),
+};

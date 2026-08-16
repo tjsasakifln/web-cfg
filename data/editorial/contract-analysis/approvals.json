@@ -1,0 +1,5 @@
+{
+  "schema": "contract-analysis-approvals/1.0",
+  "policy": "Individual human approval only. Never approve to fill a quota. Fixtures cannot be approved for INDEX.",
+  "approvals": []
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "public-read-b2g-xray/0.1-draft",
+  "extra_cli_goal": "03",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "data_state": "DATA_HOLD",
+  "xray_state": "STALE",
+  "as_of": "2025-01-15",
+  "freshness": {
+    "source_as_of": "2025-01-15",
+    "expires_at": "2025-04-15",
+    "status": "stale_fixture"
+  },
+  "reason_codes": ["freshness_expired"],
+  "company": {
+    "public_name": "Construtora Fixture Gama Ltda",
+    "uf_sede_observada": "PR"
+  },
+  "observed_portfolio": {
+    "market": "contratos publicos de pavimentacao (valor integral nominal do instrumento)",
+    "n_contracts": 2,
+    "value_sum_brl": 3100000,
+    "note": "Numeros abaixo sao historicos do recorte expirado. Nao tratar como atuais."
+  },
+  "limitations": [
+    "Freshness expirada. Nao apresentar como leitura corrente.",
+    "Recorte fixture, nao e catalogo vivo."
+  ],
+  "method_version": "b2g-xray-fixture/0.1",
+  "schema_version": "public-read-b2g-xray/0.1-draft"
+}

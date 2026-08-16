@@ -1,0 +1,72 @@
+{
+  "schema": "conversion-canary-report/1.0",
+  "issue": 88,
+  "branch": "feat/intent-conversion-88",
+  "as_of": "2026-08-16",
+  "matrix_version": {
+    "schema": "intent-action-matrix/1.0",
+    "version": "1.0.0"
+  },
+  "first_canary_cta": "Veja sua empresa neste mercado",
+  "feature_flag": {
+    "id": "conversion_market_answer_xray",
+    "enabled": false
+  },
+  "journey_states": ["READY", "NEEDS_DATA", "NOT_FOUND", "STALE", "BLOCKED", "ERROR"],
+  "synthetic_e2e": {
+    "xray_first": { "statusCode": 201, "receipt_id": "71a97d497cfb9f552b812934", "idempotent": false, "auto_send": false, "handoff_status": "SKIPPED", "persist_before_handoff": true, "public_url": "https://confenge.com.br/piloto/conversao-xray/", "cnpj_in_url": false, "cnpj_in_public_body": false },
+    "xray_replay": { "statusCode": 200, "receipt_id": "71a97d497cfb9f552b812934", "idempotent": true, "store_count": 1 },
+    "handraise_transport_fail": { "statusCode": 201, "handoff_status": "RETRYABLE", "persist_before_handoff": true, "receipt_kept": true },
+    "handraise_replay": { "statusCode": 200, "idempotent": true, "store_count": 2 }
+  },
+  "attribution_fields": [
+    "asset_family",
+    "market_answer_id",
+    "analysis_id",
+    "intent",
+    "question_class",
+    "asset_version",
+    "method_version",
+    "schema_version",
+    "cta",
+    "cta_id",
+    "source",
+    "referrer",
+    "drill_down_origin",
+    "correlation_id",
+    "idempotency_key",
+    "public_entity_id",
+    "public_contract_id",
+    "consent_state",
+    "handoff_status"
+  ],
+  "exceptions": [
+    "extra-cli Goal 03 public-read-b2g-xray is absent; fixtures labeled catalog_mode=fixture.",
+    "Frozen PR #85 mapper drops market_answer_id, method/schema/asset version, question_class, cta copy, drill_down_origin. Adapter keeps them on the receipt and under inbound payload.conversion.",
+    "#84 live Market Answer page is not this branch. Canary lives noindex at /piloto/conversao-xray/.",
+    "#90 opt-in is not authorized.",
+    "Warmbly #55 has not measured latency; SLA remains UNKNOWN."
+  ],
+  "fields_abandonment_instrumentation": {
+    "events": ["form_start", "field_abandonment", "xray_complete", "xray_error", "xray_timeout", "cta_click", "handraise_complete"],
+    "pii_in_events": false,
+    "cnpj_field_blur_empty": "field_abandonment { field: cnpj }"
+  },
+  "blockers": [
+    "Live extra-cli Goal 03 payload",
+    "Published #84 Market Answer page to attach the CTA",
+    "Real asset to CTA to lead to action/outcome reconciliation (leaves issue 88 OPEN)"
+  ],
+  "integration_required": [
+    "extra-cli Goal 03",
+    "Warmbly Goal 09 / #47 consume payload.conversion",
+    "PR #85 mapper extension after that PR merges",
+    "inbound Goal 06 join"
+  ],
+  "tests": {
+    "command": "npm run test:conversion",
+    "passed": 28,
+    "failed": 0
+  },
+  "recommendation": "READY_BEHIND_FLAG"
+}

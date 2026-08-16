@@ -1,0 +1,110 @@
+{
+  "schema": "market-answer-candidate/1.0",
+  "version": "1.0",
+  "question_id": "valor-tipico-contratos-pavimentacao",
+  "question": "Qual é o valor típico dos contratos públicos de pavimentação?",
+  "user_job": "Uma construtora ou diretoria B2G que ainda não conhece a CONFENGE precisa de uma faixa honesta de ticket contratual de pavimentação para calibrar expectativa, proposta e conversa comercial — sem confundir isso com custo por km.",
+  "intent": "quanto_custa_ticket_contratual",
+  "consumer_decision": "May render a labeled preview. May not index or claim national/custo-por-km facts until official_live + coverage + human hash pass.",
+  "demand": {
+    "status": "UNKNOWN",
+    "evidence": "UNKNOWN",
+    "gsc": null,
+    "note": "GSC histórico do donor contém a razão social de uma empresa de pavimentação, não a pergunta do canário. Sem evidência da query, demanda permanece UNKNOWN."
+  },
+  "dataset": {
+    "id": "public-read-market-answer/1.0",
+    "producer": "extra-cli Goal 03",
+    "issues": ["tjsasakifln/extra-cli#400", "tjsasakifln/extra-cli#415", "tjsasakifln/extra-cli#302"]
+  },
+  "grain": "valor_integral_nominal",
+  "unit": "ticket_contratual_integral",
+  "geography": {
+    "required_scope": "published_ufs_only",
+    "forbids_national_without_coverage": true
+  },
+  "period": {
+    "required": "declared_window",
+    "example": "2024-01-01/2025-12-31"
+  },
+  "coverage_required": {
+    "min_n": 30,
+    "typology_precision_reviewed": true,
+    "national_universe_complete": false
+  },
+  "freshness_required": {
+    "max_age_hours": 48,
+    "policy": "publication-slo"
+  },
+  "answerability": {
+    "score": 0.78,
+    "status": "ANSWERABLE_AS_TICKET",
+    "reason_codes": ["ticket_supported", "custo_por_km_not_supported"],
+    "note": "Answerable as integral ticket. Custo/km is NEEDS_DATA."
+  },
+  "data_quality": {
+    "score": 0.42,
+    "reason_codes": ["producer_fixture", "coverage_incomplete"],
+    "note": "Fixture labeled; official_live absent."
+  },
+  "singularity": {
+    "score": 0.72,
+    "reason_codes": ["answer_first_not_pseo_template", "explicit_not_km"],
+    "note": "Distinct from thin pSEO pavimentacao-* templates."
+  },
+  "citation_potential": {
+    "score": 0.55,
+    "reason_codes": ["quartile_citeable_when_official"],
+    "note": "Citeable after official_live. Fixture is not a citation fact."
+  },
+  "utility": {
+    "score": 0.8,
+    "reason_codes": ["calibrates_ticket_expectation"],
+    "note": "Direct answer plus range, n, method and limits."
+  },
+  "commercial_fit": {
+    "score": 0.84,
+    "reason_codes": ["margin_defense_adjacency", "xray_cta"],
+    "note": "Adjacent to Defesa de Margem and the first X-Ray canary."
+  },
+  "maintenance_cost": {
+    "score": 0.35,
+    "reason_codes": ["single_question", "one_url"],
+    "note": "One URL, one typology. Refresh cost is the extra-cli export."
+  },
+  "cta": {
+    "primary": {
+      "id": "veja-sua-empresa",
+      "label": "Veja sua empresa neste mercado",
+      "path": "#xray"
+    },
+    "secondary": {
+      "id": "analise-contrato",
+      "label": "Analise um contrato / peça segunda leitura",
+      "path": "/ferramentas/diagnostico-defesa-margem/"
+    },
+    "downstream_path": "Market Answer → evidence → #83 analysis → X-Ray → Warmbly#47",
+    "lead_gate": false
+  },
+  "owner": {
+    "family": "CONFENGE / market-answers",
+    "refresh": "CONFENGE / market-answers",
+    "editorial": "CONFENGE"
+  },
+  "refresh": {
+    "owner": "CONFENGE / market-answers",
+    "contract": "Re-run python3 -m scripts.market_answers build when extra-cli Goal 03 official_live arrives. Invalidate on content_hash change.",
+    "sla_hours": 48
+  },
+  "kill_gate": {
+    "triggered": false,
+    "rules": [
+      "Kill if official typology precision fails and cannot be answered as ticket.",
+      "Kill if the page becomes a combinatorial pSEO farm.",
+      "Kill if maintenance exceeds qualified pipeline learning.",
+      "Never estimate custo/km from ticket."
+    ]
+  },
+  "attribution_source": "CONFENGE_WEB",
+  "visibility": "PUBLIC_PREVIEW"
+}

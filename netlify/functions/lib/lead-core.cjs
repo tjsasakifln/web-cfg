@@ -34,6 +34,10 @@ const MAX_FIELD = {
   public_entity_id: 80,
   public_id_slug: 80,
   cnpj: 20,
+  analysis_id: 120,
+  evidence_pack_version: 80,
+  asset_family: 80,
+  query_class: 80,
 };
 
 /** Query/body keys that may persist as attribution. Everything else is dropped. */
@@ -65,6 +69,10 @@ const ATTR_ALLOWLIST = [
   "dataset_hash",
   "cta_position",
   "content_cluster",
+  "analysis_id",
+  "evidence_pack_version",
+  "asset_family",
+  "query_class",
 ];
 
 function looksLikePii(value, key) {
@@ -270,6 +278,14 @@ function validateAndNormalize(data) {
     cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id, "cta_id") || null,
     asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id") || null,
     correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id, "correlation_id") || null,
+    analysis_id: sanitizeAttributionValue(data.analysis_id, MAX_FIELD.analysis_id, "analysis_id") || null,
+    evidence_pack_version: sanitizeAttributionValue(
+      data.evidence_pack_version,
+      MAX_FIELD.evidence_pack_version,
+      "evidence_pack_version",
+    ) || null,
+    asset_family: sanitizeAttributionValue(data.asset_family, MAX_FIELD.asset_family, "asset_family") || null,
+    query_class: sanitizeAttributionValue(data.query_class, MAX_FIELD.query_class, "query_class") || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,

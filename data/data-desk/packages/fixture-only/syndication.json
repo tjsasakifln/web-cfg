@@ -1,0 +1,67 @@
+{
+  "asset_id": "fixture-only-citation-kit",
+  "auto_send": false,
+  "external_distribution": false,
+  "schema": "data_desk_syndication_v1",
+  "sent": false,
+  "smtp_called": false,
+  "targets": [
+    {
+      "angle": "UNNAMED",
+      "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+      "audience_type": "UNNAMED",
+      "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+      "id": "target-1",
+      "outcome": "UNKNOWN",
+      "owner": "Tiago Sasaki",
+      "status": "PREPARED",
+      "target_nominal": null
+    },
+    {
+      "angle": "UNNAMED",
+      "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+      "audience_type": "UNNAMED",
+      "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+      "id": "target-2",
+      "outcome": "UNKNOWN",
+      "owner": "Tiago Sasaki",
+      "status": "PREPARED",
+      "target_nominal": null
+    },
+    {
+      "angle": "UNNAMED",
+      "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+      "audience_type": "UNNAMED",
+      "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+      "id": "target-3",
+      "outcome": "UNKNOWN",
+      "owner": "Tiago Sasaki",
+      "status": "PREPARED",
+      "target_nominal": null
+    },
+    {
+      "angle": "UNNAMED",
+      "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+      "audience_type": "UNNAMED",
+      "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+      "id": "target-4",
+      "outcome": "UNKNOWN",
+      "owner": "Tiago Sasaki",
+      "status": "PREPARED",
+      "target_nominal": null
+    },
+    {
+      "angle": "UNNAMED",
+      "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+      "audience_type": "UNNAMED",
+      "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
+      "id": "target-5",
+      "outcome": "UNKNOWN",
+      "owner": "Tiago Sasaki",
+      "status": "PREPARED",
+      "target_nominal": null
+    }
+  ],
+  "watermark": "FIXTURE_ONLY",
+  "webhook_called": false
+}

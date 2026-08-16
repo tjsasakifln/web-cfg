@@ -1,0 +1,65 @@
+{
+  "schema": "public-read-market-answer/1.0",
+  "contract_version": "v1.0.0",
+  "public_read_base": "v1.0.0",
+  "compatibility": "additive_nullable_within_v1",
+  "consumer": {
+    "id": "web-cfg / market-answer / valor-típico-contratos-pavimentacao",
+    "repository": "tjsasakifln/web-cfg",
+    "issues": ["#84"],
+    "decision": "May render a labeled preview. Must not treat CONTRACT_FIXTURE as official_live. Must not index without human content-hash approval + official_live + coverage/freshness + authorized claim. Must not invent custo/km."
+  },
+  "producer": {
+    "owner": "extra-cli",
+    "goals": ["03"],
+    "issues": ["#400", "#415", "#302"],
+    "status_on_2026-08-16": "official_live_absent"
+  },
+  "grain": "valor_integral_nominal",
+  "grain_not": ["custo_por_km", "preco_unitario", "unit_price"],
+  "keys": ["question_id", "typology_id", "method_id"],
+  "required_fields": [
+    "schema",
+    "question_id",
+    "typology_id",
+    "method_id",
+    "grain",
+    "statistics.median",
+    "statistics.p25",
+    "statistics.p75",
+    "statistics.n",
+    "period",
+    "geography",
+    "distribution",
+    "contract_refs|evidence_refs",
+    "peer_group",
+    "method_refs",
+    "as_of",
+    "coverage",
+    "freshness",
+    "missingness",
+    "limitations",
+    "unknown_fields",
+    "reason_codes",
+    "claim.authorization_state",
+    "content_hash",
+    "schema_hash",
+    "producer_sha",
+    "official_live",
+    "producer_status"
+  ],
+  "value_semantics": {
+    "median_p25_p75": "quartiles of the integral nominal BRL of the contract instrument",
+    "n": "usable instrument count after producer filters",
+    "not": ["cost per km", "unit price", "national typical price"]
+  },
+  "claim_authorization_states": [
+    "AUTHORIZED",
+    "UNAUTHORIZED",
+    "STALE",
+    "FIXTURE_NOT_AUTHORIZABLE"
+  ],
+  "producer_status": ["OFFICIAL_LIVE", "CONTRACT_FIXTURE", "DATA_HOLD", "DATA_REJECT"],
+  "unknown_policy": "UNKNOWN remains UNKNOWN; absence is never zero",
+  "branding": "truth plane has no CONFENGE marks; web-cfg owns narrative, CTA and index"
+}

@@ -17,6 +17,35 @@ ROOT = Path(__file__).resolve().parents[2]
 errors: list[str] = []
 warnings: list[str] = []
 
+# Internal trees are not public pages. `data/` holds fixtures (Data Desk embed
+# fragments, JSON packs) and must not be treated as crawlable HTML.
+SKIP_DIRS = frozenset(
+    {
+        ".git",
+        "seo",
+        ".playwright-mcp",
+        "node_modules",
+        "_site",
+        "docs",
+        ".netlify",
+        ".cache",
+        "data",
+        "scripts",
+        "tests",
+        "netlify",
+    }
+)
+
+
+def iter_seo_html_pages(root: Path | None = None) -> list[Path]:
+    """HTML files the SEO gate treats as public/candidate pages."""
+    base = root or ROOT
+    return [
+        p
+        for p in base.rglob("*.html")
+        if not any(part in SKIP_DIRS for part in p.parts)
+    ]
+
 
 def page_path(p: Path) -> str:
     if p.name == "index.html":
@@ -27,21 +56,7 @@ def page_path(p: Path) -> str:
 
 
 def main() -> int:
-    skip_dirs = {
-        ".git",
-        "seo",
-        ".playwright-mcp",
-        "node_modules",
-        "_site",
-        "docs",
-        ".netlify",
-        ".cache",
-    }
-    html_pages = [
-        p
-        for p in ROOT.rglob("*.html")
-        if not any(x in p.parts for x in skip_dirs)
-    ]
+    html_pages = iter_seo_html_pages(ROOT)
     sm = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
     sm_urls = re.findall(r"<loc>([^<]+)</loc>", sm)
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")

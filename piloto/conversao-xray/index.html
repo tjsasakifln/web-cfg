@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Resposta de mercado (canario) | CONFENGE</title>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="description" content="Canario noindex: resposta de mercado fixture e X-Ray por CNPJ. Nao e catalogo vivo."/>
+<link rel="canonical" href="https://confenge.com.br/piloto/conversao-xray/"/>
+<link rel="stylesheet" href="/styles.css"/>
+<link rel="stylesheet" href="/styles-tools.css"/>
+</head>
+<body data-route-family="resposta-mercado-xray" data-asset-id="ma-pavimentacao-valor-tipico-v0">
+<a class="skip-link" href="#conteudo">Ir ao conteudo</a>
+<main id="conteudo" class="container tool-shell">
+<section class="conversion-journey" data-conversion-canary="1" data-flag="on" data-asset-family="market_answer" data-resposta-id="ma-pavimentacao-valor-tipico-v0">
+  <article class="resposta-mercado" aria-labelledby="ma-question">
+    <p class="eyebrow">Resposta de mercado · fixture</p>
+    <h1 id="ma-question">Qual e o valor tipico dos contratos publicos de pavimentacao?</h1>
+    <p class="content-lead" data-answer-visible="true">No recorte fixture, o valor integral nominal tipico (mediana) dos instrumentos de pavimentacao e da ordem de milhoes de reais, com dispersao ampla.</p>
+    <dl class="stage-meta">
+      <dt>Mediana (valor integral nominal)</dt><dd>R$ 1.850.000</dd>
+      <dt>P25 / P75</dt><dd>R$ 620.000 / R$ 4.700.000</dd>
+      <dt>Amostra</dt><dd>n=48 · 2023-01-01/2026-07-31</dd>
+      <dt>Unidade</dt><dd>valor integral nominal do instrumento. Este numero nao e custo por km.</dd>
+    </dl>
+    <p class="tool-field-hint" data-fixture-label="true">Recorte fixture. Nao e leitura ao vivo.</p>
+    <section aria-labelledby="ma-method">
+      <h2 id="ma-method">Metodo e limites</h2>
+      <p>Distribuicao do valor contratual nominal publicado. Sem conversao para unidade fisica.</p>
+      <p>Metodo: recorte SELECT-only de contratos publicos (fonte factual versionada quando existir; hoje fixture rotulada, nao viva). Ticket contratual nao e custo por km. Ausencia no recorte nao e prova de inatividade nem de problema.</p>
+    </section>
+  </article>
+
+  <section class="conversion-cta" aria-labelledby="xray-heading" >
+    <h2 id="xray-heading">Veja sua empresa neste mercado</h2>
+    <p>A resposta publica permanece visivel. Depois do CNPJ, voce ve o estado factual (pronto, falta dado, nao encontrado, desatualizado, bloqueado ou erro). Prazo de retorno humano so existe quando for medido; hoje e UNKNOWN.</p>
+    <form id="xray-form" class="tool-form" method="post" action="/.netlify/functions/conversion-intake" data-no-url-cnpj="true">
+      <input type="hidden" name="action" value="xray" />
+      <input type="hidden" name="market_answer_id" value="ma-pavimentacao-valor-tipico-v0" />
+      <input type="hidden" name="intent" value="ver_propria_empresa" />
+      <input type="hidden" name="cta" value="Veja sua empresa neste mercado" />
+      <div class="tool-field">
+        <label for="cnpj">CNPJ da empresa</label>
+        <input id="cnpj" name="cnpj" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="18" aria-describedby="cnpj-why cnpj-what" />
+        <p id="cnpj-why" class="tool-field-hint">Pedimos o CNPJ para localizar contratos publicos ja publicados em que essa empresa aparece no recorte deste mercado. Nao e cadastro e nao libera a resposta acima.</p>
+        <p id="cnpj-what" class="tool-field-hint">Se o recorte tiver observacoes, mostramos carteira publica observada, orgaos, UFs e contratos. Sem score de risco, dor ou irregularidade. Se faltar dado, dizemos isso.</p>
+      </div>
+      <div class="tool-actions">
+        <button id="xray-submit" class="button button-primary" type="submit">Veja sua empresa neste mercado</button>
+      </div>
+      <p class="form-status" id="xray-status" role="status" hidden></p>
+    </form>
+    <p>O CNPJ nao entra na URL nem nas metricas agregadas. Nome, e-mail, telefone e consentimento so sao pedidos se voce pedir uma segunda leitura ou retorno comercial.</p>
+  </section>
+
+  <section id="xray-result" hidden aria-live="polite"></section>
+
+  <section id="next-actions" hidden aria-labelledby="next-heading">
+    <h2 id="next-heading">Proximos passos</h2>
+    <ul>
+      <li><button type="button" id="action-explore" class="button">Explorar contratos observados</button></li>
+      <li><button type="button" id="action-second-reading" class="button">Peca uma segunda leitura de contrato</button></li>
+      <li><a id="action-specialist" class="button" href="https://wa.me/5548988344559?text=Ola%2C%20Tiago.%20Vi%20a%20resposta%20de%20pavimentacao%20e%20quero%20falar%20sobre%20a%20carteira%20publica%20da%20empresa.%20Sem%20prazo%20prometido.">Falar com especialista</a></li>
+      <li><button type="button" id="action-none" class="button">Nenhuma acao agora</button></li>
+    </ul>
+  </section>
+
+  <form id="handraise-form" class="tool-form" method="post" action="/.netlify/functions/conversion-intake" hidden>
+    <input type="hidden" name="action" value="handraise" />
+    <h2>Segunda leitura</h2>
+    <p>Quem responde uma segunda leitura e a equipe CONFENGE (Tiago Sasaki) quando voce pede esse passo. Nao ha SLA publicado.</p>
+    <div class="tool-field">
+      <label for="nome">Nome</label>
+      <input id="nome" name="nome" type="text" autocomplete="name" />
+    </div>
+    <div class="tool-field">
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" autocomplete="email" />
+    </div>
+    <div class="tool-field">
+      <label for="telefone">WhatsApp</label>
+      <input id="telefone" name="telefone" type="tel" autocomplete="tel" />
+    </div>
+    <div class="tool-field">
+      <label for="estagio">O que voce precisa</label>
+      <select id="estagio" name="estagio">
+        <option value="">Selecione</option>
+        <option value="segunda leitura de contrato">Segunda leitura de contrato</option>
+      </select>
+    </div>
+    <div class="tool-field">
+      <label for="consentimento">
+        <input id="consentimento" name="consentimento" type="checkbox" value="true" />
+        Autorizo o uso destes dados para retorno sobre a leitura pedida. Sem envio automatico.
+      </label>
+    </div>
+    <button id="handraise-submit" class="button button-primary" type="submit">Pedir segunda leitura</button>
+    <p class="form-status" id="handraise-status" role="status" hidden></p>
+  </form>
+</section>
+</main>
+<script src="/assets/js/conversion-journey.js" defer></script>
+</body>
+</html>
