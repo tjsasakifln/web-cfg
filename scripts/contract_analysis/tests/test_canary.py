@@ -108,6 +108,12 @@ def test_status_report_exists_and_names_the_gate():
     assert "index_count" in text
 
 
+def test_family_is_in_public_artifact_allowlist():
+    from scripts.pseo.public_artifact import PUBLIC_TOP_DIRS
+
+    assert "analises-contratos-publicos" in PUBLIC_TOP_DIRS
+
+
 def test_family_is_preserved_from_pseo_wipe():
     from scripts.pseo.build import is_preserved_static_surface
 

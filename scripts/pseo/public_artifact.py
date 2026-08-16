@@ -62,6 +62,8 @@ PUBLIC_TOP_DIRS = frozenset(
         "casos",
         "imprensa",
         "piloto",
+        # Contract-analysis family (#83). Fixture/noindex until INDEX approval.
+        "analises-contratos-publicos",
         ".well-known",
     }
 )
