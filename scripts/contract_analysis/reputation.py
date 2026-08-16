@@ -1,8 +1,9 @@
 """Reputational-safety checker for public contract analyses.
 
 Blocks language that infers fraude, irregularidade, culpa, má-fé,
-incapacidade or ilegalidade without an explicit documentary/editorial
-basis. “Atípico” is never accepted as “irregular”.
+incapacidade, incompetência, ilegalidade, sobrepreço or superfaturamento
+without an explicit documentary/editorial basis. “Atípico” is never
+accepted as “irregular”.
 """
 
 from __future__ import annotations
@@ -17,7 +18,10 @@ _ACCUSATORY: tuple[tuple[str, str], ...] = (
     (r"\bculpa\b|\bculpado\b|\bculpada\b", "reputation_culpa"),
     (r"\bm[aá]-?\s*f[eé]\b", "reputation_ma_fe"),
     (r"\bincapacidade\b|\bincapaz\b", "reputation_incapacidade"),
+    (r"\bincompet[eê]ncia\b|\bincompetente\b", "reputation_incompetencia"),
     (r"\bilegalidade|\bilegal\b|\bil[ií]cito", "reputation_ilegalidade"),
+    (r"\bsobrepre[cç]o\b", "reputation_sobrepreco"),
+    (r"\bsuperfaturamento\b|\bsuperfaturad", "reputation_superfaturamento"),
 )
 
 _ATYPICAL = re.compile(r"\bat[ií]pic[oa]s?\b", re.I)
@@ -42,7 +46,12 @@ ALLOWED_BASIS_TERMS = frozenset(
         "ma_fe",
         "má-fé",
         "incapacidade",
+        "incompetencia",
+        "incompetência",
         "ilegalidade",
+        "sobrepreco",
+        "sobrepreço",
+        "superfaturamento",
     }
 )
 
@@ -106,7 +115,10 @@ def _basis_allows(record: dict[str, Any], code: str) -> bool:
         "reputation_culpa": {"culpa"},
         "reputation_ma_fe": {"ma_fe", "má-fé", "ma-fe"},
         "reputation_incapacidade": {"incapacidade"},
+        "reputation_incompetencia": {"incompetencia", "incompetência"},
         "reputation_ilegalidade": {"ilegalidade"},
+        "reputation_sobrepreco": {"sobrepreco", "sobrepreço"},
+        "reputation_superfaturamento": {"superfaturamento"},
     }.get(code, set())
     for item in record.get("documentary_basis") or []:
         if not isinstance(item, dict):

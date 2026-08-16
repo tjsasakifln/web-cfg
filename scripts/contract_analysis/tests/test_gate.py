@@ -130,6 +130,38 @@ def test_states_are_exactly_the_five_allowed():
         assert decision.state == expected, (expected, decision.state, decision.reason_codes)
 
 
+def test_expired_or_stale_extra_cli_freshness_cannot_index():
+    stale = complete_live_record(
+        freshness={"as_of": "2026-08-01", "max_age_days": 180, "stale": True}
+    )
+    stale_decision = evaluate_publication(stale, cohort=[stale])
+    assert stale_decision.state != "PUBLISHABLE_INDEX"
+    assert stale_decision.conditions["freshness"] is False
+    assert "freshness_stale_flag" in stale_decision.reason_codes
+
+    expired = complete_live_record(
+        freshness={
+            "as_of": "2026-08-01",
+            "source_as_of": "2026-08-01T00:00:00+00:00",
+            "expires_at": "2026-08-03T00:00:00+00:00",
+            "max_age_hours": 48,
+            "stale": False,
+        }
+    )
+    expired_decision = evaluate_publication(expired, cohort=[expired])
+    assert expired_decision.state != "PUBLISHABLE_INDEX"
+    assert expired_decision.conditions["freshness"] is False
+    assert "freshness_expired" in expired_decision.reason_codes or "freshness_max_age_hours" in expired_decision.reason_codes
+
+    hours = complete_live_record(
+        as_of="2026-08-01",
+        freshness={"as_of": "2026-08-01", "max_age_hours": 48, "stale": False},
+    )
+    hours_decision = evaluate_publication(hours, cohort=[hours])
+    assert hours_decision.state != "PUBLISHABLE_INDEX"
+    assert "freshness_max_age_hours" in hours_decision.reason_codes
+
+
 def test_near_duplicate_pair_cannot_index():
     rec = complete_live_record()
     clone = entity_swap_clone(rec)

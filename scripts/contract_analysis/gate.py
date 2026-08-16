@@ -95,15 +95,22 @@ def _items(value: Any) -> list[Any]:
     return list(value) if isinstance(value, list) else []
 
 
-def _as_of_date(record: dict[str, Any]) -> date | None:
-    raw = record.get("as_of")
-    if not raw and isinstance(record.get("freshness"), dict):
-        raw = record["freshness"].get("as_of")
-    text = _text(raw)[:10]
+def _iso_date(value: Any) -> date | None:
+    text = _text(value)[:10]
+    if not text:
+        return None
     try:
         return date.fromisoformat(text)
     except ValueError:
         return None
+
+
+def _as_of_date(record: dict[str, Any]) -> date | None:
+    raw = record.get("as_of")
+    freshness = record.get("freshness") if isinstance(record.get("freshness"), dict) else {}
+    if not raw:
+        raw = freshness.get("as_of") or freshness.get("source_as_of")
+    return _iso_date(raw)
 
 
 def _today(today: date | None) -> date:
@@ -162,7 +169,10 @@ def evaluate_conditions(
     ficha = record.get("ficha") if isinstance(record.get("ficha"), dict) else {}
     as_of = _as_of_date(record)
     freshness = record.get("freshness") if isinstance(record.get("freshness"), dict) else {}
-    max_age = int(freshness.get("max_age_days") or record.get("max_age_days") or 180)
+    max_age_days = int(freshness.get("max_age_days") or record.get("max_age_days") or 180)
+    max_age_hours = freshness.get("max_age_hours")
+    if max_age_hours is None:
+        max_age_hours = record.get("max_age_hours")
 
     extra_state = _data_state(record)
     extra_ok = extra_state in {None, "DATA_READY"}
@@ -243,11 +253,28 @@ def evaluate_conditions(
         reasons.append("source_provenance_absent")
 
     fresh_ok = False
+    now = _today(today)
+    if freshness.get("stale") is True:
+        reasons.append("freshness_stale_flag")
+    expires = _iso_date(freshness.get("expires_at"))
+    if expires is not None and now > expires:
+        reasons.append("freshness_expired")
     if as_of is not None:
-        age = (_today(today) - as_of).days
-        fresh_ok = 0 <= age <= max_age
-        if not fresh_ok:
+        age_days = (now - as_of).days
+        if age_days < 0:
             reasons.append("freshness_stale_or_future")
+        elif max_age_hours is not None:
+            try:
+                hours = int(max_age_hours)
+            except (TypeError, ValueError):
+                hours = 0
+            if age_days * 24 > hours:
+                reasons.append("freshness_max_age_hours")
+        elif age_days > max_age_days:
+            reasons.append("freshness_stale_or_future")
+    fresh_ok = as_of is not None and not any(
+        code.startswith("freshness_") for code in reasons
+    )
 
     method_ok = _len_ok(record.get("methodology"), 40) and _len_ok(record.get("limitations"), 40)
     if not method_ok:

@@ -25,6 +25,9 @@ def test_accusatory_lemmas_without_basis_are_rejected():
         "má-fé": "A empresa agiu de má-fé.",
         "incapacidade": "Fica evidente a incapacidade técnica da equipe.",
         "ilegalidade": "Trata-se de ilegalidade na medição.",
+        "sobrepreço": "Há sobrepreço no contrato publicado.",
+        "superfaturamento": "Há superfaturamento no contrato publicado.",
+        "incompetência": "Fica evidente a incompetência da equipe de fiscalização.",
     }
     for lemma, sentence in lemmas.items():
         rec = complete_live_record(
@@ -96,3 +99,28 @@ def test_documentary_basis_allows_named_term_only():
         ],
     )
     assert "reputation_fraude" in check_reputational_safety(rec2)
+
+
+def test_unsupported_sobrepreco_superfaturamento_incompetencia_cannot_index():
+    """Skeptic: these lemmas used to miss _ACCUSATORY and reach PUBLISHABLE_INDEX."""
+    sentences = {
+        "sobrepreço": "Há sobrepreço no contrato publicado.",
+        "superfaturamento": "Há superfaturamento no contrato publicado.",
+        "incompetência": "Há incompetência na execução do objeto publicado.",
+    }
+    expected = {
+        "sobrepreço": "reputation_sobrepreco",
+        "superfaturamento": "reputation_superfaturamento",
+        "incompetência": "reputation_incompetencia",
+    }
+    for lemma, sentence in sentences.items():
+        rec = complete_live_record(
+            interpretation=[{"kind": "INFERENCE", "text": sentence}]
+        )
+        errors = check_reputational_safety(rec)
+        assert expected[lemma] in errors, (lemma, errors)
+        decision = evaluate_publication(rec, cohort=[rec])
+        assert decision.state != "PUBLISHABLE_INDEX", (lemma, decision.state, decision.reason_codes)
+        assert decision.state == "REJECT"
+        assert decision.indexable is False
+        assert "noindex" in decision.robots
