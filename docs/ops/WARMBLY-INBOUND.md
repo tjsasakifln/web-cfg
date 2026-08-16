@@ -4,7 +4,7 @@ Consume-only pointer to the destination contract. Do not invent a parallel versi
 
 - Warmbly PR: https://github.com/tjsasakifln/warmbly/pull/71
 - Contract: `docs/confenge/inbound-ingest.md` on that PR
-- Endpoint: `POST /api/v1/webhooks/confenge/inbound`
+- Canonical endpoint: `POST https://api.confenge.com.br/api/v1/webhooks/confenge/inbound`
 - Auth: `X-Warmbly-Signature: t=<unix>,v1=<hex(hmac_sha256(secret, "<unix>." + body))>` (5-minute skew)
 - Auto-send stays off on Warmbly (`CONFENGE_AUTO_SEND_ENABLED=false`)
 
@@ -43,11 +43,14 @@ Missing snapshot facts stay absent. CNPJ is never derived from a `public_id` pre
 
 See [ENV-VARS.md](./ENV-VARS.md). Required on both sides for a live handoff:
 
-- `CONFENGE_INBOUND_WEBHOOK_URL` — HTTPS URL ending in `/api/v1/webhooks/confenge/inbound`
+- `CONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound`
 - `CONFENGE_INBOUND_WEBHOOK_SECRET` — shared HMAC secret (Netlify env + Warmbly env)
 - Warmbly: `CONFENGE_AUTO_SEND_ENABLED=false`
 
 Optional: `CONFENGE_INBOUND_ALLOWED_HOSTS`, `CONFENGE_INBOUND_MAX_ATTEMPTS` (8), `CONFENGE_INBOUND_TIMEOUT_MS` (8000).
+
+Keep the shared secret server-side only. Do not expose either the secret or a
+signed inbound request to browser code.
 
 Empty URL: capture still works; handoff `SKIPPED`. Staging/prod refuse non-HTTPS, PII on the query, missing secret, or host off the allowlist (`BLOCKED`, no POST).
 
