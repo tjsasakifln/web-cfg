@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI: python -m scripts.organic [run|diagnose|cohort|growth|bridges|sitemap-audit]
+"""CLI: python -m scripts.organic [run|diagnose|cohort|growth|bridges|sitemap-audit|demand-engine]
 
 Default: run engine against data/pseo + seo/gsc export → data/organic/SEO_OPPORTUNITIES.json
 """
@@ -197,6 +197,27 @@ def cmd_bridges(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_demand_engine(args: argparse.Namespace) -> int:
+    from scripts.organic.demand_engine import main as demand_main
+
+    forwarded: list[str] = []
+    if args.gsc_dir:
+        forwarded.extend(["--gsc-dir", args.gsc_dir])
+    if args.rows:
+        forwarded.extend(["--rows", args.rows])
+    if args.proposals:
+        forwarded.extend(["--proposals", args.proposals])
+    if args.out:
+        forwarded.extend(["--out", args.out])
+    if args.config:
+        forwarded.extend(["--config", args.config])
+    if args.pull_api:
+        forwarded.append("--pull-api")
+    if args.compare_strip_clock:
+        forwarded.append("--compare-strip-clock")
+    return demand_main(forwarded)
+
+
 def cmd_sitemap_audit(args: argparse.Namespace) -> int:
     from scripts.organic.sitemap_hygiene import audit_sitemaps
 
@@ -239,6 +260,19 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--include-noindex", action="store_true")
     b.add_argument("--dry-run", action="store_true")
     b.set_defaults(func=cmd_bridges)
+
+    de = sub.add_parser(
+        "demand-engine",
+        help="Normalize GSC snapshot → candidate/rejection registry (does not authorize pages)",
+    )
+    de.add_argument("--gsc-dir", default=None)
+    de.add_argument("--rows", default=None)
+    de.add_argument("--proposals", default=None)
+    de.add_argument("--out", default=None)
+    de.add_argument("--config", default=None)
+    de.add_argument("--pull-api", action="store_true")
+    de.add_argument("--compare-strip-clock", action="store_true")
+    de.set_defaults(func=cmd_demand_engine)
 
     s = sub.add_parser("sitemap-audit", help="Audit sitemap hygiene")
     s.add_argument("--out", default=None)

@@ -1,0 +1,62 @@
+[
+  {
+    "date": "2026-07-28",
+    "query": "limite aditivo obra publica",
+    "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+    "country": "bra",
+    "device": "DESKTOP",
+    "impressions": 80,
+    "clicks": 2,
+    "ctr": 0.025,
+    "position": 8.0,
+    "branded": false
+  },
+  {
+    "date": "2026-07-28",
+    "query": "limite aditivo obra publica",
+    "page": "https://confenge.com.br/aditivos-obras-publicas/",
+    "country": "bra",
+    "device": "MOBILE",
+    "impressions": 40,
+    "clicks": 1,
+    "ctr": 0.025,
+    "position": 12.0,
+    "branded": false
+  },
+  {
+    "date": "2026-07-28",
+    "query": "reequilibrio economico financeiro obra",
+    "page": "https://confenge.com.br/",
+    "country": "bra",
+    "device": "DESKTOP",
+    "impressions": 30,
+    "clicks": 0,
+    "ctr": 0.0,
+    "position": 6.5,
+    "branded": false
+  },
+  {
+    "date": "2026-07-28",
+    "query": "avcb",
+    "page": "https://confenge.com.br/avcb/",
+    "country": "bra",
+    "device": "DESKTOP",
+    "impressions": 12,
+    "clicks": 0,
+    "ctr": 0.0,
+    "position": 4.3,
+    "branded": false
+  },
+  {
+    "date": "2026-07-29",
+    "query": "consultoria defesa de margem contrato publico",
+    "page": "",
+    "country": "bra",
+    "device": "DESKTOP",
+    "impressions": 18,
+    "clicks": 0,
+    "ctr": 0.0,
+    "position": 9.1,
+    "branded": false
+  }
+]
