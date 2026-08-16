@@ -1,0 +1,14 @@
+{
+  "schema": "market-answer-approval/1.0",
+  "notes": "Preview-only. index_authorized remains false while official_live is absent. A matching content_hash does not authorize INDEX on a CONTRACT_FIXTURE.",
+  "approvals": [
+    {
+      "question_id": "valor-tipico-contratos-pavimentacao",
+      "content_hash": "preview-not-an-index-hash",
+      "approved_state": "PUBLISHABLE_NOINDEX",
+      "approver": "preview-wiring",
+      "approved_at": "2026-08-16",
+      "index_authorized": false
+    }
+  ]
+}

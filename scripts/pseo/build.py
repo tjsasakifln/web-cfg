@@ -63,6 +63,9 @@ def is_preserved_static_surface(rel: str) -> bool:
     # Contract-analysis family (#83). Not a pSEO template.
     if norm.startswith("analises-contratos-publicos/"):
         return True
+    # Market Answer canary (#84). Not a pSEO template.
+    if norm.startswith("inteligencia/valor-tipico-contratos-pavimentacao/"):
+        return True
     return False
 
 
