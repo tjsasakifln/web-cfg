@@ -1,0 +1,29 @@
+{
+  "schema": "market-answer-canary/0.1-draft",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "market_answer_id": "ma-pavimentacao-valor-tipico-v0",
+  "asset_family": "market_answer",
+  "question": "Qual e o valor tipico dos contratos publicos de pavimentacao?",
+  "intent": "aprender_mercado",
+  "answer": {
+    "headline": "No recorte fixture, o valor integral nominal tipico (mediana) dos instrumentos de pavimentacao e da ordem de milhoes de reais, com dispersao ampla.",
+    "median_brl": 1850000,
+    "p25_brl": 620000,
+    "p75_brl": 4700000,
+    "n": 48,
+    "period": "2023-01-01/2026-07-31",
+    "geography": "SC / PR / RS (recorte fixture)",
+    "unit": "valor integral nominal do instrumento",
+    "not_unit": "Este numero nao e custo por km."
+  },
+  "method": "Distribuicao do valor contratual nominal publicado. Sem conversao para unidade fisica.",
+  "limitations": [
+    "Fixture rotulada. Nao e catalogo vivo extra-cli Goal 03.",
+    "Ticket contratual nao e custo por km.",
+    "Amostra e geografias sao do recorte de desenvolvimento."
+  ],
+  "primary_cta": "Veja sua empresa neste mercado",
+  "sla": "UNKNOWN"
+}

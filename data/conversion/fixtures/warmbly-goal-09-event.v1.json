@@ -1,0 +1,48 @@
+{
+  "schema": "warmbly.goal-09.compatibility/0.1",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "goal": "warmbly-goal-09",
+  "description": "Compatibility event for Warmbly Goal 09 / issue #47 inbound reconciliation. Extends confenge.inbound.v1 with conversion attribution that the frozen PR #85 mapper does not yet keep.",
+  "confenge_inbound_v1": {
+    "lead_id": "conv88fixture000000000001",
+    "receipt_id": "conv88fixture000000000001",
+    "created_at": "2026-08-16T12:00:00.000Z",
+    "source": "CONFENGE_WEB",
+    "route_family": "market-answer-xray",
+    "asset_id": "ma-pavimentacao-valor-tipico-v0",
+    "cta_id": "veja-sua-empresa-neste-mercado",
+    "landing_url": "https://confenge.com.br/piloto/conversion-market-answer/",
+    "contract_public_id": "83102277000152-1-000101/2025",
+    "name": "QA Conversion",
+    "email": "qa-conversion@example.com",
+    "phone": "48988344559",
+    "consent": { "granted": true },
+    "utm": { "source": "fixture", "medium": "canary" },
+    "referrer": "https://confenge.com.br/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
+    "message": "Segunda leitura a partir do X-Ray fixture.",
+    "correlation_id": "corr-88-goal09-fixture",
+    "analysis_id": null,
+    "evidence_pack_version": "b2g-xray-fixture/0.1",
+    "asset_family": "b2g_xray"
+  },
+  "conversion_attribution_extension": {
+    "market_answer_id": "ma-pavimentacao-valor-tipico-v0",
+    "intent": "revisar_contrato",
+    "question_class": "contract_review",
+    "asset_version": "conversion-canary/1.0",
+    "method_version": "b2g-xray-fixture/0.1",
+    "schema_version": "public-read-b2g-xray/0.1-draft",
+    "cta": "Veja sua empresa neste mercado",
+    "drill_down_origin": "answer_to_xray",
+    "idempotency_key": "idk:goal09-fixture-001",
+    "consent_state": "granted",
+    "handoff_status": "PENDING",
+    "auto_send": false
+  },
+  "notes": [
+    "CNPJ is omitted from this compatibility fixture on purpose: Goal 09 event used for parse tests should not require raw CNPJ in the checked document.",
+    "Frozen mapLeadToInboundV1 keeps the confenge_inbound_v1 object. The extension is adapter-owned until the shared mapper is extended after PR #85."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "conversion-experiment/1.0",
+  "id": "cta-copy-seq-v1",
+  "mode": "sequential_manual",
+  "isolated_variable": "cta_copy",
+  "not_varied": ["placement", "field_count", "offer", "page"],
+  "control": {
+    "cta_copy": "Veja sua empresa neste mercado",
+    "role": "shipped_canary"
+  },
+  "variant": {
+    "cta_copy": "Veja a carteira publica observada da sua empresa",
+    "role": "sequential_challenger",
+    "status": "not_run"
+  },
+  "hypothesis": "A copy that names the factual outcome (carteira publica observada) increases Answer to X-Ray start rate without reducing the share of hand-raises that include consent and a real next action. Qualified pipeline outranks lead volume.",
+  "primary_metric": "qualified_handraise_per_xray_ready",
+  "secondary_metrics": [
+    "answer_to_xray_start_rate",
+    "xray_ready_to_second_reading_rate",
+    "field_abandonment_cnpj",
+    "lead_volume_observed_not_optimized"
+  ],
+  "do_not": [
+    "compute p-values",
+    "claim statistical significance",
+    "optimize for raw lead count",
+    "run both copies at once"
+  ],
+  "sample": {
+    "status": "not_collected",
+    "n_control": 0,
+    "n_variant": 0
+  },
+  "significance_claimed": false
+}

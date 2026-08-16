@@ -1,0 +1,20 @@
+{
+  "schema": "public-read-b2g-xray/0.1-draft",
+  "extra_cli_goal": "03",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "data_state": "DATA_REJECT",
+  "xray_state": "BLOCKED",
+  "as_of": "2026-07-31",
+  "reason_codes": ["policy_block", "insufficient_public_rights"],
+  "company": null,
+  "observed_portfolio": null,
+  "limitations": [
+    "A leitura desta empresa neste recorte esta bloqueada por politica de publicacao.",
+    "Nao ha diagnostico, score ou insinuacao a partir do bloqueio.",
+    "Recorte fixture, nao e catalogo vivo."
+  ],
+  "method_version": "b2g-xray-fixture/0.1",
+  "schema_version": "public-read-b2g-xray/0.1-draft"
+}

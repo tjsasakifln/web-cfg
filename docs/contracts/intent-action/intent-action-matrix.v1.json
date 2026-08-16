@@ -1,0 +1,152 @@
+{
+  "schema": "intent-action-matrix/1.0",
+  "version": "1.0.0",
+  "as_of": "2026-08-16",
+  "owner": "web-cfg/conversion",
+  "sla_policy": "UNKNOWN until Warmbly #55 measures a representative baseline. No invented prazo.",
+  "first_canary": {
+    "asset_family": "market_answer",
+    "market_answer_id": "ma-pavimentacao-valor-tipico-v0",
+    "question": "Qual e o valor tipico dos contratos publicos de pavimentacao?",
+    "intent": "ver_propria_empresa",
+    "primary_cta": "Veja sua empresa neste mercado",
+    "secondary_cta": "Peca uma segunda leitura de contrato",
+    "feature_flag": "conversion_market_answer_xray",
+    "flag_default": false
+  },
+  "opt_in_issue_90": {
+    "authorized": false,
+    "state": "DEFER",
+    "rule": "ainda_nao_pronto may offer citation or download only. No digest, newsletter or opt-in until #90 is authorized."
+  },
+  "operational_channels": {
+    "whatsapp": {
+      "exists": true,
+      "owner": "tiago-jun-sasaki",
+      "number_e164": "5548988344559",
+      "catalog": "data/site/whatsapp-messages.json",
+      "sla": "UNKNOWN"
+    },
+    "phone": {
+      "exists": true,
+      "owner": "tiago-jun-sasaki",
+      "number_e164": "5548988344559",
+      "sla": "UNKNOWN"
+    },
+    "agenda": {
+      "exists": false,
+      "reason": "no public booking route with owner and measured latency"
+    }
+  },
+  "routes": [
+    {
+      "id": "aprender_mercado",
+      "intent": "aprender mercado",
+      "question_class": "market_learning",
+      "eligibility": "Public Market Answer or Contract Analysis is visible. Visitor wants method, sample, limits or evidence. No commercial urgency claimed.",
+      "promised_outcome": "Explorar evidencia, metodo, cobertura e limitacoes da resposta publica. Nao e diagnostico da empresa do visitante.",
+      "minimum_fields": [],
+      "owner": "web-cfg/editorial",
+      "channel": "on_page_evidence",
+      "sla": "UNKNOWN",
+      "privacy_consent": "Nenhum dado pessoal. Nenhum opt-in. Resposta permanece publica sem lead gate.",
+      "fallback": "citation_or_method_only",
+      "kill_gate": "Kill if the CTA hides the answer, invents coverage, or converts a learning intent into a coercive form.",
+      "offer_id": "evidence-method-explore",
+      "service_id": null,
+      "auto_send": false,
+      "first_canary": false
+    },
+    {
+      "id": "entender_contrato",
+      "intent": "entender contrato",
+      "question_class": "contract_understanding",
+      "eligibility": "A public contract or analysis is in context (Market Answer drill-down or #83 page). Visitor wants technical reading, not a company X-Ray.",
+      "promised_outcome": "Analise tecnica editorial ou segunda leitura humana do contrato em contexto. Fatos, inferencias e UNKNOWN permanecem separados.",
+      "minimum_fields": ["public_contract_id"],
+      "owner": "web-cfg/contract-analysis",
+      "channel": "editorial_or_handraise",
+      "sla": "UNKNOWN",
+      "privacy_consent": "Public contract id only to open the analysis. Name, contact and consent only if the visitor asks for a human second reading.",
+      "fallback": "link_to_published_analysis_or_method",
+      "kill_gate": "Kill if the route treats a public analysis as a customer case, or requires a lead to read published facts.",
+      "offer_id": "analise-tecnica-segunda-leitura",
+      "service_id": "defesa-margem-contratos-publicos",
+      "auto_send": false,
+      "first_canary": false
+    },
+    {
+      "id": "ver_propria_empresa",
+      "intent": "ver propria empresa",
+      "question_class": "company_self_view",
+      "eligibility": "Market Answer canary is on screen. Visitor wants to see the informed CNPJ in that market. extra-cli Goal 03 payload or labeled fixture.",
+      "promised_outcome": "B2G X-Ray factual: carteira publica observada, orgaos, UFs, contratos e limites. Sem score de risco, dor ou irregularidade. Sem diagnostico automatico.",
+      "minimum_fields": ["cnpj"],
+      "owner": "web-cfg/conversion",
+      "channel": "xray_then_optional_handraise",
+      "sla": "UNKNOWN",
+      "privacy_consent": "CNPJ is asked only to locate public-contract observations. Why and what-will-be-shown are on the field. CNPJ is not placed in URL, analytics or unnecessary logs. Name, contact and consent are not asked at this step.",
+      "fallback": "NEEDS_DATA_or_NOT_FOUND_with_honest_limits",
+      "kill_gate": "Kill if X-Ray emits risk/credit/pain scores, hides the Market Answer, invents SLA, or gates the public answer behind a lead.",
+      "offer_id": "b2g-xray-market-answer",
+      "service_id": "diagnostico-b2g-360",
+      "cta_copy": "Veja sua empresa neste mercado",
+      "auto_send": false,
+      "first_canary": true
+    },
+    {
+      "id": "revisar_contrato",
+      "intent": "revisar contrato",
+      "question_class": "contract_review",
+      "eligibility": "Visitor wants a human review of their own contract or a second reading after X-Ray/Analysis. Document is required only when this route is chosen.",
+      "promised_outcome": "Defesa de Margem / Analise Meu Contrato: persist-first hand-raise for a human technical reading. No automatic legal conclusion.",
+      "minimum_fields": ["nome", "contato", "consentimento", "public_contract_id_or_document_context"],
+      "owner": "warmbly-after-capture",
+      "channel": "form_then_warmbly",
+      "sla": "UNKNOWN",
+      "privacy_consent": "Explicit consent required. Purpose: retorno comercial e leitura tecnica solicitada. No nurture, no newsletter, no auto-send.",
+      "fallback": "whatsapp_operational_route_if_form_fails",
+      "kill_gate": "Kill if the route auto-messages, invents prazo, or treats an incomplete X-Ray as a discovered problem.",
+      "offer_id": "analise-meu-contrato",
+      "service_id": "defesa-margem-contratos-publicos",
+      "auto_send": false,
+      "first_canary": false
+    },
+    {
+      "id": "urgencia_real",
+      "intent": "urgencia real",
+      "question_class": "operational_urgency",
+      "eligibility": "Visitor states a live operational pressure AND an owned channel exists (WhatsApp/phone catalog). Agenda is not offered because no booking route exists.",
+      "promised_outcome": "Falar com especialista pela rota operacional existente (WhatsApp ou ligacao). Sem prazo prometido. Sem agenda publica.",
+      "minimum_fields": [],
+      "owner": "tiago-jun-sasaki",
+      "channel": "whatsapp",
+      "sla": "UNKNOWN",
+      "privacy_consent": "Clicking WhatsApp is a visitor-initiated channel. A persist-first hand-raise is used only if they also submit name/contact/consent. No auto-send.",
+      "fallback": "on_page_handraise_without_channel_promise",
+      "kill_gate": "Kill if the route offers agenda, invented SLA, or a channel without an owner.",
+      "offer_id": "falar-especialista",
+      "service_id": "diagnostico-b2g-360",
+      "auto_send": false,
+      "first_canary": false
+    },
+    {
+      "id": "ainda_nao_pronto",
+      "intent": "ainda nao pronto",
+      "question_class": "not_ready",
+      "eligibility": "Visitor wants to leave with the answer, citation or download. #90 Market Signals Brief is not authorized.",
+      "promised_outcome": "Citation text and/or download of the public answer. No form. No opt-in. No digest.",
+      "minimum_fields": [],
+      "owner": "web-cfg/editorial",
+      "channel": "citation_download",
+      "sla": "UNKNOWN",
+      "privacy_consent": "No personal data. Opt-in blocked until issue #90 is authorized.",
+      "fallback": "leave_with_visible_answer",
+      "kill_gate": "Kill if this route captures email, starts nurture, or pretends #90 is live.",
+      "offer_id": "citation-download",
+      "service_id": null,
+      "auto_send": false,
+      "first_canary": false
+    }
+  ]
+}
