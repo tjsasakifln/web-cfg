@@ -63,8 +63,8 @@ const payload = {
   landing_page: "/ferramentas/diagnostico-defesa-margem/",
   asset_id: "diagnostico-defesa-margem",
   route_family: "defesa-margem-diagnostico",
-  public_contract_id: "01619104000141-1-000123/2026",
-  public_id_slug: "qc-caixa-dagua-2026",
+  public_contract_id: "83102277000152-2-000626/2026",
+  public_id_slug: "md-8569b618",
   cta_id: "segunda-leitura-contrato",
   mensagem: "PII_MUST_NOT_LEAK_IN_RESPONSE",
   idempotency_key: "money-asset-idk-001",
@@ -83,8 +83,8 @@ const stored = await mem.get(d1.lead_id);
 if (!stored) throw new Error("not stored");
 if (stored.asset_id !== "diagnostico-defesa-margem") throw new Error("asset_id missing");
 if (stored.route_family !== "defesa-margem-diagnostico") throw new Error("route_family missing");
-if (stored.public_contract_id !== "01619104000141-1-000123/2026") throw new Error("public_contract_id missing");
-if (stored.public_id_slug !== "qc-caixa-dagua-2026") throw new Error("public_id_slug missing");
+if (stored.public_contract_id !== "83102277000152-2-000626/2026") throw new Error("public_contract_id missing");
+if (stored.public_id_slug !== "md-8569b618") throw new Error("public_id_slug missing");
 if (stored.public_entity_id) throw new Error("public_entity_id must stay absent unless supplied");
 if (stored.jornada !== "contrato") throw new Error("journey missing");
 if (stored.source !== "CONFENGE_WEB") throw new Error("source CONFENGE_WEB missing");
@@ -106,7 +106,7 @@ const analytics = await collect.handler({
         props: {
           asset_id: "diagnostico-defesa-margem",
           route_family: "defesa-margem-diagnostico",
-          public_id_slug: "qc-caixa-dagua-2026",
+          public_id_slug: "md-8569b618",
           nome: "Alice",
           email: "alice@example.com",
           telefone: "48999999999",

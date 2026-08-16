@@ -1,7 +1,7 @@
 # CONTRACT_MARGIN_EVENT — web-cfg consumer contract
 
-Version: `v1.0.0`  
-Status: consumer-defined; producer family not yet emitted by extra-cli `public_read_v1`  
+Version: `v1.0.0` (consumer projection)  
+Live producer: extra-cli `public-read-margin-defense/1.0` (PR #406)  
 Owner (truth): extra-cli  
 Owner (public render): web-cfg / confenge.com.br  
 Mode: SELECT-only. No browser credentials. No second DataLake.
@@ -88,9 +88,9 @@ field, or promoting `UNKNOWN` to a legal conclusion, requires `v2`.
 
 ## Snapshot location
 
-`data/extra-cli/public-read-v1/contracts-margin-snapshot.json`
+`data/extra-cli/public-read-margin-defense/1.0/margem-export.json`
 
-This file is a versioned SELECT-only projection. It is not a crawler cache.
+This file is a versioned SELECT-only export produced by `python3 -m scripts.public_read export-margin`. The older path `data/extra-cli/public-read-v1/contracts-margin-snapshot.json` is a pointer to the same records.
 
 ## Producer-block diagnosis
 

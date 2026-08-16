@@ -1,146 +1,107 @@
 {
   "asset": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
-  "gate_fail": "low_data_confidence",
-  "indexable_by_data_confidence": false,
-  "data_confidence": 0.4,
+  "gate_fail": null,
+  "indexable_by_data_confidence": true,
+  "data_confidence": 0.48,
   "producer": "extra-cli",
   "producer_contracts": [
-    "public_read_v1@v1.0.0",
-    "pseo-export@1.1.0"
+    "public-read-margin-defense/1.0"
   ],
-  "consumer_contract": "contract-margin-event-v1.0.0",
-  "snapshot_id": "pseo-20260802T032433Z-47e7e07c",
-  "snapshot_as_of": "2026-07-31",
-  "record_count": 2,
+  "consumer_contract": "public-read-margin-defense/1.0",
+  "snapshot_id": "b46ec394df0da1a269d6b6aee180779dac60c89e880cea32b9200a0574e0e113",
+  "snapshot_as_of": "2026-08-14T11:27:51+02:00",
+  "record_count": 16,
   "completeness": "PARTIAL",
-  "official_count": 10,
-  "unknown_count": 15,
-  "blocking_official_fields": [
-    {
-      "field": "vigencia_start",
-      "official_name": "vigencia",
-      "consumer_field": "vigencia_inicio",
-      "producer_family": "public_read_v1.contracts",
-      "producer_version": "v1.0.0",
-      "emitted_by_public_read_v1": false,
-      "blocks_indexability": true,
-      "classification": "UNKNOWN",
-      "reason": "vigencia_not_in_producer_projection"
-    },
-    {
-      "field": "vigencia_end",
-      "official_name": "vigencia",
-      "consumer_field": "vigencia_fim",
-      "producer_family": "public_read_v1.contracts",
-      "producer_version": "v1.0.0",
-      "emitted_by_public_read_v1": false,
-      "blocks_indexability": true,
-      "classification": "UNKNOWN",
-      "reason": "vigencia_not_in_producer_projection"
-    },
-    {
-      "field": "data_assinatura",
-      "official_name": "aniversario/reajuste calendar",
-      "consumer_field": "aniversario_contratual",
-      "producer_family": "public_read_v1.contracts",
-      "producer_version": "v1.0.0",
-      "emitted_by_public_read_v1": false,
-      "blocks_indexability": true,
-      "classification": "UNKNOWN",
-      "reason": "no_official_start_or_signature_date"
-    },
-    {
-      "field": "contract_value",
-      "official_name": "valor contratual assinado",
-      "consumer_field": "valor_contratual",
-      "producer_family": "public_read_v1.contracts",
-      "producer_version": "v1.0.0",
-      "emitted_by_public_read_v1": true,
-      "blocks_indexability": true,
-      "classification": "UNKNOWN",
-      "reason": "signed_contract_value_not_in_producer_projection"
-    }
-  ],
+  "official_count": 12,
+  "unknown_count": 13,
+  "blocking_official_fields": [],
   "reserved_margin_event_fields": [
     {
-      "field": "margin_events.aditivo",
+      "field": "amendments",
       "official_name": "aditivos",
       "consumer_field": "evento:aditivo",
-      "producer_family": "CONTRACT_MARGIN_EVENT",
-      "producer_version": "v1.0.0",
+      "producer_family": "public-read-margin-defense/1.0",
+      "producer_version": "1.0",
+      "emitted_by_producer": true,
       "emitted_by_public_read_v1": false,
       "blocks_indexability": false,
       "classification": "UNKNOWN",
-      "reason": "margin_event_family_not_in_public_read_v1"
+      "reason": "no_amendment_signal"
     },
     {
-      "field": "margin_events.apostilamento",
-      "official_name": "alteracao de escopo / apostilamento",
+      "field": "scope_changes",
+      "official_name": "alteracao de escopo",
       "consumer_field": "evento:apostilamento",
-      "producer_family": "CONTRACT_MARGIN_EVENT",
-      "producer_version": "v1.0.0",
+      "producer_family": "public-read-margin-defense/1.0",
+      "producer_version": "1.0",
+      "emitted_by_producer": true,
       "emitted_by_public_read_v1": false,
       "blocks_indexability": false,
       "classification": "UNKNOWN",
-      "reason": "margin_event_family_not_in_public_read_v1"
+      "reason": "no_amendment_signal"
     },
     {
-      "field": "margin_events.prorrogacao",
+      "field": "term_changes",
       "official_name": "eventos de prazo",
       "consumer_field": "evento:prorrogacao",
-      "producer_family": "CONTRACT_MARGIN_EVENT",
-      "producer_version": "v1.0.0",
+      "producer_family": "public-read-margin-defense/1.0",
+      "producer_version": "1.0",
+      "emitted_by_producer": true,
       "emitted_by_public_read_v1": false,
       "blocks_indexability": false,
       "classification": "UNKNOWN",
-      "reason": "margin_event_family_not_in_public_read_v1"
+      "reason": "no_amendment_signal"
     },
     {
-      "field": "margin_events.reajuste",
+      "field": "adjustment_anniversary",
       "official_name": "reajuste",
       "consumer_field": "evento:reajuste",
-      "producer_family": "CONTRACT_MARGIN_EVENT",
-      "producer_version": "v1.0.0",
+      "producer_family": "public-read-margin-defense/1.0",
+      "producer_version": "1.0",
+      "emitted_by_producer": true,
       "emitted_by_public_read_v1": false,
       "blocks_indexability": false,
       "classification": "UNKNOWN",
-      "reason": "margin_event_family_not_in_public_read_v1"
+      "reason": "no_explicit_adjustment_document"
     },
     {
-      "field": "margin_events.reequilibrio",
+      "field": "adjustment_base",
       "official_name": "reequilibrio",
       "consumer_field": "evento:reequilibrio",
-      "producer_family": "CONTRACT_MARGIN_EVENT",
-      "producer_version": "v1.0.0",
+      "producer_family": "public-read-margin-defense/1.0",
+      "producer_version": "1.0",
+      "emitted_by_producer": true,
       "emitted_by_public_read_v1": false,
       "blocks_indexability": false,
       "classification": "UNKNOWN",
-      "reason": "margin_event_family_not_in_public_read_v1"
+      "reason": "no_explicit_adjustment_rule"
     },
     {
-      "field": "margin_events.medicao",
+      "field": "measurement_events",
       "official_name": "medicoes",
       "consumer_field": "evento:medicao",
-      "producer_family": "CONTRACT_MARGIN_EVENT",
-      "producer_version": "v1.0.0",
+      "producer_family": "public-read-margin-defense/1.0",
+      "producer_version": "1.0",
+      "emitted_by_producer": true,
       "emitted_by_public_read_v1": false,
       "blocks_indexability": false,
       "classification": "UNKNOWN",
-      "reason": "margin_event_family_not_in_public_read_v1"
+      "reason": "source_does_not_offer_measurements"
     },
     {
-      "field": "margin_events.pagamento",
+      "field": "payment_events",
       "official_name": "pagamentos",
       "consumer_field": "evento:pagamento",
-      "producer_family": "CONTRACT_MARGIN_EVENT",
-      "producer_version": "v1.0.0",
+      "producer_family": "public-read-margin-defense/1.0",
+      "producer_version": "1.0",
+      "emitted_by_producer": true,
       "emitted_by_public_read_v1": false,
       "blocks_indexability": false,
       "classification": "UNKNOWN",
-      "reason": "margin_event_family_not_in_public_read_v1"
+      "reason": "source_does_not_offer_payments"
     }
   ],
   "do_not_relax_gate": true,
   "consumer_ready": true,
-  "next_action": "extra-cli must emit the blocking official fields on a versioned public_read family (vigência, signed contract_value, and/or data_assinatura). web-cfg already renders them. Do not lower the 0.45 floor."
+  "next_action": "Producer facts already satisfy the data-confidence floor. Re-run indexability.py; do not invent remaining event families."
 }

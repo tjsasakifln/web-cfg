@@ -123,12 +123,12 @@ const fields = {
   "public-contract-id": makeEl({
     id: "public-contract-id",
     name: "public_contract_id",
-    value: "01619104000141-1-000123/2026",
+    value: "83102277000152-2-000626/2026",
   }),
   "public-id-slug": makeEl({
     id: "public-id-slug",
     name: "public_id_slug",
-    value: "qc-caixa-dagua-2026",
+    value: "md-8569b618",
   }),
   "out-identificacao": makeEl({ id: "out-identificacao" }),
   "out-resumo": makeEl({ id: "out-resumo" }),
@@ -377,7 +377,7 @@ const created = dataLayer.find((e) => e.event === "lead_created");
 if (
   created.asset_id !== "diagnostico-defesa-margem" ||
   created.route_family !== "defesa-margem-diagnostico" ||
-  created.public_id_slug !== "qc-caixa-dagua-2026" ||
+  created.public_id_slug !== "md-8569b618" ||
   created.source !== "CONFENGE_WEB"
 ) {
   console.error("FAIL: lead_created attribution", created);

@@ -74,9 +74,10 @@ try {
 
   const sitemap = await fetchText(`${base}/sitemap.xml`);
   const inSitemap = sitemap.text.includes("diagnostico-defesa-margem");
+  const hygieneOk = page.res.status === 200 && ((noindex && !inSitemap) || (!noindex && inSitemap));
   report.steps.indexability_hygiene = step(
-    page.res.status === 200 && noindex && !inSitemap ? "PROVEN" : "UNKNOWN",
-    { noindex, in_sitemap: inSitemap, gate: "low_data_confidence expected; do not index" },
+    hygieneOk ? "PROVEN" : "UNKNOWN",
+    { noindex, in_sitemap: inSitemap, gate: "indexable only when data_confidence floor holds; do not relax" },
   );
 } catch (err) {
   report.steps.page_live = step("BLOCKED", { error: String(err && err.message ? err.message : err).slice(0, 160) });
@@ -92,8 +93,8 @@ const payload = {
   landing_page: PAGE_PATH,
   asset_id: "diagnostico-defesa-margem",
   route_family: "defesa-margem-diagnostico",
-  public_contract_id: "01619104000141-1-000123/2026",
-  public_id_slug: "qc-caixa-dagua-2026",
+  public_contract_id: "83102277000152-2-000626/2026",
+  public_id_slug: "md-8569b618",
   cta_id: "segunda-leitura-contrato",
   utm_source: "synthetic",
   utm_medium: "probe",
