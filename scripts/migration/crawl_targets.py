@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/migration"))
-from manifesto_lib import load_manifesto, ready_redirects  # noqa: E402
+from manifesto_lib import canonicalize_action, load_manifesto, ready_redirects  # noqa: E402
 
 PUBLISH_CANDIDATES = (ROOT / "_site", ROOT)
 
@@ -99,7 +99,11 @@ def crawl() -> dict:
     manifesto = load_manifesto()
     rows = []
     failures = []
-    sample_retire = [e for e in manifesto["entries"] if e["decision"] == "RETIRE"][:25]
+    sample_retire = [
+        e
+        for e in manifesto["entries"]
+        if canonicalize_action(e["decision"]) in {"RETIRE_410", "HOLD_TARGET_NOT_READY"}
+    ][:25]
     for entry in ready_redirects(manifesto) + sample_retire:
         rec = {
             "legacy_url": entry["legacy_url"],
@@ -107,7 +111,12 @@ def crawl() -> dict:
             "target_url": entry.get("target_url"),
             "status": None,
         }
-        if entry["decision"] == "RETIRE":
+        if canonicalize_action(entry["decision"]) in {
+            "RETIRE_410",
+            "HOLD_TARGET_NOT_READY",
+            "IGNORE_NONCANONICAL",
+            "LEGAL_SECURITY_HOLD",
+        }:
             rec["status"] = "retire_no_fetch"
             rec["expected_http"] = entry["expected_http"]
             rows.append(rec)
