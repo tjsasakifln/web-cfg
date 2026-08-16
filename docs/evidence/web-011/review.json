@@ -1,0 +1,99 @@
+{
+  "campaign": "WEB-011",
+  "vertical": "defesa-margem",
+  "asset": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+  "pillar": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+  "learning": "NEED_MORE_DATA",
+  "exit": "BLOCKED",
+  "real_loop": {
+    "status": "BLOCKED",
+    "commercial_event": false,
+    "qualified_lead": false,
+    "qualified_pipeline": false,
+    "outcome": "UNKNOWN",
+    "human_route_action": null,
+    "lead_id": null,
+    "record_kind": null,
+    "reason": "No persist-first real lead_id with consent. Fail closed.",
+    "missing_prerequisites": [
+      {
+        "prerequisite": "consented_real_contact",
+        "status": "MISSING",
+        "note": "No consented real person used segunda leitura. Do not invent one."
+      },
+      {
+        "prerequisite": "CONFENGE_INBOUND_WEBHOOK_URL",
+        "status": "UNSET",
+        "note": "Set on Netlify production to https://api.confenge.com.br/api/v1/webhooks/confenge/inbound"
+      },
+      {
+        "prerequisite": "CONFENGE_INBOUND_WEBHOOK_SECRET",
+        "status": "UNSET",
+        "note": "Shared HMAC with Warmbly. Server env only."
+      },
+      {
+        "prerequisite": "OPS_TOKEN",
+        "status": "UNSET",
+        "note": "Required to read ops?action=inbound_handoff."
+      },
+      {
+        "prerequisite": "CONFENGE_AUTO_SEND_ENABLED",
+        "status": "UNKNOWN",
+        "note": "Warmbly auto-send must be proven false before claiming INBOUND NOW."
+      }
+    ],
+    "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/ → segunda leitura.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+    "residual": [
+      "consented_real_contact",
+      "CONFENGE_INBOUND_WEBHOOK_URL",
+      "CONFENGE_INBOUND_WEBHOOK_SECRET",
+      "OPS_TOKEN",
+      "CONFENGE_AUTO_SEND_ENABLED"
+    ]
+  },
+  "dimensions": {
+    "icp": {
+      "token": "NEED_MORE_DATA",
+      "evidenced": false,
+      "note": "No real account or decision unit observed from this vertical. ICP stays hypothesized (construtora / diretoria B2G with a live public-works contract)."
+    },
+    "trigger": {
+      "token": "NEED_MORE_DATA",
+      "evidenced": false,
+      "note": "Live sample keeps reajuste, reequilíbrio and medição as UNKNOWN with producer reason_codes. BDI is not in the diagnose utility (footer cluster only)."
+    },
+    "offer": {
+      "token": "NEED_MORE_DATA",
+      "evidenced": false,
+      "note": "Shipped CTA is 'Quero uma segunda leitura deste contrato'. No real uptake."
+    },
+    "friction": {
+      "token": "NEED_MORE_DATA",
+      "evidenced": false,
+      "note": "Named blockers are inbound env, auto-send evidence and a consented contact. Not a proven product-copy friction."
+    }
+  },
+  "already_shipped": [
+    "#76",
+    "#79",
+    "#80",
+    "#81",
+    "#82"
+  ],
+  "residual": [
+    "consented_real_contact",
+    "CONFENGE_INBOUND_WEBHOOK_URL",
+    "CONFENGE_INBOUND_WEBHOOK_SECRET",
+    "OPS_TOKEN",
+    "CONFENGE_AUTO_SEND_ENABLED"
+  ],
+  "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/ → segunda leitura.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+  "kill_gate": {
+    "reduces_risk": true,
+    "reduces_time_to_evidence": true,
+    "reduces_cost": false,
+    "reduces_uncertainty": true,
+    "product_volume_only": false
+  },
+  "note": "Fixture, preview, dry-run, or synthetic 201 is not campaign-complete."
+}
