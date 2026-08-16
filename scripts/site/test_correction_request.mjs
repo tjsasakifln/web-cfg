@@ -106,10 +106,17 @@ for (const extra of [
   if (validated.ok || validated.error !== "extra_pii_rejected") {
     fail("core_rejects_extra_pii", { extra, validated });
   }
+  const before = mem.map.size;
   const res = await handler(event(payload));
   const body = JSON.parse(res.body);
   if (res.statusCode !== 400 || body.error !== "extra_pii_rejected") {
     fail("handler_rejects_extra_pii", { extra, status: res.statusCode, body });
+  }
+  if (mem.map.size !== before) {
+    fail("extra_pii_persisted", { extra, size: mem.map.size });
+  }
+  if (body.contact || body.cpf || body.rg || body.home_address || body.date_of_birth) {
+    fail("extra_pii_in_public_json", body);
   }
   pass(`reject_${Object.keys(extra)[0]}`, body.error);
 }

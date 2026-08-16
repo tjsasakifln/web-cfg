@@ -381,6 +381,42 @@ def test_data_analysis_surfaces_link_policy_version():
         assert "/correcoes/" in html
 
 
+def test_inteligencia_hub_rebuild_keeps_policy_version():
+    """pSEO build rewrites inteligencia/index.html via render_hub.
+
+    The stamp must come from that shipped renderer, not a hand-edit that
+    the quality-gate rebuild can strip.
+    """
+    from scripts.pseo.render import render_hub
+
+    policy = load_editorial_policy()
+    version = current_policy_version(policy)
+    html = render_hub(
+        title="Inteligência aplicada à decisão B2G | CONFENGE",
+        h1="O mercado público deixa rastros. Nós transformamos esses rastros em decisão.",
+        description="Mercados, órgãos, preços e concorrência como evidência.",
+        path="/inteligencia/",
+        intro="Contratos, órgãos, preços, concorrência e oportunidades.",
+        items=[],
+        crumbs=[("Início", "/"), ("Inteligência", None)],
+    )
+    link_errors = check_policy_links(html, policy)
+    assert not link_errors, f"inteligencia_hub rebuild: {link_errors}"
+    assert version in html
+    assert f'data-policy-version="{version}"' in html
+    assert "policy-version-disclosure" in html
+    child = render_hub(
+        title="Mercados públicos de engenharia | CONFENGE",
+        h1="Mercados por segmento e região",
+        description="Contratos, órgãos e evolução.",
+        path="/inteligencia/mercados/",
+        intro="Lista de mercados com massa mínima.",
+        items=[],
+        crumbs=[("Início", "/"), ("Inteligência", "/inteligencia/"), ("Mercados", None)],
+    )
+    assert f'data-policy-version="{version}"' not in child
+
+
 def test_signals_baseline_unknown_without_invented_numbers():
     data = load_signals_baseline()
     assert check_signals_baseline(data) == []

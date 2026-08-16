@@ -1547,10 +1547,16 @@ def render_hub(
         if path.rstrip("/") == "/inteligencia"
         else '<p><a class="text-link" href="/inteligencia/">Voltar ao hub de inteligência</a></p>'
 )
+    disclosure = ""
+    if path.rstrip("/") == "/inteligencia":
+        from scripts.site.authority import policy_version_disclosure
+
+        disclosure = policy_version_disclosure()
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero"><div class="container"><p class="eyebrow">{e(eyebrow)}</p>
-<h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p></div></header>
+<h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p>
+{disclosure}</div></header>
 <div class="container" style="padding-bottom:3rem">{grid}
 {back}</div>
 """
