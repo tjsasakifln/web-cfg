@@ -16,10 +16,8 @@ from __future__ import annotations
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -31,6 +29,16 @@ from scripts.pseo.public_artifact import (  # noqa: E402
     PUBLIC_DIR_NAME,
     assemble_public_artifact,
     audit_public_artifact,
+)
+from scripts.pseo.reproducible import (  # noqa: E402
+    VERSIONED_TIMESTAMP_FIELDS,
+    allowlist_public_build_info,
+    build_timestamp,
+    collect_input_shas,
+    collect_tool_versions,
+    present_env_names,
+    stamp_publish_identity,
+    wipe_generated_identity,
 )
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
@@ -68,7 +76,7 @@ def write_public_manifest(summary: dict, snap: dict) -> Path:
     dataset_hash = (manifest.get("dataset_hash") or summary.get("dataset_hash") or "")
     pubs = summary.get("publishable") or []
     commit = _deploy_commit()
-    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    generated_at = build_timestamp()
     env_name = (
         os.environ.get("CONTEXT")
         or os.environ.get("NETLIFY_CONTEXT")
@@ -112,32 +120,38 @@ def write_build_info(
     *,
     deploy_id: str | None = None,
     artifact_hash: str | None = None,
+    manifest_hash: str | None = None,
+    root: Path | None = None,
 ) -> Path:
     """Emit /.well-known/build-info.json from deploy env / git HEAD only.
 
-    Reliable public identity: commit, build_time, environment, deploy_id, artifact_hash.
+    Public identity binds a deploy to commit + artifact/manifest hash.
+    Secrets and local filesystem paths are rejected.
     """
+    dest_root = root or ROOT
+    # DEPLOY_URL is intentionally not used: it is a host URL, not a deploy id,
+    # and must not become a public identity field.
     deploy_id = deploy_id or (
-        os.environ.get("DEPLOY_ID")
-        or os.environ.get("NETLIFY_DEPLOY_ID")
-        or os.environ.get("DEPLOY_URL")
-        or None
+        os.environ.get("DEPLOY_ID") or os.environ.get("NETLIFY_DEPLOY_ID") or None
     )
-    payload = {
-        "schema_version": "1.1.0",
-        "commit": commit,
-        "build_time": generated_at,
-        "environment": environment,
-        "site_schema_version": schema_version,
-        "deploy_id": deploy_id,
-        "artifact_hash": artifact_hash,
-        "source": "build_site.write_build_info",
-    }
-    path = ROOT / ".well-known" / "build-info.json"
+    payload = allowlist_public_build_info(
+        {
+            "schema_version": "1.2.0",
+            "commit": commit,
+            "build_time": generated_at,
+            "environment": environment,
+            "site_schema_version": schema_version,
+            "deploy_id": deploy_id,
+            "artifact_hash": artifact_hash,
+            "manifest_hash": manifest_hash,
+            "source": "build_site.write_build_info",
+            "versioned_timestamp_fields": sorted(VERSIONED_TIMESTAMP_FIELDS),
+        }
+    )
+    path = dest_root / ".well-known" / "build-info.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    # Minimal public release marker (read-only identity; does not rewrite docs/)
-    release = ROOT / ".well-known" / "release-result.json"
+    release = dest_root / ".well-known" / "release-result.json"
     release.write_text(
         json.dumps(
             {
@@ -146,6 +160,7 @@ def write_build_info(
                 "build_time": generated_at,
                 "deploy_id": deploy_id,
                 "artifact_hash": artifact_hash,
+                "manifest_hash": manifest_hash,
                 "status": "BUILT",
             },
             ensure_ascii=False,
@@ -177,6 +192,12 @@ def run_node_gate(script: str) -> dict:
 def main(argv: list[str] | None = None) -> int:
     data_dir = ROOT / "data" / "pseo"
     errors: list[str] = []
+    # Drop leftover generated identity so assemble cannot copy a prior run.
+    wipe_generated_identity(ROOT)
+    # Inputs that affect the public artifact — captured before generators write.
+    input_shas = collect_input_shas(ROOT)
+    tool_versions = collect_tool_versions()
+    env_names = present_env_names()
 
     try:
         snap = validate_snapshot(data_dir)
@@ -239,7 +260,8 @@ def main(argv: list[str] | None = None) -> int:
     if not artifact.get("ok"):
         errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
 
-    # Re-emit build-info with material artifact hash + deploy id after assemble
+    # Write identity, then hash the final publish tree, then stamp those hashes.
+    repro_manifest: dict = {}
     try:
         man = json.loads(man_path.read_text(encoding="utf-8"))
         env_name = (
@@ -248,25 +270,20 @@ def main(argv: list[str] | None = None) -> int:
             or os.environ.get("NODE_ENV")
             or "local"
         )
-        write_build_info(
-            _deploy_commit(),
-            man.get("generated_at")
-            or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            env_name,
-            man.get("schema_version"),
+        stamped = stamp_publish_identity(
+            ROOT,
+            commit=_deploy_commit(),
+            inputs=input_shas,
+            tools=tool_versions,
+            env_names=env_names,
+            generated_at=man.get("generated_at") or build_timestamp(),
+            environment=env_name,
+            schema_version=man.get("schema_version"),
             deploy_id=os.environ.get("DEPLOY_ID") or os.environ.get("NETLIFY_DEPLOY_ID"),
-            artifact_hash=artifact.get("public_artifact_hash"),
+            public_dir_name=PUBLIC_DIR_NAME,
         )
-        # Ensure _site carries the enriched build-info
-        wk_src = ROOT / ".well-known" / "build-info.json"
-        wk_dest = ROOT / PUBLIC_DIR_NAME / ".well-known" / "build-info.json"
-        if wk_src.is_file() and (ROOT / PUBLIC_DIR_NAME).is_dir():
-            wk_dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(wk_src, wk_dest)
-            rel_src = ROOT / ".well-known" / "release-result.json"
-            rel_dest = ROOT / PUBLIC_DIR_NAME / ".well-known" / "release-result.json"
-            if rel_src.is_file():
-                shutil.copy2(rel_src, rel_dest)
+        repro_manifest = stamped.get("manifest") or {}
+        artifact["public_artifact_hash"] = stamped.get("artifact_hash")
     except Exception as exc:  # noqa: BLE001
         errors.append(f"build_info_enrich_failed:{exc}")
 
@@ -297,6 +314,8 @@ def main(argv: list[str] | None = None) -> int:
         "manifest_public": str(man_path.relative_to(ROOT)),
         "public_directory": PUBLIC_DIR_NAME,
         "public_artifact_hash": artifact.get("public_artifact_hash") or audit.get("public_artifact_hash"),
+        "manifest_hash": repro_manifest.get("manifest_hash"),
+        "reproducible_manifest": ".well-known/build-manifest.json",
         "build_summary": {
             "dataset_hash": summary.get("dataset_hash"),
             "counts": summary.get("counts"),

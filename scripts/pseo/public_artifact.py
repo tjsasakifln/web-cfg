@@ -19,6 +19,8 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 PUBLIC_DIR_NAME = "_site"
 
 # Top-level directories that may appear under the public artifact when present
@@ -218,15 +220,12 @@ def _sha256_file(path: Path) -> str:
 
 
 def _sha256_tree(base: Path) -> str:
-    """Deterministic hash of relative paths + content hashes."""
-    items: list[str] = []
+    """Deterministic hash of relative paths + normalized content hashes."""
+    from scripts.pseo.reproducible import content_tree_hash
+
     if not base.exists():
         return hashlib.sha256(b"").hexdigest()
-    for p in sorted(base.rglob("*")):
-        if p.is_file():
-            rel = p.relative_to(base).as_posix()
-            items.append(f"{rel}:{_sha256_file(p)}")
-    return hashlib.sha256("\n".join(items).encode("utf-8")).hexdigest()
+    return content_tree_hash(base)
 
 
 def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
