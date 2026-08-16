@@ -1,0 +1,15 @@
+{
+  "schema": "indexnow_allowlist_v1",
+  "version": 1,
+  "generated_at": "2026-08-16T00:00:00Z",
+  "dry_run_default": true,
+  "send_default": false,
+  "note": "Only approved public canonicals. Fixture and noindex URLs must never appear here.",
+  "urls": [
+    "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+    "https://confenge.com.br/metodologia-inteligencia/",
+    "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+    "https://confenge.com.br/defesa-margem-contratos-publicos/",
+    "https://confenge.com.br/radar/nacional-obras-publicas/"
+  ]
+}
