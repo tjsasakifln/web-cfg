@@ -7,72 +7,10 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const { corsHeaders, clientIp, safeLog, ALLOWED_ORIGINS } = require("./lib/lead-core.cjs");
+const { admitEvent, scrubProps } = require("./lib/event-contract.cjs");
 
 const MAX_EVENTS = 25;
 const MAX_BODY = 16 * 1024;
-
-const FORBIDDEN_KEYS = new Set([
-  "nome",
-  "name",
-  "email",
-  "telefone",
-  "phone",
-  "tel",
-  "whatsapp",
-  "empresa",
-  "company",
-  "mensagem",
-  "message",
-  "edital",
-  "documento",
-  "document",
-  "cpf",
-  "cnpj",
-  "search_query",
-  "q",
-  "query",
-]);
-
-const ALLOWED_EVENTS = new Set([
-  "page_view",
-  "session_start",
-  "cta_view",
-  "cta_click",
-  "whatsapp_click",
-  "email_click",
-  "lead_form_start",
-  "lead_form_step",
-  "lead_form_error",
-  "lead_form_submit",
-  "lead_form_success",
-  "lead_form_backend_error",
-  "lead_persisted",
-  "confirmation_view",
-  "internal_search",
-  "content_to_service",
-  "pseo_to_service",
-  "return_visit",
-  "conversion",
-  "critical_decision_cta_click",
-  "scroll_depth",
-  "outbound_click",
-  "web_vital",
-  "tool_use",
-  "tool_result",
-  "organic_landing",
-  "asset_view",
-  "contract_selected",
-  "contract_analyzed",
-  "lead_created",
-  "qualified_lead",
-  "answer_view",
-  "method_open",
-  "evidence_drilldown",
-  "analysis_click",
-  "xray_start",
-  "lead_receipt_correlated",
-  "correction_open",
-]);
 
 function originOk(event) {
   const h = event.headers || {};
@@ -91,20 +29,8 @@ function originOk(event) {
   return "https://confenge.com.br";
 }
 
-function scrubProps(props) {
-  if (!props || typeof props !== "object") return {};
-  const out = {};
-  for (const [k, v] of Object.entries(props)) {
-    const key = String(k).toLowerCase();
-    if (FORBIDDEN_KEYS.has(key)) continue;
-    if (/email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|document/i.test(key)) continue;
-    if (typeof v === "string") {
-      out[k] = v.slice(0, 120);
-    } else if (typeof v === "number" || typeof v === "boolean") {
-      out[k] = v;
-    }
-  }
-  return out;
+function scrubPropsCompat(props) {
+  return scrubProps(props);
 }
 
 // In-memory ring for cold-start diagnostics (not durable alone)
@@ -204,20 +130,36 @@ exports.handler = async (event) => {
     .slice(0, 12);
 
   const accepted = [];
+  const rejected = [];
   for (const ev of events) {
-    const name = String(ev.event || ev.name || "").slice(0, 64);
-    if (!name || (!ALLOWED_EVENTS.has(name) && !name.startsWith("custom_"))) continue;
+    const admitted = admitEvent(ev);
+    if (!admitted.ok) {
+      rejected.push({
+        event: String(ev && (ev.event || ev.name) || "").slice(0, 64),
+        reason: admitted.reason || "rejected",
+      });
+      continue;
+    }
     const safe = {
-      event: name,
-      props: scrubProps(ev.props || ev),
-      path: String(ev.path || ev.props?.path || "").slice(0, 180),
+      event: admitted.event.event,
+      schema_version: admitted.event.schema_version,
+      source: admitted.event.source,
+      layer: admitted.event.layer,
+      owner: admitted.event.owner,
+      alias_from: admitted.event.alias_from,
+      props: admitted.event.props,
+      path: admitted.event.path,
       ts: new Date().toISOString(),
       ip_hash,
-      sid: String(ev.sid || ev.session_id || "").slice(0, 32),
+      sid: admitted.event.sid,
     };
-    // Drop any accidental PII strings in path
-    if (/@|whatsapp|telefone/i.test(safe.path)) safe.path = "/[redacted]";
-    pushRecent({ event: safe.event, path: safe.path, ts: safe.ts });
+    pushRecent({
+      event: safe.event,
+      path: safe.path,
+      ts: safe.ts,
+      layer: safe.layer,
+      alias_from: safe.alias_from,
+    });
     accepted.push(safe);
 
     // Optional Plausible forward (server-side, no cookies)
@@ -261,15 +203,21 @@ exports.handler = async (event) => {
     }
   }
 
-  safeLog("info", "analytics_batch", { count: accepted.length });
+  safeLog("info", "analytics_batch", { count: accepted.length, rejected: rejected.length });
 
   return {
     statusCode: 202,
     headers,
-    body: JSON.stringify({ ok: true, accepted: accepted.length }),
+    body: JSON.stringify({
+      ok: true,
+      accepted: accepted.length,
+      rejected: rejected.length,
+      rejected_events: rejected,
+    }),
   };
 };
 
 // test helper
 exports._recent = () => recent.slice();
-exports._scrubProps = scrubProps;
+exports._scrubProps = scrubPropsCompat;
+exports._admitEvent = admitEvent;

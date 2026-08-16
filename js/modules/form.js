@@ -258,10 +258,6 @@
               page_path: pagePath,
               content_cluster: defaultCluster,
               journey: journey || '',
-              conversion: 'lead_persisted',
-            });
-            track('lead_created', {
-              page_path: pagePath,
               route_family: routeFamily,
               asset_id: assetId,
               public_id_slug: publicSlug,
@@ -451,13 +447,9 @@
         el.addEventListener('click', () => {
           const eventName = el.getAttribute('data-pseo-event') || 'pseo_cta_click';
           const allowed = {
-            pseo_cta_click: 1,
             pseo_table_interaction: 1,
             pseo_source_open: 1,
             pseo_related_page_click: 1,
-            pseo_form_start: 1,
-            pseo_form_submit: 1,
-            pseo_whatsapp_click: 1,
           };
           if (!allowed[eventName]) return;
           // Persist CTA click context before navigation
@@ -491,55 +483,9 @@
           });
         }, { once: true });
       });
-      document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
-        link.addEventListener('click', () => {
-          track('pseo_whatsapp_click', {
-            page_path: pseoBase.page_path,
-            content_cluster: 'pseo',
-            page_type: pseoBase.page_type,
-            pseo_page_id: pseoBase.pseo_page_id,
-            device_context: deviceContext,
-            cta_position: link.getAttribute('data-cta-position') || 'inline',
-            destination_type: 'whatsapp',
-          });
-        });
-      });
-      // Form start/submit on home OR pSEO when attribution present — not pathname-bound
-      if (form && (pseoBase.pseo_page_id || storedAttr.pseo_page_id || fromUrl.pseo_page_id)) {
-        let pseoFormStarted = false;
-        const markPseoStart = () => {
-          if (pseoFormStarted) return;
-          pseoFormStarted = true;
-          track('pseo_form_start', {
-            page_path: pagePath,
-            content_cluster: 'pseo',
-            page_type: pseoBase.page_type,
-            pseo_page_id: pseoBase.pseo_page_id || storedAttr.pseo_page_id,
-            device_context: deviceContext,
-            destination_type: 'form',
-            source_run_id: pseoBase.source_run_id || storedAttr.source_run_id || '',
-            dataset_hash: pseoBase.dataset_hash || storedAttr.dataset_hash || '',
-          });
-        };
-        form.querySelectorAll('input, select, textarea').forEach((el) => {
-          el.addEventListener('focus', markPseoStart, { once: true });
-        });
-        form.addEventListener('submit', () => {
-          if (form.checkValidity()) {
-            track('pseo_form_submit', {
-              page_path: pagePath,
-              content_cluster: 'pseo',
-              page_type: pseoBase.page_type,
-              pseo_page_id: pseoBase.pseo_page_id || storedAttr.pseo_page_id,
-              device_context: deviceContext,
-              destination_type: 'form',
-              cta_label: (form.querySelector('#necessidade')?.value || '').slice(0, 80),
-              source_run_id: pseoBase.source_run_id || storedAttr.source_run_id || '',
-              dataset_hash: pseoBase.dataset_hash || storedAttr.dataset_hash || '',
-            });
-          }
-        });
-      }
+      // pSEO WhatsApp / form start / form submit are aliases of whatsapp_click /
+      // lead_form_start / lead_form_submit. Do not dual-emit; attribution stays
+      // on the canonical events and hidden fields.
     }
   };
 

@@ -16,8 +16,8 @@ plus lead persist. They are not vanity metrics.
 | `contract_analyzed` | diagnosis rendered | `route_family`, `asset_id`, `public_id_slug`, `unknown_count`, `official_count` |
 | `cta_view` | CTA block visible | `route_family`, `asset_id`, `cta_id` |
 | `cta_click` | CTA submit control activated | `route_family`, `asset_id`, `cta_id` |
-| `lead_created` | lead function returns persisted id | `route_family`, `asset_id`, `public_id_slug` (also stored as `lead_persisted`) |
-| `qualified_lead` | reserved — only when a later operator/Warmbly signal exists | `route_family`, `asset_id` |
+| `lead_persisted` | lead function returns persisted id | `route_family`, `asset_id`, `public_id_slug`. Legacy producer name `lead_created` is an alias and is rewritten to this name. |
+| `qualified_lead` | reserved — only when a later operator/Warmbly signal exists | `route_family`, `asset_id`. Never derived from `asset_view` or `lead_persisted`. |
 
 Lead persist allowlist (server): `asset_id`, `route_family`, `public_contract_id`,
 `public_entity_id`, `public_id_slug`, `correlation_id`, `cnpj` (only when the

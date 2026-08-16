@@ -14,10 +14,12 @@ O site **não** inclui ID de GA4/Plausible inventado. Há uma **camada desacopla
 | `lead_form_start` | primeiro focus em campo do form | idem |
 | `lead_form_submit` | submit válido | + `cta_label` = valor do select `necessidade` |
 | `lead_form_error` | invalid / submit inválido | idem |
-| `service_cta_click` | clique para `#contato` / form com `?tema=` | idem |
-| `content_to_service_click` | clique de guia → página-pilar/serviço | idem |
+| `cta_click` | clique para `#contato` / form com `?tema=` (aliases: `service_cta_click`) | idem |
+| `content_to_service` | clique de guia → página-pilar/serviço (alias: `content_to_service_click`) | idem |
 | `internal_search` | busca na biblioteca (≥3 chars) | `query_len`, `results_count` — **não** envia o termo cru |
-| `qualified_scroll` | 50% e 75% da página (uma vez cada) | `cta_position=scroll_50\|75` |
+| `scroll_depth` | 50% e 75% da página (uma vez cada; alias: `qualified_scroll`) | `cta_position=scroll_50\|75` |
+
+Canon: [FUNNEL-EVENT-DICTIONARY](../docs/contracts/FUNNEL-EVENT-DICTIONARY.md). Unknown names and `custom_*` are rejected. Source `CONFENGE_WEB`.
 
 ## O que **não** é enviado
 

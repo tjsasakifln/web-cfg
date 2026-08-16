@@ -103,6 +103,6 @@ export CONFENGE_AUTO_SEND_EVIDENCE=OFF
 node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br /tmp/prod-proof.json
 ```
 
-Ops chain (auth): `GET /.netlify/functions/ops?action=inbound_handoff` and `analytics_summary` expose `money_asset.events` (`asset_view` → `contract_analyzed` → `cta_view` → `cta_click` → `lead_created`) plus `money_asset.handoff` (`delivered`/`blocked`/`pending`/`retryable`/`skipped`/`dead`). No PII.
+Ops chain (auth): `GET /.netlify/functions/ops?action=inbound_handoff` and `analytics_summary` expose `money_asset.events` (`asset_view` → `contract_analyzed` → `cta_view` → `cta_click` → `lead_persisted`, with compatibility key `lead_created`) plus `money_asset.handoff` (`delivered`/`blocked`/`pending`/`retryable`/`skipped`/`dead`). No PII.
 
 The next irreversible proof is a real qualified lead or a real rejection — not another synthetic.
