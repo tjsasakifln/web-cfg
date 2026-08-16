@@ -6,16 +6,20 @@ on:
   pull_request:
     branches: [main]
 
+# Cancel superseded in-flight runs of the same ref. Does not skip the full
+# gate set on pull_request/push to main — no path filters.
+concurrency:
+  group: site-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  gates:
-    # Stable GitHub check context — require this name in branch protection
-    name: site-ci
+  lint:
+    name: lint
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:
-          # Full history required for package commit_sha ancestor checks (PR merge refs)
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
@@ -24,36 +28,51 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Install dependencies (two clean installs)
+      - name: Install dependencies
         # Hard fail on lock desync — never soft-fallback to npm install.
-        # Keep two clean installs here to make lockfile determinism explicit.
+        run: npm ci
+      - name: Lint gates
         run: |
-          rm -rf node_modules
-          npm ci
-          rm -rf node_modules
-          npm ci
-          pip install pytest
-      - name: Workflow gate shape
-        run: npm run test:workflow-gates
-      - name: Unit and brand/copy/design gates
-        run: |
-          npm run editorial:test
-          npm run editorial:build
+          npm run test:workflow-gates
           npm run test:inbound-gates
           npm run editorial:truth
           npm run test:brand
           npm run test:copy
           npm run test:design
+          npm run test:env-example
+
+  unit:
+    name: unit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        run: |
+          npm ci
+          pip install pytest
+      - name: Unit gates
+        run: |
+          npm run editorial:test
+          npm run editorial:build
           npm run pseo:test
           npm run test:analytics
           npm run test:form-funnel
           npm run test:lead-function
           npm run test:lead-store-production
           npm run test:ops-auth
-          npm run test:env-example
           npm run test:epic-td
           npm run test:script-modules
-          npm run test:secrets-scan
           npm run test:cta-whatsapp
           npm run test:release-filters
           npm run test:pseo-attribution
@@ -61,24 +80,148 @@ jobs:
           npm run test:schedules
           npm run test:tools
           npm run test:nurture
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        run: npm ci
       - name: Build public site
         run: npm run build:site
-      - name: UI geometry
-        run: npm run test:ui
-      - name: pSEO validate and audit
+      - name: Upload _site
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-ci-site
+          path: _site
+          if-no-files-found: error
+          retention-days: 1
+
+  security:
+    name: security
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        run: npm ci
+      - name: Download _site
+        uses: actions/download-artifact@v7
+        with:
+          name: site-ci-site
+          path: _site
+      - name: Security and public-artifact gates
         run: |
+          npm run test:secrets-scan
           npm run pseo:validate
           npm run pseo:audit
-      - name: Public artifact audit
-        run: npm run audit:public-artifact
-      - name: SEO validation
-        run: npm run validate:seo
-      - name: CSS usage inventory
-        run: npm run audit:css-usage
-      - name: Redirect and 410 gates
-        run: npm run test:redirects
+          npm run audit:public-artifact
+          npm run validate:seo
+          npm run audit:css-usage
+          npm run test:redirects
+      - name: Upload security reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-ci-reports-security
+          path: |
+            seo/pseo-*.json
+          if-no-files-found: ignore
+
+  e2e:
+    name: e2e
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        run: npm ci
+      - name: Download _site
+        uses: actions/download-artifact@v7
+        with:
+          name: site-ci-site
+          path: _site
+      - name: UI geometry
+        run: npm run test:ui
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
       - name: axe accessibility
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run audit:axe
+      - name: Tools UI/UX E2E
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run test:tools-uiux-e2e
+      - name: Upload e2e reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-ci-reports-e2e
+          path: |
+            docs/uiux-evidence/axe-report.json
+            docs/uiux-tools-remediation/evidence/
+          if-no-files-found: ignore
+
+  performance:
+    name: performance
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        run: npm ci
+      - name: Download _site
+        uses: actions/download-artifact@v7
+        with:
+          name: site-ci-site
+          path: _site
       - name: Setup Chrome for Lighthouse
         uses: browser-actions/setup-chrome@v2
         id: setup-chrome
@@ -88,18 +231,25 @@ jobs:
           LH_PAGES: "/,/diretoria-b2g/,/conteudos/"
         run: npm run test:lighthouse
         continue-on-error: false
-      - name: Tools UI/UX E2E
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: npm run test:tools-uiux-e2e
-      - name: Upload reports
+      - name: Upload performance reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: site-ci-reports
+          name: site-ci-reports-performance
           path: |
             docs/lighthouse-runs/
-            docs/uiux-evidence/axe-report.json
-            docs/uiux-tools-remediation/evidence/
-            seo/pseo-*.json
           if-no-files-found: ignore
+
+  gates:
+    # Stable GitHub check context — require this name in branch protection
+    name: site-ci
+    if: ${{ always() }}
+    needs: [lint, unit, build, security, e2e, performance]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Fail closed on required child results
+        env:
+          SITE_CI_NEEDS: ${{ toJSON(needs) }}
+        run: python3 scripts/site/site_ci_aggregator.py

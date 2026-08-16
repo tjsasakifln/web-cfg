@@ -24,9 +24,11 @@ PR #6 (`lighthouse` 13.4.1) left `pSEO quality gates` red while `site-ci` could 
 
 | Required | Workflow file | Job id | Check context name |
 |----------|---------------|--------|--------------------|
-| **Yes** | `.github/workflows/site-ci.yml` | `gates` | **`site-ci`** |
+| **Yes** | `.github/workflows/site-ci.yml` | `gates` (fail-closed aggregator) | **`site-ci`** |
 | **Yes** | `.github/workflows/pseo.yml` | `pseo` | **`pSEO quality gates`** |
 | No (soft) | `.github/workflows/codeql.yml` | `analyze` | `Analyze` (matrix) |
+
+`gates` remains the unique required `site-ci` context. Child jobs `lint`, `unit`, `build`, `security`, `e2e`, and `performance` are diagnostic check names so a red child identifies the subsystem. They are not individually required in branch protection. The aggregator is fail-closed: any required child that is `failure`, `cancelled`, or `skipped` turns `site-ci` red.
 
 CodeQL uses `continue-on-error: true` until code scanning is enabled under **Settings → Code security**. Do not rely on CodeQL alone as a merge blocker.
 
