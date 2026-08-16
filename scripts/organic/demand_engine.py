@@ -386,11 +386,20 @@ def detect_reasons(
                     codes.append(REASON_WRONG_LANDING)
             else:
                 # No join: never invent cannibalization or wrong landing.
+                # A missing page on the row is not a gap if the snapshot
+                # inventory already has a useful page for the query.
                 if REASON_JOIN_UNAVAILABLE not in codes:
                     codes.append(REASON_JOIN_UNAVAILABLE)
-                if not page:
-                    codes.append(REASON_QUERY_WITHOUT_USEFUL_PAGE)
-                elif row.get("source_table") == "queries" and not _page_inventory_match(query, page_rows):
+                useful_inventory = [
+                    inv
+                    for inv in page_rows
+                    if _is_useful_page(
+                        inv.get("page") or inv.get("path"),
+                        config,
+                        label["question_class"],
+                    )
+                ]
+                if not _page_inventory_match(query, useful_inventory):
                     codes.append(REASON_QUERY_WITHOUT_USEFUL_PAGE)
 
         # Deduplicate, stable order

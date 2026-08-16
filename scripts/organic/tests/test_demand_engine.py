@@ -163,6 +163,33 @@ def test_cannibalization_only_when_query_page_join_present():
     assert all(REASON_CANNIBALIZATION not in r["reason_codes"] for r in query_rows)
 
 
+def test_csv_query_with_useful_inventory_is_not_query_without_useful_page():
+    """Consultas.csv has no page column. A useful on-site page in the same
+    snapshot is not a gap — only join_unavailable, never a fabricated join."""
+    loaded = load_gsc_dir(GSC_JUL)
+    sinapi = "/conteudos/sinapi-desonerado-nao-desonerado/"
+    assert any(
+        (p.get("path") or "") == sinapi or (p.get("url") or "").rstrip("/").endswith(sinapi.rstrip("/"))
+        for p in loaded["pages"]
+    ), "snapshot must contain the SINAPI page used as inventory"
+
+    doc = run_demand_engine(gsc_dir=GSC_JUL)
+    wanted = (
+        "desonerado ou não desonerado",
+        "sinapi desonerado ou não desonerado qual usar",
+    )
+    found = {r.get("query"): r for r in doc["records"] if r.get("query") in wanted}
+    assert set(found) == set(wanted), set(found)
+    for query, rec in found.items():
+        assert rec["join_status"] == "join_unavailable", query
+        assert REASON_JOIN_UNAVAILABLE in rec["reason_codes"], rec["reason_codes"]
+        assert REASON_QUERY_WITHOUT_USEFUL_PAGE not in rec["reason_codes"], (
+            query,
+            rec["reason_codes"],
+        )
+        assert rec["authorizes_page"] is False
+
+
 def test_wrong_landing_and_query_without_useful_page():
     doc = run_demand_engine(rows=_join_rows())
     wrong = [r for r in doc["records"] if REASON_WRONG_LANDING in r["reason_codes"]]
