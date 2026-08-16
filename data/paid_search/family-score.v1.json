@@ -1,0 +1,1147 @@
+{
+  "catalog_ref": {
+    "aditivos": "Aditivos qualitativo/quantitativo",
+    "bdi": "BDI diferenciado",
+    "brand": "Marca CONFENGE (split, não canário)",
+    "glosa_medicao": "Glosa / medição rejeitada em obra pública",
+    "legacy_avcb": "AVCB / legado imobiliário",
+    "market_answer_pavimentacao": "Valor típico de contratos de pavimentação (#84)",
+    "prorrogacao_prazo": "Prorrogação de prazo / chuva / vigência",
+    "reequilibrio": "Reequilíbrio / reajuste / curva ABC",
+    "sinapi_desonerado": "SINAPI desonerado / não desonerado"
+  },
+  "decision": "SELECTED",
+  "demand_engine": {
+    "authorizes_page": false,
+    "available": false,
+    "next_command": "git fetch origin && python3 -m scripts.organic demand-engine --gsc-dir seo/gsc-2026-08-09",
+    "prerequisite": "merge or checkout PR #98 feat/web-016-demand-engine",
+    "reason": "WEB-016 demand_engine module is not on this branch",
+    "records": [],
+    "schema": "demand-engine/1.0",
+    "status": "ABSENT"
+  },
+  "device": {
+    "exclude": [
+      "mobile",
+      "tablet"
+    ],
+    "include": [
+      "desktop"
+    ],
+    "note": "Across gsc-2026-07-30 and gsc-2026-08-09 desktop dominates clicks. Canary stays desktop-only; mobile is an exclusion, not a second canary.",
+    "observed": [
+      {
+        "clicks": 17.0,
+        "device": "desktop",
+        "impressions": 531.0
+      },
+      {
+        "clicks": 3.0,
+        "device": "mobile",
+        "impressions": 175.0
+      },
+      {
+        "clicks": 0.0,
+        "device": "tablet",
+        "impressions": 3.0
+      }
+    ]
+  },
+  "exclusions": {
+    "audiences": [
+      "remarketing",
+      "retargeting",
+      "customer_match"
+    ],
+    "brand_as_primary": true,
+    "device": [
+      "mobile",
+      "tablet"
+    ],
+    "geo": [
+      "Angola",
+      "Costa Rica",
+      "Espanha",
+      "Estados Unidos",
+      "França",
+      "Países Baixos",
+      "Reino Unido",
+      "Rússia",
+      "Ucrânia",
+      "Vietnã"
+    ],
+    "query_families": [
+      "legacy_avcb",
+      "brand",
+      "reequilibrio",
+      "aditivos",
+      "sinapi_desonerado",
+      "bdi",
+      "prorrogacao_prazo",
+      "market_answer_pavimentacao"
+    ],
+    "smartlic": true
+  },
+  "families": [
+    {
+      "adjacent_to_60": false,
+      "cluster": "legacy-entity",
+      "commercial_intent": "none",
+      "eligible": false,
+      "event_family": null,
+      "first_vertical_event": false,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 3.0,
+            "position": 4.33,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "avcb"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 3.0,
+            "position": 40.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "avcb"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 0.0,
+        "impressions": 6.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 2
+      },
+      "id": "legacy_avcb",
+      "ineligible_reasons": [
+        "not_adjacent_to_60",
+        "legacy_entity",
+        "wrong_landing"
+      ],
+      "label": "AVCB / legado imobiliário",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": false,
+        "exists": true,
+        "honesty": "Family legacy_avcb is not a contract-event the #60 diagnostic answers. Wrong landing for Diagnóstico de Defesa de Margem.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": true
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 0,
+      "score_components": {
+        "commercial_high": 0,
+        "first_vertical_event": 0,
+        "has_clicks": 0,
+        "has_impressions": 1,
+        "landing_is_60_utility": 0,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": false,
+      "cluster": "brand",
+      "commercial_intent": "branded",
+      "eligible": false,
+      "event_family": null,
+      "first_vertical_event": false,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 2.0,
+            "position": 61.5,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "coenge"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 1.0,
+            "position": 35.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "smartenge engenharia"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 1.0,
+            "position": 54.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "consenge"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 1.0,
+            "position": 56.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "conenge"
+        },
+        {
+          "demand": {
+            "clicks": 1.0,
+            "ctr": 0.25,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 4.0,
+            "position": 1.5,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "confenge"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 1.0,
+        "impressions": 9.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 5
+      },
+      "id": "brand",
+      "ineligible_reasons": [
+        "not_adjacent_to_60",
+        "brand_is_split_not_canary",
+        "wrong_landing"
+      ],
+      "label": "Marca CONFENGE (split, não canário)",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": false,
+        "exists": true,
+        "honesty": "Family brand is not a contract-event the #60 diagnostic answers. Wrong landing for Diagnóstico de Defesa de Margem.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": true
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 0,
+      "score_components": {
+        "commercial_high": 0,
+        "first_vertical_event": 0,
+        "has_clicks": 1,
+        "has_impressions": 1,
+        "landing_is_60_utility": 0,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": true,
+      "cluster": "medicoes-pagamentos",
+      "commercial_intent": "high",
+      "eligible": true,
+      "event_family": "medicao",
+      "first_vertical_event": true,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 1.0,
+            "ctr": 0.125,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 8.0,
+            "position": 4.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "glosa de medição obra pública"
+        },
+        {
+          "demand": {
+            "clicks": 1.0,
+            "ctr": 0.2,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 5.0,
+            "position": 5.5,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "medição rejeitada obra pública"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 2.0,
+        "impressions": 13.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 2
+      },
+      "id": "glosa_medicao",
+      "ineligible_reasons": [],
+      "label": "Glosa / medição rejeitada em obra pública",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": true,
+        "exists": true,
+        "honesty": "Unpaid-eligible #60 utility on origin/main: indexable Diagnóstico de Defesa de Margem. #84 paving-ticket answer is not on this branch.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": false
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": true,
+      "score": 14,
+      "score_components": {
+        "commercial_high": 1,
+        "first_vertical_event": 1,
+        "has_clicks": 1,
+        "has_impressions": 1,
+        "landing_is_60_utility": 1,
+        "problem_now": 1,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": true,
+      "cluster": "reequilibrio",
+      "commercial_intent": "high",
+      "eligible": true,
+      "event_family": "reequilibrio",
+      "first_vertical_event": true,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 1.0,
+            "ctr": 0.2,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 5.0,
+            "position": 4.4,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "curva abc reequilíbrio"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 1.0,
+        "impressions": 5.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 1
+      },
+      "id": "reequilibrio",
+      "ineligible_reasons": [],
+      "label": "Reequilíbrio / reajuste / curva ABC",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": true,
+        "exists": true,
+        "honesty": "Unpaid-eligible #60 utility on origin/main: indexable Diagnóstico de Defesa de Margem. #84 paving-ticket answer is not on this branch.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": false
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 12,
+      "score_components": {
+        "commercial_high": 1,
+        "first_vertical_event": 1,
+        "has_clicks": 1,
+        "has_impressions": 1,
+        "landing_is_60_utility": 1,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": true,
+      "cluster": "aditivos",
+      "commercial_intent": "high",
+      "eligible": true,
+      "event_family": "aditivo",
+      "first_vertical_event": true,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 5.0,
+            "position": 66.2,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "aditivos obra pública"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 12.0,
+            "position": 6.1,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "aditivo qualitativo e quantitativo"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 6.0,
+            "position": 35.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "aditivos obras públicas"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 0.0,
+        "impressions": 23.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 3
+      },
+      "id": "aditivos",
+      "ineligible_reasons": [],
+      "label": "Aditivos qualitativo/quantitativo",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": true,
+        "exists": true,
+        "honesty": "Unpaid-eligible #60 utility on origin/main: indexable Diagnóstico de Defesa de Margem. #84 paving-ticket answer is not on this branch.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": false
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 10,
+      "score_components": {
+        "commercial_high": 1,
+        "first_vertical_event": 1,
+        "has_clicks": 0,
+        "has_impressions": 1,
+        "landing_is_60_utility": 1,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": false,
+      "cluster": "orcamento-bdi",
+      "commercial_intent": "informational",
+      "eligible": false,
+      "event_family": null,
+      "first_vertical_event": false,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 10.0,
+            "position": 9.2,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "desonerado e não desonerado"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 6.0,
+            "position": 6.67,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "não desonerado"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 5.0,
+            "position": 6.6,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "sinapi desonerado ou não desonerado qual usar"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 4.0,
+            "position": 9.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "desonerado ou não desonerado"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 1.0,
+            "position": 10.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "nao desonerado"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 1.0,
+            "position": 11.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "desonerado e não desonerado sinapi"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 22.0,
+            "position": 7.5,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "desonerado e não desonerado"
+        },
+        {
+          "demand": {
+            "clicks": 1.0,
+            "ctr": 0.0556,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 18.0,
+            "position": 6.8,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "sinapi desonerado"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 1.0,
+        "impressions": 67.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 8
+      },
+      "id": "sinapi_desonerado",
+      "ineligible_reasons": [
+        "not_adjacent_to_60",
+        "wrong_landing"
+      ],
+      "label": "SINAPI desonerado / não desonerado",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": false,
+        "exists": true,
+        "honesty": "Family sinapi_desonerado is not a contract-event the #60 diagnostic answers. Wrong landing for Diagnóstico de Defesa de Margem.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": true
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 0,
+      "score_components": {
+        "commercial_high": 0,
+        "first_vertical_event": 0,
+        "has_clicks": 1,
+        "has_impressions": 1,
+        "landing_is_60_utility": 0,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": true,
+      "cluster": "orcamento-bdi",
+      "commercial_intent": "high",
+      "eligible": false,
+      "event_family": "bdi",
+      "first_vertical_event": true,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-07-30",
+            "impressions": 2.0,
+            "position": 20.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-07-30",
+          "query": "bdi diferenciado"
+        },
+        {
+          "demand": {
+            "clicks": 1.0,
+            "ctr": 0.16670000000000001,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 6.0,
+            "position": 6.3,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "bdi diferenciado obra pública"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 1.0,
+        "impressions": 8.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 2
+      },
+      "id": "bdi",
+      "ineligible_reasons": [
+        "wrong_landing"
+      ],
+      "label": "BDI diferenciado",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": false,
+        "exists": true,
+        "honesty": "Family bdi is not a contract-event the #60 diagnostic answers. Wrong landing for Diagnóstico de Defesa de Margem.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": true
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 0,
+      "score_components": {
+        "commercial_high": 1,
+        "first_vertical_event": 1,
+        "has_clicks": 1,
+        "has_impressions": 1,
+        "landing_is_60_utility": 0,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": true,
+      "cluster": "atrasos-prorrogacao",
+      "commercial_intent": "medium",
+      "eligible": true,
+      "event_family": "prorrogacao",
+      "first_vertical_event": true,
+      "gsc_queries": [
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 10.0,
+            "position": 3.5,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "prorrogação prazo obra pública chuva"
+        },
+        {
+          "demand": {
+            "clicks": 0.0,
+            "ctr": 0.0,
+            "export_id": "gsc-2026-08-09",
+            "impressions": 9.0,
+            "position": 7.0,
+            "source_table": "Consultas.csv",
+            "status": "observed"
+          },
+          "export_id": "gsc-2026-08-09",
+          "query": "prazo de vigência e prazo de execução"
+        }
+      ],
+      "gsc_totals": {
+        "clicks": 0.0,
+        "impressions": 19.0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 2
+      },
+      "id": "prorrogacao_prazo",
+      "ineligible_reasons": [],
+      "label": "Prorrogação de prazo / chuva / vigência",
+      "landing": {
+        "asset_id": "diagnostico-defesa-margem",
+        "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+        "cta_id": "segunda-leitura-contrato",
+        "eligible": true,
+        "exists": true,
+        "honesty": "Unpaid-eligible #60 utility on origin/main: indexable Diagnóstico de Defesa de Margem. #84 paving-ticket answer is not on this branch.",
+        "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+        "id": "diagnostico-defesa-margem",
+        "in_sitemap": true,
+        "indexable": true,
+        "issue": 60,
+        "jornada": "contrato",
+        "kind": "utility",
+        "noindex": false,
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "wrong_landing": false
+      },
+      "organic_demand": "observed",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 6,
+      "score_components": {
+        "commercial_high": 0,
+        "first_vertical_event": 1,
+        "has_clicks": 0,
+        "has_impressions": 1,
+        "landing_is_60_utility": 1,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    },
+    {
+      "adjacent_to_60": false,
+      "cluster": "market-answer",
+      "commercial_intent": "commercial_investigation",
+      "eligible": false,
+      "event_family": null,
+      "first_vertical_event": false,
+      "gsc_queries": [],
+      "gsc_totals": {
+        "clicks": 0,
+        "impressions": 0,
+        "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+        "query_count": 0
+      },
+      "id": "market_answer_pavimentacao",
+      "ineligible_reasons": [
+        "no_gsc_evidence",
+        "not_adjacent_to_60",
+        "wrong_landing",
+        "landing_missing"
+      ],
+      "label": "Valor típico de contratos de pavimentação (#84)",
+      "landing": {
+        "asset_id": null,
+        "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "cta_id": null,
+        "eligible": false,
+        "exists": false,
+        "honesty": "#84 market-answer landing is absent on this branch (PR #94 only, noindex fixture / UNKNOWN demand). Paying to it is not eligible.",
+        "html_path": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+        "id": "valor-tipico-contratos-pavimentacao",
+        "in_sitemap": false,
+        "indexable": false,
+        "issue": 84,
+        "jornada": null,
+        "kind": "market_answer",
+        "noindex": false,
+        "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "route_family": null,
+        "wrong_landing": true
+      },
+      "organic_demand": "UNKNOWN",
+      "paid_demand": "UNKNOWN",
+      "primary_metric": "qualified_learning_or_pipeline",
+      "problem_now": false,
+      "score": 0,
+      "score_components": {
+        "commercial_high": 0,
+        "first_vertical_event": 0,
+        "has_clicks": 0,
+        "has_impressions": 0,
+        "landing_is_60_utility": 0,
+        "problem_now": 0,
+        "volume_in_score": 0
+      }
+    }
+  ],
+  "family": {
+    "adjacent_to_60": true,
+    "cluster": "medicoes-pagamentos",
+    "commercial_intent": "high",
+    "eligible": true,
+    "event_family": "medicao",
+    "first_vertical_event": true,
+    "gsc_queries": [
+      {
+        "demand": {
+          "clicks": 1.0,
+          "ctr": 0.125,
+          "export_id": "gsc-2026-08-09",
+          "impressions": 8.0,
+          "position": 4.0,
+          "source_table": "Consultas.csv",
+          "status": "observed"
+        },
+        "export_id": "gsc-2026-08-09",
+        "query": "glosa de medição obra pública"
+      },
+      {
+        "demand": {
+          "clicks": 1.0,
+          "ctr": 0.2,
+          "export_id": "gsc-2026-08-09",
+          "impressions": 5.0,
+          "position": 5.5,
+          "source_table": "Consultas.csv",
+          "status": "observed"
+        },
+        "export_id": "gsc-2026-08-09",
+        "query": "medição rejeitada obra pública"
+      }
+    ],
+    "gsc_totals": {
+      "clicks": 2.0,
+      "impressions": 13.0,
+      "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+      "query_count": 2
+    },
+    "id": "glosa_medicao",
+    "ineligible_reasons": [],
+    "label": "Glosa / medição rejeitada em obra pública",
+    "landing": {
+      "asset_id": "diagnostico-defesa-margem",
+      "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+      "cta_id": "segunda-leitura-contrato",
+      "eligible": true,
+      "exists": true,
+      "honesty": "Unpaid-eligible #60 utility on origin/main: indexable Diagnóstico de Defesa de Margem. #84 paving-ticket answer is not on this branch.",
+      "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+      "id": "diagnostico-defesa-margem",
+      "in_sitemap": true,
+      "indexable": true,
+      "issue": 60,
+      "jornada": "contrato",
+      "kind": "utility",
+      "noindex": false,
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "route_family": "defesa-margem-diagnostico",
+      "wrong_landing": false
+    },
+    "organic_demand": "observed",
+    "paid_demand": "UNKNOWN",
+    "primary_metric": "qualified_learning_or_pipeline",
+    "problem_now": true,
+    "score": 14,
+    "score_components": {
+      "commercial_high": 1,
+      "first_vertical_event": 1,
+      "has_clicks": 1,
+      "has_impressions": 1,
+      "landing_is_60_utility": 1,
+      "problem_now": 1,
+      "volume_in_score": 0
+    }
+  },
+  "geography": {
+    "exclude_countries": [
+      {
+        "clicks": 0.0,
+        "country": "Angola",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Costa Rica",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Espanha",
+        "impressions": 5.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Estados Unidos",
+        "impressions": 16.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "França",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Países Baixos",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Reino Unido",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Rússia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Ucrânia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Vietnã",
+        "impressions": 1.0
+      }
+    ],
+    "include": [
+      "Brasil"
+    ],
+    "note": "GSC Paises.csv is organic evidence. Paid geo is Brasil-only.",
+    "observed": [
+      {
+        "clicks": 0.0,
+        "country": "Angola",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 10.0,
+        "country": "Brasil",
+        "impressions": 296.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Costa Rica",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Espanha",
+        "impressions": 5.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Estados Unidos",
+        "impressions": 16.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "França",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Países Baixos",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Reino Unido",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Rússia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Ucrânia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Vietnã",
+        "impressions": 1.0
+      }
+    ]
+  },
+  "hypothesis": "A construtora com contrato de obra pública ativo que busca termos exact/phrase da família 'Glosa / medição rejeitada em obra pública' usa o Diagnóstico de Defesa de Margem para identificar o contrato e pede segunda leitura. O canário mede learning qualificado e pipeline, não click/CTR. Paid demand permanece UNKNOWN até haver gasto aprovado; GSC orgânico não autoriza o family como TAM.",
+  "icp": {
+    "job": "Glosa / medição rejeitada em obra pública",
+    "not": "estudante, candidato a vaga, AVCB/legado, busca de marca, SINAPI tabela, SmartLic",
+    "who": "Diretoria técnica / sócio de construtora B2G com contrato de obra pública ativo",
+    "why_now": "evento contratual com dinheiro em risco"
+  },
+  "primary_metric": "qualified_learning_or_pipeline",
+  "reason": "highest_eligible_score_volume_excluded",
+  "schedule": {
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
+    "hours": "08:00-19:00",
+    "note": "Schedule confirmation is HUMAN_REQUIRED before go-live.",
+    "status": "PROPOSED",
+    "timezone": "America/Sao_Paulo"
+  },
+  "snapshots": [
+    "gsc-2026-07-30",
+    "gsc-2026-08-09"
+  ],
+  "unclassified_queries": [
+    {
+      "export_id": "gsc-2026-07-30",
+      "query": "como calcular mobilização e desmobilização de obra"
+    },
+    {
+      "export_id": "gsc-2026-07-30",
+      "query": "empreitada por preço unitário"
+    },
+    {
+      "export_id": "gsc-2026-07-30",
+      "query": "mobilização de obra"
+    },
+    {
+      "export_id": "gsc-2026-07-30",
+      "query": "ia"
+    },
+    {
+      "export_id": "gsc-2026-07-30",
+      "query": "tecnico edificacoes"
+    },
+    {
+      "export_id": "gsc-2026-07-30",
+      "query": "mobilização e desmobilização de obra"
+    },
+    {
+      "export_id": "gsc-2026-07-30",
+      "query": "comprovação de exequibilidade"
+    }
+  ]
+}
