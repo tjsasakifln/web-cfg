@@ -11,7 +11,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.contract_analysis.gate import evaluate_publication
-from scripts.contract_analysis.render import build_schema, render_analysis_html
+from scripts.contract_analysis.render import (
+    HUB_DESCRIPTION,
+    build_schema,
+    render_analysis_html,
+    render_hub_html,
+)
 from scripts.contract_analysis.tests.helpers import complete_live_record
 from scripts.site.authority import check_schema_mirrors_visible, extract_jsonld_blocks
 
@@ -101,6 +106,25 @@ def test_cta_url_has_no_cnpj_or_email():
     assert "52407089000109" not in cta_chunk
     assert "52.407.089" not in cta_chunk
     assert "@" not in cta_chunk.split("href=")[1].split(">")[0]
+
+
+def test_hub_collectionpage_description_matches_visible_meta():
+    html = render_hub_html([], index_count=0)
+    assert f'name="description" content="{HUB_DESCRIPTION}"' in html or (
+        f'content="{HUB_DESCRIPTION}" name="description"' in html
+    )
+    blocks = extract_jsonld_blocks(html)
+    pages = []
+    for block in blocks:
+        nodes = block if isinstance(block, list) else block.get("@graph", [block])
+        if isinstance(nodes, dict):
+            nodes = [nodes]
+        for node in nodes:
+            if isinstance(node, dict) and node.get("@type") == "CollectionPage":
+                pages.append(node)
+    assert pages, "hub must emit CollectionPage JSON-LD"
+    assert all(node.get("description") == HUB_DESCRIPTION for node in pages)
+    assert check_schema_mirrors_visible(html) == []
 
 
 def test_headings_and_table_accessibility():

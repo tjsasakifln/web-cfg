@@ -26,6 +26,11 @@ from scripts.pseo.html_shell import (
 
 PUBLIC_DIR = Path(FAMILY_SLUG)
 SITEMAP_NAME = "sitemap-analises-contratos.xml"
+# Visible meta and CollectionPage must share this string so discovery
+# structured_data_matches_visible does not fail when the hub file exists.
+HUB_DESCRIPTION = (
+    "Análises editoriais independentes de contratos públicos. Não são casos CONFENGE."
+)
 KIND_LABEL = {
     "FACT": "Fato",
     "CALCULATION": "Cálculo",
@@ -476,7 +481,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
             "@type": "CollectionPage",
             "@id": f"{SITE}{FAMILY_PATH}#page",
             "name": "Análises técnicas de contratos públicos",
-            "description": DISCLAIMER_PT,
+            "description": HUB_DESCRIPTION,
             "url": f"{SITE}{FAMILY_PATH}",
             "datePublished": "2026-08-16",
             "dateModified": "2026-08-16",
@@ -487,7 +492,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
     ]
     return page_shell(
         title="Análises técnicas de contratos públicos | CONFENGE",
-        description="Análises editoriais independentes de contratos públicos. Não são casos CONFENGE.",
+        description=HUB_DESCRIPTION,
         canonical_path=FAMILY_PATH,
         robots=robots,
         jsonld_graph=schema,
