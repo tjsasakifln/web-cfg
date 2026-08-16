@@ -52,3 +52,5 @@ Branded search, direct/returning, qualified referring domains and citation/reuse
 ## Gates
 
 `npm run test:authority` (and `python3 scripts/site/test_authority_contract.py`) fail-closed on: missing author/reviewer/AI-disclosure/consent slots; schema that contradicts visible byline/org/dates/crumbs/dataset; invented Review/rating/Award/association/reviewer/CaseStudy; analysis labeled as Caso CONFENGE; research without method/`as_of`; credential not in public VERIFIED proof; case without permission class; unclassified public family treated as pass.
+
+`scripts/site/visible_parity.py` (and `python3 scripts/site/test_visible_parity.py`) fail-closed on: schema/meta/canonical that outclaim visible labels, author, reviewer, dates, data version or license; Dataset/DataDownload without a real dataset; false case-study semantics; invalid JSON-LD. Defects withdraw INDEX/sitemap eligibility. The compare runs on the final `_site` artifact after `npm run build:site`.

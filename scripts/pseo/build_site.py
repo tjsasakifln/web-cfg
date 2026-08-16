@@ -308,6 +308,32 @@ def main(argv: list[str] | None = None) -> int:
     if not audit.get("ok"):
         errors.extend(audit.get("errors") or ["audit_public_artifact failed"])
 
+    # Visible parity on the final `_site` artifact (not templates).
+    parity_summary: dict = {}
+    try:
+        from scripts.site.visible_parity import dump_report, scan_site_artifact
+
+        site_dir = ROOT / PUBLIC_DIR_NAME
+        parity = scan_site_artifact(site_dir, only_index_intent=True)
+        dump_report(
+            parity,
+            ROOT / "seo" / "visible-parity.json",
+            ROOT / "seo" / "visible-parity.md",
+        )
+        parity_summary = {
+            "ok": parity.get("ok"),
+            "page_count": parity.get("page_count"),
+            "defect_count": parity.get("defect_count"),
+        }
+        if not parity.get("ok"):
+            for page in parity.get("pages") or []:
+                if page.get("ok"):
+                    continue
+                codes = ",".join(d.get("code") or "" for d in (page.get("defects") or []))
+                errors.append(f"visible_parity:{page.get('url')}:{codes}")
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"visible_parity_scan_failed:{exc}")
+
     report = {
         "ok": len(errors) == 0,
         "web_cfg_sha": _git_sha(),
@@ -329,6 +355,7 @@ def main(argv: list[str] | None = None) -> int:
             "sitemap_counts": editorial_report.get("sitemap_counts"),
         },
         "validate": {"ok": v.get("ok"), "error_count": len(v.get("errors") or [])},
+        "visible_parity": parity_summary,
         "public_artifact": {
             "assembled": True,
             "audit_ok": audit.get("ok"),

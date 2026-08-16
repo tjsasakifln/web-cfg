@@ -323,6 +323,14 @@ def render_page(page: dict[str, Any]) -> str:
     author_name = page.get("author_public") or "Biblioteca técnica CONFENGE"
     # Do not claim Tiago authorship unless explicitly set after real approval flag
     use_tiago = bool(page.get("author_is_tiago"))
+    # Same source fields feed visible HTML and JSON-LD in this render.
+    reviewer_name = str(
+        page.get("reviewer_public") or page.get("reviewed_by") or ""
+    ).strip()
+    data_version = str(
+        page.get("data_version") or page.get("dataset_hash") or page.get("version") or ""
+    ).strip()
+    license_url = str(page.get("license") or "").strip()
 
     faq = page.get("faq") or []
     faq_html = ""
@@ -363,6 +371,12 @@ def render_page(page: dict[str, Any]) -> str:
             else {"@type": "Organization", "name": author_name, "@id": f"{SITE}/#organization"}
         ),
     }
+    if reviewer_name:
+        article_ld["reviewedBy"] = {"@type": "Person", "name": reviewer_name}
+    if data_version:
+        article_ld["version"] = data_version
+    if license_url:
+        article_ld["license"] = license_url
     graph = [ORG_JSONLD, breadcrumb_jsonld(crumbs), article_ld]
     if use_tiago:
         graph.insert(1, PERSON_JSONLD)
@@ -375,12 +389,29 @@ def render_page(page: dict[str, Any]) -> str:
             f'<span>Publicado em <time datetime="{e(published)}">{e(format_date_br(published))}</time></span>'
             f'<span aria-hidden="true">·</span>'
         )
+    extra_meta = ""
+    if reviewer_name:
+        extra_meta += (
+            f'<span aria-hidden="true">·</span>'
+            f'<span>Revisão técnica: <span data-reviewer="{e(reviewer_name)}">{e(reviewer_name)}</span></span>'
+        )
+    if data_version:
+        extra_meta += (
+            f'<span aria-hidden="true">·</span>'
+            f'<span>Versão dos dados: <code data-version="{e(data_version)}">{e(data_version)}</code></span>'
+        )
+    if license_url:
+        extra_meta += (
+            f'<span aria-hidden="true">·</span>'
+            f'<span>Licença: <a data-license="{e(license_url)}" href="{e(license_url)}">{e(license_url)}</a></span>'
+        )
     meta_line = (
         f'<p class="article-meta-line">'
         f'<span>{e(author_name)}</span>'
         f'<span aria-hidden="true">·</span>'
         f"{published_span}"
         f'<span>Atualizado em <time datetime="{e(modified)}">{e(format_date_br(modified))}</time></span>'
+        f"{extra_meta}"
         f"</p>"
     )
 

@@ -1,0 +1,38 @@
+{
+  "label": "FIXTURE_ONLY",
+  "public": false,
+  "index_eligible": false,
+  "note": "Negative visible-parity cases. Never copy into _site as INDEX surfaces.",
+  "cases": [
+    {
+      "id": "false-case-study",
+      "file": "false-case-study.html",
+      "defect": "schema_false_case_study",
+      "summary": "CaseStudy / review semantics on an editorial analysis that is not a CASO CONFENGE."
+    },
+    {
+      "id": "invisible-reviewer",
+      "file": "invisible-reviewer.html",
+      "defect": "schema_reviewer_not_visible",
+      "summary": "reviewedBy present only in JSON-LD."
+    },
+    {
+      "id": "dataset-without-dataset",
+      "file": "dataset-without-dataset.html",
+      "defect": "schema_dataset_without_visible_dataset",
+      "summary": "Dataset/DataDownload without a real visible dataset."
+    },
+    {
+      "id": "stale-date",
+      "file": "stale-date.html",
+      "defect": "schema_date_stale",
+      "summary": "schema dateModified not shown on the page."
+    },
+    {
+      "id": "divergent-claim",
+      "file": "divergent-claim.html",
+      "defect": "meta_title_diverges",
+      "summary": "title/description/headline claim a different page than the visible copy."
+    }
+  ]
+}

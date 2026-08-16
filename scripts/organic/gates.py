@@ -32,6 +32,7 @@ def indexability_quality_gate(
     min_score: int = DEFAULT_MIN_SCORE,
     content_value_score: int = 0,
     legal_safe: bool = True,
+    visible_parity: bool = True,
 ) -> dict[str, Any]:
     """Return gate decision. indexable only if all mandatory criteria pass."""
     fails: list[str] = []
@@ -53,6 +54,7 @@ def indexability_quality_gate(
         "has_provenance": has_provenance,
         "legal_safe": legal_safe,
         "content_value_floor": int(content_value_score) >= int(min_score),
+        "visible_parity": visible_parity,
     }
 
     labels = {
@@ -71,6 +73,7 @@ def indexability_quality_gate(
         "has_provenance": "missing_provenance",
         "legal_safe": "legal_risk",
         "content_value_floor": f"score<{min_score}",
+        "visible_parity": "visible_parity_overclaim",
     }
 
     for key, ok in checks.items():
@@ -86,6 +89,8 @@ def indexability_quality_gate(
     indexable = len(fails) == 0
     if not indexable:
         decision = "noindex"
+        if "visible_parity_overclaim" in fails:
+            decision = "noindex"
         if "cannibalization_risk" in fails or "redundant_content" in fails:
             decision = "merge_or_canonical"
         if "sample<" in " ".join(fails) or "no_own_information" in fails:

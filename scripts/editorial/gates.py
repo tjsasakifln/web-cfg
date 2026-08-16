@@ -156,6 +156,17 @@ def evaluate_page(
     if analytics_missing:
         issues.append("analytics_hooks:" + ",".join(analytics_missing))
 
+    from scripts.site.visible_parity import compare_visible_parity, is_fixture_only
+
+    if is_fixture_only(html):
+        issues.append("visible_parity:fixture_only")
+    else:
+        parity = compare_visible_parity(html, url=url or None)
+        for defect in parity.get("defects") or []:
+            issues.append(
+                "visible_parity:" + defect["code"] + ":" + (defect.get("field") or "")
+            )
+
     # Required structural signals in body
     for signal, label in (
         (r"\b(documento|checklist|memória|diario|diário)s?\b", "docs"),
