@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-08-15",
+  "updated_at": "2026-08-16",
   "issue": 74,
   "canonical_org": {
     "name": "CONFENGE",
@@ -18,10 +18,19 @@
   "correction": {
     "owner_name": "Engº Tiago Sasaki",
     "owner_email": "tiago.sasaki@confenge.com.br",
-    "acknowledge_sla": "até 2 dias úteis após o recebimento do pedido identificável",
-    "publish_sla": "até 10 dias úteis após a confirmação do erro material",
-    "channel": "mailto:tiago.sasaki@confenge.com.br?subject=Correcao%20editorial%20CONFENGE",
+    "acknowledge_sla": "UNKNOWN",
+    "publish_sla": "UNKNOWN",
+    "prazo": "UNKNOWN",
+    "prazo_note": "Nenhum prazo de acuse, revisão ou publicação foi medido. UNKNOWN permanece UNKNOWN até existir série observada de pedidos reais.",
+    "channel": "/.netlify/functions/correction",
+    "mailto": "mailto:tiago.sasaki@confenge.com.br?subject=Correcao%20editorial%20CONFENGE",
     "public_path": "/correcoes/"
+  },
+  "policy": {
+    "record": "data/site/editorial-policy.json",
+    "current_version": "1.1.0",
+    "public_path": "/politica-editorial/",
+    "historico_path": "/politica-editorial/historico/"
   },
   "refresh": {
     "owner_name": "Engº Tiago Sasaki",

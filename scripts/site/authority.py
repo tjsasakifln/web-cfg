@@ -172,6 +172,10 @@ def load_governance() -> dict[str, Any]:
     return _load("authority-governance.json")
 
 
+def load_editorial_policy() -> dict[str, Any]:
+    return _load("editorial-policy.json")
+
+
 def load_signals_baseline() -> dict[str, Any]:
     path = SITE_DATA / "authority-signals-baseline-2026-08-15.json"
     if not path.exists():
@@ -1159,3 +1163,188 @@ def policy_pages() -> dict[str, Path]:
         "ai_use": ROOT / "uso-de-ia" / "index.html",
         "conflicts": ROOT / "conflitos" / "index.html",
     }
+
+
+def archived_policy_pages() -> dict[str, Path]:
+    return {
+        "historico": ROOT / "politica-editorial" / "historico" / "index.html",
+        "v1.0.0": ROOT / "politica-editorial" / "v" / "1.0.0" / "index.html",
+    }
+
+
+def data_analysis_policy_pages() -> dict[str, Path]:
+    """Surfaces that can take a policy/version link without a material-hash regen."""
+    return {
+        "inteligencia_hub": ROOT / "inteligencia" / "index.html",
+        "metodologia": ROOT / "metodologia-inteligencia" / "index.html",
+        "ferramenta_limite": ROOT / "ferramentas" / "limite-acrescimos-supressoes" / "index.html",
+        "radar_nacional": ROOT / "radar" / "nacional-obras-publicas" / "index.html",
+    }
+
+
+def current_policy_version(policy: dict[str, Any] | None = None) -> str:
+    rec = policy if policy is not None else load_editorial_policy()
+    return str(rec.get("current_version") or "")
+
+
+def policy_version_disclosure(policy: dict[str, Any] | None = None) -> str:
+    version = current_policy_version(policy)
+    return (
+        f'<p class="policy-version-disclosure" data-policy-version="{version}">'
+        f'Texto e dados desta página seguem a '
+        f'<a href="/politica-editorial/">política editorial {version}</a>. '
+        f'<a href="/correcoes/">Contestar ou pedir correção</a>.'
+        "</p>"
+    )
+
+
+def _canonical_version_payload(version_rec: dict[str, Any]) -> str:
+    pages = version_rec.get("pages") or {}
+    payload = {key: str((pages.get(key) or {}).get("body") or "") for key in sorted(pages)}
+    return json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+
+
+def content_sha256_for_version(version_rec: dict[str, Any]) -> str:
+    import hashlib
+
+    return hashlib.sha256(_canonical_version_payload(version_rec).encode("utf-8")).hexdigest()
+
+
+def entry_sha256_for(entry: dict[str, Any]) -> str:
+    import hashlib
+
+    material = "\n".join(
+        [
+            str(entry.get("version") or ""),
+            str(entry.get("effective_at") or ""),
+            str(entry.get("summary") or ""),
+            str(entry.get("content_sha256") or ""),
+        ]
+    )
+    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+
+
+def seal_editorial_policy(policy: dict[str, Any] | None = None) -> dict[str, Any]:
+    rec = json.loads(json.dumps(policy if policy is not None else load_editorial_policy()))
+    versions = rec.get("versions") or {}
+    for entry in rec.get("changelog") or []:
+        ver = entry.get("version")
+        body = versions.get(ver) or {}
+        entry["content_sha256"] = content_sha256_for_version(body)
+        entry["entry_sha256"] = entry_sha256_for(entry)
+    return rec
+
+
+def write_sealed_editorial_policy(path: Path | None = None) -> dict[str, Any]:
+    dest = path or (SITE_DATA / "editorial-policy.json")
+    sealed = seal_editorial_policy(json.loads(dest.read_text(encoding="utf-8")))
+    dest.write_text(json.dumps(sealed, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return sealed
+
+
+def check_policy_version_consistency(
+    policy: dict[str, Any] | None = None,
+    pages: dict[str, Path] | None = None,
+) -> list[str]:
+    """Fail closed on version/changelog drift and silent history rewrite."""
+    rec = policy if policy is not None else load_editorial_policy()
+    errors: list[str] = []
+    current = str(rec.get("current_version") or "")
+    changelog = rec.get("changelog") or []
+    versions = rec.get("versions") or {}
+    if not current:
+        errors.append("current_version_absent")
+    changelog_versions = [str(e.get("version") or "") for e in changelog]
+    if current and current not in changelog_versions:
+        errors.append("current_version_missing_from_changelog")
+    if changelog_versions and changelog_versions[-1] != current:
+        errors.append("current_version_not_last_changelog_entry")
+    if len(changelog_versions) != len(set(changelog_versions)):
+        errors.append("changelog_duplicate_version")
+    if rec.get("prazo") != "UNKNOWN":
+        errors.append("prazo_not_unknown")
+
+    for entry in changelog:
+        ver = str(entry.get("version") or "")
+        body = versions.get(ver)
+        if not isinstance(body, dict):
+            errors.append(f"version_body_missing:{ver}")
+            continue
+        expected_content = content_sha256_for_version(body)
+        if entry.get("content_sha256") != expected_content:
+            errors.append(f"changelog_hash_mismatch:{ver}")
+        if entry.get("entry_sha256") != entry_sha256_for(entry):
+            errors.append(f"changelog_entry_rewritten:{ver}")
+        if ver != current:
+            archive = ROOT / "politica-editorial" / "v" / ver / "index.html"
+            if not archive.exists():
+                errors.append(f"archived_version_unreadable:{ver}")
+            else:
+                html = archive.read_text(encoding="utf-8")
+                if ver not in html:
+                    errors.append(f"archived_version_not_visible:{ver}")
+                summary = str(entry.get("summary") or "")
+                if summary and summary not in html:
+                    errors.append(f"changelog_entry_rewritten:{ver}")
+
+    gov = load_governance()
+    gov_version = ((gov.get("policy") or {}).get("current_version")) or ""
+    if gov_version and gov_version != current:
+        errors.append("governance_version_mismatch")
+    corr = gov.get("correction") or {}
+    for key in ("acknowledge_sla", "publish_sla", "prazo"):
+        if corr.get(key) != "UNKNOWN":
+            errors.append(f"invented_sla:{key}")
+
+    for name, path in (pages or policy_pages()).items():
+        if not path.exists():
+            errors.append(f"policy_page_missing:{name}")
+            continue
+        html = path.read_text(encoding="utf-8")
+        if current and current not in html:
+            errors.append(f"visible_version_mismatch:{name}")
+        if current and f'data-policy-version="{current}"' not in html:
+            errors.append(f"visible_version_attr_missing:{name}")
+    return errors
+
+
+def check_policy_visible_disclosure(
+    html: str,
+    policy: dict[str, Any] | None = None,
+) -> list[str]:
+    rec = policy if policy is not None else load_editorial_policy()
+    blob = _norm(_strip_tags(html or ""))
+    errors: list[str] = []
+    for token in rec.get("required_visible_tokens") or []:
+        if _norm(token) not in blob:
+            errors.append(f"disclosure_missing:{token}")
+    for token in rec.get("forbidden_current_tokens") or []:
+        if _norm(token) in blob:
+            errors.append(f"forbidden_promise:{token}")
+    if rec.get("prazo") == "UNKNOWN" and "unknown" not in blob:
+        errors.append("disclosure_missing:UNKNOWN")
+    return errors
+
+
+def check_policy_links(html: str, policy: dict[str, Any] | None = None) -> list[str]:
+    rec = policy if policy is not None else load_editorial_policy()
+    raw = html or ""
+    errors: list[str] = []
+    version = current_policy_version(rec)
+    if "/politica-editorial/" not in raw:
+        errors.append("policy_link_absent")
+    if "/correcoes/" not in raw:
+        errors.append("correction_link_absent")
+    if version and version not in raw:
+        errors.append("policy_version_absent")
+    if version and f'data-policy-version="{version}"' not in raw:
+        errors.append("policy_version_attr_absent")
+    return errors
+
+
+def combined_policy_html(pages: dict[str, Path] | None = None) -> str:
+    chunks: list[str] = []
+    for path in (pages or policy_pages()).values():
+        if path.exists():
+            chunks.append(path.read_text(encoding="utf-8"))
+    return "\n".join(chunks)

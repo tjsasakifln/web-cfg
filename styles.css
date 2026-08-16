@@ -965,3 +965,5 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 .authority-method p{margin:.45rem 0;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
 .authority-policy-nav{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin:1rem 0 0}
 .authority-policy-nav a{font-size:.9rem;text-decoration:underline;text-underline-offset:2px}
+.policy-version-disclosure{margin:1rem 0 0;font-size:.95rem;color:var(--muted,#475569)}
+.policy-version-disclosure a{text-decoration:underline;text-underline-offset:2px}
