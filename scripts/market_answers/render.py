@@ -418,7 +418,7 @@ def render_html(
 <li>Owner de refresh: {escape(_text(((record.get("refresh") or {{}}).get("owner")) if isinstance(record.get("refresh"), dict) else record.get("refresh_owner") or "CONFENGE / market-answers"))}</li>
 <li>Estado do gate: <code>{escape(decision.state)}</code> · recomendação <code>{escape(decision.recommendation)}</code></li>
 </ul>
-<p>Integração extra-cli Goals 03/05/07: ver <code>docs/contracts/market-answer/INTEGRATION_NOTES.md</code>.</p>
+<p>A leitura factual é SELECT-only, versionada e com proveniência. Notas internas de integração ficam fora desta página.</p>
 </section>
 </div>
 </main>

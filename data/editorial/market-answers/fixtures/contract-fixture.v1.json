@@ -113,7 +113,7 @@
   "limitations": [
     "Recorte de duas UFs publicadas. Não descreve o Brasil.",
     "Ticket contratual não é custo por km nem preço unitário.",
-    "Tipologia de pavimentação ainda não teve precisão amostral revisada no extra-cli.",
+    "Tipologia de pavimentação ainda não teve precisão amostral revisada na fonte factual publicada.",
     "Peer group oficial (#415) ausente: status HOLD_FOR_DATA.",
     "Números deste arquivo são CONTRACT_FIXTURE e não podem ser citados como fato oficial."
   ],

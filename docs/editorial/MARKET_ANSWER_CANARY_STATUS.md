@@ -8,7 +8,7 @@
 
 **Data state:** official_live=`False` · producer_status=`CONTRACT_FIXTURE` · fixture=`True`
 
-**as_of:** `2026-07-31` · content_hash=`8ce296f094dbd14156dfe130bb6fc26421caaee32ab32dba0eab776c77e55a08`
+**as_of:** `2026-07-31` · content_hash=`e115debcfca3fbd17320fc66b6fc98f42c308d186e46db7026debc1a350e2011`
 
 ## Gate results
 

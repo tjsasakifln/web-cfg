@@ -40,6 +40,12 @@ def test_first_fold_has_answer_range_n_period_geo_method_as_of_limitations():
     assert "CONTRACT_FIXTURE" in html
 
 
+def test_rendered_html_does_not_name_extra_cli():
+    html = _html()
+    assert "extra-cli" not in html.lower()
+    assert "docs/contracts/market-answer" not in html
+
+
 def test_ticket_never_becomes_cost_per_km():
     html = _html()
     assert "ticket contratual, não custo por km" in html

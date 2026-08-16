@@ -115,7 +115,7 @@
       "national_claim_allowed": false,
       "current_publication_allowed": false
     },
-    "content_hash": "8ce296f094dbd14156dfe130bb6fc26421caaee32ab32dba0eab776c77e55a08",
+    "content_hash": "e115debcfca3fbd17320fc66b6fc98f42c308d186e46db7026debc1a350e2011",
     "producer_sha": "CONTRACT_FIXTURE",
     "source_path": "/home/tjsasakifln/code/confenge/web-cfg/data/editorial/market-answers/fixtures/contract-fixture.v1.json"
   },
@@ -167,7 +167,7 @@
     "asset_family": "market-answer",
     "route_family": "market-answer",
     "asset_version": "1.0",
-    "content_hash": "8ce296f094dbd14156dfe130bb6fc26421caaee32ab32dba0eab776c77e55a08",
+    "content_hash": "e115debcfca3fbd17320fc66b6fc98f42c308d186e46db7026debc1a350e2011",
     "events": [
       {
         "name": "answer_view",
