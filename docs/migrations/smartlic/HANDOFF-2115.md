@@ -1,31 +1,30 @@
-# Handoff — SmartLic#2115 execute set
-
-Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smartlic/HANDOFF-2115.md).
+# Handoff — SmartLic#2115 execute set (inventory v2)
 
 **Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
 **Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
 **SHA-256:** `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023`  
 **Version:** `v2`  
+**Schema:** `smartlic-url-map-v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  
 **Do not execute against any other file, branch, or unhashed edit.**
 
-### Pin reconciliation 2026-08-16 (six-action inventory)
-
-Supersedes `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d`. The 11 ready 301s are unchanged. 54 rows move from RETIRE to HOLD_TARGET_NOT_READY (still 410, no Location). SmartLic#2115 must re-pin both repos together.
+Supersedes pin `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d` (v1 REDIRECT/RETIRE-only). The 11 ready CONFENGE 301s are unchanged. Vocabulary is now the six actions; 54 previously-RETIRE rows whose job has a named future surface are `HOLD_TARGET_NOT_READY` (fail-closed 410, no Location).
 
 Recompute: `python3 -c "from pathlib import Path; import hashlib; print(hashlib.sha256(Path('data/migrations/smartlic-url-map/inventory.v2.json').read_bytes()).hexdigest())"`  
 Must match `data/migrations/smartlic-url-map/inventory.v2.sha256` and `data/migration/smartlic-confenge/manifesto.v1.sha256`.
 
 ## Scope of this handoff
 
-**Only the ready REDIRECT_301 rows below.** 1.190 RETIRE_410 URLs and 54 HOLD_TARGET_NOT_READY URLs are decided (expected **410**, not 301-to-home) but are **not** an execute list of 301s. If the bridge needs a default for unlisted paths, serve **410**. Never 301 leftover traffic to `https://confenge.com.br/` or `/consultoria-b2g/`.
+**Only the ready REDIRECT_301 rows below.** 1.190 RETIRE_410 URLs and 54 HOLD_TARGET_NOT_READY URLs are decided (expected **410**, no Location) but are **not** an execute list of 301s. If the bridge needs a default for unlisted paths, serve **410**. Never 301 leftover traffic to `https://confenge.com.br/` or `/consultoria-b2g/`.
+
+HOLD rows must not be compiled into 301s. Tests that would fetch a HOLD destination as a redirect are **skipped** with `skip_reason`.
 
 No SmartLic-branded destination. No SaaS recovery. No Railway token/limit/redeploy. No Netcup application rebuild.
 
 ## Ready redirects (execute)
 
-Single hop. HTTPS. Drop query string except the allowlist in the manifesto (`utm_*`, `jornada`, `origem`, `route_family`, `cta_id`, `asset_id`, `correlation_id`, `tema`). Never forward email/phone/name/cnpj.
+Single hop. HTTPS. Drop query string except the allowlist (`utm_*`, `jornada`, `origem`, `route_family`, `cta_id`, `asset_id`, `correlation_id`, `tema`). Never forward email/phone/name/cnpj. Fragments are not forwarded. Trailing slash on the legacy path is stripped except `/`. Host is lowercased.
 
 | legacy_url | target_url | HTTP | owner |
 |---|---|---:|---|
@@ -45,26 +44,20 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 ## Expected DNS / reverse proxy / TLS
 
-| Item | Required | Status 2026-08-14 |
+| Item | Required | Status 2026-08-16 |
 |---|---|---|
-| Target origin | `https://confenge.com.br` (Netlify) | live 200 observed |
-| Bridge hostname | `smartlic.tech` (+ www if it still receives traffic) | apex → Railway `69.46.46.88` fallback **404**; www TLS **SAN mismatch** on `*.up.railway.app` |
-| Reverse proxy | static 301 map of the 11 rows; default 410 | **not authorized / not deployed** |
+| Target origin | `https://confenge.com.br` (Netlify) | live 200 observed on the 11 ready pages (in-repo artifact + prior live GET) |
+| Bridge hostname | `smartlic.tech` (+ www if it still receives traffic) | apex → Railway `69.46.46.88` fallback **404**; www TLS **SAN mismatch** |
+| Reverse proxy | static 301 map of the 11 rows; default 410; HOLD fail-closed | **not authorized / not deployed** |
 | TLS | certificate covering `smartlic.tech` and `www.smartlic.tech` | apex Railway cert; www **fails** |
 | Owner | SmartLic#2115 operator (Gage / @devops for DNS) | human |
 
 **Gate: BLOCKED.** Do not change DNS until a named proxy + cert + rollback record exist. This handoff does not authorize Railway usage-limit work.
 
-### Post-#68 revalidation (2026-08-15)
-
-`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023` (same 11 ready 301s; HOLD fail-closed added).
-
-Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonical host `confenge.com.br`, indexable, no SmartLic brand, no redirect chain, no soft-404. SmartLic production 301s / DNS / TLS / Cloudflare / Railway were **not** changed and were **not** observed. Cutover remains unobserved. #62 stays OPEN. Counterpart SmartLic#2115 / PR #2133 may start the bridge against this pin; web-cfg does not own that deploy.
-
 ## Observation window
 
 - **Duration:** 28 days after the first production 301 of this hash.
-- **Not started** in web-cfg#62.
+- **Not started** in web-cfg#62 (no production 301 exists as of 2026-08-16).
 - Compare against `docs/migration/smartlic-confenge/BASELINE-2026-08-14.md`.
 
 ### Investigate if
@@ -74,6 +67,7 @@ Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonica
 - Soft 404 (200 with gone/empty body) on a ready target.
 - TLS/DNS failure on `smartlic.tech` after cutover.
 - Lead capture on a commercial target broken (form/function 5xx or persist miss).
+- A HOLD or RETIRE path starts returning 301.
 - GSC clicks on the 11 legacy paths drop to **zero for 14 consecutive days** while impressions remain, after indexing lag of 7 days — investigate before rollback.
 
 ### Rollback if
@@ -89,17 +83,12 @@ Rollback restores the **last functional CONFENGE Netlify publish** and the **pre
 
 - Bridge expiry review: **28 days after cutover**, then weekly until removal.
 - Remove `smartlic.tech` hosting/DNS only after: observation window complete, no residual priority errors, any later-discovered critical backlinks accepted or remapped, SmartLic#2111 archive gate.
-- Temporary cost: DNS + TLS + a static 301/410 edge (should be cents-to-low-dollars; exact invoice **UNKNOWN** until a provider is chosen). Railway app cost should go to **zero** — do not keep the failed app as the bridge.
-
-## Rollback procedure (CONFENGE side)
-
-1. Note current Netlify production SHA (`netlify status` / deploy UI) before any later publish. Pre-PR production SHA was **UNKNOWN** from public headers.
-2. `git revert` of the merge commit of this PR, or redeploy the previous Netlify deploy.
-3. Do not add SmartLic brand, CTAs or runtime back onto confenge.com.br.
+- Temporary cost: DNS + TLS + a static 301/410 edge (cents-to-low-dollars; exact invoice **UNKNOWN** until a provider is chosen). Railway app cost should go to **zero**.
 
 ## What SmartLic#2115 must not do
 
-- Implement redirects for RETIRE rows (except default 410).
+- Implement redirects for RETIRE_410 or HOLD_TARGET_NOT_READY rows (except default 410).
 - 301 `/*` to CONFENGE home.
 - Recreate FastAPI/Next/Redis/Supabase/billing.
-- Execute against an unpinned or dirty manifesto.
+- Execute against an unpinned or dirty inventory.
+- Close #2115 or archive the repo (#2111) from this handoff.

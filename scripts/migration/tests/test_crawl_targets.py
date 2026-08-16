@@ -14,7 +14,7 @@ from crawl_targets import crawl  # noqa: E402
 def test_ready_targets_exist_and_are_confenge_only():
     report = crawl()
     assert report["ok"], report["failures"]
-    ready = [r for r in report["rows"] if r["decision"] == "REDIRECT"]
+    ready = [r for r in report["rows"] if r["decision"] in {"REDIRECT", "REDIRECT_301"}]
     assert ready
     for row in ready:
         assert row["status"] == 200

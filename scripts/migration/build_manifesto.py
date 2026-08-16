@@ -8,6 +8,7 @@ snapshots under data/migration/smartlic-confenge/.
 from __future__ import annotations
 
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
@@ -585,13 +586,17 @@ def build() -> dict:
 
 
 def main() -> None:
-    manifesto = build()
-    MANIFESTO_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MANIFESTO_PATH.write_text(json.dumps(manifesto, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    digest = manifesto_sha256(MANIFESTO_PATH)
-    meta_path = DATA / "manifesto.v1.sha256"
-    meta_path.write_text(digest + "\n", encoding="utf-8")
-    print(f"wrote {MANIFESTO_PATH} entries={len(manifesto['entries'])} sha256={digest}")
+    """v1 builder is superseded. Rebuild via scripts/legacy_equity/build_inventory.py."""
+    from pathlib import Path as _Path
+    import runpy
+
+    builder = _Path(__file__).resolve().parents[1] / "legacy_equity" / "build_inventory.py"
+    print(
+        "build_manifesto.py is superseded by scripts/legacy_equity/build_inventory.py "
+        "(six-action inventory; same 11 ready 301s). Delegating.",
+        file=sys.stderr,
+    )
+    runpy.run_path(str(builder), run_name="__main__")
 
 
 if __name__ == "__main__":
