@@ -62,6 +62,7 @@
     xray_start: 1, xray_timeout: 1,
   };
   const RETIRED_EVENTS = { conversion: 1 };
+  const ENVELOPE_ID_KEYS = { correlation_id: 1, idempotency_key: 1 };
   // EVENT_CONTRACT_CLIENT_END
   window.__CONFENGE_EVENT_CONTRACT = {
     schema_version: EVENT_CONTRACT_SCHEMA_VERSION,
@@ -122,6 +123,18 @@
     if (!ADMITTED_EVENTS[canonical]) return { ok: false, reason: 'unknown_event', name };
     return { ok: true, original: name, canonical };
   };
+  const looksLikePiiValue = (val, key) => {
+    if (typeof val !== 'string' || !val) return false;
+    if (val.includes('@')) return true;
+    const k = String(key || '').toLowerCase();
+    if (ENVELOPE_ID_KEYS[k]) return false;
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val)) return false;
+    if (val.startsWith('c-')) return false;
+    const compact = val.replace(/[\s()-]/g, '');
+    if (/^\+?\d{10,15}$/.test(compact)) return true;
+    if (/^\d{14}$/.test(val.trim())) return true;
+    return false;
+  };
   const track = (eventName, params = {}) => {
     try {
       const resolved = resolveTrackedName(eventName);
@@ -139,10 +152,8 @@
         if (val == null || val === '') return;
         // Drop known PII field names even if caller passes them by mistake
         if (PII_PARAM_KEYS.has(String(key).toLowerCase())) return;
-        // Never send free-text that may contain email/phone/name/CNPJ
         if (typeof val === 'string' && val.length > 180) return;
-        if (typeof val === 'string' && /@|\+?\d{8,}/.test(val)) return;
-        if (typeof val === 'string' && /^\d{14}$/.test(val.trim())) return;
+        if (looksLikePiiValue(val, key)) return;
         safe[key] = val;
       });
       safe.page_path = safe.page_path || (window.location.pathname || '/');

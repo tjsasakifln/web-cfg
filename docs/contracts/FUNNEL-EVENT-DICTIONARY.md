@@ -22,7 +22,7 @@ Every admitted event carries:
 | `consent` | `not_required` on aggregate events |
 | `pii_policy` | `aggregate_allowlist_empty` |
 
-The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text and PII-like values are never admitted.
+The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text and PII-like values are never admitted. Envelope identifiers (`correlation_id`, `idempotency_key`) follow the lead-core rule: UUID, `c-` prefix and timestamp keys are not treated as phone/CNPJ. `@` still fails on every field.
 
 ## Layers (denominators)
 

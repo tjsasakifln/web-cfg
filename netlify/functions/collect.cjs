@@ -159,6 +159,8 @@ exports.handler = async (event) => {
       ts: safe.ts,
       layer: safe.layer,
       alias_from: safe.alias_from,
+      correlation_id: safe.props && safe.props.correlation_id,
+      idempotency_key: safe.props && safe.props.idempotency_key,
     });
     accepted.push(safe);
 

@@ -14,6 +14,8 @@ const REJECT_PREFIXES = REGISTRY.reject_prefixes || [];
 const DENOMINATORS = Object.freeze([...(REGISTRY.denominators || [])]);
 const ENVELOPE_FIELDS = Object.freeze([...(REGISTRY.envelope_fields || [])]);
 const CTA_KIND_FROM_ALIAS = REGISTRY.cta_kind_from_alias || {};
+// Envelope identifiers may contain Date.now() / UUID digits. Match lead-core.cjs:82.
+const ENVELOPE_ID_KEYS = new Set(["correlation_id", "idempotency_key"]);
 
 const LAYER_RANK = Object.freeze({
   session: 0,
@@ -84,17 +86,19 @@ function eventDef(name) {
   return REGISTRY.events[canonical] || null;
 }
 
-function looksLikePiiValue(value) {
+function looksLikePiiValue(value, key) {
   if (typeof value !== "string") return false;
-  if (value.includes("@")) return true;
-  if (/\+?\d{8,}/.test(value)) return true;
-  const digits = value.replace(/\D/g, "");
-  if (digits.length === 11 || digits.length === 14) {
-    if (/^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/.test(value) || /^\d{14}$/.test(digits) && /[.\-\/]/.test(value)) {
-      return true;
-    }
-    if (/^\d{14}$/.test(value.trim())) return true;
-  }
+  const s = value;
+  if (!s) return false;
+  if (s.includes("@")) return true;
+  const k = String(key || "").toLowerCase();
+  if (ENVELOPE_ID_KEYS.has(k)) return false;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
+  if (s.startsWith("c-")) return false;
+  const compact = s.replace(/[\s()-]/g, "");
+  if (/^\+?\d{10,15}$/.test(compact)) return true;
+  if (/^\d{14}$/.test(s.trim())) return true;
+  if (/^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/.test(s)) return true;
   return false;
 }
 
@@ -119,7 +123,7 @@ function minimizeProps(props) {
       continue;
     }
     if (typeof v === "string") {
-      if (looksLikePiiValue(v)) {
+      if (looksLikePiiValue(v, k)) {
         tainted = true;
         dropped.push(k);
         continue;
@@ -397,6 +401,7 @@ module.exports = {
   PII_KEYS,
   DENOMINATORS,
   ENVELOPE_FIELDS,
+  ENVELOPE_ID_KEYS,
   LAYER_RANK,
   getRegistry,
   admittedNames,

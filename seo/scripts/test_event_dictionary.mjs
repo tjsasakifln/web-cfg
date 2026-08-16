@@ -6,6 +6,7 @@
 import fs from "fs";
 import path from "path";
 import vm from "vm";
+import crypto from "crypto";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
 
@@ -238,7 +239,16 @@ function driveClient() {
     clearTimeout: () => {},
   };
   windowObj.window = windowObj;
-  const sandbox = { window: windowObj, document, console, URLSearchParams, setTimeout: windowObj.setTimeout, clearTimeout: windowObj.clearTimeout };
+  const sandbox = {
+    window: windowObj,
+    document,
+    console,
+    URLSearchParams,
+    setTimeout: windowObj.setTimeout,
+    clearTimeout: windowObj.clearTimeout,
+    fetch: windowObj.fetch,
+    navigator: {},
+  };
   vm.createContext(sandbox);
   vm.runInContext(fs.readFileSync(path.join(root, "script.js"), "utf8"), sandbox);
   const track = sandbox.window.confengeTrack;
@@ -249,7 +259,14 @@ function driveClient() {
     fail("client_allowlist", clientContract.aggregate_pii_allowlist);
   }
 
-  track("page_view", { page_path: "/", asset_id: "home" });
+  const envelopeUuid = crypto.randomUUID();
+  const envelopeTs = `idk-${Date.now()}-envelope`;
+  track("page_view", {
+    page_path: "/",
+    asset_id: "home",
+    correlation_id: envelopeUuid,
+    idempotency_key: envelopeTs,
+  });
   track("lead_created", { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico" });
   track("not_a_real_event", { page_path: "/" });
   track("custom_foo", { page_path: "/" });
@@ -268,7 +285,19 @@ function driveClient() {
   if (persisted.source !== "CONFENGE_WEB" || persisted.pii_policy !== "aggregate_allowlist_empty") {
     fail("client_envelope", persisted);
   }
-  return { names, dataLayer };
+  const viewed = dataLayer.find((e) => e.event === "page_view");
+  if (!viewed || viewed.correlation_id !== envelopeUuid || viewed.idempotency_key !== envelopeTs) {
+    fail("client_dropped_envelope_ids", viewed);
+  }
+  const flushed = fetches.map((f) => {
+    try { return JSON.parse(f.body); } catch { return null; }
+  }).filter(Boolean);
+  const flushedView = flushed.flatMap((b) => b.events || []).find((e) => e.event === "page_view");
+  if (!flushedView || !flushedView.props || flushedView.props.correlation_id !== envelopeUuid
+    || flushedView.props.idempotency_key !== envelopeTs) {
+    fail("client_flush_dropped_envelope_ids", { flushedView, fetches: flushed });
+  }
+  return { names, dataLayer, envelopeUuid, envelopeTs };
 }
 
 const clientA = driveClient();
@@ -387,6 +416,57 @@ const scrubbed = collect._scrubProps({
 if (scrubbed.nome || scrubbed.email || scrubbed.telefone) fail("collect_pii_keys", scrubbed);
 if (!scrubbed.asset_id) fail("scrub_dropped_asset");
 
+// Envelope identifiers: UUID + Date.now() key must survive admit, collect, and confengeTrack.
+if (!contract.ENVELOPE_ID_KEYS || !contract.ENVELOPE_ID_KEYS.has("correlation_id")
+  || !contract.ENVELOPE_ID_KEYS.has("idempotency_key")) {
+  fail("envelope_id_keys_missing", [...(contract.ENVELOPE_ID_KEYS || [])]);
+}
+const envelopeUuid = crypto.randomUUID();
+const envelopeTs = `idk-${Date.now()}-envelope`;
+const cPrefix = `c-${Date.now()}`;
+const envelopeAdmit = contract.admitEvent({
+  event: "page_view",
+  props: {
+    page_path: "/",
+    asset_id: "home",
+    correlation_id: envelopeUuid,
+    idempotency_key: envelopeTs,
+    intent: cPrefix,
+  },
+});
+if (!envelopeAdmit.ok) fail("envelope_ids_admit_rejected", envelopeAdmit);
+if (envelopeAdmit.event.props.correlation_id !== envelopeUuid) {
+  fail("envelope_uuid_dropped", envelopeAdmit.event.props);
+}
+if (envelopeAdmit.event.props.idempotency_key !== envelopeTs) {
+  fail("envelope_ts_key_dropped", envelopeAdmit.event.props);
+}
+const collectEnvelope = await postCollect([{
+  event: "cta_click",
+  props: {
+    page_path: "/",
+    cta_id: "hero",
+    correlation_id: envelopeUuid,
+    idempotency_key: envelopeTs,
+  },
+  path: "/",
+}]);
+const collectEnvelopeBody = JSON.parse(collectEnvelope.body);
+if (collectEnvelope.statusCode !== 202 || collectEnvelopeBody.accepted !== 1) {
+  fail("collect_envelope_ids_rejected", collectEnvelopeBody);
+}
+const recentEnvelope = collect._recent().slice(-1)[0];
+if (!recentEnvelope || recentEnvelope.correlation_id !== envelopeUuid
+  || recentEnvelope.idempotency_key !== envelopeTs) {
+  fail("collect_envelope_ids_not_stored", recentEnvelope);
+}
+if (clientA.envelopeUuid === clientA.envelopeTs) fail("client_envelope_ids_collapsed");
+const emailInCorr = contract.admitEvent({
+  event: "page_view",
+  props: { page_path: "/", correlation_id: "alice@example.com" },
+});
+if (emailInCorr.ok) fail("email_in_correlation_id_admitted", emailInCorr);
+
 // --- 7. Dual-count guard: lead_form_success is not lead ---
 const dual = contract.reconcileFunnel({
   events: [
@@ -410,6 +490,15 @@ const artifact = {
     stripped_keys: piiAdmit.dropped,
     value_rejected: piiValue.reason,
     cnpj_rejected: cnpjValue.reason,
+  },
+  envelope_ids: {
+    admit_ok: envelopeAdmit.ok,
+    correlation_id: envelopeAdmit.event.props.correlation_id,
+    idempotency_key: envelopeAdmit.event.props.idempotency_key,
+    collect_accepted: collectEnvelopeBody.accepted,
+    collect_recent: recentEnvelope,
+    client_uuid: clientA.envelopeUuid,
+    client_ts: clientA.envelopeTs,
   },
 };
 
