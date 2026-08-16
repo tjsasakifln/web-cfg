@@ -4,7 +4,7 @@ Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smar
 
 **Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
 **Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
-**SHA-256:** `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023`  
+**SHA-256:** `9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9`  
 **Version:** `v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  
@@ -12,7 +12,7 @@ Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smar
 
 ### Pin reconciliation 2026-08-16 (six-action inventory)
 
-Supersedes `c2cee8362321099205b76b11f89485d4248a00b8abbbda354d15964f6b316e0d`. The 11 ready 301s are unchanged. 54 rows move from RETIRE to HOLD_TARGET_NOT_READY (still 410, no Location). SmartLic#2115 must re-pin both repos together.
+Supersedes `c2cee836…` (v1) and `3c5a5b7a…` (v2 before WEB-017). 54 HOLD rows stay fail-closed 410. WEB-017 remapped the payment-delay blog onto `/conteudos/atraso-pagamento-contrato-publico-suspender/`. SmartLic#2115 / PR #2135 must re-consume this pin.
 
 Recompute: `python3 -c "from pathlib import Path; import hashlib; print(hashlib.sha256(Path('data/migrations/smartlic-url-map/inventory.v2.json').read_bytes()).hexdigest())"`  
 Must match `data/migrations/smartlic-url-map/inventory.v2.sha256` and `data/migration/smartlic-confenge/manifesto.v1.sha256`.
@@ -30,7 +30,7 @@ Single hop. HTTPS. Drop query string except the allowlist in the manifesto (`utm
 | legacy_url | target_url | HTTP | owner |
 |---|---|---:|---|
 | `https://smartlic.tech/blog/aditivos-contratuais-o-que-sao-como-monitorar` | `https://confenge.com.br/aditivos-obras-publicas/` | 301 | SmartLic#2115 |
-| `https://smartlic.tech/blog/orgaos-risco-atraso-pagamento-licitacao` | `https://confenge.com.br/atrasos-prorrogacao-obras-publicas/` | 301 | SmartLic#2115 |
+| `https://smartlic.tech/blog/orgaos-risco-atraso-pagamento-licitacao` | `https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/` | 301 | SmartLic#2115 |
 | `https://smartlic.tech/glossario/aditivo-contratual` | `https://confenge.com.br/aditivos-obras-publicas/` | 301 | SmartLic#2115 |
 | `https://smartlic.tech/glossario/mapa-de-riscos` | `https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/` | 301 | SmartLic#2115 |
 | `https://smartlic.tech/glossario/matriz-de-riscos` | `https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/` | 301 | SmartLic#2115 |
@@ -57,7 +57,7 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 ### Post-#68 revalidation (2026-08-15)
 
-`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023` (same 11 ready 301s; HOLD fail-closed added).
+`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9` (11 ready 301s; HOLD fail-closed; WEB-017 remapped payment-delay blog off the work-delay pillar).
 
 Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonical host `confenge.com.br`, indexable, no SmartLic brand, no redirect chain, no soft-404. SmartLic production 301s / DNS / TLS / Cloudflare / Railway were **not** changed and were **not** observed. Cutover remains unobserved. #62 stays OPEN. Counterpart SmartLic#2115 / PR #2133 may start the bridge against this pin; web-cfg does not own that deploy.
 

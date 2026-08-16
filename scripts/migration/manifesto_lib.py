@@ -14,6 +14,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from legacy_equity.inventory import (  # noqa: E402,F401
     ACTIONS,
+    ALLOWLIST_QUERY_KEYS,
+    DEFAULT_QUERY_STRING_POLICY,
     FAIL_CLOSED_ACTIONS,
     FORBIDDEN_GENERIC_TARGETS,
     HANDOFF_PATH,
@@ -22,9 +24,11 @@ from legacy_equity.inventory import (  # noqa: E402,F401
     LEGACY_HANDOFF_PATH,
     MANIFESTO_PATH,
     PARENT_HUB_SUFFIXES,
+    PII_QUERY_KEYS,
     READY_REDIRECT_ACTIONS,
     READY_STATUSES,
     REQUIRED_FIELDS,
+    apply_query_string_policy,
     canonicalize_action,
     hold_entries,
     inventory_sha256,

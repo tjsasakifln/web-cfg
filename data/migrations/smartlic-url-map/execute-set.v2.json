@@ -1,5 +1,5 @@
 {
-  "inventory_sha256": "3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023",
+  "inventory_sha256": "9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9",
   "schema": "smartlic-url-map-execute-v2",
   "default_status": 410,
   "owner": "SmartLic#2115",
@@ -45,8 +45,8 @@
     {
       "legacy_url": "https://smartlic.tech/blog/orgaos-risco-atraso-pagamento-licitacao",
       "path": "/blog/orgaos-risco-atraso-pagamento-licitacao",
-      "target_url": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
-      "expected_canonical": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+      "target_url": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "expected_canonical": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
       "expected_http": 301,
       "family": "blog-editorial",
       "owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",

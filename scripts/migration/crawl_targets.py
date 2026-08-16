@@ -140,9 +140,21 @@ def crawl() -> dict:
         rec["has_confenge_brand"] = "CONFENGE" in text
         rec["has_smartlic_brand"] = bool(re.search(r"SmartLic", text, re.I))
         rec["has_cta"] = bool(re.search(r"#contato|wa\.me|data-cta|Analisar", text))
-        rec["soft_404"] = False
+        expected = urlparse(entry["target_url"] or "")
+        canon = urlparse(parser.canonical or "")
+        rec["loop"] = (canon.hostname or "").lower() == "smartlic.tech"
         rec["chain"] = False
-        rec["loop"] = False
+        if parser.canonical:
+            host = (canon.hostname or "").lower()
+            if host not in {"", "confenge.com.br"}:
+                rec["chain"] = True
+            elif canon.path.rstrip("/") != expected.path.rstrip("/"):
+                rec["chain"] = True
+        rec["soft_404"] = (not parser.title.strip()) or len(text) < 800
+        if parser.title and re.search(
+            r"n[aã]o encontrada|not found|\bgone\b", parser.title, re.I
+        ):
+            rec["soft_404"] = True
         if parser.canonical != entry.get("expected_canonical"):
             rec["canonical_mismatch"] = True
             failures.append({**rec, "error": "canonical_mismatch"})
@@ -155,6 +167,12 @@ def crawl() -> dict:
             failures.append({**rec, "error": "missing_confenge"})
         if not rec["has_cta"]:
             failures.append({**rec, "error": "missing_cta"})
+        if rec["soft_404"]:
+            failures.append({**rec, "error": "soft_404"})
+        if rec["chain"]:
+            failures.append({**rec, "error": "chain"})
+        if rec["loop"]:
+            failures.append({**rec, "error": "loop"})
         rows.append(rec)
     return {
         "publish": str(publish),

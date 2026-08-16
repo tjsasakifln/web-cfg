@@ -12,11 +12,14 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from legacy_equity.inventory import (  # noqa: E402
     ACTIONS,
+    ALLOWLIST_QUERY_KEYS,
     HANDOFF_PATH,
     INVENTORY_PATH,
     LEGACY_HANDOFF_PATH,
     MANIFESTO_PATH,
+    PII_QUERY_KEYS,
     REQUIRED_FIELDS,
+    apply_query_string_policy,
     inventory_sha256,
     load_inventory,
     manifesto_sha256,
@@ -104,3 +107,48 @@ def test_execute_set_matches_ready_redirects():
         if path != "/" and path.endswith("/"):
             path = path.rstrip("/")
         assert path in execute_paths
+
+
+def test_query_pii_is_dropped_from_location():
+    data = load_inventory()
+    ready = ready_redirects(data)
+    assert ready
+    for entry in ready:
+        policy = entry["query_string_policy"]
+        assert policy["mode"] == "allowlist"
+        persist = list(policy["persist"])
+        assert persist == list(ALLOWLIST_QUERY_KEYS)
+        target = entry["target"]
+        dirty = (
+            "email=ada@example.com&phone=48999999999&name=Ada&cnpj=00000000000191"
+            "&cpf=00000000191&utm_source=gsc&jornada=defesa&evil=1"
+        )
+        location = apply_query_string_policy(target, dirty, persist)
+        lowered = location.lower()
+        for key in PII_QUERY_KEYS:
+            assert key not in lowered, (entry["legacy_url"], location)
+        assert "evil=" not in location
+        assert "utm_source=gsc" in location
+        assert "jornada=defesa" in location
+        assert location.startswith(target.rstrip("/"))
+        cases = {c["name"]: c for c in entry["test_cases"]}
+        pii_case = cases["pii-query-dropped"]
+        assert "email" in pii_case["expect"]["forbid"]
+        assert "cnpj" in pii_case["expect"]["forbid"]
+        assert pii_case["expect"]["location"] == target
+
+
+def test_payment_delay_blog_does_not_target_work_delay_pillar():
+    data = load_inventory()
+    row = next(
+        e
+        for e in data["entries"]
+        if e["legacy_url"]
+        == "https://smartlic.tech/blog/orgaos-risco-atraso-pagamento-licitacao"
+    )
+    assert row["action"] == "REDIRECT_301"
+    assert row["target"] == (
+        "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/"
+    )
+    assert "atrasos-prorrogacao-obras-publicas" not in row["target"]
+    assert "payment" in row["semantic_equivalence"].lower()

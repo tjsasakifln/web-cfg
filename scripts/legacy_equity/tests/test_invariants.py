@@ -27,8 +27,8 @@ def test_validate_inventory_ok():
     report = validate_inventory()
     assert report["ok"], report["errors"][:20]
     assert report["redirect_count"] == 11
-    assert report["hold_count"] >= 1
-    assert report["retire_count"] >= 1
+    assert report["hold_count"] == 54
+    assert report["retire_count"] == 1190
     assert report["migrate_count"] == 0
     assert report["legal_count"] == 0
 

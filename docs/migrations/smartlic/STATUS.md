@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Date | 2026-08-16 |
-| Inventory SHA-256 | `3c5a5b7aeb173a16cfb65c0314827d9022ba1b387901d1718e4fdfcbd0363023` |
+| Inventory SHA-256 | `9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9` |
 | Ready REDIRECT_301 | 11 |
 | HOLD_TARGET_NOT_READY | 54 |
 | RETIRE_410 | 1190 |
@@ -20,7 +20,7 @@
 
 ## Why not READY_FOR_CUTOVER
 
-Eleven CONFENGE destinations are live, indexable, and brand-clean. The SmartLic bridge config is deploy-ready on `chore/redirect-bridge-2115`. Live apply still needs `$BRIDGE_PUBLIC_IPV4`, ACME email, and a named Cloudflare operator. www TLS is currently a SAN mismatch on Railway. Observation cannot start without a production 301.
+Eleven CONFENGE destinations are live, indexable, and brand-clean. WEB-017 remapped the payment-delay blog onto `/conteudos/atraso-pagamento-contrato-publico-suspender/` (previous work-delay pillar failed nominal review). SmartLic PR #2135 still vendors `3c5a5b7a…` and must re-consume this pin. Live apply still needs `$BRIDGE_PUBLIC_IPV4`, ACME email, and a named Cloudflare operator. www TLS is currently a SAN mismatch on Railway. Observation cannot start without a production 301.
 
 ## Why not HOLD / NO_GO
 
