@@ -109,7 +109,15 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: ["/.netlify/functions/lead"],
   },
   "test:secrets-scan": {
-    producers: ["scripts/site/test_secrets_scan.mjs"],
+    // Mirrors SCAN_DIRS in scripts/site/test_secrets_scan.mjs (the shipped walker).
+    producers: [
+      "scripts/site/test_secrets_scan.mjs",
+      "netlify/",
+      "scripts/",
+      "seo/scripts/",
+      "script.js",
+      "index.html",
+    ],
     artifacts: [],
     surfaces: [],
   },
@@ -119,7 +127,7 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: ["/", "/diretoria-b2g/", "/defesa-margem-contratos-publicos/"],
   },
   "test:pseo-attribution": {
-    producers: ["seo/scripts/test_pseo_attribution.mjs"],
+    producers: ["seo/scripts/test_pseo_attribution.mjs", "script.js"],
     artifacts: [],
     surfaces: ["/inteligencia/"],
   },

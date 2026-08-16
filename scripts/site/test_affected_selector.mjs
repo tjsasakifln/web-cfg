@@ -3,6 +3,7 @@
  * Does not reimplement selection, does not start past the selector.
  */
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 
@@ -54,7 +55,7 @@ function expectSubset(result, mustInclude, because) {
 {
   const paths = ["scripts/site/indexnow_submit.mjs"];
   const result = selectAffected(paths, scripts);
-  expectSubset(result, ["test:indexnow"], "narrow indexnow producer");
+  expectSubset(result, ["test:indexnow", "test:secrets-scan"], "narrow indexnow producer");
   assert.ok(!result.selected_ids.includes("pseo:test"), "narrow indexnow must not pull pseo:test");
   assert.ok(!result.selected_ids.includes("test:workflow-gates"), "narrow indexnow must not pull workflow-gates");
   const idx = result.selected.find((s) => s.id === "test:indexnow");
@@ -84,6 +85,40 @@ function expectSubset(result, mustInclude, because) {
   const paths = ["docs/ops/WARMBLY-INBOUND.md"];
   const result = selectAffected(paths, scripts);
   expectSubset(result, ["test:ops-docs"], "ops doc");
+}
+
+// script.js is read by the shipped pSEO attribution test — must not omit that suite
+{
+  const src = readFileSync(path.join(ROOT, "seo/scripts/test_pseo_attribution.mjs"), "utf8");
+  assert.match(src, /readFileSync\(path\.join\(root,\s*"script\.js"\)/, "shipped pseo-attribution must still read script.js");
+  const result = selectAffected(["script.js"], scripts);
+  expectSubset(result, ["test:pseo-attribution", "test:analytics", "test:form-funnel", "test:script-modules"], "script.js consumers");
+  assert.ok(result.selected_ids.includes("test:secrets-scan"), "script.js is a secrets-scan target");
+}
+
+// secrets-scan walks SCAN_DIRS; mapped paths in those trees must not skip it
+{
+  const src = readFileSync(path.join(ROOT, "scripts/site/test_secrets_scan.mjs"), "utf8");
+  const block = src.match(/const SCAN_DIRS\s*=\s*\[([\s\S]*?)\]/);
+  assert.ok(block, "shipped SCAN_DIRS missing");
+  const scanDirs = [...block[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+  assert.ok(scanDirs.includes("scripts") && scanDirs.includes("netlify") && scanDirs.includes("script.js"));
+  const producers = SUITE_GRAPH["test:secrets-scan"].producers;
+  for (const d of scanDirs) {
+    const asPrefix = d.includes(".") ? d : `${d.replace(/\/$/, "")}/`;
+    assert.ok(
+      producers.some((p) => p === d || p === asPrefix || p === `${d}/`),
+      `test:secrets-scan producers must include SCAN_DIRS entry ${d}`,
+    );
+  }
+  for (const sample of ["scripts/site/indexnow_submit.mjs", "netlify/functions/collect.cjs", "script.js", "index.html"]) {
+    const result = selectAffected([sample], scripts);
+    assert.ok(
+      result.selected_ids.includes("test:secrets-scan"),
+      `${sample} is inside SCAN_DIRS and must select test:secrets-scan`,
+    );
+    assert.ok(result.fallback !== "skip");
+  }
 }
 
 // --- (b) shared-contract → full ---
