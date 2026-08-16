@@ -1,0 +1,62 @@
+{
+  "schema": "public-read-b2g-xray/0.1-draft",
+  "extra_cli_goal": "03",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "data_state": "DATA_READY",
+  "xray_state": "READY",
+  "as_of": "2026-07-31",
+  "freshness": {
+    "source_as_of": "2026-07-31",
+    "expires_at": "2026-10-31",
+    "status": "fixture_not_live"
+  },
+  "method_version": "b2g-xray-fixture/0.1",
+  "schema_version": "public-read-b2g-xray/0.1-draft",
+  "asset_version": "conversion-canary/1.0",
+  "market_id": "pavimentacao-valor-tipico",
+  "company": {
+    "public_name": "Construtora Fixture Alfa Ltda",
+    "uf_sede_observada": "SC"
+  },
+  "observed_portfolio": {
+    "market": "contratos publicos de pavimentacao (valor integral nominal do instrumento)",
+    "n_contracts": 4,
+    "value_sum_brl": 18450000,
+    "orgaos": ["PREFEITURA MUNICIPAL DE ITAJAI - SC", "PREFEITURA MUNICIPAL DE BLUMENAU - SC"],
+    "ufs": ["SC"],
+    "period": "2023-01-01/2026-07-31",
+    "concentration_note": "Dois orgaos concentram os contratos observados neste recorte."
+  },
+  "evidence_contracts": [
+    {
+      "public_contract_id": "83102277000152-1-000101/2025",
+      "objeto_resumo": "Pavimentacao asfaltica em vias urbanas (recorte fixture)",
+      "valor_nominal_brl": 6200000,
+      "orgao": "PREFEITURA MUNICIPAL DE ITAJAI - SC"
+    },
+    {
+      "public_contract_id": "83102277000152-1-000088/2024",
+      "objeto_resumo": "Recapeamento asfaltico (recorte fixture)",
+      "valor_nominal_brl": 4100000,
+      "orgao": "PREFEITURA MUNICIPAL DE BLUMENAU - SC"
+    }
+  ],
+  "second_reading_candidates": [
+    {
+      "public_contract_id": "83102277000152-1-000101/2025",
+      "why": "Valor e vigencia observaveis; uma leitura humana pode conferir aditivos e medicao. Isso nao e um achado de irregularidade."
+    }
+  ],
+  "limitations": [
+    "Recorte fixture, nao e catalogo vivo.",
+    "Ticket contratual nao e custo por km.",
+    "Ausencia de contrato no recorte nao prova que a empresa nao contratou.",
+    "Nenhuma pontuacao de risco, credito, dor ou irregularidade e emitida."
+  ],
+  "epistemic": {
+    "facts": ["n_contracts", "value_sum_brl", "orgaos", "ufs"],
+    "unknown": ["custo_por_km", "margem", "aditivos_completos"]
+  }
+}

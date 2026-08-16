@@ -1,0 +1,23 @@
+{
+  "schema": "public-read-b2g-xray/0.1-draft",
+  "extra_cli_goal": "03",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "data_state": "DATA_HOLD",
+  "xray_state": "NEEDS_DATA",
+  "as_of": "2026-07-31",
+  "reason_codes": ["coverage_below_threshold", "unit_not_comparable"],
+  "company": {
+    "public_name": "Construtora Fixture Beta Ltda",
+    "uf_sede_observada": "UNKNOWN"
+  },
+  "observed_portfolio": null,
+  "limitations": [
+    "Ha identificacao publica insuficiente neste recorte para montar a carteira de pavimentacao.",
+    "Nao inferimos posicao, custo por km ou problema a partir de amostra incompleta.",
+    "Recorte fixture, nao e catalogo vivo."
+  ],
+  "method_version": "b2g-xray-fixture/0.1",
+  "schema_version": "public-read-b2g-xray/0.1-draft"
+}

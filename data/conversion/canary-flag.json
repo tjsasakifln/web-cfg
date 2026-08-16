@@ -1,0 +1,8 @@
+{
+  "id": "conversion_market_answer_xray",
+  "enabled": false,
+  "reason": "Awaiting live extra-cli Goal 03 payload and a published #84 Market Answer page. Fixture path is complete.",
+  "cta_copy": "Veja sua empresa neste mercado",
+  "experiment_id": "cta-copy-seq-v1",
+  "intake_path": "/.netlify/functions/market-answer-intake"
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "public-read-b2g-xray/0.1-draft",
+  "extra_cli_goal": "03",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "data_state": "DATA_REJECT",
+  "xray_state": "NOT_FOUND",
+  "as_of": "2026-07-31",
+  "reason_codes": ["cnpj_not_in_slice"],
+  "company": null,
+  "observed_portfolio": null,
+  "limitations": [
+    "Este CNPJ nao aparece no recorte fixture de pavimentacao.",
+    "Nao encontrado nao significa irregularidade nem ausencia de atividade.",
+    "Recorte fixture, nao e catalogo vivo."
+  ],
+  "method_version": "b2g-xray-fixture/0.1",
+  "schema_version": "public-read-b2g-xray/0.1-draft"
+}
