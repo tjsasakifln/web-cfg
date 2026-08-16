@@ -14,7 +14,7 @@ READY, NEEDS_DATA, NOT_FOUND, STALE, BLOCKED, ERROR. Fixtures are `catalog_mode=
 | --- | --- |
 | X-Ray first POST | 201, receipt `71a97d497cfb9f552b812934`, persist then handoff SKIPPED (not commercial), `auto_send=false` |
 | X-Ray replay same idempotency key | 200, same receipt, store count 1 |
-| Public URL | `https://confenge.com.br/piloto/conversion-market-answer/` — no CNPJ |
+| Public URL | `https://confenge.com.br/piloto/conversao-xray/` — no CNPJ |
 | Hand-raise + forced timeout | 201, receipt kept, `handoff=RETRYABLE`, persist-before-handoff true |
 | Hand-raise replay | 200 idempotent, no second persist |
 

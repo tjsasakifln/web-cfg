@@ -14,7 +14,7 @@
   },
   "journey_states": ["READY", "NEEDS_DATA", "NOT_FOUND", "STALE", "BLOCKED", "ERROR"],
   "synthetic_e2e": {
-    "xray_first": { "statusCode": 201, "receipt_id": "71a97d497cfb9f552b812934", "idempotent": false, "auto_send": false, "handoff_status": "SKIPPED", "persist_before_handoff": true, "public_url": "https://confenge.com.br/piloto/conversion-market-answer/", "cnpj_in_url": false, "cnpj_in_public_body": false },
+    "xray_first": { "statusCode": 201, "receipt_id": "71a97d497cfb9f552b812934", "idempotent": false, "auto_send": false, "handoff_status": "SKIPPED", "persist_before_handoff": true, "public_url": "https://confenge.com.br/piloto/conversao-xray/", "cnpj_in_url": false, "cnpj_in_public_body": false },
     "xray_replay": { "statusCode": 200, "receipt_id": "71a97d497cfb9f552b812934", "idempotent": true, "store_count": 1 },
     "handraise_transport_fail": { "statusCode": 201, "handoff_status": "RETRYABLE", "persist_before_handoff": true, "receipt_kept": true },
     "handraise_replay": { "statusCode": 200, "idempotent": true, "store_count": 2 }
@@ -43,7 +43,7 @@
   "exceptions": [
     "extra-cli Goal 03 public-read-b2g-xray is absent; fixtures labeled catalog_mode=fixture.",
     "Frozen PR #85 mapper drops market_answer_id, method/schema/asset version, question_class, cta copy, drill_down_origin. Adapter keeps them on the receipt and under inbound payload.conversion.",
-    "#84 live Market Answer page is not this branch. Canary lives noindex at /piloto/conversion-market-answer/.",
+    "#84 live Market Answer page is not this branch. Canary lives noindex at /piloto/conversao-xray/.",
     "#90 opt-in is not authorized.",
     "Warmbly #55 has not measured latency; SLA remains UNKNOWN."
   ],

@@ -13,7 +13,7 @@
     "route_family": "market-answer-xray",
     "asset_id": "ma-pavimentacao-valor-tipico-v0",
     "cta_id": "veja-sua-empresa-neste-mercado",
-    "landing_url": "https://confenge.com.br/piloto/conversion-market-answer/",
+    "landing_url": "https://confenge.com.br/piloto/conversao-xray/",
     "contract_public_id": "83102277000152-1-000101/2025",
     "name": "QA Conversion",
     "email": "qa-conversion@example.com",

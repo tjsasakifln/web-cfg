@@ -13,4 +13,4 @@ node scripts/conversion/dump-matrix.cjs
 node scripts/conversion/run-intake.cjs --action xray --cnpj 11222333000181 --idempotency-key demo-1 --store-dir /tmp/conv-store
 ```
 
-Canary page (noindex, `/piloto/`): `/piloto/conversion-market-answer/`. Flag: `data/conversion/canary-flag.json`.
+Canary page (noindex, `/piloto/`): `/piloto/conversao-xray/`. Flag: `data/conversion/canary-flag.json`.

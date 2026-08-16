@@ -69,7 +69,7 @@ function safeFields(fields, { cnpj } = {}) {
 }
 
 function publicUrlForJourney(pathOnly) {
-  const p = String(pathOnly || "/piloto/conversion-market-answer/").split("?")[0].split("#")[0];
+  const p = String(pathOnly || "/piloto/conversao-xray/").split("?")[0].split("#")[0];
   return `https://confenge.com.br${p.startsWith("/") ? p : `/${p}`}`;
 }
 

@@ -144,9 +144,11 @@ const VALID = "11222333000181";
     if (!v) fail("a11y_" + k, ks);
   }
   if (html.includes("tabindex=\"1\"") || html.includes("tabindex=\"2\"")) fail("keyboard_trap_tabindex");
-  const page = fs.readFileSync(path.join(root, "piloto/conversion-market-answer/index.html"), "utf8");
+  const page = fs.readFileSync(path.join(root, "piloto/conversao-xray/index.html"), "utf8");
   if (!page.includes("Veja sua empresa neste mercado") || !page.includes("cnpj-why")) {
     fail("journey_page_cta", "missing");
+  } else if (/\bmarket-[\w-]+\b/i.test(page)) {
+    fail("pilot_internal_lang", page.match(/\bmarket-[\w-]+\b/i)[0]);
   } else pass("keyboard_a11y_structure");
   const client = fs.readFileSync(path.join(root, "assets/js/conversion-journey.js"), "utf8");
   if (!client.includes("history.replaceState") || !client.includes("searchParams.delete") || !client.includes('"cnpj"')) {

@@ -39,7 +39,7 @@ function publicXrayBody({ receipt, xray, next_actions, idempotent, copy }) {
     idempotent: Boolean(idempotent),
     auto_send: false,
     sla: "UNKNOWN",
-    public_url: publicUrlForJourney(receipt.landing_page || "/piloto/conversion-market-answer/"),
+    public_url: publicUrlForJourney(receipt.landing_page || "/piloto/conversao-xray/"),
     xray,
     next_actions,
     copy: {

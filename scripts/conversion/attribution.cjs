@@ -115,8 +115,8 @@ function defaultCanaryAttribution(overrides = {}) {
     drill_down_origin: "answer_to_xray",
     route_family: "market-answer-xray",
     asset_id: "ma-pavimentacao-valor-tipico-v0",
-    landing_page: "/piloto/conversion-market-answer/",
-    landing_url: "https://confenge.com.br/piloto/conversion-market-answer/",
+    landing_page: "/piloto/conversao-xray/",
+    landing_url: "https://confenge.com.br/piloto/conversao-xray/",
     consent_state: "not_required",
     ...overrides,
   });

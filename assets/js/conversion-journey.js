@@ -57,7 +57,7 @@
     track("form_start", { form: "xray" });
     const idem = "idk-" + String(Date.now()) + "-" + Math.random().toString(36).slice(2, 8);
     const correlation = "c-" + Math.random().toString(36).slice(2, 12);
-    fetch(form.getAttribute("action") || "/.netlify/functions/market-answer-intake", {
+    fetch(form.getAttribute("action") || "/.netlify/functions/conversion-intake", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json", "Idempotency-Key": idem },
       body: JSON.stringify({
@@ -129,7 +129,7 @@
       });
       payload.action = "handraise";
       payload.consentimento = Boolean(document.getElementById("consentimento") && document.getElementById("consentimento").checked);
-      fetch(handraise.getAttribute("action") || "/.netlify/functions/market-answer-intake", {
+      fetch(handraise.getAttribute("action") || "/.netlify/functions/conversion-intake", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
