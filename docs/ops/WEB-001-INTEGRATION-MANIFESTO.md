@@ -92,6 +92,7 @@ See also the rehearsal notes in the integration commits.
 | `test:copy` `extra-cli` | Visitor copy says “fonte factual”. Banlist kept. |
 | `pilot_no_internal_lang` `\bmarket-[\w-]+\b` | Canary moved to `/piloto/conversao-xray/`; HTML posts to `conversion-intake` alias. Implementation remains `market-answer-intake.cjs`. Still `/piloto/` Disallow. |
 | `PUBLIC_TOP_DIRS` | Added `analises-contratos-publicos` so `_site` ships the noindex family. Sitemap still excludes it. |
+| `validate:seo` / `data/` | #95 `data/data-desk/packages/fixture-only/embed.html` is a fragment, not a page. `SKIP_DIRS` now includes `data/` (and other internal trees). `npm run validate:seo` → `VALIDATION_OK`. Test: `test_fixture_embed_html_is_not_a_public_seo_page`. |
 
 ## Evidence executed (2026-08-16)
 

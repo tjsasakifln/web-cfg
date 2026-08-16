@@ -116,6 +116,39 @@ def test_dataset_metadata_only_when_dataset_exists():
     assert dataset_jsonld(no_ds, built, csv_text=None) is None
 
 
+def test_fixture_embed_html_is_not_a_public_seo_page():
+    """Shipped validate_seo.py must not treat data/ fixture fragments as pages."""
+    import importlib.util
+
+    embed = ROOT / "data" / "data-desk" / "packages" / "fixture-only" / "embed.html"
+    assert embed.is_file()
+    html = embed.read_text(encoding="utf-8")
+    assert "<h1" not in html.lower()
+    assert "rel=\"canonical\"" not in html.lower() and "rel='canonical'" not in html.lower()
+
+    spec = importlib.util.spec_from_file_location(
+        "validate_seo_shipped", ROOT / "seo" / "scripts" / "validate_seo.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    assert "data" in mod.SKIP_DIRS
+    scanned = {p.resolve() for p in mod.iter_seo_html_pages(ROOT)}
+    assert embed.resolve() not in scanned
+
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "seo" / "scripts" / "validate_seo.py")],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    combined = (proc.stdout or "") + (proc.stderr or "")
+    assert "embed.html" not in combined
+    assert proc.returncode == 0, combined[-2000:]
+    assert "VALIDATION_OK" in combined
+
+
 def test_embed_source_visible_and_no_tracker_by_default():
     package = _package()
     html = package["embed_html"]
