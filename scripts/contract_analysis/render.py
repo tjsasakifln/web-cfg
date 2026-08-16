@@ -31,6 +31,27 @@ SITEMAP_NAME = "sitemap-analises-contratos.xml"
 HUB_DESCRIPTION = (
     "Análises editoriais independentes de contratos públicos. Não são casos CONFENGE."
 )
+AI_DISCLOSURE_HTML = (
+    '<p id="ai-disclosure" class="ai-disclosure" data-ai-disclosure="assistive">'
+    "Uso de IA: assistência de redação e consistência; o responsável técnico humano "
+    "assina o que está publicado. Política: "
+    '<a href="/uso-de-ia/">Uso de IA</a>.</p>'
+)
+HUB_METHOD_HTML = (
+    '<section class="section authority-method" id="metodo">'
+    "<h2>Método e classe editorial</h2>"
+    '<p class="case-badge">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO · NÃO É CASO CONFENGE · NÃO É CASE DE CLIENTE</p>'
+    "<p>Método: cada afirmação visível entra numa trilha FACT, CALCULATION, INFERENCE ou UNKNOWN. "
+    "Fonte pública, recorte e data de referência acompanham o texto. Sem fonte, o campo permanece UNKNOWN.</p>"
+    "<p>Esta família lê instrumentos e registros públicos. A publicação não implica relação comercial "
+    "com o órgão, o contratado ou as partes. Não é Caso CONFENGE. Não é customer success. Não é review.</p>"
+    "<p>Limitação: não é parecer jurídico, não julga irregularidade e não transforma "
+    "“atípico” em “irregular”.</p>"
+    f"{AI_DISCLOSURE_HTML}"
+    "<p>Como citar: CONFENGE. Análise técnica de contrato público. "
+    f"https://confenge.com.br{FAMILY_PATH} (as of 2026-08-16).</p>"
+    "</section>"
+)
 KIND_LABEL = {
     "FACT": "Fato",
     "CALCULATION": "Cálculo",
@@ -348,7 +369,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         f' · as_of <time datetime="{e(_iso(record.get("as_of")))}">{e(_iso(record.get("as_of")))}</time>'
         ' · <a href="/correcoes/">Como corrigir ou contestar</a></p>'
     )
-    sections.append(f'<div class="container">{byline}</div>')
+    sections.append(f'<div class="container">{byline}{AI_DISCLOSURE_HTML}</div>')
 
     if _text(record.get("executive_summary")):
         sections.append(
@@ -470,6 +491,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         "<p>Família editorial seletiva. Página não é um diretório combinatório "
         "nem um case de cliente. Indexação só ocorre quando o gate "
         f"{e(GATE_VERSION)} concede <code>PUBLISHABLE_INDEX</code>.</p>"
+        f"{HUB_METHOD_HTML}"
         f"{listing}</div>"
         + author_box()
     )

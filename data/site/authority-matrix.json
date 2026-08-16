@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "updated_at": "2026-08-15",
+  "schema_version": "1.1.0",
+  "updated_at": "2026-08-16",
   "adr": "ADR-STRAT-002",
   "issue": 74,
   "audit_chain": [
@@ -11,6 +11,14 @@
     "atualizacao",
     "limitacoes",
     "como_corrigir"
+  ],
+  "required_slot_keys": [
+    "author",
+    "reviewer",
+    "evidence",
+    "update_history",
+    "ai_disclosure",
+    "consent"
   ],
   "reviewer_trigger": {
     "required_when": [
@@ -55,11 +63,15 @@
       "limitations": "recommended",
       "permission_class": "not_applicable",
       "correction_link": "required",
+      "ai_disclosure": "recommended",
+      "consent": "not_applicable",
+      "mutually_exclusive_with": null,
       "examples": [
         "/diretoria-b2g/",
         "/diagnostico-b2g-360/",
         "/bid-room-licitacoes-obras/",
-        "/defesa-margem-contratos-publicos/"
+        "/defesa-margem-contratos-publicos/",
+        "/aditivos-obras-publicas/"
       ]
     },
     "conteudo_tecnico": {
@@ -74,6 +86,9 @@
       "limitations": "required",
       "permission_class": "not_applicable",
       "correction_link": "required",
+      "ai_disclosure": "recommended",
+      "consent": "not_applicable",
+      "mutually_exclusive_with": null,
       "examples": [
         "/conteudos/limite-aditivo-25-50-obra-publica/",
         "/lei-14133-obras/limite-25-50-aditivo-obra/"
@@ -92,6 +107,9 @@
       "permission_class": "not_applicable",
       "citation_link": "required",
       "correction_link": "required",
+      "ai_disclosure": "required",
+      "consent": "not_applicable",
+      "mutually_exclusive_with": null,
       "examples": [
         "/ferramentas/limite-acrescimos-supressoes/"
       ]
@@ -109,6 +127,9 @@
       "permission_class": "not_applicable",
       "citation_link": "required",
       "correction_link": "required",
+      "ai_disclosure": "required",
+      "consent": "not_applicable",
+      "mutually_exclusive_with": null,
       "examples": [
         "/metodologia-inteligencia/",
         "/radar/nacional-obras-publicas/"
@@ -126,6 +147,9 @@
       "limitations": "required",
       "permission_class": "required",
       "correction_link": "required",
+      "ai_disclosure": "recommended",
+      "consent": "required",
+      "mutually_exclusive_with": "analise_tecnica_contrato",
       "examples": [
         "/casos/",
         "/casos/aditivo-art125-demonstrativo/",
@@ -145,6 +169,8 @@
       "permission_class": "not_applicable",
       "citation_link": "required",
       "correction_link": "required",
+      "ai_disclosure": "required",
+      "consent": "not_applicable",
       "mutually_exclusive_with": "caso_proof",
       "examples": [
         "/analises-contratos-publicos/",
