@@ -2,7 +2,7 @@
   "schema": "market-answer-candidate/1.0",
   "version": "1.0",
   "question_id": "valor-tipico-contratos-pavimentacao",
-  "question": "Qual é o valor típico dos contratos públicos de pavimentação?",
+  "question": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
   "user_job": "Uma construtora ou diretoria B2G que ainda não conhece a CONFENGE precisa de uma faixa honesta de ticket contratual de pavimentação para calibrar expectativa, proposta e conversa comercial — sem confundir isso com custo por km.",
   "intent": "quanto_custa_ticket_contratual",
   "consumer_decision": "May render a labeled preview. May not index or claim national/custo-por-km facts until official_live + coverage + human hash pass.",
@@ -20,7 +20,9 @@
   "grain": "valor_integral_nominal",
   "unit": "ticket_contratual_integral",
   "geography": {
-    "required_scope": "published_ufs_only",
+    "required_scope": "uf",
+    "code": "SC",
+    "label": "Santa Catarina",
     "forbids_national_without_coverage": true
   },
   "period": {
@@ -45,7 +47,7 @@
   "data_quality": {
     "score": 0.42,
     "reason_codes": ["producer_fixture", "coverage_incomplete"],
-    "note": "Fixture labeled; official_live absent."
+    "note": "Official_live SC payload is consumed SELECT-only. Coverage is estadual COMPLETE, not a country-wide denominator."
   },
   "singularity": {
     "score": 0.72,

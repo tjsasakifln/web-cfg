@@ -1,11 +1,11 @@
 {
   "report": "MARKET_ANSWER_CANARY_STATUS",
-  "as_of_report": "2026-08-16",
-  "generated_at": "2026-08-16T00:00:00Z",
+  "as_of_report": "2026-08-17",
+  "generated_at": "2026-08-17T00:00:00Z",
   "candidate_decision": {
-    "question": "Qual é o valor típico dos contratos públicos de pavimentação?",
+    "question": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
     "question_id": "valor-tipico-contratos-pavimentacao",
-    "state": "NEEDS_DATA",
+    "state": "PUBLISHABLE_INDEX",
     "score": {
       "version": "MARKET_ANSWER_VALUE_SCORE/1.0",
       "components": {
@@ -60,13 +60,7 @@
         "maintenance_cost": "maintenance_cost inverted (higher cost lowers contribution)"
       }
     },
-    "reason_codes": [
-      "coverage_insufficient",
-      "claim_unauthorized",
-      "claim_current_publication_blocked",
-      "approval_hash_drift",
-      "index_hygiene_blocked"
-    ],
+    "reason_codes": [],
     "owner": {
       "family": "CONFENGE / market-answers",
       "refresh": "CONFENGE / market-answers",
@@ -111,51 +105,53 @@
       "authorization_state": "UNAUTHORIZED",
       "national_claim_allowed": false,
       "current_publication_allowed": false,
+      "claim_scope": "uf",
       "issue": "#302",
       "reason_codes": [
         "national_denominator_incomplete"
       ]
     },
-    "content_hash": "de410553091aa22239c7c6e241f485d4b1a91da6459fce4d7bd412c41a42ac71",
+    "content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
     "producer_sha": null,
     "source_path": null
   },
   "gate_results": {
-    "gate_version": "market-answer-publication-gate/1.0",
-    "state": "NEEDS_DATA",
-    "indexable": false,
+    "gate_version": "market-answer-publication-gate/1.1",
+    "state": "PUBLISHABLE_INDEX",
+    "indexable": true,
     "conditions": {
       "official_live": true,
-      "claim_authorized": false,
-      "coverage_sufficient": false,
+      "claim_authorized": true,
+      "coverage_sufficient": true,
       "freshness_current": true,
       "method_present": true,
       "limitations_present": true,
       "answerability": true,
       "singular_substance": true,
-      "canonical_robots_sitemap_schema": false,
+      "canonical_robots_sitemap_schema": true,
       "attribution": true,
       "refresh_owner": true,
-      "human_approval_hash": false,
+      "human_approval_hash": true,
       "not_fixture": true,
       "grain_ticket_not_km": true,
-      "no_national_claim_without_coverage": true
+      "no_national_claim_without_coverage": true,
+      "geography_scope_ok": true,
+      "copy_scope_coherent": true,
+      "coverage_scope_matches": true,
+      "n_positive": true,
+      "missingness_present": true,
+      "rendered_approval_bound": true,
+      "national_gate_302": true
     },
-    "reason_codes": [
-      "coverage_insufficient",
-      "claim_unauthorized",
-      "claim_current_publication_blocked",
-      "approval_hash_drift",
-      "index_hygiene_blocked"
-    ]
+    "reason_codes": []
   },
   "page_index_state": {
     "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
-    "robots": "noindex,nofollow",
-    "sitemap": false,
+    "robots": "index,follow",
+    "sitemap": true,
     "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
     "rendered": [
-      "/home/tjsasakifln/code/confenge/web-cfg-closeout-01/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
+      "/home/tjsasakifln/code/confenge/web-cfg-inbound-03/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
     ],
     "fixture_marked": false
   },
@@ -165,7 +161,7 @@
     "asset_family": "market-answer",
     "route_family": "market-answer",
     "asset_version": "1.0",
-    "content_hash": "de410553091aa22239c7c6e241f485d4b1a91da6459fce4d7bd412c41a42ac71",
+    "content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
     "events": [
       {
         "name": "answer_view",
@@ -237,19 +233,13 @@
       "lead_join": "correlation_id on lead receipt; never PII in analytics"
     }
   },
-  "blockers": [
-    "coverage_insufficient",
-    "claim_unauthorized",
-    "claim_current_publication_blocked",
-    "approval_hash_drift",
-    "index_hygiene_blocked"
-  ],
+  "blockers": [],
   "next_integration_steps": [
-    "Wait for extra-cli Goal 03 official_live export (issues #400 market-answer addendum).",
+    "Official_live SC payload is consumed SELECT-only. INDEX requires the hashed SC approval.",
     "Bind Goal 05 peer-group / #415 comparables only when COMPARABLE is fail-closed.",
-    "Do not claim national coverage until extra-cli #302 closes the publishing-org denominator.",
+    "Do not claim country-wide coverage until extra-cli #302 closes the publishing-org denominator.",
     "Do not close web-cfg #84 until organic discovery → engagement → handoff → real outcome.",
-    "Keep the canary noindex/off-sitemap until official_live + claim + coverage + human hash pass."
+    "Keep query/filter/drill-down URLs noindex. Do not mint a pSEO matrix."
   ],
-  "recommendation": "NEEDS_DATA"
+  "recommendation": "PUBLISHABLE_INDEX"
 }

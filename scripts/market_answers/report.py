@@ -35,11 +35,11 @@ def build_status(
     )
     blockers = list(decision.reason_codes)
     next_steps = [
-        "Wait for extra-cli Goal 03 official_live export (issues #400 market-answer addendum).",
+        "Official_live SC payload is consumed SELECT-only. INDEX requires the hashed SC approval.",
         "Bind Goal 05 peer-group / #415 comparables only when COMPARABLE is fail-closed.",
-        "Do not claim national coverage until extra-cli #302 closes the publishing-org denominator.",
+        "Do not claim country-wide coverage until extra-cli #302 closes the publishing-org denominator.",
         "Do not close web-cfg #84 until organic discovery → engagement → handoff → real outcome.",
-        "Keep the canary noindex/off-sitemap until official_live + claim + coverage + human hash pass.",
+        "Keep query/filter/drill-down URLs noindex. Do not mint a pSEO matrix.",
     ]
     return {
         "report": STATUS_STEM,
@@ -155,7 +155,7 @@ Page view is not a lead. Impression, engagement, lead and pipeline stay separate
 
 {next_lines}
 
-Do not close #84. Extra-cli #400/#415/#302 official_live market-answer payload is still absent.
+Do not close #84. Discovery/outcome remain residual after the SC index flip. extra-cli #302 remains required for any country-wide claim.
 """
 
 

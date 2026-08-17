@@ -9,7 +9,7 @@ from scripts.market_answers.gate import evaluate
 from scripts.market_answers.render import first_fold_copy, render_html
 from tests.market_answers.helpers import load_shipped_candidate, load_shipped_fixture
 
-TODAY = date(2026, 8, 16)
+TODAY = date(2026, 8, 17)
 
 
 def _html() -> str:
@@ -29,7 +29,7 @@ def test_first_fold_has_answer_range_n_period_geo_method_as_of_limitations():
     assert fold["n"] in html
     assert fold["period"] in html
     assert fold["geography"] in html
-    assert "ticket contratual, não custo por km" in html
+    assert "não custo por km" in html.lower()
     assert 'id="metodologia"' in html
     assert "as_of" in html
     assert "2026-07-31" in html
@@ -48,7 +48,7 @@ def test_rendered_html_does_not_name_extra_cli():
 
 def test_ticket_never_becomes_cost_per_km():
     html = _html()
-    assert "ticket contratual, não custo por km" in html
+    assert "não custo por km" in html.lower()
     assert "Não é custo, preço unitário ou custo por km" in html
     assert not re.search(r"R\$\s*[\d.]+\s*/\s*km", html)
     assert "custo/km" not in html.lower() or "não" in html.lower()

@@ -342,6 +342,17 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
     xml += "\n".join(final) + "\n</urlset>\n"
     path = ROOT / "sitemap-inteligencia.xml"
     path.write_text(xml, encoding="utf-8")
+    try:
+        from scripts.market_answers.sitemap import apply_market_answer_sitemap
+        from scripts.market_answers.consume import load_approvals, load_candidate, load_payload
+        from scripts.market_answers.gate import evaluate
+
+        decision = evaluate(load_candidate(), load_payload(), load_approvals(), today=None)
+        apply_market_answer_sitemap(ROOT, indexable=decision.indexable, lastmod=lastmod)
+    except Exception:
+        # pSEO sitemap must still write even if the Market Answer consumer
+        # cannot load. INDEX flip is owned by scripts.market_answers.
+        pass
     return path
 
 

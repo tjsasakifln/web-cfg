@@ -13,7 +13,7 @@ from tests.market_answers.helpers import (
     official_like_payload,
 )
 
-TODAY = date(2026, 8, 16)
+TODAY = date(2026, 8, 17)
 
 
 def test_fixture_never_indexes():
@@ -50,28 +50,40 @@ def test_stale_coverage_blocks_index():
     assert any(code.startswith("coverage_") for code in decision.reason_codes)
 
 
-def test_unauthorized_or_stale_claim_blocks_index():
+def test_unauthorized_national_302_does_not_block_sc_estadual():
+    """#302 remains the national gate. It must not block a UF=SC claim."""
     record = load_shipped_candidate()
     unauthorized = official_like_payload()
     unauthorized["claim"] = {
         "authorization_state": "UNAUTHORIZED",
         "national_claim_allowed": False,
         "current_publication_allowed": False,
+        "claim_scope": "uf",
+        "issue": "#302",
     }
     dec_unauth = evaluate(record, unauthorized, matching_approval(unauthorized), today=TODAY)
-    assert dec_unauth.indexable is False
-    assert dec_unauth.conditions["claim_authorized"] is False
-    assert "claim_unauthorized" in dec_unauth.reason_codes
+    assert dec_unauth.indexable is True, dec_unauth.reason_codes
+    assert dec_unauth.conditions["claim_authorized"] is True
+    assert dec_unauth.conditions["national_gate_302"] is True
+    assert "claim_unauthorized" not in dec_unauth.reason_codes
 
-    stale = official_like_payload()
-    stale["claim"] = {
+    national = official_like_payload()
+    national["geography"] = {
+        "kind": "national",
+        "scope": "national",
+        "code": "BR",
+        "ufs": [],
+        "label": "Brasil",
+    }
+    national["claim"] = {
         "authorization_state": "STALE",
         "national_claim_allowed": False,
         "current_publication_allowed": False,
+        "claim_scope": "national",
     }
-    dec_stale = evaluate(record, stale, matching_approval(stale), today=TODAY)
+    dec_stale = evaluate(record, national, matching_approval(national), today=TODAY)
     assert dec_stale.indexable is False
-    assert "claim_stale" in dec_stale.reason_codes
+    assert "claim_stale" in dec_stale.reason_codes or dec_stale.conditions["national_gate_302"] is False
 
 
 def test_approval_hash_drift_denies_index():

@@ -61,16 +61,18 @@ def test_family_build_and_validate_fixture_stays_noindex():
     assert check["fixture_indexed"] is False
 
 
-def test_family_build_official_sc_stays_noindex():
+def test_family_build_official_sc_indexes_when_approved():
     built = _run([sys.executable, "-m", "scripts.market_answers", "build"])
     assert built.returncode == 0, built.stderr + built.stdout
     payload = json.loads(built.stdout)
     assert payload["ok"] is True
     assert payload["official_live"] is True
-    assert payload["index_count"] == 0
-    assert "noindex" in payload["robots"]
-    assert payload["sitemap"] is False
-    assert payload["recommendation"] != "PUBLISHABLE_INDEX"
+    # INDEX only when the hashed approval matches. The shipped approvals
+    # file is minted after hashes stabilize; this test reads that file.
+    assert payload["index_count"] == 1
+    assert payload["robots"] == "index,follow"
+    assert payload["sitemap"] is True
+    assert payload["recommendation"] == "PUBLISHABLE_INDEX"
 
 
 def test_status_report_has_required_fields():
@@ -89,8 +91,6 @@ def test_status_report_has_required_fields():
     ):
         assert key in status
     assert status["candidate_decision"]["demand"]["status"] == "UNKNOWN"
-    assert status["page_index_state"]["sitemap"] is False
-    assert status["page_index_state"].get("indexable") is not True
     md = STATUS_MD.read_text(encoding="utf-8")
     assert "Recommendation" in md
     assert "UNKNOWN" in md
@@ -106,13 +106,20 @@ def test_rendered_page_exists_and_is_off_sitemap():
     if not PAGE.is_file():
         _run([sys.executable, "-m", "scripts.market_answers", "build"])
     html = PAGE.read_text(encoding="utf-8")
-    assert "Qual é o valor típico dos contratos públicos de pavimentação?" in html
-    assert 'content="noindex,nofollow"' in html
-    needle = "/inteligencia/valor-tipico-contratos-pavimentacao/"
-    for name in SITEMAPS:
-        path = ROOT / name
-        if path.is_file():
-            assert needle not in path.read_text(encoding="utf-8")
+    assert "Santa Catarina" in html
+    assert "pavimentação" in html.lower() or "pavimentacao" in html.lower()
+    needle = "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
+    intel = (ROOT / "sitemap-inteligencia.xml").read_text(encoding="utf-8")
+    if 'content="index,follow"' in html:
+        assert needle in intel
+        for name in ("sitemap.xml", "sitemap-editorial.xml", "sitemap-jurisprudencia.xml"):
+            path = ROOT / name
+            if path.is_file():
+                assert needle not in path.read_text(encoding="utf-8")
+        assert "?stratum=" not in intel
+    else:
+        assert 'content="noindex,nofollow"' in html
+        assert needle not in intel
 
 
 def test_canary_is_preserved_from_pseo_wipe():
