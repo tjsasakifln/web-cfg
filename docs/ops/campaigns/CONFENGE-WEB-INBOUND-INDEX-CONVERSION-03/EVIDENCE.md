@@ -35,8 +35,9 @@ Class: `LIVE_PROVEN` for the SC Market Answer only.
 Two probes of `https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/` after merge `#113` / SHA `6cc46a1a99f1af4c20778f5fcfa947d4758aaf94`:
 HTTP 200, build-info commit match, robots `index,follow`, sitemap-inteligencia loc only, title/H1/schema Santa Catarina, n=5038 and limitations visible, no SmartLic, no PII in URL.
 
-## Not claimed
+## Issues (verified against GitHub after reopen)
 
-- LIVE_PROVEN, INBOUND NOW, qualified pipeline, receita: not claimed from fixtures.
-- #84 #88 #60 #64 remain open.
+- #84 is **open** (`state_reason=reopened`). #113 auto-closed it; it was reopened because discovery/outcome remain residual (`DISCOVERY_PENDING` / `UNKNOWN`). Do not close.
+- #88, #60, #64 are **open**. Real lead/QCO/outcome stay `UNKNOWN`.
+- INBOUND NOW / qualified pipeline / receita are `NO_GO` from fixtures.
 - Lockfiles and PRs #92/#93 were not edited.

@@ -3,7 +3,7 @@
 | Item | Class | Note |
 |---|---|---|
 | Production index proof | `LIVE_PROVEN` | Two probes on `6cc46a1a` / deploy `6a8351c558fa180008f11b16`: 200, index,follow, sitemap loc, Santa Catarina copy. |
-| Discovery / GSC | `DISCOVERY_PENDING` | Do not close #84. |
+| Discovery / GSC | `DISCOVERY_PENDING` | #84 was auto-closed by #113 and reopened. GitHub state=open. Do not close. |
 | Real lead / outcome | `UNKNOWN` | #60/#64 stay open. No synthetic lead treated as real. |
 | HMAC Netlify sender | `BLOCKED` | Token absent this session. Does not block code/merge. |
 | extra-cli #302 country-wide | `UNKNOWN` | Still required for any national claim. Not a SC blocker. |
