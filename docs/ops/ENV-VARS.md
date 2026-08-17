@@ -51,6 +51,18 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | --- | --- |
 | `TURNSTILE_SITE_KEY` | Site key no HTML do formulário (pública) |
 
+## Offers / contracting preview (defaults off)
+
+| Nome | Descrição |
+| --- | --- |
+| `CONFENGE_OFFER_CATALOG_PUBLIC` | `true` só publica o catálogo. Default arquivo `false`. |
+| `ASAAS_MODE` | Sempre `disabled` nesta campanha. Não autoriza produção. |
+| `CONFENGE_PRODUCTION_CHECKOUT` | Checkout real. Default `false`. |
+| `CONFENGE_PRODUCTION_WEBHOOK` | Webhook real. Default `false`. |
+| `CONFENGE_REAL_MONEY` | Mutação financeira real. Default `false`. |
+
+Nenhuma chave Asaas é lida ou armazenada.
+
 ## Build / release
 
 | Nome | Descrição |

@@ -1,0 +1,12 @@
+{
+  "schema": "confenge.offer-private-exception/1.0",
+  "visibility": "private",
+  "serializable_public": false,
+  "offer_id": "CFG-DIRB2G-EXTRA-HIST-v1",
+  "internal_code": "CFG-DIRB2G-EXTRA-HIST",
+  "amount_cents": 1000000,
+  "currency": "BRL",
+  "billing_mode": "subscription",
+  "cycle": "MONTHLY",
+  "note": "Historical Extra R$ 10.000/mês. Private exception only. Never a public offer."
+}
