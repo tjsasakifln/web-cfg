@@ -379,7 +379,7 @@ def render_html(
 </form>
 </section>
 
-<section id="fontes" aria-labelledby="fontes-titulo">
+<section id="dataset" data-dataset="valor-tipico-contratos-pavimentacao-sc" aria-labelledby="fontes-titulo">
 <h2 id="fontes-titulo">Fontes, versão e refresh</h2>
 <ul>
 <li>Schema: <code>{escape(_text(payload.get("schema")))}</code></li>
