@@ -136,10 +136,35 @@ export function extractPillarSignals(html) {
   };
 }
 
+function sitemapLocUrls(xml) {
+  const found = [];
+  const pattern = /<loc>([^<]+)<\/loc>/gi;
+  let match;
+  while ((match = pattern.exec(String(xml)))) {
+    try {
+      found.push(new URL(match[1].trim()));
+    } catch {
+      // Unparseable loc is not a canonical CONFENGE destination.
+    }
+  }
+  return found;
+}
+
+function locMatches(url, expected) {
+  const want = new URL(expected);
+  const left = url.pathname.replace(/\/+$/, "/") || "/";
+  const right = want.pathname.replace(/\/+$/, "/") || "/";
+  return url.origin === want.origin && left === right;
+}
+
 export function extractSitemapSignals(xml, { indexable = true } = {}) {
-  const text = String(xml);
-  const hasAsset = text.includes("https://confenge.com.br/ferramentas/diagnostico-defesa-margem/");
-  const hasPillar = text.includes("https://confenge.com.br/defesa-margem-contratos-publicos/");
+  const locs = sitemapLocUrls(xml);
+  const hasAsset = locs.some((url) =>
+    locMatches(url, "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"),
+  );
+  const hasPillar = locs.some((url) =>
+    locMatches(url, "https://confenge.com.br/defesa-margem-contratos-publicos/"),
+  );
   return {
     has_diagnostico_loc: hasAsset,
     has_pillar_loc: hasPillar,

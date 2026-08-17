@@ -87,6 +87,11 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
   assert.equal(map.has_pillar_loc, true);
   assert.equal(map.consistent_with_indexable, true);
   pass("sitemap_signals", map);
+  const evil = extractSitemapSignals(
+    "<urlset><loc>https://evil.example/https://confenge.com.br/ferramentas/diagnostico-defesa-margem/</loc></urlset>",
+  );
+  assert.equal(evil.has_diagnostico_loc, false);
+  pass("sitemap_rejects_host_prefix", evil);
 }
 
 // --- shipped use path (diagnoseMargin on official export) ---
