@@ -355,6 +355,15 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["data/migration/smartlic-confenge/manifesto.v1.json"],
     surfaces: [],
   },
+  "test:knowledge-funnel": {
+    producers: [
+      "scripts/knowledge_funnel/",
+      "tests/knowledge_funnel/",
+      "data/knowledge_funnel/",
+    ],
+    artifacts: [],
+    surfaces: ["/inteligencia/valor-tipico-contratos-pavimentacao/"],
+  },
   "test:affected-selector": {
     producers: [
       "scripts/site/affected_graph.mjs",
