@@ -50,6 +50,9 @@ def test_no_llms_txt_or_geo_hack_in_owned_code():
             assert "llms.txt" not in text
 
 
+PROBE_HTTP_FILES = frozenset({"http_client.py"})
+
+
 def test_owned_trees_do_not_post_to_indexnow():
     skip = {"geo_guard.py", "test_invariants.py"}
     for base in (ROOT / "scripts" / "discovery", ROOT / "scripts" / "data_desk"):
@@ -57,13 +60,21 @@ def test_owned_trees_do_not_post_to_indexnow():
             if path.name in skip:
                 continue
             text = path.read_text(encoding="utf-8")
-            assert "import urllib.request" not in text
-            assert "from urllib import request" not in text
-            assert "import http.client" not in text
             assert "import requests" not in text
             assert "import httpx" not in text
             assert "aiohttp" not in text
+            if path.name in PROBE_HTTP_FILES:
+                assert "ALLOWED_METHODS" in text
+                assert "GET" in text and "HEAD" in text
+                assert "method_not_allowed" in text
+                assert "api.indexnow.org" not in text
+                assert "POST" not in text or "IndexNow POST" in text
+                continue
+            assert "import urllib.request" not in text
+            assert "from urllib import request" not in text
+            assert "import http.client" not in text
             assert "urlopen(" not in text
+            assert "build_opener" not in text
 
 
 def test_noindex_or_fixture_fails_indexnow_and_publicable():
