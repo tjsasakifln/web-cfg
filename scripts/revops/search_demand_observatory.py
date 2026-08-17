@@ -18,6 +18,7 @@ Usage:
   python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-2026-07-30
   python3 scripts/revops/search_demand_observatory.py analyze
   python3 scripts/revops/search_demand_observatory.py pull-api --days 28
+  python3 scripts/revops/search_demand_observatory.py candidates --dir seo/gsc-2026-07-30
   python3 scripts/revops/search_demand_observatory.py dashboard --out data/ops/gsc-insights.json
 """
 
@@ -861,6 +862,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Run pipeline against committed fixture (no live API)",
     )
 
+    p_cand = sub.add_parser(
+        "candidates",
+        help="Emit demand-engine candidate/rejection registry from a versioned snapshot",
+    )
+    p_cand.add_argument("--dir", default=None, help="GSC CSV snapshot directory")
+    p_cand.add_argument("--rows", default=None, help="JSON 5-tuple dump")
+    p_cand.add_argument("--out", type=Path, default=DATA / "demand-candidates.json")
+
     p_dash = sub.add_parser("dashboard", help="Write ops dashboard JSON")
     p_dash.add_argument("--out", type=Path, default=ROOT / "data" / "ops" / "gsc-insights.json")
 
@@ -925,6 +934,35 @@ def main(argv: list[str] | None = None) -> int:
         if args.allow_missing_creds and result.get("error") == "missing_credentials":
             return 0  # external blocker recorded; schedule continues
         return 2
+
+    if args.cmd == "candidates":
+        from scripts.organic.demand_engine import run_demand_engine, write_document
+
+        gsc_dir = Path(args.dir) if args.dir else None
+        if gsc_dir and not gsc_dir.is_absolute():
+            gsc_dir = ROOT / gsc_dir
+        rows = None
+        if args.rows:
+            payload = json.loads(Path(args.rows).read_text(encoding="utf-8"))
+            rows = payload if isinstance(payload, list) else payload.get("rows")
+        if gsc_dir is None and rows is None:
+            gsc_dir = ROOT / "seo" / "gsc-2026-07-30"
+        doc = run_demand_engine(gsc_dir=gsc_dir, rows=rows)
+        write_document(doc, args.out, generated_at=datetime.now(timezone.utc).isoformat())
+        print(
+            json.dumps(
+                {
+                    "ok": True,
+                    "out": str(args.out),
+                    "snapshot_id": doc["snapshot_id"],
+                    "join_status": doc["join_status"],
+                    "counts": doc["counts"],
+                    "authorized_pages": doc["authorized_pages"],
+                },
+                ensure_ascii=False,
+            )
+        )
+        return 0
 
     if args.cmd == "dashboard":
         insights = analyze()

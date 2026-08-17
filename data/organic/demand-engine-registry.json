@@ -1,0 +1,1071 @@
+{
+  "schema": "demand-engine-registry/1.0",
+  "generated_from": [
+    "gsc-2026-07-30",
+    "gsc-2026-08-09"
+  ],
+  "live_currentness": "BLOCKED",
+  "live_stale": true,
+  "live_residual": "BLOCKED_GSC_READONLY_CREDENTIAL",
+  "authorized_pages": [],
+  "authorizes_page": false,
+  "july": {
+    "snapshot_id": "gsc-2026-07-30",
+    "join_status": "join_unavailable",
+    "counts": {
+      "rows": 108,
+      "records": 108,
+      "candidates": 43,
+      "rejects": 1,
+      "defers": 64,
+      "authorized_pages": 0
+    },
+    "authorized_pages": [],
+    "detectors": {
+      "striking_distance_n": 57,
+      "cannibalization": [],
+      "wrong_landing": [],
+      "join_unavailable_n": 20,
+      "keyword_combination_does_not_authorize_page": []
+    },
+    "query_records": [
+      {
+        "id": "cand-23c94757a8260da8",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "nao desonerado",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 10,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-2a7f9b4e9310ea24",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "desonerado e não desonerado",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 11,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-4829547e3fe712a7",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable",
+          "query_without_useful_page"
+        ],
+        "query": "ia",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 16,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-4ccec818cd8f2bea",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "sinapi desonerado ou não desonerado qual usar",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 18,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-9ce06fe363872304",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "desonerado ou não desonerado",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 24,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-abbc4212bf03460c",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "desonerado e não desonerado sinapi",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 26,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-b873485a8974565b",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "não desonerado",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 30,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-915cacd98f4f4f86",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "empreitada por preço unitário",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "cost_or_typical_value",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.62,
+        "rank": 43,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-1b8433b25b72cc4e",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "tecnico edificacoes",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 1.0,
+        "rank": 44,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-50fdf1b57b571d6a",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "mobilização e desmobilização de obra",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 1.0,
+        "rank": 46,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-9d2806f1b467f87d",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "bdi diferenciado",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 1.0,
+        "rank": 52,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-491342933501e38b",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable"
+        ],
+        "query": "mobilização de obra",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 1.0,
+        "rank": 63,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-51d430572e79e9e4",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable"
+        ],
+        "query": "comprovação de exequibilidade",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 1.0,
+        "rank": 66,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-4a054c62ae0ea03e",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable"
+        ],
+        "query": "aditivos obra pública",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "contract_understanding",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 93,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-56b118925ac7d0fc",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable",
+          "query_without_useful_page"
+        ],
+        "query": "coenge",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "branded_navigational",
+        "intent": "branded",
+        "demand_status": "observed",
+        "score": 0.665,
+        "rank": 103,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-a43a350f0f4a9a0d",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable",
+          "query_without_useful_page"
+        ],
+        "query": "smartenge engenharia",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "branded_navigational",
+        "intent": "branded",
+        "demand_status": "observed",
+        "score": 0.665,
+        "rank": 104,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-afb4ce2aeda74e78",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable",
+          "query_without_useful_page"
+        ],
+        "query": "consenge",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "branded_navigational",
+        "intent": "branded",
+        "demand_status": "observed",
+        "score": 0.665,
+        "rank": 105,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-f25769aba3abe2d7",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable",
+          "query_without_useful_page"
+        ],
+        "query": "conenge",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "branded_navigational",
+        "intent": "branded",
+        "demand_status": "observed",
+        "score": 0.665,
+        "rank": 106,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-f2f0b8af0c26f0a5",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable"
+        ],
+        "query": "como calcular mobilização e desmobilização de obra",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "calculation",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.52,
+        "rank": 107,
+        "snapshot_id": "gsc-2026-07-30"
+      },
+      {
+        "id": "cand-0d1afac080faa6f5",
+        "decision": "REJECT",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable",
+          "query_without_useful_page"
+        ],
+        "query": "avcb",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "legacy_entity",
+        "intent": "none",
+        "demand_status": "observed",
+        "score": 0.28,
+        "rank": 108,
+        "snapshot_id": "gsc-2026-07-30"
+      }
+    ]
+  },
+  "august": {
+    "snapshot_id": "gsc-2026-08-09",
+    "join_status": "join_unavailable",
+    "counts": {
+      "rows": 65,
+      "records": 65,
+      "candidates": 26,
+      "rejects": 1,
+      "defers": 38,
+      "authorized_pages": 0
+    },
+    "authorized_pages": [],
+    "detectors": {
+      "striking_distance_n": 31,
+      "cannibalization": [],
+      "wrong_landing": [],
+      "join_unavailable_n": 12,
+      "keyword_combination_does_not_authorize_page": []
+    },
+    "query_records": [
+      {
+        "id": "cand-0f14a9fe280d8a56",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "medição rejeitada obra pública",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "contract_understanding",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 2,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-5954caa5c8188d10",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "sinapi desonerado",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 10,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-85f6b2ecd98e198c",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "glosa de medição obra pública",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "contract_understanding",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 15,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-9a860a086c66a667",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "bdi diferenciado obra pública",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "contract_understanding",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 20,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-ec2886c714e789f6",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "desonerado e não desonerado",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "comparison",
+        "intent": "informational",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 24,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-116418d97fd5b550",
+        "decision": "CANDIDATE",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "aditivo qualitativo e quantitativo",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "contract_understanding",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.52,
+        "rank": 26,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-524e8526e221eda3",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "curva abc reequilíbrio",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 1.0,
+        "rank": 28,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-df78e12c109d202c",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "striking_distance",
+          "join_unavailable"
+        ],
+        "query": "prazo de vigência e prazo de execução",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 1.0,
+        "rank": 31,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-bcf15778fff9a1c4",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable"
+        ],
+        "query": "prorrogação prazo obra pública chuva",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "contract_understanding",
+        "intent": "commercial_investigation",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 57,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-f22d6a196c4d64f2",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable"
+        ],
+        "query": "aditivos obras públicas",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "unknown",
+        "intent": "unknown",
+        "demand_status": "observed",
+        "score": 0.74,
+        "rank": 60,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-7c5803e980305e64",
+        "decision": "DEFER",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable"
+        ],
+        "query": "confenge",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "branded_navigational",
+        "intent": "branded",
+        "demand_status": "observed",
+        "score": 0.665,
+        "rank": 63,
+        "snapshot_id": "gsc-2026-08-09"
+      },
+      {
+        "id": "cand-93dcd9b77f069390",
+        "decision": "REJECT",
+        "authorizes_page": false,
+        "reason_codes": [
+          "does_not_authorize_page",
+          "join_unavailable",
+          "query_without_useful_page"
+        ],
+        "query": "avcb",
+        "page": null,
+        "join_status": "join_unavailable",
+        "question_class": "legacy_entity",
+        "intent": "none",
+        "demand_status": "observed",
+        "score": 0.28,
+        "rank": 65,
+        "snapshot_id": "gsc-2026-08-09"
+      }
+    ]
+  },
+  "compare": {
+    "july_snapshot": "gsc-2026-07-30",
+    "august_snapshot": "gsc-2026-08-09",
+    "july_join": "join_unavailable",
+    "august_join": "join_unavailable",
+    "july_counts": {
+      "rows": 108,
+      "records": 108,
+      "candidates": 43,
+      "rejects": 1,
+      "defers": 64,
+      "authorized_pages": 0
+    },
+    "august_counts": {
+      "rows": 65,
+      "records": 65,
+      "candidates": 26,
+      "rejects": 1,
+      "defers": 38,
+      "authorized_pages": 0
+    },
+    "cannibalization": {
+      "july": [],
+      "august": []
+    },
+    "wrong_landing": {
+      "july": [],
+      "august": []
+    },
+    "striking_distance_n": {
+      "july": 57,
+      "august": 31
+    },
+    "candidate_queries_july_only": [
+      "desonerado e não desonerado sinapi",
+      "desonerado ou não desonerado",
+      "empreitada por preço unitário",
+      "ia",
+      "nao desonerado",
+      "não desonerado",
+      "sinapi desonerado ou não desonerado qual usar"
+    ],
+    "candidate_queries_august_only": [
+      "aditivo qualitativo e quantitativo",
+      "bdi diferenciado obra pública",
+      "glosa de medição obra pública",
+      "medição rejeitada obra pública",
+      "sinapi desonerado"
+    ],
+    "candidate_queries_both": [
+      "desonerado e não desonerado"
+    ],
+    "note": "CSV UI snapshots have no query×page matrix. cannibalization and wrong_landing stay empty (join_unavailable). No join was invented. Live currentness is BLOCKED."
+  },
+  "web_005_questions": [
+    {
+      "query": "nao desonerado",
+      "question": "nao desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado e não desonerado",
+      "question": "desonerado e não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "sinapi desonerado ou não desonerado qual usar",
+      "question": "sinapi desonerado ou não desonerado qual usar",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado ou não desonerado",
+      "question": "desonerado ou não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado e não desonerado sinapi",
+      "question": "desonerado e não desonerado sinapi",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "não desonerado",
+      "question": "não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "empreitada por preço unitário",
+      "question": "empreitada por preço unitário",
+      "question_class": "cost_or_typical_value",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "medição rejeitada obra pública",
+      "question": "medição rejeitada obra pública",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "sinapi desonerado",
+      "question": "sinapi desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "glosa de medição obra pública",
+      "question": "glosa de medição obra pública",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "bdi diferenciado obra pública",
+      "question": "bdi diferenciado obra pública",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado e não desonerado",
+      "question": "desonerado e não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "aditivo qualitativo e quantitativo",
+      "question": "aditivo qualitativo e quantitativo",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    }
+  ],
+  "web_007_questions": [
+    {
+      "query": "nao desonerado",
+      "question": "nao desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado e não desonerado",
+      "question": "desonerado e não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "ia",
+      "question": "ia",
+      "question_class": "unknown",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable",
+        "query_without_useful_page"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "sinapi desonerado ou não desonerado qual usar",
+      "question": "sinapi desonerado ou não desonerado qual usar",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado ou não desonerado",
+      "question": "desonerado ou não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado e não desonerado sinapi",
+      "question": "desonerado e não desonerado sinapi",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "não desonerado",
+      "question": "não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "empreitada por preço unitário",
+      "question": "empreitada por preço unitário",
+      "question_class": "cost_or_typical_value",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-07-30",
+      "authorizes_page": false
+    },
+    {
+      "query": "medição rejeitada obra pública",
+      "question": "medição rejeitada obra pública",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "sinapi desonerado",
+      "question": "sinapi desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "glosa de medição obra pública",
+      "question": "glosa de medição obra pública",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "bdi diferenciado obra pública",
+      "question": "bdi diferenciado obra pública",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "desonerado e não desonerado",
+      "question": "desonerado e não desonerado",
+      "question_class": "comparison",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    },
+    {
+      "query": "aditivo qualitativo e quantitativo",
+      "question": "aditivo qualitativo e quantitativo",
+      "question_class": "contract_understanding",
+      "reason_codes": [
+        "does_not_authorize_page",
+        "striking_distance",
+        "join_unavailable"
+      ],
+      "join_status": "join_unavailable",
+      "snapshot_id": "gsc-2026-08-09",
+      "authorizes_page": false
+    }
+  ],
+  "note": "Published from versioned CSV snapshots. Live GSC pull is BLOCKED without webmasters.readonly credentials. Candidates do not authorize INDEX. Join-dependent detectors stay empty where join is unavailable.",
+  "generated_at": "2026-08-17T02:54:34.833701+00:00"
+}

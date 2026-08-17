@@ -1,0 +1,175 @@
+{
+  "schema": "demand-engine-config/1.0",
+  "version": "1.0.0",
+  "owner": "web-cfg/organic",
+  "decision_state": "VALIDATE",
+  "executive_front": "distribution",
+  "leverage": ["distribution", "data", "trust"],
+  "time_to_evidence": "same snapshot reprocess; live GSC currentness stays BLOCKED without credentials",
+  "principle": "A candidate record is a proposal, not an INDEX grant. Page count and keyword combinations never authorize an asset. UNKNOWN demand stays UNKNOWN.",
+  "privacy_note": "GSC dimensional tables are independently aggregated and privacy-thresholded. Page/query/device/country/date totals are not force-reconciled. A missing query×page matrix is join_unavailable, not a fabricated join.",
+  "striking_distance": {
+    "position_min": 4.0,
+    "position_max": 20.0,
+    "min_impressions": 1
+  },
+  "weights": {
+    "demand": 0.2,
+    "answerability": 0.3,
+    "data_readiness": 0.25,
+    "commercial_fit": 0.25
+  },
+  "question_classes": [
+    "how_to",
+    "definition",
+    "calculation",
+    "comparison",
+    "limit_rule",
+    "cost_or_typical_value",
+    "branded_navigational",
+    "commercial_offer",
+    "market_learning",
+    "contract_understanding",
+    "company_self_view",
+    "contract_review",
+    "operational_urgency",
+    "not_ready",
+    "legacy_entity",
+    "unknown"
+  ],
+  "question_class_source": "Search-intent classes plus conversion question_class values from intent-action-matrix/1.0 (market_learning, contract_understanding, company_self_view, contract_review, operational_urgency, not_ready). Conversion routes themselves stay on WEB-003/#88 when that contract lands; this engine only labels demand.",
+  "classify_rules": [
+    {
+      "id": "legacy_entity",
+      "question_class": "legacy_entity",
+      "intent": "none",
+      "pattern": "\\b(avcb|clcb|avalia[cç][aã]o\\s*imob|automa[cç][aã]o|nexgen)\\b"
+    },
+    {
+      "id": "branded",
+      "question_class": "branded_navigational",
+      "intent": "branded",
+      "pattern": "\\b(confenge|coenge|consenge|conenge|smartenge|tiago\\s*sasaki)\\b"
+    },
+    {
+      "id": "company_self_view",
+      "question_class": "company_self_view",
+      "intent": "commercial",
+      "pattern": "\\b(minha empresa|meu cnpj|raio[- ]?x|x-ray|carteira)\\b"
+    },
+    {
+      "id": "cost_or_typical_value",
+      "question_class": "cost_or_typical_value",
+      "intent": "commercial_investigation",
+      "pattern": "\\b(quanto custa|valor t[ií]pico|pre[cç]o|ticket|mediana)\\b"
+    },
+    {
+      "id": "market_learning",
+      "question_class": "market_learning",
+      "intent": "informational",
+      "pattern": "\\b(mercado|ranking|benchmark|distribui[cç][aã]o|quartil)\\b"
+    },
+    {
+      "id": "limit_rule",
+      "question_class": "limit_rule",
+      "intent": "commercial_investigation",
+      "pattern": "\\b(limite|25\\s*%|50\\s*%|acr[eé]scimo|supress)\\b"
+    },
+    {
+      "id": "calculation",
+      "question_class": "calculation",
+      "intent": "commercial_investigation",
+      "pattern": "\\b(calcular|c[aá]lculo|como contar|planilha)\\b"
+    },
+    {
+      "id": "comparison",
+      "question_class": "comparison",
+      "intent": "informational",
+      "pattern": "\\b(ou n[aã]o|vs\\.?|versus|diferen[cç]a|desonerado)\\b"
+    },
+    {
+      "id": "how_to",
+      "question_class": "how_to",
+      "intent": "informational",
+      "pattern": "\\b(como|checklist|guia|passo a passo)\\b"
+    },
+    {
+      "id": "definition",
+      "question_class": "definition",
+      "intent": "informational",
+      "pattern": "\\b(o que [eé]|o que significa|conceito)\\b"
+    },
+    {
+      "id": "contract_review",
+      "question_class": "contract_review",
+      "intent": "commercial",
+      "pattern": "\\b(segunda leitura|revisar contrato|analise meu contrato)\\b"
+    },
+    {
+      "id": "contract_understanding",
+      "question_class": "contract_understanding",
+      "intent": "commercial_investigation",
+      "pattern": "\\b(aditivo|reequil|reajuste|glosa|medi[cç]|contrato p[uú]blico|obra p[uú]blica)\\b"
+    },
+    {
+      "id": "commercial_offer",
+      "question_class": "commercial_offer",
+      "intent": "commercial",
+      "pattern": "\\b(consultoria|contratar|servi[cç]o|or[cç]amento comercial)\\b"
+    },
+    {
+      "id": "operational_urgency",
+      "question_class": "operational_urgency",
+      "intent": "commercial",
+      "pattern": "\\b(urg[eê]ncia|notifica[cç][aã]o|multa|sancion)\\b"
+    }
+  ],
+  "legacy_not_useful": ["avcb", "clcb", "nexgen", "avalia", "automa"],
+  "useful_path_prefixes": [
+    "/conteudos/",
+    "/ferramentas/",
+    "/guias-contratos-obras/",
+    "/lei-14133-obras/",
+    "/jurisprudencia-contratos-obras/",
+    "/inteligencia/",
+    "/radar/",
+    "/aditivos-obras-publicas/",
+    "/reequilibrio-obras-publicas/",
+    "/medicoes-glosas-obras-publicas/",
+    "/auditoria-orcamento-licitacao/",
+    "/atrasos-prorrogacao-obras-publicas/",
+    "/defesa-margem-contratos-publicos/",
+    "/defesa-tecnica-contratos-publicos/",
+    "/diagnostico-b2g-360/",
+    "/diagnostico-pre-licitacao/",
+    "/bid-room-licitacoes-obras/",
+    "/acompanhamento-contratos-obras/",
+    "/diretoria-b2g/"
+  ],
+  "home_paths": ["/", ""],
+  "owners": {
+    "CANDIDATE": "web-cfg/organic",
+    "REJECT": "web-cfg/organic",
+    "DEFER": "web-cfg/organic"
+  },
+  "costs": {
+    "CANDIDATE": "medium — human review of unique utility before any URL work",
+    "REJECT": "none — no asset work authorized",
+    "DEFER": "low — wait for join, data readiness or observed demand"
+  },
+  "expected_evidence": {
+    "CANDIDATE": "Same-snapshot reprocess (stable ranking/reasons); unique visitor utility; provenance/freshness; individual approval before INDEX. Demand stays UNKNOWN when unobserved.",
+    "REJECT": "Reason codes that name volume, combination or missing join. Do not reopen without new evidence.",
+    "DEFER": "query×page join, extra-cli public-read, or observed GSC demand — whichever the reason codes name."
+  },
+  "kill_gates": {
+    "default": "Kill if the only justification is keyword volume, page count or a dimensional combination.",
+    "keyword_combination_does_not_authorize_page": "Kill (already rejected): combinations never authorize a URL.",
+    "striking_distance": "Kill if impressions are zero, position is outside 4–20, or the proposed fix is a new doorway page.",
+    "cannibalization": "Kill if the clash was inferred without a query×page join.",
+    "wrong_landing": "Kill if the landing mismatch was inferred without a query×page join.",
+    "query_without_useful_page": "Kill if the gap is used to mint a page without singular utility and data readiness.",
+    "join_unavailable": "Do not fabricate a join. Kill any downstream publish that treated UI CSV dimensions as a matrix.",
+    "demand_UNKNOWN": "Kill if UNKNOWN is coerced to 0, 0.15 or any numeric stand-in."
+  }
+}
