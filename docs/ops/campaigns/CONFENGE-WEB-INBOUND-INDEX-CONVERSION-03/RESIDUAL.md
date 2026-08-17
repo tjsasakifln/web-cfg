@@ -2,7 +2,7 @@
 
 | Item | Class | Note |
 |---|---|---|
-| Production index proof | `UNKNOWN` | Requires existing GitHub→Netlify pipeline after merge. If credentials cannot deploy/read, classify `DEPLOY_BLOCKED` — never `LIVE_PROVEN`. |
+| Production index proof | `LIVE_PROVEN` | Two probes on `6cc46a1a` / deploy `6a8351c558fa180008f11b16`: 200, index,follow, sitemap loc, Santa Catarina copy. |
 | Discovery / GSC | `DISCOVERY_PENDING` | Do not close #84. |
 | Real lead / outcome | `UNKNOWN` | #60/#64 stay open. No synthetic lead treated as real. |
 | HMAC Netlify sender | `BLOCKED` | Token absent this session. Does not block code/merge. |

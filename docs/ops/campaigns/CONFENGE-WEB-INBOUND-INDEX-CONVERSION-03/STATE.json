@@ -4,7 +4,7 @@
   "as_of": "2026-08-17",
   "origin_main": "265b40ea016506c6004c81c1b0aaab6e531b6627",
   "p0_market_answer": {
-    "class": "CODE_PROVEN",
+    "class": "LIVE_PROVEN",
     "official_live": true,
     "geography": "SC",
     "n": 5038,
@@ -15,7 +15,9 @@
     "robots": "index,follow",
     "sitemap": "sitemap-inteligencia.xml",
     "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
-    "live": "UNKNOWN"
+    "live": "LIVE_PROVEN",
+    "merged_sha": "6cc46a1a99f1af4c20778f5fcfa947d4758aaf94",
+    "deploy_id": "6a8351c558fa180008f11b16"
   },
   "p1_offers": {
     "class": "CODE_PROVEN",
@@ -31,9 +33,9 @@
     "60": "OPEN",
     "64": "OPEN"
   },
-  "merge": "UNKNOWN",
-  "ci": "UNKNOWN",
-  "deploy": "UNKNOWN",
+  "merge": "MERGED",
+  "ci": "CI_PROVEN",
+  "deploy": "DEPLOYED",
   "inbound_now": "NO_GO",
   "qualified_pipeline": "UNKNOWN",
   "receita": "NO_GO"
