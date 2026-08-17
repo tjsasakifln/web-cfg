@@ -5,7 +5,7 @@
   "candidate_decision": {
     "question": "Qual é o valor típico dos contratos públicos de pavimentação?",
     "question_id": "valor-tipico-contratos-pavimentacao",
-    "state": "PUBLISHABLE_NOINDEX",
+    "state": "NEEDS_DATA",
     "score": {
       "version": "MARKET_ANSWER_VALUE_SCORE/1.0",
       "components": {
@@ -14,7 +14,7 @@
         "answerability": 0.78,
         "singularity": 0.72,
         "utility": 0.8,
-        "freshness": 0.2,
+        "freshness": null,
         "citation_potential": 0.55,
         "commercial_fit": 0.84,
         "maintenance_cost": 0.65
@@ -24,17 +24,14 @@
         "answerability": 0.16,
         "singularity": 0.12,
         "utility": 0.12,
-        "freshness": 0.1,
         "citation_potential": 0.08,
         "commercial_fit": 0.1,
         "maintenance_cost": 0.06
       },
-      "total": 0.6173,
+      "total": 0.6708,
       "reason_codes": [
         "demand_UNKNOWN",
-        "national_denominator_incomplete",
-        "typology_precision_unreviewed",
-        "extra_cli_302_open",
+        "coverage_complete",
         "data_quality_weak",
         "ticket_supported",
         "custo_por_km_not_supported",
@@ -44,8 +41,7 @@
         "singularity_sufficient",
         "calibrates_ticket_expectation",
         "utility_sufficient",
-        "freshness_stale",
-        "freshness_weak",
+        "freshness_UNKNOWN",
         "quartile_citeable_when_official",
         "citation_potential_weak",
         "margin_defense_adjacency",
@@ -56,7 +52,8 @@
         "maintenance_cost_acceptable"
       ],
       "unknown_components": [
-        "demand"
+        "demand",
+        "freshness"
       ],
       "notes": {
         "demand": "Demand stays UNKNOWN until observed GSC/search evidence exists.",
@@ -65,12 +62,9 @@
     },
     "reason_codes": [
       "coverage_insufficient",
-      "freshness_stale",
-      "claim_fixture_not_authorizable",
+      "claim_unauthorized",
       "claim_current_publication_blocked",
       "approval_hash_drift",
-      "fixture_never_index",
-      "official_live_absent",
       "index_hygiene_blocked"
     ],
     "owner": {
@@ -86,48 +80,55 @@
     }
   },
   "data_state": {
-    "official_live": false,
-    "producer_status": "CONTRACT_FIXTURE",
-    "is_fixture": true,
+    "official_live": true,
+    "producer_status": "OFFICIAL_LIVE",
+    "is_fixture": false,
     "schema": "public-read-market-answer/1.0",
-    "as_of": "2026-07-31",
+    "as_of": "2026-08-17T11:29:23.193694+02:00",
     "coverage": {
-      "status": "INSUFFICIENT",
-      "partitions_expected": 98437,
-      "partitions_observed": 2,
-      "national_universe_complete": false,
-      "stale": false,
-      "min_n": 30,
-      "reason_codes": [
-        "national_denominator_incomplete",
-        "typology_precision_unreviewed",
-        "extra_cli_302_open"
-      ]
+      "missing_or_nonpositive": 25,
+      "n": 5038,
+      "status": "COMPLETE",
+      "total_keyword_rows": 5063,
+      "usable_n": 5038
     },
     "freshness": {
-      "as_of": "2026-07-31",
-      "generated_at": "2026-07-31T00:00:00Z",
+      "expires_at": "2026-08-19T11:29:23.193694+02:00",
+      "generated_at": "2026-08-17T12:40:46Z",
+      "invalidation_keys": [
+        "facts",
+        "events",
+        "coverage",
+        "policy",
+        "typology"
+      ],
       "max_age_hours": 48,
-      "status": "STALE_FOR_INDEX"
+      "policy": "contracts-freshness-slo-v1",
+      "source_as_of": "2026-08-17T11:29:23.193694+02:00",
+      "stale": false
     },
     "claim": {
-      "authorization_state": "FIXTURE_NOT_AUTHORIZABLE",
+      "authorization_state": "UNAUTHORIZED",
       "national_claim_allowed": false,
-      "current_publication_allowed": false
+      "current_publication_allowed": false,
+      "issue": "#302",
+      "reason_codes": [
+        "national_denominator_incomplete"
+      ]
     },
-    "content_hash": "e115debcfca3fbd17320fc66b6fc98f42c308d186e46db7026debc1a350e2011",
-    "producer_sha": "CONTRACT_FIXTURE",
-    "source_path": "/home/tjsasakifln/code/confenge/web-cfg/data/editorial/market-answers/fixtures/contract-fixture.v1.json"
+    "content_hash": "de410553091aa22239c7c6e241f485d4b1a91da6459fce4d7bd412c41a42ac71",
+    "producer_sha": null,
+    "source_path": null
   },
   "gate_results": {
     "gate_version": "market-answer-publication-gate/1.0",
-    "state": "PUBLISHABLE_NOINDEX",
+    "state": "NEEDS_DATA",
     "indexable": false,
     "conditions": {
-      "official_live": false,
+      "official_live": true,
       "claim_authorized": false,
       "coverage_sufficient": false,
-      "freshness_current": false,
+      "freshness_current": true,
       "method_present": true,
       "limitations_present": true,
       "answerability": true,
@@ -136,18 +137,15 @@
       "attribution": true,
       "refresh_owner": true,
       "human_approval_hash": false,
-      "not_fixture": false,
+      "not_fixture": true,
       "grain_ticket_not_km": true,
       "no_national_claim_without_coverage": true
     },
     "reason_codes": [
       "coverage_insufficient",
-      "freshness_stale",
-      "claim_fixture_not_authorizable",
+      "claim_unauthorized",
       "claim_current_publication_blocked",
       "approval_hash_drift",
-      "fixture_never_index",
-      "official_live_absent",
       "index_hygiene_blocked"
     ]
   },
@@ -157,9 +155,9 @@
     "sitemap": false,
     "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
     "rendered": [
-      "/home/tjsasakifln/code/confenge/web-cfg/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
+      "/home/tjsasakifln/code/confenge/web-cfg-closeout-01/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
     ],
-    "fixture_marked": true
+    "fixture_marked": false
   },
   "engagement_events_available": {
     "source": "CONFENGE_WEB",
@@ -167,7 +165,7 @@
     "asset_family": "market-answer",
     "route_family": "market-answer",
     "asset_version": "1.0",
-    "content_hash": "e115debcfca3fbd17320fc66b6fc98f42c308d186e46db7026debc1a350e2011",
+    "content_hash": "de410553091aa22239c7c6e241f485d4b1a91da6459fce4d7bd412c41a42ac71",
     "events": [
       {
         "name": "answer_view",
@@ -241,12 +239,9 @@
   },
   "blockers": [
     "coverage_insufficient",
-    "freshness_stale",
-    "claim_fixture_not_authorizable",
+    "claim_unauthorized",
     "claim_current_publication_blocked",
     "approval_hash_drift",
-    "fixture_never_index",
-    "official_live_absent",
     "index_hygiene_blocked"
   ],
   "next_integration_steps": [
@@ -256,5 +251,5 @@
     "Do not close web-cfg #84 until organic discovery → engagement → handoff → real outcome.",
     "Keep the canary noindex/off-sitemap until official_live + claim + coverage + human hash pass."
   ],
-  "recommendation": "GO_NOINDEX"
+  "recommendation": "NEEDS_DATA"
 }

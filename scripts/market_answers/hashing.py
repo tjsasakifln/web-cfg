@@ -17,6 +17,19 @@ HASH_SKIP_KEYS = frozenset(
     }
 )
 
+# extra-cli official export: drop versioned timestamps before byte/hash compare.
+FOLDED_TIMESTAMP_KEYS = frozenset(
+    {
+        "generated_at",
+        "as_of",
+        "source_as_of",
+        "produced_at",
+        "expires_at",
+        "content_hash",
+        "payload_content_hash",
+    }
+)
+
 
 def canonicalize(value: Any) -> Any:
     """Stable JSON shape: sort object keys, drop hash/adapter annotations."""
@@ -44,6 +57,28 @@ def canonical_bytes(value: Any) -> bytes:
 
 def content_hash(value: Any) -> str:
     return hashlib.sha256(canonical_bytes(value)).hexdigest()
+
+
+def fold_versioned_timestamps(value: Any) -> Any:
+    """Drop extra-cli versioned timestamp fields. Facts stay intact."""
+    if isinstance(value, dict):
+        return {
+            str(key): fold_versioned_timestamps(item)
+            for key, item in value.items()
+            if key not in FOLDED_TIMESTAMP_KEYS
+            and key != "freshness"
+            and key != "_source_path"
+        }
+    if isinstance(value, list):
+        return [fold_versioned_timestamps(item) for item in value]
+    return value
+
+
+def folded_content_hash(value: Any) -> str:
+    # Match the campaign fold: default json.dumps (ensure_ascii=True) + sort_keys + default=str.
+    return hashlib.sha256(
+        json.dumps(fold_versioned_timestamps(value), sort_keys=True, default=str).encode()
+    ).hexdigest()
 
 
 def schema_hash(schema_id: str, contract_version: str) -> str:
