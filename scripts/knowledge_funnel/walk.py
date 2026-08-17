@@ -32,9 +32,15 @@ from scripts.knowledge_funnel.corpus import (
     resolve_fixture,
     root,
 )
+from scripts.knowledge_funnel.dictionary import (
+    admit,
+    is_lead_event,
+    is_page_view_event,
+    layer_of,
+)
 from scripts.knowledge_funnel.hash import trace_hash
 from scripts.market_answers.consume import ConsumeError, adapt_payload, load_approvals, load_candidate
-from scripts.market_answers.events import EVENT_LAYER, EVENT_NAMES, assert_no_pii, build_event
+from scripts.market_answers.events import assert_no_pii, build_event
 from scripts.market_answers.gate import evaluate
 from scripts.market_answers.render import render_html
 from scripts.market_answers.urls import combinatorial_paths, drilldown_model
@@ -82,21 +88,25 @@ def _limitations_of(payload: dict[str, Any]) -> list[str]:
 
 
 def _emit_event(name: str, props: dict[str, Any], extra_poison: dict[str, Any] | None = None) -> dict[str, Any]:
+    spec = admit(name)
     incoming = dict(props)
     if extra_poison:
         incoming.update(extra_poison)
     event = build_event(name, incoming)
+    layer = str(spec["layer"])
+    event["event_layer"] = layer
+    event["schema_version"] = spec.get("schema_version") or "1.0.0"
     assert_no_pii(event)
     for key in PII_EVENT_KEYS:
         if key in event:
             raise AssertionError(f"PII key leaked into event {name}: {key}")
-    if EVENT_LAYER[name] == "impression" and event.get("is_lead"):
-        raise AssertionError("impression event marked as lead")
+    if is_page_view_event(name) and is_lead_event(name):
+        raise AssertionError("page_view event marked as lead")
     return {
-        "name": name,
-        "layer": EVENT_LAYER[name],
-        "is_lead": name == "lead_receipt_correlated",
-        "is_page_view": False,
+        "name": spec["name"],
+        "layer": layer,
+        "is_lead": is_lead_event(name),
+        "is_page_view": is_page_view_event(name),
         "payload": event,
     }
 
@@ -269,8 +279,8 @@ def walk(
             extra_poison=poison,
         )
     )
-    if events[-1]["layer"] != "impression" or events[-1]["is_lead"]:
-        raise AssertionError("answer_view must stay an impression, not a lead")
+    if events[-1]["layer"] != "page_view" or events[-1]["is_lead"]:
+        raise AssertionError("answer_view must stay a page_view, not a lead")
 
     stages.append(
         _stage(
@@ -700,9 +710,16 @@ def _finalize(
     if impression and impression[0]["is_lead"]:
         raise AssertionError("answer_view treated as lead")
     names = [item["name"] for item in events]
-    unknown_event = [name for name in names if name not in EVENT_NAMES]
+    unknown_event = []
+    for name in names:
+        try:
+            layer_of(name)
+        except ValueError:
+            unknown_event.append(name)
     if unknown_event:
-        raise AssertionError(f"event not in dictionary: {unknown_event}")
+        raise AssertionError(f"event not in FUNNEL-EVENT-DICTIONARY: {unknown_event}")
+    if any(item.get("layer") in {"qualified_lead", "pipeline"} for item in events):
+        raise AssertionError("walk invented qualified_lead or pipeline")
 
     trace = {
         "schema": SCHEMA_ID,

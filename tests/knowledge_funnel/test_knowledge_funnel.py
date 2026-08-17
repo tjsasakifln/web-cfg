@@ -20,7 +20,8 @@ from scripts.knowledge_funnel.corpus import (
 from scripts.knowledge_funnel.hash import trace_hash
 from scripts.knowledge_funnel.walk import walk, walk_twice
 from scripts.market_answers.consume import ConsumeError, adapt_payload
-from scripts.market_answers.events import EVENT_LAYER, build_event
+from scripts.knowledge_funnel.dictionary import layer_of, load_registry
+from scripts.market_answers.events import build_event
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -106,13 +107,25 @@ def test_happy_walk_uses_shipped_stages_and_one_correlation() -> None:
     assert handoff["claimed_live"] is False
     event_names = trace["event_names"]
     assert event_names[0] == "answer_view"
-    assert EVENT_LAYER["answer_view"] == "impression"
+    registry = load_registry()
+    assert registry["source"] == SOURCE
+    assert layer_of("answer_view") == "page_view"
+    assert layer_of("lead_receipt_correlated") == "lead"
+    for name in event_names:
+        assert name in registry["events"], name
+        assert layer_of(name) not in {"qualified_lead", "pipeline"}
     assert "lead_receipt_correlated" in event_names
     assert trace["lead_event_count"] == 1
     view = next(item for item in trace["events"] if item["name"] == "answer_view")
     assert view["is_lead"] is False
+    assert view["is_page_view"] is True
+    assert view["layer"] == "page_view"
     assert view["payload"]["event"] == "answer_view"
+    assert view["payload"]["event_layer"] == "page_view"
     assert view["payload"]["source"] == SOURCE
+    handoff = trace["stages"][5]
+    assert handoff.get("live_outcome") is False
+    assert handoff.get("transport") == "fixture_stub"
 
 
 def test_two_happy_walks_hash_equal_and_do_not_share_store() -> None:
