@@ -1,0 +1,20 @@
+{
+  "campaign": "CONFENGE-PRODUCTION-CLOSEOUT-01",
+  "repo": "tjsasakifln/web-cfg",
+  "approval": "OWNER_CONDITIONAL_PREAPPROVAL_CONFENGE_PRODUCTION_CLOSEOUT_01",
+  "as_of": "2026-08-17T12:41:00Z",
+  "origin_main": "909621a058b6cdd2402a8eb5192e4c645b45bd97",
+  "live": {
+    "commit": "909621a058b6cdd2402a8eb5192e4c645b45bd97",
+    "deploy_id": "6a8288253ff743000806c523",
+    "artifact_hash": "f28cf8242e7eff5483062cf1716e8e0ca6e61b6823f6fa46d8bba360922f491e",
+    "manifest_hash": "7af29bc628151a7c5439a66c80797a50d2117c8c49cb595a7771685ab3b6a59a",
+    "class": "LIVE_PROVEN"
+  },
+  "pr_102": "DEFER_DO_NOT_MERGE",
+  "pr_104": "REBASE_CANDIDATE",
+  "issues_keep_open": [60, 62, 83, 84, 88],
+  "xray_flag": "off_until_official_read_model",
+  "inbound_public_health": "READY",
+  "netlify_token": "AUSENTE"
+}
