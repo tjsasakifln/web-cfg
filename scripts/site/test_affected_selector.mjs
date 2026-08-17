@@ -49,6 +49,10 @@ function expectSubset(result, mustInclude, because) {
   assert.ok(!inventory.includes("test:affected"), "runner itself is not a merge suite");
   const missing = inventory.filter((id) => !SUITE_GRAPH[id]);
   assert.deepEqual(missing, [], `SUITE_GRAPH missing ${missing.join(", ")}`);
+  assert.ok(SUITE_GRAPH["organic:test"], "organic:test must be in the map");
+  assert.ok(SUITE_GRAPH["distribution:test"], "distribution:test must be in the map");
+  assert.ok(!inventory.includes("organic:test"), "organic:test stays outside merge npm test");
+  assert.ok(!inventory.includes("distribution:test"), "distribution:test stays outside merge npm test");
 }
 
 // --- (a) narrow path → proper subset ---
@@ -119,6 +123,21 @@ function expectSubset(result, mustInclude, because) {
     );
     assert.ok(result.fallback !== "skip");
   }
+}
+
+// organic / distribution are mapped extra suites (not unknown → full)
+{
+  const result = selectAffected(["scripts/organic/demand_engine.py"], scripts);
+  expectSubset(result, ["organic:test", "test:secrets-scan"], "organic producer");
+  assert.deepEqual(result.unknown_paths, []);
+  assert.ok(result.extra_graph_keys.includes("organic:test"));
+}
+
+{
+  const result = selectAffected(["scripts/distribution/prepare.py"], scripts);
+  expectSubset(result, ["distribution:test", "test:secrets-scan"], "distribution producer");
+  assert.deepEqual(result.unknown_paths, []);
+  assert.ok(result.extra_graph_keys.includes("distribution:test"));
 }
 
 // --- (b) shared-contract → full ---

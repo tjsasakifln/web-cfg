@@ -77,6 +77,9 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "seo/scripts/test_analytics_pii.mjs",
       "seo/scripts/test_editorial_analytics.mjs",
+      "seo/scripts/test_event_dictionary.mjs",
+      "netlify/functions/lib/event-registry.json",
+      "netlify/functions/lib/event-contract.cjs",
       "script.js",
       "js/modules/",
       "netlify/functions/collect.cjs",
@@ -361,6 +364,72 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: [],
   },
+  "test:visible-parity": {
+    producers: [
+      "scripts/site/test_visible_parity.py",
+      "scripts/site/visible_parity.py",
+      "scripts/site/fixtures/visible_parity/",
+    ],
+    artifacts: ["seo/visible-parity.json", "seo/visible-parity.md"],
+    surfaces: [],
+  },
+  "test:contract-analysis": {
+    producers: [
+      "scripts/contract_analysis/",
+      "data/editorial/contract-analysis/",
+      "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json",
+      "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.md",
+    ],
+    artifacts: ["analises-contratos-publicos/", "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json"],
+    surfaces: ["/analises-contratos-publicos/"],
+  },
+  "test:market-answers": {
+    producers: [
+      "scripts/market_answers/",
+      "tests/market_answers/",
+      "data/editorial/market-answers/",
+      "data/conversion/fixtures/market-answer-canary.v1.json",
+    ],
+    artifacts: [
+      "inteligencia/valor-tipico-contratos-pavimentacao/",
+      "docs/editorial/MARKET_ANSWER_CANARY_STATUS.json",
+    ],
+    surfaces: ["/inteligencia/valor-tipico-contratos-pavimentacao/"],
+  },
+  "discovery:test": {
+    producers: [
+      "scripts/discovery/",
+      "tests/discovery/",
+      "tests/data_desk/",
+      "scripts/data_desk/",
+      "data/discovery/",
+      "data/data-desk/",
+    ],
+    artifacts: ["data/discovery/"],
+    surfaces: [],
+  },
+  "test:conversion": {
+    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/"],
+    artifacts: [],
+    surfaces: ["/diagnostico-b2g-360/"],
+  },
+  "validate:seo": {
+    producers: ["seo/scripts/validate_seo.py", "seo/"],
+    artifacts: [],
+    surfaces: ["/conteudos/"],
+  },
+  // Extra (not in npm test merge inventory). Mapped so organic/distribution
+  // changes are not unknown → full. Local test:affected may run them.
+  "organic:test": {
+    producers: ["scripts/organic/", "data/organic/"],
+    artifacts: ["data/organic/demand-engine-registry.json"],
+    surfaces: [],
+  },
+  "distribution:test": {
+    producers: ["scripts/distribution/", "data/distribution/", "docs/ops/distribution/"],
+    artifacts: ["data/distribution/"],
+    surfaces: [],
+  },
 });
 
 /**
@@ -548,13 +617,15 @@ function producersForSuite(suiteId, scripts) {
 
 export function consumerSuitesForPath(changedPath, scripts = loadPackageScripts()) {
   const p = normalizePath(changedPath);
+  const { inventory, extra } = assertGraphCoversInventory(scripts);
   const hits = [];
-  for (const id of inventorySuites(scripts)) {
+  for (const id of [...inventory, ...extra]) {
     const producers = producersForSuite(id, scripts);
     const matched = producers.filter((prod) => matchesProducer(p, prod));
     if (matched.length) {
       hits.push({
         id,
+        extra: extra.includes(id),
         producers: matched.sort(),
         why: `producer ${p} → consumer ${id} (via ${matched.sort().join(", ")})`,
       });
@@ -562,10 +633,11 @@ export function consumerSuitesForPath(changedPath, scripts = loadPackageScripts(
   }
   if (isPublicSurfacePath(p)) {
     for (const id of PUBLIC_HTML_SUITES) {
-      if (!inventorySuites(scripts).includes(id)) continue;
+      if (!inventory.includes(id)) continue;
       if (hits.some((h) => h.id === id)) continue;
       hits.push({
         id,
+        extra: false,
         producers: ["<public-surface>"],
         why: `producer ${p} → consumer ${id} (public surface / HTML scan)`,
       });
@@ -647,6 +719,7 @@ export function selectAffected(paths, scripts = loadPackageScripts()) {
   if (!normalized.length) return emptySelection(inventory, extra);
 
   const reasonsBySuite = Object.fromEntries(inventory.map((id) => [id, []]));
+  for (const id of extra) reasonsBySuite[id] = [];
   const promote = [];
   const unknown = [];
 
@@ -672,6 +745,7 @@ export function selectAffected(paths, scripts = loadPackageScripts()) {
       continue;
     }
     for (const c of consumers) {
+      if (!reasonsBySuite[c.id]) reasonsBySuite[c.id] = [];
       if (!reasonsBySuite[c.id].includes(c.why)) reasonsBySuite[c.id].push(c.why);
     }
   }
@@ -685,7 +759,10 @@ export function selectAffected(paths, scripts = loadPackageScripts()) {
     return fullSelection(inventory, extra, fallback, fallbackReason, promote, unknown, reasonsBySuite);
   }
 
-  const selectedIds = inventory.filter((id) => reasonsBySuite[id].length);
+  const selectedIds = [
+    ...inventory.filter((id) => reasonsBySuite[id].length),
+    ...extra.filter((id) => (reasonsBySuite[id] || []).length),
+  ];
   for (const id of selectedIds) reasonsBySuite[id].sort();
   const selected = selectedIds.map((id) => ({
     id,
