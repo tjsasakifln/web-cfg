@@ -1,0 +1,40 @@
+{
+  "campaign": "CONFENGE-WEB-INBOUND-INDEX-CONVERSION-03",
+  "repo": "tjsasakifln/web-cfg",
+  "as_of": "2026-08-17",
+  "origin_main": "265b40ea016506c6004c81c1b0aaab6e531b6627",
+  "p0_market_answer": {
+    "class": "CODE_PROVEN",
+    "official_live": true,
+    "geography": "SC",
+    "n": 5038,
+    "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
+    "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+    "approval_token": "OWNER_APPROVAL_MARKET_ANSWER_SC_INDEX_2026_08_17",
+    "approved_by": "OWNER_CONFENGE",
+    "robots": "index,follow",
+    "sitemap": "sitemap-inteligencia.xml",
+    "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+    "live": "UNKNOWN"
+  },
+  "p1_offers": {
+    "class": "CODE_PROVEN",
+    "catalog_public": false,
+    "ASAAS_MODE": "disabled",
+    "production_checkout_enabled": false,
+    "real_money_mutation_enabled": false,
+    "public_extra_10k": false
+  },
+  "issues": {
+    "84": "OPEN",
+    "88": "OPEN",
+    "60": "OPEN",
+    "64": "OPEN"
+  },
+  "merge": "UNKNOWN",
+  "ci": "UNKNOWN",
+  "deploy": "UNKNOWN",
+  "inbound_now": "NO_GO",
+  "qualified_pipeline": "UNKNOWN",
+  "receita": "NO_GO"
+}
