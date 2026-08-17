@@ -713,20 +713,24 @@ def evaluate_quality(
             for m in _CASE_STUDY.finditer(prose)
         ),
         "pii_minimized": not _PII.search(prose) or bool(record.get("pii_allowed_public_id")),
-        "correction_defined": bool(record.get("correction_route") or True),
+        "correction_defined": bool(_text(record.get("correction_route"))),
         "specific_intent": bool(_text(record.get("intent") or record.get("job"))),
         "distinct_title_meta_h1": distinct_tmh,
         "canonical_present": bool(_text(record.get("canonical") or record.get("slug"))),
         "schema_matches_visible": _schema_visible(record, rendered_html, schema),
         "method_sources_dates": bool(_text(record.get("methodology"))) and bool(_dicts(record.get("sources"))) and bool(_text(record.get("as_of"))),
         "internal_links_useful": record.get("internal_links_missing") is not True,
-        "citation_text": bool(_text(record.get("citation_text"))) or True,
+        "citation_text": bool(_text(record.get("citation_text"))),
         "mobile_accessible": mobile_ok,
         "as_of_freshness": bool(_text(record.get("as_of"))),
         "owner_invalidation": bool(_text(record.get("maintenance_owner"))) and bool(
             record.get("invalidation_keys") or record.get("maintenance_owner")
         ),
-        "update_or_rollback": bool(record.get("rollback") or record.get("update_history") is not None or True),
+        "update_or_rollback": bool(_text(record.get("rollback")))
+        or (
+            isinstance(record.get("update_history"), list)
+            and any(item for item in record.get("update_history") or [])
+        ),
         "no_fixture_as_live": "fixture_as_live" not in (record.get("reason_codes") or [])
         and not (record.get("claimed_live") and _text(record.get("catalog_mode")) in {"fixture", "offline_catalog"}),
         "no_false_human_authorship": not _false_authorship(record),
@@ -784,6 +788,12 @@ def evaluate_quality(
         _finding(findings, "thesis_absent_or_generic", P0, "Sem tese singular e falsificável.")
     if filler:
         _finding(findings, "filler", P0, "Texto inflado sem evidência.")
+    if not gates["citation_text"]:
+        _finding(findings, "citation_text_absent", P1, "citation_text ausente.")
+    if not gates["correction_defined"]:
+        _finding(findings, "correction_route_absent", P1, "correction_route ausente.")
+    if not gates["update_or_rollback"]:
+        _finding(findings, "rollback_or_history_absent", P1, "rollback e update_history ausentes.")
 
     # Dimension scores: start from 100, subtract failed related gates.
     dim_gates = {
@@ -848,6 +858,9 @@ def evaluate_quality(
             "as_of_freshness",
             "owner_invalidation",
             "mobile_accessible",
+            "citation_text",
+            "correction_defined",
+            "update_or_rollback",
         ),
     }
     dimensions: dict[str, int] = {}

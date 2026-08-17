@@ -416,3 +416,58 @@ def test_campaign_never_writes_publishable_index_on_masterpiece():
     rec = masterpiece_record()
     decision = evaluate_publication(rec, cohort=[rec])
     assert decision.state != "PUBLISHABLE_INDEX"
+
+
+def test_missing_citation_text_blocks_index_ready():
+    rec = masterpiece_record()
+    rec.pop("citation_text", None)
+    quality = evaluate_quality(rec, cohort=[rec])
+    assert quality.hard_gates["citation_text"] is False
+    assert quality.hard_gates_all is False
+    assert quality.review_verdict != INDEX_READY_VERDICT
+    assert "citation_text_absent" in _codes(quality)
+
+
+def test_empty_citation_text_blocks_index_ready():
+    rec = masterpiece_record(citation_text="   ")
+    quality = evaluate_quality(rec, cohort=[rec])
+    assert quality.hard_gates["citation_text"] is False
+    assert quality.review_verdict != INDEX_READY_VERDICT
+
+
+def test_missing_correction_route_blocks_index_ready():
+    rec = masterpiece_record()
+    rec.pop("correction_route", None)
+    quality = evaluate_quality(rec, cohort=[rec])
+    assert quality.hard_gates["correction_defined"] is False
+    assert quality.hard_gates_all is False
+    assert quality.review_verdict != INDEX_READY_VERDICT
+    assert "correction_route_absent" in _codes(quality)
+
+
+def test_missing_rollback_and_history_blocks_index_ready():
+    rec = masterpiece_record()
+    rec.pop("rollback", None)
+    rec.pop("update_history", None)
+    quality = evaluate_quality(rec, cohort=[rec])
+    assert quality.hard_gates["update_or_rollback"] is False
+    assert quality.hard_gates_all is False
+    assert quality.review_verdict != INDEX_READY_VERDICT
+    assert "rollback_or_history_absent" in _codes(quality)
+
+
+def test_empty_history_without_rollback_blocks_index_ready():
+    rec = masterpiece_record(rollback="", update_history=[])
+    quality = evaluate_quality(rec, cohort=[rec])
+    assert quality.hard_gates["update_or_rollback"] is False
+    assert quality.review_verdict != INDEX_READY_VERDICT
+
+
+def test_update_history_alone_satisfies_rollback_gate():
+    rec = masterpiece_record(
+        rollback="",
+        update_history=[{"date": "2026-08-16", "text": "Rascunho inicial do mapa documental."}],
+    )
+    quality = evaluate_quality(rec, cohort=[rec])
+    assert quality.hard_gates["update_or_rollback"] is True
+    assert quality.review_verdict == INDEX_READY_VERDICT
