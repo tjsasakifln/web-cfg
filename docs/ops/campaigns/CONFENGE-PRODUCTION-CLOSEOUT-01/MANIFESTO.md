@@ -36,3 +36,20 @@ Não registra leitura humana de página específica.
 ## Issues que permanecem abertas
 
 web-cfg #60 #62 #83 #84 #88 · extra-cli #302 #400 #414 #415 · Warmbly #47 · SmartLic #2115 #2111
+
+## PRs desta campanha
+
+| Repo | PR | Nota |
+|---|---|---|
+| extra-cli | #424 | evidência + payload SC |
+| web-cfg | #111 | manifesto |
+| web-cfg | #102 | CLOSED DEFER |
+| web-cfg | #104 | permanece rebase candidato |
+| warmbly | #89 | deploy + canário |
+| SmartLic | #2150 | preflight BLOCKED |
+
+## Token
+
+`PRODUCTION_CLOSEOUT_PARTIAL_CREDENTIAL_BLOCK`
+
+Motivo: caminho independente atravessou produção (lake, auditor, payload SC, Warmbly `6612b7ed`, HMAC canário, preflight). Bloqueiam o restante: `NETLIFY_AUTH_TOKEN` (sender HMAC / INDEX), `$BRIDGE_PUBLIC_IPV4` + `$SMARTLIC_ACME_EMAIL` + `CF_API_TOKEN` + `CF_ZONE_ID` (cutover). Sem lead externo real.
