@@ -139,12 +139,34 @@ def test_striking_distance_on_position_4_to_20_with_impressions():
     doc = run_demand_engine(rows=_join_rows())
     striking = [r for r in doc["records"] if REASON_STRIKING_DISTANCE in r["reason_codes"]]
     assert striking, doc["detectors"]
-    assert all(
-        r.get("query") or r.get("page")
-        for r in striking
-    )
-    # Fixture positions 8, 12, 6.5, 4.3, 9.1 are all in 4–20 with impressions.
+    assert all(r["join_status"] == "present" for r in striking)
+    assert all(r.get("query") and r.get("page") for r in striking)
+    # Joined fixture positions 8, 12, 6.5, 4.3 are in 4–20. The unjoined 9.1 row is not.
     assert len(striking) >= 4
+
+
+def test_striking_distance_ids_subset_of_join_present():
+    """All three join-dependent detectors fire only where query×page is present."""
+    joined = run_demand_engine(rows=_join_rows())
+    present_ids = {r["id"] for r in joined["records"] if r["join_status"] == "present"}
+    for code in (REASON_STRIKING_DISTANCE, REASON_CANNIBALIZATION, REASON_WRONG_LANDING):
+        detector_ids = set(joined["detectors"][code])
+        assert detector_ids, (code, joined["detectors"])
+        assert detector_ids <= present_ids, (code, detector_ids - present_ids)
+    unjoined = [r for r in joined["records"] if r["join_status"] != "present"]
+    assert unjoined
+    assert all(REASON_STRIKING_DISTANCE not in r["reason_codes"] for r in unjoined)
+    assert all(REASON_CANNIBALIZATION not in r["reason_codes"] for r in unjoined)
+    assert all(REASON_WRONG_LANDING not in r["reason_codes"] for r in unjoined)
+
+    for gsc_dir in (GSC_JUL, GSC_AUG):
+        csv_doc = run_demand_engine(gsc_dir=gsc_dir)
+        assert csv_doc["join_status"] == "join_unavailable"
+        assert csv_doc["detectors"][REASON_STRIKING_DISTANCE] == []
+        assert csv_doc["detectors"][REASON_CANNIBALIZATION] == []
+        assert csv_doc["detectors"][REASON_WRONG_LANDING] == []
+        assert all(r["join_status"] != "present" for r in csv_doc["records"])
+        assert all(REASON_STRIKING_DISTANCE not in r["reason_codes"] for r in csv_doc["records"])
 
 
 def test_cannibalization_only_when_query_page_join_present():
