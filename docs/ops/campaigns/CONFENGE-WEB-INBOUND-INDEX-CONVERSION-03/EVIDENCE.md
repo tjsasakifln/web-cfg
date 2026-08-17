@@ -28,6 +28,13 @@ Class: `CODE_PROVEN`
 - No Asaas network, no stored key, no hardcoded provider URL.
 - Tests: `node tests/offers/test_offers.mjs` green.
 
+## Live (2026-08-17)
+
+Class: `LIVE_PROVEN` for the SC Market Answer only.
+
+Two probes of `https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/` after merge `#113` / SHA `6cc46a1a99f1af4c20778f5fcfa947d4758aaf94`:
+HTTP 200, build-info commit match, robots `index,follow`, sitemap-inteligencia loc only, title/H1/schema Santa Catarina, n=5038 and limitations visible, no SmartLic, no PII in URL.
+
 ## Not claimed
 
 - LIVE_PROVEN, INBOUND NOW, qualified pipeline, receita: not claimed from fixtures.
