@@ -540,14 +540,14 @@ for (const obs of observers) {
   }
 }
 form.dispatchEvent({ type: "submit", preventDefault() {} });
-for (let i = 0; i < 40 && !dataLayer.some((e) => e.event === "lead_created"); i += 1) {
+for (let i = 0; i < 40 && !dataLayer.some((e) => e.event === "lead_persisted"); i += 1) {
   await new Promise((r) => setTimeout(r, 20));
 }
 for (const fn of windowListeners.pagehide || []) fn();
 await new Promise((r) => setTimeout(r, 30));
 
 const names = dataLayer.map((e) => e.event);
-for (const ev of ["asset_view", "organic_landing", "contract_selected", "contract_analyzed", "cta_view", "cta_click", "lead_created"]) {
+for (const ev of ["asset_view", "organic_landing", "contract_selected", "contract_analyzed", "cta_view", "cta_click", "lead_persisted"]) {
   if (!names.includes(ev)) fail("page_event_missing", { ev, names });
 }
 if (!lastLeadHttp || lastLeadHttp.statusCode !== 201) {

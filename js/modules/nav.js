@@ -385,17 +385,9 @@
           device_context: deviceContext,
           destination_type: 'whatsapp',
           journey: link.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
+          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
+          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
         });
-        if (isEditorial) {
-          track(editorialType === 'inteligencia' ? 'pseo_whatsapp_click' : 'editorial_whatsapp_click', {
-            page_path: pagePath,
-            content_type: editorialType || 'editorial',
-            topic: editorialTopic.slice(0, 120),
-            cta_position: position,
-            journey: editorialJourney,
-            device_context: deviceContext,
-          });
-        }
       });
     });
 
@@ -409,17 +401,10 @@
           cta_position: link.getAttribute('data-cta-position') || 'inline',
           device_context: deviceContext,
           destination_type: 'email',
+          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
+          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
+          journey: isEditorial ? editorialJourney : undefined,
         });
-        if (isEditorial) {
-          track(editorialType === 'inteligencia' ? 'pseo_email_click' : 'editorial_email_click', {
-            page_path: pagePath,
-            content_type: editorialType || 'editorial',
-            topic: editorialTopic.slice(0, 120),
-            cta_position: link.getAttribute('data-cta-position') || 'inline',
-            journey: editorialJourney,
-            device_context: deviceContext,
-          });
-        }
       });
     });
 

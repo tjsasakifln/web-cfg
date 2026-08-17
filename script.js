@@ -6,12 +6,76 @@
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
   /** Analytics bus — no PII. First-party collector + optional gtag/plausible. */
+  // EVENT_CONTRACT_CLIENT_START — keep in lockstep with netlify/functions/lib/event-registry.json
+  const EVENT_CONTRACT_SCHEMA_VERSION = '1.0.0';
+  const EVENT_SOURCE = 'CONFENGE_WEB';
+  const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
+  const AGGREGATE_PII_ALLOWLIST = [];
   const PII_PARAM_KEYS = new Set([
-    'nome', 'name', 'email', 'telefone', 'phone', 'tel', 'whatsapp',
-    'mensagem', 'message', 'message_body', 'empresa', 'company',
-    'documento', 'document', 'attachment', 'file', 'arquivo',
-    'cpf', 'cnpj', 'address', 'endereco', 'full_name',
+    'address', 'arquivo', 'attachment', 'cnpj', 'company', 'cpf',
+    'document', 'documento', 'edital', 'email', 'empresa', 'endereco',
+    'file', 'full_name', 'mensagem', 'message', 'message_body', 'name',
+    'nome', 'phone', 'q', 'query', 'search_query', 'tel', 'telefone', 'whatsapp',
   ]);
+  const EVENT_ALIASES = {
+    qualified_scroll: 'scroll_depth',
+    content_to_service_click: 'content_to_service',
+    service_cta_click: 'cta_click',
+    offer_cta_click: 'cta_click',
+    diagnostic_cta_click: 'cta_click',
+    critical_decision_cta_click: 'cta_click',
+    pseo_cta_click: 'cta_click',
+    pseo_whatsapp_click: 'whatsapp_click',
+    editorial_whatsapp_click: 'whatsapp_click',
+    pseo_email_click: 'email_click',
+    editorial_email_click: 'email_click',
+    pseo_form_start: 'lead_form_start',
+    form_start: 'lead_form_start',
+    pseo_form_submit: 'lead_form_submit',
+    pseo_to_service: 'content_to_service',
+    tool_use: 'tool_start',
+    tool_result: 'tool_complete',
+    lead_created: 'lead_persisted',
+  };
+  const EVENT_CTA_KIND = {
+    service_cta_click: 'service',
+    offer_cta_click: 'offer',
+    diagnostic_cta_click: 'diagnostic',
+    critical_decision_cta_click: 'critical_decision',
+    pseo_cta_click: 'pseo',
+  };
+  const ADMITTED_EVENTS = {
+    analysis_click: 1, answer_view: 1, asset_view: 1, case_law_page_view: 1,
+    checklist_view: 1, comparison_view: 1, confirmation_view: 1, content_to_service: 1,
+    contract_analyzed: 1, contract_selected: 1, correction_open: 1, cta_click: 1,
+    cta_view: 1, data_insight_view: 1, editorial_page_view: 1, email_click: 1,
+    evidence_drilldown: 1, field_abandonment: 1, handraise_complete: 1, internal_search: 1,
+    lead_form_backend_error: 1, lead_form_error: 1, lead_form_start: 1, lead_form_step: 1,
+    lead_form_submit: 1, lead_form_success: 1, lead_persisted: 1, lead_receipt_correlated: 1,
+    legal_article_view: 1, method_open: 1, nurture_opt_in: 1, offer_view: 1,
+    organic_landing: 1, outbound_click: 1, page_view: 1, proof_expand: 1,
+    pseo_related_page_click: 1, pseo_source_open: 1, pseo_table_interaction: 1,
+    qualification_stage_select: 1, qualification_urgency_select: 1,
+    return_visit: 1, scroll_depth: 1, service_page_view: 1, session_start: 1,
+    tool_complete: 1, tool_copy: 1, tool_download: 1, tool_reset: 1, tool_start: 1,
+    tool_to_content: 1, tool_to_form: 1, tool_to_offer: 1, tool_to_whatsapp: 1,
+    tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
+    xray_start: 1, xray_timeout: 1,
+  };
+  const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1 };
+  const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
+  const ENVELOPE_ID_KEYS = { correlation_id: 1, idempotency_key: 1 };
+  // EVENT_CONTRACT_CLIENT_END
+  window.__CONFENGE_EVENT_CONTRACT = {
+    schema_version: EVENT_CONTRACT_SCHEMA_VERSION,
+    source: EVENT_SOURCE,
+    pii_policy: EVENT_PII_POLICY,
+    aggregate_pii_allowlist: AGGREGATE_PII_ALLOWLIST,
+    admitted: ADMITTED_EVENTS,
+    observed_only: OBSERVED_ONLY_EVENTS,
+    aliases: EVENT_ALIASES,
+    retired: RETIRED_EVENTS,
+  };
   const analyticsQueue = [];
   let analyticsFlushTimer = null;
   const getSessionId = () => {
@@ -52,34 +116,77 @@
       keepalive: true,
     }).catch(() => { /* never break UX */ });
   };
+  const resolveTrackedName = (raw) => {
+    const name = String(raw || '').slice(0, 64);
+    if (!name) return { ok: false, reason: 'empty_name' };
+    if (name.startsWith('custom_') || RETIRED_EVENTS[name]) {
+      return { ok: false, reason: name.startsWith('custom_') ? 'custom_prefix_forbidden' : 'retired', name };
+    }
+    const canonical = EVENT_ALIASES[name] || name;
+    if (OBSERVED_ONLY_EVENTS[canonical] || OBSERVED_ONLY_EVENTS[name]) {
+      return { ok: false, reason: 'observed_owner_only', name };
+    }
+    if (!ADMITTED_EVENTS[canonical]) return { ok: false, reason: 'unknown_event', name };
+    return { ok: true, original: name, canonical };
+  };
+  const looksLikePiiValue = (val, key) => {
+    if (typeof val !== 'string' || !val) return false;
+    if (/@/.test(val)) return true;
+    const k = String(key || '').toLowerCase();
+    if (ENVELOPE_ID_KEYS[k]) return false;
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val)) return false;
+    if (val.startsWith('c-')) return false;
+    // Public PII filter needle kept for validate_seo; envelope ids already returned.
+    if (/@|\+?\d{8,}/.test(val)) return true;
+    const compact = val.replace(/[\s()-]/g, '');
+    if (/^\+?\d{10,15}$/.test(compact)) return true;
+    if (/^\d{14}$/.test(val.trim())) return true;
+    return false;
+  };
   const track = (eventName, params = {}) => {
     try {
+      const resolved = resolveTrackedName(eventName);
+      if (!resolved.ok) {
+        if (window.CONFENGE_DEBUG_ANALYTICS) {
+          // eslint-disable-next-line no-console
+          console.info('[confenge:analytics:reject]', eventName, resolved.reason);
+        }
+        return;
+      }
+      if (AGGREGATE_PII_ALLOWLIST.length) return;
       const safe = {};
       Object.keys(params || {}).forEach((key) => {
         const val = params[key];
         if (val == null || val === '') return;
         // Drop known PII field names even if caller passes them by mistake
         if (PII_PARAM_KEYS.has(String(key).toLowerCase())) return;
-        // Never send free-text that may contain email/phone/name
         if (typeof val === 'string' && val.length > 180) return;
-        if (typeof val === 'string' && /@|\+?\d{8,}/.test(val)) return;
+        if (looksLikePiiValue(val, key)) return;
         safe[key] = val;
       });
       safe.page_path = safe.page_path || (window.location.pathname || '/');
+      safe.source = EVENT_SOURCE;
+      safe.schema_version = EVENT_CONTRACT_SCHEMA_VERSION;
+      safe.pii_policy = EVENT_PII_POLICY;
+      if (!safe.consent) safe.consent = 'not_required';
+      if (EVENT_CTA_KIND[resolved.original] && !safe.cta_kind) {
+        safe.cta_kind = EVENT_CTA_KIND[resolved.original];
+      }
+      if (resolved.original !== resolved.canonical) safe.alias_from = resolved.original;
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: eventName, ...safe });
+      window.dataLayer.push({ event: resolved.canonical, ...safe });
       if (typeof window.gtag === 'function') {
-        window.gtag('event', eventName, safe);
+        window.gtag('event', resolved.canonical, safe);
       }
       if (typeof window.plausible === 'function') {
-        window.plausible(eventName, { props: safe });
+        window.plausible(resolved.canonical, { props: safe });
       }
-      analyticsQueue.push({ eventName, safe });
+      analyticsQueue.push({ eventName: resolved.canonical, safe });
       if (analyticsQueue.length >= 10) flushAnalytics();
       else if (!analyticsFlushTimer) analyticsFlushTimer = setTimeout(flushAnalytics, 2000);
       if (window.CONFENGE_DEBUG_ANALYTICS) {
         // eslint-disable-next-line no-console
-        console.info('[confenge:analytics]', eventName, safe);
+        console.info('[confenge:analytics]', resolved.canonical, safe);
       }
     } catch (_) {
       /* analytics must never break UX */
@@ -553,17 +660,9 @@
           device_context: deviceContext,
           destination_type: 'whatsapp',
           journey: link.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
+          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
+          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
         });
-        if (isEditorial) {
-          track(editorialType === 'inteligencia' ? 'pseo_whatsapp_click' : 'editorial_whatsapp_click', {
-            page_path: pagePath,
-            content_type: editorialType || 'editorial',
-            topic: editorialTopic.slice(0, 120),
-            cta_position: position,
-            journey: editorialJourney,
-            device_context: deviceContext,
-          });
-        }
       });
     });
 
@@ -577,17 +676,10 @@
           cta_position: link.getAttribute('data-cta-position') || 'inline',
           device_context: deviceContext,
           destination_type: 'email',
+          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
+          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
+          journey: isEditorial ? editorialJourney : undefined,
         });
-        if (isEditorial) {
-          track(editorialType === 'inteligencia' ? 'pseo_email_click' : 'editorial_email_click', {
-            page_path: pagePath,
-            content_type: editorialType || 'editorial',
-            topic: editorialTopic.slice(0, 120),
-            cta_position: link.getAttribute('data-cta-position') || 'inline',
-            journey: editorialJourney,
-            device_context: deviceContext,
-          });
-        }
       });
     });
 
@@ -941,10 +1033,6 @@
               page_path: pagePath,
               content_cluster: defaultCluster,
               journey: journey || '',
-              conversion: 'lead_persisted',
-            });
-            track('lead_created', {
-              page_path: pagePath,
               route_family: routeFamily,
               asset_id: assetId,
               public_id_slug: publicSlug,
@@ -1134,13 +1222,9 @@
         el.addEventListener('click', () => {
           const eventName = el.getAttribute('data-pseo-event') || 'pseo_cta_click';
           const allowed = {
-            pseo_cta_click: 1,
             pseo_table_interaction: 1,
             pseo_source_open: 1,
             pseo_related_page_click: 1,
-            pseo_form_start: 1,
-            pseo_form_submit: 1,
-            pseo_whatsapp_click: 1,
           };
           if (!allowed[eventName]) return;
           // Persist CTA click context before navigation
@@ -1174,55 +1258,9 @@
           });
         }, { once: true });
       });
-      document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
-        link.addEventListener('click', () => {
-          track('pseo_whatsapp_click', {
-            page_path: pseoBase.page_path,
-            content_cluster: 'pseo',
-            page_type: pseoBase.page_type,
-            pseo_page_id: pseoBase.pseo_page_id,
-            device_context: deviceContext,
-            cta_position: link.getAttribute('data-cta-position') || 'inline',
-            destination_type: 'whatsapp',
-          });
-        });
-      });
-      // Form start/submit on home OR pSEO when attribution present — not pathname-bound
-      if (form && (pseoBase.pseo_page_id || storedAttr.pseo_page_id || fromUrl.pseo_page_id)) {
-        let pseoFormStarted = false;
-        const markPseoStart = () => {
-          if (pseoFormStarted) return;
-          pseoFormStarted = true;
-          track('pseo_form_start', {
-            page_path: pagePath,
-            content_cluster: 'pseo',
-            page_type: pseoBase.page_type,
-            pseo_page_id: pseoBase.pseo_page_id || storedAttr.pseo_page_id,
-            device_context: deviceContext,
-            destination_type: 'form',
-            source_run_id: pseoBase.source_run_id || storedAttr.source_run_id || '',
-            dataset_hash: pseoBase.dataset_hash || storedAttr.dataset_hash || '',
-          });
-        };
-        form.querySelectorAll('input, select, textarea').forEach((el) => {
-          el.addEventListener('focus', markPseoStart, { once: true });
-        });
-        form.addEventListener('submit', () => {
-          if (form.checkValidity()) {
-            track('pseo_form_submit', {
-              page_path: pagePath,
-              content_cluster: 'pseo',
-              page_type: pseoBase.page_type,
-              pseo_page_id: pseoBase.pseo_page_id || storedAttr.pseo_page_id,
-              device_context: deviceContext,
-              destination_type: 'form',
-              cta_label: (form.querySelector('#necessidade')?.value || '').slice(0, 80),
-              source_run_id: pseoBase.source_run_id || storedAttr.source_run_id || '',
-              dataset_hash: pseoBase.dataset_hash || storedAttr.dataset_hash || '',
-            });
-          }
-        });
-      }
+      // pSEO WhatsApp / form start / form submit are aliases of whatsapp_click /
+      // lead_form_start / lead_form_submit. Do not dual-emit; attribution stays
+      // on the canonical events and hidden fields.
     }
   };
 

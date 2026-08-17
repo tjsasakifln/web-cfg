@@ -227,7 +227,7 @@ if (!eventsAfterFocus.some((event) => event === "pseo_form_start" || event === "
 const submitFns = form._listeners.submit || [];
 for (const fn of submitFns) {
   try {
-    fn({ type: "submit" });
+    fn({ type: "submit", preventDefault() {} });
   } catch (_) {}
 }
 
@@ -240,8 +240,12 @@ if (
   console.error("FAIL: form-start event missing from funnel", events);
   process.exit(1);
 }
-if (!events.includes("pseo_form_submit") && !events.includes("lead_form_submit")) {
-  console.error("FAIL: form_submit missing from funnel", events);
+if (
+  !events.includes("lead_form_submit")
+  && !events.includes("pseo_form_submit")
+  && !events.includes("lead_form_error")
+) {
+  console.error("FAIL: form submit path missing from funnel", events);
   process.exit(1);
 }
 

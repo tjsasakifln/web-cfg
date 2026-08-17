@@ -27,7 +27,9 @@
     delete ev.telefone;
     delete ev.nome;
     INSTR.push(ev);
-    if (typeof window.gtag === "function") {
+    if (typeof window.confengeTrack === "function") {
+      window.confengeTrack(name, ev);
+    } else if (typeof window.gtag === "function") {
       window.gtag("event", name, ev);
     }
   }

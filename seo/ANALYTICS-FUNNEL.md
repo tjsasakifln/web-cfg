@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | `service_page_view` | Offer/service page load | page_path, offer_id, journey, device_context |
 | `offer_view` | Offer page with data-offer-id | offer_id |
-| `diagnostic_cta_click` / `offer_cta_click` / `critical_decision_cta_click` | Named CTA click | cta_position, journey, cta_label (≤80) |
+| `cta_click` (aliases: `diagnostic_cta_click` / `offer_cta_click` / `critical_decision_cta_click`) | Named CTA click | cta_position, journey, cta_label (≤80), cta_kind |
 | `whatsapp_click` | wa.me link | cta_position, journey, destination_type |
 | `email_click` | mailto: link | cta_position, destination_type |
 | `lead_form_start` | First focus on form control | journey |
@@ -16,7 +16,8 @@
 | `lead_form_error` | Validation failure | form_step |
 | `lead_form_submit` | Valid submit | journey, stage_category, urgency_category |
 | `lead_form_success` | Confirmation page | journey |
-| `pseo_*` | Intelligence/radar surfaces | pseo_page_id, page_type, dataset_hash, … |
+| `pseo_table_interaction` / `pseo_source_open` / `pseo_related_page_click` | Intelligence/radar surfaces | pseo_page_id, page_type, dataset_hash, … |
+| `pseo_whatsapp_click` / `pseo_form_start` / `pseo_form_submit` / `pseo_cta_click` / `pseo_to_service` | Aliases rewritten to `whatsapp_click` / `lead_form_start` / `lead_form_submit` / `cta_click` / `content_to_service` | same layer; not a second count |
 
 ## Attribution preserved (hidden fields / session)
 

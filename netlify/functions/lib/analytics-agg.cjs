@@ -1,7 +1,11 @@
 /**
  * Safe analytics aggregation — no PII, no raw IP hashes in public output.
  * Consumes event batches shaped like collect.cjs accepted events.
+ * Funnel layers stay distinct: never collapse page_view/session_start or
+ * lead_form_success/lead_persisted, and never derive qualified_lead/pipeline.
  */
+
+const { resolveCollectName, reconcileFunnel } = require("./event-contract.cjs");
 
 const FUNNEL_EVENTS = [
   "page_view",
@@ -14,7 +18,6 @@ const FUNNEL_EVENTS = [
   "lead_form_success",
   "lead_persisted",
   "content_to_service",
-  "conversion",
   "web_vital",
 ];
 
@@ -26,7 +29,7 @@ const MONEY_ASSET_EVENT_NAMES = [
   "contract_analyzed",
   "cta_view",
   "cta_click",
-  "lead_created",
+  "lead_persisted",
 ];
 
 function dayKey(iso) {
@@ -59,7 +62,9 @@ function aggregateEvents(events) {
   const vitals = { lcp: [], inp: [], cls: [], ttfb: [] };
 
   for (const ev of events || []) {
-    const name = String(ev.event || "");
+    const rawName = String(ev.event || "");
+    const name = resolveCollectName(rawName) || "";
+    if (!name) continue;
     const day = dayKey(ev.ts);
     const path = String(ev.path || ev.props?.page_path || "/").slice(0, 180);
     const sid = String(ev.sid || "").slice(0, 32);
@@ -103,32 +108,33 @@ function aggregateEvents(events) {
     }
     const pr = pm.get(path);
 
-    if (name === "page_view" || name === "session_start") {
+    const canonical = name;
+    if (canonical === "page_view") {
       dayRow.page_views += 1;
       pr.page_view += 1;
     }
-    if (name === "cta_click" || name === "critical_decision_cta_click") {
+    if (canonical === "cta_click") {
       dayRow.cta_clicks += 1;
       pr.cta_click += 1;
       const cta = String(props.cta_id || props.position || "unknown").slice(0, 80);
       ctas.set(cta, (ctas.get(cta) || 0) + 1);
     }
-    if (MONEY_ASSET_EVENT_NAMES.includes(name) && isMoneyAssetEvent(ev)) {
-      pr[name] = (pr[name] || 0) + 1;
+    if (MONEY_ASSET_EVENT_NAMES.includes(canonical) && isMoneyAssetEvent(ev)) {
+      pr[canonical] = (pr[canonical] || 0) + 1;
     }
-    if (name === "whatsapp_click") {
+    if (canonical === "whatsapp_click") {
       dayRow.whatsapp_clicks += 1;
       pr.whatsapp_click += 1;
     }
-    if (name === "lead_form_start") {
+    if (canonical === "lead_form_start") {
       dayRow.form_starts += 1;
       pr.form_start += 1;
     }
-    if (name === "lead_form_success" || name === "lead_persisted") {
+    if (canonical === "lead_persisted") {
       dayRow.form_success += 1;
       pr.form_success += 1;
     }
-    if (name === "content_to_service" || name === "pseo_to_service") {
+    if (canonical === "content_to_service") {
       dayRow.content_to_service += 1;
       pr.content_to_service += 1;
     }
@@ -168,6 +174,7 @@ function aggregateEvents(events) {
     web_vitals: summarizeVitals(vitals),
     attribution_note:
       "Search Console queries are aggregate; never join a single GSC query to an individual lead. Attribution is first/last touch path cohort only.",
+    funnel: reconcileFunnel({ events }),
   };
 }
 
@@ -289,10 +296,10 @@ function summarizeMoneyAssetLoop(events, leads) {
     contract_analyzed: 0,
     cta_view: 0,
     cta_click: 0,
-    lead_created: 0,
+    lead_persisted: 0,
   };
   for (const ev of events || []) {
-    const name = String(ev && ev.event || "");
+    const name = resolveCollectName(String((ev && ev.event) || "")) || "";
     if (!(name in event_counters)) continue;
     if (isMoneyAssetEvent(ev)) event_counters[name] += 1;
   }
@@ -321,7 +328,11 @@ function summarizeMoneyAssetLoop(events, leads) {
   return {
     asset_id: MONEY_ASSET_ID,
     route_family: MONEY_ASSET_ROUTE,
-    events: event_counters,
+    events: {
+      ...event_counters,
+      // Compatibility key: same persist count, not a second denominator.
+      lead_created: event_counters.lead_persisted,
+    },
     lead_created_persisted: persisted,
     handoff,
   };

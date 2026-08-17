@@ -1,7 +1,7 @@
 /**
  * Drives the shipped Money Asset page script + script.js.
  * Asserts asset_view / organic_landing fire only after confengeTrack exists,
- * cta_view on visibility, and cta_click + lead_created on the real submit path.
+ * cta_view on visibility, and cta_click + lead_persisted on the real submit path.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -351,7 +351,7 @@ if (!dataLayer.some((e) => e.event === "cta_view" && e.cta_id === "segunda-leitu
 
 const submitEvent = { type: "submit", preventDefault() {} };
 form.dispatchEvent(submitEvent);
-for (let i = 0; i < 15 && !dataLayer.some((e) => e.event === "lead_created"); i += 1) {
+for (let i = 0; i < 15 && !dataLayer.some((e) => e.event === "lead_persisted"); i += 1) {
   await new Promise((resolve) => setTimeout(resolve, 10));
 }
 
@@ -369,18 +369,18 @@ if (
   console.error("FAIL: cta_click attribution", click);
   process.exit(1);
 }
-if (!afterSubmit.includes("lead_created")) {
-  console.error("FAIL: lead_created missing from real success path", afterSubmit);
+if (!afterSubmit.includes("lead_persisted")) {
+  console.error("FAIL: lead_persisted missing from real success path", afterSubmit);
   process.exit(1);
 }
-const created = dataLayer.find((e) => e.event === "lead_created");
+const created = dataLayer.find((e) => e.event === "lead_persisted");
 if (
   created.asset_id !== "diagnostico-defesa-margem" ||
   created.route_family !== "defesa-margem-diagnostico" ||
   created.public_id_slug !== "md-8569b618" ||
   created.source !== "CONFENGE_WEB"
 ) {
-  console.error("FAIL: lead_created attribution", created);
+  console.error("FAIL: lead_persisted attribution", created);
   process.exit(1);
 }
 if (JSON.stringify(dataLayer).includes("qa-page@") || JSON.stringify(dataLayer).includes("QA Page")) {
@@ -392,5 +392,5 @@ console.log("MONEY_ASSET_PAGE_EVENTS_OK", {
   load: ["asset_view", "organic_landing"].every((n) => names.includes(n)),
   cta_view: true,
   cta_click: true,
-  lead_created: true,
+  lead_persisted: true,
 });
