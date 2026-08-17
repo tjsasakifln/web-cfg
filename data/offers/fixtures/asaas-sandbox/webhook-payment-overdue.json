@@ -1,0 +1,12 @@
+{
+  "id": "evt_sbx_payment_overdue_001",
+  "event": "PAYMENT_OVERDUE",
+  "dateCreated": "2026-08-17 13:00:00",
+  "payment": {
+    "object": "payment",
+    "id": "pay_sbx_001",
+    "status": "OVERDUE",
+    "value": 8000,
+    "externalReference": "cfg:CFG-DIAG-EXP-v1:corr_fixture"
+  }
+}

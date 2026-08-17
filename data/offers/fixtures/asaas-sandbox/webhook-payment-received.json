@@ -1,0 +1,12 @@
+{
+  "id": "evt_sbx_payment_received_001",
+  "event": "PAYMENT_RECEIVED",
+  "dateCreated": "2026-08-17 12:05:00",
+  "payment": {
+    "object": "payment",
+    "id": "pay_sbx_001",
+    "status": "RECEIVED",
+    "value": 8000,
+    "externalReference": "cfg:CFG-DIAG-EXP-v1:corr_fixture"
+  }
+}

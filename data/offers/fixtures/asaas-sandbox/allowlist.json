@@ -1,0 +1,27 @@
+{
+  "schema": "confenge.asaas-sandbox-fixtures/1.0",
+  "note": "Fictional Sandbox-only identities. Not real people or companies. Do not use production data.",
+  "retrieved": "2026-08-17",
+  "customers": [
+    {
+      "fixture_id": "sbx-diag-001",
+      "offer_id": "CFG-DIAG-EXP-v1",
+      "name": "CONFENGE Sandbox Diagnostico LTDA",
+      "cpfCnpj": "11222333000181",
+      "email": "sandbox.diag@example.invalid",
+      "phone": "4738010919",
+      "representante": "Sandbox Representante"
+    },
+    {
+      "fixture_id": "sbx-180-001",
+      "offer_id": "CFG-DIRB2G-180-v1",
+      "name": "CONFENGE Sandbox Diretoria 180 LTDA",
+      "cpfCnpj": "11222333000181",
+      "email": "sandbox.180@example.invalid",
+      "phone": "4738010919",
+      "representante": "Sandbox Representante",
+      "target_contract": "contrato-sandbox-1",
+      "start_date": "2026-09-01"
+    }
+  ]
+}

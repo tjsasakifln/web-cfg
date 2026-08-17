@@ -1,0 +1,9 @@
+{
+  "id": "sbx-checkout-fixture-001",
+  "link": "https://sandbox.asaas.com/checkoutSession/show/sbx-checkout-fixture-001",
+  "status": "ACTIVE",
+  "billingTypes": ["PIX", "CREDIT_CARD"],
+  "chargeTypes": ["DETACHED"],
+  "minutesToExpire": 60,
+  "externalReference": "cfg:CFG-DIAG-EXP-v1:corr_fixture"
+}

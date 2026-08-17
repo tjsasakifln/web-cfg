@@ -1,0 +1,12 @@
+{
+  "id": "evt_sbx_payment_refunded_001",
+  "event": "PAYMENT_REFUNDED",
+  "dateCreated": "2026-08-17 14:00:00",
+  "payment": {
+    "object": "payment",
+    "id": "pay_sbx_001",
+    "status": "REFUNDED",
+    "value": 8000,
+    "externalReference": "cfg:CFG-DIAG-EXP-v1:corr_fixture"
+  }
+}
