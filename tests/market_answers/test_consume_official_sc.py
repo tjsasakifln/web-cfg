@@ -45,7 +45,7 @@ def test_adapter_copies_quartiles_and_refuses_hash_drift():
     assert adapted["official_live"] is True
     assert adapted["geography"]["code"] == "SC"
     assert adapted["claim"]["national_claim_allowed"] is False
-    assert adapted["never_index"] is True
+    assert adapted["never_index"] is False
     assert adapted["source_folded_hash"] == EXPECTED_SC_FOLDED_HASH
 
     drifted = copy.deepcopy(raw)
@@ -61,11 +61,18 @@ def test_load_payload_prefers_official_extra_cli_consumer():
     assert payload["statistics"]["n"] == _raw()["stats"]["n"]
 
 
-def test_gate_keeps_official_sc_off_index():
+def test_gate_indexes_official_sc_only_with_matching_approval():
     payload = adapt_payload(_raw())
-    decision = evaluate(load_shipped_candidate(), payload, {"approvals": []}, today=date(2026, 8, 17))
-    assert decision.official_live is True
-    assert decision.indexable is False
-    assert "noindex" in decision.robots
-    assert decision.sitemap is False
-    assert decision.state != "PUBLISHABLE_INDEX"
+    record = load_shipped_candidate()
+    denied = evaluate(record, payload, {"approvals": []}, today=date(2026, 8, 17))
+    assert denied.official_live is True
+    assert denied.indexable is False
+    assert "noindex" in denied.robots
+
+    from tests.market_answers.helpers import matching_approval
+
+    allowed = evaluate(record, payload, matching_approval(payload), today=date(2026, 8, 17))
+    assert allowed.indexable is True, allowed.reason_codes
+    assert allowed.robots == "index,follow"
+    assert allowed.sitemap is True
+    assert allowed.state == "PUBLISHABLE_INDEX"

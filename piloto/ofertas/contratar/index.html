@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Solicitar contratacao | CONFENGE</title>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="description" content="Capacidade e termos antes de qualquer checkout. Preview sem dinheiro real."/>
+<link rel="canonical" href="https://confenge.com.br/piloto/ofertas/contratar/"/>
+<link rel="stylesheet" href="/styles.css"/>
+<link rel="stylesheet" href="/styles-tools.css"/>
+</head>
+<body data-offer-preview="1">
+<a class="skip-link" href="#conteudo">Pular para o conteudo</a>
+<header class="site-header">
+<div class="container header-inner">
+<a class="brand" href="/" aria-label="CONFENGE, pagina inicial"><img alt="CONFENGE Inteligencia Tecnica" src="/assets/logo-confenge.png" width="800" height="208"/></a>
+</div>
+</header>
+<main id="conteudo" class="container" style="max-width:46rem;padding:1.5rem 1rem 4rem;">
+<nav aria-label="Navegacao estrutural" class="breadcrumbs"><ol>
+<li><a href="/">Inicio</a><span aria-hidden="true">/</span></li>
+<li><a href="/piloto/ofertas/">Ofertas (preview)</a><span aria-hidden="true">/</span></li>
+<li aria-current="page">Solicitar contratacao</li>
+</ol></nav>
+<p class="eyebrow">Preview interno · catalogo publico desligado</p>
+<h1>Solicitar contratacao</h1>
+<p class="content-lead">Capacidade e termos antes de qualquer checkout. Preview sem dinheiro real.</p>
+
+<form class="tool-form" method="post" action="/.netlify/functions/offer-eligibility" data-no-url-cnpj="true">
+<input type="hidden" name="action" value="eligibility"/>
+<div class="tool-field">
+<label for="cnpj">CNPJ</label>
+<input id="cnpj" name="cnpj" inputmode="numeric" autocomplete="off" maxlength="18"/>
+</div>
+<div class="tool-field">
+<label for="representante">Representante</label>
+<input id="representante" name="representante" autocomplete="name"/>
+</div>
+<div class="tool-field">
+<label for="plano">Plano</label>
+<select id="plano" name="offer_id">
+<option value="CFG-DIAG-EXP-v1">CONFENGE - Diagnóstico B2G de Expansão</option><option value="CFG-DIRB2G-FLEX-v1">CONFENGE - Diretoria B2G Fracionada - Flex</option><option value="CFG-DIRB2G-180-v1">CONFENGE - Diretoria B2G Fracionada - 180</option><option value="CFG-DIRB2G-365-v1">CONFENGE - Diretoria B2G Fracionada - 365</option>
+</select>
+</div>
+<div class="tool-field">
+<label for="contrato">Contrato-alvo</label>
+<input id="contrato" name="target_contract"/>
+</div>
+<div class="tool-field">
+<label for="inicio">Data de inicio</label>
+<input id="inicio" name="start_date" type="date"/>
+</div>
+<div class="tool-field">
+<label><input type="checkbox" name="accept_terms" value="1"/> Li o snapshot CFG-TERMS-B2B-2026-08-17-v1 (preview, sem validacao juridica).</label>
+</div>
+<div class="tool-actions">
+<button class="button button-primary" type="submit">Verificar capacidade</button>
+</div>
+</form>
+<p>O CNPJ nao entra na URL nem em analytics. Nao ha cobranca nesta pagina.</p>
+</main>
+<footer class="site-footer"><div class="container footer-bottom"><span>© 2026 CONFENGE.</span><a href="/privacidade/">Politica de Privacidade</a></div></footer>
+</body>
+</html>

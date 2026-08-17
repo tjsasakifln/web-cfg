@@ -1,0 +1,8 @@
+{
+  "schema": "confenge.offer-flags/1.0",
+  "CONFENGE_OFFER_CATALOG_PUBLIC": false,
+  "ASAAS_MODE": "disabled",
+  "production_checkout_enabled": false,
+  "production_webhook_enabled": false,
+  "real_money_mutation_enabled": false
+}

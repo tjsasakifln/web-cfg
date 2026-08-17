@@ -157,6 +157,8 @@ def project_extra_cli_consumer(payload: dict[str, Any]) -> dict[str, Any]:
         claim_in = payload["claim"]
     geography = payload.get("geography") if isinstance(payload.get("geography"), dict) else {}
     national_allowed = bool(claim_in.get("national_claim_allowed"))
+    geo_code = geography.get("code")
+    geo_kind = geography.get("kind") or "uf"
     projected = {
         "schema": SCHEMA_ID,
         "contract_version": _text(payload.get("schema_version")) or "v1.0.0",
@@ -176,10 +178,11 @@ def project_extra_cli_consumer(payload: dict[str, Any]) -> dict[str, Any]:
         },
         "period": payload.get("period") or {},
         "geography": {
-            "scope": geography.get("kind") or "uf",
-            "code": geography.get("code"),
+            "kind": geo_kind,
+            "scope": geo_kind,
+            "code": geo_code,
             "label": geography.get("label"),
-            "ufs": [geography["code"]] if geography.get("code") else [],
+            "ufs": [geo_code] if geo_code else [],
             "national_claim_allowed": national_allowed,
         },
         "distribution": payload.get("distribution") or {},
@@ -194,7 +197,7 @@ def project_extra_cli_consumer(payload: dict[str, Any]) -> dict[str, Any]:
         ],
         "method_short": (
             "Mediana e quartis do valor integral nominal do instrumento, "
-            "tipologia keyword de pavimentação, recorte SC. Não é custo por km. Não é Brasil."
+            "tipologia keyword de pavimentação, recorte Santa Catarina. Não é custo por km."
         ),
         "as_of": payload.get("as_of"),
         "coverage": payload.get("coverage") if isinstance(payload.get("coverage"), dict) else {},
@@ -206,7 +209,8 @@ def project_extra_cli_consumer(payload: dict[str, Any]) -> dict[str, Any]:
         "claim": {
             "authorization_state": "UNAUTHORIZED" if not national_allowed else "AUTHORIZED",
             "national_claim_allowed": national_allowed,
-            "current_publication_allowed": False,
+            "current_publication_allowed": bool(claim_in.get("current_publication_allowed")),
+            "claim_scope": "uf" if geo_kind == "uf" else "national",
             "issue": claim_in.get("issue"),
             "reason_codes": list(claim_in.get("reason_codes") or []),
         },
@@ -217,7 +221,7 @@ def project_extra_cli_consumer(payload: dict[str, Any]) -> dict[str, Any]:
         "source_schema": EXTRA_CLI_CONSUMER_SCHEMA,
         "source_folded_hash": digest,
         "source_content_hash": payload.get("content_hash"),
-        "never_index": True,
+        "never_index": False,
     }
     return projected
 

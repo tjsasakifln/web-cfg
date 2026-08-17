@@ -125,6 +125,17 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
     (ROOT / "sitemap-jurisprudencia.xml").write_text(_urlset(juris), encoding="utf-8")
     if intel:
         (ROOT / "sitemap-inteligencia.xml").write_text(_urlset(intel), encoding="utf-8")
+    try:
+        from scripts.market_answers.consume import load_approvals, load_candidate, load_payload
+        from scripts.market_answers.gate import evaluate
+        from scripts.market_answers.sitemap import apply_market_answer_sitemap
+
+        decision = evaluate(load_candidate(), load_payload(), load_approvals(), today=None)
+        apply_market_answer_sitemap(
+            ROOT, indexable=decision.indexable, lastmod=_now_date()
+        )
+    except Exception:
+        pass
 
     today = _now_date()
     index_parts = [

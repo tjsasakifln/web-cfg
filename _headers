@@ -53,3 +53,7 @@
 # Contract-analysis canary: fixture preview cannot be indexed
 /analises-contratos-publicos/*
   X-Robots-Tag: noindex, nofollow, noarchive
+
+# Offer catalog preview: public gate still off
+/piloto/ofertas/*
+  X-Robots-Tag: noindex, nofollow

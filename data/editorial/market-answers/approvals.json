@@ -1,14 +1,49 @@
 {
-  "schema": "market-answer-approval/1.0",
-  "notes": "Preview-only. index_authorized remains false while official_live is absent. A matching content_hash does not authorize INDEX on a CONTRACT_FIXTURE.",
+  "schema": "market-answer-approval/1.1",
+  "notes": "BARRIER 2. INDEX is bound to payload_content_hash + rendered_content_hash + OWNER token. Any hash drift is fail-closed noindex. extra-cli #302 remains required for any country-wide claim.",
   "approvals": [
     {
+      "schema": "market-answer-approval/1.1",
+      "asset_id": "valor-tipico-contratos-pavimentacao",
       "question_id": "valor-tipico-contratos-pavimentacao",
-      "content_hash": "preview-not-an-index-hash",
-      "approved_state": "PUBLISHABLE_NOINDEX",
-      "approver": "preview-wiring",
-      "approved_at": "2026-08-16",
-      "index_authorized": false
+      "url": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "geography": {
+        "kind": "uf",
+        "code": "SC",
+        "label": "Santa Catarina"
+      },
+      "claim_scope": "uf",
+      "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
+      "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+      "method_version": "integral-nominal-nearest-rank/1.0",
+      "schema_version": "public-read-market-answer/1.0",
+      "approved_by": "OWNER_CONFENGE",
+      "approval_token": "OWNER_APPROVAL_MARKET_ANSWER_SC_INDEX_2026_08_17",
+      "approved_at": "2026-08-17T00:00:00Z",
+      "approved_conditions": [
+        "official_live",
+        "not_fixture",
+        "geography_uf_sc",
+        "coverage_complete_or_sufficient_same_uf",
+        "freshness_current",
+        "method_versioned",
+        "limitations_visible",
+        "no_national_claim",
+        "grain_ticket_not_km",
+        "human_hash_bound"
+      ],
+      "invalidation_keys": [
+        "facts",
+        "coverage",
+        "method",
+        "geography",
+        "visible_copy",
+        "limitations",
+        "source",
+        "as_of"
+      ],
+      "index_authorized": true,
+      "approved_state": "PUBLISHABLE_INDEX"
     }
   ]
 }

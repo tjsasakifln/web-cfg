@@ -17,15 +17,15 @@ from scripts.market_answers import (
     ASSET_FAMILY,
     ASSET_ID,
     CANONICAL,
-    FAMILY_PATH,
     PAGE_DIR,
     PRODUCER_STATUS_FIXTURE,
-    QUESTION_TEXT,
     ROUTE_FAMILY,
     SITE,
 )
+from scripts.market_answers.copy import first_fold_copy, geography_label, visitor_copy
 from scripts.market_answers.events import catalog
-from scripts.market_answers.gate import GateDecision
+from scripts.market_answers.gate import GateDecision, write_lkg
+from scripts.market_answers.sitemap import apply_market_answer_sitemap, robots_for_url
 from scripts.market_answers.urls import drilldown_model
 
 
@@ -33,37 +33,8 @@ def _root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
-def _brl(value: Any) -> str:
-    if value is None:
-        return "n/d"
-    number = float(value)
-    formatted = f"{number:,.0f}".replace(",", "X").replace(".", ",").replace("X", ".")
-    return f"R$ {formatted}"
-
-
 def _text(value: Any) -> str:
     return str(value or "").strip()
-
-
-def period_label(payload: dict[str, Any]) -> str:
-    period = payload.get("period") if isinstance(payload.get("period"), dict) else {}
-    return _text(period.get("label")) or (
-        f"{period.get('start') or ''}–{period.get('end') or ''}".strip("–")
-    )
-
-
-def geography_label(payload: dict[str, Any]) -> str:
-    geo = payload.get("geography") if isinstance(payload.get("geography"), dict) else {}
-    return _text(geo.get("label")) or ", ".join(geo.get("ufs") or []) or "recorte publicado"
-
-
-def format_n(payload: dict[str, Any]) -> str:
-    stats = payload.get("statistics") or {}
-    n = stats.get("n")
-    try:
-        return str(int(n))
-    except (TypeError, ValueError):
-        return "n/d"
 
 
 def _distribution_rows(payload: dict[str, Any]) -> list[dict[str, Any]]:
@@ -136,33 +107,17 @@ def _table(rows: list[dict[str, Any]]) -> str:
     )
 
 
-def first_fold_copy(payload: dict[str, Any]) -> dict[str, str]:
-    stats = payload.get("statistics") or {}
-    return {
-        "answer": (
-            f"No recorte publicado, o ticket contratual típico de pavimentação "
-            f"é {_brl(stats.get('median'))} (mediana do valor integral nominal do instrumento)."
-        ),
-        "range": (
-            f"Faixa interquartil: {_brl(stats.get('p25'))} (P25) a {_brl(stats.get('p75'))} (P75)."
-        ),
-        "n": f"Amostra: {format_n(payload)} contratos.",
-        "period": f"Período: {period_label(payload)}.",
-        "geography": f"Geografia: {geography_label(payload)}.",
-        "ticket_not_km": "Este número é ticket contratual, não custo por km.",
-    }
-
-
-def _schema(payload: dict[str, Any], decision: GateDecision) -> dict[str, Any]:
-    stats = payload.get("statistics") or {}
-    description = (
-        f"Resposta answer-first à pergunta «{QUESTION_TEXT}». "
-        f"Grain: valor integral nominal. Mediana {_brl(stats.get('median'))}, "
-        f"n={format_n(payload)}, {period_label(payload)}, {geography_label(payload)}. "
-        "Não é custo por km. Não é claim nacional."
-    )
+def _schema(payload: dict[str, Any], decision: GateDecision, copy: dict[str, Any]) -> dict[str, Any]:
+    description = copy["json_ld_description"]
     if decision.is_fixture:
         description += " Preview CONTRACT_FIXTURE; official_live=false."
+    crumbs = []
+    hrefs = [f"{SITE}/", f"{SITE}/inteligencia/", CANONICAL]
+    for idx, name in enumerate(copy["breadcrumbs"], start=1):
+        item: dict[str, Any] = {"@type": "ListItem", "position": idx, "name": name}
+        if idx < len(copy["breadcrumbs"]):
+            item["item"] = hrefs[idx - 1]
+        crumbs.append(item)
     return {
         "@context": "https://schema.org",
         "@graph": [
@@ -170,12 +125,12 @@ def _schema(payload: dict[str, Any], decision: GateDecision) -> dict[str, Any]:
                 "@type": "FAQPage",
                 "@id": f"{CANONICAL}#faq",
                 "url": CANONICAL,
-                "name": QUESTION_TEXT,
+                "name": copy["json_ld_name"],
                 "isAccessibleForFree": True,
                 "mainEntity": [
                     {
                         "@type": "Question",
-                        "name": QUESTION_TEXT,
+                        "name": copy["question"],
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": description,
@@ -186,7 +141,7 @@ def _schema(payload: dict[str, Any], decision: GateDecision) -> dict[str, Any]:
             {
                 "@type": "Dataset",
                 "@id": f"{CANONICAL}#dataset",
-                "name": "Ticket contratual típico de pavimentação (recorte)",
+                "name": copy["json_ld_dataset_name"],
                 "description": description,
                 "url": CANONICAL,
                 "creator": {"@type": "Organization", "name": "CONFENGE", "url": f"{SITE}/"},
@@ -196,11 +151,7 @@ def _schema(payload: dict[str, Any], decision: GateDecision) -> dict[str, Any]:
             },
             {
                 "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {"@type": "ListItem", "position": 1, "name": "Início", "item": f"{SITE}/"},
-                    {"@type": "ListItem", "position": 2, "name": "Inteligência", "item": f"{SITE}/inteligencia/"},
-                    {"@type": "ListItem", "position": 3, "name": "Valor típico de contratos de pavimentação"},
-                ],
+                "itemListElement": crumbs,
             },
         ],
     }
@@ -214,17 +165,13 @@ def render_html(
     site_root: Path | None = None,
 ) -> str:
     site_root = site_root or _root()
-    fold = first_fold_copy(payload)
+    copy = visitor_copy(record, payload)
+    fold = copy["first_fold"]
     stats = payload.get("statistics") or {}
     rows = _distribution_rows(payload)
     model = drilldown_model(payload, site_root=site_root)
-    limitations = payload.get("limitations") or []
-    method_short = _text(payload.get("method_short") or (payload.get("method") or {}).get("short"))
-    if not method_short:
-        method_short = (
-            "Mediana e quartis do valor integral nominal do instrumento na tipologia "
-            "de pavimentação do recorte. Não converte ticket em custo por km."
-        )
+    limitations = copy["limitations"]
+    method_short = copy["method_short"]
     fixture = decision.is_fixture
     fixture_banner = ""
     if fixture:
@@ -270,21 +217,40 @@ def render_html(
         content_hash=decision.content_hash,
     )
     event_json = json.dumps(events, ensure_ascii=False)
-    schema = json.dumps(_schema(payload, decision), ensure_ascii=False)
+    schema = json.dumps(_schema(payload, decision, copy), ensure_ascii=False)
     limit_items = "".join(f"<li>{escape(_text(item))}</li>" for item in limitations)
     as_of = escape(_text(payload.get("as_of")))
+    source_as_of = escape(copy["source_as_of"])
+    robots = robots_for_url(CANONICAL, indexable_canonical=decision.indexable)
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>{escape(QUESTION_TEXT)} | CONFENGE</title>
-<meta name="description" content="{escape(fold['answer'])} {escape(fold['ticket_not_km'])}"/>
-<meta name="robots" content="{escape(decision.robots)}"/>
+<title>{escape(copy["title"])}</title>
+<meta name="description" content="{escape(copy["meta_description"])}"/>
+<meta name="robots" content="{escape(robots)}"/>
 <link rel="canonical" href="{CANONICAL}"/>
+<meta property="og:type" content="{escape(copy["og_type"])}"/>
+<meta property="og:locale" content="{escape(copy["og_locale"])}"/>
+<meta property="og:site_name" content="{escape(copy["og_site_name"])}"/>
+<meta property="og:title" content="{escape(copy["og_title"])}"/>
+<meta property="og:description" content="{escape(copy["og_description"])}"/>
+<meta property="og:url" content="{escape(copy["og_url"])}"/>
+<meta property="og:image" content="{escape(copy["og_image"])}"/>
 <link rel="stylesheet" href="/styles.css"/>
 <link rel="stylesheet" href="/styles-tools.css"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<script>
+(function () {{
+  try {{
+    if (location.search) {{
+      var m = document.querySelector('meta[name="robots"]');
+      if (m) m.setAttribute("content", "noindex,nofollow");
+    }}
+  }} catch (e) {{}}
+}})();
+</script>
 <script type="application/ld+json">{schema}</script>
 <style>
 .ma-wrap {{ max-width: 46rem; margin: 0 auto; padding: 0 1rem 4rem; }}
@@ -321,11 +287,11 @@ def render_html(
 <nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol>
 <li><a href="/">Início</a><span aria-hidden="true">/</span></li>
 <li><a href="/inteligencia/">Inteligência</a><span aria-hidden="true">/</span></li>
-<li aria-current="page">Valor típico de contratos de pavimentação</li>
+<li aria-current="page">{escape(copy["breadcrumb_current"])}</li>
 </ol></nav>
 <div class="ma-wrap">
-<p class="ma-kicker">Market Answer · recorte publicado · {escape(decision.robots)}</p>
-<h1>{escape(QUESTION_TEXT)}</h1>
+<p class="ma-kicker">{escape(copy["kicker"])} · {escape(robots)}</p>
+<h1>{escape(copy["h1"])}</h1>
 {fixture_banner}
 <section id="resposta" class="ma-answer" aria-labelledby="resposta-titulo">
 <p class="ma-kicker" id="resposta-titulo">Resposta direta</p>
@@ -347,6 +313,11 @@ def render_html(
 <p>Grain: valor integral nominal do instrumento. Unidade: {escape(_text(stats.get("unit") or "ticket_contratual_integral"))}. Moeda: {escape(_text(stats.get("currency") or "BRL"))}.</p>
 <p><a href="#fontes">Fontes e metodologia completa</a> · <a href="/metodologia-inteligencia/">Como a CONFENGE lê evidências</a></p>
 <p><strong>as_of:</strong> <time datetime="{as_of}">{as_of}</time></p>
+<p><strong>source_as_of:</strong> <time datetime="{source_as_of}">{source_as_of}</time></p>
+<p>{escape(copy["validity_policy"])}</p>
+<p id="cobertura">{escape(copy["coverage"])}</p>
+<p id="missingness">{escape(copy["missingness"])}</p>
+<p id="fonte">{escape(copy["fonte"])}</p>
 </div>
 <div class="ma-limits" id="limitacoes">
 <p class="ma-kicker">Limitações</p>
@@ -375,7 +346,7 @@ def render_html(
 <section id="nao-conclui" aria-labelledby="nao-conclui-titulo">
 <h2 id="nao-conclui-titulo">O que estes dados não permitem concluir</h2>
 <ul>
-<li>Não é o valor típico do Brasil. Não há claim nacional.</li>
+<li>Não descreve o país inteiro. O recorte publicado é {escape(geography_label(payload))}.</li>
 <li>Não é custo, preço unitário ou custo por km de pavimentação.</li>
 <li>Não é ranking de empresas, órgãos ou sobrepreço.</li>
 <li>Não autoriza inferir irregularidade a partir de um outlier.</li>
@@ -408,7 +379,7 @@ def render_html(
 </form>
 </section>
 
-<section id="fontes" aria-labelledby="fontes-titulo">
+<section id="dataset" data-dataset="valor-tipico-contratos-pavimentacao-sc" aria-labelledby="fontes-titulo">
 <h2 id="fontes-titulo">Fontes, versão e refresh</h2>
 <ul>
 <li>Schema: <code>{escape(_text(payload.get("schema")))}</code></li>
@@ -446,4 +417,7 @@ def write_page(
     html = render_html(record, payload, decision, site_root=root)
     path = directory / "index.html"
     path.write_text(html, encoding="utf-8")
+    as_of = _text(payload.get("as_of"))[:10] or "2026-08-17"
+    apply_market_answer_sitemap(root, indexable=decision.indexable, lastmod=as_of)
+    write_lkg(decision)
     return {"page": path}

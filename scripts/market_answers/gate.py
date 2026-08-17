@@ -12,10 +12,7 @@ from datetime import date, datetime, timezone
 from typing import Any
 
 from scripts.market_answers import (
-    CLAIM_AUTHORIZED,
-    CLAIM_FIXTURE,
-    CLAIM_STALE,
-    CLAIM_UNAUTHORIZED,
+    DEFAULT_LKG,
     GATE_VERSION,
     INDEX_CONDITIONS,
     PRODUCER_STATUS_FIXTURE,
@@ -23,8 +20,26 @@ from scripts.market_answers import (
     QUESTION_ID,
     SOURCE,
 )
-from scripts.market_answers.consume import approval_for, grain_is_ticket, is_fixture_payload
+from scripts.market_answers.approval import approval_for, evaluate_approval
+from scripts.market_answers.consume import grain_is_ticket, is_fixture_payload
+from scripts.market_answers.copy import (
+    surfaces_claim_national,
+    surfaces_name_santa_catarina,
+    visitor_copy,
+)
 from scripts.market_answers.hashing import content_hash
+from scripts.market_answers.scope import (
+    SCOPE_NATIONAL,
+    SCOPE_UF,
+    claim_scope,
+    coverage_scope_matches,
+    coverage_status_ok,
+    estadual_claim_authorized,
+    geography_scope_ok,
+    missingness_present,
+    n_positive,
+    national_302_authorized,
+)
 from scripts.market_answers.score import ScoreResult, score_candidate
 
 
@@ -43,6 +58,10 @@ class GateDecision:
     recommendation: str
     score: dict[str, Any]
     content_hash: str
+    claim_scope: str = SCOPE_UF
+    payload_content_hash: str = ""
+    rendered_content_hash: str = ""
+    freshness_class: str = "current"
     gate_version: str = GATE_VERSION
 
     def as_dict(self) -> dict[str, Any]:
@@ -60,6 +79,10 @@ class GateDecision:
             "recommendation": self.recommendation,
             "score": dict(self.score),
             "content_hash": self.content_hash,
+            "claim_scope": self.claim_scope,
+            "payload_content_hash": self.payload_content_hash,
+            "rendered_content_hash": self.rendered_content_hash,
+            "freshness_class": self.freshness_class,
             "gate_version": self.gate_version,
         }
 
@@ -98,36 +121,11 @@ def _parse_dt(value: Any) -> datetime | None:
 
 
 def _today(today: date | None) -> date:
-    return today or date(2026, 8, 16)
+    return today or date(2026, 8, 17)
 
 
 def _coverage_sufficient(payload: dict[str, Any]) -> tuple[bool, list[str]]:
-    coverage = payload.get("coverage") if isinstance(payload.get("coverage"), dict) else {}
-    reasons: list[str] = []
-    status = _text(coverage.get("status")).upper()
-    if status in {"INSUFFICIENT", "INCOMPLETE", "UNKNOWN", ""}:
-        reasons.append("coverage_insufficient")
-    if coverage.get("national_universe_complete") is True:
-        # Extra-cli #302 is still open. A fixture/incomplete pack claiming
-        # national completeness is a lie, not a pass.
-        if status != "SUFFICIENT":
-            reasons.append("coverage_national_claim_without_sufficient_status")
-    if coverage.get("stale") is True:
-        reasons.append("coverage_stale")
-    required = payload.get("coverage_required") if isinstance(payload.get("coverage_required"), dict) else {}
-    min_n = required.get("min_n") or coverage.get("min_n")
-    stats = payload.get("statistics") if isinstance(payload.get("statistics"), dict) else {}
-    n = stats.get("n")
-    if min_n is not None and n is not None:
-        try:
-            if int(n) < int(min_n):
-                reasons.append("coverage_n_below_minimum")
-        except (TypeError, ValueError):
-            reasons.append("coverage_n_unreadable")
-    ok = status == "SUFFICIENT" and not reasons
-    if not ok and "coverage_insufficient" not in reasons and status != "SUFFICIENT":
-        reasons.append("coverage_insufficient")
-    return ok, reasons
+    return coverage_status_ok(payload)
 
 
 def _freshness_current(payload: dict[str, Any], *, today: date) -> tuple[bool, list[str]]:
@@ -154,6 +152,7 @@ def _freshness_current(payload: dict[str, Any], *, today: date) -> tuple[bool, l
         age_days = (today - as_of).days
         if age_days * 24 > max_age_hours:
             reasons.append("freshness_stale")
+            reasons.append("STALE_DATA")
     if generated is not None:
         now = datetime(today.year, today.month, today.day, tzinfo=timezone.utc)
         if generated.tzinfo is None:
@@ -161,52 +160,51 @@ def _freshness_current(payload: dict[str, Any], *, today: date) -> tuple[bool, l
         age_hours = (now - generated).total_seconds() / 3600.0
         if age_hours > max_age_hours:
             reasons.append("freshness_stale")
-    ok = not reasons
-    return ok, reasons
-
-
-def _claim_authorized(payload: dict[str, Any]) -> tuple[bool, list[str]]:
-    claim = payload.get("claim") if isinstance(payload.get("claim"), dict) else {}
-    state = _text(claim.get("authorization_state")).upper()
-    reasons: list[str] = []
-    if state == CLAIM_STALE:
-        reasons.append("claim_stale")
-    elif state == CLAIM_FIXTURE:
-        reasons.append("claim_fixture_not_authorizable")
-    elif state != CLAIM_AUTHORIZED:
-        reasons.append("claim_unauthorized")
-        if state == CLAIM_UNAUTHORIZED or not state:
-            pass
-        else:
-            reasons.append(f"claim_state_{state.lower()}")
-    if claim.get("current_publication_allowed") is False:
-        reasons.append("claim_current_publication_blocked")
-    if is_fixture_payload(payload) and state == CLAIM_AUTHORIZED:
-        reasons.append("claim_authorized_on_fixture")
-    ok = state == CLAIM_AUTHORIZED and not reasons
+            reasons.append("STALE_DATA")
+    ok = not any(code in {"freshness_stale", "freshness_as_of_missing"} for code in reasons)
     return ok, reasons
 
 
 def _human_approval(
     payload: dict[str, Any],
+    record: dict[str, Any],
     approval: dict[str, Any] | None,
-) -> tuple[bool, list[str]]:
-    reasons: list[str] = []
-    expected = _text(payload.get("content_hash")) or content_hash(payload)
-    if not approval:
-        reasons.append("approval_missing")
-        return False, reasons
-    approved_hash = _text(approval.get("content_hash"))
-    if not approved_hash:
-        reasons.append("approval_hash_missing")
-        return False, reasons
-    if approved_hash != expected:
-        reasons.append("approval_hash_drift")
-        return False, reasons
-    if approval.get("index_authorized") is not True:
-        reasons.append("approval_index_not_authorized")
-        return False, reasons
-    return True, []
+) -> tuple[bool, list[str], dict[str, str]]:
+    return evaluate_approval(payload, record, approval)
+
+
+def load_lkg(path: Any | None = None) -> dict[str, Any]:
+    from pathlib import Path
+    import json
+
+    resolved = Path(path) if path is not None else Path(__file__).resolve().parents[2] / DEFAULT_LKG
+    if not resolved.is_file():
+        return {}
+    try:
+        data = json.loads(resolved.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def write_lkg(decision: "GateDecision", path: Any | None = None) -> None:
+    from pathlib import Path
+    import json
+
+    if not decision.indexable:
+        return
+    resolved = Path(path) if path is not None else Path(__file__).resolve().parents[2] / DEFAULT_LKG
+    resolved.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "asset_id": decision.question_id,
+        "payload_content_hash": decision.payload_content_hash or decision.content_hash,
+        "rendered_content_hash": decision.rendered_content_hash,
+        "indexable": True,
+        "robots": decision.robots,
+        "recorded_at": "2026-08-17T00:00:00Z",
+        "freshness_class": decision.freshness_class,
+    }
+    resolved.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def _method_present(payload: dict[str, Any], record: dict[str, Any]) -> bool:
@@ -247,7 +245,8 @@ def evaluate_conditions(
     *,
     today: date | None = None,
     score: ScoreResult | None = None,
-) -> tuple[dict[str, bool], list[str]]:
+    surfaces: dict[str, Any] | None = None,
+) -> tuple[dict[str, bool], list[str], dict[str, str]]:
     today = _today(today)
     score = score or score_candidate(record, payload)
     reasons: list[str] = []
@@ -257,19 +256,42 @@ def evaluate_conditions(
         fixture = True
         official = False
 
+    surfaces = surfaces if surfaces is not None else visitor_copy(record, payload)
+    national_hits = surfaces_claim_national(surfaces)
+    scope = claim_scope(payload)
+    geo_ok, geo_reasons = geography_scope_ok(payload, expected_scope=SCOPE_UF)
     coverage_ok, coverage_reasons = _coverage_sufficient(payload)
+    scope_match_ok, scope_match_reasons = coverage_scope_matches(payload)
     fresh_ok, fresh_reasons = _freshness_current(payload, today=today)
-    claim_ok, claim_reasons = _claim_authorized(payload)
-    approval_ok, approval_reasons = _human_approval(payload, approval)
+    approval_ok, approval_reasons, hashes = _human_approval(payload, record, approval)
+    n302_ok, n302_reasons = national_302_authorized(payload)
 
-    geo = payload.get("geography") if isinstance(payload.get("geography"), dict) else {}
-    claim = payload.get("claim") if isinstance(payload.get("claim"), dict) else {}
-    national = bool(
-        claim.get("national_claim_allowed")
-        or geo.get("national_claim_allowed")
-        or _text(geo.get("scope")).upper() in {"BR", "NATIONAL", "BRASIL", "NACIONAL"}
-    )
-    national_ok = (not national) or coverage_ok
+    if scope == SCOPE_NATIONAL:
+        claim_ok, claim_reasons = n302_ok, list(n302_reasons)
+        # National page still requires #302. Do not delete this branch.
+        national_gate_ok = n302_ok
+        copy_ok = True
+        if not n302_ok:
+            reasons.append("national_claim_requires_302")
+    else:
+        claim_ok, claim_reasons = estadual_claim_authorized(
+            payload,
+            official=official,
+            fixture=fixture,
+            copy_national_hits=national_hits,
+        )
+        # Estadual: #302 must not block. It remains required if this page
+        # actually makes a national claim (copy or geography).
+        national_gate_ok = not national_hits and scope != SCOPE_NATIONAL
+        copy_ok = (not national_hits) and surfaces_name_santa_catarina(surfaces)
+        if not copy_ok and not national_hits:
+            reasons.append("copy_missing_santa_catarina")
+        if national_hits:
+            reasons.append("national_claim_in_copy")
+
+    n_ok = n_positive(payload)
+    miss_ok = missingness_present(payload)
+    limits_ok = _limitations_present(payload, record) or bool(surfaces.get("limitations"))
 
     owner = record.get("owner") if isinstance(record.get("owner"), dict) else record.get("owner")
     refresh = record.get("refresh") if isinstance(record.get("refresh"), dict) else {}
@@ -284,15 +306,20 @@ def evaluate_conditions(
         reasons.append("grain_not_ticket")
 
     method_ok = _method_present(payload, record)
-    limits_ok = _limitations_present(payload, record)
     answer_ok = _answerable(record, score)
     singular_ok = _singular(record, score)
+    rendered_bound = approval_ok
 
-    # Schema/canonical/robots are coherent when we emit noindex/off-sitemap
-    # for anything that is not INDEX. The condition for INDEX itself requires
-    # the page to be willing to flip — still fail-closed here because the
-    # fixture/official flags dominate.
-    hygiene_ok = official and (not fixture) and coverage_ok and claim_ok and approval_ok
+    hygiene_ok = (
+        official
+        and (not fixture)
+        and coverage_ok
+        and claim_ok
+        and approval_ok
+        and geo_ok
+        and copy_ok
+        and national_gate_ok
+    )
 
     conditions = {
         "official_live": official,
@@ -309,11 +336,20 @@ def evaluate_conditions(
         "human_approval_hash": approval_ok,
         "not_fixture": not fixture,
         "grain_ticket_not_km": grain_ok,
-        "no_national_claim_without_coverage": national_ok,
+        "no_national_claim_without_coverage": national_gate_ok,
+        "geography_scope_ok": geo_ok,
+        "copy_scope_coherent": copy_ok,
+        "coverage_scope_matches": scope_match_ok,
+        "n_positive": n_ok,
+        "missingness_present": miss_ok,
+        "rendered_approval_bound": rendered_bound,
+        "national_gate_302": national_gate_ok if scope != SCOPE_NATIONAL else n302_ok,
     }
     assert set(conditions) == set(INDEX_CONDITIONS)
 
+    reasons.extend(geo_reasons)
     reasons.extend(coverage_reasons)
+    reasons.extend(scope_match_reasons)
     reasons.extend(fresh_reasons)
     reasons.extend(claim_reasons)
     reasons.extend(approval_reasons)
@@ -325,6 +361,10 @@ def evaluate_conditions(
         reasons.append("method_missing")
     if not limits_ok:
         reasons.append("limitations_missing")
+    if not n_ok:
+        reasons.append("n_missing_or_not_positive")
+    if not miss_ok:
+        reasons.append("missingness_absent")
     if not answer_ok:
         reasons.append("answerability_fail")
     if not singular_ok:
@@ -333,10 +373,12 @@ def evaluate_conditions(
         reasons.append("attribution_missing")
     if not refresh_owner:
         reasons.append("refresh_owner_missing")
-    if not national_ok:
+    if not national_gate_ok:
         reasons.append("national_claim_without_coverage")
     if not hygiene_ok:
         reasons.append("index_hygiene_blocked")
+    if not rendered_bound:
+        reasons.append("rendered_approval_unbound")
 
     seen: set[str] = set()
     ordered: list[str] = []
@@ -344,7 +386,7 @@ def evaluate_conditions(
         if code not in seen:
             seen.add(code)
             ordered.append(code)
-    return conditions, ordered
+    return conditions, ordered, hashes
 
 
 def _recommendation(
@@ -357,7 +399,7 @@ def _recommendation(
     if state == "REJECT":
         return "REJECT"
     if state == "PUBLISHABLE_INDEX" and official_live and conditions.get("claim_authorized"):
-        return "READY_FOR_OFFICIAL_PAYLOAD"
+        return "PUBLISHABLE_INDEX"
     if fixture or not official_live:
         # Experience may exist; official payload does not. Stay honest.
         if state in {"PUBLISHABLE_NOINDEX", "CANDIDATE", "EDITORIAL_REVIEW", "PRIVATE_ANSWER_ONLY"}:
@@ -423,12 +465,14 @@ def evaluate(
     approvals: dict[str, Any] | None = None,
     *,
     today: date | None = None,
+    surfaces: dict[str, Any] | None = None,
+    lkg: dict[str, Any] | None = None,
 ) -> GateDecision:
     score = score_candidate(record, payload)
     question_id = _text(record.get("question_id") or payload.get("question_id") or QUESTION_ID)
     approval = approval_for(question_id, approvals or {})
-    conditions, reasons = evaluate_conditions(
-        record, payload, approval, today=today, score=score
+    conditions, reasons, hashes = evaluate_conditions(
+        record, payload, approval, today=today, score=score, surfaces=surfaces
     )
     state = decide_state(record, payload, conditions, score)
     if state not in PUBLICATION_STATES:
@@ -439,6 +483,32 @@ def evaluate(
         # Belt and braces: never leak INDEX from a fixture.
         state = "PUBLISHABLE_NOINDEX"
         reasons = list(reasons) + ["fixture_index_forced_down"]
+    freshness_class = "current"
+    if "STALE_DATA" in reasons or not conditions.get("freshness_current"):
+        freshness_class = "STALE_DATA"
+    if "STALE_APPROVAL" in reasons:
+        freshness_class = "STALE_APPROVAL"
+    # Stale payload cannot silently publish a NEW indexable version.
+    # Matching LKG may keep a previously healthy INDEX; hashes that drifted
+    # stay noindex.
+    lkg = lkg if lkg is not None else load_lkg()
+    payload_hash = hashes.get("payload_content_hash") or _text(payload.get("content_hash"))
+    render_hash = hashes.get("rendered_content_hash") or ""
+    lkg_match = (
+        bool(lkg)
+        and lkg.get("indexable") is True
+        and _text(lkg.get("payload_content_hash")) == payload_hash
+        and _text(lkg.get("rendered_content_hash")) == render_hash
+    )
+    if freshness_class == "STALE_DATA" and state == "PUBLISHABLE_INDEX":
+        if lkg_match:
+            reasons = list(reasons) + ["lkg_preserved"]
+        else:
+            state = "PUBLISHABLE_NOINDEX"
+            reasons = list(reasons) + ["stale_blocks_new_index"]
+            conditions = dict(conditions)
+            conditions["freshness_current"] = False
+            conditions["canonical_robots_sitemap_schema"] = False
     indexable = state == "PUBLISHABLE_INDEX"
     recommendation = _recommendation(
         state, official_live=official, fixture=fixture, conditions=conditions
@@ -459,4 +529,8 @@ def evaluate(
         recommendation=recommendation,
         score=score.as_dict(),
         content_hash=_text(payload.get("content_hash")) or content_hash(payload),
+        claim_scope=claim_scope(payload),
+        payload_content_hash=payload_hash or "",
+        rendered_content_hash=render_hash,
+        freshness_class=freshness_class,
     )

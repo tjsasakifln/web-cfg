@@ -3,9 +3,11 @@
 Consumer: `tjsasakifln/web-cfg` #84, family `scripts/market_answers`.
 Date: 2026-08-16.
 
-This canary does **not** wait for extra-cli #400 / #415 / #302 live
-`official_live`. Those issues remain OPEN. Do not treat this preview as
-DATA_READY-for-index.
+The canary now consumes the extra-cli official_live **Santa Catarina**
+export (Goal 03 / extra-cli #400 named consumer). extra-cli #415
+(comparables) and #302 (country-wide denominator) remain OPEN. #302 is
+still required for any country-wide claim and must not block this UF=SC
+page.
 
 ## Goal 03 — Public Market Answer payload
 
@@ -42,12 +44,13 @@ profiles, no combinatorial URLs.
 Ask CONFENGE and living-intelligence diffs stay DEFER. This slice does not
 open a public ask box or watchlist.
 
-extra-cli #302 (national publishing-org denominator) is still the authority
-for any Brasil/nacional claim. The canary forbids national claim without
-`coverage.status=SUFFICIENT`. Fixture coverage is `INSUFFICIENT`.
+extra-cli #302 (publishing-org denominator) is still the authority
+for any country-wide claim. A strictly estadual SC claim uses coverage
+COMPLETE/SUFFICIENT on the same UF filter and does not wait on #302.
 
 ## Honest state of this branch
 
-- extra-cli #400/#415/#302 live official market-answer payload: **absent**
-- recommendation: **GO_NOINDEX** (experience testable, index blocked)
-- do not close web-cfg #84
+- extra-cli official_live SC payload: **present** (SELECT-only, quartiles not rewritten)
+- extra-cli #415 comparables / #302 country-wide denominator: **OPEN**
+- recommendation: **PUBLISHABLE_INDEX** only when the hashed SC approval matches
+- do not close web-cfg #84 (discovery/outcome residual)

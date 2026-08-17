@@ -10,14 +10,16 @@ from __future__ import annotations
 SCHEMA_ID = "public-read-market-answer/1.0"
 CONTRACT_VERSION = "v1.0.0"
 SCORE_VERSION = "MARKET_ANSWER_VALUE_SCORE/1.0"
-GATE_VERSION = "market-answer-publication-gate/1.0"
+GATE_VERSION = "market-answer-publication-gate/1.1"
 FAMILY_SLUG = "valor-tipico-contratos-pavimentacao"
 FAMILY_PATH = f"/inteligencia/{FAMILY_SLUG}/"
 ASSET_ID = FAMILY_SLUG
 ASSET_FAMILY = "market-answer"
 ROUTE_FAMILY = "market-answer"
 QUESTION_ID = "valor-tipico-contratos-pavimentacao"
-QUESTION_TEXT = "Qual é o valor típico dos contratos públicos de pavimentação?"
+QUESTION_TEXT = (
+    "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?"
+)
 TYPOLOGY_ID = "pavimentacao-infraestrutura-viaria"
 METHOD_ID = "ticket-integral-nominal-quartiles/1.0"
 GRAIN = "valor_integral_nominal"
@@ -80,6 +82,13 @@ INDEX_CONDITIONS = (
     "not_fixture",
     "grain_ticket_not_km",
     "no_national_claim_without_coverage",
+    "geography_scope_ok",
+    "copy_scope_coherent",
+    "coverage_scope_matches",
+    "n_positive",
+    "missingness_present",
+    "rendered_approval_bound",
+    "national_gate_302",
 )
 
 FORBIDDEN_GRAINS = frozenset(
@@ -120,6 +129,7 @@ PII_EVENT_KEYS = frozenset(
 DEFAULT_CANDIDATE = "data/editorial/market-answers/candidates/valor-tipico-contratos-pavimentacao.v1.json"
 DEFAULT_FIXTURE = "data/editorial/market-answers/fixtures/contract-fixture.v1.json"
 DEFAULT_APPROVALS = "data/editorial/market-answers/approvals.json"
+DEFAULT_LKG = "data/editorial/market-answers/lkg.json"
 DEFAULT_LIVE = "data/extra-cli/public-read-market-answer/1.0/export.json"
 PAGE_DIR = f"inteligencia/{FAMILY_SLUG}"
 STATUS_STEM = "MARKET_ANSWER_CANARY_STATUS"
