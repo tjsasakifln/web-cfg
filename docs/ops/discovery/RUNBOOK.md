@@ -39,6 +39,9 @@ no IndexNow submission.
      --period-end 2026-08-07
    ```
 
+   Re-importing the same file later in the day is a fact-key replay even
+   without `--as-of`. The report does not sum the same query×page×date twice.
+
    If no export is available, do **not** invent zeros. The report emits
    `GSC_DATA_NOT_PROVIDED`.
 

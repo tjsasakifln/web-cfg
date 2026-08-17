@@ -9,6 +9,7 @@ from typing import Any
 from scripts.discovery.observation import (
     ObservationError,
     compute_record_hash,
+    fact_identity,
     validate_observation,
 )
 from scripts.discovery.registry import repo_root
@@ -46,14 +47,26 @@ def existing_hashes(path: Path) -> set[str]:
     return hashes
 
 
+def existing_fact_identities(path: Path) -> set[str]:
+    keys: set[str] = set()
+    for row in load_observations(path):
+        identity = fact_identity(row)
+        if identity:
+            keys.add(identity)
+    return keys
+
+
 def append_observation(path: Path, record: dict[str, Any]) -> dict[str, Any]:
-    """Append one validated record. Replay of the same hash is a no-op."""
+    """Append one validated record. Replay of the same hash or fact key is a no-op."""
     validated = dict(record)
     if not validated.get("record_hash"):
         validated["record_hash"] = compute_record_hash(validated)
     validate_observation(validated)
     path.parent.mkdir(parents=True, exist_ok=True)
-    if validated["record_hash"] in existing_hashes(path):
+    identity = fact_identity(validated)
+    if validated["record_hash"] in existing_hashes(path) or (
+        identity is not None and identity in existing_fact_identities(path)
+    ):
         return {**validated, "appended": False, "replay": True, "store_path": str(path)}
     line = json.dumps(validated, ensure_ascii=False, sort_keys=True) + "\n"
     with path.open("a", encoding="utf-8") as handle:

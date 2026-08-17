@@ -30,7 +30,7 @@ from scripts.discovery.operations import operations_for_asset
 from scripts.discovery.referral_import import ReferralImportError, import_referral_file
 from scripts.discovery.registry import load_cohort
 from scripts.discovery.report import build_report, format_report
-from scripts.discovery.store import append_observation
+from scripts.discovery.store import append_observation, load_observations
 
 FIXTURES = ROOT / "tests" / "discovery" / "fixtures"
 ASSET_ID = "valor-tipico-contratos-pavimentacao"
@@ -108,6 +108,82 @@ def test_gsc_replay_dedup(tmp_path):
     assert len(lines) == 1
 
 
+def test_gsc_reimport_new_observed_at_does_not_double_count(tmp_path):
+    """Same file, later wall clock: fact replay. Report stays 40, not 80."""
+    asset = next(item for item in load_cohort(root=ROOT)["assets"] if item["id"] == ASSET_ID)
+    first = import_gsc_file(
+        FIXTURES / "gsc.json", asset_id=ASSET_ID, observed_at="2026-08-17T18:00:00Z"
+    )
+    second = import_gsc_file(
+        FIXTURES / "gsc.json", asset_id=ASSET_ID, observed_at="2026-08-17T19:00:00Z"
+    )
+    assert first[0]["metrics"]["impressions"] == 40
+    assert second[0]["metrics"]["impressions"] == 40
+    assert first[0]["record_hash"] != second[0]["record_hash"]
+    assert first[0]["dimensions"]["fact_key"] == second[0]["dimensions"]["fact_key"]
+    assert first[0]["dimensions"]["row_hash"] == second[0]["dimensions"]["row_hash"]
+
+    store = tmp_path / "obs.ndjson"
+    stored_first = append_observation(store, first[0])
+    stored_second = append_observation(store, second[0])
+    assert stored_first["appended"] is True
+    assert stored_second["replay"] is True
+    assert stored_second["appended"] is False
+    assert len(load_observations(store)) == 1
+
+    # Report must not sum even if both records are handed in (stale store).
+    ops = operations_for_asset(asset, first + second)
+    assert ops["impressions"]["value"] == 40
+    assert ops["clicks"]["value"] == 2
+    assert ops["discovery_status"] == "DISCOVERY_OBSERVED"
+
+    later = tmp_path / "later.ndjson"
+    first_cli = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.discovery",
+            "import-gsc",
+            "--file",
+            str(FIXTURES / "gsc.json"),
+            "--asset-id",
+            ASSET_ID,
+            "--as-of",
+            "2026-08-17T20:00:00Z",
+            "--snapshots",
+            str(later),
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    second_cli = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.discovery",
+            "import-gsc",
+            "--file",
+            str(FIXTURES / "gsc.json"),
+            "--asset-id",
+            ASSET_ID,
+            "--as-of",
+            "2026-08-17T21:00:00Z",
+            "--snapshots",
+            str(later),
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert json.loads(first_cli.stdout)["appended"] == 1
+    assert json.loads(second_cli.stdout)["replayed"] == 1
+    assert json.loads(second_cli.stdout)["appended"] == 0
+    assert len(load_observations(later)) == 1
+
+
 def test_referral_without_pii_and_lead_without_correlation():
     ok = import_referral_file(FIXTURES / "referral-ok.json", asset_id=ASSET_ID, observed_at=AS_OF)
     types = {row["observation_type"] for row in ok}
@@ -123,6 +199,31 @@ def test_referral_without_pii_and_lead_without_correlation():
     assert lead[0]["observation_type"] == "lead"
     assert lead[0]["metrics"]["attributed_to_search"] is False
     assert REASON_LEAD_UNATTRIBUTED in lead[0]["reason_codes"]
+
+
+def test_opaque_lead_id_is_not_search_attribution():
+    asset = next(item for item in load_cohort(root=ROOT)["assets"] if item["id"] == ASSET_ID)
+    only_id = import_referral_file(
+        FIXTURES / "lead-only-id.json", asset_id=ASSET_ID, observed_at=AS_OF
+    )
+    assert only_id[0]["observation_type"] == "lead"
+    assert only_id[0]["dimensions"]["lead_id"] == "lead_opaque_aa11"
+    assert only_id[0]["metrics"]["attributed_to_search"] is False
+    assert REASON_LEAD_UNATTRIBUTED in only_id[0]["reason_codes"]
+    ops = operations_for_asset(asset, only_id)
+    assert ops["leads"]["value"] == 1
+    assert ops["leads_attributed_to_search"]["value"] == 0
+    assert ops["lead_status"] == "UNKNOWN"
+
+    with_search = import_referral_file(
+        FIXTURES / "lead-with-gclid.json", asset_id=ASSET_ID, observed_at=AS_OF
+    )
+    assert with_search[0]["metrics"]["attributed_to_search"] is True
+    assert with_search[0]["dimensions"]["gclid"] == "Cj0TESTGCLID"
+    assert with_search[0]["dimensions"]["lead_id"] == "lead_opaque_bb22"
+    proven = operations_for_asset(asset, with_search)
+    assert proven["lead_status"] == "LEAD_PROVEN"
+    assert proven["leads_attributed_to_search"]["value"] == 1
 
 
 def test_referral_pii_is_refused_and_not_persisted(tmp_path):

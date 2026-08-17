@@ -27,6 +27,25 @@ from scripts.discovery.observation import (
 )
 
 MIN_IMPRESSIONS_FOR_STABLE_POSITION = 10
+SEARCH_EVIDENCE_DIMS = ("gclid", "gsc_query", "search_query", "query")
+
+
+def lead_attributed_to_search(row: dict[str, Any]) -> bool:
+    """LEAD_PROVEN requires a search fact. Opaque lead_id is identity only."""
+    if row.get("observation_type") != "lead":
+        return False
+    if REASON_LEAD_UNATTRIBUTED in (row.get("reason_codes") or []):
+        return False
+    dims = row.get("dimensions") if isinstance(row.get("dimensions"), dict) else {}
+    metrics = row.get("metrics") if isinstance(row.get("metrics"), dict) else {}
+    lead_id = dims.get("lead_id")
+    has_search = any(dims.get(key) not in (None, "") for key in SEARCH_EVIDENCE_DIMS)
+    corr = dims.get("correlation_id")
+    if corr not in (None, "") and corr != lead_id:
+        has_search = True
+    if not has_search:
+        return False
+    return metrics.get("attributed_to_search") is True
 
 
 def _asset_obs(observations: list[dict[str, Any]], asset_id: str) -> list[dict[str, Any]]:
@@ -47,6 +66,41 @@ def _compatible_groups(rows: list[dict[str, Any]]) -> dict[tuple[Any, Any, str],
     for row in rows:
         groups.setdefault(_window_key(row), []).append(row)
     return groups
+
+
+def _gsc_fact_key(row: dict[str, Any]) -> tuple[Any, ...]:
+    dims = row.get("dimensions") or {}
+    if dims.get("fact_key"):
+        return ("fact", dims["fact_key"])
+    if dims.get("row_hash"):
+        return ("row", dims["row_hash"])
+    if dims.get("dedupe_key"):
+        return ("dedupe", dims["dedupe_key"])
+    return (
+        "dims",
+        dims.get("date"),
+        dims.get("query"),
+        dims.get("page"),
+        dims.get("country"),
+        dims.get("device"),
+        row.get("period_start"),
+        row.get("period_end"),
+        json_stable(dims.get("filters") or {}),
+    )
+
+
+def unique_gsc_facts(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep one row per GSC fact. Later re-imports of the same window do not add."""
+    ordered = sorted(rows, key=lambda row: str(row.get("observed_at") or ""))
+    seen: set[tuple[Any, ...]] = set()
+    unique: list[dict[str, Any]] = []
+    for row in ordered:
+        key = _gsc_fact_key(row)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(row)
+    return unique
 
 
 def _metric(status: str, value: Any, *, warning: str | None = None) -> dict[str, Any]:
@@ -103,7 +157,9 @@ def summarize_gsc(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "coverage": "export_empty",
         }
 
-    groups = _compatible_groups([row for row in rows if row.get("status") != "NO_ROWS"])
+    groups = _compatible_groups(
+        unique_gsc_facts([row for row in rows if row.get("status") != "NO_ROWS"])
+    )
     reasons: list[str] = []
     if len(groups) > 1:
         reasons.append(REASON_INCOMPATIBLE_WINDOWS)
@@ -125,6 +181,7 @@ def summarize_gsc(rows: list[dict[str, Any]]) -> dict[str, Any]:
         }
 
     (start, end, filters_json), items = next(iter(groups.items()))
+    items = unique_gsc_facts(items)
     if any(REASON_PERIOD_FILTER_ABSENT in (row.get("reason_codes") or []) for row in items):
         reasons.append(REASON_PERIOD_FILTER_ABSENT)
 
@@ -207,12 +264,7 @@ def summarize_outcomes(rows: list[dict[str, Any]]) -> dict[str, Any]:
     ctas = [row for row in rows if row.get("observation_type") == "cta"]
     leads = [row for row in rows if row.get("observation_type") == "lead"]
     commercial = [row for row in rows if row.get("observation_type") == "commercial_outcome"]
-    attributed = [
-        row
-        for row in leads
-        if row.get("metrics", {}).get("attributed_to_search") is True
-        and REASON_LEAD_UNATTRIBUTED not in (row.get("reason_codes") or [])
-    ]
+    attributed = [row for row in leads if lead_attributed_to_search(row)]
     unattributed = [row for row in leads if row not in attributed]
     revenue_values = [row.get("metrics", {}).get("revenue") for row in commercial]
     revenue_present = [value for value in revenue_values if value is not None]
@@ -364,6 +416,7 @@ def operations_for_asset(
         "sessions_referrals": outcomes["sessions_referrals"],
         "cta": outcomes["cta"],
         "leads": outcomes["leads"],
+        "leads_attributed_to_search": outcomes["leads_attributed_to_search"],
         "outcomes": outcomes["outcomes"],
         "revenue": outcomes["revenue"],
         "data_coverage": {

@@ -408,6 +408,7 @@ def rows_to_observations(
                     "export_source": row.get("export_source"),
                     "row_hash": row.get("row_hash"),
                     "dedupe_key": key,
+                    "fact_key": row.get("row_hash") or key,
                 },
                 metrics={
                     "impressions": impressions,
@@ -432,6 +433,19 @@ def empty_export_observation(
 ) -> dict[str, Any]:
     if not period_start or not period_end:
         raise GscImportError(REASON_AMBIGUOUS_FILE)
+    empty_key = sha256_text(
+        json.dumps(
+            {
+                "kind": "empty_gsc",
+                "source_file_hash": source_file_hash,
+                "period_start": period_start,
+                "period_end": period_end,
+                "filters": filters or {},
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return build_observation(
         asset_id=asset_id,
         observation_type="gsc",
@@ -446,6 +460,8 @@ def empty_export_observation(
             "filters": filters or {},
             "export_source": source_name,
             "row_count": 0,
+            "fact_key": empty_key,
+            "row_hash": empty_key,
         },
         metrics={
             "impressions": None,

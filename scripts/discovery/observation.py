@@ -83,6 +83,22 @@ def compute_record_hash(record: dict[str, Any]) -> str:
     return sha256_text(canonical_json(body))
 
 
+def fact_identity(record: dict[str, Any]) -> str | None:
+    """Wall-clock-independent identity for import replay.
+
+    ``record_hash`` includes ``observed_at``. Re-importing the same GSC/referral
+    row later in the day must not create a second countable fact.
+    Technical probes have no fact key and still append once per timestamp.
+    """
+    dims = record.get("dimensions") if isinstance(record.get("dimensions"), dict) else {}
+    key = dims.get("fact_key") or dims.get("row_hash") or dims.get("dedupe_key")
+    if not isinstance(key, str) or not key.strip():
+        return None
+    asset = record.get("asset_id") or ""
+    kind = record.get("observation_type") or ""
+    return f"{kind}|{asset}|{key}"
+
+
 def validate_observation(record: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(record, dict):
         raise ObservationError("observation_must_be_object")

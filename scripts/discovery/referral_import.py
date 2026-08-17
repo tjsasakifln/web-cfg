@@ -66,9 +66,9 @@ SEARCH_EVIDENCE_FIELDS = frozenset(
         "gsc_query",
         "search_query",
         "query",
-        "correlation_id",
     }
 )
+SEARCH_EQUIVALENT_FIELDS = frozenset({"correlation_id"})
 EMAIL_RE = re.compile(r"[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}", re.I)
 CNPJ_RE = re.compile(r"\b\d{2}\.?\d{3}\.?\d{3}/?0001-?\d{2}\b|\b\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}\b")
 PHONE_RE = re.compile(r"(?:\+?55[\s-]?)?(?:\(?\d{2}\)?[\s-]?)9?\d{4}[\s-]?\d{4}")
@@ -80,7 +80,10 @@ TIMESTAMP_ALIASES = ("timestamp", "time", "datetime", "event_time", "occurred_at
 EVENT_ALIASES = ("event", "event_name", "name", "tipo", "type")
 CTA_ALIASES = ("cta", "cta_event", "cta_id")
 LEAD_ALIASES = ("lead", "lead_event", "is_lead")
-CORR_ALIASES = ("correlation_id", "lead_id")
+CORR_ALIASES = ("correlation_id",)
+LEAD_ID_ALIASES = ("lead_id",)
+GCLID_ALIASES = ("gclid",)
+SEARCH_QUERY_ALIASES = ("gsc_query", "search_query", "query")
 OFFER_ALIASES = ("offer_id", "offer")
 REVENUE_ALIASES = ("revenue", "amount", "value", "payment")
 
@@ -182,14 +185,18 @@ def _truthy(value: Any) -> bool:
 
 
 def has_search_correlation(row: dict[str, Any]) -> bool:
+    """Search attribution requires a search fact, not an opaque identity."""
+    lead_id = _lookup(row, LEAD_ID_ALIASES)
     for key, value in row.items():
-        if _norm_key(str(key)) in SEARCH_EVIDENCE_FIELDS and value not in (None, ""):
+        norm = _norm_key(str(key))
+        if value in (None, ""):
+            continue
+        if norm == "lead_id":
+            continue
+        if norm in SEARCH_EVIDENCE_FIELDS:
             return True
-    medium = str(_lookup(row, MEDIUM_ALIASES) or "").lower()
-    source = str(_lookup(row, SOURCE_ALIASES) or "").lower()
-    if medium == "organic" and source in {"google", "bing", "yahoo"}:
-        # Source/medium alone is not query-level correlation.
-        return False
+        if norm in SEARCH_EQUIVALENT_FIELDS and str(value) != str(lead_id or ""):
+            return True
     return False
 
 
@@ -205,6 +212,9 @@ def normalize_row(row: dict[str, Any], *, source_file_hash: str, source_name: st
     timestamp = _lookup(row, TIMESTAMP_ALIASES)
     cta = _lookup(row, CTA_ALIASES)
     correlation = _lookup(row, CORR_ALIASES)
+    lead_id = _lookup(row, LEAD_ID_ALIASES)
+    gclid = _lookup(row, GCLID_ALIASES)
+    search_query = _lookup(row, SEARCH_QUERY_ALIASES)
     offer_id = _lookup(row, OFFER_ALIASES)
     revenue = None
     if event_type == "commercial_outcome":
@@ -214,7 +224,7 @@ def normalize_row(row: dict[str, Any], *, source_file_hash: str, source_name: st
                 revenue = float(str(raw_rev).replace(",", "."))
             except ValueError as exc:
                 raise ReferralImportError(f"unparseable_revenue:{raw_rev}") from exc
-    attributed = bool(correlation) or has_search_correlation(row)
+    attributed = has_search_correlation(row)
     return {
         "event_type": event_type,
         "landing_page": None if landing in (None, "") else str(landing),
@@ -224,9 +234,12 @@ def normalize_row(row: dict[str, Any], *, source_file_hash: str, source_name: st
         "timestamp": None if timestamp in (None, "") else str(timestamp),
         "cta": None if cta in (None, "", False) else str(cta),
         "correlation_id": None if correlation in (None, "") else str(correlation),
+        "lead_id": None if lead_id in (None, "") else str(lead_id),
+        "gclid": None if gclid in (None, "") else str(gclid),
+        "gsc_query": None if search_query in (None, "") else str(search_query),
         "offer_id": None if offer_id in (None, "") else str(offer_id),
         "revenue": revenue,
-        "attributed_to_search": attributed if event_type != "lead" else bool(correlation) or has_search_correlation(row),
+        "attributed_to_search": attributed,
         "source_file_hash": source_file_hash,
         "export_source": source_name,
         "row_hash": sha256_text(json.dumps(row, ensure_ascii=False, sort_keys=True, default=str)),
@@ -265,9 +278,13 @@ def row_to_observation(
             "medium": row.get("medium"),
             "cta": row.get("cta"),
             "correlation_id": row.get("correlation_id"),
+            "lead_id": row.get("lead_id"),
+            "gclid": row.get("gclid"),
+            "gsc_query": row.get("gsc_query"),
             "offer_id": row.get("offer_id"),
             "export_source": row.get("export_source"),
             "row_hash": row.get("row_hash"),
+            "fact_key": row.get("row_hash"),
         },
         metrics=metrics,
     )
