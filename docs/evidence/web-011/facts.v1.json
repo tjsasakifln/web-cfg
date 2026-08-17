@@ -1,6 +1,6 @@
 {
   "campaign": "WEB-011",
-  "origin_main_sha": "3ae70c6b0e5b878ccbfc646cffc421a8722ebb98",
+  "origin_main_sha": "868a73b9fcbcbbe3fbad5aa29ef6d20c9cf2d79c",
   "matches_observed_base": true,
   "already_shipped": ["#76", "#79", "#80", "#81", "#82"],
   "consented_real_contact": false,
@@ -29,9 +29,11 @@
   "offer_note": "Shipped CTA is 'Quero uma segunda leitura deste contrato'. No real uptake.",
   "friction_note": "Named blockers are inbound env, auto-send evidence and a consented contact. Not a proven product-copy friction.",
   "observation_refs": {
-    "production_commit": "3ae70c6b0e5b878ccbfc646cffc421a8722ebb98",
+    "production_commit": "868a73b9fcbcbbe3fbad5aa29ef6d20c9cf2d79c",
+    "production_build_info": "https://confenge.com.br/.well-known/build-info.json",
     "inbound_unsigned_post": "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound → HTTP 401 invalid inbound signature",
     "api_warmbly_com": "NXDOMAIN",
-    "docs_next_command": "docs/ops/WARMBLY-INBOUND.md"
+    "docs_next_command": "docs/ops/WARMBLY-INBOUND.md",
+    "stale_observation_removed": "3ae70c6b was the original write-time SHA; not current production"
   }
 }
