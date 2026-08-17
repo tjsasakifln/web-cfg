@@ -29,10 +29,16 @@
   },
   "issues": {
     "84": "OPEN",
+    "84_github_state": "open",
+    "84_state_reason": "reopened",
+    "84_residual": "DISCOVERY_PENDING",
+    "84_note": "#113 auto-closed this issue; reopened 2026-08-17 because discovery/outcome remain residual.",
     "88": "OPEN",
     "60": "OPEN",
     "64": "OPEN"
   },
+  "discovery": "DISCOVERY_PENDING",
+  "real_lead_outcome": "UNKNOWN",
   "merge": "MERGED",
   "ci": "CI_PROVEN",
   "deploy": "DEPLOYED",
