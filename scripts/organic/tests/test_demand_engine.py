@@ -261,11 +261,162 @@ def test_cli_module_is_the_shipped_entry(tmp_path: Path):
 
 
 def test_pull_api_fail_closed_without_credentials():
-    from scripts.organic.demand_engine import pull_api_fail_closed
+    from scripts.organic.demand_engine import pull_api_fail_closed, run_pull_api
 
     result = pull_api_fail_closed()
     assert result.get("ok") is False
     assert result.get("blocked") is True
     assert result.get("error") == "missing_credentials"
+    assert result.get("currentness") == "BLOCKED"
+    assert result.get("stale") is True
+    assert result.get("residual") == "BLOCKED_GSC_READONLY_CREDENTIAL"
     assert "required_env" in result
     assert any("GSC_CREDENTIALS_JSON" in str(item) for item in (result.get("required_env") or []))
+    assert "0.15" not in json.dumps(result)
+
+    shipped = run_pull_api()
+    assert shipped.get("ok") is False
+    assert shipped.get("blocked") is True
+    assert shipped.get("residual") == "BLOCKED_GSC_READONLY_CREDENTIAL"
+    assert shipped.get("currentness") == "BLOCKED"
+    assert "snapshot" not in shipped or shipped.get("snapshot") is None
+
+
+def test_cli_pull_api_fail_closed_same_way_twice(capsys):
+    from scripts.organic.demand_engine import main as demand_main
+    from scripts.organic.__main__ import main as organic_main
+
+    first = demand_main(["--pull-api"])
+    out1 = capsys.readouterr().out
+    second = demand_main(["--pull-api"])
+    out2 = capsys.readouterr().out
+    third = organic_main(["demand-engine", "--pull-api"])
+    out3 = capsys.readouterr().out
+
+    assert first == second == third == 2
+    payloads = [json.loads(out1), json.loads(out2), json.loads(out3)]
+    for payload in payloads:
+        assert payload["ok"] is False
+        assert payload["blocked"] is True
+        assert payload["residual"] == "BLOCKED_GSC_READONLY_CREDENTIAL"
+        assert payload["currentness"] == "BLOCKED"
+        blob = json.dumps(payload)
+        assert "BEGIN PRIVATE" not in blob
+        assert "private_key" not in blob
+        assert "client_secret" not in blob
+
+
+def test_consume_live_pull_versions_hashed_five_tuple(tmp_path: Path):
+    """Drive the shipped consume path on the PR 5-tuple fixture — no reimplementation."""
+    from scripts.organic.demand_engine import consume_live_pull, content_hash
+
+    rows = _join_rows()
+    daily = tmp_path / "daily.json"
+    daily.write_text(
+        json.dumps(
+            {
+                "as_of": "2026-08-16",
+                "source": "search_analytics_api",
+                "site": "sc-domain:confenge.com.br",
+                "queries": rows,
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    result = consume_live_pull(
+        {
+            "ok": True,
+            "as_of": "2026-08-16",
+            "end": "2026-08-16",
+            "source": "search_analytics_api",
+            "site": "sc-domain:confenge.com.br",
+            "path": str(daily),
+            "rows": len(rows),
+        },
+        dest_root=tmp_path / "snapshots",
+    )
+    assert result["ok"] is True
+    assert result["blocked"] is False
+    assert result["currentness"] == "LIVE"
+    assert result["empty"] is False
+    snap = result["snapshot"]
+    assert snap["id"] == "gsc-2026-08-16"
+    assert snap["sha256"]
+    assert snap["row_count"] == 5
+    dest = tmp_path / "snapshots" / "gsc-2026-08-16"
+    written = json.loads((dest / "query-page.json").read_text(encoding="utf-8"))
+    assert content_hash(written) == snap["sha256"]
+    assert (dest / "query-page.sha256").read_text(encoding="utf-8").strip() == snap["sha256"]
+    assert all("query" in row and "page" in row and "device" in row and "country" in row and "date" in row for row in written)
+    engine = result["engine"]
+    assert engine["counts"]["authorized_pages"] == 0
+    assert engine["authorized_pages"] == []
+    detectors = result["registry"]["detectors"]
+    assert detectors[REASON_STRIKING_DISTANCE]
+    assert detectors[REASON_CANNIBALIZATION]
+    assert detectors[REASON_WRONG_LANDING]
+    joined_ids = {r["id"] for r in result["registry"]["records"] if r["join_status"] == "present"}
+    for rec_id in detectors[REASON_CANNIBALIZATION]:
+        assert rec_id in joined_ids
+    for rec_id in detectors[REASON_WRONG_LANDING]:
+        assert rec_id in joined_ids
+    unjoined = [r for r in result["registry"]["records"] if r["join_status"] != "present"]
+    assert unjoined
+    assert all(REASON_CANNIBALIZATION not in r["reason_codes"] for r in unjoined)
+    assert all(REASON_WRONG_LANDING not in r["reason_codes"] for r in unjoined)
+    assert all(r["authorizes_page"] is False for r in result["registry"]["records"])
+
+
+def test_consume_live_pull_empty_gsc_is_not_default_score(tmp_path: Path):
+    from scripts.organic.demand_engine import consume_live_pull
+
+    daily = tmp_path / "empty.json"
+    daily.write_text(json.dumps({"queries": [], "as_of": "2026-08-16"}, ensure_ascii=False), encoding="utf-8")
+    result = consume_live_pull(
+        {"ok": True, "as_of": "2026-08-16", "path": str(daily), "rows": 0, "source": "search_analytics_api"},
+        dest_root=tmp_path / "snapshots",
+    )
+    assert result["ok"] is True
+    assert result["empty"] is True
+    assert result["engine"]["counts"]["authorized_pages"] == 0
+    assert result["engine"]["counts"]["records"] == 0
+    assert result["engine"]["counts"]["candidates"] == 0
+    assert result["registry"]["records"] == []
+    assert result["registry"]["ranking"] == []
+    scores = [r.get("score") for r in result["registry"]["records"]]
+    assert 0.15 not in scores
+    assert 0 not in scores
+    assert result["snapshot"]["row_count"] == 0
+
+
+def test_cli_keyword_combination_proposal_is_reject(tmp_path: Path):
+    from scripts.organic.demand_engine import main as demand_main
+
+    proposals = tmp_path / "proposals.json"
+    proposals.write_text(
+        json.dumps(
+            [
+                {
+                    "query": "uf × municipio × objeto × metrica pavimentacao preco km",
+                    "keyword_combination": True,
+                    "page_count_objective": True,
+                    "authorize_page": True,
+                    "impressions": 9999,
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    out = tmp_path / "registry.json"
+    rc = demand_main(
+        ["--gsc-dir", str(GSC_JUL), "--proposals", str(proposals), "--out", str(out), "--compare-strip-clock"]
+    )
+    assert rc == 0
+    doc = json.loads(out.read_text(encoding="utf-8"))
+    assert doc["counts"]["authorized_pages"] == 0
+    combo = [r for r in doc["records"] if r.get("query") and " × " in r["query"]]
+    assert combo
+    assert all(r["decision"] == "REJECT" for r in combo)
+    assert all(r["authorizes_page"] is False for r in combo)
+    assert all(REASON_KEYWORD_COMBO in r["reason_codes"] for r in combo)

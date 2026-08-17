@@ -37,6 +37,9 @@ from scripts.organic.service_map import map_content_to_service
 SCHEMA = "demand-engine/1.0"
 UNKNOWN = "UNKNOWN"
 DEFAULT_CONFIG = ROOT / "data" / "organic" / "demand-engine-config.json"
+LIVE_SNAPSHOT_ROOT = ROOT / "data" / "revops" / "gsc" / "snapshots"
+REGISTRY_DEFAULT = ROOT / "data" / "organic" / "demand-engine-registry.json"
+READONLY_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly"
 WALL_CLOCK_FIELDS = frozenset(
     {"generated_at", "imported_at", "recorded_at", "last_sync_at", "written_at"}
 )
@@ -705,16 +708,286 @@ def pull_api_fail_closed() -> dict[str, Any]:
     result = pull_api(7)
     if result.get("ok"):
         return result
+    error = result.get("error") or "blocked"
+    residual = (
+        "BLOCKED_GSC_READONLY_CREDENTIAL"
+        if error in {"missing_credentials", "oauth_flow_not_automated_here"}
+        else f"BLOCKED_GSC_{error.upper()}"
+    )
     return {
         "ok": False,
         "blocked": True,
-        "error": result.get("error") or "blocked",
+        "error": error,
+        "currentness": "BLOCKED",
+        "stale": True,
+        "residual": residual,
         "required_env": result.get("required_env"),
         "fallback": result.get("fallback")
         or "python3 -m scripts.organic demand-engine --gsc-dir seo/gsc-2026-07-30",
-        "note": "Live Search Analytics credentials are missing. CSV snapshots are historical only.",
+        "note": "Live Search Analytics credentials are missing. CSV snapshots are historical only. Absence is not zero.",
         "payload": result,
     }
+
+
+def content_hash(payload: Any) -> str:
+    """Stable SHA-256 of canonical JSON. Never uses builtin hash()."""
+    blob = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def _dict_rows(value: Any) -> list[dict[str, Any]] | None:
+    if not isinstance(value, list):
+        return None
+    if value and not isinstance(value[0], dict):
+        return None
+    return [row for row in value if isinstance(row, dict)]
+
+
+def _rows_from_pull_result(api_result: dict[str, Any]) -> tuple[list[dict[str, Any]], str]:
+    """Load 5-tuple rows from an observatory pull. Does not invent a series.
+
+    Returns (rows, origin). origin is path|payload|unreadable|absent.
+    An empty readable list is a real empty pull, not a missing series.
+    """
+    path = api_result.get("path") or api_result.get("snapshot_path")
+    if path:
+        p = Path(path)
+        if not p.is_absolute():
+            p = ROOT / p
+        if not p.is_file():
+            return [], "unreadable"
+        payload = json.loads(p.read_text(encoding="utf-8"))
+        if isinstance(payload, list):
+            rows = _dict_rows(payload)
+            return (rows or [], "path")
+        if isinstance(payload, dict):
+            for key in ("queries", "rows", "query_page"):
+                rows = _dict_rows(payload.get(key))
+                if rows is not None:
+                    return rows, "path"
+            return [], "path"
+        return [], "unreadable"
+    for key in ("queries", "query_page"):
+        rows = _dict_rows(api_result.get(key))
+        if rows is not None:
+            return rows, "payload"
+    rows = _dict_rows(api_result.get("rows"))
+    if rows is not None:
+        return rows, "payload"
+    return [], "absent"
+
+
+def version_query_page_snapshot(
+    rows: list[dict[str, Any]],
+    *,
+    as_of: str,
+    source: str = "search_analytics_api",
+    site: str | None = None,
+    dest_root: Path | None = None,
+) -> dict[str, Any]:
+    """Persist a dated hashed 5-tuple snapshot. Does not invent a join."""
+    snapshot_id = f"gsc-{as_of}"
+    dest = (dest_root or LIVE_SNAPSHOT_ROOT) / snapshot_id
+    dest.mkdir(parents=True, exist_ok=True)
+    normalized = rows_from_api(rows, snapshot_id=snapshot_id)
+    digest = content_hash(normalized)
+    rows_path = dest / "query-page.json"
+    meta_path = dest / "meta.json"
+    hash_path = dest / "query-page.sha256"
+    rows_path.write_text(
+        json.dumps(normalized, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    hash_path.write_text(digest + "\n", encoding="utf-8")
+    join_flags = {row.get("join_status") for row in normalized}
+    if not normalized:
+        join_status = "join_unavailable"
+    elif join_flags == {"present"}:
+        join_status = "present"
+    elif "present" in join_flags:
+        join_status = "mixed"
+    else:
+        join_status = "join_unavailable"
+    meta = {
+        "schema": "gsc-live-snapshot/1.0",
+        "snapshot_id": snapshot_id,
+        "export_date": as_of,
+        "as_of": as_of,
+        "source": source,
+        "site": site,
+        "row_count": len(normalized),
+        "join_status": join_status,
+        "sha256": digest,
+        "dimensions": ["query", "page", "device", "country", "date"],
+        "totals_reconciled": False,
+        "privacy_note": PRIVACY_NOTE,
+        "note": "Empty GSC is not scored as 0 / 0.15. Missing join stays join_unavailable.",
+    }
+    meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    try:
+        rel = str(dest.relative_to(ROOT))
+    except ValueError:
+        rel = str(dest)
+    return {
+        "ok": True,
+        "snapshot_id": snapshot_id,
+        "dir": rel,
+        "rows_path": str(rows_path),
+        "meta_path": str(meta_path),
+        "sha256": digest,
+        "join_status": join_status,
+        "row_count": len(normalized),
+        "rows": normalized,
+        "meta": meta,
+    }
+
+
+def consume_live_pull(
+    api_result: dict[str, Any],
+    *,
+    dest_root: Path | None = None,
+    registry_path: Path | None = None,
+    config: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Version a live 5-tuple snapshot and run the same engine path.
+
+    Fail closed when the pull is blocked. Empty GSC is not a default score.
+    """
+    if not api_result.get("ok"):
+        blocked = dict(api_result)
+        blocked["ok"] = False
+        blocked["blocked"] = True
+        blocked.setdefault("currentness", "BLOCKED")
+        blocked.setdefault("stale", True)
+        blocked.setdefault("residual", "BLOCKED_GSC_READONLY_CREDENTIAL")
+        return blocked
+
+    rows, origin = _rows_from_pull_result(api_result)
+    as_of = str(api_result.get("as_of") or api_result.get("end") or "live")
+    site = api_result.get("site")
+    source = str(api_result.get("source") or "search_analytics_api")
+    if origin == "unreadable":
+        return {
+            "ok": False,
+            "blocked": True,
+            "error": "live_rows_unreadable",
+            "currentness": "BLOCKED",
+            "stale": True,
+            "residual": "BLOCKED_GSC_READONLY_CREDENTIAL",
+            "path": api_result.get("path"),
+            "note": "Successful pull declared a path but no 5-tuple rows were readable. Absence is not zero.",
+        }
+    if origin == "absent":
+        return {
+            "ok": False,
+            "blocked": True,
+            "error": "live_rows_absent",
+            "currentness": "BLOCKED",
+            "stale": True,
+            "residual": "BLOCKED_GSC_READONLY_CREDENTIAL",
+            "note": "Successful pull returned no 5-tuple series. Absence is not zero.",
+        }
+
+    versioned = version_query_page_snapshot(
+        rows,
+        as_of=as_of,
+        source=source,
+        site=site,
+        dest_root=dest_root,
+    )
+    doc = run_demand_engine(
+        rows=versioned["rows"],
+        config=config,
+        snapshot_id=versioned["snapshot_id"],
+    )
+    if any(rec.get("authorizes_page") for rec in doc["records"]):
+        raise RuntimeError("demand engine must never authorize a page")
+
+    out = registry_path or (dest_root or LIVE_SNAPSHOT_ROOT) / versioned["snapshot_id"] / "registry.json"
+    out = Path(out)
+    write_document(doc, out)
+    slim = slim_registry(doc)
+    return {
+        "ok": True,
+        "blocked": False,
+        "currentness": "LIVE",
+        "stale": False,
+        "residual": None,
+        "empty": versioned["row_count"] == 0,
+        "snapshot": {
+            "id": versioned["snapshot_id"],
+            "dir": versioned["dir"],
+            "sha256": versioned["sha256"],
+            "join_status": versioned["join_status"],
+            "row_count": versioned["row_count"],
+        },
+        "engine": {
+            "schema": doc["schema"],
+            "snapshot_id": doc["snapshot_id"],
+            "join_status": doc["join_status"],
+            "counts": doc["counts"],
+            "authorized_pages": doc["authorized_pages"],
+            "registry": str(out),
+        },
+        "registry": slim,
+        "note": (
+            "Empty GSC is not scored as 0 / 0.15. "
+            "Candidates do not authorize INDEX. "
+            "Missing join stays join_unavailable."
+        ),
+    }
+
+
+def slim_registry(doc: dict[str, Any]) -> dict[str, Any]:
+    """Small reviewable registry: hashes, reasons, no dumps or secrets."""
+    records = []
+    for rec in doc.get("records") or []:
+        demand = rec.get("demand")
+        demand_status = demand if demand == UNKNOWN else (demand or {}).get("status") if isinstance(demand, dict) else UNKNOWN
+        records.append(
+            {
+                "id": rec.get("id"),
+                "decision": rec.get("decision"),
+                "authorizes_page": False,
+                "reason_codes": list(rec.get("reason_codes") or []),
+                "query": rec.get("query"),
+                "page": rec.get("page"),
+                "join_status": rec.get("join_status"),
+                "question_class": rec.get("question_class"),
+                "intent": rec.get("intent"),
+                "demand_status": demand_status,
+                "score": (rec.get("ranking") or {}).get("score"),
+                "rank": (rec.get("ranking") or {}).get("rank"),
+            }
+        )
+    return {
+        "schema": "demand-engine-registry/1.0",
+        "snapshot_id": doc.get("snapshot_id"),
+        "join_status": doc.get("join_status"),
+        "counts": doc.get("counts"),
+        "authorized_pages": [],
+        "ranking": doc.get("ranking"),
+        "records": records,
+        "detectors": {
+            key: list(ids)
+            for key, ids in (doc.get("detectors") or {}).items()
+        },
+        "note": doc.get("note"),
+    }
+
+
+def run_pull_api(
+    *,
+    dest_root: Path | None = None,
+    registry_path: Path | None = None,
+    config: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Shipped --pull-api path: fail closed, or version + classify a live pull."""
+    return consume_live_pull(
+        pull_api_fail_closed(),
+        dest_root=dest_root,
+        registry_path=registry_path,
+        config=config,
+    )
 
 
 def write_document(doc: dict[str, Any], out: Path, *, generated_at: str | None = None) -> Path:
@@ -750,9 +1023,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.pull_api:
-        blocked = pull_api_fail_closed()
-        print(json.dumps(blocked, ensure_ascii=False, indent=2))
-        return 0 if blocked.get("ok") else 2
+        pulled = run_pull_api()
+        print(json.dumps(pulled, ensure_ascii=False, indent=2))
+        return 0 if pulled.get("ok") else 2
 
     rows = None
     if args.rows:

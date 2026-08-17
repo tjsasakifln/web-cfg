@@ -46,6 +46,7 @@ data/discovery/receipts/*.json
 data/revops/gsc/last_sync.json
 data/revops/gsc/latest_import.json
 data/revops/gsc/daily/
+data/revops/gsc/snapshots/*/query-page.json
 
 # Reversa
 .reversa/config.user.toml
