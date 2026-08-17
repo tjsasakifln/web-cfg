@@ -1,7 +1,7 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-08-16T15:01:44Z",
+  "generated_at": "2026-08-17T22:02:36Z",
   "evaluated": 8,
   "evaluated_cap": 10,
   "source_kind": "test_only_fixture",
@@ -12,7 +12,7 @@
   "schema": "public-read-contract-analysis/1.0",
   "export_kind": "extra_cli_public_read",
   "live_absent": true,
-  "live_absent_reason": "official_live extra-cli public-read-contract-analysis/1.0 export not found (checked data/extra-cli/public-read-contract-analysis/1.0, data/extra-cli/public-read-contract-analysis; sibling extra-cli currently ships fixture catalogs only)",
+  "live_absent_reason": "official_live extra-cli public-read-contract-analysis/1.0 export not found (checked ../extra-cli/exports/authority-handoff/contract-analysis/1.0, data/extra-cli/public-read-contract-analysis/authority-canary, data/extra-cli/public-read-contract-analysis/1.0, data/extra-cli/public-read-contract-analysis; sibling extra-cli currently ships fixture catalogs only)",
   "index_count": 0,
   "state_counts": {
     "REJECT": 0,
@@ -49,7 +49,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     },
     {
       "id": "cand-reajuste-01",
@@ -77,7 +80,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     },
     {
       "id": "cand-aditivo-01",
@@ -105,7 +111,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     },
     {
       "id": "cand-prazo-01",
@@ -133,7 +142,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     },
     {
       "id": "cand-comparavel-01",
@@ -161,7 +173,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     },
     {
       "id": "cand-exceptional-01",
@@ -190,7 +205,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     },
     {
       "id": "cand-preco-02",
@@ -218,7 +236,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     },
     {
       "id": "cand-prazo-02",
@@ -246,7 +267,10 @@
       "source_kind": "test_only_fixture",
       "fixture": true,
       "indexable": false,
-      "robots": "noindex,nofollow"
+      "robots": "noindex,nofollow",
+      "review_recommendation": "HOLD_FOR_DATA",
+      "human_review_status": "",
+      "quality_score": 40
     }
   ],
   "comparable": [
@@ -301,6 +325,195 @@
     "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html"
   ],
   "recommendation": "ADJUST",
-  "recommendation_reason": "Família e gate prontos; extra-cli #400 consumido na forma public-read-contract-analysis/1.0. Não há official_live sobrevivente. index_count=0. Não expandir até existir pack official_live + overlay editorial que passe o gate adversário.",
+  "recommendation_reason": "Família e gate prontos; extra-cli #400 consumido na forma public-read-contract-analysis/1.0. FACTUAL_HANDOFF_PENDING: não há handoff official_live HANDOFF_READY com dossiê DATA_READY. index_count=0. Nenhum INDEX ativo. Não expandir. Ajustar o produtor e só então escrever análises. Matar a família se o handoff factual nunca autorizar tese defensável.",
+  "expand_adjust_kill": "ADJUST",
+  "nenhum_index_ativo": true,
+  "factual_handoff_pending": true,
+  "handoff": {
+    "status": "FACTUAL_HANDOFF_PENDING",
+    "path": null,
+    "checked": [
+      {
+        "path": "/home/tjsasakifln/code/confenge/extra-cli/exports/authority-handoff/contract-analysis/1.0",
+        "exists": false,
+        "layout": null,
+        "schema_ok": false,
+        "handoff_ready": false,
+        "no_index_authorization": false,
+        "official_live": false,
+        "producer_commit": null,
+        "hashes_ok": false,
+        "source_claim_matrix": false,
+        "replay": false,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 0,
+        "evaluated_cap": 0,
+        "reasons": [
+          "path_absent"
+        ]
+      },
+      {
+        "path": "/home/tjsasakifln/code/confenge/web-cfg-contract-analysis-masterpiece/data/extra-cli/public-read-contract-analysis/authority-canary",
+        "exists": false,
+        "layout": null,
+        "schema_ok": false,
+        "handoff_ready": false,
+        "no_index_authorization": false,
+        "official_live": false,
+        "producer_commit": null,
+        "hashes_ok": false,
+        "source_claim_matrix": false,
+        "replay": false,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 0,
+        "evaluated_cap": 0,
+        "reasons": [
+          "path_absent"
+        ]
+      },
+      {
+        "path": "/home/tjsasakifln/code/confenge/web-cfg-contract-analysis-masterpiece/data/extra-cli/public-read-contract-analysis/1.0",
+        "exists": false,
+        "layout": null,
+        "schema_ok": false,
+        "handoff_ready": false,
+        "no_index_authorization": false,
+        "official_live": false,
+        "producer_commit": null,
+        "hashes_ok": false,
+        "source_claim_matrix": false,
+        "replay": false,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 0,
+        "evaluated_cap": 0,
+        "reasons": [
+          "path_absent"
+        ]
+      },
+      {
+        "path": "/home/tjsasakifln/code/confenge/web-cfg-contract-analysis-masterpiece/data/extra-cli/public-read-contract-analysis",
+        "exists": false,
+        "layout": null,
+        "schema_ok": false,
+        "handoff_ready": false,
+        "no_index_authorization": false,
+        "official_live": false,
+        "producer_commit": null,
+        "hashes_ok": false,
+        "source_claim_matrix": false,
+        "replay": false,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 0,
+        "evaluated_cap": 0,
+        "reasons": [
+          "path_absent"
+        ]
+      },
+      {
+        "path": "/home/tjsasakifln/code/confenge/extra-cli/.worktrees/historical-contract-authority/exports/public-read-live/contract-analysis/1.0",
+        "exists": true,
+        "layout": "payload_json",
+        "schema_ok": true,
+        "handoff_ready": false,
+        "no_index_authorization": true,
+        "official_live": false,
+        "producer_commit": "222a182115863f8d00d1f9a1c17b46f3b21f7cbbf53136e12fbaa38232fc4681",
+        "hashes_ok": true,
+        "source_claim_matrix": false,
+        "replay": true,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 40,
+        "evaluated_cap": 40,
+        "reasons": [
+          "manifest_hash_unverified",
+          "handoff_not_ready",
+          "source_claim_matrix_absent",
+          "no_data_ready_dossier",
+          "fixture_or_not_official_live"
+        ]
+      },
+      {
+        "path": "/home/tjsasakifln/code/confenge/extra-cli/.worktrees/coverage-live-proof/exports/public-read-live/contract-analysis/1.0",
+        "exists": true,
+        "layout": "payload_json",
+        "schema_ok": true,
+        "handoff_ready": false,
+        "no_index_authorization": true,
+        "official_live": false,
+        "producer_commit": "222a182115863f8d00d1f9a1c17b46f3b21f7cbbf53136e12fbaa38232fc4681",
+        "hashes_ok": true,
+        "source_claim_matrix": false,
+        "replay": true,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 40,
+        "evaluated_cap": 40,
+        "reasons": [
+          "manifest_hash_unverified",
+          "handoff_not_ready",
+          "source_claim_matrix_absent",
+          "no_data_ready_dossier",
+          "fixture_or_not_official_live"
+        ]
+      },
+      {
+        "path": "/home/tjsasakifln/code/confenge/extra-cli/.worktrees/official-contract-semantics/exports/public-read-live/contract-analysis/1.0",
+        "exists": true,
+        "layout": "payload_json",
+        "schema_ok": true,
+        "handoff_ready": false,
+        "no_index_authorization": true,
+        "official_live": false,
+        "producer_commit": "222a182115863f8d00d1f9a1c17b46f3b21f7cbbf53136e12fbaa38232fc4681",
+        "hashes_ok": true,
+        "source_claim_matrix": false,
+        "replay": true,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 40,
+        "evaluated_cap": 40,
+        "reasons": [
+          "manifest_hash_unverified",
+          "handoff_not_ready",
+          "source_claim_matrix_absent",
+          "no_data_ready_dossier",
+          "fixture_or_not_official_live"
+        ]
+      },
+      {
+        "path": "/home/tjsasakifln/code/confenge/extra-cli/exports/public-read-live/contract-analysis/1.0",
+        "exists": false,
+        "layout": null,
+        "schema_ok": false,
+        "handoff_ready": false,
+        "no_index_authorization": false,
+        "official_live": false,
+        "producer_commit": null,
+        "hashes_ok": false,
+        "source_claim_matrix": false,
+        "replay": false,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 0,
+        "evaluated_cap": 0,
+        "reasons": [
+          "path_absent"
+        ]
+      }
+    ],
+    "data_ready_count": 0,
+    "reasons": [
+      "preferred_handoff_absent_or_not_ready",
+      "no_official_live_DATA_READY_pack"
+    ]
+  },
+  "quality_version": "authority-content-quality/1.0",
+  "written_analyses": 0,
+  "review_packets": [],
   "citations": []
 }

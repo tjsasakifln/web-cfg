@@ -56,8 +56,12 @@ KIND_LABEL = {
     "FACT": "Fato",
     "CALCULATION": "Cálculo",
     "INFERENCE": "Interpretação técnica CONFENGE",
+    "INTERPRETACAO": "Interpretação técnica CONFENGE",
+    "INTERPRETAÇÃO TÉCNICA CONFENGE": "Interpretação técnica CONFENGE",
     "UNKNOWN": "UNKNOWN",
     "LIMITATION": "Limitação",
+    "LIMITACAO": "Limitação",
+    "LIMITAÇÃO": "Limitação",
     "COMPARISON": "Comparação",
 }
 
@@ -82,11 +86,28 @@ def _fold_name(value: str) -> str:
     return re.sub(r"\s+", " ", (value or "").lower()).strip()
 
 
+DRAFT_AUTHOR = "Rascunho editorial (autoria humana não confirmada)"
+
+
+def _author_confirmed(record: dict[str, Any]) -> bool:
+    if record.get("human_authorship_confirmed") is True:
+        return True
+    if record.get("editorial_status") == "approved" and record.get("approved_for_index"):
+        return True
+    return False
+
+
 def _author_name(record: dict[str, Any]) -> str:
     author = record.get("author")
     if isinstance(author, dict):
-        return _text(author.get("name")) or "Engº Tiago Sasaki"
-    return _text(author) or "Engº Tiago Sasaki"
+        name = _text(author.get("name"))
+    else:
+        name = _text(author)
+    if name:
+        if not _author_confirmed(record) and "tiago" in _fold_name(name) and "rascunho" not in _fold_name(name):
+            return DRAFT_AUTHOR
+        return name
+    return DRAFT_AUTHOR
 
 
 def _reviewer_name(record: dict[str, Any]) -> str:
@@ -300,7 +321,11 @@ def build_schema(record: dict[str, Any], decision: PublicationDecision) -> list[
         "mainEntityOfPage": url,
         "datePublished": published,
         "dateModified": modified,
-        "author": {"@id": f"{SITE}/#tiago", "name": author_name},
+        "author": (
+            {"@id": f"{SITE}/#tiago", "name": author_name}
+            if _author_confirmed(record) and "rascunho" not in _fold_name(author_name)
+            else {"@type": "Organization", "name": author_name}
+        ),
         "publisher": {"@id": f"{SITE}/#organization"},
         "about": {
             "@type": "CreativeWork",
@@ -309,7 +334,12 @@ def build_schema(record: dict[str, Any], decision: PublicationDecision) -> list[
         },
     }
     reviewer = _reviewer_name(record)
-    if reviewer and _fold_name(reviewer) != _fold_name(author_name):
+    if (
+        reviewer
+        and _author_confirmed(record)
+        and _fold_name(reviewer) != _fold_name(author_name)
+        and "rascunho" not in _fold_name(author_name)
+    ):
         article["reviewedBy"] = {"@type": "Person", "name": reviewer}
     return [
         dict(ORG_JSONLD),
@@ -347,6 +377,14 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             "não implica relação comercial e não deve ser indexada."
             "</p>"
         )
+    elif not decision.indexable:
+        fixture_banner = (
+            '<p class="ca-draft-banner" role="status">'
+            "Rascunho editorial noindex. HUMAN_REVIEW_PENDING. "
+            "Autoria e revisão humanas ainda não foram confirmadas. "
+            "Esta página não deve ser indexada."
+            "</p>"
+        )
     sections.append(
         '<header class="article-hero container">'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
@@ -356,12 +394,30 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         "</header>"
     )
     sections.append(breadcrumbs_html(crumbs))
-    byline = (
-        f'<p class="authority-byline">Autoria: <a rel="author" href="/especialista/tiago-jun-sasaki/">{e(author_name)}</a>'
+    sections.append(
+        '<nav class="ca-toc" aria-label="Seções da análise">'
+        '<p>Navegação por seções</p>'
+        "<ul>"
+        '<li><a href="#resumo">Resumo</a></li>'
+        '<li><a href="#ficha">Ficha</a></li>'
+        '<li><a href="#fatos">Fatos</a></li>'
+        '<li><a href="#calculos">Cálculos</a></li>'
+        '<li><a href="#nao-concluir">O que não se pode concluir</a></li>'
+        '<li><a href="#fontes">Fontes</a></li>'
+        "</ul></nav>"
     )
-    if reviewer:
+    if author_name == DRAFT_AUTHOR or not _author_confirmed(record):
+        byline = (
+            f'<p class="authority-byline">Autoria: <span rel="author">{e(author_name)}</span>'
+        )
+        reviewer = ""
+    else:
+        byline = (
+            f'<p class="authority-byline">Autoria: <a rel="author" href="/especialista/tiago-jun-sasaki/">{e(author_name)}</a>'
+        )
+    if reviewer and _author_confirmed(record):
         byline += f' · Revisão técnica: <span data-reviewer="{e(reviewer)}">{e(reviewer)}</span>'
-    elif record.get("solo_reviewer_disclosure"):
+    elif record.get("solo_reviewer_disclosure") or not _author_confirmed(record):
         byline += " · Responsável técnico sem revisão independente: não há segundo revisor nomeado"
     byline += (
         f' · Publicado em <time datetime="{e(published)}">{e(published)}</time>'
@@ -380,6 +436,11 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         sections.append(
             '<section class="section" id="por-que"><h2>Por que merece análise</h2>'
             f'{_paragraphs(record["why_analysis"])}</section>'
+        )
+    if _text(record.get("body")):
+        sections.append(
+            '<section class="section" id="analise"><h2>Análise</h2>'
+            f'{_paragraphs(record["body"])}</section>'
         )
     sections.append(_ficha_html(record.get("ficha") if isinstance(record.get("ficha"), dict) else {}))
     sections.append(_timeline_html(_items(record.get("timeline"))))
@@ -459,23 +520,35 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
 
 
 def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, index_count: int) -> str:
-    robots = "index,follow" if index_count else "noindex,nofollow,noarchive"
+    robots = "index,follow" if index_count >= 3 else "noindex,nofollow,noarchive"
     cards = []
+    drafts = []
     for record, decision in items:
-        if decision.state not in {"PUBLISHABLE_NOINDEX", "PUBLISHABLE_INDEX"}:
-            continue
-        href = _canonical_path(decision.slug)
-        summary = _text(record.get("executive_summary"))
-        if len(summary) > 220:
-            summary = summary[:217].rstrip() + "…"
-        cards.append(
-            '<article class="n-card">'
-            f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)} · {e(decision.state)}</p>'
-            f'<h2><a href="{e(href)}">{e(_text(record.get("title")))}</a></h2>'
-            f"<p>{e(summary)}</p>"
-            "</article>"
+        if decision.state == "PUBLISHABLE_INDEX" and decision.indexable:
+            href = _canonical_path(decision.slug)
+            summary = _text(record.get("executive_summary"))
+            if len(summary) > 220:
+                summary = summary[:217].rstrip() + "…"
+            cards.append(
+                '<article class="n-card">'
+                f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)} · publicado</p>'
+                f'<h2><a href="{e(href)}">{e(_text(record.get("title")))}</a></h2>'
+                f"<p>{e(summary)}</p>"
+                "</article>"
+            )
+        elif decision.state == "PUBLISHABLE_NOINDEX" and not (
+            record.get("is_fixture") or decision.is_fixture
+        ):
+            drafts.append(decision.slug)
+    listing = "".join(cards) or (
+        "<p>Nenhuma análise aprovada para publicação. "
+        "Prévia noindex não é listada como conteúdo publicado.</p>"
+    )
+    if drafts:
+        listing += (
+            '<p class="ca-draft-note">Há rascunhos HUMAN_REVIEW_PENDING fora do índice '
+            f"({len(drafts)}). Eles não entram nesta listagem como publicados.</p>"
         )
-    listing = "".join(cards) or "<p>Nenhuma análise passou o limiar de pré-visualização neste canário.</p>"
     body = (
         '<header class="article-hero container">'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'

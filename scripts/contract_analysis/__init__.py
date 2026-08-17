@@ -38,5 +38,8 @@ INDEX_CONDITIONS = (
     "unique_content",
 )
 MAX_CANARY = 10
+MASTERPIECE_EVAL_CAP = 5
+MASTERPIECE_WRITE_CAP = 3
 SOURCE_OFFICIAL_LIVE = "official_live"
 SOURCE_FIXTURE = "test_only_fixture"
+QUALITY_VERSION = "authority-content-quality/1.0"

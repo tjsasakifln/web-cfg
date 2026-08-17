@@ -43,6 +43,8 @@ _SCHEMA_1X = re.compile(r"^public-read-contract-analysis/1(?:\.\d+)?$")
 _CONTRACT_V1 = re.compile(r"^v?1(?:\.\d+){0,2}$")
 
 DEFAULT_LIVE_DIRS = (
+    Path("../extra-cli/exports/authority-handoff/contract-analysis/1.0"),
+    Path("data/extra-cli/public-read-contract-analysis/authority-canary"),
     Path("data/extra-cli/public-read-contract-analysis/1.0"),
     Path("data/extra-cli/public-read-contract-analysis"),
 )
@@ -751,7 +753,9 @@ def load_canary(
     limit: int = MAX_CANARY,
 ) -> dict[str, Any]:
     """Load at most `limit` analyses. Prefer official_live; else extra-cli fixture export."""
+    from scripts.contract_analysis.handoff import require_live_or_pending
     cap = min(int(limit), MAX_CANARY)
+    handoff = require_live_or_pending(live_path)
     if fixture_path is not None:
         resolved = fixture_path if fixture_path.is_absolute() else _root() / fixture_path
         if _looks_export_dir(resolved):
@@ -760,6 +764,7 @@ def load_canary(
             bundle = load_editorial_fixture(resolved)
         bundle["records"] = bundle["records"][:cap]
         bundle["evaluated"] = len(bundle["records"])
+        bundle["handoff"] = handoff
         return bundle
     live = None
     try:
@@ -778,12 +783,14 @@ def load_canary(
                 # Explicit non-live path: still return it labeled honestly.
                 live["records"] = live["records"][:cap]
                 live["evaluated"] = len(live["records"])
+                live["handoff"] = handoff
                 return live
             live = None
         else:
             live["records"] = live["records"][:cap]
             live["evaluated"] = len(live["records"])
             live["live_absent"] = False
+            live["handoff"] = handoff
             return live
     extra_cli_fixture = _root() / DEFAULT_EXTRA_CLI_FIXTURE_DIR
     if extra_cli_fixture.is_dir():
@@ -792,10 +799,14 @@ def load_canary(
         bundle["evaluated"] = len(bundle["records"])
         bundle["live_absent"] = True
         bundle["live_absent_reason"] = live_export_absent_reason()
+        bundle["handoff"] = handoff
+        bundle["factual_handoff_pending"] = handoff.get("status") == "FACTUAL_HANDOFF_PENDING"
         return bundle
     editorial = load_editorial_fixture()
     editorial["records"] = editorial["records"][:cap]
     editorial["evaluated"] = len(editorial["records"])
     editorial["live_absent"] = True
     editorial["live_absent_reason"] = live_export_absent_reason()
+    editorial["handoff"] = handoff
+    editorial["factual_handoff_pending"] = handoff.get("status") == "FACTUAL_HANDOFF_PENDING"
     return editorial

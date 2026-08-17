@@ -37,6 +37,22 @@ def cmd_build(args: argparse.Namespace) -> int:
         written = write_pages(render_pairs, index_count=index_count)
         write_sitemap(render_pairs)
     status = build_status(bundle=bundle, decisions=decisions, written=written)
+    # Review packets only for INDEX_READY_HUMAN_REVIEW. Never approve or activate.
+    if not args.report_only:
+        from scripts.contract_analysis.quality import INDEX_READY_VERDICT
+        from scripts.contract_analysis.review_packet import emit_review_packet
+        from scripts.contract_analysis.render import render_analysis_html
+
+        packets = []
+        for rec, dec in pairs:
+            if dec.review_recommendation != INDEX_READY_VERDICT:
+                continue
+            if rec.get("is_fixture") or dec.is_fixture:
+                continue
+            html = render_analysis_html(rec, dec)
+            dest = emit_review_packet(rec, dec, rendered_html=html)
+            packets.append(str(dest))
+        status["review_packets"] = packets
     citations = []
     for rec, dec in pairs:
         if dec.state in {"PUBLISHABLE_NOINDEX", "PUBLISHABLE_INDEX"}:
@@ -61,8 +77,11 @@ def cmd_build(args: argparse.Namespace) -> int:
                 "index_count": status["index_count"],
                 "state_counts": status["state_counts"],
                 "recommendation": status["recommendation"],
+                "expand_adjust_kill": status.get("expand_adjust_kill"),
                 "has_comparable_or_not_comparable": status.get("has_comparable_or_not_comparable"),
                 "live_absent": status.get("live_absent"),
+                "factual_handoff_pending": status.get("factual_handoff_pending"),
+                "nenhum_index_ativo": status.get("nenhum_index_ativo"),
                 "report": str(paths["markdown"]),
                 "rendered": status["rendered"],
             },

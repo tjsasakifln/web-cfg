@@ -27,6 +27,11 @@ from scripts.contract_analysis.consume import (
     _has_freshness,
     producer_status_of,
 )
+from scripts.contract_analysis.quality import (
+    HUMAN_REVIEW_PENDING,
+    INDEX_READY_VERDICT,
+    evaluate_quality,
+)
 from scripts.contract_analysis.reputation import check_reputational_safety
 from scripts.contract_analysis.taxonomy import check_taxonomy
 from scripts.contract_analysis.unique_content import check_unique_content
@@ -73,6 +78,9 @@ class PublicationDecision:
     robots: str
     sitemap: bool
     gate_version: str = GATE_VERSION
+    quality: dict[str, Any] | None = None
+    review_recommendation: str = ""
+    human_review_status: str = ""
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -87,6 +95,9 @@ class PublicationDecision:
             "robots": self.robots,
             "sitemap": self.sitemap,
             "gate_version": self.gate_version,
+            "quality": dict(self.quality) if self.quality else None,
+            "review_recommendation": self.review_recommendation,
+            "human_review_status": self.human_review_status,
         }
 
 
@@ -404,6 +415,7 @@ def decide_state(
     record: dict[str, Any],
     conditions: dict[str, bool],
     reasons: list[str],
+    quality: Any = None,
 ) -> str:
     taxonomy_hit = any(code.startswith("taxonomy_") for code in reasons)
     reputation_hit = any(code.startswith("reputation_") for code in reasons)
@@ -426,7 +438,10 @@ def decide_state(
         or "data_hold" in reasons
     ):
         return "HOLD_FOR_DATA"
-    if (
+    quality_ready = bool(
+        quality is not None and getattr(quality, "review_verdict", None) == INDEX_READY_VERDICT
+    )
+    missing_editorial = (
         not conditions["author_reviewer"]
         or not conditions["method_limitations"]
         or not conditions["insight_singular"]
@@ -435,7 +450,9 @@ def decide_state(
         or not conditions["intent_plausivel"]
         or not conditions["maintenance_owner"]
         or "editorial_review_pending" in reasons
-    ):
+    )
+    # INDEX_READY content may preview as NOINDEX while authorship is unconfirmed.
+    if missing_editorial and not quality_ready:
         return "EDITORIAL_REVIEW"
     fixture = _is_fixture(record)
     approved, approval_reasons = approval_allows_index(record)
@@ -463,7 +480,13 @@ def evaluate_publication(
         rendered_html=rendered_html,
         schema=schema,
     )
-    state = decide_state(record, conditions, reasons)
+    quality = evaluate_quality(
+        record,
+        cohort=cohort,
+        rendered_html=rendered_html,
+        schema=schema,
+    )
+    state = decide_state(record, conditions, reasons, quality=quality)
     if state not in PUBLICATION_STATES:
         state = "REJECT"
         reasons.append("state_unknown")
@@ -473,6 +496,10 @@ def evaluate_publication(
         reasons.append("fixture_cannot_index")
     indexable = state == "PUBLISHABLE_INDEX"
     robots = "index,follow" if indexable else "noindex,nofollow"
+    review_rec = quality.review_verdict
+    human_status = ""
+    if review_rec == INDEX_READY_VERDICT and state != "PUBLISHABLE_INDEX":
+        human_status = HUMAN_REVIEW_PENDING
     return PublicationDecision(
         analysis_id=_text(record.get("id") or record.get("slug") or "unknown"),
         slug=_text(record.get("slug") or record.get("id") or "unknown"),
@@ -484,6 +511,9 @@ def evaluate_publication(
         indexable=indexable,
         robots=robots,
         sitemap=indexable,
+        quality=quality.as_dict(),
+        review_recommendation=review_rec,
+        human_review_status=human_status,
     )
 
 

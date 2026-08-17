@@ -5,7 +5,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-08-16T15:01:44Z`
+- Generated: `2026-08-17T22:02:36Z`
 - Evaluated: **8** (cap 10)
 - Source: `test_only_fixture` (`scripts/contract_analysis/fixtures/extra-cli-export`)
 - catalog_mode: `fixture` claimed_live=`False`
@@ -13,7 +13,10 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 - official_live absent: **True**
 - `index_count`: **0**
 - Recommendation: **ADJUST**
-- Reason: Família e gate prontos; extra-cli #400 consumido na forma public-read-contract-analysis/1.0. Não há official_live sobrevivente. index_count=0. Não expandir até existir pack official_live + overlay editorial que passe o gate adversário.
+- expand/adjust/kill: **ADJUST**
+- nenhum INDEX ativo: **True**
+- FACTUAL_HANDOFF_PENDING: **True**
+- Reason: Família e gate prontos; extra-cli #400 consumido na forma public-read-contract-analysis/1.0. FACTUAL_HANDOFF_PENDING: não há handoff official_live HANDOFF_READY com dossiê DATA_READY. index_count=0. Nenhum INDEX ativo. Não expandir. Ajustar o produtor e só então escrever análises. Matar a família se o handoff factual nunca autorizar tese defensável.
 
 ## State counts
 
