@@ -355,12 +355,13 @@ def detect_reasons(
         if is_keyword_combination(row):
             codes.append(REASON_KEYWORD_COMBO)
 
-        if is_striking_distance(row, config) and (query or page) and row.get("source_table") in {
-            "queries",
-            "pages",
-            "query_page",
-            "proposal",
-        }:
+        # Join-dependent: position-only rows without query×page are not striking distance.
+        if (
+            join == "present"
+            and query
+            and page
+            and is_striking_distance(row, config)
+        ):
             codes.append(REASON_STRIKING_DISTANCE)
 
         if label.get("demand") == UNKNOWN:
