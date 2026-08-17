@@ -526,17 +526,19 @@
       "layer": "qualified_lead",
       "owner": "warmbly",
       "schema_version": "1.0.0",
+      "admission": "observed_only",
       "producers": [],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Reserved. Only an observed Warmbly/operator qualification. Never derived from page_view, engagement, completion, or lead."
+      "consumers": ["netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Reserved. Only an observed Warmbly/operator qualification. Never admitted from collect or confengeTrack. Never derived from page_view, engagement, completion, or lead."
     },
     "pipeline": {
       "layer": "pipeline",
       "owner": "warmbly",
       "schema_version": "1.0.0",
+      "admission": "observed_only",
       "producers": [],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Reserved. Only an observed Warmbly commercial pipeline outcome. Never derived from an earlier stage."
+      "consumers": ["netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Reserved. Only an observed Warmbly commercial pipeline outcome. Never admitted from collect or confengeTrack. Never derived from an earlier stage."
     }
   },
   "aliases": {
@@ -652,6 +654,10 @@
   "retired": {
     "conversion": {
       "reason": "Catch-all inflates pipeline. Use a specific layer event.",
+      "replacement": null
+    },
+    "journey_nav_click": {
+      "reason": "Embarked data-event-name without versioned semantics. Navigation hint only; not an engagement denominator.",
       "replacement": null
     }
   },

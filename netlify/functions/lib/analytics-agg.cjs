@@ -5,7 +5,7 @@
  * lead_form_success/lead_persisted, and never derive qualified_lead/pipeline.
  */
 
-const { resolveName, reconcileFunnel } = require("./event-contract.cjs");
+const { resolveCollectName, reconcileFunnel } = require("./event-contract.cjs");
 
 const FUNNEL_EVENTS = [
   "page_view",
@@ -62,7 +62,9 @@ function aggregateEvents(events) {
   const vitals = { lcp: [], inp: [], cls: [], ttfb: [] };
 
   for (const ev of events || []) {
-    const name = String(ev.event || "");
+    const rawName = String(ev.event || "");
+    const name = resolveCollectName(rawName) || "";
+    if (!name) continue;
     const day = dayKey(ev.ts);
     const path = String(ev.path || ev.props?.page_path || "/").slice(0, 180);
     const sid = String(ev.sid || "").slice(0, 32);
@@ -106,7 +108,7 @@ function aggregateEvents(events) {
     }
     const pr = pm.get(path);
 
-    const canonical = resolveName(name) || name;
+    const canonical = name;
     if (canonical === "page_view") {
       dayRow.page_views += 1;
       pr.page_view += 1;
@@ -297,7 +299,7 @@ function summarizeMoneyAssetLoop(events, leads) {
     lead_persisted: 0,
   };
   for (const ev of events || []) {
-    const name = resolveName(String((ev && ev.event) || "")) || String((ev && ev.event) || "");
+    const name = resolveCollectName(String((ev && ev.event) || "")) || "";
     if (!(name in event_counters)) continue;
     if (isMoneyAssetEvent(ev)) event_counters[name] += 1;
   }

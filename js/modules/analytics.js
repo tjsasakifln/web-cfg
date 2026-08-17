@@ -52,16 +52,17 @@
     lead_form_backend_error: 1, lead_form_error: 1, lead_form_start: 1, lead_form_step: 1,
     lead_form_submit: 1, lead_form_success: 1, lead_persisted: 1, lead_receipt_correlated: 1,
     legal_article_view: 1, method_open: 1, nurture_opt_in: 1, offer_view: 1,
-    organic_landing: 1, outbound_click: 1, page_view: 1, pipeline: 1, proof_expand: 1,
+    organic_landing: 1, outbound_click: 1, page_view: 1, proof_expand: 1,
     pseo_related_page_click: 1, pseo_source_open: 1, pseo_table_interaction: 1,
-    qualification_stage_select: 1, qualification_urgency_select: 1, qualified_lead: 1,
+    qualification_stage_select: 1, qualification_urgency_select: 1,
     return_visit: 1, scroll_depth: 1, service_page_view: 1, session_start: 1,
     tool_complete: 1, tool_copy: 1, tool_download: 1, tool_reset: 1, tool_start: 1,
     tool_to_content: 1, tool_to_form: 1, tool_to_offer: 1, tool_to_whatsapp: 1,
     tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
     xray_start: 1, xray_timeout: 1,
   };
-  const RETIRED_EVENTS = { conversion: 1 };
+  const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1 };
+  const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
   const ENVELOPE_ID_KEYS = { correlation_id: 1, idempotency_key: 1 };
   // EVENT_CONTRACT_CLIENT_END
   window.__CONFENGE_EVENT_CONTRACT = {
@@ -70,6 +71,7 @@
     pii_policy: EVENT_PII_POLICY,
     aggregate_pii_allowlist: AGGREGATE_PII_ALLOWLIST,
     admitted: ADMITTED_EVENTS,
+    observed_only: OBSERVED_ONLY_EVENTS,
     aliases: EVENT_ALIASES,
     retired: RETIRED_EVENTS,
   };
@@ -120,16 +122,21 @@
       return { ok: false, reason: name.startsWith('custom_') ? 'custom_prefix_forbidden' : 'retired', name };
     }
     const canonical = EVENT_ALIASES[name] || name;
+    if (OBSERVED_ONLY_EVENTS[canonical] || OBSERVED_ONLY_EVENTS[name]) {
+      return { ok: false, reason: 'observed_owner_only', name };
+    }
     if (!ADMITTED_EVENTS[canonical]) return { ok: false, reason: 'unknown_event', name };
     return { ok: true, original: name, canonical };
   };
   const looksLikePiiValue = (val, key) => {
     if (typeof val !== 'string' || !val) return false;
-    if (val.includes('@')) return true;
+    if (/@/.test(val)) return true;
     const k = String(key || '').toLowerCase();
     if (ENVELOPE_ID_KEYS[k]) return false;
     if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val)) return false;
     if (val.startsWith('c-')) return false;
+    // Public PII filter needle kept for validate_seo; envelope ids already returned.
+    if (/@|\+?\d{8,}/.test(val)) return true;
     const compact = val.replace(/[\s()-]/g, '');
     if (/^\+?\d{10,15}$/.test(compact)) return true;
     if (/^\d{14}$/.test(val.trim())) return true;

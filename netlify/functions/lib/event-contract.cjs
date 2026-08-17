@@ -31,8 +31,21 @@ function getRegistry() {
   return REGISTRY;
 }
 
+function isObservedOnly(name) {
+  const def = REGISTRY.events[name];
+  return !!(def && def.admission === "observed_only");
+}
+
 function admittedNames() {
-  return Object.keys(REGISTRY.events).sort();
+  return Object.keys(REGISTRY.events)
+    .filter((name) => !isObservedOnly(name))
+    .sort();
+}
+
+function observedOnlyNames() {
+  return Object.keys(REGISTRY.events)
+    .filter((name) => isObservedOnly(name))
+    .sort();
 }
 
 function aliasNames() {
@@ -81,6 +94,12 @@ function resolveName(raw) {
   return null;
 }
 
+function resolveCollectName(raw) {
+  const canonical = resolveName(raw);
+  if (!canonical || isObservedOnly(canonical)) return null;
+  return canonical;
+}
+
 function eventDef(name) {
   const canonical = resolveName(name) || name;
   return REGISTRY.events[canonical] || null;
@@ -90,11 +109,12 @@ function looksLikePiiValue(value, key) {
   if (typeof value !== "string") return false;
   const s = value;
   if (!s) return false;
-  if (s.includes("@")) return true;
+  if (/@/.test(s)) return true;
   const k = String(key || "").toLowerCase();
   if (ENVELOPE_ID_KEYS.has(k)) return false;
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
   if (s.startsWith("c-")) return false;
+  if (/@|\+?\d{8,}/.test(s)) return true;
   const compact = s.replace(/[\s()-]/g, "");
   if (/^\+?\d{10,15}$/.test(compact)) return true;
   if (/^\d{14}$/.test(s.trim())) return true;
@@ -172,6 +192,16 @@ function admitEvent(raw) {
   const def = REGISTRY.events[canonical];
   if (!def) {
     return { ok: false, reason: "unknown_event", original, classification: "reject" };
+  }
+  if (def.admission === "observed_only") {
+    return {
+      ok: false,
+      reason: "observed_owner_only",
+      original,
+      canonical,
+      owner: def.owner,
+      classification: "reject",
+    };
   }
 
   const rawProps = input.props && typeof input.props === "object" && !Array.isArray(input.props)
@@ -288,21 +318,19 @@ function reconcileFunnel(input) {
     }
   }
 
-  const warmbly = (input && input.warmbly) || {};
+  const observation = acceptWarmblyObservation((input && input.warmbly) || {});
   const observed = {
-    qualified_lead: Object.prototype.hasOwnProperty.call(warmbly, "qualified_lead")
-      ? warmbly.qualified_lead
-      : "UNKNOWN",
-    pipeline: Object.prototype.hasOwnProperty.call(warmbly, "pipeline")
-      ? warmbly.pipeline
-      : "UNKNOWN",
+    qualified_lead: observation.qualified_lead,
+    pipeline: observation.pipeline,
   };
 
-  if (observed.qualified_lead !== "UNKNOWN" && Number.isFinite(Number(observed.qualified_lead))) {
-    denominators.qualified_lead = Number(observed.qualified_lead);
-  }
-  if (observed.pipeline !== "UNKNOWN" && Number.isFinite(Number(observed.pipeline))) {
-    denominators.pipeline = Number(observed.pipeline);
+  if (observation.accepted) {
+    if (observed.qualified_lead !== "UNKNOWN" && Number.isFinite(Number(observed.qualified_lead))) {
+      denominators.qualified_lead = Number(observed.qualified_lead);
+    }
+    if (observed.pipeline !== "UNKNOWN" && Number.isFinite(Number(observed.pipeline))) {
+      denominators.pipeline = Number(observed.pipeline);
+    }
   }
 
   return {
@@ -315,6 +343,43 @@ function reconcileFunnel(input) {
     derived_pipeline: false,
     rejected,
     admitted_count: admitted.length,
+    observation_reason: observation.reason || undefined,
+  };
+}
+
+function isFixtureOrSynthetic(meta) {
+  if (!meta || typeof meta !== "object") return false;
+  if (meta.fixture === true || meta.synthetic === true) return true;
+  const kind = String(meta.kind || meta.record_kind || "").toLowerCase();
+  if (kind === "fixture" || kind === "synthetic" || kind === "qa") return true;
+  const source = String(meta.source || "").toLowerCase();
+  if (source === "fixture" || source === "synthetic") return true;
+  if (meta.official_live === false) return true;
+  return false;
+}
+
+function acceptWarmblyObservation(warmbly) {
+  const unknown = { qualified_lead: "UNKNOWN", pipeline: "UNKNOWN", accepted: false, reason: null };
+  if (!warmbly || typeof warmbly !== "object" || Array.isArray(warmbly)) {
+    return { ...unknown, reason: null };
+  }
+  const owner = String(warmbly.owner || "warmbly").toLowerCase();
+  if (owner !== "warmbly") {
+    return { ...unknown, reason: "wrong_owner" };
+  }
+  if (isFixtureOrSynthetic(warmbly)) {
+    return { ...unknown, reason: "fixture_or_synthetic" };
+  }
+  const hasQl = Object.prototype.hasOwnProperty.call(warmbly, "qualified_lead");
+  const hasPipe = Object.prototype.hasOwnProperty.call(warmbly, "pipeline");
+  if (!hasQl && !hasPipe) {
+    return { ...unknown, reason: null };
+  }
+  return {
+    qualified_lead: hasQl ? warmbly.qualified_lead : "UNKNOWN",
+    pipeline: hasPipe ? warmbly.pipeline : "UNKNOWN",
+    accepted: true,
+    reason: null,
   };
 }
 
@@ -328,6 +393,7 @@ function inventoryArtifact() {
     producers: def.producers,
     consumers: def.consumers,
     semantic: def.semantic,
+    admission: def.admission || "collect",
     envelope_fields: ENVELOPE_FIELDS,
     source: SOURCE,
     pii_policy: PII_POLICY,
@@ -366,9 +432,14 @@ function inventoryArtifact() {
 function clientMaps() {
   const admitted = {};
   const layers = {};
+  const observedOnly = {};
   for (const [name, def] of Object.entries(REGISTRY.events)) {
-    admitted[name] = 1;
     layers[name] = def.layer;
+    if (def.admission === "observed_only") {
+      observedOnly[name] = 1;
+      continue;
+    }
+    admitted[name] = 1;
   }
   const aliases = {};
   for (const [name, def] of Object.entries(REGISTRY.aliases)) {
@@ -381,6 +452,7 @@ function clientMaps() {
     aggregate_pii_allowlist: [...AGGREGATE_PII_ALLOWLIST],
     pii_keys: [...PII_KEYS].sort(),
     admitted,
+    observed_only: observedOnly,
     aliases,
     layers,
     retired: retiredNames(),
@@ -405,10 +477,15 @@ module.exports = {
   LAYER_RANK,
   getRegistry,
   admittedNames,
+  observedOnlyNames,
   aliasNames,
   retiredNames,
   classifyName,
   resolveName,
+  resolveCollectName,
+  isObservedOnly,
+  isFixtureOrSynthetic,
+  acceptWarmblyObservation,
   eventDef,
   looksLikePiiValue,
   keyLooksPii,

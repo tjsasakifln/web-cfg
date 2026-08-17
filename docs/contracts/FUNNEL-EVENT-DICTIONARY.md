@@ -52,7 +52,9 @@ Material aliases:
 - `tool_use` → `tool_start`; `tool_result` → `tool_complete`
 - `form_start` / `pseo_form_start` → `lead_form_start`
 
-`conversion` is retired (catch-all inflates pipeline). `custom_*` is rejected.
+`conversion` is retired (catch-all inflates pipeline). `journey_nav_click` is retired (embarked `data-event-name` without versioned semantics). `custom_*` is rejected.
+
+`qualified_lead` and `pipeline` are `admission: observed_only`. Collect and `confengeTrack` reject them (`observed_owner_only`). Reconciliation accepts counts only from a Warmbly observation; fixture/synthetic/`official_live: false` stay `UNKNOWN` and do not promote a stage.
 
 ## Owners
 

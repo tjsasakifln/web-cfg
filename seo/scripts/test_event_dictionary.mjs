@@ -57,15 +57,18 @@ function extractProducerNames() {
     "ferramentas/matriz-atraso-obra/index.html",
     "guias-contratos-obras/checklist-pedido-aditivo/index.html",
     "scripts/market_answers/events.py",
+    "index.html",
   ];
   const names = new Set();
   const re = /(?:track|emit|confengeTrack|T\.track)\(\s*["']([a-z0-9_]+)["']/g;
+  const attrRe = /data-(?:event-name|ma-event|pseo-event)=["']([a-z0-9_]+)["']/g;
   for (const rel of files) {
     const full = path.join(root, rel);
     if (!fs.existsSync(full)) fail("missing_producer_file", rel);
     const text = fs.readFileSync(full, "utf8");
     let m;
     while ((m = re.exec(text))) names.add(m[1]);
+    while ((m = attrRe.exec(text))) names.add(m[1]);
     if (rel.endsWith(".py")) {
       const block = text.match(/EVENT_NAMES\s*=\s*\(([\s\S]*?)\)/);
       if (block) {
@@ -99,6 +102,14 @@ for (const ev of inventory.events) {
   if (!Array.isArray(ev.producers) || !Array.isArray(ev.consumers)) fail("event_roles", ev.name);
   if (!ev.consumers.length) fail("event_no_consumer", ev.name);
   if (ev.source !== "CONFENGE_WEB") fail("event_source", ev);
+  if (ev.admission !== "collect" && ev.admission !== "observed_only") {
+    fail("event_admission", ev);
+  }
+  if ((ev.name === "qualified_lead" || ev.name === "pipeline")) {
+    if (ev.admission !== "observed_only" || ev.owner !== "warmbly") {
+      fail("outcome_not_observed_only", ev);
+    }
+  }
 }
 for (const alias of inventory.aliases) {
   if (alias.classification !== "alias" || !alias.canonical || alias.same_layer !== true) {
@@ -107,7 +118,7 @@ for (const alias of inventory.aliases) {
   if (!inventory.events.some((e) => e.name === alias.canonical)) fail("alias_canonical_missing", alias);
 }
 
-const EVENTISH = /^(page|session|cta|whatsapp|email|lead|tool|answer|method|evidence|analysis|xray|contract|asset|organic|scroll|qualified|content|service|offer|diagnostic|editorial|legal|case_law|checklist|data_insight|pseo|form|field|handraise|nurture|web_vital|outbound|return_visit|confirmation|comparison|proof|internal|correction|conversion|custom)/;
+const EVENTISH = /^(page|session|cta|whatsapp|email|lead|tool|answer|method|evidence|analysis|xray|contract|asset|organic|scroll|qualified|content|service|offer|diagnostic|editorial|legal|case_law|checklist|data_insight|pseo|form|field|handraise|nurture|web_vital|outbound|return_visit|confirmation|comparison|proof|internal|correction|conversion|custom|journey|critical)/;
 const producerNames = extractProducerNames();
 const classified = {};
 for (const name of producerNames) {
@@ -126,12 +137,23 @@ if (!analyticsMod.includes("EVENT_CONTRACT_CLIENT_START") || !script.includes("E
 }
 for (const name of contract.admittedNames()) {
   if (!maps.admitted[name]) fail("client_map_missing_admitted", name);
-  if (!analyticsMod.includes(name) && name !== "pipeline" && name !== "qualified_lead" && name !== "outbound_click" && name !== "return_visit") {
-    // reserved names live in the ADMITTED_EVENTS object
-  }
+  if (maps.observed_only && maps.observed_only[name]) fail("collect_name_marked_observed", name);
   if (!new RegExp(`${name}: 1`).test(analyticsMod) && !analyticsMod.includes(`${name}:`)) {
     fail("analytics_module_missing_admitted", name);
   }
+}
+for (const name of contract.observedOnlyNames()) {
+  if (maps.admitted[name]) fail("observed_only_in_admitted", name);
+  if (!maps.observed_only || !maps.observed_only[name]) fail("client_map_missing_observed", name);
+  if (!analyticsMod.includes("OBSERVED_ONLY_EVENTS") || !analyticsMod.includes(`${name}: 1`)) {
+    fail("analytics_module_missing_observed_only", name);
+  }
+}
+if (!classified.journey_nav_click || classified.journey_nav_click !== "retire") {
+  fail("journey_nav_click_not_retired", classified.journey_nav_click);
+}
+if (!inventory.retired.some((r) => r.name === "journey_nav_click")) {
+  fail("journey_nav_click_missing_from_retired");
 }
 for (const [alias, canonical] of Object.entries(maps.aliases)) {
   if (!analyticsMod.includes(`${alias}: '${canonical}'`)) fail("analytics_alias_drift", { alias, canonical });
@@ -188,14 +210,20 @@ async function collectPair() {
     { event: "not_a_real_event", props: { page_path: "/" } },
     { event: "custom_anything", props: { page_path: "/" } },
     { event: "conversion", props: { page_path: "/" } },
+    { event: "journey_nav_click", props: { page_path: "/" } },
+    { event: "qualified_lead", props: { page_path: "/" } },
+    { event: "pipeline", props: { page_path: "/" } },
   ]);
   const rejectBody = JSON.parse(rejectRes.body);
-  if (rejectRes.statusCode !== 202 || rejectBody.accepted !== 0 || rejectBody.rejected !== 3) {
+  if (rejectRes.statusCode !== 202 || rejectBody.accepted !== 0 || rejectBody.rejected !== 6) {
     fail("collect_reject", rejectBody);
   }
   const reasons = (rejectBody.rejected_events || []).map((r) => r.reason).sort();
   if (!reasons.includes("unknown_event") || !reasons.includes("custom_prefix_forbidden") || !reasons.includes("retired")) {
     fail("collect_reject_reasons", rejectBody);
+  }
+  if (!reasons.includes("observed_owner_only")) {
+    fail("collect_admitted_warmbly_outcome", rejectBody);
   }
   return { acceptBody, aliasBody, rejectBody };
 }
@@ -268,16 +296,23 @@ function driveClient() {
     idempotency_key: envelopeTs,
   });
   track("lead_created", { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico" });
+  track("lead_created", { asset_id: "diagnostico-defesa-margem", route_family: "defesa-margem-diagnostico" });
   track("not_a_real_event", { page_path: "/" });
   track("custom_foo", { page_path: "/" });
   track("conversion", { page_path: "/" });
+  track("journey_nav_click", { page_path: "/" });
+  track("qualified_lead", { page_path: "/" });
+  track("pipeline", { page_path: "/" });
   track("qualified_scroll", { page_path: "/", cta_position: "scroll_50" });
 
   const names = dataLayer.map((e) => e.event);
   if (!names.includes("page_view")) fail("client_missing_page_view", names);
   if (!names.includes("lead_persisted")) fail("client_alias_not_rewritten", names);
   if (names.includes("lead_created")) fail("client_emitted_alias", names);
-  if (names.includes("not_a_real_event") || names.includes("custom_foo") || names.includes("conversion")) {
+  const persistedCount = names.filter((n) => n === "lead_persisted").length;
+  if (persistedCount !== 2) fail("client_alias_dual_canonical", { persistedCount, names });
+  if (names.includes("not_a_real_event") || names.includes("custom_foo") || names.includes("conversion")
+    || names.includes("journey_nav_click") || names.includes("qualified_lead") || names.includes("pipeline")) {
     fail("client_emitted_rejected", names);
   }
   if (!names.includes("scroll_depth")) fail("client_scroll_alias", names);
@@ -347,6 +382,21 @@ try {
 }
 if (!promoted) fail("lead_promoted_to_pipeline");
 
+for (const [from, to] of [
+  ["cta_click", "qualified_lead"],
+  ["tool_complete", "pipeline"],
+  ["lead_form_success", "pipeline"],
+  ["lead_persisted", "qualified_lead"],
+]) {
+  let blocked = false;
+  try {
+    contract.reconcileFunnel({ events: sample, treat_as: { [from]: to } });
+  } catch (err) {
+    blocked = err && err.code === "cannot_derive_outcome";
+  }
+  if (!blocked) fail("later_stage_derived", { from, to });
+}
+
 const withWarmbly = contract.reconcileFunnel({
   events: sample,
   warmbly: { qualified_lead: 1, pipeline: 1 },
@@ -355,6 +405,42 @@ if (withWarmbly.denominators.qualified_lead !== 1 || withWarmbly.denominators.pi
   fail("warmbly_observed", withWarmbly);
 }
 if (withWarmbly.derived_qualified_lead !== false) fail("warmbly_marked_derived");
+
+const fixtureWarmbly = contract.reconcileFunnel({
+  events: sample,
+  warmbly: { qualified_lead: 3, pipeline: 2, kind: "synthetic" },
+});
+if (fixtureWarmbly.denominators.qualified_lead !== 0 || fixtureWarmbly.denominators.pipeline !== 0) {
+  fail("fixture_promoted_stage", fixtureWarmbly);
+}
+if (fixtureWarmbly.observed.qualified_lead !== "UNKNOWN" || fixtureWarmbly.observed.pipeline !== "UNKNOWN") {
+  fail("fixture_observed_not_unknown", fixtureWarmbly);
+}
+if (fixtureWarmbly.observation_reason !== "fixture_or_synthetic") {
+  fail("fixture_reason", fixtureWarmbly);
+}
+
+const wrongOwner = contract.reconcileFunnel({
+  events: sample,
+  warmbly: { qualified_lead: 1, pipeline: 1, owner: "web-cfg" },
+});
+if (wrongOwner.denominators.qualified_lead !== 0 || wrongOwner.denominators.pipeline !== 0) {
+  fail("wrong_owner_promoted", wrongOwner);
+}
+if (wrongOwner.observation_reason !== "wrong_owner") fail("wrong_owner_reason", wrongOwner);
+
+const outcomeAsEvent = contract.reconcileFunnel({
+  events: [
+    { event: "qualified_lead", props: { page_path: "/" } },
+    { event: "pipeline", props: { page_path: "/" } },
+  ],
+});
+if (outcomeAsEvent.denominators.qualified_lead !== 0 || outcomeAsEvent.denominators.pipeline !== 0) {
+  fail("outcome_event_counted", outcomeAsEvent);
+}
+if (!outcomeAsEvent.rejected.some((r) => r.reason === "observed_owner_only")) {
+  fail("outcome_event_not_rejected", outcomeAsEvent);
+}
 
 // --- 6. PII allowlist empty; admission cannot keep PII ---
 if (contract.AGGREGATE_PII_ALLOWLIST.length !== 0) fail("allowlist_runtime");
