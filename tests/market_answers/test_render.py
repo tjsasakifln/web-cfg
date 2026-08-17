@@ -85,3 +85,17 @@ def test_canonical_noindex_and_no_combinatorial_paths():
     assert "municipio" not in html or "?stratum=" in html
     # only the one canonical path plus optional query strata
     assert html.count("/inteligencia/valor-tipico-contratos-pavimentacao/") >= 1
+
+
+def test_official_sc_html_does_not_advertise_rs_fixture_strata():
+    from scripts.market_answers.consume import load_payload
+
+    record = load_shipped_candidate()
+    payload = load_payload()
+    decision = evaluate(record, payload, {"approvals": []}, today=TODAY)
+    html = render_html(record, payload, decision)
+    assert "Recorte publicado (Santa Catarina)" in html
+    assert "Recorte publicado (SC e RS)" not in html
+    assert "stratum=rs-municipal" not in html
+    assert "Rio Grande do Sul · esfera municipal" not in html
+    assert 'content="noindex,nofollow"' in html
