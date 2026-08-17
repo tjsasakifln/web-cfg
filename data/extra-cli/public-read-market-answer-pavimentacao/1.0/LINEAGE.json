@@ -1,0 +1,11 @@
+{
+  "source_repo": "tjsasakifln/extra-cli",
+  "source_campaign": "CONFENGE-PRODUCTION-CLOSEOUT-01",
+  "source_schema": "public-read-market-answer-pavimentacao/1.0",
+  "consumer": "web-cfg/market-answer/valor-tipico-contratos-pavimentacao",
+  "folded_hash": "9b69e30cb9e696a6c268526b3646f2d1588519849c5024aa46e6ba89ec06c0b6",
+  "official_live": true,
+  "geography": "SC",
+  "index_authorized": false,
+  "note": "Copied byte-for-byte from extra-cli campaign export. Consume verifies folded hash. INDEX withheld."
+}

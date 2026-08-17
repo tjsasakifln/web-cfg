@@ -22,12 +22,20 @@ from scripts.market_answers import (
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
 )
-from scripts.market_answers.hashing import content_hash, schema_hash
+from scripts.market_answers.hashing import content_hash, folded_content_hash, schema_hash
 
 
 class ConsumeError(ValueError):
     """Payload cannot be consumed as the Goal 03 market-answer contract."""
 
+
+EXTRA_CLI_CONSUMER_SCHEMA = "public-read-market-answer-pavimentacao/1.0"
+EXTRA_CLI_CONSUMER_ID = "web-cfg/market-answer/valor-tipico-contratos-pavimentacao"
+# Folded hash of the official SC export (timestamps dropped). Not a fixture.
+EXPECTED_SC_FOLDED_HASH = "9b69e30cb9e696a6c268526b3646f2d1588519849c5024aa46e6ba89ec06c0b6"
+DEFAULT_EXTRA_CLI_CONSUMER = (
+    "data/extra-cli/public-read-market-answer-pavimentacao/1.0/export.json"
+)
 
 REQUIRED_TOP_LEVEL = (
     "schema",
@@ -122,6 +130,98 @@ def invents_cost_per_km(payload: dict[str, Any]) -> bool:
     return False
 
 
+def is_extra_cli_consumer_payload(payload: dict[str, Any]) -> bool:
+    schema = _text(payload.get("schema"))
+    consumer = _text(payload.get("consumer_id"))
+    return schema == EXTRA_CLI_CONSUMER_SCHEMA or consumer == EXTRA_CLI_CONSUMER_ID
+
+
+def project_extra_cli_consumer(payload: dict[str, Any]) -> dict[str, Any]:
+    """Map extra-cli named-consumer facts onto Goal 03 without rewriting quartiles.
+
+    Does not authorize INDEX. Does not invent custo/km. Does not relabel
+    national_claim_allowed. Folded hash must match the official SC export.
+    """
+    if not is_extra_cli_consumer_payload(payload):
+        raise ConsumeError("not an extra-cli named-consumer market-answer payload")
+    digest = folded_content_hash(payload)
+    if digest != EXPECTED_SC_FOLDED_HASH:
+        raise ConsumeError(
+            f"folded_hash_mismatch got {digest} expected {EXPECTED_SC_FOLDED_HASH}"
+        )
+    stats_in = payload.get("stats") if isinstance(payload.get("stats"), dict) else {}
+    if not stats_in and isinstance(payload.get("statistics"), dict):
+        stats_in = payload["statistics"]
+    claim_in = payload.get("claim_authorization") if isinstance(payload.get("claim_authorization"), dict) else {}
+    if not claim_in and isinstance(payload.get("claim"), dict):
+        claim_in = payload["claim"]
+    geography = payload.get("geography") if isinstance(payload.get("geography"), dict) else {}
+    national_allowed = bool(claim_in.get("national_claim_allowed"))
+    projected = {
+        "schema": SCHEMA_ID,
+        "contract_version": _text(payload.get("schema_version")) or "v1.0.0",
+        "question_id": payload.get("question_id"),
+        "typology_id": payload.get("typology_id"),
+        "method_id": payload.get("method_id"),
+        "grain": payload.get("grain"),
+        "grain_label": "valor integral nominal do instrumento",
+        "not_grain": list(payload.get("grain_not") or ["custo_por_km", "preco_unitario"]),
+        "statistics": {
+            "median": stats_in.get("median"),
+            "p25": stats_in.get("p25"),
+            "p75": stats_in.get("p75"),
+            "n": stats_in.get("n"),
+            "currency": payload.get("currency") or "BRL",
+            "unit": stats_in.get("unit") or "integral_nominal_instrument",
+        },
+        "period": payload.get("period") or {},
+        "geography": {
+            "scope": geography.get("kind") or "uf",
+            "code": geography.get("code"),
+            "label": geography.get("label"),
+            "ufs": [geography["code"]] if geography.get("code") else [],
+            "national_claim_allowed": national_allowed,
+        },
+        "distribution": payload.get("distribution") or {},
+        "contract_refs": list(payload.get("contract_refs") or []),
+        "evidence_refs": list(payload.get("evidence_refs") or []),
+        "peer_group": payload.get("peer_group") if isinstance(payload.get("peer_group"), dict) else {},
+        "method_refs": [
+            {
+                "id": payload.get("method_id"),
+                "note": "Shipped extra-cli integral-nominal nearest-rank on official pncp_supplier_contracts.",
+            }
+        ],
+        "method_short": (
+            "Mediana e quartis do valor integral nominal do instrumento, "
+            "tipologia keyword de pavimentação, recorte SC. Não é custo por km. Não é Brasil."
+        ),
+        "as_of": payload.get("as_of"),
+        "coverage": payload.get("coverage") if isinstance(payload.get("coverage"), dict) else {},
+        "freshness": payload.get("freshness") if isinstance(payload.get("freshness"), dict) else {},
+        "missingness": payload.get("missingness") if isinstance(payload.get("missingness"), dict) else {},
+        "limitations": list(payload.get("limitations") or []),
+        "unknown_fields": list(payload.get("unknown_fields") or []),
+        "reason_codes": list(payload.get("reason_codes") or []),
+        "claim": {
+            "authorization_state": "UNAUTHORIZED" if not national_allowed else "AUTHORIZED",
+            "national_claim_allowed": national_allowed,
+            "current_publication_allowed": False,
+            "issue": claim_in.get("issue"),
+            "reason_codes": list(claim_in.get("reason_codes") or []),
+        },
+        "official_live": bool(payload.get("official_live")),
+        "producer_status": payload.get("producer_status"),
+        "catalog_mode": payload.get("catalog_mode"),
+        "claimed_live": bool(payload.get("claimed_live")),
+        "source_schema": EXTRA_CLI_CONSUMER_SCHEMA,
+        "source_folded_hash": digest,
+        "source_content_hash": payload.get("content_hash"),
+        "never_index": True,
+    }
+    return projected
+
+
 def validate_schema(payload: dict[str, Any]) -> None:
     schema = _text(payload.get("schema"))
     if schema != SCHEMA_ID:
@@ -164,6 +264,8 @@ def attach_hashes(payload: dict[str, Any]) -> dict[str, Any]:
 
 def adapt_payload(payload: dict[str, Any]) -> dict[str, Any]:
     """Project the producer payload into the consumer view. Facts are copied."""
+    if is_extra_cli_consumer_payload(payload):
+        payload = project_extra_cli_consumer(payload)
     validate_schema(payload)
     stats = payload["statistics"]
     coverage = payload.get("coverage") if isinstance(payload.get("coverage"), dict) else {}
@@ -220,6 +322,9 @@ def adapt_payload(payload: dict[str, Any]) -> dict[str, Any]:
         "is_fixture": fixture,
         "test_only": fixture,
         "never_index": fixture or bool(payload.get("never_index")),
+        "source_folded_hash": payload.get("source_folded_hash"),
+        "source_schema": payload.get("source_schema"),
+        "source_content_hash": payload.get("source_content_hash"),
         "method_short": _text(payload.get("method_short") or payload.get("method")),
         "method": payload.get("method") if isinstance(payload.get("method"), dict) else {
             "id": payload.get("method_id"),
@@ -237,6 +342,12 @@ def load_payload(path: Path | None = None, *, default_fixture: bool = True) -> d
         payload = _parse(resolved)
         payload["_source_path"] = str(resolved)
         return adapt_payload(payload)
+    extra = root / DEFAULT_EXTRA_CLI_CONSUMER
+    if extra.is_file():
+        payload = _parse(extra)
+        payload["_source_path"] = str(extra)
+        if is_extra_cli_consumer_payload(payload) and payload.get("official_live") is True:
+            return adapt_payload(payload)
     live = root / DEFAULT_LIVE
     if live.is_file():
         payload = _parse(live)

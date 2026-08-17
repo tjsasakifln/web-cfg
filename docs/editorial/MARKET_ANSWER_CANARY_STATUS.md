@@ -1,14 +1,14 @@
 # Market Answer canary status
 
-**Recommendation:** `GO_NOINDEX`
+**Recommendation:** `NEEDS_DATA`
 
-**Candidate decision:** `PUBLISHABLE_NOINDEX`: Qual é o valor típico dos contratos públicos de pavimentação?
+**Candidate decision:** `NEEDS_DATA`: Qual é o valor típico dos contratos públicos de pavimentação?
 
 **Demand:** `UNKNOWN` (UNKNOWN stays UNKNOWN)
 
-**Data state:** official_live=`False` · producer_status=`CONTRACT_FIXTURE` · fixture=`True`
+**Data state:** official_live=`True` · producer_status=`OFFICIAL_LIVE` · fixture=`False`
 
-**as_of:** `2026-07-31` · content_hash=`e115debcfca3fbd17320fc66b6fc98f42c308d186e46db7026debc1a350e2011`
+**as_of:** `2026-08-17T11:29:23.193694+02:00` · content_hash=`de410553091aa22239c7c6e241f485d4b1a91da6459fce4d7bd412c41a42ac71`
 
 ## Gate results
 
@@ -17,10 +17,10 @@
 - robots: `noindex,nofollow`
 - sitemap: `False`
 
-- `official_live`: `False`
+- `official_live`: `True`
 - `claim_authorized`: `False`
 - `coverage_sufficient`: `False`
-- `freshness_current`: `False`
+- `freshness_current`: `True`
 - `method_present`: `True`
 - `limitations_present`: `True`
 - `answerability`: `True`
@@ -29,20 +29,20 @@
 - `attribution`: `True`
 - `refresh_owner`: `True`
 - `human_approval_hash`: `False`
-- `not_fixture`: `False`
+- `not_fixture`: `True`
 - `grain_ticket_not_km`: `True`
 - `no_national_claim_without_coverage`: `True`
 
-Reason codes: `coverage_insufficient`, `freshness_stale`, `claim_fixture_not_authorizable`, `claim_current_publication_blocked`, `approval_hash_drift`, `fixture_never_index`, `official_live_absent`, `index_hygiene_blocked`
+Reason codes: `coverage_insufficient`, `claim_unauthorized`, `claim_current_publication_blocked`, `approval_hash_drift`, `index_hygiene_blocked`
 
-Score `MARKET_ANSWER_VALUE_SCORE/1.0` total=`0.6173` · unknown components: demand
+Score `MARKET_ANSWER_VALUE_SCORE/1.0` total=`0.6708` · unknown components: demand, freshness
 
 ## Page / index state
 
 - path: `/inteligencia/valor-tipico-contratos-pavimentacao/`
 - canonical: `https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/`
-- fixture marked: `True`
-- rendered: /home/tjsasakifln/code/confenge/web-cfg/inteligencia/valor-tipico-contratos-pavimentacao/index.html
+- fixture marked: `False`
+- rendered: /home/tjsasakifln/code/confenge/web-cfg-closeout-01/inteligencia/valor-tipico-contratos-pavimentacao/index.html
 
 ## Engagement events available
 
@@ -61,12 +61,9 @@ Page view is not a lead. Impression, engagement, lead and pipeline stay separate
 ## Blockers
 
 - `coverage_insufficient`
-- `freshness_stale`
-- `claim_fixture_not_authorizable`
+- `claim_unauthorized`
 - `claim_current_publication_blocked`
 - `approval_hash_drift`
-- `fixture_never_index`
-- `official_live_absent`
 - `index_hygiene_blocked`
 
 ## Next integration steps

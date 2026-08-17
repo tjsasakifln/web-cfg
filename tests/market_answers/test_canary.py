@@ -33,8 +33,13 @@ def _run(cmd: list[str]) -> subprocess.CompletedProcess[str]:
     )
 
 
+FIXTURE = ROOT / "data/editorial/market-answers/fixtures/contract-fixture.v1.json"
+
+
 def test_family_build_and_validate_fixture_stays_noindex():
-    built = _run([sys.executable, "-m", "scripts.market_answers", "build"])
+    built = _run(
+        [sys.executable, "-m", "scripts.market_answers", "build", "--payload", str(FIXTURE)]
+    )
     assert built.returncode == 0, built.stderr + built.stdout
     payload = json.loads(built.stdout)
     assert payload["ok"] is True
@@ -46,12 +51,26 @@ def test_family_build_and_validate_fixture_stays_noindex():
     assert payload["recommendation"] in {"GO_NOINDEX", "NEEDS_DATA", "REJECT"}
     assert payload["recommendation"] != "READY_FOR_OFFICIAL_PAYLOAD"
 
-    validated = _run([sys.executable, "-m", "scripts.market_answers", "validate"])
+    validated = _run(
+        [sys.executable, "-m", "scripts.market_answers", "validate", "--payload", str(FIXTURE)]
+    )
     assert validated.returncode == 0, validated.stderr + validated.stdout
     check = json.loads(validated.stdout)
     assert check["ok"] is True
     assert check["index_count"] == 0
     assert check["fixture_indexed"] is False
+
+
+def test_family_build_official_sc_stays_noindex():
+    built = _run([sys.executable, "-m", "scripts.market_answers", "build"])
+    assert built.returncode == 0, built.stderr + built.stdout
+    payload = json.loads(built.stdout)
+    assert payload["ok"] is True
+    assert payload["official_live"] is True
+    assert payload["index_count"] == 0
+    assert "noindex" in payload["robots"]
+    assert payload["sitemap"] is False
+    assert payload["recommendation"] != "PUBLISHABLE_INDEX"
 
 
 def test_status_report_has_required_fields():
@@ -70,8 +89,8 @@ def test_status_report_has_required_fields():
     ):
         assert key in status
     assert status["candidate_decision"]["demand"]["status"] == "UNKNOWN"
-    assert status["data_state"]["official_live"] is False
     assert status["page_index_state"]["sitemap"] is False
+    assert status["page_index_state"].get("indexable") is not True
     md = STATUS_MD.read_text(encoding="utf-8")
     assert "Recommendation" in md
     assert "UNKNOWN" in md

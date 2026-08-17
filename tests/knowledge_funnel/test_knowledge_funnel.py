@@ -38,8 +38,9 @@ def test_corpus_is_labeled_non_live_and_complete() -> None:
 
 
 def test_family_validate_clis_keep_fixture_off_index() -> None:
+    fixture = ROOT / "data/editorial/market-answers/fixtures/contract-fixture.v1.json"
     ma = subprocess.run(
-        ["python3", "-m", "scripts.market_answers", "validate"],
+        ["python3", "-m", "scripts.market_answers", "validate", "--payload", str(fixture)],
         cwd=ROOT,
         check=False,
         capture_output=True,
