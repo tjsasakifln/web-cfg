@@ -1,0 +1,163 @@
+{
+  "schema": "knowledge-funnel-corpus/1.0",
+  "catalog_mode": "fixture",
+  "source_kind": "labeled_fixture",
+  "claimed_live": false,
+  "official_live": false,
+  "test_only": true,
+  "never_index": true,
+  "source": "CONFENGE_WEB",
+  "frozen_now": "2026-08-16T12:00:00.000Z",
+  "frozen_today": "2026-08-16",
+  "note": "Labeled integration corpus. Assembles shipped family fixtures. Not official_live. Not a live Warmbly outcome.",
+  "fixtures": {
+    "answer_payload": "data/editorial/market-answers/fixtures/contract-fixture.v1.json",
+    "answer_candidate": "data/editorial/market-answers/candidates/valor-tipico-contratos-pavimentacao.v1.json",
+    "answer_approvals": "data/editorial/market-answers/approvals.json",
+    "analysis_fixture": "scripts/contract_analysis/fixtures/canary.v1.json",
+    "xray_ready": "data/conversion/fixtures/xray-ready.v1.json",
+    "xray_stale": "data/conversion/fixtures/xray-stale.v1.json",
+    "xray_needs_data": "data/conversion/fixtures/xray-needs-data.v1.json",
+    "xray_not_found": "data/conversion/fixtures/xray-not-found.v1.json",
+    "xray_blocked": "data/conversion/fixtures/xray-blocked.v1.json",
+    "xray_error": "data/conversion/fixtures/xray-error.v1.json",
+    "market_answer_canary": "data/conversion/fixtures/market-answer-canary.v1.json",
+    "warmbly_goal_09": "data/conversion/fixtures/warmbly-goal-09-event.v1.json"
+  },
+  "analysis_bindings": [
+    {
+      "evidence_id": "FIXTURE-PAV-001",
+      "analysis_id": "bdi-composicao-vs-referencia-sc"
+    }
+  ],
+  "cta": "Veja sua empresa neste mercado",
+  "cta_id": "veja-sua-empresa-neste-mercado",
+  "cases": {
+    "happy": {
+      "label": "answer_to_evidence_to_analysis_xray_persist_handoff",
+      "correlation_id": "kf-web002-fixture-0001",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-happy-xray",
+      "handraise_idempotency_key": "kf-web002-happy-hand",
+      "consent": true,
+      "handoff": "ok",
+      "replay": false,
+      "expect": "ok"
+    },
+    "consent": {
+      "label": "commercial_handraise_requires_consent",
+      "correlation_id": "kf-web002-fixture-consent",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-consent-xray",
+      "handraise_idempotency_key": "kf-web002-consent-hand",
+      "consent": false,
+      "handoff": "ok",
+      "replay": false,
+      "expect": "rejected"
+    },
+    "retry": {
+      "label": "timeout_then_recoverable_receipt",
+      "correlation_id": "kf-web002-fixture-retry",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-retry-xray",
+      "handraise_idempotency_key": "kf-web002-retry-hand",
+      "consent": true,
+      "handoff": "timeout",
+      "replay": true,
+      "expect": "retryable"
+    },
+    "timeout": {
+      "label": "handoff_timeout_persist_first",
+      "correlation_id": "kf-web002-fixture-timeout",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-timeout-xray",
+      "handraise_idempotency_key": "kf-web002-timeout-hand",
+      "consent": true,
+      "handoff": "timeout",
+      "replay": false,
+      "expect": "retryable"
+    },
+    "duplicate_replay": {
+      "label": "same_idempotency_does_not_duplicate",
+      "correlation_id": "kf-web002-fixture-dup",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-dup-xray",
+      "handraise_idempotency_key": "kf-web002-dup-hand",
+      "consent": true,
+      "handoff": "ok",
+      "replay": true,
+      "expect": "ok"
+    },
+    "fixture_as_live": {
+      "label": "claimed_live_on_fixture_rejected",
+      "correlation_id": "kf-web002-fixture-as-live",
+      "mutate": "fixture_as_live",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-fal-xray",
+      "handraise_idempotency_key": "kf-web002-fal-hand",
+      "consent": true,
+      "handoff": "ok",
+      "replay": false,
+      "expect": "rejected"
+    },
+    "pii_url_event": {
+      "label": "pii_stripped_from_url_and_events",
+      "correlation_id": "kf-web002-fixture-pii",
+      "mutate": "pii_injection",
+      "cnpj": "11222333000181",
+      "email": "qa-funnel@example.com",
+      "nome": "QA Funnel",
+      "telefone": "48999990000",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-pii-xray",
+      "handraise_idempotency_key": "kf-web002-pii-hand",
+      "consent": true,
+      "handoff": "ok",
+      "replay": false,
+      "expect": "rejected"
+    },
+    "missing_evidence": {
+      "label": "empty_evidence_fail_closed",
+      "correlation_id": "kf-web002-fixture-no-ev",
+      "mutate": "missing_evidence",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-noev-xray",
+      "handraise_idempotency_key": "kf-web002-noev-hand",
+      "consent": true,
+      "handoff": "ok",
+      "replay": false,
+      "expect": "rejected"
+    },
+    "stale_payload": {
+      "label": "stale_xray_not_promoted",
+      "correlation_id": "kf-web002-fixture-stale",
+      "cnpj": "44555666000181",
+      "xray_state": "STALE",
+      "xray_idempotency_key": "kf-web002-stale-xray",
+      "handraise_idempotency_key": "kf-web002-stale-hand",
+      "consent": true,
+      "handoff": "ok",
+      "replay": false,
+      "expect": "ok"
+    },
+    "handoff_unavailable": {
+      "label": "transport_down_receipt_kept",
+      "correlation_id": "kf-web002-fixture-down",
+      "cnpj": "11222333000181",
+      "xray_state": "READY",
+      "xray_idempotency_key": "kf-web002-down-xray",
+      "handraise_idempotency_key": "kf-web002-down-hand",
+      "consent": true,
+      "handoff": "unavailable",
+      "replay": false,
+      "expect": "retryable"
+    }
+  }
+}
