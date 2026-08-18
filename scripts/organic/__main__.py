@@ -218,6 +218,12 @@ def cmd_demand_engine(args: argparse.Namespace) -> int:
     return demand_main(forwarded)
 
 
+def cmd_breakout(args: argparse.Namespace) -> int:
+    from scripts.organic.breakout import main as breakout_main
+
+    return breakout_main([args.breakout_cmd])
+
+
 def cmd_sitemap_audit(args: argparse.Namespace) -> int:
     from scripts.organic.sitemap_hygiene import audit_sitemaps
 
@@ -278,6 +284,10 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--out", default=None)
     s.add_argument("--allow-fail", action="store_true")
     s.set_defaults(func=cmd_sitemap_audit)
+
+    br = sub.add_parser("breakout", help="CONFENGE-ORGANIC-BREAKOUT-01 select/gate/render (max 3)")
+    br.add_argument("breakout_cmd", nargs="?", default="build", choices=("build", "validate", "hashes"))
+    br.set_defaults(func=cmd_breakout)
 
     args = p.parse_args(argv)
     if not args.cmd:

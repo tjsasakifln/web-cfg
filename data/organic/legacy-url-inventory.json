@@ -112,12 +112,12 @@
     },
     {
       "legacy_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
-      "status": "301_redirect",
-      "current_action": "301!",
-      "destination": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "sitemap_membership": false,
-      "action": "keep_editorial_canonical_consolidation"
+      "status": "live_indexable",
+      "current_action": "KEEP",
+      "destination": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "sitemap_membership": true,
+      "action": "self_canonical_answer_for_limit_query"
     },
     {
       "legacy_url": "https://confenge.com.br/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
