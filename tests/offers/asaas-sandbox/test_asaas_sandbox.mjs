@@ -70,6 +70,7 @@ function createHttp(impl) {
         url: opts.url,
         hasToken: Boolean(opts.headers && opts.headers.access_token),
         token: opts.headers && opts.headers.access_token,
+        body: opts.body || null,
       });
       return impl(opts, calls);
     },
@@ -100,8 +101,11 @@ function sandboxHttp(overrides = {}) {
     if (opts.method === "POST" && /customers$/.test(opts.url)) {
       return { status: 200, headers: {}, body: customerFixture };
     }
-    if (opts.method === "GET" && /subscriptions/.test(opts.url) && overrides._created) {
+    if (opts.method === "GET" && /checkouts/.test(opts.url) && overrides._created) {
       return { status: 200, headers: {}, body: { data: [checkoutFixture] } };
+    }
+    if (opts.method === "GET" && /subscriptions/.test(opts.url) && overrides._created) {
+      return { status: 200, headers: {}, body: { data: [subFixture] } };
     }
     if (opts.method === "POST" && /checkouts$/.test(opts.url)) {
       creates += 1;
@@ -147,7 +151,7 @@ function checkoutEvent(env, { http, store, body, headers, inventory } = {}) {
   });
 }
 
-function webhookEvent(env, { store, body, headers, raw } = {}) {
+function webhookEvent(env, { store, body, headers, raw, queryStringParameters } = {}) {
   const handler = webhookFn.createHandler({
     env,
     store: store === undefined ? new MemoryOfferStore() : store,
@@ -160,6 +164,7 @@ function webhookEvent(env, { store, body, headers, raw } = {}) {
       "asaas-access-token": env.ASAAS_SANDBOX_WEBHOOK_TOKEN || "",
       ...(headers || {}),
     },
+    queryStringParameters,
     body: raw != null ? raw : JSON.stringify(body || whReceived),
   });
 }
@@ -454,9 +459,198 @@ const subPosts = subHttp.calls.filter((c) => c.method === "POST" && /subscriptio
 assert("subscription_uses_official_path", subPosts.length === 1, subHttp.calls);
 assert("subscription_no_checkout_recurrent", subHttp.calls.every((c) => !/checkouts$/.test(c.url) || c.method !== "POST"), subHttp.calls);
 
+const defaultCfg = configMod.resolveConfig({ NODE_ENV: "test" });
+assert("default_base_sandbox_host", defaultCfg.ok && defaultCfg.baseUrl === "https://api-sandbox.asaas.com/v3", defaultCfg);
+assert("default_mode_disabled", defaultCfg.mode === "disabled", defaultCfg);
+
+const wwwBase = parse(await checkoutEvent({
+  ...SANDBOX_ENV,
+  ASAAS_SANDBOX_BASE_URL: "https://www.asaas.com/v3",
+}, { http: sandboxHttp() }));
+assert("www_asaas_base_blocked", wwwBase.statusCode === 403 && wwwBase.body.error === "production_base_url_blocked", wwwBase);
+
+const apexBase = parse(await checkoutEvent({
+  ...SANDBOX_ENV,
+  ASAAS_SANDBOX_BASE_URL: "https://asaas.com/v3",
+}, { http: sandboxHttp() }));
+assert("apex_asaas_base_blocked", apexBase.statusCode === 403 && apexBase.body.error === "production_base_url_blocked", apexBase);
+
+const unexpectedHost = configMod.resolveConfig({
+  ...SANDBOX_ENV,
+  ASAAS_SANDBOX_BASE_URL: "https://evil.example/v3",
+});
+assert("unexpected_host_blocked", unexpectedHost.ok === false && unexpectedHost.error === "host_not_allowlisted", unexpectedHost);
+
+const prodFallback = configMod.requireSandboxRuntime(configMod.resolveConfig({
+  ...SANDBOX_ENV,
+  ASAAS_SANDBOX_API_KEY: "",
+  ASAAS_API_KEY: "$aact_hmlg_must_not_be_read_as_fallback",
+  ASAAS_ACCESS_TOKEN: "$aact_hmlg_must_not_be_read_as_fallback",
+}), { needApiKey: true });
+assert("production_secret_names_not_fallback", prodFallback.ok === false && prodFallback.error === "sandbox_secret_missing", prodFallback);
+
+const moneyForced = configMod.resolveConfig({
+  ...SANDBOX_ENV,
+  CONFENGE_REAL_MONEY: "true",
+});
+assert("real_money_flag_blocked", moneyForced.ok === false && moneyForced.error === "production_money_blocked", moneyForced);
+
+assert("cents_to_reais_exact", providerMod.centsToReais(800000) === 8000, providerMod.centsToReais(800000));
+let unsafeCents = null;
+try { providerMod.centsToReais(10.5); } catch (err) { unsafeCents = err && err.code; }
+assert("non_integer_cents_rejected", unsafeCents === "unsafe_amount", unsafeCents);
+
+const tamperHttp = sandboxHttp();
+const tamper = parse(await checkoutEvent(SANDBOX_ENV, {
+  http: tamperHttp,
+  body: {
+    offer_id: "CFG-DIAG-EXP-v1",
+    sandbox_test: true,
+    fixture_id: "sbx-diag-001",
+    cnpj: "11222333000181",
+    email: "sandbox.diag@example.invalid",
+    phone: "4738010919",
+    amount: 1,
+    amount_cents: 1,
+    value: 1,
+    price: 1,
+    currency: "USD",
+    description: "TAMPERED",
+    term: "1 day",
+    max_payments: 99,
+    minutesToExpire: 1,
+    chargeTypes: ["RECURRENT"],
+  },
+}));
+const tamperPost = tamperHttp.calls.find((c) => c.method === "POST" && /checkouts$/.test(c.url));
+const tamperBody = tamperPost && tamperPost.body;
+assert("tamper_checkout_ok", tamper.statusCode === 201 && tamper.body.ok === true, tamper);
+assert("tamper_amount_server_allowlist", tamperBody && tamperBody.items && tamperBody.items[0].value === 8000, tamperBody);
+assert("tamper_description_not_client", tamperBody && tamperBody.items && tamperBody.items[0].description === "CFG-DIAG-EXP-v1", tamperBody);
+assert("tamper_no_usd", tamperBody && JSON.stringify(tamperBody).indexOf("USD") === -1, tamperBody);
+assert("tamper_no_recurrent", tamperBody && tamperBody.chargeTypes && tamperBody.chargeTypes[0] === "DETACHED", tamperBody);
+assert("tamper_expiry_server", tamperBody && tamperBody.minutesToExpire === 60, tamperBody);
+
+const whDisabled = parse(await webhookFn.createHandler({
+  env: { NODE_ENV: "test" },
+  store: new MemoryOfferStore(),
+})({
+  httpMethod: "POST",
+  headers: { "asaas-access-token": "anything" },
+  body: JSON.stringify(whReceived),
+}));
+assert("webhook_disabled_404", whDisabled.statusCode === 404 && whDisabled.body.error === "feature_disabled", whDisabled);
+
+const whQuery = parse(await webhookFn.createHandler({
+  env: SANDBOX_ENV,
+  store: new MemoryOfferStore(),
+})({
+  httpMethod: "POST",
+  headers: { "content-type": "application/json" },
+  queryStringParameters: {
+    "asaas-access-token": SANDBOX_ENV.ASAAS_SANDBOX_WEBHOOK_TOKEN,
+    token: SANDBOX_ENV.ASAAS_SANDBOX_WEBHOOK_TOKEN,
+  },
+  body: JSON.stringify(whReceived),
+}));
+assert("webhook_query_not_auth", whQuery.statusCode === 401 && whQuery.body.error === "invalid_webhook_token", whQuery);
+
+const whAlt = parse(await webhookEvent(SANDBOX_ENV, {
+  headers: {
+    "asaas-access-token": "",
+    authorization: `Bearer ${SANDBOX_ENV.ASAAS_SANDBOX_WEBHOOK_TOKEN}`,
+    "x-webhook-token": SANDBOX_ENV.ASAAS_SANDBOX_WEBHOOK_TOKEN,
+    access_token: SANDBOX_ENV.ASAAS_SANDBOX_WEBHOOK_TOKEN,
+  },
+}));
+assert("webhook_alt_header_not_auth", whAlt.statusCode === 401 && whAlt.body.error === "invalid_webhook_token", whAlt);
+
+const orderStore = new MemoryOfferStore();
+const orderReceived = parse(await webhookEvent(SANDBOX_ENV, { store: orderStore, body: whReceived }));
+const orderCreated = parse(await webhookEvent(SANDBOX_ENV, { store: orderStore, body: whCreated }));
+const orderObj = await orderStore.get("object:pay_sbx_001");
+assert("out_of_order_received_first", orderReceived.statusCode === 200 && orderReceived.body.type === "payment_received", orderReceived);
+assert("out_of_order_created_retained", orderCreated.statusCode === 200 && orderCreated.body.transition === "blocked", orderCreated);
+assert("out_of_order_stays_received", orderObj && orderObj.canonical_status === "PAYMENT_RECEIVED", orderObj);
+assert("out_of_order_created_not_payment", orderCreated.body.type !== "payment_received", orderCreated);
+
+const fwdStore = new MemoryOfferStore();
+const fwdCreated = parse(await webhookEvent(SANDBOX_ENV, { store: fwdStore, body: whCreated }));
+const fwdOverdue = parse(await webhookEvent(SANDBOX_ENV, { store: fwdStore, body: whOverdue }));
+const fwdReceived = parse(await webhookEvent(SANDBOX_ENV, { store: fwdStore, body: whReceived }));
+const fwdObj = await fwdStore.get("object:pay_sbx_001");
+assert("forward_created", fwdCreated.body.transition === "applied", fwdCreated);
+assert("forward_overdue", fwdOverdue.body.transition === "applied" && fwdOverdue.body.type === "payment_overdue", fwdOverdue);
+assert("forward_received", fwdReceived.body.transition === "applied" && fwdReceived.body.type === "payment_received", fwdReceived);
+assert("forward_object_received", fwdObj && fwdObj.canonical_status === "PAYMENT_RECEIVED", fwdObj);
+
+const impStore = new MemoryOfferStore();
+const impRefund = parse(await webhookEvent(SANDBOX_ENV, { store: impStore, body: whRefunded }));
+const impReceive = parse(await webhookEvent(SANDBOX_ENV, { store: impStore, body: whReceived }));
+const impObj = await impStore.get("object:pay_sbx_001");
+assert("impossible_refund_first", impRefund.statusCode === 200 && impRefund.body.type === "payment_refunded", impRefund);
+assert("impossible_receive_blocked", impReceive.statusCode === 200 && impReceive.body.transition === "blocked", impReceive);
+assert("impossible_stays_refunded", impObj && impObj.canonical_status === "PAYMENT_REFUNDED", impObj);
+assert("impossible_not_converted_to_payment", impReceive.body.transition !== "applied", impReceive);
+
+const unkStore = new MemoryOfferStore();
+const unk = parse(await webhookEvent(SANDBOX_ENV, { store: unkStore, body: whUnknown }));
+const unkObj = await unkStore.get("object:pay_sbx_001");
+assert("unknown_retained", unk.body.exception === true && unk.body.transition === "retained", unk);
+assert("unknown_no_payment_object", unkObj == null, unkObj);
+assert("unknown_not_revenue", unk.body.revenue !== true && unk.body.type !== "payment_received", unk);
+
+class FlakyAppendStore extends MemoryOfferStore {
+  constructor() {
+    super();
+    this.appendFails = 1;
+  }
+  async appendCanonicalEvent(event) {
+    if (this.appendFails > 0) {
+      this.appendFails -= 1;
+      throw new Error("forced_append_failure");
+    }
+    return super.appendCanonicalEvent(event);
+  }
+}
+const flaky = new FlakyAppendStore();
+const partial1 = parse(await webhookEvent(SANDBOX_ENV, { store: flaky, body: whReceived }));
+const partial2 = parse(await webhookEvent(SANDBOX_ENV, { store: flaky, body: whReceived }));
+const partial3 = parse(await webhookEvent(SANDBOX_ENV, { store: flaky, body: whReceived }));
+assert("partial_apply_first_incomplete", partial1.statusCode === 500 && partial1.body.error === "apply_incomplete", partial1);
+assert("partial_apply_retry_completes", partial2.statusCode === 200 && partial2.body.duplicate !== true && partial2.body.type === "payment_received", partial2);
+assert("partial_apply_second_replay_deduped", partial3.statusCode === 200 && partial3.body.duplicate === true, partial3);
+assert("partial_apply_one_canonical", flaky.events.length === 1, flaky.events);
+
+const logProvider = providerMod.createAsaasSandboxProvider({
+  env: SANDBOX_ENV,
+  http: sandboxHttp(),
+  store: new MemoryOfferStore(),
+});
+await logProvider.createSandboxCheckout({
+  offer_id: "CFG-DIAG-EXP-v1",
+  sandbox_test: true,
+  fixture_id: "sbx-diag-001",
+  cnpj: "11222333000181",
+  email: "sandbox.diag@example.invalid",
+  phone: "4738010919",
+});
+const logBlob = JSON.stringify(logProvider.logs);
+assert("logs_environment_sandbox", /"environment":"sandbox"/.test(logBlob), logProvider.logs[0]);
+assert("logs_no_api_key", !logBlob.includes(SANDBOX_ENV.ASAAS_SANDBOX_API_KEY), logBlob.slice(0, 80));
+assert("logs_no_webhook_token", !logBlob.includes(SANDBOX_ENV.ASAAS_SANDBOX_WEBHOOK_TOKEN), "logs");
+assert("logs_no_admin_token", !logBlob.includes(SANDBOX_ENV.CONFENGE_OFFER_SANDBOX_ADMIN_TOKEN), "logs");
+assert("logs_no_full_doc", !logBlob.includes("11222333000181"), logBlob.slice(0, 80));
+
+assert("checkout_no_cors_star", !valid.headers || valid.headers["access-control-allow-origin"] !== "*", valid.headers);
+const validRaw = await checkoutEvent(SANDBOX_ENV, { http: sandboxHttp() });
+assert("checkout_no_acao", !validRaw.headers || !validRaw.headers["access-control-allow-origin"], validRaw.headers);
+assert("checkout_environment_sandbox", valid.body.environment === "sandbox", valid.body);
+
 const shipped = [
   "scripts/offers/providers/asaas-sandbox.cjs",
   "scripts/offers/providers/config.cjs",
+  "scripts/offers/providers/status-machine.cjs",
   "scripts/offers/stores/sandbox-store.cjs",
   "netlify/functions/offer-checkout-sandbox.cjs",
   "netlify/functions/asaas-webhook-sandbox.cjs",

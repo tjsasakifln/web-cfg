@@ -17,6 +17,7 @@ const {
   hostnameOf,
 } = require("./config.cjs");
 const { matchFixture, loadAllowlist, isSandboxTestPayload } = require("./fixtures.cjs");
+const { decideCanonicalTransition, objectIdFromPayload } = require("./status-machine.cjs");
 
 const PIXEL_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=";
 const CALLBACK_HOST_ALLOW = new Set(["example.com"]);
@@ -85,7 +86,18 @@ function resolveBillingShape(offer) {
 }
 
 function centsToReais(cents) {
-  return Number((Number(cents) / 100).toFixed(2));
+  if (!Number.isInteger(cents) || cents < 0 || !Number.isSafeInteger(cents)) {
+    const err = new Error("unsafe_amount");
+    err.code = "unsafe_amount";
+    throw err;
+  }
+  const reais = Number((cents / 100).toFixed(2));
+  if (Math.round(reais * 100) !== cents) {
+    const err = new Error("unsafe_amount");
+    err.code = "unsafe_amount";
+    throw err;
+  }
+  return reais;
 }
 
 function itemName(offer) {
@@ -248,6 +260,92 @@ function verifySandboxWebhook(rawHeaders, config) {
   return { ok: true };
 }
 
+async function applySandboxWebhookEvent(store, mapped, raw) {
+  if (!store) return { ok: false, error: "store_unavailable", statusCode: 503 };
+  const event = mapped && mapped.event;
+  if (!event || !event.provider_event_id) {
+    return { ok: false, error: (mapped && mapped.error) || "event_id_missing", statusCode: 400 };
+  }
+  const providerEventId = event.provider_event_id;
+  const processedKey = `processed:${providerEventId}`;
+  const existing = await store.get(processedKey);
+  if (existing && existing.applied) {
+    return {
+      ok: true,
+      duplicate: true,
+      inserted: false,
+      decision: existing.decision || { action: "idempotent", reason: "already_applied" },
+      event,
+      object_status: existing.object_status || null,
+    };
+  }
+
+  if (!existing) {
+    const reserved = await store.markProviderEventProcessed(providerEventId, {
+      applied: false,
+      event_type: event.type,
+      offer_id: event.offer_id,
+      correlation_id: event.external_reference,
+    });
+    if (!reserved.inserted && reserved.value && reserved.value.applied) {
+      return {
+        ok: true,
+        duplicate: true,
+        inserted: false,
+        decision: reserved.value.decision || { action: "idempotent", reason: "already_applied" },
+        event,
+        object_status: reserved.value.object_status || null,
+      };
+    }
+  }
+
+  const objectId = objectIdFromPayload(raw);
+  const objectKey = objectId ? `object:${objectId}` : null;
+  const current = objectKey ? await store.get(objectKey) : null;
+  const decision = decideCanonicalTransition(current && current.canonical_status, mapped);
+
+  if (store.appendCanonicalEvent) {
+    await store.appendCanonicalEvent({
+      ...event,
+      transition: decision.action,
+      transition_reason: decision.reason,
+    });
+  }
+
+  if (decision.apply && objectKey) {
+    await store.put(objectKey, {
+      kind: "sandbox_payment_object",
+      environment: "sandbox",
+      object_id: objectId,
+      canonical_status: decision.next,
+      last_provider_event_id: providerEventId,
+      offer_id: event.offer_id,
+    });
+  }
+
+  const completed = {
+    kind: "processed_provider_event",
+    environment: "sandbox",
+    provider_event_id: providerEventId,
+    applied: true,
+    event_type: event.type,
+    offer_id: event.offer_id,
+    correlation_id: event.external_reference,
+    decision,
+    object_status: decision.next || (current && current.canonical_status) || null,
+  };
+  await store.put(processedKey, completed);
+
+  return {
+    ok: mapped.ok !== false,
+    duplicate: false,
+    inserted: true,
+    decision,
+    event,
+    object_status: completed.object_status,
+  };
+}
+
 function createDefaultHttp({ config, logger, clock, circuit }) {
   const state = circuit || { failures: 0, openUntil: 0 };
   return {
@@ -341,7 +439,7 @@ function createAsaasSandboxProvider(deps = {}) {
       access_token: config.apiKey,
     };
     outbound.push({ method, url, path: pathName });
-    logger.info("asaas_sandbox_request", { method, url, path: pathName });
+    logger.info("asaas_sandbox_request", { method, url, path: pathName, environment: "sandbox" });
     const exec = async () => http.request({
       method,
       url,
@@ -393,6 +491,13 @@ function createAsaasSandboxProvider(deps = {}) {
     }
     if (id) {
       return providerRequest({ method: "GET", pathName: `/v3/payments/${encodeURIComponent(id)}`, retry: true });
+    }
+    if (externalReference && kind === "checkout") {
+      return providerRequest({
+        method: "GET",
+        pathName: `/v3/checkouts?externalReference=${encodeURIComponent(externalReference)}`,
+        retry: true,
+      });
     }
     if (externalReference) {
       return providerRequest({
@@ -478,8 +583,16 @@ function createAsaasSandboxProvider(deps = {}) {
     });
     const externalReference = `cfg:${offer.offer_id}:${correlationId}`.slice(0, 200);
 
+    let amountReais;
+    try {
+      amountReais = centsToReais(offer.amount_cents);
+    } catch {
+      return { ok: false, error: "unsafe_amount", statusCode: 422 };
+    }
+
     const reserved = await store.putIfAbsent(idempotencyKey, {
       kind: "checkout_reservation",
+      environment: "sandbox",
       status: "pending",
       offer_id: offer.offer_id,
       offer_version: offer.offer_version,
@@ -490,49 +603,9 @@ function createAsaasSandboxProvider(deps = {}) {
       amount_cents: offer.amount_cents,
       fixture_id: fixture.fixture_id,
     });
-    if (!reserved.inserted) {
-      const existing = reserved.value;
-      if (existing && existing.provider_id) {
-        return {
-          ok: true,
-          idempotent: true,
-          payment: false,
-          revenue: false,
-          correlation_id: existing.correlation_id,
-          idempotency_key: idempotencyKey,
-          created: minimizeCreated(existing),
-          event: existing.event || null,
-        };
-      }
-      for (let i = 0; i < 8; i += 1) {
-        await sleep(15);
-        const again = await store.get(idempotencyKey);
-        if (again && again.provider_id) {
-          return {
-            ok: true,
-            idempotent: true,
-            payment: false,
-            revenue: false,
-            correlation_id: again.correlation_id,
-            idempotency_key: idempotencyKey,
-            created: minimizeCreated(again),
-            event: again.event || null,
-          };
-        }
-      }
-      return {
-        ok: true,
-        idempotent: true,
-        pending: true,
-        payment: false,
-        revenue: false,
-        correlation_id: existing && existing.correlation_id,
-        idempotency_key: idempotencyKey,
-        created: existing ? minimizeCreated(existing) : null,
-      };
-    }
+    const baseRecord = reserved.value;
 
-    async function persistSuccess(record) {
+    async function persistSuccess(record, { idempotent = false } = {}) {
       const event = commercialEvent({
         type: TYPES.CHECKOUT_CREATED,
         offer_id: offer.offer_id,
@@ -546,9 +619,10 @@ function createAsaasSandboxProvider(deps = {}) {
       event.financial_confirmation = false;
       event.revenue = false;
       const saved = {
-        ...reserved.value,
+        ...baseRecord,
         ...record,
         status: "created",
+        environment: "sandbox",
         event,
         offer_snapshot: snapshotOffer(offer),
       };
@@ -556,13 +630,79 @@ function createAsaasSandboxProvider(deps = {}) {
       if (store.appendCanonicalEvent) await store.appendCanonicalEvent(event);
       return {
         ok: true,
-        idempotent: false,
+        idempotent,
         payment: false,
         revenue: false,
+        environment: "sandbox",
         correlation_id: correlationId,
         idempotency_key: idempotencyKey,
         created: minimizeCreated(saved),
         event,
+      };
+    }
+
+    async function reconcileExisting() {
+      const reconciled = await getSandboxPayment({
+        kind: shape.operation,
+        externalReference,
+      });
+      const found = extractProviderObject(reconciled);
+      if (!found || !found.id) return null;
+      const linkCheck = found.link ? assertSandboxLinkUrl(found.link) : { ok: true, url: null };
+      if (!linkCheck.ok) return { ok: false, error: linkCheck.error, statusCode: 502 };
+      return persistSuccess({
+        provider_id: found.id,
+        provider_link: linkCheck.url,
+        provider_status: found.status || "ACTIVE",
+        kind: shape.operation,
+        reconciled: true,
+      }, { idempotent: true });
+    }
+
+    if (!reserved.inserted) {
+      const existing = reserved.value;
+      if (existing && existing.provider_id) {
+        return {
+          ok: true,
+          idempotent: true,
+          payment: false,
+          revenue: false,
+          environment: "sandbox",
+          correlation_id: existing.correlation_id,
+          idempotency_key: idempotencyKey,
+          created: minimizeCreated(existing),
+          event: existing.event || null,
+        };
+      }
+      const recovered = await reconcileExisting();
+      if (recovered) return recovered;
+      for (let i = 0; i < 8; i += 1) {
+        await sleep(15);
+        const again = await store.get(idempotencyKey);
+        if (again && again.provider_id) {
+          return {
+            ok: true,
+            idempotent: true,
+            payment: false,
+            revenue: false,
+            environment: "sandbox",
+            correlation_id: again.correlation_id,
+            idempotency_key: idempotencyKey,
+            created: minimizeCreated(again),
+            event: again.event || null,
+          };
+        }
+      }
+      return {
+        ok: true,
+        idempotent: true,
+        pending: true,
+        payment: false,
+        revenue: false,
+        environment: "sandbox",
+        correlation_id: existing && existing.correlation_id,
+        idempotency_key: idempotencyKey,
+        created: existing ? minimizeCreated(existing) : null,
       };
     }
 
@@ -582,7 +722,7 @@ function createAsaasSandboxProvider(deps = {}) {
           name: itemName(offer),
           description: offer.offer_id,
           quantity: 1,
-          value: centsToReais(offer.amount_cents),
+          value: amountReais,
           imageBase64: PIXEL_PNG,
         }],
         customerData: {
@@ -618,7 +758,7 @@ function createAsaasSandboxProvider(deps = {}) {
         body: {
           customer: customer.id,
           billingType: "UNDEFINED",
-          value: centsToReais(offer.amount_cents),
+          value: amountReais,
           nextDueDate: due,
           cycle: "MONTHLY",
           maxPayments: shape.maxPayments,
@@ -639,22 +779,8 @@ function createAsaasSandboxProvider(deps = {}) {
     }
 
     if (providerResult && providerResult.error === "timeout") {
-      const reconciled = await getSandboxPayment({
-        kind: shape.operation,
-        externalReference,
-      });
-      const found = extractProviderObject(reconciled);
-      if (found && found.id) {
-        const linkCheck = found.link ? assertSandboxLinkUrl(found.link) : { ok: true, url: null };
-        if (!linkCheck.ok) return { ok: false, error: linkCheck.error, statusCode: 502 };
-        return persistSuccess({
-          provider_id: found.id,
-          provider_link: linkCheck.url,
-          provider_status: found.status || "ACTIVE",
-          kind: shape.operation,
-          reconciled: true,
-        });
-      }
+      const recovered = await reconcileExisting();
+      if (recovered) return recovered;
       return { ok: false, error: "timeout", idempotency_key: idempotencyKey, statusCode: 504 };
     }
 
@@ -672,6 +798,7 @@ function createAsaasSandboxProvider(deps = {}) {
     getSandboxPayment,
     verifySandboxWebhook: (headers) => verifySandboxWebhook(headers, config),
     mapProviderEventToCanonicalEvent,
+    applySandboxWebhookEvent,
     computeProviderIdempotencyKey,
     computeCorrelationId,
     redactProviderPayload,
@@ -718,9 +845,12 @@ module.exports = {
   computeCorrelationId,
   resolveBillingShape,
   mapProviderEventToCanonicalEvent,
+  applySandboxWebhookEvent,
   verifySandboxWebhook,
   redactProviderPayload,
   createAsaasSandboxProvider,
   createDefaultHttp,
   centsToReais,
+  decideCanonicalTransition,
+  objectIdFromPayload,
 };

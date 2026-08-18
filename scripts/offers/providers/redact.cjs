@@ -35,7 +35,7 @@ function redactProviderPayload(input, depth = 0) {
 
 function containsSecret(text, secrets = []) {
   const raw = String(text || "");
-  if (SECRET_VALUE.test(raw)) return true;
+  if (/\$aact_(hmlg|prod)_[A-Za-z0-9]+/.test(raw)) return true;
   for (const secret of secrets) {
     if (secret && String(secret).length >= 4 && raw.includes(String(secret))) return true;
   }

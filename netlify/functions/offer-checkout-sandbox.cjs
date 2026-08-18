@@ -94,6 +94,7 @@ function createHandler(deps = {}) {
       payment: false,
       revenue: false,
       financial_confirmation: false,
+      environment: "sandbox",
       idempotent: Boolean(result.idempotent),
       pending: Boolean(result.pending),
       correlation_id: result.correlation_id,

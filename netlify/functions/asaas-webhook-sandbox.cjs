@@ -5,6 +5,7 @@ const { resolveConfig, requireSandboxRuntime } = require("../../scripts/offers/p
 const {
   createAsaasSandboxProvider,
   mapProviderEventToCanonicalEvent,
+  applySandboxWebhookEvent,
   redactProviderPayload,
 } = require("../../scripts/offers/providers/asaas-sandbox.cjs");
 const { createSandboxStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
@@ -72,52 +73,52 @@ function createHandler(deps = {}) {
       return json(503, { ok: false, error: "store_unavailable" });
     }
 
-    const mapped = mapProviderEventToCanonicalEvent(payload, {
-      offer_id: payload.offer_id || null,
-    });
+    const mapped = mapProviderEventToCanonicalEvent(payload, {});
     if (!mapped.event || mapped.error === "event_id_missing") {
       return json(400, {
         ok: false,
         error: mapped.error || "event_id_missing",
         status: mapped.status || "UNKNOWN",
+        environment: "sandbox",
       });
     }
 
-    const providerEventId = mapped.event.provider_event_id;
-    const marked = await store.markProviderEventProcessed(providerEventId, {
-      event_type: mapped.event.type,
-      offer_id: mapped.event.offer_id,
-      correlation_id: mapped.event.external_reference,
-    });
-    if (!marked.inserted) {
-      return json(200, {
-        ok: true,
-        duplicate: true,
-        provider_event_id: providerEventId,
-        type: marked.value && marked.value.event_type || mapped.event.type,
-      });
-    }
+    try {
+      const applied = await applySandboxWebhookEvent(store, mapped, payload);
+      if (applied.duplicate) {
+        return json(200, {
+          ok: true,
+          duplicate: true,
+          environment: "sandbox",
+          provider_event_id: mapped.event.provider_event_id,
+          type: (applied.event && applied.event.type) || mapped.event.type,
+          transition: (applied.decision && applied.decision.action) || "idempotent",
+          object_status: applied.object_status || null,
+        });
+      }
 
-    if (store.appendCanonicalEvent) {
-      await store.appendCanonicalEvent(mapped.event);
+      const body = {
+        ok: mapped.ok !== false,
+        duplicate: false,
+        environment: "sandbox",
+        provider_event_id: mapped.event.provider_event_id,
+        offer_id: mapped.event.offer_id,
+        type: mapped.event.type,
+        canonical_status: mapped.event.canonical_status,
+        object_status: applied.object_status || null,
+        transition: applied.decision && applied.decision.action,
+        financial_confirmation: mapped.event.financial_confirmation,
+        revenue: mapped.event.revenue,
+        exception: Boolean(mapped.exception) || mapped.event.type === "commercial_exception",
+      };
+      if (mapped.ok === false) {
+        body.error = mapped.error;
+        body.status = mapped.status || "UNKNOWN";
+      }
+      return json(200, body);
+    } catch {
+      return json(500, { ok: false, error: "apply_incomplete", environment: "sandbox" });
     }
-
-    const body = {
-      ok: mapped.ok !== false,
-      duplicate: false,
-      provider_event_id: providerEventId,
-      offer_id: mapped.event.offer_id,
-      type: mapped.event.type,
-      canonical_status: mapped.event.canonical_status,
-      financial_confirmation: mapped.event.financial_confirmation,
-      revenue: mapped.event.revenue,
-      exception: Boolean(mapped.exception) || mapped.event.type === "commercial_exception",
-    };
-    if (mapped.ok === false) {
-      body.error = mapped.error;
-      body.status = mapped.status || "UNKNOWN";
-    }
-    return json(200, body);
   };
 }
 

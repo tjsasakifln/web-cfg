@@ -59,16 +59,23 @@ class MemoryOfferStore {
     return record;
   }
   async appendCanonicalEvent(event) {
-    this.events.push(event);
     if (event && event.event_id) {
-      await this.put(`event:${event.event_id}`, { kind: "canonical_event", event });
+      const result = await this.putIfAbsent(`event:${event.event_id}`, {
+        kind: "canonical_event",
+        environment: "sandbox",
+        event,
+      });
+      if (result.inserted) this.events.push(event);
+      return result;
     }
-    return event;
+    this.events.push(event);
+    return { inserted: true, value: event };
   }
   async markProviderEventProcessed(providerEventId, meta = {}) {
     const key = `processed:${providerEventId}`;
     const result = await this.putIfAbsent(key, {
       kind: "processed_provider_event",
+      environment: "sandbox",
       provider_event_id: providerEventId,
       ...meta,
     });
@@ -140,13 +147,18 @@ class FileOfferStore {
   }
   async appendCanonicalEvent(event) {
     if (event && event.event_id) {
-      await this.put(`event:${event.event_id}`, { kind: "canonical_event", event });
+      return this.putIfAbsent(`event:${event.event_id}`, {
+        kind: "canonical_event",
+        environment: "sandbox",
+        event,
+      });
     }
-    return event;
+    return { inserted: true, value: event };
   }
   async markProviderEventProcessed(providerEventId, meta = {}) {
     return this.putIfAbsent(`processed:${providerEventId}`, {
       kind: "processed_provider_event",
+      environment: "sandbox",
       provider_event_id: providerEventId,
       ...meta,
     });
@@ -208,13 +220,18 @@ class NetlifyBlobsOfferStore {
   }
   async appendCanonicalEvent(event) {
     if (event && event.event_id) {
-      await this.put(`event:${event.event_id}`, { kind: "canonical_event", event });
+      return this.putIfAbsent(`event:${event.event_id}`, {
+        kind: "canonical_event",
+        environment: "sandbox",
+        event,
+      });
     }
-    return event;
+    return { inserted: true, value: event };
   }
   async markProviderEventProcessed(providerEventId, meta = {}) {
     return this.putIfAbsent(`processed:${providerEventId}`, {
       kind: "processed_provider_event",
+      environment: "sandbox",
       provider_event_id: providerEventId,
       ...meta,
     });
