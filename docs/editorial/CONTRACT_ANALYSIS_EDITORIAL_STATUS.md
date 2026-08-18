@@ -5,7 +5,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-08-17T22:02:36Z`
+- Generated: `2026-08-18T01:45:58Z`
 - Evaluated: **8** (cap 10)
 - Source: `test_only_fixture` (`scripts/contract_analysis/fixtures/extra-cli-export`)
 - catalog_mode: `fixture` claimed_live=`False`
@@ -16,7 +16,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 - expand/adjust/kill: **ADJUST**
 - nenhum INDEX ativo: **True**
 - FACTUAL_HANDOFF_PENDING: **True**
-- Reason: Família e gate prontos; extra-cli #400 consumido na forma public-read-contract-analysis/1.0. FACTUAL_HANDOFF_PENDING: não há handoff official_live HANDOFF_READY com dossiê DATA_READY. index_count=0. Nenhum INDEX ativo. Não expandir. Ajustar o produtor e só então escrever análises. Matar a família se o handoff factual nunca autorizar tese defensável.
+- Reason: Família e gate prontos. Consumer aceita authority-handoff-contract-analysis/1.0 e 1.1 além de public-read-contract-analysis/1.x. O rendezvous `$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01/` está `FACTUAL_HANDOFF_PENDING`. index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. Producer publication/index flags nunca autorizam INDEX.
 
 ## State counts
 

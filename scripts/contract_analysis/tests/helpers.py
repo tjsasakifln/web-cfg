@@ -69,11 +69,13 @@ def complete_live_record(**overrides: Any) -> dict[str, Any]:
                     "linha para administração local, omitindo canteiro e mobilização."
                 ),
                 "source_ref": "planilha",
+                "locator": "planilha / BDI / administração local",
             },
             {
                 "kind": "FACT",
                 "text": "O regime é preço unitário com quantitativos abertos por serviço.",
                 "source_ref": "contrato",
+                "locator": "contrato / cláusula de regime",
             },
         ],
         "calculations": [
@@ -84,6 +86,8 @@ def complete_live_record(**overrides: Any) -> dict[str, Any]:
                     "publicados; as contas de apoio aparecem zeradas, o que impede "
                     "rateio posterior por frente."
                 ),
+                "source_ref": "planilha",
+                "locator": "planilha / BDI / administração local",
             }
         ],
         "interpretation": [

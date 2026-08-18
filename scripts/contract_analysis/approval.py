@@ -8,7 +8,33 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from scripts.contract_analysis import (
+    OWNER_CONDITIONAL_APPROVER,
+    OWNER_CONDITIONAL_TOKEN,
+    OWNER_DIMENSION_MIN,
+    OWNER_QUALITY_MIN,
+)
+
 APPROVALS_REL = Path("data/editorial/contract-analysis/approvals.json")
+CONDITIONAL_CHECKLIST = (
+    "source_official_live",
+    "handoff_ready_verified",
+    "material_claims_have_locators",
+    "hard_gates_all_true",
+    "quality_total_ge_88",
+    "no_dimension_below_75",
+    "insight_singular",
+    "utility_beyond_source",
+    "method_limitations_author_reviewer_visible",
+    "author_assigned_after_review",
+    "reputational_safety",
+    "unique_content_anti_doorway",
+    "cta_attribution_preserved",
+    "canonical_robots_schema_sitemap_coherent",
+    "no_implied_commercial_relation",
+    "snapshot_hashes_recorded",
+    "suite_green",
+)
 APPROVAL_SCHEMA = "contract-analysis-approvals/1.0"
 
 _MATERIAL_KEYS = (
@@ -250,3 +276,151 @@ def approval_allows_index(record: dict[str, Any], *, root: Path | None = None) -
     if not stored.get("rollback"):
         return False, ["approval_rollback_absent"]
     return True, []
+
+
+def active_index_count(*, root: Path | None = None) -> int:
+    return sum(
+        1
+        for row in load_approvals(root).get("approvals") or []
+        if isinstance(row, dict) and row.get("state") == "PUBLISHABLE_INDEX" and not row.get("withdrawn")
+    )
+
+
+def rendered_content_hash(html: str) -> str:
+    return hashlib.sha256((html or "").encode("utf-8")).hexdigest()
+
+
+def evaluate_conditional_checklist(
+    record: dict[str, Any],
+    *,
+    quality: dict[str, Any] | None = None,
+    handoff: dict[str, Any] | None = None,
+    rendered_html: str = "",
+    producer_root_hash: str = "",
+    source_dossier_hash: str = "",
+    suite_green: bool = False,
+) -> dict[str, bool]:
+    from scripts.contract_analysis.consume import (
+        claim_has_locator,
+        iter_material_claims,
+        official_live_declared,
+    )
+    from scripts.contract_analysis.handoff import HANDOFF_READY
+
+    quality = quality or {}
+    handoff = handoff or {}
+    dimensions = quality.get("dimensions") if isinstance(quality.get("dimensions"), dict) else {}
+    hard_gates = quality.get("hard_gates") if isinstance(quality.get("hard_gates"), dict) else {}
+    score = quality.get("score")
+    try:
+        score_n = int(score)
+    except (TypeError, ValueError):
+        score_n = -1
+    locators_ok = bool(iter_material_claims(record)) and all(
+        claim_has_locator(item) for item in iter_material_claims(record)
+    )
+    author = record.get("author") if isinstance(record.get("author"), dict) else {"name": record.get("author")}
+    reviewer = record.get("reviewer") if isinstance(record.get("reviewer"), dict) else {"name": record.get("reviewer")}
+    author_name = str((author or {}).get("name") if isinstance(author, dict) else author or "")
+    reviewer_name = str((reviewer or {}).get("name") if isinstance(reviewer, dict) else reviewer or "")
+    html = rendered_html or ""
+    cta_ok = (
+        'data-asset-id="' in html
+        and 'data-cta-id="' in html
+        and 'data-route-family="' in html
+        and "@" not in html.split('id="proximo-passo"')[-1][:800] if 'id="proximo-passo"' in html else True
+    )
+    schema_ok = "CaseStudy" not in html and "Review" not in html and "Product" not in html
+    commercial = "caso confenge" in html.lower() or "nosso cliente" in html.lower()
+    hashes_ok = bool(producer_root_hash and source_dossier_hash and record.get("content_hash"))
+    return {
+        "source_official_live": official_live_declared(record)
+        or (
+            record.get("source_kind") == "official_live"
+            and record.get("catalog_mode") == "official_live"
+            and not record.get("is_fixture")
+        ),
+        "handoff_ready_verified": handoff.get("status") == HANDOFF_READY and bool(handoff.get("path")),
+        "material_claims_have_locators": locators_ok,
+        "hard_gates_all_true": bool(hard_gates) and all(bool(value) for value in hard_gates.values()),
+        "quality_total_ge_88": score_n >= OWNER_QUALITY_MIN,
+        "no_dimension_below_75": bool(dimensions)
+        and all(int(value) >= OWNER_DIMENSION_MIN for value in dimensions.values() if value is not None),
+        "insight_singular": len(str(record.get("insight_singular") or "")) >= 80,
+        "utility_beyond_source": len(str(record.get("utility_beyond_source") or "")) >= 60,
+        "method_limitations_author_reviewer_visible": (
+            len(str(record.get("methodology") or "")) >= 40
+            and len(str(record.get("limitations") or "")) >= 40
+            and len(author_name) >= 5
+            and (len(reviewer_name) >= 5 or bool(record.get("solo_reviewer_disclosure")))
+        ),
+        "author_assigned_after_review": bool(record.get("human_authorship_confirmed")) and "rascunho" not in author_name.lower(),
+        "reputational_safety": quality.get("reputational_safety", True) is not False
+        and "reputation_" not in str(quality.get("findings") or ""),
+        "unique_content_anti_doorway": quality.get("unique_content", True) is not False,
+        "cta_attribution_preserved": bool(html) and cta_ok,
+        "canonical_robots_schema_sitemap_coherent": bool(html) and 'rel="canonical"' in html and schema_ok,
+        "no_implied_commercial_relation": not commercial,
+        "snapshot_hashes_recorded": hashes_ok,
+        "suite_green": bool(suite_green),
+    }
+
+
+def approve_conditional_canary(
+    record: dict[str, Any],
+    *,
+    token: str,
+    rollback: str,
+    rendered_html: str,
+    producer_root_hash: str,
+    source_dossier_hash: str,
+    quality: dict[str, Any] | None = None,
+    handoff: dict[str, Any] | None = None,
+    suite_green: bool = False,
+    root: Path | None = None,
+    actor: str = OWNER_CONDITIONAL_APPROVER,
+) -> dict[str, Any]:
+    """Hash-bound owner-token approval for at most one INDEX canary."""
+    if token != OWNER_CONDITIONAL_TOKEN:
+        raise ApprovalError("conditional_token_invalid")
+    if actor != OWNER_CONDITIONAL_APPROVER:
+        raise ApprovalError("conditional_approver_invalid")
+    if _is_fixture_record(record):
+        raise ApprovalError("approval_refused_fixture")
+    if active_index_count(root=root) >= 1:
+        raise ApprovalError("index_cap_exceeded")
+    checklist = evaluate_conditional_checklist(
+        record,
+        quality=quality,
+        handoff=handoff,
+        rendered_html=rendered_html,
+        producer_root_hash=producer_root_hash,
+        source_dossier_hash=source_dossier_hash,
+        suite_green=suite_green,
+    )
+    missing = [key for key, value in checklist.items() if not value]
+    if missing:
+        raise ApprovalError("conditional_gates_incomplete:" + ",".join(missing))
+    row = approve_one(record, actor=actor, rollback=rollback, root=root)
+    row["token"] = token
+    row["approver"] = OWNER_CONDITIONAL_APPROVER
+    row["producer_root_hash"] = producer_root_hash
+    row["source_dossier_hash"] = source_dossier_hash
+    row["rendered_content_hash"] = rendered_content_hash(rendered_html)
+    row["checklist"] = checklist
+    payload = load_approvals(root)
+    updated = []
+    for existing in payload.get("approvals") or []:
+        if (
+            isinstance(existing, dict)
+            and existing.get("analysis_id") == row["analysis_id"]
+            and not existing.get("withdrawn")
+        ):
+            updated.append({**existing, **row})
+        else:
+            updated.append(existing)
+    payload["approvals"] = updated
+    path = approvals_path(root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return row

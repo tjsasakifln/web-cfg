@@ -1,7 +1,10 @@
 # Contract-analysis editorial family (#83)
 
-Fail-closed consumer of extra-cli `public-read-contract-analysis/1.0`
-(manifest + `analyses/<id>.json`) plus the publication gate.
+Fail-closed consumer of extra-cli `public-read-contract-analysis/1.x` and
+`authority-handoff-contract-analysis/1.0` (additive `1.1`), plus the
+publication gate. Official ingest only from
+`${CONFENGE_HANDOFF_DIR:-$HOME/.local/share/confenge/handoffs}/contract-analysis/official-live-01/`
+when `READY.json` + `SHA256SUMS` + manifest/root hashes verify.
 
 ```bash
 python3 -m scripts.contract_analysis build

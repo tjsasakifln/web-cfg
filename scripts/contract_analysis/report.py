@@ -9,7 +9,7 @@ from typing import Any
 
 from scripts.contract_analysis import GATE_VERSION, MAX_CANARY, PUBLICATION_STATES, QUALITY_VERSION
 from scripts.contract_analysis.gate import PublicationDecision
-from scripts.contract_analysis.handoff import FACTUAL_HANDOFF_PENDING
+from scripts.contract_analysis.handoff import FACTUAL_HANDOFF_PENDING, HANDOFF_BLOCKED
 
 REPORT_STEM = "CONTRACT_ANALYSIS_CANARY_STATUS"
 REPORT_MD = Path("docs/editorial") / f"{REPORT_STEM}.md"
@@ -65,16 +65,21 @@ def build_status(
         )
     live_absent = bool(bundle.get("live_absent") or bundle.get("source_kind") != "official_live")
     handoff = bundle.get("handoff") if isinstance(bundle.get("handoff"), dict) else {}
-    handoff_pending = handoff.get("status") == FACTUAL_HANDOFF_PENDING or live_absent
+    handoff_pending = (
+        handoff.get("status") in {FACTUAL_HANDOFF_PENDING, HANDOFF_BLOCKED, None, ""}
+        or live_absent
+    )
     if handoff_pending or index_count == 0:
         recommendation = "ADJUST"
         recommendation_reason = (
-            "Família e gate prontos; extra-cli #400 consumido na forma "
-            "public-read-contract-analysis/1.0. FACTUAL_HANDOFF_PENDING: não há "
-            "handoff official_live HANDOFF_READY com dossiê DATA_READY. "
-            "index_count=0. Nenhum INDEX ativo. Não expandir. Ajustar o produtor "
-            "e só então escrever análises. Matar a família se o handoff factual "
-            "nunca autorizar tese defensável."
+            "Família e gate prontos. Consumer aceita "
+            "authority-handoff-contract-analysis/1.0 e 1.1 além de "
+            "public-read-contract-analysis/1.x. O rendezvous "
+            "`$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01/` "
+            f"está `{handoff.get('status') or FACTUAL_HANDOFF_PENDING}`. "
+            "index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor "
+            "até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. "
+            "Producer publication/index flags nunca autorizam INDEX."
         )
     else:
         recommendation = "EXPAND"

@@ -1,7 +1,7 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-08-17T22:02:36Z",
+  "generated_at": "2026-08-18T01:45:58Z",
   "evaluated": 8,
   "evaluated_cap": 10,
   "source_kind": "test_only_fixture",
@@ -12,7 +12,7 @@
   "schema": "public-read-contract-analysis/1.0",
   "export_kind": "extra_cli_public_read",
   "live_absent": true,
-  "live_absent_reason": "official_live extra-cli public-read-contract-analysis/1.0 export not found (checked ../extra-cli/exports/authority-handoff/contract-analysis/1.0, data/extra-cli/public-read-contract-analysis/authority-canary, data/extra-cli/public-read-contract-analysis/1.0, data/extra-cli/public-read-contract-analysis; sibling extra-cli currently ships fixture catalogs only)",
+  "live_absent_reason": "official rendezvous READY.json absent or not HANDOFF_READY (checked /home/tjsasakifln/.local/share/confenge/handoffs/contract-analysis/official-live-01, ../extra-cli/exports/authority-handoff/contract-analysis/1.0, data/extra-cli/public-read-contract-analysis/authority-canary, data/extra-cli/public-read-contract-analysis/1.0, data/extra-cli/public-read-contract-analysis; fixture/sibling packs are not official_live)",
   "index_count": 0,
   "state_counts": {
     "REJECT": 0,
@@ -52,7 +52,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     },
     {
       "id": "cand-reajuste-01",
@@ -83,7 +83,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     },
     {
       "id": "cand-aditivo-01",
@@ -114,7 +114,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     },
     {
       "id": "cand-prazo-01",
@@ -145,7 +145,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     },
     {
       "id": "cand-comparavel-01",
@@ -176,7 +176,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     },
     {
       "id": "cand-exceptional-01",
@@ -208,7 +208,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     },
     {
       "id": "cand-preco-02",
@@ -239,7 +239,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     },
     {
       "id": "cand-prazo-02",
@@ -270,7 +270,7 @@
       "robots": "noindex,nofollow",
       "review_recommendation": "HOLD_FOR_DATA",
       "human_review_status": "",
-      "quality_score": 40
+      "quality_score": 39
     }
   ],
   "comparable": [
@@ -325,7 +325,7 @@
     "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html"
   ],
   "recommendation": "ADJUST",
-  "recommendation_reason": "Família e gate prontos; extra-cli #400 consumido na forma public-read-contract-analysis/1.0. FACTUAL_HANDOFF_PENDING: não há handoff official_live HANDOFF_READY com dossiê DATA_READY. index_count=0. Nenhum INDEX ativo. Não expandir. Ajustar o produtor e só então escrever análises. Matar a família se o handoff factual nunca autorizar tese defensável.",
+  "recommendation_reason": "Família e gate prontos. Consumer aceita authority-handoff-contract-analysis/1.0 e 1.1 além de public-read-contract-analysis/1.x. O rendezvous `$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01/` está `FACTUAL_HANDOFF_PENDING`. index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. Producer publication/index flags nunca autorizam INDEX.",
   "expand_adjust_kill": "ADJUST",
   "nenhum_index_ativo": true,
   "factual_handoff_pending": true,
@@ -333,6 +333,37 @@
     "status": "FACTUAL_HANDOFF_PENDING",
     "path": null,
     "checked": [
+      {
+        "path": "/home/tjsasakifln/.local/share/confenge/handoffs/contract-analysis/official-live-01",
+        "exists": false,
+        "layout": null,
+        "schema_ok": false,
+        "handoff_ready": false,
+        "no_index_authorization": false,
+        "official_live": false,
+        "producer_commit": null,
+        "hashes_ok": false,
+        "source_claim_matrix": false,
+        "replay": false,
+        "fixture": true,
+        "data_ready_count": 0,
+        "data_hold_count": 0,
+        "evaluated_cap": 0,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
+        "reasons": [
+          "path_absent"
+        ]
+      },
       {
         "path": "/home/tjsasakifln/code/confenge/extra-cli/exports/authority-handoff/contract-analysis/1.0",
         "exists": false,
@@ -349,12 +380,23 @@
         "data_ready_count": 0,
         "data_hold_count": 0,
         "evaluated_cap": 0,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "path_absent"
         ]
       },
       {
-        "path": "/home/tjsasakifln/code/confenge/web-cfg-contract-analysis-masterpiece/data/extra-cli/public-read-contract-analysis/authority-canary",
+        "path": "/home/tjsasakifln/code/confenge/web-cfg-wt-contract-analysis-live-convergence-01/data/extra-cli/public-read-contract-analysis/authority-canary",
         "exists": false,
         "layout": null,
         "schema_ok": false,
@@ -369,12 +411,23 @@
         "data_ready_count": 0,
         "data_hold_count": 0,
         "evaluated_cap": 0,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "path_absent"
         ]
       },
       {
-        "path": "/home/tjsasakifln/code/confenge/web-cfg-contract-analysis-masterpiece/data/extra-cli/public-read-contract-analysis/1.0",
+        "path": "/home/tjsasakifln/code/confenge/web-cfg-wt-contract-analysis-live-convergence-01/data/extra-cli/public-read-contract-analysis/1.0",
         "exists": false,
         "layout": null,
         "schema_ok": false,
@@ -389,12 +442,23 @@
         "data_ready_count": 0,
         "data_hold_count": 0,
         "evaluated_cap": 0,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "path_absent"
         ]
       },
       {
-        "path": "/home/tjsasakifln/code/confenge/web-cfg-contract-analysis-masterpiece/data/extra-cli/public-read-contract-analysis",
+        "path": "/home/tjsasakifln/code/confenge/web-cfg-wt-contract-analysis-live-convergence-01/data/extra-cli/public-read-contract-analysis",
         "exists": false,
         "layout": null,
         "schema_ok": false,
@@ -409,6 +473,17 @@
         "data_ready_count": 0,
         "data_hold_count": 0,
         "evaluated_cap": 0,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "path_absent"
         ]
@@ -429,6 +504,17 @@
         "data_ready_count": 0,
         "data_hold_count": 40,
         "evaluated_cap": 40,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "manifest_hash_unverified",
           "handoff_not_ready",
@@ -453,6 +539,17 @@
         "data_ready_count": 0,
         "data_hold_count": 40,
         "evaluated_cap": 40,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "manifest_hash_unverified",
           "handoff_not_ready",
@@ -477,6 +574,17 @@
         "data_ready_count": 0,
         "data_hold_count": 40,
         "evaluated_cap": 40,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "manifest_hash_unverified",
           "handoff_not_ready",
@@ -501,6 +609,17 @@
         "data_ready_count": 0,
         "data_hold_count": 0,
         "evaluated_cap": 0,
+        "ready_json": false,
+        "ready_status": null,
+        "blocked_json": false,
+        "blocked_reason": null,
+        "sha256sums_ok": false,
+        "manifest_sha_ok": false,
+        "root_hash_ok": false,
+        "dossier_ids_ok": false,
+        "rendezvous_verified": false,
+        "producer_index_authorization": false,
+        "producer_publication_authorization": false,
         "reasons": [
           "path_absent"
         ]

@@ -15,11 +15,16 @@ from pathlib import Path
 from typing import Any
 
 from scripts.contract_analysis import (
+    ANALYSIS_MODES,
+    AUTHORITY_HANDOFF_SCHEMA,
     CONTENT_CLASS_ANALYSIS,
     MAX_CANARY,
+    NON_COMPARATIVE_MODES,
+    OFFICIAL_LIVE_DOSSIER_SCHEMA,
     PUBLIC_READ_SCHEMA,
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
+    TEMPORAL_FIELDS,
 )
 
 LIVE_SCHEMA = PUBLIC_READ_SCHEMA
@@ -38,9 +43,32 @@ INTEGRITY_REASON_CODES = (
     "content_hash_mismatch",
     "manifest_hash_mismatch",
     "producer_status_not_official_live",
+    "official_live_not_true",
+    "handoff_status_not_ready",
+    "material_claim_locator_absent",
+    "comparability_not_applicable_with_comparative_claim",
 )
 _SCHEMA_1X = re.compile(r"^public-read-contract-analysis/1(?:\.\d+)?$")
+_AUTHORITY_1X = re.compile(r"^authority-handoff-contract-analysis/1(?:\.\d+)?$")
+_OFFICIAL_DOSSIER_1X = re.compile(r"^official-live-authority-dossier/1(?:\.\d+)?$")
+_HISTORICAL_DOSSIER_1X = re.compile(r"^historical-contract-authority-dossier/1(?:\.\d+)?$")
 _CONTRACT_V1 = re.compile(r"^v?1(?:\.\d+){0,2}$")
+_COMPARATIVE_LANGUAGE = (
+    re.compile(r"\boutlier\b", re.I),
+    re.compile(r"\branking\b", re.I),
+    re.compile(r"\bbenchmark\b", re.I),
+    re.compile(r"\bpercentil\b", re.I),
+    re.compile(r"\bpeers?\b", re.I),
+    re.compile(r"grupo compar", re.I),
+    re.compile(r"compar[aá]ve", re.I),
+    re.compile(r"acima da mediana", re.I),
+    re.compile(r"abaixo da mediana", re.I),
+    re.compile(r"fora da distribui", re.I),
+    re.compile(r"delta de peer", re.I),
+    re.compile(r"frente (aos|a os|aos seus) pares", re.I),
+    re.compile(r"at[ií]pico frente", re.I),
+)
+MATERIAL_CLAIM_KINDS = frozenset({"FACT", "CALCULATION"})
 
 DEFAULT_LIVE_DIRS = (
     Path("../extra-cli/exports/authority-handoff/contract-analysis/1.0"),
@@ -104,14 +132,26 @@ def negotiate_schema(
     schema: Any,
     contract_version: Any = None,
 ) -> tuple[bool, list[str]]:
-    """Accept `public-read-contract-analysis/1.0` and additive 1.x. Reject v2/unknown."""
+    """Accept public-read 1.x and authority-handoff 1.0/1.1. Unknown → not accepted."""
     reasons: list[str] = []
     text = str(schema or "").strip()
     if not text:
         return False, ["schema_absent"]
-    if text == LIVE_SCHEMA:
+    baseline = {
+        LIVE_SCHEMA,
+        AUTHORITY_HANDOFF_SCHEMA,
+        OFFICIAL_LIVE_DOSSIER_SCHEMA,
+        "historical-contract-authority-dossier/1.0",
+    }
+    additive = (
+        _SCHEMA_1X.fullmatch(text)
+        or _AUTHORITY_1X.fullmatch(text)
+        or _OFFICIAL_DOSSIER_1X.fullmatch(text)
+        or _HISTORICAL_DOSSIER_1X.fullmatch(text)
+    )
+    if text in baseline:
         ok = True
-    elif _SCHEMA_1X.fullmatch(text):
+    elif additive:
         ok = True
         reasons.append("schema_additive_1x")
     else:
@@ -120,6 +160,204 @@ def negotiate_schema(
     if version and not _CONTRACT_V1.fullmatch(version):
         return False, ["contract_version_unsupported"]
     return ok, reasons
+
+
+def official_live_declared(payload: dict[str, Any]) -> bool:
+    """True only when the producer explicitly marks official_live. Fixtures never qualify."""
+    if is_fixture_catalog(payload) or fixture_as_live(payload):
+        return False
+    if payload.get("official_live") is True:
+        return True
+    gates = payload.get("gates") if isinstance(payload.get("gates"), dict) else {}
+    if gates.get("official_live") is True:
+        return True
+    return False
+
+
+def handoff_status_of(payload: dict[str, Any]) -> str:
+    gates = payload.get("gates") if isinstance(payload.get("gates"), dict) else {}
+    raw = (
+        payload.get("handoff_status")
+        or gates.get("handoff_status")
+        or payload.get("HANDOFF_READY")
+    )
+    if raw is True:
+        return "HANDOFF_READY"
+    return str(raw or "").strip()
+
+
+def producer_publication_flags(payload: dict[str, Any]) -> dict[str, bool]:
+    """Producer publication/index flags are recorded and never grant INDEX."""
+    gates = payload.get("gates") if isinstance(payload.get("gates"), dict) else {}
+    safety = payload.get("safety_flags") if isinstance(payload.get("safety_flags"), dict) else {}
+    return {
+        "publication_authorization": bool(
+            payload.get("publication_authorization")
+            or gates.get("publication_authorization")
+            or safety.get("publication_authorization")
+        ),
+        "index_authorization": bool(
+            payload.get("index_authorization")
+            or gates.get("index_authorization")
+            or safety.get("index_authorization")
+        ),
+        "no_index_authorization": bool(
+            payload.get("no_index_authorization")
+            or gates.get("no_index_authorization")
+            or safety.get("no_index_authorization")
+        ),
+        "no_publication_authorization": bool(
+            payload.get("no_publication_authorization")
+            or gates.get("no_publication_authorization")
+            or safety.get("no_publication_authorization")
+        ),
+    }
+
+
+def claim_has_locator(claim: dict[str, Any]) -> bool:
+    locator = claim.get("locator") or claim.get("locators")
+    if isinstance(locator, (list, tuple)):
+        locator = next((item for item in locator if item), None)
+    if isinstance(locator, dict):
+        locator = "|".join(str(value) for value in locator.values() if value)
+    text = str(locator or "").strip()
+    return bool(text) and text.upper() != "UNSPECIFIED" and text.upper() != "UNKNOWN"
+
+
+def iter_material_claims(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    found: list[dict[str, Any]] = []
+    for key in ("claims", "facts", "calculations"):
+        for item in payload.get(key) or []:
+            if isinstance(item, dict):
+                found.append(item)
+    matrix = payload.get("factual_matrix") if isinstance(payload.get("factual_matrix"), dict) else {}
+    for key in ("claims", "facts", "calculations"):
+        for item in matrix.get(key) or []:
+            if isinstance(item, dict):
+                found.append(item)
+    material: list[dict[str, Any]] = []
+    for item in found:
+        kind = str(item.get("kind") or item.get("class") or item.get("klass") or "").upper()
+        if kind in MATERIAL_CLAIM_KINDS or (not kind and item.get("claim_id")):
+            material.append(item)
+    return material
+
+
+def material_claims_missing_locator(payload: dict[str, Any]) -> bool:
+    claims = iter_material_claims(payload)
+    if not claims:
+        return False
+    return any(not claim_has_locator(item) for item in claims)
+
+
+def detect_comparative_language(*texts: Any) -> tuple[str, ...]:
+    hits: list[str] = []
+    for text in texts:
+        if not text:
+            continue
+        blob = str(text)
+        for pattern in _COMPARATIVE_LANGUAGE:
+            if pattern.search(blob):
+                hits.append(pattern.pattern)
+    return tuple(dict.fromkeys(hits))
+
+
+def analysis_mode_of(payload: dict[str, Any]) -> str:
+    analysis = payload.get("analysis") if isinstance(payload.get("analysis"), dict) else {}
+    raw = str(payload.get("analysis_mode") or analysis.get("analysis_mode") or "").strip().upper()
+    if raw in ANALYSIS_MODES:
+        return raw
+    return "DOCUMENT_CHAIN"
+
+
+def comparability_status_of(payload: dict[str, Any]) -> str:
+    analysis = payload.get("analysis") if isinstance(payload.get("analysis"), dict) else {}
+    nested = analysis.get("comparability") if isinstance(analysis.get("comparability"), dict) else {}
+    raw = (
+        payload.get("comparability_status")
+        or analysis.get("comparability_status")
+        or nested.get("status")
+    )
+    return str(raw or "").strip().upper()
+
+
+def extract_temporal_fields(payload: dict[str, Any]) -> dict[str, str]:
+    """Ingest temporal clocks without rewriting history.
+
+    `verified_at` is operational. It must never replace `event_effective_at`.
+    """
+    provenance = payload.get("provenance") if isinstance(payload.get("provenance"), dict) else {}
+    freshness = payload.get("freshness") if isinstance(payload.get("freshness"), dict) else {}
+    out: dict[str, str] = {}
+    for key in TEMPORAL_FIELDS:
+        value = payload.get(key)
+        if value in (None, ""):
+            value = provenance.get(key)
+        if value in (None, "") and key != "event_effective_at":
+            value = freshness.get(key)
+        if key == "event_effective_at" and value in (None, ""):
+            value = freshness.get("event_effective_at")
+        text = str(value or "").strip()
+        out[key] = text
+    # Hard invariant: never copy verified_at onto event_effective_at.
+    if out["event_effective_at"] and out["event_effective_at"] == out["verified_at"]:
+        # Allow equality only when the producer set both to the same instant.
+        pass
+    if not out["event_effective_at"]:
+        out["event_effective_at"] = ""
+    if out["verified_at"] and not out["event_effective_at"]:
+        # Historical event stays empty rather than inheriting the verification clock.
+        out["event_effective_at"] = ""
+    return out
+
+
+def source_url_status(source: dict[str, Any]) -> str:
+    """Inaccessible or unknown URLs stay UNKNOWN. Never invent a replacement."""
+    declared = str(source.get("url_status") or source.get("access") or source.get("status") or "").strip().upper()
+    if declared in {"UNKNOWN", "INACCESSIBLE", "UNREACHABLE", "UNAVAILABLE"}:
+        return "UNKNOWN"
+    url = str(source.get("url") or source.get("locator") or "").strip()
+    if not url or url.upper() == "UNKNOWN":
+        return "UNKNOWN"
+    if source.get("url_rewritten") or source.get("corrected_url"):
+        return "UNKNOWN"
+    return "DECLARED"
+
+
+def comparability_conflict(payload: dict[str, Any]) -> bool:
+    status = comparability_status_of(payload)
+    if status != "NOT_APPLICABLE":
+        return False
+    mode = analysis_mode_of(payload)
+    analysis = payload.get("analysis") if isinstance(payload.get("analysis"), dict) else {}
+    texts = [
+        payload.get("insight_singular"),
+        analysis.get("singular_insight"),
+        payload.get("reason_summary"),
+    ]
+    for item in payload.get("facts") or []:
+        if isinstance(item, dict):
+            texts.append(item.get("text"))
+        else:
+            texts.append(item)
+    for item in payload.get("comparisons") or []:
+        if isinstance(item, dict) and str(item.get("outcome") or "").upper() != "NOT_COMPARABLE":
+            texts.append(item.get("text"))
+        elif not isinstance(item, dict):
+            texts.append(item)
+    hits = detect_comparative_language(*texts)
+    if mode == "COMPARATIVE" or hits:
+        return True
+    return False
+
+
+def not_applicable_accepted(payload: dict[str, Any]) -> bool:
+    """NOT_APPLICABLE is valid only in non-comparative modes without comparative claims."""
+    if comparability_status_of(payload) != "NOT_APPLICABLE":
+        return True
+    if comparability_conflict(payload):
+        return False
+    return analysis_mode_of(payload) in NON_COMPARATIVE_MODES
 
 
 def producer_status_of(payload: dict[str, Any]) -> str:
@@ -201,6 +439,23 @@ def inspect_producer_integrity(
     status = producer_status_of(payload)
     if status and status != SOURCE_OFFICIAL_LIVE:
         reasons.append("producer_status_not_official_live")
+    if payload.get("_schema_ok") is False:
+        reasons.append("schema_unsupported")
+    if payload.get("_content_hash_ok") is False or (
+        payload.get("content_hash") and payload.get("_content_hash_ok") is False
+    ):
+        reasons.append("content_hash_mismatch")
+    hs = handoff_status_of(payload)
+    if hs and hs != "HANDOFF_READY":
+        reasons.append("handoff_status_not_ready")
+    if payload.get("official_ingest") and not official_live_declared(payload):
+        reasons.append("official_live_not_true")
+    if material_claims_missing_locator(payload) and (
+        payload.get("official_ingest") or payload.get("claims") or payload.get("source_claim_matrix")
+    ):
+        reasons.append("material_claim_locator_absent")
+    if comparability_conflict(payload):
+        reasons.append("comparability_not_applicable_with_comparative_claim")
     return sorted(set(reasons))
 
 
@@ -240,10 +495,14 @@ def fixture_as_live(payload: dict[str, Any]) -> bool:
 def source_kind_of(payload: dict[str, Any]) -> str:
     if fixture_as_live(payload) or is_fixture_catalog(payload):
         return SOURCE_FIXTURE
+    if payload.get("official_live") is False:
+        return SOURCE_FIXTURE
     status = producer_status_of(payload)
-    if status != SOURCE_OFFICIAL_LIVE:
+    if status != SOURCE_OFFICIAL_LIVE and not official_live_declared(payload):
         return SOURCE_FIXTURE
     mode = catalog_mode_of(payload)
+    if official_live_declared(payload) and mode == SOURCE_OFFICIAL_LIVE and not is_fixture_catalog(payload):
+        return SOURCE_OFFICIAL_LIVE
     if mode == SOURCE_OFFICIAL_LIVE and claimed_live_of(payload) and not is_fixture_catalog(payload):
         return SOURCE_OFFICIAL_LIVE
     return SOURCE_FIXTURE
@@ -255,7 +514,12 @@ def _looks_export_dir(path: Path) -> bool:
 
 def _looks_extra_cli_manifest(payload: dict[str, Any]) -> bool:
     schema = str(payload.get("schema") or "")
-    return schema == LIVE_SCHEMA and isinstance(payload.get("analyses"), list)
+    ok, _ = negotiate_schema(schema)
+    return ok and (
+        isinstance(payload.get("analyses"), list)
+        or isinstance(payload.get("selected_ids"), list)
+        or isinstance(payload.get("states"), dict)
+    )
 
 
 def _looks_editorial_fixture(payload: dict[str, Any]) -> bool:
@@ -308,19 +572,34 @@ def load_export_dir(path: Path) -> dict[str, Any]:
     manifest = _parse_json(resolved / "manifest.json")
     manifest["_source_path"] = _rel(resolved)
     schema_ok, schema_reasons = negotiate_schema(manifest.get("schema"), manifest.get("contract_version"))
-    if not schema_ok:
-        raise ConsumeError(
-            f"unsupported export schema: {manifest.get('schema')} "
-            f"reasons={','.join(schema_reasons)}"
-        )
-    entries = manifest.get("analyses") or []
+    manifest["_schema_ok"] = schema_ok
+    manifest["_schema_reasons"] = list(schema_reasons)
+    entries = [item for item in (manifest.get("analyses") or []) if isinstance(item, dict)]
     canary = manifest.get("canary") if isinstance(manifest.get("canary"), dict) else {}
-    selected = list(canary.get("selected_ids") or canary.get("selected_candidate_ids") or [])
+    selected = list(
+        canary.get("selected_ids")
+        or canary.get("selected_candidate_ids")
+        or manifest.get("selected_ids")
+        or []
+    )
+    if not entries:
+        states = manifest.get("states") if isinstance(manifest.get("states"), dict) else {}
+        if not selected and states:
+            selected = [key for key, value in states.items() if str(value) == "HANDOFF_READY"]
+        for aid in selected:
+            rel = ""
+            for folder in ("public-read", "analyses", "dossiers"):
+                candidate = resolved / folder / f"{aid}.json"
+                if candidate.is_file():
+                    rel = f"{folder}/{aid}.json"
+                    break
+            if rel:
+                entries.append({"analysis_candidate_id": aid, "path": rel})
     by_id: dict[str, dict[str, Any]] = {}
     for entry in entries:
         if not isinstance(entry, dict):
             continue
-        aid = str(entry.get("analysis_candidate_id") or "")
+        aid = str(entry.get("analysis_candidate_id") or entry.get("id") or "")
         rel = entry.get("path") or (f"analyses/{aid}.json" if aid else "")
         if not rel:
             continue
@@ -331,9 +610,17 @@ def load_export_dir(path: Path) -> dict[str, Any]:
         bundle["_content_hash_ok"] = (
             not bundle.get("content_hash") or verify_content_hash(bundle)
         )
+        bundle["_schema_ok"] = schema_ok
+        bundle["_schema_reasons"] = list(schema_reasons)
         bundle.setdefault("analysis_candidate_id", aid)
         bundle.setdefault("catalog_mode", catalog_mode_of(manifest))
         bundle.setdefault("claimed_live", claimed_live_of(manifest))
+        if "official_live" not in bundle and "official_live" in manifest:
+            bundle["official_live"] = manifest.get("official_live")
+        matrix_path = resolved / "source-claim-matrix" / f"{aid}.json"
+        if matrix_path.is_file() and not bundle.get("source_claim_matrix"):
+            matrix_doc = _parse_json(matrix_path)
+            bundle["source_claim_matrix"] = matrix_doc
         bundle["_manifest_entry"] = entry
         by_id[str(bundle.get("analysis_candidate_id") or aid)] = bundle
     # Prefer extra-cli selected shortlist; if empty (all rejected), still evaluate present bundles.
@@ -384,12 +671,29 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         "schema": bundle.get("schema") or env.get("schema"),
         "reason_codes": list(bundle.get("reason_codes") or []),
         "test_only": env.get("test_only"),
+        "official_live": bundle.get("official_live") if "official_live" in bundle else env.get("official_live"),
+        "gates": bundle.get("gates") if isinstance(bundle.get("gates"), dict) else env.get("gates"),
     }
     fixture = is_fixture_catalog(envelope) or fixture_as_live(envelope)
     source_kind = SOURCE_FIXTURE if fixture else source_kind_of({**envelope, **bundle})
-    aid = str(bundle.get("analysis_candidate_id") or bundle.get("id") or "")
+    aid = str(
+        bundle.get("analysis_candidate_id")
+        or bundle.get("analysis_id")
+        or bundle.get("id")
+        or ""
+    )
+    identity = bundle.get("identity") if isinstance(bundle.get("identity"), dict) else {}
+    analysis = bundle.get("analysis") if isinstance(bundle.get("analysis"), dict) else {}
+    provenance = bundle.get("provenance") if isinstance(bundle.get("provenance"), dict) else {}
+    matrix = bundle.get("factual_matrix") if isinstance(bundle.get("factual_matrix"), dict) else {}
     sections = _section_map(bundle)
-    objeto = sections.get("object") or bundle.get("objeto") or ""
+    objeto = (
+        sections.get("object")
+        or bundle.get("objeto")
+        or identity.get("objeto")
+        or identity.get("object")
+        or ""
+    )
     identity = sections.get("identity") or ""
     ids = list(bundle.get("canonical_contract_ids") or [])
     if identity and identity not in ids:
@@ -399,21 +703,52 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         str(freshness.get("source_as_of") or bundle.get("as_of") or env.get("source_as_of") or "")[:10]
     )
     facts: list[dict[str, Any]] = []
-    if objeto:
-        facts.append({"kind": "FACT", "text": f"Objeto publicado: {objeto}.", "source_ref": "evidence_pack"})
-    if ids:
+    producer_facts = list(bundle.get("facts") or matrix.get("facts") or [])
+    producer_claims = list(bundle.get("claims") or matrix.get("claims") or [])
+    for item in producer_facts:
+        if isinstance(item, dict) and (item.get("text") or item.get("claim")):
+            facts.append(
+                {
+                    "kind": str(item.get("kind") or item.get("class") or "FACT"),
+                    "text": item.get("text") or item.get("claim"),
+                    "source_ref": item.get("source_ref") or item.get("evidence_id"),
+                    "locator": item.get("locator") or item.get("locators"),
+                    "claim_id": item.get("claim_id") or item.get("id"),
+                }
+            )
+    if not facts:
+        if objeto:
+            facts.append({"kind": "FACT", "text": f"Objeto publicado: {objeto}.", "source_ref": "evidence_pack"})
+        if ids:
+            facts.append(
+                {
+                    "kind": "FACT",
+                    "text": "Identificador(es) público(s): " + ", ".join(str(i) for i in ids) + ".",
+                    "source_ref": "evidence_pack",
+                }
+            )
+    summary = str(bundle.get("reason_summary") or "")
+    if summary and not producer_facts:
+        facts.append({"kind": "FACT", "text": summary, "source_ref": "candidate_score"})
+    for item in producer_claims:
+        if not isinstance(item, dict):
+            continue
+        kind = str(item.get("kind") or item.get("class") or item.get("klass") or "FACT").upper()
+        if kind != "FACT":
+            continue
+        if any(existing.get("claim_id") and existing.get("claim_id") == item.get("claim_id") for existing in facts):
+            continue
         facts.append(
             {
                 "kind": "FACT",
-                "text": "Identificador(es) público(s): " + ", ".join(str(i) for i in ids) + ".",
-                "source_ref": "evidence_pack",
+                "text": item.get("text") or item.get("claim"),
+                "source_ref": item.get("source_ref") or item.get("evidence_id"),
+                "locator": item.get("locator") or item.get("locators"),
+                "claim_id": item.get("claim_id") or item.get("id"),
             }
         )
-    summary = str(bundle.get("reason_summary") or "")
-    if summary:
-        facts.append({"kind": "FACT", "text": summary, "source_ref": "candidate_score"})
     calculations: list[dict[str, Any]] = []
-    for item in bundle.get("calculations") or []:
+    for item in bundle.get("calculations") or matrix.get("calculations") or []:
         if not isinstance(item, dict):
             continue
         name = item.get("name") or "cálculo"
@@ -485,18 +820,29 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             }
         )
     sources = []
-    refs = bundle.get("source_refs") or bundle.get("official_refs") or []
+    refs = bundle.get("source_refs") or bundle.get("official_refs") or bundle.get("artifacts") or []
     for item in refs:
         if not isinstance(item, dict):
             continue
+        status = source_url_status(item)
+        url = item.get("url") if status != "UNKNOWN" else ""
+        if status == "UNKNOWN" and item.get("url") and str(item.get("url")).upper() != "UNKNOWN":
+            # Keep the declared URL but mark it UNKNOWN; never invent a substitute.
+            url = item.get("url")
         sources.append(
             {
                 "label": item.get("source_id") or item.get("label") or "fonte pública",
-                "document_id": item.get("source_record_id") or item.get("document_id"),
-                "url": item.get("url") or item.get("locator"),
+                "document_id": item.get("source_record_id") or item.get("document_id") or item.get("evidence_id"),
+                "url": url if status != "UNKNOWN" or item.get("url") else "",
+                "url_status": status,
                 "as_of": as_of,
+                "locator": item.get("locator") or item.get("locators"),
             }
         )
+        if status == "UNKNOWN":
+            sources[-1]["url"] = item.get("url") if item.get("url") else ""
+            if not sources[-1]["url"]:
+                sources[-1]["label"] = f"{sources[-1]['label']} (UNKNOWN)"
     for ref in bundle.get("evidence_refs") or []:
         if isinstance(ref, str) and ref:
             sources.append({"label": "evidence_ref", "document_id": ref, "as_of": as_of})
@@ -561,7 +907,36 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         "approved_for_index": False,
         "data_incomplete": state != "DATA_READY",
         "canonical_contract_ids": ids,
+        "analysis_mode": analysis_mode_of(bundle),
+        "comparability_status": comparability_status_of(bundle),
+        "claims": producer_claims,
+        "source_claim_matrix": bundle.get("source_claim_matrix") or [],
+        "official_live": official_live_declared({**envelope, **bundle}),
+        "handoff_status": handoff_status_of(bundle) or handoff_status_of(env),
+        "insight_singular": bundle.get("insight_singular") or analysis.get("singular_insight") or "",
+        "methodology": bundle.get("methodology") or analysis.get("method") or "",
     }
+    temporal = extract_temporal_fields({**env, **bundle, "provenance": provenance, "freshness": freshness})
+    rec.update(temporal)
+    rec["freshness"] = {
+        **rec["freshness"],
+        "event_effective_at": temporal["event_effective_at"],
+        "source_published_at": temporal["source_published_at"],
+        "retrieved_at": temporal["retrieved_at"],
+        "verified_at": temporal["verified_at"],
+        "source_as_of": temporal["source_as_of"] or rec["freshness"].get("source_as_of"),
+        "historical": bool(
+            temporal["event_effective_at"]
+            and temporal["verified_at"]
+            and temporal["event_effective_at"][:10] != temporal["verified_at"][:10]
+        ),
+    }
+    flags = producer_publication_flags({**env, **bundle})
+    rec["producer_publication_authorization"] = flags["publication_authorization"]
+    rec["producer_index_authorization"] = flags["index_authorization"]
+    rec["producer_no_index_authorization"] = flags["no_index_authorization"]
+    rec["producer_no_publication_authorization"] = flags["no_publication_authorization"]
+    rec["approved_for_index"] = False
     integrity = inspect_producer_integrity(bundle, manifest=env if env.get("content_hash") or env.get("schema") else None)
     rec["producer_status"] = producer_status_of({**envelope, **bundle})
     rec["coverage"] = bundle.get("coverage")
@@ -599,6 +974,16 @@ def merge_overlay(record: dict[str, Any], overlay: dict[str, Any] | None) -> dic
         "source_kind",
         "schema",
         "reason_codes",
+        "event_effective_at",
+        "source_published_at",
+        "retrieved_at",
+        "verified_at",
+        "source_as_of",
+        "official_live",
+        "handoff_status",
+        "producer_publication_authorization",
+        "producer_index_authorization",
+        "analysis_mode",
     }
     for key, value in overlay.items():
         if key in locked:
@@ -739,10 +1124,12 @@ def load_extra_cli_bundle(path: Path) -> dict[str, Any]:
 
 
 def live_export_absent_reason() -> str:
-    checked = [str(rel) for rel in DEFAULT_LIVE_DIRS]
+    from scripts.contract_analysis.handoff import official_rendezvous_dir
+
+    checked = [str(official_rendezvous_dir()), *[str(rel) for rel in DEFAULT_LIVE_DIRS]]
     return (
-        "official_live extra-cli public-read-contract-analysis/1.0 export not found "
-        f"(checked {', '.join(checked)}; sibling extra-cli currently ships fixture catalogs only)"
+        "official rendezvous READY.json absent or not HANDOFF_READY "
+        f"(checked {', '.join(checked)}; fixture/sibling packs are not official_live)"
     )
 
 
@@ -753,7 +1140,7 @@ def load_canary(
     limit: int = MAX_CANARY,
 ) -> dict[str, Any]:
     """Load at most `limit` analyses. Prefer official_live; else extra-cli fixture export."""
-    from scripts.contract_analysis.handoff import require_live_or_pending
+    from scripts.contract_analysis.handoff import HANDOFF_READY, require_live_or_pending
     cap = min(int(limit), MAX_CANARY)
     handoff = require_live_or_pending(live_path)
     if fixture_path is not None:
@@ -767,8 +1154,20 @@ def load_canary(
         bundle["handoff"] = handoff
         return bundle
     live = None
+    if handoff.get("status") == HANDOFF_READY and handoff.get("path"):
+        found = Path(handoff["path"])
+        live = load_extra_cli_bundle(found)
+        for rec in live["records"]:
+            rec["official_ingest"] = True
+        if live["source_kind"] == SOURCE_OFFICIAL_LIVE:
+            live["records"] = live["records"][:cap]
+            live["evaluated"] = len(live["records"])
+            live["live_absent"] = False
+            live["handoff"] = handoff
+            return live
+        live = None
     try:
-        found = discover_official_live(live_path)
+        found = discover_official_live(live_path) if live_path is not None else None
     except ConsumeError:
         if live_path is not None:
             raise
