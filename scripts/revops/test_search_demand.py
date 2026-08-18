@@ -24,19 +24,26 @@ def main() -> int:
             print("FAIL", name, detail)
             failures.append(name)
 
-    # Committed historical snapshots must stay stamped (no-cred path).
+    # Committed snapshots are either labeled historical fixtures or a
+    # provider-backed, query-redacted live snapshot.
     for rel in (
         "data/revops/gsc/latest_import.json",
         "data/revops/gsc/imports/import-2026-07-30.json",
         "data/revops/gsc/insights_latest.json",
     ):
         payload = json.loads((ROOT / rel).read_text(encoding="utf-8"))
-        ok(f"committed {rel} synthetic", payload.get("synthetic") is True)
-        ok(f"committed {rel} fixture", payload.get("fixture") is True)
-        ok(
-            f"committed {rel} not product",
-            payload.get("ready_for_product_decisions") is False,
-        )
+        if sdo.is_live_gsc_payload(payload):
+            ok(f"committed {rel} live", payload.get("synthetic") is False)
+            ok(f"committed {rel} product ready", payload.get("ready_for_product_decisions") is True)
+            ok(f"committed {rel} query redacted", payload.get("query_text_redacted") is True)
+            ok(f"committed {rel} no raw rows", payload.get("raw_query_rows_in_git") is False)
+        else:
+            ok(f"committed {rel} synthetic", payload.get("synthetic") is True)
+            ok(f"committed {rel} fixture", payload.get("fixture") is True)
+            ok(
+                f"committed {rel} not product",
+                payload.get("ready_for_product_decisions") is False,
+            )
 
     # Real fixture from repo if present
     fixture = ROOT / "seo" / "gsc-2026-07-30"
@@ -153,6 +160,26 @@ def main() -> int:
     blob = json.dumps(safe)
     ok("redacted_no_raw_query", "limite aditivo" not in blob)
     ok("redacted_has_hash", "sha256:" in blob)
+
+    live_payload = sdo.git_safe_live_payload(
+        {
+            "source": "search_analytics_api",
+            "ready_for_product_decisions": True,
+            "synthetic": False,
+            "queries": [
+                {
+                    "date": "2026-08-10",
+                    "query": "consulta privada",
+                    "page": "https://confenge.com.br/aditivos-obras-publicas/",
+                    "impressions": 2,
+                    "clicks": 0,
+                }
+            ],
+        }
+    )
+    ok("live_git_safe_query_redacted", "consulta privada" not in json.dumps(live_payload))
+    ok("live_git_safe_ready", live_payload["ready_for_product_decisions"] is True)
+    ok("live_git_safe_marked", live_payload["raw_query_rows_in_git"] is False)
 
     fixture = sdo.sync_from_fixture()
     ok("fixture_ok", fixture.get("ok") is True)

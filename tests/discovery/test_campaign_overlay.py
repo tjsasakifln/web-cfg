@@ -19,6 +19,7 @@ from scripts.discovery.campaign_overlay import (
     build_stage_report,
     campaign_urls,
     format_stage_report,
+    gsc_page_evidence,
     inspect_local,
     refuse_collapsed_stage,
 )
@@ -78,6 +79,25 @@ def test_stages_refuse_collapsed_counts():
         refuse_collapsed_stage("bot_hit", "CITATION")
     with pytest.raises(MetricStageError):
         refuse_collapsed_stage("crawler_hit", "CITATION")
+
+
+def test_gsc_page_evidence_preserves_missing_as_unknown():
+    first, second = campaign_urls()[:2]
+    evidence = gsc_page_evidence(
+        {
+            "queries": [
+                {"date": "2026-08-10", "page": first, "impressions": 3, "clicks": 0},
+                {"date": "2026-08-11", "page": first, "impressions": 2, "clicks": 1},
+            ]
+        }
+    )
+    assert evidence[first] == {
+        "returned_rows": 2,
+        "impressions": 5.0,
+        "clicks": 1.0,
+        "max_date": "2026-08-11",
+    }
+    assert second not in evidence
 
 
 def test_url_inspection_unknown_without_creds_and_no_indexing_api():

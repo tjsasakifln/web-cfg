@@ -1,20 +1,20 @@
 {
   "schema": "campaign_metrics_summary_v1",
   "campaign": "CONFENGE-SEARCH-OBSERVABILITY-DISTRIBUTION-01",
-  "generated_at": "2026-08-18T03:20:00Z",
-  "ready_for_product_decisions": false,
+  "generated_at": "2026-08-18T14:20:00Z",
+  "ready_for_product_decisions": true,
   "live_baseline_invented": false,
-  "synthetic_gsc": true,
+  "synthetic_gsc": false,
   "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
   "gsc_sync": {
     "ok": true,
-    "source": "fixture",
-    "synthetic": true,
-    "max_date": "2026-07-29",
-    "latency_ms": 0,
-    "rows": 4,
-    "ready_for_product_decisions": false,
-    "manifest_sha256": "e7315ffc3016d39b064e556dbb64eb3993e92c540ef9c59b7969de9f8dca1bb0"
+    "source": "search_analytics_api",
+    "synthetic": false,
+    "max_date": "2026-08-13",
+    "latency_ms": 1764,
+    "rows": 20,
+    "ready_for_product_decisions": true,
+    "manifest_sha256": "4fc7a07c1c1439b0c0111fe5351dc089083e963df0c55dc8fcb552be8e792391"
   },
   "urls": [
     {
@@ -23,7 +23,7 @@
       "intent": "limite_aditivo_25_50",
       "stages": {
         "eligibility": "TRUE",
-        "appearance": "BLOCKED",
+        "appearance": "TRUE",
         "referral": "UNKNOWN",
         "engagement": "UNKNOWN",
         "cta_lead": "UNKNOWN",
@@ -36,7 +36,7 @@
       "intent": "aditivos_servicos_extras",
       "stages": {
         "eligibility": "TRUE",
-        "appearance": "BLOCKED",
+        "appearance": "TRUE",
         "referral": "UNKNOWN",
         "engagement": "UNKNOWN",
         "cta_lead": "UNKNOWN",
@@ -49,7 +49,7 @@
       "intent": "reequilibrio_economico_financeiro",
       "stages": {
         "eligibility": "TRUE",
-        "appearance": "BLOCKED",
+        "appearance": "UNKNOWN",
         "referral": "UNKNOWN",
         "engagement": "UNKNOWN",
         "cta_lead": "UNKNOWN",
@@ -62,7 +62,7 @@
       "intent": "quanto_custa_ticket_contratual",
       "stages": {
         "eligibility": "TRUE",
-        "appearance": "BLOCKED",
+        "appearance": "UNKNOWN",
         "referral": "UNKNOWN",
         "engagement": "UNKNOWN",
         "cta_lead": "UNKNOWN",

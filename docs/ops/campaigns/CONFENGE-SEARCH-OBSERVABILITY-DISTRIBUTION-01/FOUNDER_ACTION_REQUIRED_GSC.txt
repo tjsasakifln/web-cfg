@@ -1,25 +1,16 @@
-FOUNDER ACTION REQUIRED — GSC READ-ONLY CREDENTIAL
-
-email/role: tiago.sasaki@confenge.com.br as Owner or Full user of the
-Search Console property (service account invited as Restricted/Full with
-read-only API use).
+FOUNDER ACTION RESOLVED — GSC READ-ONLY CREDENTIAL
 
 property: sc-domain:confenge.com.br
-         (fallback: https://confenge.com.br/)
+service_account: confenge-gsc-observer@pncp-486312.iam.gserviceaccount.com
+permission: Restricted
+scope: https://www.googleapis.com/auth/webmasters.readonly
+credential_location: local secure path; not in git
 
-scope (minimum, read-only):
-  https://www.googleapis.com/auth/webmasters.readonly
+sync_source: search_analytics_api
+max_date: 2026-08-13
+rows: 20
+ready_for_product_decisions: true
+resolved_at: 2026-08-18T14:20:00Z
 
-variable/path (do not paste JSON into chat or git):
-  GSC_SITE_URL=sc-domain:confenge.com.br
-  GSC_CREDENTIALS_JSON=/secure/path/gsc-service-account.json
-  # alternative: GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON
-
-smoke test (does not print credential JSON):
-  python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke
-
-expected first line when still blocked:
-  GSC_SMOKE ok=false error=missing_credentials site=sc-domain:confenge.com.br …
-
-Do not invent a live baseline. Existing snapshots stay synthetic/fixture
-with ready_for_product_decisions=false until this handoff succeeds.
+Search Analytics returns top rows and is not an exhaustive total.
+No credential JSON or private key is stored in this repository.

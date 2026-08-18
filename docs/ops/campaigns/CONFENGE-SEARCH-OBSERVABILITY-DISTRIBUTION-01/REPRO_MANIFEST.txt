@@ -2,26 +2,27 @@ REPRO MANIFEST — CONFENGE-SEARCH-OBSERVABILITY-DISTRIBUTION-01
 related_issue: 86
 branch: goal/search-observability-distribution-20260818
 live_baseline_invented: false
-ready_for_product_decisions: false
+ready_for_product_decisions: true
 search_analytics_limitation: Search Analytics may return top rows only and is not an exhaustive total.
 
 fixture collector (twice, same path):
   python3 scripts/revops/search_demand_observatory.py sync --fixture --smoke
   # GSC_SMOKE ok=true source=fixture max_date=2026-07-29 ready_for_product_decisions=false synthetic=true
 
-live API without credential (fail closed, no JSON dump):
+live API with Restricted service account (credential stays outside git):
   python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke
-  # GSC_SMOKE ok=false error=missing_credentials site=sc-domain:confenge.com.br
+  # GSC_SMOKE ok=true error=none site=sc-domain:confenge.com.br rows=20 max_date=2026-08-13 ready_for_product_decisions=true
 
-url inspection (read-only, no Indexing API):
-  python3 -m scripts.discovery inspect-urls
-  # indexing_api_called: false · all four URLs UNKNOWN
+URL Inspection API (read-only, no Google Indexing API):
+  python3 -m scripts.discovery inspect-urls --json --as-of 2026-08-18T14:15:00Z
+  # indexing_api_called: false · all four Submitted and indexed / PASS
+  # last crawls: 2026-07-30, 2026-08-12, 2026-08-16, 2026-08-18
 
 live four-URL overlay:
-  python3 -m scripts.discovery campaign-report --live --write --as-of 2026-08-18T03:20:00Z
+  python3 -m scripts.discovery campaign-report --live --write --as-of 2026-08-18T14:20:00Z
 
 stage report (twice, identical):
-  python3 -m scripts.discovery campaign-report --as-of 2026-08-18T03:20:00Z
+  python3 -m scripts.discovery campaign-report --as-of 2026-08-18T14:20:00Z
 
 IndexNow prepare (discovery, send refused):
   python3 -m scripts.discovery indexnow --url <four canonicals>
@@ -44,8 +45,5 @@ tests:
   npm run test:secrets-scan
 
 raw query / PII: not in git (data/revops/gsc/private/ ignored)
-fixture manifest (from snapshot_manifest()):
-  python3 scripts/revops/search_demand_observatory.py stamp-snapshots
-  # writes data/revops/gsc/fixtures/last_fixture_manifest.json
-  # stamps latest_import.json, imports/import-2026-07-30.json, insights_latest.json
-  # synthetic=true fixture=true ready_for_product_decisions=false
+tracked live snapshot: query text hashed; raw_query_rows_in_git=false
+historical import-2026-07-30.json remains an explicitly labeled fixture

@@ -391,6 +391,32 @@ def git_safe_aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def git_safe_live_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    """Replace live raw queries with hashed, page-level-safe rows for git."""
+    out = dict(payload)
+    aggregate = git_safe_aggregate(list(payload.get("queries") or []))
+    out["queries"] = aggregate["rows"]
+    out["git_safe_aggregate"] = {k: v for k, v in aggregate.items() if k != "rows"}
+    out["query_text_redacted"] = True
+    out["raw_query_rows_in_git"] = False
+    return out
+
+
+def redact_live_query_fields(value: Any) -> Any:
+    """Recursively hash query-valued fields in live derived artifacts."""
+    if isinstance(value, list):
+        return [redact_live_query_fields(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    out: dict[str, Any] = {}
+    for key, item in value.items():
+        if key == "query" and isinstance(item, str):
+            out["query_hash"] = redact_query(item)
+        else:
+            out[key] = redact_live_query_fields(item)
+    return out
+
+
 def snapshot_manifest(
     *,
     source: str,
@@ -1016,8 +1042,18 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             }
         )
 
+    persisted_insights = insights
+    if is_live_gsc_payload(data):
+        PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
+        (PRIVATE_DIR / "insights_latest.json").write_text(
+            json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        persisted_insights = redact_live_query_fields(insights)
+        persisted_insights["query_text_redacted"] = True
+        persisted_insights["raw_query_rows_in_git"] = False
+
     out = DATA / "insights_latest.json"
-    out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
+    out.write_text(json.dumps(persisted_insights, ensure_ascii=False, indent=2), encoding="utf-8")
     # Private ops copies only — never publish as static public (auth via ops?action=gsc_insights)
     private_targets = [
         ROOT / "data" / "ops" / "gsc-insights.json",
@@ -1025,7 +1061,9 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
     ]
     for ops_out in private_targets:
         ops_out.parent.mkdir(parents=True, exist_ok=True)
-        ops_out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
+        ops_out.write_text(
+            json.dumps(persisted_insights, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
     # Remove legacy public static path if present
     legacy = ROOT / "ops" / "data" / "gsc-insights.json"
     if legacy.is_file():
@@ -1208,7 +1246,13 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "note": "API pull is current. July CSV snapshot is historical only.",
     }
-    (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    (PRIVATE_DIR / "latest_import.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    safe_payload = git_safe_live_payload(payload)
+    (DATA / "latest_import.json").write_text(
+        json.dumps(safe_payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     day_path = DATA / "daily" / f"{end.isoformat()}.json"
     day_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
 

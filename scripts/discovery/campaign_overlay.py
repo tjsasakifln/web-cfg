@@ -29,6 +29,7 @@ from scripts.revops.search_demand_observatory import (
     credential_presence,
     ctr_optimization_decision,
     git_safe_aggregate,
+    is_live_gsc_payload,
     snapshot_manifest,
     sync_incremental,
 )
@@ -130,6 +131,45 @@ def campaign_urls() -> list[str]:
 
 def campaign_dir(root: Path | None = None) -> Path:
     return (root or repo_root()) / CAMPAIGN_DIR_REL
+
+
+def load_live_gsc_snapshot(root: Path | None = None) -> dict[str, Any] | None:
+    """Load only a provider-backed, decision-ready Search Analytics snapshot."""
+    root = root or repo_root()
+    path = root / "data/revops/gsc/latest_import.json"
+    if not path.is_file():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(payload, dict) or not is_live_gsc_payload(payload):
+        return None
+    return payload
+
+
+def gsc_page_evidence(payload: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
+    """Aggregate returned Search Analytics rows by canonical page.
+
+    A missing page is deliberately absent from the result: Search Analytics
+    returns top rows, so missing is not a proven zero.
+    """
+    out: dict[str, dict[str, Any]] = {}
+    for row in (payload or {}).get("queries") or []:
+        page = str(row.get("page") or "")
+        if not page:
+            continue
+        cell = out.setdefault(
+            page,
+            {"returned_rows": 0, "impressions": 0.0, "clicks": 0.0, "max_date": None},
+        )
+        cell["returned_rows"] += 1
+        cell["impressions"] += float(row.get("impressions") or 0)
+        cell["clicks"] += float(row.get("clicks") or 0)
+        row_date = row.get("date")
+        if row_date and (cell["max_date"] is None or str(row_date) > cell["max_date"]):
+            cell["max_date"] = str(row_date)
+    return out
 
 
 def stage_cell(
@@ -352,12 +392,19 @@ def build_stage_report(
     generated_at: str | None = None,
     live: bool = False,
     transport: Transport | None = None,
-    gsc_ready: bool = False,
+    gsc_ready: bool | None = None,
 ) -> dict[str, Any]:
     root = root or repo_root()
     stamp = generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     sitemap = load_sitemap_urls(root)
     creds = credential_presence()
+    gsc_snapshot = load_live_gsc_snapshot(root)
+    snapshot_ready = bool(gsc_snapshot)
+    if gsc_ready is None:
+        gsc_ready = snapshot_ready
+    else:
+        gsc_ready = bool(gsc_ready and snapshot_ready)
+    page_evidence = gsc_page_evidence(gsc_snapshot)
     urls = campaign_urls()
     inspections = inspect_urls(urls, inspected_at=stamp)
     assets_out: list[dict[str, Any]] = []
@@ -396,9 +443,20 @@ def build_stage_report(
         )
         appearance_status = "UNKNOWN"
         appearance_note = "no_live_gsc_appearance; impression_is_not_engagement"
-        if inspect_row.get("index_state") not in {None, "UNKNOWN"} and gsc_ready:
+        page_gsc = page_evidence.get(asset["canonical"])
+        if page_gsc and page_gsc["impressions"] > 0 and gsc_ready:
             appearance_status = "TRUE"
-            appearance_note = f"url_inspection:{inspect_row.get('index_state')}"
+            appearance_note = (
+                "search_analytics_api_returned_page_rows; "
+                f"impressions={page_gsc['impressions']:g}; clicks={page_gsc['clicks']:g}; "
+                f"returned_rows={page_gsc['returned_rows']}; max_date={page_gsc['max_date']}; "
+                "impression_is_not_engagement"
+            )
+        elif gsc_ready and inspect_row.get("verdict") == "PASS":
+            appearance_note = (
+                "url_inspection_pass_but_no_page_row_returned_by_search_analytics; "
+                "missing_top_row_is_not_zero"
+            )
         elif creds["present"] is False:
             appearance_status = "BLOCKED"
             appearance_note = "BLOCKED_GSC_READONLY_CREDENTIAL"
@@ -408,7 +466,11 @@ def build_stage_report(
                 appearance_status,
                 source="url_inspection+gsc_search_analytics",
                 freshness=stamp,
-                next_action="founder_gsc_manual_then_live_export",
+                next_action=(
+                    "observe_engagement_and_referral_separately"
+                    if appearance_status == "TRUE"
+                    else "continue_gsc_observation_missing_is_not_zero"
+                ),
                 note=appearance_note,
             ),
             "referral": stage_cell(
@@ -451,10 +513,21 @@ def build_stage_report(
                 "reproof": reproof,
                 "url_inspection": {
                     "index_state": inspect_row.get("index_state") or "UNKNOWN",
+                    "coverage_state": inspect_row.get("coverage_state") or "UNKNOWN",
+                    "verdict": inspect_row.get("verdict") or "UNKNOWN",
+                    "last_crawl": inspect_row.get("last_crawl") or "UNKNOWN",
+                    "source": inspect_row.get("source") or "url_inspection_api",
                     "inspected_at": inspect_row.get("inspected_at") or stamp,
                     "ok": inspect_row.get("ok"),
                     "error": inspect_row.get("error"),
                     "indexing_api_called": False,
+                },
+                "gsc_search_analytics": page_gsc or {
+                    "returned_rows": None,
+                    "impressions": None,
+                    "clicks": None,
+                    "max_date": None,
+                    "reason": "page_absent_from_returned_top_rows_missing_is_not_zero",
                 },
                 "stages": stages,
                 "copy_changed": False,
@@ -473,9 +546,23 @@ def build_stage_report(
         "generated_at": stamp,
         "network_probed": live,
         "gsc_credential_present": creds["present"],
-        "ready_for_product_decisions": False if not creds["present"] else gsc_ready,
+        "ready_for_product_decisions": bool(creds["present"] and gsc_ready),
         "live_baseline_invented": False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "gsc_sync": {
+            "ok": bool(gsc_snapshot),
+            "source": (gsc_snapshot or {}).get("source") or "none",
+            "synthetic": bool((gsc_snapshot or {}).get("synthetic")),
+            "max_date": (gsc_snapshot or {}).get("max_date"),
+            "latency_ms": (gsc_snapshot or {}).get("latency_ms"),
+            "rows": (gsc_snapshot or {}).get("query_count"),
+            "ready_for_product_decisions": bool(
+                (gsc_snapshot or {}).get("ready_for_product_decisions")
+            ),
+            "manifest_sha256": ((gsc_snapshot or {}).get("manifest") or {}).get(
+                "content_sha256"
+            ),
+        },
         "stage_rules": {
             "impression_is_not_engagement": True,
             "impression_is_not_referral": True,
@@ -511,7 +598,7 @@ def format_stage_report(report: dict[str, Any]) -> str:
         f"live_baseline_invented: {str(report['live_baseline_invented']).lower()}",
         f"search_analytics_limitation: {report['search_analytics_limitation']}",
         "",
-        "STAGES per URL: eligibility → appearance → referral → engagement → cta_lead → pipeline",
+        "STAGES per URL: eligibility -> appearance -> referral -> engagement -> cta_lead -> pipeline",
         "values: TRUE | FALSE | UNKNOWN | BLOCKED",
         "",
     ]
@@ -542,6 +629,7 @@ def write_campaign_artifacts(
     gsc_sync: dict[str, Any] | None = None,
 ) -> dict[str, Path]:
     root = root or repo_root()
+    gsc_sync = gsc_sync or report.get("gsc_sync") or {}
     dest = campaign_dir(root)
     dest.mkdir(parents=True, exist_ok=True)
     written: dict[str, Path] = {}
@@ -562,14 +650,14 @@ def write_campaign_artifacts(
         "synthetic_gsc": True if not report.get("gsc_credential_present") else False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "gsc_sync": {
-            "ok": bool((gsc_sync or {}).get("ok")),
-            "source": (gsc_sync or {}).get("source") or "none",
-            "synthetic": bool((gsc_sync or {}).get("synthetic")),
-            "max_date": (gsc_sync or {}).get("max_date"),
-            "latency_ms": (gsc_sync or {}).get("latency_ms"),
-            "rows": (gsc_sync or {}).get("rows"),
-            "ready_for_product_decisions": bool((gsc_sync or {}).get("ready_for_product_decisions")),
-            "manifest_sha256": (gsc_sync or {}).get("manifest_sha256"),
+            "ok": bool(gsc_sync.get("ok")),
+            "source": gsc_sync.get("source") or "none",
+            "synthetic": bool(gsc_sync.get("synthetic")),
+            "max_date": gsc_sync.get("max_date"),
+            "latency_ms": gsc_sync.get("latency_ms"),
+            "rows": gsc_sync.get("rows"),
+            "ready_for_product_decisions": bool(gsc_sync.get("ready_for_product_decisions")),
+            "manifest_sha256": gsc_sync.get("manifest_sha256"),
         },
         "urls": [
             {
@@ -599,7 +687,11 @@ def write_campaign_artifacts(
             {
                 "url": asset["canonical"],
                 "technical_state": "; ".join(tech_bits),
-                "inspection_field": asset["url_inspection"]["index_state"],
+                "inspection_field": (
+                    f"{asset['url_inspection']['index_state']}; "
+                    f"verdict={asset['url_inspection']['verdict']}; "
+                    f"last_crawl={asset['url_inspection']['last_crawl']}"
+                ),
             }
         )
     manual = founder_manual_checklist(checklist_rows, inspected_at=report["generated_at"])
@@ -607,11 +699,14 @@ def write_campaign_artifacts(
     manual_path.write_text(manual, encoding="utf-8")
     written["FOUNDER_GSC_MANUAL_4_URLS.txt"] = manual_path
 
-    if not report.get("gsc_credential_present"):
-        action = founder_action_required_gsc()
-        action_path = dest / "FOUNDER_ACTION_REQUIRED_GSC.txt"
-        action_path.write_text(action, encoding="utf-8")
-        written["FOUNDER_ACTION_REQUIRED_GSC.txt"] = action_path
+    action = (
+        founder_action_required_gsc()
+        if not report.get("gsc_credential_present")
+        else founder_action_resolved_gsc(report)
+    )
+    action_path = dest / "FOUNDER_ACTION_REQUIRED_GSC.txt"
+    action_path.write_text(action, encoding="utf-8")
+    written["FOUNDER_ACTION_REQUIRED_GSC.txt"] = action_path
 
     evidence = render_evidence_md(report, gsc_sync=gsc_sync)
     evidence_path = dest / "EVIDENCE.md"
@@ -647,6 +742,25 @@ def founder_action_required_gsc() -> str:
         "\n"
         "Do not invent a live baseline. Existing snapshots stay synthetic/fixture\n"
         "with ready_for_product_decisions=false until this handoff succeeds.\n"
+    )
+
+
+def founder_action_resolved_gsc(report: dict[str, Any]) -> str:
+    sync = report.get("gsc_sync") or {}
+    return (
+        "FOUNDER ACTION RESOLVED — GSC READ-ONLY CREDENTIAL\n\n"
+        "property: sc-domain:confenge.com.br\n"
+        "service_account: confenge-gsc-observer@pncp-486312.iam.gserviceaccount.com\n"
+        "permission: Restricted\n"
+        "scope: https://www.googleapis.com/auth/webmasters.readonly\n"
+        "credential_location: local secure path; not in git\n\n"
+        f"sync_source: {sync.get('source') or 'none'}\n"
+        f"max_date: {sync.get('max_date')}\n"
+        f"rows: {sync.get('rows')}\n"
+        f"ready_for_product_decisions: {str(bool(sync.get('ready_for_product_decisions'))).lower()}\n"
+        f"resolved_at: {report.get('generated_at')}\n\n"
+        "Search Analytics returns top rows and is not an exhaustive total.\n"
+        "No credential JSON or private key is stored in this repository.\n"
     )
 
 
@@ -695,10 +809,13 @@ def render_evidence_md(report: dict[str, Any], *, gsc_sync: dict[str, Any] | Non
         lines.append(f"### {asset['id']}")
         for stage in CAMPAIGN_STAGES:
             cell = asset["stages"][stage]
-            lines.append(
+            line = (
                 f"- **{stage}**: `{cell['status']}` · source `{cell['source']}` · "
                 f"freshness `{cell['freshness']}` · owner `{cell['owner']}` · next `{cell['next_action']}`"
             )
+            if cell.get("note"):
+                line += f" · observation `{cell['note']}`"
+            lines.append(line)
         lines.append("")
     gsc = gsc_sync or {}
     lines.extend(
