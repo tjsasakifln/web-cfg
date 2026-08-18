@@ -72,26 +72,26 @@ def public_surface_paths() -> list[Path]:
 
 def test_superseded_urls_redirect_permanently_and_directly():
     rules = redirect_rules()
-    assert rules[OLD_LIMIT] == (NEW_LIMIT, "301!")
+    # OLD_LIMIT is self-canonical again (organic-striking-distance-cro-01).
+    assert OLD_LIMIT not in rules
     assert rules[OLD_ITEM] == (NEW_ITEM, "301!")
     for old, (destination, status) in rules.items():
-        if old in {OLD_LIMIT, OLD_ITEM}:
+        if old == OLD_ITEM:
             assert status.startswith("301")
             assert destination not in rules, f"redirect_chain:{old}->{destination}"
             assert destination not in {OLD_LIMIT, OLD_ITEM}
     assert ERROR_PROJECT not in rules
-    assert SUPERSEDED_URLS == {OLD_LIMIT, OLD_ITEM}
+    assert SUPERSEDED_URLS == {OLD_ITEM}
 
 
 def test_superseded_urls_are_absent_from_indexable_sources():
-    superseded = {OLD_LIMIT, OLD_ITEM}
+    superseded = {OLD_ITEM}
     for page_file in (ROOT / "data" / "editorial" / "pages").glob("*.json"):
         definition = json.loads(page_file.read_text(encoding="utf-8"))
         assert definition.get("url") not in superseded
         assert all(row.get("url") not in superseded for row in definition.get("related", []))
     for path in public_surface_paths():
         text = path.read_text(encoding="utf-8", errors="replace")
-        assert OLD_LIMIT not in text, f"superseded_in:{path.relative_to(ROOT)}"
         assert OLD_ITEM not in text, f"superseded_in:{path.relative_to(ROOT)}"
 
 

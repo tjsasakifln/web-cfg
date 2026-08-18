@@ -152,8 +152,8 @@
   {
     "url": "/aditivos-obras-publicas/",
     "page_type": "pillar",
-    "title": "Aditivos em obras públicas: limites, serviços extras e pleitos | CONFENGE",
-    "search_intent": "Aditivos em obras públicas: limites, serviços extras e pleitos | CONFENGE",
+    "title": "Aditivos e serviços extras em obras públicas: tipos, documentos e margem | CONFENGE",
+    "search_intent": "Aditivos e serviços extras em obras públicas: tipos, documentos e margem | CONFENGE",
     "cluster": "aditivos",
     "http_status_production": "UNVERIFIED",
     "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
@@ -177,8 +177,8 @@
   {
     "url": "/reequilibrio-obras-publicas/",
     "page_type": "pillar",
-    "title": "Reequilíbrio econômico-financeiro de contratos de obras | CONFENGE",
-    "search_intent": "Reequilíbrio econômico-financeiro de contratos de obras | CONFENGE",
+    "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+    "search_intent": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
     "cluster": "reequilibrio",
     "http_status_production": "UNVERIFIED",
     "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
@@ -1977,14 +1977,14 @@
   {
     "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
     "page_type": "conteudo",
-    "title": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
-    "search_intent": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
+    "title": "Limite de aditivo 25% e 50% em obra pública: o que conta",
+    "search_intent": "Limite de aditivo 25% e 50% em obra pública: o que conta",
     "cluster": "aditivos-obras-publicas",
     "http_status_production": "UNVERIFIED",
     "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
-    "robots": "noindex,follow",
-    "in_sitemap": false,
-    "in_hub": false,
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "in_sitemap": true,
+    "in_hub": true,
     "in_feed": false,
     "internal_links_in": "",
     "editorial_status": "",
@@ -1994,9 +1994,9 @@
     "cta": "",
     "commercial_service": "contract-defense",
     "similarity_notes": "",
-    "disposition": "RETAIN_NOINDEX",
+    "disposition": "KEEP_AND_IMPROVE",
     "journey": "contrato",
-    "notes": "noindex; excluded from hub/sitemap/feed after remediation",
+    "notes": "indexable library page",
     "path": "conteudos/limite-aditivo-25-50-obra-publica/index.html"
   },
   {
@@ -3346,7 +3346,7 @@
     "similarity_notes": "",
     "disposition": "KEEP_AND_IMPROVE",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3371,7 +3371,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "pagamento",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3396,7 +3396,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "medicao",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3421,7 +3421,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "prazo",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3446,7 +3446,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_MISSING_EVIDENCE",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3471,7 +3471,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3496,7 +3496,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "prazo",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3521,7 +3521,7 @@
     "similarity_notes": "",
     "disposition": "KEEP_AND_IMPROVE",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3546,7 +3546,7 @@
     "similarity_notes": "",
     "disposition": "KEEP_AND_IMPROVE",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3571,7 +3571,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "medicao",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3596,7 +3596,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "pagamento",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {
@@ -3621,7 +3621,7 @@
     "similarity_notes": "",
     "disposition": "BLOCKED_HUMAN_REVIEW",
     "journey": "contrato",
-    "notes": "Wave 1 — approval path is Tiago-only (PR #10)",
+    "notes": "Wave 1: approval path is Tiago-only (PR #10)",
     "path": ""
   },
   {

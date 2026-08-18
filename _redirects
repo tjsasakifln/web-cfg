@@ -54,5 +54,6 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/*  /inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/:splat  301
 
 # --- Editorial canonical consolidation (301, direct; no chain) ---
-/conteudos/limite-aditivo-25-50-obra-publica/  /lei-14133-obras/limite-25-50-aditivo-obra/  301!
+# /conteudos/limite-aditivo-25-50-obra-publica/ is self-canonical again
+# (organic-striking-distance-cro-01). Do not restore this 301.
 /conteudos/desconto-da-proposta-em-item-novo-aditivo/  /lei-14133-obras/preco-item-novo-desconto-proposta/  301!
