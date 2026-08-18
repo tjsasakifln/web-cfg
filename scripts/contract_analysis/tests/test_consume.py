@@ -187,26 +187,37 @@ def test_extra_cli_export_reports_coverage_absent_and_cannot_index():
     assert "coverage_absent" in decision.reason_codes
 
 
-def test_unknown_schema_export_is_consume_error(tmp_path):
+def test_unknown_schema_export_holds(tmp_path):
     dest = tmp_path / "bad-export"
-    dest.mkdir()
+    analyses = dest / "analyses"
+    analyses.mkdir(parents=True)
+    raw = json.loads((EXPORT / "analyses" / "cand-preco-01.json").read_text(encoding="utf-8"))
+    (analyses / "cand-preco-01.json").write_text(json.dumps(raw), encoding="utf-8")
     (dest / "manifest.json").write_text(
         json.dumps(
             {
                 "schema": "public-read-contract-analysis/2.0",
                 "contract_version": "v2.0.0",
                 "catalog_mode": "official_live",
-                "claimed_live": True,
-                "analyses": [],
+                "claimed_live": False,
+                "analyses": [
+                    {
+                        "analysis_candidate_id": "cand-preco-01",
+                        "path": "analyses/cand-preco-01.json",
+                    }
+                ],
             }
         ),
         encoding="utf-8",
     )
-    try:
-        load_export_dir(dest)
-        raise AssertionError("expected ConsumeError")
-    except ConsumeError as exc:
-        assert "unsupported export schema" in str(exc)
+    bundle = load_export_dir(dest)
+    assert bundle["manifest"].get("_schema_ok") is False
+    rec = load_extra_cli_bundle(dest)["records"][0]
+    from scripts.contract_analysis.gate import evaluate_publication
+
+    decision = evaluate_publication(rec, cohort=[rec])
+    assert decision.state == "HOLD_FOR_DATA"
+    assert "schema_unsupported" in rec["producer_integrity_reasons"] or "schema_unsupported" in decision.reason_codes
 
 
 def test_goal03_additive_official_live_does_not_invent_or_index(tmp_path):

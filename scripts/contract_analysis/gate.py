@@ -8,13 +8,14 @@ and the record is not a fixture.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 from typing import Any
 
 from scripts.contract_analysis import (
     GATE_VERSION,
     INDEX_CONDITIONS,
+    MAX_INDEX_PAGES,
     PUBLICATION_STATES,
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
@@ -25,7 +26,16 @@ from scripts.contract_analysis.consume import (
     _has_coverage,
     _has_evidence_refs,
     _has_freshness,
+    comparability_conflict,
+    handoff_status_of,
+    material_claims_missing_locator,
+    official_live_declared,
     producer_status_of,
+)
+from scripts.contract_analysis.quality import (
+    HUMAN_REVIEW_PENDING,
+    INDEX_READY_VERDICT,
+    evaluate_quality,
 )
 from scripts.contract_analysis.reputation import check_reputational_safety
 from scripts.contract_analysis.taxonomy import check_taxonomy
@@ -73,6 +83,9 @@ class PublicationDecision:
     robots: str
     sitemap: bool
     gate_version: str = GATE_VERSION
+    quality: dict[str, Any] | None = None
+    review_recommendation: str = ""
+    human_review_status: str = ""
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -87,6 +100,9 @@ class PublicationDecision:
             "robots": self.robots,
             "sitemap": self.sitemap,
             "gate_version": self.gate_version,
+            "quality": dict(self.quality) if self.quality else None,
+            "review_recommendation": self.review_recommendation,
+            "human_review_status": self.human_review_status,
         }
 
 
@@ -235,6 +251,32 @@ def evaluate_conditions(
         reasons.append("fixture_as_live")
     if integrity_errors:
         reasons.extend(integrity_errors)
+    if comparability_conflict(record):
+        extra_ok = False
+        reasons.append("comparability_not_applicable_with_comparative_claim")
+    hs = handoff_status_of(record)
+    if hs and hs != "HANDOFF_READY":
+        extra_ok = False
+        reasons.append("handoff_status_not_ready")
+    if record.get("official_ingest") and not official_live_declared(record):
+        extra_ok = False
+        reasons.append("official_live_not_true")
+    structured_claims = [
+        item
+        for item in _items(record.get("claims"))
+        if isinstance(item, dict) and item.get("claim_id")
+    ]
+    require_locators = (not _is_fixture(record)) and bool(
+        record.get("official_ingest") or structured_claims
+    )
+    if require_locators and material_claims_missing_locator(record):
+        extra_ok = False
+        reasons.append("material_claim_locator_absent")
+    # Producer publication/index flags never satisfy data readiness.
+    if record.get("producer_index_authorization") or record.get("index_authorization"):
+        reasons.append("producer_index_authorization_ignored")
+    if record.get("producer_publication_authorization") or record.get("publication_authorization"):
+        reasons.append("producer_publication_authorization_ignored")
 
     live_integrity_blockers = []
     if not _is_fixture(record) or _source_kind(record) == SOURCE_OFFICIAL_LIVE:
@@ -316,10 +358,27 @@ def evaluate_conditions(
     expires = _iso_date(freshness.get("expires_at"))
     if expires is not None and now > expires:
         reasons.append("freshness_expired")
+    verified = _iso_date(record.get("verified_at") or freshness.get("verified_at"))
+    event_at = _iso_date(record.get("event_effective_at") or freshness.get("event_effective_at"))
+    historical = bool(record.get("historical") or freshness.get("historical"))
+    if event_at and verified and event_at < verified:
+        historical = True
     if as_of is not None:
         age_days = (now - as_of).days
+        verified_fresh = False
+        if verified is not None:
+            verified_age = (now - verified).days
+            try:
+                hours_limit = int(max_age_hours) if max_age_hours is not None else max_age_days * 24
+            except (TypeError, ValueError):
+                hours_limit = max_age_days * 24
+            verified_fresh = verified_age >= 0 and verified_age * 24 <= hours_limit
         if age_days < 0:
             reasons.append("freshness_stale_or_future")
+        elif historical and verified_fresh:
+            # Current verification of an explicitly historical event does not rewrite
+            # event_effective_at and does not HOLD for document age alone.
+            pass
         elif max_age_hours is not None:
             try:
                 hours = int(max_age_hours)
@@ -404,6 +463,7 @@ def decide_state(
     record: dict[str, Any],
     conditions: dict[str, bool],
     reasons: list[str],
+    quality: Any = None,
 ) -> str:
     taxonomy_hit = any(code.startswith("taxonomy_") for code in reasons)
     reputation_hit = any(code.startswith("reputation_") for code in reasons)
@@ -414,8 +474,13 @@ def decide_state(
         or extra_state == "DATA_REJECT"
         or "fixture_as_live" in reasons
         or "withdrawn" in reasons
+        or "content_hash_mismatch" in reasons
+        or "manifest_hash_mismatch" in reasons
+        or "comparability_not_applicable_with_comparative_claim" in reasons
     ):
         return "REJECT"
+    if "schema_unsupported" in reasons or "schema_absent" in reasons:
+        return "HOLD_FOR_DATA"
     if "correction_invalidated" in reasons:
         return "EDITORIAL_REVIEW"
     if (
@@ -426,7 +491,10 @@ def decide_state(
         or "data_hold" in reasons
     ):
         return "HOLD_FOR_DATA"
-    if (
+    quality_ready = bool(
+        quality is not None and getattr(quality, "review_verdict", None) == INDEX_READY_VERDICT
+    )
+    missing_editorial = (
         not conditions["author_reviewer"]
         or not conditions["method_limitations"]
         or not conditions["insight_singular"]
@@ -435,7 +503,9 @@ def decide_state(
         or not conditions["intent_plausivel"]
         or not conditions["maintenance_owner"]
         or "editorial_review_pending" in reasons
-    ):
+    )
+    # INDEX_READY content may preview as NOINDEX while authorship is unconfirmed.
+    if missing_editorial and not quality_ready:
         return "EDITORIAL_REVIEW"
     fixture = _is_fixture(record)
     approved, approval_reasons = approval_allows_index(record)
@@ -463,7 +533,13 @@ def evaluate_publication(
         rendered_html=rendered_html,
         schema=schema,
     )
-    state = decide_state(record, conditions, reasons)
+    quality = evaluate_quality(
+        record,
+        cohort=cohort,
+        rendered_html=rendered_html,
+        schema=schema,
+    )
+    state = decide_state(record, conditions, reasons, quality=quality)
     if state not in PUBLICATION_STATES:
         state = "REJECT"
         reasons.append("state_unknown")
@@ -473,6 +549,10 @@ def evaluate_publication(
         reasons.append("fixture_cannot_index")
     indexable = state == "PUBLISHABLE_INDEX"
     robots = "index,follow" if indexable else "noindex,nofollow"
+    review_rec = quality.review_verdict
+    human_status = ""
+    if review_rec == INDEX_READY_VERDICT and state != "PUBLISHABLE_INDEX":
+        human_status = HUMAN_REVIEW_PENDING
     return PublicationDecision(
         analysis_id=_text(record.get("id") or record.get("slug") or "unknown"),
         slug=_text(record.get("slug") or record.get("id") or "unknown"),
@@ -484,6 +564,9 @@ def evaluate_publication(
         indexable=indexable,
         robots=robots,
         sitemap=indexable,
+        quality=quality.as_dict(),
+        review_recommendation=review_rec,
+        human_review_status=human_status,
     )
 
 
@@ -492,4 +575,20 @@ def evaluate_cohort(
     *,
     today: date | None = None,
 ) -> list[PublicationDecision]:
-    return [evaluate_publication(rec, cohort=records, today=today) for rec in records]
+    decisions: list[PublicationDecision] = []
+    index_seen = 0
+    for rec in records:
+        decision = evaluate_publication(rec, cohort=records, today=today)
+        if decision.state == "PUBLISHABLE_INDEX":
+            index_seen += 1
+            if index_seen > MAX_INDEX_PAGES:
+                decision = replace(
+                    decision,
+                    state="PUBLISHABLE_NOINDEX",
+                    indexable=False,
+                    sitemap=False,
+                    robots="noindex,nofollow",
+                    reason_codes=tuple(decision.reason_codes) + ("index_cap_exceeded",),
+                )
+        decisions.append(decision)
+    return decisions

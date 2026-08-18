@@ -7,8 +7,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from scripts.contract_analysis import GATE_VERSION, MAX_CANARY, PUBLICATION_STATES
+from scripts.contract_analysis import GATE_VERSION, MAX_CANARY, PUBLICATION_STATES, QUALITY_VERSION
 from scripts.contract_analysis.gate import PublicationDecision
+from scripts.contract_analysis.handoff import FACTUAL_HANDOFF_PENDING, HANDOFF_BLOCKED
 
 REPORT_STEM = "CONTRACT_ANALYSIS_CANARY_STATUS"
 REPORT_MD = Path("docs/editorial") / f"{REPORT_STEM}.md"
@@ -39,6 +40,9 @@ def build_status(
                 "fixture": decision.is_fixture,
                 "indexable": decision.indexable,
                 "robots": decision.robots,
+                "review_recommendation": decision.review_recommendation,
+                "human_review_status": decision.human_review_status,
+                "quality_score": (decision.quality or {}).get("score") if decision.quality else None,
             }
         )
     index_count = sum(1 for d in decisions if d.state == "PUBLISHABLE_INDEX")
@@ -60,13 +64,22 @@ def build_status(
             }
         )
     live_absent = bool(bundle.get("live_absent") or bundle.get("source_kind") != "official_live")
-    if live_absent or index_count == 0:
+    handoff = bundle.get("handoff") if isinstance(bundle.get("handoff"), dict) else {}
+    handoff_pending = (
+        handoff.get("status") in {FACTUAL_HANDOFF_PENDING, HANDOFF_BLOCKED, None, ""}
+        or live_absent
+    )
+    if handoff_pending or index_count == 0:
         recommendation = "ADJUST"
         recommendation_reason = (
-            "Família e gate prontos; extra-cli #400 consumido na forma "
-            "public-read-contract-analysis/1.0. Não há official_live sobrevivente. "
-            "index_count=0. Não expandir até existir pack official_live + overlay "
-            "editorial que passe o gate adversário."
+            "Família e gate prontos. Consumer aceita "
+            "authority-handoff-contract-analysis/1.0 e 1.1 além de "
+            "public-read-contract-analysis/1.x. O rendezvous "
+            "`$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01/` "
+            f"está `{handoff.get('status') or FACTUAL_HANDOFF_PENDING}`. "
+            "index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor "
+            "até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. "
+            "Producer publication/index flags nunca autorizam INDEX."
         )
     else:
         recommendation = "EXPAND"
@@ -109,6 +122,14 @@ def build_status(
         ),
         "recommendation": recommendation,
         "recommendation_reason": recommendation_reason,
+        "expand_adjust_kill": recommendation if recommendation != "STOP" else "KILL",
+        "nenhum_index_ativo": index_count == 0,
+        "factual_handoff_pending": handoff_pending,
+        "handoff": handoff,
+        "quality_version": QUALITY_VERSION,
+        "written_analyses": 0 if handoff_pending else sum(
+            1 for d in decisions if d.human_review_status == "HUMAN_REVIEW_PENDING"
+        ),
     }
 
 
@@ -125,6 +146,9 @@ def render_markdown(status: dict[str, Any]) -> str:
         f"- official_live absent: **{status.get('live_absent')}**",
         f"- `index_count`: **{status['index_count']}**",
         f"- Recommendation: **{status['recommendation']}**",
+        f"- expand/adjust/kill: **{status.get('expand_adjust_kill')}**",
+        f"- nenhum INDEX ativo: **{status.get('nenhum_index_ativo')}**",
+        f"- FACTUAL_HANDOFF_PENDING: **{status.get('factual_handoff_pending')}**",
         f"- Reason: {status.get('recommendation_reason')}",
         "",
         "## State counts",

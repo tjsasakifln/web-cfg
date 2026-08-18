@@ -15,6 +15,22 @@ CONTENT_CLASS_CASE = "CASO_CONFENGE"
 ASSET_FAMILY = "analise-tecnica-contrato-publico"
 ROUTE_FAMILY = "analise-tecnica-contrato"
 PUBLIC_READ_SCHEMA = "public-read-contract-analysis/1.0"
+AUTHORITY_HANDOFF_SCHEMA = "authority-handoff-contract-analysis/1.0"
+OFFICIAL_LIVE_DOSSIER_SCHEMA = "official-live-authority-dossier/1.0"
+ANALYSIS_MODES = ("DOCUMENT_CHAIN", "TIMELINE", "COMPARATIVE")
+NON_COMPARATIVE_MODES = ("DOCUMENT_CHAIN", "TIMELINE")
+TEMPORAL_FIELDS = (
+    "event_effective_at",
+    "source_published_at",
+    "retrieved_at",
+    "verified_at",
+    "source_as_of",
+)
+OWNER_CONDITIONAL_TOKEN = "OWNER_CONDITIONAL_APPROVAL_CONTRACT_ANALYSIS_CANARY_2026_08_17"
+OWNER_CONDITIONAL_APPROVER = "OWNER_CONFENGE_CONDITIONAL"
+OWNER_QUALITY_MIN = 88
+OWNER_DIMENSION_MIN = 75
+MAX_INDEX_PAGES = 1
 PUBLICATION_STATES = (
     "REJECT",
     "HOLD_FOR_DATA",
@@ -38,5 +54,8 @@ INDEX_CONDITIONS = (
     "unique_content",
 )
 MAX_CANARY = 10
+MASTERPIECE_EVAL_CAP = 5
+MASTERPIECE_WRITE_CAP = 3
 SOURCE_OFFICIAL_LIVE = "official_live"
 SOURCE_FIXTURE = "test_only_fixture"
+QUALITY_VERSION = "authority-content-quality/1.0"

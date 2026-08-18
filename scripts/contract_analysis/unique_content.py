@@ -166,6 +166,9 @@ def _analysis_prose(record: dict[str, Any]) -> str:
         str(record.get("cannot_conclude") or ""),
         str(record.get("methodology") or ""),
         str(record.get("limitations") or ""),
+        str(record.get("body") or ""),
+        str(record.get("counterproof") or ""),
+        str(record.get("thesis") or ""),
     ]
     for key in ("facts", "calculations", "comparisons", "interpretation"):
         val = record.get(key) or []
