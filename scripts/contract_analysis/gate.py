@@ -35,6 +35,7 @@ from scripts.contract_analysis.consume import (
 from scripts.contract_analysis.quality import (
     HUMAN_REVIEW_PENDING,
     INDEX_READY_VERDICT,
+    READY_FOR_HUMAN_REVIEW,
     evaluate_quality,
 )
 from scripts.contract_analysis.reputation import check_reputational_safety
@@ -137,7 +138,7 @@ def _as_of_date(record: dict[str, Any]) -> date | None:
 
 
 def _today(today: date | None) -> date:
-    return today or date(2026, 8, 16)
+    return today or date(2026, 8, 18)
 
 
 def _data_state(record: dict[str, Any]) -> str | None:
@@ -551,7 +552,11 @@ def evaluate_publication(
     robots = "index,follow" if indexable else "noindex,nofollow"
     review_rec = quality.review_verdict
     human_status = ""
-    if review_rec == INDEX_READY_VERDICT and state != "PUBLISHABLE_INDEX":
+    official = _source_kind(record) == SOURCE_OFFICIAL_LIVE and not fixture
+    ready_for_review = str(record.get("editorial_status") or "").strip().lower() == "ready_for_human_review"
+    if official and ready_for_review and state == "PUBLISHABLE_NOINDEX" and not record.get("approved_for_index"):
+        human_status = READY_FOR_HUMAN_REVIEW
+    elif review_rec == INDEX_READY_VERDICT and state != "PUBLISHABLE_INDEX":
         human_status = HUMAN_REVIEW_PENDING
     return PublicationDecision(
         analysis_id=_text(record.get("id") or record.get("slug") or "unknown"),

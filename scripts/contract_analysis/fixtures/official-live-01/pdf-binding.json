@@ -1,0 +1,13 @@
+{
+  "pdf_url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+  "pdf_sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+  "listing_url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+  "listing_sha256_producer": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+  "page_count_observed": 48,
+  "pages": {
+    "13": "9ca3b7bef945d6f0c992b19028dfe8c9cb31d9c9bbb36ad29012b6422d57a433",
+    "14": "07e2de2ee56fa43935571e520847a027b26cb1423d39cbc3456f765ec77dacc2",
+    "15": "6edff5f5097580ec011d8d512ffb3ab45660a35af7c03e1b98af702de1a1631b",
+    "46": "2f30a6ed778124a947fc0e9969bdfc8204f081d1a27a6d02a1cb46c7afe33f99"
+  }
+}

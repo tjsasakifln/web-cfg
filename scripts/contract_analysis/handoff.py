@@ -8,14 +8,23 @@ import os
 from pathlib import Path
 from typing import Any
 
-from scripts.contract_analysis import SOURCE_OFFICIAL_LIVE
+from scripts.contract_analysis import (
+    AUTHORIZED_ANALYSIS_ID,
+    AUTHORIZED_DOSSIER_CONTENT_HASH,
+    AUTHORIZED_PRODUCER_COMMIT,
+    AUTHORIZED_ROOT_CONTENT_HASH,
+    SOURCE_OFFICIAL_LIVE,
+)
 from scripts.contract_analysis.consume import (
     ConsumeError,
     catalog_mode_of,
     claimed_live_of,
+    handoff_status_of,
     negotiate_schema,
     official_live_declared,
+    root_content_hash_of,
     source_kind_of,
+    verify_authority_content_hash,
     verify_content_hash,
 )
 
@@ -57,9 +66,20 @@ def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def sha256sums_path(directory: Path) -> Path | None:
+    """Producer 1.1 writes SHA256SUMS.txt; 1.0 writes SHA256SUMS. Accept either."""
+    txt = directory / "SHA256SUMS.txt"
+    plain = directory / "SHA256SUMS"
+    if txt.is_file():
+        return txt
+    if plain.is_file():
+        return plain
+    return None
+
+
 def verify_sha256sums(directory: Path) -> tuple[bool, list[str]]:
-    sums = directory / "SHA256SUMS"
-    if not sums.is_file():
+    sums = sha256sums_path(directory)
+    if sums is None:
         return False, ["sha256sums_absent"]
     reasons: list[str] = []
     for raw in sums.read_text(encoding="utf-8").splitlines():
@@ -82,6 +102,53 @@ def verify_sha256sums(directory: Path) -> tuple[bool, list[str]]:
     return not reasons, reasons
 
 
+def verify_authorized_official_identity(
+    directory: Path,
+    ready: dict[str, Any],
+    manifest: dict[str, Any],
+) -> list[str]:
+    """Bind the 1.1 official rendezvous to the single authorized analysis.
+
+    Older SHA256SUMS / manifest_sha test packs are not this contract and
+    must not be rejected here.
+    """
+    schema = str(ready.get("schema") or manifest.get("schema") or "")
+    if not schema.startswith("official-live-authority-handoff/1"):
+        return []
+    reasons: list[str] = []
+    ids = list(ready.get("ids") or manifest.get("ids") or [])
+    if ids != [AUTHORIZED_ANALYSIS_ID]:
+        reasons.append("unauthorized_analysis_id")
+    producer = str(ready.get("producer_commit") or manifest.get("producer_commit") or "").strip()
+    if producer != AUTHORIZED_PRODUCER_COMMIT:
+        reasons.append("producer_commit_mismatch")
+    root_hash = str(ready.get("root_content_hash") or "").strip()
+    if root_hash != AUTHORIZED_ROOT_CONTENT_HASH:
+        reasons.append("authorized_root_hash_mismatch")
+    hashes = manifest.get("content_hashes") if isinstance(manifest.get("content_hashes"), dict) else {}
+    if str(hashes.get(AUTHORIZED_ANALYSIS_ID) or "") != AUTHORIZED_DOSSIER_CONTENT_HASH:
+        reasons.append("authorized_dossier_hash_mismatch")
+    dossier_path = directory / "dossiers" / f"{AUTHORIZED_ANALYSIS_ID}.json"
+    if dossier_path.is_file():
+        dossier = _read_json(dossier_path)
+        if not dossier or not verify_authority_content_hash(dossier):
+            reasons.append("dossier_content_hash_mismatch")
+        elif str(dossier.get("content_hash") or "") != AUTHORIZED_DOSSIER_CONTENT_HASH:
+            reasons.append("authorized_dossier_hash_mismatch")
+        if official_live_declared(dossier) is not True:
+            reasons.append("official_live_not_true")
+        if handoff_status_of(dossier) != HANDOFF_READY:
+            reasons.append("handoff_status_not_ready")
+        flags = dossier.get("gates") if isinstance(dossier.get("gates"), dict) else {}
+        if flags.get("publication_authorization") or flags.get("index_authorization"):
+            reasons.append("producer_authorization_not_false")
+        if manifest.get("publication_authorization") or manifest.get("index_authorization"):
+            reasons.append("producer_authorization_not_false")
+    else:
+        reasons.append("authorized_dossier_absent")
+    return reasons
+
+
 def verify_ready_document(directory: Path, ready: dict[str, Any]) -> tuple[bool, list[str]]:
     reasons: list[str] = []
     status = str(ready.get("status") or "").strip().upper()
@@ -91,7 +158,9 @@ def verify_ready_document(directory: Path, ready: dict[str, Any]) -> tuple[bool,
     if not manifest_path.is_file():
         return False, reasons + ["manifest_absent"]
     manifest_sha = file_sha256(manifest_path)
-    declared_sha = str(ready.get("manifest_sha") or ready.get("manifest_hash") or "").strip()
+    declared_sha = str(
+        ready.get("manifest_sha256") or ready.get("manifest_sha") or ready.get("manifest_hash") or ""
+    ).strip()
     if not declared_sha:
         reasons.append("ready_manifest_sha_absent")
     elif declared_sha != manifest_sha:
@@ -103,11 +172,21 @@ def verify_ready_document(directory: Path, ready: dict[str, Any]) -> tuple[bool,
     if not isinstance(manifest, dict):
         return False, reasons + ["manifest_unreadable"]
     root_hash = str(ready.get("root_content_hash") or ready.get("content_hash") or "").strip()
-    declared_root = str(manifest.get("content_hash") or "").strip()
+    schema = str(ready.get("schema") or manifest.get("schema") or "")
+    is_official_11 = schema.startswith("official-live-authority-handoff/1")
     if not root_hash:
         reasons.append("ready_root_hash_absent")
-    elif declared_root and root_hash != declared_root:
-        reasons.append("ready_root_hash_mismatch")
+    elif is_official_11:
+        computed = root_content_hash_of(
+            list(ready.get("ids") or manifest.get("ids") or []),
+            dict(manifest.get("content_hashes") or {}),
+        )
+        if computed != root_hash:
+            reasons.append("ready_root_hash_mismatch")
+    else:
+        declared_root = str(manifest.get("content_hash") or "").strip()
+        if declared_root and root_hash != declared_root:
+            reasons.append("ready_root_hash_mismatch")
     producer = (
         ready.get("producer_commit")
         or manifest.get("producer_commit")
@@ -205,7 +284,11 @@ def _inspect_dir(path: Path) -> dict[str, Any]:
     result["producer_commit"] = (
         manifest.get("producer_commit") or manifest.get("producer_sha") or manifest.get("git_sha")
     )
-    result["replay"] = bool(manifest.get("replay_command") or manifest.get("replay"))
+    result["replay"] = bool(
+        manifest.get("replay_command")
+        or manifest.get("replay")
+        or (path.is_dir() and (path / "replay.txt").is_file())
+    )
     ready_flag = manifest.get("handoff_status") or manifest.get("HANDOFF_READY") or manifest.get("handoff_ready")
     if isinstance(ready_flag, dict):
         result["handoff_ready"] = any(
@@ -267,8 +350,22 @@ def _inspect_dir(path: Path) -> dict[str, Any]:
         result["layout"] = "dossiers"
         entries = list(dossiers_dir.glob("*.json"))
         result["evaluated_cap"] = len(entries)
-        result["data_ready_count"] = len(entries)
-        result["source_claim_matrix"] = bool(matrix_dir and matrix_dir.is_dir() and any(matrix_dir.glob("*.json")))
+        ready = 0
+        matrix = bool(matrix_dir and matrix_dir.is_dir() and any(matrix_dir.glob("*.json"))
+        )
+        for item_path in entries:
+            item = _read_json(item_path)
+            if not item:
+                continue
+            if handoff_status_of(item) == HANDOFF_READY or official_live_declared(item):
+                ready += 1
+            claims = item.get("claims") or ((item.get("factual_matrix") or {}) if isinstance(item.get("factual_matrix"), dict) else {}).get("claims")
+            if claims:
+                matrix = True
+            if item.get("source_claim_matrix"):
+                matrix = True
+        result["data_ready_count"] = ready or len(entries)
+        result["source_claim_matrix"] = matrix
     else:
         payload_path = path / "payload.json" if path.is_dir() else None
         payload = _read_json(payload_path) if payload_path else None
@@ -307,6 +404,10 @@ def _inspect_dir(path: Path) -> dict[str, Any]:
     if official_live_declared(manifest) and mode == SOURCE_OFFICIAL_LIVE and not result["fixture"]:
         result["official_live"] = True
         result["fixture"] = False
+    live_meta = manifest.get("live") if isinstance(manifest.get("live"), dict) else {}
+    if live_meta.get("official_live") is True and mode == SOURCE_OFFICIAL_LIVE:
+        result["official_live"] = True
+        result["fixture"] = False
 
     if manifest.get("content_hash"):
         result["hashes_ok"] = verify_content_hash(manifest)
@@ -337,6 +438,14 @@ def _inspect_dir(path: Path) -> dict[str, Any]:
         result["rendezvous_verified"] = sums_ok and ready_ok and result["ready_status"] == "READY"
         if ready_doc.get("producer_commit") and not result["producer_commit"]:
             result["producer_commit"] = ready_doc.get("producer_commit")
+        result["root_content_hash"] = ready_doc.get("root_content_hash")
+        result["analysis_ids"] = list(ready_doc.get("ids") or ready_doc.get("dossier_ids") or [])
+        if result["ready_status"] == "READY" and result["data_ready_count"] > 0:
+            result["handoff_ready"] = True
+        identity_reasons = verify_authorized_official_identity(path, ready_doc, manifest)
+        result["reasons"].extend(identity_reasons)
+        if identity_reasons:
+            result["rendezvous_verified"] = False
 
     # Producer no_index_authorization is recorded, never a readiness requirement.
     if not result["handoff_ready"]:
@@ -392,6 +501,8 @@ def inspect_handoff(explicit: Path | None = None) -> dict[str, Any]:
                 "checked": checked,
                 "data_ready_count": row["data_ready_count"],
                 "producer_commit": row.get("producer_commit"),
+                "root_content_hash": row.get("root_content_hash"),
+                "analysis_ids": row.get("analysis_ids") or [],
                 "reasons": [],
             }
     if blocked_row is not None:

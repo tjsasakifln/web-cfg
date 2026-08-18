@@ -1,0 +1,748 @@
+{
+  "backfill": false,
+  "candidate_log": [
+    {
+      "contract_id": "10594533000100-2-000635/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83074302000131-2-002013/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83074302000131-2-002014/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "01613101000109-2-000262/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "01613101000109-2-000263/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "08184785000101-2-000441/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102350000196-2-000921/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "85997237000141-2-001698/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "95780458000117-2-000921/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "95991287000175-2-001466/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "95954442000183-2-000321/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82925652000100-2-002253/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82836057000190-2-001011/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "78486198000152-2-000790/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "80989965000198-2-000579/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "11433441000101-2-000354/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102772000161-2-000289/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82925652000100-2-002252/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83026765000128-2-000242/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "08184785000101-2-000439/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83009928000164-2-000580/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102590000190-2-000655/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83108357000115-2-001268/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "01613101000109-2-000264/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "08184785000101-2-000440/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "95991261000127-2-001248/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "11231203000105-2-000642/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102293000145-2-001599/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "80912108000190-2-000485/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102350000196-2-000920/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "10971858000157-2-000604/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83039842000184-2-002075/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102681000126-2-000772/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102491000109-2-001382/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "79373767000116-2-000676/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82892316000108-2-000876/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "80989965000198-2-000578/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "01612744000120-2-000685/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82939380000199-2-000584/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82925652000100-2-002254/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102491000109-2-001381/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "14007211000160-2-001138/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82945718000115-2-000476/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102517000119-2-001467/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "01599409000139-2-000307/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82925652000100-2-002255/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102541000158-2-001569/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82777335000185-2-000560/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "80912108000190-2-000483/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82939232000174-2-000793/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82777236000101-2-000612/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "95990131000170-2-000626/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "74047341000159-2-000046/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82777251000141-2-000453/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "02482295000105-2-000653/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "95990107000130-2-000422/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83024687000122-2-000614/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102319000155-2-000941/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82826462000127-2-000964/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "17243084000197-2-000313/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102491000109-2-001383/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83026781000110-2-000345/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "81140303000101-2-000684/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "80912108000190-2-000484/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82925025000160-2-000359/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "11433441000101-2-000353/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "11491075000139-2-000571/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102251000104-2-000693/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "01613101000109-2-000261/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102293000145-2-001600/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83024240000153-2-000664/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "12115907000185-2-000279/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "95991287000175-2-001467/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82925652000100-2-002256/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82892373000189-2-000246/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "01613428000172-2-001335/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "83102392000127-2-000937/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "82826462000127-2-000965/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "05774805000106-2-000014/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "05774805000106-2-000015/2026",
+      "disposition": "exited",
+      "reason": "insufficient_aec_signal",
+      "score": "0"
+    },
+    {
+      "contract_id": "14862788000150-2-000069/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "25"
+    },
+    {
+      "contract_id": "14862788000150-2-000070/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "25"
+    },
+    {
+      "contract_id": "44438968000170-2-000047/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "25"
+    },
+    {
+      "contract_id": "75654566000136-2-000088/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "25"
+    },
+    {
+      "contract_id": "88117700000101-2-000193/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "25"
+    },
+    {
+      "contract_id": "01612776000125-2-000022/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "07738057000131-2-000139/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "12122065000199-2-000073/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "20570842000196-2-000012/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "44531788000138-2-000050/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "46634093000107-2-000047/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "76208867000107-2-000124/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "83169623000110-2-001574/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "87613170000120-2-000051/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "88756879000147-2-000116/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "88847082000155-2-000203/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "92465228000175-2-000105/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "93539187000187-2-000091/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "93539187000187-2-000094/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    },
+    {
+      "contract_id": "93539187000187-2-000096/2026",
+      "disposition": "entered",
+      "geography": "BR",
+      "reason": "sc_exhausted:aec_engineering_or_construction",
+      "score": "10"
+    }
+  ],
+  "commercial_relationship_claim": false,
+  "consumer": "web-cfg#83",
+  "content_hash": "96761c84f17a370fef7e8187f2d2a09b7e998c4fab7d0891bc8bbdf2ec18258c",
+  "content_hashes": {
+    "13ec615146b3d348190a9b0b9148831e": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b"
+  },
+  "dossier_count": 1,
+  "generated_at": "2026-08-18T12:38:35Z",
+  "hold_ids": [],
+  "ids": [
+    "13ec615146b3d348190a9b0b9148831e"
+  ],
+  "index_authorization": false,
+  "live": {
+    "backfill": false,
+    "budget": {
+      "caps": {
+        "datalake_batches": 3,
+        "official_candidates": 20,
+        "primary_artifacts": 40
+      },
+      "datalake_batches": 0,
+      "official_candidates": 20,
+      "primary_artifacts": 12,
+      "scanned": 100
+    },
+    "deepen": [
+      {
+        "contract_id": "14862788000150-2-000069/2026",
+        "error_kind": null,
+        "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+        "rebound": 1,
+        "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303"
+      },
+      {
+        "contract_id": "14862788000150-2-000069/2026",
+        "error_kind": "not_found",
+        "message": "termos_http_204_or_empty",
+        "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69/termos",
+        "recorded_as": "not_found"
+      },
+      {
+        "contract_id": "14862788000150-2-000069/2026",
+        "error_kind": null,
+        "official_url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+        "pdf_pages": 4,
+        "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604"
+      }
+    ],
+    "documents_considered": 80,
+    "documents_failed": 0,
+    "documents_obtained": 12,
+    "dsn_present": false,
+    "failures": [],
+    "official_live": true,
+    "period": {
+      "end": "2026-08-18",
+      "start": "2026-07-19",
+      "uf": "SC"
+    },
+    "production_write": false,
+    "reason_codes": [
+      "dsn_unavailable",
+      "dsn_unavailable"
+    ],
+    "smallest_next_verifiable_step": "Re-fetch and hash https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69/termos (recorded_as=not_found, empty/404 is not zero).",
+    "sources": [
+      "pncp_consulta_api"
+    ],
+    "unavailabilities": [
+      {
+        "asserts_world_absence": false,
+        "epistemic_class": "UNAVAILABLE",
+        "error_kind": "dsn_unavailable",
+        "http_status": null,
+        "message": "LOCAL_DATALAKE_DSN absent",
+        "official_url": "postgresql://local/pncp_supplier_contracts",
+        "recorded_as": "unavailable",
+        "search_contract": {
+          "bound": "single_official_url",
+          "error_kind": "dsn_unavailable",
+          "http_status": null,
+          "url": "postgresql://local/pncp_supplier_contracts"
+        }
+      },
+      {
+        "asserts_world_absence": false,
+        "epistemic_class": "UNAVAILABLE",
+        "error_kind": "dsn_unavailable",
+        "http_status": null,
+        "message": "LOCAL_DATALAKE_DSN absent",
+        "official_url": "postgresql://local/pncp_supplier_contracts",
+        "recorded_as": "unavailable",
+        "search_contract": {
+          "bound": "single_official_url",
+          "error_kind": "dsn_unavailable",
+          "http_status": null,
+          "url": "postgresql://local/pncp_supplier_contracts"
+        }
+      }
+    ]
+  },
+  "producer_branch": "goal/authority-singularity-20260818",
+  "producer_commit": "5984750c14a4653bf64e16ba7547063f3e1cdab9",
+  "producer_repo": "tjsasakifln/extra-cli",
+  "production_write": false,
+  "publication_authorization": false,
+  "query_window": {
+    "end": "2026-08-18",
+    "limit": 20,
+    "sc_denominator": {
+      "national_aec_entered": 20,
+      "national_fallback": true,
+      "sc_aec_entered": 0,
+      "sc_exhausted": true,
+      "sc_scanned": 80
+    },
+    "start": "2026-07-19",
+    "uf": "BR"
+  },
+  "replay_command": "python3 -m scripts.historical_contract_authority --mode official-live --limit 20 --start-date 2026-07-19 --end-date 2026-08-18 --as-of 2026-08-18T12:00:00Z --output <handoff-dir>",
+  "schema": "official-live-authority-handoff/1.1",
+  "version": "1.1"
+}

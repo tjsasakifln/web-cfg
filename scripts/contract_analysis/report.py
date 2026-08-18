@@ -128,7 +128,9 @@ def build_status(
         "handoff": handoff,
         "quality_version": QUALITY_VERSION,
         "written_analyses": 0 if handoff_pending else sum(
-            1 for d in decisions if d.human_review_status == "HUMAN_REVIEW_PENDING"
+            1
+            for d in decisions
+            if d.human_review_status in {"HUMAN_REVIEW_PENDING", "READY_FOR_HUMAN_REVIEW"}
         ),
     }
 

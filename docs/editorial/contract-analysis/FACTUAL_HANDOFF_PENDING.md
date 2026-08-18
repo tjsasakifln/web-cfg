@@ -8,7 +8,13 @@ The only live-ingest signal is the official rendezvous:
 ${CONFENGE_HANDOFF_DIR:-$HOME/.local/share/confenge/handoffs}/contract-analysis/official-live-01/
 ```
 
-Observed this run: directory absent (no `READY.json`, no `BLOCKED.json`).
+Superseded for the 2026-08-18 official-live-01 pack: `READY.json` is present,
+`BLOCKED.json` is absent, and the consumer ingested
+`analysis_id=13ec615146b3d348190a9b0b9148831e` as `PUBLISHABLE_NOINDEX`.
+See [OFFICIAL_LIVE_REPLAY.md](./OFFICIAL_LIVE_REPLAY.md) and
+[FIRST_OFFICIAL_01.md](./FIRST_OFFICIAL_01.md).
+
+Previous observation (PR #118): directory absent (no `READY.json`, no `BLOCKED.json`).
 
 The sibling extra-cli pack
 `exports/authority-handoff/contract-analysis/1.0` is `schema=authority-handoff-contract-analysis/1.0`

@@ -97,7 +97,7 @@ def _review_markdown(
         f"- tese: {thesis}",
         f"- resumo: {record.get('executive_summary')}",
         f"- estado publicação: {decision.state}",
-        f"- review: {HUMAN_REVIEW_PENDING}",
+        f"- review: {decision.human_review_status or HUMAN_REVIEW_PENDING}",
         f"- quality verdict: {quality.get('review_verdict')}",
         f"- score: {quality.get('score')}",
         f"- dimensions: {quality.get('dimensions')}",
@@ -140,7 +140,7 @@ def _review_markdown(
         "",
         f"withdraw_approval({aid!r}) and keep noindex.",
         "",
-        "index-ready drafts only; HUMAN_REVIEW_PENDING; no human approval, authorship or INDEX was simulated.",
+        "READY_FOR_HUMAN_REVIEW; no human approval, authorship or INDEX was simulated.",
         "",
     ]
     return "\n".join(lines)
