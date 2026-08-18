@@ -14,11 +14,15 @@ Three existing INDEX URLs were substantially improved, individually gated, and l
 
 ## 2. PR
 
-See `{SCRATCH}/pr.txt` after open. Head: `goal/organic-breakout-01` → `main`.
+https://github.com/tjsasakifln/web-cfg/pull/123
+
+Head: `goal/organic-breakout-01` → `main`.
 
 ## 3. DEPLOY_PREVIEW
 
-Recorded in `{SCRATCH}/pr.txt` when Netlify produces one. Not fabricated.
+https://deploy-preview-123--confenge.netlify.app
+
+Verified HTTP 200 on the three INDEX URLs with visible job, method, limitations, CTA attribution and self-canonical.
 
 ## 4. ASSETS_SELECTED
 
