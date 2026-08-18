@@ -1,0 +1,12 @@
+{
+  "id": "evt_sbx_payment_confirmed_001",
+  "event": "PAYMENT_CONFIRMED",
+  "dateCreated": "2026-08-17 12:04:00",
+  "payment": {
+    "object": "payment",
+    "id": "pay_sbx_001",
+    "status": "CONFIRMED",
+    "value": 8000,
+    "externalReference": "cfg:CFG-DIAG-EXP-v1:corr_fixture"
+  }
+}

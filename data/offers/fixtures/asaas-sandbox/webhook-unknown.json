@@ -1,0 +1,10 @@
+{
+  "id": "evt_sbx_unknown_001",
+  "event": "PAYMENT_SOMETHING_UNDOCUMENTED",
+  "dateCreated": "2026-08-17 16:00:00",
+  "payment": {
+    "object": "payment",
+    "id": "pay_sbx_001",
+    "status": "SOMETHING_NEW"
+  }
+}

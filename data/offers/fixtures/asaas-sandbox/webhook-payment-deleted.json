@@ -1,0 +1,12 @@
+{
+  "id": "evt_sbx_payment_deleted_001",
+  "event": "PAYMENT_DELETED",
+  "dateCreated": "2026-08-17 15:00:00",
+  "payment": {
+    "object": "payment",
+    "id": "pay_sbx_001",
+    "status": "DELETED",
+    "deleted": true,
+    "externalReference": "cfg:CFG-DIAG-EXP-v1:corr_fixture"
+  }
+}

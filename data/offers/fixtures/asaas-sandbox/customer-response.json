@@ -1,0 +1,10 @@
+{
+  "object": "customer",
+  "id": "cus_sbx_fixture_001",
+  "name": "CONFENGE Sandbox Diretoria 180 LTDA",
+  "email": "sandbox.180@example.invalid",
+  "phone": "4738010919",
+  "cpfCnpj": "11222333000181",
+  "notificationDisabled": true,
+  "externalReference": "cfg-sbx-180-001"
+}

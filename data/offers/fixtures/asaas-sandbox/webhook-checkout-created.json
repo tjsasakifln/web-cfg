@@ -1,0 +1,11 @@
+{
+  "id": "evt_sbx_checkout_created_001",
+  "event": "CHECKOUT_CREATED",
+  "dateCreated": "2026-08-17 12:00:00",
+  "checkout": {
+    "id": "sbx-checkout-fixture-001",
+    "link": "https://sandbox.asaas.com/checkoutSession/show/sbx-checkout-fixture-001",
+    "status": "ACTIVE",
+    "externalReference": "cfg:CFG-DIAG-EXP-v1:corr_fixture"
+  }
+}

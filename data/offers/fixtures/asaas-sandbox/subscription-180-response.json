@@ -1,0 +1,13 @@
+{
+  "object": "subscription",
+  "id": "sub_sbx_fixture_180",
+  "customer": "cus_sbx_fixture_001",
+  "billingType": "UNDEFINED",
+  "cycle": "MONTHLY",
+  "value": 15000,
+  "nextDueDate": "2026-09-01",
+  "status": "ACTIVE",
+  "deleted": false,
+  "maxPayments": 6,
+  "externalReference": "cfg:CFG-DIRB2G-180-v1:corr_fixture"
+}
