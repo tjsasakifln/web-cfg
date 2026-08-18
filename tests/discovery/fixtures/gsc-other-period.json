@@ -1,0 +1,15 @@
+{
+  "startDate": "2026-07-01",
+  "endDate": "2026-07-07",
+  "filters": {"device": "MOBILE"},
+  "rows": [
+    {
+      "query": "pavimentacao",
+      "page": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "impressions": 5,
+      "clicks": 0,
+      "ctr": 0,
+      "position": 20
+    }
+  ]
+}

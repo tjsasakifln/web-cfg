@@ -37,6 +37,7 @@ def test_cohort_covers_required_categories_and_size():
     assert "utility-diagnostico-defesa-margem" in ids
     assert "contract-analysis-hub" in ids
     assert "market-answer-aditivos-margem" in ids
+    assert "valor-tipico-contratos-pavimentacao" in ids
     assert "methodology-inteligencia" in ids
     assert "author-tiago-sasaki" in ids
     assert "offer-defesa-margem" in ids

@@ -1,0 +1,9 @@
+{
+  "event": "lead",
+  "landing_page": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "email": "diretor@example.com",
+  "nome": "Fulano de Tal",
+  "telefone": "47999990000",
+  "cnpj": "12.345.678/0001-90",
+  "form_content": "Preciso de uma proposta"
+}

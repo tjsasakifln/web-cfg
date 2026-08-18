@@ -1,0 +1,118 @@
+{
+  "appended": true,
+  "asset_id": "valor-tipico-contratos-pavimentacao",
+  "confidence": "observed",
+  "content_hash": "56c7b169871fef28832a9ee7da1d35ab52332f24b27b64c8594313b1da6acfe8",
+  "declared_canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "dimensions": {
+    "canonical_url": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+    "host": "confenge.com.br"
+  },
+  "http": {
+    "chain": [
+      {
+        "classification": "terminal",
+        "error": null,
+        "final_url": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "status": 200,
+        "url": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
+      }
+    ],
+    "etag": "\"a2cccf7d540204968746fc2e39baceb0-ssl\"",
+    "final_url": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+    "head_used": true,
+    "last_modified": null,
+    "method": "GET",
+    "status": 200,
+    "x_robots_tag": null
+  },
+  "indexability": {
+    "state": "indexable",
+    "tokens": [
+      "follow",
+      "index"
+    ]
+  },
+  "ingestion_version": "discovery-live-ops/1.0",
+  "internal_links": [
+    "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+    "https://confenge.com.br/styles.css",
+    "https://confenge.com.br/styles-tools.css",
+    "https://confenge.com.br/assets/favicon-32.png",
+    "https://confenge.com.br/",
+    "https://confenge.com.br/#ofertas",
+    "https://confenge.com.br/inteligencia/",
+    "https://confenge.com.br/conteudos/",
+    "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+    "https://confenge.com.br/metodologia-inteligencia/",
+    "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/?stratum=sc-municipal",
+    "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+    "https://confenge.com.br/correcoes/",
+    "https://confenge.com.br/privacidade/"
+  ],
+  "limits": {
+    "max_redirects": 5,
+    "methods": [
+      "GET",
+      "HEAD"
+    ],
+    "rate_limit_s": 1.0,
+    "retries": 2,
+    "timeout_s": 20.0
+  },
+  "metrics": {
+    "content_hash": "56c7b169871fef28832a9ee7da1d35ab52332f24b27b64c8594313b1da6acfe8",
+    "http_status": 200,
+    "redirect_hops": 1
+  },
+  "observation_type": "technical_probe",
+  "observed_at": "2026-08-17T21:13:36Z",
+  "period_end": null,
+  "period_start": null,
+  "reason_codes": [
+    "TECHNICAL_LIVE"
+  ],
+  "record_hash": "3678e2b4c0ac63b3bf56f534da595e58eebfb669457f706505d6f97f18c30b37",
+  "replay": false,
+  "replay_command": "python3 -m scripts.discovery probe --asset-id valor-tipico-contratos-pavimentacao --as-of 2026-08-17T21:13:36Z",
+  "robots": {
+    "blocked": false,
+    "disallows": [
+      "/ops/",
+      "/.netlify/",
+      "/piloto/",
+      "/analises-contratos-publicos/"
+    ],
+    "meta": "index,follow",
+    "status": 200,
+    "url": "https://confenge.com.br/robots.txt"
+  },
+  "schema_version": 1,
+  "sitemap": {
+    "checked": [
+      "https://confenge.com.br/sitemap-index.xml",
+      "https://confenge.com.br/sitemap.xml",
+      "https://confenge.com.br/sitemap-editorial.xml",
+      "https://confenge.com.br/sitemap-inteligencia.xml",
+      "https://confenge.com.br/sitemap-jurisprudencia.xml"
+    ],
+    "match": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+    "present": true
+  },
+  "snapshot_sha256": "e19a4d134b9d1fdcd775396fb2ea324271643c0b4ab7d1f10bf89d1f138fe312",
+  "source": "public_http_get_head",
+  "source_file_hash": null,
+  "status": "observed",
+  "store_path": "data/discovery/snapshots/observations.ndjson",
+  "structured_data": [
+    "FAQPage",
+    "Question",
+    "Answer",
+    "Dataset",
+    "Organization",
+    "BreadcrumbList",
+    "ListItem"
+  ],
+  "technical_status": "TECHNICAL_LIVE",
+  "user_agent": "CONFENGE-DiscoveryObservatory/1.0 (+https://confenge.com.br/metodologia-inteligencia/; read-only technical probe; no ranking request)"
+}

@@ -1,0 +1,19 @@
+{
+  "startDate": "2026-08-01",
+  "endDate": "2026-08-07",
+  "timezone": "America/Sao_Paulo",
+  "filters": {"page": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"},
+  "rows": [
+    {
+      "query": "valor tipico pavimentacao",
+      "page": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "country": "bra",
+      "device": "DESKTOP",
+      "date": "2026-08-01",
+      "impressions": 40,
+      "clicks": 2,
+      "ctr": 0.05,
+      "position": 7.2
+    }
+  ]
+}

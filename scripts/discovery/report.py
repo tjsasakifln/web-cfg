@@ -14,6 +14,7 @@ from scripts.discovery.eligibility import (
 )
 from scripts.discovery.inspect import inspect_asset
 from scripts.discovery.metrics import apply_observed, empty_stage_payload
+from scripts.discovery.operations import operations_for_asset
 from scripts.discovery.registry import load_allowlist, load_cohort, load_observed, repo_root
 from scripts.discovery.schema import (
     METRIC_STAGES,
@@ -22,6 +23,8 @@ from scripts.discovery.schema import (
     UNKNOWN,
     validate_recommendation,
 )
+from scripts.discovery.states import STATE_NAMES
+from scripts.discovery.store import default_store_path, load_observations
 
 MAINTENANCE_COST_DEFAULT = "UNKNOWN"
 
@@ -192,6 +195,7 @@ def build_asset_record(
         "recommendation": rec,
         "generated_at": generated_at,
         "related_issues": list(asset.get("related_issues") or []),
+        "operations": None,
     }
     missing = [field for field in REQUIRED_ASSET_FIELDS if field not in record]
     if missing:
@@ -243,6 +247,7 @@ def build_report(
         external_targets_prepared = len(targets)
     stamp = generated_at or cohort.get("generated_at") or "1970-01-01T00:00:00Z"
     approved_configured = bool(approved_asset_id) or bool(cohort.get("approved_asset_id"))
+    observations = load_observations(default_store_path(root))
     inspections: dict[str, dict[str, Any]] = {}
     records: list[dict[str, Any]] = []
     for asset in cohort["assets"]:
@@ -258,6 +263,7 @@ def build_report(
             approved_configured=approved_configured,
             generated_at=stamp,
         )
+        record["operations"] = operations_for_asset(asset, observations)
         records.append(record)
 
     allowlisted = list(allowlist.get("urls") or [])
@@ -271,6 +277,8 @@ def build_report(
     report = {
         "schema": SCHEMA_ID,
         "mode": "prepare-only",
+        "observation_mode": cohort.get("observation_mode") or "prepare-only",
+        "approved_asset_id": cohort.get("approved_asset_id"),
         "generated_at": stamp,
         "network_probed": False,
         "llms_txt_strategy": False,
@@ -293,6 +301,13 @@ def build_report(
         "fixture_ids": [r["id"] for r in records if r.get("fixture")],
         "recommendation": recommend_cohort(records),
         "next_action": "swap_fixture_for_approved_asset_then_human_gate",
+        "stage_separation": {
+            "publication_is_not_discovery": True,
+            "impression_is_not_click": True,
+            "click_is_not_lead": True,
+            "lead_is_not_revenue": True,
+            "absence_is_not_zero": True,
+        },
     }
     return report
 
@@ -363,6 +378,45 @@ def format_report(report: dict[str, Any]) -> str:
         lines.append(f"    maintenance_cost: {asset['maintenance_cost']}")
         lines.append(f"    next_action: {asset['next_action']}")
         lines.append(f"    recommendation: {asset['recommendation']}")
+        ops = asset.get("operations") or {}
+        if ops:
+            lines.append(f"    technical_status: {ops.get('technical_status')}")
+            lines.append(f"    discovery_status: {ops.get('discovery_status')}")
+            states = (ops.get("states") or {}).get("values") or {}
+            if states:
+                lines.append("    states:")
+                for name in STATE_NAMES:
+                    cell = (ops.get("states") or {}).get(name) or {}
+                    lines.append(
+                        f"      {name}: {states.get(name)} source={cell.get('source')} "
+                        f"strength={cell.get('strength')} reason={cell.get('reason')}"
+                    )
+            lines.append(_metric_line("impressions", ops.get("impressions")))
+            lines.append(_metric_line("queries", ops.get("queries")))
+            lines.append(_metric_line("pages", ops.get("pages")))
+            lines.append(_metric_line("clicks", ops.get("clicks")))
+            lines.append(_metric_line("ctr", ops.get("ctr")))
+            lines.append(_metric_line("position", ops.get("position")))
+            lines.append(_metric_line("sessions_referrals", ops.get("sessions_referrals")))
+            lines.append(_metric_line("cta", ops.get("cta")))
+            lines.append(_metric_line("leads", ops.get("leads")))
+            lines.append(_metric_line("outcomes", ops.get("outcomes")))
+            lines.append(_metric_line("revenue", ops.get("revenue")))
+            coverage = ops.get("data_coverage") or {}
+            lines.append(
+                "    data_coverage: "
+                f"gsc={coverage.get('gsc')} outcomes={coverage.get('outcomes')} probe={coverage.get('probe')}"
+            )
+            lines.append(f"    period: {_flat(ops.get('period'))}")
+            lines.append(f"    filters: {_flat(ops.get('filters'))}")
+            lines.append(f"    freshness: {ops.get('freshness')}")
+            lines.append(f"    baseline: {_flat(ops.get('baseline'))}")
+            lines.append(f"    delta: {_flat(ops.get('delta'))}")
+            op_reasons = ",".join(ops.get("reason_codes") or []) or "(none)"
+            lines.append(f"    operations_reason_codes: {op_reasons}")
+            lines.append(f"    next_factual_gate: {ops.get('next_factual_gate')}")
+            lines.append("    seo_score: null")
+            lines.append("    causality: false")
     lines.extend(
         [
             "",
@@ -384,3 +438,30 @@ def format_report(report: dict[str, Any]) -> str:
 
 def dump_stable(obj: Any) -> str:
     return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+
+
+def _metric_line(label: str, cell: Any) -> str:
+    if not isinstance(cell, dict):
+        return f"    {label}: UNKNOWN"
+    status = cell.get("status")
+    value = cell.get("value")
+    warning = cell.get("warning")
+    rendered = f"    {label}: status={status} value={_flat(value)}"
+    if warning:
+        rendered += f" warning={warning}"
+    return rendered
+
+
+def _flat(value: Any) -> str:
+    """Render nested values without '{' so --json can still be sliced from stdout."""
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float, str)):
+        return str(value)
+    if isinstance(value, list):
+        return ",".join(_flat(item) for item in value) or "(none)"
+    if isinstance(value, dict):
+        return " ".join(f"{key}={_flat(val)}" for key, val in sorted(value.items())) or "(empty)"
+    return str(value)

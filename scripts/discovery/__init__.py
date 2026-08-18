@@ -1,1 +1,1 @@
-"""Search/AI Discovery Observatory — prepare-only, no GEO hacks."""
+"""Search/AI Discovery Observatory — live read-only probe, local imports, IndexNow prepare-only."""
