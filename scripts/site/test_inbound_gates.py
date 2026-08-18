@@ -22,6 +22,21 @@ from scripts.site.inbound_gates import (  # noqa: E402
     is_noindex,
     run_all_gates,
 )
+from scripts.site.test_organic_striking_distance_cro_01 import (  # noqa: E402,F401
+    test_article_first_fold_has_required_distinctions,
+    test_article_listed_once_in_main_sitemap_not_elsewhere,
+    test_contextual_cta_preserves_attrs_and_has_no_pii,
+    test_experiment_record_post_metrics_are_unknown,
+    test_home_points_to_reequilibrio_with_descriptive_anchor,
+    test_hub_and_article_titles_differ,
+    test_internal_links_resolve,
+    test_itemlist_has_no_empty_or_fake_url,
+    test_jsonld_parseable_and_faq_matches_visible,
+    test_no_combinatorial_or_new_slug,
+    test_no_contract_analysis_in_this_experiment_surface,
+    test_no_redirect_of_promoted_article,
+    test_one_self_canonical_and_expected_robots,
+)
 
 
 def test_naturalness_indexable_clean():
@@ -159,7 +174,8 @@ def test_machine_patterns_absent_on_sample_indexable():
     samples = [
         "atraso-pagamento-contrato-publico-suspender",
         "atraso-na-medicao-obra-publica",
-        # limite-aditivo-25-50-obra-publica is superseded (301 + noindex); do not sample it.
+        # limite-aditivo-25-50-obra-publica is self-canonical again; sampled by
+        # test_organic_striking_distance_cro_01 instead of this machine-copy set.
         "glosa-por-qualidade-obra-publica",
         "comprovacao-exequibilidade-proposta-obra",
     ]

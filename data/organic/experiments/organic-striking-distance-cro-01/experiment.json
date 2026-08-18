@@ -1,0 +1,183 @@
+{
+  "schema": "organic-experiment/1.0",
+  "version": "1.0.0",
+  "experiment_id": "organic-striking-distance-cro-01",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "distribution",
+  "leverage": [
+    "distribution",
+    "trust",
+    "revenue"
+  ],
+  "time_to_evidence": "review_after.date; live GSC currentness stays BLOCKED without readonly credentials",
+  "queries": [
+    "limite aditivo obra publica",
+    "reequilibrio economico financeiro obra"
+  ],
+  "baseline": {
+    "snapshot_ids": [
+      "gsc-2026-07-30",
+      "gsc-2026-08-09",
+      "join-present-fixture"
+    ],
+    "snapshot_dates": {
+      "gsc-2026-07-30": "2026-07-30",
+      "gsc-2026-08-09": "2026-08-09",
+      "join-present-fixture": "2026-07-28"
+    },
+    "sources": [
+      "seo/gsc-2026-07-30/Paginas.csv",
+      "seo/gsc-2026-08-09/Paginas.csv",
+      "data/revops/gsc/fixtures/demand-engine-join-present.json",
+      "data/organic/demand-engine-registry.json",
+      "https://github.com/tjsasakifln/web-cfg/pull/110"
+    ],
+    "live_currentness": "BLOCKED",
+    "live_currentness_reason": "BLOCKED_GSC_READONLY_CREDENTIAL",
+    "label": "historical_versioned_not_live",
+    "pages": [
+      {
+        "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "role": "specific_article",
+        "diagnosis": "cannibalization",
+        "historical_join_present": {
+          "source": "join-present-fixture",
+          "query": "limite aditivo obra publica",
+          "position": 8.0,
+          "impressions": 80,
+          "clicks": 2
+        },
+        "historical_page_export": {
+          "source": "gsc-2026-07-30/Paginas.csv",
+          "impressions": 24,
+          "clicks": 0,
+          "ctr": "0%",
+          "position": 17
+        },
+        "live_probe_2026-08-18T01:29:45Z": {
+          "http": 301,
+          "location": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+          "note": "live HTML was noindex,follow and 301 before this experiment"
+        }
+      },
+      {
+        "url": "/aditivos-obras-publicas/",
+        "role": "broad_hub",
+        "diagnosis": "cannibalization",
+        "historical_join_present": {
+          "source": "join-present-fixture",
+          "query": "limite aditivo obra publica",
+          "position": 12.0,
+          "impressions": 40,
+          "clicks": 1
+        }
+      },
+      {
+        "url": "/",
+        "role": "wrong_landing",
+        "diagnosis": "wrong_landing",
+        "historical_join_present": {
+          "source": "join-present-fixture",
+          "query": "reequilibrio economico financeiro obra",
+          "position": 6.5,
+          "impressions": 30,
+          "clicks": 0
+        }
+      },
+      {
+        "url": "/reequilibrio-obras-publicas/",
+        "role": "correct_landing_unused_by_query",
+        "historical_page_export": {
+          "source": "gsc-2026-07-30/Paginas.csv",
+          "impressions": 2,
+          "clicks": 0,
+          "position": 9
+        }
+      }
+    ]
+  },
+  "targets": [
+    {
+      "query": "limite aditivo obra publica",
+      "page": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "diagnosis": "cannibalization",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "robots": "index,follow",
+      "decision": "self_canonical_index_follow_after_quality_gate"
+    },
+    {
+      "query": "limite aditivo obra publica",
+      "page": "/aditivos-obras-publicas/",
+      "diagnosis": "cannibalization",
+      "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+      "robots": "index,follow",
+      "decision": "remain_broad_cluster_do_not_lead_with_25_50_answer"
+    },
+    {
+      "query": "reequilibrio economico financeiro obra",
+      "page": "/reequilibrio-obras-publicas/",
+      "diagnosis": "wrong_landing",
+      "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+      "robots": "index,follow",
+      "decision": "promote_existing_landing_not_homepage"
+    }
+  ],
+  "residual": {
+    "issue_84": "OPEN",
+    "do_not_close": [
+      "#84"
+    ],
+    "sibling_overlap": {
+      "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "note": "Existing indexable sibling remains. Not in write surface. Query overlap recorded, not solved by a new URL or by restoring the 301."
+    }
+  },
+  "changeset": {
+    "branch": "goal/organic-striking-distance-cro-01",
+    "commit": "8d77b2d2",
+    "deploy": "PENDING"
+  },
+  "hashes_at_record": {
+    "conteudos/limite-aditivo-25-50-obra-publica/index.html": "31be99a49b5ac30f8112e2b6a09bc9a7f444bd988e227c3e97dc0ee9666c3212",
+    "aditivos-obras-publicas/index.html": "8c06e0e6df462b1d73e5d170bd4fe7dbcd812bf1cf2f1da48e4197f16852a355",
+    "reequilibrio-obras-publicas/index.html": "df2c4d5d010fdd617eddd9346b2a32a946e2a93a7f2c6f09848e05f6fbd0b72e",
+    "index.html": "88173f00f3d16d856eb54234f456e0b243b5bb09ab0c437a8918e4c5e81a8481",
+    "sitemap.xml": "72d87a257ee735f79bbe2926c787aea78590a2f6996c1f987401586246374c4d",
+    "_redirects": "3c0c991120618eed25bf3d461ee86556a73440954adce290d4dbef0276bf6c3c"
+  },
+  "metrics_baseline_historical_only": {
+    "note": "Copied only as baseline. Do not treat as post-change outcome.",
+    "limite_aditivo_obra_publica": {
+      "article_position": 8.0,
+      "hub_position": 12.0,
+      "source": "join-present-fixture"
+    },
+    "reequilibrio_economico_financeiro_obra": {
+      "homepage_position": 6.5,
+      "source": "join-present-fixture"
+    }
+  },
+  "metrics_post_change": {
+    "discovery": "UNKNOWN",
+    "impressions": "UNKNOWN",
+    "clicks": "UNKNOWN",
+    "ranking": "UNKNOWN",
+    "CTA": "UNKNOWN",
+    "lead": "UNKNOWN",
+    "qualified_lead": "UNKNOWN",
+    "revenue": "UNKNOWN"
+  },
+  "review_after": {
+    "date": "2026-09-15",
+    "kind": "field_not_a_promise_of_async_execution"
+  },
+  "kill_adjust_rule": {
+    "kill_if": "Live GSC (when currentness exists) shows the promoted article losing the specific query to the hub or the Lei 14.133 sibling without a compensating qualified visit, or the reequilibrio landing remains unused while the homepage still ranks for the query after two complete GSC windows.",
+    "adjust_if": "Internal links or first-fold answer fail a later quality gate, or schema/visible drift is found.",
+    "do_not": [
+      "copy historical numbers into metrics_post_change",
+      "declare a new position, traffic, lead or revenue",
+      "close #84"
+    ]
+  }
+}

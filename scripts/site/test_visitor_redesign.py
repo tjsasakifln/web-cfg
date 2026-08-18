@@ -214,9 +214,12 @@ def test_stage_classification_versioned_and_complete():
     pillars = data.get("pillar_to_stage") or {}
     for pillar, stage in pillars.items():
         assert stage in ALLOWED, (pillar, stage)
-    # Every public indexable guide resolves
+    # Every public indexable guide resolves (count comes from the remediator owner)
+    from scripts.site.inbound_first_remediate import indexable_map
+
+    expected = sum(1 for v in indexable_map().values() if v)
     items = _parse_hub_items()
-    assert len(items) == 20, f"expected 20 public hub items, got {len(items)}"
+    assert len(items) == expected, f"expected {expected} public hub items, got {len(items)}"
     for it in items:
         slug = (it.get("href") or "").rstrip("/").split("/")[-1]
         assert it["stage"] in ALLOWED
@@ -233,9 +236,12 @@ def test_hub_all_items_nonempty_allowed_stages():
 
 
 def test_hub_filters_expected_sets():
+    from scripts.site.inbound_first_remediate import indexable_map
+
     items = _parse_hub_items()
     all_items = _filter_items(items, stage="all")
-    assert len(all_items) == 20
+    expected = sum(1 for v in indexable_map().values() if v)
+    assert len(all_items) == expected
     for stage in ("antes", "durante", "conflito"):
         subset = _filter_items(items, stage=stage)
         assert len(subset) >= 1, f"stage {stage} empty"

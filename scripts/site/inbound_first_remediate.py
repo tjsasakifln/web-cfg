@@ -49,9 +49,12 @@ TODAY = date.today().isoformat()
 
 # Single-hop 301 targets live in `_redirects`. These URLs must never re-enter
 # indexable public surfaces (feed, hubs, related, sitemaps) after remediation.
+# /conteudos/limite-aditivo-25-50-obra-publica/ was un-superseded in
+# organic-striking-distance-cro-01: it is the self-canonical answer for the
+# specific limit query. Residual overlap with the existing Lei 14.133 sibling
+# is recorded in the experiment, not solved by keeping this 301.
 SUPERSEDED_URLS = frozenset(
     {
-        "/conteudos/limite-aditivo-25-50-obra-publica/",
         "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
     }
 )
@@ -1077,7 +1080,8 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
 
     # --- Compose main body (single H1; idempotent main rebuild) ---
     # Avoid em-dash in public HTML (copy gate)
-    hero_block = f"""<header class="content-hero hub-hero hub-hero--problem">
+    hero_block = f"""<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Conteúdos</li></ol></nav>
+<header class="content-hero hub-hero hub-hero--problem">
 <div class="container">
 <p class="eyebrow">Biblioteca técnica</p>
 <h1>Qual problema de licitação ou contrato você precisa resolver?</h1>
