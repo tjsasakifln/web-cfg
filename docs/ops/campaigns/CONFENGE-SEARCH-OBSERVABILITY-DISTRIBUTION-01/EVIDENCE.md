@@ -62,6 +62,8 @@ Impression ≠ engagement ≠ referral ≠ lead. IndexNow receipt ≠ index. Cra
 - credential present: `False`
 - ready_for_product_decisions: `False`
 - live baseline invented: `false`
+- committed snapshots (`latest_import.json`, `imports/import-2026-07-30.json`, `insights_latest.json`) stamped `synthetic=true` `fixture=true` `ready_for_product_decisions=false`
+- fixture manifest: `data/revops/gsc/fixtures/last_fixture_manifest.json` (from `snapshot_manifest()`)
 - sync source: `fixture`
 - max_date: `2026-07-29`
 - latency_ms: `0`

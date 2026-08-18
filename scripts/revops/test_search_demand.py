@@ -24,6 +24,20 @@ def main() -> int:
             print("FAIL", name, detail)
             failures.append(name)
 
+    # Committed historical snapshots must stay stamped (no-cred path).
+    for rel in (
+        "data/revops/gsc/latest_import.json",
+        "data/revops/gsc/imports/import-2026-07-30.json",
+        "data/revops/gsc/insights_latest.json",
+    ):
+        payload = json.loads((ROOT / rel).read_text(encoding="utf-8"))
+        ok(f"committed {rel} synthetic", payload.get("synthetic") is True)
+        ok(f"committed {rel} fixture", payload.get("fixture") is True)
+        ok(
+            f"committed {rel} not product",
+            payload.get("ready_for_product_decisions") is False,
+        )
+
     # Real fixture from repo if present
     fixture = ROOT / "seo" / "gsc-2026-07-30"
     if fixture.is_dir():
@@ -146,6 +160,30 @@ def main() -> int:
     ok("fixture_synthetic", fixture.get("synthetic") is True)
     ok("fixture_max_date", bool(fixture.get("max_date")))
     ok("fixture_latency", isinstance(fixture.get("latency_ms"), int))
+
+    unstamped = {"as_of": "2026-07-30", "source_dir": "seo/gsc-2026-07-30", "queries": []}
+    stamped_mem = sdo.stamp_non_live_snapshot(unstamped)
+    ok("stamper_synthetic", stamped_mem.get("synthetic") is True)
+    ok("stamper_fixture", stamped_mem.get("fixture") is True)
+    ok("stamper_not_product", stamped_mem.get("ready_for_product_decisions") is False)
+    ok("stamper_not_invented", stamped_mem.get("live_baseline_invented") is False)
+
+    written = sdo.write_last_fixture_manifest()
+    manifest_path = ROOT / sdo.FIXTURE_MANIFEST_REL
+    ok("manifest_written", manifest_path.is_file() and written.get("ok") is True)
+    on_disk = json.loads(manifest_path.read_text(encoding="utf-8"))
+    rows = json.loads((ROOT / "data/revops/gsc/fixtures/sample_rows.json").read_text(encoding="utf-8"))
+    expected = sdo.snapshot_manifest(
+        source="fixture",
+        rows=rows,
+        max_date=max(str(r.get("date") or "1970-01-01") for r in rows),
+        latency_ms=0,
+        ready_for_product_decisions=False,
+        synthetic=True,
+    )
+    ok("manifest_from_shipped", on_disk["content_sha256"] == expected["content_sha256"])
+    ok("manifest_not_product", on_disk["ready_for_product_decisions"] is False)
+    ok("manifest_synthetic", on_disk["synthetic"] is True)
 
     if failures:
         print("FAILURES", failures)

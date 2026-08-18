@@ -44,4 +44,8 @@ tests:
   npm run test:secrets-scan
 
 raw query / PII: not in git (data/revops/gsc/private/ ignored)
-fixture manifest: data/revops/gsc/fixtures/last_fixture_manifest.json
+fixture manifest (from snapshot_manifest()):
+  python3 scripts/revops/search_demand_observatory.py stamp-snapshots
+  # writes data/revops/gsc/fixtures/last_fixture_manifest.json
+  # stamps latest_import.json, imports/import-2026-07-30.json, insights_latest.json
+  # synthetic=true fixture=true ready_for_product_decisions=false

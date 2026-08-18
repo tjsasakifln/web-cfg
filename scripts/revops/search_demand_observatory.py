@@ -424,6 +424,88 @@ def snapshot_manifest(
     }
 
 
+FIXTURE_MANIFEST_REL = Path("data/revops/gsc/fixtures/last_fixture_manifest.json")
+COMMITTED_GSC_SNAPSHOT_RELS = (
+    Path("data/revops/gsc/latest_import.json"),
+    Path("data/revops/gsc/imports/import-2026-07-30.json"),
+    Path("data/revops/gsc/insights_latest.json"),
+    Path("data/ops/gsc-insights.json"),
+    Path("netlify/functions/data/gsc-insights.json"),
+)
+
+
+def is_live_gsc_payload(data: dict[str, Any] | None) -> bool:
+    data = data or {}
+    return (
+        data.get("source") == "search_analytics_api"
+        and data.get("synthetic") is not True
+        and data.get("ready_for_product_decisions") is not False
+    )
+
+
+def stamp_non_live_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
+    """Historical CSV / fixture payloads cannot drive product decisions."""
+    out = dict(payload)
+    if is_live_gsc_payload(out):
+        out["synthetic"] = False
+        out["fixture"] = False
+        out["ready_for_product_decisions"] = True
+        out["live_baseline_invented"] = False
+        return out
+    out["synthetic"] = True
+    out["fixture"] = True
+    out["ready_for_product_decisions"] = False
+    out["live_baseline_invented"] = False
+    if not out.get("source"):
+        out["source"] = out.get("source_dir") or "csv_export"
+    return out
+
+
+def stamp_committed_gsc_snapshots(*, root: Path | None = None) -> dict[str, Any]:
+    """Stamp every committed GSC snapshot. Does not invent metrics."""
+    root = root or ROOT
+    stamped: list[str] = []
+    skipped: list[str] = []
+    for rel in COMMITTED_GSC_SNAPSHOT_RELS:
+        path = root / rel
+        if not path.is_file():
+            skipped.append(str(rel))
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            skipped.append(str(rel))
+            continue
+        stamped_payload = stamp_non_live_snapshot(payload)
+        path.write_text(
+            json.dumps(stamped_payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        stamped.append(str(rel))
+    return {"ok": True, "stamped": stamped, "skipped": skipped}
+
+
+def write_last_fixture_manifest(*, root: Path | None = None) -> dict[str, Any]:
+    """Persist a git-safe fixture manifest via the shipped snapshot_manifest()."""
+    root = root or ROOT
+    fixture = root / "data" / "revops" / "gsc" / "fixtures" / "sample_rows.json"
+    rows = json.loads(fixture.read_text(encoding="utf-8"))
+    if not isinstance(rows, list):
+        raise ValueError("fixture_invalid")
+    max_date = max((str(r.get("date") or "1970-01-01") for r in rows), default=None)
+    manifest = snapshot_manifest(
+        source="fixture",
+        rows=rows,
+        max_date=max_date,
+        latency_ms=0,
+        ready_for_product_decisions=False,
+        synthetic=True,
+    )
+    dest = root / FIXTURE_MANIFEST_REL
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"ok": True, "path": str(FIXTURE_MANIFEST_REL), "manifest": manifest}
+
+
 def credential_presence() -> dict[str, Any]:
     """Detect GSC credential presence without printing secret content."""
     sa = os.environ.get("GSC_CREDENTIALS_JSON")
@@ -602,6 +684,11 @@ def import_csv_dir(src: Path, as_of: str | None = None) -> dict[str, Any]:
         "imported_at": datetime.now(timezone.utc).isoformat(),
         "as_of": as_of,
         "source_dir": str(src.relative_to(ROOT)) if src.is_relative_to(ROOT) else str(src),
+        "source": "csv_export",
+        "synthetic": True,
+        "fixture": True,
+        "ready_for_product_decisions": False,
+        "live_baseline_invented": False,
         "queries": query_rows,
         "pages": page_rows,
         "query_count": len(query_rows),
@@ -843,6 +930,10 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
         ),
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "brand_classification_version": BRAND_CLASSIFICATION_VERSION,
+        "synthetic": not is_live_gsc_payload(data),
+        "fixture": not is_live_gsc_payload(data),
+        "ready_for_product_decisions": is_live_gsc_payload(data),
+        "live_baseline_invented": False,
         "counts": {
             "queries": len(queries),
             "pages": len(pages),
@@ -1259,6 +1350,7 @@ def sync_from_fixture() -> dict[str, Any]:
         "as_of": as_of,
         "source": "fixture",
         "synthetic": True,
+        "fixture": True,
         "ready_for_product_decisions": False,
         "live_baseline_invented": False,
         "max_date": as_of,
@@ -1358,6 +1450,11 @@ def main(argv: list[str] | None = None) -> int:
 
     p_dash = sub.add_parser("dashboard", help="Write ops dashboard JSON")
     p_dash.add_argument("--out", type=Path, default=ROOT / "data" / "ops" / "gsc-insights.json")
+
+    sub.add_parser(
+        "stamp-snapshots",
+        help="Mark committed GSC snapshots synthetic/fixture and not product-ready",
+    )
 
     args = parser.parse_args(argv)
 
@@ -1498,6 +1595,17 @@ def main(argv: list[str] | None = None) -> int:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps({"ok": True, "out": str(args.out)}))
+        return 0
+
+    if args.cmd == "stamp-snapshots":
+        stamped = stamp_committed_gsc_snapshots()
+        manifest = write_last_fixture_manifest()
+        print(
+            "GSC_STAMP stamped={n} manifest={path} ready_for_product_decisions=false".format(
+                n=len(stamped.get("stamped") or []),
+                path=manifest.get("path"),
+            )
+        )
         return 0
 
     return 1
