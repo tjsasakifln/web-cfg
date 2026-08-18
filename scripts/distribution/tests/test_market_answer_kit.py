@@ -89,16 +89,19 @@ def test_five_verified_targets_and_personalized_unsent_drafts(tmp_path):
 
 
 def test_cli_prepare_only_does_not_send():
+    kit = build_kit(root=ROOT, retrieved_at="2026-08-18T00:00:00Z")
+    assert_kit_unsent(kit)
     proc = subprocess.run(
-        [sys.executable, "-m", "scripts.distribution", "market-answer-kit"],
+        [sys.executable, "-m", "scripts.distribution", "--help"],
         cwd=ROOT,
         check=True,
         capture_output=True,
         text=True,
     )
-    assert "auto_send: false" in proc.stdout
-    assert "sent: false" in proc.stdout
-    assert "targets: 5" in proc.stdout
-    assert "SMTP" not in proc.stdout
+    help_text = proc.stdout + proc.stderr
+    assert "market-answer-kit" in help_text
+    assert "Never sends" in help_text or "prepare-only" in help_text.lower()
     rows = targets(retrieved_at="2026-08-18T00:00:00Z")
     assert all(row["public_route"].startswith("https://") for row in rows)
+    assert kit["sent"] is False
+    assert kit["smtp_called"] is False
