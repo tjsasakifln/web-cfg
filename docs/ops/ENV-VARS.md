@@ -78,3 +78,8 @@ Nenhuma chave Asaas é lida ou armazenada.
 | `OPS_TOKEN` | produção ops | Bearer / X-Ops-Token for sensitive ops actions |
 | `REVOPS_TOKEN` | opcional | Alternate accepted by ops (dual-key rotation window) |
 | `GSC_BACKUP_DIR` | opcional | Private directory for GSC insights backup export |
+| `GSC_SITE_URL` | para pull vivo | `sc-domain:confenge.com.br` (ou `https://confenge.com.br/`) |
+| `GSC_CREDENTIALS_JSON` | pull/inspeção | Caminho (ou JSON inline em CI) da service account com escopo `webmasters.readonly` |
+| `GSC_CLIENT_SECRETS_JSON` | alternativa OAuth | Caminho do client secret; exige `GSC_TOKEN_JSON` |
+| `GSC_TOKEN_JSON` | com client secret | Token OAuth armazenado. Não commitar. |
+| `GSC_USE_FIXTURE` | teste | `1` força o sync de fixture (`ready_for_product_decisions=false`) |

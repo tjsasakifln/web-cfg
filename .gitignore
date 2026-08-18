@@ -47,6 +47,8 @@ data/revops/gsc/last_sync.json
 data/revops/gsc/latest_import.json
 data/revops/gsc/daily/
 data/revops/gsc/snapshots/*/query-page.json
+data/revops/gsc/private/
+docs/ops/campaigns/**/private/
 
 # Reversa
 .reversa/config.user.toml

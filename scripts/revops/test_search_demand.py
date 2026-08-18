@@ -83,9 +83,69 @@ def main() -> int:
     ok("api_missing_creds", result.get("ok") is False)
     ok("api_lists_env", "required_env" in result)
 
-    # branded detection
+    # branded detection — versioned classifier (shipped function, not a twin)
     ok("branded_confenge", sdo.branded("confenge consultoria"))
     ok("nonbranded_aditivo", not sdo.branded("aditivo 25% obra pública"))
+    cls_confenge = sdo.classify_query("confenge consultoria")
+    ok("class_confenge_brand", cls_confenge["label"] == "brand")
+    ok("class_versioned", cls_confenge["version"] == sdo.BRAND_CLASSIFICATION_VERSION)
+    ok("class_smartlic_legacy", sdo.classify_query("smartlic avcb")["label"] == "legacy_brand")
+    ok("class_smartlic_not_current_brand", sdo.branded("smartlic avcb") is False)
+    ok("class_tiago_nav", sdo.classify_query("tiago sasaki")["label"] == "brand")
+    ok("class_tiago_jun_nav", sdo.classify_query("tiago jun sasaki")["label"] == "brand")
+    ok("class_tiago_sector_not_brand", sdo.classify_query("aditivo tiago sasaki reequilibrio")["label"] == "non_brand")
+    ok("class_limite_aditivo", sdo.classify_query("limite aditivo")["label"] == "non_brand")
+    ok("class_reequilibrio", sdo.classify_query("reequilibrio")["label"] == "non_brand")
+    ok("class_pavimentacao", sdo.classify_query("pavimentacao")["label"] == "non_brand")
+
+    thin = sdo.ctr_optimization_decision(99)
+    ok("ctr_insufficient", thin["decision"] == "INSUFFICIENT_EVIDENCE")
+    ok("ctr_data_kept", thin["data_preserved"] is True)
+    ok("ctr_no_optimize", thin["optimize_ctr"] is False)
+    ok("ctr_allowed_at_100", sdo.ctr_optimization_decision(100)["decision"] == "ALLOWED")
+
+    today = sdo.date(2026, 8, 18)
+    windows = sdo.complete_windows(today=today, provider_max_date=sdo.date(2026, 8, 17))
+    ok("window_no_mix", windows["mixed_incomplete_periods"] is False)
+    ok("window_today_not_zero", windows["today_missing_is_not_zero"] is True)
+    ok("window_pulse_7", len(windows["pulse"]["days"]) == 7)
+    ok("window_trend_28", len(windows["trend"]["current"]["days"]) == 28)
+    ok("window_prior_28", len(windows["trend"]["prior"]["days"]) == 28)
+    ok("window_excludes_today", today.isoformat() not in windows["pulse"]["days"])
+    ok("limitation_declared", "top rows" in windows["search_analytics_limitation"].lower())
+
+    absent = sdo.day_status("2026-08-18", rows_by_date={})
+    ok("absent_not_zero", absent["status"] == "ABSENT" and absent["value"] is None)
+    ok("absent_note", "not_zero" in (absent.get("note") or ""))
+
+    cannibal = sdo.cannibalization_verdict(
+        [
+            {
+                "query": "limite aditivo 25",
+                "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+            },
+            {
+                "query": "limite aditivo 25",
+                "page": "https://confenge.com.br/aditivos-obras-publicas/",
+            },
+        ],
+        reviewed_semantic_overlap=False,
+    )
+    ok("cannibal_needs_review", cannibal["status"] == "INSUFFICIENT_EVIDENCE")
+
+    safe = sdo.git_safe_aggregate(
+        [{"query": "limite aditivo", "page": "https://confenge.com.br/", "impressions": 3, "clicks": 0}]
+    )
+    blob = json.dumps(safe)
+    ok("redacted_no_raw_query", "limite aditivo" not in blob)
+    ok("redacted_has_hash", "sha256:" in blob)
+
+    fixture = sdo.sync_from_fixture()
+    ok("fixture_ok", fixture.get("ok") is True)
+    ok("fixture_not_product", fixture.get("ready_for_product_decisions") is False)
+    ok("fixture_synthetic", fixture.get("synthetic") is True)
+    ok("fixture_max_date", bool(fixture.get("max_date")))
+    ok("fixture_latency", isinstance(fixture.get("latency_ms"), int))
 
     if failures:
         print("FAILURES", failures)

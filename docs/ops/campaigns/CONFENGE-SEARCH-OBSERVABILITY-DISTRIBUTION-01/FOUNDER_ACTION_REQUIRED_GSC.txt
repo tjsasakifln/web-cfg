@@ -1,0 +1,25 @@
+FOUNDER ACTION REQUIRED — GSC READ-ONLY CREDENTIAL
+
+email/role: tiago.sasaki@confenge.com.br as Owner or Full user of the
+Search Console property (service account invited as Restricted/Full with
+read-only API use).
+
+property: sc-domain:confenge.com.br
+         (fallback: https://confenge.com.br/)
+
+scope (minimum, read-only):
+  https://www.googleapis.com/auth/webmasters.readonly
+
+variable/path (do not paste JSON into chat or git):
+  GSC_SITE_URL=sc-domain:confenge.com.br
+  GSC_CREDENTIALS_JSON=/secure/path/gsc-service-account.json
+  # alternative: GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON
+
+smoke test (does not print credential JSON):
+  python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke
+
+expected first line when still blocked:
+  GSC_SMOKE ok=false error=missing_credentials site=sc-domain:confenge.com.br …
+
+Do not invent a live baseline. Existing snapshots stay synthetic/fixture
+with ready_for_product_decisions=false until this handoff succeeds.

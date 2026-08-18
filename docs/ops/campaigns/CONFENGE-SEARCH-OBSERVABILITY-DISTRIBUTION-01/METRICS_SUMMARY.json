@@ -1,0 +1,80 @@
+{
+  "schema": "campaign_metrics_summary_v1",
+  "campaign": "CONFENGE-SEARCH-OBSERVABILITY-DISTRIBUTION-01",
+  "generated_at": "2026-08-18T03:20:00Z",
+  "ready_for_product_decisions": false,
+  "live_baseline_invented": false,
+  "synthetic_gsc": true,
+  "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+  "gsc_sync": {
+    "ok": true,
+    "source": "fixture",
+    "synthetic": true,
+    "max_date": "2026-07-29",
+    "latency_ms": 0,
+    "rows": 4,
+    "ready_for_product_decisions": false,
+    "manifest_sha256": "e7315ffc3016d39b064e556dbb64eb3993e92c540ef9c59b7969de9f8dca1bb0"
+  },
+  "urls": [
+    {
+      "id": "limite-aditivo-25-50-obra-publica",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "intent": "limite_aditivo_25_50",
+      "stages": {
+        "eligibility": "TRUE",
+        "appearance": "BLOCKED",
+        "referral": "UNKNOWN",
+        "engagement": "UNKNOWN",
+        "cta_lead": "UNKNOWN",
+        "pipeline": "UNKNOWN"
+      }
+    },
+    {
+      "id": "aditivos-obras-publicas",
+      "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+      "intent": "aditivos_servicos_extras",
+      "stages": {
+        "eligibility": "TRUE",
+        "appearance": "BLOCKED",
+        "referral": "UNKNOWN",
+        "engagement": "UNKNOWN",
+        "cta_lead": "UNKNOWN",
+        "pipeline": "UNKNOWN"
+      }
+    },
+    {
+      "id": "reequilibrio-obras-publicas",
+      "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+      "intent": "reequilibrio_economico_financeiro",
+      "stages": {
+        "eligibility": "TRUE",
+        "appearance": "BLOCKED",
+        "referral": "UNKNOWN",
+        "engagement": "UNKNOWN",
+        "cta_lead": "UNKNOWN",
+        "pipeline": "UNKNOWN"
+      }
+    },
+    {
+      "id": "valor-tipico-contratos-pavimentacao",
+      "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "intent": "quanto_custa_ticket_contratual",
+      "stages": {
+        "eligibility": "TRUE",
+        "appearance": "BLOCKED",
+        "referral": "UNKNOWN",
+        "engagement": "UNKNOWN",
+        "cta_lead": "UNKNOWN",
+        "pipeline": "UNKNOWN"
+      }
+    }
+  ],
+  "ctr_rule": {
+    "decision": "INSUFFICIENT_EVIDENCE",
+    "impressions": 0.0,
+    "threshold": 100,
+    "optimize_ctr": false,
+    "data_preserved": true
+  }
+}

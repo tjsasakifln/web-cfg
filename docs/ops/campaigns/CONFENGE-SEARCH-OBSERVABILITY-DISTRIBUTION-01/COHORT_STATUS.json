@@ -1,0 +1,795 @@
+{
+  "assets": [
+    {
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "copy_changed": false,
+      "id": "limite-aditivo-25-50-obra-publica",
+      "index_intent": "INDEX",
+      "intent": "limite_aditivo_25_50",
+      "reproof": {
+        "bot_policy": {
+          "bot_hit_is_not_citation": true,
+          "bots": {
+            "Bingbot": "allowed_via_star",
+            "Googlebot": "allowed_via_star",
+            "OAI-SearchBot": "allowed_via_star"
+          },
+          "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+          "private_content_released": false,
+          "star_blocked": false
+        },
+        "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "copy_changed": false,
+        "cta": {
+          "attribution_ids_present": true,
+          "attribution_source": "CONFENGE_WEB",
+          "cta_id_expected": "diagnosticar-contrato",
+          "cta_present": true
+        },
+        "declared_canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "elapsed_ms": 170,
+        "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
+        "http_error": null,
+        "http_status": 200,
+        "id": "limite-aditivo-25-50-obra-publica",
+        "indexable_robots": true,
+        "local": {
+          "cta": {
+            "attribution_ids_present": true,
+            "attribution_source": "CONFENGE_WEB",
+            "cta_id_expected": "diagnosticar-contrato",
+            "cta_present": true
+          },
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "self_canonical": true,
+          "sitemap": true,
+          "structured_data_visible": [
+            "Organization",
+            "Country",
+            "ContactPoint",
+            "Person",
+            "CollegeOrUniversity",
+            "Article",
+            "WebPage",
+            "Thing",
+            "BreadcrumbList",
+            "ListItem",
+            "FAQPage",
+            "Question",
+            "Answer"
+          ]
+        },
+        "probed": true,
+        "redirect": false,
+        "renderable": true,
+        "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "robots_txt_blocked": false,
+        "self_canonical": true,
+        "sitemap": true,
+        "structured_data_visible": [
+          "Organization",
+          "Country",
+          "ContactPoint",
+          "Person",
+          "CollegeOrUniversity",
+          "Article",
+          "WebPage",
+          "Thing",
+          "BreadcrumbList",
+          "ListItem",
+          "FAQPage",
+          "Question",
+          "Answer"
+        ],
+        "technical_ok": true,
+        "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE"
+      },
+      "stages": {
+        "appearance": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "founder_gsc_manual_then_live_export",
+          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "owner": "Tiago Sasaki",
+          "source": "url_inspection+gsc_search_analytics",
+          "status": "BLOCKED"
+        },
+        "cta_lead": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_infer_lead_from_cta_presence",
+          "note": "cta_present=true; cta_is_not_lead",
+          "owner": "Tiago Sasaki",
+          "source": "lead_store_not_joined",
+          "status": "UNKNOWN"
+        },
+        "eligibility": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "keep_observe_do_not_change_copy",
+          "owner": "Tiago Sasaki",
+          "source": "live_http+local_inspect",
+          "status": "TRUE"
+        },
+        "engagement": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "observe_engaged_sessions_separately",
+          "note": "impression_is_not_engagement",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        },
+        "pipeline": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_invent_pipeline",
+          "note": "lead_is_not_pipeline",
+          "owner": "Tiago Sasaki",
+          "source": "warmbly_not_observed",
+          "status": "UNKNOWN"
+        },
+        "referral": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "import_referral_when_available",
+          "note": "referral_is_not_lead; impression_is_not_referral",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        }
+      },
+      "url_inspection": {
+        "error": "missing_credentials",
+        "index_state": "UNKNOWN",
+        "indexing_api_called": false,
+        "inspected_at": "2026-08-18T03:20:00Z",
+        "ok": false
+      }
+    },
+    {
+      "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+      "copy_changed": false,
+      "id": "aditivos-obras-publicas",
+      "index_intent": "INDEX",
+      "intent": "aditivos_servicos_extras",
+      "reproof": {
+        "bot_policy": {
+          "bot_hit_is_not_citation": true,
+          "bots": {
+            "Bingbot": "allowed_via_star",
+            "Googlebot": "allowed_via_star",
+            "OAI-SearchBot": "allowed_via_star"
+          },
+          "path": "/aditivos-obras-publicas/",
+          "private_content_released": false,
+          "star_blocked": false
+        },
+        "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+        "copy_changed": false,
+        "cta": {
+          "attribution_ids_present": true,
+          "attribution_source": "CONFENGE_WEB",
+          "cta_id_expected": "diagnosticar-contrato",
+          "cta_present": true
+        },
+        "declared_canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+        "elapsed_ms": 69,
+        "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
+        "http_error": null,
+        "http_status": 200,
+        "id": "aditivos-obras-publicas",
+        "indexable_robots": true,
+        "local": {
+          "cta": {
+            "attribution_ids_present": true,
+            "attribution_source": "CONFENGE_WEB",
+            "cta_id_expected": "diagnosticar-contrato",
+            "cta_present": true
+          },
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "self_canonical": true,
+          "sitemap": true,
+          "structured_data_visible": [
+            "Organization",
+            "Country",
+            "ContactPoint",
+            "Person",
+            "CollegeOrUniversity",
+            "CollectionPage",
+            "WebSite",
+            "ItemList",
+            "ListItem",
+            "Service",
+            "BreadcrumbList",
+            "FAQPage",
+            "Question",
+            "Answer"
+          ]
+        },
+        "probed": true,
+        "redirect": false,
+        "renderable": true,
+        "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "robots_txt_blocked": false,
+        "self_canonical": true,
+        "sitemap": true,
+        "structured_data_visible": [
+          "Organization",
+          "Country",
+          "ContactPoint",
+          "Person",
+          "CollegeOrUniversity",
+          "CollectionPage",
+          "WebSite",
+          "ItemList",
+          "ListItem",
+          "Service",
+          "BreadcrumbList",
+          "FAQPage",
+          "Question",
+          "Answer"
+        ],
+        "technical_ok": true,
+        "title": "Aditivos e serviços extras em obras públicas: tipos, documentos e margem | CONFENGE"
+      },
+      "stages": {
+        "appearance": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "founder_gsc_manual_then_live_export",
+          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "owner": "Tiago Sasaki",
+          "source": "url_inspection+gsc_search_analytics",
+          "status": "BLOCKED"
+        },
+        "cta_lead": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_infer_lead_from_cta_presence",
+          "note": "cta_present=true; cta_is_not_lead",
+          "owner": "Tiago Sasaki",
+          "source": "lead_store_not_joined",
+          "status": "UNKNOWN"
+        },
+        "eligibility": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "keep_observe_do_not_change_copy",
+          "owner": "Tiago Sasaki",
+          "source": "live_http+local_inspect",
+          "status": "TRUE"
+        },
+        "engagement": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "observe_engaged_sessions_separately",
+          "note": "impression_is_not_engagement",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        },
+        "pipeline": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_invent_pipeline",
+          "note": "lead_is_not_pipeline",
+          "owner": "Tiago Sasaki",
+          "source": "warmbly_not_observed",
+          "status": "UNKNOWN"
+        },
+        "referral": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "import_referral_when_available",
+          "note": "referral_is_not_lead; impression_is_not_referral",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        }
+      },
+      "url_inspection": {
+        "error": "missing_credentials",
+        "index_state": "UNKNOWN",
+        "indexing_api_called": false,
+        "inspected_at": "2026-08-18T03:20:00Z",
+        "ok": false
+      }
+    },
+    {
+      "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+      "copy_changed": false,
+      "id": "reequilibrio-obras-publicas",
+      "index_intent": "INDEX",
+      "intent": "reequilibrio_economico_financeiro",
+      "reproof": {
+        "bot_policy": {
+          "bot_hit_is_not_citation": true,
+          "bots": {
+            "Bingbot": "allowed_via_star",
+            "Googlebot": "allowed_via_star",
+            "OAI-SearchBot": "allowed_via_star"
+          },
+          "path": "/reequilibrio-obras-publicas/",
+          "private_content_released": false,
+          "star_blocked": false
+        },
+        "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "copy_changed": false,
+        "cta": {
+          "attribution_ids_present": true,
+          "attribution_source": "CONFENGE_WEB",
+          "cta_id_expected": "diagnosticar-contrato",
+          "cta_present": true
+        },
+        "declared_canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "elapsed_ms": 62,
+        "h1": "Reequilíbrio econômico-financeiro de obra pública",
+        "http_error": null,
+        "http_status": 200,
+        "id": "reequilibrio-obras-publicas",
+        "indexable_robots": true,
+        "local": {
+          "cta": {
+            "attribution_ids_present": true,
+            "attribution_source": "CONFENGE_WEB",
+            "cta_id_expected": "diagnosticar-contrato",
+            "cta_present": true
+          },
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "self_canonical": true,
+          "sitemap": true,
+          "structured_data_visible": [
+            "Organization",
+            "Country",
+            "ContactPoint",
+            "Person",
+            "CollegeOrUniversity",
+            "CollectionPage",
+            "WebSite",
+            "ItemList",
+            "ListItem",
+            "Service",
+            "BreadcrumbList",
+            "FAQPage",
+            "Question",
+            "Answer"
+          ]
+        },
+        "probed": true,
+        "redirect": false,
+        "renderable": true,
+        "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "robots_txt_blocked": false,
+        "self_canonical": true,
+        "sitemap": true,
+        "structured_data_visible": [
+          "Organization",
+          "Country",
+          "ContactPoint",
+          "Person",
+          "CollegeOrUniversity",
+          "CollectionPage",
+          "WebSite",
+          "ItemList",
+          "ListItem",
+          "Service",
+          "BreadcrumbList",
+          "FAQPage",
+          "Question",
+          "Answer"
+        ],
+        "technical_ok": true,
+        "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE"
+      },
+      "stages": {
+        "appearance": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "founder_gsc_manual_then_live_export",
+          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "owner": "Tiago Sasaki",
+          "source": "url_inspection+gsc_search_analytics",
+          "status": "BLOCKED"
+        },
+        "cta_lead": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_infer_lead_from_cta_presence",
+          "note": "cta_present=true; cta_is_not_lead",
+          "owner": "Tiago Sasaki",
+          "source": "lead_store_not_joined",
+          "status": "UNKNOWN"
+        },
+        "eligibility": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "keep_observe_do_not_change_copy",
+          "owner": "Tiago Sasaki",
+          "source": "live_http+local_inspect",
+          "status": "TRUE"
+        },
+        "engagement": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "observe_engaged_sessions_separately",
+          "note": "impression_is_not_engagement",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        },
+        "pipeline": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_invent_pipeline",
+          "note": "lead_is_not_pipeline",
+          "owner": "Tiago Sasaki",
+          "source": "warmbly_not_observed",
+          "status": "UNKNOWN"
+        },
+        "referral": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "import_referral_when_available",
+          "note": "referral_is_not_lead; impression_is_not_referral",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        }
+      },
+      "url_inspection": {
+        "error": "missing_credentials",
+        "index_state": "UNKNOWN",
+        "indexing_api_called": false,
+        "inspected_at": "2026-08-18T03:20:00Z",
+        "ok": false
+      }
+    },
+    {
+      "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "copy_changed": false,
+      "id": "valor-tipico-contratos-pavimentacao",
+      "index_intent": "INDEX",
+      "intent": "quanto_custa_ticket_contratual",
+      "reproof": {
+        "bot_policy": {
+          "bot_hit_is_not_citation": true,
+          "bots": {
+            "Bingbot": "allowed_via_star",
+            "Googlebot": "allowed_via_star",
+            "OAI-SearchBot": "allowed_via_star"
+          },
+          "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+          "private_content_released": false,
+          "star_blocked": false
+        },
+        "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "copy_changed": false,
+        "cta": {
+          "attribution_ids_present": true,
+          "attribution_source": "CONFENGE_WEB",
+          "cta_id_expected": "veja-sua-empresa",
+          "cta_present": true
+        },
+        "declared_canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "elapsed_ms": 68,
+        "h1": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
+        "http_error": null,
+        "http_status": 200,
+        "id": "valor-tipico-contratos-pavimentacao",
+        "indexable_robots": true,
+        "local": {
+          "cta": {
+            "attribution_ids_present": true,
+            "attribution_source": "CONFENGE_WEB",
+            "cta_id_expected": "veja-sua-empresa",
+            "cta_present": true
+          },
+          "robots_meta": "index,follow",
+          "self_canonical": true,
+          "sitemap": true,
+          "structured_data_visible": [
+            "FAQPage",
+            "Question",
+            "Answer",
+            "Dataset",
+            "Organization",
+            "BreadcrumbList",
+            "ListItem"
+          ]
+        },
+        "probed": true,
+        "redirect": false,
+        "renderable": true,
+        "robots_meta": "index,follow",
+        "robots_txt_blocked": false,
+        "self_canonical": true,
+        "sitemap": true,
+        "structured_data_visible": [
+          "FAQPage",
+          "Question",
+          "Answer",
+          "Dataset",
+          "Organization",
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "technical_ok": true,
+        "title": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina? | CONFENGE"
+      },
+      "stages": {
+        "appearance": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "founder_gsc_manual_then_live_export",
+          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "owner": "Tiago Sasaki",
+          "source": "url_inspection+gsc_search_analytics",
+          "status": "BLOCKED"
+        },
+        "cta_lead": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_infer_lead_from_cta_presence",
+          "note": "cta_present=true; cta_is_not_lead",
+          "owner": "Tiago Sasaki",
+          "source": "lead_store_not_joined",
+          "status": "UNKNOWN"
+        },
+        "eligibility": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "keep_observe_do_not_change_copy",
+          "owner": "Tiago Sasaki",
+          "source": "live_http+local_inspect",
+          "status": "TRUE"
+        },
+        "engagement": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "observe_engaged_sessions_separately",
+          "note": "impression_is_not_engagement",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        },
+        "pipeline": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "do_not_invent_pipeline",
+          "note": "lead_is_not_pipeline",
+          "owner": "Tiago Sasaki",
+          "source": "warmbly_not_observed",
+          "status": "UNKNOWN"
+        },
+        "referral": {
+          "freshness": "2026-08-18T03:20:00Z",
+          "next_action": "import_referral_when_available",
+          "note": "referral_is_not_lead; impression_is_not_referral",
+          "owner": "Tiago Sasaki",
+          "source": "analytics_not_imported",
+          "status": "UNKNOWN"
+        }
+      },
+      "url_inspection": {
+        "error": "missing_credentials",
+        "index_state": "UNKNOWN",
+        "indexing_api_called": false,
+        "inspected_at": "2026-08-18T03:20:00Z",
+        "ok": false
+      }
+    }
+  ],
+  "campaign": "CONFENGE-SEARCH-OBSERVABILITY-DISTRIBUTION-01",
+  "cloaking": false,
+  "fake_citations": false,
+  "generated_at": "2026-08-18T03:20:00Z",
+  "geo_hacks": false,
+  "gsc_credential_present": false,
+  "live_baseline_invented": false,
+  "llms_txt_strategy": false,
+  "mode": "overlay",
+  "network_probed": true,
+  "new_public_url_created": false,
+  "public_urls": [
+    "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+    "https://confenge.com.br/aditivos-obras-publicas/",
+    "https://confenge.com.br/reequilibrio-obras-publicas/",
+    "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
+  ],
+  "ready_for_product_decisions": false,
+  "related_issue": 86,
+  "replaces_86_registry": false,
+  "schema": "campaign_search_overlay_v1",
+  "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+  "stage_rules": {
+    "crawler_hit_is_not_citation": true,
+    "cta_is_not_lead": true,
+    "impression_is_not_engagement": true,
+    "impression_is_not_referral": true,
+    "indexnow_receipt_is_not_index": true,
+    "lead_is_not_pipeline": true,
+    "missing_day_is_not_zero": true,
+    "url_inspection_is_not_appearance": true
+  },
+  "url_inspection_summary": {
+    "credential_present": false,
+    "error": "missing_credentials",
+    "indexing_api_called": false
+  },
+  "windows": {
+    "context": {
+      "complete": true,
+      "days": [
+        "2026-05-20",
+        "2026-05-21",
+        "2026-05-22",
+        "2026-05-23",
+        "2026-05-24",
+        "2026-05-25",
+        "2026-05-26",
+        "2026-05-27",
+        "2026-05-28",
+        "2026-05-29",
+        "2026-05-30",
+        "2026-05-31",
+        "2026-06-01",
+        "2026-06-02",
+        "2026-06-03",
+        "2026-06-04",
+        "2026-06-05",
+        "2026-06-06",
+        "2026-06-07",
+        "2026-06-08",
+        "2026-06-09",
+        "2026-06-10",
+        "2026-06-11",
+        "2026-06-12",
+        "2026-06-13",
+        "2026-06-14",
+        "2026-06-15",
+        "2026-06-16",
+        "2026-06-17",
+        "2026-06-18",
+        "2026-06-19",
+        "2026-06-20",
+        "2026-06-21",
+        "2026-06-22",
+        "2026-06-23",
+        "2026-06-24",
+        "2026-06-25",
+        "2026-06-26",
+        "2026-06-27",
+        "2026-06-28",
+        "2026-06-29",
+        "2026-06-30",
+        "2026-07-01",
+        "2026-07-02",
+        "2026-07-03",
+        "2026-07-04",
+        "2026-07-05",
+        "2026-07-06",
+        "2026-07-07",
+        "2026-07-08",
+        "2026-07-09",
+        "2026-07-10",
+        "2026-07-11",
+        "2026-07-12",
+        "2026-07-13",
+        "2026-07-14",
+        "2026-07-15",
+        "2026-07-16",
+        "2026-07-17",
+        "2026-07-18",
+        "2026-07-19",
+        "2026-07-20",
+        "2026-07-21",
+        "2026-07-22",
+        "2026-07-23",
+        "2026-07-24",
+        "2026-07-25",
+        "2026-07-26",
+        "2026-07-27",
+        "2026-07-28",
+        "2026-07-29",
+        "2026-07-30",
+        "2026-07-31",
+        "2026-08-01",
+        "2026-08-02",
+        "2026-08-03",
+        "2026-08-04",
+        "2026-08-05",
+        "2026-08-06",
+        "2026-08-07",
+        "2026-08-08",
+        "2026-08-09",
+        "2026-08-10",
+        "2026-08-11",
+        "2026-08-12",
+        "2026-08-13",
+        "2026-08-14",
+        "2026-08-15",
+        "2026-08-16",
+        "2026-08-17"
+      ],
+      "end": "2026-08-17",
+      "label": "context_up_to_90_complete_days",
+      "start": "2026-05-20"
+    },
+    "incomplete_days_excluded": [
+      "2026-08-18"
+    ],
+    "last_complete_day": "2026-08-17",
+    "mixed_incomplete_periods": false,
+    "provider_max_date": null,
+    "pulse": {
+      "complete": true,
+      "days": [
+        "2026-08-11",
+        "2026-08-12",
+        "2026-08-13",
+        "2026-08-14",
+        "2026-08-15",
+        "2026-08-16",
+        "2026-08-17"
+      ],
+      "end": "2026-08-17",
+      "label": "pulse_7_complete_days",
+      "start": "2026-08-11"
+    },
+    "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+    "today": "2026-08-18",
+    "today_missing_is_not_zero": true,
+    "trend": {
+      "current": {
+        "complete": true,
+        "days": [
+          "2026-07-21",
+          "2026-07-22",
+          "2026-07-23",
+          "2026-07-24",
+          "2026-07-25",
+          "2026-07-26",
+          "2026-07-27",
+          "2026-07-28",
+          "2026-07-29",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01",
+          "2026-08-02",
+          "2026-08-03",
+          "2026-08-04",
+          "2026-08-05",
+          "2026-08-06",
+          "2026-08-07",
+          "2026-08-08",
+          "2026-08-09",
+          "2026-08-10",
+          "2026-08-11",
+          "2026-08-12",
+          "2026-08-13",
+          "2026-08-14",
+          "2026-08-15",
+          "2026-08-16",
+          "2026-08-17"
+        ],
+        "end": "2026-08-17",
+        "start": "2026-07-21"
+      },
+      "label": "trend_28_complete_vs_prior_28",
+      "prior": {
+        "complete": true,
+        "days": [
+          "2026-06-23",
+          "2026-06-24",
+          "2026-06-25",
+          "2026-06-26",
+          "2026-06-27",
+          "2026-06-28",
+          "2026-06-29",
+          "2026-06-30",
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06",
+          "2026-07-07",
+          "2026-07-08",
+          "2026-07-09",
+          "2026-07-10",
+          "2026-07-11",
+          "2026-07-12",
+          "2026-07-13",
+          "2026-07-14",
+          "2026-07-15",
+          "2026-07-16",
+          "2026-07-17",
+          "2026-07-18",
+          "2026-07-19",
+          "2026-07-20"
+        ],
+        "end": "2026-07-20",
+        "start": "2026-06-23"
+      }
+    },
+    "version": "complete-days/v1"
+  }
+}
