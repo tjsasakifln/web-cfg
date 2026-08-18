@@ -1,0 +1,22 @@
+Assunto: Nota factual — ticket contratual de pavimentação em Santa Catarina (mediana R$ 218.284, n=5038)
+
+Prezada redação da Agência iNFRA,
+
+Sugestão de nota, não de release promocional. Um recorte estadual responde quanto custa o instrumento de pavimentação em SC — e recusa a conversão para custo por km.
+
+Fatos publicáveis:
+- Geografia: Santa Catarina (não é Brasil).
+- Período: 2023-07-20–2026-08-15.
+- Amostra útil: 5038 de 5063 (25 missingness).
+- Mediana: R$ 218.284 (valor integral nominal).
+- P25–P75: R$ 19.969 a R$ 708.950.
+- Unidade: instrumento. Não km, não m².
+
+Peço revisão e, se couber, citação com o link canônico e a nota de método. Sem embargo de parceria e sem oferta de exclusividade.
+
+https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/
+Correção pública: https://confenge.com.br/correcoes/
+
+Atenciosamente,
+Tiago Sasaki
+CONFENGE — fonte CONFENGE_WEB

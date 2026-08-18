@@ -1,0 +1,20 @@
+INDEXNOW NOTIFICATION RECEIPT
+meaning: notification_accepted_not_indexed
+indexation: false
+endpoint: https://api.indexnow.org/indexnow
+http_status: 200
+submitted_url_count: 4
+dry_run: false
+sender: node scripts/site/indexnow_submit.mjs  (existing human-gated path)
+discovery_prepare: dry_run true, send refused on python3 -m scripts.discovery indexnow --send
+idempotency_key: 7a142769ddbcf07f9ea9bc805ed44b6865cb01182489f9adf54421ab340c7373
+recorded_at: 2026-08-18T03:20:00Z
+
+urls:
+  - https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/
+  - https://confenge.com.br/aditivos-obras-publicas/
+  - https://confenge.com.br/reequilibrio-obras-publicas/
+  - https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/
+
+This file is a notification receipt. It is not Google/Bing index state,
+not URL Inspection, not appearance, and not a citation.

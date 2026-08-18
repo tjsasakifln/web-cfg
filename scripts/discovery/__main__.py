@@ -15,6 +15,11 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.discovery.campaign_overlay import (  # noqa: E402
+    build_stage_report,
+    format_stage_report,
+    write_campaign_artifacts,
+)
 from scripts.discovery.gsc_import import GscImportError, import_gsc_file  # noqa: E402
 from scripts.discovery.indexnow import format_prepare, prepare  # noqa: E402
 from scripts.discovery.observation import sha256_text  # noqa: E402
@@ -23,6 +28,7 @@ from scripts.discovery.referral_import import ReferralImportError, import_referr
 from scripts.discovery.registry import load_cohort, repo_root  # noqa: E402
 from scripts.discovery.report import build_report, dump_stable, format_report  # noqa: E402
 from scripts.discovery.store import append_observation, default_store_path, write_snapshot_json  # noqa: E402
+from scripts.discovery.url_inspection import inspect_urls  # noqa: E402
 
 
 def _utc_now() -> str:
@@ -250,8 +256,69 @@ def main(argv: list[str] | None = None) -> int:
     ref_p.add_argument("--snapshots", default=None)
     ref_p.set_defaults(func=_cmd_import_referral)
 
+    campaign_p = sub.add_parser(
+        "campaign-report",
+        help="four-URL overlay report (does not replace the #86 registry)",
+    )
+    _add_common(campaign_p)
+    campaign_p.add_argument("--live", action="store_true", help="GET the four public URLs")
+    campaign_p.add_argument(
+        "--write",
+        action="store_true",
+        help="write campaign artifacts under docs/ops/campaigns/…",
+    )
+    campaign_p.set_defaults(func=_cmd_campaign_report)
+
+    inspect_p = sub.add_parser("inspect-urls", help="read-only URL Inspection (no Indexing API)")
+    _add_common(inspect_p)
+    inspect_p.add_argument("--url", action="append", default=[], help="canonical URL")
+    inspect_p.set_defaults(func=_cmd_inspect_urls)
+
     args = parser.parse_args(argv)
     return args.func(args)
+
+
+def _cmd_campaign_report(args: argparse.Namespace) -> int:
+    root = Path(args.root) if args.root else repo_root()
+    report = build_stage_report(root=root, generated_at=args.as_of, live=bool(args.live))
+    text = format_stage_report(report)
+    sys.stdout.write(text)
+    if args.json:
+        sys.stdout.write(dump_stable(report))
+    if args.write:
+        write_campaign_artifacts(report, root=root)
+    if args.out:
+        out = Path(args.out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(dump_stable(report) if args.json else text, encoding="utf-8")
+    return 0
+
+
+def _cmd_inspect_urls(args: argparse.Namespace) -> int:
+    urls = list(args.url or [])
+    if not urls:
+        from scripts.discovery.campaign_overlay import campaign_urls
+
+        urls = campaign_urls()
+    result = inspect_urls(urls, inspected_at=args.as_of)
+    sys.stdout.write(dump_stable(result) if args.json else _format_inspect(result))
+    if args.out:
+        Path(args.out).write_text(dump_stable(result), encoding="utf-8")
+    return 0 if result.get("ok") or result.get("error") == "missing_credentials" else 2
+
+
+def _format_inspect(result: dict) -> str:
+    lines = [
+        "URL INSPECTION (read-only)",
+        f"indexing_api_called: {str(result.get('indexing_api_called')).lower()}",
+        f"credential_present: {str(result.get('credential_present')).lower()}",
+        f"error: {result.get('error')}",
+        "",
+    ]
+    for row in result.get("inspections") or []:
+        lines.append(f"  {row.get('url')}: {row.get('index_state')} inspected_at={row.get('inspected_at')}")
+    lines.append("")
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

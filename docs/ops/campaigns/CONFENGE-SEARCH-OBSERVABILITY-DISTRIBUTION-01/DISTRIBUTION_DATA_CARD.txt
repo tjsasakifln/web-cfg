@@ -1,0 +1,35 @@
+DISTRIBUTION DATA CARD — Market Answer pavimentação SC
+canonical: https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/
+question: Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?
+sample: n_usable=5038 / denominator=5063 / missingness=25
+period: 2023-07-20–2026-08-15
+geography: Santa Catarina (SC)
+method: mediana e quartis do valor integral nominal; tipologia keyword de pavimentação; recorte SC
+unit: valor integral nominal do instrumento
+not_unit: custo por km, m² ou unidade física
+quartiles: P25=R$ 19.969 · median=R$ 218.284 · P75=R$ 708.950
+as_of: 2026-08-17T11:29:23.193694+02:00
+source: payload official_live, leitura SELECT-only
+reusable_assets:
+  - page: https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/
+  - visible table: #distribuicao on the same URL
+  - method: #metodologia and https://confenge.com.br/metodologia-inteligencia/
+  - corrections: https://confenge.com.br/correcoes/
+headlines (factual, no clickbait):
+  - Em Santa Catarina, a mediana do ticket contratual de pavimentação é R$ 218.284 (valor integral nominal; n=5.038).
+  - Metade dos contratos de pavimentação de SC fica entre R$ 19.969 (P25) e R$ 708.950 (P75) — isso não é custo por km.
+  - Amostra estadual 2023-07-20 a 2026-08-15: 5.038 contratos úteis de 5.063; 25 valores não positivos ficaram de fora.
+limitations:
+  - O número é o valor integral nominal do instrumento, não custo por km, m² ou unidade física.
+  - O recorte é exclusivamente de Santa Catarina. Não descreve o país inteiro.
+  - Comparáveis oficiais permanecem indisponíveis neste recorte. Não há grupo de pares publicado.
+  - O drill-down de contratos individuais permanece limitado.
+  - A tipologia usa o classificador documental de pavimentação. Palavra-chave pode misturar escopos.
+  - Valores totais não positivos entram em missingness e não entram na amostra útil (25 de 5063).
+method_and_correction_note:
+  Mediana e quartis do valor integral nominal do instrumento, tipologia documental
+  de pavimentação, recorte exclusivo de Santa Catarina. Correção pública em
+  https://confenge.com.br/correcoes/. Não estimar custo por km a partir do ticket.
+partnership_claim: false
+auto_send: false
+sent: false

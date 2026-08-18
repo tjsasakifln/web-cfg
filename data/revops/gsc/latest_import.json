@@ -1409,5 +1409,10 @@
     }
   ],
   "query_count": 20,
-  "page_count": 59
+  "page_count": 59,
+  "synthetic": true,
+  "fixture": true,
+  "ready_for_product_decisions": false,
+  "live_baseline_invented": false,
+  "source": "seo/gsc-2026-07-30"
 }

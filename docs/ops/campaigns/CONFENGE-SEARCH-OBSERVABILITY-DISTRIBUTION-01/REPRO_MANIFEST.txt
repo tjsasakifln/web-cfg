@@ -1,0 +1,51 @@
+REPRO MANIFEST — CONFENGE-SEARCH-OBSERVABILITY-DISTRIBUTION-01
+related_issue: 86
+branch: goal/search-observability-distribution-20260818
+live_baseline_invented: false
+ready_for_product_decisions: false
+search_analytics_limitation: Search Analytics may return top rows only and is not an exhaustive total.
+
+fixture collector (twice, same path):
+  python3 scripts/revops/search_demand_observatory.py sync --fixture --smoke
+  # GSC_SMOKE ok=true source=fixture max_date=2026-07-29 ready_for_product_decisions=false synthetic=true
+
+live API without credential (fail closed, no JSON dump):
+  python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke
+  # GSC_SMOKE ok=false error=missing_credentials site=sc-domain:confenge.com.br
+
+url inspection (read-only, no Indexing API):
+  python3 -m scripts.discovery inspect-urls
+  # indexing_api_called: false · all four URLs UNKNOWN
+
+live four-URL overlay:
+  python3 -m scripts.discovery campaign-report --live --write --as-of 2026-08-18T03:20:00Z
+
+stage report (twice, identical):
+  python3 -m scripts.discovery campaign-report --as-of 2026-08-18T03:20:00Z
+
+IndexNow prepare (discovery, send refused):
+  python3 -m scripts.discovery indexnow --url <four canonicals>
+  # indexation: false
+
+IndexNow notification (existing sender, not called indexation):
+  node scripts/site/indexnow_submit.mjs --dry-run <four canonicals>
+  node scripts/site/indexnow_submit.mjs <four canonicals>
+  # HTTP 200, submitted=4, meaning=notification
+
+distribution kit (unsent):
+  python3 -m scripts.distribution market-answer-kit
+
+tests:
+  python3 scripts/revops/test_search_demand.py
+  npm run discovery:test
+  npm run distribution:test
+  npm run test:indexnow
+  npm run test:revops
+  npm run test:secrets-scan
+
+raw query / PII: not in git (data/revops/gsc/private/ ignored)
+fixture manifest (from snapshot_manifest()):
+  python3 scripts/revops/search_demand_observatory.py stamp-snapshots
+  # writes data/revops/gsc/fixtures/last_fixture_manifest.json
+  # stamps latest_import.json, imports/import-2026-07-30.json, insights_latest.json
+  # synthetic=true fixture=true ready_for_product_decisions=false

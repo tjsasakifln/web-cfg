@@ -1,0 +1,13 @@
+{
+  "schema": "gsc_snapshot_manifest_v1",
+  "source": "fixture",
+  "synthetic": true,
+  "ready_for_product_decisions": false,
+  "row_count": 4,
+  "max_date": "2026-07-29",
+  "latency_ms": 0,
+  "content_sha256": "e7315ffc3016d39b064e556dbb64eb3993e92c540ef9c59b7969de9f8dca1bb0",
+  "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+  "brand_classification_version": "brand-class/v1",
+  "window_policy_version": "complete-days/v1"
+}

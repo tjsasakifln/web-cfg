@@ -1,0 +1,32 @@
+FOUNDER GSC MANUAL — 4 URLS
+date: 2026-08-18
+property: sc-domain:confenge.com.br  OR  https://confenge.com.br/
+tool: Search Console → Inspeção de URL
+do_not_use: Google Indexing API (not authorized for these ordinary pages)
+
+1. https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/
+   technical_state: http=200; canonical=self; robots=index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1; sitemap=True
+   inspection_field: UNKNOWN
+   action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
+   date: 2026-08-18
+
+2. https://confenge.com.br/aditivos-obras-publicas/
+   technical_state: http=200; canonical=self; robots=index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1; sitemap=True
+   inspection_field: UNKNOWN
+   action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
+   date: 2026-08-18
+
+3. https://confenge.com.br/reequilibrio-obras-publicas/
+   technical_state: http=200; canonical=self; robots=index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1; sitemap=True
+   inspection_field: UNKNOWN
+   action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
+   date: 2026-08-18
+
+4. https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/
+   technical_state: http=200; canonical=self; robots=index,follow; sitemap=True
+   inspection_field: UNKNOWN
+   action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
+   date: 2026-08-18
+
+After the four requests, record the inspection card screenshot privately.
+Do not treat the request as INDEX. Appearance still needs Search Analytics.

@@ -1827,5 +1827,9 @@
       "query": "ia",
       "why": "legacy entity query still receiving impressions — reinforce 410 + GSC removal"
     }
-  ]
+  ],
+  "synthetic": true,
+  "fixture": true,
+  "ready_for_product_decisions": false,
+  "live_baseline_invented": false
 }

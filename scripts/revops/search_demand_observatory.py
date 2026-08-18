@@ -26,10 +26,12 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
 import re
 import sys
+import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -38,8 +40,36 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data" / "revops" / "gsc"
+PRIVATE_DIR = DATA / "private"
+BRAND_CLASSIFICATION_VERSION = "brand-class/v1"
+WINDOW_POLICY_VERSION = "complete-days/v1"
+CTR_MIN_IMPRESSIONS = 100
+SEARCH_ANALYTICS_LIMITATION = (
+    "Search Analytics may return top rows only and is not an exhaustive total. "
+    "Row counts describe the returned set, not the property universe."
+)
+
+# Current brand: CONFENGE and documented misspellings. Not sector terms.
+CONFENGE_BRAND = re.compile(
+    r"\b(confenge|coenge|consenge|conenge|smartenge)\b",
+    re.I,
+)
+# Legacy brand: SmartLic. Classified separately so it cannot inflate CONFENGE brand.
+LEGACY_BRAND = re.compile(r"\b(smartlic|smart[\s-]?lic)\b", re.I)
+# Person name is branded only when the query is clearly navigational.
+PERSON_NAME = re.compile(r"\btiago(?:\s+jun)?\s+sasaki\b", re.I)
+NAVIGATIONAL_HINT = re.compile(
+    r"\b(site|login|contato|email|linkedin|quem\s+[eé]|consultoria|empresa)\b",
+    re.I,
+)
+SECTOR_TERMS = re.compile(
+    r"\b(aditivo|reequil|paviment|obra|contrato|licita|bdi|sinapi|lei\s*14|"
+    r"acr[eé]scimo|supress|reajuste|medi[cç][aã]o|glosa)\b",
+    re.I,
+)
+# Backward-compatible detector used by legacy analyses (legacy entity + brand scan).
 BRAND_TERMS = re.compile(
-    r"\b(confenge|coenge|consenge|conenge|smartenge|tiago\s*sasaki)\b",
+    r"\b(confenge|coenge|consenge|conenge|smartenge|tiago\s*sasaki|smartlic)\b",
     re.I,
 )
 
@@ -78,8 +108,425 @@ def parse_num(val: str) -> float:
         return 0.0
 
 
+def classify_query(query: str) -> dict[str, Any]:
+    """Versioned brand / legacy-brand / non-brand classification.
+
+    Sector terms (aditivo, reequilibrio, pavimentacao, …) are never branded.
+    ``tiago sasaki`` / ``tiago jun sasaki`` are branded only when navigational.
+    """
+    text = (query or "").strip()
+    lowered = text.lower()
+    if CONFENGE_BRAND.search(lowered):
+        return {
+            "label": "brand",
+            "version": BRAND_CLASSIFICATION_VERSION,
+            "navigational": True,
+            "reason": "confenge_or_variation",
+        }
+    if LEGACY_BRAND.search(lowered):
+        return {
+            "label": "legacy_brand",
+            "version": BRAND_CLASSIFICATION_VERSION,
+            "navigational": True,
+            "reason": "smartlic_legacy",
+        }
+    if PERSON_NAME.search(lowered):
+        has_sector = bool(SECTOR_TERMS.search(lowered))
+        has_nav = bool(NAVIGATIONAL_HINT.search(lowered))
+        clearly_nav = (not has_sector) or (has_nav and not has_sector)
+        if clearly_nav:
+            return {
+                "label": "brand",
+                "version": BRAND_CLASSIFICATION_VERSION,
+                "navigational": True,
+                "reason": "person_name_navigational",
+            }
+        return {
+            "label": "non_brand",
+            "version": BRAND_CLASSIFICATION_VERSION,
+            "navigational": False,
+            "reason": "person_name_not_clearly_navigational",
+        }
+    return {
+        "label": "non_brand",
+        "version": BRAND_CLASSIFICATION_VERSION,
+        "navigational": False,
+        "reason": "sector_or_unbranded",
+    }
+
+
 def branded(query: str) -> bool:
-    return bool(BRAND_TERMS.search(query or ""))
+    """True only for current CONFENGE brand (including navigational person name)."""
+    return classify_query(query).get("label") == "brand"
+
+
+def last_complete_day(*, today: date, provider_max_date: date | None) -> date:
+    """Latest day that is complete. Today without a row is not a complete day."""
+    yesterday = today - timedelta(days=1)
+    if provider_max_date is None:
+        return yesterday
+    if provider_max_date >= today:
+        return yesterday
+    return provider_max_date
+
+
+def complete_windows(
+    *,
+    today: date,
+    provider_max_date: date | None,
+    available_dates: set[date] | None = None,
+) -> dict[str, Any]:
+    """Pulse 7 / trend 28 vs prior 28 / context up to 90 — complete days only."""
+    end = last_complete_day(today=today, provider_max_date=provider_max_date)
+    pulse_start = end - timedelta(days=6)
+    trend_start = end - timedelta(days=27)
+    prior_end = trend_start - timedelta(days=1)
+    prior_start = prior_end - timedelta(days=27)
+    context_start = end - timedelta(days=89)
+
+    def _span(start: date, stop: date) -> list[str]:
+        days: list[str] = []
+        cur = start
+        while cur <= stop:
+            days.append(cur.isoformat())
+            cur += timedelta(days=1)
+        return days
+
+    pulse_days = _span(pulse_start, end)
+    trend_days = _span(trend_start, end)
+    prior_days = _span(prior_start, prior_end)
+    context_days = _span(context_start, end)
+    incomplete: list[str] = []
+    if today not in (available_dates or set()) and today > end:
+        incomplete.append(today.isoformat())
+    return {
+        "version": WINDOW_POLICY_VERSION,
+        "today": today.isoformat(),
+        "provider_max_date": provider_max_date.isoformat() if provider_max_date else None,
+        "last_complete_day": end.isoformat(),
+        "incomplete_days_excluded": incomplete,
+        "today_missing_is_not_zero": True,
+        "mixed_incomplete_periods": False,
+        "pulse": {
+            "label": "pulse_7_complete_days",
+            "start": pulse_start.isoformat(),
+            "end": end.isoformat(),
+            "days": pulse_days,
+            "complete": True,
+        },
+        "trend": {
+            "label": "trend_28_complete_vs_prior_28",
+            "current": {
+                "start": trend_start.isoformat(),
+                "end": end.isoformat(),
+                "days": trend_days,
+                "complete": True,
+            },
+            "prior": {
+                "start": prior_start.isoformat(),
+                "end": prior_end.isoformat(),
+                "days": prior_days,
+                "complete": True,
+            },
+        },
+        "context": {
+            "label": "context_up_to_90_complete_days",
+            "start": context_start.isoformat(),
+            "end": end.isoformat(),
+            "days": context_days,
+            "complete": True,
+        },
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+    }
+
+
+def day_status(day: str | date, rows_by_date: dict[str, Any] | None = None) -> dict[str, Any]:
+    """A missing day is ABSENT, never coerced to zero."""
+    key = day.isoformat() if isinstance(day, date) else str(day)
+    rows_by_date = rows_by_date or {}
+    if key not in rows_by_date:
+        return {
+            "date": key,
+            "status": "ABSENT",
+            "value": None,
+            "impressions": None,
+            "clicks": None,
+            "note": "missing_day_is_not_zero",
+        }
+    payload = rows_by_date[key]
+    if payload is None:
+        return {
+            "date": key,
+            "status": "ABSENT",
+            "value": None,
+            "impressions": None,
+            "clicks": None,
+            "note": "missing_day_is_not_zero",
+        }
+    return {
+        "date": key,
+        "status": "observed",
+        "value": payload,
+        "note": None,
+    }
+
+
+def ctr_optimization_decision(impressions: float | int | None) -> dict[str, Any]:
+    """Refuse CTR optimization below 100 impressions on the selected denominator."""
+    imps = float(impressions or 0)
+    if imps < CTR_MIN_IMPRESSIONS:
+        return {
+            "decision": "INSUFFICIENT_EVIDENCE",
+            "impressions": imps,
+            "threshold": CTR_MIN_IMPRESSIONS,
+            "optimize_ctr": False,
+            "data_preserved": True,
+        }
+    return {
+        "decision": "ALLOWED",
+        "impressions": imps,
+        "threshold": CTR_MIN_IMPRESSIONS,
+        "optimize_ctr": True,
+        "data_preserved": True,
+    }
+
+
+def _tokens(text: str) -> set[str]:
+    return {t for t in re.split(r"\W+", (text or "").lower()) if len(t) > 3}
+
+
+def cannibalization_verdict(
+    rows: list[dict[str, Any]],
+    *,
+    reviewed_semantic_overlap: bool = False,
+) -> dict[str, Any]:
+    """Cannibalization requires the same non-brand intent on 2+ URLs.
+
+    Similar words alone are not enough. Repeated evidence plus reviewed
+    semantic overlap are both required.
+    """
+    by_query: dict[str, set[str]] = defaultdict(set)
+    for row in rows:
+        query = (row.get("query") or "").strip()
+        page = (row.get("page") or "").strip()
+        if not query or not page:
+            continue
+        if classify_query(query)["label"] != "non_brand":
+            continue
+        by_query[query].add(page)
+    repeated = {q: sorted(pages) for q, pages in by_query.items() if len(pages) >= 2}
+    if not repeated:
+        return {
+            "status": "NOT_CANNIBALIZATION",
+            "reason": "no_repeated_nonbrand_query_on_two_or_more_urls",
+            "candidates": [],
+        }
+    if not reviewed_semantic_overlap:
+        return {
+            "status": "INSUFFICIENT_EVIDENCE",
+            "reason": "similar_words_alone_are_not_cannibalization_review_required",
+            "candidates": [
+                {"query_hash": redact_query(q), "pages": pages, "url_count": len(pages)}
+                for q, pages in sorted(repeated.items())
+            ],
+        }
+    return {
+        "status": "CANNIBALIZATION",
+        "reason": "same_nonbrand_intent_repeated_and_reviewed",
+        "candidates": [
+            {"query_hash": redact_query(q), "pages": pages, "url_count": len(pages)}
+            for q, pages in sorted(repeated.items())
+        ],
+    }
+
+
+def redact_query(query: str) -> str:
+    digest = hashlib.sha256((query or "").encode("utf-8")).hexdigest()
+    return f"sha256:{digest[:16]}"
+
+
+def git_safe_aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Minimized aggregates with hashed queries. No raw query/PII."""
+    branded_n = 0
+    legacy_n = 0
+    nonbrand_n = 0
+    impressions = 0.0
+    clicks = 0.0
+    hashed: list[dict[str, Any]] = []
+    for row in rows:
+        cls = classify_query(str(row.get("query") or ""))
+        if cls["label"] == "brand":
+            branded_n += 1
+        elif cls["label"] == "legacy_brand":
+            legacy_n += 1
+        else:
+            nonbrand_n += 1
+        impressions += float(row.get("impressions") or 0)
+        clicks += float(row.get("clicks") or 0)
+        hashed.append(
+            {
+                "date": row.get("date"),
+                "query_hash": redact_query(str(row.get("query") or "")),
+                "page": row.get("page"),
+                "country": row.get("country"),
+                "device": row.get("device"),
+                "impressions": row.get("impressions"),
+                "clicks": row.get("clicks"),
+                "ctr": row.get("ctr"),
+                "position": row.get("position"),
+                "brand_class": cls["label"],
+                "brand_class_version": cls["version"],
+            }
+        )
+    return {
+        "schema": "gsc_git_safe_aggregate_v1",
+        "row_count": len(rows),
+        "branded_rows": branded_n,
+        "legacy_brand_rows": legacy_n,
+        "nonbrand_rows": nonbrand_n,
+        "impressions": impressions,
+        "clicks": clicks,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "rows": hashed,
+    }
+
+
+def snapshot_manifest(
+    *,
+    source: str,
+    rows: list[dict[str, Any]],
+    max_date: str | None,
+    latency_ms: int | None,
+    ready_for_product_decisions: bool,
+    synthetic: bool,
+) -> dict[str, Any]:
+    payload = json.dumps(
+        [{"date": r.get("date"), "page": r.get("page"), "country": r.get("country"),
+          "device": r.get("device"), "impressions": r.get("impressions"),
+          "clicks": r.get("clicks")} for r in rows],
+        ensure_ascii=False,
+        sort_keys=True,
+        default=str,
+    )
+    digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    return {
+        "schema": "gsc_snapshot_manifest_v1",
+        "source": source,
+        "synthetic": synthetic,
+        "ready_for_product_decisions": ready_for_product_decisions,
+        "row_count": len(rows),
+        "max_date": max_date,
+        "latency_ms": latency_ms,
+        "content_sha256": digest,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "brand_classification_version": BRAND_CLASSIFICATION_VERSION,
+        "window_policy_version": WINDOW_POLICY_VERSION,
+    }
+
+
+FIXTURE_MANIFEST_REL = Path("data/revops/gsc/fixtures/last_fixture_manifest.json")
+COMMITTED_GSC_SNAPSHOT_RELS = (
+    Path("data/revops/gsc/latest_import.json"),
+    Path("data/revops/gsc/imports/import-2026-07-30.json"),
+    Path("data/revops/gsc/insights_latest.json"),
+    Path("data/ops/gsc-insights.json"),
+    Path("netlify/functions/data/gsc-insights.json"),
+)
+
+
+def is_live_gsc_payload(data: dict[str, Any] | None) -> bool:
+    data = data or {}
+    return (
+        data.get("source") == "search_analytics_api"
+        and data.get("synthetic") is not True
+        and data.get("ready_for_product_decisions") is not False
+    )
+
+
+def stamp_non_live_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
+    """Historical CSV / fixture payloads cannot drive product decisions."""
+    out = dict(payload)
+    if is_live_gsc_payload(out):
+        out["synthetic"] = False
+        out["fixture"] = False
+        out["ready_for_product_decisions"] = True
+        out["live_baseline_invented"] = False
+        return out
+    out["synthetic"] = True
+    out["fixture"] = True
+    out["ready_for_product_decisions"] = False
+    out["live_baseline_invented"] = False
+    if not out.get("source"):
+        out["source"] = out.get("source_dir") or "csv_export"
+    return out
+
+
+def stamp_committed_gsc_snapshots(*, root: Path | None = None) -> dict[str, Any]:
+    """Stamp every committed GSC snapshot. Does not invent metrics."""
+    root = root or ROOT
+    stamped: list[str] = []
+    skipped: list[str] = []
+    for rel in COMMITTED_GSC_SNAPSHOT_RELS:
+        path = root / rel
+        if not path.is_file():
+            skipped.append(str(rel))
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            skipped.append(str(rel))
+            continue
+        stamped_payload = stamp_non_live_snapshot(payload)
+        path.write_text(
+            json.dumps(stamped_payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        stamped.append(str(rel))
+    return {"ok": True, "stamped": stamped, "skipped": skipped}
+
+
+def write_last_fixture_manifest(*, root: Path | None = None) -> dict[str, Any]:
+    """Persist a git-safe fixture manifest via the shipped snapshot_manifest()."""
+    root = root or ROOT
+    fixture = root / "data" / "revops" / "gsc" / "fixtures" / "sample_rows.json"
+    rows = json.loads(fixture.read_text(encoding="utf-8"))
+    if not isinstance(rows, list):
+        raise ValueError("fixture_invalid")
+    max_date = max((str(r.get("date") or "1970-01-01") for r in rows), default=None)
+    manifest = snapshot_manifest(
+        source="fixture",
+        rows=rows,
+        max_date=max_date,
+        latency_ms=0,
+        ready_for_product_decisions=False,
+        synthetic=True,
+    )
+    dest = root / FIXTURE_MANIFEST_REL
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"ok": True, "path": str(FIXTURE_MANIFEST_REL), "manifest": manifest}
+
+
+def credential_presence() -> dict[str, Any]:
+    """Detect GSC credential presence without printing secret content."""
+    sa = os.environ.get("GSC_CREDENTIALS_JSON")
+    secrets = os.environ.get("GSC_CLIENT_SECRETS_JSON")
+    token_path = os.environ.get("GSC_TOKEN_JSON")
+    site = os.environ.get("GSC_SITE_URL", "sc-domain:confenge.com.br")
+    sa_present = bool(sa and sa.strip())
+    oauth_present = bool(secrets and token_path)
+    return {
+        "present": sa_present or oauth_present,
+        "mode": "service_account" if sa_present else ("oauth" if oauth_present else None),
+        "site": site,
+        "env_names": [
+            "GSC_SITE_URL",
+            "GSC_CREDENTIALS_JSON",
+            "GSC_CLIENT_SECRETS_JSON",
+            "GSC_TOKEN_JSON",
+        ],
+        "scope": "https://www.googleapis.com/auth/webmasters.readonly",
+        "printed_secret": False,
+    }
 
 
 def enrich_path(path_or_url: str) -> dict[str, str]:
@@ -193,6 +640,7 @@ def import_csv_dir(src: Path, as_of: str | None = None) -> dict[str, Any]:
                     "ctr": ctr if ctr else (clicks / imps if imps else 0),
                     "position": pos,
                     "branded": branded(q),
+                    "brand_class": classify_query(q),
                     "cluster": enr["cluster"],
                     "offer": enr["offer"],
                     "intent": enr["intent"],
@@ -236,6 +684,11 @@ def import_csv_dir(src: Path, as_of: str | None = None) -> dict[str, Any]:
         "imported_at": datetime.now(timezone.utc).isoformat(),
         "as_of": as_of,
         "source_dir": str(src.relative_to(ROOT)) if src.is_relative_to(ROOT) else str(src),
+        "source": "csv_export",
+        "synthetic": True,
+        "fixture": True,
+        "ready_for_product_decisions": False,
+        "live_baseline_invented": False,
         "queries": query_rows,
         "pages": page_rows,
         "query_count": len(query_rows),
@@ -284,7 +737,17 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
         ctr = float(q.get("ctr") or 0)
         exp = expected_ctr(pos)
         if imps >= 5 and ctr < exp * 0.5:
-            low_ctr.append({**q, "expected_ctr": exp, "gap": exp - ctr})
+            decision = ctr_optimization_decision(imps)
+            low_ctr.append(
+                {
+                    **q,
+                    "expected_ctr": exp,
+                    "gap": exp - ctr,
+                    "ctr_decision": decision["decision"],
+                    "optimize_ctr": decision["optimize_ctr"],
+                    "data_preserved": True,
+                }
+            )
 
     striking_distance = [
         p
@@ -465,6 +928,12 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "Search Console is aggregate. Never claim that query X produced lead Y. "
             "Use cohort analysis (page → leads) only."
         ),
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "brand_classification_version": BRAND_CLASSIFICATION_VERSION,
+        "synthetic": not is_live_gsc_payload(data),
+        "fixture": not is_live_gsc_payload(data),
+        "ready_for_product_decisions": is_live_gsc_payload(data),
+        "live_baseline_invented": False,
         "counts": {
             "queries": len(queries),
             "pages": len(pages),
@@ -510,15 +979,22 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
         "priority_actions": [],
     }
 
-    # Priority actions from data
+    # Priority actions from data — CTR optimization refused below 100 impressions.
     for q in insights["analyses"]["1_high_impressions_low_ctr"][:5]:
+        decision = q.get("ctr_decision") or ctr_optimization_decision(q.get("impressions")).get("decision")
         insights["priority_actions"].append(
             {
                 "type": "ctr_title_meta",
                 "query": q.get("query"),
                 "impressions": q.get("impressions"),
                 "position": q.get("position"),
-                "why": "impressions with CTR below expected curve",
+                "ctr_decision": decision,
+                "optimize_ctr": decision == "ALLOWED",
+                "why": (
+                    "impressions with CTR below expected curve"
+                    if decision == "ALLOWED"
+                    else "INSUFFICIENT_EVIDENCE: denominator below 100 impressions — data preserved, no CTR change"
+                ),
             }
         )
     for p in insights["analyses"]["2_striking_distance_pos_4_20"][:5]:
@@ -636,6 +1112,7 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
     end = date.today() - timedelta(days=3)  # GSC lag
     start = end - timedelta(days=max(days, reprocess_days))
     service = build("searchconsole", "v1", credentials=creds, cache_discovery=False)
+    started = time.monotonic()
 
     dimensions = ["date", "query", "page", "country", "device"]
     rows_out: list[dict[str, Any]] = []
@@ -669,6 +1146,7 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
                     "ctr": row.get("ctr", 0),
                     "position": row.get("position", 0),
                     "branded": branded(q),
+                    "brand_class": classify_query(q),
                     **enr,
                     "source": "search_analytics_api",
                 }
@@ -690,7 +1168,23 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         deduped.append(r)
 
     ensure_dirs()
+    PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
+    latency_ms = int((time.monotonic() - started) * 1000)
+    provider_dates = [r.get("date") for r in deduped if r.get("date")]
+    max_date = max(provider_dates) if provider_dates else end.isoformat()
     last_sync_at = datetime.now(timezone.utc).isoformat()
+    windows = complete_windows(
+        today=date.today(),
+        provider_max_date=date.fromisoformat(str(max_date)),
+    )
+    manifest = snapshot_manifest(
+        source="search_analytics_api",
+        rows=deduped,
+        max_date=str(max_date),
+        latency_ms=latency_ms,
+        ready_for_product_decisions=True,
+        synthetic=False,
+    )
     payload = {
         "imported_at": last_sync_at,
         "as_of": end.isoformat(),
@@ -705,6 +1199,13 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "page_count": 0,
         "pages_fetched": pages_fetched,
         "is_current": True,
+        "max_date": max_date,
+        "latency_ms": latency_ms,
+        "windows": windows,
+        "manifest": manifest,
+        "ready_for_product_decisions": True,
+        "synthetic": False,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "note": "API pull is current. July CSV snapshot is historical only.",
     }
     (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -723,6 +1224,12 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "gaps": gaps,
         "site": site,
         "source": "search_analytics_api",
+        "max_date": max_date,
+        "latency_ms": latency_ms,
+        "ready_for_product_decisions": True,
+        "synthetic": False,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "manifest_sha256": manifest["content_sha256"],
     }
     (DATA / "last_sync.json").write_text(json.dumps(last_sync, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -735,6 +1242,9 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
             json.dumps(last_sync, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
 
+    (PRIVATE_DIR / "latest-manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     return {
         "ok": True,
         "rows": len(deduped),
@@ -742,6 +1252,11 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "last_sync": last_sync_at,
         "gaps": gaps,
         "pages_fetched": pages_fetched,
+        "max_date": max_date,
+        "latency_ms": latency_ms,
+        "ready_for_product_decisions": True,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "manifest_sha256": manifest["content_sha256"],
     }
 
 
@@ -777,6 +1292,9 @@ def sync_incremental(
             "blocked": True,
             "error": "missing_credentials",
             "required_env": result.get("required_env"),
+            "ready_for_product_decisions": False,
+            "synthetic": False,
+            "live_baseline_invented": False,
             "note": "July 2026 CSV snapshot is historical only — not continuous current data.",
             "recorded_at": datetime.now(timezone.utc).isoformat(),
         }
@@ -807,13 +1325,42 @@ def sync_from_fixture() -> dict[str, Any]:
         deduped.append(r)
     as_of = max((r.get("date") or "1970-01-01") for r in deduped) if deduped else date.today().isoformat()
     last_sync_at = datetime.now(timezone.utc).isoformat()
+    started = time.monotonic()
+    classified = []
+    for row in deduped:
+        item = dict(row)
+        item["branded"] = branded(str(row.get("query") or ""))
+        item["brand_class"] = classify_query(str(row.get("query") or ""))
+        classified.append(item)
+    latency_ms = int((time.monotonic() - started) * 1000)
+    windows = complete_windows(
+        today=date.today(),
+        provider_max_date=date.fromisoformat(str(as_of)),
+    )
+    manifest = snapshot_manifest(
+        source="fixture",
+        rows=classified,
+        max_date=str(as_of),
+        latency_ms=latency_ms,
+        ready_for_product_decisions=False,
+        synthetic=True,
+    )
     payload = {
         "imported_at": last_sync_at,
         "as_of": as_of,
         "source": "fixture",
-        "queries": deduped,
-        "query_count": len(deduped),
+        "synthetic": True,
+        "fixture": True,
+        "ready_for_product_decisions": False,
+        "live_baseline_invented": False,
+        "max_date": as_of,
+        "latency_ms": latency_ms,
+        "windows": windows,
+        "manifest": manifest,
+        "queries": classified,
+        "query_count": len(classified),
         "is_current": False,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "note": "Fixture for pipeline validation only — not production GSC data.",
     }
     (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -822,9 +1369,15 @@ def sync_from_fixture() -> dict[str, Any]:
             {
                 "last_sync_at": last_sync_at,
                 "as_of": as_of,
-                "rows": len(deduped),
+                "rows": len(classified),
                 "source": "fixture",
+                "synthetic": True,
+                "ready_for_product_decisions": False,
+                "max_date": as_of,
+                "latency_ms": latency_ms,
                 "gaps": [],
+                "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+                "manifest_sha256": manifest["content_sha256"],
             },
             ensure_ascii=False,
             indent=2,
@@ -832,7 +1385,18 @@ def sync_from_fixture() -> dict[str, Any]:
         + "\n",
         encoding="utf-8",
     )
-    return {"ok": True, "rows": len(deduped), "last_sync": last_sync_at, "source": "fixture"}
+    return {
+        "ok": True,
+        "rows": len(classified),
+        "last_sync": last_sync_at,
+        "source": "fixture",
+        "synthetic": True,
+        "ready_for_product_decisions": False,
+        "max_date": as_of,
+        "latency_ms": latency_ms,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "manifest_sha256": manifest["content_sha256"],
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -847,6 +1411,15 @@ def main(argv: list[str] | None = None) -> int:
     p_api = sub.add_parser("pull-api", help="Pull Search Analytics API (needs credentials)")
     p_api.add_argument("--days", type=int, default=28)
     p_api.add_argument("--reprocess-days", type=int, default=3)
+    p_api.add_argument(
+        "--smoke",
+        action="store_true",
+        help="Print a one-line status without dumping JSON or secrets",
+    )
+
+    p_inspect = sub.add_parser("inspect-urls", help="Read-only URL Inspection (never Indexing API)")
+    p_inspect.add_argument("--url", action="append", default=[], help="canonical URL (repeatable)")
+    p_inspect.add_argument("--smoke", action="store_true")
 
     p_sync = sub.add_parser("sync", help="Incremental GSC sync (scheduled entry)")
     p_sync.add_argument("--days", type=int, default=28)
@@ -861,6 +1434,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Run pipeline against committed fixture (no live API)",
     )
+    p_sync.add_argument(
+        "--smoke",
+        action="store_true",
+        help="Print a one-line status without dumping JSON or secrets",
+    )
 
     p_cand = sub.add_parser(
         "candidates",
@@ -872,6 +1450,11 @@ def main(argv: list[str] | None = None) -> int:
 
     p_dash = sub.add_parser("dashboard", help="Write ops dashboard JSON")
     p_dash.add_argument("--out", type=Path, default=ROOT / "data" / "ops" / "gsc-insights.json")
+
+    sub.add_parser(
+        "stamp-snapshots",
+        help="Mark committed GSC snapshots synthetic/fixture and not product-ready",
+    )
 
     args = parser.parse_args(argv)
 
@@ -916,10 +1499,40 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cmd == "pull-api":
         result = pull_api(args.days, reprocess_days=getattr(args, "reprocess_days", 3))
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        if getattr(args, "smoke", False):
+            print(
+                "GSC_SMOKE ok={ok} error={err} site={site} rows={rows} max_date={max_date} "
+                "ready_for_product_decisions={ready}".format(
+                    ok=str(bool(result.get("ok"))).lower(),
+                    err=result.get("error") or "none",
+                    site=result.get("site") or os.environ.get("GSC_SITE_URL", "sc-domain:confenge.com.br"),
+                    rows=result.get("rows", 0),
+                    max_date=result.get("max_date") or "none",
+                    ready=str(bool(result.get("ready_for_product_decisions"))).lower(),
+                )
+            )
+        else:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
         if result.get("ok"):
             return 0
         return 2  # soft external blocker
+
+    if args.cmd == "inspect-urls":
+        from scripts.discovery.url_inspection import inspect_urls
+
+        urls = list(args.url or [])
+        result = inspect_urls(urls)
+        if getattr(args, "smoke", False):
+            print(
+                "GSC_INSPECT_SMOKE ok={ok} error={err} inspected={n} indexing_api_called=false".format(
+                    ok=str(bool(result.get("ok"))).lower(),
+                    err=result.get("error") or "none",
+                    n=len(result.get("inspections") or []),
+                )
+            )
+        else:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0 if result.get("ok") or result.get("error") == "missing_credentials" else 2
 
     if args.cmd == "sync":
         result = sync_incremental(
@@ -928,7 +1541,20 @@ def main(argv: list[str] | None = None) -> int:
             allow_missing_creds=args.allow_missing_creds,
             use_fixture=args.fixture,
         )
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        if getattr(args, "smoke", False):
+            print(
+                "GSC_SMOKE ok={ok} error={err} source={src} max_date={max_date} "
+                "ready_for_product_decisions={ready} synthetic={syn}".format(
+                    ok=str(bool(result.get("ok"))).lower(),
+                    err=result.get("error") or "none",
+                    src=result.get("source") or "api",
+                    max_date=result.get("max_date") or "none",
+                    ready=str(bool(result.get("ready_for_product_decisions"))).lower(),
+                    syn=str(bool(result.get("synthetic"))).lower(),
+                )
+            )
+        else:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
         if result.get("ok"):
             return 0
         if args.allow_missing_creds and result.get("error") == "missing_credentials":
@@ -969,6 +1595,17 @@ def main(argv: list[str] | None = None) -> int:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps({"ok": True, "out": str(args.out)}))
+        return 0
+
+    if args.cmd == "stamp-snapshots":
+        stamped = stamp_committed_gsc_snapshots()
+        manifest = write_last_fixture_manifest()
+        print(
+            "GSC_STAMP stamped={n} manifest={path} ready_for_product_decisions=false".format(
+                n=len(stamped.get("stamped") or []),
+                path=manifest.get("path"),
+            )
+        )
         return 0
 
     return 1

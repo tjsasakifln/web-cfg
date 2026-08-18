@@ -24,6 +24,20 @@ def main() -> int:
             print("FAIL", name, detail)
             failures.append(name)
 
+    # Committed historical snapshots must stay stamped (no-cred path).
+    for rel in (
+        "data/revops/gsc/latest_import.json",
+        "data/revops/gsc/imports/import-2026-07-30.json",
+        "data/revops/gsc/insights_latest.json",
+    ):
+        payload = json.loads((ROOT / rel).read_text(encoding="utf-8"))
+        ok(f"committed {rel} synthetic", payload.get("synthetic") is True)
+        ok(f"committed {rel} fixture", payload.get("fixture") is True)
+        ok(
+            f"committed {rel} not product",
+            payload.get("ready_for_product_decisions") is False,
+        )
+
     # Real fixture from repo if present
     fixture = ROOT / "seo" / "gsc-2026-07-30"
     if fixture.is_dir():
@@ -83,9 +97,93 @@ def main() -> int:
     ok("api_missing_creds", result.get("ok") is False)
     ok("api_lists_env", "required_env" in result)
 
-    # branded detection
+    # branded detection — versioned classifier (shipped function, not a twin)
     ok("branded_confenge", sdo.branded("confenge consultoria"))
     ok("nonbranded_aditivo", not sdo.branded("aditivo 25% obra pública"))
+    cls_confenge = sdo.classify_query("confenge consultoria")
+    ok("class_confenge_brand", cls_confenge["label"] == "brand")
+    ok("class_versioned", cls_confenge["version"] == sdo.BRAND_CLASSIFICATION_VERSION)
+    ok("class_smartlic_legacy", sdo.classify_query("smartlic avcb")["label"] == "legacy_brand")
+    ok("class_smartlic_not_current_brand", sdo.branded("smartlic avcb") is False)
+    ok("class_tiago_nav", sdo.classify_query("tiago sasaki")["label"] == "brand")
+    ok("class_tiago_jun_nav", sdo.classify_query("tiago jun sasaki")["label"] == "brand")
+    ok("class_tiago_sector_not_brand", sdo.classify_query("aditivo tiago sasaki reequilibrio")["label"] == "non_brand")
+    ok("class_limite_aditivo", sdo.classify_query("limite aditivo")["label"] == "non_brand")
+    ok("class_reequilibrio", sdo.classify_query("reequilibrio")["label"] == "non_brand")
+    ok("class_pavimentacao", sdo.classify_query("pavimentacao")["label"] == "non_brand")
+
+    thin = sdo.ctr_optimization_decision(99)
+    ok("ctr_insufficient", thin["decision"] == "INSUFFICIENT_EVIDENCE")
+    ok("ctr_data_kept", thin["data_preserved"] is True)
+    ok("ctr_no_optimize", thin["optimize_ctr"] is False)
+    ok("ctr_allowed_at_100", sdo.ctr_optimization_decision(100)["decision"] == "ALLOWED")
+
+    today = sdo.date(2026, 8, 18)
+    windows = sdo.complete_windows(today=today, provider_max_date=sdo.date(2026, 8, 17))
+    ok("window_no_mix", windows["mixed_incomplete_periods"] is False)
+    ok("window_today_not_zero", windows["today_missing_is_not_zero"] is True)
+    ok("window_pulse_7", len(windows["pulse"]["days"]) == 7)
+    ok("window_trend_28", len(windows["trend"]["current"]["days"]) == 28)
+    ok("window_prior_28", len(windows["trend"]["prior"]["days"]) == 28)
+    ok("window_excludes_today", today.isoformat() not in windows["pulse"]["days"])
+    ok("limitation_declared", "top rows" in windows["search_analytics_limitation"].lower())
+
+    absent = sdo.day_status("2026-08-18", rows_by_date={})
+    ok("absent_not_zero", absent["status"] == "ABSENT" and absent["value"] is None)
+    ok("absent_note", "not_zero" in (absent.get("note") or ""))
+
+    cannibal = sdo.cannibalization_verdict(
+        [
+            {
+                "query": "limite aditivo 25",
+                "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+            },
+            {
+                "query": "limite aditivo 25",
+                "page": "https://confenge.com.br/aditivos-obras-publicas/",
+            },
+        ],
+        reviewed_semantic_overlap=False,
+    )
+    ok("cannibal_needs_review", cannibal["status"] == "INSUFFICIENT_EVIDENCE")
+
+    safe = sdo.git_safe_aggregate(
+        [{"query": "limite aditivo", "page": "https://confenge.com.br/", "impressions": 3, "clicks": 0}]
+    )
+    blob = json.dumps(safe)
+    ok("redacted_no_raw_query", "limite aditivo" not in blob)
+    ok("redacted_has_hash", "sha256:" in blob)
+
+    fixture = sdo.sync_from_fixture()
+    ok("fixture_ok", fixture.get("ok") is True)
+    ok("fixture_not_product", fixture.get("ready_for_product_decisions") is False)
+    ok("fixture_synthetic", fixture.get("synthetic") is True)
+    ok("fixture_max_date", bool(fixture.get("max_date")))
+    ok("fixture_latency", isinstance(fixture.get("latency_ms"), int))
+
+    unstamped = {"as_of": "2026-07-30", "source_dir": "seo/gsc-2026-07-30", "queries": []}
+    stamped_mem = sdo.stamp_non_live_snapshot(unstamped)
+    ok("stamper_synthetic", stamped_mem.get("synthetic") is True)
+    ok("stamper_fixture", stamped_mem.get("fixture") is True)
+    ok("stamper_not_product", stamped_mem.get("ready_for_product_decisions") is False)
+    ok("stamper_not_invented", stamped_mem.get("live_baseline_invented") is False)
+
+    written = sdo.write_last_fixture_manifest()
+    manifest_path = ROOT / sdo.FIXTURE_MANIFEST_REL
+    ok("manifest_written", manifest_path.is_file() and written.get("ok") is True)
+    on_disk = json.loads(manifest_path.read_text(encoding="utf-8"))
+    rows = json.loads((ROOT / "data/revops/gsc/fixtures/sample_rows.json").read_text(encoding="utf-8"))
+    expected = sdo.snapshot_manifest(
+        source="fixture",
+        rows=rows,
+        max_date=max(str(r.get("date") or "1970-01-01") for r in rows),
+        latency_ms=0,
+        ready_for_product_decisions=False,
+        synthetic=True,
+    )
+    ok("manifest_from_shipped", on_disk["content_sha256"] == expected["content_sha256"])
+    ok("manifest_not_product", on_disk["ready_for_product_decisions"] is False)
+    ok("manifest_synthetic", on_disk["synthetic"] is True)
 
     if failures:
         print("FAILURES", failures)
