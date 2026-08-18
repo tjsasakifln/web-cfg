@@ -1,0 +1,20 @@
+{
+  "events": [
+    {
+      "event": "referral",
+      "landing_page": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "referrer": "https://chatgpt.com/",
+      "source": "chatgpt.com",
+      "medium": "referral",
+      "timestamp": "2026-08-17T12:00:00Z",
+      "correlation_id": "corr_opaque_9f3a"
+    },
+    {
+      "event": "cta",
+      "landing_page": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "cta": "veja-sua-empresa",
+      "timestamp": "2026-08-17T12:01:00Z",
+      "correlation_id": "corr_opaque_9f3a"
+    }
+  ]
+}

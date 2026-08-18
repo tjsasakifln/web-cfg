@@ -1,11 +1,13 @@
 {
   "schema": "discovery_observatory_v1",
-  "version": 1,
-  "generated_at": "2026-08-16T00:00:00Z",
+  "version": 2,
+  "generated_at": "2026-08-17T18:25:58Z",
   "mode": "prepare-only",
-  "approved_asset_id": null,
+  "observation_mode": "live-read-only",
+  "approved_asset_id": "valor-tipico-contratos-pavimentacao",
   "swap_is": "configuration",
   "related_issues": [86, 89, 66, 74, 84, 65],
+  "note": "IndexNow remains prepare-only. The #84 SC Market Answer is registered as LIVE_PROVEN for technical publication only. DISCOVERY_PROVEN / LEAD_PROVEN / REVENUE_PROVEN stay unset until imported observations exist.",
   "assets": [
     {
       "id": "utility-diagnostico-defesa-margem",
@@ -59,6 +61,54 @@
       "freshness": "publication_gate_open",
       "correction_owner": "Tiago Sasaki",
       "correction_link": "https://confenge.com.br/correcoes/",
+      "maintenance_cost": "UNKNOWN"
+    },
+    {
+      "id": "valor-tipico-contratos-pavimentacao",
+      "category": "market_answer",
+      "related_issues": [84],
+      "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "local_path": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+      "index_intent": "INDEX",
+      "noindex": false,
+      "fixture": false,
+      "publicable": true,
+      "technical_status": "LIVE_PROVEN",
+      "discovery_status": "DISCOVERY_UNKNOWN",
+      "lead_status": "UNKNOWN",
+      "revenue_status": "UNKNOWN",
+      "observation_start_at": "2026-08-17T18:25:58Z",
+      "search_intent": "quanto_custa_ticket_contratual",
+      "market": "AEC B2G pavimentação",
+      "geography": {
+        "kind": "uf",
+        "code": "SC",
+        "label": "Santa Catarina"
+      },
+      "cta_family": "veja-sua-empresa",
+      "offer_family": "defesa-margem",
+      "offer_activation": false,
+      "hashes": {
+        "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
+        "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+        "official_export_folded_hash": "9b69e30cb9e696a6c268526b3646f2d1588519849c5024aa46e6ba89ec06c0b6"
+      },
+      "provenance": {
+        "issue": 84,
+        "pr": 113,
+        "commit": "6cc46a1a99f1af4c20778f5fcfa947d4758aaf94",
+        "deploy": "6a8351c558fa180008f11b16",
+        "live_proof_comment": "https://github.com/tjsasakifln/web-cfg/issues/84#issuecomment-5318608229",
+        "approval_token": "OWNER_APPROVAL_MARKET_ANSWER_SC_INDEX_2026_08_17"
+      },
+      "content_version": "public-read-market-answer/1.0",
+      "method_version": "integral-nominal-nearest-rank/1.0",
+      "as_of": "2026-08-17",
+      "freshness": "live_proven_pr113_2026-08-17",
+      "correction_owner": "Tiago Sasaki",
+      "correction_link": "https://confenge.com.br/correcoes/",
+      "owner": "Tiago Sasaki",
+      "source_of_truth": "https://github.com/tjsasakifln/web-cfg/issues/84#issuecomment-5318608229",
       "maintenance_cost": "UNKNOWN"
     },
     {
