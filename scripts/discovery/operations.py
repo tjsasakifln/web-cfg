@@ -25,6 +25,7 @@ from scripts.discovery.observation import (
     REASON_ZERO_ROWS,
     not_provided_metric,
 )
+from scripts.discovery.states import classify_states
 
 MIN_IMPRESSIONS_FOR_STABLE_POSITION = 10
 SEARCH_EVIDENCE_DIMS = ("gclid", "gsc_query", "search_query", "query")
@@ -402,11 +403,26 @@ def operations_for_asset(
         )
     attributed = (outcomes.get("leads_attributed_to_search") or {}).get("value") or 0
     has_revenue = (outcomes.get("revenue") or {}).get("value") is not None
+    probes = sorted(
+        [row for row in rows if row.get("observation_type") == "technical_probe"],
+        key=lambda row: str(row.get("observed_at") or ""),
+    )
+    previous_probe = probes[-2] if len(probes) >= 2 else None
+    states = classify_states(
+        asset=asset,
+        probe=probe,
+        previous_probe=previous_probe,
+        gsc_summary=gsc,
+        gsc_rows=gsc_rows,
+        outcome_rows=outcome_rows,
+        extra_rows=rows,
+    )
     return {
         "technical_status": technical,
         "discovery_status": discovery,
         "lead_status": "LEAD_PROVEN" if attributed else "UNKNOWN",
         "revenue_status": "REVENUE_PROVEN" if has_revenue else "UNKNOWN",
+        "states": states,
         "impressions": gsc["impressions"],
         "queries": gsc["queries"],
         "pages": gsc["pages"],

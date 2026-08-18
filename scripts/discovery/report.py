@@ -23,6 +23,7 @@ from scripts.discovery.schema import (
     UNKNOWN,
     validate_recommendation,
 )
+from scripts.discovery.states import STATE_NAMES
 from scripts.discovery.store import default_store_path, load_observations
 
 MAINTENANCE_COST_DEFAULT = "UNKNOWN"
@@ -381,6 +382,15 @@ def format_report(report: dict[str, Any]) -> str:
         if ops:
             lines.append(f"    technical_status: {ops.get('technical_status')}")
             lines.append(f"    discovery_status: {ops.get('discovery_status')}")
+            states = (ops.get("states") or {}).get("values") or {}
+            if states:
+                lines.append("    states:")
+                for name in STATE_NAMES:
+                    cell = (ops.get("states") or {}).get(name) or {}
+                    lines.append(
+                        f"      {name}: {states.get(name)} source={cell.get('source')} "
+                        f"strength={cell.get('strength')} reason={cell.get('reason')}"
+                    )
             lines.append(_metric_line("impressions", ops.get("impressions")))
             lines.append(_metric_line("queries", ops.get("queries")))
             lines.append(_metric_line("pages", ops.get("pages")))

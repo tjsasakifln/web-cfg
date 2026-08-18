@@ -14,6 +14,28 @@ no IndexNow submission.
 - Technical status (publication): `LIVE_PROVEN` (issue #84, PR #113)
 - Discovery / lead / revenue: remain `UNKNOWN` until a real export is imported
 
+## Named states
+
+The report emits independently checkable `TRUE` / `FALSE` / `UNKNOWN` /
+`BLOCKED` (credential-gated GSC only) values. They are not interchangeable:
+
+| State | TRUE only when | Never inferred from |
+| --- | --- | --- |
+| `HTTP_OK` | terminal public GET is 200/203 | 3xx hop counted as the page |
+| `CRAWL_ALLOWED` | robots.txt fetched and does not block the path | meta `index` |
+| `SITEMAP_LISTED` | URL is a loc in a fetched sitemap | robots Allow |
+| `CANONICAL_VALID` | declared canonical matches the registered URL | HTTP 200 alone |
+| `DISCOVERED` | GSC export/inspection shows the URL is known | HTTP + robots + sitemap, or `site:` |
+| `INDEXED` | explicit GSC index/coverage verdict | `site:`, impressions, or publication |
+| `IMPRESSION` | GSC impressions > 0 (`FALSE` only if proven zero) | missing export |
+| `CLICK` | GSC clicks > 0 (`FALSE` only if proven zero) | missing export |
+| `LEAD` | persisted lead with gclid/query correlation | opaque `lead_id` |
+| `REVENUE` | reconciled commercial/financial event | estimates |
+
+Missing GSC credentials or exports stay `UNKNOWN` or `BLOCKED`. Absence is
+not `FALSE` and is not proof that discovery is absent. `site:` is a weak
+signal and never `INDEXED=TRUE`.
+
 ## Daily routine
 
 1. **Technical probe (GET/HEAD only)**
