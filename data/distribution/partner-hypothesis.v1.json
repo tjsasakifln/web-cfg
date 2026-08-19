@@ -1,0 +1,23 @@
+{
+  "schema_version": "partner-hypothesis-v1",
+  "issue": 66,
+  "decision_state": "VALIDATE",
+  "as_of": "2026-08-19",
+  "auto_send": false,
+  "asset_id": "radar-nacional-obras-publicas",
+  "owner": "tiago.sasaki",
+  "cadence": "manual",
+  "kill_gate": "stop if no mention/link/reuse after the named list is contacted",
+  "partner": {
+    "audience": "imprensa técnica e associações de engenharia consultiva",
+    "incentive": "citação com permalink, método e as_of; sem exclusividade",
+    "referral_path": "UNKNOWN",
+    "attribution": "UNKNOWN"
+  },
+  "outcomes": {
+    "mention": "UNKNOWN",
+    "link": "UNKNOWN",
+    "reuse": "UNKNOWN",
+    "assisted_qco": "UNKNOWN"
+  }
+}
