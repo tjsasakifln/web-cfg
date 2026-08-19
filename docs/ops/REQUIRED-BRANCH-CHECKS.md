@@ -79,6 +79,8 @@ GitHub required contexts remain **`site-ci`** + **`pSEO quality gates`**. The fo
 | `test:lead-store-production` | Production fail-closed store (Story 1.1) |
 | `test:ops-auth` | Ops unauth matrix (Story 1.2) |
 | `test:inbound-gates` | Inbound SEO honesty |
+| `organic:test` | SINAPI snippet + BOFU commercial-bridge evaluators against live HTML |
+| `test:diagnose-margin` | Money-asset SELECT-only consume, UNKNOWN honesty, lead/event path |
 
 **Gates are law:** do not weaken `forbidden_patterns` or design/copy scripts without an ADR note under `_reversa_sdd/adrs/` or `docs/`.
 
