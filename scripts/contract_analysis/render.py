@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.contract_analysis import ASSET_FAMILY, FAMILY_PATH, FAMILY_SLUG, GATE_VERSION, ROUTE_FAMILY
+from scripts.contract_analysis.approval import material_hash
 from scripts.contract_analysis.attribution import attribution_payload
 from scripts.contract_analysis.gate import PublicationDecision
 from scripts.contract_analysis.graph import related_assets
@@ -140,7 +141,25 @@ def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
             if not body:
                 continue
             src = _text(item.get("source_ref") or item.get("url"))
-            src_html = f' <small>Fonte: {e(src)}</small>' if src else ""
+            locator = item.get("locator")
+            if isinstance(locator, dict):
+                locator = "; ".join(f"{k}={v}" for k, v in locator.items() if v)
+            locator_text = _text(locator)
+            sha = _text(item.get("sha256") or item.get("content_hash"))
+            extras = []
+            if src:
+                extras.append(f"Fonte: {e(src)}")
+            if locator_text:
+                extras.append(f"Locator: {e(locator_text)}")
+            if sha:
+                extras.append(f"SHA-256: <code>{e(sha)}</code>")
+            method = _text(item.get("method"))
+            result = _text(item.get("result"))
+            if method:
+                extras.append(f"Método: {e(method)}")
+            if result:
+                extras.append(f"Resultado: {e(result)}")
+            src_html = f' <small>{" · ".join(extras)}</small>' if extras else ""
             lis.append(
                 f'<li data-epistemic="{e(kind)}"><span class="ca-kind">{e(label)}</span> {e(body)}{src_html}</li>'
             )
@@ -164,7 +183,9 @@ def _ficha_html(ficha: dict[str, Any]) -> str:
         ("objeto", "Objeto"),
         ("orgao", "Órgão"),
         ("empresa", "Contratada (fonte pública)"),
-        ("municipio", "Município"),
+        ("municipio", "Município (unidade listada)"),
+        ("municipio_unidade_publicada", "Município publicado na unidade"),
+        ("municipio_objeto_publicado", "Município publicado no objeto"),
         ("uf", "UF"),
         ("valor_label", "Valor publicado"),
         ("pncp_id", "Identificador público"),
@@ -214,6 +235,15 @@ def _sources_html(sources: list[Any]) -> str:
             continue
         link = f'<a href="{e(url)}" rel="noopener noreferrer">{e(label)}</a>' if url else e(label)
         extra = f" · as_of {e(as_of)}" if as_of else ""
+        sha = _text(src.get("sha256") or src.get("content_hash"))
+        locator = src.get("locator")
+        if isinstance(locator, dict):
+            locator = "; ".join(f"{k}={v}" for k, v in locator.items() if v)
+        locator_text = _text(locator)
+        if sha:
+            extra += f" · SHA-256 <code>{e(sha)}</code>"
+        if locator_text:
+            extra += f" · locator {e(locator_text)}"
         lis.append(f"<li>{link}{extra}</li>")
     if not lis:
         return ""
@@ -350,6 +380,9 @@ def build_schema(record: dict[str, Any], decision: PublicationDecision) -> list[
 
 
 def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) -> str:
+    if not record.get("material_hash"):
+        record = dict(record)
+        record["material_hash"] = material_hash(record)
     title = _text(record.get("title")) or "Análise técnica de contrato público"
     description = _text(record.get("meta_description") or record.get("executive_summary"))
     if len(description) > 160:
@@ -380,9 +413,10 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     elif not decision.indexable:
         fixture_banner = (
             '<p class="ca-draft-banner" role="status">'
-            "Rascunho editorial noindex. HUMAN_REVIEW_PENDING. "
+            "Rascunho editorial noindex. HUMAN_REVIEW_PENDING"
+            f"{' · READY_FOR_HUMAN_REVIEW' if _text(record.get('editorial_status')) == 'ready_for_human_review' or _text(getattr(decision, 'human_review_status', '')) == 'READY_FOR_HUMAN_REVIEW' else ''}. "
             "Autoria e revisão humanas ainda não foram confirmadas. "
-            "Esta página não deve ser indexada."
+            "Esta página não deve ser indexada. Sem autorização de INDEX."
             "</p>"
         )
     sections.append(
@@ -477,6 +511,26 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     sections.append(_history_html(_items(record.get("update_history"))))
     sections.append(_related_html(record))
     sections.append(_cta_html(record))
+    hash_rows = []
+    for label, key in (
+        ("material_hash", "material_hash"),
+        ("rendered_hash", "rendered_hash"),
+        ("content_hash", "content_hash"),
+        ("evidence_pack_hash", "evidence_pack_hash"),
+        ("READY root_content_hash", "root_content_hash"),
+        ("producer_commit", "producer_commit"),
+    ):
+        val = _text(record.get(key))
+        if val:
+            hash_rows.append(f"<tr><th scope='row'>{e(label)}</th><td><code>{e(val)}</code></td></tr>")
+    if hash_rows:
+        sections.append(
+            '<section class="section" id="hashes"><h2>Hashes e proveniência</h2>'
+            '<div class="table-wrap"><table class="data-table">'
+            f"<tbody>{''.join(hash_rows)}</tbody></table></div>"
+            "<p>publication_authorization e index_authorization do produtor permanecem "
+            "<code>false</code>. Esta página não autoriza INDEX.</p></section>"
+        )
     sections.append(
         '<section class="section" id="correcao"><h2>Correção e contestação</h2>'
         "<p>Erro material, contestação de fato público ou pedido de correção "

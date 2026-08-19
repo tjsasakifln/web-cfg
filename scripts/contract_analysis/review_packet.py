@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from scripts.contract_analysis import AUTHORIZED_LISTING_SHA256, AUTHORIZED_PDF_SHA256
 from scripts.contract_analysis.approval import material_hash
 from scripts.contract_analysis.gate import PublicationDecision
 from scripts.contract_analysis.quality import HUMAN_REVIEW_PENDING, material_claims, source_claim_matrix_of
@@ -97,7 +98,7 @@ def _review_markdown(
         f"- tese: {thesis}",
         f"- resumo: {record.get('executive_summary')}",
         f"- estado publicação: {decision.state}",
-        f"- review: {HUMAN_REVIEW_PENDING}",
+        f"- review: {decision.human_review_status or HUMAN_REVIEW_PENDING}",
         f"- quality verdict: {quality.get('review_verdict')}",
         f"- score: {quality.get('score')}",
         f"- dimensions: {quality.get('dimensions')}",
@@ -140,10 +141,60 @@ def _review_markdown(
         "",
         f"withdraw_approval({aid!r}) and keep noindex.",
         "",
-        "index-ready drafts only; HUMAN_REVIEW_PENDING; no human approval, authorship or INDEX was simulated.",
+        f"{decision.human_review_status or HUMAN_REVIEW_PENDING}; no human approval, authorship or INDEX was simulated.",
         "",
     ]
     return "\n".join(lines)
+
+
+def founder_decision_required(
+    record: dict[str, Any],
+    decision: PublicationDecision,
+    *,
+    rendered_hash: str,
+    evidence_hash: str,
+) -> str:
+    aid = str(record.get("id") or decision.analysis_id)
+    slug = decision.slug or record.get("slug") or aid
+    preview = f"https://confenge.com.br/analises-contratos-publicos/{slug}/"
+    thesis = str(record.get("thesis") or record.get("insight_singular") or "").strip()
+    risks = record.get("risks") or []
+    if isinstance(risks, list):
+        risk_lines = "\n".join(f"- {item}" for item in risks)
+    else:
+        risk_lines = str(risks)
+    quality = decision.quality if isinstance(getattr(decision, "quality", None), dict) else {}
+    return "\n".join(
+        [
+            f"analysis_id: {aid}",
+            f"preview_url: {preview}",
+            f"publication_state: {decision.state}",
+            f"human_review_status: {decision.human_review_status or HUMAN_REVIEW_PENDING}",
+            f"quality_verdict: {quality.get('review_verdict')}",
+            f"quality_score: {quality.get('score')}",
+            "",
+            "TESE",
+            thesis,
+            "",
+            "RISCOS",
+            risk_lines,
+            "",
+            "HASHES",
+            f"rendered-content.sha256: {rendered_hash}",
+            f"evidence-pack.sha256: {evidence_hash}",
+            f"material_hash: {material_hash(record)}",
+            f"listing_sha256: {AUTHORIZED_LISTING_SHA256}",
+            f"pdf_sha256: {AUTHORIZED_PDF_SHA256}",
+            f"dossier_content_hash: {record.get('content_hash')}",
+            "",
+            "ACTIONS (exactly two; founder only)",
+            "APPROVE_FOR_INDEX_FOLLOWUP",
+            "REJECT_WITH_REASON",
+            "",
+            "Do not call approve_one in this campaign. INDEX is not granted.",
+            "",
+        ]
+    )
 
 
 def emit_review_packet(
@@ -195,6 +246,9 @@ def emit_review_packet(
         "evidence-pack.sha256": evidence_hash + "\n",
         "activation-plan.json": json.dumps(activation_plan(record, decision), ensure_ascii=False, indent=2) + "\n",
         "rollback-plan.json": json.dumps(rollback_plan(record, decision), ensure_ascii=False, indent=2) + "\n",
+        "FOUNDER_DECISION_REQUIRED.txt": founder_decision_required(
+            record, decision, rendered_hash=rendered_hash, evidence_hash=evidence_hash
+        ),
     }
     for name, body in files.items():
         (dest / name).write_text(body, encoding="utf-8")
@@ -211,3 +265,20 @@ def packet_complete(path: Path) -> bool:
     if not path.is_dir():
         return False
     return all((path / name).is_file() for name in PACKET_FILES) and (path / "screenshots").is_dir()
+
+
+def packet_hashes_match_rendered(path: Path, *, rendered_html: str) -> bool:
+    """True only when packet SHA files match the rendered HTML and evidence bytes."""
+    if not packet_complete(path):
+        return False
+    expected_rendered = _sha256_text(rendered_html)
+    stored_rendered = (path / "rendered-content.sha256").read_text(encoding="utf-8").strip()
+    if stored_rendered != expected_rendered:
+        return False
+    review = (path / "REVIEW.md").read_text(encoding="utf-8")
+    if expected_rendered not in review:
+        return False
+    stored_evidence = (path / "evidence-pack.sha256").read_text(encoding="utf-8").strip()
+    if not stored_evidence or len(stored_evidence) != 64:
+        return False
+    return True

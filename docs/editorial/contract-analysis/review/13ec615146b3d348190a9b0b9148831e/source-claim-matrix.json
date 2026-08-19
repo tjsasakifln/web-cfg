@@ -1,0 +1,120 @@
+[
+  {
+    "claim_id": "fact-object-14862788000150-2-000069-2026",
+    "source_id": "14862788000150-2-000069/2026",
+    "locator": {
+      "json_path": "$.objetoContrato"
+    },
+    "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+    "url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-value-14862788000150-2-000069-2026",
+    "source_id": "14862788000150-2-000069/2026",
+    "locator": {
+      "json_path": "$.valorGlobal"
+    },
+    "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+    "url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-period-14862788000150-2-000069-2026",
+    "source_id": "14862788000150-2-000069/2026",
+    "locator": {
+      "json_path": "$.dataVigenciaInicio"
+    },
+    "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+    "url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p14",
+    "source_id": "14862788000150-2-000069/2026:pdf:14",
+    "locator": {
+      "page": 14,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-indice-14862788000150-2-000069-2026-p14",
+    "source_id": "14862788000150-2-000069/2026:pdf:14",
+    "locator": {
+      "page": 14,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-data_base-14862788000150-2-000069-2026-p14",
+    "source_id": "14862788000150-2-000069/2026:pdf:14",
+    "locator": {
+      "page": 14,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p13",
+    "source_id": "14862788000150-2-000069/2026:pdf:13",
+    "locator": {
+      "page": 13,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-data_base-14862788000150-2-000069-2026-p13",
+    "source_id": "14862788000150-2-000069/2026:pdf:13",
+    "locator": {
+      "page": 13,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p15",
+    "source_id": "14862788000150-2-000069/2026:pdf:15",
+    "locator": {
+      "page": 15,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p46",
+    "source_id": "14862788000150-2-000069/2026:pdf:46",
+    "locator": {
+      "page": 46,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  },
+  {
+    "claim_id": "fact-indice-14862788000150-2-000069-2026-p46",
+    "source_id": "14862788000150-2-000069/2026:pdf:46",
+    "locator": {
+      "page": 46,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "class": "FACT"
+  }
+]

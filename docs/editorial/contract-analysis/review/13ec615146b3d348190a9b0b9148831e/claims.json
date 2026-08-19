@@ -1,0 +1,175 @@
+[
+  {
+    "claim_id": "fact-object-14862788000150-2-000069-2026",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026",
+    "locator": {
+      "json_path": "$.objetoContrato"
+    },
+    "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+    "source_refs": [
+      "14862788000150-2-000069/2026"
+    ],
+    "text": "Objeto oficial: Pavimentação em Paralelepípedo de 4.710,00 m² de ruas no município de\nSão Gonçalo do Piauí - PI",
+    "url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+    "source_ref": "14862788000150-2-000069/2026"
+  },
+  {
+    "claim_id": "fact-value-14862788000150-2-000069-2026",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026",
+    "locator": {
+      "json_path": "$.valorGlobal"
+    },
+    "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+    "source_refs": [
+      "14862788000150-2-000069/2026"
+    ],
+    "text": "Valor valor_global publicado: 719177.48 BRL.",
+    "url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+    "source_ref": "14862788000150-2-000069/2026"
+  },
+  {
+    "claim_id": "fact-period-14862788000150-2-000069-2026",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026",
+    "locator": {
+      "json_path": "$.dataVigenciaInicio"
+    },
+    "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+    "source_refs": [
+      "14862788000150-2-000069/2026"
+    ],
+    "text": "Vigência oficial 2026-07-08 a 2027-07-08.",
+    "url": "https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69",
+    "source_ref": "14862788000150-2-000069/2026"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p14",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:14",
+    "locator": {
+      "page": 14,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:14"
+    ],
+    "text": "citação da contratada, os preços contratados poderão sofrer reajuste após o interregno de um ano, contado a partir da data do orçamento a que a proposta se referir, conforme a seguinte fórmula: Sendo: R = Valor do reajuste procurado; V = Val",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:14"
+  },
+  {
+    "claim_id": "fact-indice-14862788000150-2-000069-2026-p14",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:14",
+    "locator": {
+      "page": 14,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:14"
+    ],
+    "text": "12.3. O índice de reajuste empregado na fórmula acima será o Índice Nacional da Construção Civil – Coluna 35, calculado e publicado pela Fundação Getúlio Vargas na revista Conjuntura Econômica, salvo de outro índice for indica",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:14"
+  },
+  {
+    "claim_id": "fact-data_base-14862788000150-2-000069-2026-p14",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:14",
+    "locator": {
+      "page": 14,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:14"
+    ],
+    "text": "terregno de um ano, contado a partir da data do orçamento a que a proposta se referir, conforme a seguinte fórmula: Sendo: R = Valor do reajuste procurado; V = Valor contratual da obra/servi",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:14"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p13",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:13",
+    "locator": {
+      "page": 13,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:13"
+    ],
+    "text": "mais de um ano, os preços da proposta vencedora poderão ser reajustados segundo índice que reflita o incremento de custos setoriais da Contratada, a cada período anual, conforme fixado na cláusula referente a reajustamento de preço, desde que não tenh",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:13"
+  },
+  {
+    "claim_id": "fact-data_base-14862788000150-2-000069-2026-p13",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:13",
+    "locator": {
+      "page": 13,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:13"
+    ],
+    "text": "justáveis no prazo de um ano contado da data do orçamento estimado.",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:13"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p15",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:15",
+    "locator": {
+      "page": 15,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:15"
+    ],
+    "text": "ível à licitante adjudicatária, os preços contratuais serão reajustados pela fórmula estabelecida no subitem precedente, obedecendo-se os seguintes critérios: a) Se os índices aumentarem, prevalecerão aqueles vigentes nas datas em que a etapa das ob",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:15"
+  },
+  {
+    "claim_id": "fact-reajuste-14862788000150-2-000069-2026-p46",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:46",
+    "locator": {
+      "page": 46,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:46"
+    ],
+    "text": "omo objeto do presente contrato. 12.3 ( x ) Para fins de reajuste do valor contratual será utilizado o Índice Nacional da Construção Civil – Coluna 35, calculado e publicado pela Fundação Getúlio Vargas, conforme já indicado na Parte Geral deste",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:46"
+  },
+  {
+    "claim_id": "fact-indice-14862788000150-2-000069-2026-p46",
+    "class": "FACT",
+    "evidence_id": "14862788000150-2-000069/2026:pdf:46",
+    "locator": {
+      "page": 46,
+      "section": "contrato-oficial"
+    },
+    "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+    "source_refs": [
+      "14862788000150-2-000069/2026:pdf:46"
+    ],
+    "text": "Índice Nacional da Construção Civil – Coluna 35, calculado e publicado pela Fundação Getúlio Vargas, conforme já indicado na Parte Geral deste Contrato. ( ) Para fins de reajuste do valor contratual será utilizado",
+    "url": "https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1",
+    "source_ref": "14862788000150-2-000069/2026:pdf:46"
+  }
+]

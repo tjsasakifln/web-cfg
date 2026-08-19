@@ -33,10 +33,15 @@ from scripts.contract_analysis.consume import (
     producer_status_of,
 )
 from scripts.contract_analysis.quality import (
+    DEPTH_REVIEW_REQUIRED,
     HUMAN_REVIEW_PENDING,
     INDEX_READY_VERDICT,
+    P0,
+    READY_FOR_HUMAN_REVIEW,
     evaluate_quality,
 )
+
+HUMAN_REVIEW_ELIGIBLE = frozenset({INDEX_READY_VERDICT, DEPTH_REVIEW_REQUIRED})
 from scripts.contract_analysis.reputation import check_reputational_safety
 from scripts.contract_analysis.taxonomy import check_taxonomy
 from scripts.contract_analysis.unique_content import check_unique_content
@@ -137,7 +142,7 @@ def _as_of_date(record: dict[str, Any]) -> date | None:
 
 
 def _today(today: date | None) -> date:
-    return today or date(2026, 8, 16)
+    return today or date(2026, 8, 18)
 
 
 def _data_state(record: dict[str, Any]) -> str | None:
@@ -551,7 +556,14 @@ def evaluate_publication(
     robots = "index,follow" if indexable else "noindex,nofollow"
     review_rec = quality.review_verdict
     human_status = ""
-    if review_rec == INDEX_READY_VERDICT and state != "PUBLISHABLE_INDEX":
+    official = _source_kind(record) == SOURCE_OFFICIAL_LIVE and not fixture
+    ready_for_review = str(record.get("editorial_status") or "").strip().lower() == "ready_for_human_review"
+    p0 = any(item.severity == P0 for item in quality.findings)
+    eligible = review_rec in HUMAN_REVIEW_ELIGIBLE and not p0
+    if official and ready_for_review and state == "PUBLISHABLE_NOINDEX" and not record.get("approved_for_index"):
+        # Overlay editorial_status cannot grant READY when quality is REJECT or has P0.
+        human_status = READY_FOR_HUMAN_REVIEW if eligible else HUMAN_REVIEW_PENDING
+    elif review_rec == INDEX_READY_VERDICT and state != "PUBLISHABLE_INDEX":
         human_status = HUMAN_REVIEW_PENDING
     return PublicationDecision(
         analysis_id=_text(record.get("id") or record.get("slug") or "unknown"),

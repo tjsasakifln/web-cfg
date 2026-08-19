@@ -37,19 +37,36 @@ def cmd_build(args: argparse.Namespace) -> int:
         written = write_pages(render_pairs, index_count=index_count)
         write_sitemap(render_pairs)
     status = build_status(bundle=bundle, decisions=decisions, written=written)
-    # Review packets only for INDEX_READY_HUMAN_REVIEW. Never approve or activate.
+    # Review packets for official-live READY_FOR_HUMAN_REVIEW. Never approve or activate.
     if not args.report_only:
-        from scripts.contract_analysis.quality import INDEX_READY_VERDICT
+        import hashlib
+
+        from scripts.contract_analysis.approval import material_hash
+        from scripts.contract_analysis.quality import (
+            DEPTH_REVIEW_REQUIRED,
+            INDEX_READY_VERDICT,
+            READY_FOR_HUMAN_REVIEW,
+        )
         from scripts.contract_analysis.review_packet import emit_review_packet
         from scripts.contract_analysis.render import render_analysis_html
 
         packets = []
         for rec, dec in pairs:
-            if dec.review_recommendation != INDEX_READY_VERDICT:
+            official = (
+                dec.human_review_status == READY_FOR_HUMAN_REVIEW
+                or dec.review_recommendation in {INDEX_READY_VERDICT, DEPTH_REVIEW_REQUIRED}
+            )
+            if not official:
                 continue
             if rec.get("is_fixture") or dec.is_fixture:
                 continue
+            rec = dict(rec)
+            rec["material_hash"] = material_hash(rec)
+            ready = bundle.get("handoff") or {}
+            rec["producer_commit"] = rec.get("producer_commit") or ready.get("producer_commit")
+            rec["root_content_hash"] = rec.get("root_content_hash") or ready.get("root_content_hash")
             html = render_analysis_html(rec, dec)
+            rec["rendered_hash"] = hashlib.sha256(html.encode("utf-8")).hexdigest()
             dest = emit_review_packet(rec, dec, rendered_html=html)
             packets.append(str(dest))
         status["review_packets"] = packets

@@ -1,0 +1,24 @@
+[
+  {
+    "kind": "CALCULATION",
+    "class": "CALCULATION",
+    "text": "Valor-base valor_global=719177.48 BRL dividido por 4710.00 m² documentados no objeto: 152.6916 BRL/m².",
+    "calculation_id": "calc-brl-per-square-meter",
+    "method": "contract_value_amount / documented_area_m2",
+    "result": "152.6916",
+    "inputs": {
+      "area_m2": "4710.00",
+      "currency": "BRL",
+      "denominator": "area_m2",
+      "rounding": "quantize_0.0001",
+      "unit": "BRL/m2",
+      "valor_base": "719177.48",
+      "valor_base_semantic": "valor_global"
+    },
+    "source_ref": "14862788000150-2-000069/2026",
+    "locator": {
+      "json_path": "$.valorGlobal / $.objetoContrato area_m2"
+    },
+    "claim_id": "calc-brl-per-square-meter"
+  }
+]

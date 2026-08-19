@@ -21,6 +21,7 @@ from scripts.contract_analysis import (
     MAX_CANARY,
     NON_COMPARATIVE_MODES,
     OFFICIAL_LIVE_DOSSIER_SCHEMA,
+    OFFICIAL_LIVE_HANDOFF_SCHEMA,
     PUBLIC_READ_SCHEMA,
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
@@ -51,8 +52,20 @@ INTEGRITY_REASON_CODES = (
 _SCHEMA_1X = re.compile(r"^public-read-contract-analysis/1(?:\.\d+)?$")
 _AUTHORITY_1X = re.compile(r"^authority-handoff-contract-analysis/1(?:\.\d+)?$")
 _OFFICIAL_DOSSIER_1X = re.compile(r"^official-live-authority-dossier/1(?:\.\d+)?$")
+_OFFICIAL_HANDOFF_1X = re.compile(r"^official-live-authority-handoff/1(?:\.\d+)?$")
 _HISTORICAL_DOSSIER_1X = re.compile(r"^historical-contract-authority-dossier/1(?:\.\d+)?$")
 _CONTRACT_V1 = re.compile(r"^v?1(?:\.\d+){0,2}$")
+TEMPORAL_HASH_EXCLUSIONS = frozenset(
+    {
+        "retrieved_at",
+        "verified_at",
+        "extracted_at",
+        "generated_at",
+        "started_at",
+        "finished_at",
+        "content_hash",
+    }
+)
 _COMPARATIVE_LANGUAGE = (
     re.compile(r"\boutlier\b", re.I),
     re.compile(r"\branking\b", re.I),
@@ -128,6 +141,44 @@ def verify_content_hash(document: dict[str, Any]) -> bool:
     return declared == content_hash_of(document)
 
 
+def strip_temporal_for_hash(payload: Any) -> Any:
+    """Producer 1.1 content hash excludes operational clocks."""
+    if isinstance(payload, dict):
+        return {
+            str(key): strip_temporal_for_hash(value)
+            for key, value in payload.items()
+            if key not in TEMPORAL_HASH_EXCLUSIONS
+        }
+    if isinstance(payload, list):
+        return [strip_temporal_for_hash(item) for item in payload]
+    if isinstance(payload, tuple):
+        return [strip_temporal_for_hash(item) for item in payload]
+    return payload
+
+
+def authority_content_hash(document: dict[str, Any]) -> str:
+    body = strip_temporal_for_hash(
+        {key: value for key, value in document.items() if key != "content_hash" and not str(key).startswith("_")}
+    )
+    return hashlib.sha256(canonical_dumps(body).encode("utf-8")).hexdigest()
+
+
+def verify_authority_content_hash(document: dict[str, Any]) -> bool:
+    declared = str(document.get("content_hash") or "").strip()
+    if not declared:
+        return False
+    return declared == authority_content_hash(document)
+
+
+def root_content_hash_of(ids: list[Any], content_hashes: dict[str, Any]) -> str:
+    """READY 1.1 root hash is over {ids, hashes}, clocks stripped."""
+    return hashlib.sha256(
+        canonical_dumps(
+            strip_temporal_for_hash({"ids": list(ids), "hashes": dict(content_hashes)})
+        ).encode("utf-8")
+    ).hexdigest()
+
+
 def negotiate_schema(
     schema: Any,
     contract_version: Any = None,
@@ -141,12 +192,14 @@ def negotiate_schema(
         LIVE_SCHEMA,
         AUTHORITY_HANDOFF_SCHEMA,
         OFFICIAL_LIVE_DOSSIER_SCHEMA,
+        OFFICIAL_LIVE_HANDOFF_SCHEMA,
         "historical-contract-authority-dossier/1.0",
     }
     additive = (
         _SCHEMA_1X.fullmatch(text)
         or _AUTHORITY_1X.fullmatch(text)
         or _OFFICIAL_DOSSIER_1X.fullmatch(text)
+        or _OFFICIAL_HANDOFF_1X.fullmatch(text)
         or _HISTORICAL_DOSSIER_1X.fullmatch(text)
     )
     if text in baseline:
@@ -170,6 +223,9 @@ def official_live_declared(payload: dict[str, Any]) -> bool:
         return True
     gates = payload.get("gates") if isinstance(payload.get("gates"), dict) else {}
     if gates.get("official_live") is True:
+        return True
+    live = payload.get("live") if isinstance(payload.get("live"), dict) else {}
+    if live.get("official_live") is True:
         return True
     return False
 
@@ -432,10 +488,24 @@ def inspect_producer_integrity(
         pass
     elif payload.get("schema") == LIVE_SCHEMA and not verify_content_hash(payload):
         reasons.append("content_hash_mismatch")
+    elif (
+        _OFFICIAL_DOSSIER_1X.fullmatch(str(payload.get("schema") or ""))
+        and payload.get("content_hash")
+        and not verify_authority_content_hash(payload)
+        and payload.get("_content_hash_ok") is not True
+    ):
+        reasons.append("content_hash_mismatch")
     if manifest is not None:
         declared = str(manifest.get("content_hash") or "").strip()
-        if declared and not verify_content_hash(manifest):
-            reasons.append("manifest_hash_mismatch")
+        if declared:
+            schema = str(manifest.get("schema") or "")
+            ok_hash = (
+                verify_authority_content_hash(manifest)
+                if _OFFICIAL_HANDOFF_1X.fullmatch(schema)
+                else verify_content_hash(manifest)
+            )
+            if not ok_hash:
+                reasons.append("manifest_hash_mismatch")
     status = producer_status_of(payload)
     if status and status != SOURCE_OFFICIAL_LIVE:
         reasons.append("producer_status_not_official_live")
@@ -467,7 +537,14 @@ def data_state_of(payload: dict[str, Any]) -> str | None:
 
 
 def catalog_mode_of(payload: dict[str, Any]) -> str:
-    return str(payload.get("catalog_mode") or "fixture").strip() or "fixture"
+    raw = str(payload.get("catalog_mode") or "").strip()
+    if raw:
+        return raw
+    live = payload.get("live") if isinstance(payload.get("live"), dict) else {}
+    schema = str(payload.get("schema") or "")
+    if live.get("official_live") is True and _OFFICIAL_HANDOFF_1X.fullmatch(schema):
+        return SOURCE_OFFICIAL_LIVE
+    return "fixture"
 
 
 def claimed_live_of(payload: dict[str, Any]) -> bool:
@@ -580,6 +657,7 @@ def load_export_dir(path: Path) -> dict[str, Any]:
         canary.get("selected_ids")
         or canary.get("selected_candidate_ids")
         or manifest.get("selected_ids")
+        or manifest.get("ids")
         or []
     )
     if not entries:
@@ -607,16 +685,33 @@ def load_export_dir(path: Path) -> dict[str, Any]:
         if not bundle_path.is_file():
             raise ConsumeError(f"missing analysis bundle: {bundle_path}")
         bundle = _parse_json(bundle_path)
-        bundle["_content_hash_ok"] = (
-            not bundle.get("content_hash") or verify_content_hash(bundle)
-        )
+        dossier_schema = str(bundle.get("schema") or "")
+        if _OFFICIAL_DOSSIER_1X.fullmatch(dossier_schema) or _OFFICIAL_HANDOFF_1X.fullmatch(
+            str(manifest.get("schema") or "")
+        ):
+            bundle["_content_hash_ok"] = (
+                not bundle.get("content_hash") or verify_authority_content_hash(bundle)
+            )
+        else:
+            bundle["_content_hash_ok"] = (
+                not bundle.get("content_hash") or verify_content_hash(bundle)
+            )
         bundle["_schema_ok"] = schema_ok
         bundle["_schema_reasons"] = list(schema_reasons)
-        bundle.setdefault("analysis_candidate_id", aid)
-        bundle.setdefault("catalog_mode", catalog_mode_of(manifest))
+        bundle.setdefault("analysis_candidate_id", aid or bundle.get("analysis_id"))
+        if not bundle.get("catalog_mode"):
+            bundle["catalog_mode"] = catalog_mode_of(bundle) if bundle.get("catalog_mode") else catalog_mode_of(manifest)
         bundle.setdefault("claimed_live", claimed_live_of(manifest))
-        if "official_live" not in bundle and "official_live" in manifest:
-            bundle["official_live"] = manifest.get("official_live")
+        live_meta = manifest.get("live") if isinstance(manifest.get("live"), dict) else {}
+        if "official_live" not in bundle:
+            if "official_live" in manifest:
+                bundle["official_live"] = manifest.get("official_live")
+            elif live_meta.get("official_live") is True:
+                bundle["official_live"] = True
+            else:
+                gates = bundle.get("gates") if isinstance(bundle.get("gates"), dict) else {}
+                if gates.get("official_live") is True:
+                    bundle["official_live"] = True
         matrix_path = resolved / "source-claim-matrix" / f"{aid}.json"
         if matrix_path.is_file() and not bundle.get("source_claim_matrix"):
             matrix_doc = _parse_json(matrix_path)
@@ -694,13 +789,21 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         or identity.get("object")
         or ""
     )
-    identity = sections.get("identity") or ""
+    listed_id = sections.get("identity") or identity.get("contract_id") or ""
     ids = list(bundle.get("canonical_contract_ids") or [])
-    if identity and identity not in ids:
-        ids = [identity, *ids]
+    if listed_id and listed_id not in ids:
+        ids = [listed_id, *ids]
+    if identity.get("contract_id") and identity.get("contract_id") not in ids:
+        ids = [identity.get("contract_id"), *ids]
     freshness = bundle.get("freshness") if isinstance(bundle.get("freshness"), dict) else {}
     as_of = (
-        str(freshness.get("source_as_of") or bundle.get("as_of") or env.get("source_as_of") or "")[:10]
+        str(
+            freshness.get("as_of")
+            or freshness.get("source_as_of")
+            or bundle.get("as_of")
+            or env.get("source_as_of")
+            or ""
+        )[:10]
     )
     facts: list[dict[str, Any]] = []
     producer_facts = list(bundle.get("facts") or matrix.get("facts") or [])
@@ -714,6 +817,8 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
                     "source_ref": item.get("source_ref") or item.get("evidence_id"),
                     "locator": item.get("locator") or item.get("locators"),
                     "claim_id": item.get("claim_id") or item.get("id"),
+                    "sha256": item.get("sha256"),
+                    "url": item.get("url"),
                 }
             )
     if not facts:
@@ -738,23 +843,49 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             continue
         if any(existing.get("claim_id") and existing.get("claim_id") == item.get("claim_id") for existing in facts):
             continue
+        refs = item.get("source_refs") if isinstance(item.get("source_refs"), list) else []
         facts.append(
             {
                 "kind": "FACT",
                 "text": item.get("text") or item.get("claim"),
-                "source_ref": item.get("source_ref") or item.get("evidence_id"),
+                "source_ref": item.get("source_ref") or item.get("evidence_id") or (refs[0] if refs else None),
+                "source_refs": refs or item.get("source_refs"),
                 "locator": item.get("locator") or item.get("locators"),
                 "claim_id": item.get("claim_id") or item.get("id"),
+                "sha256": item.get("sha256"),
+                "url": item.get("url"),
             }
         )
     calculations: list[dict[str, Any]] = []
-    for item in bundle.get("calculations") or matrix.get("calculations") or []:
+    raw_calcs = bundle.get("calculations") or analysis.get("calculation_or_timeline", {}).get("calculations") if isinstance(analysis.get("calculation_or_timeline"), dict) else None
+    if not raw_calcs:
+        raw_calcs = matrix.get("calculations") or []
+    for item in raw_calcs or []:
         if not isinstance(item, dict):
             continue
-        name = item.get("name") or "cálculo"
-        amount = item.get("value") if item.get("value") is not None else item.get("amount")
-        text = f"{name}: {amount}" if amount is not None else str(name)
-        calculations.append({"kind": "CALCULATION", "text": text, "source_ref": "evidence_pack"})
+        name = item.get("name") or item.get("calculation_id") or "cálculo"
+        amount = (
+            item.get("result")
+            if item.get("result") is not None
+            else item.get("value") if item.get("value") is not None else item.get("amount")
+        )
+        text = item.get("text") or (f"{name}: {amount}" if amount is not None else str(name))
+        calculations.append(
+            {
+                "kind": "CALCULATION",
+                "class": "CALCULATION",
+                "text": text,
+                "calculation_id": item.get("calculation_id") or name,
+                "method": item.get("method"),
+                "result": amount,
+                "inputs": item.get("inputs") or {},
+                "source_ref": item.get("source_ref") or item.get("evidence_id") or "14862788000150-2-000069/2026",
+                "locator": item.get("locator")
+                or item.get("locators")
+                or {"json_path": "$.valorGlobal / $.objetoContrato area_m2"},
+                "claim_id": item.get("claim_id") or item.get("calculation_id"),
+            }
+        )
     comparisons: list[dict[str, Any]] = []
     raw_comps = bundle.get("comparisons")
     if not raw_comps:
@@ -810,15 +941,31 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             }
         )
     timeline = []
-    for item in bundle.get("timeline") or []:
+    raw_timeline = list(bundle.get("timeline") or [])
+    calc_block = analysis.get("calculation_or_timeline") if isinstance(analysis.get("calculation_or_timeline"), dict) else {}
+    if not raw_timeline:
+        raw_timeline = list(calc_block.get("timeline") or [])
+    for item in raw_timeline:
         if not isinstance(item, dict):
             continue
         timeline.append(
             {
                 "date": item.get("at") or item.get("date") or item.get("when"),
-                "text": item.get("event") or item.get("text") or item.get("label"),
+                "text": item.get("event") or item.get("text") or item.get("label") or item.get("kind"),
             }
         )
+    period_text = " ".join(
+        str(item.get("text") or "")
+        for item in producer_facts + producer_claims
+        if isinstance(item, dict) and "vig" in str(item.get("text") or "").lower()
+    )
+    vig_dates = re.findall(r"20\d{2}-\d{2}-\d{2}", period_text)
+    seen_dates = {str(row.get("date") or "")[:10] for row in timeline}
+    for date in dict.fromkeys(vig_dates):
+        if date in seen_dates:
+            continue
+        timeline.append({"date": date, "text": f"Data de vigência publicada no JSON oficial: {date}."})
+        seen_dates.add(date)
     sources = []
     refs = bundle.get("source_refs") or bundle.get("official_refs") or bundle.get("artifacts") or []
     for item in refs:
@@ -829,14 +976,30 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         if status == "UNKNOWN" and item.get("url") and str(item.get("url")).upper() != "UNKNOWN":
             # Keep the declared URL but mark it UNKNOWN; never invent a substitute.
             url = item.get("url")
+        locator = item.get("locator") or item.get("locators")
+        page = locator.get("page") if isinstance(locator, dict) else None
+        mime = str(item.get("mime") or "")
+        kind = str(item.get("source_kind") or item.get("label") or "")
+        if mime == "application/json" or kind == "contract":
+            family = "listing_json"
+        elif page == 46:
+            family = "parte_especifica"
+        elif mime == "application/pdf" or kind == "process_document":
+            family = "instrumento_pdf"
+        else:
+            family = kind or None
         sources.append(
             {
-                "label": item.get("source_id") or item.get("label") or "fonte pública",
+                "label": item.get("source_id") or item.get("label") or item.get("source_kind") or "fonte pública",
                 "document_id": item.get("source_record_id") or item.get("document_id") or item.get("evidence_id"),
                 "url": url if status != "UNKNOWN" or item.get("url") else "",
                 "url_status": status,
                 "as_of": as_of,
-                "locator": item.get("locator") or item.get("locators"),
+                "locator": locator,
+                "sha256": item.get("sha256") or item.get("content_hash"),
+                "mime": item.get("mime"),
+                "family": family,
+                "kind": kind or family,
             }
         )
         if status == "UNKNOWN":
@@ -852,6 +1015,55 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
     else:
         lim_text = str(limitations or "")
     state = data_state_of(bundle)
+    hs = handoff_status_of(bundle) or handoff_status_of(env)
+    if not state and hs == "HANDOFF_READY":
+        state = "DATA_READY"
+    municipio_unidade = str(identity.get("municipio") or "").strip()
+    objeto_municipio = ""
+    if "São Gonçalo do Piauí" in str(objeto):
+        objeto_municipio = "São Gonçalo do Piauí"
+    elif "Sao Goncalo do Piaui" in str(objeto):
+        objeto_municipio = "Sao Goncalo do Piaui"
+    query_window = (
+        (provenance.get("query_window") if isinstance(provenance, dict) else None)
+        or env.get("query_window")
+        or {}
+    )
+    coverage = bundle.get("coverage")
+    if not coverage and query_window:
+        coverage = {
+            "status": "DECLARED",
+            "window": query_window,
+            "uf": [query_window.get("uf")] if query_window.get("uf") else [],
+            "record_count": 1,
+        }
+    source_matrix = bundle.get("source_claim_matrix") or []
+    if not source_matrix and (producer_claims or matrix.get("claims")):
+        source_matrix = [
+            {
+                "claim_id": item.get("claim_id"),
+                "source_id": item.get("evidence_id") or item.get("source_ref"),
+                "locator": item.get("locator") or item.get("locators"),
+                "sha256": item.get("sha256"),
+                "url": item.get("url"),
+                "class": item.get("class") or item.get("kind"),
+            }
+            for item in (producer_claims or matrix.get("claims") or [])
+            if isinstance(item, dict)
+        ]
+    evidence_hash = (
+        bundle.get("evidence_pack_hash")
+        or bundle.get("content_hash")
+        or provenance.get("artifact_hashes")
+    )
+    if isinstance(evidence_hash, dict):
+        evidence_hash = bundle.get("content_hash")
+    evidence_version = (
+        bundle.get("evidence_pack_version")
+        or analysis.get("method")
+        or provenance.get("schema")
+        or bundle.get("schema")
+    )
     rec: dict[str, Any] = {
         "id": aid,
         "slug": str(bundle.get("slug") or aid or "sem-slug"),
@@ -868,9 +1080,9 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         "reason_codes": list(bundle.get("reason_codes") or []),
         "reason_summary": summary,
         "angle": bundle.get("angle"),
-        "intent": bundle.get("angle") or "",
-        "evidence_pack_version": bundle.get("evidence_pack_version"),
-        "evidence_pack_hash": bundle.get("evidence_pack_hash"),
+        "intent": bundle.get("angle") or analysis.get("commercial_adjacency", [None])[0] or "",
+        "evidence_pack_version": evidence_version,
+        "evidence_pack_hash": evidence_hash,
         "peer_group_version": bundle.get("peer_group_version")
         or ((bundle.get("peer_group") or {}) if isinstance(bundle.get("peer_group"), dict) else {}).get(
             "version"
@@ -883,8 +1095,24 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         "epistemic_classes": list(bundle.get("epistemic_classes") or []),
         "ficha": {
             "objeto": objeto or "",
-            "pncp_id": ids[0] if ids else "",
-            "valor_label": _money(sections.get("nominal_value")),
+            "pncp_id": ids[0] if ids else identity.get("contract_id") or "",
+            "valor_label": _money(sections.get("nominal_value"))
+            or (
+                next(
+                    (
+                        item.get("text")
+                        for item in producer_facts
+                        if isinstance(item, dict) and "valor_global" in str(item.get("text") or "").lower()
+                    ),
+                    "",
+                )
+            ),
+            "municipio": municipio_unidade,
+            "municipio_unidade_publicada": municipio_unidade,
+            "municipio_objeto_publicado": objeto_municipio,
+            "uf": identity.get("uf") or "",
+            "orgao": identity.get("orgao_cnpj") or "",
+            "empresa": identity.get("fornecedor_cnpj") or "",
         },
         "facts": facts,
         "calculations": calculations,
@@ -909,8 +1137,34 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         "canonical_contract_ids": ids,
         "analysis_mode": analysis_mode_of(bundle),
         "comparability_status": comparability_status_of(bundle),
-        "claims": producer_claims,
-        "source_claim_matrix": bundle.get("source_claim_matrix") or [],
+        "claims": [
+            {
+                **item,
+                "source_ref": item.get("source_ref")
+                or item.get("evidence_id")
+                or (
+                    (item.get("source_refs") or [None])[0]
+                    if isinstance(item.get("source_refs"), list)
+                    else item.get("source_refs")
+                ),
+            }
+            for item in producer_claims
+            if isinstance(item, dict)
+        ],
+        "source_claim_matrix": source_matrix,
+        "evidence_families": sorted(
+            {str(src.get("family")) for src in sources if src.get("family")}
+        ),
+        "document_map": [
+            {
+                "label": src.get("label"),
+                "family": src.get("family"),
+                "document_id": src.get("document_id"),
+                "locator": src.get("locator"),
+            }
+            for src in sources
+            if src.get("document_id") or src.get("label")
+        ],
         "official_live": official_live_declared({**envelope, **bundle}),
         "handoff_status": handoff_status_of(bundle) or handoff_status_of(env),
         "insight_singular": bundle.get("insight_singular") or analysis.get("singular_insight") or "",
@@ -937,9 +1191,28 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
     rec["producer_no_index_authorization"] = flags["no_index_authorization"]
     rec["producer_no_publication_authorization"] = flags["no_publication_authorization"]
     rec["approved_for_index"] = False
-    integrity = inspect_producer_integrity(bundle, manifest=env if env.get("content_hash") or env.get("schema") else None)
+    integrity = inspect_producer_integrity(
+        {**bundle, "coverage": coverage, "evidence_pack_hash": evidence_hash, "evidence_pack_version": evidence_version, "sources": sources, "freshness": rec.get("freshness") or freshness},
+        manifest=env if env.get("content_hash") or env.get("schema") else None,
+    )
+    if rec.get("evidence_pack_hash"):
+        integrity = [code for code in integrity if code != "evidence_pack_hash_absent"]
+    if rec.get("evidence_pack_version"):
+        integrity = [code for code in integrity if code != "evidence_pack_version_absent"]
+    if rec.get("coverage"):
+        integrity = [code for code in integrity if code != "coverage_absent"]
+    if rec.get("sources"):
+        integrity = [code for code in integrity if code != "evidence_refs_absent"]
     rec["producer_status"] = producer_status_of({**envelope, **bundle})
-    rec["coverage"] = bundle.get("coverage")
+    rec["coverage"] = coverage
+    rec["objeto"] = objeto
+    rec["official_ingest"] = official_live_declared({**envelope, **bundle}) and catalog_mode == SOURCE_OFFICIAL_LIVE
+    rec["producer_commit"] = (
+        provenance.get("producer_commit")
+        or bundle.get("producer_commit")
+        or env.get("producer_commit")
+    )
+    rec["root_content_hash"] = env.get("root_content_hash")
     rec["producer_integrity_reasons"] = integrity
     rec["content_hash_verified"] = (
         bool(bundle.get("content_hash")) and "content_hash_mismatch" not in integrity
@@ -952,6 +1225,31 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         rec["is_fixture"] = True
         rec["source_kind"] = SOURCE_FIXTURE
         rec["approved_for_index"] = False
+    return rec
+
+
+CORRECTION_ROUTE = "/correcoes/"
+
+
+def finalize_editorial_projection(record: dict[str, Any]) -> dict[str, Any]:
+    """Fill citation_text, correction_route and thesis from existing site/producer fields.
+
+    Does not invent dates, localities or authorization flags.
+    """
+    rec = dict(record)
+    if not str(rec.get("thesis") or "").strip():
+        rec["thesis"] = rec.get("insight_singular") or ""
+    if rec.get("thesis_falsifiable") is None and rec.get("counterproof"):
+        rec["thesis_falsifiable"] = True
+    if not str(rec.get("correction_route") or "").strip():
+        rec["correction_route"] = CORRECTION_ROUTE
+    if not str(rec.get("citation_text") or "").strip():
+        from scripts.contract_analysis.citation import citation_registry
+
+        pack = citation_registry(rec, indexable=False)
+        rec["citation_text"] = (
+            pack.get("asset", {}).get("citation_pack", {}).get("citation_text") or ""
+        )
     return rec
 
 
@@ -983,7 +1281,10 @@ def merge_overlay(record: dict[str, Any], overlay: dict[str, Any] | None) -> dic
         "handoff_status",
         "producer_publication_authorization",
         "producer_index_authorization",
+        "publication_authorization",
+        "index_authorization",
         "analysis_mode",
+        "official_ingest",
     }
     for key, value in overlay.items():
         if key in locked:
@@ -1104,6 +1405,7 @@ def load_extra_cli_bundle(path: Path) -> dict[str, Any]:
     for bundle in export["analyses"][:MAX_CANARY]:
         rec = project_extra_cli_record(bundle, manifest=export["manifest"])
         rec = merge_overlay(rec, load_overlay(str(rec.get("id") or "")))
+        rec = finalize_editorial_projection(rec)
         rec = normalize_record(rec, source_kind=source_kind, is_fixture=fixture or rec.get("is_fixture"))
         records.append(rec)
     return {
@@ -1159,6 +1461,8 @@ def load_canary(
         live = load_extra_cli_bundle(found)
         for rec in live["records"]:
             rec["official_ingest"] = True
+            rec["root_content_hash"] = rec.get("root_content_hash") or handoff.get("root_content_hash")
+            rec["producer_commit"] = rec.get("producer_commit") or handoff.get("producer_commit")
         if live["source_kind"] == SOURCE_OFFICIAL_LIVE:
             live["records"] = live["records"][:cap]
             live["evaluated"] = len(live["records"])

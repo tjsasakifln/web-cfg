@@ -4,7 +4,10 @@ Fail-closed consumer of extra-cli `public-read-contract-analysis/1.x` and
 `authority-handoff-contract-analysis/1.0` (additive `1.1`), plus the
 publication gate. Official ingest only from
 `${CONFENGE_HANDOFF_DIR:-$HOME/.local/share/confenge/handoffs}/contract-analysis/official-live-01/`
-when `READY.json` + `SHA256SUMS` + manifest/root hashes verify.
+when `READY.json` + `SHA256SUMS.txt` (or `SHA256SUMS`) + manifest/root
+hashes verify. Producer 1.1 uses `manifest_sha256` and
+`root_content_hash` over `{ids, hashes}`; 1.0 packs keep
+`manifest_sha` / `manifest.content_hash`.
 
 ```bash
 python3 -m scripts.contract_analysis build

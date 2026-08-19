@@ -1,0 +1,15 @@
+{
+  "dossier_count": 1,
+  "generated_at": "2026-08-18T12:38:35Z",
+  "ids": [
+    "13ec615146b3d348190a9b0b9148831e"
+  ],
+  "manifest_sha256": "75684cd66f95bffb0df4867530d0b86129e47e1bbee0908e889cdba5eb28b586",
+  "producer_branch": "goal/authority-singularity-20260818",
+  "producer_commit": "5984750c14a4653bf64e16ba7547063f3e1cdab9",
+  "producer_repo": "tjsasakifln/extra-cli",
+  "root_content_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+  "schema": "official-live-authority-handoff/1.1",
+  "status": "READY",
+  "version": "1.1"
+}

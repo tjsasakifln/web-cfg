@@ -23,6 +23,7 @@ QUALITY_VERSION = "authority-content-quality/1.0"
 INDEX_READY_VERDICT = "INDEX_READY_HUMAN_REVIEW"
 DEPTH_REVIEW_REQUIRED = "DEPTH_REVIEW_REQUIRED"
 HUMAN_REVIEW_PENDING = "HUMAN_REVIEW_PENDING"
+READY_FOR_HUMAN_REVIEW = "READY_FOR_HUMAN_REVIEW"
 MIN_SCORE = 90
 MIN_DIMENSION = 80
 MIN_NON_BOILERPLATE_WORDS = 1500
@@ -246,11 +247,38 @@ def boilerplate_ratio(record: dict[str, Any], extra: str = "") -> float:
     return removed / len(raw)
 
 
+def _source_id_of(claim: dict[str, Any]) -> str:
+    """Official claims carry source_refs + evidence_id; fixtures use source_ref."""
+    for key in ("source_ref", "source_id", "evidence_id"):
+        text = _text(claim.get(key))
+        if text:
+            return text
+    refs = claim.get("source_refs")
+    if isinstance(refs, (list, tuple)):
+        for item in refs:
+            text = _text(item)
+            if text:
+                return text
+    return _text(refs)
+
+
+def _locator_present(claim: dict[str, Any]) -> bool:
+    from scripts.contract_analysis.consume import claim_has_locator
+
+    return claim_has_locator(claim)
+
+
 def material_claims(record: dict[str, Any]) -> list[dict[str, Any]]:
     claims = [item for item in _dicts(record.get("claims")) if _text(item.get("text") or item.get("body"))]
     if claims:
-        return claims
-    out: list[dict[str, Any]] = []
+        out: list[dict[str, Any]] = []
+        for item in claims:
+            row = dict(item)
+            if not _text(row.get("source_ref")):
+                row["source_ref"] = _source_id_of(row)
+            out.append(row)
+        return out
+    out = []
     for key in ("facts", "calculations", "interpretation", "findings"):
         for item in _dicts(record.get(key)):
             body = _text(item.get("text"))
@@ -261,7 +289,7 @@ def material_claims(record: dict[str, Any]) -> list[dict[str, Any]]:
                     "claim_id": item.get("claim_id") or item.get("id") or f"{key}-{len(out)+1}",
                     "text": body,
                     "kind": item.get("kind") or ("FACT" if key == "facts" else key.upper()),
-                    "source_ref": item.get("source_ref") or item.get("source_id"),
+                    "source_ref": _source_id_of(item) or item.get("source_ref") or item.get("source_id"),
                     "locator": item.get("locator") or item.get("locator_path"),
                     "unit": item.get("unit"),
                     "period": item.get("period"),
@@ -277,8 +305,8 @@ def source_claim_matrix_of(record: dict[str, Any]) -> list[dict[str, Any]]:
         return matrix
     derived: list[dict[str, Any]] = []
     for claim in material_claims(record):
-        source = _text(claim.get("source_ref") or claim.get("source_id"))
-        locator = _text(claim.get("locator"))
+        source = _source_id_of(claim)
+        locator = claim.get("locator") or claim.get("locators")
         if source or locator:
             derived.append(
                 {
@@ -291,9 +319,7 @@ def source_claim_matrix_of(record: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _has_locator(claim: dict[str, Any]) -> bool:
-    return bool(_text(claim.get("source_ref") or claim.get("source_id"))) and bool(
-        _text(claim.get("locator"))
-    )
+    return bool(_source_id_of(claim)) and _locator_present(claim)
 
 
 def _kind(item: dict[str, Any]) -> str:
