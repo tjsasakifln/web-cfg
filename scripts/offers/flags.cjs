@@ -10,6 +10,10 @@ const DEFAULTS = Object.freeze({
   production_checkout_enabled: false,
   production_webhook_enabled: false,
   real_money_mutation_enabled: false,
+  diag_checkout_enabled: false,
+  webhook_apply_enabled: false,
+  onboarding_enabled: false,
+  legal_authority_hash: "",
 });
 
 function loadFileFlags() {
@@ -54,6 +58,22 @@ function loadFlags(env = process.env) {
       file.real_money_mutation_enabled === true ? true : DEFAULTS.real_money_mutation_enabled,
       env,
     ),
+    diag_checkout_enabled: boolFromEnv(
+      "CONFENGE_DIAG_CHECKOUT_ENABLED",
+      file.diag_checkout_enabled === true ? true : DEFAULTS.diag_checkout_enabled,
+      env,
+    ),
+    webhook_apply_enabled: boolFromEnv(
+      "CONFENGE_WEBHOOK_APPLY",
+      file.webhook_apply_enabled === true ? true : DEFAULTS.webhook_apply_enabled,
+      env,
+    ),
+    onboarding_enabled: boolFromEnv(
+      "CONFENGE_ONBOARDING_ENABLED",
+      file.onboarding_enabled === true ? true : DEFAULTS.onboarding_enabled,
+      env,
+    ),
+    legal_authority_hash: String(env.CONFENGE_LEGAL_AUTHORITY_HASH || file.legal_authority_hash || DEFAULTS.legal_authority_hash).trim(),
   };
 }
 
