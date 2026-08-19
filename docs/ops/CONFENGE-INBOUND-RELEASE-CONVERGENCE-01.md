@@ -379,7 +379,7 @@ Nenhum e-mail foi enviado ou agendado. Nenhum anúncio foi criado. Nenhum gasto 
 
 ---
 
-## 23. Revalidação pós-relatório (2026-08-19 18:xx -03)
+## 23. Revalidação pós-relatório (2026-08-19 19:01 -03)
 
 Production tip after this report first landed: `9f506f7f6711a36043cb7e90111f86c5e99c68f8` (docs-only follow-up; public HTML of the increment unchanged). Two further GETs of the five URLs + three noindex gates still PASS. Issue **#126** was auto-closed as completed and **reopened** — DoD remains 14/28d GSC. Issues #128, #60, #127 stayed open. PRs #129/#130/#131/#137 stay closed SUPERSEDED; #148 stays merged. Adjacent PRs #92/#93/#132–#136/#138–#147 remain HOLD.
 
