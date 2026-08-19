@@ -26,6 +26,7 @@
     "test:inbound-handoff": "node scripts/site/test_inbound_handoff.mjs",
     "test:conversion": "node tests/conversion/test_conversion.mjs && node tests/offers/test_offers.mjs",
     "test:offers": "node tests/offers/test_offers.mjs",
+    "test:asaas-production": "node tests/offers/asaas-production/test_asaas_production.mjs",
     "offers:render": "node scripts/offers/render.cjs",
     "test:knowledge-funnel": "python3 -m pytest tests/knowledge_funnel -q",
     "knowledge-funnel:walk": "python3 -m scripts.knowledge_funnel walk",

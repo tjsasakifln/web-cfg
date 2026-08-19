@@ -1,0 +1,47 @@
+FOUNDER_ACTION_REQUIRED_ASAAS_PRODUCTION
+Campaign: CONFENGE-LEGAL-RISK-ACCEPTANCE-ASAAS-PRODUCTION-01
+Date: 2026-08-18 America/Sao_Paulo
+
+Production Asaas credentials are not present in this environment.
+Do not invent customers, acceptances, checkouts or payments.
+
+Secrets to configure (names only — never commit values):
+
+  ASAAS_PRODUCTION_API_KEY
+    Asaas production API key. Must start with $aact_prod_
+    Must NOT be the Sandbox key ($aact_hmlg_ / test_).
+    Set in Netlify site env (production context only). Header used: access_token.
+
+  ASAAS_PRODUCTION_WEBHOOK_TOKEN
+    Dedicated webhook auth token. Must differ from ASAAS_PRODUCTION_API_KEY.
+    Configure the same value in Asaas dashboard as the webhook access token
+    (header asaas-access-token).
+
+  CONFENGE_LEGAL_AUTHORITY_HASH
+    Exact value:
+    sha256:5fd69a314d6b6aab74ba2ab87ae5e90d12ade6360193a18275c9c3377e1fd778
+
+UI / flag activation order (keep OFF until the previous step is done):
+
+  1. Merge Governance founder-approved-v1 and pin the hash above.
+  2. Deploy Warmbly consumer (auto-send remains false).
+  3. Deploy web-cfg with all flags still false / ASAAS_MODE=disabled.
+  4. In Netlify, set the three secrets above. Do not set Sandbox keys in production.
+  5. In Asaas production dashboard:
+       URL: https://confenge.com.br/.netlify/functions/asaas-webhook
+       Auth: asaas-access-token = ASAAS_PRODUCTION_WEBHOOK_TOKEN
+       Events: Checkout + Payment (at least CREATED, CONFIRMED, RECEIVED, OVERDUE, REFUNDED, CHARGEBACK_*).
+  6. Set CONFENGE_PRODUCTION_WEBHOOK=true and CONFENGE_WEBHOOK_APPLY=true.
+  7. Set ASAAS_MODE=production
+     CONFENGE_PRODUCTION_CHECKOUT=true
+     CONFENGE_REAL_MONEY=true
+     CONFENGE_DIAG_CHECKOUT_ENABLED=true
+     CONFENGE_OFFER_CATALOG_PUBLIC=true
+  8. Leave recurring offers, automated refund and automated NFS-e OFF.
+  9. Probe: GET /diagnostico-b2g-expansao/ and POST checkout without acceptance must fail closed.
+ 10. Rollback: set CONFENGE_DIAG_CHECKOUT_ENABLED=false and/or CONFENGE_OFFER_CATALOG_PUBLIC=false.
+     Keep webhook receive on for existing objects. Do not auto-cancel or refund.
+
+Honest state until a real B2B client accepts: LIVE_READY_AWAITING_FIRST_REAL_B2B_ACCEPTANCE
+is only valid after secrets + flags above. Until then:
+BLOCKED_SINGLE_EXTERNAL_ACTION_ASAAS_CREDENTIAL

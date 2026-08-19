@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Diagnóstico B2G de Expansão  -  R$ 8.000 | CONFENGE</title>
+<meta name="robots" content="index,follow"/>
+<meta name="description" content="Diagnóstico B2G one-off da CONFENGE. R$ 8.000, pagamento único. Obrigação de meio. Não é serviço jurídico."/>
+<link rel="canonical" href="https://confenge.com.br/diagnostico-b2g-expansao/"/>
+<link rel="stylesheet" href="/styles.css"/>
+<link rel="stylesheet" href="/styles-tools.css"/>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+<div class="container header-inner">
+<a class="brand" href="/" aria-label="CONFENGE, página inicial"><img alt="CONFENGE" src="/assets/logo-confenge.png" width="800" height="208"/></a>
+</div>
+</header>
+<main id="conteudo" class="container" style="max-width:46rem;padding:1.5rem 1rem 4rem;">
+<p class="eyebrow">CONFENGE · CONTRATAR</p>
+<h1>Diagnóstico B2G de Expansão</h1>
+<p class="content-lead">R$ 8.000, pagamento único. Compromisso contratual: até 15 dias úteis após aceite, confirmação financeira, insumos completos e kickoff ou dispensa escrita. Normalmente 10 a 15 dias úteis.</p>
+
+<p><strong>Prestador:</strong> CONFENGE SERVICOS DE DESENHOS TECNICOS LTDA, CNPJ 52.407.089/0001-09. Marca pública: CONFENGE.</p>
+
+<h2>O que está incluído</h2>
+<ul>
+<li>mapa de compradores</li>
+<li>até 15 concorrentes</li>
+<li>painel de preços públicos</li>
+<li>contratos com indício de expiração</li>
+<li>avisos/editais triados</li>
+<li>PDF executivo</li>
+<li>planilhas</li>
+<li>kickoff</li>
+<li>apresentação final</li>
+</ul>
+
+<h2>Exclusões</h2>
+<p>Não inclui representação jurídica, recurso, protocolo, assinatura, influência, execução de obra, ART/RRT, orçamento completo do zero, garantia financeira nem quadro dedicado.</p>
+
+<h2>Limitações</h2>
+<p>É obrigação de meio. Não há garantia de resultado, vitória, adjudicação, economia ou receita. <strong>Não é serviço jurídico.</strong> Não substitui advogado nem contador. O cliente valida os entregáveis antes de qualquer decisão.</p>
+
+<h2>Cancelamento e reembolso</h2>
+<p>Política por marcos comprováveis (M0-M5). Antes de kickoff e de trabalho material: reembolso integral. Depois, o valor devido é o recebido menos o trabalho comprovado e custos de terceiro preaprovados. Cobrança indevida ou duplicada é devolvida após conciliação. Não há estorno automático.</p>
+
+<p>Canal comercial, suporte e privacidade: <a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a> · WhatsApp <a href="https://wa.me/5548988344559">+55 48 98834-4559</a>.</p>
+<p><a href="/comercial/termos-diagnostico-b2g/">Termos B2B</a> · <a href="/comercial/privacidade-leads/">Aviso de privacidade</a></p>
+
+<p>Estes termos foram aprovados pelo founder para produção limitada. Não houve revisão profissional de advogado. A revisão profissional será contratada após a primeira receita recebida.</p>
+
+<form id="contratar" method="post" action="/.netlify/functions/offer-terms-accept" style="margin-top:2rem;display:grid;gap:0.75rem;">
+<h2>Contratar Diagnóstico B2G  -  R$ 8.000</h2>
+<label>CNPJ <input name="cnpj" required inputmode="numeric" autocomplete="off"/></label>
+<label>Nome do representante <input name="representative_name" required autocomplete="name"/></label>
+<label>Cargo <input name="representative_role" required/></label>
+<label>E-mail profissional <input name="email" type="email" required autocomplete="email"/></label>
+<label><input type="checkbox" name="li_e_aceito_os_termos" value="1"/> li e aceito os termos</label>
+<label><input type="checkbox" name="declaro_possuir_poderes_para_contratar" value="1"/> declaro possuir poderes para contratar</label>
+<label><input type="checkbox" name="reconheco_obrigacao_de_meio" value="1"/> reconheço que o serviço é obrigação de meio</label>
+<label><input type="checkbox" name="confirmo_contratacao_b2b_atividade_economica" value="1"/> confirmo contratação B2B para atividade econômica</label>
+<button class="button button-primary" type="submit">Contratar Diagnóstico B2G  -  R$ 8.000</button>
+<p id="status" role="status"></p>
+</form>
+<p>Não há link genérico de pagamento. O checkout hospedado do Asaas só é criado depois do aceite eletrônico.</p>
+</main>
+<footer class="site-footer"><div class="container footer-bottom"><span>© 2026 CONFENGE.</span></div></footer>
+<script>
+(function () {
+  var form = document.getElementById("contratar");
+  var status = document.getElementById("status");
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    status.textContent = "Enviando aceite…";
+    var data = new FormData(form);
+    var body = {
+      cnpj: data.get("cnpj"),
+      representative_name: data.get("representative_name"),
+      representative_role: data.get("representative_role"),
+      email: data.get("email"),
+      offer_id: "CFG-DIAG-EXP-v1",
+      declarations: {
+        li_e_aceito_os_termos: data.get("li_e_aceito_os_termos") === "1",
+        declaro_possuir_poderes_para_contratar: data.get("declaro_possuir_poderes_para_contratar") === "1",
+        reconheco_obrigacao_de_meio: data.get("reconheco_obrigacao_de_meio") === "1",
+        confirmo_contratacao_b2b_atividade_economica: data.get("confirmo_contratacao_b2b_atividade_economica") === "1"
+      }
+    };
+    fetch("/.netlify/functions/offer-terms-accept", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
+      .then(function (out) {
+        if (!out.j.ok) {
+          status.textContent = "Não foi possível seguir. Se a elegibilidade for incerta, o pedido vai para revisão manual.";
+          return;
+        }
+        status.textContent = "Confirme o e-mail (OTP) para criar o checkout individual.";
+      })
+      .catch(function () { status.textContent = "Falha de rede. Tente de novo."; });
+  });
+})();
+</script>
+</body>
+</html>

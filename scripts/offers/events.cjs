@@ -16,6 +16,7 @@ const TYPES = Object.freeze({
   CHECKOUT_CREATED: "checkout_created",
   PAYMENT_CREATED: "payment_created",
   PAYMENT_PENDING: "payment_pending",
+  PAYMENT_CONFIRMED: "payment_confirmed",
   PAYMENT_RECEIVED: "payment_received",
   PAYMENT_OVERDUE: "payment_overdue",
   PAYMENT_REFUNDED: "payment_refunded",
@@ -27,23 +28,35 @@ const TYPES = Object.freeze({
   COMMERCIAL_EXCEPTION: "commercial_exception",
 });
 
-const FINANCIAL_CONFIRMED = new Set(["PAYMENT_RECEIVED", "received", "CONFIRMED", "confirmed"]);
+const FINANCIAL_CONFIRMED = new Set(["PAYMENT_CONFIRMED", "PAYMENT_RECEIVED", "confirmed", "received"]);
 
 function normalizeStatus(raw) {
   const text = String(raw || "").trim().toUpperCase();
-  if (["RECEIVED", "CONFIRMED", "PAYMENT_RECEIVED", "RECEIVED_PAYMENT"].includes(text)) {
+  if (["RECEIVED", "PAYMENT_RECEIVED", "RECEIVED_PAYMENT"].includes(text)) {
     return "PAYMENT_RECEIVED";
+  }
+  if (["CONFIRMED", "PAYMENT_CONFIRMED"].includes(text)) {
+    return "PAYMENT_CONFIRMED";
   }
   if (["PENDING", "AWAITING", "WAITING"].includes(text)) return "PAYMENT_PENDING";
   if (["OVERDUE", "LATE"].includes(text)) return "PAYMENT_OVERDUE";
-  if (["REFUNDED", "REFUND"].includes(text)) return "PAYMENT_REFUNDED";
+  if (["REFUNDED", "REFUND", "CHARGEBACK"].includes(text)) return "PAYMENT_REFUNDED";
   if (["CREATED", "CHECKOUT_CREATED", "SUBSCRIPTION_CREATED"].includes(text)) return "CREATED";
   if (!text) return "UNKNOWN";
   return "UNKNOWN";
 }
 
 function isFinancialConfirmation(status) {
-  const canonical = normalizeStatus(status);
+  const canonical = typeof status === "string" && status.startsWith("PAYMENT_")
+    ? status
+    : normalizeStatus(status);
+  return canonical === "PAYMENT_CONFIRMED" || canonical === "PAYMENT_RECEIVED";
+}
+
+function isReceivedRevenue(status) {
+  const canonical = typeof status === "string" && status.startsWith("PAYMENT_")
+    ? status
+    : normalizeStatus(status);
   return canonical === "PAYMENT_RECEIVED";
 }
 
@@ -66,6 +79,7 @@ function commercialEvent(partial = {}) {
     currency: partial.currency || "BRL",
     source: "CONFENGE_WEB",
     financial_confirmation: isFinancialConfirmation(canonical),
+    received_revenue: isReceivedRevenue(canonical),
     revenue: false,
     exception_code: partial.exception_code || null,
   };
@@ -77,5 +91,6 @@ module.exports = {
   FINANCIAL_CONFIRMED,
   normalizeStatus,
   isFinancialConfirmation,
+  isReceivedRevenue,
   commercialEvent,
 };
