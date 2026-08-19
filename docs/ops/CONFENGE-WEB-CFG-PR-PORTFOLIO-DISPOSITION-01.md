@@ -29,7 +29,7 @@ This report stamped 2026-08-19 19:06 America/Sao_Paulo.
   - `3196fe3e` docs(ops): stamp revalidation heading with America/Sao_Paulo time
 - **MAIN_SHA_AFTER (pre-integration, after #93):** `ce5192c550b94e9f5296618612f254e72a76288a`  
   (`chore(deps): bump @netlify/blobs from 10.7.12 to 10.7.13 (#93)`)
-- **MAIN_SHA_AFTER (final):** squash/merge of this integration PR onto `ce5192c5` (STALE X-Ray honesty + this report). Exact tip is the merge commit of this PR; recorded in campaign evidence after merge.
+- **MAIN_SHA_AFTER (final):** squash/merge of integration PR #150 onto `ce5192c5` (STALE X-Ray honesty + this report). Exact tip is the merge commit of #150; recorded in campaign evidence after merge.
 
 ---
 
