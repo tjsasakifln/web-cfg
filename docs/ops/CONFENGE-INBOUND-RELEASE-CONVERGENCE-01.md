@@ -379,6 +379,15 @@ Nenhum e-mail foi enviado ou agendado. Nenhum anúncio foi criado. Nenhum gasto 
 
 ---
 
+## 23. Revalidação pós-relatório (2026-08-19 18:xx -03)
+
+Production tip after this report first landed: `9f506f7f6711a36043cb7e90111f86c5e99c68f8` (docs-only follow-up; public HTML of the increment unchanged). Two further GETs of the five URLs + three noindex gates still PASS. Issue **#126** was auto-closed as completed and **reopened** — DoD remains 14/28d GSC. Issues #128, #60, #127 stayed open. PRs #129/#130/#131/#137 stay closed SUPERSEDED; #148 stays merged. Adjacent PRs #92/#93/#132–#136/#138–#147 remain HOLD.
+
+Increment SHA (rollback unit): `fe6d066fb3af7306b860af5ff3fe095d6079cb43`.  
+Production tip at revalidation: recorded in `/.well-known/build-info.json` (must be `fe6d066` or a descendant that still serves the increment HTML).
+
+---
+
 ```text
 MAIN_SHA_BEFORE: b00989c750ef67af979c55a547e29b93efd39340
 MAIN_SHA_AFTER: fe6d066fb3af7306b860af5ff3fe095d6079cb43
@@ -386,8 +395,8 @@ INTEGRATED_PRS: #148 (absorbs #129 #131 #137 #130)
 SUPERSEDED_PRS: #129 #131 #137 #130
 HELD_PRS: #92 #93 #132 #133 #134 #135 #136 #138 #139 #140 #141 #142 #143 #144 #145 #146 #147
 CI: site-ci GREEN + pSEO quality gates GREEN on fe6d066 (main runs 32301442782 / 32301442781)
-DEPLOY: Netlify production confenge.com.br deploy_id=6a8618fa44b8ea0008c7ff71 commit=fe6d066 2026-08-19 17:58:51 -03
-LIVE_SMOKE: PASS (5 URLs + 3 noindex gates, two consistent GETs)
+DEPLOY: Netlify production confenge.com.br increment deploy_id=6a8618fa44b8ea0008c7ff71 commit=fe6d066 2026-08-19 17:58:51 -03; later tip 9f506f7f deploy_id=6a861b6c8f70c80008764c1a (report only)
+LIVE_SMOKE: PASS (5 URLs + 3 noindex gates, two consistent GETs, revalidated)
 LEAD_PATH: SYNTHETIC_PLUMBING_PROVEN; INBOUND_NOW BLOCKED (synthetic); OPS_TOKEN ABSENT; not QCO
 GSC_BASELINE: seo/gsc-2026-08-09 (SINAPI 89/1/1.12%/7.27; query desonerado e não desonerado 22/0; aditivos 12/0/pos 49.25; commercial_click_share 0.0)
 REAL_ORGANIC_LIFT: UNKNOWN_AWAITING_MEASUREMENT_WINDOW
