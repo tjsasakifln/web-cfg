@@ -48,6 +48,8 @@ PUBLIC_TOP_DIRS = frozenset(
         "reequilibrio-obras-publicas",
         # Value communication 2040 commercial offers
         "diagnostico-b2g-360",
+        "diagnostico-b2g-expansao",
+        "comercial",
         "diretoria-b2g",
         "bid-room-licitacoes-obras",
         "defesa-margem-contratos-publicos",

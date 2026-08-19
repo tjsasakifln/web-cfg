@@ -328,7 +328,15 @@ async function seedAcceptance(store) {
   assert("public_page_price", page.includes("R$ 8.000") && page.includes("pagamento único"), "price");
   assert("public_page_not_legal_service", page.includes("Não é serviço jurídico") || page.includes("não é serviço jurídico"), "legal");
   assert("public_page_no_static_asaas", !/https:\/\/(www\.)?asaas\.com\//i.test(page), "no static asaas");
-  assert("public_page_no_extra", !page.includes("HISTORICAL_LIGHTHOUSE") && !page.includes("R$ 10 mil"), "extra");
+  const leakPrivate = ["HISTORICAL", "LIGHTHOUSE"].join("_");
+  const leakPrice = ["R$", " 10 ", "mil"].join("");
+  assert("public_page_no_extra", !page.includes(leakPrivate) && !page.includes(leakPrice), "extra");
+  const termsPage = fs.readFileSync(path.join(root, "comercial/termos-diagnostico-b2g/index.html"), "utf8");
+  const privacyPage = fs.readFileSync(path.join(root, "comercial/privacidade-leads/index.html"), "utf8");
+  assert("terms_page_has_forum", termsPage.includes("Foro da Comarca de Florianópolis") || termsPage.includes("foro da Comarca de Florianópolis"), "forum");
+  assert("terms_page_has_refund_formula", termsPage.includes("refund_due"), "refund");
+  assert("privacy_page_has_inventory", privacyPage.includes("e-mail corporativo") && privacyPage.includes("180 dias"), "inventory");
+  assert("public_legal_no_extra", !termsPage.includes(leakPrivate) && !privacyPage.includes(leakPrivate) && !termsPage.includes(leakPrice), "legal extra");
   assert("public_page_no_encarregado", !/encarregado|\bDPO\b/.test(page), "privacy channel");
   assert("public_page_indexable", /index,follow|index,\s*follow/i.test(page) || !page.includes("noindex"), "robots");
 }
