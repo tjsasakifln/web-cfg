@@ -23,6 +23,7 @@ from scripts.contract_analysis import (
     CONTENT_CLASS_ANALYSIS,
     READY_FOR_HUMAN_REVIEW,
 )
+from scripts.contract_analysis.quality import DEPTH_REVIEW_REQUIRED, INDEX_READY_VERDICT
 from scripts.contract_analysis.approval import material_hash
 from scripts.contract_analysis.calc import official_brl_per_m2, published_value_per_area
 from scripts.contract_analysis.consume import load_canary, load_extra_cli_bundle
@@ -165,9 +166,18 @@ def test_gate_is_publishable_noindex_never_index(tmp_path, monkeypatch):
     assert decision.sitemap is False
     assert "noindex,nofollow" in decision.robots
     assert decision.human_review_status == READY_FOR_HUMAN_REVIEW
+    quality = decision.quality or {}
+    assert quality.get("review_verdict") in {INDEX_READY_VERDICT, DEPTH_REVIEW_REQUIRED}
+    assert quality.get("review_verdict") != "REJECT"
+    assert not any(
+        isinstance(item, dict) and item.get("severity") == "P0" for item in (quality.get("findings") or [])
+    )
     rec = bundle["records"][0]
     assert rec.get("producer_index_authorization") is False
     assert rec.get("publication_authorization") in {None, False}
+    assert rec.get("thesis")
+    assert rec.get("citation_text")
+    assert rec.get("correction_route")
 
 
 def test_render_hashes_stable_and_visible(tmp_path, monkeypatch):
@@ -230,6 +240,10 @@ def test_review_packet_hash_bound_not_approval(tmp_path, monkeypatch):
     html = render_analysis_html(rec, decision)
     packet = emit_review_packet(rec, decision, rendered_html=html, root=tmp_path)
     assert packet_complete(packet)
+    founder = (packet / "FOUNDER_DECISION_REQUIRED.txt").read_text(encoding="utf-8")
+    assert "APPROVE_FOR_INDEX_FOLLOWUP" in founder
+    assert "REJECT_WITH_REASON" in founder
+    assert "PUBLISHABLE_NOINDEX" in founder
     review = (packet / "REVIEW.md").read_text(encoding="utf-8")
     assert READY_FOR_HUMAN_REVIEW in review or "READY_FOR_HUMAN_REVIEW" in review
     assert "approve_one" in review

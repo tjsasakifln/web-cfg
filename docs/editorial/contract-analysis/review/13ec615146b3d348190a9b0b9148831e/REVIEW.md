@@ -14,13 +14,13 @@ A divisão 719177.48 / 4710.00 = 152.6916 BRL/m² é apenas valor global publica
 Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE. Não implica relação comercial da CONFENGE com o órgão ou o contratado. publication_authorization=false e index_authorization=false permanecem falsos.
 - estado publicação: PUBLISHABLE_NOINDEX
 - review: READY_FOR_HUMAN_REVIEW
-- quality verdict: REJECT
-- score: 76
-- dimensions: {'profundidade_documental': 67, 'singularidade_novidade': 84, 'utilidade_decisoria': 60, 'integridade_epistemica': 86, 'calculos_engenharia': 100, 'comunicacao': 91, 'seo_citabilidade_manutencao': 82}
-- findings: [{'code': 'claim_without_locator', 'severity': 'P0', 'message': 'Claim material sem fonte/locator.'}, {'code': 'thesis_absent_or_generic', 'severity': 'P0', 'message': 'Sem tese singular e falsificável.'}, {'code': 'citation_text_absent', 'severity': 'P1', 'message': 'citation_text ausente.'}, {'code': 'correction_route_absent', 'severity': 'P1', 'message': 'correction_route ausente.'}]
-- rendered-content.sha256: 173d672420e45b6b953a5cd4fe39619890af8302bf7fbd34d7d54b11ef427376
+- quality verdict: INDEX_READY_HUMAN_REVIEW
+- score: 100
+- dimensions: {'profundidade_documental': 100, 'singularidade_novidade': 100, 'utilidade_decisoria': 100, 'integridade_epistemica': 100, 'calculos_engenharia': 100, 'comunicacao': 100, 'seo_citabilidade_manutencao': 100}
+- findings: []
+- rendered-content.sha256: d6dd79a5124cb56bef72bdcdefba3cbabaed2c520e8d799a36f5224986c107a4
 - evidence-pack.sha256: f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b
-- material_hash: d8f8dadd948be8571f0082b9a55659322102a71a9df8ce36ee9e74c36f8cfc2c
+- material_hash: 0f30e8854a46ad7f7dd57acf49743c5657d0e54ea49226db9124bd4572bb5cea
 
 ## Texto / preview
 
@@ -45,7 +45,9 @@ Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE
       "json_path": "$.objetoContrato"
     },
     "sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
-    "mime": "application/json"
+    "mime": "application/json",
+    "family": "listing_json",
+    "kind": "contract"
   },
   {
     "label": "process_document",
@@ -58,7 +60,9 @@ Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE
       "section": "contrato-oficial"
     },
     "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
-    "mime": "application/pdf"
+    "mime": "application/pdf",
+    "family": "instrumento_pdf",
+    "kind": "process_document"
   },
   {
     "label": "process_document",
@@ -71,7 +75,9 @@ Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE
       "section": "contrato-oficial"
     },
     "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
-    "mime": "application/pdf"
+    "mime": "application/pdf",
+    "family": "instrumento_pdf",
+    "kind": "process_document"
   },
   {
     "label": "process_document",
@@ -84,7 +90,9 @@ Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE
       "section": "contrato-oficial"
     },
     "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
-    "mime": "application/pdf"
+    "mime": "application/pdf",
+    "family": "instrumento_pdf",
+    "kind": "process_document"
   },
   {
     "label": "process_document",
@@ -97,7 +105,9 @@ Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE
       "section": "contrato-oficial"
     },
     "sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
-    "mime": "application/pdf"
+    "mime": "application/pdf",
+    "family": "parte_especifica",
+    "kind": "process_document"
   }
 ]
 
@@ -140,6 +150,11 @@ Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE
     "kind": "INFERENCE",
     "text": "A marcação (x) da cláusula 12.3 na página 46 confirma, no mesmo PDF, o índice já nomeado na Parte Geral (INCC Coluna 35 / FGV). Isso estreita a leitura do índice aplicável no instrumento; não se afirma que o índice tenha sido aplicado ou pago.",
     "source_ref": "14862788000150-2-000069/2026:pdf:46"
+  },
+  {
+    "kind": "INFERENCE",
+    "text": "A cláusula 12.5, no mesmo PDF, atribui à contratada o ônus de requerer o reajuste e afasta efeitos sobre medições anteriores ao requerimento. Sem requerimento localizado neste pacote, a cláusula descreve um procedimento; não descreve reajuste pago, devido ou vencido.",
+    "source_ref": "14862788000150-2-000069/2026:pdf:14"
   },
   {
     "kind": "UNKNOWN",

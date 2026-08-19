@@ -843,11 +843,13 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             continue
         if any(existing.get("claim_id") and existing.get("claim_id") == item.get("claim_id") for existing in facts):
             continue
+        refs = item.get("source_refs") if isinstance(item.get("source_refs"), list) else []
         facts.append(
             {
                 "kind": "FACT",
                 "text": item.get("text") or item.get("claim"),
-                "source_ref": item.get("source_ref") or item.get("evidence_id"),
+                "source_ref": item.get("source_ref") or item.get("evidence_id") or (refs[0] if refs else None),
+                "source_refs": refs or item.get("source_refs"),
                 "locator": item.get("locator") or item.get("locators"),
                 "claim_id": item.get("claim_id") or item.get("id"),
                 "sha256": item.get("sha256"),
@@ -939,15 +941,31 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             }
         )
     timeline = []
-    for item in bundle.get("timeline") or []:
+    raw_timeline = list(bundle.get("timeline") or [])
+    calc_block = analysis.get("calculation_or_timeline") if isinstance(analysis.get("calculation_or_timeline"), dict) else {}
+    if not raw_timeline:
+        raw_timeline = list(calc_block.get("timeline") or [])
+    for item in raw_timeline:
         if not isinstance(item, dict):
             continue
         timeline.append(
             {
                 "date": item.get("at") or item.get("date") or item.get("when"),
-                "text": item.get("event") or item.get("text") or item.get("label"),
+                "text": item.get("event") or item.get("text") or item.get("label") or item.get("kind"),
             }
         )
+    period_text = " ".join(
+        str(item.get("text") or "")
+        for item in producer_facts + producer_claims
+        if isinstance(item, dict) and "vig" in str(item.get("text") or "").lower()
+    )
+    vig_dates = re.findall(r"20\d{2}-\d{2}-\d{2}", period_text)
+    seen_dates = {str(row.get("date") or "")[:10] for row in timeline}
+    for date in dict.fromkeys(vig_dates):
+        if date in seen_dates:
+            continue
+        timeline.append({"date": date, "text": f"Data de vigência publicada no JSON oficial: {date}."})
+        seen_dates.add(date)
     sources = []
     refs = bundle.get("source_refs") or bundle.get("official_refs") or bundle.get("artifacts") or []
     for item in refs:
@@ -958,6 +976,18 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         if status == "UNKNOWN" and item.get("url") and str(item.get("url")).upper() != "UNKNOWN":
             # Keep the declared URL but mark it UNKNOWN; never invent a substitute.
             url = item.get("url")
+        locator = item.get("locator") or item.get("locators")
+        page = locator.get("page") if isinstance(locator, dict) else None
+        mime = str(item.get("mime") or "")
+        kind = str(item.get("source_kind") or item.get("label") or "")
+        if mime == "application/json" or kind == "contract":
+            family = "listing_json"
+        elif page == 46:
+            family = "parte_especifica"
+        elif mime == "application/pdf" or kind == "process_document":
+            family = "instrumento_pdf"
+        else:
+            family = kind or None
         sources.append(
             {
                 "label": item.get("source_id") or item.get("label") or item.get("source_kind") or "fonte pública",
@@ -965,9 +995,11 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
                 "url": url if status != "UNKNOWN" or item.get("url") else "",
                 "url_status": status,
                 "as_of": as_of,
-                "locator": item.get("locator") or item.get("locators"),
+                "locator": locator,
                 "sha256": item.get("sha256") or item.get("content_hash"),
                 "mime": item.get("mime"),
+                "family": family,
+                "kind": kind or family,
             }
         )
         if status == "UNKNOWN":
@@ -1105,8 +1137,34 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         "canonical_contract_ids": ids,
         "analysis_mode": analysis_mode_of(bundle),
         "comparability_status": comparability_status_of(bundle),
-        "claims": producer_claims,
+        "claims": [
+            {
+                **item,
+                "source_ref": item.get("source_ref")
+                or item.get("evidence_id")
+                or (
+                    (item.get("source_refs") or [None])[0]
+                    if isinstance(item.get("source_refs"), list)
+                    else item.get("source_refs")
+                ),
+            }
+            for item in producer_claims
+            if isinstance(item, dict)
+        ],
         "source_claim_matrix": source_matrix,
+        "evidence_families": sorted(
+            {str(src.get("family")) for src in sources if src.get("family")}
+        ),
+        "document_map": [
+            {
+                "label": src.get("label"),
+                "family": src.get("family"),
+                "document_id": src.get("document_id"),
+                "locator": src.get("locator"),
+            }
+            for src in sources
+            if src.get("document_id") or src.get("label")
+        ],
         "official_live": official_live_declared({**envelope, **bundle}),
         "handoff_status": handoff_status_of(bundle) or handoff_status_of(env),
         "insight_singular": bundle.get("insight_singular") or analysis.get("singular_insight") or "",
@@ -1167,6 +1225,31 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
         rec["is_fixture"] = True
         rec["source_kind"] = SOURCE_FIXTURE
         rec["approved_for_index"] = False
+    return rec
+
+
+CORRECTION_ROUTE = "/correcoes/"
+
+
+def finalize_editorial_projection(record: dict[str, Any]) -> dict[str, Any]:
+    """Fill citation_text, correction_route and thesis from existing site/producer fields.
+
+    Does not invent dates, localities or authorization flags.
+    """
+    rec = dict(record)
+    if not str(rec.get("thesis") or "").strip():
+        rec["thesis"] = rec.get("insight_singular") or ""
+    if rec.get("thesis_falsifiable") is None and rec.get("counterproof"):
+        rec["thesis_falsifiable"] = True
+    if not str(rec.get("correction_route") or "").strip():
+        rec["correction_route"] = CORRECTION_ROUTE
+    if not str(rec.get("citation_text") or "").strip():
+        from scripts.contract_analysis.citation import citation_registry
+
+        pack = citation_registry(rec, indexable=False)
+        rec["citation_text"] = (
+            pack.get("asset", {}).get("citation_pack", {}).get("citation_text") or ""
+        )
     return rec
 
 
@@ -1322,6 +1405,7 @@ def load_extra_cli_bundle(path: Path) -> dict[str, Any]:
     for bundle in export["analyses"][:MAX_CANARY]:
         rec = project_extra_cli_record(bundle, manifest=export["manifest"])
         rec = merge_overlay(rec, load_overlay(str(rec.get("id") or "")))
+        rec = finalize_editorial_projection(rec)
         rec = normalize_record(rec, source_kind=source_kind, is_fixture=fixture or rec.get("is_fixture"))
         records.append(rec)
     return {

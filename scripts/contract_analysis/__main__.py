@@ -42,7 +42,11 @@ def cmd_build(args: argparse.Namespace) -> int:
         import hashlib
 
         from scripts.contract_analysis.approval import material_hash
-        from scripts.contract_analysis.quality import INDEX_READY_VERDICT, READY_FOR_HUMAN_REVIEW
+        from scripts.contract_analysis.quality import (
+            DEPTH_REVIEW_REQUIRED,
+            INDEX_READY_VERDICT,
+            READY_FOR_HUMAN_REVIEW,
+        )
         from scripts.contract_analysis.review_packet import emit_review_packet
         from scripts.contract_analysis.render import render_analysis_html
 
@@ -50,7 +54,7 @@ def cmd_build(args: argparse.Namespace) -> int:
         for rec, dec in pairs:
             official = (
                 dec.human_review_status == READY_FOR_HUMAN_REVIEW
-                or dec.review_recommendation == INDEX_READY_VERDICT
+                or dec.review_recommendation in {INDEX_READY_VERDICT, DEPTH_REVIEW_REQUIRED}
             )
             if not official:
                 continue

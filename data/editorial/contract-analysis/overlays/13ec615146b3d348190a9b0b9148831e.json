@@ -12,6 +12,9 @@
   "executive_summary": "O contrato público PNCP 14862788000150-2-000069/2026 publica pavimentação em paralelepípedo de 4.710,00 m² no município de São Gonçalo do Piauí – PI, valor global 719177.48 BRL e vigência 2026-07-08 a 2027-07-08. A unidade listada no JSON oficial traz município Teresina. São duas strings publicadas; esta análise não reconcilia qual descreve a execução.\n\nO PDF oficial (SHA-256 64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604), páginas 14–15, não trata o reajuste como aniversário da vigência. A cláusula 12.1 fixa preços por um ano contado da data do orçamento estimado. A cláusula 12.2 autoriza reajuste após o interregno de um ano contado da data do orçamento a que a proposta se referir, com fórmula Io/I pro rata dia. A cláusula 12.3 nomeia o Índice Nacional da Construção Civil – Coluna 35, FGV, revista Conjuntura Econômica, salvo indicação diversa na Parte Específica. A página 46 marca 12.3 com (x) no mesmo índice.\n\nA divisão 719177.48 / 4710.00 = 152.6916 BRL/m² é apenas valor global publicado ÷ área publicada no objeto. Não é custo completo, preço de referência, SINAPI/SICRO, custo/km nem prova de economicidade.\n\nEsta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE. Não implica relação comercial da CONFENGE com o órgão ou o contratado. publication_authorization=false e index_authorization=false permanecem falsos.",
   "why_analysis": "Equipes de obra e de medição costumam tratar o aniversário da vigência publicada no PNCP como se fosse o único relógio de reajuste. Neste instrumento, a vigência, a irreajustabilidade e o interregno de reajuste não compartilham a mesma base documental. Sem as datas de orçamento, a cláusula 12 não pode ser aplicada como conta; só pode ser lida como procedimento. Isso é utilidade independente da ficha do PNCP.",
   "insight_singular": "O valor informacional não é o valor global nem a área. É a coexistência, no mesmo PDF, de três relógios: vigência publicada no JSON, irreajustabilidade de um ano contada da data do orçamento estimado (12.1) e interregno de um ano contado da data do orçamento da proposta (12.2), com índice INCC Coluna 35/FGV (12.3). A listagem oficial não publica essas duas datas de orçamento. Quem usa 2027-07-08 como data de reajuste está lendo um relógio que o instrumento não autorizou como base.",
+  "thesis": "O valor informacional não é o valor global nem a área. É a coexistência, no mesmo PDF, de três relógios: vigência publicada no JSON, irreajustabilidade de um ano contada da data do orçamento estimado (12.1) e interregno de um ano contado da data do orçamento da proposta (12.2), com índice INCC Coluna 35/FGV (12.3). A listagem oficial não publica essas duas datas de orçamento. Quem usa 2027-07-08 como data de reajuste está lendo um relógio que o instrumento não autorizou como base.",
+  "thesis_falsifiable": true,
+  "correction_route": "/correcoes/",
   "utility_beyond_source": "A fonte entrega objeto, valor, vigência e o texto das cláusulas 12.2 e 12.3. A análise entrega o protocolo: antes de protocolar ou recusar reajuste, exigir a data do orçamento estimado e a data do orçamento da proposta; não substituí-las pelo aniversário da vigência; e tratar 152,6916 BRL/m² apenas como quociente publicado, nunca como preço unitário de medição ou referência de mercado.",
   "intent": "reajuste",
   "body": "A leitura útil deste instrumento não começa pelo valor global. Começa pela diferença entre o que o JSON do PNCP publica e o que o PDF oficial ancora como procedimento de reajuste.\n\nFACT. A listagem em https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69 (SHA-256 do snapshot do produtor 89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303) publica objeto «Pavimentação em Paralelepípedo de 4.710,00 m² de ruas no município de São Gonçalo do Piauí - PI», valorGlobal 719177.48, dataVigenciaInicio 2026-07-08 e dataVigenciaFim 2027-07-08. A mesma listagem publica unidadeOrgao.municipioNome = «Teresina». Não há, nesse JSON, data do orçamento estimado nem data do orçamento da proposta.\n\nFACT. O PDF em https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1, SHA-256 64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604, página 13, encerra a cláusula 12.1: «Os preços são fixos e irreajustáveis no prazo de um ano contado da data do orçamento estimado.» A página 14 continua: 12.2 autoriza reajuste «após o interregno de um ano, contado a partir da data do orçamento a que a proposta se referir», com fórmula em que Io é o índice do mês do orçamento da proposta, pro rata dia, e I é o índice da data do reajuste, pro rata dia. 12.3 fixa o índice: «Índice Nacional da Construção Civil – Coluna 35, calculado e publicado pela Fundação Getúlio Vargas na revista Conjuntura Econômica, salvo de outro índice for indicado na Parte Específica deste Contrato.» 12.4 conta o interregno subsequente a partir dos efeitos financeiros do último reajuste. 12.5 atribui à contratada o ônus de requerer o reajuste; os efeitos começam após o requerimento; valores de medições anteriores não são devidos por essa via. A página 15, 12.7, trata atraso atribuível à adjudicatária: se os índices aumentam, prevalecem as datas do cronograma; se diminuem, prevalecem as datas de execução. 12.10 exige duas faturas após o reajustamento: preços originais e parcela de reajuste.\n\nFACT. A página 46 do mesmo PDF, Parte Específica, marca 12.3 com (x): o índice da Parte Geral (INCC Coluna 35 / FGV) é o escolhido. A alternativa em branco («será utilizado o índice (...)») não está marcada.\n\nCALCULATION. 719177.48 ÷ 4710.00, Decimal, quantize 0.0001, produz 152.6916 BRL/m². Semântica declarada pelo produtor: valor_global / área documentada no objeto. Não é custo completo por m², não é preço unitário de medição, não é SINAPI, não é SICRO, não é custo/km e não é comparável a outro contrato.\n\nINFERENCE. Os três relógios não são o mesmo fato. A vigência publicada é um intervalo de 12 meses a partir de 2026-07-08. A irreajustabilidade de 12.1 corre a partir de uma data de orçamento estimado que este pacote não publica. O interregno de 12.2 corre a partir de uma data de orçamento da proposta que este pacote também não publica. Sem essas duas datas, a cláusula descreve um procedimento e um índice; não descreve uma competência de reajuste já vencida ou já devida.\n\nINFERENCE. A Parte Específica, ao marcar Coluna 35, reduz a incerteza sobre qual índice a Parte Geral deixou em aberto. Isso não prova que o índice foi aplicado, nem que houve medição, nem que houve pagamento de reajuste.\n\nUNKNOWN. Data do orçamento estimado. Data do orçamento da proposta. Se a Parte Específica publicou outro índice em algum aditivo posterior. Se houve requerimento nos termos de 12.5. Se houve medição. Qual string municipal descreve o local da execução.\n\nA divergência Teresina / São Gonçalo do Piauí permanece como duas publicações. Não se corrige, não se infere sede versus objeto, não se escolhe a «verdadeira».",
@@ -37,6 +40,11 @@
       "kind": "INFERENCE",
       "text": "A marcação (x) da cláusula 12.3 na página 46 confirma, no mesmo PDF, o índice já nomeado na Parte Geral (INCC Coluna 35 / FGV). Isso estreita a leitura do índice aplicável no instrumento; não se afirma que o índice tenha sido aplicado ou pago.",
       "source_ref": "14862788000150-2-000069/2026:pdf:46"
+    },
+    {
+      "kind": "INFERENCE",
+      "text": "A cláusula 12.5, no mesmo PDF, atribui à contratada o ônus de requerer o reajuste e afasta efeitos sobre medições anteriores ao requerimento. Sem requerimento localizado neste pacote, a cláusula descreve um procedimento; não descreve reajuste pago, devido ou vencido.",
+      "source_ref": "14862788000150-2-000069/2026:pdf:14"
     },
     {
       "kind": "UNKNOWN",
@@ -75,5 +83,33 @@
     "Reconciliar Teresina com São Gonçalo do Piauí sem fonte adicional.",
     "Tratar cláusula 12.5 como direito líquido já vencido.",
     "Indexar esta página ou interpretá-la como caso CONFENGE."
-  ]
+  ],
+  "implications": [
+    "Antes de protocolar ou recusar reajuste, exigir a data do orçamento estimado (12.1) e a data do orçamento da proposta (12.2); a vigência publicada não as substitui.",
+    "Tratar 152,6916 BRL/m² somente como quociente valor_global ÷ área publicada. Não é preço unitário contratual, SINAPI, SICRO, custo completo nem prova de economicidade.",
+    "Manter Teresina e São Gonçalo do Piauí como duas strings publicadas e não reconciliadas até existir fonte adicional com locator próprio."
+  ],
+  "defined_terms": [
+    {
+      "term": "vigência",
+      "definition": "Intervalo publicado no JSON oficial (dataVigenciaInicio / dataVigenciaFim). Não é, por si, data-base de reajuste das cláusulas 12.1 e 12.2."
+    },
+    {
+      "term": "orçamento estimado",
+      "definition": "Data citada na cláusula 12.1 como início da irreajustabilidade de um ano. Não consta da listagem JSON deste pacote."
+    },
+    {
+      "term": "orçamento da proposta",
+      "definition": "Data citada na cláusula 12.2 como início do interregno de reajuste. Não consta da listagem JSON deste pacote."
+    },
+    {
+      "term": "INCC Coluna 35",
+      "definition": "Índice nomeado na cláusula 12.3 (Parte Geral) e marcado com (x) na cláusula 12.3 da Parte Específica, página 46."
+    },
+    {
+      "term": "valor global",
+      "definition": "Campo valorGlobal da listagem oficial. É o numerador do quociente 152.6916 BRL/m², não o preço unitário contratual."
+    }
+  ],
+  "terms_defined": true
 }
