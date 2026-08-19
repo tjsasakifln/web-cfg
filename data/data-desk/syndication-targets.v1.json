@@ -1,0 +1,50 @@
+{
+  "schema_version": "data-desk-syndication-targets-v1",
+  "issue": 89,
+  "asset_id": "fixture-only-citation-kit",
+  "auto_send": false,
+  "sent": false,
+  "owner": "tiago.sasaki",
+  "targets": [
+    {
+      "id": "imprensa-tecnica",
+      "target_nominal": "imprensa técnica de engenharia e infraestrutura",
+      "audience_type": "imprensa",
+      "angle": "método + as_of + permalink, sem estatística de fixture",
+      "status": "PREPARED",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "associacao-consultiva",
+      "target_nominal": "associações de engenharia consultiva",
+      "audience_type": "associação",
+      "angle": "kit de citação com limitações visíveis",
+      "status": "PREPARED",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "parceiro-distribuicao",
+      "target_nominal": "parceiro de distribuição técnica (manual)",
+      "audience_type": "parceiro",
+      "angle": "reuse com link canônico CONFENGE",
+      "status": "PREPARED",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "comunidade-aec",
+      "target_nominal": "comunidade AEC B2G",
+      "audience_type": "comunidade",
+      "angle": "embed/citação, sem widget SmartLic",
+      "status": "PREPARED",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "especialista-revisor",
+      "target_nominal": "especialista revisor nomeado",
+      "audience_type": "especialista",
+      "angle": "pedido de correção/citação com provenance",
+      "status": "PREPARED",
+      "outcome": "UNKNOWN"
+    }
+  ]
+}
