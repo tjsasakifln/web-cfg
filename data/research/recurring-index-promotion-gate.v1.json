@@ -1,0 +1,21 @@
+{
+  "schema_version": "recurring-index-promotion-v1",
+  "issue": 91,
+  "depends_on_issue": 65,
+  "decision_state": "DEFER",
+  "as_of": "2026-08-19",
+  "proposed_name": "Índice CONFENGE do Mercado de Obras Públicas",
+  "build_authorized": false,
+  "public_url_authorized": false,
+  "flagship_citation_proof": {
+    "status": "UNKNOWN",
+    "qualified_reuse": false,
+    "qualified_citation": false
+  },
+  "kill": [
+    "editorial_calendar_without_reuse",
+    "vanity_ranking",
+    "press_release_without_method",
+    "recurring_cost_without_moat"
+  ]
+}
