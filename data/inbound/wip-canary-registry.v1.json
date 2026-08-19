@@ -1,0 +1,45 @@
+{
+  "schema_version": "wip-canary-registry-v1",
+  "issue": 61,
+  "decision_state": "EXECUTE_NOW",
+  "as_of": "2026-08-19",
+  "rule": "At most one canary per acquisition/conversion mechanism in execution.",
+  "mechanisms": [
+    {
+      "id": "organic_serp_snippet",
+      "canary_issue": 126,
+      "state": "VALIDATE",
+      "count": 1
+    },
+    {
+      "id": "organic_bofu_bridges",
+      "canary_issue": 128,
+      "state": "VALIDATE",
+      "count": 1
+    },
+    {
+      "id": "contract_intelligence_index",
+      "canary_issue": 83,
+      "state": "VALIDATE",
+      "count": 1
+    },
+    {
+      "id": "market_answer",
+      "canary_issue": 84,
+      "state": "VALIDATE",
+      "count": 1
+    },
+    {
+      "id": "paid_search",
+      "canary_issue": 87,
+      "state": "VALIDATE",
+      "count": 1
+    },
+    {
+      "id": "intent_conversion",
+      "canary_issue": 88,
+      "state": "VALIDATE",
+      "count": 1
+    }
+  ]
+}
