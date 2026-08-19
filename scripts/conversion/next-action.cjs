@@ -29,6 +29,17 @@ function selectNextActions({ xrayState, intent } = {}) {
     });
   }
 
+  if (state === "STALE") {
+    actions.push({
+      id: "dados_defasados",
+      label: "Os dados observados podem estar defasados",
+      intent: "aprender_mercado",
+      requires: [],
+      sla: "UNKNOWN",
+      honesty: "STALE",
+    });
+  }
+
   if (state === "READY") {
     actions.push({
       id: "pedir_segunda_leitura",
