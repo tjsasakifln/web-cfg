@@ -350,6 +350,11 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["data/research/"],
     surfaces: ["/radar/pesquisa/"],
   },
+  "test:paid-search": {
+    producers: ["scripts/paid_search/", "data/paid_search/", "docs/paid-search/"],
+    artifacts: ["data/paid_search/"],
+    surfaces: ["/ferramentas/diagnostico-defesa-margem/"],
+  },
   "test:migration-manifesto": {
     producers: ["scripts/migration/", "data/migration/", "docs/migration/"],
     artifacts: ["data/migration/smartlic-confenge/manifesto.v1.json"],
