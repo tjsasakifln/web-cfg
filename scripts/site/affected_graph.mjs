@@ -94,7 +94,12 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: ["/", "/obrigado.html"],
   },
   "test:lead-function": {
-    producers: ["scripts/site/test_lead_function.mjs"],
+    producers: [
+      "scripts/site/test_lead_function.mjs",
+      "netlify/functions/lead.cjs",
+      "netlify/functions/lib/lead-delivery.cjs",
+      "netlify/functions/lib/record-kind.cjs",
+    ],
     artifacts: [],
     surfaces: ["/.netlify/functions/lead"],
   },

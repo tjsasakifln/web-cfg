@@ -261,12 +261,19 @@ Approved in-repo probes against production, twice.
 
 `LEAD_PROBE_SECRET` was **absent** (optional per `docs/ops/ENV-VARS.md`). The approved command still persisted synthetic records with `test_mode` / `record_kind=synthetic`. Not counted as lead, QCO, pipeline or revenue.
 
+**`email_status: ok` was a defect.** Warmbly inbound already skipped `non_real`, but `deliverResendEmail` did not. With `RESEND_API_KEY` set in production, the four probe creates (two `probe:lead:prod` + two `probe:money-asset:prod`) each POSTed Resend to `LEAD_NOTIFY_EMAIL` / `tiago.sasaki@confenge.com.br`. That is founder contact. It is not a commercial campaign send, Outlook draft, or paid ad — it is still an email that should not have gone out.
+
+Fix (this commit, `netlify/functions/lib/lead-delivery.cjs`): skip Resend, ops webhook and authenticated ntfy when `isCommercialReal(record)` is false (`synthetic` / `qa` / `spam` / `internal`). Shipped test `synthetic_skips_resend` drives `deliverResendEmail` and the lead handler with `RESEND_API_KEY` set and fails if `api.resend.com` is called.
+
+Do **not** re-run production probes until this skip is on the live Netlify function.
+
 **`npm run probe:money-asset:prod`**
 
 - capture PROVEN, replay PROVEN, PII absent from response
 - `inbound_now` BLOCKED (synthetic must not POST Warmbly)
 - `ops_counters` BLOCKED (`OPS_TOKEN` unset here)
 - commercial send: not attempted
+- email: **incorrectly `ok` on those two runs** (same Resend gap)
 - lead_ids `b257fa4501bb1e809aa5ef19`, `c8a20cf0f6306dd2b3261ecc`
 
 Issue #60 real-lead DoD remains **UNKNOWN**. Synthetic plumbing ≠ that DoD.
@@ -360,6 +367,8 @@ Not blockers for this increment: merge permission (granted), Netlify deploy (liv
 4. Issue #60: wait for a real qualified visitor on Defesa de Margem; do not invent one.
 5. Issue #127: rewrite chuva canary, then named human `approve_cli` INDEXABLE — not before.
 6. Do not send email, create ads, charge, or mutate DNS.
+7. Discard the four Resend notify emails from the synthetic probes (`lead_id`s in §16). Do not treat them as inbound.
+8. After the Resend skip is live on Netlify functions, a single synthetic probe may confirm `email_status=skipped`. Not before.
 
 ---
 
@@ -375,7 +384,9 @@ Documented in `docs/ops/ROLLBACK.md`.
 
 ## 22. Declaração de não disparo comercial
 
-Nenhum e-mail foi enviado ou agendado. Nenhum anúncio foi criado. Nenhum gasto de mídia ocorreu. Nenhuma cobrança/checkout Asaas foi ativada. Nenhum rascunho Outlook, planilha de Consultoria B2G, lista de contatos ou landing de parceiro foi alterado. Nenhum runtime SmartLic foi recriado. Nenhuma URL noindex foi liberada automaticamente. Nenhum sucesso orgânico futuro foi inventado.
+**Correction:** four transactional Resend notify emails **were** sent to the founder inbox (`LEAD_NOTIFY_EMAIL` / `tiago.sasaki@confenge.com.br`) by the synthetic production probes, because `deliverResendEmail` lacked a `record_kind` skip. They are not commercial campaign sends, Outlook partner drafts, ads, or checkout. They should still be discarded.
+
+No advertisement was created. Nenhum gasto de mídia ocorreu. Nenhuma cobrança/checkout Asaas foi ativada. Nenhum rascunho Outlook, planilha de Consultoria B2G, lista de contatos ou landing de parceiro foi alterado. Nenhum runtime SmartLic foi recriado. Nenhuma URL noindex foi liberada automaticamente. Nenhum sucesso orgânico futuro foi inventado. The Resend skip for non-real kinds is the corrective increment; do not re-probe production until it is live.
 
 ---
 
@@ -397,11 +408,11 @@ HELD_PRS: #92 #93 #132 #133 #134 #135 #136 #138 #139 #140 #141 #142 #143 #144 #1
 CI: site-ci GREEN + pSEO quality gates GREEN on fe6d066 (main runs 32301442782 / 32301442781)
 DEPLOY: Netlify production confenge.com.br increment deploy_id=6a8618fa44b8ea0008c7ff71 commit=fe6d066 2026-08-19 17:58:51 -03; later tip 9f506f7f deploy_id=6a861b6c8f70c80008764c1a (report only)
 LIVE_SMOKE: PASS (5 URLs + 3 noindex gates, two consistent GETs, revalidated)
-LEAD_PATH: SYNTHETIC_PLUMBING_PROVEN; INBOUND_NOW BLOCKED (synthetic); OPS_TOKEN ABSENT; not QCO
+LEAD_PATH: SYNTHETIC_PLUMBING_PROVEN; email_status=ok WAS A DEFECT (4 Resend notifies); skip shipped, not re-probed until live; INBOUND_NOW BLOCKED; not QCO
 GSC_BASELINE: seo/gsc-2026-08-09 (SINAPI 89/1/1.12%/7.27; query desonerado e não desonerado 22/0; aditivos 12/0/pos 49.25; commercial_click_share 0.0)
 REAL_ORGANIC_LIFT: UNKNOWN_AWAITING_MEASUREMENT_WINDOW
 BLOCKERS: GSC auth absent; OPS_TOKEN absent; #60 real lead UNKNOWN
-HUMAN_ACTIONS: GSC URL inspection of five URLs + 14d/28d export; do not Indexing-API ordinary pages
+HUMAN_ACTIONS: discard 4 probe Resend emails; GSC URL inspection of five URLs + 14d/28d export; do not Indexing-API ordinary pages; do not re-probe until skip is live
 ROLLBACK: Netlify publish prior green 6a851d21838b910008549459 (b00989c7)
 FINAL_VERDICT: INCREMENT_PUBLISHED_AWAITING_MEASUREMENT
 ```

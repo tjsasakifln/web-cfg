@@ -136,14 +136,14 @@ _reset();
   try {
     const res = await handler(
       event({
-        nome: "QA Journey A",
+        nome: "Maria Construtora",
         telefone: "48988344559",
         estagio: "problema urgente em contrato",
         jornada: "contrato",
         consentimento: "on",
         origem: "/",
-        utm_source: "test",
-        utm_medium: "cpc",
+        utm_source: "google",
+        utm_medium: "organic",
         utm_campaign: "inbound",
         landing_page: "/defesa-margem-contratos-publicos/",
         mensagem: "SECRET_MESSAGE_SHOULD_NOT_LEAK",
@@ -165,8 +165,8 @@ _reset();
     }
     const stored = await mem.get(data.lead_id);
     if (!stored) fail("not_in_store", data.lead_id);
-    if (stored.nome !== "QA Journey A") fail("store_nome", stored);
-    if (stored.utm_source !== "test" || stored.jornada !== "contrato") fail("store_attribution", stored);
+    if (stored.nome !== "Maria Construtora") fail("store_nome", stored);
+    if (stored.utm_source !== "google" || stored.jornada !== "contrato") fail("store_attribution", stored);
     if (stored.mensagem !== "SECRET_MESSAGE_SHOULD_NOT_LEAK") fail("store_message", stored);
     if (!calls.some((c) => c.url.includes("example.com/hooks/ops"))) fail("webhook_not_called", calls);
     // Webhook body may contain PII over TLS to private endpoint — response must not
@@ -315,8 +315,8 @@ _reset();
   try {
     const res = await handler(
       event({
-        nome: "QA Email Fail",
-        email: "qa-email-fail@example.com",
+        nome: "Carlos Diretor",
+        email: "carlos.diretor@construtora.com.br",
         estagio: "diagnostico operacao",
         jornada: "operacao",
         consentimento: "on",
@@ -327,6 +327,68 @@ _reset();
     const stored = await mem.get(data.lead_id);
     if (!stored || stored.status === undefined) fail("email_fail_store", stored);
     pass("email_fail_keeps_lead", { lead_id: data.lead_id, delivery_email: stored.delivery?.email?.status });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+  }
+}
+
+// 7b) synthetic / non-real kinds must not call Resend even when the key is set
+{
+  process.env.RESEND_API_KEY = "re_test_key_must_not_send";
+  process.env.LEAD_NOTIFY_EMAIL = "tiago.sasaki@confenge.com.br";
+  const originalFetch = globalThis.fetch;
+  const resendCalls = [];
+  globalThis.fetch = async (url, init = {}) => {
+    const href = String(url);
+    if (href.includes("resend.com")) {
+      resendCalls.push({ url: href, body: init.body });
+      return { ok: true, status: 200, text: async () => "{}", json: async () => ({ id: "should-not-send" }) };
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    const { deliverResendEmail } = require(path.join(root, "netlify/functions/lib/lead-delivery.cjs"));
+    const direct = await deliverResendEmail({
+      lead_id: "aaaaaaaaaaaaaaaaaaaaaaaa",
+      record_kind: "synthetic",
+      jornada: "operacao",
+      estagio: "synthetic probe — discard",
+      nome: "SYNTHETIC-PROBE",
+      email: "probe@example.com",
+      test_mode: true,
+    });
+    if (direct.status !== "skipped" || direct.reason !== "non_real") {
+      fail("deliverResendEmail_synthetic_skip", direct);
+    }
+    if (resendCalls.length) fail("deliverResendEmail_synthetic_called_resend", resendCalls);
+
+    const res = await handler(
+      event({
+        nome: "SYNTHETIC-PROBE",
+        email: "probe@example.com",
+        estagio: "synthetic probe — discard",
+        jornada: "operacao",
+        consentimento: "true",
+        origem: "/synthetic-probe",
+        utm_source: "synthetic",
+        utm_medium: "probe",
+        utm_campaign: "slo",
+        landing_page: "/",
+        mensagem: "[QA] synthetic probe — do not contact",
+        test_mode: true,
+        record_kind: "synthetic",
+      }),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.ok || !data.lead_id) fail("synthetic_persist", data);
+    if (data.email_status !== "skipped") fail("synthetic_email_status", data);
+    if (resendCalls.length) fail("synthetic_handler_called_resend", resendCalls);
+    const stored = await mem.get(data.lead_id);
+    if (!stored || stored.record_kind !== "synthetic") fail("synthetic_store_kind", stored);
+    if (stored.delivery?.email?.status !== "skipped") fail("synthetic_store_email", stored.delivery);
+    pass("synthetic_skips_resend", { lead_id: data.lead_id, email_status: data.email_status });
   } finally {
     globalThis.fetch = originalFetch;
     delete process.env.RESEND_API_KEY;

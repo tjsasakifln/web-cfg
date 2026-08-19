@@ -5,6 +5,17 @@
  */
 const crypto = require("crypto");
 const { safeLog } = require("./lead-core.cjs");
+const { isCommercialReal, effectiveRecordKind } = require("./record-kind.cjs");
+
+function skipNonReal(record, channel) {
+  if (isCommercialReal(record)) return null;
+  return {
+    channel,
+    status: "skipped",
+    reason: "non_real",
+    kind: effectiveRecordKind(record),
+  };
+}
 
 const MAX_ATTEMPTS = 3;
 
@@ -61,6 +72,8 @@ async function verifyTurnstile(token, ip) {
  * Never log the body.
  */
 async function deliverOpsWebhook(record) {
+  const skip = skipNonReal(record, "ops_webhook");
+  if (skip) return skip;
   const url = process.env.OPS_WEBHOOK_URL;
   if (!url) {
     return { channel: "ops_webhook", status: "skipped", reason: "not_configured" };
@@ -128,6 +141,8 @@ async function deliverOpsWebhook(record) {
  * No default public topic. NTFY_TOKEN required if NTFY_URL set.
  */
 async function deliverNtfyAuth(record) {
+  const skip = skipNonReal(record, "ntfy");
+  if (skip) return skip;
   const url = process.env.NTFY_URL; // full URL e.g. https://ntfy.sh/private-topic — must be env, never hardcoded
   const token = process.env.NTFY_TOKEN;
   if (!url) return { channel: "ntfy", status: "skipped", reason: "not_configured" };
@@ -179,6 +194,8 @@ async function deliverNtfyAuth(record) {
  * Resend transactional email (CONFENGE domain).
  */
 async function deliverResendEmail(record) {
+  const skip = skipNonReal(record, "email");
+  if (skip) return skip;
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.LEAD_NOTIFY_EMAIL || process.env.OPS_EMAIL || "tiago.sasaki@confenge.com.br";
   const from =
