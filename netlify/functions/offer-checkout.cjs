@@ -4,7 +4,7 @@
 const { resolveProductionConfig, requireProductionRuntime } = require("../../scripts/offers/providers/config-production.cjs");
 const { createAsaasProductionProvider } = require("../../scripts/offers/providers/asaas-production.cjs");
 const { redactProviderPayload } = require("../../scripts/offers/providers/redact.cjs");
-const { MemoryOfferStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
+const { resolveProductionStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
 
 const MAX_BODY = 64 * 1024;
 
@@ -41,7 +41,8 @@ function createHandler(deps = {}) {
       return json(400, { ok: false, error: "invalid_json" });
     }
 
-    const store = deps.store || new MemoryOfferStore({ clock: deps.clock });
+    const store = await resolveProductionStore(deps, event);
+    if (!store) return json(503, { ok: false, error: "store_unavailable" });
     const provider = createAsaasProductionProvider({
       http: deps.http,
       clock: deps.clock,

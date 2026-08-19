@@ -1,10 +1,10 @@
 /**
  * Production Asaas webhook. Dedicated token. Persist-then-2xx. No provider mutation.
  */
-const { resolveProductionConfig, requireProductionRuntime } = require("../../scripts/offers/providers/config-production.cjs");
+const { resolveProductionConfig, requireProductionRuntime, verifyWebhookToken, headerValue } = require("../../scripts/offers/providers/config-production.cjs");
 const { createAsaasProductionProvider, mapProductionEvent } = require("../../scripts/offers/providers/asaas-production.cjs");
 const { redactProviderPayload } = require("../../scripts/offers/providers/redact.cjs");
-const { MemoryOfferStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
+const { resolveProductionStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
 
 const MAX_BODY = 64 * 1024;
 
@@ -30,7 +30,13 @@ function createHandler(deps = {}) {
     const runtime = requireProductionRuntime(config, { needWebhook: true });
     if (!runtime.ok) return json(runtime.statusCode || 403, { ok: false, error: runtime.error });
 
-    const store = deps.store || new MemoryOfferStore({ clock: deps.clock });
+    const token = headerValue(event.headers || {}, "asaas-access-token");
+    if (!verifyWebhookToken(config, token)) {
+      return json(401, { ok: false, error: "invalid_webhook_token" });
+    }
+
+    const store = await resolveProductionStore(deps, event);
+    if (!store) return json(503, { ok: false, error: "store_unavailable" });
     const provider = createAsaasProductionProvider({
       http: deps.http,
       clock: deps.clock,
@@ -39,8 +45,6 @@ function createHandler(deps = {}) {
       env,
       logger: deps.logger,
     });
-    const verified = provider.verifyProductionWebhook(event.headers || {});
-    if (!verified.ok) return json(401, { ok: false, error: verified.error });
 
     const rawBody = event.body == null ? "" : String(event.body);
     if (Buffer.byteLength(rawBody, "utf8") > (deps.maxBodyBytes || MAX_BODY)) {

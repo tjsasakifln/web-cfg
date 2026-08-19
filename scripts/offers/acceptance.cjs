@@ -82,7 +82,11 @@ function requestAcceptance(input = {}, deps = {}) {
   }
 
   const otp = deps.otp || String(crypto.randomInt(100000, 999999));
+  const magicLinkToken = deps.magicLinkToken || crypto.randomBytes(24).toString("hex");
   const pendingId = `pend_${crypto.randomBytes(8).toString("hex")}`;
+  if (magicLinkToken === pendingId) {
+    return { ok: false, error: "challenge_collision", statusCode: 500 };
+  }
   const pending = {
     kind: "acceptance_pending",
     pending_id: pendingId,
@@ -98,9 +102,15 @@ function requestAcceptance(input = {}, deps = {}) {
     legal_authority_hash: PINNED_LEGAL_HASH,
     declarations: { ...REQUIRED_DECLARATIONS },
     otp_hash: crypto.createHash("sha256").update(otp).digest("hex"),
+    magic_link_hash: crypto.createHash("sha256").update(magicLinkToken).digest("hex"),
     created_at: (deps.clock && deps.clock.now ? deps.clock.now() : new Date()).toISOString(),
   };
-  return { ok: true, pending, otp_for_test: deps.exposeOtp ? otp : undefined };
+  return {
+    ok: true,
+    pending,
+    challenge: { otp, magic_link_token: magicLinkToken },
+    otp_for_test: deps.exposeOtp === true ? otp : undefined,
+  };
 }
 
 async function confirmAcceptance(store, input = {}, deps = {}) {
@@ -110,8 +120,20 @@ async function confirmAcceptance(store, input = {}, deps = {}) {
   if (!pending || pending.kind !== "acceptance_pending") {
     return { ok: false, error: "acceptance_pending_missing", statusCode: 404 };
   }
-  const otpHash = crypto.createHash("sha256").update(String(input.otp || "")).digest("hex");
-  if (!safeEqual(otpHash, pending.otp_hash) && input.magic_link_token !== pending.pending_id) {
+  const otpProvided = String(input.otp || "").trim();
+  const magicProvided = String(input.magic_link_token || "").trim();
+  const otpOk = Boolean(otpProvided) && safeEqual(
+    crypto.createHash("sha256").update(otpProvided).digest("hex"),
+    pending.otp_hash,
+  );
+  const magicOk = Boolean(magicProvided)
+    && magicProvided !== pending.pending_id
+    && pending.magic_link_hash
+    && safeEqual(
+      crypto.createHash("sha256").update(magicProvided).digest("hex"),
+      pending.magic_link_hash,
+    );
+  if (!otpOk && !magicOk) {
     return { ok: false, error: "email_confirmation_failed", statusCode: 401 };
   }
   const now = deps.clock && deps.clock.now ? deps.clock.now() : new Date();

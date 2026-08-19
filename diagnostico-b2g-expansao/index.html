@@ -53,6 +53,7 @@
 
 <form id="contratar" method="post" action="/.netlify/functions/offer-terms-accept" style="margin-top:2rem;display:grid;gap:0.75rem;">
 <h2>Contratar Diagnóstico B2G  -  R$ 8.000</h2>
+<div id="step-dados">
 <label>CNPJ <input name="cnpj" required inputmode="numeric" autocomplete="off"/></label>
 <label>Nome do representante <input name="representative_name" required autocomplete="name"/></label>
 <label>Cargo <input name="representative_role" required/></label>
@@ -61,22 +62,77 @@
 <label><input type="checkbox" name="declaro_possuir_poderes_para_contratar" value="1"/> declaro possuir poderes para contratar</label>
 <label><input type="checkbox" name="reconheco_obrigacao_de_meio" value="1"/> reconheço que o serviço é obrigação de meio</label>
 <label><input type="checkbox" name="confirmo_contratacao_b2b_atividade_economica" value="1"/> confirmo contratação B2B para atividade econômica</label>
-<button class="button button-primary" type="submit">Contratar Diagnóstico B2G  -  R$ 8.000</button>
+<button class="button button-primary" type="submit" id="btn-aceitar">Contratar Diagnóstico B2G  -  R$ 8.000</button>
+</div>
+<div id="step-otp" hidden>
+<p>Enviamos um código ao e-mail profissional informado. Digite-o para criar o checkout individual.</p>
+<label>Código do e-mail <input name="otp" inputmode="numeric" autocomplete="one-time-code" id="otp-input"/></label>
+<button class="button button-primary" type="button" id="btn-confirmar">Confirmar e ir ao pagamento</button>
+</div>
 <p id="status" role="status"></p>
 </form>
-<p>Não há link genérico de pagamento. O checkout hospedado do Asaas só é criado depois do aceite eletrônico.</p>
+<p>Não há link genérico de pagamento. O checkout hospedado só é criado depois do aceite eletrônico e da confirmação do e-mail.</p>
 </main>
 <footer class="site-footer"><div class="container footer-bottom"><span>© 2026 CONFENGE.</span></div></footer>
 <script>
 (function () {
   var form = document.getElementById("contratar");
   var status = document.getElementById("status");
+  var stepDados = document.getElementById("step-dados");
+  var stepOtp = document.getElementById("step-otp");
+  var pendingId = null;
+  var cnpj = null;
+
+  function showError(msg) {
+    status.textContent = msg || "Não foi possível seguir. Se a elegibilidade for incerta, o pedido vai para revisão manual.";
+  }
+
+  function startCheckout(acceptanceId, cnpjValue) {
+    status.textContent = "Criando checkout individual…";
+    return fetch("/.netlify/functions/offer-checkout", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        offer_id: "CFG-DIAG-EXP-v1",
+        acceptance_id: acceptanceId,
+        cnpj: cnpjValue,
+        callback_origin: window.location.origin
+      })
+    }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
+      .then(function (out) {
+        if (!out.j.ok || !out.j.created || !out.j.created.link) {
+          showError(out.j.error === "feature_disabled"
+            ? "Checkout ainda não está ativo. Os termos já estão publicados."
+            : "Não foi possível criar o checkout. Tente de novo ou peça revisão manual.");
+          return;
+        }
+        window.location.href = out.j.created.link;
+      });
+  }
+
+  function confirmAcceptance(payload) {
+    status.textContent = "Confirmando aceite…";
+    return fetch("/.netlify/functions/offer-terms-accept", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
+      .then(function (out) {
+        if (!out.j.ok || !out.j.acceptance_id) {
+          showError("Código inválido ou expirado. Use o código enviado por e-mail.");
+          return;
+        }
+        return startCheckout(out.j.acceptance_id, out.j.cnpj || cnpj);
+      });
+  }
+
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
     status.textContent = "Enviando aceite…";
     var data = new FormData(form);
+    cnpj = data.get("cnpj");
     var body = {
-      cnpj: data.get("cnpj"),
+      cnpj: cnpj,
       representative_name: data.get("representative_name"),
       representative_role: data.get("representative_role"),
       email: data.get("email"),
@@ -94,14 +150,34 @@
       body: JSON.stringify(body)
     }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
       .then(function (out) {
-        if (!out.j.ok) {
-          status.textContent = "Não foi possível seguir. Se a elegibilidade for incerta, o pedido vai para revisão manual.";
+        if (!out.j.ok || !out.j.pending_id) {
+          showError();
           return;
         }
-        status.textContent = "Confirme o e-mail (OTP) para criar o checkout individual.";
+        pendingId = out.j.pending_id;
+        try { sessionStorage.setItem("cfg_diag_pending", pendingId); } catch (e) {}
+        stepDados.hidden = true;
+        stepOtp.hidden = false;
+        status.textContent = "Confirme o código enviado ao e-mail profissional.";
       })
-      .catch(function () { status.textContent = "Falha de rede. Tente de novo."; });
+      .catch(function () { showError("Falha de rede. Tente de novo."); });
   });
+
+  document.getElementById("btn-confirmar").addEventListener("click", function () {
+    var otp = document.getElementById("otp-input").value;
+    if (!pendingId) {
+      try { pendingId = sessionStorage.getItem("cfg_diag_pending"); } catch (e) {}
+    }
+    confirmAcceptance({ action: "confirm", pending_id: pendingId, otp: otp });
+  });
+
+  var params = new URLSearchParams(window.location.search);
+  var qPending = params.get("pending_id");
+  var qToken = params.get("magic_link_token");
+  if (qPending && qToken) {
+    pendingId = qPending;
+    confirmAcceptance({ action: "confirm", pending_id: qPending, magic_link_token: qToken });
+  }
 })();
 </script>
 </body>

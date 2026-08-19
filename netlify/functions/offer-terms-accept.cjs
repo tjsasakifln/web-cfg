@@ -1,10 +1,11 @@
 /**
- * Production acceptance before checkout. OTP / magic-link confirmation.
+ * Production acceptance before checkout. OTP / magic-link confirmation via email.
  */
 const { resolveProductionConfig, requireProductionRuntime } = require("../../scripts/offers/providers/config-production.cjs");
 const { redactProviderPayload } = require("../../scripts/offers/providers/redact.cjs");
 const { requestAcceptance, confirmAcceptance } = require("../../scripts/offers/acceptance.cjs");
-const { MemoryOfferStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
+const { sendAcceptanceChallenge } = require("../../scripts/offers/acceptance-mail.cjs");
+const { resolveProductionStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
 
 const MAX_BODY = 64 * 1024;
 
@@ -42,7 +43,10 @@ function createHandler(deps = {}) {
     } catch {
       return json(400, { ok: false, error: "invalid_json" });
     }
-    const store = deps.store || new MemoryOfferStore({ clock: deps.clock });
+
+    const store = await resolveProductionStore(deps, event);
+    if (!store) return json(503, { ok: false, error: "store_unavailable" });
+
     if (payload.action === "confirm") {
       const confirmed = await confirmAcceptance(store, {
         pending_id: payload.pending_id,
@@ -58,6 +62,7 @@ function createHandler(deps = {}) {
         acceptance_id: confirmed.acceptance.acceptance_id,
         amount_cents: confirmed.acceptance.amount_cents,
         terms_version: confirmed.acceptance.terms_version,
+        cnpj: confirmed.acceptance.cnpj,
         download: {
           acceptance_id: confirmed.acceptance.acceptance_id,
           terms_version: confirmed.acceptance.terms_version,
@@ -66,20 +71,37 @@ function createHandler(deps = {}) {
         },
       });
     }
+
     const requested = requestAcceptance(payload, {
       clock: deps.clock,
       otp: deps.otp,
-      exposeOtp: Boolean(deps.exposeOtp || env.NODE_ENV === "test"),
+      magicLinkToken: deps.magicLinkToken,
+      exposeOtp: deps.exposeOtp === true,
       legalHash: config.legalHash,
     });
     if (!requested.ok) return json(requested.statusCode || 422, { ok: false, error: requested.error, field: requested.field });
+
     await store.put(`acceptance-pending:${requested.pending.pending_id}`, requested.pending);
+
+    const origin = "https://confenge.com.br";
+    const magicLinkUrl = `${origin}/diagnostico-b2g-expansao/?pending_id=${encodeURIComponent(requested.pending.pending_id)}&magic_link_token=${encodeURIComponent(requested.challenge.magic_link_token)}`;
+    const mailer = deps.mailer || sendAcceptanceChallenge;
+    const mailed = await mailer({
+      to: requested.pending.email,
+      otp: requested.challenge.otp,
+      magicLinkUrl,
+      env,
+    });
+    if (!mailed || mailed.ok !== true) {
+      return json(503, { ok: false, error: (mailed && mailed.error) || "email_delivery_failed" });
+    }
+
     const body = {
       ok: true,
       pending_id: requested.pending.pending_id,
       next: "confirm_email",
     };
-    if (requested.otp_for_test) body.otp_for_test = requested.otp_for_test;
+    if (deps.exposeOtp === true && requested.otp_for_test) body.otp_for_test = requested.otp_for_test;
     return json(200, body);
   };
 }
