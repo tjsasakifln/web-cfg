@@ -115,6 +115,12 @@ const VALID = "11222333000181";
   if (!missing.some((a) => a.id === "nenhuma" || a.id === "falar_especialista")) {
     fail("next_actions_not_found", missing);
   } else pass("next_actions_fallback");
+  const stale = nextAction.selectNextActions({ xrayState: "STALE" });
+  const staleIds = stale.map((a) => a.id);
+  if (staleIds.includes("pedir_segunda_leitura")) fail("stale_must_not_get_segunda_leitura", staleIds);
+  if (!staleIds.includes("dados_defasados")) fail("stale_honesty_missing", staleIds);
+  if (!stale.every((a) => a.sla === "UNKNOWN")) fail("stale_sla", stale);
+  else pass("stale_honesty", staleIds.join(","));
 }
 
 // --- copy / trust ---
