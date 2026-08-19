@@ -169,13 +169,14 @@ class FileOfferStore {
 }
 
 class NetlifyBlobsOfferStore {
-  constructor(blobsStore, { clock } = {}) {
+  constructor(blobsStore, { clock, keyPrefix = "offers-sandbox/" } = {}) {
     this.store = blobsStore;
     this.clock = clock || { now: () => new Date() };
+    this.keyPrefix = keyPrefix;
   }
   _key(key) {
     const h = crypto.createHash("sha256").update(String(key)).digest("hex").slice(0, 40);
-    return `offers-sandbox/${h}`;
+    return `${this.keyPrefix}${h}`;
   }
   async _read(key) {
     try {
@@ -279,6 +280,48 @@ async function createSandboxStore(options = {}) {
   return null;
 }
 
+async function createProductionStore(options = {}) {
+  if (options.store) return options.store;
+  const env = options.env || process.env;
+  const clock = options.clock;
+  if (options.forceUnavailable) return null;
+  if (env.ASAAS_PRODUCTION_STORE_DIR) {
+    return new FileOfferStore(env.ASAAS_PRODUCTION_STORE_DIR, { clock });
+  }
+  try {
+    // eslint-disable-next-line import/no-unresolved
+    const blobs = require("@netlify/blobs");
+    if (options.event && options.event.blobs) {
+      try { blobs.connectLambda(options.event); } catch { /* context already bound */ }
+    }
+    const siteID = env.NETLIFY_BLOBS_SITE_ID || env.SITE_ID || env.NETLIFY_SITE_ID || "";
+    const token = env.NETLIFY_BLOBS_TOKEN || env.NETLIFY_API_TOKEN || env.NETLIFY_AUTH_TOKEN || "";
+    let store;
+    if (siteID && token) {
+      store = blobs.getStore({ name: "confenge-offers-production", siteID, token });
+    } else if (env.NETLIFY_BLOBS_CONTEXT || (options.event && options.event.blobs)) {
+      store = blobs.getStore("confenge-offers-production");
+    }
+    if (store) return new NetlifyBlobsOfferStore(store, { clock, keyPrefix: "offers-production/" });
+  } catch {
+    /* blobs unavailable */
+  }
+  if (options.allowMemory === true && !isProductionProfile(env)) {
+    return new MemoryOfferStore({ clock });
+  }
+  return null;
+}
+
+async function resolveProductionStore(deps, event) {
+  if (Object.prototype.hasOwnProperty.call(deps, "store")) return deps.store;
+  return createProductionStore({
+    env: deps.env || process.env,
+    event,
+    clock: deps.clock,
+    allowMemory: false,
+  });
+}
+
 module.exports = {
   DEFAULT_TTL_MS,
   alreadyExists,
@@ -286,5 +329,7 @@ module.exports = {
   FileOfferStore,
   NetlifyBlobsOfferStore,
   createSandboxStore,
+  createProductionStore,
+  resolveProductionStore,
   isProductionProfile,
 };

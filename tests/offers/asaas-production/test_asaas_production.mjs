@@ -90,12 +90,14 @@ function prodHttp() {
 }
 
 async function seedAcceptance(store) {
+  const mailer = async () => ({ ok: true });
   const accept = acceptFn.createHandler({
     env: PROD_ENV,
     store,
     clock: { now: () => new Date("2026-08-18T15:00:00Z") },
     otp: "654321",
     exposeOtp: true,
+    mailer,
   });
   const requested = parse(await accept({
     httpMethod: "POST",
@@ -339,6 +341,9 @@ async function seedAcceptance(store) {
   assert("public_legal_no_extra", !termsPage.includes(leakPrivate) && !privacyPage.includes(leakPrivate) && !termsPage.includes(leakPrice), "legal extra");
   assert("public_page_no_encarregado", !/encarregado|\bDPO\b/.test(page), "privacy channel");
   assert("public_page_indexable", /index,follow|index,\s*follow/i.test(page) || !page.includes("noindex"), "robots");
+  assert("public_page_has_otp_step", page.includes("otp-input") && page.includes("btn-confirmar"), "otp ui");
+  assert("public_page_calls_checkout", page.includes("/.netlify/functions/offer-checkout"), "checkout call");
+  assert("public_page_redirects_hosted", page.includes("created.link") && page.includes("window.location.href"), "hosted redirect");
 }
 
 {
@@ -347,6 +352,99 @@ async function seedAcceptance(store) {
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
   assert("diag_kill_switch", kill.statusCode >= 400, kill);
+}
+
+{
+  const store = new MemoryOfferStore();
+  const mailed = [];
+  const accept = acceptFn.createHandler({
+    env: PROD_ENV,
+    store,
+    mailer: async (msg) => { mailed.push(msg); return { ok: true }; },
+  });
+  const requested = parse(await accept({
+    httpMethod: "POST",
+    body: JSON.stringify({
+      cnpj: CNPJ,
+      representative_name: "Ana Souza",
+      representative_role: "Diretora",
+      email: "ana@empresa.com.br",
+      offer_id: "CFG-DIAG-EXP-v1",
+      declarations: Object.fromEntries(Object.keys(REQUIRED_DECLARATIONS).map((k) => [k, true])),
+    }),
+  }));
+  assert("otp_not_in_browser", requested.body.otp_for_test == null && !JSON.stringify(requested.body).includes("654321"), requested.body);
+  assert("email_challenge_sent", mailed.length === 1 && mailed[0].otp && mailed[0].to === "ana@empresa.com.br", mailed[0]);
+  const noSecret = parse(await accept({
+    httpMethod: "POST",
+    body: JSON.stringify({ action: "confirm", pending_id: requested.body.pending_id }),
+  }));
+  assert("confirm_without_email_secret_rejected", noSecret.statusCode === 401, noSecret);
+  const spoof = parse(await accept({
+    httpMethod: "POST",
+    body: JSON.stringify({
+      action: "confirm",
+      pending_id: requested.body.pending_id,
+      magic_link_token: requested.body.pending_id,
+    }),
+  }));
+  assert("pending_id_is_not_magic_secret", spoof.statusCode === 401, spoof);
+  const okConfirm = parse(await accept({
+    httpMethod: "POST",
+    body: JSON.stringify({
+      action: "confirm",
+      pending_id: requested.body.pending_id,
+      otp: mailed[0].otp,
+    }),
+  }));
+  assert("confirm_with_emailed_otp", okConfirm.statusCode === 201 && Boolean(okConfirm.body.acceptance_id), okConfirm);
+}
+
+{
+  const saved = {};
+  for (const key of Object.keys(PROD_ENV)) saved[key] = process.env[key];
+  Object.assign(process.env, PROD_ENV);
+  delete process.env.ASAAS_PRODUCTION_STORE_DIR;
+  delete process.env.NETLIFY_BLOBS_SITE_ID;
+  delete process.env.NETLIFY_BLOBS_TOKEN;
+  delete process.env.SITE_ID;
+  delete process.env.NETLIFY_SITE_ID;
+  delete process.env.RESEND_API_KEY;
+  try {
+    const acceptBare = parse(await acceptFn.handler({
+      httpMethod: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        cnpj: CNPJ,
+        representative_name: "Ana Souza",
+        representative_role: "Diretora",
+        email: "ana@empresa.com.br",
+        offer_id: "CFG-DIAG-EXP-v1",
+        declarations: Object.fromEntries(Object.keys(REQUIRED_DECLARATIONS).map((k) => [k, true])),
+      }),
+    }));
+    assert("uninjected_accept_durable_or_503", acceptBare.statusCode === 503 && acceptBare.body.error === "store_unavailable", acceptBare);
+    assert("uninjected_accept_no_otp_leak", acceptBare.body.otp_for_test == null, acceptBare.body);
+
+    const checkoutBare = parse(await checkoutFn.handler({
+      httpMethod: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ offer_id: "CFG-DIAG-EXP-v1", acceptance_id: "acc_x" }),
+    }));
+    assert("uninjected_checkout_durable_or_503", checkoutBare.statusCode === 503 && checkoutBare.body.error === "store_unavailable", checkoutBare);
+
+    const webhookBare = parse(await webhookFn.handler({
+      httpMethod: "POST",
+      headers: { "asaas-access-token": PROD_ENV.ASAAS_PRODUCTION_WEBHOOK_TOKEN, "content-type": "application/json" },
+      body: JSON.stringify({ id: "evt_bare", event: "PAYMENT_RECEIVED" }),
+    }));
+    assert("uninjected_webhook_durable_or_503", webhookBare.statusCode === 503 && webhookBare.body.error === "store_unavailable", webhookBare);
+  } finally {
+    for (const key of Object.keys(PROD_ENV)) {
+      if (saved[key] === undefined) delete process.env[key];
+      else process.env[key] = saved[key];
+    }
+  }
 }
 
 const failed = results.filter((r) => !r.ok);

@@ -21,6 +21,11 @@ Secrets to configure (names only — never commit values):
     Exact value:
     sha256:5fd69a314d6b6aab74ba2ab87ae5e90d12ade6360193a18275c9c3377e1fd778
 
+  RESEND_API_KEY
+    Used only to email the acceptance OTP / magic link. The code is never
+    returned to the browser. Without this key, accept returns 503
+    email_not_configured and no checkout is created.
+
 UI / flag activation order (keep OFF until the previous step is done):
 
   1. Merge Governance founder-approved-v1 and pin the hash above.
