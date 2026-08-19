@@ -265,7 +265,7 @@ Approved in-repo probes against production, twice.
 
 Fix (this commit, `netlify/functions/lib/lead-delivery.cjs`): skip Resend, ops webhook and authenticated ntfy when `isCommercialReal(record)` is false (`synthetic` / `qa` / `spam` / `internal`). Shipped test `synthetic_skips_resend` drives `deliverResendEmail` and the lead handler with `RESEND_API_KEY` set and fails if `api.resend.com` is called.
 
-Do **not** re-run production probes until this skip is on the live Netlify function.
+After skip SHA `6ffb5cd392d5d2b2089d90a90c0cbe6adf8c2cd4` was live (`deploy_id=6a862ccfa2a76d0007cd36cd`), **one** `npm run probe:lead:prod` returned `email_status=skipped`, `notify_status=skipped`, `status=persisted`, lead_id `8d4fe3284167e54d5c242249`. No further production probes in this campaign.
 
 **`npm run probe:money-asset:prod`**
 
@@ -408,7 +408,7 @@ HELD_PRS: #92 #93 #132 #133 #134 #135 #136 #138 #139 #140 #141 #142 #143 #144 #1
 CI: site-ci GREEN + pSEO quality gates GREEN on fe6d066 (main runs 32301442782 / 32301442781)
 DEPLOY: Netlify production confenge.com.br increment deploy_id=6a8618fa44b8ea0008c7ff71 commit=fe6d066 2026-08-19 17:58:51 -03; later tip 9f506f7f deploy_id=6a861b6c8f70c80008764c1a (report only)
 LIVE_SMOKE: PASS (5 URLs + 3 noindex gates, two consistent GETs, revalidated)
-LEAD_PATH: SYNTHETIC_PLUMBING_PROVEN; email_status=ok WAS A DEFECT (4 Resend notifies); skip shipped, not re-probed until live; INBOUND_NOW BLOCKED; not QCO
+LEAD_PATH: SYNTHETIC_PLUMBING_PROVEN; 4 Resend notifies WERE sent (defect); skip live on 6ffb5cd3 with email_status=skipped; INBOUND_NOW BLOCKED; not QCO
 GSC_BASELINE: seo/gsc-2026-08-09 (SINAPI 89/1/1.12%/7.27; query desonerado e não desonerado 22/0; aditivos 12/0/pos 49.25; commercial_click_share 0.0)
 REAL_ORGANIC_LIFT: UNKNOWN_AWAITING_MEASUREMENT_WINDOW
 BLOCKERS: GSC auth absent; OPS_TOKEN absent; #60 real lead UNKNOWN
