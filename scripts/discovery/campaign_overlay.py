@@ -425,6 +425,9 @@ def _eligibility_from_reproof(reproof: dict[str, Any], freshness: str) -> dict[s
     )
 
 
+_UNSET = object()
+
+
 def build_stage_report(
     *,
     root: Path | None = None,
@@ -432,12 +435,16 @@ def build_stage_report(
     live: bool = False,
     transport: Transport | None = None,
     gsc_ready: bool | None = None,
+    gsc_snapshot: Any = _UNSET,
 ) -> dict[str, Any]:
     root = root or repo_root()
     stamp = generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     sitemap = load_sitemap_urls(root)
     creds = credential_presence()
-    gsc_snapshot = load_live_gsc_snapshot(root)
+    if gsc_snapshot is _UNSET:
+        gsc_snapshot = load_live_gsc_snapshot(root)
+    elif gsc_snapshot is not None and not is_live_gsc_payload(gsc_snapshot):
+        gsc_snapshot = None
     snapshot_ready = bool(gsc_snapshot)
     if gsc_ready is None:
         gsc_ready = snapshot_ready

@@ -26,6 +26,7 @@ from scripts.discovery.campaign_overlay import (
     refuse_collapsed_stage,
 )
 from scripts.discovery.http_client import FakeTransport, ProbeResponse
+from scripts.revops.search_demand_observatory import is_live_gsc_payload
 from scripts.discovery.metrics import MetricStageError
 from scripts.discovery.registry import load_cohort
 from scripts.discovery.url_inspection import founder_manual_checklist, inspect_urls
@@ -137,11 +138,21 @@ def test_appearance_inspection_pass_does_not_invent_metrics():
 
 
 def test_live_snapshot_missing_url_is_unknown_not_blocked_or_zero():
-    snapshot = load_live_gsc_snapshot(root=ROOT)
-    assert snapshot is not None
+    import subprocess
+
+    blob = subprocess.check_output(
+        ["git", "show", "HEAD:data/revops/gsc/latest_import.json"],
+        cwd=ROOT,
+    )
+    snapshot = json.loads(blob)
+    assert is_live_gsc_payload(snapshot)
     assert snapshot["source"] == "search_analytics_api"
     assert snapshot["ready_for_product_decisions"] is True
-    report = build_stage_report(root=ROOT, generated_at=AS_OF, live=False)
+    assert snapshot.get("query_text_redacted") is True
+    assert "consulta privada" not in blob.decode("utf-8")
+    report = build_stage_report(
+        root=ROOT, generated_at=AS_OF, live=False, gsc_snapshot=snapshot
+    )
     by_id = {row["id"]: row for row in report["assets"]}
     seen = by_id["limite-aditivo-25-50-obra-publica"]
     missing = by_id["reequilibrio-obras-publicas"]
