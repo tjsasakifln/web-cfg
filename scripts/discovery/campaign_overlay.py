@@ -172,6 +172,45 @@ def gsc_page_evidence(payload: dict[str, Any] | None) -> dict[str, dict[str, Any
     return out
 
 
+
+def appearance_from_gsc(
+    *,
+    page_gsc: dict[str, Any] | None,
+    gsc_ready: bool,
+    inspect_row: dict[str, Any] | None,
+    credential_present: bool,
+) -> dict[str, str]:
+    """Map Search Analytics + URL Inspection to appearance.
+
+    URL Inspection proves index/eligibility only. A campaign URL absent from
+    Search Analytics top rows is UNKNOWN (missing_is_not_zero), never zero
+    impressions/clicks. Inspection PASS cannot invent appearance.
+    """
+    inspect_row = inspect_row or {}
+    if gsc_ready and page_gsc and float(page_gsc.get("impressions") or 0) > 0:
+        return {
+            "status": "TRUE",
+            "note": (
+                "search_analytics_api_returned_page_rows; "
+                f"impressions={page_gsc['impressions']:g}; clicks={page_gsc['clicks']:g}; "
+                f"returned_rows={page_gsc['returned_rows']}; max_date={page_gsc['max_date']}; "
+                "impression_is_not_engagement"
+            ),
+        }
+    if gsc_ready:
+        if inspect_row.get("verdict") == "PASS":
+            note = (
+                "url_inspection_pass_but_no_page_row_returned_by_search_analytics; "
+                "missing_top_row_is_not_zero"
+            )
+        else:
+            note = "page_absent_from_returned_top_rows_missing_is_not_zero"
+        return {"status": "UNKNOWN", "note": note}
+    if not credential_present:
+        return {"status": "BLOCKED", "note": "BLOCKED_GSC_READONLY_CREDENTIAL"}
+    return {"status": "UNKNOWN", "note": "no_live_gsc_appearance; impression_is_not_engagement"}
+
+
 def stage_cell(
     status: str,
     *,
@@ -441,25 +480,15 @@ def build_stage_report(
             (row for row in inspections.get("inspections") or [] if row.get("url") == asset["canonical"]),
             {"index_state": "UNKNOWN", "ok": False, "error": "missing"},
         )
-        appearance_status = "UNKNOWN"
-        appearance_note = "no_live_gsc_appearance; impression_is_not_engagement"
         page_gsc = page_evidence.get(asset["canonical"])
-        if page_gsc and page_gsc["impressions"] > 0 and gsc_ready:
-            appearance_status = "TRUE"
-            appearance_note = (
-                "search_analytics_api_returned_page_rows; "
-                f"impressions={page_gsc['impressions']:g}; clicks={page_gsc['clicks']:g}; "
-                f"returned_rows={page_gsc['returned_rows']}; max_date={page_gsc['max_date']}; "
-                "impression_is_not_engagement"
-            )
-        elif gsc_ready and inspect_row.get("verdict") == "PASS":
-            appearance_note = (
-                "url_inspection_pass_but_no_page_row_returned_by_search_analytics; "
-                "missing_top_row_is_not_zero"
-            )
-        elif creds["present"] is False:
-            appearance_status = "BLOCKED"
-            appearance_note = "BLOCKED_GSC_READONLY_CREDENTIAL"
+        appearance = appearance_from_gsc(
+            page_gsc=page_gsc,
+            gsc_ready=gsc_ready,
+            inspect_row=inspect_row,
+            credential_present=bool(creds["present"]),
+        )
+        appearance_status = appearance["status"]
+        appearance_note = appearance["note"]
         stages = {
             "eligibility": _eligibility_from_reproof(reproof, stamp),
             "appearance": stage_cell(

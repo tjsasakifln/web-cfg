@@ -19,7 +19,9 @@ from scripts.discovery.campaign_overlay import (
     build_stage_report,
     campaign_urls,
     format_stage_report,
+    appearance_from_gsc,
     gsc_page_evidence,
+    load_live_gsc_snapshot,
     inspect_local,
     refuse_collapsed_stage,
 )
@@ -98,6 +100,92 @@ def test_gsc_page_evidence_preserves_missing_as_unknown():
         "max_date": "2026-08-11",
     }
     assert second not in evidence
+
+
+
+
+def test_appearance_inspection_pass_does_not_invent_metrics():
+    first, missing = campaign_urls()[:2]
+    evidence = gsc_page_evidence(
+        {
+            "queries": [
+                {"date": "2026-08-10", "page": first, "impressions": 4, "clicks": 0},
+                {"date": "2026-08-11", "page": first, "impressions": 2, "clicks": 1},
+            ]
+        }
+    )
+    present = appearance_from_gsc(
+        page_gsc=evidence[first],
+        gsc_ready=True,
+        inspect_row={"verdict": "PASS", "index_state": "Submitted and indexed"},
+        credential_present=True,
+    )
+    absent = appearance_from_gsc(
+        page_gsc=evidence.get(missing),
+        gsc_ready=True,
+        inspect_row={"verdict": "PASS", "index_state": "Submitted and indexed"},
+        credential_present=True,
+    )
+    assert present["status"] == "TRUE"
+    assert "impressions=6" in present["note"]
+    assert "clicks=1" in present["note"]
+    assert "max_date=2026-08-11" in present["note"]
+    assert absent["status"] == "UNKNOWN"
+    assert "missing_top_row_is_not_zero" in absent["note"]
+    assert "impressions=0" not in absent["note"]
+    assert absent.get("impressions") is None
+
+
+def test_live_snapshot_missing_url_is_unknown_not_blocked_or_zero():
+    snapshot = load_live_gsc_snapshot(root=ROOT)
+    assert snapshot is not None
+    assert snapshot["source"] == "search_analytics_api"
+    assert snapshot["ready_for_product_decisions"] is True
+    report = build_stage_report(root=ROOT, generated_at=AS_OF, live=False)
+    by_id = {row["id"]: row for row in report["assets"]}
+    seen = by_id["limite-aditivo-25-50-obra-publica"]
+    missing = by_id["reequilibrio-obras-publicas"]
+    assert seen["gsc_search_analytics"]["impressions"] > 0
+    assert seen["gsc_search_analytics"]["max_date"]
+    assert seen["stages"]["appearance"]["status"] == "TRUE"
+    assert missing["gsc_search_analytics"]["impressions"] is None
+    assert missing["gsc_search_analytics"]["clicks"] is None
+    assert missing["gsc_search_analytics"]["reason"] == (
+        "page_absent_from_returned_top_rows_missing_is_not_zero"
+    )
+    assert missing["stages"]["appearance"]["status"] == "UNKNOWN"
+    assert missing["stages"]["appearance"]["status"] != "BLOCKED"
+    assert "0" != str(missing["gsc_search_analytics"]["impressions"])
+
+
+def test_fixture_snapshot_cannot_become_live():
+    import json
+    import tempfile
+    from pathlib import Path as P
+
+    with tempfile.TemporaryDirectory() as td:
+        dest = P(td) / "data/revops/gsc"
+        dest.mkdir(parents=True)
+        (dest / "latest_import.json").write_text(
+            json.dumps(
+                {
+                    "source": "fixture",
+                    "synthetic": True,
+                    "fixture": True,
+                    "ready_for_product_decisions": True,
+                    "queries": [
+                        {
+                            "page": campaign_urls()[0],
+                            "impressions": 99,
+                            "clicks": 9,
+                            "query": "consulta privada",
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        assert load_live_gsc_snapshot(root=P(td)) is None
 
 
 def test_url_inspection_unknown_without_creds_and_no_indexing_api():
