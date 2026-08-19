@@ -105,7 +105,7 @@ PR | TÍTULO | DESTINO | SHA/PR DE DESTINO | ISSUE | ISSUE STATE | BRANCH | OBSE
 | #143 | feat(authority): canary verdict stays UNKNOWN without evidence (#83) | CLOSED_NO_INCREMENTAL_VALUE | test_canary.py CLI | #83 | OPEN | issue/83-inrepo-slice | EXPAND already blocked |
 | #144 | feat(market-answers): candidate record completeness with UNKNOWN demand (#84) | CLOSED_NO_INCREMENTAL_VALUE | shipped candidate + gate | #84 | OPEN | issue/84-inrepo-slice | fields already present |
 | #145 | feat(discovery): absence of citations is not a zero (#86) | CLOSED_NO_INCREMENTAL_VALUE | report.py | #86 | OPEN | issue/86-inrepo-slice | absence_is_not_zero already set |
-| #146 | feat(conversion): STALE X-Ray keeps honesty and blocks segunda leitura (#88) | ABSORBED_BY_INTEGRATION_PR | this PR | #88 | OPEN | issue/88-inrepo-slice | dados_defasados + tests landed here |
+| #146 | feat(conversion): STALE X-Ray keeps honesty and blocks segunda leitura (#88) | ABSORBED_BY_INTEGRATION_PR | #150 | #88 | OPEN | issue/88-inrepo-slice | dados_defasados + tests landed here |
 | #147 | feat(data-desk): five named syndication targets, prepare-only (#89) | CLOSED_DEFERRED_TO_ISSUE | #89 | #89 | OPEN | issue/89-inrepo-slice | no approved asset / 14-day send |
 
 ---
@@ -200,7 +200,7 @@ CLOSED_DEFERRED: 7 (#132 #133 #135 #136 #138 #140 #147)
 CLOSED_NO_VALUE: 5 (#139 #142 #143 #144 #145)
 CLOSED_WRONG_AUTHORITY: 1 (#134)
 ACTIVE_WITH_BLOCKER: 0
-INTEGRATION_PRS: 1 (this PR)
+INTEGRATION_PRS: 1 (#150)
 BRANCHES_DELETED: dependabot blobs + axe/LH + issue/*-inrepo-slice sources
 ISSUES_CLOSED: 0
 ISSUES_LEFT_OPEN: #61 #62 #63 #64 #65 #66 #74 #83 #84 #86 #87 #88 #89 #90 #91 (+ #149 new)
