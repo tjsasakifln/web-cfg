@@ -33,10 +33,13 @@ from scripts.organic.breakout import (
     select_assets,
     sitemap_locs,
 )
+from scripts.discovery.campaign_overlay import appearance_from_gsc, gsc_page_evidence
 from scripts.revops.search_demand_observatory import (
     dedupe_gsc_rows,
     detect_all,
+    git_safe_live_payload,
     gsc_performance_status,
+    is_live_gsc_payload,
     label_historical_export,
     pull_api,
 )
@@ -203,6 +206,72 @@ def test_filters_stay_noindex_in_gate():
     decision = evaluate_index_gate(record, html, root=ROOT, sitemap={record["canonical"]})
     assert decision.conditions["filters_not_indexed"] is False
     assert decision.indexable is False
+
+
+
+
+def test_overlap_keeps_live_missing_and_organic_classes():
+    """Combined #122 + #123: live missing is UNKNOWN; organic classes stay."""
+    first = "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
+    missing = "https://confenge.com.br/reequilibrio-obras-publicas/"
+    evidence = gsc_page_evidence(
+        {
+            "queries": [
+                {"date": "2026-08-10", "page": first, "impressions": 4, "clicks": 0},
+            ]
+        }
+    )
+    present = appearance_from_gsc(
+        page_gsc=evidence[first],
+        gsc_ready=True,
+        inspect_row={"verdict": "PASS"},
+        credential_present=True,
+    )
+    absent = appearance_from_gsc(
+        page_gsc=evidence.get(missing),
+        gsc_ready=True,
+        inspect_row={"verdict": "PASS"},
+        credential_present=True,
+    )
+    assert present["status"] == "TRUE"
+    assert absent["status"] == "UNKNOWN"
+    assert "missing_top_row_is_not_zero" in absent["note"]
+
+    stamped = label_historical_export({"source": "csv", "queries": [{"query": "sinapi desonerado"}]})
+    assert stamped["historical_neq_live"] is True
+    assert stamped["performance_status"] == "UNKNOWN"
+    assert is_live_gsc_payload(stamped) is False
+    assert is_live_gsc_payload(
+        {"source": "fixture", "synthetic": True, "ready_for_product_decisions": True}
+    ) is False
+
+    safe = git_safe_live_payload(
+        {
+            "source": "search_analytics_api",
+            "ready_for_product_decisions": True,
+            "synthetic": False,
+            "queries": [{"query": "consulta privada", "page": first, "impressions": 2}],
+        }
+    )
+    assert "consulta privada" not in json.dumps(safe)
+    assert safe["raw_query_rows_in_git"] is False
+
+    detected = detect_all(
+        [
+            {
+                "date": "2026-07-28",
+                "query": "sinapi desonerado",
+                "page": "https://confenge.com.br/",
+                "impressions": 8,
+                "position": 7.5,
+                "clicks": 0,
+            }
+        ],
+        indexable_urls=["https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/"],
+    )
+    assert detected["zero_inferred_from_absence"] is False
+    assert detected["wrong_landing"]["class"] == "wrong_landing"
+    assert any(item.get("impressions") is None and item.get("status") == "ABSENT" for item in detected["indexable_without_impressions"]["items"])
 
 
 def test_gsc_absence_unknown_and_historical_neq_live():

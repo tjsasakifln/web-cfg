@@ -8,9 +8,9 @@ Leverage: distribution + trust + data.
 
 ## 1. STATUS
 
-`READY_FOR_REVIEW`
+`READY_FOR_REVIEW` (rebased onto #122 live GSC observation)
 
-Three existing INDEX URLs were substantially improved, individually gated, and left INDEX. Live GSC credentials are absent, so current demand is not claimed. The extra-cli Traffic Opportunity Frontier export was absent (non-blocking). Contract-analysis surfaces were not touched.
+Three existing INDEX URLs were substantially improved, individually gated, and left INDEX. Live GSC observation landed first via #122; this PR keeps `missing_is_not_zero`, historical ≠ live, and organic classification. The extra-cli Traffic Opportunity Frontier export was absent (non-blocking). Contract-analysis surfaces were not touched.
 
 ## 2. PR
 
@@ -44,19 +44,23 @@ All three are **existing URLs**. Zero new public URLs. Not a page factory.
 
 ## 6. GSC_STATE
 
-`UNKNOWN`
+Live snapshot on main after #122 (`source=search_analytics_api`, `max_date=2026-08-13`, 20 returned rows). Historical exports stay labeled historical ≠ live.
 
-- Shipped `pull-api` 28d, 7d and 7d smoke all returned `missing_credentials`.
-- `FOUNDER_ACTION_REQUIRED_GSC.txt` written.
-- Historical exports `seo/gsc-2026-07-30` and `seo/gsc-2026-08-09` remain labeled `historical ≠ live`.
-- Zero not inferred from absence.
+| URL | appearance | impressions | clicks |
+| --- | --- | --- | --- |
+| `/conteudos/limite-aditivo-25-50-obra-publica/` | TRUE | 4 | 0 |
+| `/aditivos-obras-publicas/` | TRUE | 10 | 0 |
+| `/reequilibrio-obras-publicas/` | UNKNOWN | absent from top rows | absent |
+| `/inteligencia/valor-tipico-contratos-pavimentacao/` | UNKNOWN | absent from top rows | absent |
+
+- Zero not inferred from absence (`missing_is_not_zero`).
 - Inspection ≠ indexation ≠ impression ≠ click.
-- Live baseline not invented.
-- `ready_for_product_decisions=false` on committed snapshots (unchanged).
+- Live git-safe snapshots redact raw queries.
+- Fixture / `sync --fixture` cannot become product-ready.
 
 ## 7. TECHNICAL_PROOF
 
-- Exclusive worktree from `origin/main` (`61276b3a`).
+- Rebased onto `origin/main` after #122 (`0e707126`). Shared files keep live observation + organic `detect_*` / `label_historical_export`.
 - Forbidden paths absent from the campaign diff.
 - Production HTTP 200 on the three existing URLs (pre-improvement surface).
 - After this PR: self-canonical, `index,follow`, present in exactly one sitemap (`sitemap.xml`), HowTo JSON-LD matches visible method/limitations, CTA attribution `CONFENGE_WEB`, correction `/correcoes/`, refresh owner visible, content hash visible.
@@ -111,19 +115,17 @@ Each pack has outreach title, factual summary, citable datum/visual, method, fiv
 
 `DISCOVERED`, `INDEXED`, `IMPRESSION`, `CLICK`, `ENGAGEMENT`, `CTA`, `LEAD`, `PIPELINE`, `REVENUE`.
 
-GSC performance remains `UNKNOWN` until a live read-only pull succeeds.
+Impression, click, lead and revenue stay `UNKNOWN` unless a later live pull or lead store observes them. Absence from top rows is not zero.
 
 ## 14. ROLLBACK
 
 Revert this PR / `git revert` the merge commit. The three URLs return to the previous HTML. No sitemap membership was added or removed. No redirects were added. No catalog, prices, terms, Asaas, SmartLic, Warmbly, Governance or contract-analysis files change.
 
-## 15. RESIDUAL_HUMAN_ACTION
+## 15. NEXT_MEASUREMENT_EXPERIMENT
 
-1. Invite a read-only Search Console service account and run `python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke`.
-2. Review the three prepare-only packs; send nothing automatically.
-3. Do not close issues whose DoD requires discovery, lead or revenue.
-4. Rebase onto extra-cli `CONFENGE-TRAFFIC-OPPORTUNITY-FRONTIER-01` only if a READY export appears and there is no file collision.
-5. Leave `CONFENGE-WEB-FIRST-OFFICIAL-CONTRACT-ANALYSIS-01` as exclusive owner of `scripts/contract_analysis/**` and its official-live route/slug.
+After the integrated production SHA, observe **one complete Search Analytics window** on the three existing URLs and record **CTA click → lead persist**. Do not rewrite the chassis. Do not auto-submit IndexNow. Do not close #84, #86, #66, #63 or #61.
+
+Supporting (not the experiment): review the three prepare-only packs; send nothing automatically.
 
 ## Isolation
 
