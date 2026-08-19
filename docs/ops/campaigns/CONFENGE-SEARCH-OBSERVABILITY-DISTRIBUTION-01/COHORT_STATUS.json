@@ -3,6 +3,12 @@
     {
       "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
       "copy_changed": false,
+      "gsc_search_analytics": {
+        "clicks": 0.0,
+        "impressions": 4.0,
+        "max_date": "2026-08-10",
+        "returned_rows": 4
+      },
       "id": "limite-aditivo-25-50-obra-publica",
       "index_intent": "INDEX",
       "intent": "limite_aditivo_25_50",
@@ -27,7 +33,7 @@
           "cta_present": true
         },
         "declared_canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
-        "elapsed_ms": 170,
+        "elapsed_ms": 281,
         "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
         "http_error": null,
         "http_status": 200,
@@ -86,15 +92,15 @@
       },
       "stages": {
         "appearance": {
-          "freshness": "2026-08-18T03:20:00Z",
-          "next_action": "founder_gsc_manual_then_live_export",
-          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "freshness": "2026-08-18T14:20:00Z",
+          "next_action": "observe_engagement_and_referral_separately",
+          "note": "search_analytics_api_returned_page_rows; impressions=4; clicks=0; returned_rows=4; max_date=2026-08-10; impression_is_not_engagement",
           "owner": "Tiago Sasaki",
           "source": "url_inspection+gsc_search_analytics",
-          "status": "BLOCKED"
+          "status": "TRUE"
         },
         "cta_lead": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_infer_lead_from_cta_presence",
           "note": "cta_present=true; cta_is_not_lead",
           "owner": "Tiago Sasaki",
@@ -102,14 +108,14 @@
           "status": "UNKNOWN"
         },
         "eligibility": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "keep_observe_do_not_change_copy",
           "owner": "Tiago Sasaki",
           "source": "live_http+local_inspect",
           "status": "TRUE"
         },
         "engagement": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "observe_engaged_sessions_separately",
           "note": "impression_is_not_engagement",
           "owner": "Tiago Sasaki",
@@ -117,7 +123,7 @@
           "status": "UNKNOWN"
         },
         "pipeline": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_invent_pipeline",
           "note": "lead_is_not_pipeline",
           "owner": "Tiago Sasaki",
@@ -125,7 +131,7 @@
           "status": "UNKNOWN"
         },
         "referral": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "import_referral_when_available",
           "note": "referral_is_not_lead; impression_is_not_referral",
           "owner": "Tiago Sasaki",
@@ -134,16 +140,26 @@
         }
       },
       "url_inspection": {
-        "error": "missing_credentials",
-        "index_state": "UNKNOWN",
+        "coverage_state": "Submitted and indexed",
+        "error": null,
+        "index_state": "Submitted and indexed",
         "indexing_api_called": false,
-        "inspected_at": "2026-08-18T03:20:00Z",
-        "ok": false
+        "inspected_at": "2026-08-18T14:20:00Z",
+        "last_crawl": "2026-07-30T06:12:09Z",
+        "ok": true,
+        "source": "url_inspection_api",
+        "verdict": "PASS"
       }
     },
     {
       "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
       "copy_changed": false,
+      "gsc_search_analytics": {
+        "clicks": 0.0,
+        "impressions": 10.0,
+        "max_date": "2026-08-12",
+        "returned_rows": 10
+      },
       "id": "aditivos-obras-publicas",
       "index_intent": "INDEX",
       "intent": "aditivos_servicos_extras",
@@ -168,7 +184,7 @@
           "cta_present": true
         },
         "declared_canonical": "https://confenge.com.br/aditivos-obras-publicas/",
-        "elapsed_ms": 69,
+        "elapsed_ms": 93,
         "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
         "http_error": null,
         "http_status": 200,
@@ -229,15 +245,15 @@
       },
       "stages": {
         "appearance": {
-          "freshness": "2026-08-18T03:20:00Z",
-          "next_action": "founder_gsc_manual_then_live_export",
-          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "freshness": "2026-08-18T14:20:00Z",
+          "next_action": "observe_engagement_and_referral_separately",
+          "note": "search_analytics_api_returned_page_rows; impressions=10; clicks=0; returned_rows=10; max_date=2026-08-12; impression_is_not_engagement",
           "owner": "Tiago Sasaki",
           "source": "url_inspection+gsc_search_analytics",
-          "status": "BLOCKED"
+          "status": "TRUE"
         },
         "cta_lead": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_infer_lead_from_cta_presence",
           "note": "cta_present=true; cta_is_not_lead",
           "owner": "Tiago Sasaki",
@@ -245,14 +261,14 @@
           "status": "UNKNOWN"
         },
         "eligibility": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "keep_observe_do_not_change_copy",
           "owner": "Tiago Sasaki",
           "source": "live_http+local_inspect",
           "status": "TRUE"
         },
         "engagement": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "observe_engaged_sessions_separately",
           "note": "impression_is_not_engagement",
           "owner": "Tiago Sasaki",
@@ -260,7 +276,7 @@
           "status": "UNKNOWN"
         },
         "pipeline": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_invent_pipeline",
           "note": "lead_is_not_pipeline",
           "owner": "Tiago Sasaki",
@@ -268,7 +284,7 @@
           "status": "UNKNOWN"
         },
         "referral": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "import_referral_when_available",
           "note": "referral_is_not_lead; impression_is_not_referral",
           "owner": "Tiago Sasaki",
@@ -277,16 +293,27 @@
         }
       },
       "url_inspection": {
-        "error": "missing_credentials",
-        "index_state": "UNKNOWN",
+        "coverage_state": "Submitted and indexed",
+        "error": null,
+        "index_state": "Submitted and indexed",
         "indexing_api_called": false,
-        "inspected_at": "2026-08-18T03:20:00Z",
-        "ok": false
+        "inspected_at": "2026-08-18T14:20:00Z",
+        "last_crawl": "2026-08-12T23:33:28Z",
+        "ok": true,
+        "source": "url_inspection_api",
+        "verdict": "PASS"
       }
     },
     {
       "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
       "copy_changed": false,
+      "gsc_search_analytics": {
+        "clicks": null,
+        "impressions": null,
+        "max_date": null,
+        "reason": "page_absent_from_returned_top_rows_missing_is_not_zero",
+        "returned_rows": null
+      },
       "id": "reequilibrio-obras-publicas",
       "index_intent": "INDEX",
       "intent": "reequilibrio_economico_financeiro",
@@ -311,7 +338,7 @@
           "cta_present": true
         },
         "declared_canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
-        "elapsed_ms": 62,
+        "elapsed_ms": 108,
         "h1": "Reequilíbrio econômico-financeiro de obra pública",
         "http_error": null,
         "http_status": 200,
@@ -372,15 +399,15 @@
       },
       "stages": {
         "appearance": {
-          "freshness": "2026-08-18T03:20:00Z",
-          "next_action": "founder_gsc_manual_then_live_export",
-          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "freshness": "2026-08-18T14:20:00Z",
+          "next_action": "continue_gsc_observation_missing_is_not_zero",
+          "note": "url_inspection_pass_but_no_page_row_returned_by_search_analytics; missing_top_row_is_not_zero",
           "owner": "Tiago Sasaki",
           "source": "url_inspection+gsc_search_analytics",
-          "status": "BLOCKED"
+          "status": "UNKNOWN"
         },
         "cta_lead": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_infer_lead_from_cta_presence",
           "note": "cta_present=true; cta_is_not_lead",
           "owner": "Tiago Sasaki",
@@ -388,14 +415,14 @@
           "status": "UNKNOWN"
         },
         "eligibility": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "keep_observe_do_not_change_copy",
           "owner": "Tiago Sasaki",
           "source": "live_http+local_inspect",
           "status": "TRUE"
         },
         "engagement": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "observe_engaged_sessions_separately",
           "note": "impression_is_not_engagement",
           "owner": "Tiago Sasaki",
@@ -403,7 +430,7 @@
           "status": "UNKNOWN"
         },
         "pipeline": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_invent_pipeline",
           "note": "lead_is_not_pipeline",
           "owner": "Tiago Sasaki",
@@ -411,7 +438,7 @@
           "status": "UNKNOWN"
         },
         "referral": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "import_referral_when_available",
           "note": "referral_is_not_lead; impression_is_not_referral",
           "owner": "Tiago Sasaki",
@@ -420,16 +447,27 @@
         }
       },
       "url_inspection": {
-        "error": "missing_credentials",
-        "index_state": "UNKNOWN",
+        "coverage_state": "Submitted and indexed",
+        "error": null,
+        "index_state": "Submitted and indexed",
         "indexing_api_called": false,
-        "inspected_at": "2026-08-18T03:20:00Z",
-        "ok": false
+        "inspected_at": "2026-08-18T14:20:00Z",
+        "last_crawl": "2026-08-16T06:05:51Z",
+        "ok": true,
+        "source": "url_inspection_api",
+        "verdict": "PASS"
       }
     },
     {
       "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
       "copy_changed": false,
+      "gsc_search_analytics": {
+        "clicks": null,
+        "impressions": null,
+        "max_date": null,
+        "reason": "page_absent_from_returned_top_rows_missing_is_not_zero",
+        "returned_rows": null
+      },
       "id": "valor-tipico-contratos-pavimentacao",
       "index_intent": "INDEX",
       "intent": "quanto_custa_ticket_contratual",
@@ -454,7 +492,7 @@
           "cta_present": true
         },
         "declared_canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
-        "elapsed_ms": 68,
+        "elapsed_ms": 62,
         "h1": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
         "http_error": null,
         "http_status": 200,
@@ -501,15 +539,15 @@
       },
       "stages": {
         "appearance": {
-          "freshness": "2026-08-18T03:20:00Z",
-          "next_action": "founder_gsc_manual_then_live_export",
-          "note": "BLOCKED_GSC_READONLY_CREDENTIAL",
+          "freshness": "2026-08-18T14:20:00Z",
+          "next_action": "continue_gsc_observation_missing_is_not_zero",
+          "note": "url_inspection_pass_but_no_page_row_returned_by_search_analytics; missing_top_row_is_not_zero",
           "owner": "Tiago Sasaki",
           "source": "url_inspection+gsc_search_analytics",
-          "status": "BLOCKED"
+          "status": "UNKNOWN"
         },
         "cta_lead": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_infer_lead_from_cta_presence",
           "note": "cta_present=true; cta_is_not_lead",
           "owner": "Tiago Sasaki",
@@ -517,14 +555,14 @@
           "status": "UNKNOWN"
         },
         "eligibility": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "keep_observe_do_not_change_copy",
           "owner": "Tiago Sasaki",
           "source": "live_http+local_inspect",
           "status": "TRUE"
         },
         "engagement": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "observe_engaged_sessions_separately",
           "note": "impression_is_not_engagement",
           "owner": "Tiago Sasaki",
@@ -532,7 +570,7 @@
           "status": "UNKNOWN"
         },
         "pipeline": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "do_not_invent_pipeline",
           "note": "lead_is_not_pipeline",
           "owner": "Tiago Sasaki",
@@ -540,7 +578,7 @@
           "status": "UNKNOWN"
         },
         "referral": {
-          "freshness": "2026-08-18T03:20:00Z",
+          "freshness": "2026-08-18T14:20:00Z",
           "next_action": "import_referral_when_available",
           "note": "referral_is_not_lead; impression_is_not_referral",
           "owner": "Tiago Sasaki",
@@ -549,20 +587,34 @@
         }
       },
       "url_inspection": {
-        "error": "missing_credentials",
-        "index_state": "UNKNOWN",
+        "coverage_state": "Submitted and indexed",
+        "error": null,
+        "index_state": "Submitted and indexed",
         "indexing_api_called": false,
-        "inspected_at": "2026-08-18T03:20:00Z",
-        "ok": false
+        "inspected_at": "2026-08-18T14:20:00Z",
+        "last_crawl": "2026-08-18T14:08:17Z",
+        "ok": true,
+        "source": "url_inspection_api",
+        "verdict": "PASS"
       }
     }
   ],
   "campaign": "CONFENGE-SEARCH-OBSERVABILITY-DISTRIBUTION-01",
   "cloaking": false,
   "fake_citations": false,
-  "generated_at": "2026-08-18T03:20:00Z",
+  "generated_at": "2026-08-18T14:20:00Z",
   "geo_hacks": false,
-  "gsc_credential_present": false,
+  "gsc_credential_present": true,
+  "gsc_sync": {
+    "latency_ms": 1764,
+    "manifest_sha256": "4fc7a07c1c1439b0c0111fe5351dc089083e963df0c55dc8fcb552be8e792391",
+    "max_date": "2026-08-13",
+    "ok": true,
+    "ready_for_product_decisions": true,
+    "rows": 20,
+    "source": "search_analytics_api",
+    "synthetic": false
+  },
   "live_baseline_invented": false,
   "llms_txt_strategy": false,
   "mode": "overlay",
@@ -574,7 +626,7 @@
     "https://confenge.com.br/reequilibrio-obras-publicas/",
     "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
   ],
-  "ready_for_product_decisions": false,
+  "ready_for_product_decisions": true,
   "related_issue": 86,
   "replaces_86_registry": false,
   "schema": "campaign_search_overlay_v1",
@@ -590,8 +642,8 @@
     "url_inspection_is_not_appearance": true
   },
   "url_inspection_summary": {
-    "credential_present": false,
-    "error": "missing_credentials",
+    "credential_present": true,
+    "error": null,
     "indexing_api_called": false
   },
   "windows": {

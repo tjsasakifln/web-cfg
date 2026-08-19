@@ -6,25 +6,25 @@ do_not_use: Google Indexing API (not authorized for these ordinary pages)
 
 1. https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/
    technical_state: http=200; canonical=self; robots=index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1; sitemap=True
-   inspection_field: UNKNOWN
+   inspection_field: Submitted and indexed; verdict=PASS; last_crawl=2026-07-30T06:12:09Z
    action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
    date: 2026-08-18
 
 2. https://confenge.com.br/aditivos-obras-publicas/
    technical_state: http=200; canonical=self; robots=index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1; sitemap=True
-   inspection_field: UNKNOWN
+   inspection_field: Submitted and indexed; verdict=PASS; last_crawl=2026-08-12T23:33:28Z
    action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
    date: 2026-08-18
 
 3. https://confenge.com.br/reequilibrio-obras-publicas/
    technical_state: http=200; canonical=self; robots=index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1; sitemap=True
-   inspection_field: UNKNOWN
+   inspection_field: Submitted and indexed; verdict=PASS; last_crawl=2026-08-16T06:05:51Z
    action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
    date: 2026-08-18
 
 4. https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/
    technical_state: http=200; canonical=self; robots=index,follow; sitemap=True
-   inspection_field: UNKNOWN
+   inspection_field: Submitted and indexed; verdict=PASS; last_crawl=2026-08-18T14:08:17Z
    action: paste the URL → wait for the inspection card → click “Solicitar indexação” if Google reports the live URL is not indexed or the last crawl is stale.
    date: 2026-08-18
 
