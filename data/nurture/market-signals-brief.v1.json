@@ -1,0 +1,31 @@
+{
+  "schema_version": "market-signals-brief-v1",
+  "issue": 90,
+  "decision_state": "VALIDATE",
+  "as_of": "2026-08-19",
+  "product": "CONFENGE Market Signals Brief",
+  "auto_send": false,
+  "frequency": "manual-first, proposed biweekly after pattern",
+  "consent": {
+    "explicit_opt_in": true,
+    "label": "Quero o Market Signals Brief da CONFENGE (posso sair a qualquer momento).",
+    "unsubscribe_url": "https://confenge.com.br/nurture/sair/"
+  },
+  "audience_is_not_lead": true,
+  "pipeline_metric_separate": true,
+  "edition": {
+    "id": "brief-000-unsent",
+    "status": "PREPARE_ONLY",
+    "method": "UNKNOWN",
+    "source": "UNKNOWN",
+    "freshness": "UNKNOWN",
+    "sent": false,
+    "recipients": 0
+  },
+  "kill": {
+    "weak_opt_in": true,
+    "complaints_up": true,
+    "commodity_content": true,
+    "cost_exceeds_assisted_value": true
+  }
+}
