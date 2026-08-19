@@ -332,6 +332,7 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/site/test_money_asset_lead.mjs",
       "scripts/site/test_money_asset_page_events.mjs",
       "scripts/site/test_money_asset_loop.mjs",
+      "scripts/site/test_margin_defense_select_only.py",
       "scripts/site/money_asset_loc.mjs",
       "scripts/site/money_asset_prod_proof.mjs",
       "scripts/money_asset/",

@@ -1,0 +1,48 @@
+{
+  "schema_version": "striking-distance-noindex-v1",
+  "issue": 127,
+  "decision_state": "VALIDATE",
+  "as_of": "2026-08-19",
+  "owner": "tiago.sasaki",
+  "canary_cap": 1,
+  "gsc_export": "seo/gsc-2026-08-09",
+  "note": "Demand is a review signal, not an index warrant. HTML generation is not index permission. approve_cli INDEXABLE is the only robots flip.",
+  "urls": [
+    {
+      "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "html": "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+      "decision": "REWRITE_THEN_INDEX",
+      "canary": true,
+      "owner": "tiago.sasaki",
+      "mapped_service": "/atrasos-prorrogacao-obras-publicas/",
+      "gsc": { "impressions": 17, "clicks": 0, "position": 3.35, "sample_quality": "very_low" },
+      "reason": "Distinct rain-delay proof job at position ~3 while noindex. Candidate for one rewrite; remains noindex until rewrite + named human approve_cli.",
+      "rewrite_complete": false,
+      "approve_cli_indexable": false
+    },
+    {
+      "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "html": "conteudos/aditivo-qualitativo-quantitativo/index.html",
+      "decision": "KEEP_NOINDEX",
+      "canary": false,
+      "owner": "tiago.sasaki",
+      "mapped_service": "/aditivos-obras-publicas/",
+      "gsc": { "impressions": 22, "clicks": 0, "position": 6.09, "sample_quality": "very_low" },
+      "reason": "answer_still_generic and the commercial job is already owned by the aditivos pillar. Hold until the chuva canary has a 28d GSC outcome.",
+      "rewrite_complete": false,
+      "approve_cli_indexable": false
+    },
+    {
+      "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "html": "conteudos/prazo-vigencia-prazo-execucao-contrato-obra/index.html",
+      "decision": "KEEP_NOINDEX",
+      "canary": false,
+      "owner": "tiago.sasaki",
+      "mapped_service": "/atrasos-prorrogacao-obras-publicas/",
+      "gsc": { "impressions": 18, "clicks": 0, "position": 7.0, "sample_quality": "very_low" },
+      "reason": "answer_still_generic; vigência vs execução is a distinct job but not the canary. Hold noindex.",
+      "rewrite_complete": false,
+      "approve_cli_indexable": false
+    }
+  ]
+}

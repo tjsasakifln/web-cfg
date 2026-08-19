@@ -45,6 +45,8 @@ jobs:
           npm run test:copy
           npm run test:design
           npm run pseo:test
+          npm run organic:test
+          npm run test:diagnose-margin
           npm run test:analytics
           npm run test:form-funnel
           npm run test:lead-function

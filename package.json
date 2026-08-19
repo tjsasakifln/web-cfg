@@ -114,7 +114,7 @@
     "revops:gsc:smoke": "python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke",
     "test:prod-build-info": "node scripts/site/test_prod_build_info.mjs",
     "test:indexnow": "node scripts/site/test_indexnow.mjs",
-    "test:diagnose-margin": "node scripts/site/test_diagnose_margin.mjs && node scripts/site/test_money_asset_lead.mjs && node scripts/site/test_money_asset_page_events.mjs && node scripts/site/test_money_asset_loop.mjs && python3 scripts/money_asset/indexability.py && node scripts/site/test_margin_defense_commercial_dod.mjs",
+    "test:diagnose-margin": "node scripts/site/test_diagnose_margin.mjs && node scripts/site/test_money_asset_lead.mjs && node scripts/site/test_money_asset_page_events.mjs && node scripts/site/test_money_asset_loop.mjs && python3 scripts/money_asset/indexability.py && node scripts/site/test_margin_defense_commercial_dod.mjs && python3 -m pytest scripts/site/test_margin_defense_select_only.py -q",
     "test:margin-defense-dod": "node scripts/site/test_margin_defense_commercial_dod.mjs",
     "audit:margin-defense-dod": "node scripts/money_asset/audit_commercial_dod.mjs",
     "indexnow:submit": "node scripts/site/indexnow_submit.mjs",
