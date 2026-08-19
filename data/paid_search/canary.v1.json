@@ -1,0 +1,797 @@
+{
+  "ads_mutate": false,
+  "attribution": {
+    "contract": "confenge.inbound.v1",
+    "final_url": {
+      "allowlist": [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_content",
+        "utm_term",
+        "jornada",
+        "origem",
+        "landing_page",
+        "landing_url",
+        "route_family",
+        "cta_id",
+        "asset_id",
+        "intent",
+        "content_cluster",
+        "correlation_id"
+      ],
+      "base": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+      "params": {
+        "asset_id": "diagnostico-defesa-margem",
+        "content_cluster": "medicoes-pagamentos",
+        "cta_id": "segunda-leitura-contrato",
+        "intent": "operational_urgency",
+        "jornada": "contrato",
+        "landing_page": "/ferramentas/diagnostico-defesa-margem/",
+        "origem": "/ferramentas/diagnostico-defesa-margem/",
+        "route_family": "defesa-margem-diagnostico",
+        "utm_campaign": "web-032-glosa_medicao",
+        "utm_content": "{matchtype}",
+        "utm_medium": "cpc",
+        "utm_source": "google",
+        "utm_term": "{keyword}"
+      },
+      "url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/?utm_source=google&utm_medium=cpc&utm_campaign=web-032-glosa_medicao&utm_content={matchtype}&utm_term={keyword}&jornada=contrato&origem=/ferramentas/diagnostico-defesa-margem/&landing_page=/ferramentas/diagnostico-defesa-margem/&route_family=defesa-margem-diagnostico&cta_id=segunda-leitura-contrato&asset_id=diagnostico-defesa-margem&intent=operational_urgency&content_cluster=medicoes-pagamentos"
+    },
+    "forbidden_params": [
+      "cnpj",
+      "contract",
+      "contrato",
+      "cpf",
+      "e-mail",
+      "email",
+      "fbclid",
+      "identifier",
+      "li_fat_id",
+      "mensagem",
+      "message",
+      "msclkid",
+      "name",
+      "nome",
+      "phone",
+      "q",
+      "query",
+      "tel",
+      "telefone",
+      "whatsapp"
+    ],
+    "keep_list": [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "jornada",
+      "origem",
+      "landing_page",
+      "landing_url",
+      "route_family",
+      "cta_id",
+      "asset_id",
+      "intent",
+      "content_cluster",
+      "correlation_id"
+    ],
+    "pii_in_ads": false,
+    "pii_in_analytics": false,
+    "pii_in_params": false,
+    "source": "CONFENGE_WEB"
+  },
+  "brand_non_brand": {
+    "brand_terms": [
+      {
+        "ad_group": "brand_holdout",
+        "match_type": "EXACT",
+        "text": "confenge"
+      }
+    ],
+    "canary_split": "non_brand",
+    "note": "Brand is recorded and excluded from the non-brand canary. Not a second campaign."
+  },
+  "campaign_created": false,
+  "campaign_id": "web-032",
+  "channel": "SEARCH",
+  "conversion_definitions": {
+    "meeting_pipeline": "reserved — Warmbly meeting/pipeline. Stays UNKNOWN until observed.",
+    "qualified_engagement": "asset_view plus at least one of contract_selected, contract_analyzed, cta_view",
+    "qualified_lead": "reserved — operator/Warmbly signal. Stays UNKNOWN until observed.",
+    "valid_lead": "lead_created with persisted id, consent, and complete CONFENGE_WEB attribution"
+  },
+  "conversion_hierarchy": [
+    "qualified_engagement",
+    "valid_lead",
+    "qualified_lead",
+    "meeting_pipeline"
+  ],
+  "decision": "SELECTED",
+  "demand_engine": {
+    "authorizes_page": false,
+    "available": false,
+    "next_command": "git fetch origin && python3 -m scripts.organic demand-engine --gsc-dir seo/gsc-2026-08-09",
+    "prerequisite": "merge or checkout PR #98 feat/web-016-demand-engine",
+    "schema": "demand-engine/1.0",
+    "status": "ABSENT"
+  },
+  "device": {
+    "exclude": [
+      "mobile",
+      "tablet"
+    ],
+    "include": [
+      "desktop"
+    ],
+    "note": "Across gsc-2026-07-30 and gsc-2026-08-09 desktop dominates clicks. Canary stays desktop-only; mobile is an exclusion, not a second canary.",
+    "observed": [
+      {
+        "clicks": 17.0,
+        "device": "desktop",
+        "impressions": 531.0
+      },
+      {
+        "clicks": 3.0,
+        "device": "mobile",
+        "impressions": 175.0
+      },
+      {
+        "clicks": 0.0,
+        "device": "tablet",
+        "impressions": 3.0
+      }
+    ]
+  },
+  "events": [
+    "organic_landing",
+    "asset_view",
+    "contract_selected",
+    "contract_analyzed",
+    "cta_view",
+    "cta_click",
+    "lead_created",
+    "qualified_lead"
+  ],
+  "exclusions": {
+    "audiences": [
+      "remarketing",
+      "retargeting",
+      "customer_match"
+    ],
+    "brand_as_primary": true,
+    "device": [
+      "mobile",
+      "tablet"
+    ],
+    "geo": [
+      "Angola",
+      "Costa Rica",
+      "Espanha",
+      "Estados Unidos",
+      "França",
+      "Países Baixos",
+      "Reino Unido",
+      "Rússia",
+      "Ucrânia",
+      "Vietnã"
+    ],
+    "query_families": [
+      "legacy_avcb",
+      "brand",
+      "reequilibrio",
+      "aditivos",
+      "sinapi_desonerado",
+      "bdi",
+      "prorrogacao_prazo",
+      "market_answer_pavimentacao"
+    ],
+    "smartlic": true
+  },
+  "executable": false,
+  "family": {
+    "cluster": "medicoes-pagamentos",
+    "eligible": true,
+    "event_family": "medicao",
+    "gsc_queries": [
+      {
+        "demand": {
+          "clicks": 1.0,
+          "ctr": 0.125,
+          "export_id": "gsc-2026-08-09",
+          "impressions": 8.0,
+          "position": 4.0,
+          "source_table": "Consultas.csv",
+          "status": "observed"
+        },
+        "export_id": "gsc-2026-08-09",
+        "query": "glosa de medição obra pública"
+      },
+      {
+        "demand": {
+          "clicks": 1.0,
+          "ctr": 0.2,
+          "export_id": "gsc-2026-08-09",
+          "impressions": 5.0,
+          "position": 5.5,
+          "source_table": "Consultas.csv",
+          "status": "observed"
+        },
+        "export_id": "gsc-2026-08-09",
+        "query": "medição rejeitada obra pública"
+      }
+    ],
+    "gsc_totals": {
+      "clicks": 2.0,
+      "impressions": 13.0,
+      "note": "Totals are evidence of organic presence, not authorization and not paid demand.",
+      "query_count": 2
+    },
+    "id": "glosa_medicao",
+    "ineligible_reasons": [],
+    "label": "Glosa / medição rejeitada em obra pública",
+    "organic_demand": "observed",
+    "paid_demand": "UNKNOWN",
+    "score": 14
+  },
+  "forbidden": {
+    "ads_mutate": true,
+    "audiences": [
+      "AUDIENCE_EXPANSION",
+      "CUSTOMER_MATCH",
+      "OPTIMIZED_TARGETING",
+      "REMARKETING",
+      "RETARGETING",
+      "SIMILAR_AUDIENCE"
+    ],
+    "channels": [
+      "DEMAND_GEN",
+      "DISCOVERY",
+      "DISPLAY",
+      "PERFORMANCE_MAX",
+      "PMAX",
+      "SHOPPING",
+      "VIDEO"
+    ],
+    "match_types": [
+      "BROAD",
+      "BROAD_MATCH_MODIFIER",
+      "SMART"
+    ],
+    "spend_without_approval": true
+  },
+  "geography": {
+    "exclude_countries": [
+      {
+        "clicks": 0.0,
+        "country": "Angola",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Costa Rica",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Espanha",
+        "impressions": 5.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Estados Unidos",
+        "impressions": 16.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "França",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Países Baixos",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Reino Unido",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Rússia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Ucrânia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Vietnã",
+        "impressions": 1.0
+      }
+    ],
+    "include": [
+      "Brasil"
+    ],
+    "note": "GSC Paises.csv is organic evidence. Paid geo is Brasil-only.",
+    "observed": [
+      {
+        "clicks": 0.0,
+        "country": "Angola",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 10.0,
+        "country": "Brasil",
+        "impressions": 296.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Costa Rica",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Espanha",
+        "impressions": 5.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Estados Unidos",
+        "impressions": 16.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "França",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Países Baixos",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Reino Unido",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Rússia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Ucrânia",
+        "impressions": 1.0
+      },
+      {
+        "clicks": 0.0,
+        "country": "Vietnã",
+        "impressions": 1.0
+      }
+    ]
+  },
+  "go_live": false,
+  "human_required": {
+    "ads_account_id": {
+      "approved": false,
+      "status": "HUMAN_REQUIRED",
+      "value": null
+    },
+    "budget_daily_brl": {
+      "approved": false,
+      "status": "HUMAN_REQUIRED",
+      "value": null
+    },
+    "budget_total_brl": {
+      "approved": false,
+      "status": "HUMAN_REQUIRED",
+      "value": null
+    },
+    "cpa_cap_qualified_lead_brl": {
+      "approved": false,
+      "status": "HUMAN_REQUIRED",
+      "value": null
+    },
+    "cpc_cap_brl": {
+      "approved": false,
+      "status": "HUMAN_REQUIRED",
+      "value": null
+    },
+    "hard_stop_spend_brl": {
+      "approved": false,
+      "status": "HUMAN_REQUIRED",
+      "value": null
+    },
+    "owner": {
+      "approved": false,
+      "status": "HUMAN_REQUIRED",
+      "value": null
+    }
+  },
+  "hypothesis": "A construtora com contrato de obra pública ativo que busca termos exact/phrase da família 'Glosa / medição rejeitada em obra pública' usa o Diagnóstico de Defesa de Margem para identificar o contrato e pede segunda leitura. O canário mede learning qualificado e pipeline, não click/CTR. Paid demand permanece UNKNOWN até haver gasto aprovado; GSC orgânico não autoriza o family como TAM.",
+  "icp": {
+    "job": "Glosa / medição rejeitada em obra pública",
+    "not": "estudante, candidato a vaga, AVCB/legado, busca de marca, SINAPI tabela, SmartLic",
+    "who": "Diretoria técnica / sócio de construtora B2G com contrato de obra pública ativo",
+    "why_now": "evento contratual com dinheiro em risco"
+  },
+  "issue": 87,
+  "kill": {
+    "note": "Observed spend stays 0 until a human authorizes an account and cap.",
+    "observed": {
+      "hard_stop_spend_brl": null,
+      "mismatch_min_terms": 5,
+      "mismatch_rate_threshold": 0.4,
+      "qualified_intent_signals": 0,
+      "qualified_lead_rate": 0,
+      "quality_min_valid_leads": 3,
+      "quality_rate_threshold": 0.2,
+      "search_term_mismatch_rate": 0,
+      "search_terms_observed": 0,
+      "spend_brl": 0,
+      "tracking_reconcile_ok": true,
+      "valid_leads": 0
+    },
+    "specs": [
+      {
+        "action": "PAUSE",
+        "fields": [
+          "spend_brl",
+          "hard_stop_spend_brl",
+          "qualified_intent_signals"
+        ],
+        "id": "cap_without_qualified_intent"
+      },
+      {
+        "action": "PAUSE",
+        "fields": [
+          "search_term_mismatch_rate",
+          "search_terms_observed",
+          "mismatch_rate_threshold",
+          "mismatch_min_terms"
+        ],
+        "id": "misaligned_search_terms"
+      },
+      {
+        "action": "PAUSE",
+        "fields": [
+          "valid_leads",
+          "qualified_lead_rate",
+          "quality_min_valid_leads",
+          "quality_rate_threshold"
+        ],
+        "id": "low_lead_quality"
+      },
+      {
+        "action": "PAUSE",
+        "fields": [
+          "tracking_reconcile_ok"
+        ],
+        "id": "tracking_does_not_reconcile"
+      }
+    ],
+    "thresholds": {
+      "mismatch_min_terms": 5,
+      "mismatch_rate_threshold": 0.4,
+      "quality_min_valid_leads": 3,
+      "quality_rate_threshold": 0.2
+    }
+  },
+  "landing": {
+    "asset_id": "diagnostico-defesa-margem",
+    "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+    "cta_id": "segunda-leitura-contrato",
+    "eligible": true,
+    "exists": true,
+    "honesty": "Unpaid-eligible #60 utility on origin/main: indexable Diagnóstico de Defesa de Margem. #84 paving-ticket answer is not on this branch.",
+    "html_path": "ferramentas/diagnostico-defesa-margem/index.html",
+    "id": "diagnostico-defesa-margem",
+    "in_sitemap": true,
+    "indexable": true,
+    "issue": 60,
+    "jornada": "contrato",
+    "kind": "utility",
+    "noindex": false,
+    "path": "/ferramentas/diagnostico-defesa-margem/",
+    "route_family": "defesa-margem-diagnostico",
+    "wrong_landing": false
+  },
+  "match_types_allowed": [
+    "EXACT",
+    "PHRASE"
+  ],
+  "negatives": [
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "avcb"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "clcb"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "vaga"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "emprego"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "salário"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "salario"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "curso"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "faculdade"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "tcc"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "smartlic"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "desonerado"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "sinapi"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "grátis"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "gratis"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "pdf"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "chatgpt"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "inteligência artificial"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "ia para"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "residencial"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "particular"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "modelo planilha"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "técnico edificações"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "pre_registered_junk_or_wrong_family",
+      "text": "tecnico edificacoes"
+    },
+    {
+      "match_type": "PHRASE",
+      "reason": "brand_split_non_brand_canary",
+      "text": "confenge"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:legacy_avcb",
+      "text": "avcb"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:brand",
+      "text": "coenge"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:brand",
+      "text": "smartenge engenharia"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:brand",
+      "text": "consenge"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:brand",
+      "text": "conenge"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:brand",
+      "text": "confenge"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:reequilibrio",
+      "text": "curva abc reequilíbrio"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:aditivos",
+      "text": "aditivos obra pública"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:aditivos",
+      "text": "aditivo qualitativo e quantitativo"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:aditivos",
+      "text": "aditivos obras públicas"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:sinapi_desonerado",
+      "text": "desonerado e não desonerado"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:sinapi_desonerado",
+      "text": "não desonerado"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:sinapi_desonerado",
+      "text": "sinapi desonerado ou não desonerado qual usar"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:sinapi_desonerado",
+      "text": "desonerado ou não desonerado"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:sinapi_desonerado",
+      "text": "nao desonerado"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:sinapi_desonerado",
+      "text": "desonerado e não desonerado sinapi"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:sinapi_desonerado",
+      "text": "sinapi desonerado"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:bdi",
+      "text": "bdi diferenciado"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:bdi",
+      "text": "bdi diferenciado obra pública"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:prorrogacao_prazo",
+      "text": "prorrogação prazo obra pública chuva"
+    },
+    {
+      "match_type": "EXACT",
+      "reason": "other_family:prorrogacao_prazo",
+      "text": "prazo de vigência e prazo de execução"
+    }
+  ],
+  "primary_metric": {
+    "definition": "qualified_lead + meeting_pipeline + material Demand Engine candidate/rejection learning, per real approved spend. Click and CTR are diagnostics, never the objective.",
+    "name": "qualified_learning_or_pipeline",
+    "not": [
+      "click",
+      "clicks",
+      "cpc",
+      "ctr",
+      "impression_share",
+      "impressions"
+    ]
+  },
+  "schedule": {
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
+    "hours": "08:00-19:00",
+    "note": "Schedule confirmation is HUMAN_REQUIRED before go-live.",
+    "status": "PROPOSED",
+    "timezone": "America/Sao_Paulo"
+  },
+  "schema": "paid-search-canary/1.0",
+  "snapshots": [
+    "gsc-2026-07-30",
+    "gsc-2026-08-09"
+  ],
+  "spend_authorized": false,
+  "terms": {
+    "exact": [
+      {
+        "match_type": "EXACT",
+        "text": "glosa de medição obra pública"
+      },
+      {
+        "match_type": "EXACT",
+        "text": "medição rejeitada obra pública"
+      }
+    ],
+    "phrase": [
+      {
+        "match_type": "PHRASE",
+        "text": "glosa de medição obra pública"
+      },
+      {
+        "match_type": "PHRASE",
+        "text": "glosa de medição"
+      },
+      {
+        "match_type": "PHRASE",
+        "text": "medição rejeitada obra pública"
+      },
+      {
+        "match_type": "PHRASE",
+        "text": "medição rejeitada obra"
+      }
+    ]
+  }
+}
