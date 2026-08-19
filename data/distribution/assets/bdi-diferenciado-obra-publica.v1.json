@@ -1,0 +1,117 @@
+{
+  "schema": "earned_distribution_v1",
+  "version": 1,
+  "auto_send": false,
+  "human_send_only": true,
+  "decision_state": "VALIDATE",
+  "lane": "organic-breakout",
+  "asset": {
+    "id": "bdi-diferenciado-obra-publica",
+    "name": "Quando usar BDI diferenciado em materiais e equipamentos?",
+    "canonical_url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+    "indexable": true,
+    "do_not_index": false,
+    "needs_data": false,
+    "press_allowed": true,
+    "verdict": "PUBLISHED_OPEN_METHODOLOGY",
+    "owner": "Tiago Sasaki",
+    "source": "conteudos/bdi-diferenciado-obra-publica/ + mapa de incidência",
+    "date": "2026-08-18",
+    "utility": {
+      "distinct_user_utility": true,
+      "utility_note": "Mapa de incidência por família com recusa explícita de tabela oficial de percentuais.",
+      "invented_national_contract_stats": false
+    },
+    "citation_primitives": {
+      "stable_citation_link": {
+        "status": "already_present",
+        "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
+      },
+      "quotable_stat": {
+        "status": "already_present",
+        "text": "BDI diferenciado só se sustenta com estrutura de custo distinta e memória. O mapa é relativo, não uma tabela oficial de percentuais."
+      },
+      "chart_card_metadata": {
+        "status": "already_present",
+        "page_section": "Mapa de incidência de BDI por família"
+      },
+      "source_method_block": {
+        "status": "already_present",
+        "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+        "page_section": "Método bdi-incidence-families/1.0"
+      },
+      "safe_download": {
+        "status": "already_present",
+        "pii": false,
+        "note": "Visual no HTML; sem download com PII."
+      }
+    }
+  },
+  "targets": [
+    {
+      "id": "sicepot-sc",
+      "target_class": "associação",
+      "target_nominal": "SICEPOT-SC",
+      "editorial_angle": "Revisão do mapa de incidência de BDI para orçamentistas de obras públicas.",
+      "citation_url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://sicepot-sc.org.br"
+    },
+    {
+      "id": "crea-sc",
+      "target_class": "associação",
+      "target_nominal": "CREA-SC",
+      "editorial_angle": "Consulta sobre quando a taxa diferenciada é defensável na diligência.",
+      "citation_url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://www.crea-sc.org.br"
+    },
+    {
+      "id": "cbic-coinfra",
+      "target_class": "associação",
+      "target_nominal": "CBIC / COINFRA",
+      "editorial_angle": "Citação do método, não de um BDI médio nacional.",
+      "citation_url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://cbic.org.br"
+    },
+    {
+      "id": "sinaenco",
+      "target_class": "associação",
+      "target_nominal": "SINAENCO",
+      "editorial_angle": "Utilidade para quem decompõe BDI em material e equipamento.",
+      "citation_url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://sinaenco.com.br"
+    },
+    {
+      "id": "agencia-infra",
+      "target_class": "imprensa",
+      "target_nominal": "Agência Infra",
+      "editorial_angle": "Peça factual: incidência relativa e o que a página recusa publicar.",
+      "citation_url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://www.agenciainfra.com"
+    }
+  ]
+}

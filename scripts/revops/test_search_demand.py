@@ -260,6 +260,105 @@ def main() -> int:
         ok("manifest_not_product", on_disk["ready_for_product_decisions"] is False)
         ok("manifest_synthetic", on_disk["synthetic"] is True)
 
+        # Honesty: absence stays UNKNOWN; historical ≠ live; rows dedupe; zero not inferred.
+        missing = sdo.pull_api(7)
+        ok("pull_missing_ok_false", missing.get("ok") is False)
+        ok("pull_missing_creds_shape", missing.get("error") == "missing_credentials")
+        ok("pull_missing_lists_env", "GSC_CREDENTIALS_JSON" in " ".join(missing.get("required_env") or []))
+        ok("perf_unknown_without_live", sdo.gsc_performance_status(missing) == "UNKNOWN")
+        ok(
+        "perf_unknown_empty",
+        sdo.gsc_performance_status({}) == "UNKNOWN",
+        )
+        ok(
+        "perf_live_only_when_ready",
+        sdo.gsc_performance_status(
+            {"ok": True, "ready_for_product_decisions": True, "synthetic": False}
+        )
+        == "LIVE",
+        )
+        historical = sdo.label_historical_export({"source": "csv", "queries": [{"query": "aditivo"}]})
+        ok("historical_flag", historical.get("historical") is True)
+        ok("historical_neq_live", historical.get("historical_neq_live") is True)
+        ok("historical_not_product", historical.get("ready_for_product_decisions") is False)
+        ok("historical_perf_unknown", historical.get("performance_status") == "UNKNOWN")
+
+        duped = [
+        {
+            "date": "2026-07-28",
+            "query": "limite aditivo 25",
+            "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+            "country": "bra",
+            "device": "DESKTOP",
+            "impressions": 4,
+            "clicks": 0,
+            "position": 12,
+        },
+        {
+            "date": "2026-07-28",
+            "query": "limite aditivo 25",
+            "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+            "country": "bra",
+            "device": "DESKTOP",
+            "impressions": 4,
+            "clicks": 0,
+            "position": 12,
+        },
+        {
+            "date": "2026-07-28",
+            "query": "sinapi desonerado",
+            "page": "https://confenge.com.br/",
+            "country": "bra",
+            "device": "MOBILE",
+            "impressions": 8,
+            "clicks": 0,
+            "position": 7.5,
+        },
+        ]
+        deduped = sdo.dedupe_gsc_rows(duped)
+        ok("rows_dedupe", len(deduped) == 2)
+        detections = sdo.detect_all(
+        duped,
+        indexable_urls=[
+            "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+            "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        ],
+        cta_by_path={"/conteudos/bdi-diferenciado-obra-publica/": "weak"},
+        )
+        ok("detect_grain", detections["grain"] == ["date", "query", "page", "country", "device"])
+        ok("detect_no_zero_infer", detections["zero_inferred_from_absence"] is False)
+        ok("detect_inspection_split", detections["inspection_is_not_indexation"] is True)
+        ok("detect_brand_classes", "non_brand" in detections["brand_classes"])
+        ok("detect_striking", detections["striking_distance"]["class"] == "striking_distance")
+        ok("detect_wrong_landing_class", detections["wrong_landing"]["class"] == "wrong_landing")
+        ok(
+        "detect_wrong_landing_sinapi_home",
+        any(
+            item.get("intended") == "/conteudos/sinapi-desonerado-nao-desonerado/"
+            for item in detections["wrong_landing"]["items"]
+        ),
+        )
+        absent_indexable = detections["indexable_without_impressions"]["items"]
+        ok(
+        "indexable_missing_is_absent",
+        any(
+            item.get("status") == "ABSENT" and item.get("impressions") is None
+            for item in absent_indexable
+            if "sinapi" in item.get("url", "")
+        ),
+        )
+        ok(
+        "indexable_zero_not_inferred",
+        detections["indexable_without_impressions"]["zero_inferred_from_absence"] is False,
+        )
+        weak = sdo.detect_clicks_weak_cta(
+        [{"page": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/", "clicks": 2}],
+        {"/conteudos/bdi-diferenciado-obra-publica/": "weak"},
+        )
+        ok("weak_cta_observed", weak["status"] == "observed" and len(weak["items"]) == 1)
+        no_cta_map = sdo.detect_clicks_weak_cta([{"page": "/x/", "clicks": 1}])
+        ok("weak_cta_needs_map", no_cta_map["status"] == "INSUFFICIENT_EVIDENCE")
+
         if failures:
             print("FAILURES", failures)
             return 1

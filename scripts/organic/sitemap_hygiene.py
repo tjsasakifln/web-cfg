@@ -44,6 +44,21 @@ def parse_redirects(text: str) -> list[dict[str, str]]:
     return rules
 
 
+def _meta_robots_noindex(html: str) -> bool:
+    """True only when a real robots meta tag contains noindex.
+
+    Fail-closed JS that *writes* noindex into a string is not a robots tag.
+    """
+    for match in re.finditer(r"<meta\b[^>]*>", html, re.I):
+        tag = match.group(0)
+        if not re.search(r'name=["\']robots["\']', tag, re.I):
+            continue
+        content = re.search(r'content=["\']([^"\']+)["\']', tag, re.I)
+        if content and "noindex" in content.group(1).lower():
+            return True
+    return False
+
+
 def _local_path(url: str) -> str:
     if url.startswith("http"):
         p = urlparse(url).path or "/"
@@ -151,9 +166,7 @@ def audit_sitemaps(root: Path) -> dict[str, Any]:
                 continue
             local = alt
         html = local.read_text(encoding="utf-8", errors="replace")
-        if re.search(
-            r'name=["\']robots["\'][^>]*noindex|content=["\'][^"\']*noindex', html, re.I
-        ):
+        if _meta_robots_noindex(html):
             issues.append(
                 {"severity": "high", "code": "sitemap_url_noindex", "url": url}
             )

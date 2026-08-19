@@ -1,0 +1,26 @@
+FOUNDER ACTION RESOLVED — GSC READ-ONLY CREDENTIAL
+
+campaign: CONFENGE-ORGANIC-BREAKOUT-01
+date: 2026-08-18
+integrated_after: #122 live observation on main
+
+property: sc-domain:confenge.com.br
+service_account: confenge-gsc-observer@pncp-486312.iam.gserviceaccount.com
+permission: Restricted
+scope: https://www.googleapis.com/auth/webmasters.readonly
+credential_location: local secure path; not in git
+
+Live snapshot (historical ≠ live):
+  source=search_analytics_api
+  max_date=2026-08-13
+  rows=20
+  ready_for_product_decisions=true
+  query_text_redacted=true
+
+Missing top-row URLs stay UNKNOWN. URL Inspection PASS is not appearance.
+Do not invent impression, click, lead or revenue.
+
+Next measurement experiment (only):
+  After the integrated production SHA, observe one complete Search Analytics
+  window on the three existing URLs. Record CTA click → lead persist.
+  Do not rewrite the chassis. Do not auto-submit IndexNow.

@@ -1,0 +1,98 @@
+{
+  "schema": "organic-breakout-distribution-pack/1.0",
+  "auto_send": false,
+  "sent": false,
+  "smtp_called": false,
+  "webhook_called": false,
+  "asset_id": "bdi-diferenciado-obra-publica",
+  "outreach_title": "Quando usar BDI diferenciado em materiais e equipamentos?",
+  "factual_summary": "Use BDI diferenciado quando o edital permitir (ou a boa técnica exigir) e quando materiais ou equipamentos tiverem estrutura de custo e risco distinta da mão de obra. Não use só para baixar preço aparente em item sensível: a planilha precisa fechar com composições, data-base e desconto global.",
+  "citable_datum": {
+    "visual_id": "bdi-incidence-map",
+    "content_hash": "689d131af76888293146d2a4d0650cdc92936170c73da4aec7d9d447323e456a",
+    "historical_gsc": {
+      "export": "seo/gsc-2026-07-30",
+      "label": "historical_not_live",
+      "impressions": 24,
+      "clicks": 2,
+      "position": 9.29
+    },
+    "historical_neq_live": true
+  },
+  "method": {
+    "id": "bdi-incidence-families/1.0",
+    "short": "Ler modelo de BDI do edital → classificar família do item (mão de obra, material, equipamento) → marcar onde cada componente incide sem duplicar → recusar taxa sem memória.",
+    "source": "Modelo de BDI do edital; TCU sobre preço global; cartilha de obras públicas; metodologia SINAPI para separar custo direto de BDI."
+  },
+  "targets": [
+    {
+      "id": "sicepot-sc",
+      "target_class": "associação",
+      "target_nominal": "SICEPOT-SC",
+      "public_url": "https://sicepot-sc.org.br",
+      "editorial_angle": "Revisão técnica do Quando usar BDI diferenciado em materiais e equipamentos? com método bdi-incidence-families/1.0."
+    },
+    {
+      "id": "crea-sc",
+      "target_class": "associação",
+      "target_nominal": "CREA-SC",
+      "public_url": "https://www.crea-sc.org.br",
+      "editorial_angle": "Peça de consulta para engenheiros que orçam ou aditam contrato público."
+    },
+    {
+      "id": "cbic-coinfra",
+      "target_class": "associação",
+      "target_nominal": "CBIC / COINFRA",
+      "public_url": "https://cbic.org.br",
+      "editorial_angle": "Citação do método e das limitações, não de um censo nacional."
+    },
+    {
+      "id": "sinaenco",
+      "target_class": "associação",
+      "target_nominal": "SINAENCO",
+      "public_url": "https://sinaenco.com.br",
+      "editorial_angle": "Utilidade para empresas de engenharia consultiva que leem edital e aditivo."
+    },
+    {
+      "id": "agencia-infra",
+      "target_class": "imprensa",
+      "target_nominal": "Agência Infra",
+      "public_url": "https://www.agenciainfra.com",
+      "editorial_angle": "Dado/visual citável com recusa explícita de extrapolar o que a página não mede."
+    }
+  ],
+  "drafts": [
+    {
+      "target_id": "sicepot-sc",
+      "target_nominal": "SICEPOT-SC",
+      "subject": "Pedido de revisão: Quando usar BDI diferenciado em materiais e equipamentos?",
+      "body": "Olá, equipe SICEPOT-SC.\n\nPublicamos uma resposta verificável para: Quando usar BDI diferenciado em materiais e equipamentos?\nURL: https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/\n\nMétodo: Ler modelo de BDI do edital → classificar família do item (mão de obra, material, equipamento) → marcar onde cada componente incide sem duplicar → recusar taxa sem memória.\nDado/visual citável: bdi-incidence-map (hash 689d131af768).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "crea-sc",
+      "target_nominal": "CREA-SC",
+      "subject": "Pedido de revisão: Quando usar BDI diferenciado em materiais e equipamentos?",
+      "body": "Olá, equipe CREA-SC.\n\nPublicamos uma resposta verificável para: Quando usar BDI diferenciado em materiais e equipamentos?\nURL: https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/\n\nMétodo: Ler modelo de BDI do edital → classificar família do item (mão de obra, material, equipamento) → marcar onde cada componente incide sem duplicar → recusar taxa sem memória.\nDado/visual citável: bdi-incidence-map (hash 689d131af768).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "cbic-coinfra",
+      "target_nominal": "CBIC / COINFRA",
+      "subject": "Pedido de revisão: Quando usar BDI diferenciado em materiais e equipamentos?",
+      "body": "Olá, equipe CBIC / COINFRA.\n\nPublicamos uma resposta verificável para: Quando usar BDI diferenciado em materiais e equipamentos?\nURL: https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/\n\nMétodo: Ler modelo de BDI do edital → classificar família do item (mão de obra, material, equipamento) → marcar onde cada componente incide sem duplicar → recusar taxa sem memória.\nDado/visual citável: bdi-incidence-map (hash 689d131af768).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "sinaenco",
+      "target_nominal": "SINAENCO",
+      "subject": "Pedido de revisão: Quando usar BDI diferenciado em materiais e equipamentos?",
+      "body": "Olá, equipe SINAENCO.\n\nPublicamos uma resposta verificável para: Quando usar BDI diferenciado em materiais e equipamentos?\nURL: https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/\n\nMétodo: Ler modelo de BDI do edital → classificar família do item (mão de obra, material, equipamento) → marcar onde cada componente incide sem duplicar → recusar taxa sem memória.\nDado/visual citável: bdi-incidence-map (hash 689d131af768).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "agencia-infra",
+      "target_nominal": "Agência Infra",
+      "subject": "Pedido de revisão: Quando usar BDI diferenciado em materiais e equipamentos?",
+      "body": "Olá, equipe Agência Infra.\n\nPublicamos uma resposta verificável para: Quando usar BDI diferenciado em materiais e equipamentos?\nURL: https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/\n\nMétodo: Ler modelo de BDI do edital → classificar família do item (mão de obra, material, equipamento) → marcar onde cada componente incide sem duplicar → recusar taxa sem memória.\nDado/visual citável: bdi-incidence-map (hash 689d131af768).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    }
+  ],
+  "request_type": "review_or_citation",
+  "not_a_favor": true
+}

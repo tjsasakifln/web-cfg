@@ -1,0 +1,203 @@
+{
+  "schema": "organic-breakout-candidates/1.0",
+  "campaign": "CONFENGE-ORGANIC-BREAKOUT-01",
+  "max_assets": 3,
+  "frontier_export": null,
+  "frontier_status": "ABSENT",
+  "gsc_live": false,
+  "notes": [
+    "No READY extra-cli Traffic Opportunity Frontier export was present.",
+    "Live GSC credentials are absent; demand stays UNKNOWN.",
+    "Publication decisions do not claim current demand.",
+    "Existing Market Answer fixture remains unpromoted.",
+    "Contract-analysis routes are out of scope."
+  ],
+  "candidates": [
+    {
+      "asset_id": "sinapi-desonerado-nao-desonerado",
+      "url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "html_path": "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+      "existing_url": true,
+      "new_url": false,
+      "intent": "sinapi_desonerado_vs_nao",
+      "preference_class": "gsc_observed_poorly_served",
+      "why_not_generic": "Interactive regime-alignment tool plus explicit method, grain and limitations. A competitor cannot reproduce the decision table by rewriting prose. Historical GSC striking distance is labeled historical, not live demand.",
+      "visitor_job": "Uma construtora que está fechando planilha precisa decidir, antes de enviar a proposta, qual base SINAPI (desonerada ou não) o edital e o regime da empresa exigem — sem misturar tabelas nem tratar a escolha como atalho de preço.",
+      "question": "SINAPI desonerado ou não desonerado: qual usar?",
+      "answer": "Use a tabela que o edital e a planilha modelo fixam na data-base do certame; depois alinhe BDI, encargos da proposta e unitários à mesma base. SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra, não em um desconto universal. Escolher a tabela mais barata sem coerência com o edital e com o regime da empresa gera planilha incoerente e risco de inexequibilidade ou prejuízo.",
+      "method": {
+        "id": "sinapi-regime-alignment/1.0",
+        "short": "Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.",
+        "source": "CAIXA, metodologia SINAPI; regra do edital; Lei 12.546/2011 e atualizações de desoneração da folha quando o enquadramento se aplica."
+      },
+      "period": "Leitura operacional em 2026-08-18. A data-base que vale é a do edital, não a desta página.",
+      "geography": "Brasil — referência federal de composição. A aplicação é a do órgão licitante.",
+      "grain": "regime_de_encargos_da_composicao_sinapi",
+      "limitations": [
+        "Esta página não publica custo por km nem um fator único de conversão entre as duas tabelas.",
+        "O alinhador é um verificador de coerência. Não decide o enquadramento tributário da empresa.",
+        "A amostra GSC citada é histórica (seo/gsc-2026-07-30) e não é demanda atual.",
+        "Silêncio ou contradição no edital exige leitura do caso, não um default nacional."
+      ],
+      "visual_id": "sinapi-aligner",
+      "author": "Engº Tiago Sasaki",
+      "reviewer": "CONFENGE / editorial",
+      "refresh_owner": "CONFENGE / organic-breakout",
+      "correction_route": "/correcoes/?asset=sinapi-desonerado-nao-desonerado",
+      "cta": {
+        "id": "conferir-base-sinapi",
+        "label": "Ver auditoria de orçamento e edital",
+        "path": "/auditoria-orcamento-licitacao/",
+        "asset_id": "sinapi-desonerado-nao-desonerado",
+        "route_family": "orcamento-bdi",
+        "source": "CONFENGE_WEB"
+      },
+      "internal_links": [
+        {"href": "/auditoria-orcamento-licitacao/", "label": "Hub de orçamento e BDI"},
+        {"href": "/conteudos/bdi-diferenciado-obra-publica/", "label": "BDI diferenciado em materiais e equipamentos"},
+        {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"}
+      ],
+      "demand_claim": "historical_labeled",
+      "publication_requires_live_demand": false,
+      "gsc_historical": {
+        "export": "seo/gsc-2026-07-30",
+        "label": "historical_not_live",
+        "impressions": 88,
+        "clicks": 0,
+        "position": 7.75
+      },
+      "fixture": false,
+      "hold_for_data": false,
+      "index_intent": "INDEX"
+    },
+    {
+      "asset_id": "bdi-diferenciado-obra-publica",
+      "url": "/conteudos/bdi-diferenciado-obra-publica/",
+      "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "html_path": "conteudos/bdi-diferenciado-obra-publica/index.html",
+      "existing_url": true,
+      "new_url": false,
+      "intent": "bdi_diferenciado_materiais_equipamentos",
+      "preference_class": "gsc_observed_poorly_served",
+      "why_not_generic": "Incidence map of BDI families with an explicit not-a-rate disclaimer. The visual is a decision aid, not a published official BDI table. Distinct intent from SINAPI regime alignment.",
+      "visitor_job": "Um orçamentista precisa saber quando BDI distinto em material ou equipamento é tecnicamente defensável — e quando é só maquiagem de margem que a diligência derruba.",
+      "question": "Quando usar BDI diferenciado em materiais e equipamentos?",
+      "answer": "Use BDI diferenciado quando o edital permitir (ou a boa técnica exigir) e quando materiais ou equipamentos tiverem estrutura de custo e risco distinta da mão de obra. Não use só para baixar preço aparente em item sensível: a planilha precisa fechar com composições, data-base e desconto global.",
+      "method": {
+        "id": "bdi-incidence-families/1.0",
+        "short": "Ler modelo de BDI do edital → classificar família do item (mão de obra, material, equipamento) → marcar onde cada componente incide sem duplicar → recusar taxa sem memória.",
+        "source": "Modelo de BDI do edital; TCU sobre preço global; cartilha de obras públicas; metodologia SINAPI para separar custo direto de BDI."
+      },
+      "period": "Leitura operacional em 2026-08-18. O modelo de BDI que vale é o do edital.",
+      "geography": "Brasil — prática de análise de preço em obras públicas. O teto e a fórmula são os do órgão.",
+      "grain": "incidencia_de_componentes_de_bdi_por_familia_de_item",
+      "limitations": [
+        "O mapa de incidência não é tabela oficial de BDI e não publica percentuais nacionais.",
+        "Não autoriza jogo de planilha nem desconto seletivo sem memória.",
+        "A evidência GSC citada é histórica e não prova demanda atual.",
+        "Regulamento do ente e o modelo anexado ao edital prevalecem."
+      ],
+      "visual_id": "bdi-incidence-map",
+      "author": "Engº Tiago Sasaki",
+      "reviewer": "CONFENGE / editorial",
+      "refresh_owner": "CONFENGE / organic-breakout",
+      "correction_route": "/correcoes/?asset=bdi-diferenciado-obra-publica",
+      "cta": {
+        "id": "auditar-bdi",
+        "label": "Ver auditoria de orçamento e edital",
+        "path": "/auditoria-orcamento-licitacao/",
+        "asset_id": "bdi-diferenciado-obra-publica",
+        "route_family": "orcamento-bdi",
+        "source": "CONFENGE_WEB"
+      },
+      "internal_links": [
+        {"href": "/auditoria-orcamento-licitacao/", "label": "Hub de orçamento e BDI"},
+        {"href": "/conteudos/sinapi-desonerado-nao-desonerado/", "label": "SINAPI desonerado ou não desonerado"},
+        {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"}
+      ],
+      "demand_claim": "historical_labeled",
+      "publication_requires_live_demand": false,
+      "gsc_historical": {
+        "export": "seo/gsc-2026-07-30",
+        "label": "historical_not_live",
+        "impressions": 24,
+        "clicks": 2,
+        "position": 9.29
+      },
+      "fixture": false,
+      "hold_for_data": false,
+      "index_intent": "INDEX"
+    },
+    {
+      "asset_id": "limite-aditivo-25-50-obra-publica",
+      "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "html_path": "conteudos/limite-aditivo-25-50-obra-publica/index.html",
+      "existing_url": true,
+      "new_url": false,
+      "intent": "limite_aditivo_25_50",
+      "preference_class": "existing_url_improvement",
+      "why_not_generic": "Worked saldo diagram of art. 125 with isolated increment and suppression sets, plus the existing calculator. Distinct from the Lei 14.133 article walkthrough and from the contract-analysis family.",
+      "visitor_job": "Uma diretoria de contrato precisa saber o que ainda cabe no teto de 25% ou 50% antes de protocolar aditivo — com base de cálculo, histórico e sem compensar acréscimo com supressão de item distinto.",
+      "question": "O que conta no limite de aditivo de 25% e 50% em obra pública?",
+      "answer": "Pelo art. 125 da Lei nº 14.133/2021, o contratado é obrigado a aceitar acréscimos ou supressões de até 25% do valor inicial atualizado do contrato. Na reforma de edifício ou de equipamento, o limite de acréscimo sobe para 50%. O teto opera em valor, trata acréscimos e supressões como conjuntos distintos e não autoriza transfigurar o objeto nem executar extra sem formalização.",
+      "method": {
+        "id": "art125-saldo-isolado/1.0",
+        "short": "Fixar valor inicial atualizado → somar acréscimos e supressões em conjuntos isolados → aplicar 25% ou 50% só na hipótese legal de reforma → recusar compensação automática.",
+        "source": "Lei nº 14.133/2021, art. 125; orientação AGU sobre alterações contratuais em obras e serviços de engenharia (2024)."
+      },
+      "period": "Texto legal vigente em 2026-08-18. O saldo do caso é o do contrato concreto.",
+      "geography": "Brasil — regra federal. Entes podem ter regulamento próprio que não afasta o teto legal.",
+      "grain": "percentual_sobre_valor_inicial_atualizado",
+      "limitations": [
+        "O diagrama é orientativo. Não cria direito a aditivo.",
+        "Não resolve alteração qualitativa, item novo sem preço ou execução informal.",
+        "A evidência GSC citada é histórica e não é demanda atual.",
+        "Esta página não é análise contratual oficial nem substitui o jurídico do caso."
+      ],
+      "visual_id": "art125-saldo",
+      "author": "Engº Tiago Sasaki",
+      "reviewer": "CONFENGE / editorial",
+      "refresh_owner": "CONFENGE / organic-breakout",
+      "correction_route": "/correcoes/?asset=limite-aditivo-25-50-obra-publica",
+      "cta": {
+        "id": "verificar-saldo-aditivo",
+        "label": "Abrir o verificador de limite de acréscimos e supressões",
+        "path": "/ferramentas/limite-acrescimos-supressoes/",
+        "asset_id": "limite-aditivo-25-50-obra-publica",
+        "route_family": "aditivos",
+        "source": "CONFENGE_WEB"
+      },
+      "internal_links": [
+        {"href": "/aditivos-obras-publicas/", "label": "Hub de aditivos e serviços extras"},
+        {"href": "/ferramentas/limite-acrescimos-supressoes/", "label": "Verificador de acréscimos e supressões"},
+        {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"},
+        {"href": "/lei-14133-obras/limite-25-50-aditivo-obra/", "label": "Artigo 125 na trilha da Lei 14.133"}
+      ],
+      "demand_claim": "historical_labeled",
+      "publication_requires_live_demand": false,
+      "gsc_historical": {
+        "export": "seo/gsc-2026-07-30",
+        "label": "historical_not_live",
+        "impressions": 24,
+        "clicks": 0,
+        "position": 17.0
+      },
+      "fixture": false,
+      "hold_for_data": false,
+      "index_intent": "INDEX"
+    }
+  ],
+  "rejected": [
+    {
+      "asset_id": "valor-tipico-contratos-pavimentacao",
+      "reason": "Existing Market Answer already INDEX on official_live SC payload. Campaign must not treat the CONTRACT_FIXTURE as a second asset or promote HOLD_FOR_DATA.",
+      "preference_class": "existing_url_already_extraordinary"
+    },
+    {
+      "asset_id": "analises-contratos-publicos",
+      "reason": "Owned exclusively by CONFENGE-WEB-FIRST-OFFICIAL-CONTRACT-ANALYSIS-01."
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema": "organic-breakout-distribution-pack/1.0",
+  "auto_send": false,
+  "sent": false,
+  "smtp_called": false,
+  "webhook_called": false,
+  "asset_id": "limite-aditivo-25-50-obra-publica",
+  "outreach_title": "O que conta no limite de aditivo de 25% e 50% em obra pública?",
+  "factual_summary": "Pelo art. 125 da Lei nº 14.133/2021, o contratado é obrigado a aceitar acréscimos ou supressões de até 25% do valor inicial atualizado do contrato. Na reforma de edifício ou de equipamento, o limite de acréscimo sobe para 50%. O teto opera em valor, trata acréscimos e supressões como conjuntos distintos e não autoriza transfigurar o objeto nem executar extra sem formalização.",
+  "citable_datum": {
+    "visual_id": "art125-saldo",
+    "content_hash": "21b65734c35be624c15d7751ff639159f7698cd3d419b760a2232103091ddbdf",
+    "historical_gsc": {
+      "export": "seo/gsc-2026-07-30",
+      "label": "historical_not_live",
+      "impressions": 24,
+      "clicks": 0,
+      "position": 17.0
+    },
+    "historical_neq_live": true
+  },
+  "method": {
+    "id": "art125-saldo-isolado/1.0",
+    "short": "Fixar valor inicial atualizado → somar acréscimos e supressões em conjuntos isolados → aplicar 25% ou 50% só na hipótese legal de reforma → recusar compensação automática.",
+    "source": "Lei nº 14.133/2021, art. 125; orientação AGU sobre alterações contratuais em obras e serviços de engenharia (2024)."
+  },
+  "targets": [
+    {
+      "id": "sicepot-sc",
+      "target_class": "associação",
+      "target_nominal": "SICEPOT-SC",
+      "public_url": "https://sicepot-sc.org.br",
+      "editorial_angle": "Revisão técnica do O que conta no limite de aditivo de 25% e 50% em obra pública? com método art125-saldo-isolado/1.0."
+    },
+    {
+      "id": "crea-sc",
+      "target_class": "associação",
+      "target_nominal": "CREA-SC",
+      "public_url": "https://www.crea-sc.org.br",
+      "editorial_angle": "Peça de consulta para engenheiros que orçam ou aditam contrato público."
+    },
+    {
+      "id": "cbic-coinfra",
+      "target_class": "associação",
+      "target_nominal": "CBIC / COINFRA",
+      "public_url": "https://cbic.org.br",
+      "editorial_angle": "Citação do método e das limitações, não de um censo nacional."
+    },
+    {
+      "id": "sinaenco",
+      "target_class": "associação",
+      "target_nominal": "SINAENCO",
+      "public_url": "https://sinaenco.com.br",
+      "editorial_angle": "Utilidade para empresas de engenharia consultiva que leem edital e aditivo."
+    },
+    {
+      "id": "agencia-infra",
+      "target_class": "imprensa",
+      "target_nominal": "Agência Infra",
+      "public_url": "https://www.agenciainfra.com",
+      "editorial_angle": "Dado/visual citável com recusa explícita de extrapolar o que a página não mede."
+    }
+  ],
+  "drafts": [
+    {
+      "target_id": "sicepot-sc",
+      "target_nominal": "SICEPOT-SC",
+      "subject": "Pedido de revisão: O que conta no limite de aditivo de 25% e 50% em obra pública?",
+      "body": "Olá, equipe SICEPOT-SC.\n\nPublicamos uma resposta verificável para: O que conta no limite de aditivo de 25% e 50% em obra pública?\nURL: https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/\n\nMétodo: Fixar valor inicial atualizado → somar acréscimos e supressões em conjuntos isolados → aplicar 25% ou 50% só na hipótese legal de reforma → recusar compensação automática.\nDado/visual citável: art125-saldo (hash 21b65734c35b).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "crea-sc",
+      "target_nominal": "CREA-SC",
+      "subject": "Pedido de revisão: O que conta no limite de aditivo de 25% e 50% em obra pública?",
+      "body": "Olá, equipe CREA-SC.\n\nPublicamos uma resposta verificável para: O que conta no limite de aditivo de 25% e 50% em obra pública?\nURL: https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/\n\nMétodo: Fixar valor inicial atualizado → somar acréscimos e supressões em conjuntos isolados → aplicar 25% ou 50% só na hipótese legal de reforma → recusar compensação automática.\nDado/visual citável: art125-saldo (hash 21b65734c35b).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "cbic-coinfra",
+      "target_nominal": "CBIC / COINFRA",
+      "subject": "Pedido de revisão: O que conta no limite de aditivo de 25% e 50% em obra pública?",
+      "body": "Olá, equipe CBIC / COINFRA.\n\nPublicamos uma resposta verificável para: O que conta no limite de aditivo de 25% e 50% em obra pública?\nURL: https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/\n\nMétodo: Fixar valor inicial atualizado → somar acréscimos e supressões em conjuntos isolados → aplicar 25% ou 50% só na hipótese legal de reforma → recusar compensação automática.\nDado/visual citável: art125-saldo (hash 21b65734c35b).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "sinaenco",
+      "target_nominal": "SINAENCO",
+      "subject": "Pedido de revisão: O que conta no limite de aditivo de 25% e 50% em obra pública?",
+      "body": "Olá, equipe SINAENCO.\n\nPublicamos uma resposta verificável para: O que conta no limite de aditivo de 25% e 50% em obra pública?\nURL: https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/\n\nMétodo: Fixar valor inicial atualizado → somar acréscimos e supressões em conjuntos isolados → aplicar 25% ou 50% só na hipótese legal de reforma → recusar compensação automática.\nDado/visual citável: art125-saldo (hash 21b65734c35b).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "agencia-infra",
+      "target_nominal": "Agência Infra",
+      "subject": "Pedido de revisão: O que conta no limite de aditivo de 25% e 50% em obra pública?",
+      "body": "Olá, equipe Agência Infra.\n\nPublicamos uma resposta verificável para: O que conta no limite de aditivo de 25% e 50% em obra pública?\nURL: https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/\n\nMétodo: Fixar valor inicial atualizado → somar acréscimos e supressões em conjuntos isolados → aplicar 25% ou 50% só na hipótese legal de reforma → recusar compensação automática.\nDado/visual citável: art125-saldo (hash 21b65734c35b).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    }
+  ],
+  "request_type": "review_or_citation",
+  "not_a_favor": true
+}

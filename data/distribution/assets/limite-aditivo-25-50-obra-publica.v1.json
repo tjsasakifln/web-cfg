@@ -1,0 +1,119 @@
+{
+  "schema": "earned_distribution_v1",
+  "version": 1,
+  "auto_send": false,
+  "human_send_only": true,
+  "decision_state": "VALIDATE",
+  "lane": "organic-breakout",
+  "asset": {
+    "id": "limite-aditivo-25-50-obra-publica",
+    "name": "O que conta no limite de aditivo de 25% e 50% em obra pública?",
+    "canonical_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+    "indexable": true,
+    "do_not_index": false,
+    "needs_data": false,
+    "press_allowed": true,
+    "verdict": "PUBLISHED_OPEN_METHODOLOGY",
+    "owner": "Tiago Sasaki",
+    "source": "conteudos/limite-aditivo-25-50-obra-publica/ + memória de saldo art. 125",
+    "date": "2026-08-18",
+    "utility": {
+      "distinct_user_utility": true,
+      "utility_note": "Memória de saldo com conjuntos isolados e recusa de compensação automática.",
+      "invented_national_contract_stats": false
+    },
+    "citation_primitives": {
+      "stable_citation_link": {
+        "status": "already_present",
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
+      },
+      "quotable_stat": {
+        "status": "already_present",
+        "text": "No exemplo trabalhável (base R$ 1.000.000, acréscimos R$ 180.000, sem reforma) o saldo de acréscimo é R$ 70.000. Acréscimo e supressão não se compensam automaticamente."
+      },
+      "chart_card_metadata": {
+        "status": "already_present",
+        "page_section": "Memória de saldo do art. 125"
+      },
+      "source_method_block": {
+        "status": "already_present",
+        "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "page_section": "Método art125-saldo-isolado/1.0"
+      },
+      "safe_download": {
+        "status": "already_present",
+        "pii": false,
+        "links": [
+          "https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/"
+        ]
+      }
+    }
+  },
+  "targets": [
+    {
+      "id": "sicepot-sc",
+      "target_class": "associação",
+      "target_nominal": "SICEPOT-SC",
+      "editorial_angle": "Revisão da memória de saldo do art. 125 para associados que protocolam aditivo.",
+      "citation_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://sicepot-sc.org.br"
+    },
+    {
+      "id": "crea-sc",
+      "target_class": "associação",
+      "target_nominal": "CREA-SC",
+      "editorial_angle": "Consulta sobre teto legal versus memória de saldo do contrato.",
+      "citation_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://www.crea-sc.org.br"
+    },
+    {
+      "id": "cbic-coinfra",
+      "target_class": "associação",
+      "target_nominal": "CBIC / COINFRA",
+      "editorial_angle": "Citação do método de conjuntos isolados, não de um volume nacional de aditivos.",
+      "citation_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://cbic.org.br"
+    },
+    {
+      "id": "sinaenco",
+      "target_class": "associação",
+      "target_nominal": "SINAENCO",
+      "editorial_angle": "Utilidade para quem mede saldo antes de formalizar alteração.",
+      "citation_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://sinaenco.com.br"
+    },
+    {
+      "id": "agencia-infra",
+      "target_class": "imprensa",
+      "target_nominal": "Agência Infra",
+      "editorial_angle": "Peça factual: exemplo de saldo e a recusa de compensação automática.",
+      "citation_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "owner": "Tiago Sasaki",
+      "outcome": "UNKNOWN",
+      "source": "CONFENGE-ORGANIC-BREAKOUT-01",
+      "date": "2026-08-18",
+      "fit": true,
+      "public_url": "https://www.agenciainfra.com"
+    }
+  ]
+}

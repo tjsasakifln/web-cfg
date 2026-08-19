@@ -345,6 +345,384 @@ def redact_query(query: str) -> str:
     return f"sha256:{digest[:16]}"
 
 
+DETECTION_CLASSES = (
+    "striking_distance",
+    "wrong_landing",
+    "cannibalization",
+    "impressions_without_adequate_answer",
+    "indexable_without_impressions",
+    "clicks_weak_cta",
+)
+
+# Operational intended landings for known non-brand questions. Not a demand claim.
+DEFAULT_INTENDED_LANDINGS = {
+    "sinapi desonerado": "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "sinapi desonerado ou nao": "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "desonerado e nao desonerado": "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "bdi diferenciado": "/conteudos/bdi-diferenciado-obra-publica/",
+    "limite aditivo": "/conteudos/limite-aditivo-25-50-obra-publica/",
+    "limite aditivo 25": "/conteudos/limite-aditivo-25-50-obra-publica/",
+    "limite 25 50": "/conteudos/limite-aditivo-25-50-obra-publica/",
+}
+
+DEFAULT_ADEQUATE_PATHS = {
+    "/conteudos/sinapi-desonerado-nao-desonerado/",
+    "/conteudos/bdi-diferenciado-obra-publica/",
+    "/conteudos/limite-aditivo-25-50-obra-publica/",
+    "/aditivos-obras-publicas/",
+    "/reequilibrio-obras-publicas/",
+    "/inteligencia/valor-tipico-contratos-pavimentacao/",
+}
+
+
+def _path_of(page: str) -> str:
+    raw = (page or "").strip()
+    if not raw:
+        return ""
+    path = urlparse(raw).path if raw.startswith("http") else raw
+    if not path or path == "/":
+        return "/"
+    return path if path.endswith("/") else path + "/"
+
+
+def _normalize_query(query: str) -> str:
+    text = re.sub(r"\s+", " ", (query or "").strip().lower())
+    text = (
+        text.replace("ã", "a")
+        .replace("á", "a")
+        .replace("â", "a")
+        .replace("é", "e")
+        .replace("ê", "e")
+        .replace("í", "i")
+        .replace("ó", "o")
+        .replace("ô", "o")
+        .replace("ú", "u")
+        .replace("ç", "c")
+    )
+    return text
+
+
+def brand_class_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
+    counts = {"brand": 0, "non_brand": 0, "legacy_brand": 0}
+    for row in rows:
+        raw = row.get("brand_class")
+        if isinstance(raw, dict) and raw.get("label") in counts:
+            label = str(raw["label"])
+        else:
+            label = classify_query(str(row.get("query") or "")).get("label") or "non_brand"
+        if label in counts:
+            counts[label] += 1
+    return counts
+
+
+def dedupe_gsc_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Dedupe on the Search Analytics 5-tuple. First row wins."""
+    seen: set[tuple] = set()
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        key = (
+            row.get("date"),
+            row.get("query"),
+            row.get("page"),
+            row.get("country"),
+            row.get("device"),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(row)
+    return out
+
+
+def detect_striking_distance(
+    rows: list[dict[str, Any]],
+    *,
+    min_impressions: float = 3.0,
+    pos_lo: float = 4.0,
+    pos_hi: float = 20.0,
+) -> dict[str, Any]:
+    """Positions 4–20 with observed impressions. Missing position is not zero."""
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        if row.get("impressions") is None or row.get("position") is None:
+            continue
+        impressions = float(row.get("impressions"))
+        position = float(row.get("position"))
+        if impressions >= min_impressions and pos_lo <= position <= pos_hi:
+            items.append(
+                {
+                    "page": row.get("page"),
+                    "query_hash": redact_query(str(row.get("query") or "")),
+                    "impressions": impressions,
+                    "position": position,
+                    "clicks": row.get("clicks"),
+                }
+            )
+    return {
+        "class": "striking_distance",
+        "status": "observed" if items else "none_in_returned_set",
+        "zero_inferred_from_absence": False,
+        "items": items,
+        "note": SEARCH_ANALYTICS_LIMITATION,
+    }
+
+
+def detect_wrong_landing(
+    rows: list[dict[str, Any]],
+    intended_by_query: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Query landed on a page other than the intended operational URL."""
+    mapping = intended_by_query if intended_by_query is not None else DEFAULT_INTENDED_LANDINGS
+    if not mapping:
+        return {
+            "class": "wrong_landing",
+            "status": "INSUFFICIENT_EVIDENCE",
+            "reason": "no_intended_landing_map",
+            "items": [],
+        }
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        query = str(row.get("query") or "")
+        page = str(row.get("page") or "")
+        if not query or not page:
+            continue
+        norm = _normalize_query(query)
+        intended = None
+        for key, path in mapping.items():
+            if key in norm:
+                intended = path
+                break
+        if not intended:
+            continue
+        landed = _path_of(page)
+        if landed and intended.rstrip("/") not in landed.rstrip("/"):
+            items.append(
+                {
+                    "query_hash": redact_query(query),
+                    "landed": landed,
+                    "intended": intended,
+                    "impressions": row.get("impressions"),
+                }
+            )
+    return {
+        "class": "wrong_landing",
+        "status": "observed" if items else "none_in_returned_set",
+        "items": items,
+        "zero_inferred_from_absence": False,
+    }
+
+
+def detect_impressions_without_adequate_answer(
+    rows: list[dict[str, Any]],
+    adequate_paths: set[str] | None = None,
+) -> dict[str, Any]:
+    """Non-brand queries with impressions whose landing is missing or inadequate."""
+    paths = adequate_paths if adequate_paths is not None else DEFAULT_ADEQUATE_PATHS
+    if not paths:
+        return {
+            "class": "impressions_without_adequate_answer",
+            "status": "INSUFFICIENT_EVIDENCE",
+            "reason": "adequate_answer_map_required",
+            "items": [],
+        }
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        if row.get("impressions") is None:
+            continue
+        if float(row.get("impressions") or 0) <= 0:
+            continue
+        if classify_query(str(row.get("query") or "")).get("label") != "non_brand":
+            continue
+        page = str(row.get("page") or "")
+        if not page:
+            items.append(
+                {
+                    "query_hash": redact_query(str(row.get("query") or "")),
+                    "status": "join_absent",
+                    "impressions": row.get("impressions"),
+                    "note": "missing_page_join_is_not_zero",
+                }
+            )
+            continue
+        landed = _path_of(page)
+        if landed not in paths:
+            items.append(
+                {
+                    "query_hash": redact_query(str(row.get("query") or "")),
+                    "landed": landed,
+                    "status": "landing_not_in_adequate_set",
+                    "impressions": row.get("impressions"),
+                }
+            )
+    return {
+        "class": "impressions_without_adequate_answer",
+        "status": "observed" if items else "none_in_returned_set",
+        "items": items,
+        "zero_inferred_from_absence": False,
+    }
+
+
+def detect_indexable_without_impressions(
+    indexable_urls: list[str],
+    observed_by_url: dict[str, dict[str, Any]] | None,
+) -> dict[str, Any]:
+    """Indexable URLs missing from a performance export stay ABSENT, never 0."""
+    observed = observed_by_url if observed_by_url is not None else {}
+    items: list[dict[str, Any]] = []
+    for url in indexable_urls:
+        key = url.rstrip("/") + "/"
+        obs = observed.get(url) or observed.get(key) or observed.get(_path_of(url))
+        if obs is None:
+            items.append(
+                {
+                    "url": url,
+                    "status": "ABSENT",
+                    "impressions": None,
+                    "note": "missing_is_not_zero",
+                }
+            )
+            continue
+        if obs.get("impressions") is None:
+            items.append(
+                {
+                    "url": url,
+                    "status": "ABSENT",
+                    "impressions": None,
+                    "note": "missing_is_not_zero",
+                }
+            )
+            continue
+        if float(obs.get("impressions") or 0) == 0:
+            items.append(
+                {
+                    "url": url,
+                    "status": "observed_zero",
+                    "impressions": 0.0,
+                    "note": "zero_was_present_in_returned_set",
+                }
+            )
+    return {
+        "class": "indexable_without_impressions",
+        "status": "observed" if any(i.get("status") == "observed_zero" for i in items) else "ABSENT_OR_EMPTY",
+        "items": items,
+        "zero_inferred_from_absence": False,
+        "note": (
+            "A URL missing from Search Analytics is ABSENT. "
+            "Inspection, indexation, impression and click stay independent."
+        ),
+    }
+
+
+def detect_clicks_weak_cta(
+    rows: list[dict[str, Any]],
+    cta_by_path: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Pages with observed clicks whose CTA map is weak or missing."""
+    if cta_by_path is None:
+        return {
+            "class": "clicks_weak_cta",
+            "status": "INSUFFICIENT_EVIDENCE",
+            "reason": "cta_strength_map_required",
+            "items": [],
+        }
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        if row.get("clicks") is None:
+            continue
+        if float(row.get("clicks") or 0) <= 0:
+            continue
+        path = _path_of(str(row.get("page") or ""))
+        if not path:
+            continue
+        strength = cta_by_path.get(path) or cta_by_path.get(path.rstrip("/"))
+        if strength in {None, "weak", "missing"}:
+            items.append(
+                {
+                    "page": path,
+                    "clicks": row.get("clicks"),
+                    "impressions": row.get("impressions"),
+                    "cta_strength": strength or "missing",
+                }
+            )
+    return {
+        "class": "clicks_weak_cta",
+        "status": "observed" if items else "none_in_returned_set",
+        "items": items,
+        "zero_inferred_from_absence": False,
+    }
+
+
+def detect_all(
+    rows: list[dict[str, Any]],
+    *,
+    indexable_urls: list[str] | None = None,
+    intended_by_query: dict[str, str] | None = None,
+    adequate_paths: set[str] | None = None,
+    cta_by_path: dict[str, str] | None = None,
+    reviewed_semantic_overlap: bool = False,
+) -> dict[str, Any]:
+    """Bundle the campaign detection classes over a query×page×date×country×device set."""
+    deduped = dedupe_gsc_rows(rows)
+    observed_pages: dict[str, dict[str, Any]] = {}
+    for row in deduped:
+        path = _path_of(str(row.get("page") or ""))
+        if not path:
+            continue
+        prev = observed_pages.get(path)
+        if prev is None:
+            observed_pages[path] = {
+                "impressions": row.get("impressions"),
+                "clicks": row.get("clicks"),
+                "position": row.get("position"),
+            }
+            continue
+        if row.get("impressions") is not None:
+            prev["impressions"] = float(prev.get("impressions") or 0) + float(row.get("impressions") or 0)
+        if row.get("clicks") is not None:
+            prev["clicks"] = float(prev.get("clicks") or 0) + float(row.get("clicks") or 0)
+    return {
+        "grain": ["date", "query", "page", "country", "device"],
+        "row_count": len(deduped),
+        "brand_classes": brand_class_counts(deduped),
+        "striking_distance": detect_striking_distance(deduped),
+        "wrong_landing": detect_wrong_landing(deduped, intended_by_query),
+        "cannibalization": cannibalization_verdict(
+            deduped, reviewed_semantic_overlap=reviewed_semantic_overlap
+        ),
+        "impressions_without_adequate_answer": detect_impressions_without_adequate_answer(
+            deduped, adequate_paths
+        ),
+        "indexable_without_impressions": detect_indexable_without_impressions(
+            list(indexable_urls or []), observed_pages
+        ),
+        "clicks_weak_cta": detect_clicks_weak_cta(deduped, cta_by_path),
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "zero_inferred_from_absence": False,
+        "inspection_is_not_indexation": True,
+        "indexation_is_not_impression": True,
+        "impression_is_not_click": True,
+    }
+
+
+def gsc_performance_status(pull_result: dict[str, Any] | None) -> str:
+    """Live performance is UNKNOWN unless a non-synthetic API pull succeeded."""
+    data = pull_result or {}
+    if data.get("error") == "missing_credentials":
+        return "UNKNOWN"
+    if data.get("ok") is True and data.get("ready_for_product_decisions") is True and data.get("synthetic") is not True:
+        return "LIVE"
+    return "UNKNOWN"
+
+
+def label_historical_export(payload: dict[str, Any]) -> dict[str, Any]:
+    """Stamp a CSV/historical snapshot so it cannot be confused with a live pull."""
+    stamped = stamp_non_live_snapshot(payload)
+    stamped["historical"] = True
+    stamped["historical_neq_live"] = True
+    stamped["performance_status"] = "UNKNOWN"
+    return stamped
+
+
 def git_safe_aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
     """Minimized aggregates with hashed queries. No raw query/PII."""
     branded_n = 0
@@ -965,6 +1343,7 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "pages": len(pages),
             "branded_queries": sum(1 for q in queries if q.get("branded")),
             "nonbranded_queries": sum(1 for q in queries if not q.get("branded")),
+            "brand_classes": brand_class_counts(queries),
             "analysis_keys": 12,
             "lead_cohort_paths": len(lead_pages),
         },
@@ -1001,6 +1380,10 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "11_emerging_terms": sorted(queries, key=lambda x: -float(x.get("impressions") or 0))[:15],
             "12_competitor_content_gaps": competitor_gaps,
             "legacy_entity_queries_still_ranking": legacy_entity,
+            "detection_classes": detect_all(
+                list(queries) + list(pages),
+                indexable_urls=sorted(DEFAULT_ADEQUATE_PATHS),
+            ),
         },
         "priority_actions": [],
     }

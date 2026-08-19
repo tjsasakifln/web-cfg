@@ -1,0 +1,98 @@
+{
+  "schema": "organic-breakout-distribution-pack/1.0",
+  "auto_send": false,
+  "sent": false,
+  "smtp_called": false,
+  "webhook_called": false,
+  "asset_id": "sinapi-desonerado-nao-desonerado",
+  "outreach_title": "SINAPI desonerado ou não desonerado: qual usar?",
+  "factual_summary": "Use a tabela que o edital e a planilha modelo fixam na data-base do certame; depois alinhe BDI, encargos da proposta e unitários à mesma base. SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra, não em um desconto universal. Escolher a tabela mais barata sem coerência com o edital e com o regime da empresa gera planilha incoerente e risco de inexequibilidade ou prejuízo.",
+  "citable_datum": {
+    "visual_id": "sinapi-aligner",
+    "content_hash": "203e2ad70cfda3eceb1279ea22a0894a644e7cbc9176fccf63c1959effca6927",
+    "historical_gsc": {
+      "export": "seo/gsc-2026-07-30",
+      "label": "historical_not_live",
+      "impressions": 88,
+      "clicks": 0,
+      "position": 7.75
+    },
+    "historical_neq_live": true
+  },
+  "method": {
+    "id": "sinapi-regime-alignment/1.0",
+    "short": "Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.",
+    "source": "CAIXA, metodologia SINAPI; regra do edital; Lei 12.546/2011 e atualizações de desoneração da folha quando o enquadramento se aplica."
+  },
+  "targets": [
+    {
+      "id": "sicepot-sc",
+      "target_class": "associação",
+      "target_nominal": "SICEPOT-SC",
+      "public_url": "https://sicepot-sc.org.br",
+      "editorial_angle": "Revisão técnica do SINAPI desonerado ou não desonerado: qual usar? com método sinapi-regime-alignment/1.0."
+    },
+    {
+      "id": "crea-sc",
+      "target_class": "associação",
+      "target_nominal": "CREA-SC",
+      "public_url": "https://www.crea-sc.org.br",
+      "editorial_angle": "Peça de consulta para engenheiros que orçam ou aditam contrato público."
+    },
+    {
+      "id": "cbic-coinfra",
+      "target_class": "associação",
+      "target_nominal": "CBIC / COINFRA",
+      "public_url": "https://cbic.org.br",
+      "editorial_angle": "Citação do método e das limitações, não de um censo nacional."
+    },
+    {
+      "id": "sinaenco",
+      "target_class": "associação",
+      "target_nominal": "SINAENCO",
+      "public_url": "https://sinaenco.com.br",
+      "editorial_angle": "Utilidade para empresas de engenharia consultiva que leem edital e aditivo."
+    },
+    {
+      "id": "agencia-infra",
+      "target_class": "imprensa",
+      "target_nominal": "Agência Infra",
+      "public_url": "https://www.agenciainfra.com",
+      "editorial_angle": "Dado/visual citável com recusa explícita de extrapolar o que a página não mede."
+    }
+  ],
+  "drafts": [
+    {
+      "target_id": "sicepot-sc",
+      "target_nominal": "SICEPOT-SC",
+      "subject": "Pedido de revisão: SINAPI desonerado ou não desonerado: qual usar?",
+      "body": "Olá, equipe SICEPOT-SC.\n\nPublicamos uma resposta verificável para: SINAPI desonerado ou não desonerado: qual usar?\nURL: https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/\n\nMétodo: Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.\nDado/visual citável: sinapi-aligner (hash 203e2ad70cfd).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "crea-sc",
+      "target_nominal": "CREA-SC",
+      "subject": "Pedido de revisão: SINAPI desonerado ou não desonerado: qual usar?",
+      "body": "Olá, equipe CREA-SC.\n\nPublicamos uma resposta verificável para: SINAPI desonerado ou não desonerado: qual usar?\nURL: https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/\n\nMétodo: Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.\nDado/visual citável: sinapi-aligner (hash 203e2ad70cfd).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "cbic-coinfra",
+      "target_nominal": "CBIC / COINFRA",
+      "subject": "Pedido de revisão: SINAPI desonerado ou não desonerado: qual usar?",
+      "body": "Olá, equipe CBIC / COINFRA.\n\nPublicamos uma resposta verificável para: SINAPI desonerado ou não desonerado: qual usar?\nURL: https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/\n\nMétodo: Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.\nDado/visual citável: sinapi-aligner (hash 203e2ad70cfd).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "sinaenco",
+      "target_nominal": "SINAENCO",
+      "subject": "Pedido de revisão: SINAPI desonerado ou não desonerado: qual usar?",
+      "body": "Olá, equipe SINAENCO.\n\nPublicamos uma resposta verificável para: SINAPI desonerado ou não desonerado: qual usar?\nURL: https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/\n\nMétodo: Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.\nDado/visual citável: sinapi-aligner (hash 203e2ad70cfd).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    },
+    {
+      "target_id": "agencia-infra",
+      "target_nominal": "Agência Infra",
+      "subject": "Pedido de revisão: SINAPI desonerado ou não desonerado: qual usar?",
+      "body": "Olá, equipe Agência Infra.\n\nPublicamos uma resposta verificável para: SINAPI desonerado ou não desonerado: qual usar?\nURL: https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/\n\nMétodo: Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.\nDado/visual citável: sinapi-aligner (hash 203e2ad70cfd).\nA evidência de busca citada é histórica (seo/gsc-2026-07-30), não uma alegação de demanda atual.\n\nPedimos revisão ou citação do método e das limitações, não um favor de link. Se o recorte não servir à audiência de vocês, ignore.\n\nauto_send=false — esta mensagem não foi enviada."
+    }
+  ],
+  "request_type": "review_or_citation",
+  "not_a_favor": true
+}
