@@ -1,0 +1,50 @@
+{
+  "schema_version": "qco-cycle-v1",
+  "issue": 64,
+  "decision_state": "EXECUTE_NOW",
+  "as_of": "2026-08-19",
+  "bulk_auto_send": false,
+  "north_star": "qualified_commercial_opportunity",
+  "icp": {
+    "include": [
+      "construtora de obras públicas com contrato ativo de edificação, saneamento ou infraestrutura"
+    ],
+    "exclude": [
+      "fornecedor de material sem execução",
+      "órgão público comprador como conta de venda"
+    ],
+    "defer": [
+      "software house sem contrato de obras",
+      "contabilidade genérica"
+    ]
+  },
+  "offer": {
+    "id": "CFG-DIAG-EXP-v1",
+    "owner_issue": 88,
+    "buyable": true,
+    "charge_authorized": false
+  },
+  "accounts": [
+    {
+      "account_id": "qco-cycle-01-fixture",
+      "kind": "fixture",
+      "valid_account": true,
+      "trigger": {
+        "family": "medicao_glosa",
+        "evidence": "UNKNOWN",
+        "why_now": "UNKNOWN"
+      },
+      "decision_unit": {
+        "role": "UNKNOWN",
+        "named_person": "UNKNOWN"
+      },
+      "route": "MANUAL_OUTREACH",
+      "founder_action": "NONE",
+      "outcome": "UNKNOWN",
+      "rejected": false,
+      "next_action": "UNKNOWN",
+      "learning": "UNKNOWN",
+      "pipeline": "UNKNOWN"
+    }
+  ]
+}
