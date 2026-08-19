@@ -1,0 +1,93 @@
+{
+  "schema_version": "capability-classification-v1",
+  "issue": 63,
+  "as_of": "2026-08-19",
+  "decision_state": "VALIDATE",
+  "canonical_public_host": "confenge.com.br",
+  "donor_host": "smartlic.tech",
+  "rule": "SmartLic is donor/redirect/sunset only. No new SmartLic capability, public brand, CTA or runtime.",
+  "ordering_after_p0": [
+    "contract-intelligence-publishing-engine-83",
+    "margin-defense-utility-60",
+    "market-answer-engine-84",
+    "intent-conversion-88",
+    "flagship-research-65",
+    "earned-distribution-66"
+  ],
+  "capabilities": [
+    {
+      "id": "margin-defense-suite",
+      "label": "Suite Defesa de Margem",
+      "class": "REIMPLEMENT_IN_WEB_CFG",
+      "web_cfg_issue": 60,
+      "public_runtime": "confenge.com.br",
+      "smartlic_runtime": false
+    },
+    {
+      "id": "contract-intelligence-publishing",
+      "label": "Contract Intelligence Publishing Engine",
+      "class": "REIMPLEMENT_IN_WEB_CFG",
+      "web_cfg_issue": 83,
+      "public_runtime": "confenge.com.br",
+      "smartlic_runtime": false
+    },
+    {
+      "id": "market-answer-engine",
+      "label": "Public Market Answer Engine",
+      "class": "REIMPLEMENT_IN_WEB_CFG",
+      "web_cfg_issue": 84,
+      "public_runtime": "confenge.com.br",
+      "smartlic_runtime": false
+    },
+    {
+      "id": "contracts-prices-explorer",
+      "label": "Generic contracts/prices explorer",
+      "class": "DEFER",
+      "web_cfg_issue": 84,
+      "note": "Evidence drill-down / noindex; not a product portal.",
+      "smartlic_runtime": false
+    },
+    {
+      "id": "cnpj-orgao-profiles",
+      "label": "Static CNPJ/órgão entity pages",
+      "class": "DROP",
+      "note": "Entity-substitution anti-pattern. B2G X-Ray absorbs contextual use.",
+      "smartlic_runtime": false
+    },
+    {
+      "id": "tender-hub",
+      "label": "Tender hub / índice municipal",
+      "class": "DEFER",
+      "web_cfg_issue": 91,
+      "smartlic_runtime": false
+    },
+    {
+      "id": "smartlic-digest-runtime",
+      "label": "SmartLic newsletter/digest SaaS",
+      "class": "DROP",
+      "note": "Do not migrate runtime. Lessons only for #90.",
+      "smartlic_runtime": false
+    },
+    {
+      "id": "smartlic-raiox-watchlists",
+      "label": "SmartLic Raio-X / watchlists / pSEO families",
+      "class": "KEEP_TEMPORARILY_FOR_MIGRATION",
+      "note": "Donor inventory and anti-pattern evidence. URL map in #62. Never public CONFENGE runtime.",
+      "smartlic_runtime": false
+    },
+    {
+      "id": "geo-llms-txt-hacks",
+      "label": "llms.txt / GEO tactics",
+      "class": "DROP",
+      "web_cfg_issue": 86,
+      "smartlic_runtime": false
+    },
+    {
+      "id": "lead-magnet-cro-stack",
+      "label": "SmartLic CRO / lead-magnet stack",
+      "class": "DROP",
+      "web_cfg_issue": 88,
+      "smartlic_runtime": false
+    }
+  ]
+}
