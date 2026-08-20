@@ -7,12 +7,13 @@ human approval hash that matches.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from dataclasses import dataclass, field
+from datetime import date, datetime, timedelta
 from typing import Any
 
 from scripts.market_answers import (
     DEFAULT_LKG,
+    FRESHNESS_CLASSES,
     GATE_VERSION,
     INDEX_CONDITIONS,
     PRODUCER_STATUS_FIXTURE,
@@ -21,6 +22,7 @@ from scripts.market_answers import (
     SOURCE,
 )
 from scripts.market_answers.approval import approval_for, evaluate_approval
+from scripts.market_answers.clock import as_utc, format_utc, parse_instant, resolve_now
 from scripts.market_answers.consume import grain_is_ticket, is_fixture_payload
 from scripts.market_answers.copy import (
     surfaces_claim_national,
@@ -61,7 +63,10 @@ class GateDecision:
     claim_scope: str = SCOPE_UF
     payload_content_hash: str = ""
     rendered_content_hash: str = ""
-    freshness_class: str = "current"
+    freshness_class: str = "UNKNOWN"
+    evaluated_at: str = ""
+    age_seconds: int | None = None
+    expires_at: str | None = None
     gate_version: str = GATE_VERSION
 
     def as_dict(self) -> dict[str, Any]:
@@ -83,6 +88,9 @@ class GateDecision:
             "payload_content_hash": self.payload_content_hash,
             "rendered_content_hash": self.rendered_content_hash,
             "freshness_class": self.freshness_class,
+            "evaluated_at": self.evaluated_at,
+            "age_seconds": self.age_seconds,
+            "expires_at": self.expires_at,
             "gate_version": self.gate_version,
         }
 
@@ -95,74 +103,134 @@ def _items(value: Any) -> list[Any]:
     return list(value) if isinstance(value, list) else []
 
 
-def _iso_date(value: Any) -> date | None:
-    text = _text(value)[:10]
-    if not text:
-        return None
-    try:
-        return date.fromisoformat(text)
-    except ValueError:
-        return None
+DEFAULT_MAX_AGE_HOURS = 48.0
+EXPIRING_REMAINING_FRACTION = 0.25
 
 
-def _parse_dt(value: Any) -> datetime | None:
-    text = _text(value)
-    if not text:
-        return None
-    try:
-        if text.endswith("Z"):
-            text = text[:-1] + "+00:00"
-        return datetime.fromisoformat(text)
-    except ValueError:
-        day = _iso_date(value)
-        if day is None:
-            return None
-        return datetime(day.year, day.month, day.day, tzinfo=timezone.utc)
+@dataclass(frozen=True)
+class FreshnessDecision:
+    freshness_class: str
+    current: bool
+    evaluated_at: datetime
+    age_seconds: int | None
+    expires_at: datetime | None
+    expires_at_raw: str | None
+    reasons: tuple[str, ...] = field(default_factory=tuple)
 
-
-def _today(today: date | None) -> date:
-    return today or date(2026, 8, 17)
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "freshness_class": self.freshness_class,
+            "current": self.current,
+            "evaluated_at": format_utc(self.evaluated_at),
+            "age_seconds": self.age_seconds,
+            "expires_at": (
+                self.expires_at_raw
+                if self.expires_at_raw
+                else (format_utc(self.expires_at) if self.expires_at is not None else None)
+            ),
+            "reason_codes": list(self.reasons),
+        }
 
 
 def _coverage_sufficient(payload: dict[str, Any]) -> tuple[bool, list[str]]:
     return coverage_status_ok(payload)
 
 
-def _freshness_current(payload: dict[str, Any], *, today: date) -> tuple[bool, list[str]]:
+def _max_age_hours(freshness: dict[str, Any], payload: dict[str, Any]) -> tuple[float, list[str]]:
+    raw = freshness.get("max_age_hours")
+    if raw is None:
+        raw = payload.get("max_age_hours")
+    if raw is None:
+        return DEFAULT_MAX_AGE_HOURS, []
+    try:
+        return float(raw), []
+    except (TypeError, ValueError):
+        return DEFAULT_MAX_AGE_HOURS, ["freshness_max_age_unreadable"]
+
+
+def evaluate_freshness(
+    payload: dict[str, Any],
+    *,
+    now: datetime | None = None,
+    today: date | None = None,
+) -> FreshnessDecision:
+    """Classify freshness from timezone-aware timestamps vs an injectable UTC instant.
+
+    ``generated_at`` is telemetry only. Expiry is ``expires_at`` when parseable,
+    otherwise ``as_of``/``source_as_of`` plus ``max_age_hours``. Missing or
+    unparseable timestamps are UNKNOWN. STALE and UNKNOWN are not current.
+    """
+    instant = resolve_now(now=now, today=today)
     freshness = payload.get("freshness") if isinstance(payload.get("freshness"), dict) else {}
     reasons: list[str] = []
     status = _text(freshness.get("status")).upper()
-    if status in {"STALE", "STALE_FOR_INDEX", "EXPIRED"}:
+    producer_stale = status in {"STALE", "STALE_FOR_INDEX", "EXPIRED"} or freshness.get("stale") is True
+
+    expires_raw = _text(freshness.get("expires_at")) or None
+    expires = parse_instant(expires_raw)
+    as_of = parse_instant(
+        payload.get("as_of") or freshness.get("as_of") or freshness.get("source_as_of")
+    )
+    max_age_hours, max_age_reasons = _max_age_hours(freshness, payload)
+    reasons.extend(max_age_reasons)
+
+    if expires is None and expires_raw:
+        reasons.append("freshness_expires_unparseable")
+    if expires is None and as_of is not None:
+        expires = as_utc(as_of + timedelta(hours=max_age_hours))
+
+    age_seconds: int | None = None
+    if as_of is not None:
+        age_seconds = int((instant - as_of).total_seconds())
+
+    if expires is None:
+        reasons.append("freshness_unknown_timestamps")
+        if as_of is None:
+            reasons.append("freshness_as_of_missing")
+        return FreshnessDecision(
+            freshness_class="UNKNOWN",
+            current=False,
+            evaluated_at=instant,
+            age_seconds=age_seconds,
+            expires_at=None,
+            expires_at_raw=expires_raw,
+            reasons=tuple(dict.fromkeys(reasons)),
+        )
+
+    if producer_stale or instant >= expires:
         reasons.append("freshness_stale")
-    as_of = _iso_date(payload.get("as_of") or freshness.get("as_of") or freshness.get("source_as_of"))
-    generated = _parse_dt(freshness.get("generated_at") or freshness.get("as_of"))
-    max_age_hours = freshness.get("max_age_hours")
-    if max_age_hours is None:
-        max_age_hours = payload.get("max_age_hours")
-    if max_age_hours is None:
-        max_age_hours = 48
-    try:
-        max_age_hours = float(max_age_hours)
-    except (TypeError, ValueError):
-        max_age_hours = 48.0
-        reasons.append("freshness_max_age_unreadable")
-    if as_of is None:
-        reasons.append("freshness_as_of_missing")
+        reasons.append("STALE_DATA")
+        if instant >= expires:
+            reasons.append("freshness_expired")
+        if producer_stale:
+            reasons.append("freshness_producer_stale")
+        return FreshnessDecision(
+            freshness_class="STALE",
+            current=False,
+            evaluated_at=instant,
+            age_seconds=age_seconds,
+            expires_at=expires,
+            expires_at_raw=expires_raw,
+            reasons=tuple(dict.fromkeys(reasons)),
+        )
+
+    remaining = (expires - instant).total_seconds()
+    window = EXPIRING_REMAINING_FRACTION * max_age_hours * 3600.0
+    if remaining <= window:
+        reasons.append("freshness_expiring")
+        klass = "EXPIRING"
     else:
-        age_days = (today - as_of).days
-        if age_days * 24 > max_age_hours:
-            reasons.append("freshness_stale")
-            reasons.append("STALE_DATA")
-    if generated is not None:
-        now = datetime(today.year, today.month, today.day, tzinfo=timezone.utc)
-        if generated.tzinfo is None:
-            generated = generated.replace(tzinfo=timezone.utc)
-        age_hours = (now - generated).total_seconds() / 3600.0
-        if age_hours > max_age_hours:
-            reasons.append("freshness_stale")
-            reasons.append("STALE_DATA")
-    ok = not any(code in {"freshness_stale", "freshness_as_of_missing"} for code in reasons)
-    return ok, reasons
+        klass = "CURRENT"
+    assert klass in FRESHNESS_CLASSES
+    return FreshnessDecision(
+        freshness_class=klass,
+        current=True,
+        evaluated_at=instant,
+        age_seconds=age_seconds,
+        expires_at=expires,
+        expires_at_raw=expires_raw,
+        reasons=tuple(dict.fromkeys(reasons)),
+    )
 
 
 def _human_approval(
@@ -191,18 +259,19 @@ def write_lkg(decision: "GateDecision", path: Any | None = None) -> None:
     from pathlib import Path
     import json
 
-    if not decision.indexable:
-        return
     resolved = Path(path) if path is not None else Path(__file__).resolve().parents[2] / DEFAULT_LKG
     resolved.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "asset_id": decision.question_id,
         "payload_content_hash": decision.payload_content_hash or decision.content_hash,
         "rendered_content_hash": decision.rendered_content_hash,
-        "indexable": True,
+        "indexable": decision.indexable,
         "robots": decision.robots,
-        "recorded_at": "2026-08-17T00:00:00Z",
+        "recorded_at": decision.evaluated_at,
         "freshness_class": decision.freshness_class,
+        "evaluated_at": decision.evaluated_at,
+        "expires_at": decision.expires_at,
+        "age_seconds": decision.age_seconds,
     }
     resolved.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -243,12 +312,14 @@ def evaluate_conditions(
     payload: dict[str, Any],
     approval: dict[str, Any] | None,
     *,
+    now: datetime | None = None,
     today: date | None = None,
     score: ScoreResult | None = None,
     surfaces: dict[str, Any] | None = None,
+    freshness: FreshnessDecision | None = None,
 ) -> tuple[dict[str, bool], list[str], dict[str, str]]:
-    today = _today(today)
     score = score or score_candidate(record, payload)
+    freshness = freshness or evaluate_freshness(payload, now=now, today=today)
     reasons: list[str] = []
     fixture = is_fixture_payload(payload) or bool(payload.get("is_fixture"))
     official = bool(payload.get("official_live")) and not fixture
@@ -262,7 +333,7 @@ def evaluate_conditions(
     geo_ok, geo_reasons = geography_scope_ok(payload, expected_scope=SCOPE_UF)
     coverage_ok, coverage_reasons = _coverage_sufficient(payload)
     scope_match_ok, scope_match_reasons = coverage_scope_matches(payload)
-    fresh_ok, fresh_reasons = _freshness_current(payload, today=today)
+    fresh_ok, fresh_reasons = freshness.current, list(freshness.reasons)
     approval_ok, approval_reasons, hashes = _human_approval(payload, record, approval)
     n302_ok, n302_reasons = national_302_authorized(payload)
 
@@ -464,15 +535,25 @@ def evaluate(
     payload: dict[str, Any],
     approvals: dict[str, Any] | None = None,
     *,
+    now: datetime | None = None,
     today: date | None = None,
     surfaces: dict[str, Any] | None = None,
     lkg: dict[str, Any] | None = None,
 ) -> GateDecision:
+    del lkg  # LKG must not extend INDEX after expiry (#151).
     score = score_candidate(record, payload)
     question_id = _text(record.get("question_id") or payload.get("question_id") or QUESTION_ID)
     approval = approval_for(question_id, approvals or {})
+    freshness = evaluate_freshness(payload, now=now, today=today)
     conditions, reasons, hashes = evaluate_conditions(
-        record, payload, approval, today=today, score=score, surfaces=surfaces
+        record,
+        payload,
+        approval,
+        now=now,
+        today=today,
+        score=score,
+        surfaces=surfaces,
+        freshness=freshness,
     )
     state = decide_state(record, payload, conditions, score)
     if state not in PUBLICATION_STATES:
@@ -483,32 +564,14 @@ def evaluate(
         # Belt and braces: never leak INDEX from a fixture.
         state = "PUBLISHABLE_NOINDEX"
         reasons = list(reasons) + ["fixture_index_forced_down"]
-    freshness_class = "current"
-    if "STALE_DATA" in reasons or not conditions.get("freshness_current"):
-        freshness_class = "STALE_DATA"
-    if "STALE_APPROVAL" in reasons:
-        freshness_class = "STALE_APPROVAL"
-    # Stale payload cannot silently publish a NEW indexable version.
-    # Matching LKG may keep a previously healthy INDEX; hashes that drifted
-    # stay noindex.
-    lkg = lkg if lkg is not None else load_lkg()
+    if state == "PUBLISHABLE_INDEX" and not freshness.current:
+        state = "PUBLISHABLE_NOINDEX"
+        reasons = list(reasons) + ["stale_blocks_new_index"]
+        conditions = dict(conditions)
+        conditions["freshness_current"] = False
+        conditions["canonical_robots_sitemap_schema"] = False
     payload_hash = hashes.get("payload_content_hash") or _text(payload.get("content_hash"))
     render_hash = hashes.get("rendered_content_hash") or ""
-    lkg_match = (
-        bool(lkg)
-        and lkg.get("indexable") is True
-        and _text(lkg.get("payload_content_hash")) == payload_hash
-        and _text(lkg.get("rendered_content_hash")) == render_hash
-    )
-    if freshness_class == "STALE_DATA" and state == "PUBLISHABLE_INDEX":
-        if lkg_match:
-            reasons = list(reasons) + ["lkg_preserved"]
-        else:
-            state = "PUBLISHABLE_NOINDEX"
-            reasons = list(reasons) + ["stale_blocks_new_index"]
-            conditions = dict(conditions)
-            conditions["freshness_current"] = False
-            conditions["canonical_robots_sitemap_schema"] = False
     indexable = state == "PUBLISHABLE_INDEX"
     recommendation = _recommendation(
         state, official_live=official, fixture=fixture, conditions=conditions
@@ -532,5 +595,12 @@ def evaluate(
         claim_scope=claim_scope(payload),
         payload_content_hash=payload_hash or "",
         rendered_content_hash=render_hash,
-        freshness_class=freshness_class,
+        freshness_class=freshness.freshness_class,
+        evaluated_at=format_utc(freshness.evaluated_at),
+        age_seconds=freshness.age_seconds,
+        expires_at=(
+            freshness.expires_at_raw
+            if freshness.expires_at_raw
+            else (format_utc(freshness.expires_at) if freshness.expires_at is not None else None)
+        ),
     )

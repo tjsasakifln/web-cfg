@@ -62,14 +62,15 @@ def official_like_payload(**overrides: Any) -> dict[str, Any]:
         "reason_codes": [],
     }
     base["freshness"] = {
-        "as_of": "2026-08-17",
+        "as_of": "2026-08-17T00:00:00Z",
         "generated_at": "2026-08-17T00:00:00Z",
         "source_as_of": "2026-08-17T00:00:00Z",
+        "expires_at": "2026-08-19T00:00:00Z",
         "max_age_hours": 48,
         "status": "FRESH",
         "policy": "publication-slo",
     }
-    base["as_of"] = "2026-08-17"
+    base["as_of"] = "2026-08-17T00:00:00Z"
     base["missingness"] = {
         "unknown_or_nonpositive": 0,
         "usable": 48,

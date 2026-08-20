@@ -1,8 +1,8 @@
 # Market Answer canary status
 
-**Recommendation:** `PUBLISHABLE_INDEX`
+**Recommendation:** `NEEDS_DATA`
 
-**Candidate decision:** `PUBLISHABLE_INDEX`: Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?
+**Candidate decision:** `NEEDS_DATA`: Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?
 
 **Demand:** `UNKNOWN` (UNKNOWN stays UNKNOWN)
 
@@ -12,15 +12,19 @@
 
 ## Gate results
 
-- gate: `market-answer-publication-gate/1.1`
-- indexable: `True`
-- robots: `index,follow`
-- sitemap: `True`
+- gate: `market-answer-publication-gate/1.2`
+- indexable: `False`
+- robots: `noindex,nofollow`
+- sitemap: `False`
+- freshness_class: `STALE`
+- evaluated_at: `2026-08-20T01:25:45.404827Z`
+- age_seconds: `230182`
+- expires_at: `2026-08-19T11:29:23.193694+02:00`
 
 - `official_live`: `True`
 - `claim_authorized`: `True`
 - `coverage_sufficient`: `True`
-- `freshness_current`: `True`
+- `freshness_current`: `False`
 - `method_present`: `True`
 - `limitations_present`: `True`
 - `answerability`: `True`
@@ -40,7 +44,7 @@
 - `rendered_approval_bound`: `True`
 - `national_gate_302`: `True`
 
-Reason codes: none
+Reason codes: `freshness_stale`, `STALE_DATA`, `freshness_expired`
 
 Score `MARKET_ANSWER_VALUE_SCORE/1.0` total=`0.6708` · unknown components: demand, freshness
 
@@ -49,7 +53,7 @@ Score `MARKET_ANSWER_VALUE_SCORE/1.0` total=`0.6708` · unknown components: dema
 - path: `/inteligencia/valor-tipico-contratos-pavimentacao/`
 - canonical: `https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/`
 - fixture marked: `False`
-- rendered: /home/tjsasakifln/code/confenge/web-cfg-inbound-03/inteligencia/valor-tipico-contratos-pavimentacao/index.html
+- rendered: /home/tjsasakifln/code/confenge/web-cfg/inteligencia/valor-tipico-contratos-pavimentacao/index.html
 
 ## Engagement events available
 
@@ -67,7 +71,9 @@ Page view is not a lead. Impression, engagement, lead and pipeline stay separate
 
 ## Blockers
 
-- none
+- `freshness_stale`
+- `STALE_DATA`
+- `freshness_expired`
 
 ## Next integration steps
 
@@ -76,5 +82,6 @@ Page view is not a lead. Impression, engagement, lead and pipeline stay separate
 - Do not claim country-wide coverage until extra-cli #302 closes the publishing-org denominator.
 - Do not close web-cfg #84 until organic discovery → engagement → handoff → real outcome.
 - Keep query/filter/drill-down URLs noindex. Do not mint a pSEO matrix.
+- STALE or UNKNOWN freshness is an operational incident: consume a renewed extra-cli payload plus matching approval, or keep noindex/off-sitemap.
 
 Do not close #84. Discovery/outcome remain residual after the SC index flip. extra-cli #302 remains required for any country-wide claim.

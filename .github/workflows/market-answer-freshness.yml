@@ -1,0 +1,34 @@
+# Operational re-evaluation of the Market Answer canary (#151).
+# Re-runs the shipped gate against a real UTC clock before max_age_hours
+# (48h) elapses. Does not commit content. Does not use RevOps.
+#
+# STALE or UNKNOWN is an observable non-success: the job fails and must
+# not be reported as current / PUBLISHABLE_INDEX.
+#
+# Manual: Actions → market-answer-freshness → Run workflow
+name: market-answer-freshness
+
+on:
+  schedule:
+    # Every 6 hours — strictly more frequent than max_age_hours=48.
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: market-answer-freshness
+  cancel-in-progress: false
+
+jobs:
+  reevaluate:
+    name: reevaluate-canary
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Report-only evaluation (no content commit)
+        run: python3 -m scripts.market_answers build --report-only
+      - name: Fail closed on STALE or UNKNOWN
+        run: python3 -m scripts.market_answers validate --fail-on-stale

@@ -206,7 +206,8 @@ def test_stale_fails():
     decision = evaluate(record, payload, matching_approval(payload), today=TODAY)
     assert decision.indexable is False
     assert "STALE_DATA" in decision.reason_codes
-    assert decision.freshness_class == "STALE_DATA"
+    assert decision.freshness_class == "STALE"
+    assert decision.state != "PUBLISHABLE_INDEX"
 
 
 def test_payload_or_render_hash_change_invalidates_approval():
