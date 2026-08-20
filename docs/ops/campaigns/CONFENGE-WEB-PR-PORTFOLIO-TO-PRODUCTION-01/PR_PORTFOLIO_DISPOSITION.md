@@ -12,7 +12,7 @@ Campaign report. Organic ranking is not claimed. No new public page family.
 
 CAMPAIGN: CONFENGE-WEB-PR-PORTFOLIO-TO-PRODUCTION-01  
 MAIN_SHA_BEFORE: `8ced783468a70ea8208398ec4202dc4b89b4d4fe`  
-INTEGRATION_SHA: `dccd102caf6eb0b8f69658931bebac591a51a548` (updated after the integration commit)  
+INTEGRATION_SHA: `86758e2f0da215abfe406b503c4306d56a3b10fc` (updated after the integration commit)  
 OPEN_PRS_BEFORE: 31  
 OPEN_PRS_AFTER: 14  
 ABSORBED: #178, #189, #194, #200, #207, #208, #211, #214, #215, #216  

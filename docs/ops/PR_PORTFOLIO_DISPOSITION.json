@@ -10,7 +10,7 @@
   "inventory_at": "2026-08-20T18:00:00-03:00",
   "timezone": "America/Sao_Paulo",
   "MAIN_SHA_BEFORE": "8ced783468a70ea8208398ec4202dc4b89b4d4fe",
-  "INTEGRATION_SHA": "dccd102caf6eb0b8f69658931bebac591a51a548",
+  "INTEGRATION_SHA": "86758e2f0da215abfe406b503c4306d56a3b10fc",
   "OPEN_PRS_BEFORE": 31,
   "OPEN_PRS_AFTER": 14,
   "inventoried_pr_numbers": [
