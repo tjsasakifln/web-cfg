@@ -45,7 +45,9 @@ def test_six_specs_present_with_required_fields():
         assert snap["cta"]
         assert spec["earliest_safe_action_at"] >= "2026-09-16"
         gsc = spec["gsc_precondition"]
-        assert gsc["gsc_live_available"] is False
+        assert gsc["source_kind"] == "LIVE_JOB_OK"
+        assert gsc["ready_for_product_decisions"] is False
+        assert gsc["authorizes_html_edit"] is False
         assert gsc["other_evidence_decision"]["decision"]
         assert spec["serp_census"]["family"]
         assert spec["serp_census"]["competitors"]
@@ -154,7 +156,8 @@ def test_citations_in_specs():
     for spec in load_specs():
         dc = spec["demand_control_citation"]
         assert dc["authorizes_html_edit"] is False
-        assert dc["source_kind"] == "credential_failure"
+        assert dc["source_kind"] == "LIVE_JOB_OK"
+        assert dc["ready_for_product_decisions"] is False
         assert dc["bofu_observe_only"] is True
         assert dc["earliest_safe_action_at"] >= "2026-09-16"
         assert spec["issue_128_baseline"]["commercial_click_share"] == 0.0

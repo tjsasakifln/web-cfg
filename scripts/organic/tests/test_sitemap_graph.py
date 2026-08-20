@@ -244,6 +244,26 @@ def test_drift_between_txt_and_children_fails(tmp_path: Path):
     assert any(i["code"] == "loc_set_drift" for i in report["issues"])
 
 
+def test_close_graph_drops_noindex_html(tmp_path: Path):
+    loc_ok = f"{SITE}/a/"
+    loc_no = f"{SITE}/secret/"
+    _seed(
+        tmp_path,
+        members={"sitemap.xml": [(loc_ok, None), (loc_no, None)]},
+        pages={
+            loc_ok: {"robots": "index,follow"},
+            loc_no: {"robots": "noindex,nofollow"},
+        },
+    )
+    closed = close_graph(tmp_path, as_of=AS_OF, market_answer_indexable=True)
+    assert loc_ok in closed["locs"]
+    assert loc_no not in closed["locs"]
+    xml = (tmp_path / "sitemap.xml").read_text(encoding="utf-8")
+    assert loc_no not in xml
+    txt = (tmp_path / "sitemap.txt").read_text(encoding="utf-8")
+    assert loc_no not in txt
+
+
 def test_stale_market_answer_absent_and_present(tmp_path: Path):
     loc = f"{SITE}/a/"
     _seed(

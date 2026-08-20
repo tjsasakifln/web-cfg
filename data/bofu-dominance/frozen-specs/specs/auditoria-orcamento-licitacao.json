@@ -11,9 +11,10 @@
   "demand_control_citation": {
     "pr": 159,
     "authorizes_html_edit": false,
-    "source_kind": "credential_failure",
+    "source_kind": "LIVE_JOB_OK",
     "bofu_observe_only": true,
-    "earliest_safe_action_at": "2026-09-16"
+    "earliest_safe_action_at": "2026-09-16",
+    "ready_for_product_decisions": false
   },
   "issue_128_baseline": {
     "issue": 128,
@@ -41,8 +42,8 @@
     "national_claim_authorized": false
   },
   "gsc_precondition": {
-    "gsc_live_available": false,
-    "source_kind": "credential_failure",
+    "gsc_live_available": true,
+    "source_kind": "LIVE_JOB_OK",
     "ready_for_product_decisions": false,
     "authorizes_html_edit": false,
     "other_evidence_decision": {
@@ -53,7 +54,7 @@
         "https://github.com/tjsasakifln/web-cfg/issues/128"
       ],
       "invented_live_metrics": false,
-      "reason": "PR #159 live Search Analytics is credential_failure. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
+      "reason": "PR #159 live Search Analytics is LIVE_JOB_OK. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
     }
   },
   "success_metrics": {
@@ -64,7 +65,7 @@
   },
   "kill_metrics": {
     "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
-    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from credential_failure",
+    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from LIVE_JOB_OK",
     "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change"
   },
   "revert_metrics": {

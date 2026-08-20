@@ -50,6 +50,12 @@ jobs:
           npm run test:analytics
           npm run test:form-funnel
           npm run test:lead-function
+          npm run test:search-observation
+          npm run test:checkout-negatives
+          npm run test:bofu-dominance
+          npm run test:local-entity
+          npm run test:market-answers
+          npm run test:contract-analysis
           npm run test:lead-store-production
           npm run test:ops-auth
           npm run test:env-example
@@ -94,6 +100,20 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run test:tools-uiux-e2e
+      - name: Install Playwright Chromium
+        run: npx --yes playwright install --with-deps chromium
+      - name: Playwright checklist on _site
+        env:
+          CONFENGE_BASE: http://127.0.0.1:8765
+        run: |
+          python3 -m http.server 8765 --directory _site &
+          echo $! > /tmp/site-http.pid
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            curl -fsS http://127.0.0.1:8765/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/site/playwright_local_checklist.mjs
+          kill "$(cat /tmp/site-http.pid)" || true
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v7

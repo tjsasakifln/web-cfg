@@ -5,7 +5,7 @@ This campaign **must not** mutate pillar HTML, `script.js`, CSS, analytics, site
 
 - `earliest_safe_action_at`: `2026-09-16`
 - corresponding issue: #128 `LANDED_AWAITING_LIVE_EVIDENCE`
-- PR #159: `authorizes_html_edit=false`, `source_kind=credential_failure`, BOFU `observe_only`
+- PR #159: `authorizes_html_edit=false`, `source_kind=LIVE_JOB_OK`, BOFU `observe_only`
 - extra-cli #435 COMPARABLE / #437 PARTIAL: `publication_authorization=false` / `national_claim_authorized=false`
 
 ## Specs

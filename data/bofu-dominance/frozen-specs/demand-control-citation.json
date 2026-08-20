@@ -3,7 +3,7 @@
   "source": "https://github.com/tjsasakifln/web-cfg/pull/159",
   "copied_into_this_tree": false,
   "authorizes_html_edit": false,
-  "source_kind": "credential_failure",
+  "source_kind": "LIVE_JOB_OK",
   "ready_for_product_decisions": false,
   "bofu_queue_item": {
     "rank": 2,

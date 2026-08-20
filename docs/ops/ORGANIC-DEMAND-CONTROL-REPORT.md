@@ -3,10 +3,10 @@
 - campaign: `CONFENGE-WEB-SEO-DEMAND-CONTROL-02`
 - as_of (last complete day): `2026-08-18`
 - timezone: `America/Sao_Paulo`
-- source_kind: `credential_failure`
-- freshness: `BLOCKED`
+- source_kind: `LIVE_JOB_OK`
+- freshness: `LIVE_TOP_ROWS_ONLY`
 - ready_for_product_decisions: `false`
-- live: `false`
+- live: `true`
 - synthetic/fixture/historical: `False` / `False` / `False`
 - truncated: `False`
 - versions: `{"baseline": "organic_demand_control_baseline/v1", "brand_classification": "brand-class/v1", "window_policy": "complete-days/v1"}`

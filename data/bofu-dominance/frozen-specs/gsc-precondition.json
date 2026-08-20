@@ -1,19 +1,20 @@
 {
   "schema": "bofu_frozen_gsc_precondition/v1",
-  "gsc_live_available": false,
-  "source_kind": "credential_failure",
+  "gsc_live_available": true,
+  "source_kind": "LIVE_JOB_OK",
   "ready_for_product_decisions": false,
   "authorizes_html_edit": false,
   "invented_live_metrics": false,
   "other_evidence_decision": {
     "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
-    "decided_at": "2026-08-19",
+    "decided_at": "2026-08-20",
     "sources": [
+      "data/bofu-dominance/core/gsc-live-overlay.v1.json",
       "seo/gsc-2026-08-09",
       "docs/ops/ORGANIC-GROWTH-REPORT.md",
       "https://github.com/tjsasakifln/web-cfg/issues/128"
     ],
-    "reason": "PR #159 reports live GSC as credential_failure / ready_for_product_decisions=false. Absence is not zero. Frozen specs use the 2026-08-09 export plus the six-URL table and commercial_click_share=0 in #128. They do not invent live impressions or clicks."
+    "reason": "GitHub Actions gsc-sync 32322344062 is LIVE_JOB_OK (top-rows overlay, as_of 2026-08-17). core_ready_for_product_decisions=false because of top-rows-only, date gaps, mixed device and non-BR geo. Absence is not zero. Frozen HTML is unchanged."
   },
   "historical_window": {
     "export": "seo/gsc-2026-08-09",

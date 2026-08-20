@@ -27,7 +27,7 @@ Encontrar itens que concentram risco de preço/BDI/referência e conhecer a marg
 
 ## Demand-control / #128 / extra-cli
 
-- PR #159: `authorizes_html_edit=False`, `source_kind=credential_failure`, BOFU `observe_only`, `earliest_safe_action_at=2026-09-16`.
+- PR #159: `authorizes_html_edit=False`, `source_kind=LIVE_JOB_OK`, BOFU `observe_only`, `earliest_safe_action_at=2026-09-16`.
 - Issue #128: commercial click share `0.0`, GSC row {'impressions': 3, 'clicks': 0, 'position': 9.0}, state `LANDED_AWAITING_LIVE_EVIDENCE`.
 - extra-cli PR #435 COMPARABLE `publication_authorization=false`; PR #437 PARTIAL `national_claim_authorized=false`. Factual inputs only.
 

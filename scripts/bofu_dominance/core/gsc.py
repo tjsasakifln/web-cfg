@@ -281,6 +281,7 @@ def missing_credentials_is_not_zero(live: dict[str, Any] | None = None) -> bool:
     blocked = bool(record.get("blocked")) or str(record.get("error") or "") in {
         "missing_credentials",
         "credential_failure",
+        "last_sync_missing",
     }
     if not blocked:
         return False

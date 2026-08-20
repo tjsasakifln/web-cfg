@@ -240,15 +240,17 @@ def test_frozen_pages_byte_equal_origin_main():
         assert now == base, f"{rel} drifted from origin/main"
 
 
-def test_expansao_keeps_checkout_wiring_without_claiming_live():
+def test_expansao_handraise_not_checkout_when_flags_false():
     html = read_html("expansao")
-    assert 'id="contratar"' in html
-    assert "/.netlify/functions/offer-terms-accept" in html
-    assert "/.netlify/functions/offer-checkout" in html
-    assert "otp-input" in html and "btn-confirmar" in html
-    assert "created.link" in html and "window.location.href" in html
-    assert "CFG-DIAG-EXP-v1" in html
     flags = load_flags()
+    assert flags["production_checkout_enabled"] is False
+    assert "/.netlify/functions/lead" in html
+    assert "CFG-DIAG-EXP-v1" in html
+    assert "CFG-TERMS-B2B-2026-08-17-v1" in html
+    assert "/.netlify/functions/offer-checkout" not in html
+    assert "otp-input" not in html
+    assert "btn-confirmar" not in html
+    assert "created.link" not in html
     vis = visible_text(html).lower()
-    if not flags["production_checkout_enabled"]:
-        assert "desligado" in vis
+    assert "desligado" in vis
+    assert "pagar" not in vis or "não" in vis

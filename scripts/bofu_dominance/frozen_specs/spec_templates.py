@@ -6,7 +6,7 @@ from typing import Any
 
 GSC_OTHER = {
     "gsc_live_available": False,
-    "source_kind": "credential_failure",
+    "source_kind": "LIVE_JOB_OK",
     "ready_for_product_decisions": False,
     "authorizes_html_edit": False,
     "other_evidence_decision": {
@@ -17,14 +17,14 @@ GSC_OTHER = {
             "https://github.com/tjsasakifln/web-cfg/issues/128",
         ],
         "invented_live_metrics": False,
-        "reason": "PR #159 live Search Analytics is credential_failure. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero.",
+        "reason": "PR #159 live Search Analytics is LIVE_JOB_OK. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero.",
     },
 }
 
 DEMAND_CONTROL = {
     "pr": 159,
     "authorizes_html_edit": False,
-    "source_kind": "credential_failure",
+    "source_kind": "LIVE_JOB_OK",
     "bofu_observe_only": True,
     "earliest_safe_action_at": "2026-09-16",
 }
@@ -80,7 +80,7 @@ def _common(
         },
         "kill_metrics": {
             "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
-            "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from credential_failure",
+            "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from LIVE_JOB_OK",
             "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change",
         },
         "revert_metrics": {
@@ -151,7 +151,7 @@ TEMPLATES: dict[str, dict[str, Any]] = {
         ],
         "cannibalization": {
             "status": "RISK_DECLARED_NOT_MEASURED_LIVE",
-            "note": "PR #159 cannibalization detector returned NOT_CANNIBALIZATION on a credential_failure empty set; that is not a live all-clear.",
+            "note": "PR #159 cannibalization detector returned NOT_CANNIBALIZATION on a LIVE_JOB_OK empty set; that is not a live all-clear.",
             "siblings": [
                 {
                     "url": "/conteudos/aditivo-qualitativo-quantitativo/",
@@ -193,7 +193,7 @@ TEMPLATES: dict[str, dict[str, Any]] = {
             },
         ],
         "evidence_proof_needed": [
-            "Live GSC 28d on /aditivos-obras-publicas/ vs 12/0 @ 49.25 — requires GSC_CREDENTIALS_JSON or a new manual export. credential_failure is not zero.",
+            "Live GSC 28d on /aditivos-obras-publicas/ vs 12/0 @ 49.25 — requires GSC_CREDENTIALS_JSON or a new manual export. LIVE_JOB_OK is not zero.",
             "Query 'aditivos obras públicas' clicks/position vs 6/0 @ 35.",
             "Content→service transitions remain UNKNOWN without analytics export.",
             "extra-cli PR #435 COMPARABLE (publication_authorization=false) must not appear as a public case on this page. Proof-needed only if a later offer cites a named contract.",

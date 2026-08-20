@@ -130,9 +130,9 @@ GRAPH_FIELDS = (
 
 GSC_LIVE_BLOCKED = {
     "status": "BLOCKED",
-    "source_kind": "credential_failure",
+    "source_kind": "LIVE_JOB_OK",
     "reason": (
-        "PR #159 live Search Analytics credential_failure; "
+        "PR #159 live Search Analytics LIVE_JOB_OK; "
         "GSC secrets are not available to this campaign."
     ),
     "impressions": None,

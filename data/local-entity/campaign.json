@@ -14,7 +14,7 @@
   "visitor_job": "A visitor (or search system) should recognize CONFENGE and Engº Tiago Sasaki as a national B2G engineering consultancy without a fake storefront.",
   "hypothesis": "Honest Organization/Person graph + labeled local/organic census + founder-only GBP checklist and professional citation targets improve entity recognition without city-page farming or invented NAP.",
   "data_owner": "web-cfg local-entity campaign; identity facts remain extra-cli / owned public copy",
-  "live_gsc": "BLOCKED credential_failure (PR #159)",
+  "live_gsc": "LIVE_JOB_OK overlay (run 32322344062); core_ready_for_product_decisions=false; absence is not zero",
   "new_public_landing_created": false,
   "surface_decision": "USE_EXISTING_SERVICE"
 }

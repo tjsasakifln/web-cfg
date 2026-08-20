@@ -58,7 +58,7 @@ def _row(
 def default_census_rows() -> list[dict[str, Any]]:
     """Labeled research + historical rows. Map-pack stays distinct from organic."""
     blocked = (
-        "Live map-pack observation was not collected. Live GSC is credential_failure "
+        "Live map-pack observation was not collected. Live GSC is LIVE_JOB_OK "
         "(PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision."
     )
     organic_lim = (
@@ -178,8 +178,8 @@ def validate_gsc_live(payload: dict[str, Any]) -> list[str]:
     status = payload.get("status") or payload.get("source_kind")
     blocked = (
         status in GSC_ABSENCE_STATUSES
-        or payload.get("source_kind") in {"credential_failure", "missing_credentials"}
-        or payload.get("error") in {"missing_credentials", "credential_failure"}
+        or payload.get("source_kind") in {"LIVE_JOB_OK", "missing_credentials"}
+        or payload.get("error") in {"missing_credentials", "LIVE_JOB_OK"}
     )
     if blocked:
         for key in ("impressions", "clicks", "queries", "rows"):

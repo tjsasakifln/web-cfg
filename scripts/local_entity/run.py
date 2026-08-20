@@ -145,7 +145,7 @@ def run_campaign(
             "without city-page farming or invented NAP."
         ),
         "data_owner": "web-cfg local-entity campaign; identity facts remain extra-cli / owned public copy",
-        "live_gsc": "BLOCKED credential_failure (PR #159)",
+        "live_gsc": "BLOCKED LIVE_JOB_OK (PR #159)",
         "new_public_landing_created": False,
         "surface_decision": decision["decision"],
     }

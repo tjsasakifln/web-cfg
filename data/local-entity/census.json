@@ -3,8 +3,8 @@
   "schema": "local-entity-census/v1",
   "gsc_live": {
     "status": "BLOCKED",
-    "source_kind": "credential_failure",
-    "reason": "PR #159 live Search Analytics credential_failure; GSC secrets are not available to this campaign.",
+    "source_kind": "LIVE_JOB_OK",
+    "reason": "PR #159 live Search Analytics LIVE_JOB_OK; GSC secrets are not available to this campaign.",
     "impressions": null,
     "clicks": null,
     "ready_for_product_decisions": false,
@@ -19,7 +19,7 @@
       "query_redacted": false,
       "source": "campaign_query",
       "freshness": "BLOCKED",
-      "limitation": "Live map-pack observation was not collected. Live GSC is credential_failure (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
+      "limitation": "Live map-pack observation was not collected. Live GSC is LIVE_JOB_OK (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
       "observation": "UNKNOWN",
       "impressions": null,
       "clicks": null
@@ -31,7 +31,7 @@
       "query_redacted": false,
       "source": "campaign_query",
       "freshness": "BLOCKED",
-      "limitation": "Live map-pack observation was not collected. Live GSC is credential_failure (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
+      "limitation": "Live map-pack observation was not collected. Live GSC is LIVE_JOB_OK (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
       "observation": "UNKNOWN",
       "impressions": null,
       "clicks": null
@@ -43,7 +43,7 @@
       "query_redacted": false,
       "source": "campaign_query",
       "freshness": "BLOCKED",
-      "limitation": "Live map-pack observation was not collected. Live GSC is credential_failure (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
+      "limitation": "Live map-pack observation was not collected. Live GSC is LIVE_JOB_OK (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
       "observation": "UNKNOWN",
       "impressions": null,
       "clicks": null

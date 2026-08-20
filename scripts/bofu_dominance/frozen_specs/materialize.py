@@ -141,7 +141,7 @@ def _write_index_markdown(spec_files: list[str]) -> None:
         "",
         f"- `earliest_safe_action_at`: `{EARLIEST_SAFE_ACTION_AT.isoformat()}`",
         f"- corresponding issue: #{CORRESPONDING_ISSUE} `LANDED_AWAITING_LIVE_EVIDENCE`",
-        "- PR #159: `authorizes_html_edit=false`, `source_kind=credential_failure`, BOFU `observe_only`",
+        "- PR #159: `authorizes_html_edit=false`, `source_kind=LIVE_JOB_OK`, BOFU `observe_only`",
         "- extra-cli #435 COMPARABLE / #437 PARTIAL: `publication_authorization=false` / `national_claim_authorized=false`",
         "",
         "## Specs",

@@ -54,8 +54,12 @@ def test_local_reproof_of_four_urls_and_no_new_public_path():
         local = inspect_local(asset, root=ROOT)
         assert local["http"]["local_file"] == "present"
         assert local["self_canonical"] is True
-        assert local["indexable_robots"] is True
-        assert local["sitemap"] is True
+        if asset.get("index_intent") == "DO_NOT_INDEX" or asset.get("noindex"):
+            assert local["indexable_robots"] is False
+            assert local["sitemap"] is False
+        else:
+            assert local["indexable_robots"] is True
+            assert local["sitemap"] is True
         assert local["cta"]["cta_present"] is True
         assert local["copy_changed"] is False
         for bot in ("Googlebot", "Bingbot", "OAI-SearchBot"):

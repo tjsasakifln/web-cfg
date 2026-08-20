@@ -1,0 +1,24 @@
+{
+  "as_of_utc": "2026-08-20T04:02:22.205813+00:00",
+  "head": "abe5cd2901c4e74284a9abbaee78889f01de1310",
+  "origin_main": "4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd",
+  "ok": true,
+  "url_count": 64,
+  "unique_paths": 64,
+  "families": {
+    "core": 59,
+    "editorial": 5
+  },
+  "walked_members": [
+    "sitemap.xml",
+    "sitemap-editorial.xml",
+    "sitemap-jurisprudencia.xml",
+    "sitemap-inteligencia.xml"
+  ],
+  "robots_sitemaps": [
+    "https://confenge.com.br/sitemap-index.xml"
+  ],
+  "market_answer_indexable": true,
+  "market_answer_in_graph": false,
+  "issues": []
+}

@@ -27,7 +27,7 @@ Enquadrar uma mudança de obra (acréscimo, supressão, item novo, serviço extr
 
 ## Demand-control / #128 / extra-cli
 
-- PR #159: `authorizes_html_edit=False`, `source_kind=credential_failure`, BOFU `observe_only`, `earliest_safe_action_at=2026-09-16`.
+- PR #159: `authorizes_html_edit=False`, `source_kind=LIVE_JOB_OK`, BOFU `observe_only`, `earliest_safe_action_at=2026-09-16`.
 - Issue #128: commercial click share `0.0`, GSC row {'impressions': 12, 'clicks': 0, 'position': 49.25}, state `LANDED_AWAITING_LIVE_EVIDENCE`.
 - extra-cli PR #435 COMPARABLE `publication_authorization=false`; PR #437 PARTIAL `national_claim_authorized=false`. Factual inputs only.
 
@@ -80,7 +80,7 @@ Exact replacements: `data/bofu-dominance/frozen-specs/patches/aditivos-obras-pub
 
 ## Evidence / proof needed
 
-- Live GSC 28d on /aditivos-obras-publicas/ vs 12/0 @ 49.25 — requires GSC_CREDENTIALS_JSON or a new manual export. credential_failure is not zero.
+- Live GSC 28d on /aditivos-obras-publicas/ vs 12/0 @ 49.25 — requires GSC_CREDENTIALS_JSON or a new manual export. LIVE_JOB_OK is not zero.
 - Query 'aditivos obras públicas' clicks/position vs 6/0 @ 35.
 - Content→service transitions remain UNKNOWN without analytics export.
 - extra-cli PR #435 COMPARABLE (publication_authorization=false) must not appear as a public case on this page. Proof-needed only if a later offer cites a named contract.

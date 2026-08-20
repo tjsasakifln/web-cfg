@@ -11,6 +11,7 @@ build-gate failure, not a warning.
 
 from __future__ import annotations
 
+import json
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
@@ -819,7 +820,8 @@ def close_graph(
     """Rewrite lastmod honestly, sitemap.txt from the same loc set, index from children.
 
     Does not create pages or flip indexability. Removes the Market Answer loc when
-    the consumed #151 gate says it is not INDEX.
+    the consumed #151 gate says it is not INDEX. Drops noindex / X-Robots noindex
+    members rather than leaving them in any child or sitemap.txt.
     """
     as_of = as_of or utc_today()
     ma_flag = (
@@ -828,6 +830,12 @@ def close_graph(
         else consumed_market_answer_indexable()
     )
     ma_key = loc_key(market_answer_canonical())
+    headers_path = root / "_headers"
+    headers_text = (
+        headers_path.read_text(encoding="utf-8", errors="replace")
+        if headers_path.is_file()
+        else ""
+    )
     index_path = root / INDEX_NAME
     if index_path.is_file():
         members = parse_sitemap_index(index_path.read_text(encoding="utf-8"))
@@ -849,7 +857,13 @@ def close_graph(
         for loc, _old in parse_urlset_entries(child_path.read_text(encoding="utf-8")):
             if ma_flag is False and loc_key(loc) == ma_key:
                 continue
-            html = read_local_html(root, loc) or ""
+            html = read_local_html(root, loc)
+            if html is None:
+                continue
+            if meta_robots_noindex(html):
+                continue
+            if x_robots_noindex(headers_text, loc_path(loc)):
+                continue
             lastmod = substantial_lastmod_from_html(html, as_of=as_of)
             kept.append((loc, lastmod))
         kept.sort(key=lambda item: loc_key(item[0]))
@@ -867,4 +881,15 @@ def close_graph(
             robots_with_index_only(robots_path.read_text(encoding="utf-8")),
             encoding="utf-8",
         )
-    return audit_graph(root, as_of=as_of, market_answer_indexable=ma_flag)
+    report = audit_graph(root, as_of=as_of, market_answer_indexable=ma_flag)
+    hygiene_path = root / "data" / "organic" / "sitemap-hygiene.json"
+    if hygiene_path.parent.is_dir() or (root / "data").is_dir():
+        hygiene_path.parent.mkdir(parents=True, exist_ok=True)
+        from scripts.organic.sitemap_hygiene import audit_sitemaps
+
+        hygiene = audit_sitemaps(root)
+        hygiene_path.write_text(
+            json.dumps(hygiene, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    return report

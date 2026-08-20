@@ -2,7 +2,7 @@
   "schema": "organic_demand_control_queue/v1",
   "campaign": "CONFENGE-WEB-SEO-DEMAND-CONTROL-02",
   "as_of": "2026-08-19",
-  "source_kind": "credential_failure",
+  "source_kind": "LIVE_JOB_OK",
   "ready_for_product_decisions": false,
   "max_items": 3,
   "count": 3,
@@ -27,7 +27,7 @@
       "current_landing": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
       "intended_landing": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
       "evidence": {
-        "source_kind": "credential_failure",
+        "source_kind": "LIVE_JOB_OK",
         "denominator_impressions": null,
         "denominator_status": "ABSENT",
         "row_count": 0,
@@ -57,7 +57,7 @@
       "current_landing": "https://confenge.com.br/aditivos-obras-publicas/",
       "intended_landing": "https://confenge.com.br/aditivos-obras-publicas/",
       "evidence": {
-        "source_kind": "credential_failure",
+        "source_kind": "LIVE_JOB_OK",
         "denominator_impressions": null,
         "denominator_status": "ABSENT",
         "row_count": 0,
@@ -87,7 +87,7 @@
       "current_landing": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
       "intended_landing": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
       "evidence": {
-        "source_kind": "credential_failure",
+        "source_kind": "LIVE_JOB_OK",
         "denominator_impressions": null,
         "denominator_status": "ABSENT",
         "row_count": 0,
@@ -112,5 +112,5 @@
   ],
   "zero_inferred_from_absence": false,
   "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
-  "note": "Queue is a recommendation. It does not authorize HTML/copy/robots edits in this PR."
+  "note": "LIVE_JOB_OK from gsc-sync 32322344062 overlay. core_ready_for_product_decisions=false (top-rows-only, date gaps, mixed device, non-BR geo). Absence is not zero. Window totals remain null when incomplete."
 }

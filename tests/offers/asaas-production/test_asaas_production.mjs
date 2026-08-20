@@ -341,9 +341,9 @@ async function seedAcceptance(store) {
   assert("public_legal_no_extra", !termsPage.includes(leakPrivate) && !privacyPage.includes(leakPrivate) && !termsPage.includes(leakPrice), "legal extra");
   assert("public_page_no_encarregado", !/encarregado|\bDPO\b/.test(page), "privacy channel");
   assert("public_page_indexable", /index,follow|index,\s*follow/i.test(page) || !page.includes("noindex"), "robots");
-  assert("public_page_has_otp_step", page.includes("otp-input") && page.includes("btn-confirmar"), "otp ui");
-  assert("public_page_calls_checkout", page.includes("/.netlify/functions/offer-checkout"), "checkout call");
-  assert("public_page_redirects_hosted", page.includes("created.link") && page.includes("window.location.href"), "hosted redirect");
+  assert("public_page_no_otp_step", !page.includes("otp-input") && !page.includes("btn-confirmar"), "otp ui gone");
+  assert("public_page_does_not_call_checkout", !page.includes("/.netlify/functions/offer-checkout"), "checkout call absent");
+  assert("public_page_handraise_lead", page.includes("/.netlify/functions/lead") && page.includes("CFG-TERMS-B2B-2026-08-17-v1"), "hand-raise");
 }
 
 {

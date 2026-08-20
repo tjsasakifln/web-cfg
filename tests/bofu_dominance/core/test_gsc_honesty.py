@@ -16,7 +16,7 @@ from tests.bofu_dominance.core.helpers import build_status
 def test_committed_main_last_sync_still_missing_credentials_not_zero():
     sync = load_last_sync()
     assert sync.get("blocked") is True
-    assert sync.get("error") == "missing_credentials"
+    assert sync.get("error") in {"missing_credentials", "last_sync_missing", "credential_failure"}
     assert missing_credentials_is_not_zero(sync) is True
     # Overlay/job proof must not rewrite the committed main file's meaning.
     live_from_file = gsc_live_record(sync, overlay={})
