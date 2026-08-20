@@ -83,7 +83,7 @@ It is **not** a SPA framework app. The product is:
 | Build | `npm run build:site` → `python3 scripts/pseo/build_site.py` | Single deterministic public artifact |
 | Node | 20 | Functions via esbuild; `@netlify/blobs` externalized |
 | Python | 3.12 | Editorial/pSEO/gates |
-| CDN / redirects | `_redirects` + `netlify.toml` | Host canonization `confenge.netlify.app` → `confenge.com.br` |
+| CDN / redirects | `_redirects` + `netlify.toml` | Host canonization `confenge.netlify.app` → `confenge.com.br`; unpublished `/intranet` 302 gateway to `ops.confenge.com.br` (see `docs/ops/INTRANET-GATEWAY.md`) |
 
 ### 4.2 Frontend (public)
 

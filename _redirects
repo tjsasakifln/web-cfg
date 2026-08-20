@@ -57,3 +57,10 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # /conteudos/limite-aditivo-25-50-obra-publica/ is self-canonical again
 # (organic-striking-distance-cro-01). Do not restore this 301.
 /conteudos/desconto-da-proposta-em-item-novo-aditivo/  /lei-14133-obras/preco-item-novo-desconto-proposta/  301!
+
+# --- Intranet gateway (302 only; not a page, not a 200 proxy, not 301) ---
+# Temporary hop to Control Center. Do not duplicate in netlify.toml.
+# Do not merge/deploy until ACTIVATION_GATE=OPS_HOST_AUTHENTICATED_AND_HEALTHY.
+# Existing /ops/ on this host is a different noindex RevOps surface — leave it.
+/intranet     https://ops.confenge.com.br/         302
+/intranet/*   https://ops.confenge.com.br/:splat   302
