@@ -41,12 +41,14 @@
       });
     });
 
-    const reveals = document.querySelectorAll('.reveal');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if ('IntersectionObserver' in window && !reducedMotion) {
-      const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .08, rootMargin: '0px 0px -35px' });
-      reveals.forEach((el) => observer.observe(el));
-    } else reveals.forEach((el) => el.classList.add('is-visible'));
+    scheduleIdle(() => {
+      const reveals = document.querySelectorAll('.reveal');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if ('IntersectionObserver' in window && !reducedMotion) {
+        const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .08, rootMargin: '0px 0px -35px' });
+        reveals.forEach((el) => observer.observe(el));
+      } else reveals.forEach((el) => el.classList.add('is-visible'));
+    });
 
     const search = document.getElementById('content-search');
     const items = [...document.querySelectorAll('[data-content-item]')];

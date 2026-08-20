@@ -23,7 +23,8 @@ ALLOWED = frozenset(ALLOWED_STAGES)
 EXPECTED_NAV = [
     "Serviços",
     "Problemas que resolvemos",
-    "Conteúdos e ferramentas",
+    "Conteúdos",
+    "Ferramentas",
     "Especialista",
 ]
 EXPECTED_CTA = "Analisar meu caso"
@@ -640,12 +641,89 @@ def test_home_nav_and_hierarchy():
     assert "Analisar meu caso" in home
     assert "Serviços" in home
     assert "Problemas que resolvemos" in home
-    assert "Conteúdos e ferramentas" in home
+    assert "Conteúdos" in home
+    assert "Ferramentas" in home
+    assert "Conteúdos e ferramentas" not in home
     assert home.count("button-primary") <= 4
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
     assert "journey-row--dominant" in home or "journey-path--core" in home
     assert "evidence-matrix" in home or "hero-evidence" in home
+
+
+LEAD_INLINE_HIERARCHY_ROUTES = [
+    ROOT / "aditivos-obras-publicas" / "index.html",
+    ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
+    ROOT / "auditoria-orcamento-licitacao" / "index.html",
+    ROOT / "medicoes-glosas-obras-publicas" / "index.html",
+    ROOT / "reequilibrio-obras-publicas" / "index.html",
+    ROOT / "conteudos" / "limite-aditivo-25-50-obra-publica" / "index.html",
+]
+
+
+def test_lead_inline_not_before_main_or_h1():
+    """Promotional lead-inline must not sit between site header and main/H1."""
+    for path in LEAD_INLINE_HIERARCHY_ROUTES:
+        assert path.exists(), f"missing {path.relative_to(ROOT)}"
+        html = path.read_text(encoding="utf-8")
+        main = re.search(r"<main\b", html, re.I)
+        assert main, f"{path.relative_to(ROOT)}: missing <main"
+        h1 = re.search(r"<h1\b", html, re.I)
+        assert h1, f"{path.relative_to(ROOT)}: missing <h1"
+        for m in re.finditer(r"\blead-inline\b", html):
+            assert m.start() > main.start(), (
+                f"{path.relative_to(ROOT)}: lead-inline appears before <main"
+            )
+            assert m.start() > h1.start(), (
+                f"{path.relative_to(ROOT)}: lead-inline appears before first <h1"
+            )
+
+
+def test_home_form_anchor_reveals_fields():
+    """Hero/primary 'Analisar meu caso' must land on the form, not the long contact copy."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    form = re.search(
+        r'<form\b[^>]*\bid="formulario-contato"[^>]*>[\s\S]*?</form>',
+        html,
+        re.I,
+    )
+    if not form:
+        form = re.search(
+            r'<form\b[^>]*class="[^"]*\bcontact-form\b[^"]*"[^>]*>[\s\S]*?</form>',
+            html,
+            re.I,
+        )
+        assert form and 'id="formulario-contato"' in html, 'home missing id="formulario-contato"'
+    else:
+        form_html = form.group(0)
+        assert re.search(r"<input\b|<select\b|<textarea\b", form_html, re.I), (
+            "first field must be a descendant of #formulario-contato"
+        )
+        assert re.search(r"<h2\b", form_html, re.I), "form card must include its title"
+    hero = re.search(
+        r'<a\b[^>]*data-cta-position="hero"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Analisar meu caso',
+        html,
+        re.I,
+    )
+    if not hero:
+        hero = re.search(
+            r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*button-lg[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Analisar meu caso',
+            html,
+            re.I,
+        )
+    assert hero, "hero/primary Analisar meu caso CTA missing"
+    assert "#formulario-contato" in hero.group(1), (
+        f"hero/primary CTA must target #formulario-contato, got {hero.group(1)!r}"
+    )
+    assert 'id="contato"' in html, "keep #contato section id for back-compat"
+    assert re.search(r"#formulario-contato\s*\{[^}]*scroll-margin-top", css), (
+        "CSS must set scroll-margin-top on #formulario-contato"
+    )
+    assert re.search(
+        r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
+        css.replace(" ", ""),
+    ), "mobile rule must set form order so title + first field lead the 390px viewport"
 
 
 def test_form_no_contingency_copy():

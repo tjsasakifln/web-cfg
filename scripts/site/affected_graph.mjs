@@ -125,6 +125,19 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/.netlify/functions/ops", "/.netlify/functions/search-observation-tick"],
   },
+  "test:commercial-event": {
+    producers: [
+      "scripts/site/test_commercial_event.mjs",
+      "netlify/functions/lib/commercial-event.cjs",
+      "netlify/functions/lib/inbound-handoff.cjs",
+      "netlify/functions/lib/lead-store.cjs",
+      "scripts/offers/events.cjs",
+      "scripts/offers/flags.cjs",
+      "data/offers/flags.json",
+    ],
+    artifacts: [],
+    surfaces: ["/.netlify/functions/ops"],
+  },
   "test:checkout-negatives": {
     producers: [
       "tests/offers/test_checkout_negatives.mjs",

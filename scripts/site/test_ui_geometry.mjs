@@ -480,8 +480,10 @@ async function main() {
   try {
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const href = await page.$eval(".hero .button-primary", (el) => el.getAttribute("href"));
-    if (href !== "#contato") throw new Error(`hero CTA href ${href}`);
-    const form = await page.$("#contato form, form[name='diagnostico-b2g']");
+    if (!href || !href.includes("#formulario-contato")) {
+      throw new Error(`hero CTA href ${href}`);
+    }
+    const form = await page.$("#formulario-contato, #contato form, form[name='diagnostico-b2g']");
     if (!form) throw new Error("contact form missing");
     ok("primary_cta_targets_form");
   } catch (e) {

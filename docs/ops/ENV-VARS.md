@@ -63,6 +63,19 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 
 Nenhuma chave Asaas é lida ou armazenada.
 
+## Commercial event producer (cross-system, fail-closed)
+
+| Nome | Descrição |
+| --- | --- |
+| `CONFENGE_COMMERCIAL_EVENT_ENABLED` | `1` habilita POST HMAC. Default off. Sandbox/staging only until Warmbly announces `confenge.commercial_event.v1`. |
+| `CONFENGE_COMMERCIAL_EVENT_WEBHOOK_URL` | Destino HTTPS (default: inbound URL). Path `/api/v1/webhooks/confenge/inbound`. |
+| `CONFENGE_COMMERCIAL_EVENT_WEBHOOK_SECRET` | Segredo HMAC server-side (default: inbound secret). Never in the browser. |
+| `CONFENGE_COMMERCIAL_EVENT_HEALTH_URL` | Health/capability GET. Consumer must list `confenge.commercial_event.v1` or producer HELD. |
+| `CONFENGE_COMMERCIAL_EVENT_ALLOWED_HOSTS` | Allowlist de hosts (default: inbound allowlist). |
+| `CONFENGE_COMMERCIAL_EVENT_TIMEOUT_MS` | Default inbound timeout. |
+
+Checkout/callback cannot emit `payment_received`. Production real-money stays off regardless of this flag.
+
 ## Build / release
 
 | Nome | Descrição |

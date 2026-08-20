@@ -1,0 +1,572 @@
+{
+  "campaign": "CONFENGE-WEB-PR-PORTFOLIO-TO-PRODUCTION-01",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "INBOUND ENGINE + GOVERNANCE",
+  "leverage": [
+    "revenue",
+    "trust",
+    "automation"
+  ],
+  "inventory_at": "2026-08-20T18:00:00-03:00",
+  "timezone": "America/Sao_Paulo",
+  "MAIN_SHA_BEFORE": "8ced783468a70ea8208398ec4202dc4b89b4d4fe",
+  "INTEGRATION_SHA": "dccd102caf6eb0b8f69658931bebac591a51a548",
+  "OPEN_PRS_BEFORE": 31,
+  "OPEN_PRS_AFTER": 14,
+  "inventoried_pr_numbers": [
+    216,
+    215,
+    214,
+    213,
+    212,
+    211,
+    210,
+    209,
+    208,
+    207,
+    206,
+    205,
+    204,
+    203,
+    202,
+    201,
+    200,
+    199,
+    198,
+    197,
+    196,
+    195,
+    194,
+    193,
+    192,
+    191,
+    190,
+    189,
+    178,
+    175,
+    174
+  ],
+  "absorbed": [
+    178,
+    189,
+    194,
+    200,
+    207,
+    208,
+    211,
+    214,
+    215,
+    216
+  ],
+  "held": [
+    174,
+    175,
+    190,
+    191,
+    192,
+    193,
+    196,
+    199,
+    201,
+    205,
+    206,
+    210,
+    213
+  ],
+  "rejected": [
+    195,
+    197,
+    198,
+    202,
+    203,
+    204,
+    209,
+    212
+  ],
+  "merged": [],
+  "superseded": [
+    178,
+    189,
+    194,
+    200,
+    207,
+    208,
+    211,
+    214,
+    215,
+    216
+  ],
+  "prs": [
+    {
+      "number": 216,
+      "title": "fix(ui): drop the invalid inner WhatsApp SVG path",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#187",
+      "paths": [
+        "scripts/site/test_cta_whatsapp.mjs",
+        "*.html (i-whatsapp symbol)"
+      ],
+      "semantic_overlap": "mass HTML chrome vs nav/lead-inline — string-level unique delta",
+      "ci": "BLOCKED (reviews)",
+      "risk": "low",
+      "visitor_impact": "WhatsApp icon valid SVG",
+      "rollback": "restore inner path only if needed"
+    },
+    {
+      "number": 215,
+      "title": "feat(copy): replace internal strategy language with visitor jobs (#188)",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#188",
+      "paths": [
+        "index.html",
+        "conteudos/index.html",
+        "scripts/site/test_copy_gates.py"
+      ],
+      "semantic_overlap": "home copy vs #200 form; does not genericize pillar meta",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "visitor jobs instead of internal strategy",
+      "rollback": "revert two content-lead sentences"
+    },
+    {
+      "number": 214,
+      "title": "fix(a11y): raise pillar-evidence contrast above muted overview text",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#186",
+      "paths": [
+        "styles.css",
+        "scripts/site/test_design_gates.py"
+      ],
+      "semantic_overlap": "CSS contrast vs #189 img rules — additive",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "pillar-evidence readable on navy",
+      "rollback": "revert descendant color rules"
+    },
+    {
+      "number": 213,
+      "title": "feat(home): label the Fato-Prova-Impacto panel as illustrative (#184)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#184",
+      "paths": [
+        "index.html",
+        "styles.css"
+      ],
+      "semantic_overlap": "illustrative hero label; overlaps home HTML; not in required set",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 212,
+      "title": "feat(conversion): prepare-only bid-readiness triage canary (#155)",
+      "destination": "REJECT",
+      "issue_owner": "#155",
+      "paths": [
+        "data/conversion/bid-readiness-canary.v1.json"
+      ],
+      "semantic_overlap": "new conversion canary family; campaign forbids new page family/utilities",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 211,
+      "title": "fix(perf): size home logos to the display box and idle non-critical JS",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#185",
+      "paths": [
+        "index.html",
+        "script.js",
+        "js/modules/",
+        "styles.css",
+        "scripts/pseo/html_shell.py"
+      ],
+      "semantic_overlap": "home logos vs #200/#215 on index.html",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "home LCP budget; idle reveal",
+      "rollback": "revert logo attrs + requestIdleCallback"
+    },
+    {
+      "number": 210,
+      "title": "feat(editorial): HOLD_NOINDEX human gate for three striking-distance URLs (#127)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#127",
+      "paths": [
+        "data/editorial/indexation-human-gate.v1.json"
+      ],
+      "semantic_overlap": "HOLD_NOINDEX risk of accidental noindex",
+      "ci": "CLEAN",
+      "risk": "high",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 209,
+      "title": "feat(market-answers): coverage/UNKNOWN fail-closed on canary (#84)",
+      "destination": "REJECT",
+      "issue_owner": "#84",
+      "paths": [
+        "tests/market_answers/test_canary_coverage.py"
+      ],
+      "semantic_overlap": "new Market Answers coverage out of scope",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 208,
+      "title": "fix(nav): split Conteúdos and Ferramentas in the global shell",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#183",
+      "paths": [
+        "data/site/brand.json",
+        "scripts/pseo/html_shell.py",
+        "nav HTML chrome"
+      ],
+      "semantic_overlap": "nav labels vs #216 HTML chrome — combined",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "Conteúdos vs Ferramentas split",
+      "rollback": "revert brand.json + nav strings"
+    },
+    {
+      "number": 207,
+      "title": "feat(organic): unique SINAPI title, H1 and meta for desonerado CTR (#126)",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#126",
+      "paths": [
+        "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+        "scripts/site/test_copy_gates.py"
+      ],
+      "semantic_overlap": "isolated SINAPI experiment HTML; exclusive-area authorized",
+      "ci": "BLOCKED (reviews)",
+      "risk": "low",
+      "visitor_impact": "unique SINAPI title/H1/meta",
+      "rollback": "revert that one article"
+    },
+    {
+      "number": 206,
+      "title": "feat(editorial): fail-closed language on contract-analysis canary (#83)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#83",
+      "paths": [
+        "scripts/contract_analysis/tests/"
+      ],
+      "semantic_overlap": "editorial fail-closed; main already has INDEX canary V2",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 205,
+      "title": "feat(authority): sameAs and as_of on specialist page (#74)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#74",
+      "paths": [
+        "scripts/site/test_authority_contract.py"
+      ],
+      "semantic_overlap": "sameAs/as_of; small but not in P0 list",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 204,
+      "title": "feat(research): block recurring index until the flagship gate opens (#91)",
+      "destination": "REJECT",
+      "issue_owner": "#91",
+      "paths": [
+        "data/editorial/flagship-gate.v1.json"
+      ],
+      "semantic_overlap": "recurring index / flagship out of scope",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 203,
+      "title": "feat(distribution): prepare-only Radar syndication canary (#66)",
+      "destination": "REJECT",
+      "issue_owner": "#66",
+      "paths": [
+        "data/distribution/syndication-canary.radar-nacional.v1.json"
+      ],
+      "semantic_overlap": "Radar syndication out of scope",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 202,
+      "title": "feat(nurture): consent-first Market Signals Brief track (#90)",
+      "destination": "REJECT",
+      "issue_owner": "#90",
+      "paths": [
+        "data/nurture/tracks.json"
+      ],
+      "semantic_overlap": "newsletter/nurture expansion out of scope",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 201,
+      "title": "feat(research): citation provenance on Radar Nacional (#65)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#65",
+      "paths": [
+        "scripts/research/tests/"
+      ],
+      "semantic_overlap": "citation provenance; research not this campaign",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 200,
+      "title": "fix(ui): point Analisar meu caso at the form on mobile",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#182",
+      "paths": [
+        "index.html",
+        "styles.css",
+        "scripts/site/test_ui_geometry.mjs"
+      ],
+      "semantic_overlap": "home form id vs #215 copy on same index.html — semantic merge",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "mobile Analisar meu caso hits form",
+      "rollback": "revert #formulario-contato"
+    },
+    {
+      "number": 199,
+      "title": "feat(offers): ICP × trigger × oferta on home journeys (#64)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#64",
+      "paths": [
+        "data/offers/icp-trigger-offer.v1.json"
+      ],
+      "semantic_overlap": "ICP×offer may collide with BOFU intent matrix",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 198,
+      "title": "feat(data-desk): prepare-only syndication canary for the live SC page (#89)",
+      "destination": "REJECT",
+      "issue_owner": "#89",
+      "paths": [
+        "data/data-desk/syndication-canary.v1.json"
+      ],
+      "semantic_overlap": "data-desk syndication out of scope",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 197,
+      "title": "feat(market-answers): priority ranking with live canary first (#63)",
+      "destination": "REJECT",
+      "issue_owner": "#63",
+      "paths": [
+        "data/editorial/market-answers/priority.v1.json"
+      ],
+      "semantic_overlap": "new Market Answers ranking out of scope",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 196,
+      "title": "feat(migration): explicit RETIRE for one SmartLic donor URL (#62)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#62",
+      "paths": [
+        "data/migrations/smartlic-url-map/"
+      ],
+      "semantic_overlap": "SmartLic RETIRE — campaign forbids SmartLic work",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 195,
+      "title": "feat(distribution): prepare-only paid search canary as demand sensor (#87)",
+      "destination": "REJECT",
+      "issue_owner": "#87",
+      "paths": [
+        "data/distribution/paid-search-canary.v1.json"
+      ],
+      "semantic_overlap": "paid search out of scope",
+      "ci": "CLEAN",
+      "risk": "high if merged",
+      "visitor_impact": "none",
+      "rollback": "close; parent issue stays"
+    },
+    {
+      "number": 194,
+      "title": "fix(ui): move lead-inline below H1 instead of before main",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#181",
+      "paths": [
+        "scripts/organic/cohort.py",
+        "scripts/site/test_visitor_redesign.py",
+        "aditivos-obras-publicas/index.html"
+      ],
+      "semantic_overlap": "lead-inline vs BOFU frozen hashes — recaptured",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "CTA not before H1",
+      "rollback": "revert lead-inline placement + hashes"
+    },
+    {
+      "number": 193,
+      "title": "chore(runtime): resume Node 22.19 + Lighthouse 13",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#149",
+      "paths": [
+        ".nvmrc",
+        "package.json",
+        "netlify.toml",
+        ".github/workflows/"
+      ],
+      "semantic_overlap": "Node 22 / LH13 vs current Node 20 / LH12 pin",
+      "ci": "CLEAN",
+      "risk": "high",
+      "visitor_impact": "none until lockstep",
+      "rollback": "n/a — not landed",
+      "lockstep_evidence": false
+    },
+    {
+      "number": 192,
+      "title": "feat(knowledge-funnel): visitor-path article → pillar → offer (#61)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#61",
+      "paths": [
+        "tests/knowledge_funnel/"
+      ],
+      "semantic_overlap": "visitor-path canary; not in P0 list",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 191,
+      "title": "feat(discovery): visible as_of provenance on shipped llms.txt (#86)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#86",
+      "paths": [
+        "llms.txt"
+      ],
+      "semantic_overlap": "llms.txt as_of; not conversion",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 190,
+      "title": "feat(authority): visible provenance on defesa de margem (#60)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#60",
+      "paths": [
+        "defesa-margem-contratos-publicos/index.html"
+      ],
+      "semantic_overlap": "provenance on one pillar; not in P0 UI list",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "none this release",
+      "rollback": "n/a"
+    },
+    {
+      "number": 189,
+      "title": "fix(ui): restore article-cover aspect with height:auto",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#180",
+      "paths": [
+        "styles.css",
+        "scripts/site/test_design_gates.py"
+      ],
+      "semantic_overlap": "CSS-only; no HTML overlap",
+      "ci": "CLEAN",
+      "risk": "low",
+      "visitor_impact": "article cover no longer squashed",
+      "rollback": "revert height:auto on img"
+    },
+    {
+      "number": 178,
+      "title": "feat(bofu): close search readiness and prepare catalog checkout (#128, #88)",
+      "destination": "CHERRY_PICK_UNIQUE_DELTA",
+      "issue_owner": "#128 / #88",
+      "paths": [
+        "scripts/organic/bofu_adversarial.py",
+        "scripts/offers/",
+        "data/offers/",
+        "data/organic/bofu-intent-matrix.json"
+      ],
+      "semantic_overlap": "BOFU HTML + catalog adapter vs later UI chrome",
+      "ci": "CLEAN",
+      "risk": "medium",
+      "visitor_impact": "service snippet + when-not-hire + prepare-only checkout",
+      "rollback": "revert integration SHA; flags stay off"
+    },
+    {
+      "number": 175,
+      "title": "feat(growth-accounting): CONFENGE_COMPOUNDING_STANDARD/1.0 (#154)",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "#154",
+      "paths": [
+        "scripts/growth_accounting/"
+      ],
+      "semantic_overlap": "compounding standard; not conversion P0",
+      "ci": "BEHIND",
+      "risk": "low",
+      "visitor_impact": "none",
+      "rollback": "n/a"
+    },
+    {
+      "number": 174,
+      "title": "feat(public-integrity): prepare-only fail-closed CEIS/CNEP consumer",
+      "destination": "HOLD_FOR_EVIDENCE",
+      "issue_owner": "public-integrity campaign",
+      "paths": [
+        "scripts/public_integrity_consumer/"
+      ],
+      "semantic_overlap": "new consumer family; behind main; out of this campaign",
+      "ci": "BEHIND",
+      "risk": "medium",
+      "visitor_impact": "none (not shipped)",
+      "rollback": "n/a"
+    }
+  ],
+  "producer_status": "WAITING_WARMBLY_COMMERCIAL_EVENT_CAPABILITY",
+  "asaas_governance_status": "WAITING_GOVERNANCE_AUTHORITY_MERGE",
+  "asaas_mode": "disabled",
+  "production_checkout_enabled": false,
+  "provider_mapping_ids": "null",
+  "node22_lighthouse13": {
+    "pr": 193,
+    "destination": "HOLD_FOR_EVIDENCE",
+    "lockstep_evidence": false
+  },
+  "DEPLOY": "NOT_AUTHORIZED",
+  "verdict": "WEB_PRODUCTION_CONVERGED_READY_FOR_ASAAS_MAPPING",
+  "new_public_page_family": false
+}

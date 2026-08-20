@@ -291,6 +291,60 @@ def test_ferramentas_eyebrow_client_facing():
     assert re.search(r"ferramenta", eye, re.I), f"expected tools category eyebrow, got {eye!r}"
 
 
+def test_visitor_copy_rejects_internal_strategy_phrases():
+    """#188: home and /conteudos/ must not expose internal strategy language."""
+    forbidden = (
+        "O foco comercial prioriza o contrato sob pressão; os demais seguem com clareza subordinada.",
+        "Busque pelo problema concreto, não por categorias de inventário.",
+    )
+    pages = (
+        ROOT / "index.html",
+        ROOT / "conteudos" / "index.html",
+    )
+    for path in pages:
+        text = path.read_text(encoding="utf-8")
+        for phrase in forbidden:
+            assert phrase not in text, f"{path}: internal phrase still visible"
+
+
+def test_sinapi_snippet_unique_not_generic():
+    """#126: GSC URL title, H1 and meta name the SINAPI desonerado decision.
+
+    Drives the shipped page that currently gets 89 impressions / 1 click.
+    Fails if the original title (no SINAPI) or truncated/generic snippet returns.
+    """
+    path = ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    title_m = re.search(r"<title>([^<]+)</title>", html, re.I)
+    h1_m = re.search(r"<h1>([^<]+)</h1>", html, re.I)
+    desc_m = re.search(
+        r'<meta[^>]*name=["\']description["\'][^>]*content=["\']([^"\']+)["\']|'
+        r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*name=["\']description["\']',
+        html,
+        re.I,
+    )
+    assert title_m and h1_m and desc_m, f"{path.name}: missing title, H1 or meta description"
+    title = title_m.group(1).strip()
+    h1 = h1_m.group(1).strip()
+    meta = (desc_m.group(1) or desc_m.group(2)).strip()
+    title_core = re.sub(r"\s*\|\s*CONFENGE\s*$", "", title).strip()
+    assert "SINAPI" in title_core, "title must name SINAPI (original defect: omitted query)"
+    assert title_core != "Desonerado e não desonerado: o que o edital exige"
+    assert title_core != h1, "title and H1 must not be duplicates"
+    assert title_core.lower() not in meta.lower(), "title duplicated into meta"
+    assert h1.lower() not in meta.lower(), "H1 duplicated into meta"
+    for blob, name in ((title, "title"), (h1, "h1"), (meta, "meta")):
+        assert "…" not in blob and "..." not in blob, f"{name} truncated"
+        lower = blob.lower()
+        for generic in ("guia completo", "tudo sobre", "saiba mais", "página inicial", "clique aqui"):
+            assert generic not in lower, f"{name} generic: {generic}"
+        assert "SINAPI" in blob, f"{name} missing SINAPI intent"
+        assert "desonerad" in lower, f"{name} missing desonerado intent"
+    assert 24 <= len(title_core) <= 62, f"title core length {len(title_core)}"
+    assert 70 <= len(meta) <= 170, f"meta length {len(meta)}"
+    assert "SINAPI" in h1
+
+
 def test_banlist_includes_conversion_eyebrow():
     """Regression: known leak phrase must remain in brand + design banlists."""
     brand = load_brand()
@@ -330,6 +384,8 @@ if __name__ == "__main__":
         test_whatsapp_float_in_landmark,
         test_public_backstage_language_absent,
         test_ferramentas_eyebrow_client_facing,
+        test_visitor_copy_rejects_internal_strategy_phrases,
+        test_sinapi_snippet_unique_not_generic,
         test_banlist_includes_conversion_eyebrow,
         test_gate_bites_on_reintroduction,
     ):

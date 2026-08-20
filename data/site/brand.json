@@ -97,8 +97,12 @@
         "href": "/#jornadas"
       },
       {
-        "label": "Conteúdos e ferramentas",
+        "label": "Conteúdos",
         "href": "/conteudos/"
+      },
+      {
+        "label": "Ferramentas",
+        "href": "/ferramentas/"
       },
       {
         "label": "Especialista",
