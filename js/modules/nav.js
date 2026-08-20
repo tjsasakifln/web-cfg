@@ -15,7 +15,6 @@
       document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
-    scheduleIdle(() => {
     document.querySelectorAll('#year').forEach((el) => { el.textContent = new Date().getFullYear(); });
 
     // Journey rail progressive enhancement — all stages remain in the DOM for no-JS
@@ -42,12 +41,14 @@
       });
     });
 
-    const reveals = document.querySelectorAll('.reveal');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if ('IntersectionObserver' in window && !reducedMotion) {
-      const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .08, rootMargin: '0px 0px -35px' });
-      reveals.forEach((el) => observer.observe(el));
-    } else reveals.forEach((el) => el.classList.add('is-visible'));
+    scheduleIdle(() => {
+      const reveals = document.querySelectorAll('.reveal');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if ('IntersectionObserver' in window && !reducedMotion) {
+        const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .08, rootMargin: '0px 0px -35px' });
+        reveals.forEach((el) => observer.observe(el));
+      } else reveals.forEach((el) => el.classList.add('is-visible'));
+    });
 
     const search = document.getElementById('content-search');
     const items = [...document.querySelectorAll('[data-content-item]')];
@@ -75,7 +76,6 @@
     };
     search?.addEventListener('input', apply);
     filters.forEach((button) => button.addEventListener('click', () => { filters.forEach((b) => b.classList.remove('is-active')); button.classList.add('is-active'); activeFilter = button.dataset.filter || 'all'; apply(); }));
-    });
 
     // Lead attribution: ?tema= & ?origem= + pSEO context (URL → sessionStorage)
     const searchParams = new URLSearchParams((window.location && window.location.search) || '');

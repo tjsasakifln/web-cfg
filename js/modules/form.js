@@ -519,7 +519,7 @@
   const safeInit = () => {
     try {
       init();
-      scheduleIdle(initTurnstile);
+      initTurnstile();
       // Session + page view (no PII)
       try {
         const path = window.location.pathname || '/';

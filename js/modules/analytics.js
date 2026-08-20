@@ -421,13 +421,22 @@
   window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
   window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
 
+  // Decorative reveal only. Never throw: missing window.setTimeout must not abort form/analytics.
   const scheduleIdle = (fn) => {
     const run = () => { try { fn(); } catch (_) { /* non-critical */ } };
-    if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(run, { timeout: 2500 });
-    } else {
-      window.setTimeout(run, 1);
+    try {
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(run, { timeout: 2500 });
+        return;
+      }
+    } catch (_) { /* ignore */ }
+    const later = (typeof window.setTimeout === 'function' && window.setTimeout)
+      || (typeof setTimeout === 'function' && setTimeout);
+    if (typeof later === 'function') {
+      later(run, 1);
+      return;
     }
+    run();
   };
 
   const init = () => {
