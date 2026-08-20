@@ -197,7 +197,7 @@ HOLD_BLOG = {
     ),
     "checklist-habilitacao-licitacao-2026": (
         "CONFENGE habilitação checklist (not live)",
-        "Habilitação checklist is a future tender-operations surface.",
+        "Habilitação checklist is a future tender-operations surface; keep HOLD until the named target ships or an explicit SUNSET decision is approved.",
     ),
     "clausulas-escondidas-editais-licitacao": (
         "CONFENGE hidden-clause edital guide (not live)",

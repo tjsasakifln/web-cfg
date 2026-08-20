@@ -4,7 +4,7 @@ Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smar
 
 **Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
 **Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
-**SHA-256:** `9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9`  
+**SHA-256:** `a23b488b3a064b1e353b06d0e62dc9b548dc4b5e430cccea843f62a8e830a5b4`
 **Version:** `v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  
@@ -57,7 +57,7 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 ### Post-#68 revalidation (2026-08-15)
 
-`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9` (11 ready 301s; HOLD fail-closed; WEB-017 remapped payment-delay blog off the work-delay pillar).
+`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `a23b488b3a064b1e353b06d0e62dc9b548dc4b5e430cccea843f62a8e830a5b4` (11 ready 301s; HOLD fail-closed; WEB-017 remapped payment-delay blog off the work-delay pillar).
 
 Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonical host `confenge.com.br`, indexable, no SmartLic brand, no redirect chain, no soft-404. SmartLic production 301s / DNS / TLS / Cloudflare / Railway were **not** changed and were **not** observed. Cutover remains unobserved. #62 stays OPEN. Counterpart SmartLic#2115 / PR #2133 may start the bridge against this pin; web-cfg does not own that deploy.
 

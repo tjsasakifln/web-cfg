@@ -109,6 +109,46 @@ def test_execute_set_matches_ready_redirects():
         assert path in execute_paths
 
 
+def test_execute_set_holds_are_an_exact_fail_closed_projection():
+    """Compiled HOLD rows must be source-owned, minimal and impossible to hand-edit."""
+    data = load_inventory()
+    execute = json.loads((INVENTORY_PATH.parent / "execute-set.v2.json").read_text(encoding="utf-8"))
+    source_holds = {
+        entry["legacy_url"]: entry
+        for entry in data["entries"]
+        if entry["action"] == "HOLD_TARGET_NOT_READY"
+    }
+    compiled_holds = {row["legacy_url"]: row for row in execute["holds"]}
+
+    assert compiled_holds.keys() == source_holds.keys()
+    expected_keys = {
+        "legacy_url",
+        "path",
+        "skip_reason",
+        "intended_future_surface",
+        "expected_http",
+        "target_url",
+    }
+    for legacy_url, row in compiled_holds.items():
+        source = source_holds[legacy_url]
+        expected_path = legacy_url.removeprefix("https://smartlic.tech") or "/"
+        if expected_path != "/" and expected_path.endswith("/"):
+            expected_path = expected_path.rstrip("/")
+        assert set(row) == expected_keys
+        assert row["path"] == expected_path
+        assert row["skip_reason"] == source["skip_reason"]
+        assert row["intended_future_surface"] == source["intended_future_surface"]
+        assert row["expected_http"] == 410
+        assert row["target_url"] is None
+
+    checklist = source_holds[
+        "https://smartlic.tech/blog/checklist-habilitacao-licitacao-2026"
+    ]
+    assert checklist["status"] == "hold"
+    assert checklist["target"] is None
+    assert "explicit SUNSET decision" in checklist["reason"]
+
+
 def test_query_pii_is_dropped_from_location():
     data = load_inventory()
     ready = ready_redirects(data)

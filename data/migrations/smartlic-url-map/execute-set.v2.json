@@ -1,5 +1,5 @@
 {
-  "inventory_sha256": "9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9",
+  "inventory_sha256": "a23b488b3a064b1e353b06d0e62dc9b548dc4b5e430cccea843f62a8e830a5b4",
   "schema": "smartlic-url-map-execute-v2",
   "default_status": 410,
   "owner": "SmartLic#2115",
@@ -277,7 +277,7 @@
     {
       "legacy_url": "https://smartlic.tech/blog/checklist-habilitacao-licitacao-2026",
       "path": "/blog/checklist-habilitacao-licitacao-2026",
-      "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação checklist is a future tender-operations surface. Intended surface: CONFENGE habilitação checklist (not live). Do not 301 to a weak substitute or home.",
+      "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação checklist is a future tender-operations surface; keep HOLD until the named target ships or an explicit SUNSET decision is approved. Intended surface: CONFENGE habilitação checklist (not live). Do not 301 to a weak substitute or home.",
       "intended_future_surface": "CONFENGE habilitação checklist (not live)",
       "expected_http": 410,
       "target_url": null

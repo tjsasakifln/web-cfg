@@ -1499,7 +1499,7 @@
       "decision": "HOLD_TARGET_NOT_READY",
       "target": null,
       "target_url": null,
-      "reason": "Habilitação checklist is a future tender-operations surface.",
+      "reason": "Habilitação checklist is a future tender-operations surface; keep HOLD until the named target ships or an explicit SUNSET decision is approved.",
       "owner": "web-cfg#62 HOLD + SmartLic#2115 fail-closed 410",
       "priority": "P4",
       "rollback_impact": "Low — HOLD already fail-closed 410; changing to a weak 301 would be the defect.",
@@ -1517,7 +1517,7 @@
         "live_http_2026_08_14": "UNKNOWN as HTML (Railway fallback 404 on apex; www TLS SAN mismatch)",
         "notes": "frontend/lib/blog.ts"
       },
-      "target_absence_justification": "Habilitação checklist is a future tender-operations surface.",
+      "target_absence_justification": "Habilitação checklist is a future tender-operations surface; keep HOLD until the named target ships or an explicit SUNSET decision is approved.",
       "semantic_equivalence": "none — no live 1:1",
       "equivalence_utility": "",
       "preconditions": [
@@ -1567,7 +1567,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE habilitação checklist (not live)",
-      "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação checklist is a future tender-operations surface. Intended surface: CONFENGE habilitação checklist (not live). Do not 301 to a weak substitute or home."
+      "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação checklist is a future tender-operations surface; keep HOLD until the named target ships or an explicit SUNSET decision is approved. Intended surface: CONFENGE habilitação checklist (not live). Do not 301 to a weak substitute or home."
     },
     {
       "legacy_url": "https://smartlic.tech/blog/clausulas-escondidas-editais-licitacao",
