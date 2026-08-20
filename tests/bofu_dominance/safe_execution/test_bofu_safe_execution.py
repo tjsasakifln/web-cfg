@@ -417,6 +417,12 @@ def test_existing_153_attributes_preserved_and_primary_cta_complete():
         before_hrefs = {c["href"] for c in primary_ctas_in(before) if c["href"]}
         after_hrefs = {c["href"] for c in primary_ctas_in(html) if c["href"]}
         missing = before_hrefs - after_hrefs
+        # Header/mobile "Analisar meu caso" now lands on the form id, not the
+        # contact-section start. Same destination page; not a dropped CTA.
+        if "/#contato" in missing and any(
+            href.endswith("#formulario-contato") for href in after_hrefs
+        ):
+            missing.discard("/#contato")
         assert not missing, f"{slug} lost CTA hrefs {missing}"
 
 

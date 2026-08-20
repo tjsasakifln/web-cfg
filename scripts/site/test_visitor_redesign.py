@@ -416,7 +416,11 @@ def test_global_shell_nav_uniform():
     brand = load_brand()
     brand_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
     assert brand_labels == EXPECTED_NAV
-    assert (brand.get("navigation") or {}).get("cta", {}).get("label") == EXPECTED_CTA
+    cta_meta = (brand.get("navigation") or {}).get("cta") or {}
+    assert cta_meta.get("label") == EXPECTED_CTA
+    assert "#formulario-contato" in (cta_meta.get("href") or ""), (
+        f"brand CTA must target the form, got {cta_meta.get('href')!r}"
+    )
 
     surfaces = [
         ROOT / "index.html",
@@ -467,6 +471,29 @@ def test_global_shell_nav_uniform():
         if cta and cta != EXPECTED_CTA:
             failures.append(f"{path.relative_to(ROOT)}: cta {cta!r}")
         html = path.read_text(encoding="utf-8", errors="replace")
+        header_cta = re.search(
+            r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"|'
+            r'<a\b[^>]*href="([^"]+)"[^>]*\bheader-cta\b',
+            html,
+        )
+        if header_cta:
+            href = header_cta.group(1) or header_cta.group(2)
+            if "#formulario-contato" not in href:
+                failures.append(
+                    f"{path.relative_to(ROOT)}: header-cta href {href!r} not form"
+                )
+        mobile = re.search(
+            r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I
+        )
+        if mobile:
+            mcta = re.search(
+                r'<a\b[^>]*href="([^"]+)"[^>]*>\s*Analisar meu caso\s*</a>',
+                mobile.group(1),
+            )
+            if mcta and "#formulario-contato" not in mcta.group(1):
+                failures.append(
+                    f"{path.relative_to(ROOT)}: mobile Analisar href {mcta.group(1)!r}"
+                )
         for banned in (
             "Analisar licitação",
             "Proteger contrato",
@@ -717,6 +744,26 @@ def test_home_form_anchor_reveals_fields():
     assert "#formulario-contato" in hero.group(1), (
         f"hero/primary CTA must target #formulario-contato, got {hero.group(1)!r}"
     )
+    header_cta = re.search(
+        r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"|'
+        r'<a\b[^>]*href="([^"]+)"[^>]*\bheader-cta\b',
+        html,
+    )
+    assert header_cta, "home header-cta missing"
+    header_href = header_cta.group(1) or header_cta.group(2)
+    assert "#formulario-contato" in header_href, (
+        f"home header-cta must target #formulario-contato, got {header_href!r}"
+    )
+    mobile = re.search(r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I)
+    assert mobile, "home mobile-nav missing"
+    mobile_cta = re.search(
+        r'<a\b[^>]*href="([^"]+)"[^>]*>\s*Analisar meu caso\s*</a>',
+        mobile.group(1),
+    )
+    assert mobile_cta, "home mobile Analisar meu caso missing"
+    assert "#formulario-contato" in mobile_cta.group(1), (
+        f"home mobile CTA must target #formulario-contato, got {mobile_cta.group(1)!r}"
+    )
     assert 'id="contato"' in html, "keep #contato section id for back-compat"
     assert re.search(r"#formulario-contato\s*\{[^}]*scroll-margin-top", css), (
         "CSS must set scroll-margin-top on #formulario-contato"
@@ -725,6 +772,50 @@ def test_home_form_anchor_reveals_fields():
         r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
+
+
+def test_analisar_meu_caso_shell_targets_form():
+    """Current-shell pages must not dump Analisar meu caso on #contato copy."""
+    shell_src = (ROOT / "scripts" / "pseo" / "html_shell.py").read_text(encoding="utf-8")
+    remediator = (ROOT / "scripts" / "site" / "inbound_first_remediate.py").read_text(
+        encoding="utf-8"
+    )
+    assert 'href": "/#formulario-contato"' in shell_src or (
+        '"/#formulario-contato"' in shell_src and "Analisar meu caso" in shell_src
+    )
+    assert 'href": "/#formulario-contato"' in remediator
+    failures = []
+    for path in _public_html_files():
+        labels, cta = _nav_from(path)
+        if labels != EXPECTED_NAV:
+            continue
+        html = path.read_text(encoding="utf-8", errors="replace")
+        header_cta = re.search(
+            r'<a\b([^>]*)\bheader-cta\b([^>]*)>(.*?)</a>',
+            html,
+            re.S | re.I,
+        )
+        if header_cta:
+            attrs = header_cta.group(1) + header_cta.group(2)
+            label = re.sub(r"<[^>]+>", "", header_cta.group(3))
+            label = re.sub(r"\s+", " ", label).strip()
+            href_m = re.search(r'\bhref="([^"]+)"', attrs)
+            href = href_m.group(1) if href_m else ""
+            if label == EXPECTED_CTA and "#formulario-contato" not in href:
+                failures.append(f"{path.relative_to(ROOT)}: header-cta {href!r}")
+        mobile = re.search(
+            r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I
+        )
+        if mobile:
+            mcta = re.search(
+                r'<a\b[^>]*href="([^"]+)"[^>]*>\s*Analisar meu caso\s*</a>',
+                mobile.group(1),
+            )
+            if mcta and "#formulario-contato" not in mcta.group(1):
+                failures.append(
+                    f"{path.relative_to(ROOT)}: mobile {mcta.group(1)!r}"
+                )
+    assert not failures, failures[:20]
 
 
 def test_form_no_contingency_copy():
