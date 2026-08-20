@@ -52,7 +52,7 @@ JOB = {
     },
 }
 
-FIRST_FOLD_KEYS = ("ICP", "Trigger", "Job", "Entrega")
+FIRST_FOLD_KEYS = ("O que resolvemos", "Para quem é", "Quando faz sentido", "O que você recebe")
 EPISTEMIC = ("FACT", "CALCULATION", "INFERENCE", "UNKNOWN")
 EXCLUSIVE_PREFIXES = (
     "defesa-margem-contratos-publicos/",

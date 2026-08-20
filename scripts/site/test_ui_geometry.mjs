@@ -231,6 +231,8 @@ async function main() {
       ".related-card small",
       ".service-number",
       ".deliverables-list span",
+      ".offer-context dt",
+      ".offer-context dd",
     ].join(",");
     const measureFonts = async (path) => {
       await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded" });
@@ -783,6 +785,75 @@ async function main() {
     }
   } catch (e) {
     fail("axe_home_no_critical_serious", e.message || e);
+  }
+
+  // offer-context: dt sits with its dd; dl.hero-proof is gone
+  try {
+    const routes = [
+      "/diretoria-b2g/",
+      "/diagnostico-b2g-expansao/",
+      "/bid-room-licitacoes-obras/",
+      "/acompanhamento-contratos-obras/",
+      "/defesa-margem-contratos-publicos/",
+      "/defesa-tecnica-contratos-publicos/",
+      "/atrasos-prorrogacao-obras-publicas/",
+    ];
+    const viewports = [
+      [390, 844],
+      [1440, 900],
+    ];
+    const bad = [];
+    for (const [w, h] of viewports) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      for (const path of routes) {
+        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        const report = await page.evaluate((vpW) => {
+          const issues = [];
+          if (document.querySelectorAll("dl.hero-proof").length) issues.push("dl.hero-proof");
+          const ctx = document.querySelector(".offer-context");
+          if (!ctx) issues.push("missing offer-context");
+          const container = ctx && ctx.closest(".container");
+          const cbox = container ? container.getBoundingClientRect() : null;
+          const items = [...document.querySelectorAll(".offer-context-item")];
+          if (!items.length) issues.push("missing offer-context-item");
+          for (const item of items) {
+            const dt = item.querySelector("dt");
+            const dd = item.querySelector("dd");
+            if (!dt || !dd) {
+              issues.push("item missing dt/dd");
+              continue;
+            }
+            const ritem = item.getBoundingClientRect();
+            const rdt = dt.getBoundingClientRect();
+            const rdd = dd.getBoundingClientRect();
+            if (rdt.width === 0 || rdt.height === 0 || rdd.width === 0 || rdd.height === 0) {
+              issues.push("zero-box");
+              continue;
+            }
+            if (cbox && ritem.right > cbox.right + 2) issues.push("item-overflows-container");
+            const hGap = rdd.left - rdt.right;
+            if (hGap > 64) issues.push(`hGap:${Math.round(hGap)}`);
+            if (vpW <= 430 && !(rdd.top > rdt.bottom - 1)) issues.push("mobile-dd-not-below-dt");
+            const ox = Math.min(rdt.right, rdd.right) - Math.max(rdt.left, rdd.left);
+            const oy = Math.min(rdt.bottom, rdd.bottom) - Math.max(rdt.top, rdd.top);
+            if (ox > 2 && oy > 2) issues.push("overlap");
+            const fsDt = parseFloat(getComputedStyle(dt).fontSize);
+            const fsDd = parseFloat(getComputedStyle(dd).fontSize);
+            if (fsDt < 14 || fsDd < 14) issues.push(`tiny-type:${fsDt}/${fsDd}`);
+            const label = (dt.textContent || "").trim();
+            if (/^(Job|ICP|Trigger)$/i.test(label)) issues.push(`internal-label:${label}`);
+            const pairDx = Math.abs(rdt.left - rdd.left);
+            if (pairDx > 48 && hGap > 64) issues.push(`pair-far:${Math.round(pairDx)}`);
+          }
+          return issues;
+        }, w);
+        if (report.length) bad.push(`${path}@${w}x${h}:${report.join(",")}`);
+      }
+    }
+    if (bad.length) throw new Error(bad.slice(0, 10).join(" | "));
+    ok(`offer_context_geometry (${routes.length} routes × ${viewports.length} viewports)`);
+  } catch (e) {
+    fail("offer_context_geometry", e.message || e);
   }
 
   await browser.close();
