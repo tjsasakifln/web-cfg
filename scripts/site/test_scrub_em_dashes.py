@@ -130,6 +130,24 @@ def test_check_cli_fails_on_prose_em_dash():
         path.unlink(missing_ok=True)
 
 
+def test_editorial_write_html_scrubs_prose_em_dash():
+    """editorial:build must not reintroduce U+2014; CI runs it before test:copy."""
+    from scripts.editorial.build import write_html
+
+    rel = "_g03_emdash_probe"
+    path = write_html(rel, "<p>O desfecho depende de prova — não de narrativa.</p>\n")
+    try:
+        out = path.read_text(encoding="utf-8")
+        assert EM not in out
+        assert "prova, não de narrativa" in out
+    finally:
+        path.unlink(missing_ok=True)
+        try:
+            path.parent.rmdir()
+        except OSError:
+            pass
+
+
 def test_check_cli_does_not_mutate_tree():
     """Shipped --check must leave git status unchanged."""
     before = subprocess.check_output(
@@ -164,6 +182,7 @@ if __name__ == "__main__":
         test_html_protects_source_anchors,
         test_placeholder_nd,
         test_html_newlines_and_indent_preserved,
+        test_editorial_write_html_scrubs_prose_em_dash,
         test_check_cli_fails_on_prose_em_dash,
         test_check_cli_does_not_mutate_tree,
     ):
