@@ -308,6 +308,71 @@ def test_functional_type_floor_in_css():
     assert re.search(r"\.related-card span\{[^}]*font-size:\.875rem", css)
 
 
+def _srgb_channel(value: float) -> float:
+    return value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
+
+
+def _hex_to_rgb(color: str) -> tuple[float, float, float]:
+    raw = color.strip().lstrip("#")
+    assert len(raw) == 6, color
+    return tuple(int(raw[i : i + 2], 16) / 255.0 for i in (0, 2, 4))
+
+
+def _relative_luminance(color: str) -> float:
+    r, g, b = _hex_to_rgb(color)
+    return 0.2126 * _srgb_channel(r) + 0.7152 * _srgb_channel(g) + 0.0722 * _srgb_channel(b)
+
+
+def _contrast_ratio(fg: str, bg: str) -> float:
+    l1, l2 = _relative_luminance(fg), _relative_luminance(bg)
+    lighter, darker = (l1, l2) if l1 >= l2 else (l2, l1)
+    return (lighter + 0.05) / (darker + 0.05)
+
+
+def test_pillar_evidence_contrast_on_navy():
+    """Count/note must beat .pillar-overview p{color:muted} and stay ≥4.5:1 on #071a31."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    bg = "#071a31"
+    selectors = (
+        r"\.pillar-evidence\s+(?:p\.)?pillar-evidence-count",
+        r"\.pillar-evidence\s+p\.pillar-evidence-count",
+        r"\.pillar-evidence\s+(?:p\.)?pillar-evidence-note",
+        r"\.pillar-evidence\s+p\.pillar-evidence-note",
+    )
+    found_count = False
+    found_note = False
+    for sel in selectors:
+        for body in re.findall(rf"{sel}\s*\{{([^}}]*)\}}", css):
+            color_m = re.search(r"(?<![\w-])color\s*:\s*(#[0-9a-fA-F]{3,8}|#fff)\b", body)
+            assert color_m, f"{sel} missing color in {body!r}"
+            color = color_m.group(1)
+            if color.lower() == "#fff":
+                color = "#ffffff"
+            elif len(color) == 4:
+                color = "#" + "".join(ch * 2 for ch in color[1:])
+            ratio = _contrast_ratio(color, bg)
+            assert ratio >= 4.5, f"{sel} {color} on {bg} contrast {ratio:.2f} < 4.5"
+            if "count" in sel:
+                found_count = True
+            if "note" in sel:
+                found_note = True
+    assert found_count and found_note, "need descendant count and note color rules"
+    pillars = [
+        ROOT / "acompanhamento-contratos-obras" / "index.html",
+        ROOT / "aditivos-obras-publicas" / "index.html",
+        ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
+        ROOT / "auditoria-orcamento-licitacao" / "index.html",
+        ROOT / "defesa-tecnica-contratos-publicos" / "index.html",
+        ROOT / "diagnostico-pre-licitacao" / "index.html",
+        ROOT / "medicoes-glosas-obras-publicas" / "index.html",
+        ROOT / "reequilibrio-obras-publicas" / "index.html",
+    ]
+    assert len(pillars) == 8
+    for path in pillars:
+        html = path.read_text(encoding="utf-8")
+        assert 'class="pillar-evidence"' in html, f"{path.relative_to(ROOT)} missing pillar-evidence"
+
+
 def test_thankyou_specialist_cta_family():
     for name in ("obrigado.html", "obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         path = ROOT / name

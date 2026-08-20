@@ -848,9 +848,11 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 .pillar-evidence{
   padding:1.25rem 1.35rem;background:#071a31;color:#d2dbe3;border-radius:var(--radius-sm);
 }
-.pillar-evidence-count{margin:0 0 .5rem;color:#fff;font-size:1.05rem}
-.pillar-evidence-count strong{color:var(--lime);font-size:1.75rem;margin-right:.35rem}
-.pillar-evidence-note{margin:0;font-size:.9rem;line-height:1.5;color:#b8c6d3}
+.pillar-evidence .pillar-evidence-count,
+.pillar-evidence p.pillar-evidence-count{margin:0 0 .5rem;color:#fff;font-size:1.05rem}
+.pillar-evidence .pillar-evidence-count strong{color:var(--lime);font-size:1.75rem;margin-right:.35rem}
+.pillar-evidence .pillar-evidence-note,
+.pillar-evidence p.pillar-evidence-note{margin:0;font-size:.9rem;line-height:1.5;color:#d2dbe3}
 
 /* ========== Editorial reading ========== */
 .article-hero{padding:40px 0 36px;background:#fff}
