@@ -1,0 +1,12 @@
+{
+  "as_of": "2026-08-19",
+  "source_kind": "scripts/site/audit_performance.py",
+  "css_kb": 87.89,
+  "js_kb": 59.9,
+  "css_budget_kb": 80,
+  "js_budget_kb": 40,
+  "note": "Uncompressed sizes; gzip typically ~30-40% of text assets. Lighthouse not run if environment lacks browser.",
+  "framework_runtime": false,
+  "carousel_video_webgl_lottie": false,
+  "ok": true
+}
