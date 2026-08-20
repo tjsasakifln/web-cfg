@@ -5,6 +5,7 @@ Site: https://confenge.com.br/
 Contato: tiago.sasaki@confenge.com.br | WhatsApp +55 48 98834-4559
 Responsável técnico: Eng. Tiago Sasaki (EESC-USP)
 Tagline: Licitação vencida não paga a conta. Contrato rentável, sim.
+Provenance: as_of 2026-08-20 · canonical_host confenge.com.br · same people-first inventory as the public site; not a bot-specific surface.
 
 ## Posicionamento
 A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). Quando a empresa precisa de rotina contínua, o formato se chama Diretoria B2G fracionada.
