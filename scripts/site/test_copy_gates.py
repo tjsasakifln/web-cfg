@@ -291,6 +291,22 @@ def test_ferramentas_eyebrow_client_facing():
     assert re.search(r"ferramenta", eye, re.I), f"expected tools category eyebrow, got {eye!r}"
 
 
+def test_visitor_copy_rejects_internal_strategy_phrases():
+    """#188: home and /conteudos/ must not expose internal strategy language."""
+    forbidden = (
+        "O foco comercial prioriza o contrato sob pressão; os demais seguem com clareza subordinada.",
+        "Busque pelo problema concreto, não por categorias de inventário.",
+    )
+    pages = (
+        ROOT / "index.html",
+        ROOT / "conteudos" / "index.html",
+    )
+    for path in pages:
+        text = path.read_text(encoding="utf-8")
+        for phrase in forbidden:
+            assert phrase not in text, f"{path}: internal phrase still visible"
+
+
 def test_banlist_includes_conversion_eyebrow():
     """Regression: known leak phrase must remain in brand + design banlists."""
     brand = load_brand()
@@ -330,6 +346,7 @@ if __name__ == "__main__":
         test_whatsapp_float_in_landmark,
         test_public_backstage_language_absent,
         test_ferramentas_eyebrow_client_facing,
+        test_visitor_copy_rejects_internal_strategy_phrases,
         test_banlist_includes_conversion_eyebrow,
         test_gate_bites_on_reintroduction,
     ):
