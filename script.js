@@ -843,6 +843,7 @@
         cta_position: position,
         device_context: deviceContext,
         event_id: eventId,
+        correlation_id: fromUrl.correlation_id || '',
       };
       if (classified.kind === 'whatsapp') {
         track('whatsapp_click', {
