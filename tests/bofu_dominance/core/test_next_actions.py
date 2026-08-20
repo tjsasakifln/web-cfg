@@ -15,7 +15,8 @@ def test_next_actions_cap_and_no_edit_now():
         assert item["authorizes_html_edit"] is False
         assert item["action"] not in EDIT_NOW_ACTIONS
     ids = [item["id"] for item in actions]
-    assert "gsc-credentials" in ids
+    assert "gsc-live-overlay" in ids
+    assert "gsc-credentials" not in ids
     assert "freeze-128" in ids
     assert "origin-to-service-153" in ids
     assert "gated-155-156" in ids

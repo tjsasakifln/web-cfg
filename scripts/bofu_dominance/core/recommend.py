@@ -7,7 +7,6 @@ from typing import Any
 from scripts.bofu_dominance.core.constants import (
     EARLIEST_SAFE_ACTION_FROZEN,
     EDIT_NOW_ACTIONS,
-    GSC_LIVE_RECOMMENDATION,
     MAX_NEXT_ACTIONS,
 )
 from scripts.bofu_dominance.core.schema import RegistryError
@@ -33,8 +32,8 @@ def recommend_family(resolved: dict[str, Any], family: dict[str, Any]) -> dict[s
         action = "observe_only"
         authorizes = False
         summary = (
-            f"Family {family['id']} is {state} with live GSC blocked. "
-            "No edit-now; wait for credentials or earliest_safe_action_at."
+            f"Family {family['id']} is {state}. Live GSC job may be OK; "
+            "top-rows/non-BR/mixed context still refuse edit-now."
         )
     else:
         action = "observe_only"
@@ -60,15 +59,17 @@ def recommend_family(resolved: dict[str, Any], family: dict[str, Any]) -> dict[s
 def ledger_next_actions() -> list[dict[str, Any]]:
     actions = [
         {
-            "id": "gsc-credentials",
-            "action": GSC_LIVE_RECOMMENDATION,
+            "id": "gsc-live-overlay",
+            "action": "observe_only",
             "authorizes_html_edit": False,
-            "owner": "operator_secrets",
+            "owner": "pr-159",
             "refs": ["pr-159", "issue-128"],
             "summary": (
-                "Set GSC_CREDENTIALS_JSON (or client secrets+token) and GSC_SITE_URL. "
-                "Until then gsc_live_state=BLOCKED_CREDENTIAL_FAILURE. "
-                "Do not treat historical CSV, redacted snapshots or SERP samples as live."
+                "Actions run 32322344062 proved GSC credentials (95 top-rows, "
+                "as_of 2026-08-17, LIVE_JOB_OK). Committed last_sync.json on main "
+                "is still the old missing_credentials file. Do not treat historical "
+                "CSV, SERP samples, non-BR geo, mixed device, or top-row gaps as "
+                "BR TOP* or HTML authorization. PR #159 remains a merge candidate."
             ),
         },
         {

@@ -5,7 +5,10 @@ from __future__ import annotations
 from typing import Any
 
 from scripts.bofu_dominance.core.constants import (
+    BLOCKED_GSC_LIVE_STATE,
+    BRA_GEOS,
     GSC_LIVE_STATE,
+    INCOMPLETE_CONTEXT,
     LIVE_GSC_SOURCES,
     OFFICIAL_SERP_SOURCES,
     RANKING_STATES,
@@ -32,7 +35,7 @@ def ranking_evidence_complete(evidence: dict[str, Any] | None) -> bool:
     if evidence.get("is_gsc_live") is not True and source in LIVE_GSC_SOURCES:
         return False
     for key in ("date", "geo", "device", "denominator"):
-        if evidence.get(key) in (None, "", "UNKNOWN"):
+        if evidence.get(key) in INCOMPLETE_CONTEXT:
             return False
     if evidence.get("position") in (None, ""):
         return False
@@ -44,7 +47,7 @@ def visibility_from_evidence(
     *,
     gsc_live_state: str,
 ) -> tuple[str | None, str]:
-    if gsc_live_state == GSC_LIVE_STATE:
+    if gsc_live_state == BLOCKED_GSC_LIVE_STATE:
         if not ranking_evidence_complete(evidence):
             return None, "gsc_live_blocked_credential_failure"
     if not evidence:
@@ -55,7 +58,12 @@ def visibility_from_evidence(
     if source in {"web_search_api", "serp_manual_sample"}:
         return None, "search_sample_is_not_official_position"
     if not ranking_evidence_complete(evidence):
+        if source in LIVE_GSC_SOURCES:
+            return None, "live_top_rows_context_incomplete_or_mixed"
         return None, "ranking_requires_source_date_geo_device_denominator"
+    geo = str(evidence.get("geo") or "").lower()
+    if geo not in BRA_GEOS:
+        return "VISIBLE", "live_non_br_geo_is_not_top"
     position = float(evidence["position"])
     if position <= 1.05:
         return "TOP1", "live_or_official_position_lte_1_with_context"

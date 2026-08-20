@@ -18,7 +18,7 @@
     "over_limit": {},
     "p0_p1_missing_census": []
   },
-  "content_sha256": "a6e8eadea57503c2809bdb8b856545c42f5b3d74d26c27f9047683dde9e07662",
+  "content_sha256": "901058eb18fce2727382952cd0cfc7dadb45a8a5662eafee40461d380116af1c",
   "families": [
     {
       "active_issue": 128,
@@ -282,18 +282,31 @@
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
         "clicks": 0.0,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
-        "device": "UNKNOWN",
-        "geo": "UNKNOWN",
-        "impressions": 12.0,
-        "is_gsc_live": false,
-        "position": 49.25,
-        "reason": "historical_csv_row",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv",
-        "url": "https://confenge.com.br/aditivos-obras-publicas/",
-        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+        "date": "2026-08-17",
+        "date_max": "2026-08-12",
+        "date_min": "2026-07-31",
+        "denominator": "impressions_in_returned_top_rows",
+        "device": "MIXED",
+        "device_values": [
+          "DESKTOP",
+          "MOBILE"
+        ],
+        "geo": "esp",
+        "geo_values": [
+          "esp"
+        ],
+        "impressions": 20.0,
+        "is_gsc_live": true,
+        "path": "/aditivos-obras-publicas/",
+        "position": 73.55,
+        "query_hashes": [
+          "sha256:267ea7083aaa780c"
+        ],
+        "query_text_redacted": true,
+        "reason": "live_top_rows_overlay",
+        "row_count": 20,
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "census_allowed": true,
@@ -610,19 +623,20 @@
       "decision": "Recuperar caixa vs aceitar o corte vs acionar defesa formal.",
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
-        "clicks": 0.0,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "clicks": null,
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
-        "impressions": 8.0,
-        "is_gsc_live": false,
-        "position": 7.88,
-        "reason": "historical_csv_row",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv",
-        "url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
-        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+        "impressions": null,
+        "is_gsc_live": true,
+        "path": "/medicoes-glosas-obras-publicas/",
+        "position": null,
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "census_allowed": true,
@@ -936,19 +950,20 @@
       "decision": "Reajuste/repactuação vs reequilíbrio vs não pleitear.",
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
-        "clicks": 0.0,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "clicks": null,
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
-        "impressions": 4.0,
-        "is_gsc_live": false,
-        "position": 7.75,
-        "reason": "historical_csv_row",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv",
-        "url": "https://confenge.com.br/reequilibrio-obras-publicas/",
-        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+        "impressions": null,
+        "is_gsc_live": true,
+        "path": "/reequilibrio-obras-publicas/",
+        "position": null,
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "census_allowed": true,
@@ -1266,18 +1281,30 @@
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
         "clicks": 0.0,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
-        "device": "UNKNOWN",
-        "geo": "UNKNOWN",
-        "impressions": 3.0,
-        "is_gsc_live": false,
-        "position": 9.0,
-        "reason": "historical_csv_row",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv",
-        "url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
-        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+        "date": "2026-08-17",
+        "date_max": "2026-08-04",
+        "date_min": "2026-08-04",
+        "denominator": "impressions_in_returned_top_rows",
+        "device": "MOBILE",
+        "device_values": [
+          "MOBILE"
+        ],
+        "geo": "chl",
+        "geo_values": [
+          "chl"
+        ],
+        "impressions": 1.0,
+        "is_gsc_live": true,
+        "path": "/auditoria-orcamento-licitacao/",
+        "position": 10.0,
+        "query_hashes": [
+          "sha256:8fd063d681e6a51b"
+        ],
+        "query_text_redacted": true,
+        "reason": "live_top_rows_overlay",
+        "row_count": 1,
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "census_allowed": true,
@@ -1599,19 +1626,20 @@
       "decision": "Rotina contínua vs apoio pontual vs não contratar.",
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
-        "clicks": 0.0,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "clicks": null,
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
-        "impressions": 1.0,
-        "is_gsc_live": false,
-        "position": 15.0,
-        "reason": "historical_csv_row",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv",
-        "url": "https://confenge.com.br/diagnostico-b2g-360/",
-        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+        "impressions": null,
+        "is_gsc_live": true,
+        "path": "/diagnostico-b2g-360/",
+        "position": null,
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "census_allowed": true,
@@ -1927,19 +1955,20 @@
       "decision": "Go / no-go humano no edital, regime e matriz de riscos.",
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
-        "clicks": 0.0,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "clicks": null,
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
-        "impressions": 1.0,
-        "is_gsc_live": false,
-        "position": 18.0,
-        "reason": "historical_csv_row",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv",
-        "url": "https://confenge.com.br/diagnostico-pre-licitacao/",
-        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+        "impressions": null,
+        "is_gsc_live": true,
+        "path": "/diagnostico-pre-licitacao/",
+        "position": null,
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "census_allowed": true,
@@ -2262,17 +2291,19 @@
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
         "clicks": null,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
         "impressions": null,
-        "is_gsc_live": false,
+        "is_gsc_live": true,
         "path": "/defesa-margem-contratos-publicos/",
         "position": null,
-        "reason": "path_absent_from_historical_export_not_zero",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv"
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "frozen": false
@@ -2319,7 +2350,7 @@
         "kill": "If branded-only demand and no qualified hand-raise, do not spawn sibling offer URLs.",
         "next_test": "Tool /ferramentas/diagnostico-defesa-margem/ is the utility; this path stays the commercial owner. No HTML in this slot.",
         "state": "COVERED",
-        "summary": "Family defesa-margem is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+        "summary": "Family defesa-margem is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
       "transition_owner_issue": 153
@@ -2341,17 +2372,19 @@
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
         "clicks": null,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
         "impressions": null,
-        "is_gsc_live": false,
+        "is_gsc_live": true,
         "path": "/atrasos-prorrogacao-obras-publicas/",
         "position": null,
-        "reason": "path_absent_from_historical_export_not_zero",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv"
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "frozen": false,
@@ -2395,7 +2428,7 @@
         "kill": "If only informational chuva queries click, do not force the service URL.",
         "next_test": "Do not index the #127 noindex library to feed this pillar.",
         "state": "COVERED",
-        "summary": "Family atrasos-prorrogacao is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+        "summary": "Family atrasos-prorrogacao is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
       "transition_owner_issue": 153
@@ -2417,17 +2450,19 @@
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
         "clicks": null,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
         "impressions": null,
-        "is_gsc_live": false,
+        "is_gsc_live": true,
         "path": "/defesa-tecnica-contratos-publicos/",
         "position": null,
-        "reason": "path_absent_from_historical_export_not_zero",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv"
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "frozen": false
@@ -2470,7 +2505,7 @@
         "kill": "If the page only ranks for brand, do not add sanção variants.",
         "next_test": "No HTML. Confirm the URL is not competing with defesa-margem copy.",
         "state": "COVERED",
-        "summary": "Family defesa-sancoes is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+        "summary": "Family defesa-sancoes is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
       "transition_owner_issue": 153
@@ -2492,17 +2527,19 @@
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
         "clicks": null,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
         "impressions": null,
-        "is_gsc_live": false,
+        "is_gsc_live": true,
         "path": "/acompanhamento-contratos-obras/",
         "position": null,
-        "reason": "path_absent_from_historical_export_not_zero",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv"
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "frozen": false
@@ -2540,7 +2577,7 @@
         "kill": "If both 360 and acompanhamento rank for the same generic gestão query, consolidate internal links — do not add a third URL.",
         "next_test": "Watch cannibalization with /diagnostico-b2g-360/ and /diretoria-b2g/.",
         "state": "COVERED",
-        "summary": "Family gestao-contratual is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+        "summary": "Family gestao-contratual is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
       "transition_owner_issue": 153
@@ -2562,17 +2599,19 @@
       "earliest_safe_action_at": "2026-09-16",
       "evidence": {
         "clicks": null,
-        "date": "2026-08-09",
-        "denominator": "impressions_in_export_row",
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
         "device": "UNKNOWN",
         "geo": "UNKNOWN",
         "impressions": null,
-        "is_gsc_live": false,
+        "is_gsc_live": true,
         "path": "/bid-room-licitacoes-obras/",
         "position": null,
-        "reason": "path_absent_from_historical_export_not_zero",
-        "source": "historical_csv_not_live",
-        "source_kind": "historical_csv"
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
       },
       "freeze": {
         "frozen": false
@@ -2615,7 +2654,7 @@
         "kill": "If Bid Room never receives origin→service from pré-licitação, fix #153 rather than cloning pages.",
         "next_test": "Do not create a second Bid Room URL for #155.",
         "state": "COVERED",
-        "summary": "Family bid-room is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+        "summary": "Family bid-room is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
       "transition_owner_issue": 153
@@ -3452,12 +3491,12 @@
         "state": "draft_open"
       },
       {
-        "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
+        "gsc_live_state": "LIVE_JOB_OK",
         "head": "campaign/confenge-web-seo-demand-control-02",
         "id": "pr-159",
         "kind": "pull_request",
         "merged_to_main": false,
-        "note": "Search-demand observability producer. Candidate to merge; not main; not GSC live.",
+        "note": "Search-demand observability producer. Candidate to merge; not main. Isolated gsc job 32322344062 is LIVE_JOB_OK overlay in BOFU-CORE, not a merged PR #159 loop.",
         "ref": 159,
         "role": "observability_candidate_not_live_gsc",
         "sha": "feba68928ab997229028a66bb25d3b3b5a439206",
@@ -3483,19 +3522,53 @@
     "transition_owner_issue": 153
   },
   "gsc_live": {
-    "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
-    "last_sync_blocked": true,
-    "last_sync_error": "missing_credentials",
-    "note": "Absence of live Search Analytics is NEEDS_EXTERNAL_ACTION, not ranking zero. Historical CSV, redacted snapshots and SERP samples are not GSC live.",
+    "actions_run_id": 32322344062,
+    "actions_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/32322344062",
+    "as_of": "2026-08-17",
+    "committed_main_last_sync": "still_missing_credentials_file_not_live_rows",
+    "gaps": [
+      "2026-07-20",
+      "2026-07-21",
+      "2026-07-22",
+      "2026-07-23",
+      "2026-07-24",
+      "2026-07-25",
+      "2026-07-26",
+      "2026-07-27",
+      "2026-07-28",
+      "2026-07-29",
+      "2026-07-30",
+      "2026-07-31",
+      "2026-08-01",
+      "2026-08-02",
+      "2026-08-03",
+      "2026-08-04",
+      "2026-08-05",
+      "2026-08-06",
+      "2026-08-07",
+      "2026-08-08",
+      "2026-08-09",
+      "2026-08-10",
+      "2026-08-11",
+      "2026-08-12",
+      "2026-08-13",
+      "2026-08-14",
+      "2026-08-15",
+      "2026-08-16"
+    ],
+    "gsc_live_state": "LIVE_JOB_OK",
+    "job_ready_for_product_decisions": true,
+    "last_sync_blocked": false,
+    "last_sync_error": null,
+    "note": "GitHub Actions gsc-sync 32322344062 proved credentials (ok, 95 top-rows, as_of 2026-08-17). Committed data/revops/gsc/last_sync.json on main is still the old missing_credentials file. Historical CSV and SERP samples are not this live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not authorize TOP* or HTML.",
     "pr_159_role": "observability_candidate_not_merged_to_main",
+    "query_text_redacted": true,
     "ready_for_product_decisions": false,
-    "recommendation": "NEEDS_EXTERNAL_ACTION",
-    "required_env": [
-      "GSC_SITE_URL",
-      "GSC_CREDENTIALS_JSON (service account path or JSON) OR (GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON)"
-    ]
+    "recommendation": "observe_only",
+    "rows": 95,
+    "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe."
   },
-  "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
+  "gsc_live_state": "LIVE_JOB_OK",
   "historical_gsc": {
     "as_of": "2026-08-09",
     "dir": "seo/gsc-2026-08-09",
@@ -3506,15 +3579,15 @@
   },
   "next_actions": [
     {
-      "action": "NEEDS_EXTERNAL_ACTION",
+      "action": "observe_only",
       "authorizes_html_edit": false,
-      "id": "gsc-credentials",
-      "owner": "operator_secrets",
+      "id": "gsc-live-overlay",
+      "owner": "pr-159",
       "refs": [
         "pr-159",
         "issue-128"
       ],
-      "summary": "Set GSC_CREDENTIALS_JSON (or client secrets+token) and GSC_SITE_URL. Until then gsc_live_state=BLOCKED_CREDENTIAL_FAILURE. Do not treat historical CSV, redacted snapshots or SERP samples as live."
+      "summary": "Actions run 32322344062 proved GSC credentials (95 top-rows, as_of 2026-08-17, LIVE_JOB_OK). Committed last_sync.json on main is still the old missing_credentials file. Do not treat historical CSV, SERP samples, non-BR geo, mixed device, or top-row gaps as BR TOP* or HTML authorization. PR #159 remains a merge candidate."
     },
     {
       "action": "observe_only",

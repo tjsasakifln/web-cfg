@@ -35,17 +35,16 @@ def test_every_family_has_owner_state_reason():
         assert item["transition_owner_issue"] == 153
 
 
-def test_gsc_live_state_is_blocked_credential_failure():
+def test_gsc_live_state_is_job_ok_and_not_product_ready():
     status = build_status()
-    assert status["gsc_live_state"] == "BLOCKED_CREDENTIAL_FAILURE"
-    assert status["gsc_live"]["recommendation"] == "NEEDS_EXTERNAL_ACTION"
+    assert status["gsc_live_state"] == "LIVE_JOB_OK"
     assert status["gsc_live"]["ready_for_product_decisions"] is False
     assert status["historical_gsc"]["is_gsc_live"] is False
+    assert status["gsc_live"]["actions_run_id"] == 32322344062
 
 
-def test_no_ranking_state_while_gsc_blocked():
+def test_no_top_star_from_mixed_or_non_br_live_rows():
     status = build_status()
     ranking = {"TOP10", "TOP3", "TOP1", "DOMINANT"}
     for item in status["families"]:
         assert item["state"] not in ranking, item
-        assert item["evidence"].get("is_gsc_live") is not True

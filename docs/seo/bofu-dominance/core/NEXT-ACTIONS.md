@@ -2,9 +2,9 @@
 
 Maximum five. Frozen state **refuses** edit-now. Count: 5.
 
-## 1. `gsc-credentials` — NEEDS_EXTERNAL_ACTION
+## 1. `gsc-live-overlay` — observe_only
 
-Set GSC_CREDENTIALS_JSON (or client secrets+token) and GSC_SITE_URL. Until then gsc_live_state=BLOCKED_CREDENTIAL_FAILURE. Do not treat historical CSV, redacted snapshots or SERP samples as live.
+Actions run 32322344062 proved GSC credentials (95 top-rows, as_of 2026-08-17, LIVE_JOB_OK). Committed last_sync.json on main is still the old missing_credentials file. Do not treat historical CSV, SERP samples, non-BR geo, mixed device, or top-row gaps as BR TOP* or HTML authorization. PR #159 remains a merge candidate.
 
 - authorizes_html_edit: `False`
 - refs: pr-159, issue-128

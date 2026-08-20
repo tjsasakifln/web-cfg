@@ -60,6 +60,40 @@ def test_top10_requires_complete_live_context():
     assert resolved_incomplete["state"] == "COVERED"
 
 
+def test_live_non_br_geo_is_visible_not_top():
+    family = _covered_family()
+    live = {
+        "source": "gsc_live",
+        "is_gsc_live": True,
+        "date": "2026-08-17",
+        "geo": "chl",
+        "device": "MOBILE",
+        "denominator": "impressions",
+        "position": 10.0,
+        "impressions": 1,
+    }
+    resolved = resolve_family_state(family, evidence=live, gsc_live_state="LIVE_JOB_OK")
+    assert resolved["state"] == "VISIBLE"
+    assert resolved["reason"] == "live_non_br_geo_is_not_top"
+
+
+def test_mixed_device_is_not_top():
+    family = _covered_family()
+    live = {
+        "source": "gsc_live",
+        "is_gsc_live": True,
+        "date": "2026-08-17",
+        "geo": "esp",
+        "device": "MIXED",
+        "denominator": "impressions_in_returned_top_rows",
+        "position": 8.0,
+        "impressions": 20,
+    }
+    assert ranking_evidence_complete(live) is False
+    resolved = resolve_family_state(family, evidence=live, gsc_live_state="LIVE_JOB_OK")
+    assert resolved["state"] == "COVERED"
+
+
 def test_web_search_sample_cannot_be_top1():
     family = _covered_family()
     evidence = {

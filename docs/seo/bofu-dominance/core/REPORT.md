@@ -5,7 +5,7 @@
 **Git head (origin/main pin):** `faadc16609210522c9ffaf32a7b944817f6c6214`  
 **Decision state:** VALIDATE (ledger) / EXECUTE_NOW (honesty gates)  
 **Leverage:** distribution, data, trust  
-**Time to evidence:** this PR for the ledger; GSC live remains blocked  
+**Time to evidence:** this PR for the ledger; GSC job 32322344062 is LIVE_JOB_OK  
 **North Star:** inbound qualified pipeline / month — not page count
 
 ## Visitor job
@@ -13,19 +13,22 @@
 An operator deciding BOFU work needs one ledger that says, for each
 commercial family: which job, which canonical URL, which state, what
 evidence exists, what overlaps, and what is the next test or kill —
-without pretending live Search Analytics is available.
+without converting historical CSV or SERP samples into live rank.
 
 ## GSC live
 
-- `gsc_live_state`: `BLOCKED_CREDENTIAL_FAILURE`
-- recommendation: `NEEDS_EXTERNAL_ACTION`
-- last_sync error: `missing_credentials`
-- ready_for_product_decisions: `False`
+- `gsc_live_state`: `LIVE_JOB_OK`
+- recommendation: `observe_only`
+- Actions run: `32322344062`
+- rows (top-set only): `95` as_of `2026-08-17`
+- core ready_for_product_decisions: `False`
+- committed main last_sync: `still_missing_credentials_file_not_live_rows`
 
-Missing credentials produce `NEEDS_EXTERNAL_ACTION`, not ranking zero.
-The 2026-08-09 CSV, redacted snapshots and this SERP sample are **not**
-GSC live. PR #159 is an observability candidate; it is not main and not
-a live loop.
+Credentials are proven by isolated job `gsc` on run 32322344062.
+The 2026-08-09 CSV, redacted snapshots and SERP samples are **not** this
+live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not
+authorize TOP* or HTML. PR #159 remains an observability candidate, not
+main. Absence of a path in the returned top rows is not ranking zero.
 
 ## Coverage
 
@@ -52,9 +55,8 @@ a live loop.
 | `bid-readiness` | P1 | `NO_CANONICAL` | `issue:155` | 155 | gated_issue_no_public_page | no |
 | `partner-integrity` | P1 | `NO_CANONICAL` | `issue:156` | 156 | gated_issue_no_public_page | no |
 
-Frozen families stay FROZEN even when the 2026-08-09 export showed
-page-2/3 or top-10 *historical* positions. Historical position is
-evidence of an old window, not a current TOP* state.
+Frozen families stay FROZEN even when live top-rows show Spain/Chile
+impressions or mixed devices. That is not a BR TOP* and not edit-now.
 
 ## Dependency graph
 
