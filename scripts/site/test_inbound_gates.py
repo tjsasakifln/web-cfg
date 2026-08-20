@@ -22,6 +22,9 @@ from scripts.site.inbound_gates import (  # noqa: E402
     is_noindex,
     run_all_gates,
 )
+from scripts.site.test_bid_readiness_canary import (  # noqa: E402,F401
+    test_bid_readiness_canary_prepare_only,
+)
 from scripts.site.test_organic_striking_distance_cro_01 import (  # noqa: E402,F401
     test_article_first_fold_has_required_distinctions,
     test_article_listed_once_in_main_sitemap_not_elsewhere,
