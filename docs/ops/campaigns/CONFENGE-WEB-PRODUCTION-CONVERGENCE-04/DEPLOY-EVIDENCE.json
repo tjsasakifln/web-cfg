@@ -1,0 +1,145 @@
+{
+  "schema": "confenge-web-production-convergence-04/deploy-evidence/v1",
+  "as_of_utc": "2026-08-20T04:27:30Z",
+  "main_sha": "f767554bcdfb7594c1e079cd39791a7c9770ef22",
+  "previous_main_sha": "4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd",
+  "convergence_pr": 168,
+  "merged_at": "2026-08-20T04:22:07Z",
+  "netlify": {
+    "site_id": "d48bab78-b26c-4152-88f0-78b166c951e6",
+    "site": "confenge",
+    "custom_domain": "confenge.com.br",
+    "deploy_id": "6a8680f16e35db00084a9147",
+    "build_id": "6a8680f16e35db00084a9145",
+    "commit_ref": "f767554bcdfb7594c1e079cd39791a7c9770ef22",
+    "commit_ref_equals_main": true,
+    "state": "ready",
+    "context": "production",
+    "branch": "main",
+    "created_at": "2026-08-20T04:22:10.003Z",
+    "published_at": "2026-08-20T04:22:48.226Z",
+    "deploy_time_seconds": 37,
+    "url": "https://confenge.com.br",
+    "admin_url": "https://app.netlify.com/projects/confenge/deploys/6a8680f16e35db00084a9147",
+    "error_message": null
+  },
+  "homepage_etag": {
+    "before": "b7e476cad9c06be46c98d9cde1536857-ssl",
+    "after": "4b3870a8ed28bdc3cf988e3fc03f636c-ssl"
+  },
+  "graph": {
+    "sitemap_index_status": 200,
+    "members": [
+      "https://confenge.com.br/sitemap.xml",
+      "https://confenge.com.br/sitemap-editorial.xml",
+      "https://confenge.com.br/sitemap-jurisprudencia.xml",
+      "https://confenge.com.br/sitemap-inteligencia.xml"
+    ],
+    "child_loc_count": 64,
+    "sitemap_txt_count": 64,
+    "loc_set_equal": true,
+    "duplicates": false,
+    "robots_sitemap": ["https://confenge.com.br/sitemap-index.xml"],
+    "market_answer_in_any_child": false,
+    "market_answer_in_sitemap_txt": false
+  },
+  "pages": {
+    "/defesa-margem-contratos-publicos/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "in_graph": true,
+      "csp": true
+    },
+    "/atrasos-prorrogacao-obras-publicas/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "in_graph": true,
+      "csp": true
+    },
+    "/defesa-tecnica-contratos-publicos/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "in_graph": true,
+      "csp": true
+    },
+    "/acompanhamento-contratos-obras/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/acompanhamento-contratos-obras/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "in_graph": true,
+      "csp": true
+    },
+    "/bid-room-licitacoes-obras/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "in_graph": true,
+      "csp": true
+    },
+    "/diretoria-b2g/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/diretoria-b2g/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "in_graph": true,
+      "csp": true
+    },
+    "/diagnostico-b2g-expansao/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/diagnostico-b2g-expansao/",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "in_graph": true,
+      "csp": true,
+      "handraise": true,
+      "lead_endpoint": true,
+      "offer_checkout_in_html": false,
+      "terms_id": "CFG-TERMS-B2B-2026-08-17-v1"
+    },
+    "/inteligencia/valor-tipico-contratos-pavimentacao/": {
+      "status": 200,
+      "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "robots": "noindex,nofollow",
+      "in_graph": false,
+      "accessible_as_history": true,
+      "csp": true
+    },
+    "/analises-contratos-publicos/": {
+      "status": 200,
+      "x_robots": "noindex, nofollow, noarchive",
+      "robots_txt_disallow": true,
+      "in_graph": false
+    },
+    "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/": {
+      "status": 200,
+      "meta_robots": "noindex,follow",
+      "x_robots": "noindex, follow",
+      "in_graph": false
+    }
+  },
+  "checkout_production": {
+    "flags": {
+      "CONFENGE_OFFER_CATALOG_PUBLIC": false,
+      "production_checkout_enabled": false
+    },
+    "POST /.netlify/functions/offer-checkout": {
+      "http": 404,
+      "body": {"ok": false, "error": "feature_disabled"}
+    }
+  },
+  "gsc": {
+    "run_id": 32330638164,
+    "artifact_id": 9392893073,
+    "source_kind": "search_analytics_api",
+    "as_of": "2026-08-17",
+    "repo_state": "LIVE_JOB_OK",
+    "core_ready_for_product_decisions": false
+  },
+  "indexnow": {
+    "submitted": false,
+    "reason": "auto_send=false; no live IndexNow POST in this campaign"
+  },
+  "commit_ref_equals_main": true,
+  "token_basis": "PRODUCTION_CONVERGED_FOR_NETLIFY_GRAPH_PAGES; residuals remain for #157 INDEX and Warmbly v1 capability"
+}
