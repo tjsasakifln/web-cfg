@@ -159,6 +159,13 @@ def test_stale_tokens_refused_on_shipped_approve(tmp_path, monkeypatch):
             )
 
 
+def test_family_sitemap_is_copied_into_public_artifact():
+    from scripts.contract_analysis.render import SITEMAP_NAME
+    from scripts.pseo.public_artifact import PUBLIC_ROOT_FILES
+
+    assert SITEMAP_NAME in PUBLIC_ROOT_FILES
+
+
 def test_v2_token_constant_is_2026_08_20():
     assert OWNER_CONDITIONAL_PREAPPROVAL_V2.endswith("2026_08_20")
     assert "V2" in OWNER_CONDITIONAL_PREAPPROVAL_V2
