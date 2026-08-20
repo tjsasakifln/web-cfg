@@ -308,6 +308,61 @@ def test_functional_type_floor_in_css():
     assert re.search(r"\.related-card span\{[^}]*font-size:\.875rem", css)
 
 
+def _css_rule_bodies(css: str, selector: str) -> list[str]:
+    """Extract declaration blocks for a minified/plain CSS selector from live styles.css."""
+    sel = r"\s+".join(re.escape(part) for part in selector.split())
+    # Do not treat ".brand img" as the global "img" rule.
+    return re.findall(
+        rf"(?<![A-Za-z0-9_.*#:>+\s\[\]=\"'-]){sel}\s*\{{([^}}]*)\}}",
+        css,
+    )
+
+
+def _declares_height_auto(body: str) -> bool:
+    return bool(re.search(r"(?<![\w-])height\s*:\s*auto\b", body, re.I))
+
+
+def test_img_rules_declare_height_auto():
+    """width:100% + HTML height=630 squashes 1200x630 covers unless height:auto is set."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    global_img = _css_rule_bodies(css, "img")
+    assert global_img, "global img { ... } rule missing in styles.css"
+    assert any(_declares_height_auto(body) for body in global_img), (
+        "global img rule must set height:auto so intrinsic aspect ratio is preserved"
+    )
+    cover_img = _css_rule_bodies(css, ".article-cover img")
+    assert cover_img, ".article-cover img { ... } rule missing in styles.css"
+    for i, body in enumerate(cover_img):
+        assert _declares_height_auto(body), (
+            f".article-cover img rule #{i} must set height:auto; got {body!r}"
+        )
+
+
+def test_article_cover_html_keeps_intrinsic_1200x630():
+    """CSS height:auto is the distortion fix; HTML still declares 1200x630 intrinsic size."""
+    article = ROOT / "conteudos" / "documentos-reequilibrio-obra-publica" / "index.html"
+    pillar = ROOT / "reequilibrio-obras-publicas" / "index.html"
+    for path in (article, pillar):
+        assert path.exists(), f"missing {path.relative_to(ROOT)}"
+        html = path.read_text(encoding="utf-8")
+        figures = re.findall(
+            r"<figure\b[^>]*class=\"[^\"]*\barticle-cover\b[^\"]*\"[^>]*>[\s\S]*?</figure>",
+            html,
+            re.I,
+        )
+        assert figures, f"{path.relative_to(ROOT)}: missing <figure class=\"article-cover\">"
+        matched = False
+        for fig in figures:
+            if re.search(r"<img\b[^>]*\bwidth=\"1200\"[^>]*\bheight=\"630\"", fig, re.I) or re.search(
+                r"<img\b[^>]*\bheight=\"630\"[^>]*\bwidth=\"1200\"", fig, re.I
+            ):
+                matched = True
+                break
+        assert matched, (
+            f"{path.relative_to(ROOT)}: article-cover img must keep width=\"1200\" height=\"630\""
+        )
+
+
 def test_thankyou_specialist_cta_family():
     for name in ("obrigado.html", "obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         path = ROOT / name
