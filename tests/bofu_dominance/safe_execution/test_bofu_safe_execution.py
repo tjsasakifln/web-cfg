@@ -11,6 +11,7 @@ import json
 import re
 import subprocess
 import sys
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -136,7 +137,7 @@ def first_fold(html: str) -> str:
 def tag_text(html: str, tag: str) -> str:
     m = re.search(rf"<{tag}[^>]*>(.*?)</{tag}>", html, flags=re.I | re.S)
     assert m, f"missing <{tag}>"
-    return re.sub(r"<[^>]+>", "", m.group(1)).strip()
+    return unescape(re.sub(r"<[^>]+>", "", m.group(1))).strip()
 
 
 def meta_description(html: str) -> str:
@@ -197,6 +198,30 @@ def jsonld_blocks(html: str) -> list[dict]:
         blocks.append(json.loads(raw))
     assert blocks, "missing JSON-LD"
     return blocks
+
+
+def jsonld_nodes_of_type(html: str, type_name: str) -> list[dict]:
+    found: list[dict] = []
+    for block in jsonld_blocks(html):
+        nodes = block.get("@graph") if isinstance(block, dict) else None
+        if nodes is None:
+            nodes = [block]
+        if not isinstance(nodes, list):
+            nodes = [nodes]
+        for node in nodes:
+            if not isinstance(node, dict):
+                continue
+            types = node.get("@type")
+            types = types if isinstance(types, list) else [types]
+            if type_name in types:
+                found.append(node)
+    return found
+
+
+def first_eyebrow(html: str) -> str:
+    fold = first_fold(html)
+    m = re.search(r'<p class="eyebrow">([^<]+)', fold)
+    return m.group(1).strip() if m else ""
 
 
 def flatten_names(node: object, acc: list[str]) -> None:
@@ -308,32 +333,68 @@ def test_no_invented_case_or_review_claims():
 
 
 def test_title_h1_meta_canonical_schema():
+    titles: dict[str, str] = {}
+    h1s_by_slug: dict[str, str] = {}
+    webpage_names: dict[str, str] = {}
     for slug in PAGES:
         html = shipped_html(slug)
         title = tag_text(html, "title")
-        h1s = re.findall(r"<h1[^>]*>(.*?)</h1>", html, flags=re.I | re.S)
+        h1_matches = re.findall(r"<h1[^>]*>(.*?)</h1>", html, flags=re.I | re.S)
         assert title
-        assert len(h1s) == 1
-        h1 = re.sub(r"<[^>]+>", "", h1s[0]).strip()
+        assert len(h1_matches) == 1
+        h1 = unescape(re.sub(r"<[^>]+>", "", h1_matches[0])).strip()
         assert h1
         desc = meta_description(html)
         assert desc
         can = canonical(html)
         assert can == f"https://confenge.com.br/{slug}/"
-        blocks = jsonld_blocks(html)
-        names: list[str] = []
-        flatten_names(blocks, names)
-        blob = " ".join(names)
+        pages = jsonld_nodes_of_type(html, "WebPage")
+        assert pages, f"{slug} missing WebPage JSON-LD"
+        wp_name = str(pages[0].get("name") or "")
+        wp_desc = str(pages[0].get("description") or "")
+        services = jsonld_nodes_of_type(html, "Service")
+        assert services, f"{slug} missing Service JSON-LD"
+        svc_desc = str(services[0].get("description") or "")
+        phrase = JOB[slug]["phrase"]
+        for label, text in (("title", title), ("h1", h1), ("WebPage.name", wp_name)):
+            assert phrase in text, f"{slug} {label} missing job phrase {phrase!r}: {text!r}"
+        for other, spec in JOB.items():
+            if other == slug:
+                continue
+            assert spec["phrase"] not in title, f"{slug} title cannibalizes {other}"
+            assert spec["phrase"] not in h1, f"{slug} H1 cannibalizes {other}"
+            assert spec["phrase"] not in wp_name, f"{slug} WebPage.name cannibalizes {other}"
         vis = visible_text(html)
-        assert h1.replace("&", "").split("|")[0].strip()[:12] in vis
-        assert "confenge.com.br" in json.dumps(blocks)
-        assert any(
-            vis.find(n[:24]) >= 0 or n[:24].lower() in vis.lower()
-            for n in names
-            if len(n) >= 12
-        ), f"{slug} JSON-LD names do not overlap visible copy: {names[:6]}"
-        assert title.split("|")[0].strip()[:10].lower() in vis.lower() or h1[:10].lower() in vis.lower()
-        assert desc[:18].rstrip("…") in html
+        assert h1 in vis
+        assert desc in html
+        titles[slug] = title
+        h1s_by_slug[slug] = h1
+        webpage_names[slug] = wp_name
+        if slug == "defesa-margem-contratos-publicos":
+            assert not re.match(r"\s*Defesa técnica", title, flags=re.I), (
+                f"defesa-margem title leads with Defesa técnica: {title!r}"
+            )
+            assert "Defesa técnica" not in title
+            eyebrow = first_eyebrow(html)
+            chrome = " ".join([title, desc, eyebrow, wp_name, wp_desc, svc_desc]).lower()
+            for token in (
+                "defesa técnica",
+                "notifica",
+                "aditivo",
+                "reequil",
+            ):
+                assert token not in chrome, (
+                    f"defesa-margem title/meta/eyebrow/schema still carries {token!r}: {chrome[:240]!r}"
+                )
+            assert "proteção de margem" in chrome
+            assert "contract defense" in vis.lower()
+        if slug == "acompanhamento-contratos-obras":
+            assert "pleitos" not in h1.lower()
+            assert "pleitos" not in wp_name.lower()
+            svc_type = str(services[0].get("serviceType") or "").lower()
+            assert "pleitos" not in svc_type
+    assert len(set(titles.values())) == 4
+    assert len(set(h1s_by_slug.values())) == 4
 
 
 def test_existing_153_attributes_preserved_and_primary_cta_complete():
