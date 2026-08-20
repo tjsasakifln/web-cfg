@@ -1,0 +1,500 @@
+{
+  "schema": "bofu-intent-registry/2.0",
+  "campaign": "CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02",
+  "slot": "BOFU-CORE",
+  "as_of": "2026-08-19",
+  "public_surface": "https://confenge.com.br",
+  "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
+  "notes": [
+    "This is the canonical BOFU intent ledger, not a second Organic Opportunity Engine.",
+    "Families from issue #128 are FROZEN: census and spec allowed, HTML not.",
+    "Issues #155 and #156 enter as GATED, not as existing pages.",
+    "PR #157 is a contract-analysis canary, not a family in this list.",
+    "PR #158 is the Data Desk kit; this file is not a second target registry.",
+    "PR #159 is an observability candidate; it does not make GSC live."
+  ],
+  "families": [
+    {
+      "id": "aditivos",
+      "priority": "P1",
+      "job": "Decidir se um acréscimo, supressão ou serviço extra cabe em aditivo formal antes de executar sem cobertura.",
+      "decision": "Enquadrar o fato, o saldo 25%/50% e o documento do termo vs apostila.",
+      "primary_queries": [
+        "aditivos obras públicas",
+        "limite aditivo 25 50 obra pública",
+        "aditivo qualitativo e quantitativo",
+        "acréscimo e supressão contrato público"
+      ],
+      "negative_queries": [
+        "aditivos para concreto",
+        "aditivo plastificante",
+        "master builders aditivos"
+      ],
+      "canonical_owner": {
+        "path": "/aditivos-obras-publicas/",
+        "url": "https://confenge.com.br/aditivos-obras-publicas/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 128
+      },
+      "freeze": {
+        "frozen": true,
+        "issue": 128,
+        "html_edit": false,
+        "census_allowed": true,
+        "spec_allowed": true,
+        "reason": "frozen_issue_128"
+      },
+      "active_issue": 128,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "orcamento-bdi", "rule": "item_novo_price_belongs_to_aditivos_not_bdi_audit"},
+        {"other_family": "defesa-margem", "rule": "pillar_owns_query_tool_is_second_reading_not_landing"}
+      ],
+      "next_test": "After 2026-09-16 and live GSC credentials, re-read commercial clicks on /aditivos-obras-publicas/ without editing HTML now.",
+      "kill": "If 28d live GSC still shows 0 service clicks while content clicks hold, the gap is offer/SERP and #88/#60 own the next move.",
+      "consolidate": "Do not create keyword variants or index the noindex library to feed this pillar (#127)."
+    },
+    {
+      "id": "medicoes-pagamentos",
+      "priority": "P1",
+      "job": "Contestar glosa, medição rejeitada ou parcela retida com nexo contratual e prova contemporânea.",
+      "decision": "Recuperar caixa vs aceitar o corte vs acionar defesa formal.",
+      "primary_queries": [
+        "glosa de medição obra pública",
+        "medição de obra pública rejeitada",
+        "parcela incontroversa medição",
+        "fiscal não assina medição"
+      ],
+      "negative_queries": ["glosa plano de saúde", "glosa médica convênio"],
+      "canonical_owner": {
+        "path": "/medicoes-glosas-obras-publicas/",
+        "url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 128
+      },
+      "freeze": {
+        "frozen": true,
+        "issue": 128,
+        "html_edit": false,
+        "census_allowed": true,
+        "spec_allowed": true,
+        "reason": "frozen_issue_128"
+      },
+      "active_issue": 128,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "defesa-sancoes", "rule": "payment_dispute_stays_here_until_sanction_notice"},
+        {"other_family": "defesa-margem", "rule": "pillar_owns_query_diagnosis_is_not_the_money_landing"}
+      ],
+      "next_test": "Observe whether owned articles (glosa/rejeitada/fiscal) transfer to the pillar once #153 destination events exist.",
+      "kill": "Kill further snippet work if historical top-10 on the pillar never becomes a click after live GSC is restored.",
+      "consolidate": "Lei 14.133 parcela-incontroversa remains MOFU supporting content, not a second BOFU owner."
+    },
+    {
+      "id": "reequilibrio",
+      "priority": "P1",
+      "job": "Decidir se cabe reequilíbrio econômico-financeiro agora e como instruir o pleito.",
+      "decision": "Reajuste/repactuação vs reequilíbrio vs não pleitear.",
+      "primary_queries": [
+        "reequilíbrio econômico financeiro obra pública",
+        "pedido de reequilíbrio contrato público",
+        "reajuste ou reequilíbrio obra pública",
+        "curva abc reequilíbrio"
+      ],
+      "negative_queries": ["reequilíbrio ambiental", "reequilíbrio de treino"],
+      "canonical_owner": {
+        "path": "/reequilibrio-obras-publicas/",
+        "url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 128
+      },
+      "freeze": {
+        "frozen": true,
+        "issue": 128,
+        "html_edit": false,
+        "census_allowed": true,
+        "spec_allowed": true,
+        "reason": "frozen_issue_128"
+      },
+      "active_issue": 128,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "atrasos-prorrogacao", "rule": "delay_may_feed_reequilibrio_but_prazo_job_stays_on_atrasos"},
+        {"other_family": "defesa-margem", "rule": "checklist_tool_is_not_the_service_canonical"}
+      ],
+      "next_test": "Do not claim unindexed from the 2026-08-14 site: sample. Wait for live URL inspection + GSC.",
+      "kill": "If demand is only generic TCU explainer with no commercial click, stop forcing the generic query.",
+      "consolidate": "Lei reequilibrio-reajuste-repactuacao is supporting, not a competing BOFU URL."
+    },
+    {
+      "id": "orcamento-bdi",
+      "priority": "P1",
+      "job": "Auditar orçamento, BDI e base SINAPI/SICRO do edital antes de precificar a proposta.",
+      "decision": "Participar, impugnar a planilha ou recusar a licitação.",
+      "primary_queries": [
+        "auditoria orçamento licitação",
+        "bdi diferenciado obra pública",
+        "sinapi desonerado ou não desonerado",
+        "sinapi ou sicro obra pública"
+      ],
+      "negative_queries": ["auditoria TCU de obras como carreira", "calculadora bdi genérica sem edital"],
+      "canonical_owner": {
+        "path": "/auditoria-orcamento-licitacao/",
+        "url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 128
+      },
+      "freeze": {
+        "frozen": true,
+        "issue": 128,
+        "html_edit": false,
+        "census_allowed": true,
+        "spec_allowed": true,
+        "reason": "frozen_issue_128"
+      },
+      "active_issue": 128,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "edital-proposta", "rule": "budget_base_belongs_here_go_nogo_edital_belongs_to_edital-proposta"},
+        {"other_family": "bid-readiness", "rule": "gated_readiness_must_not_replace_this_pillar"}
+      ],
+      "next_test": "SINAPI article CTR remains #126; do not steal that query onto the pillar while #126 observation runs.",
+      "kill": "If the pillar never earns a commercial click after bridges + live GSC, treat demand as informational SINAPI-only.",
+      "consolidate": "Keep /conteudos/sinapi-desonerado-nao-desonerado/ as supporting; do not create a second audit URL."
+    },
+    {
+      "id": "carteira-operacao",
+      "priority": "P1",
+      "job": "Diagnosticar a operação B2G da carteira, não um contrato isolado.",
+      "decision": "Rotina contínua vs apoio pontual vs não contratar.",
+      "primary_queries": [
+        "diagnóstico B2G 360",
+        "consultoria B2G engenharia construtora",
+        "gestão de carteira contratos obras públicas",
+        "diretoria B2G construtora"
+      ],
+      "negative_queries": ["diagnóstico médico 360", "B2B SaaS 360"],
+      "canonical_owner": {
+        "path": "/diagnostico-b2g-360/",
+        "url": "https://confenge.com.br/diagnostico-b2g-360/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 128
+      },
+      "freeze": {
+        "frozen": true,
+        "issue": 128,
+        "html_edit": false,
+        "census_allowed": true,
+        "spec_allowed": true,
+        "reason": "frozen_issue_128"
+      },
+      "active_issue": 128,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "gestao-contratual", "rule": "360_owns_portfolio_job_acompanhamento_owns_continuous_pleito_routine"},
+        {"other_family": "defesa-margem", "rule": "single_contract_second_reading_is_not_360"}
+      ],
+      "next_test": "Confirm branded/generic 'diagnóstico B2G' does not cannibalize Diretoria B2G or 360.",
+      "kill": "If the URL only ranks for brand, do not expand portfolio pages.",
+      "consolidate": "Do not split 360 into município × oferta URLs."
+    },
+    {
+      "id": "edital-proposta",
+      "priority": "P1",
+      "job": "Decidir participar, impugnar ou ajustar a proposta antes do preço final.",
+      "decision": "Go / no-go humano no edital, regime e matriz de riscos.",
+      "primary_queries": [
+        "diagnóstico pré-licitação obras",
+        "comprovação de exequibilidade proposta obra",
+        "orçamento incompleto edital obra pública",
+        "empreitada preço global vs preço unitário"
+      ],
+      "negative_queries": ["modelo de edital PDF", "como ganhar licitação garantido"],
+      "canonical_owner": {
+        "path": "/diagnostico-pre-licitacao/",
+        "url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 128
+      },
+      "freeze": {
+        "frozen": true,
+        "issue": 128,
+        "html_edit": false,
+        "census_allowed": true,
+        "spec_allowed": true,
+        "reason": "frozen_issue_128"
+      },
+      "active_issue": 128,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "orcamento-bdi", "rule": "planilha_audit_is_orcamento_go_nogo_is_here"},
+        {"other_family": "bid-room", "rule": "bid_room_is_delivery_format_this_is_the_decision_landing"},
+        {"other_family": "bid-readiness", "rule": "gated_utility_must_not_replace_this_canonical"}
+      ],
+      "next_test": "Keep Bid Room as offer format, not a second pré-licitação URL.",
+      "kill": "If the page never appears for non-brand decision queries after live GSC, do not clone it.",
+      "consolidate": "One canonical pré-licitação service. No pSEO per edital."
+    },
+    {
+      "id": "defesa-margem",
+      "priority": "P0",
+      "job": "Partir de um contrato público real e decidir se vale uma segunda leitura técnica de margem.",
+      "decision": "Contratar Diagnóstico de Defesa de Margem vs seguir internamente.",
+      "primary_queries": [
+        "defesa de margem contrato público",
+        "diagnóstico contrato obra pública",
+        "segunda leitura contrato público",
+        "contract defense margin obras públicas"
+      ],
+      "negative_queries": ["margem de preferência ME EPP", "proteção de margem de rio"],
+      "canonical_owner": {
+        "path": "/defesa-margem-contratos-publicos/",
+        "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 60
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 60,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "reequilibrio", "rule": "offer_owns_second_reading_pillar_owns_reequilibrio_query"},
+        {"other_family": "aditivos", "rule": "offer_is_not_the_aditivos_canonical"},
+        {"other_family": "carteira-operacao", "rule": "one_contract_vs_portfolio"}
+      ],
+      "next_test": "Tool /ferramentas/diagnostico-defesa-margem/ is the utility; this path stays the commercial owner. No HTML in this slot.",
+      "kill": "If branded-only demand and no qualified hand-raise, do not spawn sibling offer URLs.",
+      "consolidate": "Keep one money-asset diagnosis. PR #157 analysis canaries must CTA here, not become a parallel offer."
+    },
+    {
+      "id": "atrasos-prorrogacao",
+      "priority": "P2",
+      "job": "Proteger prazo e documentar prorrogação, paralisação ou atraso imputável.",
+      "decision": "Notificar, pedir prazo, defender-se ou acelerar.",
+      "primary_queries": [
+        "prorrogação prazo obra pública",
+        "atraso imputável administração",
+        "notificação atraso obra pública",
+        "chuva prorrogação prazo obra pública"
+      ],
+      "negative_queries": ["prorrogação de matrícula", "atraso de voo"],
+      "canonical_owner": {
+        "path": "/atrasos-prorrogacao-obras-publicas/",
+        "url": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 128
+      },
+      "freeze": {
+        "frozen": false,
+        "note": "Service URL is not in the #128 six-URL freeze list; supporting noindex content remains #127."
+      },
+      "active_issue": 127,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "defesa-sancoes", "rule": "notice_response_moves_to_defesa_when_sanction_risk_dominates"},
+        {"other_family": "reequilibrio", "rule": "delay_is_input_to_reequilibrio_not_a_second_prazo_url"}
+      ],
+      "next_test": "Do not index the #127 noindex library to feed this pillar.",
+      "kill": "If only informational chuva queries click, do not force the service URL.",
+      "consolidate": "One prazo pillar. No weather × município pages."
+    },
+    {
+      "id": "defesa-sancoes",
+      "priority": "P2",
+      "job": "Responder notificação, defesa técnica ou risco de sanção/extinção com cronologia e nexo.",
+      "decision": "Defender, negociar ou preparar extinção/impedimento.",
+      "primary_queries": [
+        "defesa técnica contrato público",
+        "resposta notificação atraso obra pública",
+        "processo sancionador contrato obra",
+        "extinção contrato administrativo obra"
+      ],
+      "negative_queries": ["defesa pessoal", "sanção penal genérica"],
+      "canonical_owner": {
+        "path": "/defesa-tecnica-contratos-publicos/",
+        "url": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 61
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 61,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "atrasos-prorrogacao", "rule": "prazo_job_stays_on_atrasos_until_sanction_path"},
+        {"other_family": "partner-integrity", "rule": "CEIS_CNEP_is_gated_other_job"}
+      ],
+      "next_test": "No HTML. Confirm the URL is not competing with defesa-margem copy.",
+      "kill": "If the page only ranks for brand, do not add sanção variants.",
+      "consolidate": "One defesa-técnica service."
+    },
+    {
+      "id": "gestao-contratual",
+      "priority": "P2",
+      "job": "Decidir se a construtora contrata acompanhamento contínuo de contratos públicos.",
+      "decision": "Equipe própria vs consultoria de gestão vs 360 pontual.",
+      "primary_queries": [
+        "gestão de contratos de obras públicas",
+        "acompanhamento contratos obras",
+        "consultoria gestão contratual B2G",
+        "pleitos contínuos contrato público"
+      ],
+      "negative_queries": ["software de gestão de contratos genérico"],
+      "canonical_owner": {
+        "path": "/acompanhamento-contratos-obras/",
+        "url": "https://confenge.com.br/acompanhamento-contratos-obras/",
+        "page_type": "service_pillar",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 61
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 61,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "carteira-operacao", "rule": "360_is_diagnosis_this_is_continuous_operating_routine"}
+      ],
+      "next_test": "Watch cannibalization with /diagnostico-b2g-360/ and /diretoria-b2g/.",
+      "kill": "If both 360 and acompanhamento rank for the same generic gestão query, consolidate internal links — do not add a third URL.",
+      "consolidate": "Prefer 360 for portfolio diagnosis; keep this URL for ongoing pleito routine."
+    },
+    {
+      "id": "bid-room",
+      "priority": "P2",
+      "job": "Operar uma sala de licitação de obras com recorte, prazo e decisão humana.",
+      "decision": "Montar Bid Room vs diagnóstico pré-licitação pontual.",
+      "primary_queries": [
+        "bid room licitações obras",
+        "sala de licitação construtora",
+        "apoio a proposta de obra pública",
+        "war room licitação engenharia"
+      ],
+      "negative_queries": ["bid room software procurement US", "hotel bid room"],
+      "canonical_owner": {
+        "path": "/bid-room-licitacoes-obras/",
+        "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+        "page_type": "offer",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 88
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 88,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "edital-proposta", "rule": "pre_licitacao_is_the_decision_landing_bid_room_is_the_delivery_offer"},
+        {"other_family": "bid-readiness", "rule": "gated_readiness_utility_is_not_this_offer"}
+      ],
+      "next_test": "Do not create a second Bid Room URL for #155.",
+      "kill": "If Bid Room never receives origin→service from pré-licitação, fix #153 rather than cloning pages.",
+      "consolidate": "One Bid Room offer."
+    },
+    {
+      "id": "bid-readiness",
+      "priority": "P1",
+      "job": "Antes de enviar a proposta, o edital, a planilha, a documentação e o acervo estão cobertos para um go/no-go humano?",
+      "decision": "Seguir, bloquear, ou pedir Bid Room/diagnóstico — sem parecer automático.",
+      "primary_queries": [
+        "prontidão licitação obras",
+        "bid readiness licitação",
+        "triagem edital orçamento acervo",
+        "checklist prontidão proposta obra pública"
+      ],
+      "negative_queries": ["centro de triagem de resíduos", "sistema de triagem automática correios"],
+      "canonical_owner": {
+        "path": null,
+        "url": null,
+        "page_type": null,
+        "page_exists": false,
+        "indexable": false,
+        "issue": 155
+      },
+      "gate": {
+        "status": "GATED",
+        "gated": true,
+        "issue": 155,
+        "reason": "gated_issue_no_public_page",
+        "page_exists": false
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 155,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "edital-proposta", "rule": "existing_pre_licitacao_remains_canonical_until_canary_proves_utility"},
+        {"other_family": "orcamento-bdi", "rule": "do_not_replace_auditoria_pillar"},
+        {"other_family": "bid-room", "rule": "cta_may_point_to_bid_room_after_human_review"}
+      ],
+      "next_test": "Consumer contract extra-cli ↔ web-cfg before any landing. This slot does not ship HTML.",
+      "kill": "Kill if documents cannot produce auditable FACT/RISK/UNKNOWN or if 28d qualified use does not transfer BOFU.",
+      "consolidate": "One future canary URL. No pages per edital/CNPJ/órgão."
+    },
+    {
+      "id": "partner-integrity",
+      "priority": "P1",
+      "job": "Consultar ocorrências públicas CEIS/CNEP de parceiro/consórcio/subcontratado antes de diligência humana.",
+      "decision": "Ampliar diligência documental vs seguir com cobertura UNKNOWN — never 'empresa limpa'.",
+      "primary_queries": [
+        "consulta CEIS CNEP empresa",
+        "due diligence parceiro licitação",
+        "sanções CNEP CEIS construtora",
+        "integridade parceiro contrato público"
+      ],
+      "negative_queries": ["empresa limpa", "certidão de idoneidade", "empresa idônea automática"],
+      "canonical_owner": {
+        "path": null,
+        "url": null,
+        "page_type": null,
+        "page_exists": false,
+        "indexable": false,
+        "issue": 156
+      },
+      "gate": {
+        "status": "GATED",
+        "gated": true,
+        "issue": 156,
+        "reason": "gated_issue_no_public_page",
+        "page_exists": false,
+        "blocked_on": "extra-cli#436"
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 156,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-09-16",
+      "overlap": [
+        {"other_family": "defesa-sancoes", "rule": "sanctions_defense_is_not_partner_lookup"},
+        {"other_family": "bid-readiness", "rule": "do_not_run_two_bofu_canaries_in_parallel_by_default"}
+      ],
+      "next_test": "Hold until extra-cli#436 is green and #154/#155 slot rules allow a second BOFU canary.",
+      "kill": "Do not index if source cannot paginate/provenance, if copy implies certificado, or if CNPJ leaks.",
+      "consolidate": "Reuse SmartLic UX pattern only. No SmartLic brand, runtime or /compliance/[cnpj] public URL."
+    }
+  ]
+}
