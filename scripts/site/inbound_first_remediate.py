@@ -222,7 +222,7 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
     mobile_cta = f'<a class="button button-primary" href="{cta["href"]}">{cta["label"]}</a>'
     header = f"""<header class="site-header" id="inicio">
 <div class="container header-inner">
-<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge.png" width="224"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
 {desktop}
 </nav>

@@ -422,6 +422,15 @@
   window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
   window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
 
+  const scheduleIdle = (fn) => {
+    const run = () => { try { fn(); } catch (_) { /* non-critical */ } };
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(run, { timeout: 2500 });
+    } else {
+      window.setTimeout(run, 1);
+    }
+  };
+
   const init = () => {
 
     const toggle = document.querySelector('.menu-toggle');
@@ -438,6 +447,7 @@
       document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
+    scheduleIdle(() => {
     document.querySelectorAll('#year').forEach((el) => { el.textContent = new Date().getFullYear(); });
 
     // Journey rail progressive enhancement — all stages remain in the DOM for no-JS
@@ -497,6 +507,7 @@
     };
     search?.addEventListener('input', apply);
     filters.forEach((button) => button.addEventListener('click', () => { filters.forEach((b) => b.classList.remove('is-active')); button.classList.add('is-active'); activeFilter = button.dataset.filter || 'all'; apply(); }));
+    });
 
     // Lead attribution: ?tema= & ?origem= + pSEO context (URL → sessionStorage)
     const searchParams = new URLSearchParams((window.location && window.location.search) || '');
@@ -1487,7 +1498,7 @@
   const safeInit = () => {
     try {
       init();
-      initTurnstile();
+      scheduleIdle(initTurnstile);
       // Session + page view (no PII)
       try {
         const path = window.location.pathname || '/';

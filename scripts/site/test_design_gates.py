@@ -308,6 +308,38 @@ def test_functional_type_floor_in_css():
     assert re.search(r"\.related-card span\{[^}]*font-size:\.875rem", css)
 
 
+def test_home_header_footer_asset_budget():
+    """Home must not declare 800px logos for a ~190–224px box; footer logo is lazy."""
+    html = HOME.read_text(encoding="utf-8")
+    header = re.search(
+        r'<a\b[^>]*class="[^"]*\bbrand\b[^"]*"[^>]*>\s*<img\b([^>]+)>',
+        html,
+        re.I,
+    )
+    assert header, "home header .brand img missing"
+    attrs = header.group(1)
+    width_m = re.search(r'\bwidth="(\d+)"', attrs, re.I)
+    assert width_m, "header .brand img must declare width"
+    assert int(width_m.group(1)) <= 224, (
+        f"header logo width attribute {width_m.group(1)} exceeds display box 224"
+    )
+    assert re.search(r'\bheight="(\d+)"', attrs, re.I), "header .brand img must declare height"
+    footer = re.search(
+        r'<div\b[^>]*class="[^"]*\bfooter-brand\b[^"]*"[^>]*>\s*<img\b([^>]+)>',
+        html,
+        re.I,
+    )
+    assert footer, "home footer-brand img missing"
+    fattrs = footer.group(1)
+    assert re.search(r'\bloading="lazy"', fattrs, re.I), "footer logo must be loading=lazy"
+    assert re.search(r'\bdecoding="async"', fattrs, re.I), "footer logo should decode async"
+    script = re.search(r"<script\b[^>]*src=\"[^\"]*script\.js[^\"]*\"[^>]*>", html, re.I)
+    assert script, "home script.js tag missing"
+    assert re.search(r"\bdefer\b", script.group(0), re.I), "home script.js must use defer"
+    js = (ROOT / "script.js").read_text(encoding="utf-8")
+    assert "requestIdleCallback" in js, "non-critical init must use requestIdleCallback"
+
+
 def test_thankyou_specialist_cta_family():
     for name in ("obrigado.html", "obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         path = ROOT / name
