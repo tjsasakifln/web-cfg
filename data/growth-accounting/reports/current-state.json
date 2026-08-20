@@ -1,0 +1,436 @@
+{
+  "as_of": "2026-08-20T12:00:00-03:00",
+  "classification": {
+    "gates": {
+      "compounding": {
+        "passed": false,
+        "reasons": [
+          "INSUFFICIENT_COHORTS"
+        ]
+      },
+      "exponential": {
+        "passed": false,
+        "reasons": [
+          "INSUFFICIENT_COHORTS"
+        ],
+        "stats": null
+      }
+    },
+    "human_scale_decision_required": true,
+    "scale_allowed": false,
+    "state": "INSUFFICIENT_EVIDENCE"
+  },
+  "cohort_days": 28,
+  "cohorts": [],
+  "cohorts_available": 0,
+  "cohorts_complete": 0,
+  "compatibility": {
+    "gsc_daily_series": "incompatible_incomplete",
+    "matrix": "data/growth-accounting/source-compatibility-matrix.json",
+    "warmbly_outcomes": "UNKNOWN"
+  },
+  "components": {
+    "commercial": {
+      "contracted_revenue_brl": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "lead_valid": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "lost": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "meeting": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "note": "Warmbly #88 outcomes remain UNKNOWN until observed. UNKNOWN never becomes zero.",
+      "proposal": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "qualified": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "qualified_pipeline_brl": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "received_revenue_brl": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "won": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      }
+    },
+    "discovery": {
+      "commercial_clicks_snapshot": {
+        "denominator": null,
+        "reason": null,
+        "status": "ZERO",
+        "value": 0
+      },
+      "commercial_impressions_snapshot": {
+        "denominator": null,
+        "reason": null,
+        "status": "OBSERVED",
+        "value": 29
+      },
+      "ctr": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "non_branded_clicks": {
+        "denominator": null,
+        "reason": null,
+        "status": "OBSERVED",
+        "value": 10
+      },
+      "non_branded_impressions": {
+        "denominator": null,
+        "reason": null,
+        "status": "OBSERVED",
+        "value": 373
+      },
+      "note": "Snapshot totals are not a closed 28-day cohort. Impression is not a click.",
+      "query_coverage_count": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      }
+    },
+    "efficiency": {
+      "clicks_per_active_asset": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "cost_per_click": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "pipeline_per_mature_active_asset": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      }
+    },
+    "input": {
+      "approved_indexable_assets": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "corrections": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "defects": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "editorial_hours": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "refresh_cost": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "stale_rate": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "substantive_changes": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      }
+    },
+    "moat": {
+      "citations": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "download_embed_reuse": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "referring_domains": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "return_visits": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      }
+    },
+    "qualified_use": {
+      "content_to_service": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "contract": "#153 content→service IDs; observed events only",
+      "engagement_admitted": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "method_evidence_opened": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "utility_completed": {
+        "denominator": null,
+        "reason": "MISSING",
+        "status": "UNKNOWN",
+        "value": null
+      }
+    }
+  },
+  "current_state": "INSUFFICIENT_EVIDENCE",
+  "definition_id": "CONFENGE_COMPOUNDING_STANDARD/1.0",
+  "exponential_gate_eligible": false,
+  "flags": {
+    "click_is_not_lead": true,
+    "contracted_is_not_received": true,
+    "impression_is_not_click": true,
+    "lead_is_not_qualified_pipeline": true,
+    "page_count_kpi": false,
+    "query_to_lead_join": false,
+    "scale_allowed_auto_emitted": false,
+    "source_families_separated": true,
+    "unknown_preserved": true
+  },
+  "human_decisions": [],
+  "input_hash": "sha256:8e89252bcd8a7451e7303c420ae4ca94092820ef9ddc20894a3595e6d0f71529",
+  "labeled_synthetic": false,
+  "north_star": {
+    "name": "inbound_qualified_pipeline_per_month_observed",
+    "status": "UNKNOWN",
+    "value": null
+  },
+  "notes": [
+    "Frozen SELECT-only snapshot for CONFENGE_COMPOUNDING_STANDARD/1.0.",
+    "GSC pages table from data/organic/growth-report.json: 373 impressions, 10 clicks, 29 commercial impressions, 0 commercial clicks.",
+    "data/revops/gsc/last_sync.json is blocked (missing_credentials). Not a closed 28-day daily series.",
+    "Commercial outcomes from Warmbly #88 remain UNKNOWN. Do not infer from clicks.",
+    "data/discovery/observed.v1.json has an empty overlay. Missing stays UNKNOWN.",
+    "data/organic/content-service-map.json supplies #153 IDs as inventory, not observed content→service events.",
+    "Page count is not a success KPI and is not recorded as one."
+  ],
+  "primary_series": {
+    "description": "Non-branded clicks on approved indexable routes",
+    "name": "non_branded_clicks_approved_routes",
+    "source_family": "organic_non_branded",
+    "unit": "clicks"
+  },
+  "public_claim": null,
+  "reason_codes": [
+    "GSC_SYNC_BLOCKED",
+    "INSUFFICIENT_COHORTS",
+    "INCOMPLETE_WINDOW"
+  ],
+  "report_hash": "sha256:8dfc857817d09bd8cfe28f73b097852a2a021a557e9bdfe322b3068e31418627",
+  "schema": "CONFENGE_COMPOUNDING_STANDARD/1.0",
+  "schema_version": "1.0",
+  "source_families": {
+    "direct": {
+      "clicks": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "impressions": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "in_primary_series": false,
+      "separated": true
+    },
+    "legacy_brand": {
+      "clicks": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "impressions": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "in_primary_series": false,
+      "separated": true
+    },
+    "organic_branded": {
+      "clicks": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "impressions": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "in_primary_series": false,
+      "separated": true
+    },
+    "organic_non_branded": {
+      "clicks": {
+        "denominator": null,
+        "reason": null,
+        "status": "OBSERVED",
+        "value": 10
+      },
+      "complete_closed_cohort": false,
+      "impressions": {
+        "denominator": null,
+        "reason": null,
+        "status": "OBSERVED",
+        "value": 373
+      },
+      "in_primary_series": true,
+      "note": "Snapshot only; not a closed 28-day cohort.",
+      "separated": true
+    },
+    "outbound": {
+      "clicks": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "impressions": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "in_primary_series": false,
+      "separated": true
+    },
+    "paid": {
+      "clicks": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "impressions": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "in_primary_series": false,
+      "separated": true
+    },
+    "partner": {
+      "clicks": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "impressions": {
+        "denominator": null,
+        "reason": "NO_CLOSED_COHORT",
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "in_primary_series": false,
+      "separated": true
+    }
+  },
+  "sources": [
+    {
+      "authority_owner": "web-cfg/organic",
+      "family": "organic_non_branded",
+      "id": "organic-growth-report-v1",
+      "path": "data/organic/growth-report.json"
+    },
+    {
+      "authority_owner": "web-cfg/revops",
+      "family": "organic_non_branded",
+      "id": "gsc-last-sync",
+      "path": "data/revops/gsc/last_sync.json"
+    },
+    {
+      "authority_owner": "web-cfg/discovery",
+      "family": "organic_non_branded",
+      "id": "discovery-observed-v1",
+      "path": "data/discovery/observed.v1.json"
+    },
+    {
+      "authority_owner": "web-cfg/organic",
+      "family": "organic_non_branded",
+      "id": "content-service-map-v1",
+      "path": "data/organic/content-service-map.json"
+    }
+  ],
+  "timezone": "America/Sao_Paulo"
+}

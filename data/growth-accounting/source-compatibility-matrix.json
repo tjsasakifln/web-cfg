@@ -1,0 +1,86 @@
+{
+  "schema": "CONFENGE_COMPOUNDING_STANDARD/1.0-source-compatibility",
+  "definition_id": "CONFENGE_COMPOUNDING_STANDARD/1.0",
+  "timezone": "America/Sao_Paulo",
+  "primary_series": "organic_non_branded",
+  "families": {
+    "organic_non_branded": {
+      "primary_series": true,
+      "mix_into_primary": true,
+      "authority_owner": "extra-cli (SELECT-only) / web-cfg organic snapshots"
+    },
+    "organic_branded": {
+      "primary_series": false,
+      "mix_into_primary": false,
+      "role": "secondary moat effect"
+    },
+    "paid": {
+      "primary_series": false,
+      "mix_into_primary": false,
+      "role": "separated; contamination reason PAID_CONTAMINATION"
+    },
+    "legacy_brand": {
+      "primary_series": false,
+      "mix_into_primary": false,
+      "role": "SmartLic anti-baseline; never CONFENGE compounding evidence"
+    },
+    "outbound": {
+      "primary_series": false,
+      "mix_into_primary": false
+    },
+    "partner": {
+      "primary_series": false,
+      "mix_into_primary": false
+    },
+    "direct": {
+      "primary_series": false,
+      "mix_into_primary": false,
+      "role": "secondary; never primary"
+    }
+  },
+  "sources": [
+    {
+      "id": "organic-growth-report-v1",
+      "path": "data/organic/growth-report.json",
+      "family": "organic_non_branded",
+      "compatible_with_v1": "partial",
+      "complete_closed_cohort": false,
+      "reason": "Single GSC pages-table snapshot (373 impressions / 10 clicks / 0 commercial clicks). Not a 28-day daily series."
+    },
+    {
+      "id": "gsc-last-sync",
+      "path": "data/revops/gsc/last_sync.json",
+      "family": "organic_non_branded",
+      "compatible_with_v1": false,
+      "reason": "blocked missing_credentials; July 2026 CSV is historical only"
+    },
+    {
+      "id": "discovery-observed-v1",
+      "path": "data/discovery/observed.v1.json",
+      "family": "organic_non_branded",
+      "compatible_with_v1": "partial",
+      "reason": "Empty overlay. Missing stays UNKNOWN."
+    },
+    {
+      "id": "content-service-map-v1",
+      "path": "data/organic/content-service-map.json",
+      "family": "organic_non_branded",
+      "compatible_with_v1": "inventory_only",
+      "reason": "#153 cluster/service IDs. Not observed content→service events."
+    },
+    {
+      "id": "warmbly-outcomes-88",
+      "path": "data/revops",
+      "family": "organic_non_branded",
+      "compatible_with_v1": false,
+      "reason": "Commercial outcomes UNKNOWN until observed. Do not infer from clicks."
+    },
+    {
+      "id": "smartlic-baseline-2026-08-14",
+      "path": "docs/migration/smartlic-confenge/BASELINE-2026-08-14.md",
+      "family": "legacy_brand",
+      "compatible_with_v1": false,
+      "reason": "Anti-baseline. Historical SmartLic demand is not CONFENGE compounding."
+    }
+  ]
+}
