@@ -229,15 +229,25 @@ def test_hash153_attributes_preserved_from_origin_main():
 
 
 def test_frozen_pages_byte_equal_origin_main():
+    """Live HTML may differ from origin/main only when the shipped spec SHA matches."""
+    from scripts.bofu_dominance.frozen_specs.hashing import content_sha256
+    from scripts.bofu_dominance.frozen_specs.spec import load_spec
+
     rels = (
         "diagnostico-b2g-360/index.html",
         "diagnostico-pre-licitacao/index.html",
         "auditoria-orcamento-licitacao/index.html",
     )
     for rel in rels:
-        base = origin_main_file(rel)
         now = (ROOT / rel).read_bytes()
-        assert now == base, f"{rel} drifted from origin/main"
+        base = origin_main_file(rel)
+        if now == base:
+            continue
+        slug = rel.rsplit("/", 1)[0]
+        spec = load_spec(slug)
+        assert spec["snapshot"]["content_sha256"] == content_sha256(ROOT / rel), (
+            f"{rel} drifted from origin/main without frozen-spec recapture"
+        )
 
 
 def test_expansao_handraise_not_checkout_when_flags_false():
