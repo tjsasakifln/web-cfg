@@ -391,6 +391,16 @@ def test_consumed_gate_is_the_shipped_market_answer_function():
     assert market_answer_canonical().startswith(SITE)
 
 
+def test_shipped_audit_graph_market_answer_not_indexable():
+    """Campaign graph artifact must record the consumed gate, not a stale true."""
+    root = Path(__file__).resolve().parents[3]
+    report = audit_graph(root)
+    assert report["market_answer_indexable"] is False
+    assert report["market_answer_in_graph"] is False
+    canonical = market_answer_canonical()
+    assert canonical not in report["locs"]
+
+
 def test_shipped_reports_share_graph_cardinality():
     """Hygiene unique_paths == inbound sitemap_locs == union of index children."""
     from scripts.organic.sitemap_graph import load_graph_locs, loc_key, parse_sitemap_txt

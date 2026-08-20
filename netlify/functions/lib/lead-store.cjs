@@ -142,8 +142,13 @@ class FileStore {
 }
 
 class NetlifyBlobsStore {
-  constructor(store) {
+  constructor(store, options = {}) {
     this.store = store;
+    const prefix = options.prefix == null ? "leads/" : String(options.prefix);
+    this.prefix = prefix.endsWith("/") ? prefix : `${prefix}/`;
+  }
+  _recordKey(id) {
+    return `${this.prefix}${id}`;
   }
   /**
    * @returns {{ modified: boolean, etag?: string }}
@@ -213,7 +218,7 @@ class NetlifyBlobsStore {
   }
   async get(id) {
     try {
-      return (await this._getJson(`leads/${id}`)) || null;
+      return (await this._getJson(this._recordKey(id))) || null;
     } catch {
       return null;
     }
@@ -221,7 +226,7 @@ class NetlifyBlobsStore {
   async put(record, { onlyIfNew = false } = {}) {
     // Lead body first (same order as pre-idempotency-hardening path that worked in prod).
     // onlyIfNew: concurrent/retry must not overwrite or re-deliver an existing lead.
-    const write = await this._setJson(`leads/${record.lead_id}`, record, { onlyIfNew });
+    const write = await this._setJson(this._recordKey(record.lead_id), record, { onlyIfNew });
     if (onlyIfNew && write && write.modified === false) {
       // Precondition failed — key exists. Brief get retry (eventual read lag).
       let existing = await this.get(record.lead_id);
@@ -246,7 +251,7 @@ class NetlifyBlobsStore {
   async delete(id) {
     const cur = await this.get(id);
     if (!cur) return false;
-    await this.store.delete(`leads/${id}`);
+    await this.store.delete(this._recordKey(id));
     if (cur.idempotency_key) {
       const h = crypto.createHash("sha256").update(cur.idempotency_key).digest("hex").slice(0, 40);
       try {
@@ -263,11 +268,13 @@ class NetlifyBlobsStore {
     try {
       let cursor;
       do {
-        const page = await this.store.list({ prefix: "leads/", cursor });
+        const page = await this.store.list({ prefix: this.prefix, cursor });
         const blobs = page.blobs || [];
         for (const b of blobs) {
           const key = b.key || b;
-          const id = String(key).replace(/^leads\//, "");
+          const id = String(key).startsWith(this.prefix)
+            ? String(key).slice(this.prefix.length)
+            : String(key);
           const rec = await this.get(id);
           if (rec) out.push(rec);
         }

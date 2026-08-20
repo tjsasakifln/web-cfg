@@ -42,6 +42,17 @@ else {
   else pass("secrets_via_env");
 }
 
+{
+  const daily = readFileSync(resolve(ROOT, "scripts/revops/scheduled_daily.mjs"), "utf8");
+  if (!daily.includes("produce_search_observation") || !daily.includes("drain_search_observation")) {
+    fail("daily_search_observation");
+  } else pass("daily_search_observation");
+  const toml = readFileSync(resolve(ROOT, "netlify.toml"), "utf8");
+  if (!toml.includes("search-observation-tick") || !toml.includes("schedule")) {
+    fail("netlify_search_observation_tick");
+  } else pass("netlify_search_observation_tick");
+}
+
 // 2) Entry scripts exist
 for (const rel of [
   "scripts/revops/scheduled_daily.mjs",

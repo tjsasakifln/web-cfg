@@ -706,7 +706,7 @@ def audit_graph(
     index_path = root / INDEX_NAME
     if not index_path.is_file():
         issues.append(GraphIssue(severity="high", code="missing_sitemap_index"))
-        return _report(issues, [], [], sm_dirs)
+        return _report(issues, [], [], sm_dirs, market_answer_indexable=None, market_answer_in_graph=False)
 
     index_xml = index_path.read_text(encoding="utf-8")
     members = parse_sitemap_index(index_xml)
@@ -762,7 +762,16 @@ def audit_graph(
         named["sitemap.txt"] = parse_sitemap_txt(txt_path.read_text(encoding="utf-8"))
     issues.extend(loc_set_drift(named))
 
-    return _report(issues, entries, members, sm_dirs)
+    ma_key = loc_key(market_answer_canonical())
+    ma_in_graph = any(loc_key(entry.loc) == ma_key for entry in entries)
+    return _report(
+        issues,
+        entries,
+        members,
+        sm_dirs,
+        market_answer_indexable=ma_flag,
+        market_answer_in_graph=ma_in_graph,
+    )
 
 
 def _report(
@@ -770,6 +779,9 @@ def _report(
     entries: list[UrlEntry],
     members: list[IndexMember],
     robots_sitemaps: list[str],
+    *,
+    market_answer_indexable: bool | None = None,
+    market_answer_in_graph: bool | None = None,
 ) -> dict[str, Any]:
     high = [item for item in issues if item.severity == "high"]
     unique = {loc_key(entry.loc) for entry in entries}
@@ -787,6 +799,8 @@ def _report(
         "member_sitemaps": [member.loc for member in members],
         "walked_members": [member.filename for member in members],
         "robots_sitemaps": robots_sitemaps,
+        "market_answer_indexable": market_answer_indexable,
+        "market_answer_in_graph": market_answer_in_graph,
     }
 
 

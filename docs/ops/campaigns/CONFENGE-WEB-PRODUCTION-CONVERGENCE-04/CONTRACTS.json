@@ -13,7 +13,9 @@
     "generic_2xx_is_not_delivered": true,
     "capability_required": "confenge.search_observation.v1",
     "synthetic_excluded": true,
-    "store": "LEAD_STORE_DIR/search-observation or existing durable store directory"
+    "store": "durable lead-store: FileStore(LEAD_STORE_DIR/search-observation) or Netlify Blobs prefix search-obs/",
+    "caller": "ops produce_search_observation/drain_search_observation and scheduled search-observation-tick",
+    "held_when_capability_absent": true
   },
   "content_to_service": {
     "event": "content_to_service",

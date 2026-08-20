@@ -116,9 +116,14 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/site/test_search_observation.mjs",
       "netlify/functions/lib/search-observation.cjs",
       "netlify/functions/lib/inbound-handoff.cjs",
+      "netlify/functions/lib/lead-store.cjs",
+      "netlify/functions/ops.cjs",
+      "netlify/functions/search-observation-tick.cjs",
+      "scripts/revops/scheduled_daily.mjs",
+      "data/bofu-dominance/core/gsc-live-overlay.v1.json",
     ],
     artifacts: [],
-    surfaces: ["/.netlify/functions/lead"],
+    surfaces: ["/.netlify/functions/ops", "/.netlify/functions/search-observation-tick"],
   },
   "test:checkout-negatives": {
     producers: [
