@@ -13,6 +13,7 @@ const incompletePagination = require("../../data/public-integrity-consumer/envel
 const sourceDegraded = require("../../data/public-integrity-consumer/envelopes/source-degraded.json");
 const staleExpired = require("../../data/public-integrity-consumer/envelopes/stale-expired.json");
 const invalidCnpj = require("../../data/public-integrity-consumer/envelopes/invalid-cnpj.json");
+const coverageLieIncompletePages = require("../../data/public-integrity-consumer/envelopes/coverage-lie-incomplete-pages.json");
 const manifest = require("../../data/public-integrity-consumer/envelopes/MANIFEST.json");
 
 const ENVELOPES = Object.freeze({
@@ -29,6 +30,7 @@ const ENVELOPES = Object.freeze({
   "source-degraded": sourceDegraded,
   "stale-expired": staleExpired,
   "invalid-cnpj": invalidCnpj,
+  "coverage-lie-incomplete-pages": coverageLieIncompletePages,
 });
 
 const FAILURE_IDS = Object.freeze([
@@ -41,6 +43,7 @@ const FAILURE_IDS = Object.freeze([
   "source-degraded",
   "stale-expired",
   "invalid-cnpj",
+  "coverage-lie-incomplete-pages",
 ]);
 
 function clone(value) {

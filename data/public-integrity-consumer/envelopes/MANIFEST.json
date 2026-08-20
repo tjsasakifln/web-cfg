@@ -260,6 +260,24 @@
         "coverage_incomplete"
       ],
       "record_count": 0
+    },
+    {
+      "aggregate_state": "NO_MATCH_CONFIRMED",
+      "ceis_status": "NO_MATCH_CONFIRMED",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "da39e4537c8c106b766b33a25e4e59d59d84cd3c10f1324ca9bd56c6a9767f7c",
+      "coverage_ceis": true,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "coverage-lie-incomplete-pages.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "consumer mutation: coverage_complete true with pages_fetched < pages_expected",
+      "reason_codes": [
+        "pagination_incomplete",
+        "coverage_incomplete"
+      ],
+      "record_count": 0
     }
   ],
   "not_live": true,

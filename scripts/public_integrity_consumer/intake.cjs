@@ -77,11 +77,31 @@ async function lookupExisting(store, idemKey) {
   return null;
 }
 
-function loadFixtureEnvelope(body) {
-  const id = String((body && (body.fixture_id || body.fixture)) || "empty-complete");
-  const env = loadEnvelope(id);
-  if (!env) return { ok: false, error: "fixture_unknown" };
-  return { ok: true, envelope: env, fixture_id: id };
+function fixturesAllowed(env = process.env) {
+  if (env && env.NODE_ENV === "test") return true;
+  if (env && env.PUBLIC_INTEGRITY_PREPARE === "1") return true;
+  return false;
+}
+
+function resolveEnvelope(body, env = process.env) {
+  const requested = String((body && (body.fixture_id || body.fixture)) || "").trim();
+  if (requested) {
+    if (!fixturesAllowed(env)) {
+      return {
+        ok: false,
+        error: "fixture_rejected",
+        reason_codes: ["fixture_rejected", "producer_envelope_absent"],
+      };
+    }
+    const envelope = loadEnvelope(requested);
+    if (!envelope) return { ok: false, error: "fixture_unknown", reason_codes: ["fixture_unknown"] };
+    return { ok: true, envelope, fixture_id: requested };
+  }
+  return {
+    ok: false,
+    error: "producer_envelope_absent",
+    reason_codes: ["producer_envelope_absent", "keyed_live_canary_pending"],
+  };
 }
 
 async function handleConsult({ store, body, env, now } = {}) {
@@ -190,13 +210,24 @@ async function handleConsult({ store, body, env, now } = {}) {
     };
   }
 
-  const loaded = loadFixtureEnvelope(data);
-  if (!loaded.ok) {
-    const view = mapPublicView({ ok: false, error: loaded.error, reason_codes: [loaded.error] });
-    return { statusCode: 400, body: unknownBody({ error: loaded.error, view }), logs };
+  const loaded = resolveEnvelope(data, runtimeEnv);
+  if (loaded.error === "fixture_unknown") {
+    const view = mapPublicView({
+      ok: false,
+      error: loaded.error,
+      reason_codes: loaded.reason_codes || [loaded.error],
+    });
+    return { statusCode: 400, body: unknownBody({ error: loaded.error, view, reason_codes: loaded.reason_codes }), logs };
   }
 
-  const consumed = consumeEnvelope(loaded.envelope);
+  const consumed = loaded.ok
+    ? consumeEnvelope(loaded.envelope)
+    : {
+      ok: false,
+      error: loaded.error,
+      reason_codes: loaded.reason_codes || [loaded.error],
+      envelope: null,
+    };
   const view = mapPublicView(consumed);
   const token = mintToken();
   if (!tokenLooksOpaque(token) || require("./privacy.cjs").scanCnpjLeaks(token, checked.cnpj).length) {
@@ -361,4 +392,6 @@ module.exports = {
   handleDelete,
   resultUrl,
   loadFlag,
+  fixturesAllowed,
+  resolveEnvelope,
 };

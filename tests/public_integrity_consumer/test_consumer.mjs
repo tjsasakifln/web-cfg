@@ -78,6 +78,27 @@ function clone(v) {
   return JSON.parse(JSON.stringify(v));
 }
 
+function landingFormPayload(cnpjValue) {
+  const html = fs.readFileSync(
+    path.join(root, "piloto/consulta-ocorrencias-publicas/index.html"),
+    "utf8",
+  );
+  const form = html.match(/<form\b[^>]*id="integrity-form"[\s\S]*?<\/form>/);
+  if (!form) throw new Error("landing_form_missing");
+  const payload = {};
+  const inputRe = /<input\b([^>]*)>/g;
+  let match;
+  while ((match = inputRe.exec(form[0]))) {
+    const tag = match[1];
+    const name = /name="([^"]+)"/.exec(tag);
+    if (!name) continue;
+    const value = /value="([^"]*)"/.exec(tag);
+    payload[name[1]] = value ? value[1] : "";
+  }
+  payload.cnpj = cnpjValue;
+  return payload;
+}
+
 // --- flag ---
 {
   if (flag.flagDefault() !== false && flag.loadFlag().enabled !== false) {
@@ -223,6 +244,26 @@ for (const id of fixtures.failureIds()) {
   else pass("contradiction_no_match", got.view.aggregate_state);
 }
 
+{
+  const lie = mapMod.consumeAndMap(fixtures.loadEnvelope("coverage-lie-incomplete-pages"));
+  if (lie.view.aggregate_state === "NO_MATCH_CONFIRMED") fail("coverage_lie_empty", lie.view);
+  else pass("coverage_lie_incomplete_pages", lie.view.aggregate_state);
+}
+
+{
+  const bad = clone(fixtures.loadEnvelope("empty-complete"));
+  bad.sources.CEIS.coverage_complete = true;
+  bad.sources.CEIS.pages_expected = null;
+  bad.sources.CEIS.pages_fetched = 1;
+  bad.sources.CNEP.coverage_complete = true;
+  bad.sources.CNEP.pages_expected = null;
+  bad.sources.CNEP.pages_fetched = 1;
+  const hashed = hashing.attachHash(bad);
+  const got = mapMod.consumeAndMap(hashed);
+  if (got.view.aggregate_state === "NO_MATCH_CONFIRMED") fail("null_pages_expected_empty", got.view);
+  else pass("null_pages_expected_not_complete", got.view.aggregate_state);
+}
+
 // missing pages_fetched represented as UNKNOWN, not zero
 {
   const bad = clone(fixtures.loadEnvelope("timeout"));
@@ -331,6 +372,76 @@ async function getHandler(token) {
     queryStringParameters: { t: token, action: "result" },
     path: "/.netlify/functions/public-integrity-consult",
   });
+}
+
+{
+  const landingHtml = fs.readFileSync(
+    path.join(root, "piloto/consulta-ocorrencias-publicas/index.html"),
+    "utf8",
+  );
+  if (/fixture_id/.test(landingHtml)) fail("landing_ships_fixture_id");
+  else pass("landing_has_no_fixture_id");
+  const form = landingHtml.match(/<form\b[^>]*id="integrity-form"[^>]*>/);
+  if (!form || !/method="post"/i.test(form[0])) fail("landing_form_post");
+  else pass("landing_form_post_method");
+}
+
+{
+  const payload = landingFormPayload(VALID);
+  if (payload.action !== "consult") fail("landing_action", payload);
+  if (payload.fixture_id || payload.fixture) fail("landing_payload_fixture", payload);
+  if (!payload.cnpj) fail("landing_payload_cnpj");
+  const res = await postHandler(payload);
+  const body = JSON.parse(res.body);
+  if (body.aggregate_state === "NO_MATCH_CONFIRMED" || body.empty_success) {
+    fail("landing_post_false_empty", body.aggregate_state);
+  } else if (!["PARTIAL", "UNKNOWN"].includes(body.aggregate_state)) {
+    fail("landing_post_state", body.aggregate_state);
+  } else pass("landing_post_no_fixture", body.aggregate_state);
+  const loc = (res.headers && res.headers.Location) || body.result_url || "";
+  if (!cnpj.assertNoCnpjInUrl(loc, VALID).ok) fail("landing_post_url", loc);
+  if (privacy.scanCnpjLeaks(res.body, VALID).length) fail("landing_post_body_cnpj");
+}
+
+{
+  const payload = landingFormPayload(VALID);
+  const encoded = new URLSearchParams(payload).toString();
+  const res = await handler.handler({
+    httpMethod: "POST",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      origin: "https://confenge.com.br",
+    },
+    body: encoded,
+  });
+  const body = JSON.parse(res.body);
+  if (body.aggregate_state === "NO_MATCH_CONFIRMED" || body.empty_success) {
+    fail("landing_urlencoded_false_empty", body.aggregate_state);
+  } else pass("landing_urlencoded_post", body.aggregate_state);
+}
+
+{
+  const payload = landingFormPayload(VALID);
+  const got = await intake.handleConsult({
+    store: new storeMod.MemoryStore(),
+    body: payload,
+    env: { NODE_ENV: "production", PUBLIC_INTEGRITY_CONSUMER: "1" },
+    now: new Date(),
+  });
+  if (got.body.aggregate_state === "NO_MATCH_CONFIRMED" || got.body.empty_success) {
+    fail("flag_on_landing_false_empty", got.body.aggregate_state);
+  } else pass("flag_on_landing_unknown", got.body.aggregate_state);
+}
+
+{
+  const got = await intake.handleConsult({
+    store: new storeMod.MemoryStore(),
+    body: { ...landingFormPayload(VALID), fixture_id: "empty-complete" },
+    env: { NODE_ENV: "production", PUBLIC_INTEGRITY_CONSUMER: "1" },
+    now: new Date(),
+  });
+  if (got.body.aggregate_state === "NO_MATCH_CONFIRMED") fail("prod_fixture_rejected_empty", got.body);
+  else pass("prod_rejects_client_fixture", got.body.aggregate_state);
 }
 
 const emptyBodies = [];

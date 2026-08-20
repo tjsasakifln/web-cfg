@@ -46,7 +46,10 @@ function sourceCoverageComplete(source) {
   if (!source || typeof source !== "object") return false;
   if (source.coverage_complete !== true) return false;
   if (source.error_class) return false;
-  if (source.pages_fetched === undefined || source.pages_fetched === null) return false;
+  if (typeof source.pages_expected !== "number" || !Number.isFinite(source.pages_expected)) return false;
+  if (typeof source.pages_fetched !== "number" || !Number.isFinite(source.pages_fetched)) return false;
+  if (source.pages_expected < 1) return false;
+  if (source.pages_fetched < source.pages_expected) return false;
   return true;
 }
 
