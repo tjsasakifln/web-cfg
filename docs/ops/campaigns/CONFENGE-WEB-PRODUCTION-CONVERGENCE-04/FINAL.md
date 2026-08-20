@@ -6,8 +6,8 @@ Netlify production `commit_ref` equals `origin/main` (`154b1d2a`). Graph, seven 
 
 ## FACT
 
-- `origin/main` = `154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b` (merge of #170 at 2026-08-20T05:23Z). Previous main: `5d5081237aec99f5bedf1ab441bfbde41e724f51` (#169). Content convergence: #168 `f767554bcdfb7594c1e079cd39791a7c9770ef22`.
-- Live `/.well-known/build-info.json`: `commit` = `154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b`, `deploy_id` = `6a868f64beb71a000870758b`, `environment` = `production`, `build_time` = `2026-08-20T05:24:02Z`.
+- `origin/main` = `70ba0cd4d4cdc0ceadb3a7de1e9e9e7e305e367d` (merge of #172). Published product line remains the #170 graph/pages at `154b1d2a` plus GSC-honesty/discovery:test CI. Previous published: `154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b` / `6a868f64beb71a000870758b`.
+- Live `/.well-known/build-info.json`: `commit` = `70ba0cd4d4cdc0ceadb3a7de1e9e9e7e305e367d`, `deploy_id` = `6a8698d8e7a3b00008ac36d2`, `environment` = `production`.
 - Homepage etag `5ff2889b469de55250a924e1ca9a3f4e-ssl`. CSP present (`default-src 'self'`).
 - Graph: sitemap-index + four children + sitemap.txt = **64** unique locs, loc sets equal to each other and to `origin/main:sitemap.txt`. Robots Sitemap line points only at `sitemap-index.xml`. `audit_graph`: `market_answer_indexable=false`, `market_answer_in_graph=false`, `ok=true`.
 - Seven BOFU URLs HTTP 200, self-canonical, index,follow, in graph, CSP present:
@@ -44,7 +44,7 @@ Netlify production `commit_ref` equals `origin/main` (`154b1d2a`). Graph, seven 
 
 ## produção comprovada
 
-- Yes for main SHA, Netlify `commit_ref` `154b1d2a` / deploy `6a868f64beb71a000870758b`, graph (64), seven BOFU pages, Market Answer noindex/off-sitemap, Data Desk noindex/off-sitemap, checkout-off, CSP, persist-first search-observation callers.
+- Yes for main SHA, Netlify `commit_ref` `70ba0cd4` / deploy `6a8698d8e7a3b00008ac36d2`, graph (64), seven BOFU pages, Market Answer noindex/off-sitemap, Data Desk noindex/off-sitemap, checkout-off, CSP, persist-first search-observation callers.
 - No for #157 INDEX and search-observation DELIVERED.
 
 ## efeito comercial ainda não observado
