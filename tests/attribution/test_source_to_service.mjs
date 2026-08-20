@@ -165,6 +165,17 @@ function transitionsOf(dataLayer) {
   return dataLayer.filter((e) => e.event === "content_to_service");
 }
 
+function flushedEvents(fetches) {
+  const out = [];
+  for (const f of fetches || []) {
+    try {
+      const body = JSON.parse(f.body);
+      for (const ev of body.events || []) out.push(ev);
+    } catch (_) { /* ignore */ }
+  }
+  return out;
+}
+
 function assertMinFields(ev, extra) {
   if (!ev) fail("missing_transition_event", extra);
   if (ev.source !== "CONFENGE_WEB") fail("source_not_confenge_web", ev);
@@ -261,23 +272,21 @@ for (const j of journeys) {
     fail("journey_dest_not_canonical", ev);
   }
 
-  const admitted = contract.admitEvent({
-    event: "content_to_service",
-    props: { ...ev },
-    path: j.pathname,
-    sid: "sid-journey",
-  });
+  const flushed = flushedEvents(driven.fetches).filter((e) => e.event === "content_to_service");
+  if (flushed.length !== 1) fail("journey_flush_count", { name: j.name, flushed });
+  const payload = flushed[0];
+  if (!payload.props || !payload.props.correlation_id) fail("journey_flush_no_correlation_id", payload);
+  if (!payload.sid) fail("journey_flush_no_sid", payload);
+  const admitted = contract.admitEvent(payload);
   if (!admitted.ok) fail("journey_admit_rejected", { name: j.name, admitted });
   if (admitted.event.event !== "content_to_service") fail("journey_admit_name", admitted.event);
   if (admitted.event.props.destination_service_id !== j.expectService) {
     fail("journey_admit_dest", admitted.event.props);
   }
-  const collectRes = await postCollect([{
-    event: "content_to_service",
-    props: { ...ev },
-    path: j.pathname,
-    sid: "sid-journey",
-  }]);
+  if (admitted.event.props.correlation_id !== payload.props.correlation_id) {
+    fail("journey_admit_dropped_correlation", admitted.event.props);
+  }
+  const collectRes = await postCollect([payload]);
   const collectBody = JSON.parse(collectRes.body);
   if (collectRes.statusCode !== 202 || collectBody.accepted !== 1) {
     fail("journey_collect", { name: j.name, collectBody });
@@ -292,6 +301,48 @@ for (const j of journeys) {
     data_cta_id: attrs["data-cta-id"] || "",
     data_asset_id: attrs["data-asset-id"] || body["data-asset-id"] || "",
   });
+}
+
+// --- Production identity: flushed click correlation_id joins a lead with no session_id ---
+{
+  const html = htmlOf("conteudos/sinapi-desonerado-nao-desonerado/index.html");
+  const attrs = findAnchor(html, (a) => a.href === "/auditoria-orcamento-licitacao/" && a["data-cta-id"] === "conferir-base-sinapi");
+  const el = makeEl(attrs, "CTA");
+  const driven = driveScript({
+    pathname: "/conteudos/sinapi-desonerado-nao-desonerado/",
+    body: bodyAttrs(html),
+    hrefEls: [el],
+  });
+  el.click();
+  const payload = flushedEvents(driven.fetches).find((e) => e.event === "content_to_service");
+  if (!payload || !payload.props || !payload.props.correlation_id) {
+    fail("flush_missing_correlation_id", payload);
+  }
+  const admitted = contract.admitEvent(payload);
+  if (!admitted.ok) fail("flush_admit_rejected", admitted);
+  const joined = agg.attributeLeads(
+    [{
+      lead_id: "L-prod-flush",
+      correlation_id: payload.props.correlation_id,
+      destination_path: payload.props.destination_path,
+      destination_service_id: payload.props.destination_service_id,
+      received_at: "2026-08-19T10:05:00Z",
+    }],
+    [{
+      event: admitted.event.event,
+      props: admitted.event.props,
+      path: admitted.event.path,
+      sid: admitted.event.sid,
+    }],
+  )[0];
+  if (joined.discrepancy !== null) fail("flush_correlation_not_joined", joined);
+  if (joined.destination_service_id !== "auditoria-orcamento-licitacao") {
+    fail("flush_correlation_dest_dropped", joined);
+  }
+  const assisted = (joined.assisted_paths || []).find((p) => p.role === "transition");
+  if (!assisted || assisted.destination_path !== "/auditoria-orcamento-licitacao/") {
+    fail("flush_correlation_assisted_lost", joined.assisted_paths);
+  }
 }
 
 // --- Duplicate listeners: generic href + data-event-name on one physical click ---
@@ -702,6 +753,25 @@ for (const j of journeys) {
   )[0];
   if (mismatch.discrepancy !== "event_lead_mismatch") fail("mismatch_not_visible", mismatch);
   if (mismatch.destination_service_id !== "UNKNOWN_SERVICE") fail("mismatch_inferred", mismatch);
+
+  const prodShape = agg.attributeLeads(
+    [{
+      lead_id: "L-corr-only",
+      correlation_id: "c-assist",
+      destination_path: "/auditoria-orcamento-licitacao/",
+      destination_service_id: "auditoria-orcamento-licitacao",
+      received_at: "2026-08-19T10:05:00Z",
+    }],
+    events,
+  )[0];
+  if (prodShape.discrepancy !== null) fail("correlation_only_lead_not_joined", prodShape);
+  if (prodShape.destination_service_id !== "auditoria-orcamento-licitacao") {
+    fail("correlation_only_dest_dropped", prodShape);
+  }
+  const prodAssist = (prodShape.assisted_paths || []).find((p) => p.role === "transition");
+  if (!prodAssist || prodAssist.destination_path !== "/auditoria-orcamento-licitacao/") {
+    fail("correlation_only_assisted_lost", prodShape.assisted_paths);
+  }
 
   const queryJoin = agg.attributeLeads(
     [{

@@ -66,11 +66,11 @@ External / `tel:` / `sms:` clicks emit `outbound_click`. `wa.me` emits `whatsapp
 
 `aggregateEvents` publishes `origin_destination.by_day[]` cells with `count`, `rate`, `view_denominator`, `engagement_denominator`, plus `coverage` and `unknown`. A missing day or missing origin series is absent / `UNKNOWN` — never numeric zero (PR #159).
 
-`funnel_layers` lists `transition`, `lead`, `qualified`, `pipeline`, `won_lost` separately. Clicks never populate `qualified` / `pipeline` / `won_lost`. Those stay observed-only (#88).
+`funnel_layers` is the absence-safe series: `transition`, `lead`, `qualified`, `pipeline`, `won_lost`. Clicks never populate `qualified` / `pipeline` / `won_lost`. Those stay observed-only (#88). Sibling `funnel` from `reconcileFunnel` is admitted-event counts only and is not the #153 absence-safe report.
 
 ## Assisted path and lead join
 
-`attributeLeads` joins only by permitted `session_id` / `sid` / `correlation_id`. A GSC or raw query string is never a join key and never stored on the cohort row.
+`attributeLeads` joins only by permitted `session_id` / `sid` / `correlation_id`. Classified clicks carry the visit `correlation_id` already minted for the lead form, so a lead with only `correlation_id` joins `event.props.correlation_id`. A GSC or raw query string is never a join key and never stored on the cohort row.
 
 Assisted transitions keep `destination_path` and `destination_service_id` (not only origin `e.path`). If the session has a transition and the persisted lead lacks destination (or the dest disagrees), the row shows `discrepancy` and `UNKNOWN` rather than a synthesized destination.
 
