@@ -280,7 +280,10 @@
       "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação checklist is a future tender-operations surface. Intended surface: CONFENGE habilitação checklist (not live). Do not 301 to a weak substitute or home.",
       "intended_future_surface": "CONFENGE habilitação checklist (not live)",
       "expected_http": 410,
-      "target_url": null
+      "target_url": null,
+      "decision": "RETIRE",
+      "issue": 62,
+      "reason": "No live 1:1 CONFENGE habilitação checklist. RETIRE with HTTP 410. Blanket home redirect is forbidden."
     },
     {
       "legacy_url": "https://smartlic.tech/blog/clausulas-escondidas-editais-licitacao",
