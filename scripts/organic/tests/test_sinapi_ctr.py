@@ -34,7 +34,7 @@ def test_live_article_front_loads_query_not_sinapi():
 def test_old_serp_title_fails_closed():
     html = SINAPI_PATH.read_text(encoding="utf-8")
     reverted = html.replace(
-        "Desonerado e não desonerado: qual tabela o edital pede | CONFENGE",
+        "Desonerado e não desonerado: o que o edital exige | CONFENGE",
         "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
         1,
     )

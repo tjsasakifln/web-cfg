@@ -292,8 +292,11 @@ def test_ferramentas_eyebrow_client_facing():
 
 
 def test_sinapi_snippet_unique_not_generic():
-    """#126: title, H1 and meta must be distinct, complete and decision-oriented."""
-    html = (ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html").read_text(
+    """#126: unfrozen SINAPI sibling title, H1 and meta stay distinct and decision-oriented.
+
+    Frozen experiment HTML at conteudos/sinapi-desonerado-nao-desonerado/ is exclusive-area.
+    """
+    html = (ROOT / "conteudos" / "sinapi-ou-sicro-obra-publica" / "index.html").read_text(
         encoding="utf-8"
     )
     title_m = re.search(r"<title>([^<]+)</title>", html, re.I)
@@ -317,9 +320,8 @@ def test_sinapi_snippet_unique_not_generic():
         lower = blob.lower()
         for generic in ("guia completo", "tudo sobre", "saiba mais", "página inicial", "clique aqui"):
             assert generic not in lower, f"{name} generic: {generic}"
-        assert re.search(r"desonerad", blob, re.I), f"{name} missing desonerado intent"
-    assert re.search(r"n[aã]o desonerado", title, re.I)
-    assert re.search(r"n[aã]o desonerado", h1, re.I)
+        assert re.search(r"SINAPI", blob), f"{name} missing SINAPI intent"
+        assert re.search(r"SICRO", blob, re.I), f"{name} missing SICRO intent"
     assert 24 <= len(title_core) <= 62, f"title core length {len(title_core)}"
     assert 70 <= len(meta) <= 170, f"meta length {len(meta)}"
     assert "SINAPI" in h1
