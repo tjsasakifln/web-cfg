@@ -1,0 +1,19 @@
+{
+  "schema": "market-answers-priority/1.0",
+  "version": "1.0",
+  "decision_state": "VALIDATE",
+  "issue": 63,
+  "owner": "web-cfg#63",
+  "ranking_rule": "expected qualified pipeline x TOFU reach x authority moat x organic compounding x citation potential x data defensibility / engineering+maintenance cost",
+  "ranked": [
+    {
+      "rank": 1,
+      "id": "valor-tipico-contratos-pavimentacao",
+      "role": "live_canary",
+      "path": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+      "canonical_url": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "question": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
+      "status": "VALIDATE"
+    }
+  ]
+}
