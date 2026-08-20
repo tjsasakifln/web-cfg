@@ -48,12 +48,22 @@ function acceptTerms({ actor, acceptedAt, evidence } = {}) {
   });
 }
 
-function termsMatch(acceptance) {
-  if (!acceptance) return false;
+function isAcceptanceSnapshot(acceptance) {
+  if (!acceptance || typeof acceptance !== "object") return false;
   return (
-    acceptance.terms_version === TERMS_VERSION
-    && acceptance.terms_hash === TERMS_HASH
-    && acceptance.immutable === true
+    acceptance.immutable === true
+    && Boolean(acceptance.terms_version)
+    && Boolean(acceptance.terms_hash)
+    && Boolean(acceptance.accepted_at)
+  );
+}
+
+function termsMatch(acceptance, expected) {
+  if (!isAcceptanceSnapshot(acceptance)) return false;
+  const live = expected || currentTerms();
+  return (
+    acceptance.terms_version === live.terms_version
+    && acceptance.terms_hash === live.terms_hash
   );
 }
 
@@ -72,6 +82,7 @@ module.exports = {
   termsHash,
   currentTerms,
   acceptTerms,
+  isAcceptanceSnapshot,
   termsMatch,
   mutateAcceptance,
 };

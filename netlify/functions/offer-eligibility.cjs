@@ -29,8 +29,9 @@ exports.handler = async (event) => {
     targetContract: body.target_contract,
     startDate: body.start_date,
   }, { inventory, now: new Date() });
+  let terms = null;
   if (body.accept_terms && elig.status === "APPROVED") {
-    await acceptOfferTerms(store, {
+    terms = await acceptOfferTerms(store, {
       cnpj: elig.cnpj,
       offerId: body.offer_id,
       actor: body.representante,
@@ -44,6 +45,10 @@ exports.handler = async (event) => {
       status: elig.status,
       hold_id: elig.hold_id || null,
       reason: elig.capacity_reason || elig.error || null,
+      selected: elig.selected || null,
+      qualification: elig.qualification || elig.event || null,
+      capacity_event: elig.capacity_event || null,
+      terms_event: terms && terms.event ? terms.event : null,
     }),
   };
 };

@@ -21,6 +21,8 @@ const journey = require(path.join(root, "scripts/offers/journey.cjs"));
 const flags = require(path.join(root, "scripts/offers/flags.cjs"));
 const terms = require(path.join(root, "scripts/offers/terms.cjs"));
 const capacity = require(path.join(root, "scripts/offers/capacity.cjs"));
+const eligibility = require(path.join(root, "scripts/offers/eligibility.cjs"));
+const persist = require(path.join(root, "scripts/offers/persist.cjs"));
 const { MemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
 function fail(name, detail) {
@@ -66,13 +68,43 @@ assert("unknown_offer", unknownOffer.ok === false && unknownOffer.error === "off
 const badVersion = adapter.resolveOffer("CFG-DIAG-EXP-v1", { offer_version: "v9" });
 assert("unknown_offer_version", badVersion.ok === false && badVersion.error === "unknown_offer_version", badVersion);
 
-const paused = adapter.resolveOffer("CFG-DIRB2G-180-v1");
-assert("180_resolves", paused.ok, paused);
+const live180 = adapter.resolveOffer("CFG-DIRB2G-180-v1");
+assert("180_resolves", live180.ok, live180);
 
-for (const job of Object.keys(events.CAMPAIGN_JOBS)) {
-  const resolved = events.resolveCampaignJob(job);
-  assert(`campaign_job_${job}`, resolved.ok && resolved.canonical && resolved.layer, resolved);
+try {
+  registry.setOfferOverrideForTests("CFG-DIRB2G-180-v1", { status: "PAUSED" });
+  const paused = adapter.resolveOffer("CFG-DIRB2G-180-v1");
+  assert("paused_not_contractable", paused.ok === false && paused.error === "offer_not_contractable", paused);
+  const pausedElig = eligibility.evaluateEligibility({
+    cnpj: CNPJ,
+    representante: "Ana Souza",
+    offerId: "CFG-DIRB2G-180-v1",
+    targetContract: "contrato-alvo-1",
+    startDate: "2026-09-01",
+    inventory: capacity.emptyInventory(now),
+    now,
+  });
+  assert("paused_elig_blocked", pausedElig.ok === false && pausedElig.error === "offer_not_contractable", pausedElig);
+  const pausedCheckout = await journey.requestCheckout(new MemoryStore(), {
+    cnpj: CNPJ,
+    offerId: "CFG-DIRB2G-180-v1",
+    inventory: capacity.emptyInventory(now),
+    now,
+  });
+  assert("paused_checkout_blocked", pausedCheckout.ok === false && pausedCheckout.error === "offer_not_contractable", pausedCheckout);
+  registry.setOfferOverrideForTests("CFG-DIRB2G-180-v1", { status: "RETIRED", kill_switch: true });
+  const retired = adapter.resolveOffer("CFG-DIRB2G-180-v1");
+  assert("retired_kill_switch", retired.ok === false && retired.error === "offer_not_contractable", retired);
+} finally {
+  registry.setOfferOverrideForTests("CFG-DIRB2G-180-v1", null);
 }
+
+const qualificationJob = events.resolveCampaignJob("qualification_submitted");
+assert("qualification_alias", qualificationJob.ok && qualificationJob.canonical === events.TYPES.ELIGIBILITY_SUBMITTED, qualificationJob);
+const selectedJob = events.resolveCampaignJob("offer_selected");
+assert("offer_selected_job", selectedJob.ok && selectedJob.canonical === events.TYPES.OFFER_SELECTED, selectedJob);
+const termsJob = events.resolveCampaignJob("terms_accepted");
+assert("terms_accepted_job", termsJob.ok && termsJob.canonical === events.TYPES.TERMS_ACCEPTED, termsJob);
 assert("layers_uncollapsed", events.LAYER_SEPARATION.lead[0] !== events.LAYER_SEPARATION.pipeline[0], events.LAYER_SEPARATION);
 assert("checkout_not_revenue_layer", events.LAYER_SEPARATION.checkout_object[0] !== events.LAYER_SEPARATION.pipeline[0], events.LAYER_SEPARATION);
 
@@ -92,7 +124,24 @@ const elig = await journey.submitEligibility(store, {
   representante: "Ana Souza",
   offerId: "CFG-DIAG-EXP-v1",
 }, { inventory: inv, now });
-assert("one_off_elig", elig.status === "APPROVED" && elig.event.type === events.TYPES.CAPACITY_DECISION, elig.event);
+assert("one_off_elig", elig.status === "APPROVED", elig);
+assert(
+  "qualification_submitted_producer",
+  elig.event && elig.event.type === events.TYPES.ELIGIBILITY_SUBMITTED
+    && elig.qualification && elig.qualification.type === qualificationJob.canonical,
+  elig.event,
+);
+assert(
+  "offer_selected_producer",
+  elig.selected && elig.selected.type === events.TYPES.OFFER_SELECTED
+    && elig.selected.offer_id === "CFG-DIAG-EXP-v1",
+  elig.selected,
+);
+assert(
+  "capacity_decision_producer",
+  elig.capacity_event && elig.capacity_event.type === events.TYPES.CAPACITY_DECISION,
+  elig.capacity_event,
+);
 
 const noTerms = await journey.requestCheckout(store, {
   cnpj: CNPJ,
@@ -109,15 +158,50 @@ const accepted = await journey.acceptOfferTerms(store, {
   now,
 });
 assert("terms_ok", accepted.ok && accepted.acceptance.terms_version === terms.TERMS_VERSION, accepted.acceptance);
+assert(
+  "terms_accepted_producer",
+  accepted.event && accepted.event.type === events.TYPES.TERMS_ACCEPTED
+    && accepted.event.terms_version === accepted.acceptance.terms_version
+    && accepted.event.offer_id === "CFG-DIAG-EXP-v1",
+  accepted.event,
+);
 
-const drifted = await journey.requestCheckout(store, {
+const driftedVersion = await journey.requestCheckout(store, {
   cnpj: CNPJ,
   offerId: "CFG-DIAG-EXP-v1",
   offer_version: "v9",
   inventory: inv,
   now,
 });
-assert("checkout_unknown_version", drifted.ok === false && drifted.error === "unknown_offer_version", drifted);
+assert("checkout_unknown_version", driftedVersion.ok === false && driftedVersion.error === "unknown_offer_version", driftedVersion);
+
+const driftStore = new MemoryStore();
+const driftInv = capacity.emptyInventory(now);
+await journey.submitEligibility(driftStore, {
+  cnpj: CNPJ,
+  representante: "Ana Souza",
+  offerId: "CFG-DIAG-EXP-v1",
+}, { inventory: driftInv, now });
+await persist.persistRecord(driftStore, "terms", `${CNPJ}|CFG-DIAG-EXP-v1`, {
+  cnpj: CNPJ,
+  offer_id: "CFG-DIAG-EXP-v1",
+  acceptance: {
+    terms_version: "CFG-TERMS-B2B-2026-01-01-v0",
+    terms_hash: terms.termsHash("prior terms snapshot"),
+    accepted_at: now.toISOString(),
+    actor: "Ana Souza",
+    evidence: { method: "checkbox" },
+    immutable: true,
+    legally_validated: false,
+  },
+});
+const termsDrift = await journey.requestCheckout(driftStore, {
+  cnpj: CNPJ,
+  offerId: "CFG-DIAG-EXP-v1",
+  inventory: driftInv,
+  now,
+});
+assert("terms_drift", termsDrift.ok === false && termsDrift.error === "terms_drift", termsDrift);
 
 const checkout = await journey.requestCheckout(store, {
   cnpj: CNPJ,

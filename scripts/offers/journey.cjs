@@ -3,7 +3,7 @@
  * Created objects are not payment or receita. Onboarding waits confirmation.
  */
 const { evaluateEligibility } = require("./eligibility.cjs");
-const { acceptTerms, termsMatch } = require("./terms.cjs");
+const { acceptTerms, termsMatch, isAcceptanceSnapshot, TERMS_HASH } = require("./terms.cjs");
 const { snapshotOffer, getOffer } = require("./registry.cjs");
 const { resolveOffer } = require("./catalog-adapter.cjs");
 const { createSandboxCheckout, applyProviderEvent, checkoutExpired } = require("./sandbox.cjs");
@@ -29,27 +29,59 @@ async function submitEligibility(store, input, { inventory, now } = {}) {
     ...result,
     offer: undefined,
   });
+  const offerId = result.offer_id || input.offerId;
+  const offerVersion = result.offer_snapshot && result.offer_snapshot.offer_version;
+  const selected = commercialEvent({
+    type: TYPES.OFFER_SELECTED,
+    offer_id: offerId,
+    offer_version: offerVersion,
+  });
+  const qualification = commercialEvent({
+    type: TYPES.ELIGIBILITY_SUBMITTED,
+    offer_id: offerId,
+    offer_version: offerVersion,
+    provider_raw_status: result.status,
+  });
+  const capacityEvent = commercialEvent({
+    type: TYPES.CAPACITY_DECISION,
+    offer_id: offerId,
+    offer_version: offerVersion,
+    provider_raw_status: result.status,
+    exception_code: result.status === "APPROVED" ? null : result.capacity_reason,
+  });
   return {
     ...result,
     persisted: persisted.record,
     idempotent: persisted.idempotent,
-    event: commercialEvent({
-      type: TYPES.CAPACITY_DECISION,
-      offer_id: result.offer_id,
-      offer_version: result.offer_snapshot && result.offer_snapshot.offer_version,
-      provider_raw_status: result.status,
-      exception_code: result.status === "APPROVED" ? null : result.capacity_reason,
-    }),
+    selected,
+    qualification,
+    event: qualification,
+    capacity_event: capacityEvent,
   };
+}
+
+function termsAcceptedEvent(acceptance, offer) {
+  return commercialEvent({
+    type: TYPES.TERMS_ACCEPTED,
+    offer_id: offer && offer.offer_id,
+    offer_version: offer && offer.offer_version,
+    terms_version: acceptance && acceptance.terms_version,
+  });
 }
 
 async function acceptOfferTerms(store, { cnpj, offerId, actor, evidence, now } = {}) {
   const key = `${cnpj}|${offerId}`;
+  const offer = getOffer(offerId);
   const existing = await getRecord(store, "terms", key);
   if (existing && existing.acceptance) {
-    return { ok: true, acceptance: existing.acceptance, idempotent: true };
+    return {
+      ok: true,
+      acceptance: existing.acceptance,
+      snapshot: existing.offer_snapshot || snapshotOffer(offer),
+      idempotent: true,
+      event: termsAcceptedEvent(existing.acceptance, offer),
+    };
   }
-  const offer = getOffer(offerId);
   const acceptance = acceptTerms({
     actor,
     acceptedAt: (now || new Date()).toISOString(),
@@ -61,7 +93,13 @@ async function acceptOfferTerms(store, { cnpj, offerId, actor, evidence, now } =
     acceptance,
     offer_snapshot: snapshotOffer(offer),
   });
-  return { ok: true, acceptance, snapshot: persisted.record.offer_snapshot, idempotent: persisted.idempotent };
+  return {
+    ok: true,
+    acceptance,
+    snapshot: persisted.record.offer_snapshot,
+    idempotent: persisted.idempotent,
+    event: termsAcceptedEvent(acceptance, offer),
+  };
 }
 
 async function requestCheckout(store, { cnpj, offerId, offer_version, inventory, env, now } = {}) {
@@ -76,10 +114,14 @@ async function requestCheckout(store, { cnpj, offerId, offer_version, inventory,
     return { ok: false, error: "capacity_not_approved" };
   }
   const termsRow = await getRecord(store, "terms", `${cnpj}|${offerId}`);
-  if (!termsRow || !termsMatch(termsRow.acceptance)) {
+  if (!termsRow || !isAcceptanceSnapshot(termsRow.acceptance)) {
     return { ok: false, error: "terms_not_accepted" };
   }
-  if (termsRow.acceptance.terms_version !== resolved.offer.terms_version) {
+  if (
+    termsRow.acceptance.terms_version !== resolved.offer.terms_version
+    || termsRow.acceptance.terms_hash !== TERMS_HASH
+    || !termsMatch(termsRow.acceptance)
+  ) {
     return { ok: false, error: "terms_drift" };
   }
   const created = createSandboxCheckout({
