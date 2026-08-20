@@ -101,7 +101,9 @@ jobs:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run test:tools-uiux-e2e
       - name: Install Playwright Chromium
-        run: npx --yes playwright install --with-deps chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
       - name: Playwright checklist on _site
         env:
           CONFENGE_BASE: http://127.0.0.1:8765
