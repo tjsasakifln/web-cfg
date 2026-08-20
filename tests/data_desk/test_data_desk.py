@@ -17,6 +17,8 @@ from scripts.data_desk.embed import embed_has_tracker, embed_has_visible_source
 from scripts.data_desk.hashing import package_hash
 from scripts.data_desk.metadata import dataset_jsonld, has_real_dataset
 from scripts.data_desk.package import (
+    FIXTURE_ASSET_REL,
+    FIXTURE_OUT_REL,
     assert_no_sensitive,
     build_package,
     generate,
@@ -30,17 +32,28 @@ from scripts.data_desk.syndication import SYNDICATION_TARGET_COUNT, validate_man
 from scripts.discovery.inspect import load_sitemap_urls
 
 AS_OF = "2026-08-16"
-ASSET_DIR = ROOT / "data" / "data-desk" / "fixture"
+FIXTURE_ASSET = ROOT / FIXTURE_ASSET_REL
+ASSET_DIR = FIXTURE_ASSET.parent
 
 
 def _package(**overrides):
-    asset = load_asset(root=ROOT)
+    asset = load_asset(FIXTURE_ASSET, root=ROOT)
     asset.update(overrides)
     return build_package(asset, asset_dir=ASSET_DIR, generated_at=AS_OF)
 
 
+def _generate_fixture(**kwargs):
+    return generate(
+        root=ROOT,
+        asset_path=FIXTURE_ASSET,
+        out_dir=kwargs.get("out_dir", ROOT / FIXTURE_OUT_REL),
+        generated_at=kwargs.get("generated_at", AS_OF),
+        publish_public=False,
+    )
+
+
 def test_fixture_package_watermark_and_no_public_canonical():
-    package = generate(root=ROOT, out_dir=None, generated_at=AS_OF)
+    package = _generate_fixture()
     assert package["watermark"] == WATERMARK
     assert package["canonical"] is None
     assert package["public_canonical"] is None
@@ -57,8 +70,8 @@ def test_fixture_package_watermark_and_no_public_canonical():
 
 
 def test_package_has_citation_versions_and_stable_hash():
-    first = generate(root=ROOT, generated_at=AS_OF)
-    second = generate(root=ROOT, generated_at=AS_OF)
+    first = _generate_fixture()
+    second = _generate_fixture()
     for package in (first, second):
         assert package["citation_text"]
         assert package["method_version"]
@@ -86,7 +99,7 @@ def test_package_has_citation_versions_and_stable_hash():
 
 def test_update_or_correction_invalidates_hash():
     old = _package()
-    asset = load_asset(root=ROOT)
+    asset = load_asset(FIXTURE_ASSET, root=ROOT)
     asset["data_version"] = "fixture-2"
     asset["as_of"] = "2026-08-17"
     asset["citation_text"] = asset["citation_text"] + " Correção."
@@ -97,7 +110,7 @@ def test_update_or_correction_invalidates_hash():
 
 
 def test_dataset_metadata_only_when_dataset_exists():
-    asset = load_asset(root=ROOT)
+    asset = load_asset(FIXTURE_ASSET, root=ROOT)
     csv_text = (ASSET_DIR / "table.csv").read_text(encoding="utf-8")
     assert has_real_dataset(asset, csv_text=csv_text) is True
     with_ds = _package()
@@ -106,7 +119,7 @@ def test_dataset_metadata_only_when_dataset_exists():
     assert with_ds["dataset_jsonld"]["distribution"]["@type"] == "DataDownload"
     assert with_ds["dataset_jsonld"]["distribution"]["contentUrl"]
 
-    no_ds = load_asset(root=ROOT)
+    no_ds = load_asset(FIXTURE_ASSET, root=ROOT)
     no_ds["has_dataset"] = False
     no_ds["dataset"] = None
     no_ds["csv"] = None
@@ -161,7 +174,7 @@ def test_embed_source_visible_and_no_tracker_by_default():
 
 
 def test_optional_media_and_csv_are_not_invented():
-    asset = load_asset(root=ROOT)
+    asset = load_asset(FIXTURE_ASSET, root=ROOT)
     asset["csv"] = None
     asset["has_dataset"] = False
     asset["dataset"] = None
@@ -174,7 +187,7 @@ def test_optional_media_and_csv_are_not_invented():
 
 
 def test_data_request_requires_consent_minimizes_pii_and_unknown_prazo():
-    asset = load_asset(root=ROOT)
+    asset = load_asset(FIXTURE_ASSET, root=ROOT)
     contract = request_contract(asset)
     assert contract["automatic_promise"] is False
     assert contract["api"] is False
@@ -238,7 +251,16 @@ def test_no_raw_or_sensitive_dump():
 def test_cli_generate_twice_is_stable(tmp_path):
     out1 = tmp_path / "run-1"
     out2 = tmp_path / "run-2"
-    cmd = [sys.executable, "-m", "scripts.data_desk", "generate", "--as-of", AS_OF]
+    cmd = [
+        sys.executable,
+        "-m",
+        "scripts.data_desk",
+        "generate",
+        "--asset",
+        str(FIXTURE_ASSET),
+        "--as-of",
+        AS_OF,
+    ]
     first = subprocess.run(cmd + ["--out", str(out1)], cwd=ROOT, check=True, capture_output=True, text=True)
     second = subprocess.run(cmd + ["--out", str(out2)], cwd=ROOT, check=True, capture_output=True, text=True)
     hash1 = json.loads((out1 / "package.json").read_text(encoding="utf-8"))["package_hash"]

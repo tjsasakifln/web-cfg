@@ -1,61 +1,63 @@
 # CONFENGE Data Desk
 
-Prepare-only citation / download / request kit for issue #89. Default
-asset is a labeled fixture. Swapping an approved asset is a registry
-change, not a redesign.
+Citation / download / request kit for issue #89. The operational canary
+is the approved Santa Catarina Market Answer. The labeled fixture remains
+on disk for tests and is not a public asset.
 
 ## Visitor job
 
-A journalist, association, researcher or partner should be able — once an
-approved asset exists — to cite a CONFENGE recorte with method, `as_of`,
-limitations and a visible source link, or request a scoped cut without
-getting a raw dump or an automatic promise.
+A journalist, association, researcher or partner should be able to cite a
+CONFENGE recorte with method, `as_of`, limitations and a visible source
+link, or request a scoped cut without getting a raw dump or an automatic
+promise.
 
 ## Decision state
 
 VALIDATE. Time to evidence: generate the package twice, confirm the hash
-is stable, then (later, human-gated) name five syndication targets via
+is stable, then (later, human-gated) send five syndication targets via
 #66. Leverage: distribution, trust, data.
 
-## What the generator emits
+## Operational asset
 
-For `data/data-desk/fixture/asset.v1.json`:
+`data/data-desk/valor-tipico-contratos-pavimentacao-sc/asset.v1.json`
 
-- citation text and permalink (no public canonical)
-- accessible SVG when provided
-- aggregated CSV when provided (not a raw/sensitive dump)
-- method / schema / data version, `as_of`, coverage, limitations
-- correction link, creator, publisher, license, usage, identifier
-- Dataset / DataDownload **only** when a real dataset file exists
-- optional embed with visible Source/canonical and no tracker
-- one-page press/research brief
-- data-request contract (`FULFILLED | DECLINED | NEEDS_SCOPE | UNKNOWN`)
-- five-slot syndication manifest with `auto_send=false`
+Canonical source (not this kit):
 
-Watermark: `FIXTURE_ONLY`. Not in any sitemap. Not distributed.
+`https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/`
+
+Public files (noindex,follow, off sitemap):
+
+`https://confenge.com.br/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/`
+
+A Market Answer page link is PATCH-NEEDED and out of this change set.
 
 ## Commands
 
 ```bash
 python3 -m scripts.data_desk generate
-python3 -m scripts.data_desk generate --out /tmp/data-desk-preview --as-of 2026-08-16
+python3 -m scripts.data_desk generate --as-of 2026-08-17T11:29:23.193694+02:00
+python3 -m scripts.data_desk generate --asset data/data-desk/fixture/asset.v1.json --out data/data-desk/packages/fixture-only
 ```
 
-## Data request
+## What the generator emits
 
-Intake is a contract, not an API. Required: finalidade, organization,
-role, consent, prazo=`UNKNOWN`, correlation id, attribution. Forbidden:
-CPF, RG, personal phone, home address, raw documents. No automatic
-promise.
+For the approved asset: Portuguese citation + short bibliographic form,
+accessible SVG, aggregated CSV, method.json/md, coverage manifest,
+limitations.md, PRESS-BRIEF.md, package.json with hashes,
+request-contract.json, syndication.json (`auto_send=false`), tracker-free
+embed, Dataset/DataDownload only because the CSV is a real published
+file. PNG is omitted (no reproducible local converter).
+
+Watermark: none on the real asset. Fixture stays `FIXTURE_ONLY`.
 
 ## Syndication
 
-Five later-nameable slots (`target-1` … `target-5`). Nothing is sent.
-Naming a target is a human edit of `syndication.json` plus #66.
+Five named finalists, status `PREPARED_NOT_SENT`, outcome `UNKNOWN`.
+Nothing is sent. `auto_send` is false and must stay false.
 
 ## What this is not
 
 - Not a generic public API, partner portal, or widget farm.
 - Not pay-to-cite or a link scheme.
-- Not a reason to close #89. Closing needs an approved asset and real
-  reuse that preserves provenance.
+- Not a reason to close #89. Closing needs observed reuse that preserves
+  provenance. External reuse remains UNKNOWN.

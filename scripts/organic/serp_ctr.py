@@ -40,9 +40,9 @@ def expected_ctr(position: float, config: dict[str, Any] | None = None) -> float
 
 def is_ctr_gap(
     *,
-    impressions: float,
-    clicks: float,
-    position: float,
+    impressions: float | None,
+    clicks: float | None,
+    position: float | None,
     config: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Decide if a URL is a SERP CTR opportunity under configured thresholds."""
@@ -52,6 +52,17 @@ def is_ctr_gap(
     min_pos = float(config.get("min_position_for_opportunity") or 1)
     ratio = float(config.get("ctr_gap_ratio") or 0.45)
     floor = float(config.get("absolute_ctr_floor") or 0.02)
+
+    if impressions is None or clicks is None or position is None:
+        return {
+            "is_opportunity": False,
+            "ctr": None,
+            "expected_ctr": None,
+            "gap": None,
+            "reasons": ["missing_denominator_is_not_zero"],
+            "status": "INSUFFICIENT_EVIDENCE",
+            "zero_inferred_from_absence": False,
+        }
 
     ctr = (clicks / impressions) if impressions else 0.0
     exp = expected_ctr(position, config)
