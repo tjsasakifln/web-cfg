@@ -33,8 +33,11 @@ from scripts.contract_analysis.approval import (
     ApprovalError,
     approval_allows_index,
     approval_rendered_hash_ok,
+    approve_one,
     approve_preapproval_canary,
+    approvals_path,
     evaluate_conditional_checklist,
+    load_approvals,
     material_hash,
     rendered_content_hash,
 )
@@ -193,6 +196,21 @@ def test_stale_2026_08_17_token_cannot_grant_this_campaign_index(tmp_path, monke
             root=tmp_path,
             actor=OWNER_CONDITIONAL_APPROVER,
         )
+
+
+def test_planted_2026_08_17_token_row_refuses_index(tmp_path, monkeypatch):
+    rec = _stage_official(tmp_path, monkeypatch)["records"][0]
+    approve_one(rec, actor="editor", rollback="git:revert:stale", root=tmp_path)
+    payload = load_approvals(root=tmp_path)
+    for row in payload.get("approvals") or []:
+        if row.get("analysis_id") == rec["id"] and not row.get("withdrawn"):
+            row["token"] = OWNER_CONDITIONAL_TOKEN
+    path = approvals_path(root=tmp_path)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    ok, reasons = approval_allows_index(rec, root=tmp_path)
+    assert ok is False
+    assert "approval_stale_campaign_token" in reasons
+    assert evaluate_publication(rec, cohort=[rec]).state != "PUBLISHABLE_INDEX"
 
 
 def test_preapproval_token_binds_hashes_and_grants_index_when_gates_pass(tmp_path, monkeypatch):

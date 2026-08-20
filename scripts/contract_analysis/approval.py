@@ -267,6 +267,8 @@ def approval_allows_index(record: dict[str, Any], *, root: Path | None = None) -
     stored = find_approval(record, root=root)
     expected = material_hash(record)
     aid, pack, digest = approval_triple(record)
+    if stored is not None and str(stored.get("token") or "") == OWNER_CONDITIONAL_TOKEN:
+        return False, ["approval_stale_campaign_token"]
     if stored is None:
         # Inline approval on the record (tests) still needs the triple + hash + rollback.
         inline_hash = str(record.get("material_hash") or "")

@@ -1,7 +1,7 @@
 analysis_id: 13ec615146b3d348190a9b0b9148831e
 preview_url: https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/
 publication_state: PUBLISHABLE_INDEX
-human_review_status: HUMAN_REVIEW_PENDING
+human_review_status: OWNER_PREAPPROVAL_BOUND
 quality_verdict: INDEX_READY_HUMAN_REVIEW
 quality_score: 100
 

@@ -14,6 +14,8 @@ if str(ROOT) not in sys.path:
 from scripts.contract_analysis import MAX_CANARY, PUBLICATION_STATES
 from scripts.contract_analysis.consume import load_canary, load_editorial_fixture
 from scripts.contract_analysis.gate import evaluate_cohort
+import pytest
+
 from scripts.contract_analysis.render import analysis_urls_in_sitemaps
 
 
@@ -158,6 +160,39 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     else:
         allowed = {"sitemap-analises-contratos.xml", "sitemap-index.xml"}
         assert set(names) <= allowed
+
+
+def test_index_slug_x_robots_follows_family_noindex(tmp_path):
+    """Netlify last-match wins: family noindex must precede the INDEX slug allow."""
+    from scripts.contract_analysis.gate import PublicationDecision
+    from scripts.contract_analysis.render import sync_family_crawler_rules
+
+    (tmp_path / "_headers").write_text("# start\n", encoding="utf-8")
+    (tmp_path / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+    rec = {"slug": OFFICIAL_LIVE_SLUG}
+    decision = PublicationDecision(
+        analysis_id="13ec615146b3d348190a9b0b9148831e",
+        slug=OFFICIAL_LIVE_SLUG,
+        state="PUBLISHABLE_INDEX",
+        reason_codes=(),
+        conditions={},
+        source_kind="official_live",
+        is_fixture=False,
+        indexable=True,
+        robots="index,follow",
+        sitemap=True,
+    )
+    sync_family_crawler_rules([(rec, decision)], root=tmp_path)
+    headers = (tmp_path / "_headers").read_text(encoding="utf-8")
+    slug = f"/analises-contratos-publicos/{OFFICIAL_LIVE_SLUG}/*"
+    family = "/analises-contratos-publicos/*"
+    i_slug = headers.find(slug)
+    i_family = headers.find(family)
+    assert i_slug != -1
+    assert i_family != -1
+    assert i_family < i_slug
+    after_slug = headers[i_slug : i_slug + 220]
+    assert "X-Robots-Tag: index, follow" in after_slug
 
 
 def test_robots_and_headers_block_fixture_family():

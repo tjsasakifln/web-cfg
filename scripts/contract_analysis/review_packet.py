@@ -173,7 +173,7 @@ def founder_decision_required(
             f"analysis_id: {aid}",
             f"preview_url: {preview}",
             f"publication_state: {decision.state}",
-            f"human_review_status: {decision.human_review_status or HUMAN_REVIEW_PENDING}",
+            f"human_review_status: {decision.human_review_status or ('OWNER_PREAPPROVAL_BOUND' if decision.state == 'PUBLISHABLE_INDEX' else HUMAN_REVIEW_PENDING)}",
             f"quality_verdict: {quality.get('review_verdict')}",
             f"quality_score: {quality.get('score')}",
             "",

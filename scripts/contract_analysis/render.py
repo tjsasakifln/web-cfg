@@ -816,9 +816,13 @@ def _index_slugs(pairs: list[tuple[dict[str, Any], PublicationDecision]]) -> lis
     ]
 
 
-def sync_family_crawler_rules(pairs: list[tuple[dict[str, Any], PublicationDecision]]) -> None:
+def sync_family_crawler_rules(
+    pairs: list[tuple[dict[str, Any], PublicationDecision]],
+    *,
+    root: Path | None = None,
+) -> None:
     """Allow only INDEX slugs; keep the rest of the family Disallow / X-Robots noindex."""
-    root = _root()
+    root = root or _root()
     slugs = _index_slugs(pairs)
     robots_path = root / "robots.txt"
     if robots_path.is_file():
@@ -841,11 +845,13 @@ def sync_family_crawler_rules(pairs: list[tuple[dict[str, Any], PublicationDecis
         allow_blocks = "".join(
             f"{FAMILY_PATH}{slug}/*\n  X-Robots-Tag: index, follow\n\n" for slug in slugs
         )
+        # Family noindex first; slug override last. Netlify last-match wins
+        # for the same header on overlapping paths.
         block = (
             f"{HEADERS_FAMILY_BEGIN}\n"
-            f"{allow_blocks}"
             f"{FAMILY_PATH}*\n"
             "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+            f"{allow_blocks}"
         )
         headers = _replace_or_append_block(
             headers,
