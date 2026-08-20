@@ -1,0 +1,41 @@
+{
+  "canonical_source": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "claim_scope": "uf",
+  "coverage": {
+    "missing_or_nonpositive": 25,
+    "n": 5038,
+    "status": "COMPLETE",
+    "total_keyword_rows": 5063,
+    "usable_n": 5038
+  },
+  "extra_cli_content_hash_not_binding": "dbb6254950f8e25f12676636c7dd39a339b300a48c2544c68a4a750813c41e18",
+  "geography": {
+    "code": "SC",
+    "kind": "uf",
+    "label": "Santa Catarina"
+  },
+  "grain": "integral_nominal_instrument",
+  "grain_not": [
+    "cost_per_km",
+    "unit_price",
+    "price_per_m2",
+    "custo_por_km"
+  ],
+  "missingness": {
+    "total_keyword_rows": 5063,
+    "unknown_or_nonpositive": 25,
+    "usable": 5038
+  },
+  "n_total": 5063,
+  "n_usable": 5038,
+  "national_statistic": false,
+  "note": "The binding hashes are payload_content_hash and rendered_content_hash from data/editorial/market-answers/approvals.json. extra-cli content_hash is provenance only and must not be treated as the approval hash.",
+  "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
+  "period": {
+    "end": "2026-08-15",
+    "start": "2023-07-20"
+  },
+  "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+  "schema": "data_desk_coverage_v1",
+  "source": "extra-cli public-read SELECT-only + editorial approval hashes"
+}

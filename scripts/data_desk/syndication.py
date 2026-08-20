@@ -40,12 +40,48 @@ def empty_target(index: int, *, asset_version: str, owner: str) -> dict[str, Any
     }
 
 
+def named_target(row: dict[str, Any], *, package_version: str, owner: str, source: str) -> dict[str, Any]:
+    return {
+        "id": row.get("id"),
+        "audience_type": row.get("audience_type"),
+        "angle": row.get("angle"),
+        "asset_version": package_version,
+        "citation_link_requirements": row.get("citation_link_requirements")
+        or (
+            "Preserve the CONFENGE canonical source, method/as_of, n/missingness and limitations. "
+            "Do not convert the integral nominal ticket into custo/km. Do not claim a national statistic."
+        ),
+        "owner": row.get("owner") or owner,
+        "status": row.get("status") or "PREPARED_NOT_SENT",
+        "outcome": "UNKNOWN",
+        "target_nominal": row.get("target_nominal") or row.get("organization"),
+        "organization": row.get("organization"),
+        "public_url": row.get("public_url"),
+        "person_role": row.get("person_role"),
+        "why_useful": row.get("why_useful"),
+        "contact_route": row.get("contact_route"),
+        "asset_link": row.get("asset_link") or source,
+        "sent": False,
+        "auto_send": False,
+    }
+
+
 def build_manifest(asset: dict[str, Any], *, package_version: str) -> dict[str, Any]:
     owner = asset.get("owner") or "Tiago Sasaki"
-    targets = [
-        empty_target(i, asset_version=package_version, owner=owner)
-        for i in range(1, SYNDICATION_TARGET_COUNT + 1)
-    ]
+    source = asset.get("canonical_source") or asset.get("public_canonical")
+    named = asset.get("syndication_targets")
+    if named:
+        if not isinstance(named, list) or len(named) != SYNDICATION_TARGET_COUNT:
+            raise SchemaError(f"syndication_requires_{SYNDICATION_TARGET_COUNT}_targets")
+        targets = [
+            named_target(row, package_version=package_version, owner=owner, source=source)
+            for row in named
+        ]
+    else:
+        targets = [
+            empty_target(i, asset_version=package_version, owner=owner)
+            for i in range(1, SYNDICATION_TARGET_COUNT + 1)
+        ]
     manifest = {
         "schema": SYNDICATION_SCHEMA,
         "auto_send": False,
@@ -64,6 +100,8 @@ def build_manifest(asset: dict[str, Any], *, package_version: str) -> dict[str, 
 def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     if manifest.get("auto_send") is not False:
         raise SchemaError("auto_send_must_be_false")
+    if manifest.get("sent") is True or manifest.get("smtp_called") is True or manifest.get("webhook_called") is True:
+        raise SchemaError("syndication_must_remain_unsent")
     targets = manifest.get("targets")
     if not isinstance(targets, list) or len(targets) != SYNDICATION_TARGET_COUNT:
         raise SchemaError(f"syndication_requires_{SYNDICATION_TARGET_COUNT}_targets")
