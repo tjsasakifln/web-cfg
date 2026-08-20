@@ -623,6 +623,34 @@ def test_no_visible_technical_js_fallback():
 # ---------------------------------------------------------------------------
 
 
+LEAD_INLINE_HIERARCHY_ROUTES = [
+    ROOT / "aditivos-obras-publicas" / "index.html",
+    ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
+    ROOT / "auditoria-orcamento-licitacao" / "index.html",
+    ROOT / "medicoes-glosas-obras-publicas" / "index.html",
+    ROOT / "reequilibrio-obras-publicas" / "index.html",
+    ROOT / "conteudos" / "limite-aditivo-25-50-obra-publica" / "index.html",
+]
+
+
+def test_lead_inline_not_before_main_or_h1():
+    """Promotional lead-inline must not sit between site header and main/H1."""
+    for path in LEAD_INLINE_HIERARCHY_ROUTES:
+        assert path.exists(), f"missing {path.relative_to(ROOT)}"
+        html = path.read_text(encoding="utf-8")
+        main = re.search(r"<main\b", html, re.I)
+        assert main, f"{path.relative_to(ROOT)}: missing <main"
+        h1 = re.search(r"<h1\b", html, re.I)
+        assert h1, f"{path.relative_to(ROOT)}: missing <h1"
+        for m in re.finditer(r"\blead-inline\b", html):
+            assert m.start() > main.start(), (
+                f"{path.relative_to(ROOT)}: lead-inline appears before <main"
+            )
+            assert m.start() > h1.start(), (
+                f"{path.relative_to(ROOT)}: lead-inline appears before first <h1"
+            )
+
+
 def test_hub_problem_first_structure():
     hub = _hub_html()
     assert "Qual problema de licitação ou contrato você precisa resolver?" in hub
