@@ -7,9 +7,21 @@ import shutil
 from pathlib import Path
 from typing import Any
 
+from scripts.data_desk.artifacts import (
+    build_aggregate_csv,
+    build_citation_short,
+    build_citation_text,
+    build_method_document,
+    build_quartile_svg,
+    coverage_manifest,
+    limitations_markdown,
+    method_markdown,
+)
+from scripts.data_desk.bind import assert_asset_matches_approved, load_approved_source
 from scripts.data_desk.embed import build_embed, embed_has_tracker
 from scripts.data_desk.hashing import package_hash, sha256_text, version_label
 from scripts.data_desk.metadata import dataset_jsonld, has_real_dataset
+from scripts.data_desk.publish import PUBLIC_REL, publish_public_namespace
 from scripts.data_desk.request import request_contract
 from scripts.data_desk.schema import (
     PACKAGE_SCHEMA,
@@ -21,9 +33,11 @@ from scripts.data_desk.schema import (
 from scripts.data_desk.syndication import build_manifest
 from scripts.discovery.registry import repo_root
 
-DEFAULT_ASSET_ID = "fixture-only-citation-kit"
-DEFAULT_ASSET_REL = Path("data/data-desk/fixture/asset.v1.json")
-DEFAULT_OUT_REL = Path("data/data-desk/packages/fixture-only")
+DEFAULT_ASSET_ID = "valor-tipico-contratos-pavimentacao-sc-citation-kit"
+DEFAULT_ASSET_REL = Path("data/data-desk/valor-tipico-contratos-pavimentacao-sc/asset.v1.json")
+DEFAULT_OUT_REL = Path("data/data-desk/packages/valor-tipico-contratos-pavimentacao-sc")
+FIXTURE_ASSET_REL = Path("data/data-desk/fixture/asset.v1.json")
+FIXTURE_OUT_REL = Path("data/data-desk/packages/fixture-only")
 
 
 def load_asset(path: Path | None = None, *, root: Path | None = None) -> dict[str, Any]:
@@ -118,21 +132,34 @@ def build_package(
     asset_dir: Path,
     generated_at: str,
 ) -> dict[str, Any]:
+    fixture = bool(asset.get("fixture") or asset.get("label") == WATERMARK or asset.get("watermark") == WATERMARK)
+    generated_csv = None
+    generated_svg = None
+    if not fixture and asset.get("stats"):
+        generated_csv = build_aggregate_csv(asset)
+        generated_svg = build_quartile_svg(asset)
+        if not asset.get("citation_text"):
+            asset = dict(asset)
+            asset["citation_text"] = build_citation_text(asset)
+
     csv_text, csv_hash = _read_sidecar(asset_dir, asset.get("csv"))
+    if generated_csv:
+        csv_text, csv_hash = generated_csv, sha256_text(generated_csv)
     svg_text, svg_hash = _read_sidecar(asset_dir, (asset.get("media") or {}).get("svg"))
+    if generated_svg:
+        svg_text, svg_hash = generated_svg, sha256_text(generated_svg)
     png_name = (asset.get("media") or {}).get("png")
     png_hash = None
     if png_name and (asset_dir / png_name).is_file():
         png_hash = sha256_text((asset_dir / png_name).read_bytes().decode("latin-1"))
 
-    fixture = bool(asset.get("fixture") or asset.get("label") == WATERMARK or asset.get("watermark") == WATERMARK)
-    public_canonical = asset.get("public_canonical")
+    public_canonical = asset.get("public_canonical") or asset.get("canonical_source")
     if fixture:
         public_canonical = None
     permalink = asset.get("permalink")
     csv_url = None
     if csv_text and permalink:
-        filename = (asset.get("dataset") or {}).get("download_filename") or asset.get("csv")
+        filename = (asset.get("dataset") or {}).get("download_filename") or asset.get("csv") or "table.csv"
         csv_url = f"{permalink.rstrip('/')}/{filename}"
 
     package: dict[str, Any] = {
@@ -149,7 +176,9 @@ def build_package(
         "schema_version": asset.get("schema_version") or asset.get("schema"),
         "data_version": asset.get("data_version"),
         "as_of": asset.get("as_of"),
-        "coverage": asset.get("coverage"),
+        "coverage": asset.get("coverage_text")
+        if isinstance(asset.get("coverage"), dict)
+        else asset.get("coverage"),
         "limitations": asset.get("limitations"),
         "correction_link": asset.get("correction_link") or "https://confenge.com.br/correcoes/",
         "correction_owner": asset.get("correction_owner") or asset.get("owner"),
@@ -174,6 +203,30 @@ def build_package(
         "generated_at": generated_at,
         "previous_package_hash": asset.get("previous_package_hash"),
     }
+    if not fixture and asset.get("stats"):
+        package["citation_short"] = asset.get("citation_short") or build_citation_short(asset)
+        package["stats"] = {
+            "p25": asset["stats"]["p25"],
+            "median": asset["stats"]["median"],
+            "p75": asset["stats"]["p75"],
+            "n": asset["stats"]["n"],
+            "unit": asset["stats"].get("unit"),
+        }
+        package["missingness"] = asset.get("missingness")
+        package["payload_content_hash"] = asset.get("payload_content_hash")
+        package["rendered_content_hash"] = asset.get("rendered_content_hash")
+        package["grain"] = asset.get("grain")
+        package["geography_code"] = (asset.get("geography") or {}).get("code") or asset.get("geography_code")
+        package["period"] = asset.get("period")
+        package["prohibited_claims"] = list(asset.get("prohibited_claims") or [])
+        package["license_review"] = asset.get("license_review") or "NEEDS_REVIEW"
+        package["refresh_owner"] = asset.get("refresh_owner")
+        package["invalidation"] = asset.get("invalidation")
+        package["_generated_csv"] = generated_csv
+        package["_generated_svg"] = generated_svg
+        package["_method_doc"] = build_method_document(asset, package)
+        package["_coverage_doc"] = coverage_manifest(asset)
+        package["_limitations_md"] = limitations_markdown(asset)
     package["package_hash"] = package_hash(package)
     package["package_version"] = version_label(package)
     jsonld = dataset_jsonld(asset, package, csv_text=csv_text)
@@ -196,6 +249,10 @@ def build_package(
     return package
 
 
+def _public_package(package: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in package.items() if not str(key).startswith("_")}
+
+
 def write_package(
     package: dict[str, Any],
     *,
@@ -206,11 +263,14 @@ def write_package(
     if out_dir.exists():
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    serializable = _public_package(package)
     (out_dir / "package.json").write_text(
-        json.dumps(package, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        json.dumps(serializable, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
     (out_dir / "citation.txt").write_text(str(package.get("citation_text") or "") + "\n", encoding="utf-8")
+    if package.get("citation_short"):
+        (out_dir / "citation-short.txt").write_text(str(package["citation_short"]) + "\n", encoding="utf-8")
     (out_dir / "PRESS-BRIEF.md").write_text(press_brief(asset, package), encoding="utf-8")
     (out_dir / "embed.html").write_text(package["embed_html"], encoding="utf-8")
     (out_dir / "request-contract.json").write_text(
@@ -226,12 +286,35 @@ def write_package(
             json.dumps(package["dataset_jsonld"], ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
-    csv_name = asset.get("csv")
-    if csv_name and (asset_dir / csv_name).is_file():
-        shutil.copy2(asset_dir / csv_name, out_dir / csv_name)
-    svg_name = (asset.get("media") or {}).get("svg")
-    if svg_name and (asset_dir / svg_name).is_file():
-        shutil.copy2(asset_dir / svg_name, out_dir / svg_name)
+    method_doc = package.get("_method_doc")
+    if method_doc:
+        (out_dir / "method.json").write_text(
+            json.dumps(method_doc, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        (out_dir / "method.md").write_text(method_markdown(method_doc), encoding="utf-8")
+    coverage_doc = package.get("_coverage_doc")
+    if coverage_doc:
+        (out_dir / "coverage.json").write_text(
+            json.dumps(coverage_doc, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+    if package.get("_limitations_md"):
+        (out_dir / "limitations.md").write_text(str(package["_limitations_md"]), encoding="utf-8")
+    generated_csv = package.get("_generated_csv")
+    if generated_csv:
+        (out_dir / "table.csv").write_text(generated_csv, encoding="utf-8")
+    else:
+        csv_name = asset.get("csv")
+        if csv_name and (asset_dir / csv_name).is_file():
+            shutil.copy2(asset_dir / csv_name, out_dir / csv_name)
+    generated_svg = package.get("_generated_svg")
+    if generated_svg:
+        (out_dir / "chart.svg").write_text(generated_svg, encoding="utf-8")
+    else:
+        svg_name = (asset.get("media") or {}).get("svg")
+        if svg_name and (asset_dir / svg_name).is_file():
+            shutil.copy2(asset_dir / svg_name, out_dir / svg_name)
     png_name = (asset.get("media") or {}).get("png")
     if png_name and (asset_dir / png_name).is_file():
         shutil.copy2(asset_dir / png_name, out_dir / png_name)
@@ -245,15 +328,25 @@ def generate(
     asset_path: Path | None = None,
     out_dir: Path | None = None,
     generated_at: str | None = None,
+    publish_public: bool | None = None,
 ) -> dict[str, Any]:
     root = root or repo_root()
     asset = load_asset(asset_path, root=root)
     asset_dir = (asset_path or (root / DEFAULT_ASSET_REL)).parent
+    fixture = bool(asset.get("fixture") or asset.get("watermark") == WATERMARK)
+    if not fixture and asset.get("approved") is True:
+        assert_asset_matches_approved(asset, load_approved_source(root))
     stamp = generated_at or asset.get("as_of") or "1970-01-01"
     package = build_package(asset, asset_dir=asset_dir, generated_at=stamp)
     dest = out_dir or (root / DEFAULT_OUT_REL)
     write_package(package, out_dir=dest, asset_dir=asset_dir, asset=asset)
     package["output_dir"] = str(dest)
+    default_dest = root / DEFAULT_OUT_REL
+    if publish_public is None:
+        publish_public = (not fixture) and dest.resolve() == default_dest.resolve()
+    if publish_public:
+        public_dir = publish_public_namespace(package, package_dir=dest, dest=root / PUBLIC_REL)
+        package["public_dir"] = str(public_dir)
     return package
 
 

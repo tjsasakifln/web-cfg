@@ -12,6 +12,7 @@ HASH_FIELDS = (
     "permalink",
     "canonical",
     "citation_text",
+    "citation_short",
     "method_version",
     "schema_version",
     "data_version",
@@ -30,6 +31,12 @@ HASH_FIELDS = (
     "csv_sha256",
     "svg_sha256",
     "png_sha256",
+    "stats",
+    "missingness",
+    "payload_content_hash",
+    "rendered_content_hash",
+    "grain",
+    "geography_code",
 )
 
 
