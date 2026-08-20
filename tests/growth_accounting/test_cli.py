@@ -46,6 +46,27 @@ def test_cli_module_fail_closed_pii(tmp_path: Path, capsys):
     assert body["reason"] == "QUERY_LEVEL_PII"
 
 
+def test_cli_omit_cost_is_insufficient_not_linear(tmp_path: Path, capsys):
+    payload = synthetic_input(
+        n_cohorts=3, clicks_for=exponential_clicks, omit_cost=True
+    )
+    path = tmp_path / "omit-cost.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    code = main(["build", "--input", str(path), "--out", str(tmp_path / "out")])
+    assert code == 0
+    out = capsys.readouterr().out
+    summary = json.loads(out)
+    assert summary["current_state"] == "INSUFFICIENT_EVIDENCE"
+    assert "MISSING_DENOMINATOR" in summary["reason_codes"]
+    report = json.loads((tmp_path / "out" / "current-state.json").read_text(encoding="utf-8"))
+    assert report["current_state"] == "INSUFFICIENT_EVIDENCE"
+    assert report["classification"]["state"] not in {
+        "LINEAR_CANDIDATE",
+        "COMPOUNDING_CANDIDATE",
+        "EXPONENTIAL_CANDIDATE",
+    }
+
+
 def test_cli_subprocess_matches_module(tmp_path: Path):
     out = tmp_path / "cli"
     proc = subprocess.run(

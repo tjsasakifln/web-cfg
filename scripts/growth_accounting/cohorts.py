@@ -150,6 +150,15 @@ def build_cohorts(
             asset_rows = [row for row in primary_rows if str(row.get("asset_id")) == asset_id]
             per_asset_clicks[asset_id] = _sum_field(asset_rows, "clicks")
 
+        mature_id_set = set(mature_ids)
+        mature_rows = [
+            row for row in primary_rows if str(row.get("asset_id")) in mature_id_set
+        ]
+        mature_clicks = _sum_field(mature_rows, "clicks") if mature_rows else UNKNOWN
+        mature_pipeline = (
+            _sum_field(mature_rows, "qualified_pipeline_brl") if mature_rows else UNKNOWN
+        )
+
         refresh_without_new = (
             len(mid_cohort_ids) == 0
             and _sum_field(primary_rows, "substantive_changes") not in {UNKNOWN, 0, 0.0}
@@ -175,6 +184,8 @@ def build_cohorts(
                 "mature_asset_ids": mature_ids,
                 "mid_cohort_new_asset_ids": mid_cohort_ids,
                 "per_asset_clicks": per_asset_clicks,
+                "mature_clicks": mature_clicks,
+                "mature_pipeline_brl": mature_pipeline,
                 "refresh_without_new_asset": bool(refresh_without_new),
             }
         )

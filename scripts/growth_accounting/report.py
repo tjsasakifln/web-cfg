@@ -262,6 +262,8 @@ def build_report(payload: dict[str, Any]) -> dict[str, Any]:
                 "complete": c["complete"],
                 "complete_days": c["complete_days"],
                 "mid_cohort_new_asset_ids": c.get("mid_cohort_new_asset_ids") or [],
+                "mature_asset_ids": c.get("mature_asset_ids") or [],
+                "mature_clicks": c.get("mature_clicks"),
                 "refresh_without_new_asset": c.get("refresh_without_new_asset"),
                 "components": c["components"],
                 "asset_ids": c.get("asset_ids") or [],

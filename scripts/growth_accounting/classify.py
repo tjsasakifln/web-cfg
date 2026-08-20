@@ -316,6 +316,7 @@ FORCE_INSUFFICIENT = frozenset(
         REASON_TRACKING_BREAK,
         REASON_INCOMPLETE_WINDOW,
         REASON_NORTH_STAR_UNKNOWN,
+        REASON_MISSING_DENOMINATOR,
     }
 )
 
@@ -338,14 +339,11 @@ def classify_state(
     elif compounding["passed"] and not extra:
         state = "COMPOUNDING_CANDIDATE"
         reasons = list(exponential["reasons"])
-    elif (
-        not complete
-        or set(extra) & FORCE_INSUFFICIENT
-        or REASON_TRACKING_BREAK in combined
-        or REASON_NORTH_STAR_UNKNOWN in combined
-    ):
+    elif not complete or (set(extra) | set(combined)) & FORCE_INSUFFICIENT:
         state = "INSUFFICIENT_EVIDENCE"
-        reasons = extra + [REASON_INSUFFICIENT_COHORTS]
+        reasons = list(extra)
+        if len(complete) < MIN_COMPOUNDING_COHORTS:
+            reasons.append(REASON_INSUFFICIENT_COHORTS)
         if not complete:
             reasons.append(REASON_INCOMPLETE_WINDOW)
         reasons.extend(combined)

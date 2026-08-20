@@ -172,6 +172,13 @@ def component_moat(cohort: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _mature_field(cohort: dict[str, Any], field: str, fallback: Any) -> Any:
+    value = cohort.get(field, UNKNOWN)
+    if is_missing(value):
+        return fallback
+    return value
+
+
 def component_efficiency(cohort: dict[str, Any]) -> dict[str, Any]:
     clicks = _m(cohort, "clicks")
     pipeline = _m(cohort, "qualified_pipeline_brl")
@@ -180,10 +187,15 @@ def component_efficiency(cohort: dict[str, Any]) -> dict[str, Any]:
     active = cohort.get("active_asset_count")
     mature = cohort.get("mature_active_asset_count")
     defects = _m(cohort, "defects")
+    # Demand-per-mature-asset uses clicks of mature assets only. Mid-cohort
+    # new URLs stay in INPUT inventory and must not inflate DPA.
+    mature_clicks = _mature_field(cohort, "mature_clicks", UNKNOWN)
+    mature_pipeline = _mature_field(cohort, "mature_pipeline_brl", UNKNOWN)
     return {
         "clicks_per_active_asset": ratio(clicks, active),
-        "clicks_per_mature_active_asset": ratio(clicks, mature),
-        "pipeline_per_mature_active_asset": ratio(pipeline, mature),
+        "mature_non_branded_clicks": metric(mature_clicks),
+        "clicks_per_mature_active_asset": ratio(mature_clicks, mature),
+        "pipeline_per_mature_active_asset": ratio(mature_pipeline, mature),
         "cost_per_click": ratio(cost, clicks),
         "editorial_hours_per_result": ratio(editorial, clicks),
         "defect_rate": ratio(defects, active),

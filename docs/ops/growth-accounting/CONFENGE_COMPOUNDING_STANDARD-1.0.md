@@ -41,7 +41,7 @@ Authority: extra-cli owns acquisition facts (SELECT-only contracts). Warmbly own
 
 Windows are `[origin + i·28, origin + (i+1)·28)`. A cohort is complete only when all 28 local days are complete as of frozen `as_of`. Incomplete windows are reported as incomplete. They are never filled with synthetic zeros and never force-closed.
 
-New URLs that appear mid-cohort are inventory (INPUT). They are not mature assets and do not inflate demand-per-asset as if they had been present the whole window.
+New URLs that appear mid-cohort are inventory (INPUT). They are not mature assets. Demand per mature asset uses **clicks of mature assets only** over the mature-asset count; mid-cohort clicks must not inflate that ratio.
 
 A refresh with no new asset is a substantive change, not inventory growth.
 

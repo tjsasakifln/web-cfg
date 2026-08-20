@@ -10,6 +10,7 @@ from scripts.growth_accounting.constants import (
     REASON_INSUFFICIENT_COHORTS,
     REASON_LEAVE_ONE_OUT_FAILED,
     REASON_LINEAR_BETTER_THAN_LOG,
+    REASON_MISSING_DENOMINATOR,
     REASON_SINGLE_ASSET_DOMINANCE,
     REASON_STALE_PAYLOAD,
     REASON_TRACKING_BREAK,
@@ -80,6 +81,24 @@ def test_log_better_but_commercial_guardrail_deteriorating():
         REASON_COMMERCIAL_GUARDRAIL_DETERIORATED
         in report["classification"]["gates"]["exponential"]["reasons"]
     )
+
+
+def test_missing_cost_denominator_is_insufficient_not_linear():
+    payload = synthetic_input(
+        n_cohorts=3,
+        clicks_for=exponential_clicks,
+        omit_cost=True,
+    )
+    report = build_report(payload)
+    assert report["current_state"] == "INSUFFICIENT_EVIDENCE"
+    assert report["current_state"] not in {
+        "LINEAR_CANDIDATE",
+        "COMPOUNDING_CANDIDATE",
+        "EXPONENTIAL_CANDIDATE",
+    }
+    assert REASON_MISSING_DENOMINATOR in report["reason_codes"]
+    assert report["components"]["input"]["refresh_cost"]["status"] == "UNKNOWN"
+    assert report["components"]["input"]["refresh_cost"]["value"] is None
 
 
 def test_pipeline_and_revenue_unknown():
