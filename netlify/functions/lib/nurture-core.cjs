@@ -1,6 +1,6 @@
 /**
  * Nurture sequences — CONFENGE.
- * Tracks: contrato | edital | operacao (5 messages each).
+ * Tracks: contrato | edital | operacao (5 messages each) | sinais (brief).
  * PII only in private store; public responses never echo email in full.
  */
 const crypto = require("crypto");
@@ -8,7 +8,7 @@ const fs = require("fs");
 const path = require("path");
 const { safeLog } = require("./lead-core.cjs");
 
-const TRACKS = ["contrato", "edital", "operacao"];
+const TRACKS = ["contrato", "edital", "operacao", "sinais"];
 const TRACK_SET = new Set(TRACKS);
 
 function loadTracks() {

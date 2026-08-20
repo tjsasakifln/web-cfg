@@ -125,6 +125,41 @@
           "body_md": "Diagnóstico B2G 360°: se a empresa ainda não tem mapa claro de capacidade, mercado e gargalos.\nhttps://confenge.com.br/diagnostico-b2g-360/\n\nDiretoria B2G: se o problema é rotina de decisão e acompanhamento.\n{{cta_url}}\n\nContato: https://confenge.com.br/#contato?jornada=operacao\nDescadastro: {{unsubscribe_url}}"
         }
       ]
+    },
+    "sinais": {
+      "id": "sinais",
+      "label": "Brief de sinais de mercado",
+      "intent": "market_signals_brief",
+      "offer": "inteligencia",
+      "cta_default": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "tool": "https://confenge.com.br/inteligencia/",
+      "consent_label": "Quero receber o Brief de sinais de mercado da CONFENGE (até 4 edições manuais). Só envio depois deste consentimento; posso sair a qualquer momento. O e-mail não é gravado em métricas do site.",
+      "messages": [
+        {
+          "day_offset": 0,
+          "subject": "O que este briefing promete (e o que não promete)",
+          "preheader": "Mudanças factuais em obras públicas, com fonte e as_of.",
+          "body_md": "Você pediu o Brief de sinais de mercado da CONFENGE.\n\nO que chega: recortes factuais já publicados (Market Answer, análise de contrato, Radar) com método, as_of e limite visíveis.\n\nO que não chega: ranking de empresas, irregularidade inferida, \"o que mudou\" sem versão, nem e-mail frio.\n\nPrimeira leitura: valor típico de contratos de pavimentação em Santa Catarina.\n{{cta_url}}\n\nDescadastro: {{unsubscribe_url}}"
+        },
+        {
+          "day_offset": 7,
+          "subject": "Como ler ticket contratual sem virar custo por km",
+          "preheader": "Mediana é valor integral do instrumento, não preço de m².",
+          "body_md": "No recorte publicado, o ticket é o valor integral nominal do instrumento. Não converta isso em custo por km ou m².\n\nPágina: {{cta_url}}\nHub: {{tool_url}}\n\nSe o recorte não servir para a sua UF, responda NOT_RELEVANT no descadastro. Sem personalização por CNPJ neste briefing."
+        },
+        {
+          "day_offset": 14,
+          "subject": "O que o briefing não afirma quando falta dado",
+          "preheader": "Freshness falhou? Fica UNKNOWN, não narrativa.",
+          "body_md": "Se a fonte estiver vencida ou o recorte for incompleto, o briefing diz UNKNOWN. Não inventamos tendência nacional.\n\nInteligência: {{tool_url}}\n\nFeedback possível: USEFUL, TOO_BROAD, TOO_FREQUENT, NOT_RELEVANT.\nSair: {{unsubscribe_url}}"
+        },
+        {
+          "day_offset": 21,
+          "subject": "Quando o briefing vira conversa comercial (só se você pedir)",
+          "preheader": "Opt-in de leitura não é pedido de reunião.",
+          "body_md": "Esta sequência é leitura. Se a empresa tiver um contrato ou edital vivo, o próximo passo é o formulário, não mais um e-mail.\n\nhttps://confenge.com.br/#contato\n\nSair: {{unsubscribe_url}}"
+        }
+      ]
     }
   }
 }

@@ -92,6 +92,8 @@ const valueMarkers = [
   ["Diretoria B2G", "track_operacao_diretoria"],
   ["double opt-in", "double_opt_in"],
   ["nurture-form", "subscribe_form"],
+  ["Brief de sinais de mercado", "track_sinais_brief"],
+  ["consentimento explícito", "brief_consent_sentence"],
 ];
 for (const [needle, name] of valueMarkers) {
   if (!nurture.includes(needle)) {
@@ -99,6 +101,22 @@ for (const [needle, name] of valueMarkers) {
     fail++;
   } else console.log("PASS nurture_value", name);
 }
+
+if (!/autorizo|consentimento/i.test(nurture)) {
+  console.error("FAIL nurture_consent_language");
+  fail++;
+} else console.log("PASS nurture_consent_language");
+
+if (/data-email=|data-user-email=|data-pii-email=|data-analytics-email=/i.test(nurture)) {
+  console.error("FAIL nurture_email_in_analytics_attrs");
+  fail++;
+} else console.log("PASS nurture_no_email_analytics_attrs");
+
+const tracksSinais = tracks.tracks?.sinais;
+if (!tracksSinais?.consent_label || !/consentimento|posso sair/i.test(tracksSinais.consent_label)) {
+  console.error("FAIL sinais_consent_label");
+  fail++;
+} else console.log("PASS sinais_consent_label");
 
 if (fail) process.exit(1);
 console.log("ALL nurture/cases/press structure checks passed");
