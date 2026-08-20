@@ -280,6 +280,20 @@ def test_mobile_matrix_composition():
     assert "hero-visual{display:none}" in css.replace(" ", "") or ".hero-visual{display:none}" in css.replace(" ", "")
 
 
+def test_hero_evidence_visible_heading_and_mobile_equivalent():
+    html = HOME.read_text(encoding="utf-8")
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    assert re.search(
+        r"<h2[^>]*>Exemplo ilustrativo de raciocínio</h2>", html
+    ), "visible heading must say the panel is illustrative"
+    assert "hero-evidence-mobile" in html
+    assert "Não é um painel de produto" in html or "Nao e um painel de produto" in html
+    compact = css.replace(" ", "").replace("\n", "")
+    assert "hero-evidence-mobile{display:none" in compact
+    assert "hero-evidence-mobile{display:block" in compact
+    assert "hero-visual{display:none}" in compact or ".hero-visual{display:none}" in compact
+
+
 def test_functional_type_floor_in_css():
     """Shipped CSS must not set commercial functional type below 14px (.875rem)."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
