@@ -229,6 +229,134 @@ def main() -> int:
         ok("live_git_safe_ready", live_payload["ready_for_product_decisions"] is True)
         ok("live_git_safe_marked", live_payload["raw_query_rows_in_git"] is False)
 
+        raw_live = {
+            "source": "search_analytics_api",
+            "source_kind": "search_analytics_api",
+            "ready_for_product_decisions": True,
+            "synthetic": False,
+            "max_date": "2026-08-10",
+            "as_of": "2026-08-10",
+            "queries": [
+                {
+                    "date": "2026-08-10",
+                    "query": "confenge consultoria",
+                    "page": "https://confenge.com.br/",
+                    "country": "bra",
+                    "device": "DESKTOP",
+                    "impressions": 5,
+                    "clicks": 1,
+                    "position": 2.0,
+                    "brand_class": sdo.classify_query("confenge consultoria"),
+                },
+                {
+                    "date": "2026-08-10",
+                    "query": "sinapi desonerado",
+                    "page": "https://confenge.com.br/",
+                    "country": "bra",
+                    "device": "DESKTOP",
+                    "impressions": 8,
+                    "clicks": 0,
+                    "position": 7.5,
+                    "brand_class": sdo.classify_query("sinapi desonerado"),
+                },
+            ],
+        }
+        safe_live = sdo.git_safe_live_payload(raw_live)
+        ok("safe_live_no_raw_brand_query", "confenge consultoria" not in json.dumps(safe_live))
+        ok("safe_live_no_raw_sinapi", "sinapi desonerado" not in json.dumps(safe_live))
+        ok(
+            "safe_live_stores_brand_string",
+            any(r.get("brand_class") == "brand" for r in safe_live["queries"]),
+        )
+        ok(
+            "row_brand_honors_stored_string",
+            sdo.row_brand_label({"query_hash": "sha256:deadbeefdeadbeef", "brand_class": "brand"})
+            == "brand",
+        )
+        ok(
+            "row_brand_does_not_classify_hash",
+            sdo.row_brand_label({"query_hash": "sha256:deadbeefdeadbeef", "query": "sha256:deadbeefdeadbeef"})
+            == "non_brand",
+        )
+        counts_safe = sdo.brand_class_counts(safe_live["queries"])
+        ok("git_safe_brand_count", counts_safe.get("brand") == 1, str(counts_safe))
+        ok("git_safe_nonbrand_count", counts_safe.get("non_brand") == 1, str(counts_safe))
+        baseline_safe = sdo.build_operational_baseline(safe_live, today=sdo.date(2026, 8, 11))
+        pulse_safe = baseline_safe["windows"]["pulse_7"]["totals"]
+        ok(
+            "git_safe_baseline_brand_imps",
+            pulse_safe["brand"]["impressions"] == 5.0,
+            str(pulse_safe["brand"]),
+        )
+        ok(
+            "git_safe_baseline_nonbrand_imps",
+            pulse_safe["non_brand"]["impressions"] == 8.0,
+            str(pulse_safe["non_brand"]),
+        )
+        wrong_from_safe = sdo.detect_wrong_landing(safe_live["queries"])
+        ok(
+            "git_safe_wrong_landing_fires",
+            any(
+                item.get("intended") == "/conteudos/sinapi-desonerado-nao-desonerado/"
+                and item.get("landed") == "/"
+                for item in wrong_from_safe.get("items") or []
+            ),
+            str(wrong_from_safe),
+        )
+
+        private_path = sdo.PRIVATE_DIR / "latest_import.json"
+        last_sync_path = sdo.DATA / "last_sync.json"
+        public_path = sdo.DATA / "latest_import.json"
+        private_backup = private_path.read_bytes() if private_path.is_file() else None
+        last_backup = last_sync_path.read_bytes() if last_sync_path.is_file() else None
+        public_backup = public_path.read_bytes() if public_path.is_file() else None
+        try:
+            sdo.PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
+            private_path.write_text(json.dumps(raw_live, ensure_ascii=False), encoding="utf-8")
+            public_path.write_text(json.dumps(safe_live, ensure_ascii=False), encoding="utf-8")
+            last_sync_path.write_text(
+                json.dumps(
+                    {
+                        "source": "search_analytics_api",
+                        "source_kind": "search_analytics_api",
+                        "ready_for_product_decisions": True,
+                        "synthetic": False,
+                        "last_sync_at": "2026-08-11T00:00:00+00:00",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            loaded = sdo.load_labeled_snapshot()
+            ok("analysis_prefers_private_raw", loaded.get("analysis_source") == "private_raw")
+            ok(
+                "analysis_private_keeps_query",
+                any(r.get("query") == "sinapi desonerado" for r in loaded.get("queries") or []),
+            )
+            private_wrong = sdo.detect_wrong_landing(loaded.get("queries") or [])
+            ok(
+                "private_wrong_landing_fires",
+                any(
+                    item.get("intended") == "/conteudos/sinapi-desonerado-nao-desonerado/"
+                    for item in private_wrong.get("items") or []
+                ),
+            )
+        finally:
+            if private_backup is None:
+                if private_path.is_file():
+                    private_path.unlink()
+            else:
+                private_path.write_bytes(private_backup)
+            if last_backup is None:
+                if last_sync_path.is_file():
+                    last_sync_path.unlink()
+            else:
+                last_sync_path.write_bytes(last_backup)
+            if public_backup is None:
+                if public_path.is_file():
+                    public_path.unlink()
+            else:
+                public_path.write_bytes(public_backup)
+
         fixture = sdo.sync_from_fixture()
         ok("fixture_ok", fixture.get("ok") is True)
         ok("fixture_not_product", fixture.get("ready_for_product_decisions") is False)

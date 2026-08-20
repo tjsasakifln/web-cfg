@@ -526,11 +526,13 @@ def cannibalization_verdict(
     """
     by_query: dict[str, set[str]] = defaultdict(set)
     for row in rows:
-        query = (row.get("query") or "").strip()
         page = (row.get("page") or "").strip()
-        if not query or not page:
+        if not page:
             continue
-        if classify_query(query)["label"] != "non_brand":
+        if row_brand_label(row) != "non_brand":
+            continue
+        query = _row_query_text(row) or _row_query_hash(row)
+        if not query:
             continue
         by_query[query].add(page)
     repeated = {q: sorted(pages) for q, pages in by_query.items() if len(pages) >= 2}
@@ -621,14 +623,42 @@ def _normalize_query(query: str) -> str:
     return text
 
 
+def _row_query_text(row: dict[str, Any]) -> str:
+    """Raw query text only. A sha256 query_hash is not a query."""
+    q = row.get("query")
+    if isinstance(q, str) and q and not q.startswith("sha256:"):
+        return q
+    return ""
+
+
+def _row_query_hash(row: dict[str, Any]) -> str:
+    stored = row.get("query_hash")
+    if isinstance(stored, str) and stored.startswith("sha256:"):
+        return stored
+    text = _row_query_text(row)
+    return redact_query(text) if text else ""
+
+
+def row_brand_label(row: dict[str, Any]) -> str:
+    """Honor stored brand_class on git-safe rows. Never classify a query_hash."""
+    allowed = {"brand", "legacy_brand", "non_brand"}
+    raw = row.get("brand_class")
+    if isinstance(raw, dict) and raw.get("label") in allowed:
+        return str(raw["label"])
+    if isinstance(raw, str) and raw in allowed:
+        return raw
+    text = _row_query_text(row)
+    if text:
+        return classify_query(text).get("label") or "non_brand"
+    if row.get("branded") is True:
+        return "brand"
+    return "non_brand"
+
+
 def brand_class_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
     counts = {"brand": 0, "non_brand": 0, "legacy_brand": 0}
     for row in rows:
-        raw = row.get("brand_class")
-        if isinstance(raw, dict) and raw.get("label") in counts:
-            label = str(raw["label"])
-        else:
-            label = classify_query(str(row.get("query") or "")).get("label") or "non_brand"
+        label = row_brand_label(row)
         if label in counts:
             counts[label] += 1
     return counts
@@ -671,7 +701,7 @@ def detect_striking_distance(
             items.append(
                 {
                     "page": row.get("page"),
-                    "query_hash": redact_query(str(row.get("query") or "")),
+                    "query_hash": _row_query_hash(row),
                     "impressions": impressions,
                     "position": position,
                     "clicks": row.get("clicks"),
@@ -699,25 +729,36 @@ def detect_wrong_landing(
             "reason": "no_intended_landing_map",
             "items": [],
         }
+    hashed_exact = {
+        redact_query(key): path for key, path in mapping.items()
+    }
+    hashed_exact.update(
+        {redact_query(_normalize_query(key)): path for key, path in mapping.items()}
+    )
     items: list[dict[str, Any]] = []
     for row in rows:
-        query = str(row.get("query") or "")
         page = str(row.get("page") or "")
-        if not query or not page:
+        if not page:
             continue
-        norm = _normalize_query(query)
+        query = _row_query_text(row)
         intended = None
-        for key, path in mapping.items():
-            if key in norm:
-                intended = path
-                break
+        if query:
+            norm = _normalize_query(query)
+            for key, path in mapping.items():
+                if key in norm:
+                    intended = path
+                    break
+        if intended is None:
+            qh = _row_query_hash(row)
+            if qh:
+                intended = hashed_exact.get(qh)
         if not intended:
             continue
         landed = _path_of(page)
         if landed and intended.rstrip("/") not in landed.rstrip("/"):
             items.append(
                 {
-                    "query_hash": redact_query(query),
+                    "query_hash": _row_query_hash(row) or redact_query(query),
                     "landed": landed,
                     "intended": intended,
                     "impressions": row.get("impressions"),
@@ -750,13 +791,13 @@ def detect_impressions_without_adequate_answer(
             continue
         if float(row.get("impressions") or 0) <= 0:
             continue
-        if classify_query(str(row.get("query") or "")).get("label") != "non_brand":
+        if row_brand_label(row) != "non_brand":
             continue
         page = str(row.get("page") or "")
         if not page:
             items.append(
                 {
-                    "query_hash": redact_query(str(row.get("query") or "")),
+                    "query_hash": _row_query_hash(row),
                     "status": "join_absent",
                     "impressions": row.get("impressions"),
                     "note": "missing_page_join_is_not_zero",
@@ -767,7 +808,7 @@ def detect_impressions_without_adequate_answer(
         if landed not in paths:
             items.append(
                 {
-                    "query_hash": redact_query(str(row.get("query") or "")),
+                    "query_hash": _row_query_hash(row),
                     "landed": landed,
                     "status": "landing_not_in_adequate_set",
                     "impressions": row.get("impressions"),
@@ -955,19 +996,19 @@ def git_safe_aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
     clicks = 0.0
     hashed: list[dict[str, Any]] = []
     for row in rows:
-        cls = classify_query(str(row.get("query") or ""))
-        if cls["label"] == "brand":
+        cls_label = row_brand_label(row)
+        if cls_label == "brand":
             branded_n += 1
-        elif cls["label"] == "legacy_brand":
+        elif cls_label == "legacy_brand":
             legacy_n += 1
         else:
             nonbrand_n += 1
-        impressions += float(row.get("impressions") or 0)
-        clicks += float(row.get("clicks") or 0)
+        impressions += float(row.get("impressions") or 0) if row.get("impressions") is not None else 0.0
+        clicks += float(row.get("clicks") or 0) if row.get("clicks") is not None else 0.0
         hashed.append(
             {
                 "date": row.get("date"),
-                "query_hash": redact_query(str(row.get("query") or "")),
+                "query_hash": _row_query_hash(row) or redact_query(_row_query_text(row)),
                 "page": row.get("page"),
                 "country": row.get("country"),
                 "device": row.get("device"),
@@ -975,8 +1016,8 @@ def git_safe_aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 "clicks": row.get("clicks"),
                 "ctr": row.get("ctr"),
                 "position": row.get("position"),
-                "brand_class": cls["label"],
-                "brand_class_version": cls["version"],
+                "brand_class": cls_label,
+                "brand_class_version": BRAND_CLASSIFICATION_VERSION,
             }
         )
     return {
@@ -2105,6 +2146,28 @@ def url_funnel_status(
     return "UNKNOWN"
 
 
+def _read_snapshot_dict(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        return {}
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    return raw if isinstance(raw, dict) else {}
+
+
+def analysis_import_payload() -> dict[str, Any]:
+    """Prefer private raw Search Analytics rows; fall back to git-safe public snapshot."""
+    private = _read_snapshot_dict(PRIVATE_DIR / "latest_import.json")
+    public = _read_snapshot_dict(DATA / "latest_import.json")
+    if private.get("queries"):
+        private["source_kind"] = classify_snapshot_source(private)
+        private["analysis_source"] = "private_raw"
+        return private
+    if public:
+        public["source_kind"] = classify_snapshot_source(public)
+        public["analysis_source"] = "git_safe"
+        return public
+    return {}
+
+
 def load_labeled_snapshot(path: Path | None = None) -> dict[str, Any]:
     if path is not None:
         target = path
@@ -2115,37 +2178,27 @@ def load_labeled_snapshot(path: Path | None = None) -> dict[str, Any]:
             return {"source_kind": "absence", "queries": [], "pages": [], "ok": False}
         payload["source_kind"] = classify_snapshot_source(payload)
         return payload
-    last_path = DATA / "last_sync.json"
-    latest_path = DATA / "latest_import.json"
-    last_payload: dict[str, Any] = {}
-    latest_payload: dict[str, Any] = {}
-    if last_path.is_file():
-        raw = json.loads(last_path.read_text(encoding="utf-8"))
-        if isinstance(raw, dict):
-            last_payload = raw
-    if latest_path.is_file():
-        raw = json.loads(latest_path.read_text(encoding="utf-8"))
-        if isinstance(raw, dict):
-            latest_payload = raw
+    last_payload = _read_snapshot_dict(DATA / "last_sync.json")
+    analysis = analysis_import_payload()
     last_kind = classify_snapshot_source(last_payload) if last_payload else "absence"
     if last_kind == "credential_failure":
         merged = dict(last_payload)
         merged["source_kind"] = "credential_failure"
-        if is_live_gsc_payload(latest_payload):
+        if analysis:
             merged["last_live_snapshot"] = {
-                "source_kind": classify_snapshot_source(latest_payload),
-                "as_of": latest_payload.get("as_of"),
-                "max_date": latest_payload.get("max_date"),
-                "freshness": snapshot_freshness(latest_payload),
-                "query_count": latest_payload.get("query_count"),
+                "source_kind": classify_snapshot_source(analysis),
+                "as_of": analysis.get("as_of"),
+                "max_date": analysis.get("max_date"),
+                "freshness": snapshot_freshness(analysis),
+                "query_count": analysis.get("query_count") or len(analysis.get("queries") or []),
+                "analysis_source": analysis.get("analysis_source"),
                 "ready_for_product_decisions": False,
             }
         merged.setdefault("queries", [])
         merged.setdefault("pages", [])
         return merged
-    if latest_payload:
-        latest_payload["source_kind"] = classify_snapshot_source(latest_payload)
-        return latest_payload
+    if analysis:
+        return analysis
     if last_payload:
         last_payload["source_kind"] = last_kind
         return last_payload
@@ -2168,11 +2221,7 @@ def _window_totals(
             present_days.add(day)
         if day and day not in day_set:
             continue
-        cls = row.get("brand_class")
-        if isinstance(cls, dict):
-            label = str(cls.get("label") or "non_brand")
-        else:
-            label = classify_query(str(row.get("query") or row.get("query_hash") or "")).get("label") or "non_brand"
+        label = row_brand_label(row)
         if label not in brand_imps:
             label = "non_brand"
         imps = optional_metric(row, "impressions")
