@@ -271,6 +271,8 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/revops/backfill_record_kind.mjs",
       "scripts/revops/test_search_demand.py",
       "scripts/revops/search_demand_observatory.py",
+      "scripts/distribution/tests/test_paid_search_canary.py",
+      "data/distribution/paid-search-canary.v1.json",
       "netlify/functions/lib/lead-stages.cjs",
       "netlify/functions/lib/record-kind.cjs",
     ],

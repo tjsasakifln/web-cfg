@@ -1,0 +1,30 @@
+{
+  "schema": "paid-search-canary-v1",
+  "issue": 87,
+  "decision_state": "VALIDATE",
+  "status": "PREPARE",
+  "mode": "prepare-only",
+  "as_of": "2026-08-20",
+  "owner": "tiago.sasaki",
+  "canonical_host": "confenge.com.br",
+  "spend_authorized": false,
+  "spend": null,
+  "budget_cap_brl": null,
+  "note": "No spend, account, campaign or click is authorized by this record. Human approval of budget, owner and kill cap is required before any live ads. Spend figures remain UNKNOWN until a later measured export.",
+  "hypothesis": "A single high-intent query adjacent to Contract Defense can measure whether paid search is a useful demand sensor without substituting SEO or product.",
+  "campaign_name": "CONFENGE-search-sensor-defesa-margem-v1",
+  "query": "glosa medição obra pública",
+  "match_type": "phrase",
+  "geo": "BR",
+  "landing_path": "/defesa-margem-contratos-publicos/",
+  "html": "defesa-margem-contratos-publicos/index.html",
+  "canonical_url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+  "primary_metric": "qualified_lead",
+  "hard_stop": "No launch until budget cap, account and named human approval exist in a later record. Pause if spend hits the cap without qualified intent.",
+  "exclusions": ["broad_match_autonomous", "performance_max", "retargeting", "smartlic.tech"],
+  "outcomes": {
+    "clicks": "UNKNOWN",
+    "spend_brl": "UNKNOWN",
+    "qualified_leads": "UNKNOWN"
+  }
+}
