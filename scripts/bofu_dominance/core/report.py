@@ -19,7 +19,7 @@ def render_report(status: dict[str, Any]) -> str:
         f"**Git head (origin/main pin):** `{status.get('origin_main')}`  ",
         f"**Decision state:** VALIDATE (ledger) / EXECUTE_NOW (honesty gates)  ",
         f"**Leverage:** distribution, data, trust  ",
-        f"**Time to evidence:** this PR for the ledger; GSC job 32322344062 is LIVE_JOB_OK  ",
+        f"**Time to evidence:** this PR for the ledger; `gsc_live_state` is `{status['gsc_live_state']}`  ",
         f"**North Star:** inbound qualified pipeline / month — not page count",
         "",
         "## Visitor job",
@@ -38,7 +38,12 @@ def render_report(status: dict[str, Any]) -> str:
         f"- core ready_for_product_decisions: `{live.get('ready_for_product_decisions')}`",
         f"- committed main last_sync: `{live.get('committed_main_last_sync')}`",
         "",
-        "Credentials are proven by isolated job `gsc` on run 32322344062.",
+        (
+            "Credentials are proven by isolated job `gsc` on run "
+            f"`{live.get('actions_run_id')}`."
+            if status.get("gsc_live_state") == "LIVE_JOB_OK"
+            else "Live GSC remains blocked until a successful isolated `gsc` job is recorded."
+        ),
         "The 2026-08-09 CSV, redacted snapshots and SERP samples are **not** this",
         "live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not",
         "authorize TOP* or HTML. PR #159 remains an observability candidate, not",
@@ -85,7 +90,11 @@ def render_report(status: dict[str, Any]) -> str:
             "- **#155 / #156** are GATED families, not existing pages.",
             "- **PR #157** is exactly one contract-analysis canary, not a BOFU family.",
             "- **PR #158** is the Data Desk kit; this ledger is not a second target registry.",
-            "- **PR #159** is the observability producer candidate. `gsc_live_state` stays blocked.",
+            (
+                "- **PR #159** is the observability producer candidate. "
+                f"`gsc_live_state` is `{status['gsc_live_state']}`; "
+                "PR #159 is not merged to main."
+            ),
             "",
             "## SERP census",
             "",
