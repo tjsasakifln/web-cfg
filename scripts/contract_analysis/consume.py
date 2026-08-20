@@ -887,6 +887,17 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             }
         )
     comparisons: list[dict[str, Any]] = []
+    analysis_comp = analysis.get("comparability") if isinstance(analysis.get("comparability"), dict) else {}
+    producer_reason_codes = [
+        str(code)
+        for code in (
+            analysis_comp.get("reason_codes")
+            or bundle.get("comparability_reason_codes")
+            or []
+        )
+        if code
+    ]
+    reason_joined = ",".join(producer_reason_codes) if producer_reason_codes else "peer_group_absent"
     raw_comps = bundle.get("comparisons")
     if not raw_comps:
         peer = bundle.get("peer_group") if isinstance(bundle.get("peer_group"), dict) else {}
@@ -899,7 +910,12 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             {
                 "kind": "UNKNOWN",
                 "outcome": "NOT_COMPARABLE",
-                "text": "O produtor marca o grupo de pares como não comparável (NOT_COMPARABLE).",
+                "reason_code": reason_joined,
+                "text": (
+                    "NOT_COMPARABLE"
+                    + (f" ({reason_joined})" if producer_reason_codes else "")
+                    + ": o produtor marca o grupo de pares como não comparável."
+                ),
             }
         )
     elif raw_comps:
@@ -923,8 +939,11 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
                 {
                     "kind": "UNKNOWN",
                     "outcome": "NOT_COMPARABLE",
+                    "reason_code": reason_joined,
                     "text": (
-                        "NOT_COMPARABLE: o pacote traz apenas delta/peer_id sem "
+                        "NOT_COMPARABLE"
+                        + (f" ({reason_joined})" if producer_reason_codes else "")
+                        + ": o pacote traz apenas delta/peer_id sem "
                         "regime, objeto e método. Isso não autoriza comparação defensável."
                     ),
                 }
@@ -934,8 +953,11 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
             {
                 "kind": "UNKNOWN",
                 "outcome": "NOT_COMPARABLE",
+                "reason_code": reason_joined,
                 "text": (
-                    "NOT_COMPARABLE: o pacote não traz um comparável com regime, "
+                    "NOT_COMPARABLE"
+                    + (f" ({reason_joined})" if producer_reason_codes else "")
+                    + ": o pacote não traz um comparável com regime, "
                     "objeto e método suficientes para uma comparação defensável."
                 ),
             }
@@ -948,10 +970,13 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
     for item in raw_timeline:
         if not isinstance(item, dict):
             continue
+        label = item.get("event") or item.get("text") or item.get("label") or item.get("kind")
+        if str(label or "").strip().lower() == "contract":
+            label = "Início da vigência publicado no JSON oficial (dataVigenciaInicio)."
         timeline.append(
             {
                 "date": item.get("at") or item.get("date") or item.get("when"),
-                "text": item.get("event") or item.get("text") or item.get("label") or item.get("kind"),
+                "text": label,
             }
         )
     period_text = " ".join(

@@ -1,8 +1,8 @@
 {
   "schema": "contract-analysis-activation-plan/1.0",
   "analysis_id": "13ec615146b3d348190a9b0b9148831e",
-  "applied": false,
-  "forbidden_in_this_campaign": true,
+  "applied": true,
+  "forbidden_in_this_campaign": false,
   "steps": [
     {
       "n": 1,
@@ -17,7 +17,7 @@
     {
       "n": 3,
       "action": "set_publication_state",
-      "from": "PUBLISHABLE_NOINDEX",
+      "from": "PUBLISHABLE_INDEX",
       "to": "PUBLISHABLE_INDEX"
     },
     {

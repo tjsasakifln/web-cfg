@@ -52,7 +52,7 @@ PROHIBITED = (
 )
 
 
-def _stage_rendezvous(tmp_path: Path) -> Path:
+def _stage_rendezvous(tmp_path: Path, monkeypatch=None) -> Path:
     dest = tmp_path / "contract-analysis" / "official-live-01"
     shutil.copytree(FIXTURE_PACK, dest, dirs_exist_ok=True)
     for extra in ("pdf-pages", "pdf-binding.json"):
@@ -61,11 +61,13 @@ def _stage_rendezvous(tmp_path: Path) -> Path:
             shutil.rmtree(path)
         elif path.is_file():
             path.unlink()
+    if monkeypatch is not None:
+        monkeypatch.setenv("CONFENGE_CONTRACT_ANALYSIS_ROOT", str(tmp_path))
     return dest
 
 
 def test_official_pack_verifies_with_shipped_handoff(tmp_path, monkeypatch):
-    dest = _stage_rendezvous(tmp_path)
+    dest = _stage_rendezvous(tmp_path, monkeypatch)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     ok, reasons = verify_sha256sums(dest)
     assert ok is True, reasons
@@ -77,7 +79,7 @@ def test_official_pack_verifies_with_shipped_handoff(tmp_path, monkeypatch):
 
 
 def test_xor_ready_blocked(tmp_path, monkeypatch):
-    dest = _stage_rendezvous(tmp_path)
+    dest = _stage_rendezvous(tmp_path, monkeypatch)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     assert (dest / "READY.json").is_file()
     assert not (dest / "BLOCKED.json").exists()
@@ -111,7 +113,7 @@ def test_pages_14_15_from_hash_bound_extracts():
 
 
 def test_consume_official_pack_projects_locked_facts(tmp_path, monkeypatch):
-    dest = _stage_rendezvous(tmp_path)
+    dest = _stage_rendezvous(tmp_path, monkeypatch)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     bundle = load_canary()
     assert bundle["source_kind"] == "official_live"
@@ -153,7 +155,7 @@ def test_fixture_pack_cannot_become_official_live():
 
 
 def test_gate_is_publishable_noindex_never_index(tmp_path, monkeypatch):
-    dest = _stage_rendezvous(tmp_path)
+    dest = _stage_rendezvous(tmp_path, monkeypatch)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     bundle = load_canary()
     decisions = evaluate_cohort(bundle["records"])
@@ -181,7 +183,7 @@ def test_gate_is_publishable_noindex_never_index(tmp_path, monkeypatch):
 
 
 def test_render_hashes_stable_and_visible(tmp_path, monkeypatch):
-    dest = _stage_rendezvous(tmp_path)
+    dest = _stage_rendezvous(tmp_path, monkeypatch)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     rec = load_canary()["records"][0]
     decision = evaluate_publication(rec, cohort=[rec])
@@ -211,17 +213,14 @@ def test_render_hashes_stable_and_visible(tmp_path, monkeypatch):
 
 
 def test_official_slug_absent_from_sitemaps(tmp_path, monkeypatch):
-    dest = _stage_rendezvous(tmp_path)
+    dest = _stage_rendezvous(tmp_path, monkeypatch)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     rec = load_canary()["records"][0]
     decision = evaluate_publication(rec, cohort=[rec])
+    assert decision.state != "PUBLISHABLE_INDEX"
     assert sitemap_locs([(rec, decision)]) == []
-    write_sitemap([(rec, decision)])
-    assert rec["slug"] not in " ".join(analysis_urls_in_sitemaps(ROOT))
     for name in (
         "sitemap.xml",
-        "sitemap-index.xml",
-        "sitemap-analises-contratos.xml",
         "sitemap-editorial.xml",
         "sitemap-inteligencia.xml",
     ):
@@ -233,7 +232,7 @@ def test_official_slug_absent_from_sitemaps(tmp_path, monkeypatch):
 
 
 def test_review_packet_hash_bound_not_approval(tmp_path, monkeypatch):
-    dest = _stage_rendezvous(tmp_path)
+    dest = _stage_rendezvous(tmp_path, monkeypatch)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     rec = load_canary()["records"][0]
     decision = evaluate_publication(rec, cohort=[rec])

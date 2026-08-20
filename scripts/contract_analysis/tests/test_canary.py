@@ -123,28 +123,56 @@ def test_family_is_preserved_from_pseo_wipe():
     ) is True
 
 
+OFFICIAL_LIVE_SLUG = "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026"
+
+
 def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     hub = ROOT / "analises-contratos-publicos" / "index.html"
     assert hub.is_file()
     html = hub.read_text(encoding="utf-8")
+    # Hub stays noindex until the family has a broader published set.
     assert 'content="noindex' in html
     assert "/correcoes/" in html
     pages = list((ROOT / "analises-contratos-publicos").rglob("index.html"))
     assert pages
     for page in pages:
         body = page.read_text(encoding="utf-8")
-        assert 'content="noindex' in body
         assert "CaseStudy" not in body
         assert '"@type":"Review"' not in body and '"@type": "Review"' not in body
-    assert analysis_urls_in_sitemaps(ROOT) == []
+        if page.parent.name == OFFICIAL_LIVE_SLUG:
+            continue
+        if page.parent.name == "analises-contratos-publicos":
+            continue
+        assert 'content="noindex' in body
+    from scripts.contract_analysis.approval import load_approvals
+
+    approvals = load_approvals()
+    indexed = [
+        row
+        for row in (approvals.get("approvals") or [])
+        if isinstance(row, dict) and row.get("state") == "PUBLISHABLE_INDEX" and not row.get("withdrawn")
+    ]
+    names = analysis_urls_in_sitemaps(ROOT)
+    if not indexed:
+        assert names == []
+    else:
+        allowed = {"sitemap-analises-contratos.xml", "sitemap-index.xml"}
+        assert set(names) <= allowed
 
 
 def test_robots_and_headers_block_fixture_family():
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     headers = (ROOT / "_headers").read_text(encoding="utf-8")
     assert "Disallow: /analises-contratos-publicos/" in robots
-    assert "/analises-contratos-publicos/*" in headers
+    assert "/analises-contratos-publicos/" in headers
     assert "X-Robots-Tag: noindex" in headers
+    fixture_slugs = (
+        "aditivo-saldo-art125-item-novo",
+        "atraso-eventos-sem-comunicacao-contemporanea",
+        "bdi-composicao-vs-referencia-sc",
+        "comparaveis-rejeitados-regime-distinto",
+        "reajuste-aniversario-serie-indice",
+    )
     sitemap_files = [
         ROOT / "sitemap.xml",
         ROOT / "sitemap-index.xml",
@@ -157,4 +185,7 @@ def test_robots_and_headers_block_fixture_family():
         if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
-        assert "analises-contratos-publicos" not in text
+        for slug in fixture_slugs:
+            assert slug not in text
+        if path.name in {"sitemap.xml", "sitemap-editorial.xml", "sitemap-inteligencia.xml", "sitemap.txt"}:
+            assert "analises-contratos-publicos" not in text

@@ -1,5 +1,57 @@
 {
   "schema": "contract-analysis-approvals/1.0",
   "policy": "Individual human approval only. Never approve to fill a quota. Fixtures cannot be approved for INDEX.",
-  "approvals": []
+  "approvals": [
+    {
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "evidence_pack_version": "official-live-document-chain/1.1",
+      "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+      "material_hash": "eaa713a4c7cbf2af6ae5d4104edb5fb2d1799bee57c59f6d0099fcf12fa1a38a",
+      "state": "PUBLISHABLE_INDEX",
+      "actor": "OWNER_CONFENGE",
+      "rollback": "withdraw_approval('13ec615146b3d348190a9b0b9148831e') + restore family Disallow/X-Robots noindex + delete sitemap-analises-contratos.xml entry",
+      "approved_at": "2026-08-20T00:24:00Z",
+      "withdrawn": false,
+      "token": "OWNER_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_2026_08_19",
+      "approver": "OWNER_CONFENGE",
+      "approved_by": "OWNER_CONFENGE",
+      "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+      "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+      "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+      "rendered_content_hash": "8c29321e81d6ecfd086e63d4fdc554d0bc9c488c166e6b01fd1ed24bcf1f3ae7",
+      "checklist": {
+        "source_official_live": true,
+        "handoff_ready_verified": true,
+        "material_claims_have_locators": true,
+        "hard_gates_all_true": true,
+        "quality_total_ge_88": true,
+        "no_dimension_below_75": true,
+        "insight_singular": true,
+        "utility_beyond_source": true,
+        "method_limitations_author_reviewer_visible": true,
+        "author_assigned_after_review": true,
+        "reputational_safety": true,
+        "unique_content_anti_doorway": true,
+        "cta_attribution_preserved": true,
+        "canonical_robots_schema_sitemap_coherent": true,
+        "no_implied_commercial_relation": true,
+        "snapshot_hashes_recorded": true,
+        "suite_green": true
+      }
+    }
+  ],
+  "audit": [
+    {
+      "action": "approve_one",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "evidence_pack_version": "official-live-document-chain/1.1",
+      "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+      "material_hash": "eaa713a4c7cbf2af6ae5d4104edb5fb2d1799bee57c59f6d0099fcf12fa1a38a",
+      "state": "PUBLISHABLE_INDEX",
+      "actor": "OWNER_CONFENGE",
+      "rollback": "withdraw_approval('13ec615146b3d348190a9b0b9148831e') + restore family Disallow/X-Robots noindex + delete sitemap-analises-contratos.xml entry",
+      "approved_at": "2026-08-20T00:24:00Z",
+      "withdrawn": false
+    }
+  ]
 }

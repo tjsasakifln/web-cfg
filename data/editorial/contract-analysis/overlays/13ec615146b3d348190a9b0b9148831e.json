@@ -5,7 +5,9 @@
   "content_class": "ANALISE_TECNICA_CONTRATO_PUBLICO",
   "editorial_status": "ready_for_human_review",
   "approved_for_index": false,
-  "human_authorship_confirmed": false,
+  "human_authorship_confirmed": true,
+  "date_published": "2026-08-18",
+  "date_modified": "2026-08-19",
   "title": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo",
   "h1": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo",
   "meta_description": "O instrumento oficial separa vigência, orçamento estimado e orçamento da proposta. A listagem não publica as duas datas de orçamento. Não é caso CONFENGE.",
@@ -57,15 +59,19 @@
   ],
   "cannot_conclude": "Não se afirma irregularidade, sobrepreço, superfaturamento, culpa, fraude, má-fé, incapacidade técnica, ilegalidade, reajuste efetivamente pago, medição aprovada, dano, crédito, direito líquido ou falha do órgão ou do contratado. Não se afirma relação comercial, caso, cliente ou autorização de publicação ou indexação. Não se afirma ausência mundial de aditivo a partir de 404 ou lista vazia. Não se afirma irregularidade a partir de atípico.",
   "methodology": "Leitura do dossiê official-live-authority-dossier/1.1 (analysis_id 13ec615146b3d348190a9b0b9148831e), verificação XOR READY/BLOCKED, SHA256SUMS.txt, root_content_hash sobre {ids, hashes}, content_hash do dossiê com exclusão de relógios operacionais, e conferência das páginas 14–15 e 46 do PDF cujo SHA-256 é 64a238e6…. Cálculo em Decimal, sem float. Overlay editorial acrescenta interpretação rotulada e não reescreve fatos, hashes nem flags de autorização do produtor.",
-  "limitations": "Não há comparável autorizado: o modo é DOCUMENT_CHAIN e a comparabilidade é NOT_APPLICABLE. Termos posteriores ao contrato não foram obtidos (endpoint de termos registrado como not_found). A listagem ao vivo refetchada nesta execução produziu SHA-256 distinto do snapshot do produtor; objeto e valorGlobal continuam iguais às strings do FACT. Sem as datas de orçamento, a cláusula 12 não se converte em conta. publication_authorization e index_authorization permanecem false.",
+  "limitations": "Não há comparável autorizado: o modo é DOCUMENT_CHAIN e a comparabilidade é NOT_APPLICABLE, reason_codes no_comparative_claim e singular_document_insight. extra-cli #415/#435 permanece aberto e, nesta data, o peer group de pavimentação está HOLD_FOR_DATA (live_columns_unavailable, fields_unavailable, unit_unknown). Ausência de grupo de pares não autoriza inventar benchmark e não bloqueia o insight documental dos três relógios. Termos posteriores ao contrato não foram obtidos (endpoint de termos registrado como not_found). A listagem ao vivo refetchada nesta execução produziu SHA-256 distinto do snapshot do produtor; objeto e valorGlobal continuam iguais às strings do FACT. Sem as datas de orçamento, a cláusula 12 não se converte em conta. publication_authorization e index_authorization do produtor permanecem false.",
   "author": {
-    "name": "Rascunho editorial (autoria humana não confirmada)"
+    "name": "Engº Tiago Sasaki",
+    "url": "/especialista/tiago-jun-sasaki/",
+    "scope": "autoria editorial e interpretação de engenharia/gestão contratual"
   },
   "reviewer": {
-    "name": "Revisão humana pendente — somente o owner pode aprovar após leitura integral"
+    "name": "Revisão editorial/técnica do owner — engenharia e gestão contratual; revisão jurídica externa ausente"
   },
   "solo_reviewer_disclosure": true,
-  "maintenance_owner": "web-cfg#83 — sem autorização de INDEX nesta campanha",
+  "maintenance_owner": "web-cfg#83",
+  "refresh_cost": "Releitura do dossiê official-live (READY XOR BLOCKED, SHA256SUMS, content_hash) + conferência das páginas 13–15 e 46 do PDF cujo SHA-256 está bound. Sem novo instrumento, o custo é uma execução do consume/gate/render. Qualquer drift de hash do produtor ou do render invalida INDEX e devolve noindex. Não há cadência automática; owner de atualização é web-cfg#83.",
+  "citation_text": "CONFENGE. Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo. Análise técnica de contrato público. as_of 2026-08-18. https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
   "cta": {
     "label": "Ver Diagnóstico de Defesa de Margem",
     "href": "/ferramentas/diagnostico-defesa-margem/",
@@ -75,6 +81,10 @@
     {
       "date": "2026-08-18",
       "text": "Primeira análise official-live em PUBLISHABLE_NOINDEX / READY_FOR_HUMAN_REVIEW. Sem aprovação humana e sem INDEX."
+    },
+    {
+      "date": "2026-08-19",
+      "text": "Campanha CONFENGE-WEB-SEO-CONTRACT-AUTHORITY-CANARY-03: aprofundamento editorial, reason_code de NOT_COMPARABLE, citação visível, custo de refresh e token OWNER_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_2026_08_19 bound a hashes. extra-cli #435 permanece unmerged; sem benchmark inventado."
     }
   ],
   "counterproof": "A leitura alternativa — usar a vigência 2026-07-08/2027-07-08 como único relógio — só seria defensável se o instrumento identificasse essa vigência como data do orçamento estimado e como data do orçamento da proposta. O PDF não faz essa identificação nas páginas 13–15. A contraprova exigiria o orçamento citado em 12.1 e 12.2.",

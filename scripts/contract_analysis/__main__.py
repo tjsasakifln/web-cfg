@@ -33,9 +33,18 @@ def cmd_build(args: argparse.Namespace) -> int:
             preview = load_editorial_fixture()
             preview_decisions = evaluate_cohort(preview["records"])
             render_pairs = list(zip(preview["records"], preview_decisions))
+        from scripts.contract_analysis.render import apply_rendered_hash_gate, render_analysis_html, sync_family_crawler_rules
+
+        gated_pairs = []
+        for rec, dec in render_pairs:
+            html = render_analysis_html(rec, dec)
+            dec, _html = apply_rendered_hash_gate(rec, dec, html)
+            gated_pairs.append((rec, dec))
+        render_pairs = gated_pairs
         index_count = sum(1 for _rec, dec in render_pairs if dec.state == "PUBLISHABLE_INDEX")
         written = write_pages(render_pairs, index_count=index_count)
         write_sitemap(render_pairs)
+        sync_family_crawler_rules(render_pairs)
     status = build_status(bundle=bundle, decisions=decisions, written=written)
     # Review packets for official-live READY_FOR_HUMAN_REVIEW. Never approve or activate.
     if not args.report_only:
@@ -115,10 +124,21 @@ def cmd_validate(args: argparse.Namespace) -> int:
         fixture_path=Path(args.fixture) if args.fixture else None,
         limit=args.limit,
     )
+    from scripts.contract_analysis.approval import approval_rendered_hash_ok
+    from scripts.contract_analysis.render import render_analysis_html
+
     decisions = evaluate_cohort(bundle["records"])
+    render_mismatch = []
+    for rec, dec in zip(bundle["records"], decisions):
+        if dec.state != "PUBLISHABLE_INDEX":
+            continue
+        html = render_analysis_html(rec, dec)
+        ok_hash, reasons = approval_rendered_hash_ok(rec, html)
+        if not ok_hash:
+            render_mismatch.append({"id": dec.analysis_id, "reasons": reasons})
     fixture_indexed = [d.analysis_id for d in decisions if d.is_fixture and d.state == "PUBLISHABLE_INDEX"]
     over = len(decisions) > MAX_CANARY
-    ok = not fixture_indexed and not over
+    ok = not fixture_indexed and not over and not render_mismatch
     print(
         json.dumps(
             {
@@ -127,6 +147,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
                 "source_kind": bundle.get("source_kind"),
                 "index_count": sum(1 for d in decisions if d.state == "PUBLISHABLE_INDEX"),
                 "fixture_indexed": fixture_indexed,
+                "render_mismatch": render_mismatch,
             },
             ensure_ascii=False,
             indent=2,

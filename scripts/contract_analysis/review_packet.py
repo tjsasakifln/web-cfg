@@ -37,12 +37,16 @@ def _sha256_text(text: str) -> str:
 
 
 def activation_plan(record: dict[str, Any], decision: PublicationDecision) -> dict[str, Any]:
+    from scripts.contract_analysis.approval import find_approval
+
     aid = str(record.get("id") or decision.analysis_id)
+    stored = find_approval(record)
+    applied = bool(stored) and decision.state == "PUBLISHABLE_INDEX"
     return {
         "schema": "contract-analysis-activation-plan/1.0",
         "analysis_id": aid,
-        "applied": False,
-        "forbidden_in_this_campaign": True,
+        "applied": applied,
+        "forbidden_in_this_campaign": not applied,
         "steps": [
             {"n": 1, "action": "hash_bound_human_approval", "command": f"approve_one --id {aid} --actor HUMAN --rollback git:revert:{aid}"},
             {"n": 2, "action": "confirm_author_reviewer", "note": "Do not invent Tiago Sasaki."},
@@ -191,7 +195,12 @@ def founder_decision_required(
             "APPROVE_FOR_INDEX_FOLLOWUP",
             "REJECT_WITH_REASON",
             "",
-            "Do not call approve_one in this campaign. INDEX is not granted.",
+            (
+                "OWNER_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_2026_08_19 / approved_by=OWNER_CONFENGE "
+                "is bound to the hashes above. Merge/deploy remain forbidden."
+                if decision.state == "PUBLISHABLE_INDEX"
+                else "Do not call approve_one in this campaign. INDEX is not granted."
+            ),
             "",
         ]
     )

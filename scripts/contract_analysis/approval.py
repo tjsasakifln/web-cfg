@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,8 @@ from scripts.contract_analysis import (
     OWNER_CONDITIONAL_APPROVER,
     OWNER_CONDITIONAL_TOKEN,
     OWNER_DIMENSION_MIN,
+    OWNER_PREAPPROVAL_APPROVER,
+    OWNER_PREAPPROVAL_TOKEN,
     OWNER_QUALITY_MIN,
 )
 
@@ -62,6 +65,9 @@ _MATERIAL_KEYS = (
 
 
 def _root() -> Path:
+    env = os.environ.get("CONFENGE_CONTRACT_ANALYSIS_ROOT")
+    if env:
+        return Path(env)
     return Path(__file__).resolve().parents[2]
 
 
@@ -106,6 +112,25 @@ def load_approvals(root: Path | None = None) -> dict[str, Any]:
         return {"schema": APPROVAL_SCHEMA, "approvals": []}
     payload.setdefault("approvals", [])
     return payload
+
+
+def approval_rendered_hash_ok(
+    record: dict[str, Any],
+    rendered_html: str,
+    *,
+    root: Path | None = None,
+) -> tuple[bool, list[str]]:
+    """A stored rendered_content_hash must still match the HTML that would go live."""
+    stored = find_approval(record, root=root)
+    if stored is None:
+        return True, []
+    expected = str(stored.get("rendered_content_hash") or "")
+    if not expected:
+        return True, []
+    actual = rendered_content_hash(rendered_html)
+    if actual != expected:
+        return False, ["approval_rendered_hash_mismatch"]
+    return True, []
 
 
 def find_approval(record: dict[str, Any], *, root: Path | None = None) -> dict[str, Any] | None:
@@ -331,7 +356,17 @@ def evaluate_conditional_checklist(
         and "@" not in html.split('id="proximo-passo"')[-1][:800] if 'id="proximo-passo"' in html else True
     )
     schema_ok = "CaseStudy" not in html and "Review" not in html and "Product" not in html
-    commercial = "caso confenge" in html.lower() or "nosso cliente" in html.lower()
+    lowered = html.lower()
+    commercial = "nosso cliente" in lowered or "case de cliente" in lowered
+    remainder = (
+        lowered.replace("não é um caso confenge", " ")
+        .replace("nao e um caso confenge", " ")
+        .replace("não é caso confenge", " ")
+        .replace("nao e caso confenge", " ")
+        .replace("não implica relação comercial", " ")
+        .replace("nao implica relacao comercial", " ")
+    )
+    commercial = commercial or "caso confenge" in remainder
     hashes_ok = bool(producer_root_hash and source_dossier_hash and record.get("content_hash"))
     return {
         "source_official_live": official_live_declared(record)
@@ -406,6 +441,78 @@ def approve_conditional_canary(
     row["approver"] = OWNER_CONDITIONAL_APPROVER
     row["producer_root_hash"] = producer_root_hash
     row["source_dossier_hash"] = source_dossier_hash
+    row["rendered_content_hash"] = rendered_content_hash(rendered_html)
+    row["checklist"] = checklist
+    payload = load_approvals(root)
+    updated = []
+    for existing in payload.get("approvals") or []:
+        if (
+            isinstance(existing, dict)
+            and existing.get("analysis_id") == row["analysis_id"]
+            and not existing.get("withdrawn")
+        ):
+            updated.append({**existing, **row})
+        else:
+            updated.append(existing)
+    payload["approvals"] = updated
+    path = approvals_path(root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return row
+
+
+def approve_preapproval_canary(
+    record: dict[str, Any],
+    *,
+    token: str,
+    rollback: str,
+    rendered_html: str,
+    producer_root_hash: str,
+    source_dossier_hash: str,
+    quality: dict[str, Any] | None = None,
+    handoff: dict[str, Any] | None = None,
+    suite_green: bool = False,
+    root: Path | None = None,
+    actor: str = OWNER_PREAPPROVAL_APPROVER,
+) -> dict[str, Any]:
+    """2026-08-19 owner preapproval. Distinct token/approver from the 08-17 path.
+
+    Bound to official payload hash + rendered HTML hash. Any drift invalidates INDEX.
+    The 08-17 conditional token cannot satisfy this function.
+    """
+    if token == OWNER_CONDITIONAL_TOKEN:
+        raise ApprovalError("preapproval_token_stale_campaign")
+    if token != OWNER_PREAPPROVAL_TOKEN:
+        raise ApprovalError("preapproval_token_invalid")
+    if actor != OWNER_PREAPPROVAL_APPROVER:
+        raise ApprovalError("preapproval_approver_invalid")
+    if _is_fixture_record(record):
+        raise ApprovalError("approval_refused_fixture")
+    if active_index_count(root=root) >= 1:
+        raise ApprovalError("index_cap_exceeded")
+    if not producer_root_hash or not source_dossier_hash:
+        raise ApprovalError("preapproval_payload_hash_absent")
+    if not rendered_html:
+        raise ApprovalError("preapproval_render_absent")
+    checklist = evaluate_conditional_checklist(
+        record,
+        quality=quality,
+        handoff=handoff,
+        rendered_html=rendered_html,
+        producer_root_hash=producer_root_hash,
+        source_dossier_hash=source_dossier_hash,
+        suite_green=suite_green,
+    )
+    missing = [key for key, value in checklist.items() if not value]
+    if missing:
+        raise ApprovalError("preapproval_gates_incomplete:" + ",".join(missing))
+    row = approve_one(record, actor=actor, rollback=rollback, root=root)
+    row["token"] = token
+    row["approver"] = OWNER_PREAPPROVAL_APPROVER
+    row["approved_by"] = OWNER_PREAPPROVAL_APPROVER
+    row["producer_root_hash"] = producer_root_hash
+    row["source_dossier_hash"] = source_dossier_hash
+    row["official_payload_hash"] = source_dossier_hash
     row["rendered_content_hash"] = rendered_content_hash(rendered_html)
     row["checklist"] = checklist
     payload = load_approvals(root)

@@ -47,6 +47,7 @@ def _stage_official(tmp_path, monkeypatch) -> dict:
         elif path.is_file():
             path.unlink()
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
+    monkeypatch.setenv("CONFENGE_CONTRACT_ANALYSIS_ROOT", str(tmp_path))
     return load_canary()
 
 
