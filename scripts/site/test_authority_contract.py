@@ -265,6 +265,22 @@ def test_conteudos_lei_14133_guide_triggers_reviewer_slot():
     assert not errors, errors
 
 
+def test_specialist_page_shows_sameas_and_as_of():
+    """#74 VALIDATE: specialist HTML keeps a verifiable public identity signal."""
+    path = ROOT / "especialista" / "tiago-jun-sasaki" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    assert path.is_file()
+    assert "sameAs" in html
+    assert "https://github.com/tjsasakifln" in html
+    assert "as_of" in html
+    assert 'datetime="2026-07-15"' in html
+    assert "EESC-USP" in html or "Universidade de São Paulo" in html
+    assert "CREA" not in html
+    assert "smartlic" not in html.lower()
+    errors = check_schema_mirrors_visible(html)
+    assert not errors, errors
+
+
 def test_specialist_credentials_are_subset_of_public_verified_proof():
     path = ROOT / "especialista" / "tiago-jun-sasaki" / "index.html"
     html = path.read_text(encoding="utf-8")
