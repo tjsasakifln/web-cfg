@@ -246,17 +246,13 @@ def origin_html(slug: str) -> str:
 
 
 def git_diff_names() -> list[str]:
-    work = subprocess.check_output(
-        ["git", "diff", "--name-only", "origin/main"],
+    """Committed files in this branch vs origin/main. Ignore dirty test builds."""
+    committed = subprocess.check_output(
+        ["git", "diff", "--name-only", "origin/main...HEAD"],
         cwd=ROOT,
         text=True,
     )
-    cached = subprocess.check_output(
-        ["git", "diff", "--cached", "--name-only", "origin/main"],
-        cwd=ROOT,
-        text=True,
-    )
-    names = {line.strip() for line in (work + cached).splitlines() if line.strip()}
+    names = {line.strip() for line in committed.splitlines() if line.strip()}
     return sorted(names)
 
 
