@@ -1,0 +1,32 @@
+{
+  "schema": "confenge-web217-g04-merge-deploy-production/deploy-evidence/v1",
+  "as_of_utc": "2026-08-20T23:03:00Z",
+  "pr": 217,
+  "g03_release_candidate_sha": "fd8717b21290d1b14b76d5b066a553df67807e19",
+  "previous_main_sha": "8ced783468a70ea8208398ec4202dc4b89b4d4fe",
+  "merge_sha": "85c7193ad9a9df8fc22840d6dbdd0b30e91486f8",
+  "merge_method": "merge",
+  "merged_at": "2026-08-20T22:56:37Z",
+  "pr193": "open",
+  "netlify": {
+    "site": "confenge",
+    "custom_domain": "confenge.com.br",
+    "deploy_id": "6a8786281956a400087ec6f8",
+    "commit": "85c7193ad9a9df8fc22840d6dbdd0b30e91486f8",
+    "commit_equals_merge_sha": true,
+    "environment": "production",
+    "build_time": "2026-08-20T22:56:58Z",
+    "artifact_hash": "de1345830a56285815e23c6cb19ca5f016f782cca4efa1204465909ca7570898",
+    "url": "https://confenge.com.br",
+    "admin_url": "https://app.netlify.com/projects/confenge/deploys/6a8786281956a400087ec6f8",
+    "source": "https://confenge.com.br/.well-known/build-info.json",
+    "cli": "absent"
+  },
+  "checks": {
+    "site-ci": "https://github.com/tjsasakifln/web-cfg/actions/runs/32426514730",
+    "pseo": "https://github.com/tjsasakifln/web-cfg/actions/runs/32426514741",
+    "codeql_analyze": "https://github.com/tjsasakifln/web-cfg/actions/runs/32426514752"
+  },
+  "rollback_ref": "main=8ced783468a70ea8208398ec4202dc4b89b4d4fe deploy_id=6a86f72ad7e3c60008095566 commit=8ced783468a70ea8208398ec4202dc4b89b4d4fe",
+  "final_verdict": "READY"
+}

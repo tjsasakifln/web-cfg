@@ -1,0 +1,37 @@
+CAMPANHA: CONFENGE-WEB217-G04-MERGE-DEPLOY-PRODUCTION
+as_of_utc: 2026-08-20T23:03:00Z
+
+PREVIOUS_MAIN_SHA=8ced783468a70ea8208398ec4202dc4b89b4d4fe
+MERGE_SHA=85c7193ad9a9df8fc22840d6dbdd0b30e91486f8
+RELEASE_CANDIDATE_SHA=fd8717b21290d1b14b76d5b066a553df67807e19
+PRODUCTION_DEPLOY_ID/REF=6a8786281956a400087ec6f8
+PRODUCTION_URL=https://confenge.com.br
+ROLLBACK_REF=main=8ced783468a70ea8208398ec4202dc4b89b4d4fe deploy_id=6a86f72ad7e3c60008095566 commit=8ced783468a70ea8208398ec4202dc4b89b4d4fe
+
+CHECKS
+- G03 FINAL_VERDICT=READY; RELEASE_CANDIDATE_SHA=fd8717b21290d1b14b76d5b066a553df67807e19
+- PR #217 merged (merge commit, two parents: 8ced7834 + fd8717b2)
+- origin/main=85c7193ad9a9df8fc22840d6dbdd0b30e91486f8
+- PR #193 remains OPEN / unmerged
+- main site-ci success run 32426514730 (late steps executed, none skipped)
+- main pSEO quality gates success run 32426514741
+- main CodeQL Analyze success run 32426514752
+- live /.well-known/build-info.json commit=MERGE_SHA environment=production deploy_id=6a8786281956a400087ec6f8 (two reads agree)
+- Netlify CLI/API absent; production identity is live build-info
+- smoke x2 FAILCOUNT=0; listed routes/assets/robots/sitemaps HTTP 200
+- EXPECTED_SHA=MERGE_SHA npm run test:prod-build-info x2 exit 0
+- npm run test:checkout-negatives exit 0
+- live POST /.netlify/functions/offer-checkout → 404 {"ok":false,"error":"feature_disabled"}
+
+FLAGS
+- ASAAS_MODE=disabled
+- production_checkout_enabled=false
+- CONFENGE_OFFER_CATALOG_PUBLIC=false
+- production_webhook_enabled=false
+- real_money_mutation_enabled=false
+- provider-mapping IDs null
+- CONFENGE_COMMERCIAL_EVENT_ENABLED default off
+- NODE_VERSION=20
+- lighthouse ^12.8.2
+
+FINAL_VERDICT=READY
