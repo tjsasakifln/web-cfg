@@ -1,0 +1,18 @@
+{
+  "schema": "earned_distribution_syndication_canary/1.0",
+  "version": "1.0",
+  "decision_state": "VALIDATE",
+  "issue": 66,
+  "auto_send": false,
+  "prepare_only": true,
+  "posted": false,
+  "live_post": false,
+  "asset": {
+    "id": "radar-nacional-obras-publicas",
+    "canonical_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
+    "in_repo_path": "radar/nacional-obras-publicas/index.html",
+    "brand": "CONFENGE"
+  },
+  "status": "PREPARE_ONLY",
+  "owner": "Tiago Sasaki"
+}
