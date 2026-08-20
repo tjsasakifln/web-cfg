@@ -291,6 +291,40 @@ def test_ferramentas_eyebrow_client_facing():
     assert re.search(r"ferramenta", eye, re.I), f"expected tools category eyebrow, got {eye!r}"
 
 
+def test_sinapi_snippet_unique_not_generic():
+    """#126: title, H1 and meta must be distinct, complete and decision-oriented."""
+    html = (ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    title_m = re.search(r"<title>([^<]+)</title>", html, re.I)
+    h1_m = re.search(r"<h1>([^<]+)</h1>", html, re.I)
+    desc_m = re.search(
+        r'<meta[^>]*name=["\']description["\'][^>]*content=["\']([^"\']+)["\']|'
+        r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*name=["\']description["\']',
+        html,
+        re.I,
+    )
+    assert title_m and h1_m and desc_m, "SINAPI page missing title, H1 or meta description"
+    title = title_m.group(1).strip()
+    h1 = h1_m.group(1).strip()
+    meta = (desc_m.group(1) or desc_m.group(2)).strip()
+    title_core = re.sub(r"\s*\|\s*CONFENGE\s*$", "", title).strip()
+    assert title_core != h1, "title and H1 must not be duplicates"
+    assert title_core.lower() not in meta.lower(), "title duplicated into meta"
+    assert h1.lower() not in meta.lower(), "H1 duplicated into meta"
+    for blob, name in ((title, "title"), (h1, "h1"), (meta, "meta")):
+        assert "…" not in blob and "..." not in blob, f"{name} truncated"
+        lower = blob.lower()
+        for generic in ("guia completo", "tudo sobre", "saiba mais", "página inicial", "clique aqui"):
+            assert generic not in lower, f"{name} generic: {generic}"
+        assert re.search(r"desonerad", blob, re.I), f"{name} missing desonerado intent"
+    assert re.search(r"n[aã]o desonerado", title, re.I)
+    assert re.search(r"n[aã]o desonerado", h1, re.I)
+    assert 24 <= len(title_core) <= 62, f"title core length {len(title_core)}"
+    assert 70 <= len(meta) <= 170, f"meta length {len(meta)}"
+    assert "SINAPI" in h1
+
+
 def test_banlist_includes_conversion_eyebrow():
     """Regression: known leak phrase must remain in brand + design banlists."""
     brand = load_brand()
@@ -330,6 +364,7 @@ if __name__ == "__main__":
         test_whatsapp_float_in_landmark,
         test_public_backstage_language_absent,
         test_ferramentas_eyebrow_client_facing,
+        test_sinapi_snippet_unique_not_generic,
         test_banlist_includes_conversion_eyebrow,
         test_gate_bites_on_reintroduction,
     ):
