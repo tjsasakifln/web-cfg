@@ -11,6 +11,7 @@ Deliberate failure mode (for local demo):
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -20,6 +21,10 @@ ROOT = Path(__file__).resolve().parents[2]
 SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 CODEQL = ROOT / ".github" / "workflows" / "codeql.yml"
+PACKAGE_JSON = ROOT / "package.json"
+PACKAGE_LOCK = ROOT / "package-lock.json"
+NETLIFY = ROOT / "netlify.toml"
+NVMRC = ROOT / ".nvmrc"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -121,9 +126,11 @@ def test_site_ci_shape():
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")
 
-    # Node pin aligned with Netlify/PR1 restore
-    if 'node-version: "20"' not in text and "node-version: '20'" not in text:
-        errors.append('site-ci must pin node-version: "20" until deliberate Node 22 migration')
+    # Node pin aligned with Netlify / engines.node >=22.19 (#149)
+    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+        errors.append('site-ci must pin node-version: "22"')
+    if 'node-version: "20"' in text or "node-version: '20'" in text:
+        errors.append('site-ci must not pin node-version: "20" (Node 22 lockstep)')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     ui_at = text.find("npm run test:ui")
@@ -181,8 +188,10 @@ def test_pseo_shape():
         if needle not in text:
             errors.append(f"pseo missing required step command: {needle}")
 
-    if 'node-version: "20"' not in text and "node-version: '20'" not in text:
-        errors.append('pseo must pin node-version: "20" until deliberate Node 22 migration')
+    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+        errors.append('pseo must pin node-version: "22"')
+    if 'node-version: "20"' in text or "node-version: '20'" in text:
+        errors.append('pseo must not pin node-version: "20" (Node 22 lockstep)')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     npm_test_at = text.find("npm test")
@@ -228,6 +237,61 @@ def test_pseo_still_requires_full_npm_test():
         raise AssertionError("pseo.yml must not soften or replace npm test with test:affected")
 
 
+def test_node22_lighthouse13_lockstep():
+    """Shipped files for #149. Must fail if Node 22 / Lighthouse 13 is reverted."""
+    errors: list[str] = []
+
+    pkg = json.loads(PACKAGE_JSON.read_text(encoding="utf-8"))
+    engines_node = str((pkg.get("engines") or {}).get("node") or "")
+    if "22.19" not in engines_node:
+        errors.append(
+            f'package.json engines.node must include 22.19, got {engines_node!r}'
+        )
+    if re.search(r"(^|[^\d])20([^\d.]|$)", engines_node) and "22.19" not in engines_node:
+        errors.append("package.json engines.node must not remain on the Node 20 pin")
+
+    lh_range = str((pkg.get("devDependencies") or {}).get("lighthouse") or "")
+    if not re.search(r"(^|[\^~>= ]*)13(\.|$)", lh_range.strip()):
+        errors.append(f"package.json lighthouse must be 13.x, got {lh_range!r}")
+
+    lock = json.loads(PACKAGE_LOCK.read_text(encoding="utf-8"))
+    lh_lock = (lock.get("packages") or {}).get("node_modules/lighthouse") or {}
+    lh_version = str(lh_lock.get("version") or "")
+    if not lh_version.startswith("13."):
+        errors.append(
+            f"package-lock.json node_modules/lighthouse must be 13.x, got {lh_version!r}"
+        )
+
+    for label, path in (("site-ci", SITE_CI), ("pseo", PSEO)):
+        text = _read(path)
+        if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+            errors.append(f'{label} must contain node-version: "22"')
+        if 'node-version: "20"' in text or "node-version: '20'" in text:
+            errors.append(f'{label} must not contain node-version: "20"')
+
+    nvmrc_text = NVMRC.read_text(encoding="utf-8").strip() if NVMRC.is_file() else ""
+    if nvmrc_text != "22":
+        errors.append(f'.nvmrc must be "22", got {nvmrc_text!r}')
+
+    netlify = NETLIFY.read_text(encoding="utf-8")
+    if not re.search(r'(?m)^\s*NODE_VERSION\s*=\s*"22"\s*$', netlify):
+        errors.append('netlify.toml must set NODE_VERSION = "22"')
+    if re.search(r'(?m)^\s*NODE_VERSION\s*=\s*"20"\s*$', netlify):
+        errors.append("netlify.toml must not remain NODE_VERSION=20 (GHA/Netlify split-brain)")
+
+    wf_dir = ROOT / ".github" / "workflows"
+    for path in sorted(wf_dir.glob("*.yml")):
+        text = path.read_text(encoding="utf-8")
+        if "setup-node" not in text:
+            continue
+        if 'node-version: "20"' in text or "node-version: '20'" in text:
+            errors.append(f"{path.name} still pins node-version: \"20\"")
+        if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+            errors.append(f'{path.name} uses setup-node but does not pin node-version: "22"')
+
+    assert not errors, "node22/lighthouse13 lockstep failures:\n- " + "\n- ".join(errors)
+
+
 def test_codeql_soft_fail_is_explicit():
     """CodeQL may soft-fail only while code scanning is org-disabled — must stay honest."""
     text = _read(CODEQL)
@@ -252,6 +316,7 @@ def main() -> int:
         test_pseo_shape,
         test_merge_workflows_have_no_path_skip,
         test_pseo_still_requires_full_npm_test,
+        test_node22_lighthouse13_lockstep,
         test_codeql_soft_fail_is_explicit,
         test_deliberate_force_fail_env,
     ]

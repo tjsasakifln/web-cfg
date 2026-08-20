@@ -24,7 +24,7 @@ It is **not** a SPA framework app. The product is:
 |-----------|---------|
 | Product type | Content + conversion site (inbound) |
 | Runtime public | Static files + Netlify Functions |
-| Primary languages | HTML/CSS/JS, Python 3.12, Node 20 |
+| Primary languages | HTML/CSS/JS, Python 3.12, Node 22.19+ |
 | Database RDBMS | **None** (Netlify Blobs + JSON artifacts) |
 | Package name | `confenge-site` v1.0.0 |
 

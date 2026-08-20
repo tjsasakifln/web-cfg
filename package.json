@@ -171,12 +171,12 @@
     "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check"
   },
   "engines": {
-    "node": ">=20 <21"
+    "node": ">=22.19"
   },
   "devDependencies": {
-    "axe-core": "^4.10.0",
+    "axe-core": "^4.13.0",
     "chrome-launcher": "^1.2.1",
-    "lighthouse": "^12.8.2",
+    "lighthouse": "^13.4.1",
     "puppeteer-core": "^23.0.0"
   },
   "dependencies": {

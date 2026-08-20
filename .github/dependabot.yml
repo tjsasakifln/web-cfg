@@ -14,13 +14,6 @@ updates:
           - "puppeteer-core"
           - "axe-core"
           - "chrome-launcher"
-    ignore:
-      # puppeteer-core@25+ requires Node >=22.12; CI still on Node 20.
-      # Remove this ignore after engines + workflows move to Node 22 LTS.
-      - dependency-name: "puppeteer-core"
-        update-types:
-          - "version-update:semver-major"
-
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
