@@ -1,0 +1,213 @@
+{
+  "slug": "reequilibrio-obras-publicas",
+  "path": "/reequilibrio-obras-publicas/",
+  "family": "reequilibrio",
+  "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+  "mode": "PREPARE_ONLY",
+  "html_mutation": false,
+  "corresponding_issue": 128,
+  "earliest_safe_action_at": "2026-09-16",
+  "evidential_close": false,
+  "demand_control_citation": {
+    "pr": 159,
+    "authorizes_html_edit": false,
+    "source_kind": "credential_failure",
+    "bofu_observe_only": true,
+    "earliest_safe_action_at": "2026-09-16"
+  },
+  "issue_128_baseline": {
+    "issue": 128,
+    "state": "LANDED_AWAITING_LIVE_EVIDENCE",
+    "commercial_click_share": 0.0,
+    "evidential_close": false,
+    "gsc_row": {
+      "impressions": 4,
+      "clicks": 0,
+      "position": 7.75
+    }
+  },
+  "extra_cli_inputs": {
+    "pr_435": {
+      "state": "COMPARABLE",
+      "publication_authorization": false,
+      "use": "factual_input_only"
+    },
+    "pr_437": {
+      "verdict": "PARTIAL",
+      "national_claim_authorized": false,
+      "use": "factual_input_only"
+    },
+    "publication_authorization": false,
+    "national_claim_authorized": false
+  },
+  "gsc_precondition": {
+    "gsc_live_available": false,
+    "source_kind": "credential_failure",
+    "ready_for_product_decisions": false,
+    "authorizes_html_edit": false,
+    "other_evidence_decision": {
+      "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
+      "sources": [
+        "seo/gsc-2026-08-09",
+        "docs/ops/ORGANIC-GROWTH-REPORT.md",
+        "https://github.com/tjsasakifln/web-cfg/issues/128"
+      ],
+      "invented_live_metrics": false,
+      "reason": "PR #159 live Search Analytics is credential_failure. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
+    }
+  },
+  "success_metrics": {
+    "commercial_click_share": "no longer 0% on a 28-day GSC window after gate, or an explicit kill note that demand is informational-only at this volume",
+    "service_url_clicks": "at least one click on this service URL in the next complete 28d GSC window, or the pillar leaves the documented position band",
+    "north_star": "inbound qualified pipeline / month; impressions on /conteudos/ are not success",
+    "denominator": "historical seo/gsc-2026-08-09 until GSC live is ready_for_product_decisions=true"
+  },
+  "kill_metrics": {
+    "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
+    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from credential_failure",
+    "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change"
+  },
+  "revert_metrics": {
+    "trigger": "revert the hash-bound patch if CTR/position on the owned query does not move while position is stable, or if a sibling cannibalizes the same non-brand intent",
+    "method": "restore the bound content_sha256 of the pillar HTML; do not blanket-redirect"
+  },
+  "visitor_job": "Decidir se cabe reequilíbrio agora e estruturar evento, matriz de riscos, nexo e impacto auditável — sem confundir com reajuste.",
+  "serp_census": {
+    "family": "reequilibrio",
+    "as_of": "2026-08-19",
+    "rank_status": "UNKNOWN",
+    "note": "data/organic/search-baseline-2026-08-14.json records CONFENGE_NOT_OBSERVED for 'reequilíbrio contrato obra pública consultoria' and NO_CURRENT_ASSET_RESULT_OBSERVED for site:confenge.com.br/reequilibrio-obras-publicas. Absence in a sample is not non-indexation.",
+    "competitors": [
+      {
+        "url": "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/",
+        "kind": "tcu_manual",
+        "intent": "informational_administration"
+      },
+      {
+        "url": "https://zenite.blog.br/metodologia-ao-restabelecimento-do-equilibrio-economico-financeiro-inicial-em-contratos-de-obras-publicas/",
+        "kind": "legal_blog",
+        "intent": "informational_methodology"
+      },
+      {
+        "url": "https://contreinamentos.com.br/curso/reajuste-e-reequilibrio-economico-financeiro-nas-obras-publicas/",
+        "kind": "course",
+        "intent": "commercial_training"
+      }
+    ],
+    "intent_gaps": [
+      "SERP is doctrine/TCU/course. Contractor decision utility (when NOT to mount the pleito, nexo, no deferment promise) is the gap CONFENGE already wrote.",
+      "CONFENGE not observed on the 2026-08-14 focused sample. Rank UNKNOWN."
+    ]
+  },
+  "query_ownership": {
+    "owned": [
+      "reequilíbrio econômico-financeiro obra pública",
+      "reequilíbrio contrato obra pública"
+    ],
+    "supporting_not_owned_by_pillar": [
+      "curva abc reequilíbrio → /conteudos/curva-abc-reequilibrio-contrato/",
+      "matriz de riscos reequilíbrio"
+    ],
+    "gsc_supporting": {
+      "curva abc reequilíbrio": {
+        "impressions": 5,
+        "clicks": 1,
+        "position": 4.4
+      }
+    }
+  },
+  "negative_queries": [
+    "reajuste ordinário / índice contratual (not reequilíbrio)",
+    "reequilíbrio econômico-financeiro without obras públicas",
+    "national coverage / national claim copy (extra-cli #437 national_claim_authorized=false)"
+  ],
+  "cannibalization": {
+    "status": "RISK_DECLARED_NOT_MEASURED_LIVE",
+    "siblings": [
+      {
+        "url": "/conteudos/curva-abc-reequilibrio-contrato/",
+        "gsc": "7 impr / 1 click / pos 4.43"
+      },
+      {
+        "url": "/ferramentas/checklist-reequilibrio/",
+        "note": "tool vs service; keep distinct jobs"
+      }
+    ]
+  },
+  "before_after_blocks": [
+    {
+      "block": "title_og",
+      "before": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE (~82 chars)",
+      "after": "Reequilíbrio econômico-financeiro de obra pública | CONFENGE (align with H1; under desktop soft-max 60 for the non-brand span is still tight — record char count at apply time)",
+      "why": "Title/H1 alignment and truncation risk. Do not add invented legal percentages."
+    },
+    {
+      "block": "schema",
+      "before": "CollectionPage ItemList numberOfItems=1 with position=7",
+      "after": "unchanged in this patch (list hygiene is a later, evidence-gated edit)",
+      "why": "Do not silently rewrite ItemList from extra-cli facts."
+    },
+    {
+      "block": "cta",
+      "before": "hero → diagnóstico de defesa de margem; WhatsApp 'Enquadrar o reequilíbrio'",
+      "after": "unchanged",
+      "why": "CTA freeze."
+    }
+  ],
+  "evidence_proof_needed": [
+    "URL inspection in GSC/Bing remains the index diagnostic; the 2026-08-14 sample is not proof of non-indexation.",
+    "28d GSC vs 4/0 @ 7.75.",
+    "Do not cite extra-cli PR #435 COMPARABLE paving peer group as a reequilíbrio case. publication_authorization=false.",
+    "Do not cite extra-cli PR #437 PARTIAL as a national coverage claim. national_claim_authorized=false."
+  ],
+  "snapshot": {
+    "slug": "reequilibrio-obras-publicas",
+    "path": "/reequilibrio-obras-publicas/",
+    "html_rel": "reequilibrio-obras-publicas/index.html",
+    "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+    "meta_description": "Reequilíbrio econômico-financeiro de obra pública: o que é, quando pode existir, diferença entre reajuste e revisão, evento, matriz de riscos, nexo e demonstração do impacto.",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+    "og_title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+    "og_url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+    "h1": "Reequilíbrio econômico-financeiro de obra pública",
+    "schema_types": [
+      "Organization",
+      "Country",
+      "ContactPoint",
+      "Person",
+      "CollegeOrUniversity",
+      "CollectionPage",
+      "WebSite",
+      "ItemList",
+      "ListItem",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage",
+      "Question",
+      "Answer"
+    ],
+    "cta": {
+      "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
+      "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+      "bridges": [
+        {
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+          "text": "Enquadrar o reequilíbrio"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "text": "Diretoria B2G"
+        }
+      ],
+      "when_not_to_hire": true,
+      "whatsapp_present": true,
+      "form_count": 0
+    },
+    "content_sha256": "df2c4d5d010fdd617eddd9346b2a32a946e2a93a7f2c6f09848e05f6fbd0b72e",
+    "bytes": 23773,
+    "noindex": false
+  }
+}

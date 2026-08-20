@@ -1,0 +1,10 @@
+{
+  "schema": "bofu_frozen_issue_state/v1",
+  "issue": 128,
+  "url": "https://github.com/tjsasakifln/web-cfg/issues/128",
+  "state": "LANDED_AWAITING_LIVE_EVIDENCE",
+  "evidential_close": false,
+  "closed_at": null,
+  "commercial_click_share": 0.0,
+  "note": "Issue #128 remains open. Deploy of the in-repo slice is not evidential close. Do not treat credential_failure as live Search Analytics."
+}

@@ -1,0 +1,225 @@
+{
+  "slug": "aditivos-obras-publicas",
+  "path": "/aditivos-obras-publicas/",
+  "family": "aditivos",
+  "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+  "mode": "PREPARE_ONLY",
+  "html_mutation": false,
+  "corresponding_issue": 128,
+  "earliest_safe_action_at": "2026-09-16",
+  "evidential_close": false,
+  "demand_control_citation": {
+    "pr": 159,
+    "authorizes_html_edit": false,
+    "source_kind": "credential_failure",
+    "bofu_observe_only": true,
+    "earliest_safe_action_at": "2026-09-16"
+  },
+  "issue_128_baseline": {
+    "issue": 128,
+    "state": "LANDED_AWAITING_LIVE_EVIDENCE",
+    "commercial_click_share": 0.0,
+    "evidential_close": false,
+    "gsc_row": {
+      "impressions": 12,
+      "clicks": 0,
+      "position": 49.25
+    }
+  },
+  "extra_cli_inputs": {
+    "pr_435": {
+      "state": "COMPARABLE",
+      "publication_authorization": false,
+      "use": "factual_input_only"
+    },
+    "pr_437": {
+      "verdict": "PARTIAL",
+      "national_claim_authorized": false,
+      "use": "factual_input_only"
+    },
+    "publication_authorization": false,
+    "national_claim_authorized": false
+  },
+  "gsc_precondition": {
+    "gsc_live_available": false,
+    "source_kind": "credential_failure",
+    "ready_for_product_decisions": false,
+    "authorizes_html_edit": false,
+    "other_evidence_decision": {
+      "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
+      "sources": [
+        "seo/gsc-2026-08-09",
+        "docs/ops/ORGANIC-GROWTH-REPORT.md",
+        "https://github.com/tjsasakifln/web-cfg/issues/128"
+      ],
+      "invented_live_metrics": false,
+      "reason": "PR #159 live Search Analytics is credential_failure. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
+    }
+  },
+  "success_metrics": {
+    "commercial_click_share": "no longer 0% on a 28-day GSC window after gate, or an explicit kill note that demand is informational-only at this volume",
+    "service_url_clicks": "at least one click on this service URL in the next complete 28d GSC window, or the pillar leaves the documented position band",
+    "north_star": "inbound qualified pipeline / month; impressions on /conteudos/ are not success",
+    "denominator": "historical seo/gsc-2026-08-09 until GSC live is ready_for_product_decisions=true"
+  },
+  "kill_metrics": {
+    "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
+    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from credential_failure",
+    "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change"
+  },
+  "revert_metrics": {
+    "trigger": "revert the hash-bound patch if CTR/position on the owned query does not move while position is stable, or if a sibling cannibalizes the same non-brand intent",
+    "method": "restore the bound content_sha256 of the pillar HTML; do not blanket-redirect"
+  },
+  "visitor_job": "Enquadrar uma mudança de obra (acréscimo, supressão, item novo, serviço extra) em fato documentado, preço justificável e decisão formal antes de executar sem cobertura.",
+  "serp_census": {
+    "family": "aditivos",
+    "as_of": "2026-08-19",
+    "rank_status": "UNKNOWN",
+    "note": "SERP ranks are not invented. GSC historical position for this URL is 49.25 (seo/gsc-2026-08-09). Live rank tracking was not run.",
+    "competitors": [
+      {
+        "url": "https://www.jusbrasil.com.br/artigos/alteracoes-contratuais-aditivos-nas-obras-publicas/1289579327",
+        "kind": "legal_article",
+        "intent": "informational_legal"
+      },
+      {
+        "url": "https://prefeitura.sp.gov.br/web/procuradoria_geral/w/cejur/cejur-debate-aditivos-em-contratos-de-obras-públicas-com-base-na-lei-n-1413321",
+        "kind": "public_sector_event",
+        "intent": "informational_lei_14133"
+      },
+      {
+        "url": "https://www.interempresas.net/ObrasPublicas/494172-Master-Builders-Solutions-referente-mundial-en-aditivos-para-la-Construccion.html",
+        "kind": "chemical_admixture_vendor",
+        "intent": "negative_chemical_aditivos"
+      }
+    ],
+    "intent_gaps": [
+      "Query 'aditivos obras públicas' collides with concrete-admixture SERPs; the commercial job (documentos, limite 25/50, margem) is under-served by generic legal explainers.",
+      "No observed contractor-side decision utility that names when NOT to hire. CONFENGE already has that block; it is not yet a ranking claim.",
+      "CONFENGE rank for the generic query is UNKNOWN; GSC shows pos 49.25 / 0 clicks / 6 query impressions on 'aditivos obras públicas'."
+    ]
+  },
+  "query_ownership": {
+    "owned": [
+      "aditivos obras públicas",
+      "aditivos em obras públicas"
+    ],
+    "supporting_not_owned_by_pillar": [
+      "aditivo qualitativo e quantitativo",
+      "limite aditivo 25 50 obra pública"
+    ],
+    "gsc_query_row": {
+      "query": "aditivos obras públicas",
+      "impressions": 6,
+      "clicks": 0,
+      "position": 35.0,
+      "source": "seo/gsc-2026-08-09/Consultas.csv"
+    }
+  },
+  "negative_queries": [
+    "aditivos para concreto / aditivos químicos / Master Builders",
+    "aditivo de prazo sem mudança de escopo (atrasos family)",
+    "SmartLic product or legacy brand queries"
+  ],
+  "cannibalization": {
+    "status": "RISK_DECLARED_NOT_MEASURED_LIVE",
+    "note": "PR #159 cannibalization detector returned NOT_CANNIBALIZATION on a credential_failure empty set; that is not a live all-clear.",
+    "siblings": [
+      {
+        "url": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "robots": "noindex,follow",
+        "gsc": "22 impr / 0 clicks / pos 6.09",
+        "owner": "#127 KEEP_NOINDEX unless human rewrite"
+      },
+      {
+        "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "gsc": "14 impr / 0 clicks / pos 11.0",
+        "note": "pillar H2 already defers the 25/50 question to this guide"
+      }
+    ]
+  },
+  "before_after_blocks": [
+    {
+      "block": "h1",
+      "before": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
+      "after": "Aditivos em obras públicas: documentar, precificar e decidir",
+      "why": "Front-load the GSC query lead already present in <title> so H1 and snippet agree. No new section."
+    },
+    {
+      "block": "title_meta_canonical",
+      "before": "title already = Aditivos em obras públicas: documentos e margem | CONFENGE; canonical present; meta specific",
+      "after": "keep title/meta/canonical; do not re-run the #128 snippet that already shipped",
+      "why": "Issue #128 snippet pass already landed (LANDED_AWAITING_LIVE_EVIDENCE). This patch is the next hypothesized alignment, not a second snippet rewrite of title."
+    },
+    {
+      "block": "schema",
+      "before": "CollectionPage + Service + FAQPage + BreadcrumbList",
+      "after": "unchanged in this patch; Service remains; do not publish extra-cli COMPARABLE as schema",
+      "why": "CollectionPage is a hub signal; changing @type is a larger experiment than this frozen draft."
+    },
+    {
+      "block": "cta",
+      "before": "hero → /ferramentas/diagnostico-defesa-margem/; bridge WhatsApp 'Enquadrar o evento contratual'",
+      "after": "unchanged",
+      "why": "CTA/offer code is out of scope for this campaign."
+    }
+  ],
+  "evidence_proof_needed": [
+    "Live GSC 28d on /aditivos-obras-publicas/ vs 12/0 @ 49.25 — requires GSC_CREDENTIALS_JSON or a new manual export. credential_failure is not zero.",
+    "Query 'aditivos obras públicas' clicks/position vs 6/0 @ 35.",
+    "Content→service transitions remain UNKNOWN without analytics export.",
+    "extra-cli PR #435 COMPARABLE (publication_authorization=false) must not appear as a public case on this page. Proof-needed only if a later offer cites a named contract.",
+    "Do not close #128 on deploy; evidential close needs the 28d GSC window."
+  ],
+  "snapshot": {
+    "slug": "aditivos-obras-publicas",
+    "path": "/aditivos-obras-publicas/",
+    "html_rel": "aditivos-obras-publicas/index.html",
+    "title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+    "meta_description": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+    "og_title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+    "og_url": "https://confenge.com.br/aditivos-obras-publicas/",
+    "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
+    "schema_types": [
+      "Organization",
+      "Country",
+      "ContactPoint",
+      "Person",
+      "CollegeOrUniversity",
+      "CollectionPage",
+      "WebSite",
+      "ItemList",
+      "ListItem",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage",
+      "Question",
+      "Answer"
+    ],
+    "cta": {
+      "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
+      "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+      "bridges": [
+        {
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+          "text": "Enquadrar o evento contratual"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/diagnostico-b2g-360/",
+          "text": "Diagnosticar a operação B2G"
+        }
+      ],
+      "when_not_to_hire": true,
+      "whatsapp_present": true,
+      "form_count": 0
+    },
+    "content_sha256": "3cf907b8b92d8c5267ed8f4b64e63662442051904d0477ab795af1e9d7685523",
+    "bytes": 25886,
+    "noindex": false
+  }
+}

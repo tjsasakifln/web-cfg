@@ -1,0 +1,313 @@
+{
+  "schema": "bofu_frozen_snapshots/v1",
+  "html_mutation": false,
+  "pillars": [
+    {
+      "slug": "aditivos-obras-publicas",
+      "path": "/aditivos-obras-publicas/",
+      "html_rel": "aditivos-obras-publicas/index.html",
+      "title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+      "meta_description": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+      "og_title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+      "og_url": "https://confenge.com.br/aditivos-obras-publicas/",
+      "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
+      "schema_types": [
+        "Organization",
+        "Country",
+        "ContactPoint",
+        "Person",
+        "CollegeOrUniversity",
+        "CollectionPage",
+        "WebSite",
+        "ItemList",
+        "ListItem",
+        "Service",
+        "BreadcrumbList",
+        "FAQPage",
+        "Question",
+        "Answer"
+      ],
+      "cta": {
+        "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
+        "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+        "bridges": [
+          {
+            "position": "pillar_bridge",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+            "text": "Enquadrar o evento contratual"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/diagnostico-b2g-360/",
+            "text": "Diagnosticar a operação B2G"
+          }
+        ],
+        "when_not_to_hire": true,
+        "whatsapp_present": true,
+        "form_count": 0
+      },
+      "content_sha256": "3cf907b8b92d8c5267ed8f4b64e63662442051904d0477ab795af1e9d7685523",
+      "bytes": 25886,
+      "noindex": false
+    },
+    {
+      "slug": "medicoes-glosas-obras-publicas",
+      "path": "/medicoes-glosas-obras-publicas/",
+      "html_rel": "medicoes-glosas-obras-publicas/index.html",
+      "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "meta_description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente…",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "og_title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "og_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "h1": "Medições, glosas e pagamentos em obras públicas",
+      "schema_types": [
+        "Organization",
+        "Country",
+        "ContactPoint",
+        "Person",
+        "CollegeOrUniversity",
+        "CollectionPage",
+        "WebSite",
+        "ItemList",
+        "ListItem",
+        "Service",
+        "BreadcrumbList",
+        "FAQPage",
+        "Question",
+        "Answer"
+      ],
+      "cta": {
+        "hero_text": "Analisar uma demanda",
+        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "bridges": [
+          {
+            "position": "pillar_bridge",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+            "text": "Enquadrar um risco contratual"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/diretoria-b2g/",
+            "text": "Diretoria B2G na execução"
+          }
+        ],
+        "when_not_to_hire": true,
+        "whatsapp_present": true,
+        "form_count": 0
+      },
+      "content_sha256": "88f7c91e187e5cedad4e2f5c65c43afdf5282a79cac7f9201f77004d90e1fe1c",
+      "bytes": 27812,
+      "noindex": false
+    },
+    {
+      "slug": "reequilibrio-obras-publicas",
+      "path": "/reequilibrio-obras-publicas/",
+      "html_rel": "reequilibrio-obras-publicas/index.html",
+      "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+      "meta_description": "Reequilíbrio econômico-financeiro de obra pública: o que é, quando pode existir, diferença entre reajuste e revisão, evento, matriz de riscos, nexo e demonstração do impacto.",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+      "og_title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+      "og_url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+      "h1": "Reequilíbrio econômico-financeiro de obra pública",
+      "schema_types": [
+        "Organization",
+        "Country",
+        "ContactPoint",
+        "Person",
+        "CollegeOrUniversity",
+        "CollectionPage",
+        "WebSite",
+        "ItemList",
+        "ListItem",
+        "Service",
+        "BreadcrumbList",
+        "FAQPage",
+        "Question",
+        "Answer"
+      ],
+      "cta": {
+        "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
+        "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+        "bridges": [
+          {
+            "position": "pillar_bridge",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+            "text": "Enquadrar o reequilíbrio"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/diretoria-b2g/",
+            "text": "Diretoria B2G"
+          }
+        ],
+        "when_not_to_hire": true,
+        "whatsapp_present": true,
+        "form_count": 0
+      },
+      "content_sha256": "df2c4d5d010fdd617eddd9346b2a32a946e2a93a7f2c6f09848e05f6fbd0b72e",
+      "bytes": 23773,
+      "noindex": false
+    },
+    {
+      "slug": "auditoria-orcamento-licitacao",
+      "path": "/auditoria-orcamento-licitacao/",
+      "html_rel": "auditoria-orcamento-licitacao/index.html",
+      "title": "Orçamento, BDI e SINAPI em obras públicas | CONFENGE",
+      "meta_description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de…",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+      "og_title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
+      "og_url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+      "h1": "Auditoria de orçamento, BDI, SINAPI e preço",
+      "schema_types": [
+        "Organization",
+        "Country",
+        "ContactPoint",
+        "Person",
+        "CollegeOrUniversity",
+        "CollectionPage",
+        "WebSite",
+        "ItemList",
+        "ListItem",
+        "Service",
+        "BreadcrumbList",
+        "FAQPage",
+        "Question",
+        "Answer"
+      ],
+      "cta": {
+        "hero_text": "Analisar uma demanda",
+        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "bridges": [
+          {
+            "position": "pillar_bridge",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+            "text": "Revisar esta oportunidade"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/diretoria-b2g/",
+            "text": "Operação B2G continuada"
+          }
+        ],
+        "when_not_to_hire": false,
+        "whatsapp_present": true,
+        "form_count": 0
+      },
+      "content_sha256": "f178e0b78b89e13d8ffc8f671d4c4c36d2a52e275a27b9ab164e7a3f85558b17",
+      "bytes": 28597,
+      "noindex": false
+    },
+    {
+      "slug": "diagnostico-b2g-360",
+      "path": "/diagnostico-b2g-360/",
+      "html_rel": "diagnostico-b2g-360/index.html",
+      "title": "Diagnóstico B2G 360° | CONFENGE",
+      "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação.",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
+      "og_title": "Mapeie onde a frente pública perde tempo, margem e controle.",
+      "og_url": "https://confenge.com.br/diagnostico-b2g-360/",
+      "h1": "Diagnóstico B2G 360°",
+      "schema_types": [
+        "Organization",
+        "WebPage",
+        "Service",
+        "Country",
+        "BreadcrumbList",
+        "ListItem"
+      ],
+      "cta": {
+        "hero_text": "Diagnosticar a operação B2G",
+        "hero_href": "/#contato?jornada=operacao",
+        "bridges": [
+          {
+            "position": "offer_hero",
+            "href": "/#contato?jornada=operacao",
+            "text": "Diagnosticar a operação B2G"
+          },
+          {
+            "position": "offer_final",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+            "text": "Solicitar Diagnóstico B2G"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/?origem=/diagnostico-b2g-360#contato",
+            "text": "Pedir diagnóstico da operação"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/conteudos/",
+            "text": "Ver conteúdos de apoio"
+          },
+          {
+            "position": "float",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+            "text": ""
+          }
+        ],
+        "when_not_to_hire": true,
+        "whatsapp_present": true,
+        "form_count": 0
+      },
+      "content_sha256": "ee0aa2242c5673f75434695ad9e82b4942e437cd2fd78ca8b1817fad54434650",
+      "bytes": 18326,
+      "noindex": false
+    },
+    {
+      "slug": "diagnostico-pre-licitacao",
+      "path": "/diagnostico-pre-licitacao/",
+      "html_rel": "diagnostico-pre-licitacao/index.html",
+      "title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
+      "meta_description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um…",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/diagnostico-pre-licitacao/",
+      "og_title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
+      "og_url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+      "h1": "Diagnóstico pré-licitação para obras públicas",
+      "schema_types": [
+        "Organization",
+        "Country",
+        "ContactPoint",
+        "Person",
+        "CollegeOrUniversity",
+        "CollectionPage",
+        "WebSite",
+        "ItemList",
+        "ListItem",
+        "Service",
+        "BreadcrumbList",
+        "FAQPage",
+        "Question",
+        "Answer"
+      ],
+      "cta": {
+        "hero_text": "Analisar uma demanda",
+        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "bridges": [
+          {
+            "position": "pillar_bridge",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20um%20Bid%20Room%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+            "text": "Avaliar uma oportunidade"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/diretoria-b2g/",
+            "text": "Conhecer a Diretoria B2G"
+          }
+        ],
+        "when_not_to_hire": true,
+        "whatsapp_present": true,
+        "form_count": 0
+      },
+      "content_sha256": "1490c9d0101bad0d53937cbbbee5dfd495b787051bd2386838b1a3f7e3c2bd72",
+      "bytes": 22592,
+      "noindex": false
+    }
+  ]
+}

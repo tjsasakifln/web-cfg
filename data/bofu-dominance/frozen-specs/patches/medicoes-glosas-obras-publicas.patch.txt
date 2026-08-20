@@ -1,0 +1,14 @@
+format: frozen_patch_v1
+slug: medicoes-glosas-obras-publicas
+path: medicoes-glosas-obras-publicas/index.html
+content_sha256: 88f7c91e187e5cedad4e2f5c65c43afdf5282a79cac7f9201f77004d90e1fe1c
+earliest_safe_action_at: 2026-09-16
+corresponding_issue: 128
+html_mutation_authorized: false
+do_not_git_apply: true
+---DIFF---
+---REPLACEMENT---
+<<<BEFORE
+documentação capaz de transformar serviço executado em valor efetivamente…
+===AFTER
+documentação capaz de transformar serviço executado em valor efetivamente recebido.

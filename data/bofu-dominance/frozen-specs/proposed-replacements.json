@@ -1,0 +1,60 @@
+{
+  "schema": "bofu_frozen_proposed_replacements/v1",
+  "html_mutation_authorized": false,
+  "earliest_safe_action_at": "2026-09-16",
+  "corresponding_issue": 128,
+  "pillars": {
+    "aditivos-obras-publicas": [
+      {
+        "block": "h1",
+        "before": "<h1>Aditivos e serviços extras em obras públicas: documentar, precificar e decidir</h1>",
+        "after": "<h1>Aditivos em obras públicas: documentar, precificar e decidir</h1>"
+      }
+    ],
+    "medicoes-glosas-obras-publicas": [
+      {
+        "block": "meta_og_schema_description",
+        "before": "documentação capaz de transformar serviço executado em valor efetivamente…",
+        "after": "documentação capaz de transformar serviço executado em valor efetivamente recebido."
+      }
+    ],
+    "reequilibrio-obras-publicas": [
+      {
+        "block": "title_og",
+        "before": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+        "after": "Reequilíbrio econômico-financeiro de obra pública | CONFENGE"
+      }
+    ],
+    "auditoria-orcamento-licitacao": [
+      {
+        "block": "title",
+        "before": "<title>Orçamento, BDI e SINAPI em obras públicas | CONFENGE</title>",
+        "after": "<title>Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE</title>"
+      },
+      {
+        "block": "meta_og_schema_description",
+        "before": "tratados como sistema econômico, não como preenchimento mecânico de…",
+        "after": "tratados como sistema econômico, não como preenchimento mecânico de planilha."
+      },
+      {
+        "block": "when_not_to_hire",
+        "before": "<section class=\"container\" data-organic-taya=\"1\" aria-label=\"Perguntas que costumam ficar sem resposta\">",
+        "after": "<section class=\"container\" data-organic-taya=\"1\" id=\"quando-nao-contratar\" data-when-not-hire=\"1\" aria-label=\"Perguntas que costumam ficar sem resposta\">"
+      }
+    ],
+    "diagnostico-b2g-360": [
+      {
+        "block": "og_title",
+        "before": "<meta content=\"Mapeie onde a frente pública perde tempo, margem e controle.\" property=\"og:title\"/>",
+        "after": "<meta content=\"Diagnóstico B2G 360° | CONFENGE\" property=\"og:title\"/>"
+      }
+    ],
+    "diagnostico-pre-licitacao": [
+      {
+        "block": "meta_og_schema_description",
+        "before": "antes de transformar uma vitória na licitação em um…",
+        "after": "antes de transformar uma vitória na licitação em um contrato ruim."
+      }
+    ]
+  }
+}
