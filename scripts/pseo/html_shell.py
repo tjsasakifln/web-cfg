@@ -130,7 +130,8 @@ def _build_header() -> str:
     nav = (brand.get("navigation") or {}).get("desktop") or [
         {"label": "Serviços", "href": "/#ofertas"},
         {"label": "Problemas que resolvemos", "href": "/#jornadas"},
-        {"label": "Conteúdos e ferramentas", "href": "/conteudos/"},
+        {"label": "Conteúdos", "href": "/conteudos/"},
+        {"label": "Ferramentas", "href": "/ferramentas/"},
         {"label": "Especialista", "href": "/especialista/tiago-jun-sasaki/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
@@ -174,7 +175,7 @@ def _build_footer() -> str:
 <div class="footer-brand"><img alt="CONFENGE" height="208" src="/assets/logo-confenge-white.png" width="800"/><p>{html.escape(blurb)}</p></div>
 <div class="footer-links"><strong>Ofertas</strong>{offer_links}</div>
 <div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
-<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="/metodologia-inteligencia/">Metodologia</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="/metodologia-inteligencia/">Metodologia</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
 </div>
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span>{_authority_nav()}</div>
 </footer>"""

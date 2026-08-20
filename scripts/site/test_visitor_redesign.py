@@ -23,7 +23,8 @@ ALLOWED = frozenset(ALLOWED_STAGES)
 EXPECTED_NAV = [
     "Serviços",
     "Problemas que resolvemos",
-    "Conteúdos e ferramentas",
+    "Conteúdos",
+    "Ferramentas",
     "Especialista",
 ]
 EXPECTED_CTA = "Analisar meu caso"
@@ -640,7 +641,8 @@ def test_home_nav_and_hierarchy():
     assert "Analisar meu caso" in home
     assert "Serviços" in home
     assert "Problemas que resolvemos" in home
-    assert "Conteúdos e ferramentas" in home
+    assert "Conteúdos" in home
+    assert "Ferramentas" in home
     assert home.count("button-primary") <= 4
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
