@@ -18,7 +18,7 @@
     "over_limit": {},
     "p0_p1_missing_census": []
   },
-  "content_sha256": "901058eb18fce2727382952cd0cfc7dadb45a8a5662eafee40461d380116af1c",
+  "content_sha256": "03d882499c43b214509331493c3a087ec368a8f6aaf985a2c17cfd7938fe7422",
   "families": [
     {
       "active_issue": 128,
@@ -3525,7 +3525,7 @@
     "actions_run_id": 32322344062,
     "actions_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/32322344062",
     "as_of": "2026-08-17",
-    "committed_main_last_sync": "still_missing_credentials_file_not_live_rows",
+    "committed_main_last_sync": "gitignored_not_the_live_overlay",
     "gaps": [
       "2026-07-20",
       "2026-07-21",
@@ -3560,7 +3560,7 @@
     "job_ready_for_product_decisions": true,
     "last_sync_blocked": false,
     "last_sync_error": null,
-    "note": "GitHub Actions gsc-sync 32322344062 proved credentials (ok, 95 top-rows, as_of 2026-08-17). Committed data/revops/gsc/last_sync.json on main is still the old missing_credentials file. Historical CSV and SERP samples are not this live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not authorize TOP* or HTML.",
+    "note": "Committed live mechanical state is overlay LIVE_JOB_OK (data/bofu-dominance/core/gsc-live-overlay.v1.json; as_of 2026-08-17; core_ready_for_product_decisions=false). data/revops/gsc/last_sync.json is gitignored and is not a committed missing_credentials source. PR #159 freeze-head historically recorded credential_failure. Historical CSV and SERP samples are not this live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not authorize TOP* or HTML.",
     "pr_159_role": "observability_candidate_not_merged_to_main",
     "query_text_redacted": true,
     "ready_for_product_decisions": false,
@@ -3587,7 +3587,7 @@
         "pr-159",
         "issue-128"
       ],
-      "summary": "Actions run 32322344062 proved GSC credentials (95 top-rows, as_of 2026-08-17, LIVE_JOB_OK). Committed last_sync.json on main is still the old missing_credentials file. Do not treat historical CSV, SERP samples, non-BR geo, mixed device, or top-row gaps as BR TOP* or HTML authorization. PR #159 remains a merge candidate."
+      "summary": "Current mechanical state is LIVE_JOB_OK with core_ready_for_product_decisions=false (overlay gsc-live-overlay.v1.json, as_of 2026-08-17). last_sync.json is gitignored, not a committed missing_credentials file. PR #159 freeze-head historically recorded credential_failure. Do not treat historical CSV, SERP samples, non-BR geo, mixed device, or top-row gaps as BR TOP* or HTML authorization."
     },
     {
       "action": "observe_only",

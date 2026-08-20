@@ -22,7 +22,7 @@ without converting historical CSV or SERP samples into live rank.
 - Actions run: `32322344062`
 - rows (top-set only): `95` as_of `2026-08-17`
 - core ready_for_product_decisions: `False`
-- committed main last_sync: `still_missing_credentials_file_not_live_rows`
+- committed main last_sync: `gitignored_not_the_live_overlay`
 
 Credentials are proven by isolated job `gsc` on run `32322344062`.
 The 2026-08-09 CSV, redacted snapshots and SERP samples are **not** this

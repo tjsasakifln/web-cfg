@@ -4,7 +4,7 @@ Maximum five. Frozen state **refuses** edit-now. Count: 5.
 
 ## 1. `gsc-live-overlay` — observe_only
 
-Actions run 32322344062 proved GSC credentials (95 top-rows, as_of 2026-08-17, LIVE_JOB_OK). Committed last_sync.json on main is still the old missing_credentials file. Do not treat historical CSV, SERP samples, non-BR geo, mixed device, or top-row gaps as BR TOP* or HTML authorization. PR #159 remains a merge candidate.
+Current mechanical state is LIVE_JOB_OK with core_ready_for_product_decisions=false (overlay gsc-live-overlay.v1.json, as_of 2026-08-17). last_sync.json is gitignored, not a committed missing_credentials file. PR #159 freeze-head historically recorded credential_failure. Do not treat historical CSV, SERP samples, non-BR geo, mixed device, or top-row gaps as BR TOP* or HTML authorization.
 
 - authorizes_html_edit: `False`
 - refs: pr-159, issue-128
