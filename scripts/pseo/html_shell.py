@@ -136,7 +136,7 @@ def _build_header() -> str:
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
         "label": "Analisar meu caso",
-        "href": "/#contato",
+        "href": "/#formulario-contato",
     }
     links = "\n".join(f'<a href="{n["href"]}">{n["label"]}</a>' for n in nav)
     mobile = "".join(f'<a href="{n["href"]}">{n["label"]}</a>' for n in nav)

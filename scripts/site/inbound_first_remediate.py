@@ -204,7 +204,7 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
     nav = (brand.get("navigation") or {}).get("desktop") or []
     cta = (brand.get("navigation") or {}).get("cta") or {
         "label": "Falar com a CONFENGE",
-        "href": "/#contato",
+        "href": "/#formulario-contato",
     }
     desktop_parts = []
     mobile_parts = []
