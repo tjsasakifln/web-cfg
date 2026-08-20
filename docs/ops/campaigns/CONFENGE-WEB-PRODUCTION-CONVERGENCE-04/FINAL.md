@@ -2,14 +2,14 @@
 
 Token: `PARTIAL_WITH_EXACT_RESIDUALS`
 
-Netlify production `commit_ref` equals main. Graph, seven BOFU pages, Market Answer noindex, Data Desk noindex, checkout-off, and CSP are proven live. The token is not `PRODUCTION_CONVERGED` because the contract-analysis canary is not INDEX v2 and Warmbly `confenge.search_observation.v1` capability is not proven DELIVERED.
+Netlify production `commit_ref` equals `origin/main` (`154b1d2a`). Graph, seven BOFU pages, Market Answer noindex, Data Desk noindex, checkout-off, CSP, and persist-first search-observation callers are proven live. The token is not `PRODUCTION_CONVERGED` because the contract-analysis canary is not INDEX v2 and Warmbly `confenge.search_observation.v1` is not proven DELIVERED.
 
 ## FACT
 
-- `origin/main` = `f767554bcdfb7594c1e079cd39791a7c9770ef22` (merge of #168 at 2026-08-20T04:22:07Z). Previous main: `4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd`.
-- Netlify production deploy `6a8680f16e35db00084a9147`: `commit_ref` = `f767554bcdfb7594c1e079cd39791a7c9770ef22`, `state` = `ready`, `context` = `production`, `published_at` = `2026-08-20T04:22:48.226Z`.
-- Homepage etag changed `b7e476cad9c06be46c98d9cde1536857-ssl` → `4b3870a8ed28bdc3cf988e3fc03f636c-ssl`.
-- Graph: sitemap-index + four children + sitemap.txt = **64** unique locs, loc sets equal, no duplicates. Robots Sitemap line points only at `sitemap-index.xml`.
+- `origin/main` = `154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b` (merge of #170 at 2026-08-20T05:23Z). Previous main: `5d5081237aec99f5bedf1ab441bfbde41e724f51` (#169). Content convergence: #168 `f767554bcdfb7594c1e079cd39791a7c9770ef22`.
+- Live `/.well-known/build-info.json`: `commit` = `154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b`, `deploy_id` = `6a868f64beb71a000870758b`, `environment` = `production`, `build_time` = `2026-08-20T05:24:02Z`.
+- Homepage etag `5ff2889b469de55250a924e1ca9a3f4e-ssl`. CSP present (`default-src 'self'`).
+- Graph: sitemap-index + four children + sitemap.txt = **64** unique locs, loc sets equal to each other and to `origin/main:sitemap.txt`. Robots Sitemap line points only at `sitemap-index.xml`. `audit_graph`: `market_answer_indexable=false`, `market_answer_in_graph=false`, `ok=true`.
 - Seven BOFU URLs HTTP 200, self-canonical, index,follow, in graph, CSP present:
   - `/defesa-margem-contratos-publicos/`
   - `/atrasos-prorrogacao-obras-publicas/`
@@ -22,27 +22,29 @@ Netlify production `commit_ref` equals main. Graph, seven BOFU pages, Market Ans
 - Data Desk kit `/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/`: HTTP 200, `noindex,follow` (meta + `X-Robots-Tag`), off sitemap.
 - Contract-analysis family: robots Disallow `/analises-contratos-publicos/`; listing `X-Robots-Tag: noindex, nofollow, noarchive`; off sitemap.
 - Checkout POST `/.netlify/functions/offer-checkout` with flags false: HTTP 404 `{"ok":false,"error":"feature_disabled"}`.
-- GSC job 32330638164 authenticated; repo overlay `LIVE_JOB_OK`; `core_ready_for_product_decisions=false`.
-- Source PRs #160–#167 closed SUPERSEDED_BY_CONVERGENCE. Issues #151, #152, #153 closed. #157 and #83 remain HOLD.
+- Search-observation producer is wired: persist-first FileStore/Blobs `search-obs/`, ops produce/drain, scheduled `search-observation-tick`. DELIVERED not proven.
+- GSC overlay `LIVE_JOB_OK`; `core_ready_for_product_decisions=false`.
+- Source PRs #160–#167 already closed SUPERSEDED_BY_CONVERGENCE (absorbed by #168). #170 merged. #157 and #83 remain HOLD.
+- IndexNow: prepare dry-run accepted `/defesa-margem-contratos-publicos/` (`sent=false`). No HTTP POST. Graph loc set matches live (not a divergence blocker). CLI `--send` is refused; `send_default=false`.
 
 ## INFERENCE
 
-- One merge + one production Netlify deploy replaced eight intermediate source-PR deploys.
+- Two production merges (#168 content, #170 persist-first/GSC honesty/scanner/Chrome) replaced eight intermediate source-PR deploys.
 
 ## UNKNOWN
 
-- Warmbly inbound health may still omit `confenge.search_observation.v1` (producer holds HELD/RETRYABLE; not DELIVERED).
+- Warmbly inbound health may still omit `confenge.search_observation.v1` (producer holds HELD; not DELIVERED).
 - Map-pack / branded-search / organic lift.
 - Live `content_to_service` counts in production analytics (contract is on shipped HTML/JS).
 
 ## BLOCKED
 
 - Contract-analysis canary INDEX v2: stale 2026-08-17 token is invalid; twelve-item v2 gate was not proven; #83 stays open.
-- IndexNow not submitted (`auto_send=false`).
+- IndexNow POST: CLI is prepare-only (`--send` refused). `send_default=false`. Loc set unchanged at 64 versus previous production. Frozen #128 and observe_only URLs excluded. This is not a graph-divergence blocker.
 
 ## produção comprovada
 
-- Yes for main SHA, Netlify `commit_ref`, graph (64), seven BOFU pages, Market Answer noindex/off-sitemap, Data Desk noindex/off-sitemap, checkout-off, CSP.
+- Yes for main SHA, Netlify `commit_ref` `154b1d2a` / deploy `6a868f64beb71a000870758b`, graph (64), seven BOFU pages, Market Answer noindex/off-sitemap, Data Desk noindex/off-sitemap, checkout-off, CSP, persist-first search-observation callers.
 - No for #157 INDEX and search-observation DELIVERED.
 
 ## efeito comercial ainda não observado

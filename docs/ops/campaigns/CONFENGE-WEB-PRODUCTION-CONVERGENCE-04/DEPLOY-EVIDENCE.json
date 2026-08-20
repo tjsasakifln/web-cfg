@@ -1,31 +1,30 @@
 {
   "schema": "confenge-web-production-convergence-04/deploy-evidence/v1",
-  "as_of_utc": "2026-08-20T04:27:30Z",
-  "main_sha": "f767554bcdfb7594c1e079cd39791a7c9770ef22",
-  "previous_main_sha": "4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd",
+  "as_of_utc": "2026-08-20T05:26:00Z",
+  "main_sha": "154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b",
+  "previous_main_sha": "5d5081237aec99f5bedf1ab441bfbde41e724f51",
   "convergence_pr": 168,
-  "merged_at": "2026-08-20T04:22:07Z",
+  "follow_up_pr": 170,
+  "merged_at": "2026-08-20T05:23:00Z",
   "netlify": {
-    "site_id": "d48bab78-b26c-4152-88f0-78b166c951e6",
     "site": "confenge",
     "custom_domain": "confenge.com.br",
-    "deploy_id": "6a8680f16e35db00084a9147",
-    "build_id": "6a8680f16e35db00084a9145",
-    "commit_ref": "f767554bcdfb7594c1e079cd39791a7c9770ef22",
+    "deploy_id": "6a868f64beb71a000870758b",
+    "commit_ref": "154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b",
     "commit_ref_equals_main": true,
     "state": "ready",
     "context": "production",
-    "branch": "main",
-    "created_at": "2026-08-20T04:22:10.003Z",
-    "published_at": "2026-08-20T04:22:48.226Z",
-    "deploy_time_seconds": 37,
+    "environment": "production",
+    "build_time": "2026-08-20T05:24:02Z",
+    "artifact_hash": "7d563e47250f523fbd24f2a14301e598d1c438be30f158f27c1121e243ba10d7",
+    "manifest_hash": "5855b43ac36c6688d06c0d7e2f785a8990dd9d5e5c84b9c8296e3a977994d4bc",
     "url": "https://confenge.com.br",
-    "admin_url": "https://app.netlify.com/projects/confenge/deploys/6a8680f16e35db00084a9147",
-    "error_message": null
+    "admin_url": "https://app.netlify.com/projects/confenge/deploys/6a868f64beb71a000870758b",
+    "source": "https://confenge.com.br/.well-known/build-info.json"
   },
   "homepage_etag": {
-    "before": "b7e476cad9c06be46c98d9cde1536857-ssl",
-    "after": "4b3870a8ed28bdc3cf988e3fc03f636c-ssl"
+    "previous_production": "4b3870a8ed28bdc3cf988e3fc03f636c-ssl",
+    "after": "5ff2889b469de55250a924e1ca9a3f4e-ssl"
   },
   "graph": {
     "sitemap_index_status": 200,
@@ -35,13 +34,23 @@
       "https://confenge.com.br/sitemap-jurisprudencia.xml",
       "https://confenge.com.br/sitemap-inteligencia.xml"
     ],
+    "child_loc_counts": {
+      "sitemap.xml": 59,
+      "sitemap-editorial.xml": 5,
+      "sitemap-jurisprudencia.xml": 0,
+      "sitemap-inteligencia.xml": 0
+    },
     "child_loc_count": 64,
     "sitemap_txt_count": 64,
     "loc_set_equal": true,
+    "live_equals_origin_main_sitemap_txt": true,
     "duplicates": false,
     "robots_sitemap": ["https://confenge.com.br/sitemap-index.xml"],
     "market_answer_in_any_child": false,
-    "market_answer_in_sitemap_txt": false
+    "market_answer_in_sitemap_txt": false,
+    "market_answer_indexable": false,
+    "market_answer_in_graph": false,
+    "audit_graph_ok": true
   },
   "pages": {
     "/defesa-margem-contratos-publicos/": {
@@ -107,6 +116,7 @@
     },
     "/analises-contratos-publicos/": {
       "status": 200,
+      "robots": "noindex,nofollow,noarchive",
       "x_robots": "noindex, nofollow, noarchive",
       "robots_txt_disallow": true,
       "in_graph": false
@@ -128,6 +138,17 @@
       "body": {"ok": false, "error": "feature_disabled"}
     }
   },
+  "search_observation": {
+    "producer": "netlify/functions/lib/search-observation.cjs",
+    "callers": [
+      "ops produce_search_observation",
+      "ops drain_search_observation",
+      "search-observation-tick"
+    ],
+    "store": "FileStore(LEAD_STORE_DIR/search-observation) or Netlify Blobs prefix search-obs/",
+    "held_when_capability_absent": true,
+    "delivered_proven": false
+  },
   "gsc": {
     "run_id": 32330638164,
     "artifact_id": 9392893073,
@@ -138,8 +159,27 @@
   },
   "indexnow": {
     "submitted": false,
-    "reason": "auto_send=false; no live IndexNow POST in this campaign"
+    "http_post": false,
+    "endpoint_called": false,
+    "graph_divergence": false,
+    "live_loc_set_equals_origin_main": true,
+    "send_default": false,
+    "dry_run_default": true,
+    "cli": "python3 -m scripts.discovery indexnow is prepare-only; --send is refused on this path",
+    "prepare_dry_run": {
+      "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "state": "changed",
+      "accepted": true,
+      "sent": false,
+      "idempotency_key": "18dfddbd20054e1e13493de38e4b9968ce40ac20106437c2eba1e1ece80521c3"
+    },
+    "reason": "No IndexNow POST. Graph loc set is 64 and equals origin/main (not a graph-divergence blocker). CLI is prepare-only (--send refused). allowlist send_default=false. No indexable URL is new or materially altered versus previous production 5d508123. Frozen #128 allowlist members and observe_only URLs are excluded."
+  },
+  "source_prs": {
+    "closed_superseded_by_168": [160, 161, 162, 163, 164, 165, 166, 167],
+    "merged_convergence": [168, 170],
+    "hold": [157]
   },
   "commit_ref_equals_main": true,
-  "token_basis": "PRODUCTION_CONVERGED_FOR_NETLIFY_GRAPH_PAGES; residuals remain for #157 INDEX and Warmbly v1 capability"
+  "token_basis": "PARTIAL_WITH_EXACT_RESIDUALS: production SHA+graph+pages proven; #157 not INDEX v2; Warmbly v1 not DELIVERED; IndexNow not POSTed"
 }
