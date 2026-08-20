@@ -1,26 +1,24 @@
 # Data Desk — integration notes
 
-Prepare-only. No public page is added in this change set.
+The approved SC Market Answer is the operational canary. The fixture
+remains loadable via `--asset` and is not deleted.
 
-## Public surface (proposal only)
+## Public surface
 
-When an approved asset replaces the fixture:
+Static files live under the exclusive namespace:
 
-1. Choose a public permalink under `https://confenge.com.br/` that is not
-   `/internal/`.
-2. Add that single URL to the matching sitemap urlset (see
-   `docs/discovery/INTEGRATION_NOTES.md`).
-3. Point `public_canonical` at that URL in the asset JSON. Do not keep
-   `FIXTURE_ONLY`.
-4. Emit Dataset / DataDownload on that page only if the package still
-   contains a real aggregated distribution. Never attach Dataset to an
-   offer or author page just to look “citable”.
-5. Embed snippet may be copied by third parties. Keep `data-tracker="none"`
-   as the default. Do not inject GTM, pixels or third-party analytics
-   into the embed.
+`/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/`
 
-Do not add the fixture to `sitemap.xml`. Do not give it a public
-canonical. Do not open a generic `/api/data` route.
+- Path-scoped `X-Robots-Tag: noindex, follow` in `_headers`.
+- Absent from every sitemap urlset.
+- Every artifact points at the Market Answer canonical source.
+- `.md` and `package.json` stay in `data/data-desk/packages/**` because
+  the public-artifact assembler forbids those names. Public copies use
+  `.txt` / `.json` / `.csv` / `.svg` / noindex `index.html`.
+
+Do not add the kit to `sitemap.xml`. Do not add a generic `/api/data`
+route. Do not edit the Market Answer page in this change set
+(see `PATCH-NEEDED.md`).
 
 ## Forms
 
@@ -36,12 +34,12 @@ second identity model.
 ## Syndication
 
 `auto_send` is false and must stay false. Actual outreach is #66
-human-send. This package only prepares five unnamed slots.
+human-send. Five named finalists are `PREPARED_NOT_SENT` / `UNKNOWN`.
 
 ## Ownership
 
 Owned here: `scripts/data_desk/**`, `tests/data_desk/**`,
-`data/data-desk/**`, `docs/data-desk/**`.
+`data/data-desk/**`, `docs/data-desk/**`, `assets/data-desk/**`.
 
 Not owned: `scripts/contract_analysis/**`, `scripts/market_answers/**`,
 Goal 05/06 pages, PR #85 authority matrix, SmartLic redirects, shared
