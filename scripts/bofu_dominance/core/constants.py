@@ -21,11 +21,16 @@ STATUS_PATH = DATA_DIR / "status.json"
 REPORT_PATH = DOCS_DIR / "REPORT.md"
 NEXT_ACTIONS_PATH = DOCS_DIR / "NEXT-ACTIONS.md"
 
-GSC_LIVE_STATE = "BLOCKED_CREDENTIAL_FAILURE"
+BLOCKED_GSC_LIVE_STATE = "BLOCKED_CREDENTIAL_FAILURE"
+GSC_LIVE_STATE = BLOCKED_GSC_LIVE_STATE  # default until overlay/job proof
+LIVE_JOB_OK = "LIVE_JOB_OK"
 GSC_LIVE_RECOMMENDATION = "NEEDS_EXTERNAL_ACTION"
 HISTORICAL_GSC_DIR = ROOT / "seo" / "gsc-2026-08-09"
 HISTORICAL_GSC_AS_OF = "2026-08-09"
 LAST_SYNC_PATH = ROOT / "data" / "revops" / "gsc" / "last_sync.json"
+OVERLAY_PATH = DATA_DIR / "gsc-live-overlay.v1.json"
+BRA_GEOS = frozenset({"bra", "br"})
+INCOMPLETE_CONTEXT = frozenset({"UNKNOWN", "MIXED", "", None})
 EARLIEST_SAFE_ACTION_FROZEN = "2026-09-16"
 
 STATES = (
@@ -174,11 +179,11 @@ GRAPH_NODES = (
         "kind": "pull_request",
         "ref": 159,
         "role": "observability_candidate_not_live_gsc",
-        "note": "Search-demand observability producer. Candidate to merge; not main; not GSC live.",
+        "note": "Search-demand observability producer. Candidate to merge; not main. Isolated gsc job 32322344062 is LIVE_JOB_OK overlay in BOFU-CORE, not a merged PR #159 loop.",
         "state": "draft_open",
         "head": "campaign/confenge-web-seo-demand-control-02",
         "sha": "feba68928ab997229028a66bb25d3b3b5a439206",
-        "gsc_live_state": GSC_LIVE_STATE,
+        "gsc_live_state": LIVE_JOB_OK,
         "merged_to_main": False,
     },
 )

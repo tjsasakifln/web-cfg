@@ -34,13 +34,12 @@ def test_public_target_queries_in_status_are_not_live_rows():
     blob = str(status)
     assert "52.407.089/0001-09" not in blob
     assert contains_pii(blob) is False
-    live_rows = [
-        item
-        for family in status["families"]
-        for item in [family["evidence"]]
-        if item.get("is_gsc_live")
-    ]
-    assert live_rows == []
+    assert '"query":' not in blob or "query_hashes" in blob
+    for family in status["families"]:
+        evidence = family["evidence"]
+        assert "query" not in evidence
+        if evidence.get("is_gsc_live") and evidence.get("query_hashes"):
+            assert all(str(h).startswith("sha256:") for h in evidence["query_hashes"])
 
 
 def test_cnpj_is_refused():

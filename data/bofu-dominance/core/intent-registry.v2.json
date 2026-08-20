@@ -4,7 +4,7 @@
   "slot": "BOFU-CORE",
   "as_of": "2026-08-19",
   "public_surface": "https://confenge.com.br",
-  "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
+  "gsc_live_state": "LIVE_JOB_OK",
   "notes": [
     "This is the canonical BOFU intent ledger, not a second Organic Opportunity Engine.",
     "Families from issue #128 are FROZEN: census and spec allowed, HTML not.",

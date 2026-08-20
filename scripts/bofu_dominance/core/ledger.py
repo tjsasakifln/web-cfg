@@ -12,7 +12,6 @@ from scripts.bofu_dominance.core.constants import (
     CENSUS_PATH,
     DATA_DIR,
     DOCS_DIR,
-    GSC_LIVE_STATE,
     MAX_NEXT_ACTIONS,
     ORIGIN_MAIN_SHA,
     REGISTRY_PATH,
@@ -26,7 +25,6 @@ from scripts.bofu_dominance.core.gsc import (
     gsc_live_record,
     load_historical_pages,
     load_historical_queries,
-    load_last_sync,
 )
 from scripts.bofu_dominance.core.hashing import canonical_json, sha256_json
 from scripts.bofu_dominance.core.overlap import overlap_conflicts, shared_primary_queries
@@ -59,7 +57,7 @@ def build_status(
     census_doc = census or load_census(family_ids=family_ids)
     pages = load_historical_pages()
     queries = load_historical_queries()
-    live = gsc_live_record(load_last_sync())
+    live = gsc_live_record()
     graph = build_graph()
     conflicts = overlap_conflicts(families)
     if conflicts:
@@ -75,9 +73,9 @@ def build_status(
     resolved_families: list[dict[str, Any]] = []
     for family in families:
         path = (family.get("canonical_owner") or {}).get("path")
-        evidence = evidence_for_path(path, pages)
+        evidence = evidence_for_path(path)
         resolved = resolve_family_state(
-            family, evidence=evidence, gsc_live_state=GSC_LIVE_STATE
+            family, evidence=evidence, gsc_live_state=live["gsc_live_state"]
         )
         rec = recommend_family(resolved, family)
         if resolved["state"] == "FROZEN" and rec["authorizes_html_edit"]:
@@ -136,7 +134,7 @@ def build_status(
         "git_head": git_head or ORIGIN_MAIN_SHA,
         "origin_main": ORIGIN_MAIN_SHA,
         "gsc_live": live,
-        "gsc_live_state": GSC_LIVE_STATE,
+        "gsc_live_state": live["gsc_live_state"],
         "historical_gsc": {
             "dir": "seo/gsc-2026-08-09",
             "as_of": "2026-08-09",

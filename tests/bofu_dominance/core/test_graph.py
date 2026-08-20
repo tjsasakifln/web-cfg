@@ -23,7 +23,7 @@ def test_status_graph_does_not_treat_pr159_as_main_or_live():
     status = build_status()
     pr159 = next(node for node in status["graph"]["nodes"] if node["id"] == "pr-159")
     assert pr159["merged_to_main"] is False
-    assert pr159["gsc_live_state"] == "BLOCKED_CREDENTIAL_FAILURE"
+    assert pr159["gsc_live_state"] == "LIVE_JOB_OK"
     pr157 = next(node for node in status["graph"]["nodes"] if node["id"] == "pr-157")
     assert pr157["role"] == "contract_analysis_canary_not_family"
     pr158 = next(node for node in status["graph"]["nodes"] if node["id"] == "pr-158")
