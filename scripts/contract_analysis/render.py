@@ -690,37 +690,43 @@ def sitemap_locs(pairs: list[tuple[dict[str, Any], PublicationDecision]]) -> lis
 
 def write_sitemap(pairs: list[tuple[dict[str, Any], PublicationDecision]]) -> Path | None:
     """Write the family sitemap only with INDEX urls. Do not advertise an empty set."""
+    from scripts.organic.sitemap_graph import (
+        close_graph,
+        drop_index_member,
+        ensure_index_member,
+        render_urlset,
+    )
+
     root = _root()
     path = root / SITEMAP_NAME
     locs = sitemap_locs(pairs)
     if not locs:
         if path.exists():
             path.unlink()
+        drop_index_member(root, SITEMAP_NAME)
+        if (root / "sitemap-index.xml").is_file():
+            close_graph(root)
         return None
-    urls = "\n".join(
-        f" <url>\n <loc>{escape(loc)}</loc>\n <lastmod>2026-08-16</lastmod>\n </url>" for loc in locs
-    )
-    path.write_text(
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f"{urls}\n</urlset>\n",
-        encoding="utf-8",
-    )
+
+    path.write_text(render_urlset((loc, None) for loc in locs), encoding="utf-8")
+    ensure_index_member(root, SITEMAP_NAME)
+    close_graph(root)
     return path
 
 
 def analysis_urls_in_sitemaps(root: Path | None = None) -> list[str]:
     base = root or _root()
     found: list[str] = []
+    from scripts.organic.sitemap_graph import INDEX_NAME, TXT_NAME, load_index_members
+
     needle = f"{SITE}{FAMILY_PATH}"
-    for name in (
-        "sitemap.xml",
-        "sitemap-index.xml",
-        "sitemap-editorial.xml",
-        "sitemap-inteligencia.xml",
-        "sitemap.txt",
-        SITEMAP_NAME,
-    ):
+    names = [member.filename for member in load_index_members(base)]
+    names.extend([TXT_NAME, SITEMAP_NAME, INDEX_NAME])
+    seen: set[str] = set()
+    for name in names:
+        if name in seen:
+            continue
+        seen.add(name)
         path = base / name
         if not path.is_file():
             continue

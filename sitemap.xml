@@ -1,321 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://confenge.com.br/</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/acompanhamento-contratos-obras/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/aditivos-obras-publicas/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/atrasos-prorrogacao-obras-publicas/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/auditoria-orcamento-licitacao/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/</loc>
-    <lastmod>2026-08-17</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  <url>
-    <loc>https://confenge.com.br/defesa-tecnica-contratos-publicos/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/diagnostico-pre-licitacao/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/especialista/tiago-jun-sasaki/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/medicoes-glosas-obras-publicas/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/termos-de-uso/</loc>
-    <lastmod>2026-07-30</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/privacidade/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/reequilibrio-obras-publicas/</loc>
-    <lastmod>2026-07-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/diagnostico-b2g-360/</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/diagnostico-b2g-expansao/</loc>
-    <lastmod>2026-08-18</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/comercial/termos-diagnostico-b2g/</loc>
-    <lastmod>2026-08-18</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/comercial/privacidade-leads/</loc>
-    <lastmod>2026-08-18</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/diretoria-b2g/</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/bid-room-licitacoes-obras/</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/defesa-margem-contratos-publicos/</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/metodologia-inteligencia/</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/ferramentas/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/ferramentas/checklist-reequilibrio/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/ferramentas/matriz-atraso-obra/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/ferramentas/diagnostico-defesa-margem/</loc>
-    <lastmod>2026-08-15</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/radar/nacional-obras-publicas/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/nurture/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/casos/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/casos/medicao-glosa-demonstrativo/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/imprensa/</loc>
-    <lastmod>2026-08-03</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/politica-editorial/</loc>
-    <lastmod>2026-08-16</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/politica-editorial/historico/</loc>
-    <lastmod>2026-08-16</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/politica-editorial/v/1.0.0/</loc>
-    <lastmod>2026-08-16</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/correcoes/</loc>
-    <lastmod>2026-08-16</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/uso-de-ia/</loc>
-    <lastmod>2026-08-16</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conflitos/</loc>
-    <lastmod>2026-08-16</lastmod>
-  </url>
-  <url>
-    <loc>https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/</loc>
-  </url>
+ <url>
+ <loc>https://confenge.com.br/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/acompanhamento-contratos-obras/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/aditivos-obras-publicas/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/atrasos-prorrogacao-obras-publicas/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/auditoria-orcamento-licitacao/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/bid-room-licitacoes-obras/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/casos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/casos/medicao-glosa-demonstrativo/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/comercial/privacidade-leads/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/comercial/termos-diagnostico-b2g/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conflitos/</loc>
+ <lastmod>2026-08-16</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/</loc>
+ <lastmod>2026-08-18</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/</loc>
+ <lastmod>2026-08-18</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/</loc>
+ <lastmod>2026-08-18</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/</loc>
+ <lastmod>2026-07-30</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/correcoes/</loc>
+ <lastmod>2026-08-16</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/defesa-margem-contratos-publicos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/defesa-tecnica-contratos-publicos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/diagnostico-b2g-360/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/diagnostico-b2g-expansao/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/diagnostico-pre-licitacao/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/diretoria-b2g/</loc>
+ <lastmod>2026-08-01</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/especialista/tiago-jun-sasaki/</loc>
+ <lastmod>2026-07-15</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/checklist-reequilibrio/</loc>
+ <lastmod>2026-08-14</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/diagnostico-defesa-margem/</loc>
+ <lastmod>2026-08-15</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/</loc>
+ <lastmod>2026-08-15</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/matriz-atraso-obra/</loc>
+ <lastmod>2026-08-15</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/imprensa/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/medicoes-glosas-obras-publicas/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/metodologia-inteligencia/</loc>
+ <lastmod>2026-08-15</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/nurture/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/politica-editorial/</loc>
+ <lastmod>2026-08-16</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/politica-editorial/historico/</loc>
+ <lastmod>2026-08-16</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/politica-editorial/v/1.0.0/</loc>
+ <lastmod>2026-08-15</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/privacidade/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/radar/nacional-obras-publicas/</loc>
+ <lastmod>2026-08-03</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/reequilibrio-obras-publicas/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/termos-de-uso/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/uso-de-ia/</loc>
+ <lastmod>2026-08-16</lastmod>
+ </url>
 </urlset>
-
