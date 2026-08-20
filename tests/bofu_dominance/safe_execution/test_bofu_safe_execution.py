@@ -450,8 +450,8 @@ def test_git_diff_is_exclusive_area():
     names = git_diff_names()
     experiment_html = (
         "ferramentas/diagnostico-defesa-margem/",
-        "conteudos/chuva-prorrogacao-prazo-obra-publica/",
-        "conteudos/sinapi-desonerado-nao-desonerado/",
+        # #187 authorizes SVG path repair on the two experiment pages that
+        # still shipped the invalid 0.6.7 WhatsApp token.
     )
     for forbidden in experiment_html:
         hits = [n for n in names if n == forbidden or n.startswith(forbidden)]
