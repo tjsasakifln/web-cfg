@@ -11,6 +11,7 @@ Deliberate failure mode (for local demo):
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -237,6 +238,30 @@ def test_codeql_soft_fail_is_explicit():
     assert "do not block" in text.lower() or "until then" in text.lower()
 
 
+def test_copy_ci_is_check_not_write():
+    """CI copy path must verify em-dashes without mutating the tree.
+
+    `npm run scrub:em-dashes` remains the explicit fixer (`--write`).
+    """
+    pkg = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+    copy = pkg["scripts"]["test:copy"]
+    if "scrub_em_dashes.py --write" in copy:
+        raise AssertionError(
+            "test:copy must not run scrub_em_dashes.py --write "
+            "(CI/check cannot mutate tracked files)"
+        )
+    if "scrub_em_dashes.py --check" not in copy:
+        raise AssertionError("test:copy must keep scrub_em_dashes.py --check")
+    if "test_copy_gates.py" not in copy:
+        raise AssertionError("test:copy must keep test_copy_gates.py")
+    fixer = pkg["scripts"].get("scrub:em-dashes", "")
+    if "scrub_em_dashes.py --write" not in fixer:
+        raise AssertionError("scrub:em-dashes fixer must keep --write")
+    site_ci = _read(SITE_CI)
+    if "npm run test:copy" not in site_ci:
+        raise AssertionError("site-ci must run npm run test:copy")
+
+
 def test_deliberate_force_fail_env():
     """Controlled negative path: env forces red so CI can prove the test blocks."""
     if os.environ.get("WORKFLOW_GATE_FORCE_FAIL") == "1":
@@ -253,6 +278,7 @@ def main() -> int:
         test_merge_workflows_have_no_path_skip,
         test_pseo_still_requires_full_npm_test,
         test_codeql_soft_fail_is_explicit,
+        test_copy_ci_is_check_not_write,
         test_deliberate_force_fail_env,
     ]
     failed = 0

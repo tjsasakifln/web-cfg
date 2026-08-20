@@ -25,6 +25,21 @@ FORBIDDEN_PUBLIC_FRAGMENTS = (
 )
 
 
+def _insert_after_page_hero(html: str, block: str) -> str:
+    """Place a block inside <main> after H1/hero — never between site header and main."""
+    m = re.search(
+        r"<main\b[\s\S]*?<header class=\"[^\"]*(?:content-hero|article-hero|pillar-hero)[^\"]*\"[^>]*>[\s\S]*?</header>",
+        html,
+        re.I,
+    )
+    if m:
+        return html[: m.end()] + "\n" + block + html[m.end() :]
+    m = re.search(r"(<main\b[^>]*>[\s\S]*?</h1>)", html, re.I)
+    if m:
+        return html[: m.end()] + "\n" + block + html[m.end() :]
+    return html
+
+
 def is_contract_aggregate_evidence(dl: dict[str, Any] | None) -> bool:
     """Mirror engine rule: only real contract aggregates are content moat."""
     if not dl:
@@ -326,8 +341,9 @@ def materialize_cohort_item(root: Path, item: dict[str, Any], *, apply: bool) ->
   </div>
 </aside>
 """
-            if re.search(r"</header>", html, re.I):
-                html = re.sub(r"</header>", "</header>\n" + tool_block, html, count=1, flags=re.I)
+            inserted = _insert_after_page_hero(html, tool_block)
+            if inserted != html:
+                html = inserted
                 result["changes"].append("injected_tool_link")
             break
 

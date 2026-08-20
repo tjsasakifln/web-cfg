@@ -51,6 +51,8 @@
   const EVENT_ALIASES = {
     qualified_scroll: 'scroll_depth',
     content_to_service_click: 'content_to_service',
+    service_view: 'service_page_view',
+    service_cta: 'cta_click',
     service_cta_click: 'cta_click',
     offer_cta_click: 'cta_click',
     diagnostic_cta_click: 'cta_click',
@@ -422,6 +424,24 @@
   window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
   window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
 
+  // Decorative reveal only. Never throw: missing window.setTimeout must not abort form/analytics.
+  const scheduleIdle = (fn) => {
+    const run = () => { try { fn(); } catch (_) { /* non-critical */ } };
+    try {
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(run, { timeout: 2500 });
+        return;
+      }
+    } catch (_) { /* ignore */ }
+    const later = (typeof window.setTimeout === 'function' && window.setTimeout)
+      || (typeof setTimeout === 'function' && setTimeout);
+    if (typeof later === 'function') {
+      later(run, 1);
+      return;
+    }
+    run();
+  };
+
   const init = () => {
 
     const toggle = document.querySelector('.menu-toggle');
@@ -464,12 +484,14 @@
       });
     });
 
-    const reveals = document.querySelectorAll('.reveal');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if ('IntersectionObserver' in window && !reducedMotion) {
-      const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .08, rootMargin: '0px 0px -35px' });
-      reveals.forEach((el) => observer.observe(el));
-    } else reveals.forEach((el) => el.classList.add('is-visible'));
+    scheduleIdle(() => {
+      const reveals = document.querySelectorAll('.reveal');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if ('IntersectionObserver' in window && !reducedMotion) {
+        const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .08, rootMargin: '0px 0px -35px' });
+        reveals.forEach((el) => observer.observe(el));
+      } else reveals.forEach((el) => el.classList.add('is-visible'));
+    });
 
     const search = document.getElementById('content-search');
     const items = [...document.querySelectorAll('[data-content-item]')];

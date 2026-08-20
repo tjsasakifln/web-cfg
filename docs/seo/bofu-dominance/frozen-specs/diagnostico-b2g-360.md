@@ -21,7 +21,7 @@ Mapear onde a operação B2G de obras perde tempo, margem e controle, e sair com
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, WebPage, Service, Country, BreadcrumbList, ListItem |
 | og:title | Mapeie onde a frente pública perde tempo, margem e controle. |
-| content_sha256 | `ee0aa2242c5673f75434695ad9e82b4942e437cd2fd78ca8b1817fad54434650` |
+| content_sha256 | `c18c71e062ab992acf7be5ecb15ddb39396b29561a7cfd11928c72afa93380fa` |
 | hero CTA | Diagnosticar a operação B2G → `/#contato?jornada=operacao` |
 | when-not-to-hire | True |
 

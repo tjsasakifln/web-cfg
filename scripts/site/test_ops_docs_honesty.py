@@ -2,6 +2,7 @@
 """Assert restore/ops docs stay consistent with post-merge restore facts."""
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -109,12 +110,65 @@ def test_portfolio_disposition_report_shape():
     print("OK test_portfolio_disposition_report_shape")
 
 
+CAMPAIGN_DISPOSITION_JSON = ROOT / "docs" / "ops" / "PR_PORTFOLIO_DISPOSITION.json"
+CAMPAIGN_DISPOSITION_MD = ROOT / "docs" / "ops" / "PR_PORTFOLIO_DISPOSITION.md"
+SEVEN_LABELS = (
+    "MERGE_AS_IS",
+    "REBASE_THEN_MERGE",
+    "CHERRY_PICK_UNIQUE_DELTA",
+    "SUPERSEDED_BY_MAIN",
+    "SUPERSEDED_BY_ANOTHER_PR",
+    "HOLD_FOR_EVIDENCE",
+    "REJECT",
+)
+
+
+def test_pr_portfolio_disposition_campaign_artifact():
+    assert CAMPAIGN_DISPOSITION_JSON.is_file(), "missing docs/ops/PR_PORTFOLIO_DISPOSITION.json"
+    assert CAMPAIGN_DISPOSITION_MD.is_file(), "missing docs/ops/PR_PORTFOLIO_DISPOSITION.md"
+    doc = json.loads(CAMPAIGN_DISPOSITION_JSON.read_text(encoding="utf-8"))
+    before = int(doc["OPEN_PRS_BEFORE"])
+    after = int(doc["OPEN_PRS_AFTER"])
+    assert after < before, f"OPEN_PRS_AFTER {after} is not lower than OPEN_PRS_BEFORE {before}"
+    inventoried = doc.get("inventoried_pr_numbers") or [p["number"] for p in doc["prs"]]
+    assert inventoried, "inventoried PR list empty"
+    numbers = [int(p["number"]) for p in doc["prs"]]
+    assert len(numbers) == len(set(numbers)), f"duplicate PR numbers in disposition: {numbers}"
+    assert sorted(numbers) == sorted(int(n) for n in inventoried), (
+        "every inventoried PR number must appear once in prs[]"
+    )
+    for pr in doc["prs"]:
+        dest = pr["destination"]
+        assert dest in SEVEN_LABELS, f"PR #{pr['number']} destination {dest!r} not in seven labels"
+        for key in (
+            "issue_owner",
+            "paths",
+            "semantic_overlap",
+            "ci",
+            "risk",
+            "visitor_impact",
+            "rollback",
+        ):
+            assert key in pr and pr[key] not in (None, ""), f"PR #{pr['number']} missing {key}"
+    pr193 = next(p for p in doc["prs"] if int(p["number"]) == 193)
+    lockstep = bool(pr193.get("lockstep_evidence") or (doc.get("node22_lighthouse13") or {}).get("lockstep_evidence"))
+    if not lockstep:
+        assert pr193["destination"] == "HOLD_FOR_EVIDENCE", (
+            "#193 must be HOLD_FOR_EVIDENCE unless CI + Netlify preview lockstep evidence is attached"
+        )
+    md = CAMPAIGN_DISPOSITION_MD.read_text(encoding="utf-8")
+    assert "OPEN_PRS_BEFORE:" in md and "OPEN_PRS_AFTER:" in md
+    assert "WEB_PRODUCTION_CONVERGED_READY_FOR_ASAAS_MAPPING" in md or "WEB_CONVERGENCE_BLOCKED_" in md
+    print("OK test_pr_portfolio_disposition_campaign_artifact")
+
+
 def main() -> int:
     failed = 0
     for t in (
         test_required_branch_checks_status_is_applied,
         test_restore_report_post_merge_human_actions,
         test_portfolio_disposition_report_shape,
+        test_pr_portfolio_disposition_campaign_artifact,
     ):
         try:
             t()

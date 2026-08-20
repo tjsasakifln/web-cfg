@@ -37,6 +37,7 @@ from scripts.editorial.render import render_hub, render_page # noqa: E402
 from scripts.editorial.sources import load_manifest, page_sources_ok # noqa: E402
 from scripts.editorial.cohort import FIRST_COHORT_IDS, FIRST_COHORT_SET # noqa: E402
 from scripts.editorial.preview import write_preview_packet # noqa: E402
+from scripts.site.scrub_em_dashes import scrub_html # noqa: E402
 
 PAGES_DIR = ROOT / "data" / "editorial" / "pages"
 REPORT_PATH = ROOT / "seo" / "editorial-build-report.json"
@@ -62,7 +63,7 @@ def write_html(url_path: str, html: str) -> Path:
     rel = url_path.strip("/")
     out = ROOT / rel / "index.html"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(html, encoding="utf-8")
+    out.write_text(scrub_html(html), encoding="utf-8")
     return out
 
 

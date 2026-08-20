@@ -48,8 +48,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "3cf907b8b92d8c5267ed8f4b64e63662442051904d0477ab795af1e9d7685523",
-      "bytes": 25886,
+      "content_sha256": "b20f12a0eb028fe83fb0671aa3f4788395155a26fd759f70363b5b46d12e9867",
+      "bytes": 25670,
       "noindex": false
     },
     {
@@ -57,7 +57,7 @@
       "path": "/medicoes-glosas-obras-publicas/",
       "html_rel": "medicoes-glosas-obras-publicas/index.html",
       "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
-      "meta_description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente…",
+      "meta_description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
       "og_title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
@@ -98,8 +98,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "88f7c91e187e5cedad4e2f5c65c43afdf5282a79cac7f9201f77004d90e1fe1c",
-      "bytes": 27812,
+      "content_sha256": "7235d57f9db3d2e9abcb181e848d6f8dd5bf26effc2501561fde45f22fc00900",
+      "bytes": 27617,
       "noindex": false
     },
     {
@@ -148,16 +148,16 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "df2c4d5d010fdd617eddd9346b2a32a946e2a93a7f2c6f09848e05f6fbd0b72e",
-      "bytes": 23773,
+      "content_sha256": "92cee9e67f81c6eefa432c8fb500784080af417892de342466da44b801e30c0f",
+      "bytes": 23557,
       "noindex": false
     },
     {
       "slug": "auditoria-orcamento-licitacao",
       "path": "/auditoria-orcamento-licitacao/",
       "html_rel": "auditoria-orcamento-licitacao/index.html",
-      "title": "Orçamento, BDI e SINAPI em obras públicas | CONFENGE",
-      "meta_description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de…",
+      "title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
+      "meta_description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/auditoria-orcamento-licitacao/",
       "og_title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
@@ -194,12 +194,12 @@
             "text": "Operação B2G continuada"
           }
         ],
-        "when_not_to_hire": false,
+        "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "f178e0b78b89e13d8ffc8f671d4c4c36d2a52e275a27b9ab164e7a3f85558b17",
-      "bytes": 28597,
+      "content_sha256": "b79954180021267ffb3d7d82348bc5c64e1f18318c8b2be5ce62dbbb16180e2b",
+      "bytes": 28453,
       "noindex": false
     },
     {
@@ -255,8 +255,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "ee0aa2242c5673f75434695ad9e82b4942e437cd2fd78ca8b1817fad54434650",
-      "bytes": 18326,
+      "content_sha256": "c18c71e062ab992acf7be5ecb15ddb39396b29561a7cfd11928c72afa93380fa",
+      "bytes": 20226,
       "noindex": false
     },
     {
@@ -264,7 +264,7 @@
       "path": "/diagnostico-pre-licitacao/",
       "html_rel": "diagnostico-pre-licitacao/index.html",
       "title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
-      "meta_description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um…",
+      "meta_description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/diagnostico-pre-licitacao/",
       "og_title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
@@ -305,8 +305,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "1490c9d0101bad0d53937cbbbee5dfd495b787051bd2386838b1a3f7e3c2bd72",
-      "bytes": 22592,
+      "content_sha256": "df99235fd53c7d6228b800d0599ec5788b64ec64856fba68b183122ae6693c04",
+      "bytes": 22411,
       "noindex": false
     }
   ]

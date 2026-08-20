@@ -97,8 +97,12 @@
         "href": "/#jornadas"
       },
       {
-        "label": "Conteúdos e ferramentas",
+        "label": "Conteúdos",
         "href": "/conteudos/"
+      },
+      {
+        "label": "Ferramentas",
+        "href": "/ferramentas/"
       },
       {
         "label": "Especialista",
@@ -107,7 +111,7 @@
     ],
     "cta": {
       "label": "Analisar meu caso",
-      "href": "/#contato"
+      "href": "/#formulario-contato"
     }
   },
   "offers": [

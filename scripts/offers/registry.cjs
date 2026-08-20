@@ -111,10 +111,26 @@ const OFFERS = Object.freeze({
   }),
 });
 
+const TEST_OVERRIDES = Object.create(null);
+
+function setOfferOverrideForTests(offerId, patch) {
+  if (!offerId) return;
+  if (patch == null) {
+    delete TEST_OVERRIDES[offerId];
+    return;
+  }
+  TEST_OVERRIDES[offerId] = { ...patch };
+}
+
 function getOffer(offerId) {
   const offer = OFFERS[offerId];
   if (!offer) return null;
-  return { ...offer, provider_mapping: { ...offer.provider_mapping } };
+  const overlay = TEST_OVERRIDES[offerId];
+  return {
+    ...offer,
+    ...(overlay || {}),
+    provider_mapping: { ...(overlay && overlay.provider_mapping) || offer.provider_mapping || {} },
+  };
 }
 
 function listPublicOffers({ includePaused = false } = {}) {
@@ -164,6 +180,7 @@ module.exports = {
   STATUSES,
   OFFERS,
   getOffer,
+  setOfferOverrideForTests,
   listPublicOffers,
   assertNewVersionForPriceChange,
   snapshotOffer,

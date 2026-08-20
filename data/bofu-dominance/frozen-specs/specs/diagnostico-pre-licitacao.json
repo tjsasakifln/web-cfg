@@ -12,9 +12,9 @@
     "pr": 159,
     "authorizes_html_edit": false,
     "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
     "bofu_observe_only": true,
-    "earliest_safe_action_at": "2026-09-16",
-    "ready_for_product_decisions": false
+    "earliest_safe_action_at": "2026-09-16"
   },
   "issue_128_baseline": {
     "issue": 128,
@@ -42,7 +42,7 @@
     "national_claim_authorized": false
   },
   "gsc_precondition": {
-    "gsc_live_available": true,
+    "gsc_live_available": false,
     "source_kind": "LIVE_JOB_OK",
     "ready_for_product_decisions": false,
     "authorizes_html_edit": false,
@@ -165,7 +165,7 @@
     "path": "/diagnostico-pre-licitacao/",
     "html_rel": "diagnostico-pre-licitacao/index.html",
     "title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
-    "meta_description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um…",
+    "meta_description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim.",
     "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
     "canonical": "https://confenge.com.br/diagnostico-pre-licitacao/",
     "og_title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
@@ -206,8 +206,8 @@
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "1490c9d0101bad0d53937cbbbee5dfd495b787051bd2386838b1a3f7e3c2bd72",
-    "bytes": 22592,
+    "content_sha256": "b75ba37ef4104af5f78608408230096b1529aae2ab533e972d4f7dc50093ce11",
+    "bytes": 22433,
     "noindex": false
   }
 }

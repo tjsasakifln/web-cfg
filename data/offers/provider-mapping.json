@@ -1,0 +1,27 @@
+{
+  "schema": "confenge.offer-provider-mapping/1.0",
+  "environment": "unassigned",
+  "note": "Founder fills Asaas product/checkout/subscription IDs after registering them. Empty values are required until then. No component may hardcode Asaas URLs or IDs; consume catalog-adapter.cjs.",
+  "offers": {
+    "CFG-DIAG-EXP-v1": {
+      "asaas_product_id": null,
+      "asaas_checkout_url": null,
+      "asaas_subscription_template_id": null
+    },
+    "CFG-DIRB2G-FLEX-v1": {
+      "asaas_product_id": null,
+      "asaas_checkout_url": null,
+      "asaas_subscription_template_id": null
+    },
+    "CFG-DIRB2G-180-v1": {
+      "asaas_product_id": null,
+      "asaas_checkout_url": null,
+      "asaas_subscription_template_id": null
+    },
+    "CFG-DIRB2G-365-v1": {
+      "asaas_product_id": null,
+      "asaas_checkout_url": null,
+      "asaas_subscription_template_id": null
+    }
+  }
+}

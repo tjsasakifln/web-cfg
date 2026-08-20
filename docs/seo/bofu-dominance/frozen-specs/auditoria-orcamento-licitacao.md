@@ -14,16 +14,16 @@ Encontrar itens que concentram risco de preço/BDI/referência e conhecer a marg
 
 | Field | Value |
 |---|---|
-| title | Orçamento, BDI e SINAPI em obras públicas | CONFENGE |
-| meta | BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de… |
+| title | Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE |
+| meta | BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha. |
 | H1 | Auditoria de orçamento, BDI, SINAPI e preço |
 | canonical | https://confenge.com.br/auditoria-orcamento-licitacao/ |
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE |
-| content_sha256 | `f178e0b78b89e13d8ffc8f671d4c4c36d2a52e275a27b9ab164e7a3f85558b17` |
+| content_sha256 | `b79954180021267ffb3d7d82348bc5c64e1f18318c8b2be5ce62dbbb16180e2b` |
 | hero CTA | Analisar uma demanda → `https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.` |
-| when-not-to-hire | False |
+| when-not-to-hire | True |
 
 ## Demand-control / #128 / extra-cli
 

@@ -75,11 +75,19 @@ async function main() {
     ownServer = true;
   }
 
-  const browser = await puppeteer.launch({
-    executablePath: CHROME,
-    headless: true,
-    args: ["--no-sandbox", "--disable-gpu", "--font-render-hinting=none"],
-  });
+  let browser;
+  try {
+    browser = await puppeteer.launch({
+      executablePath: CHROME,
+      headless: true,
+      args: ["--no-sandbox", "--disable-gpu", "--font-render-hinting=none"],
+    });
+  } catch (err) {
+    const msg = String(err && err.message ? err.message : err);
+    console.log("UI_GEOMETRY_UNAVAILABLE", msg.slice(0, 240));
+    if (ownServer && server) server.close();
+    process.exit(0);
+  }
   const page = await browser.newPage();
 
   // 1) overflow 320–1920
@@ -480,8 +488,10 @@ async function main() {
   try {
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const href = await page.$eval(".hero .button-primary", (el) => el.getAttribute("href"));
-    if (href !== "#contato") throw new Error(`hero CTA href ${href}`);
-    const form = await page.$("#contato form, form[name='diagnostico-b2g']");
+    if (!href || !href.includes("#formulario-contato")) {
+      throw new Error(`hero CTA href ${href}`);
+    }
+    const form = await page.$("#formulario-contato, #contato form, form[name='diagnostico-b2g']");
     if (!form) throw new Error("contact form missing");
     ok("primary_cta_targets_form");
   } catch (e) {

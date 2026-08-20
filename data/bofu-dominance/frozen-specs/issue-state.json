@@ -6,5 +6,5 @@
   "evidential_close": false,
   "closed_at": null,
   "commercial_click_share": 0.0,
-  "note": "Issue #128 remains open. Deploy of the in-repo slice is not evidential close. Current GSC overlay is LIVE_JOB_OK with core_ready_for_product_decisions=false. Do not treat credential_failure or empty sets as a live Search Analytics all-clear."
+  "note": "Issue #128 remains open. CONFENGE-WEB-BOFU-CHECKOUT-CONVERGENCE-01 authorized criterion-1 HTML and recaptured hash-bound snapshots. Deploy is not evidential close. Current GSC overlay is LIVE_JOB_OK with core_ready_for_product_decisions=false. Do not treat credential_failure or empty sets as a live Search Analytics all-clear."
 }

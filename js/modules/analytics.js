@@ -50,6 +50,8 @@
   const EVENT_ALIASES = {
     qualified_scroll: 'scroll_depth',
     content_to_service_click: 'content_to_service',
+    service_view: 'service_page_view',
+    service_cta: 'cta_click',
     service_cta_click: 'cta_click',
     offer_cta_click: 'cta_click',
     diagnostic_cta_click: 'cta_click',
@@ -420,5 +422,23 @@
   window.__CONFENGE_EVENT_CONTRACT.classifyTransition = classifyTransition;
   window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
   window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
+
+  // Decorative reveal only. Never throw: missing window.setTimeout must not abort form/analytics.
+  const scheduleIdle = (fn) => {
+    const run = () => { try { fn(); } catch (_) { /* non-critical */ } };
+    try {
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(run, { timeout: 2500 });
+        return;
+      }
+    } catch (_) { /* ignore */ }
+    const later = (typeof window.setTimeout === 'function' && window.setTimeout)
+      || (typeof setTimeout === 'function' && setTimeout);
+    if (typeof later === 'function') {
+      later(run, 1);
+      return;
+    }
+    run();
+  };
 
   const init = () => {

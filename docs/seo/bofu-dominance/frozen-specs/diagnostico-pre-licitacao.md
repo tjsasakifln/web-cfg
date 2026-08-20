@@ -15,13 +15,13 @@ Decidir participar, esclarecer, impugnar, ajustar estrutura ou abandonar um edit
 | Field | Value |
 |---|---|
 | title | Diagnóstico pré-licitação para obras públicas | CONFENGE |
-| meta | Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um… |
+| meta | Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim. |
 | H1 | Diagnóstico pré-licitação para obras públicas |
 | canonical | https://confenge.com.br/diagnostico-pre-licitacao/ |
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Diagnóstico pré-licitação para obras públicas | CONFENGE |
-| content_sha256 | `1490c9d0101bad0d53937cbbbee5dfd495b787051bd2386838b1a3f7e3c2bd72` |
+| content_sha256 | `df99235fd53c7d6228b800d0599ec5788b64ec64856fba68b183122ae6693c04` |
 | hero CTA | Analisar uma demanda → `https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.` |
 | when-not-to-hire | True |
 

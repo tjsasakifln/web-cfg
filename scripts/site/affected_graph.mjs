@@ -125,6 +125,20 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/.netlify/functions/ops", "/.netlify/functions/search-observation-tick"],
   },
+  "test:commercial-event": {
+    producers: [
+      "scripts/site/test_commercial_event.mjs",
+      "netlify/functions/lib/commercial-event.cjs",
+      "netlify/functions/lib/inbound-handoff.cjs",
+      "netlify/functions/lib/lead-store.cjs",
+      "scripts/offers/events.cjs",
+      "scripts/offers/flags.cjs",
+      "scripts/offers/commercial_event_canary.mjs",
+      "data/offers/flags.json",
+    ],
+    artifacts: [],
+    surfaces: ["/.netlify/functions/ops"],
+  },
   "test:checkout-negatives": {
     producers: [
       "tests/offers/test_checkout_negatives.mjs",
@@ -478,9 +492,9 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: [],
   },
   "test:conversion": {
-    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/"],
+    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
     artifacts: [],
-    surfaces: ["/diagnostico-b2g-360/"],
+    surfaces: ["/diagnostico-b2g-360/", "/diagnostico-b2g-expansao/", "/diretoria-b2g/"],
   },
   "validate:seo": {
     producers: ["seo/scripts/validate_seo.py", "seo/", "tests/data_desk/test_data_desk.py"],

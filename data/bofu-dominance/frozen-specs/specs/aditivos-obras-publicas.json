@@ -12,9 +12,9 @@
     "pr": 159,
     "authorizes_html_edit": false,
     "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
     "bofu_observe_only": true,
-    "earliest_safe_action_at": "2026-09-16",
-    "ready_for_product_decisions": false
+    "earliest_safe_action_at": "2026-09-16"
   },
   "issue_128_baseline": {
     "issue": 128,
@@ -42,7 +42,7 @@
     "national_claim_authorized": false
   },
   "gsc_precondition": {
-    "gsc_live_available": true,
+    "gsc_live_available": false,
     "source_kind": "LIVE_JOB_OK",
     "ready_for_product_decisions": false,
     "authorizes_html_edit": false,
@@ -219,8 +219,8 @@
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "3cf907b8b92d8c5267ed8f4b64e63662442051904d0477ab795af1e9d7685523",
-    "bytes": 25886,
+    "content_sha256": "3d929e448a46bf80e5df812088da009a812d7269c287a608f53a7a468db5849f",
+    "bytes": 25692,
     "noindex": false
   }
 }

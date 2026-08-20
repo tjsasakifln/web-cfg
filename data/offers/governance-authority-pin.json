@@ -1,0 +1,23 @@
+{
+  "schema": "confenge.governance-authority-pin/1.0",
+  "governance_repo": "tjsasakifln/Governance",
+  "governance_pr": 9,
+  "git_sha": "e2b0498a68092c1bdbf64aa31854d652c07afdc0",
+  "authority_hash": "sha256:3ddf29b13971e8dcfcef2be7df6649fa7d8dd43d80a67c9f4bd4c484ccceed38",
+  "authority_manifest": "commercial/authority/authority-manifest.v1.json",
+  "hash_algorithm": "SHA-256 of authority-manifest.v1.json with sorted keys, UTF-8, compact JSON",
+  "catalog_authority": "APPROVED",
+  "terms_version": "CFG-TERMS-B2B-2026-08-17-v1",
+  "production_checkout_enabled": false,
+  "production_webhook_enabled": false,
+  "real_money_mutation_approved": false,
+  "writable_catalog_copied": false,
+  "mapping_ids": null,
+  "note": "Pin only. Do not copy Governance into a second writable catalog. Founder fills Asaas IDs after cadastro.",
+  "offer_amount_cents": {
+    "CFG-DIAG-EXP-v1": 800000,
+    "CFG-DIRB2G-FLEX-v1": 2000000,
+    "CFG-DIRB2G-180-v1": 1500000,
+    "CFG-DIRB2G-365-v1": 1250000
+  }
+}

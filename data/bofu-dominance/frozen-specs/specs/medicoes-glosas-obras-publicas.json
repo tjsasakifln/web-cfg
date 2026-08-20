@@ -12,9 +12,9 @@
     "pr": 159,
     "authorizes_html_edit": false,
     "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
     "bofu_observe_only": true,
-    "earliest_safe_action_at": "2026-09-16",
-    "ready_for_product_decisions": false
+    "earliest_safe_action_at": "2026-09-16"
   },
   "issue_128_baseline": {
     "issue": 128,
@@ -42,7 +42,7 @@
     "national_claim_authorized": false
   },
   "gsc_precondition": {
-    "gsc_live_available": true,
+    "gsc_live_available": false,
     "source_kind": "LIVE_JOB_OK",
     "ready_for_product_decisions": false,
     "authorizes_html_edit": false,
@@ -178,7 +178,7 @@
     "path": "/medicoes-glosas-obras-publicas/",
     "html_rel": "medicoes-glosas-obras-publicas/index.html",
     "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
-    "meta_description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente…",
+    "meta_description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido.",
     "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
     "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
     "og_title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
@@ -219,8 +219,8 @@
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "88f7c91e187e5cedad4e2f5c65c43afdf5282a79cac7f9201f77004d90e1fe1c",
-    "bytes": 27812,
+    "content_sha256": "ae91519891386163d48e42ea2c687f8ee9d8f7cf7086c43a4fd077715bfb362b",
+    "bytes": 27639,
     "noindex": false
   }
 }

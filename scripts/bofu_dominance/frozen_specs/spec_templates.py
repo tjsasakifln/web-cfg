@@ -25,6 +25,7 @@ DEMAND_CONTROL = {
     "pr": 159,
     "authorizes_html_edit": False,
     "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": False,
     "bofu_observe_only": True,
     "earliest_safe_action_at": "2026-09-16",
 }

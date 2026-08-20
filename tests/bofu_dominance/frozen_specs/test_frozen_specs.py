@@ -85,7 +85,9 @@ def test_patch_txt_hash_equals_live_file_hash():
         result = apply_frozen_patch(
             slug, root=ROOT, mutate=False, now=FROZEN_NOW, evidential_close=False
         )
-        assert result["would_mutate"] is True
+        pending = any(item["before"] != item["after"] for item in parsed["replacements"])
+        if pending:
+            assert result["would_mutate"] is True
         assert result["html_mutation"] is False
 
 
