@@ -1,0 +1,122 @@
+{
+  "schema": "data_desk_targets_researched_v1",
+  "issue": 66,
+  "related_issues": [89, 84],
+  "asset_id": "valor-tipico-contratos-pavimentacao-sc-citation-kit",
+  "canonical_source": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "auto_send": false,
+  "sent": false,
+  "smtp_called": false,
+  "webhook_called": false,
+  "retrieved_at": "2026-08-19",
+  "selection_criteria": [
+    "audiência AEC/B2G",
+    "afinidade com obras públicas/pavimentação/contratos",
+    "probabilidade realista de usar dado original",
+    "autoridade de domínio/entidade",
+    "ausência de conflito/relação paga oculta",
+    "formato de contato público defensável"
+  ],
+  "targets": [
+    {
+      "id": "sicepot-sc",
+      "organization": "SICEPOT-SC",
+      "public_url": "https://sicepot.com.br/",
+      "contact_route": "https://sicepot.com.br/",
+      "person_role": null,
+      "class": "associação",
+      "fit_notes": "Sindicato da construção pesada de SC. Máxima afinidade geográfica e de objeto.",
+      "finalist": true
+    },
+    {
+      "id": "crea-sc",
+      "organization": "CREA-SC",
+      "public_url": "https://portal.crea-sc.org.br/",
+      "contact_route": "https://portal.crea-sc.org.br/noticias-crea-sc/",
+      "person_role": "canal Notícias CREA-SC",
+      "class": "conselho profissional",
+      "fit_notes": "Autoridade profissional estadual. Canal de notícias público.",
+      "finalist": true
+    },
+    {
+      "id": "cbic-coinfra",
+      "organization": "CBIC / COINFRA",
+      "public_url": "https://cbic.org.br/",
+      "contact_route": "https://cbic.org.br/assessoria-de-imprensa/",
+      "person_role": "Assessoria de Imprensa da CBIC",
+      "class": "associação",
+      "fit_notes": "Autoridade nacional de construção/infraestrutura. Contato de imprensa público (ascom@cbic.org.br).",
+      "finalist": true
+    },
+    {
+      "id": "aneor",
+      "organization": "ANEOR",
+      "public_url": "https://www.aneor.org.br/",
+      "contact_route": "https://www.aneor.org.br/",
+      "person_role": null,
+      "class": "associação",
+      "fit_notes": "Associação nacional de empresas de obras rodoviárias. Afinidade direta com pavimentação.",
+      "finalist": true
+    },
+    {
+      "id": "agencia-infra",
+      "organization": "Agência iNFRA",
+      "public_url": "https://agenciainfra.com/blog/",
+      "contact_route": "https://agenciainfra.com/blog/contato/",
+      "person_role": "redação / formulário de contato",
+      "class": "imprensa",
+      "fit_notes": "Imprensa especializada em infraestrutura. Mais alta probabilidade de citar dado original.",
+      "finalist": true
+    },
+    {
+      "id": "sinaenco",
+      "organization": "SINAENCO",
+      "public_url": "https://sinaenco.com.br/",
+      "contact_route": "https://sinaenco.com.br/fale-conosco/",
+      "person_role": "comunicação (e-mail institucional público)",
+      "class": "associação",
+      "fit_notes": "A&EC consultiva. Forte, mas menos específica em pavimentação do que ANEOR.",
+      "finalist": false
+    },
+    {
+      "id": "senge-sc",
+      "organization": "SENGE-SC",
+      "public_url": "https://www.senge-sc.org.br/",
+      "contact_route": "https://www.senge-sc.org.br/",
+      "person_role": null,
+      "class": "sindicato profissional",
+      "fit_notes": "Engenheiros de SC. Audiência certa, menor hábito de citar recortes estatísticos.",
+      "finalist": false
+    },
+    {
+      "id": "fiesc",
+      "organization": "FIESC",
+      "public_url": "https://fiesc.com.br/pt-br/imprensa",
+      "contact_route": "https://fiesc.com.br/pt-br/imprensa",
+      "person_role": "Assessoria de Imprensa FIESC",
+      "class": "federação industrial",
+      "fit_notes": "Autoridade industrial de SC. Audiência ampla, menos afinidade específica com pavimentação.",
+      "finalist": false
+    },
+    {
+      "id": "sinduscon-fpolis",
+      "organization": "Sinduscon Grande Florianópolis",
+      "public_url": "https://sinduscon-fpolis.org.br/",
+      "contact_route": "https://sinduscon-fpolis.org.br/contato/",
+      "person_role": null,
+      "class": "associação",
+      "fit_notes": "Construção civil da capital. Mais edificações do que obras rodoviárias.",
+      "finalist": false
+    },
+    {
+      "id": "revista-oe",
+      "organization": "Revista O Empreiteiro",
+      "public_url": "https://revistaoe.com.br/",
+      "contact_route": "https://revistaoe.com.br/",
+      "person_role": null,
+      "class": "imprensa",
+      "fit_notes": "Cobre obras públicas. Contato de pauta menos específico que Agência iNFRA.",
+      "finalist": false
+    }
+  ]
+}
