@@ -36,13 +36,18 @@ is_evidence() {
     seo/pseo-build-report.json|\
     seo/pseo-editorial-report.json|\
     seo/pseo-editorial-report.md|\
-    seo/pseo-audit-report.json)
+    seo/pseo-audit-report.json|\
+    scripts/pseo/ignore_evidence_build.sh|\
+    docs/ops/campaigns/CONFENGE-WEB-PRODUCTION-CONVERGENCE-04/*)
       return 0
       ;;
   esac
   # Any other pure report under seo/*.md or seo/*.json that does not affect HTML
   case "$f" in
     seo/*.md|seo/*.json)
+      return 0
+      ;;
+    docs/ops/campaigns/CONFENGE-WEB-PRODUCTION-CONVERGENCE-04/*)
       return 0
       ;;
   esac

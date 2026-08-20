@@ -1,8 +1,10 @@
 # ROLLBACK
 
 ## Before merge
-- previous_main: `4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd`
-- previous production: confenge.com.br HTTP 200, robots Sitemap sitemap-index.xml
+- previous_main (pre-#170): `5d5081237aec99f5bedf1ab441bfbde41e724f51`
+- previous production deploy: `6a86846deb6faf0008236690` (`commit` 5d508123)
+- campaign content merge (#168): `f767554bcdfb7594c1e079cd39791a7c9770ef22` / deploy `6a8680f16e35db00084a9147`
+- pre-campaign main: `4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd`
 
 ## Tripwires (revert the convergence PR, do not edit production by hand)
 - Netlify publishes a SHA that is not main
