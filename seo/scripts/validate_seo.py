@@ -40,14 +40,27 @@ SKIP_DIRS = frozenset(
 )
 
 
+def _relative_parts(path: Path, base: Path) -> tuple[str, ...]:
+    """Path parts relative to the scan root.
+
+    Skip rules apply inside the checkout, not to ancestor directories.
+    A worktree at `repo/.worktrees/name` must still see public HTML.
+    """
+    try:
+        return path.resolve().relative_to(base.resolve()).parts
+    except ValueError:
+        return path.parts
+
+
 def iter_seo_html_pages(root: Path | None = None) -> list[Path]:
     """HTML files the SEO gate treats as public/candidate pages."""
-    base = root or ROOT
-    return [
-        p
-        for p in base.rglob("*.html")
-        if not any(part in SKIP_DIRS for part in p.parts)
-    ]
+    base = (root or ROOT).resolve()
+    out: list[Path] = []
+    for p in base.rglob("*.html"):
+        if any(part in SKIP_DIRS for part in _relative_parts(p, base)):
+            continue
+        out.append(p)
+    return out
 
 
 def page_path(p: Path) -> str:

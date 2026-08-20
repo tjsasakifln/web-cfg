@@ -147,6 +147,12 @@ def test_fixture_embed_html_is_not_a_public_seo_page():
     spec.loader.exec_module(mod)
     assert "data" in mod.SKIP_DIRS
     scanned = {p.resolve() for p in mod.iter_seo_html_pages(ROOT)}
+    assert scanned, (
+        "iter_seo_html_pages must scan the checkout even when ROOT sits under "
+        ".worktrees (skip rules are relative to the scan root)"
+    )
+    home = (ROOT / "index.html").resolve()
+    assert home in scanned, f"homepage missing from SEO scanner: {home}"
     assert embed.resolve() not in scanned
 
     proc = subprocess.run(
@@ -160,6 +166,32 @@ def test_fixture_embed_html_is_not_a_public_seo_page():
     assert "embed.html" not in combined
     assert proc.returncode == 0, combined[-2000:]
     assert "VALIDATION_OK" in combined
+
+
+def test_iter_seo_html_pages_skips_nested_dirs_not_ancestor_names(tmp_path: Path):
+    """`.worktrees` as a directory inside the scan root is skipped; ancestor names are not."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "validate_seo_shipped_rel", ROOT / "seo" / "scripts" / "validate_seo.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    home = tmp_path / "index.html"
+    home.write_text("<html><title>ok</title></html>", encoding="utf-8")
+    nested = tmp_path / ".worktrees" / "other" / "index.html"
+    nested.parent.mkdir(parents=True)
+    nested.write_text("<html><title>skip</title></html>", encoding="utf-8")
+    fixture = tmp_path / "data" / "fixture.html"
+    fixture.parent.mkdir()
+    fixture.write_text("<html><title>skip-data</title></html>", encoding="utf-8")
+
+    scanned = {p.resolve() for p in mod.iter_seo_html_pages(tmp_path)}
+    assert home.resolve() in scanned
+    assert nested.resolve() not in scanned
+    assert fixture.resolve() not in scanned
 
 
 def test_embed_source_visible_and_no_tracker_by_default():

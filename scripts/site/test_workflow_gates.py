@@ -124,6 +124,16 @@ def test_site_ci_shape():
     if 'node-version: "20"' not in text and "node-version: '20'" not in text:
         errors.append('site-ci must pin node-version: "20" until deliberate Node 22 migration')
 
+    chrome_at = text.find("browser-actions/setup-chrome")
+    ui_at = text.find("npm run test:ui")
+    axe_at = text.find("npm run audit:axe")
+    if chrome_at < 0:
+        errors.append("site-ci must install Chrome via browser-actions/setup-chrome")
+    if chrome_at >= 0 and ui_at >= 0 and chrome_at > ui_at:
+        errors.append("site-ci must install Chrome before npm run test:ui")
+    if chrome_at >= 0 and axe_at >= 0 and chrome_at > axe_at:
+        errors.append("site-ci must install Chrome before npm run audit:axe")
+
     assert not errors, "site-ci shape failures:\n- " + "\n- ".join(errors)
 
 
@@ -172,6 +182,13 @@ def test_pseo_shape():
 
     if 'node-version: "20"' not in text and "node-version: '20'" not in text:
         errors.append('pseo must pin node-version: "20" until deliberate Node 22 migration')
+
+    chrome_at = text.find("browser-actions/setup-chrome")
+    npm_test_at = text.find("npm test")
+    if chrome_at < 0:
+        errors.append("pseo must install Chrome via browser-actions/setup-chrome")
+    if chrome_at >= 0 and npm_test_at >= 0 and chrome_at > npm_test_at:
+        errors.append("pseo must install Chrome before npm test")
 
     assert not errors, "pseo shape failures:\n- " + "\n- ".join(errors)
 

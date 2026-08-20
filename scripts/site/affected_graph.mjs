@@ -233,7 +233,11 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: ["/", "/conteudos/"],
   },
   "test:ui": {
-    producers: ["scripts/site/test_ui_geometry.mjs"],
+    producers: [
+      "scripts/site/test_ui_geometry.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      ".github/workflows/site-ci.yml",
+    ],
     artifacts: [],
     surfaces: ["/", "/ferramentas/"],
   },
@@ -479,7 +483,7 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: ["/diagnostico-b2g-360/"],
   },
   "validate:seo": {
-    producers: ["seo/scripts/validate_seo.py", "seo/"],
+    producers: ["seo/scripts/validate_seo.py", "seo/", "tests/data_desk/test_data_desk.py"],
     artifacts: [],
     surfaces: ["/conteudos/"],
   },
