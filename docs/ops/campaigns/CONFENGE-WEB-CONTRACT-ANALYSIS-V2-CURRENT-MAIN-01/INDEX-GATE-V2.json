@@ -1,0 +1,28 @@
+{
+  "items": {
+    "official_source_handoff": true,
+    "epistemic_labels_distinct": true,
+    "material_facts_have_source_locator": true,
+    "singular_falsifiable_anti_doorway": true,
+    "atipico_is_not_irregular": true,
+    "authorship_method_as_of_limitations_correction": true,
+    "taxonomy_analise_tecnica_not_caso": true,
+    "canonical_robots_sitemap_graph": true,
+    "cta_keep_list": true,
+    "no_pii_or_gsc_query": true,
+    "v2_token_and_current_hashes": true,
+    "rollback_noindex_no_ghost_loc": true
+  },
+  "all_pass": true,
+  "comparable_available": true,
+  "comparable_consumed": false,
+  "comparable_reason": "singular_document_insight_no_comparative_claim",
+  "indexable": true,
+  "index_count_allowed": 1,
+  "campaign": "CONFENGE-WEB-CONTRACT-ANALYSIS-V2-CURRENT-MAIN-01",
+  "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+  "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "token_v2": "OWNER_CONDITIONAL_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_V2_2026_08_20",
+  "index_count": 1,
+  "verdict_if_merged_and_live_proven": "INDEX_V2_PROVEN_AND_DEPLOYED"
+}

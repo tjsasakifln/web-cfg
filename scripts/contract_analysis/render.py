@@ -3,12 +3,20 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from html import escape
 from pathlib import Path
 from typing import Any
 
-from scripts.contract_analysis import ASSET_FAMILY, FAMILY_PATH, FAMILY_SLUG, GATE_VERSION, ROUTE_FAMILY
+from scripts.contract_analysis import (
+    ASSET_FAMILY,
+    FAMILY_PATH,
+    FAMILY_SLUG,
+    GATE_VERSION,
+    ROUTE_FAMILY,
+    SINGULAR_COMPARABLE_REASON,
+)
 from scripts.contract_analysis.approval import material_hash
 from scripts.contract_analysis.attribution import attribution_payload
 from scripts.contract_analysis.gate import PublicationDecision
@@ -68,6 +76,9 @@ KIND_LABEL = {
 
 
 def _root() -> Path:
+    env = os.environ.get("CONFENGE_CONTRACT_ANALYSIS_ROOT")
+    if env:
+        return Path(env)
     return Path(__file__).resolve().parents[2]
 
 
@@ -301,7 +312,9 @@ def _cta_html(record: dict[str, Any]) -> str:
         f'data-asset-family="{e(attr.get("asset_family") or "")}" '
         f'data-route-family="{e(attr.get("route_family") or "")}" '
         f'data-asset-id="{e(attr.get("asset_id") or "")}" '
-        f'data-cta-id="{e(attr.get("cta_id") or "")}">{e(label)}</a></p>'
+        f'data-cta-id="{e(attr.get("cta_id") or "")}" '
+        f'data-source="{e(attr.get("source") or "CONFENGE_WEB")}" '
+        f'data-destination-service-id="{e(attr.get("destination_service_id") or "")}">{e(label)}</a></p>'
         "</section>"
     )
 
@@ -319,15 +332,40 @@ def _related_html(record: dict[str, Any]) -> str:
     )
 
 
-def _comparisons_html(items: list[Any]) -> str:
-    if not items:
-        return ""
+def _comparisons_html(items: list[Any], record: dict[str, Any] | None = None) -> str:
+    rec = record or {}
+    available = rec.get("comparable_available")
+    consumed = rec.get("comparable_consumed")
+    reason = _text(rec.get("comparable_reason"))
+    policy = ""
+    if available is not None or consumed is not None or reason:
+        available_s = "true" if available is True else "false"
+        consumed_s = "true" if consumed is True else "false"
+        reason_s = reason or SINGULAR_COMPARABLE_REASON
+        policy = (
+            f'<p data-comparable-available="{e(available_s)}" '
+            f'data-comparable-consumed="{e(consumed_s)}" '
+            f'data-comparable-reason="{e(reason_s)}">'
+            f"comparable_available={e(available_s)} · comparable_consumed={e(consumed_s)} · "
+            f"reason={e(reason_s)}. Esta página não consome grupo de pares nem afirma posição na distribuição."
+            "</p>"
+        )
     not_comp = any(
         isinstance(item, dict) and str(item.get("outcome") or "").upper() == "NOT_COMPARABLE"
         for item in items
     )
+    if not items and not policy:
+        return ""
     heading = "Comparações" if not not_comp else "Comparações (NOT_COMPARABLE)"
-    return _kind_items(items, heading, "comparacoes")
+    inner = _kind_items(items, heading, "comparacoes") if items else ""
+    if policy and inner:
+        inner = inner.replace("</section>", f"{policy}</section>", 1)
+        return inner
+    if policy and not inner:
+        return (
+            f'<section class="section" id="comparacoes"><h2>{e(heading)}</h2>{policy}</section>'
+        )
+    return inner
 
 
 def build_schema(record: dict[str, Any], decision: PublicationDecision) -> list[dict[str, Any]]:
@@ -480,7 +518,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     sections.append(_timeline_html(_items(record.get("timeline"))))
     sections.append(_kind_items(_items(record.get("facts")), "Fatos relevantes", "fatos"))
     sections.append(_kind_items(_items(record.get("calculations")), "Cálculos", "calculos"))
-    sections.append(_comparisons_html(_items(record.get("comparisons"))))
+    sections.append(_comparisons_html(_items(record.get("comparisons")), record))
     sections.append(
         _kind_items(_items(record.get("interpretation")), "Interpretação técnica CONFENGE", "interpretacao")
     )
@@ -529,7 +567,14 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             '<div class="table-wrap"><table class="data-table">'
             f"<tbody>{''.join(hash_rows)}</tbody></table></div>"
             "<p>publication_authorization e index_authorization do produtor permanecem "
-            "<code>false</code>. Esta página não autoriza INDEX.</p></section>"
+            "<code>false</code>. "
+            + (
+                "INDEX desta URL, se existir, é decisão do consumidor bound a hashes "
+                "e token de owner — não é autorização do produtor."
+                if decision.indexable
+                else "Esta página não autoriza INDEX."
+            )
+            + "</p></section>"
         )
     sections.append(
         '<section class="section" id="correcao"><h2>Correção e contestação</h2>'
@@ -675,7 +720,9 @@ def write_pages(
         dest = root / PUBLIC_DIR / decision.slug
         dest.mkdir(parents=True, exist_ok=True)
         path = dest / "index.html"
-        path.write_text(render_analysis_html(record, decision), encoding="utf-8")
+        html = render_analysis_html(record, decision)
+        decision, html = apply_rendered_hash_gate(record, decision, html)
+        path.write_text(html, encoding="utf-8")
         written[decision.slug] = path
     return written
 
@@ -734,3 +781,110 @@ def analysis_urls_in_sitemaps(root: Path | None = None) -> list[str]:
         if FAMILY_PATH.rstrip("/") in text or needle in text:
             found.append(name)
     return found
+
+
+FAMILY_SITEMAP_LOC = f"{SITE}/{SITEMAP_NAME}"
+ROBOTS_FAMILY_BEGIN = "# Contract-analysis family — generated by scripts.contract_analysis"
+HEADERS_FAMILY_BEGIN = "# Contract-analysis family — generated by scripts.contract_analysis"
+
+
+def apply_rendered_hash_gate(
+    record: dict[str, Any],
+    decision: PublicationDecision,
+    html: str,
+) -> tuple[PublicationDecision, str]:
+    """One-byte render drift against a stored approval hash refuses INDEX."""
+    from dataclasses import replace
+
+    from scripts.contract_analysis.approval import approval_rendered_hash_ok
+
+    ok, reasons = approval_rendered_hash_ok(record, html)
+    if ok or decision.state != "PUBLISHABLE_INDEX":
+        return decision, html
+    downgraded = replace(
+        decision,
+        state="PUBLISHABLE_NOINDEX",
+        indexable=False,
+        sitemap=False,
+        robots="noindex,nofollow",
+        reason_codes=tuple(decision.reason_codes) + tuple(reasons),
+    )
+    return downgraded, render_analysis_html(record, downgraded)
+
+
+def _index_slugs(pairs: list[tuple[dict[str, Any], PublicationDecision]]) -> list[str]:
+    return [
+        decision.slug
+        for _, decision in pairs
+        if decision.state == "PUBLISHABLE_INDEX" and decision.indexable and decision.slug
+    ]
+
+
+def sync_family_crawler_rules(
+    pairs: list[tuple[dict[str, Any], PublicationDecision]],
+    *,
+    root: Path | None = None,
+) -> None:
+    """Allow only INDEX slugs; keep the rest of the family Disallow / X-Robots noindex.
+
+    Netlify last-match wins for X-Robots-Tag on overlapping paths, so the INDEX
+    override is written after the family noindex block.
+    """
+    root = root or _root()
+    slugs = _index_slugs(pairs)
+    robots_path = root / "robots.txt"
+    if robots_path.is_file():
+        robots = robots_path.read_text(encoding="utf-8")
+        allow_lines = "".join(f"Allow: {FAMILY_PATH}{slug}/\n" for slug in slugs)
+        block = f"{ROBOTS_FAMILY_BEGIN}\n{allow_lines}Disallow: {FAMILY_PATH}\n"
+        robots = _replace_or_append_block(
+            robots,
+            begin_markers=(ROBOTS_FAMILY_BEGIN, "# Contract-analysis canary:"),
+            new_block=block,
+        )
+        robots_path.write_text(robots, encoding="utf-8")
+    headers_path = root / "_headers"
+    if headers_path.is_file():
+        headers = headers_path.read_text(encoding="utf-8")
+        allow_blocks = "".join(
+            f"{FAMILY_PATH}{slug}/*\n  X-Robots-Tag: index, follow\n\n" for slug in slugs
+        )
+        block = (
+            f"{HEADERS_FAMILY_BEGIN}\n"
+            f"{FAMILY_PATH}*\n"
+            "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+            f"{allow_blocks}"
+        )
+        headers = _replace_or_append_block(
+            headers,
+            begin_markers=(HEADERS_FAMILY_BEGIN, "# Contract-analysis canary:"),
+            new_block=block,
+        )
+        headers_path.write_text(headers, encoding="utf-8")
+
+
+def _replace_or_append_block(text: str, *, begin_markers: tuple[str, ...], new_block: str) -> str:
+    lines = text.splitlines(keepends=True)
+    start = None
+    for idx, line in enumerate(lines):
+        if any(line.startswith(marker) for marker in begin_markers):
+            start = idx
+            break
+    if start is None:
+        if text and not text.endswith("\n"):
+            text += "\n"
+        return text + "\n" + new_block
+    end = len(lines)
+    for idx in range(start + 1, len(lines)):
+        if lines[idx].startswith("#") and idx > start + 1 and not lines[idx].startswith("# Contract-analysis"):
+            end = idx
+            break
+        if idx > start + 1 and lines[idx].startswith("/") and not lines[idx].startswith(FAMILY_PATH):
+            end = idx
+            break
+    rebuilt = "".join(lines[:start]) + new_block
+    if end < len(lines):
+        rebuilt += "".join(lines[end:])
+    if not rebuilt.endswith("\n"):
+        rebuilt += "\n"
+    return rebuilt

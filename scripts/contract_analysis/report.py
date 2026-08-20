@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,22 @@ LEGACY_STEM = "CONTRACT_ANALYSIS_EDITORIAL_STATUS"
 
 def _root() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def _rel_written(path: Path) -> str:
+    if not path.is_absolute():
+        return str(path)
+    try:
+        return str(path.relative_to(_root()))
+    except ValueError:
+        pass
+    env = os.environ.get("CONFENGE_CONTRACT_ANALYSIS_ROOT")
+    if env:
+        try:
+            return str(path.relative_to(Path(env)))
+        except ValueError:
+            pass
+    return str(path)
 
 
 def build_status(
@@ -61,6 +78,9 @@ def build_status(
                 "id": decision.analysis_id,
                 "defensible_comparable": has_comp and not not_comp,
                 "not_comparable": not_comp,
+                "comparable_available": rec.get("comparable_available"),
+                "comparable_consumed": rec.get("comparable_consumed"),
+                "comparable_reason": rec.get("comparable_reason"),
             }
         )
     live_absent = bool(bundle.get("live_absent") or bundle.get("source_kind") != "official_live")
@@ -81,11 +101,18 @@ def build_status(
             "até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. "
             "Producer publication/index flags nunca autorizam INDEX."
         )
-    else:
-        recommendation = "EXPAND"
+    elif index_count == 1:
+        recommendation = "ADJUST"
         recommendation_reason = (
-            "Há ao menos uma análise official_live aprovada individualmente. "
-            "Medir citação, correção e engagement antes de escala."
+            "Canário INDEX de uma URL official_live. Não expandir. Medir citação, "
+            "correção e engagement qualificado antes de qualquer segunda análise. "
+            "Producer publication/index flags nunca autorizam INDEX."
+        )
+    else:
+        recommendation = "ADJUST"
+        recommendation_reason = (
+            "Há mais de uma análise INDEX. Continuar a medir citação, correção e "
+            "engagement; page count não é o KPI. Não tratar throughput como sucesso."
         )
     allowed = set(PUBLICATION_STATES)
     return {
@@ -116,7 +143,7 @@ def build_status(
         ),
         "rendered": sorted(
             {
-                str(path.relative_to(_root())) if path.is_absolute() else str(path)
+                _rel_written(path)
                 for path in (written or {}).values()
             }
         ),

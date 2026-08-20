@@ -280,14 +280,44 @@ def path_robots_disallowed(path: str, prefixes: Iterable[str]) -> bool:
     return False
 
 
+def path_blocked_by_robots(path: str, robots_text: str) -> bool:
+    """True when the longest matching robots Allow/Disallow rule is Disallow.
+
+    Google longest-match: a more specific Allow beats a shorter family Disallow.
+    Equal-length Allow and Disallow resolve to Allow (less restrictive).
+    """
+    if not path.startswith("/"):
+        path = "/" + path
+    matches: list[tuple[int, bool]] = []
+    for line in (robots_text or "").splitlines():
+        stripped = line.strip()
+        lower = stripped.lower()
+        if lower.startswith("allow:") or lower.startswith("disallow:"):
+            value = stripped.split(":", 1)[1].strip()
+            if not value:
+                continue
+            if value == "/" or path.startswith(value):
+                matches.append((len(value), lower.startswith("disallow:")))
+    if not matches:
+        return False
+    longest = max(item[0] for item in matches)
+    return all(is_disallow for length, is_disallow in matches if length == longest)
+
+
 def x_robots_noindex(headers_text: str, path: str) -> bool:
-    """True when Netlify `_headers` assigns X-Robots-Tag noindex to this path."""
+    """True when Netlify `_headers` last-match X-Robots-Tag for this path is noindex.
+
+    Overlapping path rules are resolved last-match, matching Netlify header merge.
+    A later `index, follow` override for one URL must not inherit an earlier
+    family `noindex`.
+    """
     if not headers_text:
         return False
     if not path.startswith("/"):
         path = "/" + path
     current_pattern: str | None = None
     applies = False
+    last_noindex: bool | None = None
     for raw in headers_text.splitlines():
         line = raw.rstrip()
         if not line.strip() or line.lstrip().startswith("#"):
@@ -296,9 +326,9 @@ def x_robots_noindex(headers_text: str, path: str) -> bool:
             current_pattern = line.strip()
             applies = _headers_path_matches(current_pattern, path)
             continue
-        if applies and "x-robots-tag" in line.lower() and "noindex" in line.lower():
-            return True
-    return False
+        if applies and "x-robots-tag" in line.lower():
+            last_noindex = "noindex" in line.lower()
+    return bool(last_noindex)
 
 
 def _headers_path_matches(pattern: str, path: str) -> bool:
@@ -444,7 +474,7 @@ def validate_loc(
     if not loc.startswith(SITE):
         issues.append(GraphIssue(severity="high", code="non_canonical_host", url=loc))
     path = loc_path(loc)
-    if path_robots_disallowed(path, robots_disallow_prefixes(robots_text)):
+    if path_blocked_by_robots(path, robots_text):
         issues.append(
             GraphIssue(severity="high", code="sitemap_url_robots_disallowed", url=loc)
         )

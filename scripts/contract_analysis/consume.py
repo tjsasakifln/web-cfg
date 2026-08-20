@@ -17,12 +17,14 @@ from typing import Any
 from scripts.contract_analysis import (
     ANALYSIS_MODES,
     AUTHORITY_HANDOFF_SCHEMA,
+    AUTHORIZED_ANALYSIS_ID,
     CONTENT_CLASS_ANALYSIS,
     MAX_CANARY,
     NON_COMPARATIVE_MODES,
     OFFICIAL_LIVE_DOSSIER_SCHEMA,
     OFFICIAL_LIVE_HANDOFF_SCHEMA,
     PUBLIC_READ_SCHEMA,
+    SINGULAR_COMPARABLE_REASON,
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
     TEMPORAL_FIELDS,
@@ -948,10 +950,13 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
     for item in raw_timeline:
         if not isinstance(item, dict):
             continue
+        label = item.get("event") or item.get("text") or item.get("label") or item.get("kind")
+        if str(label or "").strip().lower() == "contract":
+            label = "Início da vigência publicado no JSON oficial (dataVigenciaInicio)."
         timeline.append(
             {
                 "date": item.get("at") or item.get("date") or item.get("when"),
-                "text": item.get("event") or item.get("text") or item.get("label") or item.get("kind"),
+                "text": label,
             }
         )
     period_text = " ".join(
@@ -1250,6 +1255,13 @@ def finalize_editorial_projection(record: dict[str, Any]) -> dict[str, Any]:
         rec["citation_text"] = (
             pack.get("asset", {}).get("citation_pack", {}).get("citation_text") or ""
         )
+    if str(rec.get("id") or rec.get("analysis_id") or "") == AUTHORIZED_ANALYSIS_ID:
+        # Singular document thesis: extra-cli COMPARABLE may exist; this page
+        # does not consume peer percentiles or change the claim to comparative.
+        rec["comparable_consumed"] = False
+        rec["comparable_reason"] = rec.get("comparable_reason") or SINGULAR_COMPARABLE_REASON
+        if rec.get("comparable_available") is None:
+            rec["comparable_available"] = True
     return rec
 
 

@@ -17,7 +17,7 @@
     {
       "n": 3,
       "action": "set_publication_state",
-      "from": "PUBLISHABLE_NOINDEX",
+      "from": "PUBLISHABLE_INDEX",
       "to": "PUBLISHABLE_INDEX"
     },
     {

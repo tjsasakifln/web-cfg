@@ -95,6 +95,7 @@ PUBLIC_ROOT_FILES = frozenset(
         "sitemap-inteligencia.xml",
         "sitemap-editorial.xml",
         "sitemap-jurisprudencia.xml",
+        "sitemap-analises-contratos.xml",
         "sitemap.txt",
         "content-index.json",
         "01ce18c7219b7c7dcb2ab06e226c2681.txt",
