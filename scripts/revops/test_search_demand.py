@@ -229,6 +229,134 @@ def main() -> int:
         ok("live_git_safe_ready", live_payload["ready_for_product_decisions"] is True)
         ok("live_git_safe_marked", live_payload["raw_query_rows_in_git"] is False)
 
+        raw_live = {
+            "source": "search_analytics_api",
+            "source_kind": "search_analytics_api",
+            "ready_for_product_decisions": True,
+            "synthetic": False,
+            "max_date": "2026-08-10",
+            "as_of": "2026-08-10",
+            "queries": [
+                {
+                    "date": "2026-08-10",
+                    "query": "confenge consultoria",
+                    "page": "https://confenge.com.br/",
+                    "country": "bra",
+                    "device": "DESKTOP",
+                    "impressions": 5,
+                    "clicks": 1,
+                    "position": 2.0,
+                    "brand_class": sdo.classify_query("confenge consultoria"),
+                },
+                {
+                    "date": "2026-08-10",
+                    "query": "sinapi desonerado",
+                    "page": "https://confenge.com.br/",
+                    "country": "bra",
+                    "device": "DESKTOP",
+                    "impressions": 8,
+                    "clicks": 0,
+                    "position": 7.5,
+                    "brand_class": sdo.classify_query("sinapi desonerado"),
+                },
+            ],
+        }
+        safe_live = sdo.git_safe_live_payload(raw_live)
+        ok("safe_live_no_raw_brand_query", "confenge consultoria" not in json.dumps(safe_live))
+        ok("safe_live_no_raw_sinapi", "sinapi desonerado" not in json.dumps(safe_live))
+        ok(
+            "safe_live_stores_brand_string",
+            any(r.get("brand_class") == "brand" for r in safe_live["queries"]),
+        )
+        ok(
+            "row_brand_honors_stored_string",
+            sdo.row_brand_label({"query_hash": "sha256:deadbeefdeadbeef", "brand_class": "brand"})
+            == "brand",
+        )
+        ok(
+            "row_brand_does_not_classify_hash",
+            sdo.row_brand_label({"query_hash": "sha256:deadbeefdeadbeef", "query": "sha256:deadbeefdeadbeef"})
+            == "non_brand",
+        )
+        counts_safe = sdo.brand_class_counts(safe_live["queries"])
+        ok("git_safe_brand_count", counts_safe.get("brand") == 1, str(counts_safe))
+        ok("git_safe_nonbrand_count", counts_safe.get("non_brand") == 1, str(counts_safe))
+        baseline_safe = sdo.build_operational_baseline(safe_live, today=sdo.date(2026, 8, 11))
+        pulse_safe = baseline_safe["windows"]["pulse_7"]["totals"]
+        ok(
+            "git_safe_baseline_brand_imps",
+            pulse_safe["brand"]["impressions"] == 5.0,
+            str(pulse_safe["brand"]),
+        )
+        ok(
+            "git_safe_baseline_nonbrand_imps",
+            pulse_safe["non_brand"]["impressions"] == 8.0,
+            str(pulse_safe["non_brand"]),
+        )
+        wrong_from_safe = sdo.detect_wrong_landing(safe_live["queries"])
+        ok(
+            "git_safe_wrong_landing_fires",
+            any(
+                item.get("intended") == "/conteudos/sinapi-desonerado-nao-desonerado/"
+                and item.get("landed") == "/"
+                for item in wrong_from_safe.get("items") or []
+            ),
+            str(wrong_from_safe),
+        )
+
+        private_path = sdo.PRIVATE_DIR / "latest_import.json"
+        last_sync_path = sdo.DATA / "last_sync.json"
+        public_path = sdo.DATA / "latest_import.json"
+        private_backup = private_path.read_bytes() if private_path.is_file() else None
+        last_backup = last_sync_path.read_bytes() if last_sync_path.is_file() else None
+        public_backup = public_path.read_bytes() if public_path.is_file() else None
+        try:
+            sdo.PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
+            private_path.write_text(json.dumps(raw_live, ensure_ascii=False), encoding="utf-8")
+            public_path.write_text(json.dumps(safe_live, ensure_ascii=False), encoding="utf-8")
+            last_sync_path.write_text(
+                json.dumps(
+                    {
+                        "source": "search_analytics_api",
+                        "source_kind": "search_analytics_api",
+                        "ready_for_product_decisions": True,
+                        "synthetic": False,
+                        "last_sync_at": "2026-08-11T00:00:00+00:00",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            loaded = sdo.load_labeled_snapshot()
+            ok("analysis_prefers_private_raw", loaded.get("analysis_source") == "private_raw")
+            ok(
+                "analysis_private_keeps_query",
+                any(r.get("query") == "sinapi desonerado" for r in loaded.get("queries") or []),
+            )
+            private_wrong = sdo.detect_wrong_landing(loaded.get("queries") or [])
+            ok(
+                "private_wrong_landing_fires",
+                any(
+                    item.get("intended") == "/conteudos/sinapi-desonerado-nao-desonerado/"
+                    for item in private_wrong.get("items") or []
+                ),
+            )
+        finally:
+            if private_backup is None:
+                if private_path.is_file():
+                    private_path.unlink()
+            else:
+                private_path.write_bytes(private_backup)
+            if last_backup is None:
+                if last_sync_path.is_file():
+                    last_sync_path.unlink()
+            else:
+                last_sync_path.write_bytes(last_backup)
+            if public_backup is None:
+                if public_path.is_file():
+                    public_path.unlink()
+            else:
+                public_path.write_bytes(public_backup)
+
         fixture = sdo.sync_from_fixture()
         ok("fixture_ok", fixture.get("ok") is True)
         ok("fixture_not_product", fixture.get("ready_for_product_decisions") is False)
@@ -358,6 +486,135 @@ def main() -> int:
         ok("weak_cta_observed", weak["status"] == "observed" and len(weak["items"]) == 1)
         no_cta_map = sdo.detect_clicks_weak_cta([{"page": "/x/", "clicks": 1}])
         ok("weak_cta_needs_map", no_cta_map["status"] == "INSUFFICIENT_EVIDENCE")
+
+        ok("source_kinds_six", set(sdo.SNAPSHOT_SOURCE_KINDS) == {
+            "search_analytics_api",
+            "historical_csv_export",
+            "fixture",
+            "absence",
+            "credential_failure",
+            "search_analytics_top_row_truncation",
+        })
+        ok(
+            "classify_api_live",
+            sdo.classify_snapshot_source({"source": "search_analytics_api", "synthetic": False})
+            == "search_analytics_api",
+        )
+        ok(
+            "classify_csv",
+            sdo.classify_snapshot_source({"source": "csv_export", "historical": True})
+            == "historical_csv_export",
+        )
+        ok("classify_fixture", sdo.classify_snapshot_source({"source": "fixture"}) == "fixture")
+        ok("classify_absence", sdo.classify_snapshot_source({}) == "absence")
+        ok(
+            "classify_creds",
+            sdo.classify_snapshot_source({"error": "missing_credentials"}) == "credential_failure",
+        )
+        ok(
+            "classify_truncation",
+            sdo.classify_snapshot_source({"source": "search_analytics_api", "truncated": True})
+            == "search_analytics_top_row_truncation",
+        )
+        empty_env = sdo.credential_blocker_record()
+        ok("blocker_no_zero_rows", empty_env.get("rows") is None)
+        ok("blocker_no_zero_imps", empty_env.get("impressions") is None)
+        ok("blocker_not_product", empty_env.get("ready_for_product_decisions") is False)
+        ok("blocker_names_secret", empty_env.get("required_secret") == "GSC_CREDENTIALS_JSON")
+        ok("ctr_none_not_zero", sdo.ctr_optimization_decision(None)["impressions"] is None)
+        ok(
+            "ctr_none_insufficient",
+            sdo.ctr_optimization_decision(None)["decision"] == "INSUFFICIENT_EVIDENCE",
+        )
+
+        before_latest = (ROOT / "data/revops/gsc/latest_import.json").read_bytes()
+        fixture_payload = sdo.sync_from_fixture()
+        ok("fixture_source_kind", fixture_payload.get("source_kind") == "fixture")
+        ok("fixture_not_live_kind", sdo.is_live_gsc_payload(fixture_payload) is False)
+        after_latest = (ROOT / "data/revops/gsc/latest_import.json").read_bytes()
+        ok("fixture_does_not_overwrite_latest_import", before_latest == after_latest)
+        csv_labeled = sdo.stamp_non_live_snapshot({"source": "csv_export", "queries": []})
+        ok("csv_kind", csv_labeled.get("source_kind") == "historical_csv_export")
+        ok("csv_not_live", sdo.is_live_gsc_payload(csv_labeled) is False)
+
+        windows_today = sdo.complete_windows(
+            today=sdo.date(2026, 8, 19), provider_max_date=sdo.date(2026, 8, 16)
+        )
+        ok("windows_exclude_today_aug19", "2026-08-19" not in windows_today["pulse"]["days"])
+        ok("windows_90", len(windows_today["context"]["days"]) == 90)
+        ok("windows_pulse_complete", windows_today["pulse"]["complete"] is True)
+
+        creds_pull = sdo.pull_api(7)
+        blob = json.dumps(creds_pull)
+        ok("pull_missing_not_zero_rows", creds_pull.get("rows") is None)
+        ok("pull_missing_source_kind", sdo.classify_snapshot_source(creds_pull) == "credential_failure")
+        ok("pull_missing_no_fake_clicks", '"clicks": 0' not in blob or creds_pull.get("clicks") is None)
+        ok("pull_missing_ready_false", creds_pull.get("ready_for_product_decisions") is False)
+
+        hist_rows = [
+            {
+                "date": "2026-07-28",
+                "query": "consulta privada demand-control",
+                "page": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+                "impressions": 12,
+                "clicks": 0,
+                "position": 8,
+                "country": "bra",
+                "device": "DESKTOP",
+            }
+        ]
+        hist_snap = sdo.label_historical_export(
+            {"source": "csv_export", "queries": hist_rows, "max_date": "2026-07-28"}
+        )
+        baseline = sdo.build_operational_baseline(hist_snap, today=sdo.date(2026, 8, 19))
+        ok("baseline_not_live", baseline.get("live") is False)
+        ok("baseline_source_csv", baseline.get("source_kind") == "historical_csv_export")
+        ok("baseline_not_product", baseline.get("ready_for_product_decisions") is False)
+        ok("baseline_pulse_7", "pulse_7" in baseline["windows"])
+        ok("baseline_90", "context_90" in baseline["windows"])
+        pulse_tot = baseline["windows"]["pulse_7"]["totals"]
+        ok("baseline_missing_not_zero", pulse_tot.get("coverage") in {"ABSENT", "partial", "observed"})
+        ok(
+            "baseline_brand_keys",
+            set((pulse_tot.keys() if False else ["brand", "legacy_brand", "non_brand"]))
+            <= set(pulse_tot),
+        )
+        for label in ("brand", "legacy_brand", "non_brand"):
+            cell = pulse_tot[label]
+            if cell["impressions"] == 0 and pulse_tot["coverage"] == "ABSENT":
+                ok("baseline_absent_not_numeric_zero", False, label)
+        queue = sdo.build_next_action_queue(hist_snap, today=sdo.date(2026, 8, 19))
+        ok("queue_max_3", queue.get("count", 99) <= 3)
+        ok("queue_len_eq", len(queue.get("candidates") or []) <= 3)
+        ok("queue_no_html_auth", queue.get("authorizes_html_edit") is False)
+        excluded_hits = []
+        for cand in queue.get("candidates") or []:
+            if cand.get("observe_only"):
+                continue
+            for url in (cand.get("current_landing"), cand.get("intended_landing")):
+                reason = sdo.exclusion_for_url(str(url or ""))
+                if reason:
+                    excluded_hits.append((url, reason))
+        ok("queue_change_now_excludes_experiments", not excluded_hits, str(excluded_hits))
+        report = sdo.render_human_report(baseline, queue)
+        ok("report_as_of", str(baseline.get("as_of")) in report)
+        ok("report_source", str(baseline.get("source_kind")) in report)
+        ok("report_queue_len", f"`{queue.get('count')}`" in report or str(queue.get("count")) in report)
+        ok("report_no_raw_query", "consulta privada demand-control" not in report)
+        safe = sdo.git_safe_aggregate(hist_rows)
+        ok("git_safe_no_private_query", "consulta privada demand-control" not in json.dumps(safe))
+
+        funnel = sdo.url_funnel_status(
+            eligible=True, appeared=True, clicked=False, engaged=None, lead=None, pipeline=None
+        )
+        ok("funnel_appeared", funnel == "APPEARED")
+        ok(
+            "funnel_unknown",
+            sdo.url_funnel_status(
+                eligible=None, appeared=None, clicked=None, engaged=None, lead=None, pipeline=None
+            )
+            == "UNKNOWN",
+        )
 
         if failures:
             print("FAILURES", failures)

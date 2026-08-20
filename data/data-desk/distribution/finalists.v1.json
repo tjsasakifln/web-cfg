@@ -1,0 +1,75 @@
+{
+  "schema": "data_desk_finalists_v1",
+  "issue": 66,
+  "related_issues": [89],
+  "asset_id": "valor-tipico-contratos-pavimentacao-sc-citation-kit",
+  "canonical_source": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "kit_permalink": "https://confenge.com.br/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+  "auto_send": false,
+  "sent": false,
+  "smtp_called": false,
+  "webhook_called": false,
+  "external_reuse": "UNKNOWN",
+  "targets": [
+    {
+      "organization": "SICEPOT-SC",
+      "public_url": "https://sicepot.com.br/",
+      "person_role": null,
+      "why_useful": "Associadas de construção pesada em SC precisam de um recorte estadual de porte contratual de pavimentação, com n e limitações, sem converter ticket em custo/km.",
+      "angle": "Referência de ticket nominal para o mercado catarinense de obras pesadas.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://sicepot.com.br/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN",
+      "sent": false
+    },
+    {
+      "organization": "CREA-SC",
+      "public_url": "https://portal.crea-sc.org.br/noticias-crea-sc/",
+      "person_role": "canal Notícias CREA-SC (função pública do canal; pessoa não nomeada)",
+      "why_useful": "O canal de notícias do conselho publica leituras técnicas estaduais. O kit traz método, as_of e o que o número não mede.",
+      "angle": "Pauta técnica de ticket típico de pavimentação em SC, sem endosso do plenário.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://portal.crea-sc.org.br/noticias-crea-sc/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN",
+      "sent": false
+    },
+    {
+      "organization": "CBIC / COINFRA",
+      "public_url": "https://cbic.org.br/assessoria-de-imprensa/",
+      "person_role": "Assessoria de Imprensa da CBIC",
+      "why_useful": "COINFRA debate porte e reequilíbrio de contratos de obras públicas. Um recorte SC com quartis é evidência estadual, não posicionamento da comissão.",
+      "angle": "Quartis de ticket de pavimentação em SC adjacentes à pauta de porte contratual.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://cbic.org.br/assessoria-de-imprensa/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN",
+      "sent": false
+    },
+    {
+      "organization": "ANEOR — Associação Nacional das Empresas de Obras Rodoviárias",
+      "public_url": "https://www.aneor.org.br/",
+      "person_role": null,
+      "why_useful": "Empresas de obras rodoviárias operam o objeto pavimentação. O grain do kit é o instrumento, o que evita a conversão indevida para custo/km.",
+      "angle": "Ticket nominal de pavimentação em SC para o setor rodoviário.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://www.aneor.org.br/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN",
+      "sent": false
+    },
+    {
+      "organization": "Agência iNFRA",
+      "public_url": "https://agenciainfra.com/blog/",
+      "person_role": "redação / formulário de contato",
+      "why_useful": "Redação especializada cita dado original com n, período e limitações. Formulário público de contato.",
+      "angle": "Nota factual: mediana e IQR do ticket de pavimentação em Santa Catarina.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://agenciainfra.com/blog/contato/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN",
+      "sent": false
+    }
+  ]
+}
