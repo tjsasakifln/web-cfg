@@ -517,6 +517,10 @@ Não descreve o Brasil.
 
 
 def render_all(pack: dict[str, Any]) -> dict[str, Path]:
+    from scripts.research.flagship_gate import assert_no_recurring_index
+
+    # #91: do not emit extra flagship-like index pages while the gate is closed.
+    assert_no_recurring_index(planned_paths=["/radar/pesquisa/edicao-zero-4uf/"])
     docs = render_docs(pack)
     return {
         **docs,

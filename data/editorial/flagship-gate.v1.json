@@ -1,0 +1,16 @@
+{
+  "schema": "flagship-gate-v1",
+  "issue": 91,
+  "decision_state": "VALIDATE",
+  "as_of": "2026-08-20",
+  "owner": "tiago.sasaki",
+  "flagship_status": "PREVIEW_NOINDEX",
+  "recurring_index_allowed": false,
+  "flagship_path": "/radar/pesquisa/edicao-zero-4uf/",
+  "canonical_host": "confenge.com.br",
+  "reason": "The EDIÇÃO ZERO preview is not a citable flagship. A recurring Índice CONFENGE do Mercado de Obras Públicas is blocked until #65 proves reuse, coverage and a sustainable refresh.",
+  "blocked_index_paths": [
+    "/radar/indice-mercado-obras-publicas/",
+    "/inteligencia/indice-mercado-obras-publicas/"
+  ]
+}
