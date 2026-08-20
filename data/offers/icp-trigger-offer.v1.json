@@ -1,0 +1,30 @@
+{
+  "schema": "icp-trigger-offer/1.0",
+  "version": "1.0",
+  "decision_state": "VALIDATE",
+  "issue": 64,
+  "catalog": "scripts/offers/registry.cjs",
+  "journeys": [
+    {
+      "journey_id": "contrato",
+      "icp": "Construtora com contrato público de obra em execução",
+      "trigger": "Glosa, medição retida, atraso de pagamento, notificação, multa, aditivo, reequilíbrio, paralisação ou divergência de projeto e orçamento.",
+      "trigger_sentence": "O gatilho deste caminho é um contrato sob pressão: glosa, aditivo ou reequilíbrio já ameaça o resultado.",
+      "offer_id": "CFG-DIAG-EXP-v1"
+    },
+    {
+      "journey_id": "edital",
+      "icp": "Construtora analisando edital de obra pública",
+      "trigger": "Leitura crítica do edital, habilitação, acervo, orçamento, cronograma, riscos e decisão de participar ou recusar.",
+      "trigger_sentence": "O gatilho deste caminho é um edital em análise com prazo real de entrega da proposta.",
+      "offer_id": "CFG-DIAG-EXP-v1"
+    },
+    {
+      "journey_id": "operacao",
+      "icp": "Direção de engenharia que precisa organizar a operação B2G",
+      "trigger": "Seleção de oportunidades, rotina comercial, orçamento, indicadores, responsabilidades e governança.",
+      "trigger_sentence": "O gatilho deste caminho é uma operação B2G sem método para os próximos 90 dias.",
+      "offer_id": "CFG-DIRB2G-FLEX-v1"
+    }
+  ]
+}
