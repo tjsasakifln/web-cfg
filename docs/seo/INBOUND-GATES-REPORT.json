@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 44,
+        "scanned": 46,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,14 +14,14 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 57
+        "sitemap_locs": 65
       }
     },
     "brand_shell": {
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 28,
+        "scanned": 29,
         "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
         "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
       }
@@ -30,7 +30,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 20,
+        "scanned": 21,
         "journeys": [
           "contrato",
           "edital",
@@ -57,8 +57,8 @@
         }
       ],
       "stats": {
-        "pages": 20,
-        "pairs": 190,
+        "pages": 21,
+        "pairs": 210,
         "threshold": 0.55
       }
     }

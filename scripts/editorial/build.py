@@ -101,7 +101,7 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
             )
             if not elig.get("sitemap_include"):
                 continue
-        lm = p.get("date_modified") or p.get("date_published") or _now_date()
+        lm = p.get("date_modified") or p.get("date_published") or ""
         arch = p.get("archetype") or "guia"
         by_arch[arch] = by_arch.get(arch, 0) + 1
         if arch == "jurisprudencia":
@@ -119,7 +119,7 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
 )
     for hub_path, arch in hub_map:
         if by_arch.get(arch, 0) > 0 and (ROOT / hub_path.strip("/") / "index.html").exists():
-            editorial.append((f"{SITE}{hub_path}", _now_date()))
+            editorial.append((f"{SITE}{hub_path}", ""))
 
     (ROOT / "sitemap-editorial.xml").write_text(_urlset(editorial), encoding="utf-8")
     (ROOT / "sitemap-jurisprudencia.xml").write_text(_urlset(juris), encoding="utf-8")
@@ -132,51 +132,14 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
 
         decision = evaluate(load_candidate(), load_payload(), load_approvals(), today=None)
         apply_market_answer_sitemap(
-            ROOT, indexable=decision.indexable, lastmod=_now_date()
+            ROOT, indexable=decision.indexable, lastmod=""
         )
     except Exception:
         pass
 
-    today = _now_date()
-    index_parts = [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        " <sitemap>",
-        f" <loc>{SITE}/sitemap.xml</loc>",
-        f" <lastmod>{today}</lastmod>",
-        " </sitemap>",
-        " <sitemap>",
-        f" <loc>{SITE}/sitemap-editorial.xml</loc>",
-        f" <lastmod>{today}</lastmod>",
-        " </sitemap>",
-        " <sitemap>",
-        f" <loc>{SITE}/sitemap-jurisprudencia.xml</loc>",
-        f" <lastmod>{today}</lastmod>",
-        " </sitemap>",
-        " <sitemap>",
-        f" <loc>{SITE}/sitemap-inteligencia.xml</loc>",
-        f" <lastmod>{today}</lastmod>",
-        " </sitemap>",
-        "</sitemapindex>",
-        "",
-    ]
-    (ROOT / "sitemap-index.xml").write_text("\n".join(index_parts), encoding="utf-8")
+    from scripts.organic.sitemap_graph import close_graph
 
-    robots = ROOT / "robots.txt"
-    if robots.exists():
-        # Canonical entry only: individual urlsets are listed in sitemap-index.xml
-        lines_out = []
-        saw_index = False
-        for line in robots.read_text(encoding="utf-8").splitlines():
-            if line.strip().lower().startswith("sitemap:"):
-                if "sitemap-index.xml" in line and not saw_index:
-                    lines_out.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
-                    saw_index = True
-                continue
-            lines_out.append(line)
-        if not saw_index:
-            lines_out.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
-        robots.write_text("\n".join(lines_out).rstrip() + "\n", encoding="utf-8")
+    close_graph(ROOT)
 
     return {
         "editorial": len(editorial),

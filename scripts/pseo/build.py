@@ -348,7 +348,7 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
         from scripts.market_answers.gate import evaluate
 
         decision = evaluate(load_candidate(), load_payload(), load_approvals(), today=None)
-        apply_market_answer_sitemap(ROOT, indexable=decision.indexable, lastmod=lastmod)
+        apply_market_answer_sitemap(ROOT, indexable=decision.indexable, lastmod="")
     except Exception:
         # pSEO sitemap must still write even if the Market Answer consumer
         # cannot load. INDEX flip is owned by scripts.market_answers.
@@ -357,21 +357,12 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
 
 
 def write_sitemap_index(lastmod: str) -> Path:
-    """Single entry point for GSC: index of main + inteligência urlsets."""
-    # Use sitemapindex so one submit covers both files (recommended by Google)
-    parts = [
-        f" <sitemap>\n <loc>{SITE}/sitemap.xml</loc>\n <lastmod>{lastmod}</lastmod>\n </sitemap>",
-        f" <sitemap>\n <loc>{SITE}/sitemap-inteligencia.xml</loc>\n <lastmod>{lastmod}</lastmod>\n </sitemap>",
-    ]
-    xml = (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + "\n".join(parts)
-        + "\n</sitemapindex>\n"
-)
-    path = ROOT / "sitemap-index.xml"
-    path.write_text(xml, encoding="utf-8")
-    return path
+    """Rewrite sitemap-index from existing children. `lastmod` is ignored (no build clock)."""
+    del lastmod
+    from scripts.organic.sitemap_graph import close_graph
+
+    close_graph(ROOT)
+    return ROOT / "sitemap-index.xml"
 
 
 def patch_main_sitemap_index() -> None:

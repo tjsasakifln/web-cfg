@@ -338,17 +338,23 @@ def pillar_guide_count_findings(pillar: str, html: str) -> list[Finding]:
 
 def gate_index_surface() -> GateReport:
     findings: list[Finding] = []
-    # Sitemaps must not list noindex pages
-    sm_files = [
-        ROOT / "sitemap.xml",
-        ROOT / "sitemap-editorial.xml",
-        ROOT / "sitemap-jurisprudencia.xml",
-        ROOT / "sitemap-inteligencia.xml",
-    ]
-    all_locs: list[str] = []
-    for sm in sm_files:
+    # Walk sitemap-index members (not a hardcoded four-file list).
+    from scripts.organic.sitemap_graph import load_graph_locs, load_index_members
+
+    all_locs: list[str] = list(load_graph_locs(ROOT))
+    for member in load_index_members(ROOT):
+        sm = ROOT / member.filename
+        if not sm.is_file():
+            findings.append(
+                Finding(
+                    gate="index_surface",
+                    path=member.filename,
+                    reason="sitemap_member_inaccessible",
+                    excerpt=member.loc,
+                )
+            )
+            continue
         for loc in sitemap_locs(sm):
-            all_locs.append(loc)
             path_part = urlparse(loc).path
             if not path_part or path_part == "/":
                 local = ROOT / "index.html"
@@ -541,10 +547,11 @@ def gate_index_surface() -> GateReport:
                 )
             )
 
+    unique_locs = {urlparse(loc).path.rstrip("/") or "/" for loc in all_locs}
     return GateReport(
         ok=not any(f.severity == "error" for f in findings),
         findings=findings,
-        stats={"sitemap_locs": len(all_locs)},
+        stats={"sitemap_locs": len(unique_locs)},
     )
 
 
