@@ -1,0 +1,13 @@
+{
+  "id": "PUBLIC_INTEGRITY_CONSUMER",
+  "enabled": false,
+  "default": false,
+  "reason": "PREPARE_ONLY. Producer code is deployed (extra-cli#436, SHA 8e15f94f) but keyed live canary is pending. Landing stays noindex. Do not publish a factual utility until keyed live proof exists.",
+  "asset_family": "public_integrity",
+  "asset_id": "consulta-ocorrencias-ceis-cnep",
+  "asset_version": "1.0",
+  "consumed_schema": "public-read-integrity/1.0",
+  "landing_path": "/piloto/consulta-ocorrencias-publicas/",
+  "result_path": "/piloto/consulta-ocorrencias-publicas/r/",
+  "intake_path": "/.netlify/functions/public-integrity-consult"
+}

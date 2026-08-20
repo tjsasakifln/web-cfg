@@ -1,0 +1,14 @@
+{
+  "campaign": "CONFENGE-WEB-PUBLIC-INTEGRITY-CONSUMER-PREPARE-01",
+  "wave": "CONSUMER_PREPARE_ONLY",
+  "producer_status": "PRODUCER_CODE_DEPLOYED",
+  "keyed_live_canary": "KEYED_LIVE_CANARY_PENDING",
+  "consumed_schema": "public-read-integrity/1.0",
+  "producer_sha": "8e15f94fb641a79954a8c909417bb9df18c0d491",
+  "producer_issue": "https://github.com/tjsasakifln/extra-cli/issues/436",
+  "consumer_issue": "https://github.com/tjsasakifln/web-cfg/issues/156",
+  "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
+  "claimed_live": false,
+  "select_only": true,
+  "contracted_sources": ["CEIS", "CNEP"]
+}

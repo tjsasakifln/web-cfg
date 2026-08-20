@@ -9,6 +9,7 @@ User-agent: *
 Disallow: /ops/
 Disallow: /.netlify/
 Disallow: /piloto/
+Disallow: /piloto/consulta-ocorrencias-publicas/
 
 # Contract-analysis canary: fixture/preview family stays off crawlers
 # until an official_live PUBLISHABLE_INDEX page exists.

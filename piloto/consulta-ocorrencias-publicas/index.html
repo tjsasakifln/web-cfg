@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Consulta preliminar de ocorrencias publicas em CEIS e CNEP | CONFENGE</title>
+<meta name="description" content="Informe um CNPJ de forma privada e veja o que os cadastros CEIS e CNEP do Portal da Transparencia registram neste instante, com cobertura e limites visiveis."/>
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+<meta name="googlebot" content="noindex,nofollow,noarchive"/>
+<link rel="canonical" href="https://confenge.com.br/piloto/consulta-ocorrencias-publicas/"/>
+<link rel="stylesheet" href="/styles.css"/>
+<link rel="stylesheet" href="/styles-tools.css"/>
+<meta http-equiv="Cache-Control" content="no-store"/>
+
+</head>
+<body data-asset-family="public_integrity" data-asset-id="consulta-ocorrencias-ceis-cnep" data-asset-version="1.0" data-source="CONFENGE_WEB">
+<a class="skip-link" href="#conteudo">Ir ao conteudo</a>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, pagina inicial" class="brand" href="/"><img alt="CONFENGE Inteligencia Tecnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
+<nav aria-label="Navegacao principal" class="desktop-nav">
+<a href="/#ofertas">Servicos</a>
+<a href="/#jornadas">Problemas que resolvemos</a>
+<a href="/conteudos/">Conteudos e ferramentas</a>
+<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+</nav>
+<a class="button button-primary header-cta" href="/#contato">Analisar meu caso</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<span>Menu</span>
+</button>
+</div>
+<nav aria-label="Navegacao movel" class="mobile-nav" id="mobile-menu">
+<a href="/#ofertas">Servicos</a>
+<a href="/#jornadas">Problemas que resolvemos</a>
+<a href="/conteudos/">Conteudos e ferramentas</a>
+<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+<a class="button button-primary" href="/#contato">Analisar meu caso</a>
+</nav>
+</header>
+<main id="conteudo">
+
+<nav class="breadcrumbs container" aria-label="breadcrumb"><ol>
+<li><a href="/">Inicio</a></li>
+<li aria-current="page">Consulta preliminar CEIS e CNEP</li>
+</ol></nav>
+<header class="tool-page-hero"><div class="container tool-shell">
+<p class="eyebrow">Consulta preliminar de ocorrencias publicas</p>
+<h1>Consulta preliminar de ocorrencias publicas em CEIS e CNEP</h1>
+<p class="content-lead">Informe um CNPJ de forma privada e veja o que os cadastros CEIS e CNEP do Portal da Transparencia registram neste instante, com cobertura e limites visiveis.</p>
+<p class="authority-byline">Autor: Eng. Tiago Sasaki. Revisor: Eng. Tiago Sasaki. Referencia de metodo: contrato public-read-integrity/1.0. <a href="/correcoes/">Como corrigir</a></p>
+</div></header>
+<div class="container tool-shell">
+<section aria-labelledby="o-que-e">
+<h2 id="o-que-e">O que esta consulta faz</h2>
+<p>Esta consulta e preliminar. Ela descreve ocorrencias observadas nas fontes contratadas; nao substitui diligencia documental humana.</p>
+<p>Fontes cobertas nesta versao: CEIS (Cadastro Nacional de Empresas Inidoneas e Suspensas) e CNEP (Cadastro Nacional de Empresas Punidas), ambos do Portal da Transparencia / CGU.</p>
+<p>Ausencia confirmada nestas duas fontes, mesmo com cobertura completa, nao prova ausencia geral de risco, de outros cadastros ou de impedimentos fora deste recorte.</p>
+<p>Se uma fonte nao responder, esgotar limite de pedidos, atrasar ou devolver leitura incompleta, esse estado permanece visivel. Falha tecnica nunca vira lista vazia.</p>
+</section>
+<section class="authority-method" id="metodo" aria-labelledby="metodo-title">
+<h2 id="metodo-title">Metodo e limites</h2>
+<p>Metodo: consumo fail-closed do contrato public-read-integrity/1.0 (SELECT-only). CEIS e CNEP sao consultados em separado, com paginacao ate pagina terminal bem sucedida. O agregado so confirma ausencia quando as duas fontes e todas as paginas completam vazias.</p>
+<ul><li>Consulta limitada aos cadastros CEIS e CNEP do Portal da Transparencia.</li><li>Cadastros nao contratados nao entram na conclusao.</li><li>Valor ausente nao e fato negativo.</li><li>Ocorrencias observadas nao constituem conclusao juridica, certificacao ou recomendacao.</li></ul>
+<p>Se um fato publicado estiver errado, use o canal de correcoes da CONFENGE.</p>
+</section>
+<section aria-labelledby="consulta-title">
+<h2 id="consulta-title">Consultar CNPJ</h2>
+<p>O CNPJ identifica o sancionado nos cadastros oficiais. Ele e enviado so no corpo da requisicao, permanece no servidor pelo TTL da consulta e nao entra na URL, no titulo, no analytics nem em logs indexaveis.</p>
+<p>O resultado mostra o estado agregado, um cartao por fonte, ocorrencias observadas com localizador oficial quando o envelope permitir, cobertura, instante (as_of), metodo e limites. Sem pontuacao e sem decisao de contratar ou recusar parceiro.</p>
+<p>O CNPJ nao entra na URL, no fragmento, no titulo, no canonical, no analytics nem no referrer. O resultado individual permanece noindex e fora do sitemap.</p>
+<p>A consulta permanece fechada ao publico (flag desligada). Esta pagina explica o metodo e nao publica utilidade factual ainda nao comprovada por canario com chave.</p>
+<form id="integrity-form" class="tool-form" method="post" action="/.netlify/functions/public-integrity-consult" data-no-url-cnpj="true" data-flag="off">
+<input type="hidden" name="action" value="consult"/>
+<input type="hidden" name="asset_family" value="public_integrity"/>
+<input type="hidden" name="asset_id" value="consulta-ocorrencias-ceis-cnep"/>
+<input type="hidden" name="cta_id" value="diligencia-humana-diagnostico"/>
+<div class="tool-field">
+<label for="cnpj">CNPJ da empresa consultada</label>
+<input id="cnpj" name="cnpj" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="18" aria-describedby="cnpj-why cnpj-what" required/>
+<p id="cnpj-why" class="tool-field-hint">O CNPJ identifica o sancionado nos cadastros oficiais. Ele e enviado so no corpo da requisicao, permanece no servidor pelo TTL da consulta e nao entra na URL, no titulo, no analytics nem em logs indexaveis.</p>
+<p id="cnpj-what" class="tool-field-hint">O resultado mostra o estado agregado, um cartao por fonte, ocorrencias observadas com localizador oficial quando o envelope permitir, cobertura, instante (as_of), metodo e limites. Sem pontuacao e sem decisao de contratar ou recusar parceiro.</p>
+</div>
+<div class="tool-field" hidden>
+<label for="empresa-site">Nao preencha</label>
+<input id="empresa-site" name="empresa-site" type="text" tabindex="-1" autocomplete="off"/>
+</div>
+<div class="tool-actions">
+<button id="integrity-submit" class="button button-primary" type="submit">Consultar ocorrencias publicas</button>
+</div>
+<p class="form-status" id="integrity-status" role="status" aria-live="polite"></p>
+</form>
+</section>
+</div>
+<script>
+(function () {
+  var form = document.getElementById("integrity-form");
+  if (!form) return;
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var input = document.getElementById("cnpj");
+    var status = document.getElementById("integrity-status");
+    var fd = new FormData(form);
+    var body = {};
+    fd.forEach(function (v, k) { body[k] = v; });
+    status.hidden = false;
+    status.textContent = "Enviando consulta privada...";
+    fetch(form.getAttribute("action"), {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      credentials: "same-origin",
+      referrerPolicy: "no-referrer"
+    }).then(function (res) { return res.json().then(function (data) { return { res: res, data: data }; }); })
+      .then(function (pack) {
+        var loc = pack.res.headers.get("Location") || (pack.data && pack.data.result_url);
+        if (loc) {
+          window.location.replace(loc);
+          return;
+        }
+        status.textContent = (pack.data && pack.data.message) || "Nao foi possivel concluir a leitura.";
+      })
+      .catch(function () {
+        status.textContent = "Nao foi possivel concluir a leitura.";
+      });
+    if (input) input.value = "";
+  });
+})();
+</script>
+
+</main>
+</body>
+</html>
