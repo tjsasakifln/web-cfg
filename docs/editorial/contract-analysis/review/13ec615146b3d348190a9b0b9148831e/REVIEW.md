@@ -12,15 +12,15 @@ O PDF oficial (SHA-256 64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b
 A divisão 719177.48 / 4710.00 = 152.6916 BRL/m² é apenas valor global publicado ÷ área publicada no objeto. Não é custo completo, preço de referência, SINAPI/SICRO, custo/km nem prova de economicidade.
 
 Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE. Não implica relação comercial da CONFENGE com o órgão ou o contratado. publication_authorization=false e index_authorization=false permanecem falsos.
-- estado publicação: PUBLISHABLE_NOINDEX
-- review: READY_FOR_HUMAN_REVIEW
+- estado publicação: PUBLISHABLE_INDEX
+- review: HUMAN_REVIEW_PENDING
 - quality verdict: INDEX_READY_HUMAN_REVIEW
 - score: 100
 - dimensions: {'profundidade_documental': 100, 'singularidade_novidade': 100, 'utilidade_decisoria': 100, 'integridade_epistemica': 100, 'calculos_engenharia': 100, 'comunicacao': 100, 'seo_citabilidade_manutencao': 100}
 - findings: []
-- rendered-content.sha256: d6dd79a5124cb56bef72bdcdefba3cbabaed2c520e8d799a36f5224986c107a4
+- rendered-content.sha256: 823c6b057a68916480b0973c5843dca9ed406973d1bcf1ba1adebcc6e0b35dbb
 - evidence-pack.sha256: f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b
-- material_hash: 0f30e8854a46ad7f7dd57acf49743c5657d0e54ea49226db9124bd4572bb5cea
+- material_hash: dc7453b96b21e3f81b46b7f5e8b2682a14a52f9bc6ca398be21aaffbc7ca1b23
 
 ## Texto / preview
 
@@ -189,4 +189,4 @@ A leitura alternativa — usar a vigência 2026-07-08/2027-07-08 como único rel
 
 withdraw_approval('13ec615146b3d348190a9b0b9148831e') and keep noindex.
 
-READY_FOR_HUMAN_REVIEW; no human approval, authorship or INDEX was simulated.
+HUMAN_REVIEW_PENDING; no human approval, authorship or INDEX was simulated.

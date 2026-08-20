@@ -1,0 +1,62 @@
+{
+  "legacy_pr": 157,
+  "legacy_head": "1e244afc26bd2e2368d23498c3a261f8dbf75b36",
+  "legacy_base_at_open": "faadc16609210522c9ffaf32a7b944817f6c6214",
+  "legacy_state": "draft, mergeable_state=dirty, HOLD",
+  "disposition": "supersede_do_not_merge",
+  "replacement_branch": "campaign/CONFENGE-WEB-CONTRACT-ANALYSIS-V2-CURRENT-MAIN-01",
+  "current_main_base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
+  "matrix": [
+    {
+      "item": "last-match X-Robots override for the INDEX slug after family noindex",
+      "disposition": "ported",
+      "reason": "Netlify last-match is required for gate item 8"
+    },
+    {
+      "item": "apply_rendered_hash_gate + approval_rendered_hash_ok",
+      "disposition": "ported",
+      "reason": "one-byte render drift must refuse INDEX"
+    },
+    {
+      "item": "sync_family_crawler_rules robots Allow + headers override",
+      "disposition": "ported",
+      "reason": "family remains Disallow/noindex except the one INDEX URL"
+    },
+    {
+      "item": "CONFENGE_CONTRACT_ANALYSIS_ROOT isolation",
+      "disposition": "ported",
+      "reason": "tests must not mutate repo approvals/sitemaps"
+    },
+    {
+      "item": "author Engº Tiago Sasaki + solo reviewer disclosure",
+      "disposition": "ported_and_rebound",
+      "reason": "gate item 6; V2 token is the authorized approval path"
+    },
+    {
+      "item": "comparable reason_code / NOT_COMPARABLE visibility",
+      "disposition": "rewritten",
+      "reason": "comparable_available=true comparable_consumed=false reason=singular_document_insight_no_comparative_claim; no producer percentiles in copy"
+    },
+    {
+      "item": "limitations claiming extra-cli #435 HOLD_FOR_DATA",
+      "disposition": "dropped",
+      "reason": "false current claim; not restated"
+    },
+    {
+      "item": "token OWNER_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_2026_08_19 and hashes eaa713a4 / 8c29321e as live authority",
+      "disposition": "refused",
+      "reason": "pre-V2; fail closed in shipped approval"
+    },
+    {
+      "item": "generated HTML/sitemap from #157",
+      "disposition": "not_copied",
+      "reason": "pipeline re-executed consume → gate → render → approve on current official-live"
+    },
+    {
+      "item": "sitemap-index / close_graph family member",
+      "disposition": "reimplemented_on_current_main",
+      "reason": "current main already has sitemap_graph; last-match X-Robots and longest-match robots Allow added so loc sets reconcile"
+    }
+  ],
+  "close_when": "replacement PR green and integrated; comment superseded_by=<new PR>; never close #83"
+}

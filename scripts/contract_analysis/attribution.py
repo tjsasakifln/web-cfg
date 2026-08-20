@@ -21,7 +21,12 @@ KEEP_LIST = (
     "cta_id",
     "referrer",
     "query_class",
+    "source",
+    "destination_service_id",
 )
+
+CTA_SOURCE = "CONFENGE_WEB"
+DEFAULT_DESTINATION_SERVICE_ID = "diagnostico-defesa-margem"
 
 PII_KEYS = (
     "email",
@@ -36,6 +41,13 @@ PII_KEYS = (
 
 
 def attribution_payload(record: dict[str, Any], *, correlation_id: str = "") -> dict[str, str]:
+    cta = record.get("cta") if isinstance(record.get("cta"), dict) else {}
+    href = str(cta.get("href") or record.get("cta_href") or "")
+    destination = str(record.get("destination_service_id") or cta.get("destination_service_id") or "")
+    if not destination and "diagnostico-defesa-margem" in href:
+        destination = DEFAULT_DESTINATION_SERVICE_ID
+    if not destination:
+        destination = DEFAULT_DESTINATION_SERVICE_ID
     return {
         "analysis_id": str(record.get("analysis_id") or record.get("id") or ""),
         "evidence_pack_version": str(record.get("evidence_pack_version") or ""),
@@ -44,6 +56,8 @@ def attribution_payload(record: dict[str, Any], *, correlation_id: str = "") -> 
         "route_family": ROUTE_FAMILY,
         "asset_id": str(record.get("slug") or record.get("id") or ""),
         "cta_id": "analise-tecnica-contextual",
+        "source": CTA_SOURCE,
+        "destination_service_id": destination,
     }
 
 

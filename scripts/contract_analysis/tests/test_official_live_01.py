@@ -215,21 +215,17 @@ def test_official_slug_absent_from_sitemaps(tmp_path, monkeypatch):
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
     rec = load_canary()["records"][0]
     decision = evaluate_publication(rec, cohort=[rec])
+    assert decision.state != "PUBLISHABLE_INDEX"
     assert sitemap_locs([(rec, decision)]) == []
     write_sitemap([(rec, decision)])
-    assert rec["slug"] not in " ".join(analysis_urls_in_sitemaps(ROOT))
-    for name in (
-        "sitemap.xml",
-        "sitemap-index.xml",
-        "sitemap-analises-contratos.xml",
-        "sitemap-editorial.xml",
-        "sitemap-inteligencia.xml",
-    ):
-        path = ROOT / name
-        if path.is_file():
-            text = path.read_text(encoding="utf-8")
-            assert rec["slug"] not in text
-            assert AUTHORIZED_ANALYSIS_ID not in text
+    isolated = Path(__import__("os").environ["CONFENGE_CONTRACT_ANALYSIS_ROOT"])
+    written = isolated / "sitemap-analises-contratos.xml"
+    if written.is_file():
+        text = written.read_text(encoding="utf-8")
+        assert rec["slug"] not in text
+        assert AUTHORIZED_ANALYSIS_ID not in text
+    members = analysis_urls_in_sitemaps(isolated)
+    assert rec["slug"] not in " ".join(members)
 
 
 def test_review_packet_hash_bound_not_approval(tmp_path, monkeypatch):

@@ -1,0 +1,30 @@
+{
+  "campaign": "CONFENGE-WEB-CONTRACT-ANALYSIS-V2-CURRENT-MAIN-01",
+  "token_v2": "OWNER_CONDITIONAL_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_V2_2026_08_20",
+  "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+  "pncp_id": "14862788000150-2-000069/2026",
+  "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
+  "payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+  "ready_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+  "material_hash": "dc7453b96b21e3f81b46b7f5e8b2682a14a52f9bc6ca398be21aaffbc7ca1b23",
+  "render_hash": "823c6b057a68916480b0973c5843dca9ed406973d1bcf1ba1adebcc6e0b35dbb",
+  "producer_commit": "5984750c14a4653bf64e16ba7547063f3e1cdab9",
+  "listing_sha256": "89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303",
+  "pdf_sha256": "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604",
+  "comparable_available": true,
+  "comparable_consumed": false,
+  "comparable_reason": "singular_document_insight_no_comparative_claim",
+  "historical_hashes_not_authority": {
+    "payload_old": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+    "ready_root_old": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+    "material_old": "eaa713a4c7cbf2af6ae5d4104edb5fb2d1799bee57c59f6d0099fcf12fa1a38a",
+    "render_old": "8c29321e81d6ecfd086e63d4fdc554d0bc9c488c166e6b01fd1ed24bcf1f3ae7",
+    "note": "Producer payload and READY root coincide with the current official-live rendezvous; they are rebound as current measurements, not inherited from PR #157. Material and render hashes are new."
+  },
+  "stale_tokens_refused": [
+    "OWNER_CONDITIONAL_APPROVAL_CONTRACT_ANALYSIS_CANARY_2026_08_17",
+    "OWNER_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_2026_08_19",
+    "OWNER_CONDITIONAL_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_V2_2026_08_19"
+  ]
+}

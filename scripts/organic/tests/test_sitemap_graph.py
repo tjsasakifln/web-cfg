@@ -30,6 +30,7 @@ from scripts.organic.sitemap_graph import (
     stale_market_answer_issues,
     substantial_lastmod_from_html,
     walk_index_children,
+    x_robots_noindex,
     UrlEntry,
 )
 from scripts.organic.sitemap_hygiene import audit_sitemaps
@@ -432,3 +433,31 @@ def test_audit_sitemaps_is_the_shipped_entry_point(tmp_path: Path):
     assert via_graph["ok"] is True
     assert via_hygiene["unique_paths"] == via_graph["unique_paths"] == 1
     assert via_hygiene["walked_members"] == ["sitemap.xml"]
+
+
+def test_robots_longest_allow_beats_family_disallow():
+    from scripts.organic.sitemap_graph import path_blocked_by_robots
+
+    robots = (
+        "User-agent: *\n"
+        "Allow: /analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/\n"
+        "Disallow: /analises-contratos-publicos/\n"
+    )
+    canary = "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    other = "/analises-contratos-publicos/fixture-preview/"
+    assert path_blocked_by_robots(canary, robots) is False
+    assert path_blocked_by_robots(other, robots) is True
+
+
+def test_x_robots_last_match_index_override_not_family_noindex():
+    headers = (
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n"
+        "\n"
+        "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/*\n"
+        "  X-Robots-Tag: index, follow\n"
+    )
+    family = "/analises-contratos-publicos/fixture-preview/"
+    canary = "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    assert x_robots_noindex(headers, family) is True
+    assert x_robots_noindex(headers, canary) is False

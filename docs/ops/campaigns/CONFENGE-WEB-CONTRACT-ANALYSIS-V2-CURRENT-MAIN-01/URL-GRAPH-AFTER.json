@@ -1,0 +1,14 @@
+{
+  "tag": "AFTER",
+  "canary_path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "robots_meta": "index,follow",
+  "html_sha256": "823c6b057a68916480b0973c5843dca9ed406973d1bcf1ba1adebcc6e0b35dbb",
+  "canary_in_graph": true,
+  "graph_count": 65,
+  "other_analysis_index_locs": [],
+  "family_sitemap_exists": true,
+  "family_sitemap_has_slug": true,
+  "robots_allow_canary": true,
+  "headers_index_override": true,
+  "index_count": 1
+}

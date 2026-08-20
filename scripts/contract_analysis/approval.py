@@ -4,17 +4,24 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from scripts.contract_analysis import (
+    AUTHORIZED_ANALYSIS_ID,
+    AUTHORIZED_BASE_SHA,
+    AUTHORIZED_CANONICAL_PATH,
     OWNER_CONDITIONAL_APPROVER,
     OWNER_CONDITIONAL_PREAPPROVAL_V2,
+    OWNER_CONDITIONAL_PREAPPROVAL_V2_2026_08_19,
     OWNER_CONDITIONAL_TOKEN,
     OWNER_CONDITIONAL_TOKEN_2026_08_17,
     OWNER_DIMENSION_MIN,
+    OWNER_PREAPPROVAL_TOKEN_2026_08_19,
     OWNER_QUALITY_MIN,
+    SINGULAR_COMPARABLE_REASON,
     STALE_INDEX_TOKENS,
 )
 
@@ -37,6 +44,8 @@ CONDITIONAL_CHECKLIST = (
     "no_implied_commercial_relation",
     "snapshot_hashes_recorded",
     "suite_green",
+    "comparable_available_not_consumed",
+    "v2_token_and_hashes_bound",
 )
 APPROVAL_SCHEMA = "contract-analysis-approvals/1.0"
 
@@ -61,10 +70,21 @@ _MATERIAL_KEYS = (
     "calculations",
     "comparisons",
     "interpretation",
+    "author",
+    "reviewer",
+    "human_authorship_confirmed",
+    "comparable_available",
+    "comparable_consumed",
+    "comparable_reason",
+    "body",
+    "thesis",
 )
 
 
 def _root() -> Path:
+    env = os.environ.get("CONFENGE_CONTRACT_ANALYSIS_ROOT")
+    if env:
+        return Path(env)
     return Path(__file__).resolve().parents[2]
 
 
@@ -111,6 +131,25 @@ def load_approvals(root: Path | None = None) -> dict[str, Any]:
     return payload
 
 
+def approval_rendered_hash_ok(
+    record: dict[str, Any],
+    rendered_html: str,
+    *,
+    root: Path | None = None,
+) -> tuple[bool, list[str]]:
+    """A stored rendered_content_hash must still match the HTML that would go live."""
+    stored = find_approval(record, root=root)
+    if stored is None:
+        return True, []
+    expected = str(stored.get("rendered_content_hash") or "")
+    if not expected:
+        return True, []
+    actual = rendered_content_hash(rendered_html)
+    if actual != expected:
+        return False, ["approval_rendered_hash_mismatch"]
+    return True, []
+
+
 def find_approval(record: dict[str, Any], *, root: Path | None = None) -> dict[str, Any] | None:
     aid, pack, digest = approval_triple(record)
     if not (aid and pack and digest):
@@ -120,6 +159,11 @@ def find_approval(record: dict[str, Any], *, root: Path | None = None) -> dict[s
         if not isinstance(row, dict):
             continue
         if row.get("withdrawn"):
+            continue
+        token = str(row.get("token") or "")
+        if token in STALE_INDEX_TOKENS:
+            continue
+        if aid == AUTHORIZED_ANALYSIS_ID and token != OWNER_CONDITIONAL_PREAPPROVAL_V2:
             continue
         if str(row.get("analysis_id") or "") != aid:
             continue
@@ -245,6 +289,12 @@ def approval_allows_index(record: dict[str, Any], *, root: Path | None = None) -
     stored = find_approval(record, root=root)
     expected = material_hash(record)
     aid, pack, digest = approval_triple(record)
+    if stored is not None and str(stored.get("token") or "") in STALE_INDEX_TOKENS:
+        return False, ["approval_stale_campaign_token"]
+    if stored is not None and aid == AUTHORIZED_ANALYSIS_ID:
+        bind_reasons = _canary_binding_reasons(stored, record)
+        if bind_reasons:
+            return False, bind_reasons
     if stored is None:
         # Inline approval on the record (tests) still needs the triple + hash + rollback.
         inline_hash = str(record.get("material_hash") or "")
@@ -331,11 +381,32 @@ def evaluate_conditional_checklist(
         'data-asset-id="' in html
         and 'data-cta-id="' in html
         and 'data-route-family="' in html
+        and 'data-analysis-id="' in html
+        and 'data-source="CONFENGE_WEB"' in html
+        and 'data-destination-service-id="' in html
         and "@" not in html.split('id="proximo-passo"')[-1][:800] if 'id="proximo-passo"' in html else True
     )
     schema_ok = "CaseStudy" not in html and "Review" not in html and "Product" not in html
-    commercial = "caso confenge" in html.lower() or "nosso cliente" in html.lower()
+    lowered = html.lower()
+    commercial = "nosso cliente" in lowered or "case de cliente" in lowered
+    remainder = (
+        lowered.replace("não é um caso confenge", " ")
+        .replace("nao e um caso confenge", " ")
+        .replace("não é caso confenge", " ")
+        .replace("nao e caso confenge", " ")
+        .replace("não implica relação comercial", " ")
+        .replace("nao implica relacao comercial", " ")
+    )
+    commercial = commercial or "caso confenge" in remainder
     hashes_ok = bool(producer_root_hash and source_dossier_hash and record.get("content_hash"))
+    comparable_ok = (
+        str(record.get("id") or record.get("analysis_id") or "") != AUTHORIZED_ANALYSIS_ID
+        or (
+            record.get("comparable_available") is True
+            and record.get("comparable_consumed") is False
+            and str(record.get("comparable_reason") or "") == SINGULAR_COMPARABLE_REASON
+        )
+    )
     return {
         "source_official_live": official_live_declared(record)
         or (
@@ -366,6 +437,8 @@ def evaluate_conditional_checklist(
         "no_implied_commercial_relation": not commercial,
         "snapshot_hashes_recorded": hashes_ok,
         "suite_green": bool(suite_green),
+        "comparable_available_not_consumed": comparable_ok,
+        "v2_token_and_hashes_bound": hashes_ok and bool(producer_root_hash) and bool(source_dossier_hash),
     }
 
 
@@ -384,7 +457,12 @@ def approve_conditional_canary(
     actor: str = OWNER_CONDITIONAL_APPROVER,
 ) -> dict[str, Any]:
     """Hash-bound owner-token approval for at most one INDEX canary."""
-    if token in STALE_INDEX_TOKENS or token == OWNER_CONDITIONAL_TOKEN_2026_08_17:
+    if (
+        token in STALE_INDEX_TOKENS
+        or token == OWNER_CONDITIONAL_TOKEN_2026_08_17
+        or token == OWNER_PREAPPROVAL_TOKEN_2026_08_19
+        or token == OWNER_CONDITIONAL_PREAPPROVAL_V2_2026_08_19
+    ):
         raise ApprovalError("conditional_token_invalid")
     if token != OWNER_CONDITIONAL_PREAPPROVAL_V2 or token != OWNER_CONDITIONAL_TOKEN:
         raise ApprovalError("conditional_token_invalid")
@@ -394,6 +472,14 @@ def approve_conditional_canary(
         raise ApprovalError("approval_refused_fixture")
     if active_index_count(root=root) >= 1:
         raise ApprovalError("index_cap_exceeded")
+    aid = str(record.get("id") or record.get("analysis_id") or "")
+    if aid == AUTHORIZED_ANALYSIS_ID:
+        if source_dossier_hash != str(record.get("content_hash") or ""):
+            raise ApprovalError("conditional_payload_hash_mismatch")
+        if producer_root_hash != str(record.get("root_content_hash") or ""):
+            raise ApprovalError("conditional_ready_root_mismatch")
+        if not rendered_html:
+            raise ApprovalError("conditional_render_absent")
     checklist = evaluate_conditional_checklist(
         record,
         quality=quality,
@@ -411,7 +497,16 @@ def approve_conditional_canary(
     row["approver"] = OWNER_CONDITIONAL_APPROVER
     row["producer_root_hash"] = producer_root_hash
     row["source_dossier_hash"] = source_dossier_hash
+    row["official_payload_hash"] = source_dossier_hash
     row["rendered_content_hash"] = rendered_content_hash(rendered_html)
+    row["material_hash"] = material_hash(record)
+    row["analysis_id"] = aid or row.get("analysis_id")
+    if aid == AUTHORIZED_ANALYSIS_ID:
+        row["canonical_url"] = AUTHORIZED_CANONICAL_PATH
+        row["base_sha"] = AUTHORIZED_BASE_SHA
+        row["comparable_available"] = True
+        row["comparable_consumed"] = False
+        row["comparable_reason"] = SINGULAR_COMPARABLE_REASON
     row["checklist"] = checklist
     payload = load_approvals(root)
     updated = []
@@ -429,3 +524,28 @@ def approve_conditional_canary(
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return row
+
+
+def _canary_binding_reasons(stored: dict[str, Any], record: dict[str, Any]) -> list[str]:
+    """INDEX of the authorized canary requires the current V2 token and live hashes."""
+    reasons: list[str] = []
+    token = str(stored.get("token") or "")
+    if token != OWNER_CONDITIONAL_PREAPPROVAL_V2:
+        reasons.append("approval_token_not_v2")
+    if str(stored.get("analysis_id") or "") != AUTHORIZED_ANALYSIS_ID:
+        reasons.append("approval_analysis_id_mismatch")
+    canonical = str(stored.get("canonical_url") or "")
+    if canonical not in {AUTHORIZED_CANONICAL_PATH, f"https://confenge.com.br{AUTHORIZED_CANONICAL_PATH}"}:
+        reasons.append("approval_canonical_url_mismatch")
+    if str(stored.get("base_sha") or "") != AUTHORIZED_BASE_SHA:
+        reasons.append("approval_base_sha_mismatch")
+    ready = str(record.get("root_content_hash") or "")
+    if ready and str(stored.get("producer_root_hash") or "") != ready:
+        reasons.append("approval_ready_root_mismatch")
+    payload_hash = str(record.get("content_hash") or "")
+    stored_payload = str(stored.get("source_dossier_hash") or stored.get("official_payload_hash") or "")
+    if payload_hash and stored_payload != payload_hash:
+        reasons.append("approval_payload_hash_mismatch")
+    if str(stored.get("material_hash") or "") != material_hash(record):
+        reasons.append("approval_material_hash_mismatch")
+    return reasons

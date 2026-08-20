@@ -124,27 +124,60 @@ def test_family_is_preserved_from_pseo_wipe():
 
 
 def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
+    from scripts.contract_analysis import AUTHORIZED_CANONICAL_PATH
+    from scripts.contract_analysis.approval import find_approval, load_approvals
+
     hub = ROOT / "analises-contratos-publicos" / "index.html"
     assert hub.is_file()
     html = hub.read_text(encoding="utf-8")
     assert 'content="noindex' in html
     assert "/correcoes/" in html
+    canary_slug = AUTHORIZED_CANONICAL_PATH.strip("/").split("/")[-1]
+    approved = any(
+        isinstance(row, dict)
+        and row.get("analysis_id") == "13ec615146b3d348190a9b0b9148831e"
+        and row.get("state") == "PUBLISHABLE_INDEX"
+        and not row.get("withdrawn")
+        for row in (load_approvals(ROOT).get("approvals") or [])
+    )
     pages = list((ROOT / "analises-contratos-publicos").rglob("index.html"))
     assert pages
+    indexable_pages = []
     for page in pages:
         body = page.read_text(encoding="utf-8")
-        assert 'content="noindex' in body
         assert "CaseStudy" not in body
         assert '"@type":"Review"' not in body and '"@type": "Review"' not in body
-    assert analysis_urls_in_sitemaps(ROOT) == []
+        is_canary = canary_slug in str(page)
+        if is_canary and approved:
+            assert 'content="index,follow"' in body or 'content="index, follow"' in body
+            indexable_pages.append(page)
+        else:
+            assert 'content="noindex' in body
+    if approved:
+        assert len(indexable_pages) == 1
+        members = analysis_urls_in_sitemaps(ROOT)
+        assert members
+    else:
+        assert analysis_urls_in_sitemaps(ROOT) == []
 
 
 def test_robots_and_headers_block_fixture_family():
+    from scripts.contract_analysis import AUTHORIZED_CANONICAL_PATH
+    from scripts.contract_analysis.approval import load_approvals
+
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     headers = (ROOT / "_headers").read_text(encoding="utf-8")
     assert "Disallow: /analises-contratos-publicos/" in robots
     assert "/analises-contratos-publicos/*" in headers
     assert "X-Robots-Tag: noindex" in headers
+    approved = any(
+        isinstance(row, dict)
+        and row.get("analysis_id") == "13ec615146b3d348190a9b0b9148831e"
+        and row.get("state") == "PUBLISHABLE_INDEX"
+        and not row.get("withdrawn")
+        for row in (load_approvals(ROOT).get("approvals") or [])
+    )
+    slug = AUTHORIZED_CANONICAL_PATH.strip("/")
     sitemap_files = [
         ROOT / "sitemap.xml",
         ROOT / "sitemap-index.xml",
@@ -153,8 +186,20 @@ def test_robots_and_headers_block_fixture_family():
         ROOT / "sitemap.txt",
         ROOT / "sitemap-analises-contratos.xml",
     ]
+    other_slugs = (
+        "aditivo-saldo-art125-item-novo",
+        "atraso-eventos-sem-comunicacao-contemporanea",
+        "bdi-composicao-vs-referencia-sc",
+        "comparaveis-rejeitados-regime-distinto",
+        "reajuste-aniversario-serie-indice",
+    )
     for path in sitemap_files:
         if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
-        assert "analises-contratos-publicos" not in text
+        for other in other_slugs:
+            assert other not in text
+        if not approved:
+            assert "analises-contratos-publicos" not in text
+        elif path.name in {"sitemap-analises-contratos.xml", "sitemap-index.xml", "sitemap.txt"}:
+            assert slug.split("/")[-1] in text or "sitemap-analises-contratos.xml" in text
