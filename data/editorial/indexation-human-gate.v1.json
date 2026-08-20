@@ -1,0 +1,29 @@
+{
+  "schema": "indexation-human-gate-v1",
+  "issue": 127,
+  "decision_state": "VALIDATE",
+  "as_of": "2026-08-20",
+  "owner": "tiago.sasaki",
+  "canonical_host": "confenge.com.br",
+  "note": "Demand is a review signal, not an index warrant. HTML generation is not index permission. HOLD_NOINDEX until a named human runs approve_cli. Do not flip robots in this increment.",
+  "urls": [
+    {
+      "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "html": "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+      "decision": "HOLD_NOINDEX",
+      "reason": "Position ~3 with noindex is interesting, not permission. Distinct rain-delay job still generic; stay noindex until rewrite + approve_cli."
+    },
+    {
+      "path": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "html": "conteudos/aditivo-qualitativo-quantitativo/index.html",
+      "decision": "HOLD_NOINDEX",
+      "reason": "Answer still generic; qualitative vs quantitative addendum is already owned by the aditivos pillar."
+    },
+    {
+      "path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "html": "conteudos/prazo-vigencia-prazo-execucao-contrato-obra/index.html",
+      "decision": "HOLD_NOINDEX",
+      "reason": "Vigência vs execução is a distinct job but the live answer is still generic. Hold noindex."
+    }
+  ]
+}
