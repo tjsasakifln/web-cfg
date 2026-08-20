@@ -1,16 +1,16 @@
 {
   "schema": "confenge-web-production-convergence-04/deploy-evidence/v1",
-  "as_of_utc": "2026-08-20T05:26:00Z",
-  "main_sha": "154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b",
-  "previous_main_sha": "5d5081237aec99f5bedf1ab441bfbde41e724f51",
+  "as_of_utc": "2026-08-20T06:05:00Z",
+  "main_sha": "70ba0cd4d4cdc0ceadb3a7de1e9e9e7e305e367d",
+  "previous_main_sha": "154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b",
   "convergence_pr": 168,
-  "follow_up_pr": 170,
+  "follow_up_pr": 172,
   "merged_at": "2026-08-20T05:23:00Z",
   "netlify": {
     "site": "confenge",
     "custom_domain": "confenge.com.br",
-    "deploy_id": "6a868f64beb71a000870758b",
-    "commit_ref": "154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b",
+    "deploy_id": "6a8698d8e7a3b00008ac36d2",
+    "commit_ref": "70ba0cd4d4cdc0ceadb3a7de1e9e9e7e305e367d",
     "commit_ref_equals_main": true,
     "state": "ready",
     "context": "production",
@@ -45,7 +45,9 @@
     "loc_set_equal": true,
     "live_equals_origin_main_sitemap_txt": true,
     "duplicates": false,
-    "robots_sitemap": ["https://confenge.com.br/sitemap-index.xml"],
+    "robots_sitemap": [
+      "https://confenge.com.br/sitemap-index.xml"
+    ],
     "market_answer_in_any_child": false,
     "market_answer_in_sitemap_txt": false,
     "market_answer_indexable": false,
@@ -135,7 +137,10 @@
     },
     "POST /.netlify/functions/offer-checkout": {
       "http": 404,
-      "body": {"ok": false, "error": "feature_disabled"}
+      "body": {
+        "ok": false,
+        "error": "feature_disabled"
+      }
     }
   },
   "search_observation": {
@@ -176,10 +181,25 @@
     "reason": "No IndexNow POST. Graph loc set is 64 and equals origin/main (not a graph-divergence blocker). CLI is prepare-only (--send refused). allowlist send_default=false. No indexable URL is new or materially altered versus previous production 5d508123. Frozen #128 allowlist members and observe_only URLs are excluded."
   },
   "source_prs": {
-    "closed_superseded_by_168": [160, 161, 162, 163, 164, 165, 166, 167],
-    "merged_convergence": [168, 170],
-    "hold": [157]
+    "closed_superseded_by_168": [
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167
+    ],
+    "merged_convergence": [
+      168,
+      170
+    ],
+    "hold": [
+      157
+    ]
   },
   "commit_ref_equals_main": true,
-  "token_basis": "PARTIAL_WITH_EXACT_RESIDUALS: production SHA+graph+pages proven; #157 not INDEX v2; Warmbly v1 not DELIVERED; IndexNow not POSTed"
+  "token_basis": "PARTIAL_WITH_EXACT_RESIDUALS: production SHA+graph+pages proven; #157 not INDEX v2; Warmbly v1 not DELIVERED; IndexNow not POSTed",
+  "product_sha": "154b1d2a8ab254ad0213cdb2fdb9cb46cfcb094b"
 }
