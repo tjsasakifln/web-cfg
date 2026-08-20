@@ -12,29 +12,31 @@ Campaign report. Organic ranking is not claimed. No new public page family.
 
 CAMPAIGN: CONFENGE-WEB-PR-PORTFOLIO-TO-PRODUCTION-01  
 MAIN_SHA_BEFORE: `8ced783468a70ea8208398ec4202dc4b89b4d4fe`  
-INTEGRATION_SHA: `86758e2f0da215abfe406b503c4306d56a3b10fc` (updated after the integration commit)  
+INTEGRATION_SHA: `PENDING_COMMIT`  
+INTEGRATION_PR: #217  
 OPEN_PRS_BEFORE: 31  
 OPEN_PRS_AFTER: 14  
 ABSORBED: #178, #189, #194, #200, #207, #208, #211, #214, #215, #216  
 HELD: #174, #175, #190, #191, #192, #193, #196, #199, #201, #205, #206, #210, #213  
 REJECTED: #195, #197, #198, #202, #203, #204, #209, #212  
-PRODUCER: WAITING_WARMBLY_COMMERCIAL_EVENT_CAPABILITY  
-ASAAS_GOVERNANCE: WAITING_GOVERNANCE_AUTHORITY_MERGE  
+PRODUCER: WARMBLY_COMMERCIAL_EVENT_CAPABILITY_ANNOUNCED  
+PRODUCER_CANARY: SIGNED_CANARY_HELD_NO_HMAC_SECRET  
+ASAAS_GOVERNANCE: PINNED `e2b0498a68092c1bdbf64aa31854d652c07afdc0` `sha256:3ddf29b13971e8dcfcef2be7df6649fa7d8dd43d80a67c9f4bd4c484ccceed38`  
 ASAAS_MODE: disabled  
 PRODUCTION_CHECKOUT: false  
 PROVIDER_MAPPING_IDS: null  
 DEPLOY: NOT_AUTHORIZED  
 FINAL_VERDICT: WEB_PRODUCTION_CONVERGED_READY_FOR_ASAAS_MAPPING  
 
-Residuals `WAITING_WARMBLY_COMMERCIAL_EVENT_CAPABILITY` and `WAITING_GOVERNANCE_AUTHORITY_MERGE` are named, not `WEB_CONVERGENCE_BLOCKED_*`.
+Warmbly inbound health announces `confenge.commercial_event.v1`. Signed POST is held without the server HMAC secret. Governance PR #9 is merged and pinned; provider IDs remain null. Residuals are named, not `WEB_CONVERGENCE_BLOCKED_*`.
 
 ## Inventário
 
-Every then-open PR is classified as exactly one of the seven labels. Unique P0/P1 deltas landed on one branch from `8ced783468a7` in order: #178, then #189/#194/#200/#214/#216, then #211, then #208, then #215 (intent/SEO held), then #207 isolated. #193 is HOLD_FOR_EVIDENCE (no Node 22 + Lighthouse 13 + Netlify lockstep evidence).
+Every then-open PR is classified as exactly one of the seven labels. Unique P0/P1 deltas landed on one branch from `8ced783468a7` in order: #178, then #189/#194/#200/#214/#216, then #211, then #208, then #215 (intent/SEO held), then #207 isolated (query-first title that still names SINAPI). #193 is HOLD_FOR_EVIDENCE (no Node 22 + Lighthouse 13 + Netlify lockstep evidence). Live open set after this fetch is 14 (#217 + 13 held).
 
 | PR | TÍTULO | DESTINO | ISSUE OWNER | CI | RISCO | VISITOR IMPACT | ROLLBACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-
+| #217 | feat(release): converge P0/P1 PR portfolio for BOFU-preserving production | MERGE_AS_IS | CONFENGE-WEB-PR-PORTFOLIO-TO-PRODUCTION-01 | site-ci fix in flight; reviews required | medium | combined chrome + BOFU + checkout-prepare | revert PR #217; flags stay off |
 | #216 | fix(ui): drop the invalid inner WhatsApp SVG path | CHERRY_PICK_UNIQUE_DELTA | #187 | BLOCKED (reviews) | low | WhatsApp icon valid SVG | restore inner path only if needed |
 | #215 | feat(copy): replace internal strategy language with visitor jobs (#188) | CHERRY_PICK_UNIQUE_DELTA | #188 | CLEAN | low | visitor jobs instead of internal strategy | revert two content-lead sentences |
 | #214 | fix(a11y): raise pillar-evidence contrast above muted overview text | CHERRY_PICK_UNIQUE_DELTA | #186 | CLEAN | low | pillar-evidence readable on navy | revert descendant color rules |
@@ -75,8 +77,9 @@ Semantic outcome over commit preservation. Generated HTML was not mechanically s
 
 - `confenge.commercial_event.v1` persist-first HMAC producer in `netlify/functions/lib/commercial-event.cjs`.
 - Fail-closed if consumer omits the version. Checkout/callback cannot emit `payment_received`.
-- Flag `CONFENGE_COMMERCIAL_EVENT_ENABLED` default off.
-- Governance PR #9 still open → `WAITING_GOVERNANCE_AUTHORITY_MERGE`. Provider IDs remain null. No Asaas HTTP.
+- Health negotiation accepts `accepted_event_versions` (live Warmbly field) as well as `capabilities`.
+- Flag `CONFENGE_COMMERCIAL_EVENT_ENABLED` default off. Live health announces the version; signed canary held without HMAC secret.
+- Governance PR #9 merged at `e2b0498a68092c1bdbf64aa31854d652c07afdc0`, `AUTHORITY_HASH sha256:3ddf29b13971e8dcfcef2be7df6649fa7d8dd43d80a67c9f4bd4c484ccceed38`. Pin only; no second writable catalog. Provider IDs remain null. No Asaas HTTP.
 
 ## Rollback
 

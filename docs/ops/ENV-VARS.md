@@ -67,7 +67,7 @@ Nenhuma chave Asaas é lida ou armazenada.
 
 | Nome | Descrição |
 | --- | --- |
-| `CONFENGE_COMMERCIAL_EVENT_ENABLED` | `1` habilita POST HMAC. Default off. Sandbox/staging only until Warmbly announces `confenge.commercial_event.v1`. |
+| `CONFENGE_COMMERCIAL_EVENT_ENABLED` | `1` habilita POST HMAC. Default off. Sandbox/staging only. Consumer health must list `confenge.commercial_event.v1` (`accepted_event_versions` or `capabilities`) or producer HELD. |
 | `CONFENGE_COMMERCIAL_EVENT_WEBHOOK_URL` | Destino HTTPS (default: inbound URL). Path `/api/v1/webhooks/confenge/inbound`. |
 | `CONFENGE_COMMERCIAL_EVENT_WEBHOOK_SECRET` | Segredo HMAC server-side (default: inbound secret). Never in the browser. |
 | `CONFENGE_COMMERCIAL_EVENT_HEALTH_URL` | Health/capability GET. Consumer must list `confenge.commercial_event.v1` or producer HELD. |

@@ -23,6 +23,7 @@ def test_live_article_front_loads_query_not_sinapi():
     title = parse_title(html)
     assert title == CANONICAL_TITLE
     assert title.startswith("Desonerado e não desonerado")
+    assert "SINAPI" in title
     assert not title.startswith("SINAPI")
     report = evaluate_sinapi_snippet(html)
     assert report["ok"], report["fails"]
@@ -34,10 +35,22 @@ def test_live_article_front_loads_query_not_sinapi():
 def test_old_serp_title_fails_closed():
     html = SINAPI_PATH.read_text(encoding="utf-8")
     reverted = html.replace(
-        "Desonerado e não desonerado: o que o edital exige | CONFENGE",
+        CANONICAL_TITLE,
         "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
         1,
     )
     report = evaluate_sinapi_snippet(reverted)
     assert report["ok"] is False
     assert "title_front_loads_sinapi" in report["fails"]
+
+
+def test_title_that_omits_sinapi_fails_closed():
+    html = SINAPI_PATH.read_text(encoding="utf-8")
+    omitted = html.replace(
+        CANONICAL_TITLE,
+        "Desonerado e não desonerado: o que o edital exige | CONFENGE",
+        1,
+    )
+    report = evaluate_sinapi_snippet(omitted)
+    assert report["ok"] is False
+    assert "title_omits_sinapi" in report["fails"]

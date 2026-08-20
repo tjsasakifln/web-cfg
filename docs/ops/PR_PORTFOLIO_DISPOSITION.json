@@ -7,13 +7,14 @@
     "trust",
     "automation"
   ],
-  "inventory_at": "2026-08-20T18:00:00-03:00",
+  "inventory_at": "2026-08-20T18:35:00-03:00",
   "timezone": "America/Sao_Paulo",
   "MAIN_SHA_BEFORE": "8ced783468a70ea8208398ec4202dc4b89b4d4fe",
-  "INTEGRATION_SHA": "86758e2f0da215abfe406b503c4306d56a3b10fc",
+  "INTEGRATION_SHA": "PENDING_COMMIT",
   "OPEN_PRS_BEFORE": 31,
   "OPEN_PRS_AFTER": 14,
   "inventoried_pr_numbers": [
+    217,
     216,
     215,
     214,
@@ -97,6 +98,25 @@
     216
   ],
   "prs": [
+    {
+      "number": 217,
+      "title": "feat(release): converge P0/P1 PR portfolio for BOFU-preserving production",
+      "destination": "MERGE_AS_IS",
+      "issue_owner": "CONFENGE-WEB-PR-PORTFOLIO-TO-PRODUCTION-01",
+      "paths": [
+        "netlify/functions/lib/commercial-event.cjs",
+        "data/offers/governance-authority-pin.json",
+        "styles.css",
+        "index.html",
+        "scripts/organic/sinapi_snippet.py",
+        "docs/ops/PR_PORTFOLIO_DISPOSITION.json"
+      ],
+      "semantic_overlap": "single integration line absorbing unique P0/P1 deltas; not a second release PR",
+      "ci": "site-ci fix in flight; reviews still required",
+      "risk": "medium",
+      "visitor_impact": "combined chrome + BOFU + checkout-prepare on one line",
+      "rollback": "revert PR #217; flags stay ASAAS_MODE=disabled"
+    },
     {
       "number": 216,
       "title": "fix(ui): drop the invalid inner WhatsApp SVG path",
@@ -556,8 +576,8 @@
       "rollback": "n/a"
     }
   ],
-  "producer_status": "WAITING_WARMBLY_COMMERCIAL_EVENT_CAPABILITY",
-  "asaas_governance_status": "WAITING_GOVERNANCE_AUTHORITY_MERGE",
+  "producer_status": "WARMBLY_COMMERCIAL_EVENT_CAPABILITY_ANNOUNCED",
+  "asaas_governance_status": "PINNED",
   "asaas_mode": "disabled",
   "production_checkout_enabled": false,
   "provider_mapping_ids": "null",
@@ -568,5 +588,22 @@
   },
   "DEPLOY": "NOT_AUTHORIZED",
   "verdict": "WEB_PRODUCTION_CONVERGED_READY_FOR_ASAAS_MAPPING",
-  "new_public_page_family": false
+  "new_public_page_family": false,
+  "integration_pr": 217,
+  "producer_canary": "SIGNED_CANARY_HELD_NO_HMAC_SECRET",
+  "governance_pin": {
+    "repo": "tjsasakifln/Governance",
+    "pr": 9,
+    "git_sha": "e2b0498a68092c1bdbf64aa31854d652c07afdc0",
+    "authority_hash": "sha256:3ddf29b13971e8dcfcef2be7df6649fa7d8dd43d80a67c9f4bd4c484ccceed38",
+    "writable_catalog_copied": false
+  },
+  "warmbly_health": {
+    "url": "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound/health",
+    "accepted_event_versions": [
+      "confenge.commercial_event.v1",
+      "confenge.search_observation.v1"
+    ],
+    "auto_send_enabled": false
+  }
 }

@@ -133,6 +133,7 @@ export const SUITE_GRAPH = Object.freeze({
       "netlify/functions/lib/lead-store.cjs",
       "scripts/offers/events.cjs",
       "scripts/offers/flags.cjs",
+      "scripts/offers/commercial_event_canary.mjs",
       "data/offers/flags.json",
     ],
     artifacts: [],
@@ -491,7 +492,7 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: [],
   },
   "test:conversion": {
-    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "tests/offers/", "scripts/offers/", "data/offers/"],
+    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
     artifacts: [],
     surfaces: ["/diagnostico-b2g-360/", "/diagnostico-b2g-expansao/", "/diretoria-b2g/"],
   },

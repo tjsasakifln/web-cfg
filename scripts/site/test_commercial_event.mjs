@@ -182,6 +182,40 @@ const baseInput = {
   const rx = await startReceiver((req, res, raw) => {
     if (req.url.endsWith("/health")) {
       res.writeHead(200, { "content-type": "application/json" });
+      res.end(
+        JSON.stringify({
+          accepted_event_versions: ["confenge.commercial_event.v1", "confenge.search_observation.v1"],
+          auto_send_enabled: false,
+          dispatch_attempted: false,
+          reasons: [],
+          status: "READY",
+        }),
+      );
+      return;
+    }
+    const okSig = verifySig(SECRET, req.headers["x-warmbly-signature"], raw);
+    seen.push({ okSig });
+    const body = JSON.parse(raw || "{}");
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ version: body.version, schema: body.schema, event_id: body.event_id }));
+  });
+  const ce = loadMod();
+  const out = await ce.produce(
+    { ...baseInput, event_id: "ce-accepted-event-versions" },
+    { env: envFor(rx.inbound, rx.health) },
+  );
+  if (!out.ok || out.record.outbox.status !== "DELIVERED") {
+    fail("accepted_event_versions_announced", out.record && out.record.outbox);
+  } else if (!seen.length || !seen[0].okSig) fail("accepted_event_versions_hmac", seen);
+  else pass("accepted_event_versions_announced");
+  rx.server.close();
+}
+
+{
+  const seen = [];
+  const rx = await startReceiver((req, res, raw) => {
+    if (req.url.endsWith("/health")) {
+      res.writeHead(200, { "content-type": "application/json" });
       res.end(JSON.stringify({ capabilities: ["confenge.inbound.v1", "confenge.commercial_event.v1"] }));
       return;
     }

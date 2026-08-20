@@ -47,6 +47,13 @@ assert("flag_checkout_off", defaults.production_checkout_enabled === false, defa
 assert("flag_webhook_off", defaults.production_webhook_enabled === false, defaults);
 assert("flag_money_off", defaults.real_money_mutation_enabled === false, defaults);
 assert("flag_asaas_not_prod", defaults.ASAAS_MODE !== "production", defaults.ASAAS_MODE);
+assert("flag_asaas_mode_disabled", defaults.ASAAS_MODE === "disabled", defaults.ASAAS_MODE);
+
+const governancePin = require(path.join(root, "scripts/offers/governance-pin.cjs"));
+const pinCheck = governancePin.validatePin();
+assert("governance_pin", pinCheck.ok, pinCheck.fails);
+const pinDrift = governancePin.validateDrift();
+assert("governance_amount_mapping_drift", pinDrift.ok, pinDrift.fails);
 
 const snapshot = adapter.loadCatalogSnapshot();
 const mapping = adapter.loadProviderMapping();

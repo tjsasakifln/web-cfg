@@ -242,6 +242,7 @@ async function readCapability(env = process.env) {
     const versions = []
       .concat(data.capabilities || [])
       .concat(data.accepted_versions || [])
+      .concat(data.accepted_event_versions || [])
       .concat(data.versions || [])
       .map((v) => String(v));
     const present = versions.includes(VERSION);

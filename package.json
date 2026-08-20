@@ -27,6 +27,7 @@
     "test:inbound-handoff": "node scripts/site/test_inbound_handoff.mjs",
     "test:search-observation": "node scripts/site/test_search_observation.mjs",
     "test:commercial-event": "node scripts/site/test_commercial_event.mjs",
+    "canary:commercial-event": "node scripts/offers/commercial_event_canary.mjs",
     "test:checkout-negatives": "node tests/offers/test_checkout_negatives.mjs",
     "test:bofu-dominance": "python3 -m pytest tests/bofu_dominance -q",
     "test:local-entity": "python3 -m pytest tests/local_entity -q",
