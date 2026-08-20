@@ -32,9 +32,15 @@ from scripts.pseo.score import (# noqa: E402
     resolve_related_urls,
 )
 from scripts.pseo.similarity import find_similar_pairs # noqa: E402
+from scripts.site.scrub_em_dashes import scrub_html # noqa: E402
 
 SITE = "https://confenge.com.br"
 SIM_THRESHOLD = 0.88
+
+
+def write_public_html(path: Path, html: str) -> None:
+    """Write visitor HTML after the shipped em-dash scrubber."""
+    path.write_text(scrub_html(html), encoding="utf-8")
 
 # Hand-authored surfaces under inteligencia/radar. pSEO generation wipes other
 # index.html files in those trees and rewrites them from the snapshot.
@@ -547,7 +553,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
 )
         out = url_to_path(path)
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(html, encoding="utf-8")
+        write_public_html(out, html)
         written.append(str(out.relative_to(ROOT)))
     return written
 
@@ -638,7 +644,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
             raise
         if not dry_run:
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(html, encoding="utf-8")
+            write_public_html(path, html)
         written_pages.append(
             {
                 "url": c.url,

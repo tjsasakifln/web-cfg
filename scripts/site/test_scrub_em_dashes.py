@@ -130,6 +130,28 @@ def test_check_cli_fails_on_prose_em_dash():
         path.unlink(missing_ok=True)
 
 
+def test_pseo_write_public_html_scrubs_prose_em_dash():
+    """pseo:audit rebuilds inteligencia HTML; writes must go through the scrubber."""
+    from scripts.pseo.build import write_public_html
+
+    path = ROOT / "_g03_pseo_emdash_probe" / "index.html"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        write_public_html(
+            path,
+            "<p>insumos e logística — cenário em que reequilíbrio</p>\n",
+        )
+        out = path.read_text(encoding="utf-8")
+        assert EM not in out
+        assert "logística, cenário" in out or "logística, cenário" in out.replace("  ", " ")
+    finally:
+        path.unlink(missing_ok=True)
+        try:
+            path.parent.rmdir()
+        except OSError:
+            pass
+
+
 def test_editorial_write_html_scrubs_prose_em_dash():
     """editorial:build must not reintroduce U+2014; CI runs it before test:copy."""
     from scripts.editorial.build import write_html
@@ -182,6 +204,7 @@ if __name__ == "__main__":
         test_html_protects_source_anchors,
         test_placeholder_nd,
         test_html_newlines_and_indent_preserved,
+        test_pseo_write_public_html_scrubs_prose_em_dash,
         test_editorial_write_html_scrubs_prose_em_dash,
         test_check_cli_fails_on_prose_em_dash,
         test_check_cli_does_not_mutate_tree,
