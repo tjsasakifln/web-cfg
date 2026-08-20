@@ -13,15 +13,19 @@ from scripts.bofu_dominance.core.gsc import (
 from tests.bofu_dominance.core.helpers import build_status
 
 
-def test_committed_main_last_sync_still_missing_credentials_not_zero():
+def test_gitignored_last_sync_blocked_is_not_zero():
     sync = load_last_sync()
     assert sync.get("blocked") is True
     assert sync.get("error") in {"missing_credentials", "last_sync_missing", "credential_failure"}
     assert missing_credentials_is_not_zero(sync) is True
-    # Overlay/job proof must not rewrite the committed main file's meaning.
+    # A local/gitignored last_sync file is not the committed live overlay.
     live_from_file = gsc_live_record(sync, overlay={})
     assert live_from_file["gsc_live_state"] == "BLOCKED_CREDENTIAL_FAILURE"
     assert live_from_file["recommendation"] == "NEEDS_EXTERNAL_ACTION"
+    live = gsc_live_record()
+    assert live["gsc_live_state"] == "LIVE_JOB_OK"
+    assert live["committed_main_last_sync"] == "gitignored_not_the_live_overlay"
+    assert "missing_credentials file" not in live["note"]
 
 
 def test_actions_job_overlay_is_live_job_ok_not_historical():

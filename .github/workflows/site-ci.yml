@@ -37,6 +37,7 @@ jobs:
         run: npm run test:workflow-gates
       - name: Unit and brand/copy/design gates
         run: |
+          npm run discovery:test
           npm run editorial:test
           npm run editorial:build
           npm run test:inbound-gates

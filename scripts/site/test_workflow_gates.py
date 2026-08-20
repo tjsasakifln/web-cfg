@@ -116,6 +116,7 @@ def test_site_ci_shape():
         "npm run organic:test",
         "npm run test:diagnose-margin",
         "npm run editorial:test",
+        "npm run discovery:test",
     ):
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")

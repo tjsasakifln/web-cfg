@@ -70,14 +70,16 @@ def gsc_live_record(
             "search_analytics_limitation": overlay_doc.get(
                 "search_analytics_limitation"
             ),
-            "committed_main_last_sync": "still_missing_credentials_file_not_live_rows",
+            "committed_main_last_sync": "gitignored_not_the_live_overlay",
             "note": (
-                "GitHub Actions gsc-sync 32322344062 proved credentials "
-                "(ok, 95 top-rows, as_of 2026-08-17). Committed "
-                "data/revops/gsc/last_sync.json on main is still the old "
-                "missing_credentials file. Historical CSV and SERP samples "
-                "are not this live pull. Top-rows-only, date gaps, mixed "
-                "device and non-BR geo do not authorize TOP* or HTML."
+                "Committed live mechanical state is overlay LIVE_JOB_OK "
+                "(data/bofu-dominance/core/gsc-live-overlay.v1.json; as_of "
+                "2026-08-17; core_ready_for_product_decisions=false). "
+                "data/revops/gsc/last_sync.json is gitignored and is not a "
+                "committed missing_credentials source. PR #159 freeze-head "
+                "historically recorded credential_failure. Historical CSV and "
+                "SERP samples are not this live pull. Top-rows-only, date "
+                "gaps, mixed device and non-BR geo do not authorize TOP* or HTML."
             ),
             "pr_159_role": "observability_candidate_not_merged_to_main",
             "query_text_redacted": True,
