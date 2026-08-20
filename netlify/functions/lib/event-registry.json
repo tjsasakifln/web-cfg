@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "source": "CONFENGE_WEB",
   "pii_policy": "aggregate_allowlist_empty",
   "aggregate_pii_allowlist": [],
@@ -13,6 +13,12 @@
     "cta_position",
     "correlation_id",
     "idempotency_key",
+    "event_id",
+    "source_path",
+    "source_asset_id",
+    "source_asset_family",
+    "destination_path",
+    "destination_service_id",
     "consent",
     "pii_policy"
   ],
@@ -181,18 +187,18 @@
     "content_to_service": {
       "layer": "engagement",
       "owner": "web-cfg",
-      "schema_version": "1.0.0",
+      "schema_version": "1.1.0",
       "producers": ["js/modules/nav.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Navigation from content to a service/offer URL. Engagement."
+      "semantic": "One physical click from an editorial/data/tool origin to a canonical service/offer. Carries source_path, source_asset_id, source_asset_family, destination_path, destination_service_id, cta_id, route_family, event_id. Engagement only; never a lead, qualified lead, pipeline, or won/lost. Unknown dest is UNKNOWN_SERVICE."
     },
     "outbound_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": [],
+      "producers": ["js/modules/nav.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Reserved outbound link click. No current producer."
+      "semantic": "Click on an external http(s) or tel: destination. Not a content_to_service transition."
     },
     "web_vital": {
       "layer": "engagement",
@@ -696,5 +702,49 @@
     "diagnostic_cta_click": "diagnostic",
     "critical_decision_cta_click": "critical_decision",
     "pseo_cta_click": "pseo"
+  },
+  "source_to_service": {
+    "schema_version": "1.1.0",
+    "unknown_service": "UNKNOWN_SERVICE",
+    "destinations": {
+      "/auditoria-orcamento-licitacao/": "auditoria-orcamento-licitacao",
+      "/medicoes-glosas-obras-publicas/": "medicoes-glosas-obras-publicas",
+      "/aditivos-obras-publicas/": "aditivos-obras-publicas",
+      "/reequilibrio-obras-publicas/": "reequilibrio-obras-publicas",
+      "/atrasos-prorrogacao-obras-publicas/": "atrasos-prorrogacao-obras-publicas",
+      "/defesa-tecnica-contratos-publicos/": "defesa-tecnica-contratos-publicos",
+      "/diagnostico-pre-licitacao/": "diagnostico-pre-licitacao",
+      "/acompanhamento-contratos-obras/": "acompanhamento-contratos-obras",
+      "/diretoria-b2g/": "diretoria-b2g",
+      "/diagnostico-b2g-360/": "diagnostico-b2g-360",
+      "/bid-room-licitacoes-obras/": "bid-room-licitacoes-obras",
+      "/defesa-margem-contratos-publicos/": "defesa-margem-contratos-publicos",
+      "/ferramentas/diagnostico-defesa-margem/": "diagnostico-defesa-margem"
+    },
+    "origin_prefixes": {
+      "/conteudos/": "editorial",
+      "/lei-14133-obras/": "editorial",
+      "/jurisprudencia-contratos-obras/": "editorial",
+      "/guias-contratos-obras/": "editorial",
+      "/analises-contratos-publicos/": "editorial",
+      "/inteligencia/": "data",
+      "/radar/": "data",
+      "/ferramentas/": "tool"
+    },
+    "chrome_prefixes": [
+      "/especialista/",
+      "/politica-editorial/",
+      "/privacidade/",
+      "/termos-de-uso/",
+      "/correcoes/",
+      "/uso-de-ia/",
+      "/conflitos/",
+      "/imprensa/",
+      "/casos/",
+      "/nurture/",
+      "/ops/",
+      "/comercial/",
+      "/obrigado"
+    ]
   }
 }

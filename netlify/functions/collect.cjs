@@ -7,7 +7,10 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const { corsHeaders, clientIp, safeLog, ALLOWED_ORIGINS } = require("./lib/lead-core.cjs");
-const { admitEvent, scrubProps } = require("./lib/event-contract.cjs");
+const { admitEvent, admitBatch, scrubProps } = require("./lib/event-contract.cjs");
+
+const seenEventIds = new Set();
+const MAX_SEEN_EVENT_IDS = 4000;
 
 const MAX_EVENTS = 25;
 const MAX_BODY = 16 * 1024;
@@ -131,15 +134,23 @@ exports.handler = async (event) => {
 
   const accepted = [];
   const rejected = [];
-  for (const ev of events) {
-    const admitted = admitEvent(ev);
-    if (!admitted.ok) {
-      rejected.push({
-        event: String(ev && (ev.event || ev.name) || "").slice(0, 64),
-        reason: admitted.reason || "rejected",
-      });
-      continue;
+  const batch = admitBatch(events, seenEventIds);
+  if (seenEventIds.size > MAX_SEEN_EVENT_IDS) {
+    const extra = seenEventIds.size - MAX_SEEN_EVENT_IDS;
+    let dropped = 0;
+    for (const id of seenEventIds) {
+      if (dropped >= extra) break;
+      seenEventIds.delete(id);
+      dropped += 1;
     }
+  }
+  for (const row of batch.rejected) {
+    rejected.push({
+      event: String((row && row.event) || "").slice(0, 64),
+      reason: row.reason || "rejected",
+    });
+  }
+  for (const admitted of batch.admitted) {
     const safe = {
       event: admitted.event.event,
       schema_version: admitted.event.schema_version,
@@ -161,6 +172,7 @@ exports.handler = async (event) => {
       alias_from: safe.alias_from,
       correlation_id: safe.props && safe.props.correlation_id,
       idempotency_key: safe.props && safe.props.idempotency_key,
+      event_id: safe.props && safe.props.event_id,
     });
     accepted.push(safe);
 

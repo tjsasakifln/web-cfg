@@ -6,7 +6,7 @@
 
   /** Analytics bus — no PII. First-party collector + optional gtag/plausible. */
   // EVENT_CONTRACT_CLIENT_START — keep in lockstep with netlify/functions/lib/event-registry.json
-  const EVENT_CONTRACT_SCHEMA_VERSION = '1.0.0';
+  const EVENT_CONTRACT_SCHEMA_VERSION = '1.1.0';
   const EVENT_SOURCE = 'CONFENGE_WEB';
   const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
   const AGGREGATE_PII_ALLOWLIST = [];
@@ -16,6 +16,37 @@
     'file', 'full_name', 'mensagem', 'message', 'message_body', 'name',
     'nome', 'phone', 'q', 'query', 'search_query', 'tel', 'telefone', 'whatsapp',
   ]);
+  const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
+  const CANONICAL_DESTINATIONS = {
+    '/auditoria-orcamento-licitacao/': 'auditoria-orcamento-licitacao',
+    '/medicoes-glosas-obras-publicas/': 'medicoes-glosas-obras-publicas',
+    '/aditivos-obras-publicas/': 'aditivos-obras-publicas',
+    '/reequilibrio-obras-publicas/': 'reequilibrio-obras-publicas',
+    '/atrasos-prorrogacao-obras-publicas/': 'atrasos-prorrogacao-obras-publicas',
+    '/defesa-tecnica-contratos-publicos/': 'defesa-tecnica-contratos-publicos',
+    '/diagnostico-pre-licitacao/': 'diagnostico-pre-licitacao',
+    '/acompanhamento-contratos-obras/': 'acompanhamento-contratos-obras',
+    '/diretoria-b2g/': 'diretoria-b2g',
+    '/diagnostico-b2g-360/': 'diagnostico-b2g-360',
+    '/bid-room-licitacoes-obras/': 'bid-room-licitacoes-obras',
+    '/defesa-margem-contratos-publicos/': 'defesa-margem-contratos-publicos',
+    '/ferramentas/diagnostico-defesa-margem/': 'diagnostico-defesa-margem',
+  };
+  const ORIGIN_PREFIXES = {
+    '/conteudos/': 'editorial',
+    '/lei-14133-obras/': 'editorial',
+    '/jurisprudencia-contratos-obras/': 'editorial',
+    '/guias-contratos-obras/': 'editorial',
+    '/analises-contratos-publicos/': 'editorial',
+    '/inteligencia/': 'data',
+    '/radar/': 'data',
+    '/ferramentas/': 'tool',
+  };
+  const CHROME_PREFIXES = [
+    '/especialista/', '/politica-editorial/', '/privacidade/', '/termos-de-uso/',
+    '/correcoes/', '/uso-de-ia/', '/conflitos/', '/imprensa/', '/casos/',
+    '/nurture/', '/ops/', '/comercial/', '/obrigado',
+  ];
   const EVENT_ALIASES = {
     qualified_scroll: 'scroll_depth',
     content_to_service_click: 'content_to_service',
@@ -63,7 +94,7 @@
   };
   const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1 };
   const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
-  const ENVELOPE_ID_KEYS = { correlation_id: 1, idempotency_key: 1 };
+  const ENVELOPE_ID_KEYS = { correlation_id: 1, idempotency_key: 1, event_id: 1 };
   // EVENT_CONTRACT_CLIENT_END
   window.__CONFENGE_EVENT_CONTRACT = {
     schema_version: EVENT_CONTRACT_SCHEMA_VERSION,
@@ -74,9 +105,13 @@
     observed_only: OBSERVED_ONLY_EVENTS,
     aliases: EVENT_ALIASES,
     retired: RETIRED_EVENTS,
+    unknown_service: UNKNOWN_SERVICE,
+    destinations: CANONICAL_DESTINATIONS,
+    origin_prefixes: ORIGIN_PREFIXES,
   };
   const analyticsQueue = [];
   let analyticsFlushTimer = null;
+  const trackedEventIds = new Set();
   const getSessionId = () => {
     try {
       let sid = sessionStorage.getItem('confenge_sid');
@@ -172,6 +207,16 @@
         safe.cta_kind = EVENT_CTA_KIND[resolved.original];
       }
       if (resolved.original !== resolved.canonical) safe.alias_from = resolved.original;
+      if (safe.event_id) {
+        const eid = String(safe.event_id).slice(0, 80);
+        if (trackedEventIds.has(eid)) return;
+        trackedEventIds.add(eid);
+        if (trackedEventIds.size > 400) {
+          const first = trackedEventIds.values().next().value;
+          trackedEventIds.delete(first);
+        }
+        safe.event_id = eid;
+      }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: resolved.canonical, ...safe });
       if (typeof window.gtag === 'function') {
@@ -272,5 +317,108 @@
     if (p.includes('/inteligencia') || p.includes('/radar')) return 'pseo';
     return 'other';
   };
+
+  const canonicalizePath = (value) => {
+    let s = String(value || '').trim();
+    if (!s) return '';
+    s = s.replace(/^https?:\/\/[^/?#]+/i, '');
+    s = s.replace(/^\/\/[^/?#]+/, '');
+    const cut = s.search(/[?#]/);
+    if (cut !== -1) s = s.slice(0, cut);
+    if (!s.startsWith('/')) s = `/${s}`;
+    s = s.replace(/\/{2,}/g, '/');
+    if (s.length > 1 && !s.endsWith('/')) s += '/';
+    return s.slice(0, 180);
+  };
+  const hostFromHref = (href) => {
+    const raw = String(href || '').trim();
+    const m = raw.match(/^https?:\/\/([^/?#]+)/i) || raw.match(/^\/\/([^/?#]+)/);
+    return m ? String(m[1]).toLowerCase().replace(/:\d+$/, '') : '';
+  };
+  const isConfengeHost = (host) => {
+    if (!host) return true;
+    const h = String(host).toLowerCase();
+    return h === 'confenge.com.br' || h === 'www.confenge.com.br' || h === 'localhost' || h === '127.0.0.1';
+  };
+  const originFamilyFromPath = (path) => {
+    const p = canonicalizePath(path);
+    const entries = Object.keys(ORIGIN_PREFIXES).sort((a, b) => b.length - a.length);
+    for (let i = 0; i < entries.length; i += 1) {
+      const prefix = entries[i];
+      if (p === prefix || p.startsWith(prefix)) return ORIGIN_PREFIXES[prefix];
+    }
+    return null;
+  };
+  const isChromePath = (path) => {
+    const p = canonicalizePath(path);
+    if (!p || p === '/') return true;
+    for (let i = 0; i < CHROME_PREFIXES.length; i += 1) {
+      const prefix = CHROME_PREFIXES[i];
+      if (p === prefix || p.startsWith(prefix)) return true;
+    }
+    return false;
+  };
+  const assetIdFromPath = (path) => {
+    const segs = canonicalizePath(path).split('/').filter(Boolean);
+    return segs.length ? segs[segs.length - 1].slice(0, 80) : '';
+  };
+  const canonicalizeDestination = (href) => {
+    const raw = String(href || '').trim();
+    if (!raw) return { kind: 'empty', path: '' };
+    const lower = raw.toLowerCase();
+    if (lower.startsWith('mailto:')) return { kind: 'email', path: '' };
+    if (lower.startsWith('tel:') || lower.startsWith('sms:')) return { kind: 'tel', path: '' };
+    if (/wa\.me|whatsapp\.com/i.test(raw)) return { kind: 'whatsapp', path: '' };
+    const host = hostFromHref(raw);
+    if (host && !isConfengeHost(host)) return { kind: 'external', path: '' };
+    const path = canonicalizePath(raw.startsWith('/') || /^https?:/i.test(raw) || raw.startsWith('//') ? raw : `/${raw}`);
+    if (!path) return { kind: 'empty', path: '' };
+    if (looksLikePiiValue(path, 'destination_path')) return { kind: 'pii', path: '' };
+    return { kind: 'internal', path };
+  };
+  const classifyTransition = (input) => {
+    const href = input && input.href != null ? String(input.href) : '';
+    const originPath = canonicalizePath((input && (input.origin_path || input.originPath)) || '');
+    const attrs = (input && (input.attributes || input.attrs)) || {};
+    const family = originFamilyFromPath(originPath);
+    const dest = canonicalizeDestination(href);
+    if (dest.kind === 'whatsapp') return { kind: 'whatsapp', event: 'whatsapp_click' };
+    if (dest.kind === 'email') return { kind: 'email', event: 'email_click' };
+    if (dest.kind === 'tel' || dest.kind === 'external') {
+      return { kind: dest.kind, event: 'outbound_click' };
+    }
+    if (dest.kind === 'pii' || dest.kind === 'empty') return { kind: dest.kind, event: null };
+    if (/#contato/.test(href) || /^\/\?tema=/.test(href)) return { kind: 'contact', event: 'cta_click' };
+    if (!family) return { kind: 'not_transition', event: null, origin_family: null, origin_path: originPath };
+    const knownId = Object.prototype.hasOwnProperty.call(CANONICAL_DESTINATIONS, dest.path)
+      ? CANONICAL_DESTINATIONS[dest.path]
+      : null;
+    const destFamily = originFamilyFromPath(dest.path);
+    if (!knownId && (destFamily || isChromePath(dest.path))) {
+      return { kind: 'not_transition', event: null, origin_family: family, origin_path: originPath };
+    }
+    return {
+      kind: 'transition',
+      event: 'content_to_service',
+      origin_family: family,
+      origin_path: originPath,
+      source_path: originPath,
+      source_asset_id: String(attrs.source_asset_id || attrs.asset_id || '').slice(0, 80) || assetIdFromPath(originPath),
+      source_asset_family: String(attrs.source_asset_family || attrs.asset_family || '').slice(0, 80) || family,
+      destination_path: dest.path,
+      destination_service_id: knownId || UNKNOWN_SERVICE,
+      cta_id: String(attrs.cta_id || '').slice(0, 80) || 'unspecified',
+      route_family: String(attrs.route_family || '').slice(0, 80) || 'unspecified',
+    };
+  };
+  const makeEventId = () => {
+    const sid = getSessionId().replace(/[^a-z0-9]/gi, '').slice(0, 8) || 'anon';
+    return `e-${sid}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  };
+
+  window.__CONFENGE_EVENT_CONTRACT.canonicalizeDestination = canonicalizeDestination;
+  window.__CONFENGE_EVENT_CONTRACT.classifyTransition = classifyTransition;
+  window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
+  window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
 
   const init = () => {
