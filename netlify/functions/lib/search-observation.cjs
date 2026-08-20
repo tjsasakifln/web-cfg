@@ -16,6 +16,12 @@ const {
   STATUS,
 } = require("./inbound-handoff.cjs");
 const { safeLog } = require("./lead-core.cjs");
+const {
+  FileStore,
+  MemoryStore,
+  NetlifyBlobsStore,
+  createStore,
+} = require("./lead-store.cjs");
 
 const VERSION = "confenge.search_observation.v1";
 const QUERY_CLASSES = Object.freeze([
@@ -151,38 +157,60 @@ function stableBody(payload) {
   return JSON.stringify(payload);
 }
 
-function storeDir(env = process.env) {
-  return env.LEAD_STORE_DIR ? path.join(env.LEAD_STORE_DIR, "search-observation") : null;
+const BLOBS_PREFIX = "search-obs/";
+let _obsMemory = null;
+
+function observationMemory() {
+  if (!_obsMemory) _obsMemory = new MemoryStore();
+  return _obsMemory;
 }
 
-function recordPath(dir, eventId) {
-  return path.join(dir, `${eventId}.json`);
+function asStored(record) {
+  const id = record && (record.event_id || record.lead_id);
+  if (!record || !id) return record;
+  return { ...record, lead_id: id };
 }
 
-async function persistRecord(record, env = process.env) {
-  const dir = storeDir(env);
-  if (!dir) {
-    return { ok: false, error: "store_unavailable" };
+async function createObservationStore(env = process.env) {
+  if (env.LEAD_STORE_DIR) {
+    return new FileStore(path.join(env.LEAD_STORE_DIR, "search-observation"));
   }
-  fs.mkdirSync(dir, { recursive: true });
-  const dest = recordPath(dir, record.event_id);
-  if (fs.existsSync(dest)) {
-    const existing = JSON.parse(fs.readFileSync(dest, "utf8"));
-    return { ok: true, record: existing, replay: true };
+  if (String(env.LEAD_STORE || "").toLowerCase() === "memory") {
+    return observationMemory();
   }
-  fs.writeFileSync(dest, JSON.stringify(record, null, 2) + "\n", "utf8");
-  return { ok: true, record, replay: false };
+  const inner = await createStore();
+  if (!inner) return null;
+  if (inner instanceof NetlifyBlobsStore) {
+    return new NetlifyBlobsStore(inner.store, { prefix: BLOBS_PREFIX });
+  }
+  if (inner instanceof FileStore) {
+    return new FileStore(path.join(inner.dir, "search-observation"));
+  }
+  if (inner.ephemeral) return observationMemory();
+  return null;
 }
 
-async function updateRecord(eventId, patch, env = process.env) {
-  const dir = storeDir(env);
-  if (!dir) return null;
-  const dest = recordPath(dir, eventId);
-  if (!fs.existsSync(dest)) return null;
-  const cur = JSON.parse(fs.readFileSync(dest, "utf8"));
-  const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
-  fs.writeFileSync(dest, JSON.stringify(next, null, 2) + "\n", "utf8");
-  return next;
+async function persistRecord(record, env = process.env, store = null) {
+  const obsStore = store || (await createObservationStore(env));
+  if (!obsStore) return { ok: false, error: "store_unavailable" };
+  const stored = asStored(record);
+  const existing = await obsStore.get(stored.lead_id);
+  if (existing) return { ok: true, record: existing, replay: true };
+  try {
+    await obsStore.put(stored, { onlyIfNew: true });
+  } catch (err) {
+    if (err && err.code === "ALREADY_EXISTS") {
+      return { ok: true, record: err.existing || existing || stored, replay: true };
+    }
+    return { ok: false, error: "store_write_failed" };
+  }
+  return { ok: true, record: stored, replay: false };
+}
+
+async function updateRecord(eventId, patch, env = process.env, store = null) {
+  const obsStore = store || (await createObservationStore(env));
+  if (!obsStore) return null;
+  return obsStore.update(eventId, patch);
 }
 
 function healthUrlFrom(cfg, env = process.env) {
@@ -330,7 +358,7 @@ async function postObservation(record, { now = new Date(), env = process.env } =
   }
 }
 
-async function produce(input = {}, { env = process.env, now = new Date() } = {}) {
+async function produce(input = {}, { env = process.env, now = new Date(), store = null } = {}) {
   const built = buildPayload(input);
   if (!built.ok) return built;
   const destination = clampText(input.destination || input.asset_id, 120);
@@ -350,7 +378,7 @@ async function produce(input = {}, { env = process.env, now = new Date() } = {})
       last_error: null,
     },
   };
-  const persisted = await persistRecord(record, env);
+  const persisted = await persistRecord(record, env, store);
   if (!persisted.ok) return persisted;
   if (persisted.replay) {
     return { ok: true, record: persisted.record, replay: true };
@@ -367,6 +395,7 @@ async function produce(input = {}, { env = process.env, now = new Date() } = {})
         },
       },
       env,
+      store,
     );
     return { ok: true, record: held || persisted.record, synthetic: true };
   }
@@ -380,8 +409,168 @@ async function produce(input = {}, { env = process.env, now = new Date() } = {})
     latency_ms: result.latency_ms,
     echoed: result.echoed,
   };
-  const updated = await updateRecord(record.event_id, { outbox: nextOutbox }, env);
+  const updated = await updateRecord(record.event_id, { outbox: nextOutbox }, env, store);
   return { ok: true, record: updated || { ...persisted.record, outbox: nextOutbox } };
+}
+
+function windowStartFromEnd(endIso) {
+  const end = clampText(endIso, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(end)) return null;
+  const d = new Date(`${end}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 27);
+  return d.toISOString().slice(0, 10);
+}
+
+function overlayToInput(overlay = {}) {
+  const asOf = clampText(overlay.as_of || overlay.max_date, 32);
+  const end = clampText(overlay.max_date || overlay.as_of, 32) || asOf || null;
+  const start = clampText(overlay.window && overlay.window.start, 32) || windowStartFromEnd(end);
+  const limitation = clampText(
+    overlay.search_analytics_limitation ||
+      (overlay.coverage && overlay.coverage.limitation) ||
+      "Search Analytics may return top rows only. Path rows are not unique-query totals. Absence is not zero.",
+    240,
+  );
+  const input = {
+    event_id: clampText(`so-${asOf || "unknown"}-28d-unknown`, 80),
+    window: { label: "28d", start, end },
+    query_class: "unknown",
+    counts: {
+      impressions: null,
+      clicks: null,
+      sessions: null,
+      engaged: null,
+      leads: null,
+      pipeline: null,
+    },
+    coverage: {
+      complete: false,
+      limitation,
+    },
+    freshness: {
+      as_of: asOf || null,
+      class: overlay.core_ready_for_product_decisions ? "LIVE" : "LIVE_TOP_ROWS_ONLY",
+    },
+    synthetic: Boolean(overlay.synthetic),
+  };
+  const forbidden = hasForbiddenField(input);
+  if (forbidden) return { ok: false, error: "payload_contains_forbidden_field", field: forbidden };
+  return { ok: true, input };
+}
+
+function loadShippedOverlay() {
+  const candidates = [
+    path.join(__dirname, "..", "..", "..", "data", "bofu-dominance", "core", "gsc-live-overlay.v1.json"),
+    path.join(process.cwd(), "data", "bofu-dominance", "core", "gsc-live-overlay.v1.json"),
+    path.join(__dirname, "..", "data", "gsc-live-overlay.v1.json"),
+  ];
+  for (const p of candidates) {
+    try {
+      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, "utf8"));
+    } catch {
+      /* next */
+    }
+  }
+  return null;
+}
+
+async function produceFromShippedOverlay({ env = process.env, now = new Date(), store = null } = {}) {
+  const overlay = loadShippedOverlay();
+  if (!overlay) return { ok: false, error: "overlay_missing" };
+  const mapped = overlayToInput(overlay);
+  if (!mapped.ok) return mapped;
+  return produce(mapped.input, { env, now, store });
+}
+
+function summarizeObservations(records) {
+  const counts = {
+    records: 0,
+    pending: 0,
+    held: 0,
+    delivered: 0,
+    retryable: 0,
+    blocked: 0,
+    dead: 0,
+    skipped: 0,
+  };
+  for (const rec of records || []) {
+    if (!rec || rec.kind !== "search_observation") continue;
+    counts.records += 1;
+    const status = rec.outbox && rec.outbox.status;
+    if (status === OBS_STATUS.PENDING) counts.pending += 1;
+    else if (status === OBS_STATUS.HELD) counts.held += 1;
+    else if (status === OBS_STATUS.DELIVERED) counts.delivered += 1;
+    else if (status === OBS_STATUS.RETRYABLE) counts.retryable += 1;
+    else if (status === OBS_STATUS.BLOCKED) counts.blocked += 1;
+    else if (status === OBS_STATUS.DEAD) counts.dead += 1;
+    else if (status === OBS_STATUS.SKIPPED) counts.skipped += 1;
+  }
+  return counts;
+}
+
+async function drainHeld({ env = process.env, now = new Date(), limit = 20, store = null } = {}) {
+  const summary = {
+    scanned: 0,
+    attempted: 0,
+    delivered: 0,
+    held: 0,
+    retryable: 0,
+    blocked: 0,
+    dead: 0,
+    skipped: 0,
+  };
+  const obsStore = store || (await createObservationStore(env));
+  if (!obsStore || typeof obsStore.list !== "function") {
+    return { ok: false, error: "store_unavailable", ...summary };
+  }
+  const records = await obsStore.list();
+  summary.scanned = Array.isArray(records) ? records.length : 0;
+  const due = (records || [])
+    .filter((rec) => {
+      if (!rec || rec.kind !== "search_observation") return false;
+      const status = rec.outbox && rec.outbox.status;
+      return status === OBS_STATUS.PENDING || status === OBS_STATUS.HELD || status === OBS_STATUS.RETRYABLE;
+    })
+    .slice(0, Math.min(50, Math.max(1, Number(limit) || 20)));
+  for (const rec of due) {
+    summary.attempted += 1;
+    if (rec.synthetic) {
+      await updateRecord(
+        rec.event_id,
+        {
+          outbox: {
+            status: OBS_STATUS.SKIPPED,
+            reason: "synthetic_excluded",
+            attempts: (rec.outbox && rec.outbox.attempts) || 0,
+            last_error: null,
+          },
+        },
+        env,
+        obsStore,
+      );
+      summary.skipped += 1;
+      continue;
+    }
+    const result = await postObservation(rec, { now, env });
+    const attempts = ((rec.outbox && rec.outbox.attempts) || 0) + (result.attemptsDelta || 0);
+    const nextOutbox = {
+      status: result.status,
+      reason: result.reason,
+      attempts,
+      last_error: result.last_error || null,
+      http_status: result.http,
+      latency_ms: result.latency_ms,
+      echoed: result.echoed,
+    };
+    await updateRecord(rec.event_id, { outbox: nextOutbox }, env, obsStore);
+    if (result.status === OBS_STATUS.DELIVERED) summary.delivered += 1;
+    else if (result.status === OBS_STATUS.HELD) summary.held += 1;
+    else if (result.status === OBS_STATUS.RETRYABLE) summary.retryable += 1;
+    else if (result.status === OBS_STATUS.BLOCKED) summary.blocked += 1;
+    else if (result.status === OBS_STATUS.DEAD) summary.dead += 1;
+    else if (result.status === OBS_STATUS.SKIPPED) summary.skipped += 1;
+  }
+  return { ok: true, ...summary };
 }
 
 module.exports = {
@@ -389,12 +578,19 @@ module.exports = {
   QUERY_CLASSES,
   OBS_STATUS,
   FORBIDDEN_KEYS,
+  BLOBS_PREFIX,
   setFetchForTests,
   buildPayload,
   hasForbiddenField,
   persistRecord,
+  createObservationStore,
   readCapability,
   produce,
+  overlayToInput,
+  loadShippedOverlay,
+  produceFromShippedOverlay,
+  drainHeld,
+  summarizeObservations,
   classifyObservationHttp,
   receiverEchoes,
 };

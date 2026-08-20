@@ -23,6 +23,9 @@
  *   POST rollback_record_kind { snapshot_id }
  *   GET  inbound_handoff
  *   POST drain_inbound
+ *   GET  search_observation
+ *   POST produce_search_observation
+ *   POST drain_search_observation
  */
 const crypto = require("crypto");
 const fs = require("fs");
@@ -51,6 +54,12 @@ const {
   drainPendingHandoffs,
   summarizeHandoffs,
 } = require("./lib/inbound-handoff.cjs");
+const {
+  createObservationStore,
+  produceFromShippedOverlay,
+  drainHeld,
+  summarizeObservations,
+} = require("./lib/search-observation.cjs");
 
 /** Simple per-IP rate limit for authenticated ops (in-memory, best-effort). */
 const _opsHits = new Map();
@@ -772,6 +781,64 @@ exports.handler = async (event) => {
       delivered: result.delivered,
       retryable: result.retryable,
       dead: result.dead,
+    });
+    return json(200, { ok: true, ...result }, origin);
+  }
+
+  if (action === "search_observation" && event.httpMethod === "GET") {
+    const obsStore = await createObservationStore(process.env);
+    if (!obsStore) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const records = typeof obsStore.list === "function" ? await obsStore.list() : [];
+    const counters = summarizeObservations(records);
+    return json(
+      200,
+      {
+        ok: true,
+        counters,
+        ts: new Date().toISOString(),
+        note: "Window/cohort aggregates only. No query text. HELD means Warmbly omitted confenge.search_observation.v1; records are persisted.",
+      },
+      origin
+    );
+  }
+
+  if (action === "produce_search_observation" && event.httpMethod === "POST") {
+    const result = await produceFromShippedOverlay({ env: process.env });
+    if (!result.ok) {
+      const code = result.error === "store_unavailable" ? 503 : 422;
+      return json(code, { ok: false, error: result.error, field: result.field }, origin);
+    }
+    const outbox = (result.record && result.record.outbox) || {};
+    safeLog("info", "ops_produce_search_observation", {
+      replay: Boolean(result.replay),
+      status: outbox.status || null,
+      synthetic: Boolean(result.synthetic),
+    });
+    return json(
+      200,
+      {
+        ok: true,
+        replay: Boolean(result.replay),
+        synthetic: Boolean(result.synthetic),
+        status: outbox.status || null,
+        reason: outbox.reason || outbox.last_error || null,
+      },
+      origin
+    );
+  }
+
+  if (action === "drain_search_observation" && event.httpMethod === "POST") {
+    const body = parseBody(event) || {};
+    const limit = Math.min(50, Math.max(1, Number(body.limit || 20)));
+    const result = await drainHeld({ env: process.env, limit });
+    if (!result.ok) {
+      return json(result.error === "store_unavailable" ? 503 : 422, { ok: false, ...result }, origin);
+    }
+    safeLog("info", "ops_drain_search_observation", {
+      attempted: result.attempted,
+      delivered: result.delivered,
+      held: result.held,
+      retryable: result.retryable,
     });
     return json(200, { ok: true, ...result }, origin);
   }

@@ -9,11 +9,12 @@ import { readFileSync, existsSync, statSync, writeFileSync, mkdirSync } from "fs
 import { join, resolve, extname } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { resolveChromePath } from "./resolve_chrome.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const require = createRequire(import.meta.url);
 const PORT = 8793;
-const CHROME = process.env.CHROME_PATH || "/usr/bin/google-chrome";
+const CHROME = resolveChromePath();
 const PAGES = [
   "/", // home includes Netlify form #contato (formulário surface)
   "/diretoria-b2g/",

@@ -116,9 +116,14 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/site/test_search_observation.mjs",
       "netlify/functions/lib/search-observation.cjs",
       "netlify/functions/lib/inbound-handoff.cjs",
+      "netlify/functions/lib/lead-store.cjs",
+      "netlify/functions/ops.cjs",
+      "netlify/functions/search-observation-tick.cjs",
+      "scripts/revops/scheduled_daily.mjs",
+      "data/bofu-dominance/core/gsc-live-overlay.v1.json",
     ],
     artifacts: [],
-    surfaces: ["/.netlify/functions/lead"],
+    surfaces: ["/.netlify/functions/ops", "/.netlify/functions/search-observation-tick"],
   },
   "test:checkout-negatives": {
     producers: [
@@ -228,7 +233,11 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: ["/", "/conteudos/"],
   },
   "test:ui": {
-    producers: ["scripts/site/test_ui_geometry.mjs"],
+    producers: [
+      "scripts/site/test_ui_geometry.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      ".github/workflows/site-ci.yml",
+    ],
     artifacts: [],
     surfaces: ["/", "/ferramentas/"],
   },
@@ -474,7 +483,7 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: ["/diagnostico-b2g-360/"],
   },
   "validate:seo": {
-    producers: ["seo/scripts/validate_seo.py", "seo/"],
+    producers: ["seo/scripts/validate_seo.py", "seo/", "tests/data_desk/test_data_desk.py"],
     artifacts: [],
     surfaces: ["/conteudos/"],
   },

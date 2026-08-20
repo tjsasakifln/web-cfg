@@ -38,7 +38,7 @@ Public phone, email and CNPJ already on `/especialista/tiago-jun-sasaki/` are ex
 
 ## Live GSC
 
-PR #159 recorded `credential_failure`. Live Search Analytics is `BLOCKED`, not zero, and `ready_for_product_decisions` is false. This campaign does not call the Search Analytics API.
+Current overlay is `LIVE_JOB_OK` with `core_ready_for_product_decisions=false`. Absence is not zero. This campaign does not call the Search Analytics API. PR #159 historically recorded `credential_failure`.
 
 ## Surface decision
 

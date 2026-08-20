@@ -11,10 +11,11 @@ import { readFileSync, existsSync, statSync } from "fs";
 import { join, extname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { resolveChromePath } from "./resolve_chrome.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
-const CHROME = process.env.CHROME_PATH || "/usr/bin/google-chrome";
+const CHROME = resolveChromePath();
 const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
 

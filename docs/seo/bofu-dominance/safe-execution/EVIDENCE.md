@@ -1,7 +1,7 @@
 # Evidence — CONFENGE-WEB-BOFU-SAFE-EXECUTION-01
 
 as_of: 2026-08-19.  
-source_kind: in-repo HTML + named gates. Live GSC remains UNKNOWN (`credential_failure` on PR #159).
+source_kind: in-repo HTML + named gates. Current live GSC overlay is `LIVE_JOB_OK` with `core_ready_for_product_decisions=false`. PR #159 freeze recorded `credential_failure`.
 
 ## Visitor jobs (distinct)
 

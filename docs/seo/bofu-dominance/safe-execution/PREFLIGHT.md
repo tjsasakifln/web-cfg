@@ -12,7 +12,7 @@ source_kind: `git fetch origin main` + GitHub issue/PR bodies + in-repo HTML SHA
 | #127 | open. Human noindex gate. Canary preference: `/conteudos/chuva-prorrogacao-prazo-obra-publica/`. | Do not edit the chuva canary. Atrasos/prorrogações landing owns causa, responsabilidade, caminho crítico, registro contemporâneo. |
 | #128 | open. BOFU pillars in observation: `/aditivos-obras-publicas/`, `/medicoes-glosas-obras-publicas/`, `/reequilibrio-obras-publicas/`, `/auditoria-orcamento-licitacao/`, `/diagnostico-b2g-360/`, `/diagnostico-pre-licitacao/`. | Frozen. Not in exclusive area. |
 | #153 | open. Single content→service transition with destination fields (`data-cta-id`, `data-route-family`, `data-asset-id`, `data-journey`, `data-offer-id`, `data-event-name`). | Preserve existing attributes. Add missing body/CTA attrs on defesa-técnica and acompanhamento without renaming values on atrasos/defesa-margem. |
-| PR #159 | draft, not merged. Head `feba68928ab997229028a66bb25d3b3b5a439206`. GSC loop `credential_failure` / BLOCKED. | Observe_only queue is the contamination set. |
+| PR #159 | draft at campaign freeze. Head `feba68928ab997229028a66bb25d3b3b5a439206`. GSC loop at that head: `credential_failure` / BLOCKED. Current shipped overlay: `LIVE_JOB_OK`, `core_ready_for_product_decisions=false`. | Observe_only queue is the contamination set. |
 
 ## Exclusive-area proof vs `observe_only`
 
@@ -45,4 +45,4 @@ Performance: [`performance-before.json`](performance-before.json) from `python3 
 
 ## SERP census
 
-See [`SERP-CENSUS.md`](SERP-CENSUS.md). Live GSC is UNKNOWN (`credential_failure` on PR #159). Absence is not recorded as zero.
+See [`SERP-CENSUS.md`](SERP-CENSUS.md). Current live GSC overlay is `LIVE_JOB_OK` (`core_ready_for_product_decisions=false`). PR #159 freeze recorded `credential_failure`. Absence is not recorded as zero.

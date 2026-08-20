@@ -294,5 +294,94 @@ const baseInput = {
   else pass("lead_capture_independent");
 }
 
+{
+  const so = loadMod();
+  const overlay = {
+    as_of: "2026-08-17",
+    max_date: "2026-08-17",
+    core_ready_for_product_decisions: false,
+    gsc_live_state: "LIVE_JOB_OK",
+    search_analytics_limitation: "Search Analytics may return top rows only. Absence is not zero.",
+    synthetic: false,
+    paths: {
+      "/": {
+        impressions: 19,
+        clicks: 0,
+        query_hashes: ["sha256:deadbeef"],
+        query: "must-not-leak",
+      },
+    },
+  };
+  const mapped = so.overlayToInput(overlay);
+  if (!mapped.ok) fail("overlay_to_input_ok", mapped);
+  else if (mapped.input.counts.impressions !== null || mapped.input.counts.clicks !== null) {
+    fail("overlay_does_not_sum_path_rows", mapped.input.counts);
+  } else if (so.hasForbiddenField(mapped.input)) {
+    fail("overlay_strips_query_fields", so.hasForbiddenField(mapped.input));
+  } else if (JSON.stringify(mapped.input).includes("deadbeef") || JSON.stringify(mapped.input).includes("must-not-leak")) {
+    fail("overlay_payload_mentions_query", mapped.input);
+  } else pass("overlay_to_input_strips_queries_and_nulls_counts");
+}
+
+{
+  const { MemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+  const mem = new MemoryStore();
+  const absent = await startReceiver((req, res) => {
+    if (req.url.endsWith("/health")) {
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ capabilities: ["confenge.inbound.v1"] }));
+      return;
+    }
+    res.writeHead(500, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "should_not_post" }));
+  });
+  const so = loadMod();
+  const out = await so.produce(
+    { ...baseInput, event_id: "so-held-durable" },
+    { env: envFor(absent.inbound, absent.health), store: mem },
+  );
+  absent.server.close();
+  if (!out.ok) fail("held_persisted_without_capability", out);
+  else if (out.record.outbox.status !== "HELD") fail("held_persisted_without_capability", out.record.outbox);
+  else {
+    const listed = await mem.list();
+    const hit = listed.find((r) => r.event_id === "so-held-durable" || r.lead_id === "so-held-durable");
+    if (!hit) fail("held_persisted_without_capability", { listed: listed.length });
+    else pass("held_persisted_without_capability", hit.outbox.status);
+  }
+
+  const present = await startReceiver((req, res, raw) => {
+    if (req.url.endsWith("/health")) {
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ capabilities: ["confenge.search_observation.v1"] }));
+      return;
+    }
+    const body = JSON.parse(raw || "{}");
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ version: body.version, event_id: body.event_id }));
+  });
+  const so2 = loadMod();
+  const drained = await so2.drainHeld({
+    env: envFor(present.inbound, present.health),
+    store: mem,
+    limit: 10,
+  });
+  if (!drained.ok || drained.delivered !== 1) fail("drain_held_after_capability", drained);
+  else pass("drain_held_after_capability", `delivered=${drained.delivered}`);
+  present.server.close();
+}
+
+{
+  const so = loadMod();
+  const overlay = so.loadShippedOverlay();
+  if (!overlay || overlay.gsc_live_state !== "LIVE_JOB_OK") fail("shipped_overlay_live_job_ok", overlay && overlay.gsc_live_state);
+  else if (overlay.core_ready_for_product_decisions !== false) fail("shipped_overlay_not_core_ready", overlay.core_ready_for_product_decisions);
+  else {
+    const mapped = so.overlayToInput(overlay);
+    if (!mapped.ok || so.hasForbiddenField(mapped.input)) fail("shipped_overlay_maps_clean", mapped);
+    else pass("shipped_overlay_maps_clean", mapped.input.event_id);
+  }
+}
+
 console.log(`search_observation ${results.filter((r) => r.ok).length}/${results.length} passed`);
 if (process.exitCode) process.exit(1);

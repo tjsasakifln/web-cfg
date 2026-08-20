@@ -71,7 +71,12 @@ jobs:
           npm run test:nurture
       - name: Build public site
         run: npm run build:site
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
       - name: UI geometry
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run test:ui
       - name: pSEO validate and audit
         run: |
@@ -86,10 +91,9 @@ jobs:
       - name: Redirect and 410 gates
         run: npm run test:redirects
       - name: axe accessibility
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run audit:axe
-      - name: Setup Chrome for Lighthouse
-        uses: browser-actions/setup-chrome@v2
-        id: setup-chrome
       - name: Lighthouse local (_site)
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

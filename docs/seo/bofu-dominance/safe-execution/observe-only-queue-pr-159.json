@@ -10,8 +10,10 @@
     "base_sha": "faadc16609210522c9ffaf32a7b944817f6c6214",
     "draft": true,
     "merged": false,
-    "gsc_loop": "credential_failure",
-    "ready_for_product_decisions": false
+    "gsc_loop": "LIVE_JOB_OK",
+    "gsc_loop_at_pr_159_head": "credential_failure",
+    "ready_for_product_decisions": false,
+    "core_ready_for_product_decisions": false
   },
   "authorizes_html_edit": false,
   "observe_only": [

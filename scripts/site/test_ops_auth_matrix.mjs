@@ -22,6 +22,9 @@ const SENSITIVE = [
   "backfill_record_kind",
   "inbound_handoff",
   "drain_inbound",
+  "search_observation",
+  "produce_search_observation",
+  "drain_search_observation",
 ];
 
 function load() {

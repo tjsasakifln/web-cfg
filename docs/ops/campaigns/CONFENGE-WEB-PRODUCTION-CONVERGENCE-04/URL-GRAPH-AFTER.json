@@ -1,7 +1,8 @@
 {
-  "as_of_utc": "2026-08-20T04:02:22.205813+00:00",
-  "head": "abe5cd2901c4e74284a9abbaee78889f01de1310",
-  "origin_main": "4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd",
+  "as_of_utc": "2026-08-20T05:04:21.839036+00:00",
+  "head": "5d5081237aec99f5bedf1ab441bfbde41e724f51",
+  "origin_main": "5d5081237aec99f5bedf1ab441bfbde41e724f51",
+  "generated_by": "scripts.organic.sitemap_graph.audit_graph",
   "ok": true,
   "url_count": 64,
   "unique_paths": 64,
@@ -18,7 +19,7 @@
   "robots_sitemaps": [
     "https://confenge.com.br/sitemap-index.xml"
   ],
-  "market_answer_indexable": true,
+  "market_answer_indexable": false,
   "market_answer_in_graph": false,
   "issues": []
 }

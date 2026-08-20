@@ -207,6 +207,28 @@ if (TOKEN) {
     `attempted=${drain.body.attempted || 0} delivered=${drain.body.delivered || 0}`,
     { critical: false }
   );
+  const soProduce = await j("/.netlify/functions/ops?action=produce_search_observation", {
+    method: "POST",
+    body: JSON.stringify({}),
+  });
+  check(
+    "search_observation_produce",
+    soProduce.status === 200 && soProduce.body.ok === true,
+    `status=${soProduce.body.status || soProduce.body.error || soProduce.status}`,
+    { critical: false }
+  );
+  out.search_observation = { produce: soProduce.body || null };
+  const soDrain = await j("/.netlify/functions/ops?action=drain_search_observation", {
+    method: "POST",
+    body: JSON.stringify({ limit: 20 }),
+  });
+  check(
+    "search_observation_drain",
+    soDrain.status === 200 && soDrain.body.ok === true,
+    `attempted=${soDrain.body.attempted || 0} held=${soDrain.body.held || 0}`,
+    { critical: false }
+  );
+  out.search_observation = { ...(out.search_observation || {}), drain: soDrain.body || null };
 } else {
   check("ops_token", true, "OPS_TOKEN not set — commercial checks skipped (set OPS_TOKEN for full daily)", {
     critical: false,
