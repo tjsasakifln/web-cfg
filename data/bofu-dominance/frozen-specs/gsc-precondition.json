@@ -1,0 +1,26 @@
+{
+  "schema": "bofu_frozen_gsc_precondition/v1",
+  "gsc_live_available": false,
+  "source_kind": "credential_failure",
+  "ready_for_product_decisions": false,
+  "authorizes_html_edit": false,
+  "invented_live_metrics": false,
+  "other_evidence_decision": {
+    "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
+    "decided_at": "2026-08-19",
+    "sources": [
+      "seo/gsc-2026-08-09",
+      "docs/ops/ORGANIC-GROWTH-REPORT.md",
+      "https://github.com/tjsasakifln/web-cfg/issues/128"
+    ],
+    "reason": "PR #159 reports live GSC as credential_failure / ready_for_product_decisions=false. Absence is not zero. Frozen specs use the 2026-08-09 export plus the six-URL table and commercial_click_share=0 in #128. They do not invent live impressions or clicks."
+  },
+  "historical_window": {
+    "export": "seo/gsc-2026-08-09",
+    "window_days": 7,
+    "aggregate_clicks": 10,
+    "aggregate_impressions": 384,
+    "commercial_click_share": 0.0,
+    "commercial_impression_share": 0.0777
+  }
+}

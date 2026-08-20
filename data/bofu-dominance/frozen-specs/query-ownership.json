@@ -1,0 +1,219 @@
+{
+  "schema": "bofu_frozen_query_ownership/v1",
+  "as_of": "2026-08-19",
+  "pillars": {
+    "aditivos-obras-publicas": {
+      "query_ownership": {
+        "owned": [
+          "aditivos obras públicas",
+          "aditivos em obras públicas"
+        ],
+        "supporting_not_owned_by_pillar": [
+          "aditivo qualitativo e quantitativo",
+          "limite aditivo 25 50 obra pública"
+        ],
+        "gsc_query_row": {
+          "query": "aditivos obras públicas",
+          "impressions": 6,
+          "clicks": 0,
+          "position": 35.0,
+          "source": "seo/gsc-2026-08-09/Consultas.csv"
+        }
+      },
+      "negative_queries": [
+        "aditivos para concreto / aditivos químicos / Master Builders",
+        "aditivo de prazo sem mudança de escopo (atrasos family)",
+        "SmartLic product or legacy brand queries"
+      ],
+      "cannibalization": {
+        "status": "RISK_DECLARED_NOT_MEASURED_LIVE",
+        "note": "PR #159 cannibalization detector returned NOT_CANNIBALIZATION on a credential_failure empty set; that is not a live all-clear.",
+        "siblings": [
+          {
+            "url": "/conteudos/aditivo-qualitativo-quantitativo/",
+            "robots": "noindex,follow",
+            "gsc": "22 impr / 0 clicks / pos 6.09",
+            "owner": "#127 KEEP_NOINDEX unless human rewrite"
+          },
+          {
+            "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+            "gsc": "14 impr / 0 clicks / pos 11.0",
+            "note": "pillar H2 already defers the 25/50 question to this guide"
+          }
+        ]
+      }
+    },
+    "medicoes-glosas-obras-publicas": {
+      "query_ownership": {
+        "owned": [
+          "medições glosas obras públicas",
+          "glosa de medição obra pública (service landing, after transfer)"
+        ],
+        "supporting_not_owned_by_pillar": [
+          "glosa de medição obra pública → currently /conteudos/glosa-de-medicao-obra-publica/",
+          "medição rejeitada obra pública → /conteudos/medicao-de-obra-publica-rejeitada/",
+          "fiscal não assina medição"
+        ],
+        "gsc_supporting": {
+          "glosa de medição obra pública": {
+            "impressions": 8,
+            "clicks": 1,
+            "position": 4.0
+          }
+        }
+      },
+      "negative_queries": [
+        "glosa de convênio médico / plano de saúde",
+        "glosa TCU as auditoria de contas (controladoria, not contractor cash)",
+        "glosa em contratos de TIC / NMS"
+      ],
+      "cannibalization": {
+        "status": "RISK_OWN_SUPPORTING_OUTRANKS_PILLAR",
+        "note": "Indexable supporting URLs hold the clicks. Do not 301 them onto the pillar. Do not index noindex siblings to feed the pillar (#127).",
+        "siblings": [
+          {
+            "url": "/conteudos/glosa-de-medicao-obra-publica/",
+            "gsc": "8 impr / 1 click / pos 4.0 / CTR 12.5%"
+          },
+          {
+            "url": "/conteudos/medicao-de-obra-publica-rejeitada/",
+            "gsc": "6 impr / 1 click / pos 5.5 / CTR 16.67%"
+          },
+          {
+            "url": "/conteudos/atraso-na-medicao-obra-publica/",
+            "gsc": "10 impr / 0 clicks / pos 8.1"
+          }
+        ]
+      }
+    },
+    "reequilibrio-obras-publicas": {
+      "query_ownership": {
+        "owned": [
+          "reequilíbrio econômico-financeiro obra pública",
+          "reequilíbrio contrato obra pública"
+        ],
+        "supporting_not_owned_by_pillar": [
+          "curva abc reequilíbrio → /conteudos/curva-abc-reequilibrio-contrato/",
+          "matriz de riscos reequilíbrio"
+        ],
+        "gsc_supporting": {
+          "curva abc reequilíbrio": {
+            "impressions": 5,
+            "clicks": 1,
+            "position": 4.4
+          }
+        }
+      },
+      "negative_queries": [
+        "reajuste ordinário / índice contratual (not reequilíbrio)",
+        "reequilíbrio econômico-financeiro without obras públicas",
+        "national coverage / national claim copy (extra-cli #437 national_claim_authorized=false)"
+      ],
+      "cannibalization": {
+        "status": "RISK_DECLARED_NOT_MEASURED_LIVE",
+        "siblings": [
+          {
+            "url": "/conteudos/curva-abc-reequilibrio-contrato/",
+            "gsc": "7 impr / 1 click / pos 4.43"
+          },
+          {
+            "url": "/ferramentas/checklist-reequilibrio/",
+            "note": "tool vs service; keep distinct jobs"
+          }
+        ]
+      }
+    },
+    "auditoria-orcamento-licitacao": {
+      "query_ownership": {
+        "owned": [
+          "auditoria de orçamento licitação obras",
+          "BDI obras públicas (service, not the supporting article)"
+        ],
+        "not_owned": [
+          "desonerado e não desonerado / sinapi desonerado → #126 URL",
+          "bdi diferenciado obra pública → /conteudos/bdi-diferenciado-obra-publica/ (2 clicks / 11 impr, benchmark not rewrite)"
+        ]
+      },
+      "negative_queries": [
+        "auditoria TCU/CGU de obras públicas (controle externo)",
+        "SINAPI table download / tabela SINAPI 2026 as a destination",
+        "national SINAPI coverage claims (extra-cli #437 not authorized)"
+      ],
+      "cannibalization": {
+        "status": "RISK_TITLE_CONTAINS_SINAPI",
+        "siblings": [
+          {
+            "url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+            "gsc": "89 impr / 1 click / pos 7.27",
+            "owner": "#126 observe_only until 2026-09-16"
+          },
+          {
+            "url": "/conteudos/bdi-diferenciado-obra-publica/",
+            "gsc": "11 impr / 2 clicks / CTR 18.18%"
+          }
+        ]
+      }
+    },
+    "diagnostico-b2g-360": {
+      "query_ownership": {
+        "owned": [
+          "diagnóstico B2G 360 CONFENGE",
+          "diagnóstico operação B2G obras públicas"
+        ],
+        "not_owned": [
+          "diagnóstico B2G gratuito",
+          "diretoria B2G fracionada (sibling offer /diretoria-b2g/)"
+        ]
+      },
+      "negative_queries": [
+        "diagnóstico B2G gratuito / quiz de maturidade",
+        "B2G glossário (business-to-government definition)",
+        "SmartLic / legacy brand"
+      ],
+      "cannibalization": {
+        "status": "RISK_OFFER_CLUSTER",
+        "siblings": [
+          {
+            "url": "/diretoria-b2g/",
+            "note": "continuous retainer vs one-shot diagnostic"
+          },
+          {
+            "url": "/#contato?jornada=operacao",
+            "note": "hero CTA already points here"
+          }
+        ]
+      }
+    },
+    "diagnostico-pre-licitacao": {
+      "query_ownership": {
+        "owned": [
+          "diagnóstico pré-licitação obras públicas",
+          "análise de edital de obra pública (service)"
+        ],
+        "not_owned": [
+          "empreitada global ou preço unitário → /conteudos/empreitada-preco-global-preco-unitario/",
+          "comprovação de exequibilidade → /conteudos/comprovacao-exequibilidade-proposta-obra/",
+          "bid room licitações obras → /bid-room-licitacoes-obras/"
+        ]
+      },
+      "negative_queries": [
+        "como analisar edital (generic goods/services)",
+        "impugnação de edital as standalone legal product",
+        "tenders/licitações TOFU without contractor margin job (#60 VALIDATE next, not this pillar rewrite)"
+      ],
+      "cannibalization": {
+        "status": "RISK_OFFER_AND_LIBRARY",
+        "siblings": [
+          {
+            "url": "/bid-room-licitacoes-obras/",
+            "note": "execution format vs diagnostic decision"
+          },
+          {
+            "url": "/conteudos/empreitada-preco-global-preco-unitario/",
+            "note": "library guide listed on this pillar"
+          }
+        ]
+      }
+    }
+  }
+}
