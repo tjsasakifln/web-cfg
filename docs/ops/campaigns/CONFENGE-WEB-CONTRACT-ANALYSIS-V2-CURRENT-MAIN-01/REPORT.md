@@ -38,6 +38,15 @@ Stale tokens `…2026_08_17`, `OWNER_PREAPPROVAL_…2026_08_19`, and `…V2_2026
 
 All twelve items true on the shipped consume/gate/render/approve path. `index_count=1`. Graph 64 → 65. No other analysis URL changed indexability.
 
+## Integration SHA CI
+
+After merge, required checks on `691ed189b5af39d1e637f219d4170d943085f034`:
+
+- `site-ci` completed success (2026-08-20T12:37:40Z, run 32369464249)
+- `pSEO quality gates` completed success (2026-08-20T12:35:33Z, run 32369464335)
+
+`CI=green` is verified on the integration SHA.
+
 ## Analytics / next action
 
 CTA keeps `CONFENGE_WEB`, `asset_family=analise-tecnica-contrato-publico`, `analysis_id`, `cta_id`, `destination_service_id=diagnostico-defesa-margem`. No PII, no individual GSC query.

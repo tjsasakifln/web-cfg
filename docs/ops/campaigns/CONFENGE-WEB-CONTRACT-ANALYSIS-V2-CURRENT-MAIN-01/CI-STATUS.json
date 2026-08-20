@@ -1,0 +1,24 @@
+{
+  "queried_at": "2026-08-20T12:38:00Z",
+  "final_head_sha": "691ed189b5af39d1e637f219d4170d943085f034",
+  "origin_main": "691ed189b5af39d1e637f219d4170d943085f034",
+  "replacement_pr": 176,
+  "required_on_final_head": {
+    "site-ci": {
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-08-20T12:37:40Z",
+      "run_id": 32369464249,
+      "run_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/32369464249"
+    },
+    "pSEO quality gates": {
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-08-20T12:35:33Z",
+      "run_id": 32369464335,
+      "run_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/32369464335"
+    }
+  },
+  "CI": "green",
+  "both_required_success_on_691ed189": true
+}

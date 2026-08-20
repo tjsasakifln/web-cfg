@@ -39,3 +39,14 @@ See `ROLLBACK.md`. Proven.
 ## IndexNow
 
 Prepare-only. No submit. Receipt is not indexation.
+
+## Required CI on final HEAD `691ed189`
+
+Re-queried GitHub Actions after merge. Both required checks on `origin/main` SHA `691ed189b5af39d1e637f219d4170d943085f034` completed **success**:
+
+| Check | Conclusion | Completed | Run |
+|---|---|---|---|
+| `site-ci` | success | 2026-08-20T12:37:40Z | https://github.com/tjsasakifln/web-cfg/actions/runs/32369464249 |
+| `pSEO quality gates` | success | 2026-08-20T12:35:33Z | https://github.com/tjsasakifln/web-cfg/actions/runs/32369464335 |
+
+PR head `f2239f4f` was already green before merge. `CI=green` is now verified on the integration SHA, not only on the PR SHA.
