@@ -320,6 +320,7 @@ def render_html(
 <p id="cobertura">{escape(copy["coverage"])}</p>
 <p id="missingness">{escape(copy["missingness"])}</p>
 <p id="fonte">{escape(copy["fonte"])}</p>
+<p id="ma-empty-not-success">Coverage, UNKNOWN e source: amostra vazia ou cobertura incompleta não é sucesso. Demanda de busca permanece UNKNOWN quando não há evidência da pergunta. n=0 nunca vira prova de mercado.</p>
 </div>
 <div class="ma-limits" id="limitacoes">
 <p class="ma-kicker">Limitações</p>
