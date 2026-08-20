@@ -63,8 +63,12 @@ def test_family_validate_clis_keep_fixture_off_index() -> None:
     assert ca.returncode == 0, ca.stderr or ca.stdout
     ca_body = json.loads(ca.stdout)
     assert ca_body["ok"] is True
-    assert ca_body["index_count"] == 0
     assert ca_body.get("fixture_indexed") == []
+    # Official-live INDEX canary V2 may be 1. Fixtures must stay off index.
+    if ca_body.get("source_kind") == "official_live":
+        assert ca_body["index_count"] <= 1
+    else:
+        assert ca_body["index_count"] == 0
 
 
 def test_happy_walk_uses_shipped_stages_and_one_correlation() -> None:
