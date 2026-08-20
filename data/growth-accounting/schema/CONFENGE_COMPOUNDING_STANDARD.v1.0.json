@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "CONFENGE_COMPOUNDING_STANDARD/1.0",
+  "title": "CONFENGE_COMPOUNDING_STANDARD/1.0",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "schema_version",
+    "timezone",
+    "cohort_days",
+    "as_of",
+    "current_state",
+    "primary_series",
+    "north_star",
+    "components",
+    "flags"
+  ],
+  "properties": {
+    "schema": { "const": "CONFENGE_COMPOUNDING_STANDARD/1.0" },
+    "schema_version": { "const": "1.0" },
+    "timezone": { "const": "America/Sao_Paulo" },
+    "cohort_days": { "const": 28 },
+    "current_state": {
+      "type": "string",
+      "enum": [
+        "INSUFFICIENT_EVIDENCE",
+        "PLATEAU_OR_DECAY",
+        "LINEAR_CANDIDATE",
+        "COMPOUNDING_CANDIDATE",
+        "EXPONENTIAL_CANDIDATE"
+      ]
+    },
+    "flags": {
+      "type": "object",
+      "required": [
+        "source_families_separated",
+        "unknown_preserved",
+        "query_to_lead_join",
+        "page_count_kpi",
+        "scale_allowed_auto_emitted"
+      ],
+      "properties": {
+        "source_families_separated": { "const": true },
+        "unknown_preserved": { "const": true },
+        "query_to_lead_join": { "const": false },
+        "page_count_kpi": { "const": false },
+        "scale_allowed_auto_emitted": { "const": false }
+      }
+    }
+  }
+}

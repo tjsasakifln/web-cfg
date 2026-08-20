@@ -1,0 +1,114 @@
+{
+  "schema": "CONFENGE_COMPOUNDING_STANDARD/1.0",
+  "schema_version": "1.0",
+  "definition_id": "CONFENGE_COMPOUNDING_STANDARD/1.0",
+  "timezone": "America/Sao_Paulo",
+  "as_of": "2026-08-20T12:00:00-03:00",
+  "clock_source": "frozen",
+  "labeled_synthetic": false,
+  "payload_observed_at": "2026-08-09T20:12:04Z",
+  "gsc_sync_blocked": true,
+  "primary_series": "non_branded_clicks_approved_routes",
+  "freshness_lag_days": 2,
+  "notes": [
+    "Frozen SELECT-only snapshot for CONFENGE_COMPOUNDING_STANDARD/1.0.",
+    "GSC pages table from data/organic/growth-report.json: 373 impressions, 10 clicks, 29 commercial impressions, 0 commercial clicks.",
+    "data/revops/gsc/last_sync.json is blocked (missing_credentials). Not a closed 28-day daily series.",
+    "Commercial outcomes from Warmbly #88 remain UNKNOWN. Do not infer from clicks.",
+    "data/discovery/observed.v1.json has an empty overlay. Missing stays UNKNOWN.",
+    "data/organic/content-service-map.json supplies #153 IDs as inventory, not observed content→service events.",
+    "Page count is not a success KPI and is not recorded as one."
+  ],
+  "sources": [
+    {
+      "id": "organic-growth-report-v1",
+      "path": "data/organic/growth-report.json",
+      "authority_owner": "web-cfg/organic",
+      "family": "organic_non_branded"
+    },
+    {
+      "id": "gsc-last-sync",
+      "path": "data/revops/gsc/last_sync.json",
+      "authority_owner": "web-cfg/revops",
+      "family": "organic_non_branded"
+    },
+    {
+      "id": "discovery-observed-v1",
+      "path": "data/discovery/observed.v1.json",
+      "authority_owner": "web-cfg/discovery",
+      "family": "organic_non_branded"
+    },
+    {
+      "id": "content-service-map-v1",
+      "path": "data/organic/content-service-map.json",
+      "authority_owner": "web-cfg/organic",
+      "family": "organic_non_branded"
+    }
+  ],
+  "compatibility": {
+    "matrix": "data/growth-accounting/source-compatibility-matrix.json",
+    "gsc_daily_series": "incompatible_incomplete",
+    "warmbly_outcomes": "UNKNOWN"
+  },
+  "daily": [],
+  "snapshot_aggregates": [
+    {
+      "id": "gsc-pages-2026-08-09",
+      "period": "gsc-export-unspecified-window",
+      "complete_closed_cohort": false,
+      "source_family": "organic_non_branded",
+      "impressions": 373,
+      "clicks": 10,
+      "commercial_impressions": 29,
+      "commercial_clicks": 0,
+      "provenance": {
+        "source_id": "organic-growth-report-v1",
+        "authority_owner": "web-cfg/organic",
+        "observed": true,
+        "path": "data/organic/growth-report.json"
+      }
+    }
+  ],
+  "inventory": {
+    "approved_indexable_assets": "UNKNOWN",
+    "substantive_changes": "UNKNOWN",
+    "editorial_hours": "UNKNOWN",
+    "refresh_cost": "UNKNOWN"
+  },
+  "qualified_use": {
+    "engagement_admitted": "UNKNOWN",
+    "method_evidence_opened": "UNKNOWN",
+    "utility_completed": "UNKNOWN",
+    "content_to_service": "UNKNOWN"
+  },
+  "commercial": {
+    "lead_valid": "UNKNOWN",
+    "qualified": "UNKNOWN",
+    "meeting": "UNKNOWN",
+    "proposal": "UNKNOWN",
+    "qualified_pipeline_brl": "UNKNOWN",
+    "won": "UNKNOWN",
+    "lost": "UNKNOWN",
+    "contracted_revenue_brl": "UNKNOWN",
+    "received_revenue_brl": "UNKNOWN"
+  },
+  "moat": {
+    "citations": "UNKNOWN",
+    "referring_domains": "UNKNOWN",
+    "download_embed_reuse": "UNKNOWN",
+    "return_visits": "UNKNOWN"
+  },
+  "quality": {
+    "defects": "UNKNOWN",
+    "corrections": "UNKNOWN",
+    "stale_rate": "UNKNOWN"
+  },
+  "late_arrivals": [],
+  "tracking_breaks": [],
+  "human_decisions": [],
+  "flags": {
+    "contains_query_level_pii": false,
+    "query_to_lead_join": false,
+    "inferred_outcomes": false
+  }
+}
