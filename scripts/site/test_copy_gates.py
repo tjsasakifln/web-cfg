@@ -312,7 +312,7 @@ def test_sinapi_snippet_unique_not_generic():
     h1 = h1_m.group(1).strip()
     meta = (desc_m.group(1) or desc_m.group(2)).strip()
     title_core = re.sub(r"\s*\|\s*CONFENGE\s*$", "", title).strip()
-    # Original GSC snippet hid the query term "SINAPI" from the title.
+    # Original GSC title omitted SINAPI; the rewrite must name the family.
     assert "SINAPI" in title_core, "title must name SINAPI (original defect: omitted query)"
     assert title_core != "Desonerado e não desonerado: o que o edital exige"
     assert title_core != h1, "title and H1 must not be duplicates"

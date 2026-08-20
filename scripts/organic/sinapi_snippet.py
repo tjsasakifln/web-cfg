@@ -14,7 +14,7 @@ from scripts.organic.service_map import extract_bridge_service, html_has_commerc
 ROOT = Path(__file__).resolve().parents[2]
 SINAPI_PATH = ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html"
 QUERY_LEAD = "desonerado e não desonerado"
-CANONICAL_TITLE = "Desonerado e não desonerado: o que o edital exige | CONFENGE"
+CANONICAL_TITLE = "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE"
 SERVICE = "/auditoria-orcamento-licitacao/"
 TITLE_SOFT_MAX = 60
 
