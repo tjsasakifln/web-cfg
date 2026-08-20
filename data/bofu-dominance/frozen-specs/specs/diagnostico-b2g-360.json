@@ -1,0 +1,218 @@
+{
+  "slug": "diagnostico-b2g-360",
+  "path": "/diagnostico-b2g-360/",
+  "family": "carteira-operacao",
+  "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+  "mode": "PREPARE_ONLY",
+  "html_mutation": false,
+  "corresponding_issue": 128,
+  "earliest_safe_action_at": "2026-09-16",
+  "evidential_close": false,
+  "demand_control_citation": {
+    "pr": 159,
+    "authorizes_html_edit": false,
+    "source_kind": "LIVE_JOB_OK",
+    "bofu_observe_only": true,
+    "earliest_safe_action_at": "2026-09-16",
+    "ready_for_product_decisions": false
+  },
+  "issue_128_baseline": {
+    "issue": 128,
+    "state": "LANDED_AWAITING_LIVE_EVIDENCE",
+    "commercial_click_share": 0.0,
+    "evidential_close": false,
+    "gsc_row": {
+      "impressions": 1,
+      "clicks": 0,
+      "position": 15.0
+    }
+  },
+  "extra_cli_inputs": {
+    "pr_435": {
+      "state": "COMPARABLE",
+      "publication_authorization": false,
+      "use": "factual_input_only"
+    },
+    "pr_437": {
+      "verdict": "PARTIAL",
+      "national_claim_authorized": false,
+      "use": "factual_input_only"
+    },
+    "publication_authorization": false,
+    "national_claim_authorized": false
+  },
+  "gsc_precondition": {
+    "gsc_live_available": true,
+    "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
+    "authorizes_html_edit": false,
+    "other_evidence_decision": {
+      "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
+      "sources": [
+        "seo/gsc-2026-08-09",
+        "docs/ops/ORGANIC-GROWTH-REPORT.md",
+        "https://github.com/tjsasakifln/web-cfg/issues/128"
+      ],
+      "invented_live_metrics": false,
+      "reason": "PR #159 live Search Analytics is LIVE_JOB_OK. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
+    }
+  },
+  "success_metrics": {
+    "commercial_click_share": "no longer 0% on a 28-day GSC window after gate, or an explicit kill note that demand is informational-only at this volume",
+    "service_url_clicks": "at least one click on this service URL in the next complete 28d GSC window, or the pillar leaves the documented position band",
+    "north_star": "inbound qualified pipeline / month; impressions on /conteudos/ are not success",
+    "denominator": "historical seo/gsc-2026-08-09 until GSC live is ready_for_product_decisions=true"
+  },
+  "kill_metrics": {
+    "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
+    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from LIVE_JOB_OK",
+    "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change"
+  },
+  "revert_metrics": {
+    "trigger": "revert the hash-bound patch if CTR/position on the owned query does not move while position is stable, or if a sibling cannibalizes the same non-brand intent",
+    "method": "restore the bound content_sha256 of the pillar HTML; do not blanket-redirect"
+  },
+  "visitor_job": "Mapear onde a operação B2G de obras perde tempo, margem e controle, e sair com um plano de 90 dias — not a generic 'vender para o governo' quiz.",
+  "serp_census": {
+    "family": "carteira-operacao",
+    "as_of": "2026-08-19",
+    "rank_status": "UNKNOWN",
+    "note": "Web sample shows CONFENGE on branded/offer queries. Generic 'diagnóstico B2G' is occupied by free quizzes. Do not invent rank.",
+    "competitors": [
+      {
+        "url": "https://www.redeb2g.com.br/",
+        "kind": "generic_b2g_platform",
+        "intent": "free_maturity_quiz"
+      },
+      {
+        "url": "https://diagnosticob2g.com.br/",
+        "kind": "generic_b2g_diagnostic",
+        "intent": "licitacoes_generic"
+      },
+      {
+        "url": "https://conquistagov.com.br/",
+        "kind": "b2g_consulting",
+        "intent": "contracts_generic_not_obras"
+      },
+      {
+        "url": "https://b2gsmart.com.br/",
+        "kind": "licitacoes_saas",
+        "intent": "monitor_editais"
+      }
+    ],
+    "intent_gaps": [
+      "Generic B2G diagnostics are not obras-públicas margin-defense. CONFENGE unique utility is the engineering/contract portfolio, not a 5-dimension quiz.",
+      "GSC 1 impr / 0 clicks / pos 15 — anecdotal. Brand query 'confenge' is separate (4 impr / 1 click)."
+    ]
+  },
+  "query_ownership": {
+    "owned": [
+      "diagnóstico B2G 360 CONFENGE",
+      "diagnóstico operação B2G obras públicas"
+    ],
+    "not_owned": [
+      "diagnóstico B2G gratuito",
+      "diretoria B2G fracionada (sibling offer /diretoria-b2g/)"
+    ]
+  },
+  "negative_queries": [
+    "diagnóstico B2G gratuito / quiz de maturidade",
+    "B2G glossário (business-to-government definition)",
+    "SmartLic / legacy brand"
+  ],
+  "cannibalization": {
+    "status": "RISK_OFFER_CLUSTER",
+    "siblings": [
+      {
+        "url": "/diretoria-b2g/",
+        "note": "continuous retainer vs one-shot diagnostic"
+      },
+      {
+        "url": "/#contato?jornada=operacao",
+        "note": "hero CTA already points here"
+      }
+    ]
+  },
+  "before_after_blocks": [
+    {
+      "block": "og_title",
+      "before": "og:title = Mapeie onde a frente pública perde tempo, margem e controle.",
+      "after": "og:title = Diagnóstico B2G 360° | CONFENGE (match <title>; keep the sentence as visible lead)",
+      "why": "Snippet/social title mismatch. Canonical already present (href-before-rel). Do not touch offer copy."
+    },
+    {
+      "block": "canonical",
+      "before": "present as link href=... rel=canonical",
+      "after": "unchanged",
+      "why": "Parser must accept either attribute order; this is not a missing canonical."
+    },
+    {
+      "block": "schema",
+      "before": "WebPage + Service (no CollectionPage)",
+      "after": "unchanged; do not add AggregateRating or national claims",
+      "why": "Offer page already uses Service. extra-cli facts stay unpublished."
+    }
+  ],
+  "evidence_proof_needed": [
+    "28d GSC vs 1/0 @ 15.0 — n is anecdotal; kill if the og:title change does not produce a click and n stays < 30.",
+    "Do not treat extra-cli national coverage PARTIAL as a 360° proof asset.",
+    "Qualified conversation from jornada=operacao remains the commercial evidence (#88/#60), not this patch."
+  ],
+  "snapshot": {
+    "slug": "diagnostico-b2g-360",
+    "path": "/diagnostico-b2g-360/",
+    "html_rel": "diagnostico-b2g-360/index.html",
+    "title": "Diagnóstico B2G 360° | CONFENGE",
+    "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação.",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
+    "og_title": "Mapeie onde a frente pública perde tempo, margem e controle.",
+    "og_url": "https://confenge.com.br/diagnostico-b2g-360/",
+    "h1": "Diagnóstico B2G 360°",
+    "schema_types": [
+      "Organization",
+      "WebPage",
+      "Service",
+      "Country",
+      "BreadcrumbList",
+      "ListItem"
+    ],
+    "cta": {
+      "hero_text": "Diagnosticar a operação B2G",
+      "hero_href": "/#contato?jornada=operacao",
+      "bridges": [
+        {
+          "position": "offer_hero",
+          "href": "/#contato?jornada=operacao",
+          "text": "Diagnosticar a operação B2G"
+        },
+        {
+          "position": "offer_final",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "text": "Solicitar Diagnóstico B2G"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/?origem=/diagnostico-b2g-360#contato",
+          "text": "Pedir diagnóstico da operação"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/conteudos/",
+          "text": "Ver conteúdos de apoio"
+        },
+        {
+          "position": "float",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "text": ""
+        }
+      ],
+      "when_not_to_hire": true,
+      "whatsapp_present": true,
+      "form_count": 0
+    },
+    "content_sha256": "ee0aa2242c5673f75434695ad9e82b4942e437cd2fd78ca8b1817fad54434650",
+    "bytes": 18326,
+    "noindex": false
+  }
+}

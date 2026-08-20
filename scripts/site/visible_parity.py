@@ -940,14 +940,9 @@ def filter_sitemap_urls(entries: list[tuple[str, str]]) -> list[str]:
 
 
 def sitemap_locs(site_root: Path) -> list[str]:
-    locs: list[str] = []
-    for name in SITEMAP_NAMES:
-        path = site_root / name
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8", errors="replace")
-        locs.extend(re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", text))
-    return sorted(set(locs))
+    from scripts.organic.sitemap_graph import load_graph_locs
+
+    return sorted(set(load_graph_locs(site_root)))
 
 
 def url_to_html_path(site_root: Path, url: str) -> Path:

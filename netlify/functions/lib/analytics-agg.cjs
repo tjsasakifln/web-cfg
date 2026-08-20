@@ -5,7 +5,15 @@
  * lead_form_success/lead_persisted, and never derive qualified_lead/pipeline.
  */
 
-const { resolveCollectName, reconcileFunnel } = require("./event-contract.cjs");
+const {
+  resolveCollectName,
+  reconcileFunnel,
+  canonicalizePath,
+  UNKNOWN_SERVICE,
+  acceptWarmblyObservation,
+  isFixtureOrSynthetic,
+  lookupDestinationServiceId,
+} = require("./event-contract.cjs");
 
 const FUNNEL_EVENTS = [
   "page_view",
@@ -52,7 +60,11 @@ function weekKey(iso) {
  * Aggregate raw events into daily rollups.
  * @param {Array<{event:string,path?:string,sid?:string,ts?:string,props?:object}>} events
  */
-function aggregateEvents(events) {
+function eventIdOf(ev) {
+  return String((ev && ev.props && ev.props.event_id) || "").slice(0, 80);
+}
+
+function aggregateEvents(events, opts) {
   const byDay = new Map();
   const sessions = new Map(); // day -> Set sid
   const paths = new Map(); // day -> path -> counts
@@ -60,8 +72,14 @@ function aggregateEvents(events) {
   const clusters = new Map();
   const journeys = new Map();
   const vitals = { lcp: [], inp: [], cls: [], ttfb: [] };
+  const seenIds = new Set();
 
   for (const ev of events || []) {
+    const eid = eventIdOf(ev);
+    if (eid) {
+      if (seenIds.has(eid)) continue;
+      seenIds.add(eid);
+    }
     const rawName = String(ev.event || "");
     const name = resolveCollectName(rawName) || "";
     if (!name) continue;
@@ -164,6 +182,7 @@ function aggregateEvents(events) {
     }
   }
 
+  const warmbly = opts && opts.warmbly;
   return {
     generated_at: new Date().toISOString(),
     daily,
@@ -172,9 +191,195 @@ function aggregateEvents(events) {
     cluster_totals: Object.fromEntries([...clusters.entries()].sort((a, b) => b[1] - a[1]).slice(0, 50)),
     journey_totals: Object.fromEntries(journeys),
     web_vitals: summarizeVitals(vitals),
+    origin_destination: buildOriginDestinationMatrix(events),
+    funnel_layers: buildFunnelLayers(events, warmbly),
     attribution_note:
-      "Search Console queries are aggregate; never join a single GSC query to an individual lead. Attribution is first/last touch path cohort only.",
-    funnel: reconcileFunnel({ events }),
+      "Search Console queries are aggregate; never join a single GSC query to an individual lead. Attribution is first/last touch path cohort only. Missing series stay UNKNOWN, never numeric zero.",
+    funnel: reconcileFunnel({ events, warmbly }),
+  };
+}
+
+function seriesOrUnknown(present, count) {
+  if (!present) return "UNKNOWN";
+  return count;
+}
+
+function buildOriginDestinationMatrix(events) {
+  const days = new Map();
+  const seenIds = new Set();
+  for (const ev of events || []) {
+    const eid = eventIdOf(ev);
+    if (eid) {
+      if (seenIds.has(eid)) continue;
+      seenIds.add(eid);
+    }
+    const name = resolveCollectName(String((ev && ev.event) || "")) || "";
+    if (!name) continue;
+    const day = dayKey(ev.ts);
+    if (!days.has(day)) {
+      days.set(day, {
+        day,
+        views: new Map(),
+        views_present: new Set(),
+        engagement: new Map(),
+        engagement_present: new Set(),
+        cells: new Map(),
+      });
+    }
+    const row = days.get(day);
+    const origin = canonicalizePath(
+      (ev.props && ev.props.source_path) || ev.path || (ev.props && ev.props.page_path) || "",
+    );
+    if (name === "page_view" || name === "service_page_view" || name === "editorial_page_view"
+      || name === "asset_view" || name === "answer_view" || name === "tool_view") {
+      if (origin) {
+        row.views_present.add(origin);
+        row.views.set(origin, (row.views.get(origin) || 0) + 1);
+      }
+    }
+    if (name === "cta_click" || name === "cta_view" || name === "scroll_depth"
+      || name === "content_to_service" || name === "whatsapp_click" || name === "email_click"
+      || name === "outbound_click" || name === "tool_start") {
+      if (origin) {
+        row.engagement_present.add(origin);
+        row.engagement.set(origin, (row.engagement.get(origin) || 0) + 1);
+      }
+    }
+    if (name !== "content_to_service") continue;
+    const props = ev.props || {};
+    const sourcePath = canonicalizePath(props.source_path || ev.path || "") || origin;
+    const destPath = canonicalizePath(props.destination_path || "");
+    const destId = props.destination_service_id
+      || lookupDestinationServiceId(destPath)
+      || UNKNOWN_SERVICE;
+    const key = `${sourcePath}|${destPath}|${destId}`;
+    if (!row.cells.has(key)) {
+      row.cells.set(key, {
+        source_path: sourcePath,
+        source_asset_id: String(props.source_asset_id || props.asset_id || "").slice(0, 80) || null,
+        source_asset_family: String(props.source_asset_family || props.asset_family || "").slice(0, 80) || null,
+        destination_path: destPath || null,
+        destination_service_id: destId,
+        count: 0,
+      });
+    }
+    row.cells.get(key).count += 1;
+  }
+
+  const by_day = [];
+  for (const row of [...days.values()].sort((a, b) => a.day.localeCompare(b.day))) {
+    const cells = [];
+    let known = 0;
+    let unknown = 0;
+    for (const cell of row.cells.values()) {
+      const viewDenom = seriesOrUnknown(row.views_present.has(cell.source_path), row.views.get(cell.source_path) || 0);
+      const engDenom = seriesOrUnknown(
+        row.engagement_present.has(cell.source_path),
+        row.engagement.get(cell.source_path) || 0,
+      );
+      const rate = typeof viewDenom === "number" && viewDenom > 0
+        ? Math.round((cell.count / viewDenom) * 10000) / 10000
+        : "UNKNOWN";
+      if (cell.destination_service_id === UNKNOWN_SERVICE || !cell.destination_path) unknown += cell.count;
+      else known += cell.count;
+      cells.push({
+        ...cell,
+        rate,
+        view_denominator: viewDenom,
+        engagement_denominator: engDenom,
+      });
+    }
+    const total = known + unknown;
+    by_day.push({
+      day: row.day,
+      cells: cells.sort((a, b) => b.count - a.count),
+      coverage: total
+        ? { known, unknown, ratio: Math.round((known / total) * 10000) / 10000 }
+        : { known: "UNKNOWN", unknown: "UNKNOWN", ratio: "UNKNOWN" },
+      unknown: total ? { destination_service_id: unknown } : { destination_service_id: "UNKNOWN" },
+    });
+  }
+
+  return {
+    by_day,
+    missing_day: "UNKNOWN",
+    note: "Days or origin series not present in the batch are absent, not zero. UNKNOWN_SERVICE is fail-closed.",
+  };
+}
+
+function observedWonLost(warmbly) {
+  const unknown = {
+    count: "UNKNOWN",
+    won: "UNKNOWN",
+    lost: "UNKNOWN",
+    source: "warmbly",
+    derived: false,
+  };
+  if (!warmbly || typeof warmbly !== "object" || Array.isArray(warmbly)) return unknown;
+  if (isFixtureOrSynthetic(warmbly)) return { ...unknown, reason: "fixture_or_synthetic" };
+  const owner = String(warmbly.owner || "warmbly").toLowerCase();
+  if (owner !== "warmbly") return { ...unknown, reason: "wrong_owner" };
+  const hasWon = Object.prototype.hasOwnProperty.call(warmbly, "won");
+  const hasLost = Object.prototype.hasOwnProperty.call(warmbly, "lost");
+  const hasCombined = Object.prototype.hasOwnProperty.call(warmbly, "won_lost");
+  if (!hasWon && !hasLost && !hasCombined) return unknown;
+  const won = hasWon ? warmbly.won : "UNKNOWN";
+  const lost = hasLost ? warmbly.lost : "UNKNOWN";
+  let count = "UNKNOWN";
+  if (hasCombined) count = warmbly.won_lost;
+  else if (Number.isFinite(Number(won)) && Number.isFinite(Number(lost))) count = Number(won) + Number(lost);
+  return { count, won, lost, source: "warmbly", derived: false };
+}
+
+function buildFunnelLayers(events, warmbly) {
+  const seenIds = new Set();
+  let transitionPresent = false;
+  let leadPresent = false;
+  let transition = 0;
+  let lead = 0;
+  for (const ev of events || []) {
+    const eid = eventIdOf(ev);
+    if (eid) {
+      if (seenIds.has(eid)) continue;
+      seenIds.add(eid);
+    }
+    const name = resolveCollectName(String((ev && ev.event) || "")) || "";
+    if (name === "content_to_service") {
+      transitionPresent = true;
+      transition += 1;
+    }
+    if (name === "lead_persisted") {
+      leadPresent = true;
+      lead += 1;
+    }
+  }
+  const observation = acceptWarmblyObservation(warmbly || {});
+  return {
+    transition: {
+      count: seriesOrUnknown(transitionPresent, transition),
+      source: "content_to_service",
+      derived: false,
+    },
+    lead: {
+      count: seriesOrUnknown(leadPresent, lead),
+      source: "lead_persisted",
+      derived: false,
+    },
+    qualified: {
+      count: observation.accepted && observation.qualified_lead !== "UNKNOWN"
+        ? observation.qualified_lead
+        : "UNKNOWN",
+      source: "warmbly",
+      derived: false,
+    },
+    pipeline: {
+      count: observation.accepted && observation.pipeline !== "UNKNOWN"
+        ? observation.pipeline
+        : "UNKNOWN",
+      source: "warmbly",
+      derived: false,
+    },
+    won_lost: observedWonLost(warmbly),
   };
 }
 
@@ -197,37 +402,142 @@ function summarizeVitals(vitals) {
   return out;
 }
 
+function permittedLeadKey(lead) {
+  if (!lead || typeof lead !== "object") return null;
+  const sid = lead.session_id || lead.sid;
+  if (sid) return { type: "sid", value: String(sid) };
+  const corr = lead.correlation_id;
+  if (corr) return { type: "correlation_id", value: String(corr) };
+  return null;
+}
+
+function eventsForLead(lead, bySid, byCorr) {
+  const key = permittedLeadKey(lead);
+  if (!key) return [];
+  if (key.type === "sid") return bySid.get(key.value) || [];
+  return byCorr.get(key.value) || [];
+}
+
+function transitionFromEvents(evs) {
+  const hits = [];
+  for (const e of evs || []) {
+    const name = resolveCollectName(String(e.event || "")) || e.event;
+    if (name !== "content_to_service") continue;
+    const props = e.props || {};
+    hits.push({
+      destination_path: canonicalizePath(props.destination_path || "") || null,
+      destination_service_id: props.destination_service_id || lookupDestinationServiceId(props.destination_path) || UNKNOWN_SERVICE,
+      source_path: canonicalizePath(props.source_path || e.path || "") || null,
+    });
+  }
+  return hits[hits.length - 1] || null;
+}
+
+function reconcileLeadDestination(lead, evs) {
+  const transition = transitionFromEvents(evs);
+  const leadDestPath = canonicalizePath(lead && lead.destination_path) || null;
+  const leadDestId = (lead && lead.destination_service_id) || null;
+  const leadHasDest = !!(leadDestPath || leadDestId);
+  if (transition && leadHasDest) {
+    const samePath = !leadDestPath || leadDestPath === transition.destination_path;
+    const sameId = !leadDestId || leadDestId === transition.destination_service_id;
+    if (samePath && sameId) {
+      return {
+        destination_path: transition.destination_path,
+        destination_service_id: transition.destination_service_id,
+        discrepancy: null,
+      };
+    }
+    return {
+      destination_path: "UNKNOWN",
+      destination_service_id: UNKNOWN_SERVICE,
+      discrepancy: "event_lead_mismatch",
+    };
+  }
+  if (transition && !leadHasDest) {
+    return {
+      destination_path: "UNKNOWN",
+      destination_service_id: UNKNOWN_SERVICE,
+      discrepancy: "lead_missing_destination",
+    };
+  }
+  if (!transition && leadHasDest) {
+    return {
+      destination_path: "UNKNOWN",
+      destination_service_id: UNKNOWN_SERVICE,
+      discrepancy: "event_missing_transition",
+    };
+  }
+  return {
+    destination_path: "UNKNOWN",
+    destination_service_id: UNKNOWN_SERVICE,
+    discrepancy: "UNKNOWN",
+  };
+}
+
 /**
- * First/last touch path attribution for leads using session events.
- * Returns cohort-level only (no PII).
+ * First/last touch path attribution for leads using session/correlation IDs.
+ * Never joins a GSC/query string to a person or lead. Cohort-level only (no PII).
  */
 function attributeLeads(leads, events) {
   const bySid = new Map();
+  const byCorr = new Map();
   for (const ev of events || []) {
     const sid = String(ev.sid || "");
-    if (!sid) continue;
-    if (!bySid.has(sid)) bySid.set(sid, []);
-    bySid.get(sid).push(ev);
+    if (sid) {
+      if (!bySid.has(sid)) bySid.set(sid, []);
+      bySid.get(sid).push(ev);
+    }
+    const corr = ev.props && ev.props.correlation_id;
+    if (corr) {
+      const c = String(corr);
+      if (!byCorr.has(c)) byCorr.set(c, []);
+      byCorr.get(c).push(ev);
+    }
   }
   for (const arr of bySid.values()) {
+    arr.sort((a, b) => String(a.ts).localeCompare(String(b.ts)));
+  }
+  for (const arr of byCorr.values()) {
     arr.sort((a, b) => String(a.ts).localeCompare(String(b.ts)));
   }
 
   const rows = [];
   for (const lead of leads || []) {
-    const sid = lead.session_id || lead.sid;
     const landing = lead.landing_page || null;
-    const evs = sid ? bySid.get(sid) || [] : [];
+    const evs = eventsForLead(lead, bySid, byCorr);
     const first = evs.find((e) => e.event === "page_view") || evs[0];
     const last = [...evs].reverse().find((e) => e.event === "page_view") || evs[evs.length - 1];
-    const assisted = [
-      ...new Set(
-        evs
-          .filter((e) => e.event === "page_view" || e.event === "content_to_service")
-          .map((e) => e.path)
-          .filter(Boolean)
-      ),
-    ].slice(0, 20);
+    const assisted = [];
+    const seenAssist = new Set();
+    for (const e of evs) {
+      const name = resolveCollectName(String(e.event || "")) || e.event;
+      if (name === "page_view") {
+        const path = e.path;
+        const key = `view:${path}`;
+        if (path && !seenAssist.has(key)) {
+          seenAssist.add(key);
+          assisted.push({ path, role: "view" });
+        }
+      }
+      if (name === "content_to_service") {
+        const props = e.props || {};
+        const origin = canonicalizePath(props.source_path || e.path || "");
+        const dest = canonicalizePath(props.destination_path || "") || null;
+        const service = props.destination_service_id || lookupDestinationServiceId(dest) || UNKNOWN_SERVICE;
+        const key = `t:${origin}->${dest}`;
+        if (!seenAssist.has(key)) {
+          seenAssist.add(key);
+          assisted.push({
+            path: origin,
+            destination_path: dest,
+            destination_service_id: service,
+            role: "transition",
+          });
+        }
+      }
+    }
+    const dest = reconcileLeadDestination(lead, evs);
 
     let first_to_lead_hours = null;
     if (first?.ts && lead.received_at) {
@@ -249,9 +559,12 @@ function attributeLeads(leads, events) {
 
     rows.push({
       lead_id: lead.lead_id,
-      first_touch_path: first?.path || landing,
-      last_touch_path: last?.path || landing,
-      assisted_paths: assisted,
+      first_touch_path: canonicalizePath(first?.path || landing || "") || landing,
+      last_touch_path: canonicalizePath(last?.path || landing || "") || landing,
+      assisted_paths: assisted.slice(0, 20),
+      destination_path: dest.destination_path,
+      destination_service_id: dest.destination_service_id,
+      discrepancy: dest.discrepancy,
       commercial_stage: lead.commercial_stage || lead.status,
       first_to_lead_hours,
       lead_to_proposal_hours,
@@ -347,6 +660,9 @@ module.exports = {
   weekKey,
   aggregateEvents,
   attributeLeads,
+  buildOriginDestinationMatrix,
+  buildFunnelLayers,
+  reconcileLeadDestination,
   summarizeVitals,
   isMoneyAssetEvent,
   isMoneyAssetLead,

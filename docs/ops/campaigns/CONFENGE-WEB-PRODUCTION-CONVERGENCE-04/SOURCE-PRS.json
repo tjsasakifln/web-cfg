@@ -1,0 +1,87 @@
+{
+  "origin_main": "4e1d3dbc5f9305bbdaabc03145e01ac91a39f3bd",
+  "integration_branch": "integration/confenge-web-production-convergence-04",
+  "matrix": [
+    {
+      "source_pr": 160,
+      "unique_commits": ["c9473197"],
+      "unique_files": 19,
+      "disposition": "TRANSPLANTED",
+      "transplanted_sha": "cea6cd6b",
+      "tests": "tests/market_answers + sitemap graph close",
+      "residual": "none"
+    },
+    {
+      "source_pr": 167,
+      "unique_commits": ["ce0d1cc9"],
+      "unique_files": 17,
+      "disposition": "TRANSPLANTED_THEN_CLOSED_GRAPH",
+      "transplanted_sha": "63355722",
+      "tests": "scripts/organic/tests/test_sitemap_graph.py",
+      "residual": "none"
+    },
+    {
+      "source_pr": 163,
+      "unique_commits": ["ebd8d257", "364d5977", "b716c85c"],
+      "unique_files": 37,
+      "disposition": "TRANSPLANTED",
+      "transplanted_sha": "7d85a743",
+      "tests": "tests/bofu_dominance/core",
+      "residual": "none"
+    },
+    {
+      "source_pr": 166,
+      "unique_commits": ["7e0fa19a", "251a9d58"],
+      "unique_files": 12,
+      "disposition": "TRANSPLANTED",
+      "transplanted_sha": "4ff807ff",
+      "tests": "tests/attribution/test_source_to_service.mjs",
+      "residual": "none"
+    },
+    {
+      "source_pr": 161,
+      "unique_commits": ["8de089ea", "a2a90d19"],
+      "unique_files": 12,
+      "disposition": "TRANSPLANTED",
+      "transplanted_sha": "a3b0fb87",
+      "tests": "tests/bofu_dominance/safe_execution",
+      "residual": "none"
+    },
+    {
+      "source_pr": 164,
+      "unique_commits": ["921cc80f"],
+      "unique_files": 11,
+      "disposition": "TRANSPLANTED_THEN_AUTHORITY_FIXED",
+      "transplanted_sha": "9b5e2bff",
+      "tests": "tests/bofu_dominance/safe_strategy + tests/offers/test_checkout_negatives.mjs",
+      "residual": "checkout remains behind flag, unreachable from HTML"
+    },
+    {
+      "source_pr": 165,
+      "unique_commits": ["c15c070b"],
+      "unique_files": 33,
+      "disposition": "TRANSPLANTED",
+      "transplanted_sha": "6a968174",
+      "tests": "tests/local_entity",
+      "residual": "none"
+    },
+    {
+      "source_pr": 162,
+      "unique_commits": ["7352f08a"],
+      "unique_files": 43,
+      "disposition": "TRANSPLANTED_HASHES_REBASED_TO_LIVE_HTML",
+      "transplanted_sha": "abe5cd29",
+      "tests": "tests/bofu_dominance/frozen_specs",
+      "residual": "patches remain text/draft, mutate=false"
+    },
+    {
+      "source_pr": 157,
+      "unique_commits": ["42056bb1", "1e244afc"],
+      "unique_files": 30,
+      "disposition": "NOT_TRANSPLANTED_INDEX",
+      "transplanted_sha": null,
+      "tests": "scripts/contract_analysis/tests/test_stale_token_fail_closed.py",
+      "residual": "canary stays noindex/off-sitemap; 2026-08-17 token invalid; v2 preapproval not materialized because 12-item INDEX gate was not proven on this tree"
+    }
+  ]
+}

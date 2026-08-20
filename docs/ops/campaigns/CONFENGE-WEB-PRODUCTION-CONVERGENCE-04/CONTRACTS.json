@@ -1,0 +1,35 @@
+{
+  "confenge_inbound_v1": {
+    "channel": "HMAC POST /api/v1/webhooks/confenge/inbound",
+    "source": "CONFENGE_WEB",
+    "persist_first": true
+  },
+  "confenge_search_observation_v1": {
+    "producer": "netlify/functions/lib/search-observation.cjs",
+    "aggregates_only": true,
+    "query_and_query_hash_forbidden": true,
+    "counts_nullable": true,
+    "delivered_requires_echo_of_version_and_event_id": true,
+    "generic_2xx_is_not_delivered": true,
+    "capability_required": "confenge.search_observation.v1",
+    "synthetic_excluded": true,
+    "store": "LEAD_STORE_DIR/search-observation or existing durable store directory"
+  },
+  "content_to_service": {
+    "event": "content_to_service",
+    "unknown_service": "UNKNOWN_SERVICE",
+    "click_does_not_infer_downstream": true
+  },
+  "offers": {
+    "CONFENGE_OFFER_CATALOG_PUBLIC": false,
+    "production_checkout_enabled": false,
+    "terms_id": "CFG-TERMS-B2B-2026-08-17-v1",
+    "handraise_offer_id": "CFG-DIAG-EXP-v1"
+  },
+  "contract_analysis_canary": {
+    "index": false,
+    "stale_token_2026_08_17": "invalid",
+    "v2_preapproval": "OWNER_CONDITIONAL_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_V2_2026_08_19",
+    "materialized": false
+  }
+}

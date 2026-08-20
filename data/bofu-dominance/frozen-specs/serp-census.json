@@ -1,0 +1,187 @@
+{
+  "schema": "bofu_frozen_serp_census/v1",
+  "as_of": "2026-08-19",
+  "rank_invention": false,
+  "families": {
+    "aditivos-obras-publicas": {
+      "family": "aditivos",
+      "rank_status": "UNKNOWN",
+      "note": "SERP ranks are not invented. GSC historical position for this URL is 49.25 (seo/gsc-2026-08-09). Live rank tracking was not run.",
+      "competitors": [
+        {
+          "url": "https://www.jusbrasil.com.br/artigos/alteracoes-contratuais-aditivos-nas-obras-publicas/1289579327",
+          "kind": "legal_article",
+          "intent": "informational_legal"
+        },
+        {
+          "url": "https://prefeitura.sp.gov.br/web/procuradoria_geral/w/cejur/cejur-debate-aditivos-em-contratos-de-obras-públicas-com-base-na-lei-n-1413321",
+          "kind": "public_sector_event",
+          "intent": "informational_lei_14133"
+        },
+        {
+          "url": "https://www.interempresas.net/ObrasPublicas/494172-Master-Builders-Solutions-referente-mundial-en-aditivos-para-la-Construccion.html",
+          "kind": "chemical_admixture_vendor",
+          "intent": "negative_chemical_aditivos"
+        }
+      ],
+      "intent_gaps": [
+        "Query 'aditivos obras públicas' collides with concrete-admixture SERPs; the commercial job (documentos, limite 25/50, margem) is under-served by generic legal explainers.",
+        "No observed contractor-side decision utility that names when NOT to hire. CONFENGE already has that block; it is not yet a ranking claim.",
+        "CONFENGE rank for the generic query is UNKNOWN; GSC shows pos 49.25 / 0 clicks / 6 query impressions on 'aditivos obras públicas'."
+      ]
+    },
+    "medicoes-glosas-obras-publicas": {
+      "family": "medicoes-pagamentos",
+      "rank_status": "UNKNOWN",
+      "note": "Do not invent pillar rank. Supporting article /conteudos/glosa-de-medicao-obra-publica/ was observed in the web sample; GSC historical CTR there is 12.5% (8 impr / 1 click).",
+      "competitors": [
+        {
+          "url": "https://licitacoesecontratos.tcu.gov.br/4-3-7-criterios-de-medicao-e-de-pagamento-2/",
+          "kind": "tcu_manual",
+          "intent": "informational_administration"
+        },
+        {
+          "url": "https://www.migalhas.com.br/depeso/231732/o-instituto-da-glosa--retencao-de-pagamentos-nos-contratos-administrativos",
+          "kind": "legal_doctrine",
+          "intent": "informational_legal"
+        },
+        {
+          "url": "https://effecti.com.br/glosa-contrato-publico/",
+          "kind": "saas_explainer",
+          "intent": "informational_generic_contracts"
+        },
+        {
+          "url": "https://confenge.com.br/conteudos/glosa-de-medicao-obra-publica/",
+          "kind": "own_supporting",
+          "intent": "informational_contractor"
+        }
+      ],
+      "intent_gaps": [
+        "Money query 'glosa de medição obra pública' already has a CONFENGE supporting URL with a click; the service pillar has 8 impr / 0 clicks. Transfer problem, not missing page.",
+        "Generic glosa explainers (health-plan / TIC / public-controladoria) pollute the term.",
+        "Pillar rank UNKNOWN beyond GSC pos 7.88."
+      ]
+    },
+    "reequilibrio-obras-publicas": {
+      "family": "reequilibrio",
+      "rank_status": "UNKNOWN",
+      "note": "data/organic/search-baseline-2026-08-14.json records CONFENGE_NOT_OBSERVED for 'reequilíbrio contrato obra pública consultoria' and NO_CURRENT_ASSET_RESULT_OBSERVED for site:confenge.com.br/reequilibrio-obras-publicas. Absence in a sample is not non-indexation.",
+      "competitors": [
+        {
+          "url": "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/",
+          "kind": "tcu_manual",
+          "intent": "informational_administration"
+        },
+        {
+          "url": "https://zenite.blog.br/metodologia-ao-restabelecimento-do-equilibrio-economico-financeiro-inicial-em-contratos-de-obras-publicas/",
+          "kind": "legal_blog",
+          "intent": "informational_methodology"
+        },
+        {
+          "url": "https://contreinamentos.com.br/curso/reajuste-e-reequilibrio-economico-financeiro-nas-obras-publicas/",
+          "kind": "course",
+          "intent": "commercial_training"
+        }
+      ],
+      "intent_gaps": [
+        "SERP is doctrine/TCU/course. Contractor decision utility (when NOT to mount the pleito, nexo, no deferment promise) is the gap CONFENGE already wrote.",
+        "CONFENGE not observed on the 2026-08-14 focused sample. Rank UNKNOWN."
+      ]
+    },
+    "auditoria-orcamento-licitacao": {
+      "family": "orcamento-bdi",
+      "rank_status": "UNKNOWN",
+      "note": "Web sample returned the CONFENGE pillar URL with the H1/og string 'Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE', which is NOT the current <title>. Rank number UNKNOWN.",
+      "competitors": [
+        {
+          "url": "https://licitacoesecontratos.tcu.gov.br/4-4-3-6-orcamento-detalhado-do-custo-global-da-obra/",
+          "kind": "tcu_manual",
+          "intent": "informational_administration"
+        },
+        {
+          "url": "https://www.orcafascio.com/papodeengenheiro/bdi-em-obras-publicas",
+          "kind": "saas_explainer",
+          "intent": "informational_bdi"
+        },
+        {
+          "url": "https://repositorio.cgu.gov.br/bitstream/1/44963/5/Manual_de_Auditoria_de_Obras_Publicas_II.pdf",
+          "kind": "cgu_audit_manual",
+          "intent": "negative_controladoria_auditoria"
+        },
+        {
+          "url": "https://www.filipemachadoengenharia.com/artigos/auditoria-tecnica-licitacao-publica-obra/",
+          "kind": "peer_contractor_article",
+          "intent": "commercial_adjacent"
+        }
+      ],
+      "intent_gaps": [
+        "Query language 'auditoria de obras públicas' often means CGU/TCU controladoria, not a contractor pre-bid audit. Negative-query hygiene matters.",
+        "SINAPI money queries belong to /conteudos/sinapi-desonerado-nao-desonerado/ (#126). Pillar must not steal that experiment.",
+        "Pillar GSC: 3/0 @ 9.0 — anecdotal."
+      ]
+    },
+    "diagnostico-b2g-360": {
+      "family": "carteira-operacao",
+      "rank_status": "UNKNOWN",
+      "note": "Web sample shows CONFENGE on branded/offer queries. Generic 'diagnóstico B2G' is occupied by free quizzes. Do not invent rank.",
+      "competitors": [
+        {
+          "url": "https://www.redeb2g.com.br/",
+          "kind": "generic_b2g_platform",
+          "intent": "free_maturity_quiz"
+        },
+        {
+          "url": "https://diagnosticob2g.com.br/",
+          "kind": "generic_b2g_diagnostic",
+          "intent": "licitacoes_generic"
+        },
+        {
+          "url": "https://conquistagov.com.br/",
+          "kind": "b2g_consulting",
+          "intent": "contracts_generic_not_obras"
+        },
+        {
+          "url": "https://b2gsmart.com.br/",
+          "kind": "licitacoes_saas",
+          "intent": "monitor_editais"
+        }
+      ],
+      "intent_gaps": [
+        "Generic B2G diagnostics are not obras-públicas margin-defense. CONFENGE unique utility is the engineering/contract portfolio, not a 5-dimension quiz.",
+        "GSC 1 impr / 0 clicks / pos 15 — anecdotal. Brand query 'confenge' is separate (4 impr / 1 click)."
+      ]
+    },
+    "diagnostico-pre-licitacao": {
+      "family": "edital-proposta",
+      "rank_status": "UNKNOWN",
+      "note": "Web sample returned the CONFENGE pillar on the branded/offer query. Generic 'como analisar edital' is TOFU legal/SaaS. Rank UNKNOWN.",
+      "competitors": [
+        {
+          "url": "https://conlicitacao.com.br/como-analisar-um-edital-de-licitacao/",
+          "kind": "saas_howto",
+          "intent": "informational_generic_edital"
+        },
+        {
+          "url": "https://schiefler.adv.br/edital-de-licitacao/",
+          "kind": "law_firm",
+          "intent": "informational_legal"
+        },
+        {
+          "url": "https://metalicitacoes.com.br/os-10-principais-pontos-a-serem-observados-em-um-edital-para-licitacoes-de-obras-publicas/",
+          "kind": "listicle",
+          "intent": "informational_obras"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8",
+          "kind": "video_howto",
+          "intent": "informational"
+        }
+      ],
+      "intent_gaps": [
+        "TOFU 'como ler um edital' ≠ BOFU 'diagnóstico pré-licitação para obras com matriz de riscos e exequibilidade'.",
+        "Pillar GSC 1/0 @ 18 anecdotal.",
+        "Bid Room is a sibling commercial format; do not keyword-variant this URL into Bid Room."
+      ]
+    }
+  }
+}

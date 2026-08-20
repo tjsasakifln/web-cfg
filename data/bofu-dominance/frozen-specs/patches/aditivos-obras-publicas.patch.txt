@@ -1,0 +1,14 @@
+format: frozen_patch_v1
+slug: aditivos-obras-publicas
+path: aditivos-obras-publicas/index.html
+content_sha256: 3cf907b8b92d8c5267ed8f4b64e63662442051904d0477ab795af1e9d7685523
+earliest_safe_action_at: 2026-09-16
+corresponding_issue: 128
+html_mutation_authorized: false
+do_not_git_apply: true
+---DIFF---
+---REPLACEMENT---
+<<<BEFORE
+<h1>Aditivos e serviços extras em obras públicas: documentar, precificar e decidir</h1>
+===AFTER
+<h1>Aditivos em obras públicas: documentar, precificar e decidir</h1>

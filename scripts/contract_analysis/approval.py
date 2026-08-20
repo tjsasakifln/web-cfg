@@ -10,9 +10,12 @@ from typing import Any
 
 from scripts.contract_analysis import (
     OWNER_CONDITIONAL_APPROVER,
+    OWNER_CONDITIONAL_PREAPPROVAL_V2,
     OWNER_CONDITIONAL_TOKEN,
+    OWNER_CONDITIONAL_TOKEN_2026_08_17,
     OWNER_DIMENSION_MIN,
     OWNER_QUALITY_MIN,
+    STALE_INDEX_TOKENS,
 )
 
 APPROVALS_REL = Path("data/editorial/contract-analysis/approvals.json")
@@ -381,7 +384,9 @@ def approve_conditional_canary(
     actor: str = OWNER_CONDITIONAL_APPROVER,
 ) -> dict[str, Any]:
     """Hash-bound owner-token approval for at most one INDEX canary."""
-    if token != OWNER_CONDITIONAL_TOKEN:
+    if token in STALE_INDEX_TOKENS or token == OWNER_CONDITIONAL_TOKEN_2026_08_17:
+        raise ApprovalError("conditional_token_invalid")
+    if token != OWNER_CONDITIONAL_PREAPPROVAL_V2 or token != OWNER_CONDITIONAL_TOKEN:
         raise ApprovalError("conditional_token_invalid")
     if actor != OWNER_CONDITIONAL_APPROVER:
         raise ApprovalError("conditional_approver_invalid")

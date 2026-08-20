@@ -38,6 +38,9 @@ const MAX_FIELD = {
   evidence_pack_version: 80,
   asset_family: 80,
   query_class: 80,
+  offer_id: 80,
+  terms_id: 80,
+  amount_cents: 16,
 };
 
 /** Query/body keys that may persist as attribution. Everything else is dropped. */
@@ -73,6 +76,8 @@ const ATTR_ALLOWLIST = [
   "evidence_pack_version",
   "asset_family",
   "query_class",
+  "offer_id",
+  "terms_id",
 ];
 
 function looksLikePii(value, key) {
@@ -197,6 +202,64 @@ function isHoneypot(data) {
   return Boolean(hp && String(hp).trim());
 }
 
+function assertOfferTermsAndPrice(data) {
+  const offerId = clamp(data.offer_id, MAX_FIELD.offer_id);
+  const termsId = clamp(data.terms_id || data.terms_version, MAX_FIELD.terms_id);
+  const amountRaw = data.amount_cents;
+  if (!offerId && !termsId && (amountRaw == null || amountRaw === "")) {
+    return { ok: true, offer_id: "", terms_id: "" };
+  }
+  let registry;
+  try {
+    registry = require("../../../scripts/offers/registry.cjs");
+  } catch {
+    return {
+      ok: false,
+      status: 422,
+      error: "offer_registry_unavailable",
+      message: "Registro de oferta indisponível.",
+    };
+  }
+  const canonicalTerms = registry.AUTHORITY.terms_version;
+  if (termsId && termsId !== canonicalTerms) {
+    return {
+      ok: false,
+      status: 422,
+      error: "terms_version_mismatch",
+      message: "Os termos submetidos não coincidem com o registro vigente.",
+    };
+  }
+  if (!offerId) {
+    return {
+      ok: false,
+      status: 422,
+      error: "offer_id_required",
+      message: "Informe o offer_id do registro.",
+    };
+  }
+  const offer = registry.getOffer(offerId);
+  if (!offer) {
+    return {
+      ok: false,
+      status: 422,
+      error: "offer_id_unknown",
+      message: "Oferta inexistente no registro.",
+    };
+  }
+  if (amountRaw != null && amountRaw !== "") {
+    const cents = Number(amountRaw);
+    if (!Number.isFinite(cents) || cents !== offer.amount_cents) {
+      return {
+        ok: false,
+        status: 422,
+        error: "price_mismatch",
+        message: "O valor submetido não coincide com o registro.",
+      };
+    }
+  }
+  return { ok: true, offer_id: offerId, terms_id: termsId || canonicalTerms };
+}
+
 /**
  * Validate and normalize inbound lead payload.
  * @returns {{ ok: true, lead: object } | { ok: false, status: number, error: string, message: string }}
@@ -205,6 +268,9 @@ function validateAndNormalize(data) {
   if (isHoneypot(data)) {
     return { ok: true, honeypot: true };
   }
+
+  const offerCheck = assertOfferTermsAndPrice(data);
+  if (!offerCheck.ok) return offerCheck;
 
   const nome = clamp(data.nome || data.name, MAX_FIELD.nome);
   const telefone = normalizePhone(data.telefone || data.whatsapp || data.phone || data.tel);
@@ -292,6 +358,8 @@ function validateAndNormalize(data) {
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     public_id_slug: clamp(data.public_id_slug, MAX_FIELD.public_id_slug) || null,
     cnpj: clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
+    offer_id: offerCheck.offer_id || null,
+    terms_id: offerCheck.terms_id || null,
     source: "CONFENGE_WEB",
   };
 
@@ -463,6 +531,7 @@ module.exports = {
   pickAttribution,
   parseBody,
   isHoneypot,
+  assertOfferTermsAndPrice,
   validateAndNormalize,
   generateLeadId,
   idempotencyKeyFor,

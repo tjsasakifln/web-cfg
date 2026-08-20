@@ -1,9 +1,10 @@
 # Funnel event dictionary
 
-**Schema:** `1.0.0`  
+**Schema:** `1.1.0`  
 **Public source:** `CONFENGE_WEB`  
 **Machine registry:** `netlify/functions/lib/event-registry.json`  
-**Admit/minimize/reconcile:** `netlify/functions/lib/event-contract.cjs`
+**Admit/minimize/reconcile:** `netlify/functions/lib/event-contract.cjs`  
+**Source→service:** [docs/seo/source-to-service/CONTRACT.md](../seo/source-to-service/CONTRACT.md)
 
 `confenge.com.br` is the only public surface. extra-cli owns facts. Warmbly owns commercial outcomes. This contract owns public event *names* so page view, engagement, completion, lead, qualified lead and pipeline cannot collapse.
 
@@ -14,11 +15,13 @@ Every admitted event carries:
 | Field | Rule |
 |---|---|
 | `source` | Always `CONFENGE_WEB` |
-| `schema_version` | Event schema, currently `1.0.0` |
+| `schema_version` | Event schema; `content_to_service` is `1.1.0` |
 | `asset_id` / `asset_family` / `route_family` | When known |
+| `source_path` / `source_asset_id` / `source_asset_family` | Required on `content_to_service` |
+| `destination_path` / `destination_service_id` | Canonical dest on `content_to_service`. Unknown dest is `UNKNOWN_SERVICE` |
 | `intent` | When known |
 | `cta_id` / `cta_position` | When the event is a CTA |
-| `correlation_id` / `idempotency_key` | When the producer has them |
+| `correlation_id` / `idempotency_key` / `event_id` | When the producer has them. `event_id` dedupes one physical click |
 | `consent` | `not_required` on aggregate events |
 | `pii_policy` | `aggregate_allowlist_empty` |
 
@@ -36,6 +39,8 @@ The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query t
 | `pipeline` | Observed Warmbly commercial outcome only | — |
 
 `session_start` is a session marker. It is not a page view.
+
+`content_to_service` stays on the engagement layer. Aggregator `funnel_layers` reports `transition`, `lead`, `qualified`, `pipeline`, and `won_lost` as separate series. `qualified` / `pipeline` / `won_lost` are observed Warmbly inputs only (#88). Absence of a series is `UNKNOWN`, never numeric zero.
 
 Missing Warmbly evidence stays `UNKNOWN`. Reconciliation never derives qualified lead or pipeline from an earlier stage.
 

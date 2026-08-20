@@ -1,0 +1,213 @@
+{
+  "slug": "diagnostico-pre-licitacao",
+  "path": "/diagnostico-pre-licitacao/",
+  "family": "edital-proposta",
+  "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+  "mode": "PREPARE_ONLY",
+  "html_mutation": false,
+  "corresponding_issue": 128,
+  "earliest_safe_action_at": "2026-09-16",
+  "evidential_close": false,
+  "demand_control_citation": {
+    "pr": 159,
+    "authorizes_html_edit": false,
+    "source_kind": "LIVE_JOB_OK",
+    "bofu_observe_only": true,
+    "earliest_safe_action_at": "2026-09-16",
+    "ready_for_product_decisions": false
+  },
+  "issue_128_baseline": {
+    "issue": 128,
+    "state": "LANDED_AWAITING_LIVE_EVIDENCE",
+    "commercial_click_share": 0.0,
+    "evidential_close": false,
+    "gsc_row": {
+      "impressions": 1,
+      "clicks": 0,
+      "position": 18.0
+    }
+  },
+  "extra_cli_inputs": {
+    "pr_435": {
+      "state": "COMPARABLE",
+      "publication_authorization": false,
+      "use": "factual_input_only"
+    },
+    "pr_437": {
+      "verdict": "PARTIAL",
+      "national_claim_authorized": false,
+      "use": "factual_input_only"
+    },
+    "publication_authorization": false,
+    "national_claim_authorized": false
+  },
+  "gsc_precondition": {
+    "gsc_live_available": true,
+    "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
+    "authorizes_html_edit": false,
+    "other_evidence_decision": {
+      "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
+      "sources": [
+        "seo/gsc-2026-08-09",
+        "docs/ops/ORGANIC-GROWTH-REPORT.md",
+        "https://github.com/tjsasakifln/web-cfg/issues/128"
+      ],
+      "invented_live_metrics": false,
+      "reason": "PR #159 live Search Analytics is LIVE_JOB_OK. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
+    }
+  },
+  "success_metrics": {
+    "commercial_click_share": "no longer 0% on a 28-day GSC window after gate, or an explicit kill note that demand is informational-only at this volume",
+    "service_url_clicks": "at least one click on this service URL in the next complete 28d GSC window, or the pillar leaves the documented position band",
+    "north_star": "inbound qualified pipeline / month; impressions on /conteudos/ are not success",
+    "denominator": "historical seo/gsc-2026-08-09 until GSC live is ready_for_product_decisions=true"
+  },
+  "kill_metrics": {
+    "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
+    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from LIVE_JOB_OK",
+    "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change"
+  },
+  "revert_metrics": {
+    "trigger": "revert the hash-bound patch if CTR/position on the owned query does not move while position is stable, or if a sibling cannibalizes the same non-brand intent",
+    "method": "restore the bound content_sha256 of the pillar HTML; do not blanket-redirect"
+  },
+  "visitor_job": "Decidir participar, esclarecer, impugnar, ajustar estrutura ou abandonar um edital de obra pública antes de imobilizar a equipe na proposta.",
+  "serp_census": {
+    "family": "edital-proposta",
+    "as_of": "2026-08-19",
+    "rank_status": "UNKNOWN",
+    "note": "Web sample returned the CONFENGE pillar on the branded/offer query. Generic 'como analisar edital' is TOFU legal/SaaS. Rank UNKNOWN.",
+    "competitors": [
+      {
+        "url": "https://conlicitacao.com.br/como-analisar-um-edital-de-licitacao/",
+        "kind": "saas_howto",
+        "intent": "informational_generic_edital"
+      },
+      {
+        "url": "https://schiefler.adv.br/edital-de-licitacao/",
+        "kind": "law_firm",
+        "intent": "informational_legal"
+      },
+      {
+        "url": "https://metalicitacoes.com.br/os-10-principais-pontos-a-serem-observados-em-um-edital-para-licitacoes-de-obras-publicas/",
+        "kind": "listicle",
+        "intent": "informational_obras"
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8",
+        "kind": "video_howto",
+        "intent": "informational"
+      }
+    ],
+    "intent_gaps": [
+      "TOFU 'como ler um edital' ≠ BOFU 'diagnóstico pré-licitação para obras com matriz de riscos e exequibilidade'.",
+      "Pillar GSC 1/0 @ 18 anecdotal.",
+      "Bid Room is a sibling commercial format; do not keyword-variant this URL into Bid Room."
+    ]
+  },
+  "query_ownership": {
+    "owned": [
+      "diagnóstico pré-licitação obras públicas",
+      "análise de edital de obra pública (service)"
+    ],
+    "not_owned": [
+      "empreitada global ou preço unitário → /conteudos/empreitada-preco-global-preco-unitario/",
+      "comprovação de exequibilidade → /conteudos/comprovacao-exequibilidade-proposta-obra/",
+      "bid room licitações obras → /bid-room-licitacoes-obras/"
+    ]
+  },
+  "negative_queries": [
+    "como analisar edital (generic goods/services)",
+    "impugnação de edital as standalone legal product",
+    "tenders/licitações TOFU without contractor margin job (#60 VALIDATE next, not this pillar rewrite)"
+  ],
+  "cannibalization": {
+    "status": "RISK_OFFER_AND_LIBRARY",
+    "siblings": [
+      {
+        "url": "/bid-room-licitacoes-obras/",
+        "note": "execution format vs diagnostic decision"
+      },
+      {
+        "url": "/conteudos/empreitada-preco-global-preco-unitario/",
+        "note": "library guide listed on this pillar"
+      }
+    ]
+  },
+  "before_after_blocks": [
+    {
+      "block": "meta_og_schema_description",
+      "before": "...transformar uma vitória na licitação em um…",
+      "after": "...transformar uma vitória na licitação em um contrato ruim.",
+      "why": "Complete truncated description already in the visible lead."
+    },
+    {
+      "block": "title_h1_canonical",
+      "before": "Diagnóstico pré-licitação para obras públicas | CONFENGE; canonical present",
+      "after": "unchanged",
+      "why": "Already aligned. Do not doorway-keyword 'análise de edital'."
+    },
+    {
+      "block": "cta",
+      "before": "hero generic WhatsApp; bridge 'Avaliar uma oportunidade'",
+      "after": "unchanged",
+      "why": "CTA/offer freeze."
+    }
+  ],
+  "evidence_proof_needed": [
+    "28d GSC vs 1/0 @ 18.0.",
+    "Do not publish extra-cli COMPARABLE contract as a pre-bid case study (publication_authorization=false).",
+    "Kill if the meta completion does not move CTR while n stays anecdotal, or if Bid Room cannibalizes the same query."
+  ],
+  "snapshot": {
+    "slug": "diagnostico-pre-licitacao",
+    "path": "/diagnostico-pre-licitacao/",
+    "html_rel": "diagnostico-pre-licitacao/index.html",
+    "title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
+    "meta_description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um…",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/diagnostico-pre-licitacao/",
+    "og_title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
+    "og_url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+    "h1": "Diagnóstico pré-licitação para obras públicas",
+    "schema_types": [
+      "Organization",
+      "Country",
+      "ContactPoint",
+      "Person",
+      "CollegeOrUniversity",
+      "CollectionPage",
+      "WebSite",
+      "ItemList",
+      "ListItem",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage",
+      "Question",
+      "Answer"
+    ],
+    "cta": {
+      "hero_text": "Analisar uma demanda",
+      "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+      "bridges": [
+        {
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20um%20Bid%20Room%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+          "text": "Avaliar uma oportunidade"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "text": "Conhecer a Diretoria B2G"
+        }
+      ],
+      "when_not_to_hire": true,
+      "whatsapp_present": true,
+      "form_count": 0
+    },
+    "content_sha256": "1490c9d0101bad0d53937cbbbee5dfd495b787051bd2386838b1a3f7e3c2bd72",
+    "bytes": 22592,
+    "noindex": false
+  }
+}

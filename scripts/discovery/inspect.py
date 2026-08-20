@@ -133,12 +133,9 @@ def extract_sitemap_locs(xml_text: str) -> list[str]:
 
 
 def load_sitemap_urls(root: Path) -> set[str]:
-    urls: set[str] = set()
-    for name in SITEMAP_FILES:
-        path = root / name
-        if path.is_file():
-            urls.update(extract_sitemap_locs(path.read_text(encoding="utf-8", errors="replace")))
-    return urls
+    from scripts.organic.sitemap_graph import load_graph_locs
+
+    return set(load_graph_locs(root))
 
 
 def robots_disallows(robots_text: str) -> list[str]:

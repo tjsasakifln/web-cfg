@@ -4,6 +4,7 @@
  * Public source is always CONFENGE_WEB. Aggregate PII allowlist is empty.
  */
 const REGISTRY = require("./event-registry.json");
+const sts = require("./source-to-service.cjs");
 
 const SOURCE = REGISTRY.source;
 const SCHEMA_VERSION = REGISTRY.schema_version;
@@ -15,7 +16,7 @@ const DENOMINATORS = Object.freeze([...(REGISTRY.denominators || [])]);
 const ENVELOPE_FIELDS = Object.freeze([...(REGISTRY.envelope_fields || [])]);
 const CTA_KIND_FROM_ALIAS = REGISTRY.cta_kind_from_alias || {};
 // Envelope identifiers may contain Date.now() / UUID digits. Match lead-core.cjs:82.
-const ENVELOPE_ID_KEYS = new Set(["correlation_id", "idempotency_key"]);
+const ENVELOPE_ID_KEYS = new Set(["correlation_id", "idempotency_key", "event_id"]);
 
 const LAYER_RANK = Object.freeze({
   session: 0,
@@ -238,9 +239,10 @@ function admitEvent(raw) {
   const aliasMeta = classified.classification === "alias"
     ? { cta_kind: CTA_KIND_FROM_ALIAS[original] }
     : {};
-  const props = applyEnvelope(canonical, minimized.props, aliasMeta);
-  const path = String(input.path || props.page_path || props.path || "").slice(0, 180);
-  const safePath = /@|whatsapp|telefone/i.test(path) ? "/[redacted]" : path;
+  const path = String(input.path || minimized.props.page_path || minimized.props.path || "").slice(0, 180);
+  const safePath = /@|whatsapp|telefone/i.test(path) ? "/[redacted]" : (sts.canonicalizePath(path) || path);
+  const transitionProps = sts.normalizeTransitionProps(canonical, minimized.props, { path: safePath });
+  const props = applyEnvelope(canonical, transitionProps, aliasMeta);
 
   return {
     ok: true,
@@ -263,6 +265,30 @@ function admitEvent(raw) {
       sid: String(input.sid || input.session_id || "").slice(0, 32),
     },
   };
+}
+
+function admitBatch(events, seen) {
+  const seenIds = seen instanceof Set ? seen : new Set();
+  const admitted = [];
+  const rejected = [];
+  for (const ev of events || []) {
+    const result = admitEvent(ev);
+    if (!result.ok) {
+      rejected.push({
+        event: ev && (ev.event || ev.name),
+        reason: result.reason,
+      });
+      continue;
+    }
+    const eventId = String((result.event.props && result.event.props.event_id) || "").slice(0, 80);
+    if (eventId && seenIds.has(eventId)) {
+      rejected.push({ event: result.canonical, reason: "duplicate_event_id", event_id: eventId });
+      continue;
+    }
+    if (eventId) seenIds.add(eventId);
+    admitted.push(result);
+  }
+  return { admitted, rejected, seen: seenIds };
 }
 
 function assertNotPromoted(fromLayer, toLayer) {
@@ -458,6 +484,7 @@ function clientMaps() {
     retired: retiredNames(),
     reject_prefixes: [...REJECT_PREFIXES],
     cta_kind_from_alias: { ...CTA_KIND_FROM_ALIAS },
+    source_to_service: sts.maps(),
   };
 }
 
@@ -475,6 +502,15 @@ module.exports = {
   ENVELOPE_FIELDS,
   ENVELOPE_ID_KEYS,
   LAYER_RANK,
+  UNKNOWN_SERVICE: sts.UNKNOWN_SERVICE,
+  CANONICAL_DESTINATIONS: sts.CANONICAL_DESTINATIONS,
+  ORIGIN_PREFIXES: sts.ORIGIN_PREFIXES,
+  canonicalizePath: sts.canonicalizePath,
+  canonicalizeDestination: sts.canonicalizeDestination,
+  classifyTransition: sts.classifyTransition,
+  lookupDestinationServiceId: sts.lookupDestinationServiceId,
+  originFamilyFromPath: sts.originFamilyFromPath,
+  normalizeTransitionProps: sts.normalizeTransitionProps,
   getRegistry,
   admittedNames,
   observedOnlyNames,
@@ -492,6 +528,7 @@ module.exports = {
   minimizeProps,
   applyEnvelope,
   admitEvent,
+  admitBatch,
   assertNotPromoted,
   reconcileFunnel,
   inventoryArtifact,

@@ -1,0 +1,19 @@
+{
+  "gsc_live": {
+    "status": "BLOCKED",
+    "source_kind": "credential_failure",
+    "impressions": null,
+    "clicks": null,
+    "ready_for_product_decisions": false
+  },
+  "rows": [
+    {
+      "id": "collapsed",
+      "channel": "MAP_PACK+ORGANIC",
+      "query_or_context": "CONFENGE",
+      "source": "campaign_query",
+      "freshness": "UNKNOWN",
+      "limitation": "collapsed fixture"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "campaign_snapshot": "CONFENGE-WEB-BOFU-SAFE-EXECUTION-01",
+  "as_of": "2026-08-19",
+  "source_kind": "github_pr_body_plus_in_repo_queue",
+  "pr": {
+    "number": 159,
+    "title": "feat(revops): operational SEO demand-control loop (no content factory)",
+    "html_url": "https://github.com/tjsasakifln/web-cfg/pull/159",
+    "head_sha": "feba68928ab997229028a66bb25d3b3b5a439206",
+    "base_sha": "faadc16609210522c9ffaf32a7b944817f6c6214",
+    "draft": true,
+    "merged": false,
+    "gsc_loop": "credential_failure",
+    "ready_for_product_decisions": false
+  },
+  "authorizes_html_edit": false,
+  "observe_only": [
+    {
+      "rank": 1,
+      "action": "observe_only",
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "exclusion": "#126",
+      "diagnosis": "ctr_gap"
+    },
+    {
+      "rank": 2,
+      "action": "observe_only",
+      "path": "/aditivos-obras-publicas/",
+      "exclusion": "#128",
+      "diagnosis": "observe_only"
+    },
+    {
+      "rank": 3,
+      "action": "observe_only",
+      "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "exclusion": "#127",
+      "diagnosis": "observe_only"
+    }
+  ],
+  "safe_execution_urls": [
+    "/defesa-margem-contratos-publicos/",
+    "/atrasos-prorrogacao-obras-publicas/",
+    "/defesa-tecnica-contratos-publicos/",
+    "/acompanhamento-contratos-obras/"
+  ],
+  "proof": "None of the four safe-execution URLs appear in PR #159 observe_only current_landing or intended_landing. Frozen #128 pillars, #126 SINAPI snippet and #127 chuva canary remain observe_only.",
+  "zero_inferred_from_absence": false
+}

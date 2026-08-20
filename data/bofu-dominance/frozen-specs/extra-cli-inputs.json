@@ -1,0 +1,28 @@
+{
+  "schema": "bofu_frozen_extra_cli_inputs/v1",
+  "publication_authorization": false,
+  "national_claim_authorized": false,
+  "index_authorization": false,
+  "use_as_live_copy": false,
+  "pr_435": {
+    "repo": "tjsasakifln/extra-cli",
+    "url": "https://github.com/tjsasakifln/extra-cli/pull/435",
+    "state": "COMPARABLE",
+    "family": "paralelepipedo",
+    "n_used": 12,
+    "metric": "valor_integral_nominal",
+    "publication_authorization": false,
+    "index_authorization": false,
+    "national_claim_authorized": false,
+    "role_in_this_campaign": "factual_input_only_proof_needed_note"
+  },
+  "pr_437": {
+    "repo": "tjsasakifln/extra-cli",
+    "url": "https://github.com/tjsasakifln/extra-cli/pull/437",
+    "verdict": "PARTIAL",
+    "national_claim_authorized": false,
+    "reason_codes": ["partitions_not_closed", "unconsulted_partitions_remain"],
+    "role_in_this_campaign": "factual_input_only_proof_needed_note"
+  },
+  "note": "Do not publish COMPARABLE/PARTIAL as live copy, schema, or a national claim."
+}

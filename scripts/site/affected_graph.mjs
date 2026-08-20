@@ -111,6 +111,51 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/.netlify/functions/lead"],
   },
+  "test:search-observation": {
+    producers: [
+      "scripts/site/test_search_observation.mjs",
+      "netlify/functions/lib/search-observation.cjs",
+      "netlify/functions/lib/inbound-handoff.cjs",
+    ],
+    artifacts: [],
+    surfaces: ["/.netlify/functions/lead"],
+  },
+  "test:checkout-negatives": {
+    producers: [
+      "tests/offers/test_checkout_negatives.mjs",
+      "diagnostico-b2g-expansao/index.html",
+      "netlify/functions/offer-checkout.cjs",
+      "netlify/functions/lib/lead-core.cjs",
+      "data/offers/flags.json",
+    ],
+    artifacts: [],
+    surfaces: ["/diagnostico-b2g-expansao/"],
+  },
+  "test:bofu-dominance": {
+    producers: ["tests/bofu_dominance/", "scripts/bofu_dominance/", "data/bofu-dominance/"],
+    artifacts: ["docs/seo/bofu-dominance/"],
+    surfaces: [
+      "/defesa-margem-contratos-publicos/",
+      "/bid-room-licitacoes-obras/",
+      "/diretoria-b2g/",
+      "/diagnostico-b2g-expansao/",
+    ],
+  },
+  "test:local-entity": {
+    producers: ["tests/local_entity/", "scripts/local_entity/", "data/local-entity/"],
+    artifacts: ["docs/seo/local-entity/"],
+    surfaces: ["/especialista/tiago-jun-sasaki/"],
+  },
+  "test:sitemap-graph": {
+    producers: [
+      "scripts/organic/tests/test_sitemap_graph.py",
+      "scripts/organic/sitemap_graph.py",
+      "sitemap-index.xml",
+      "sitemap.txt",
+    ],
+    artifacts: ["sitemap-index.xml", "sitemap.txt", "data/organic/sitemap-hygiene.json"],
+    surfaces: ["/sitemap-index.xml", "/sitemap.txt"],
+  },
   "test:attribution-allowlist": {
     producers: ["scripts/site/test_attribution_allowlist.mjs"],
     artifacts: [],

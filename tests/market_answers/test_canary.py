@@ -61,18 +61,45 @@ def test_family_build_and_validate_fixture_stays_noindex():
     assert check["fixture_indexed"] is False
 
 
-def test_family_build_official_sc_indexes_when_approved():
+def test_family_build_official_sc_indexes_when_approved_and_current():
+    built = _run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.market_answers",
+            "build",
+            "--report-only",
+            "--now",
+            "2026-08-17T12:00:00Z",
+        ]
+    )
+    assert built.returncode == 0, built.stderr + built.stdout
+    payload = json.loads(built.stdout)
+    assert payload["ok"] is True
+    assert payload["official_live"] is True
+    # INDEX only when the hashed approval matches and the injected instant
+    # is still before expires_at. Does not write INDEX onto a stale canary.
+    assert payload["index_count"] == 1
+    assert payload["robots"] == "index,follow"
+    assert payload["sitemap"] is True
+    assert payload["recommendation"] == "PUBLISHABLE_INDEX"
+    assert payload["freshness_class"] in {"CURRENT", "EXPIRING"}
+    assert payload["state"] == "PUBLISHABLE_INDEX"
+
+
+def test_family_build_official_sc_fail_closed_on_real_clock():
     built = _run([sys.executable, "-m", "scripts.market_answers", "build"])
     assert built.returncode == 0, built.stderr + built.stdout
     payload = json.loads(built.stdout)
     assert payload["ok"] is True
     assert payload["official_live"] is True
-    # INDEX only when the hashed approval matches. The shipped approvals
-    # file is minted after hashes stabilize; this test reads that file.
-    assert payload["index_count"] == 1
-    assert payload["robots"] == "index,follow"
-    assert payload["sitemap"] is True
-    assert payload["recommendation"] == "PUBLISHABLE_INDEX"
+    assert payload["state"] != "PUBLISHABLE_INDEX"
+    assert payload["index_count"] == 0
+    assert "noindex" in payload["robots"]
+    assert payload["sitemap"] is False
+    assert payload["freshness_class"] in {"STALE", "UNKNOWN"}
+    assert payload["evaluated_at"]
+    assert "2026-08-17T00:00:00Z" not in payload["evaluated_at"]
 
 
 def test_status_report_has_required_fields():
@@ -88,12 +115,21 @@ def test_status_report_has_required_fields():
         "blockers",
         "next_integration_steps",
         "recommendation",
+        "freshness_class",
+        "evaluated_at",
+        "age_seconds",
+        "expires_at",
     ):
         assert key in status
+    assert status["freshness_class"] in {"CURRENT", "EXPIRING", "STALE", "UNKNOWN"}
     assert status["candidate_decision"]["demand"]["status"] == "UNKNOWN"
+    assert status["generated_at"] == status["evaluated_at"]
+    assert status["generated_at"] != "2026-08-17T00:00:00Z"
+    assert status["generated_at"] != "2026-08-16T00:00:00Z"
     md = STATUS_MD.read_text(encoding="utf-8")
     assert "Recommendation" in md
     assert "UNKNOWN" in md
+    assert "freshness_class" in md
     notes = NOTES.read_text(encoding="utf-8")
     assert "Goal 03" in notes
     assert "Goal 05" in notes

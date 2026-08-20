@@ -76,13 +76,15 @@ def merge_inteligencia_sitemap(
     path = base / SITEMAP_NAME
     existing: list[tuple[str, str]] = []
     if path.is_file():
+        from scripts.organic.sitemap_graph import parse_urlset_entries
+
         text = path.read_text(encoding="utf-8")
-        for loc in parse_locs(text):
+        for loc, prev in parse_urlset_entries(text):
             if is_market_answer_loc(loc):
                 continue
-            existing.append((loc, lastmod))
+            existing.append((loc, prev or ""))
     if include:
-        existing.append((CANONICAL, lastmod))
+        existing.append((CANONICAL, lastmod or ""))
     write_urlset(path, existing)
     return path
 

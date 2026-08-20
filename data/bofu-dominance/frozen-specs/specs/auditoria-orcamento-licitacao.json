@@ -1,0 +1,213 @@
+{
+  "slug": "auditoria-orcamento-licitacao",
+  "path": "/auditoria-orcamento-licitacao/",
+  "family": "orcamento-bdi",
+  "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+  "mode": "PREPARE_ONLY",
+  "html_mutation": false,
+  "corresponding_issue": 128,
+  "earliest_safe_action_at": "2026-09-16",
+  "evidential_close": false,
+  "demand_control_citation": {
+    "pr": 159,
+    "authorizes_html_edit": false,
+    "source_kind": "LIVE_JOB_OK",
+    "bofu_observe_only": true,
+    "earliest_safe_action_at": "2026-09-16",
+    "ready_for_product_decisions": false
+  },
+  "issue_128_baseline": {
+    "issue": 128,
+    "state": "LANDED_AWAITING_LIVE_EVIDENCE",
+    "commercial_click_share": 0.0,
+    "evidential_close": false,
+    "gsc_row": {
+      "impressions": 3,
+      "clicks": 0,
+      "position": 9.0
+    }
+  },
+  "extra_cli_inputs": {
+    "pr_435": {
+      "state": "COMPARABLE",
+      "publication_authorization": false,
+      "use": "factual_input_only"
+    },
+    "pr_437": {
+      "verdict": "PARTIAL",
+      "national_claim_authorized": false,
+      "use": "factual_input_only"
+    },
+    "publication_authorization": false,
+    "national_claim_authorized": false
+  },
+  "gsc_precondition": {
+    "gsc_live_available": true,
+    "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
+    "authorizes_html_edit": false,
+    "other_evidence_decision": {
+      "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
+      "sources": [
+        "seo/gsc-2026-08-09",
+        "docs/ops/ORGANIC-GROWTH-REPORT.md",
+        "https://github.com/tjsasakifln/web-cfg/issues/128"
+      ],
+      "invented_live_metrics": false,
+      "reason": "PR #159 live Search Analytics is LIVE_JOB_OK. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
+    }
+  },
+  "success_metrics": {
+    "commercial_click_share": "no longer 0% on a 28-day GSC window after gate, or an explicit kill note that demand is informational-only at this volume",
+    "service_url_clicks": "at least one click on this service URL in the next complete 28d GSC window, or the pillar leaves the documented position band",
+    "north_star": "inbound qualified pipeline / month; impressions on /conteudos/ are not success",
+    "denominator": "historical seo/gsc-2026-08-09 until GSC live is ready_for_product_decisions=true"
+  },
+  "kill_metrics": {
+    "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
+    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from LIVE_JOB_OK",
+    "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change"
+  },
+  "revert_metrics": {
+    "trigger": "revert the hash-bound patch if CTR/position on the owned query does not move while position is stable, or if a sibling cannibalizes the same non-brand intent",
+    "method": "restore the bound content_sha256 of the pillar HTML; do not blanket-redirect"
+  },
+  "visitor_job": "Encontrar itens que concentram risco de preço/BDI/referência e conhecer a margem real antes de assumir a obra.",
+  "serp_census": {
+    "family": "orcamento-bdi",
+    "as_of": "2026-08-19",
+    "rank_status": "UNKNOWN",
+    "note": "Web sample returned the CONFENGE pillar URL with the H1/og string 'Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE', which is NOT the current <title>. Rank number UNKNOWN.",
+    "competitors": [
+      {
+        "url": "https://licitacoesecontratos.tcu.gov.br/4-4-3-6-orcamento-detalhado-do-custo-global-da-obra/",
+        "kind": "tcu_manual",
+        "intent": "informational_administration"
+      },
+      {
+        "url": "https://www.orcafascio.com/papodeengenheiro/bdi-em-obras-publicas",
+        "kind": "saas_explainer",
+        "intent": "informational_bdi"
+      },
+      {
+        "url": "https://repositorio.cgu.gov.br/bitstream/1/44963/5/Manual_de_Auditoria_de_Obras_Publicas_II.pdf",
+        "kind": "cgu_audit_manual",
+        "intent": "negative_controladoria_auditoria"
+      },
+      {
+        "url": "https://www.filipemachadoengenharia.com/artigos/auditoria-tecnica-licitacao-publica-obra/",
+        "kind": "peer_contractor_article",
+        "intent": "commercial_adjacent"
+      }
+    ],
+    "intent_gaps": [
+      "Query language 'auditoria de obras públicas' often means CGU/TCU controladoria, not a contractor pre-bid audit. Negative-query hygiene matters.",
+      "SINAPI money queries belong to /conteudos/sinapi-desonerado-nao-desonerado/ (#126). Pillar must not steal that experiment.",
+      "Pillar GSC: 3/0 @ 9.0 — anecdotal."
+    ]
+  },
+  "query_ownership": {
+    "owned": [
+      "auditoria de orçamento licitação obras",
+      "BDI obras públicas (service, not the supporting article)"
+    ],
+    "not_owned": [
+      "desonerado e não desonerado / sinapi desonerado → #126 URL",
+      "bdi diferenciado obra pública → /conteudos/bdi-diferenciado-obra-publica/ (2 clicks / 11 impr, benchmark not rewrite)"
+    ]
+  },
+  "negative_queries": [
+    "auditoria TCU/CGU de obras públicas (controle externo)",
+    "SINAPI table download / tabela SINAPI 2026 as a destination",
+    "national SINAPI coverage claims (extra-cli #437 not authorized)"
+  ],
+  "cannibalization": {
+    "status": "RISK_TITLE_CONTAINS_SINAPI",
+    "siblings": [
+      {
+        "url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "gsc": "89 impr / 1 click / pos 7.27",
+        "owner": "#126 observe_only until 2026-09-16"
+      },
+      {
+        "url": "/conteudos/bdi-diferenciado-obra-publica/",
+        "gsc": "11 impr / 2 clicks / CTR 18.18%"
+      }
+    ]
+  },
+  "before_after_blocks": [
+    {
+      "block": "title",
+      "before": "Orçamento, BDI e SINAPI em obras públicas | CONFENGE",
+      "after": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
+      "why": "Align <title> with H1 and og:title (already what the web sample displayed). Apply only after gate; still do not rewrite the #126 SINAPI article."
+    },
+    {
+      "block": "meta_og_schema_description",
+      "before": "...preenchimento mecânico de…",
+      "after": "...preenchimento mecânico de planilha.",
+      "why": "Complete truncated description already visible in the lead."
+    },
+    {
+      "block": "when_not_to_hire",
+      "before": "H3 'Quando NÃO contratar?' exists without id=quando-nao-contratar / data-when-not-hire",
+      "after": "same TAYA section gains id and data-when-not-hire so the pillar matches the #128 when-not-to-hire check without new copy",
+      "why": "Hygiene / consistency with the other five pillars. No new URL."
+    }
+  ],
+  "evidence_proof_needed": [
+    "Do not apply while #126 is in 14/28-day observation if the title change would re-front SINAPI as the pillar query.",
+    "28d GSC vs 3/0 @ 9.0.",
+    "extra-cli COMPARABLE paving group is not a BDI audit proof and must not be published here."
+  ],
+  "snapshot": {
+    "slug": "auditoria-orcamento-licitacao",
+    "path": "/auditoria-orcamento-licitacao/",
+    "html_rel": "auditoria-orcamento-licitacao/index.html",
+    "title": "Orçamento, BDI e SINAPI em obras públicas | CONFENGE",
+    "meta_description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de…",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+    "og_title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
+    "og_url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+    "h1": "Auditoria de orçamento, BDI, SINAPI e preço",
+    "schema_types": [
+      "Organization",
+      "Country",
+      "ContactPoint",
+      "Person",
+      "CollegeOrUniversity",
+      "CollectionPage",
+      "WebSite",
+      "ItemList",
+      "ListItem",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage",
+      "Question",
+      "Answer"
+    ],
+    "cta": {
+      "hero_text": "Analisar uma demanda",
+      "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+      "bridges": [
+        {
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+          "text": "Revisar esta oportunidade"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "text": "Operação B2G continuada"
+        }
+      ],
+      "when_not_to_hire": false,
+      "whatsapp_present": true,
+      "form_count": 0
+    },
+    "content_sha256": "f178e0b78b89e13d8ffc8f671d4c4c36d2a52e275a27b9ab164e7a3f85558b17",
+    "bytes": 28597,
+    "noindex": false
+  }
+}

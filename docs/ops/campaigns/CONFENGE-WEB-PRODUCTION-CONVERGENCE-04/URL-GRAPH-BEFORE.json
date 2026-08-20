@@ -1,0 +1,14 @@
+{
+  "as_of": "preflight origin/main 4e1d3dbc",
+  "sitemap_index_members": [
+    "sitemap.xml",
+    "sitemap-editorial.xml",
+    "sitemap-jurisprudencia.xml",
+    "sitemap-inteligencia.xml"
+  ],
+  "notes": [
+    "Production robots pointed only at sitemap-index.xml.",
+    "Market Answer HTML was already noindex after expiry on #160, but cohort/allowlist/sitemap.txt still listed INDEX until this convergence closed the graph.",
+    "Counts on origin/main were not treated as authority for the closed graph."
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "slug": "medicoes-glosas-obras-publicas",
+  "path": "/medicoes-glosas-obras-publicas/",
+  "family": "medicoes-pagamentos",
+  "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+  "mode": "PREPARE_ONLY",
+  "html_mutation": false,
+  "corresponding_issue": 128,
+  "earliest_safe_action_at": "2026-09-16",
+  "evidential_close": false,
+  "demand_control_citation": {
+    "pr": 159,
+    "authorizes_html_edit": false,
+    "source_kind": "LIVE_JOB_OK",
+    "bofu_observe_only": true,
+    "earliest_safe_action_at": "2026-09-16",
+    "ready_for_product_decisions": false
+  },
+  "issue_128_baseline": {
+    "issue": 128,
+    "state": "LANDED_AWAITING_LIVE_EVIDENCE",
+    "commercial_click_share": 0.0,
+    "evidential_close": false,
+    "gsc_row": {
+      "impressions": 8,
+      "clicks": 0,
+      "position": 7.88
+    }
+  },
+  "extra_cli_inputs": {
+    "pr_435": {
+      "state": "COMPARABLE",
+      "publication_authorization": false,
+      "use": "factual_input_only"
+    },
+    "pr_437": {
+      "verdict": "PARTIAL",
+      "national_claim_authorized": false,
+      "use": "factual_input_only"
+    },
+    "publication_authorization": false,
+    "national_claim_authorized": false
+  },
+  "gsc_precondition": {
+    "gsc_live_available": true,
+    "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
+    "authorizes_html_edit": false,
+    "other_evidence_decision": {
+      "decision": "USE_HISTORICAL_EXPORT_AND_ISSUE_128_BASELINE",
+      "sources": [
+        "seo/gsc-2026-08-09",
+        "docs/ops/ORGANIC-GROWTH-REPORT.md",
+        "https://github.com/tjsasakifln/web-cfg/issues/128"
+      ],
+      "invented_live_metrics": false,
+      "reason": "PR #159 live Search Analytics is LIVE_JOB_OK. Specs use seo/gsc-2026-08-09 plus the six-URL table in #128. Absence is not zero."
+    }
+  },
+  "success_metrics": {
+    "commercial_click_share": "no longer 0% on a 28-day GSC window after gate, or an explicit kill note that demand is informational-only at this volume",
+    "service_url_clicks": "at least one click on this service URL in the next complete 28d GSC window, or the pillar leaves the documented position band",
+    "north_star": "inbound qualified pipeline / month; impressions on /conteudos/ are not success",
+    "denominator": "historical seo/gsc-2026-08-09 until GSC live is ready_for_product_decisions=true"
+  },
+  "kill_metrics": {
+    "bridges_and_snippet_shipped_service_clicks_still_zero": "if 28d GSC after observation still shows service clicks=0 while content clicks hold, the gap is offer/SERP not linking; #88/#60 own the next move",
+    "noisy_n": "do not treat impressions < 30 as significance; do not invent live metrics from LIVE_JOB_OK",
+    "cannibalization": "kill the hypothesized snippet if a sibling indexable URL captures the owned query after the change"
+  },
+  "revert_metrics": {
+    "trigger": "revert the hash-bound patch if CTR/position on the owned query does not move while position is stable, or if a sibling cannibalizes the same non-brand intent",
+    "method": "restore the bound content_sha256 of the pillar HTML; do not blanket-redirect"
+  },
+  "visitor_job": "Recuperar medição, contestar glosa e transformar serviço executado em valor recebido com prova contemporânea.",
+  "serp_census": {
+    "family": "medicoes-pagamentos",
+    "as_of": "2026-08-19",
+    "rank_status": "UNKNOWN",
+    "note": "Do not invent pillar rank. Supporting article /conteudos/glosa-de-medicao-obra-publica/ was observed in the web sample; GSC historical CTR there is 12.5% (8 impr / 1 click).",
+    "competitors": [
+      {
+        "url": "https://licitacoesecontratos.tcu.gov.br/4-3-7-criterios-de-medicao-e-de-pagamento-2/",
+        "kind": "tcu_manual",
+        "intent": "informational_administration"
+      },
+      {
+        "url": "https://www.migalhas.com.br/depeso/231732/o-instituto-da-glosa--retencao-de-pagamentos-nos-contratos-administrativos",
+        "kind": "legal_doctrine",
+        "intent": "informational_legal"
+      },
+      {
+        "url": "https://effecti.com.br/glosa-contrato-publico/",
+        "kind": "saas_explainer",
+        "intent": "informational_generic_contracts"
+      },
+      {
+        "url": "https://confenge.com.br/conteudos/glosa-de-medicao-obra-publica/",
+        "kind": "own_supporting",
+        "intent": "informational_contractor"
+      }
+    ],
+    "intent_gaps": [
+      "Money query 'glosa de medição obra pública' already has a CONFENGE supporting URL with a click; the service pillar has 8 impr / 0 clicks. Transfer problem, not missing page.",
+      "Generic glosa explainers (health-plan / TIC / public-controladoria) pollute the term.",
+      "Pillar rank UNKNOWN beyond GSC pos 7.88."
+    ]
+  },
+  "query_ownership": {
+    "owned": [
+      "medições glosas obras públicas",
+      "glosa de medição obra pública (service landing, after transfer)"
+    ],
+    "supporting_not_owned_by_pillar": [
+      "glosa de medição obra pública → currently /conteudos/glosa-de-medicao-obra-publica/",
+      "medição rejeitada obra pública → /conteudos/medicao-de-obra-publica-rejeitada/",
+      "fiscal não assina medição"
+    ],
+    "gsc_supporting": {
+      "glosa de medição obra pública": {
+        "impressions": 8,
+        "clicks": 1,
+        "position": 4.0
+      }
+    }
+  },
+  "negative_queries": [
+    "glosa de convênio médico / plano de saúde",
+    "glosa TCU as auditoria de contas (controladoria, not contractor cash)",
+    "glosa em contratos de TIC / NMS"
+  ],
+  "cannibalization": {
+    "status": "RISK_OWN_SUPPORTING_OUTRANKS_PILLAR",
+    "note": "Indexable supporting URLs hold the clicks. Do not 301 them onto the pillar. Do not index noindex siblings to feed the pillar (#127).",
+    "siblings": [
+      {
+        "url": "/conteudos/glosa-de-medicao-obra-publica/",
+        "gsc": "8 impr / 1 click / pos 4.0 / CTR 12.5%"
+      },
+      {
+        "url": "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "gsc": "6 impr / 1 click / pos 5.5 / CTR 16.67%"
+      },
+      {
+        "url": "/conteudos/atraso-na-medicao-obra-publica/",
+        "gsc": "10 impr / 0 clicks / pos 8.1"
+      }
+    ]
+  },
+  "before_after_blocks": [
+    {
+      "block": "meta_og_schema_description",
+      "before": "...valor efetivamente… (truncated ellipsis in meta, og:description and CollectionPage description)",
+      "after": "...valor efetivamente recebido. (same sentence as visible lead)",
+      "why": "Hygiene snippet. No new claims. Completes a truncated description already on-page."
+    },
+    {
+      "block": "title_h1",
+      "before": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "after": "unchanged",
+      "why": "Title and H1 already agree. Do not front-load a query owned by a high-CTR supporting article."
+    },
+    {
+      "block": "cta",
+      "before": "hero WhatsApp generic 'Analisar uma demanda'; bridge 'Enquadrar um risco contratual'",
+      "after": "unchanged in this campaign (offer/CTA out of scope)",
+      "why": "HTML/CTA freeze."
+    }
+  ],
+  "evidence_proof_needed": [
+    "28d GSC on the pillar vs 8/0 @ 7.88 and on glosa supporting vs 8/1 @ 4.0 — do not join query to a lead.",
+    "Whether a later snippet on the pillar steals the supporting click (cannibalization kill).",
+    "Analytics content→service still UNKNOWN.",
+    "extra-cli PARTIAL/COMPARABLE not applicable as published proof on this page."
+  ],
+  "snapshot": {
+    "slug": "medicoes-glosas-obras-publicas",
+    "path": "/medicoes-glosas-obras-publicas/",
+    "html_rel": "medicoes-glosas-obras-publicas/index.html",
+    "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+    "meta_description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente…",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+    "og_title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+    "og_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+    "h1": "Medições, glosas e pagamentos em obras públicas",
+    "schema_types": [
+      "Organization",
+      "Country",
+      "ContactPoint",
+      "Person",
+      "CollegeOrUniversity",
+      "CollectionPage",
+      "WebSite",
+      "ItemList",
+      "ListItem",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage",
+      "Question",
+      "Answer"
+    ],
+    "cta": {
+      "hero_text": "Analisar uma demanda",
+      "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+      "bridges": [
+        {
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "text": "Enquadrar um risco contratual"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "text": "Diretoria B2G na execução"
+        }
+      ],
+      "when_not_to_hire": true,
+      "whatsapp_present": true,
+      "form_count": 0
+    },
+    "content_sha256": "88f7c91e187e5cedad4e2f5c65c43afdf5282a79cac7f9201f77004d90e1fe1c",
+    "bytes": 27812,
+    "noindex": false
+  }
+}

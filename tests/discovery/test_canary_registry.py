@@ -49,8 +49,9 @@ def test_canary_is_registered_from_issue_84_evidence():
     assert asset["provenance"]["deploy"] == EVIDENCED_DEPLOY
     assert asset["owner"] == "Tiago Sasaki"
     assert "issues/84" in asset["source_of_truth"]
-    assert asset["index_intent"] == "INDEX"
-    assert asset["noindex"] is False
+    assert asset["index_intent"] == "DO_NOT_INDEX"
+    assert asset["noindex"] is True
+    assert asset["publicable"] is False
     # Previous noindex #84 member remains; we did not invent a replacement id.
     leftover = next(item for item in cohort["assets"] if item["id"] == "market-answer-aditivos-margem")
     assert leftover["index_intent"] == "DO_NOT_INDEX"

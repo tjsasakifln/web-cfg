@@ -1,0 +1,209 @@
+{
+  "campaign": "CONFENGE-WEB-BOFU-SAFE-EXECUTION-01",
+  "as_of": "2026-08-19",
+  "source_kind": "in_repo_html_sha256",
+  "git_head": "faadc16609210522c9ffaf32a7b944817f6c6214",
+  "origin_main": "faadc16609210522c9ffaf32a7b944817f6c6214",
+  "pages": {
+    "defesa-margem-contratos-publicos": {
+      "path": "/defesa-margem-contratos-publicos/",
+      "sha256": "03252ad2b069eb3de56cc8ad17a6aa6083e3edb4bed2eee5a58d2aa1051ff709",
+      "bytes": 17257,
+      "title": "Defesa técnica e proteção de margem (Contract Defense &amp; Margin) | CONFENGE",
+      "h1": "Contract Defense &amp; Margin",
+      "meta_description": "Defesa técnica e proteção de margem em contratos públicos: cronologia, causalidade, cálculos, evidências, notificações, aditivos e reequilíbrio.",
+      "canonical": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "jsonld": [
+        "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://confenge.com.br/#organization\",\"name\":\"CONFENGE\",\"url\":\"https://confenge.com.br/\",\"description\":\"Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.\",\"email\":\"tiago.sasaki@confenge.com.br\",\"telephone\":\"+55-48-98834-4559\",\"taxID\":\"52.407.089/0001-09\"},{\"@type\":\"WebPage\",\"@id\":\"https://confenge.com.br/defesa-margem-contratos-publicos/#webpage\",\"url\":\"https://confenge.com.br/defesa-margem-contratos-publicos/\",\"name\":\"Contract Defense & Margin | CONFENGE\",\"description\":\"Defesa técnica e proteção de margem em contratos públicos: cronologia, causalidade, cálculos, evidências, notificações, aditivos e reequilíbrio.\",\"isPartOf\":{\"@id\":\"https://confenge.com.br/#website\"}},{\"@type\":\"Service\",\"@id\":\"https://confenge.com.br/defesa-margem-contratos-publicos/#service\",\"name\":\"Contract Defense & Margin\",\"description\":\"Organização de cronologia, causalidade, cálculos, evidências, notificações, aditivos, reequilíbrio, defesa técnica e proteção de margem.\",\"provider\":{\"@id\":\"https://confenge.com.br/#organization\"},\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"serviceType\":\"Defesa de margem em contratos públicos\",\"url\":\"https://confenge.com.br/defesa-margem-contratos-publicos/\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://confenge.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Contract Defense & Margin\",\"item\":\"https://confenge.com.br/defesa-margem-contratos-publicos/\"}]}]}"
+      ],
+      "body_data_attrs": {
+        "data-content-cluster": "offer",
+        "data-offer-id": "contract-defense",
+        "data-journey": "contrato",
+        "data-route-family": "margin-defense",
+        "data-asset-id": "defesa-margem-contratos-publicos",
+        "data-cta-id": "offer_hero"
+      },
+      "primary_ctas": [
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "/#contato?jornada=contrato",
+          "text": "Enviar documentos para análise",
+          "attrs": {
+            "data-offer-id": "contract-defense",
+            "data-cta-position": "offer_hero",
+            "data-event-name": "offer_cta_click",
+            "data-journey": "contrato",
+            "data-cta-id": "contato-direto"
+          }
+        },
+        {
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20um%20risco%20contratual%20e%20proteger%20a%20margem%20de%20um%20contrato%20p%C3%BAblico.",
+          "text": "Avaliar contrato sob pressão",
+          "attrs": {
+            "data-offer-id": "contract-defense",
+            "data-cta-position": "offer_final",
+            "data-event-name": "offer_cta_click"
+          }
+        }
+      ],
+      "styles": true,
+      "script": true,
+      "commercial_bridge": false,
+      "cta_hrefs": [
+        "/#contato",
+        "/#contato?jornada=contrato",
+        "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20um%20risco%20contratual%20e%20proteger%20a%20margem%20de%20um%20contrato%20p%C3%BAblico."
+      ]
+    },
+    "atrasos-prorrogacao-obras-publicas": {
+      "path": "/atrasos-prorrogacao-obras-publicas/",
+      "sha256": "18996343a34593875bd41126a71c978797519dab6c4d9572de5fb8ebb19b50e7",
+      "bytes": 22600,
+      "title": "Atrasos, prorrogação e paralisação em obras públicas | CONFENGE",
+      "h1": "Atrasos, prorrogação e paralisação em obras públicas",
+      "meta_description": "Prorrogação, suspensão, chuva, projeto atrasado, frentes indisponíveis, interferências e aceleração exigida: o prazo só se protege quando causa e impacto…",
+      "canonical": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+      "jsonld": [
+        "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://confenge.com.br/#organization\",\"name\":\"CONFENGE\",\"legalName\":\"CONFENGE\",\"url\":\"https://confenge.com.br/\",\"logo\":\"https://confenge.com.br/assets/logo-confenge.png\",\"image\":\"https://confenge.com.br/assets/og-confenge.jpg\",\"description\":\"Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.\",\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"email\":\"tiago.sasaki@confenge.com.br\",\"telephone\":\"+55-48-98834-4559\",\"taxID\":\"52.407.089/0001-09\",\"founder\":{\"@id\":\"https://confenge.com.br/#tiago\"},\"contactPoint\":{\"@type\":\"ContactPoint\",\"contactType\":\"sales\",\"telephone\":\"+55-48-98834-4559\",\"email\":\"tiago.sasaki@confenge.com.br\",\"areaServed\":\"BR\",\"availableLanguage\":[\"pt-BR\",\"en\"]}},{\"@type\":\"Person\",\"@id\":\"https://confenge.com.br/#tiago\",\"name\":\"Engº Tiago Sasaki\",\"image\":\"https://confenge.com.br/assets/tiago-sasaki-foto-v11-sem-fundo.png\",\"url\":\"https://confenge.com.br/especialista/tiago-jun-sasaki/\",\"jobTitle\":\"Engenheiro Civil e consultor B2G\",\"worksFor\":{\"@id\":\"https://confenge.com.br/#organization\"},\"alumniOf\":{\"@type\":\"CollegeOrUniversity\",\"name\":\"Universidade de São Paulo\"},\"knowsAbout\":[\"Licitações de obras públicas\",\"Gestão de contratos públicos\",\"Orçamentação de obras\",\"SINAPI\",\"SICRO\",\"BDI\",\"Aditivos\",\"Reequilíbrio econômico-financeiro\",\"Fiscalização e medição de obras\",\"Lei 14.133/2021\"]},{\"@type\":\"CollectionPage\",\"@id\":\"https://confenge.com.br/atrasos-prorrogacao-obras-publicas/#collection\",\"url\":\"https://confenge.com.br/atrasos-prorrogacao-obras-publicas/\",\"name\":\"Atrasos, prorrogação e paralisação em obras públicas\",\"description\":\"Prorrogação, suspensão, chuva, projeto atrasado, frentes indisponíveis, interferências e aceleração exigida: o prazo só se protege quando causa e impacto…\",\"image\":\"https://confenge.com.br/assets/clusters/atrasos-prorrogacao-obras-publicas.jpg\",\"inLanguage\":\"pt-BR\",\"isPartOf\":{\"@type\":\"WebSite\",\"@id\":\"https://confenge.com.br/#website\"},\"mainEntity\":{\"@type\":\"ItemList\",\"numberOfItems\":2,\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"url\":\"https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/\",\"name\":\"Prorrogação de prazo em obra pública: documentos que não podem faltar\"},{\"@type\":\"ListItem\",\"position\":4,\"url\":\"https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/\",\"name\":\"Obra atrasada por culpa da Administração: como proteger a construtora\"}]}},{\"@type\":\"Service\",\"@id\":\"https://confenge.com.br/atrasos-prorrogacao-obras-publicas/#service\",\"name\":\"Análise de atraso, prorrogação e impacto no contrato\",\"description\":\"Demonstre quem causou o desvio, como ele atingiu o caminho crítico e quais custos e prazos precisam ser recompostos.\",\"provider\":{\"@id\":\"https://confenge.com.br/#organization\"},\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"serviceType\":\"Atrasos, prorrogação e paralisação em obras públicas\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://confenge.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Conteúdos\",\"item\":\"https://confenge.com.br/conteudos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Atrasos, prorrogação e paralisação em obras públicas\",\"item\":\"https://confenge.com.br/atrasos-prorrogacao-obras-publicas/\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Quando vale contratar apoio em atrasos e prorrogações?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Quando a decisão pode alterar margem, prazo, recebimento, exposição a sanção ou continuidade da obra e a equipe precisa transformar documentos dispersos em uma posição verificável.\"}},{\"@type\":\"Question\",\"name\":\"A análise pode ser feita remotamente?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Sim. A atuação é nacional e pode ser conduzida por reuniões, organização do repositório documental, análise técnica, memórias de cálculo e alinhamentos "
+      ],
+      "body_data_attrs": {
+        "data-route-family": "atrasos",
+        "data-asset-id": "atrasos-prorrogacao-obras-publicas",
+        "data-cta-id": "pillar_hero",
+        "data-journey": "contrato"
+      },
+      "primary_ctas": [
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+          "text": "Analisar uma demanda",
+          "attrs": {}
+        },
+        {
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20atraso%20ou%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20preciso%20organizar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "text": "Enquadrar o atraso agora",
+          "attrs": {
+            "data-cta-position": "pillar_bridge"
+          }
+        }
+      ],
+      "styles": true,
+      "script": true,
+      "commercial_bridge": true,
+      "cta_hrefs": [
+        "/#contato",
+        "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20atraso%20ou%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20preciso%20organizar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica."
+      ]
+    },
+    "defesa-tecnica-contratos-publicos": {
+      "path": "/defesa-tecnica-contratos-publicos/",
+      "sha256": "2f32ce50be3a7cf96bf23c039861265011d1634c96a6ea0f97ee7e74e1e03a65",
+      "bytes": 20535,
+      "title": "Defesa técnica, sanções e extinção de contratos públicos | CONFENGE",
+      "h1": "Defesa técnica, sanções e extinção de contratos públicos",
+      "meta_description": "Notificações, multas, impedimento de licitar, rescisão, subcontratação, habilitação e defesas que precisam separar fato, culpa, proporcionalidade e…",
+      "canonical": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+      "jsonld": [
+        "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://confenge.com.br/#organization\",\"name\":\"CONFENGE\",\"legalName\":\"CONFENGE\",\"url\":\"https://confenge.com.br/\",\"logo\":\"https://confenge.com.br/assets/logo-confenge.png\",\"image\":\"https://confenge.com.br/assets/og-confenge.jpg\",\"description\":\"Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.\",\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"email\":\"tiago.sasaki@confenge.com.br\",\"telephone\":\"+55-48-98834-4559\",\"taxID\":\"52.407.089/0001-09\",\"founder\":{\"@id\":\"https://confenge.com.br/#tiago\"},\"contactPoint\":{\"@type\":\"ContactPoint\",\"contactType\":\"sales\",\"telephone\":\"+55-48-98834-4559\",\"email\":\"tiago.sasaki@confenge.com.br\",\"areaServed\":\"BR\",\"availableLanguage\":[\"pt-BR\",\"en\"]}},{\"@type\":\"Person\",\"@id\":\"https://confenge.com.br/#tiago\",\"name\":\"Engº Tiago Sasaki\",\"image\":\"https://confenge.com.br/assets/tiago-sasaki-foto-v11-sem-fundo.png\",\"url\":\"https://confenge.com.br/especialista/tiago-jun-sasaki/\",\"jobTitle\":\"Engenheiro Civil e consultor B2G\",\"worksFor\":{\"@id\":\"https://confenge.com.br/#organization\"},\"alumniOf\":{\"@type\":\"CollegeOrUniversity\",\"name\":\"Universidade de São Paulo\"},\"knowsAbout\":[\"Licitações de obras públicas\",\"Gestão de contratos públicos\",\"Orçamentação de obras\",\"SINAPI\",\"SICRO\",\"BDI\",\"Aditivos\",\"Reequilíbrio econômico-financeiro\",\"Fiscalização e medição de obras\",\"Lei 14.133/2021\"]},{\"@type\":\"CollectionPage\",\"@id\":\"https://confenge.com.br/defesa-tecnica-contratos-publicos/#collection\",\"url\":\"https://confenge.com.br/defesa-tecnica-contratos-publicos/\",\"name\":\"Defesa técnica, sanções e extinção de contratos públicos\",\"description\":\"Notificações, multas, impedimento de licitar, rescisão, subcontratação, habilitação e defesas que precisam separar fato, culpa, proporcionalidade e…\",\"image\":\"https://confenge.com.br/assets/clusters/defesa-tecnica-contratos-publicos.jpg\",\"inLanguage\":\"pt-BR\",\"isPartOf\":{\"@type\":\"WebSite\",\"@id\":\"https://confenge.com.br/#website\"},\"mainEntity\":{\"@type\":\"ItemList\",\"numberOfItems\":1,\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":2,\"url\":\"https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/\",\"name\":\"Construtora notificada por atraso: como montar a resposta técnica\"}]}},{\"@type\":\"Service\",\"@id\":\"https://confenge.com.br/defesa-tecnica-contratos-publicos/#service\",\"name\":\"Diagnóstico técnico para notificação, defesa e processo sancionador\",\"description\":\"Construa uma resposta que não dependa de adjetivos: cronologia, obrigações, causas externas, medidas adotadas e pedido coerente.\",\"provider\":{\"@id\":\"https://confenge.com.br/#organization\"},\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"serviceType\":\"Defesa técnica, sanções e extinção de contratos públicos\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://confenge.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Conteúdos\",\"item\":\"https://confenge.com.br/conteudos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Defesa técnica, sanções e extinção de contratos públicos\",\"item\":\"https://confenge.com.br/defesa-tecnica-contratos-publicos/\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Quando vale contratar apoio em defesa e sanções?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Quando a decisão pode alterar margem, prazo, recebimento, exposição a sanção ou continuidade da obra e a equipe precisa transformar documentos dispersos em uma posição verificável.\"}},{\"@type\":\"Question\",\"name\":\"A análise pode ser feita remotamente?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Sim. A atuação é nacional e pode ser conduzida por reuniões, organização do repositório documental, análise técnica, memórias de cálculo e alinhamentos com direção, engenharia e jurídico.\"}},{\"@type\":\"Question\",\"name\":\"A CONFENGE substitui o jurídico da empresa?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Não. A consultor"
+      ],
+      "body_data_attrs": {},
+      "primary_ctas": [
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+          "text": "Analisar uma demanda",
+          "attrs": {}
+        },
+        {
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20e%20preciso%20organizar%20a%20defesa%20t%C3%A9cnica.",
+          "text": "Organizar a posição técnica",
+          "attrs": {
+            "data-cta-position": "pillar_bridge"
+          }
+        }
+      ],
+      "styles": true,
+      "script": true,
+      "commercial_bridge": true,
+      "cta_hrefs": [
+        "/#contato",
+        "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20e%20preciso%20organizar%20a%20defesa%20t%C3%A9cnica."
+      ]
+    },
+    "acompanhamento-contratos-obras": {
+      "path": "/acompanhamento-contratos-obras/",
+      "sha256": "92a5ed66231600c68b4e95832a7f63959b61bc196eb823743da753b293d5dfed",
+      "bytes": 18399,
+      "title": "Gestão contratual e pleitos em obras públicas | CONFENGE",
+      "h1": "Gestão contratual e pleitos em obras públicas",
+      "meta_description": "Diário de obra, comunicações, controle de mudanças, indicadores e auditorias periódicas para encontrar desvios antes que virem perda financeira ou defesa…",
+      "canonical": "https://confenge.com.br/acompanhamento-contratos-obras/",
+      "jsonld": [
+        "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://confenge.com.br/#organization\",\"name\":\"CONFENGE\",\"legalName\":\"CONFENGE\",\"url\":\"https://confenge.com.br/\",\"logo\":\"https://confenge.com.br/assets/logo-confenge.png\",\"image\":\"https://confenge.com.br/assets/og-confenge.jpg\",\"description\":\"Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.\",\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"email\":\"tiago.sasaki@confenge.com.br\",\"telephone\":\"+55-48-98834-4559\",\"taxID\":\"52.407.089/0001-09\",\"founder\":{\"@id\":\"https://confenge.com.br/#tiago\"},\"contactPoint\":{\"@type\":\"ContactPoint\",\"contactType\":\"sales\",\"telephone\":\"+55-48-98834-4559\",\"email\":\"tiago.sasaki@confenge.com.br\",\"areaServed\":\"BR\",\"availableLanguage\":[\"pt-BR\",\"en\"]}},{\"@type\":\"Person\",\"@id\":\"https://confenge.com.br/#tiago\",\"name\":\"Engº Tiago Sasaki\",\"image\":\"https://confenge.com.br/assets/tiago-sasaki-foto-v11-sem-fundo.png\",\"url\":\"https://confenge.com.br/especialista/tiago-jun-sasaki/\",\"jobTitle\":\"Engenheiro Civil e consultor B2G\",\"worksFor\":{\"@id\":\"https://confenge.com.br/#organization\"},\"alumniOf\":{\"@type\":\"CollegeOrUniversity\",\"name\":\"Universidade de São Paulo\"},\"knowsAbout\":[\"Licitações de obras públicas\",\"Gestão de contratos públicos\",\"Orçamentação de obras\",\"SINAPI\",\"SICRO\",\"BDI\",\"Aditivos\",\"Reequilíbrio econômico-financeiro\",\"Fiscalização e medição de obras\",\"Lei 14.133/2021\"]},{\"@type\":\"CollectionPage\",\"@id\":\"https://confenge.com.br/acompanhamento-contratos-obras/#collection\",\"url\":\"https://confenge.com.br/acompanhamento-contratos-obras/\",\"name\":\"Gestão contratual e pleitos em obras públicas\",\"description\":\"Diário de obra, comunicações, controle de mudanças, indicadores e auditorias periódicas para encontrar desvios antes que virem perda financeira ou defesa…\",\"image\":\"https://confenge.com.br/assets/clusters/acompanhamento-contratos-obras.jpg\",\"inLanguage\":\"pt-BR\",\"isPartOf\":{\"@type\":\"WebSite\",\"@id\":\"https://confenge.com.br/#website\"},\"mainEntity\":{\"@type\":\"ItemList\",\"numberOfItems\":0,\"itemListElement\":[]}},{\"@type\":\"Service\",\"@id\":\"https://confenge.com.br/acompanhamento-contratos-obras/#service\",\"name\":\"Acompanhamento técnico e contratual de obras públicas\",\"description\":\"Crie um sistema de registros e decisões que conecte obra, contrato, caixa e direção sem depender da memória da equipe.\",\"provider\":{\"@id\":\"https://confenge.com.br/#organization\"},\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"serviceType\":\"Gestão contratual e pleitos em obras públicas\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://confenge.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Conteúdos\",\"item\":\"https://confenge.com.br/conteudos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Gestão contratual e pleitos em obras públicas\",\"item\":\"https://confenge.com.br/acompanhamento-contratos-obras/\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Quando vale contratar apoio em gestão contratual?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Quando a decisão pode alterar margem, prazo, recebimento, exposição a sanção ou continuidade da obra e a equipe precisa transformar documentos dispersos em uma posição verificável.\"}},{\"@type\":\"Question\",\"name\":\"A análise pode ser feita remotamente?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Sim. A atuação é nacional e pode ser conduzida por reuniões, organização do repositório documental, análise técnica, memórias de cálculo e alinhamentos com direção, engenharia e jurídico.\"}},{\"@type\":\"Question\",\"name\":\"A CONFENGE substitui o jurídico da empresa?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Não. A consultoria estrutura a base técnica, contratual e econômica do caso para que engenharia, direção e jurídico decidam com mais segurança.\"}}]}]}"
+      ],
+      "body_data_attrs": {},
+      "primary_ctas": [
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "/#contato",
+          "text": "Analisar meu caso",
+          "attrs": {}
+        },
+        {
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+          "text": "Analisar uma demanda",
+          "attrs": {}
+        },
+        {
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20acompanhamento%20de%20contrato%20p%C3%BAblico%20e%20prote%C3%A7%C3%A3o%20de%20margem.",
+          "text": "Conhecer a Diretoria B2G",
+          "attrs": {
+            "data-cta-position": "pillar_bridge"
+          }
+        }
+      ],
+      "styles": true,
+      "script": true,
+      "commercial_bridge": true,
+      "cta_hrefs": [
+        "/#contato",
+        "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20acompanhamento%20de%20contrato%20p%C3%BAblico%20e%20prote%C3%A7%C3%A3o%20de%20margem."
+      ]
+    }
+  }
+}

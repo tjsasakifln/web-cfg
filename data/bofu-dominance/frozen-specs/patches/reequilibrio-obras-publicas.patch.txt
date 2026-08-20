@@ -1,0 +1,14 @@
+format: frozen_patch_v1
+slug: reequilibrio-obras-publicas
+path: reequilibrio-obras-publicas/index.html
+content_sha256: df2c4d5d010fdd617eddd9346b2a32a946e2a93a7f2c6f09848e05f6fbd0b72e
+earliest_safe_action_at: 2026-09-16
+corresponding_issue: 128
+html_mutation_authorized: false
+do_not_git_apply: true
+---DIFF---
+---REPLACEMENT---
+<<<BEFORE
+Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE
+===AFTER
+Reequilíbrio econômico-financeiro de obra pública | CONFENGE

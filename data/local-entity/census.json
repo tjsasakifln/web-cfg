@@ -1,0 +1,132 @@
+{
+  "as_of": "2026-08-19",
+  "schema": "local-entity-census/v1",
+  "gsc_live": {
+    "status": "BLOCKED",
+    "source_kind": "LIVE_JOB_OK",
+    "reason": "PR #159 live Search Analytics LIVE_JOB_OK; GSC secrets are not available to this campaign.",
+    "impressions": null,
+    "clicks": null,
+    "ready_for_product_decisions": false,
+    "limitation": "Live GSC is BLOCKED, not zero. Historical CSV/fixtures are not current Search Analytics and do not authorize product decisions.",
+    "as_of": "2026-08-19"
+  },
+  "rows": [
+    {
+      "id": "map-pack-confenge-florianopolis",
+      "channel": "MAP_PACK",
+      "query_or_context": "CONFENGE Florianópolis",
+      "query_redacted": false,
+      "source": "campaign_query",
+      "freshness": "BLOCKED",
+      "limitation": "Live map-pack observation was not collected. Live GSC is LIVE_JOB_OK (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
+      "observation": "UNKNOWN",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "map-pack-tiago-sasaki-florianopolis",
+      "channel": "MAP_PACK",
+      "query_or_context": "Tiago Sasaki Florianópolis",
+      "query_redacted": false,
+      "source": "campaign_query",
+      "freshness": "BLOCKED",
+      "limitation": "Live map-pack observation was not collected. Live GSC is LIVE_JOB_OK (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
+      "observation": "UNKNOWN",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "map-pack-confenge-engenharia-sc",
+      "channel": "MAP_PACK",
+      "query_or_context": "CONFENGE engenharia Santa Catarina",
+      "query_redacted": false,
+      "source": "campaign_query",
+      "freshness": "BLOCKED",
+      "limitation": "Live map-pack observation was not collected. Live GSC is LIVE_JOB_OK (PR #159). Absence is BLOCKED/UNKNOWN, not zero and not a product decision.",
+      "observation": "UNKNOWN",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "organic-historical-serp-entity-snippet",
+      "channel": "ORGANIC",
+      "query_or_context": "site:confenge.com.br CONFENGE licitações contratos obras públicas",
+      "query_redacted": false,
+      "source": "historical_serp_sample",
+      "freshness": "STALE",
+      "limitation": "data/organic/search-baseline-2026-08-14.json observation STALE_ENTITY_SNIPPET. Organic/local-organic row is labeled independently of map-pack. Do not fold map-pack presence into this row. Live GSC is BLOCKED.",
+      "observation": "STALE_ENTITY_SNIPPET",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "organic-historical-serp-margin-query",
+      "channel": "ORGANIC",
+      "query_or_context": "reequilíbrio contrato obra pública consultoria",
+      "query_redacted": false,
+      "source": "historical_serp_sample",
+      "freshness": "STALE",
+      "limitation": "data/organic/search-baseline-2026-08-14.json observation CONFENGE_NOT_OBSERVED. Organic/local-organic row is labeled independently of map-pack. Do not fold map-pack presence into this row. Live GSC is BLOCKED.",
+      "observation": "CONFENGE_NOT_OBSERVED",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "organic-historical-gsc-branded",
+      "channel": "ORGANIC",
+      "query_or_context": "sha256:2b4a3a90bf0f802a",
+      "query_redacted": true,
+      "source": "historical_gsc_csv",
+      "freshness": "STALE",
+      "limitation": "Historical Search Console CSV (seo/gsc-2026-08-09). Query text hashed. Not live Search Analytics. Metrics omitted so staleness is not treated as current zero.",
+      "observation": "UNKNOWN",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "local-organic-consultoria-sc",
+      "channel": "LOCAL_ORGANIC",
+      "query_or_context": "consultoria licitações contratos obras públicas Santa Catarina",
+      "query_redacted": false,
+      "source": "campaign_query",
+      "freshness": "BLOCKED",
+      "limitation": "Local-organic (query with geographic modifier, web blue links — not map-pack). Organic/local-organic row is labeled independently of map-pack. Do not fold map-pack presence into this row. Live GSC is BLOCKED.",
+      "observation": "UNKNOWN",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "local-organic-consultoria-florianopolis",
+      "channel": "LOCAL_ORGANIC",
+      "query_or_context": "consultoria contratos obras públicas Florianópolis",
+      "query_redacted": false,
+      "source": "campaign_query",
+      "freshness": "BLOCKED",
+      "limitation": "Local-organic geographic modifier. Not a map-pack row. Live SERP not collected. Organic/local-organic row is labeled independently of map-pack. Do not fold map-pack presence into this row. Live GSC is BLOCKED.",
+      "observation": "UNKNOWN",
+      "impressions": null,
+      "clicks": null
+    },
+    {
+      "id": "organic-branded-person",
+      "channel": "ORGANIC",
+      "query_or_context": "Engº Tiago Sasaki CONFENGE",
+      "query_redacted": false,
+      "source": "campaign_query",
+      "freshness": "BLOCKED",
+      "limitation": "Branded person query in classic organic. Not map-pack. Live GSC BLOCKED.",
+      "observation": "UNKNOWN",
+      "impressions": null,
+      "clicks": null
+    }
+  ],
+  "channels": [
+    "LOCAL_ORGANIC",
+    "MAP_PACK",
+    "ORGANIC"
+  ],
+  "map_pack_distinct_from_organic": true,
+  "search_baseline_consumed": true,
+  "limitation": "Live GSC is BLOCKED, not zero. Historical CSV/fixtures are not current Search Analytics and do not authorize product decisions."
+}

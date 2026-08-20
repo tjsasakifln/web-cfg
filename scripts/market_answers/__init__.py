@@ -10,7 +10,7 @@ from __future__ import annotations
 SCHEMA_ID = "public-read-market-answer/1.0"
 CONTRACT_VERSION = "v1.0.0"
 SCORE_VERSION = "MARKET_ANSWER_VALUE_SCORE/1.0"
-GATE_VERSION = "market-answer-publication-gate/1.1"
+GATE_VERSION = "market-answer-publication-gate/1.2"
 FAMILY_SLUG = "valor-tipico-contratos-pavimentacao"
 FAMILY_PATH = f"/inteligencia/{FAMILY_SLUG}/"
 ASSET_ID = FAMILY_SLUG
@@ -91,6 +91,13 @@ INDEX_CONDITIONS = (
     "national_gate_302",
 )
 
+FRESHNESS_CLASSES = (
+    "CURRENT",
+    "EXPIRING",
+    "STALE",
+    "UNKNOWN",
+)
+
 FORBIDDEN_GRAINS = frozenset(
     {
         "custo_por_km",
@@ -139,6 +146,7 @@ __all__ = [
     "ASSET_ID",
     "CANONICAL",
     "FAMILY_PATH",
+    "FRESHNESS_CLASSES",
     "GATE_VERSION",
     "GRAIN",
     "INDEX_CONDITIONS",

@@ -9,15 +9,15 @@
     "window_policy": "complete-days/v1",
     "baseline": "organic_demand_control_baseline/v1"
   },
-  "source_kind": "credential_failure",
-  "source": "credential_failure",
+  "source_kind": "LIVE_JOB_OK",
+  "source": "search_analytics_api_live",
   "synthetic": false,
   "fixture": false,
   "historical": false,
   "truncated": false,
   "ready_for_product_decisions": false,
-  "freshness": "BLOCKED",
-  "live": false,
+  "freshness": "LIVE_TOP_ROWS_ONLY",
+  "live": true,
   "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
   "zero_inferred_from_absence": false,
   "windows": {
@@ -536,5 +536,6 @@
     "consequence": "Search Analytics live loop cannot run. Historical CSV and fixtures stay non-live. Product decisions from GSC remain blocked.",
     "external_action": "Set GitHub Actions secrets GSC_CREDENTIALS_JSON (Search Console service-account JSON) and GSC_SITE_URL=sc-domain:confenge.com.br (or https://confenge.com.br/). Grant that service account Search Console read on the property. Do not paste the JSON into the repository."
   },
-  "recommendation_enum_context": "NEEDS_EXTERNAL_SECRET"
+  "recommendation_enum_context": "NEEDS_EXTERNAL_SECRET",
+  "note": "LIVE_JOB_OK from gsc-sync 32322344062 overlay. core_ready_for_product_decisions=false (top-rows-only, date gaps, mixed device, non-BR geo). Absence is not zero. Window totals remain null when incomplete."
 }

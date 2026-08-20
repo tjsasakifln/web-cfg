@@ -14,6 +14,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -33,6 +35,7 @@ SKIP_DIRS = frozenset(
         "scripts",
         "tests",
         "netlify",
+        ".worktrees",
     }
 )
 
@@ -57,11 +60,15 @@ def page_path(p: Path) -> str:
 
 def main() -> int:
     html_pages = iter_seo_html_pages(ROOT)
-    sm = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
-    sm_urls = re.findall(r"<loc>([^<]+)</loc>", sm)
+    from scripts.organic.sitemap_graph import load_graph_locs, load_index_members
+
+    sm_urls = load_graph_locs(ROOT)
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
-    if "sitemap.xml" not in robots.lower() and "Sitemap:" not in robots:
+    if "sitemap-index.xml" not in robots.lower() and "Sitemap:" not in robots:
         errors.append("robots.txt missing Sitemap")
+    for member in load_index_members(ROOT):
+        if not (ROOT / member.filename).is_file():
+            errors.append(f"sitemap-index member inaccessible: {member.filename}")
 
     titles: dict[str, list[str]] = defaultdict(list)
     descs: dict[str, list[str]] = defaultdict(list)

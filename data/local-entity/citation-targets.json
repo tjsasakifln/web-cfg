@@ -1,0 +1,69 @@
+{
+  "as_of": "2026-08-19",
+  "auto_send": false,
+  "sent": false,
+  "partnership_claim": false,
+  "citation_farm": false,
+  "targets": [
+    {
+      "id": "crea-sc-noticias",
+      "name": "CREA-SC / comunicação-notícias",
+      "class": "conselho_profissional",
+      "public_route": "https://portal.crea-sc.org.br/noticias-crea-sc/",
+      "fallback": "https://portal.crea-sc.org.br/",
+      "purpose": "Conselho profissional do estado do DDD 48. Candidato a citação de entidade, não diretório farm e não parceria.",
+      "auto_send": false,
+      "sent": false,
+      "partnership_claim": false,
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "sicepot-sc",
+      "name": "SICEPOT-SC",
+      "class": "associacao",
+      "public_route": "https://sicepot.com.br/contact/",
+      "fallback": "https://sicepot.com.br/",
+      "purpose": "Associação de construção pesada em Santa Catarina. Rota pública de contato.",
+      "auto_send": false,
+      "sent": false,
+      "partnership_claim": false,
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "cbic-coinfra",
+      "name": "CBIC / COINFRA",
+      "class": "associacao",
+      "public_route": "https://cbic.org.br/assessoria-de-imprensa/",
+      "fallback": "https://cbic.org.br/",
+      "purpose": "Entidade nacional de construção. Assessoria de imprensa pública.",
+      "auto_send": false,
+      "sent": false,
+      "partnership_claim": false,
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "sinaenco",
+      "name": "SINAENCO",
+      "class": "associacao",
+      "public_route": "https://sinaenco.com.br/fale-conosco/",
+      "fallback": "https://sinaenco.com.br/",
+      "purpose": "Sindicato nacional de arquitetura e consultoria de engenharia. Formulário público.",
+      "auto_send": false,
+      "sent": false,
+      "partnership_claim": false,
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "eesc-usp-comunicacao",
+      "name": "EESC-USP / comunicação institucional",
+      "class": "instituicao_formacao",
+      "public_route": "https://eesc.usp.br/",
+      "fallback": "https://www.usp.br/",
+      "purpose": "Instituição de formação já declarada no perfil (alumniOf). Rota pública institucional; não é diploma digital nem prova de terceiro anexada neste repositório.",
+      "auto_send": false,
+      "sent": false,
+      "partnership_claim": false,
+      "outcome": "UNKNOWN"
+    }
+  ]
+}
