@@ -60,7 +60,7 @@
     "test:visible-parity": "python3 scripts/site/test_visible_parity.py",
     "parity:site": "python3 -m scripts.site.visible_parity --root _site --json seo/visible-parity.json --md seo/visible-parity.md",
     "test:design": "python3 scripts/site/test_design_gates.py && python3 scripts/site/test_visitor_redesign.py",
-    "test:copy": "python3 scripts/site/test_copy_gates.py && python3 scripts/site/scrub_em_dashes.py --write && python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json && python3 scripts/site/test_scrub_em_dashes.py && python3 scripts/site/scrub_em_dashes.py --check",
+    "test:copy": "python3 scripts/site/test_copy_gates.py && python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json && python3 scripts/site/test_scrub_em_dashes.py && python3 scripts/site/scrub_em_dashes.py --check && python3 scripts/site/test_copy_ci_hermetic.py",
     "test:visual-structure": "python3 scripts/site/test_design_gates.py",
     "test:ui": "node scripts/site/test_ui_geometry.mjs",
     "test:screenshots": "node scripts/site/capture_screenshots.mjs",

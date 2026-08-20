@@ -202,15 +202,16 @@ def scrub_prose(text: str) -> str:
     out = SPACED_EM.sub(", ", out)
     out = out.replace(EM, ", ")
 
-    # Cleanup spacing artifacts (never leave " ," or " (")
-    out = re.sub(r" {2,}", " ", out)
+    # Cleanup spacing artifacts (never leave " ," or " (").
+    # Mid-line horizontal space only — do not collapse HTML indentation
+    # or newlines. Leading spaces on a line are layout, not em-dash residue.
+    out = re.sub(r"(?<=\S) {2,}", " ", out)
     out = re.sub(r",\s*,", ",", out)
-    out = re.sub(r"\s+,", ",", out)
-    out = re.sub(r"\s+:", ":", out)
-    out = re.sub(r"\s+\.", ".", out)
-    out = re.sub(r"\(\s+", "(", out)
-    out = re.sub(r"\s+\)", ")", out)
-    out = re.sub(r"\s{2,}", " ", out)
+    out = re.sub(r"(?<=\S)[^\S\n\r]+,", ",", out)
+    out = re.sub(r"(?<=\S)[^\S\n\r]+:", ":", out)
+    out = re.sub(r"(?<=\S)[^\S\n\r]+\.", ".", out)
+    out = re.sub(r"\([^\S\n\r]+", "(", out)
+    out = re.sub(r"(?<=\S)[^\S\n\r]+\)", ")", out)
 
     return _restore_official(out, held)
 
@@ -398,16 +399,19 @@ def main(argv: list[str] | None = None) -> int:
         if args.write and cleaned != raw:
             path.write_text(cleaned, encoding="utf-8")
             changed += 1
-            check_src = cleaned
-        else:
-            check_src = cleaned if args.write else scrub_html(raw)
 
-        # For --check without --write, evaluate post-scrub residual on dry-run result
-        target = cleaned if (args.write or args.check) else raw
         if args.check:
-            snips = residual_em_dashes(target if args.write else cleaned)
-            if snips:
+            # Fail closed if the fixer would rewrite the file. CI must not
+            # --write; un-normalized prose em-dashes are a check failure.
+            if cleaned != raw:
+                snips = residual_em_dashes(raw) or [
+                    "unnormalized prose em-dash (run npm run scrub:em-dashes once)"
+                ]
                 residual_files.append((path, snips[:5]))
+            else:
+                snips = residual_em_dashes(cleaned)
+                if snips:
+                    residual_files.append((path, snips[:5]))
 
     if args.write:
         print(f"scrub_em_dashes: wrote {changed} file(s)")

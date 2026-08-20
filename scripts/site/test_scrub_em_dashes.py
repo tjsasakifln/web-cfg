@@ -1,7 +1,9 @@
 """Unit tests for public em-dash scrub rules."""
 from __future__ import annotations
 
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -79,3 +81,96 @@ def test_html_protects_source_anchors():
 
 def test_placeholder_nd():
     assert scrub_prose(f"<td>{EM}</td>") == "<td>n/d</td>"
+
+
+def test_html_newlines_and_indent_preserved():
+    """--write must not smash DOCTYPE/newlines or HTML indentation."""
+    html = (
+        "<!DOCTYPE html>\n\n"
+        '<html lang="pt-BR">\n'
+        "<body>\n"
+        "  <p>Radar para a sua operação — não para o mercado inteiro.</p>\n"
+        "</body>\n"
+        "</html>\n"
+    )
+    out = scrub_html(html)
+    assert "<!DOCTYPE html>\n\n<html" in out
+    assert "  <p>Radar" in out
+    assert "operação, não para" in out
+    assert EM not in out
+
+
+def test_check_cli_fails_on_prose_em_dash():
+    """Shipped --check must still fail on a representative U+2014 input."""
+    html = "<!DOCTYPE html><html><body><p>Prova — não narrativa.</p></body></html>\n"
+    with tempfile.NamedTemporaryFile(
+        "w",
+        encoding="utf-8",
+        suffix=".html",
+        delete=False,
+    ) as fh:
+        fh.write(html)
+        path = Path(fh.name)
+    try:
+        proc = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts" / "site" / "scrub_em_dashes.py"),
+                "--check",
+                "--path",
+                str(path),
+            ],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        assert proc.returncode == 1, proc.stdout + proc.stderr
+        assert "FAIL" in proc.stderr or "unnormalized" in proc.stderr or "residual" in proc.stderr
+    finally:
+        path.unlink(missing_ok=True)
+
+
+def test_check_cli_does_not_mutate_tree():
+    """Shipped --check must leave git status unchanged."""
+    before = subprocess.check_output(
+        ["git", "status", "--porcelain"], cwd=ROOT, text=True
+    )
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "site" / "scrub_em_dashes.py"),
+            "--check",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    after = subprocess.check_output(
+        ["git", "status", "--porcelain"], cwd=ROOT, text=True
+    )
+    assert after == before, "scrub_em_dashes.py --check mutated the working tree"
+
+
+if __name__ == "__main__":
+    failed = 0
+    for t in (
+        test_contrast_clause,
+        test_parenthetical_pair,
+        test_uf_and_region,
+        test_templates,
+        test_chrome_rss,
+        test_official_source_preserved,
+        test_html_protects_source_anchors,
+        test_placeholder_nd,
+        test_html_newlines_and_indent_preserved,
+        test_check_cli_fails_on_prose_em_dash,
+        test_check_cli_does_not_mutate_tree,
+    ):
+        try:
+            t()
+            print("OK", t.__name__)
+        except Exception as exc:  # noqa: BLE001
+            failed += 1
+            print("FAIL", t.__name__, exc)
+    sys.exit(1 if failed else 0)
