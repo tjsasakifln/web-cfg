@@ -177,6 +177,7 @@ def public_html_files() -> list[Path]:
         ".netlify",
         ".playwright-mcp",
         "netlify",
+        ".worktrees",
     }
     # Always include these trees
     roots = [
