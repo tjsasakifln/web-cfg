@@ -1,0 +1,29 @@
+{
+  "decision": "USE_EXISTING_SERVICE",
+  "new_public_landing_created": false,
+  "decision_state": "VALIDATE",
+  "as_of": "2026-08-19",
+  "existing_surfaces": [
+    "/especialista/tiago-jun-sasaki/",
+    "/diagnostico-b2g-360/",
+    "/diretoria-b2g/",
+    "/bid-room-licitacoes-obras/",
+    "/defesa-margem-contratos-publicos/",
+    "/diagnostico-pre-licitacao/",
+    "/auditoria-orcamento-licitacao/",
+    "/medicoes-glosas-obras-publicas/",
+    "/aditivos-obras-publicas/",
+    "/reequilibrio-obras-publicas/",
+    "/defesa-tecnica-contratos-publicos/",
+    "/acompanhamento-contratos-obras/",
+    "/atrasos-prorrogacao-obras-publicas/"
+  ],
+  "reason": "CONFENGE publishes a Person specialist page and national service pages. There is no public street address and no city-level VERIFIED areaServed. Entity recognition uses those existing URLs. A city-page farm would add page count without distinct local utility.",
+  "rejected_alternatives": {
+    "REGIONAL_SECTION_ONLY": "A regional section on existing pages would still need a city-level fact with distinct visitor utility. DDD 48 is a phone prefix, not that fact.",
+    "REGIONAL_LANDING_CANDIDATE": "No city-level VERIFIED areaServed or local dataset justifies a landing. Candidate status is withheld to avoid city-page farming.",
+    "NO_LOCAL_SURFACE": "Would erase the specialist Person page and national service URLs that already carry Organization/Person recognition.",
+    "USE_EXISTING_SERVICE": "Selected."
+  },
+  "gbp_note": "A future service-area Google Business Profile (address hidden) is a founder decision outside this PR. It is not a new confenge.com.br URL."
+}

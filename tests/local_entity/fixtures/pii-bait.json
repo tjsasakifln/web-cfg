@@ -1,0 +1,19 @@
+{
+  "cpf": "123.456.789-00",
+  "note": "endereço residencial: Rua Particular 100 casa fundos",
+  "email": "tiago.pessoal@gmail.com",
+  "extra_email": "tiago.privado@confenge.com.br",
+  "credential": {
+    "type": "service_account",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEfake\n-----END PRIVATE KEY-----"
+  },
+  "rows": [
+    {
+      "channel": "ORGANIC",
+      "source": "gsc_api",
+      "query_or_context": "confenge florianopolis consultoria",
+      "freshness": "UNKNOWN",
+      "limitation": "bait"
+    }
+  ]
+}

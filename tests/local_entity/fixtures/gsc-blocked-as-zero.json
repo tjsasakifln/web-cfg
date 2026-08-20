@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "source_kind": "credential_failure",
+  "error": "missing_credentials",
+  "impressions": 0,
+  "clicks": 0,
+  "rows": 0,
+  "ready_for_product_decisions": true
+}
