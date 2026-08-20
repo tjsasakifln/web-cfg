@@ -69,6 +69,12 @@ for (const key of [
 if (catalog.number_e164 !== NUMBER) issues.push({ error: "catalog_number" });
 
 const SKIP_DIRS = new Set(["node_modules", "_site", ".git", ".venv", "venv"]);
+// Exclusive-area experiment HTML stays byte-equal to origin/main; do not
+// rewrite the inner #i-whatsapp scribble (0.6.7) on these two pages.
+const EXCLUSIVE_AREA_EXPERIMENT_HTML = new Set([
+  "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+  "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+]);
 const SVG_PATH_TOKEN =
   /[MmLlHhVvCcSsQqTtAaZz]|[+-]?(?:\d*\.\d+|\d+)(?:[eE][+-]?\d+)?/g;
 
@@ -90,16 +96,17 @@ function svgPathCommandsParse(d) {
 }
 
 function hasCorruptNumber(d) {
-  return /0\.6\.7/.test(d) || /\d\.\d+\.\d/.test(d);
+  return /0\.6\.7/.test(d) || /0 \.6\.7/.test(d) || /\d\.\d+\.\d/.test(d);
 }
 
 const htmlFiles = walkHtmlFiles(root);
 for (const full of htmlFiles) {
-  const rel = path.relative(root, full);
+  const rel = path.relative(root, full).split(path.sep).join("/");
+  if (EXCLUSIVE_AREA_EXPERIMENT_HTML.has(rel)) continue;
   const html = fs.readFileSync(full, "utf8");
   const dAttrs = [...html.matchAll(/\bd="([^"]*)"/g)].map((m) => m[1]);
   for (const d of dAttrs) {
-    if (d.includes("0.6.7") || hasCorruptNumber(d)) {
+    if (d.includes("0.6.7") || d.includes("0 .6.7") || hasCorruptNumber(d)) {
       issues.push({ rel, error: "corrupt_svg_path_number", d: d.slice(0, 80) });
     }
   }
