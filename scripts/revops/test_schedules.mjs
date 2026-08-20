@@ -35,6 +35,8 @@ else {
   else pass("weekly_entry");
   if (!y.includes("search_demand_observatory.py sync")) fail("gsc_sync_entry");
   else pass("gsc_sync_entry");
+  if (!y.includes("--allow-missing-creds")) fail("gsc_allow_missing_creds");
+  else pass("gsc_allow_missing_creds");
   // Secrets not hardcoded
   if (/OPS_TOKEN:\s*['\"][^$]/.test(y)) fail("secret_hardcoded");
   else pass("secrets_via_env");
@@ -72,11 +74,23 @@ function parseJsonBlob(text) {
   const j = parseJsonBlob(out);
   if (!j.ok || j.rows < 1) fail("gsc_fixture_sync", out.slice(0, 200));
   else pass("gsc_fixture_sync", `rows=${j.rows}`);
+  const latestImport = resolve(ROOT, "data/revops/gsc/latest_import.json");
+  if (existsSync(latestImport)) {
+    const latest = JSON.parse(readFileSync(latestImport, "utf8"));
+    if (latest.source === "fixture" || latest.synthetic === true) {
+      fail("fixture_did_not_clobber_latest_import", latest.source);
+    } else pass("fixture_did_not_clobber_latest_import", latest.source);
+  }
   if (!existsSync(resolve(ROOT, "data/revops/gsc/last_sync.json"))) fail("last_sync_written");
   else {
     const ls = JSON.parse(readFileSync(resolve(ROOT, "data/revops/gsc/last_sync.json"), "utf8"));
     if (!ls.last_sync_at) fail("last_sync_at", ls);
     else pass("last_sync_at", ls.last_sync_at);
+    if (ls.ready_for_product_decisions === true) fail("fixture_not_product", ls);
+    else pass("fixture_not_product");
+    if (ls.source === "search_analytics_api" || ls.source_kind === "search_analytics_api") {
+      fail("fixture_not_live_source", ls);
+    } else pass("fixture_not_live_source", ls.source_kind || ls.source);
   }
 }
 

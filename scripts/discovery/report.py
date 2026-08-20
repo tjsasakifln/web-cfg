@@ -465,3 +465,120 @@ def _flat(value: Any) -> str:
     if isinstance(value, dict):
         return " ".join(f"{key}={_flat(val)}" for key, val in sorted(value.items())) or "(empty)"
     return str(value)
+
+
+def _cell_status(value: Any, *, true_when: bool | None = None) -> str:
+    if true_when is True:
+        return "TRUE"
+    if true_when is False:
+        return "FALSE"
+    if value in (None, "", UNKNOWN):
+        return "UNKNOWN"
+    if value in {"TRUE", "FALSE", "UNKNOWN", "BLOCKED", "ABSENT"}:
+        return str(value)
+    return "UNKNOWN"
+
+
+def demand_control_cohort(
+    *,
+    root: Path | None = None,
+    generated_at: str | None = None,
+    report: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Map the existing #86 observatory report into uncollapsed demand-control cells.
+
+    Does not create a second observatory. Stages stay independent.
+    """
+    from scripts.discovery.metrics import MetricStageError, count_event
+
+    report = report or build_report(root=root, generated_at=generated_at)
+    assets = []
+    for record in report.get("assets") or []:
+        inspected_ok = bool(record.get("http") or record.get("canonical"))
+        robots_blocked = bool(record.get("robots_txt_blocked"))
+        noindex = bool(record.get("noindex"))
+        eligible = inspected_ok and not robots_blocked and not noindex and bool(record.get("publicable"))
+        if noindex or record.get("index_intent") == "DO_NOT_INDEX":
+            eligible_status = "BLOCKED" if noindex else "FALSE"
+        elif robots_blocked:
+            eligible_status = "BLOCKED"
+        elif eligible:
+            eligible_status = "TRUE"
+        else:
+            eligible_status = "UNKNOWN"
+        stages = {
+            "ELIGIBLE": {
+                "status": eligible_status,
+                "authority": "local_inspect",
+                "value": None,
+            },
+            "APPEARED": {
+                "status": _cell_status(record.get("google_index_state")),
+                "authority": "gsc_or_inspection",
+                "value": None,
+            },
+            "CLICKED": {
+                "status": "UNKNOWN",
+                "authority": "gsc_search_analytics",
+                "value": None,
+            },
+            "ENGAGED": {
+                "status": "UNKNOWN",
+                "authority": "analytics",
+                "value": None,
+            },
+            "LEAD": {
+                "status": "UNKNOWN",
+                "authority": "warmbly",
+                "value": None,
+            },
+            "PIPELINE": {
+                "status": "UNKNOWN",
+                "authority": "warmbly",
+                "value": None,
+            },
+        }
+        # Keep discovery metric_stages as an independent authority (do not collapse).
+        metric_stages = record.get("metric_stages") or {}
+        assets.append(
+            {
+                "id": record.get("id"),
+                "canonical": record.get("canonical"),
+                "category": record.get("category"),
+                "related_issues": record.get("related_issues") or [],
+                "index_intent": record.get("index_intent"),
+                "robots_meta": record.get("robots_meta"),
+                "sitemap": record.get("sitemap"),
+                "http": record.get("http"),
+                "renderability": record.get("renderability"),
+                "structured_data_visible": record.get("structured_data_visible"),
+                "google_index_state": record.get("google_index_state"),
+                "bing_index_state": record.get("bing_index_state"),
+                "generative_ai_visibility": record.get("generative_ai_visibility"),
+                "chatgpt_ai_referrals": record.get("chatgpt_ai_referrals"),
+                "authorized_crawler_logs": record.get("authorized_crawler_logs"),
+                "metric_stages": metric_stages,
+                "demand_control_stages": stages,
+                "llms_txt_strategy": False,
+            }
+        )
+    # Prove collapsed counts remain refused on this path.
+    try:
+        count_event("impression", "LEAD/PIPELINE")
+        collapsed_refused = False
+    except MetricStageError:
+        collapsed_refused = True
+    return {
+        "schema": "organic_demand_control_cohort/v1",
+        "campaign": "CONFENGE-WEB-SEO-DEMAND-CONTROL-02",
+        "issue": 86,
+        "replaces_86_registry": False,
+        "llms_txt_strategy": False,
+        "geo_score": False,
+        "cloaking": False,
+        "generated_at": report.get("generated_at"),
+        "collapsed_stage_refused": collapsed_refused,
+        "stage_cells": ["ELIGIBLE", "APPEARED", "CLICKED", "ENGAGED", "LEAD", "PIPELINE"],
+        "assets": assets,
+        "query_not_joined_to_lead": True,
+    }

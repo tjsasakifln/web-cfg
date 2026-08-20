@@ -1,0 +1,70 @@
+{
+  "as_of": "2026-08-17T11:29:23.193694+02:00",
+  "canonical_source": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "coverage": {
+    "missing_or_nonpositive": 25,
+    "n": 5038,
+    "status": "COMPLETE",
+    "total_keyword_rows": 5063,
+    "usable_n": 5038
+  },
+  "currency": "BRL",
+  "data_version": "sc-pavimentacao-ticket-1.0",
+  "description": "Mediana e quartis (nearest-rank) do valor integral nominal do instrumento, tipologia documental de pavimentação, recorte exclusivo de Santa Catarina. Não estima custo por km, m² ou unidade física. Missingness de valores não positivos permanece visível e não é convertida em zero.",
+  "geography": {
+    "code": "SC",
+    "kind": "uf",
+    "label": "Santa Catarina"
+  },
+  "grain": "integral_nominal_instrument",
+  "grain_not": [
+    "cost_per_km",
+    "unit_price",
+    "price_per_m2",
+    "custo_por_km"
+  ],
+  "invalidation": {
+    "keys": [
+      "payload_content_hash",
+      "rendered_content_hash",
+      "facts",
+      "coverage",
+      "method",
+      "geography",
+      "visible_copy",
+      "limitations",
+      "source",
+      "as_of"
+    ],
+    "owner": "CONFENGE / market-answers",
+    "rule": "Any change to an invalidation key requires a new data_version and a new package_hash. Silent backfill is forbidden."
+  },
+  "method_version": "integral-nominal-nearest-rank/1.0",
+  "missingness": {
+    "total_keyword_rows": 5063,
+    "unknown_or_nonpositive": 25,
+    "usable": 5038
+  },
+  "n_total_keyword_rows": 5063,
+  "n_usable": 5038,
+  "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
+  "period": {
+    "end": "2026-08-15",
+    "start": "2023-07-20"
+  },
+  "png": {
+    "included": false,
+    "reason": "no_reproducible_local_converter"
+  },
+  "refresh_owner": "CONFENGE / market-answers",
+  "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+  "schema": "data_desk_method_v1",
+  "schema_version": "data_desk_asset_v1",
+  "source_schema_version": "public-read-market-answer/1.0",
+  "stats": {
+    "median": 218284.5,
+    "p25": 19969.495,
+    "p75": 708950.0
+  },
+  "unit": "integral_nominal_instrument"
+}
