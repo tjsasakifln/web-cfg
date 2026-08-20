@@ -1,0 +1,7 @@
+metric,value,unit,geography_code,period_start,period_end,source,note
+p25,19969.495,BRL_integral_nominal_instrument,SC,2023-07-20,2026-08-15,https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/,quartile from approved payload; not custo/km
+median,218284.5,BRL_integral_nominal_instrument,SC,2023-07-20,2026-08-15,https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/,integral nominal ticket; not custo/km
+p75,708950.0,BRL_integral_nominal_instrument,SC,2023-07-20,2026-08-15,https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/,quartile from approved payload; not custo/km
+n_usable,5038,count,SC,2023-07-20,2026-08-15,https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/,usable sample; missingness not coerced to zero
+n_total_keyword_rows,5063,count,SC,2023-07-20,2026-08-15,https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/,denominator of the SC recorte
+missingness_unknown_or_nonpositive,25,count,SC,2023-07-20,2026-08-15,https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/,excluded non-positive totals; not a real ticket of zero
