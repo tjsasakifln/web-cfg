@@ -5,6 +5,7 @@
 const { evaluateEligibility } = require("./eligibility.cjs");
 const { acceptTerms, termsMatch } = require("./terms.cjs");
 const { snapshotOffer, getOffer } = require("./registry.cjs");
+const { resolveOffer } = require("./catalog-adapter.cjs");
 const { createSandboxCheckout, applyProviderEvent, checkoutExpired } = require("./sandbox.cjs");
 const { persistRecord, getRecord } = require("./persist.cjs");
 const { isFinancialConfirmation, commercialEvent, TYPES } = require("./events.cjs");
@@ -28,7 +29,18 @@ async function submitEligibility(store, input, { inventory, now } = {}) {
     ...result,
     offer: undefined,
   });
-  return { ...result, persisted: persisted.record, idempotent: persisted.idempotent };
+  return {
+    ...result,
+    persisted: persisted.record,
+    idempotent: persisted.idempotent,
+    event: commercialEvent({
+      type: TYPES.CAPACITY_DECISION,
+      offer_id: result.offer_id,
+      offer_version: result.offer_snapshot && result.offer_snapshot.offer_version,
+      provider_raw_status: result.status,
+      exception_code: result.status === "APPROVED" ? null : result.capacity_reason,
+    }),
+  };
 }
 
 async function acceptOfferTerms(store, { cnpj, offerId, actor, evidence, now } = {}) {
@@ -52,11 +64,13 @@ async function acceptOfferTerms(store, { cnpj, offerId, actor, evidence, now } =
   return { ok: true, acceptance, snapshot: persisted.record.offer_snapshot, idempotent: persisted.idempotent };
 }
 
-async function requestCheckout(store, { cnpj, offerId, inventory, env, now } = {}) {
+async function requestCheckout(store, { cnpj, offerId, offer_version, inventory, env, now } = {}) {
   const flags = loadFlags(env);
   if (flags.production_checkout_enabled || flags.real_money_mutation_enabled) {
     return { ok: false, error: "production_checkout_disabled" };
   }
+  const resolved = resolveOffer(offerId, { offer_version });
+  if (!resolved.ok) return resolved;
   const elig = await getRecord(store, "eligibility", `${cnpj}|${offerId}`);
   if (!elig || elig.status !== "APPROVED") {
     return { ok: false, error: "capacity_not_approved" };
@@ -64,6 +78,9 @@ async function requestCheckout(store, { cnpj, offerId, inventory, env, now } = {
   const termsRow = await getRecord(store, "terms", `${cnpj}|${offerId}`);
   if (!termsRow || !termsMatch(termsRow.acceptance)) {
     return { ok: false, error: "terms_not_accepted" };
+  }
+  if (termsRow.acceptance.terms_version !== resolved.offer.terms_version) {
+    return { ok: false, error: "terms_drift" };
   }
   const created = createSandboxCheckout({
     offerId,
@@ -93,7 +110,7 @@ async function ingestEvent(store, { checkoutId, raw, seenIds, inventory, now, en
   if (applied.event) {
     await persistRecord(store, "event", applied.event.event_id, applied.event);
   }
-  return applied;
+  return wrapPaymentObservation(applied);
 }
 
 function requestOnboarding({ checkout, lastEvent }) {
@@ -112,7 +129,59 @@ function requestOnboarding({ checkout, lastEvent }) {
       }),
     };
   }
-  return { ok: true, status: "ONBOARDING_ALLOWED" };
+  return {
+    ok: true,
+    status: "ONBOARDING_ALLOWED",
+    event: commercialEvent({
+      type: TYPES.ONBOARDING_ELIGIBLE,
+      offer_id: checkout && checkout.offer_id,
+      offer_version: checkout && checkout.offer_version,
+      provider_raw_status: lastEvent && lastEvent.canonical_status,
+      canonical_status: lastEvent && lastEvent.canonical_status,
+      financial_confirmation: true,
+    }),
+  };
+}
+
+function observeCheckoutCallback({ checkout, query } = {}) {
+  const params = query && typeof query === "object" ? query : {};
+  const piiKeys = ["email", "cnpj", "cpf", "name", "nome", "telefone", "phone"];
+  for (const key of piiKeys) {
+    if (params[key]) {
+      return { ok: false, error: "pii_in_callback_url" };
+    }
+  }
+  return {
+    ok: true,
+    payment: false,
+    revenue: false,
+    financial_confirmation: false,
+    event: commercialEvent({
+      type: TYPES.PAYMENT_STATE_OBSERVED,
+      offer_id: checkout && checkout.offer_id,
+      external_reference: checkout && checkout.external_reference,
+      provider_raw_status: "callback",
+      canonical_status: "PAYMENT_PENDING",
+    }),
+  };
+}
+
+function wrapPaymentObservation(applied) {
+  if (!applied || !applied.ok || applied.duplicate || !applied.event) return applied;
+  return {
+    ...applied,
+    observation: commercialEvent({
+      type: TYPES.PAYMENT_STATE_OBSERVED,
+      offer_id: applied.event.offer_id,
+      offer_version: applied.event.offer_version,
+      terms_version: applied.event.terms_version,
+      external_reference: applied.event.external_reference,
+      provider_event_id: applied.event.provider_event_id,
+      provider_raw_status: applied.event.provider_raw_status,
+      canonical_status: applied.event.canonical_status,
+      amount_cents: applied.event.amount_cents,
+    }),
+  };
 }
 
 module.exports = {
@@ -122,4 +191,6 @@ module.exports = {
   requestCheckout,
   ingestEvent,
   requestOnboarding,
+  observeCheckoutCallback,
+  wrapPaymentObservation,
 };

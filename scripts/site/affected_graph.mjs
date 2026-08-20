@@ -478,9 +478,9 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: [],
   },
   "test:conversion": {
-    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/"],
+    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "tests/offers/", "scripts/offers/", "data/offers/"],
     artifacts: [],
-    surfaces: ["/diagnostico-b2g-360/"],
+    surfaces: ["/diagnostico-b2g-360/", "/diagnostico-b2g-expansao/", "/diretoria-b2g/"],
   },
   "validate:seo": {
     producers: ["seo/scripts/validate_seo.py", "seo/", "tests/data_desk/test_data_desk.py"],

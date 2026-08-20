@@ -560,6 +560,18 @@
       "same_layer": true,
       "semantic": "Legacy content-to-service name."
     },
+    "service_view": {
+      "canonical": "service_page_view",
+      "rule": "rewrite",
+      "same_layer": true,
+      "semantic": "Campaign job alias for a service page impression. Same layer as page_view."
+    },
+    "service_cta": {
+      "canonical": "cta_click",
+      "rule": "rewrite",
+      "same_layer": true,
+      "semantic": "Campaign job alias for a service CTA. Same layer as engagement; not a lead."
+    },
     "service_cta_click": {
       "canonical": "cta_click",
       "rule": "rewrite",
@@ -697,6 +709,7 @@
     "query"
   ],
   "cta_kind_from_alias": {
+    "service_cta": "service",
     "service_cta_click": "service",
     "offer_cta_click": "offer",
     "diagnostic_cta_click": "diagnostic",

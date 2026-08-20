@@ -27,7 +27,7 @@
       ],
       "cannibalization": {
         "status": "RISK_DECLARED_NOT_MEASURED_LIVE",
-        "note": "PR #159 cannibalization detector returned NOT_CANNIBALIZATION on a then-credential_failure empty set; that is not a live all-clear. Current overlay is LIVE_JOB_OK with core_ready_for_product_decisions=false.",
+        "note": "PR #159 cannibalization detector returned NOT_CANNIBALIZATION on a LIVE_JOB_OK empty set; that is not a live all-clear.",
         "siblings": [
           {
             "url": "/conteudos/aditivo-qualitativo-quantitativo/",

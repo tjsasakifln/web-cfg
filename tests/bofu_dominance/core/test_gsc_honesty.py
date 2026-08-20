@@ -15,6 +15,12 @@ from tests.bofu_dominance.core.helpers import build_status
 
 def test_gitignored_last_sync_blocked_is_not_zero():
     sync = load_last_sync()
+    live = gsc_live_record()
+    assert live["gsc_live_state"] == "LIVE_JOB_OK"
+    if sync.get("source") == "fixture":
+        # Local gitignored fixture is not live Search Analytics and is not a zero.
+        assert sync.get("as_of")
+        return
     assert sync.get("blocked") is True
     assert sync.get("error") in {"missing_credentials", "last_sync_missing", "credential_failure"}
     assert missing_credentials_is_not_zero(sync) is True

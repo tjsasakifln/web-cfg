@@ -50,6 +50,8 @@
   const EVENT_ALIASES = {
     qualified_scroll: 'scroll_depth',
     content_to_service_click: 'content_to_service',
+    service_view: 'service_page_view',
+    service_cta: 'cta_click',
     service_cta_click: 'cta_click',
     offer_cta_click: 'cta_click',
     diagnostic_cta_click: 'cta_click',

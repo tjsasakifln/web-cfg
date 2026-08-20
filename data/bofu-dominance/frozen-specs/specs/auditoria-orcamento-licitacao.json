@@ -12,9 +12,9 @@
     "pr": 159,
     "authorizes_html_edit": false,
     "source_kind": "LIVE_JOB_OK",
+    "ready_for_product_decisions": false,
     "bofu_observe_only": true,
-    "earliest_safe_action_at": "2026-09-16",
-    "ready_for_product_decisions": false
+    "earliest_safe_action_at": "2026-09-16"
   },
   "issue_128_baseline": {
     "issue": 128,
@@ -42,7 +42,7 @@
     "national_claim_authorized": false
   },
   "gsc_precondition": {
-    "gsc_live_available": true,
+    "gsc_live_available": false,
     "source_kind": "LIVE_JOB_OK",
     "ready_for_product_decisions": false,
     "authorizes_html_edit": false,
@@ -164,8 +164,8 @@
     "slug": "auditoria-orcamento-licitacao",
     "path": "/auditoria-orcamento-licitacao/",
     "html_rel": "auditoria-orcamento-licitacao/index.html",
-    "title": "Orçamento, BDI e SINAPI em obras públicas | CONFENGE",
-    "meta_description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de…",
+    "title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
+    "meta_description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha.",
     "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
     "canonical": "https://confenge.com.br/auditoria-orcamento-licitacao/",
     "og_title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
@@ -202,12 +202,12 @@
           "text": "Operação B2G continuada"
         }
       ],
-      "when_not_to_hire": false,
+      "when_not_to_hire": true,
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "f178e0b78b89e13d8ffc8f671d4c4c36d2a52e275a27b9ab164e7a3f85558b17",
-    "bytes": 28597,
+    "content_sha256": "7204c3f9435970279663f01733c043b077332e6934958f18efd88a4a57e73a6e",
+    "bytes": 28669,
     "noindex": false
   }
 }

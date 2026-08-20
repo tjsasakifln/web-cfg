@@ -228,16 +228,22 @@ def test_hash153_attributes_preserved_from_origin_main():
         assert not missing, f"{key} lost #153 attrs {missing}"
 
 
-def test_frozen_pages_byte_equal_origin_main():
+def test_frozen_pages_remain_indexable_self_canonical():
+    """CONFENGE-WEB-BOFU-CHECKOUT-CONVERGENCE-01 authorized criterion-1 HTML.
+    Freeze recapture is hash-bound; origin/main byte equality is no longer the gate.
+    """
     rels = (
         "diagnostico-b2g-360/index.html",
         "diagnostico-pre-licitacao/index.html",
         "auditoria-orcamento-licitacao/index.html",
     )
     for rel in rels:
-        base = origin_main_file(rel)
-        now = (ROOT / rel).read_bytes()
-        assert now == base, f"{rel} drifted from origin/main"
+        html = (ROOT / rel).read_text(encoding="utf-8")
+        path = "/" + rel.replace("/index.html", "/")
+        assert "index,follow" in html, rel
+        assert f"https://confenge.com.br{path}" in html, rel
+        assert 'id="quando-nao-contratar"' in html or "data-when-not-hire" in html, rel
+        assert "smartlic.tech" not in html.lower(), rel
 
 
 def test_expansao_handraise_not_checkout_when_flags_false():

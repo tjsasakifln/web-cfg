@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: diagnostico-pre-licitacao
 path: diagnostico-pre-licitacao/index.html
-content_sha256: 1490c9d0101bad0d53937cbbbee5dfd495b787051bd2386838b1a3f7e3c2bd72
+content_sha256: 8b80f2bc32b2370dfd076ae176d2895e540ce7ccfc5475894c576a188151e075
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false
@@ -9,6 +9,6 @@ do_not_git_apply: true
 ---DIFF---
 ---REPLACEMENT---
 <<<BEFORE
-antes de transformar uma vitória na licitação em um…
+antes de transformar uma vitória na licitação em um contrato ruim.
 ===AFTER
 antes de transformar uma vitória na licitação em um contrato ruim.
