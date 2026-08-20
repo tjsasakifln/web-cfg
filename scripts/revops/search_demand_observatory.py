@@ -37,16 +37,52 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data" / "revops" / "gsc"
 PRIVATE_DIR = DATA / "private"
 BRAND_CLASSIFICATION_VERSION = "brand-class/v1"
 WINDOW_POLICY_VERSION = "complete-days/v1"
+PROPERTY_TZ = ZoneInfo("America/Sao_Paulo")
 CTR_MIN_IMPRESSIONS = 100
 SEARCH_ANALYTICS_LIMITATION = (
     "Search Analytics may return top rows only and is not an exhaustive total. "
     "Row counts describe the returned set, not the property universe."
+)
+SNAPSHOT_SOURCE_KINDS = (
+    "search_analytics_api",
+    "historical_csv_export",
+    "fixture",
+    "absence",
+    "credential_failure",
+    "search_analytics_top_row_truncation",
+)
+LIVE_SOURCE_KINDS = frozenset(
+    {"search_analytics_api", "search_analytics_top_row_truncation"}
+)
+URL_FUNNEL_STATUSES = (
+    "ELIGIBLE",
+    "APPEARED",
+    "CLICKED",
+    "ENGAGED",
+    "LEAD",
+    "PIPELINE",
+    "UNKNOWN",
+)
+QUEUE_MAX = 3
+QUEUE_OWNER = "tiago.sasaki"
+REQUIRED_GSC_ENV = (
+    "GSC_SITE_URL",
+    "GSC_CREDENTIALS_JSON",
+    "GSC_CLIENT_SECRETS_JSON",
+    "GSC_TOKEN_JSON",
+)
+CREDENTIAL_BLOCKER_ACTION = (
+    "Set GitHub Actions secrets GSC_CREDENTIALS_JSON (Search Console service-account JSON) "
+    "and GSC_SITE_URL=sc-domain:confenge.com.br (or https://confenge.com.br/). "
+    "Grant that service account Search Console read on the property. "
+    "Do not paste the JSON into the repository."
 )
 
 # Current brand: CONFENGE and documented misspellings. Not sector terms.
@@ -84,6 +120,180 @@ CLUSTER_RULES: list[tuple[re.Pattern[str], str, str]] = [
     (re.compile(r"diretoria|b2g|diagn[oó]stico", re.I), "oferta", "diretoria-b2g"),
     (re.compile(r"avcb|clcb|avalia[cç]|im[oó]vel|automa[cç]|nexgen|vision", re.I), "legacy-entity", ""),
 ]
+
+
+# Paths/families that must not appear as change-now (active experiments + excluded products).
+CHANGE_NOW_EXCLUSIONS: tuple[tuple[str, str], ...] = (
+    ("/conteudos/sinapi-desonerado-nao-desonerado/", "#126"),
+    ("/conteudos/chuva-prorrogacao-prazo-obra-publica/", "#127"),
+    ("/conteudos/aditivo-qualitativo-quantitativo/", "#127"),
+    ("/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/", "#127"),
+    ("/aditivos-obras-publicas/", "#128"),
+    ("/medicoes-glosas-obras-publicas/", "#128"),
+    ("/reequilibrio-obras-publicas/", "#128"),
+    ("/auditoria-orcamento-licitacao/", "#128"),
+    ("/diagnostico-b2g-360/", "#128"),
+    ("/diagnostico-pre-licitacao/", "#128"),
+    ("/ferramentas/diagnostico-defesa-margem/", "#60"),
+    ("/analises-contratos-publicos/", "#83"),
+    ("/inteligencia/valor-tipico-contratos-pavimentacao/", "#84"),
+    ("/inteligencia/cenarios/", "#84"),
+    ("/internal/data-desk/", "#89"),
+    ("/ofertas/", "checkout"),
+    ("/checkout", "checkout"),
+    ("smartlic", "SmartLic"),
+)
+
+
+def env_nonempty(name: str) -> str | None:
+    """GitHub Actions injects unset secrets as empty strings. Empty is absent."""
+    raw = os.environ.get(name)
+    if raw is None:
+        return None
+    stripped = raw.strip()
+    return stripped or None
+
+
+def property_today() -> date:
+    return datetime.now(PROPERTY_TZ).date()
+
+
+def optional_metric(row: dict[str, Any], key: str) -> float | None:
+    """Missing metrics stay None. Presence of numeric zero is preserved."""
+    if key not in row or row.get(key) is None:
+        return None
+    try:
+        return float(row[key])
+    except (TypeError, ValueError):
+        return None
+
+
+def exclusion_for_url(url_or_path: str) -> str | None:
+    blob = (url_or_path or "").lower()
+    path = _path_of(url_or_path)
+    for prefix, reason in CHANGE_NOW_EXCLUSIONS:
+        if prefix.startswith("/") and (path.startswith(prefix) or prefix.rstrip("/") in path):
+            return reason
+        if not prefix.startswith("/") and prefix in blob:
+            return reason
+    return None
+
+
+def classify_snapshot_source(payload: dict[str, Any] | None) -> str:
+    """Exactly one of SNAPSHOT_SOURCE_KINDS. Fixture/CSV/history is never live API."""
+    data = payload or {}
+    explicit = data.get("source_kind")
+    if explicit in SNAPSHOT_SOURCE_KINDS:
+        if explicit in LIVE_SOURCE_KINDS and (
+            data.get("synthetic") is True or data.get("fixture") is True or data.get("historical") is True
+        ):
+            return "fixture" if data.get("fixture") is True else "historical_csv_export"
+        return str(explicit)
+    err = data.get("error")
+    if err in {"missing_credentials", "invalid_credentials", "credential_failure"}:
+        return "credential_failure"
+    if data.get("blocked") is True and not data.get("ok"):
+        return "credential_failure"
+    if data.get("truncated") is True or data.get("top_row_truncation") is True:
+        if data.get("synthetic") is True or data.get("fixture") is True:
+            return "fixture"
+        return "search_analytics_top_row_truncation"
+    if data.get("source") == "fixture" or data.get("fixture") is True:
+        return "fixture"
+    if data.get("historical") is True or data.get("source") in {
+        "csv_export",
+        "csv",
+        "historical_csv_export",
+    }:
+        return "historical_csv_export"
+    src = str(data.get("source") or data.get("source_dir") or "")
+    if src.startswith("seo/gsc"):
+        return "historical_csv_export"
+    if data.get("source") == "search_analytics_api" and data.get("synthetic") is not True:
+        return "search_analytics_api"
+    if not data or (data.get("ok") is False and not data.get("queries") and not data.get("pages")):
+        return "absence"
+    if data.get("queries") is None and data.get("pages") is None and data.get("row_count") is None:
+        return "absence"
+    return "absence"
+
+
+def snapshot_freshness(
+    payload: dict[str, Any] | None,
+    *,
+    today: date | None = None,
+) -> str:
+    """CURRENT | STALE | BLOCKED | NOT_CURRENT. Stale live is not a current decision source."""
+    data = payload or {}
+    kind = classify_snapshot_source(data)
+    if kind == "credential_failure" or data.get("blocked") is True:
+        return "BLOCKED"
+    if kind in {"fixture", "historical_csv_export", "absence"}:
+        return "NOT_CURRENT"
+    today = today or property_today()
+    provider_max = data.get("max_date") or data.get("as_of") or data.get("end")
+    if not provider_max:
+        return "STALE"
+    try:
+        max_day = date.fromisoformat(str(provider_max)[:10])
+    except ValueError:
+        return "STALE"
+    # Search Analytics typically lags ~2–3 days. Compare snapshot max to expected complete day.
+    expected_end = today - timedelta(days=3)
+    if max_day < expected_end - timedelta(days=1):
+        return "STALE"
+    return "CURRENT"
+
+
+def credential_blocker_record(*, site: str | None = None) -> dict[str, Any]:
+    """Exact external blocker. No invented metrics. Absence is not zero."""
+    site_value = site or env_nonempty("GSC_SITE_URL")
+    return {
+        "ok": False,
+        "blocked": True,
+        "error": "missing_credentials",
+        "source_kind": "credential_failure",
+        "source": "credential_failure",
+        "synthetic": False,
+        "fixture": False,
+        "historical": False,
+        "ready_for_product_decisions": False,
+        "live_baseline_invented": False,
+        "performance_status": "UNKNOWN",
+        "last_sync_at": None,
+        "rows": None,
+        "impressions": None,
+        "clicks": None,
+        "query_count": None,
+        "site": site_value,
+        "required_env": list(REQUIRED_GSC_ENV),
+        "required_secret": "GSC_CREDENTIALS_JSON",
+        "required_secret_alt": "GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON",
+        "required_site": "GSC_SITE_URL",
+        "scope": "https://www.googleapis.com/auth/webmasters.readonly",
+        "printed_secret": False,
+        "env_presence": {name: bool(env_nonempty(name)) for name in REQUIRED_GSC_ENV},
+        "consequence": (
+            "Search Analytics live loop cannot run. Historical CSV and fixtures stay "
+            "non-live. Product decisions from GSC remain blocked."
+        ),
+        "external_action": CREDENTIAL_BLOCKER_ACTION,
+        "fallback": "python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-YYYY-MM-DD",
+        "note": "July/August 2026 CSV snapshots are historical only — not continuous current data.",
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "timezone": "America/Sao_Paulo",
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+    }
+
+
+def write_blocked_last_sync(record: dict[str, Any] | None = None) -> dict[str, Any]:
+    ensure_dirs()
+    payload = record or credential_blocker_record()
+    (DATA / "last_sync.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return payload
 
 
 def ensure_dirs() -> None:
@@ -272,8 +482,17 @@ def day_status(day: str | date, rows_by_date: dict[str, Any] | None = None) -> d
 
 
 def ctr_optimization_decision(impressions: float | int | None) -> dict[str, Any]:
-    """Refuse CTR optimization below 100 impressions on the selected denominator."""
-    imps = float(impressions or 0)
+    """Refuse CTR optimization below 100 impressions. Missing denominator is not zero."""
+    if impressions is None:
+        return {
+            "decision": "INSUFFICIENT_EVIDENCE",
+            "impressions": None,
+            "threshold": CTR_MIN_IMPRESSIONS,
+            "optimize_ctr": False,
+            "data_preserved": True,
+            "note": "missing_denominator_is_not_zero",
+        }
+    imps = float(impressions)
     if imps < CTR_MIN_IMPRESSIONS:
         return {
             "decision": "INSUFFICIENT_EVIDENCE",
@@ -707,7 +926,10 @@ def detect_all(
 def gsc_performance_status(pull_result: dict[str, Any] | None) -> str:
     """Live performance is UNKNOWN unless a non-synthetic API pull succeeded."""
     data = pull_result or {}
-    if data.get("error") == "missing_credentials":
+    kind = classify_snapshot_source(data)
+    if kind == "credential_failure" or data.get("error") == "missing_credentials":
+        return "UNKNOWN"
+    if kind in {"fixture", "historical_csv_export"}:
         return "UNKNOWN"
     if data.get("ok") is True and data.get("ready_for_product_decisions") is True and data.get("synthetic") is not True:
         return "LIVE"
@@ -719,6 +941,7 @@ def label_historical_export(payload: dict[str, Any]) -> dict[str, Any]:
     stamped = stamp_non_live_snapshot(payload)
     stamped["historical"] = True
     stamped["historical_neq_live"] = True
+    stamped["source_kind"] = "historical_csv_export"
     stamped["performance_status"] = "UNKNOWN"
     return stamped
 
@@ -839,10 +1062,14 @@ COMMITTED_GSC_SNAPSHOT_RELS = (
 
 
 def is_live_gsc_payload(data: dict[str, Any] | None) -> bool:
+    """True only for a labeled live Search Analytics payload. Does not imply freshness."""
     data = data or {}
+    kind = classify_snapshot_source(data)
     return (
-        data.get("source") == "search_analytics_api"
+        kind in LIVE_SOURCE_KINDS
         and data.get("synthetic") is not True
+        and data.get("fixture") is not True
+        and data.get("historical") is not True
         and data.get("ready_for_product_decisions") is not False
     )
 
@@ -850,14 +1077,27 @@ def is_live_gsc_payload(data: dict[str, Any] | None) -> bool:
 def stamp_non_live_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
     """Historical CSV / fixture payloads cannot drive product decisions."""
     out = dict(payload)
-    if is_live_gsc_payload(out):
+    kind = classify_snapshot_source(out)
+    if kind in LIVE_SOURCE_KINDS and out.get("synthetic") is not True and out.get("fixture") is not True:
+        out["source_kind"] = kind
         out["synthetic"] = False
         out["fixture"] = False
-        out["ready_for_product_decisions"] = True
+        out["historical"] = False
+        out["live_baseline_invented"] = False
+        if "ready_for_product_decisions" not in out:
+            out["ready_for_product_decisions"] = True
+        return out
+    if kind == "credential_failure":
+        out["source_kind"] = "credential_failure"
+        out["synthetic"] = False
+        out["fixture"] = False
+        out["ready_for_product_decisions"] = False
         out["live_baseline_invented"] = False
         return out
     out["synthetic"] = True
     out["fixture"] = True
+    out["historical"] = kind == "historical_csv_export" or bool(out.get("historical"))
+    out["source_kind"] = kind if kind in SNAPSHOT_SOURCE_KINDS else "historical_csv_export"
     out["ready_for_product_decisions"] = False
     out["live_baseline_invented"] = False
     if not out.get("source"):
@@ -912,22 +1152,19 @@ def write_last_fixture_manifest(*, root: Path | None = None) -> dict[str, Any]:
 
 def credential_presence() -> dict[str, Any]:
     """Detect GSC credential presence without printing secret content."""
-    sa = os.environ.get("GSC_CREDENTIALS_JSON")
-    secrets = os.environ.get("GSC_CLIENT_SECRETS_JSON")
-    token_path = os.environ.get("GSC_TOKEN_JSON")
-    site = os.environ.get("GSC_SITE_URL", "sc-domain:confenge.com.br")
-    sa_present = bool(sa and sa.strip())
+    sa = env_nonempty("GSC_CREDENTIALS_JSON")
+    secrets = env_nonempty("GSC_CLIENT_SECRETS_JSON")
+    token_path = env_nonempty("GSC_TOKEN_JSON")
+    site = env_nonempty("GSC_SITE_URL") or "sc-domain:confenge.com.br"
+    sa_present = bool(sa)
     oauth_present = bool(secrets and token_path)
     return {
         "present": sa_present or oauth_present,
         "mode": "service_account" if sa_present else ("oauth" if oauth_present else None),
         "site": site,
-        "env_names": [
-            "GSC_SITE_URL",
-            "GSC_CREDENTIALS_JSON",
-            "GSC_CLIENT_SECRETS_JSON",
-            "GSC_TOKEN_JSON",
-        ],
+        "site_env_present": bool(env_nonempty("GSC_SITE_URL")),
+        "env_names": list(REQUIRED_GSC_ENV),
+        "env_presence": {name: bool(env_nonempty(name)) for name in REQUIRED_GSC_ENV},
         "scope": "https://www.googleapis.com/auth/webmasters.readonly",
         "printed_secret": False,
     }
@@ -1089,14 +1326,17 @@ def import_csv_dir(src: Path, as_of: str | None = None) -> dict[str, Any]:
         "as_of": as_of,
         "source_dir": str(src.relative_to(ROOT)) if src.is_relative_to(ROOT) else str(src),
         "source": "csv_export",
+        "source_kind": "historical_csv_export",
         "synthetic": True,
         "fixture": True,
+        "historical": True,
         "ready_for_product_decisions": False,
         "live_baseline_invented": False,
         "queries": query_rows,
         "pages": page_rows,
         "query_count": len(query_rows),
         "page_count": len(page_rows),
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
     }
     out = DATA / "imports" / f"import-{as_of}.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -1459,22 +1699,14 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
 
 def _gsc_credentials():
     """Resolve GSC credentials from env. Returns (creds, error_dict)."""
-    site = os.environ.get("GSC_SITE_URL", "sc-domain:confenge.com.br")
-    sa = os.environ.get("GSC_CREDENTIALS_JSON")
-    secrets = os.environ.get("GSC_CLIENT_SECRETS_JSON")
-    token_path = os.environ.get("GSC_TOKEN_JSON")
+    site = env_nonempty("GSC_SITE_URL") or "sc-domain:confenge.com.br"
+    sa = env_nonempty("GSC_CREDENTIALS_JSON")
+    secrets = env_nonempty("GSC_CLIENT_SECRETS_JSON")
+    token_path = env_nonempty("GSC_TOKEN_JSON")
 
     if not sa and not (secrets and token_path):
-        return None, {
-            "ok": False,
-            "error": "missing_credentials",
-            "required_env": [
-                "GSC_SITE_URL",
-                "GSC_CREDENTIALS_JSON (service account path or JSON) OR (GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON)",
-            ],
-            "fallback": "python3 scripts/revops/search_demand_observatory.py import-csv --dir seo/gsc-YYYY-MM-DD",
-            "site": site,
-        }
+        blocker = credential_blocker_record(site=site if env_nonempty("GSC_SITE_URL") else None)
+        return None, blocker
 
     try:
         from google.oauth2 import service_account
@@ -1530,8 +1762,9 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
             "install": "pip install google-api-python-client google-auth",
         }
 
-    end = date.today() - timedelta(days=3)  # GSC lag
-    start = end - timedelta(days=max(days, reprocess_days))
+    today = property_today()
+    end = last_complete_day(today=today, provider_max_date=today - timedelta(days=3))
+    start = end - timedelta(days=max(days, reprocess_days) - 1)
     service = build("searchconsole", "v1", credentials=creds, cache_discovery=False)
     started = time.monotonic()
 
@@ -1539,6 +1772,8 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
     rows_out: list[dict[str, Any]] = []
     start_row = 0
     pages_fetched = 0
+    last_batch_size = 0
+    truncated = False
     while True:
         body = {
             "startDate": start.isoformat(),
@@ -1550,6 +1785,7 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         resp = service.searchanalytics().query(siteUrl=site, body=body).execute()
         batch = resp.get("rows") or []
         pages_fetched += 1
+        last_batch_size = len(batch)
         for row in batch:
             keys = row.get("keys") or []
             q = keys[1] if len(keys) > 1 else ""
@@ -1562,10 +1798,10 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
                     "page": page,
                     "country": keys[3] if len(keys) > 3 else None,
                     "device": keys[4] if len(keys) > 4 else None,
-                    "impressions": row.get("impressions", 0),
-                    "clicks": row.get("clicks", 0),
-                    "ctr": row.get("ctr", 0),
-                    "position": row.get("position", 0),
+                    "impressions": row["impressions"] if "impressions" in row else None,
+                    "clicks": row["clicks"] if "clicks" in row else None,
+                    "ctr": row["ctr"] if "ctr" in row else None,
+                    "position": row["position"] if "position" in row else None,
                     "branded": branded(q),
                     "brand_class": classify_query(q),
                     **enr,
@@ -1576,6 +1812,7 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
             break
         start_row += row_limit
         if pages_fetched > 40:  # hard safety
+            truncated = True
             break
 
     # Dedupe
@@ -1594,12 +1831,17 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
     provider_dates = [r.get("date") for r in deduped if r.get("date")]
     max_date = max(provider_dates) if provider_dates else end.isoformat()
     last_sync_at = datetime.now(timezone.utc).isoformat()
+    if last_batch_size >= row_limit:
+        truncated = True
+    source_kind = (
+        "search_analytics_top_row_truncation" if truncated else "search_analytics_api"
+    )
     windows = complete_windows(
-        today=date.today(),
+        today=today,
         provider_max_date=date.fromisoformat(str(max_date)),
     )
     manifest = snapshot_manifest(
-        source="search_analytics_api",
+        source=source_kind,
         rows=deduped,
         max_date=str(max_date),
         latency_ms=latency_ms,
@@ -1610,10 +1852,14 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "imported_at": last_sync_at,
         "as_of": end.isoformat(),
         "source": "search_analytics_api",
+        "source_kind": source_kind,
+        "truncated": truncated,
+        "top_row_truncation": truncated,
         "site": site,
         "start": start.isoformat(),
         "end": end.isoformat(),
         "reprocess_days": reprocess_days,
+        "timezone": "America/Sao_Paulo",
         "queries": deduped,
         "pages": [],
         "query_count": len(deduped),
@@ -1637,7 +1883,11 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         json.dumps(safe_payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     day_path = DATA / "daily" / f"{end.isoformat()}.json"
-    day_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    day_path.write_text(json.dumps(safe_payload, ensure_ascii=False), encoding="utf-8")
+    (PRIVATE_DIR / "daily" / f"{end.isoformat()}.json").parent.mkdir(parents=True, exist_ok=True)
+    (PRIVATE_DIR / "daily" / f"{end.isoformat()}.json").write_text(
+        json.dumps(payload, ensure_ascii=False), encoding="utf-8"
+    )
 
     # Gap detection: missing calendar days in daily/ history
     gaps = detect_gsc_gaps(start, end)
@@ -1651,6 +1901,9 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "gaps": gaps,
         "site": site,
         "source": "search_analytics_api",
+        "source_kind": source_kind,
+        "truncated": truncated,
+        "timezone": "America/Sao_Paulo",
         "max_date": max_date,
         "latency_ms": latency_ms,
         "ready_for_product_decisions": True,
@@ -1681,6 +1934,10 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "pages_fetched": pages_fetched,
         "max_date": max_date,
         "latency_ms": latency_ms,
+        "source": "search_analytics_api",
+        "source_kind": source_kind,
+        "truncated": truncated,
+        "synthetic": False,
         "ready_for_product_decisions": True,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "manifest_sha256": manifest["content_sha256"],
@@ -1712,22 +1969,11 @@ def sync_incremental(
     if use_fixture or os.environ.get("GSC_USE_FIXTURE") == "1":
         return sync_from_fixture()
     result = pull_api(days=days, reprocess_days=reprocess_days)
-    if result.get("error") == "missing_credentials" and allow_missing_creds:
-        # Record blocked state without fabricating metrics
-        blocked = {
-            "last_sync_at": None,
-            "blocked": True,
-            "error": "missing_credentials",
-            "required_env": result.get("required_env"),
-            "ready_for_product_decisions": False,
-            "synthetic": False,
-            "live_baseline_invented": False,
-            "note": "July 2026 CSV snapshot is historical only — not continuous current data.",
-            "recorded_at": datetime.now(timezone.utc).isoformat(),
-        }
-        (DATA / "last_sync.json").write_text(
-            json.dumps(blocked, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
+    if result.get("error") == "missing_credentials":
+        # Always persist the blocker so scheduled artifacts exist. Absence is not zero.
+        write_blocked_last_sync(result)
+        return result
+    if allow_missing_creds:
         return result
     return result
 
@@ -1761,7 +2007,7 @@ def sync_from_fixture() -> dict[str, Any]:
         classified.append(item)
     latency_ms = int((time.monotonic() - started) * 1000)
     windows = complete_windows(
-        today=date.today(),
+        today=property_today(),
         provider_max_date=date.fromisoformat(str(as_of)),
     )
     manifest = snapshot_manifest(
@@ -1776,6 +2022,7 @@ def sync_from_fixture() -> dict[str, Any]:
         "imported_at": last_sync_at,
         "as_of": as_of,
         "source": "fixture",
+        "source_kind": "fixture",
         "synthetic": True,
         "fixture": True,
         "ready_for_product_decisions": False,
@@ -1790,7 +2037,7 @@ def sync_from_fixture() -> dict[str, Any]:
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "note": "Fixture for pipeline validation only — not production GSC data.",
     }
-    (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Persist gitignored last_sync as fixture (not live). Never overwrite latest_import.json.
     (DATA / "last_sync.json").write_text(
         json.dumps(
             {
@@ -1798,7 +2045,9 @@ def sync_from_fixture() -> dict[str, Any]:
                 "as_of": as_of,
                 "rows": len(classified),
                 "source": "fixture",
+                "source_kind": "fixture",
                 "synthetic": True,
+                "fixture": True,
                 "ready_for_product_decisions": False,
                 "max_date": as_of,
                 "latency_ms": latency_ms,
@@ -1817,12 +2066,698 @@ def sync_from_fixture() -> dict[str, Any]:
         "rows": len(classified),
         "last_sync": last_sync_at,
         "source": "fixture",
+        "source_kind": "fixture",
         "synthetic": True,
         "ready_for_product_decisions": False,
         "max_date": as_of,
         "latency_ms": latency_ms,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "manifest_sha256": manifest["content_sha256"],
+    }
+
+
+def url_funnel_status(
+    *,
+    eligible: str | bool | None,
+    appeared: str | bool | None,
+    clicked: str | bool | None,
+    engaged: str | bool | None,
+    lead: str | bool | None,
+    pipeline: str | bool | None,
+) -> str:
+    """Highest confirmed stage. Cells stay independent; UNKNOWN is not FALSE."""
+
+    def _true(value: str | bool | None) -> bool:
+        return value is True or value == "TRUE" or value == "observed"
+
+    if _true(pipeline):
+        return "PIPELINE"
+    if _true(lead):
+        return "LEAD"
+    if _true(engaged):
+        return "ENGAGED"
+    if _true(clicked):
+        return "CLICKED"
+    if _true(appeared):
+        return "APPEARED"
+    if _true(eligible):
+        return "ELIGIBLE"
+    return "UNKNOWN"
+
+
+def load_labeled_snapshot(path: Path | None = None) -> dict[str, Any]:
+    if path is not None:
+        target = path
+        if not target.is_file():
+            return {"source_kind": "absence", "queries": [], "pages": [], "ok": False}
+        payload = json.loads(target.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            return {"source_kind": "absence", "queries": [], "pages": [], "ok": False}
+        payload["source_kind"] = classify_snapshot_source(payload)
+        return payload
+    last_path = DATA / "last_sync.json"
+    latest_path = DATA / "latest_import.json"
+    last_payload: dict[str, Any] = {}
+    latest_payload: dict[str, Any] = {}
+    if last_path.is_file():
+        raw = json.loads(last_path.read_text(encoding="utf-8"))
+        if isinstance(raw, dict):
+            last_payload = raw
+    if latest_path.is_file():
+        raw = json.loads(latest_path.read_text(encoding="utf-8"))
+        if isinstance(raw, dict):
+            latest_payload = raw
+    last_kind = classify_snapshot_source(last_payload) if last_payload else "absence"
+    if last_kind == "credential_failure":
+        merged = dict(last_payload)
+        merged["source_kind"] = "credential_failure"
+        if is_live_gsc_payload(latest_payload):
+            merged["last_live_snapshot"] = {
+                "source_kind": classify_snapshot_source(latest_payload),
+                "as_of": latest_payload.get("as_of"),
+                "max_date": latest_payload.get("max_date"),
+                "freshness": snapshot_freshness(latest_payload),
+                "query_count": latest_payload.get("query_count"),
+                "ready_for_product_decisions": False,
+            }
+        merged.setdefault("queries", [])
+        merged.setdefault("pages", [])
+        return merged
+    if latest_payload:
+        latest_payload["source_kind"] = classify_snapshot_source(latest_payload)
+        return latest_payload
+    if last_payload:
+        last_payload["source_kind"] = last_kind
+        return last_payload
+    return {"source_kind": "absence", "queries": [], "pages": [], "ok": False}
+
+
+def _window_totals(
+    rows: list[dict[str, Any]], days: list[str]
+) -> dict[str, Any]:
+    day_set = set(days)
+    present_days: set[str] = set()
+    brand_imps: dict[str, float | None] = {"brand": None, "legacy_brand": None, "non_brand": None}
+    brand_clicks: dict[str, float | None] = {"brand": None, "legacy_brand": None, "non_brand": None}
+    devices: dict[str, dict[str, float]] = {}
+    countries: dict[str, dict[str, float]] = {}
+    any_metric = False
+    for row in rows:
+        day = str(row.get("date") or "")
+        if day and day in day_set:
+            present_days.add(day)
+        if day and day not in day_set:
+            continue
+        cls = row.get("brand_class")
+        if isinstance(cls, dict):
+            label = str(cls.get("label") or "non_brand")
+        else:
+            label = classify_query(str(row.get("query") or row.get("query_hash") or "")).get("label") or "non_brand"
+        if label not in brand_imps:
+            label = "non_brand"
+        imps = optional_metric(row, "impressions")
+        clicks = optional_metric(row, "clicks")
+        if imps is not None:
+            any_metric = True
+            brand_imps[label] = (brand_imps[label] or 0.0) + imps
+        if clicks is not None:
+            any_metric = True
+            brand_clicks[label] = (brand_clicks[label] or 0.0) + clicks
+        device = str(row.get("device") or "UNKNOWN")
+        country = str(row.get("country") or "UNKNOWN")
+        if imps is not None:
+            devices.setdefault(device, {"impressions": 0.0, "clicks": 0.0})
+            devices[device]["impressions"] += imps
+            if clicks is not None:
+                devices[device]["clicks"] += clicks
+            countries.setdefault(country, {"impressions": 0.0, "clicks": 0.0})
+            countries[country]["impressions"] += imps
+            if clicks is not None:
+                countries[country]["clicks"] += clicks
+    expected = set(days)
+    missing_days = sorted(expected - present_days) if expected else []
+    return {
+        "brand": {
+            "impressions": brand_imps["brand"],
+            "clicks": brand_clicks["brand"],
+        },
+        "legacy_brand": {
+            "impressions": brand_imps["legacy_brand"],
+            "clicks": brand_clicks["legacy_brand"],
+        },
+        "non_brand": {
+            "impressions": brand_imps["non_brand"],
+            "clicks": brand_clicks["non_brand"],
+        },
+        "devices": devices or None,
+        "countries": countries or None,
+        "days_expected": len(days),
+        "days_present": len(present_days),
+        "missing_days": missing_days,
+        "coverage": (
+            "observed"
+            if any_metric and not missing_days
+            else ("partial" if any_metric else "ABSENT")
+        ),
+        "value": None if not any_metric else True,
+        "zero_inferred_from_absence": False,
+    }
+
+
+def _page_status_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_page: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        page = str(row.get("page") or "")
+        if not page:
+            continue
+        path = _path_of(page)
+        slot = by_page.setdefault(
+            path,
+            {
+                "url": page,
+                "path": path,
+                "impressions": None,
+                "clicks": None,
+                "cluster": enrich_path(path).get("cluster"),
+                "exclusion": exclusion_for_url(path),
+            },
+        )
+        imps = optional_metric(row, "impressions")
+        clicks = optional_metric(row, "clicks")
+        if imps is not None:
+            slot["impressions"] = (slot["impressions"] or 0.0) + imps
+        if clicks is not None:
+            slot["clicks"] = (slot["clicks"] or 0.0) + clicks
+    out = []
+    for slot in by_page.values():
+        appeared = slot["impressions"] is not None and slot["impressions"] > 0
+        clicked = slot["clicks"] is not None and slot["clicks"] > 0
+        slot["status"] = url_funnel_status(
+            eligible=True,
+            appeared=appeared,
+            clicked=clicked,
+            engaged=None,
+            lead=None,
+            pipeline=None,
+        )
+        slot["stages"] = {
+            "ELIGIBLE": {"status": "TRUE", "authority": "local_inspect", "value": None},
+            "APPEARED": {
+                "status": "TRUE" if appeared else ("ABSENT" if slot["impressions"] is None else "FALSE"),
+                "authority": "gsc_search_analytics",
+                "value": slot["impressions"],
+            },
+            "CLICKED": {
+                "status": "TRUE" if clicked else ("ABSENT" if slot["clicks"] is None else "FALSE"),
+                "authority": "gsc_search_analytics",
+                "value": slot["clicks"],
+            },
+            "ENGAGED": {"status": "UNKNOWN", "authority": "analytics", "value": None},
+            "LEAD": {"status": "UNKNOWN", "authority": "warmbly", "value": None},
+            "PIPELINE": {"status": "UNKNOWN", "authority": "warmbly", "value": None},
+        }
+        out.append(slot)
+    out.sort(key=lambda r: (-(r["impressions"] or -1), r["path"]))
+    return out
+
+
+def build_operational_baseline(
+    snapshot: dict[str, Any] | None = None,
+    *,
+    today: date | None = None,
+    versions: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Machine-readable 7/28/prior-28/90 baseline. Absence is null, never zero."""
+    today = today or property_today()
+    payload = dict(snapshot or load_labeled_snapshot())
+    kind = classify_snapshot_source(payload)
+    rows = list(payload.get("queries") or [])
+    provider_max = None
+    dates = [str(r.get("date")) for r in rows if r.get("date")]
+    if dates:
+        provider_max = date.fromisoformat(max(dates))
+    elif payload.get("max_date"):
+        try:
+            provider_max = date.fromisoformat(str(payload["max_date"])[:10])
+        except ValueError:
+            provider_max = None
+    windows = complete_windows(today=today, provider_max_date=provider_max)
+    freshness = snapshot_freshness(payload, today=today)
+    ready = (
+        kind in LIVE_SOURCE_KINDS
+        and payload.get("synthetic") is not True
+        and freshness == "CURRENT"
+        and payload.get("ready_for_product_decisions") is not False
+    )
+    detections = detect_all(rows) if rows else detect_all([])
+    pages = _page_status_rows(rows)
+    blocker = payload if kind == "credential_failure" else None
+    if kind == "credential_failure" and not blocker:
+        blocker = credential_blocker_record()
+    return {
+        "schema": "organic_demand_control_baseline/v1",
+        "campaign": "CONFENGE-WEB-SEO-DEMAND-CONTROL-02",
+        "as_of": windows["last_complete_day"],
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "timezone": "America/Sao_Paulo",
+        "versions": versions
+        or {
+            "brand_classification": BRAND_CLASSIFICATION_VERSION,
+            "window_policy": WINDOW_POLICY_VERSION,
+            "baseline": "organic_demand_control_baseline/v1",
+        },
+        "source_kind": kind,
+        "source": payload.get("source") or kind,
+        "synthetic": payload.get("synthetic") is True or kind in {"fixture", "historical_csv_export"},
+        "fixture": kind == "fixture",
+        "historical": kind == "historical_csv_export",
+        "truncated": kind == "search_analytics_top_row_truncation" or bool(payload.get("truncated")),
+        "ready_for_product_decisions": ready,
+        "freshness": freshness,
+        "live": is_live_gsc_payload(payload) and freshness == "CURRENT",
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "zero_inferred_from_absence": False,
+        "windows": {
+            "pulse_7": {
+                **windows["pulse"],
+                "totals": _window_totals(rows, windows["pulse"]["days"]),
+            },
+            "trend_28": {
+                **windows["trend"]["current"],
+                "totals": _window_totals(rows, windows["trend"]["current"]["days"]),
+            },
+            "prior_28": {
+                **windows["trend"]["prior"],
+                "totals": _window_totals(rows, windows["trend"]["prior"]["days"]),
+            },
+            "context_90": {
+                **windows["context"],
+                "totals": _window_totals(rows, windows["context"]["days"]),
+            },
+        },
+        "brand_classes": detections.get("brand_classes"),
+        "grain": ["date", "query", "page", "country", "device"],
+        "authorities": {
+            "appearance": "gsc_search_analytics",
+            "click": "gsc_search_analytics",
+            "session_referral": "analytics_UNKNOWN",
+            "engagement": "analytics_UNKNOWN",
+            "lead": "warmbly_UNKNOWN",
+            "pipeline": "warmbly_UNKNOWN",
+        },
+        "priority_urls": pages[:25],
+        "detections": {
+            "wrong_landing": detections.get("wrong_landing"),
+            "cannibalization": detections.get("cannibalization"),
+            "striking_distance": detections.get("striking_distance"),
+            "indexable_without_impressions": detections.get("indexable_without_impressions"),
+        },
+        "defects": _technical_defects(kind, freshness, payload),
+        "coverage_limits": {
+            "search_analytics_top_rows_only": True,
+            "not_in_top_rows_is_not_zero": True,
+            "query_not_joined_to_lead": True,
+            "row_count": len(rows),
+            "note": SEARCH_ANALYTICS_LIMITATION,
+        },
+        "blocker": {
+            "secret": "GSC_CREDENTIALS_JSON",
+            "required_env": list(REQUIRED_GSC_ENV),
+            "env_presence": (blocker or payload).get("env_presence"),
+            "consequence": (blocker or payload).get("consequence"),
+            "external_action": CREDENTIAL_BLOCKER_ACTION,
+        }
+        if kind == "credential_failure"
+        else None,
+        "recommendation_enum_context": "NEEDS_EXTERNAL_SECRET"
+        if kind == "credential_failure"
+        else ("MERGE_CANDIDATE" if ready else "NEEDS_EXTERNAL_SECRET" if freshness == "BLOCKED" else "MERGE_CANDIDATE"),
+    }
+
+
+def _technical_defects(kind: str, freshness: str, payload: dict[str, Any]) -> list[dict[str, Any]]:
+    defects: list[dict[str, Any]] = []
+    if kind == "credential_failure":
+        defects.append(
+            {
+                "id": "gsc_credentials_missing",
+                "severity": "blocker",
+                "cause": "GSC_CREDENTIALS_JSON and/or GSC_SITE_URL unset or empty in the runtime env",
+                "evidence": payload.get("env_presence") or credential_presence()["env_presence"],
+                "action": CREDENTIAL_BLOCKER_ACTION,
+            }
+        )
+    if freshness == "STALE":
+        defects.append(
+            {
+                "id": "gsc_snapshot_stale",
+                "severity": "warning",
+                "cause": "latest labeled Search Analytics snapshot is older than the expected complete-day window",
+                "max_date": payload.get("max_date") or payload.get("as_of"),
+                "action": "Re-run live pull after secrets are present. Do not treat the snapshot as current.",
+            }
+        )
+    if kind in {"fixture", "historical_csv_export"}:
+        defects.append(
+            {
+                "id": "non_live_snapshot",
+                "severity": "info",
+                "cause": f"source_kind={kind} is not Search Analytics live",
+                "action": "Do not promote this snapshot to product decisions.",
+            }
+        )
+    return defects
+
+
+def _queue_candidate(
+    *,
+    rank: int,
+    diagnosis: str,
+    query_job: str,
+    current_url: str,
+    intended_url: str,
+    evidence: dict[str, Any],
+    hypothesis: str,
+    impact: str,
+    change: str,
+    first_test: str,
+    earliest: str,
+    observe_only: bool,
+    exclusion: str | None,
+) -> dict[str, Any]:
+    return {
+        "rank": rank,
+        "action": "observe_only" if observe_only else "recommend_change",
+        "diagnosis": diagnosis,
+        "query_job_intent": query_job,
+        "current_landing": current_url,
+        "intended_landing": intended_url,
+        "evidence": evidence,
+        "falsifiable_hypothesis": hypothesis,
+        "probable_commercial_impact": impact,
+        "cannibalization_risk": evidence.get("cannibalization_risk") or "UNKNOWN",
+        "minimal_suggested_change": change if not observe_only else "none_this_cycle_observe_only",
+        "first_test": first_test,
+        "earliest_safe_action_at": earliest,
+        "owner": QUEUE_OWNER,
+        "kill_revert_gate": (
+            "Revert if the next two complete GSC windows show no lift on the named query "
+            "while position is stable, or if a sibling URL cannibalizes the same non-brand intent."
+        ),
+        "observe_only": observe_only,
+        "exclusion": exclusion,
+        "authorizes_html_edit": False,
+        "invented_revenue": False,
+    }
+
+
+def build_next_action_queue(
+    snapshot: dict[str, Any] | None = None,
+    *,
+    today: date | None = None,
+    max_items: int = QUEUE_MAX,
+) -> dict[str, Any]:
+    """At most three next actions. Active experiments are observe-only, never change-now."""
+    today = today or property_today()
+    payload = dict(snapshot or load_labeled_snapshot())
+    kind = classify_snapshot_source(payload)
+    rows = list(payload.get("queries") or [])
+    detections = detect_all(rows)
+    earliest = (today + timedelta(days=28)).isoformat()
+    candidates: list[dict[str, Any]] = []
+
+    # Always surface the three in-measurement families first as observe-only.
+    observe_specs = [
+        {
+            "diagnosis": "ctr_gap",
+            "query_job": "desonerado e não desonerado / sinapi desonerado (informational)",
+            "current_url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+            "intended_url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+            "exclusion": "#126",
+            "hypothesis": "Snippet rewrite already shipped; CTR on the named query moves vs 1.12% URL CTR after 14/28 complete days.",
+            "impact": "Qualified clicks on the only URL with enough historical impressions to falsify a snippet hypothesis. No revenue invented.",
+            "first_test": "Compare next complete 14d and 28d Search Analytics windows to seo/gsc-2026-08-09. Do not edit copy now.",
+        },
+        {
+            "diagnosis": "observe_only",
+            "query_job": "BOFU service-pillar commercial bridges (aditivos / reequilíbrio / auditoria)",
+            "current_url": "https://confenge.com.br/aditivos-obras-publicas/",
+            "intended_url": "https://confenge.com.br/aditivos-obras-publicas/",
+            "exclusion": "#128",
+            "hypothesis": "Post-deploy BOFU bridges change qualified next-action rate without a new editorial URL.",
+            "impact": "Service-pillar discovery already in 14/28-day observation. No revenue invented.",
+            "first_test": "Keep measurement. Do not restage title/H1/CTA in this cycle.",
+        },
+        {
+            "diagnosis": "observe_only",
+            "query_job": "striking-distance noindex canary (chuva prorrogação)",
+            "current_url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+            "intended_url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+            "exclusion": "#127",
+            "hypothesis": "Demand is a review signal, not an index warrant. approve_cli INDEXABLE remains the only robots flip.",
+            "impact": "Avoid premature indexation of a thin/generic answer. No revenue invented.",
+            "first_test": "Leave noindex in place until rewrite_complete and named human INDEXABLE.",
+        },
+    ]
+
+    denom = None
+    for row in rows:
+        imps = optional_metric(row, "impressions")
+        if imps is not None:
+            denom = (denom or 0.0) + imps
+    evidence_base = {
+        "source_kind": kind,
+        "denominator_impressions": denom,
+        "denominator_status": "ABSENT" if denom is None else "observed",
+        "row_count": len(rows),
+        "zero_inferred_from_absence": False,
+        "ready_for_product_decisions": False
+        if kind != "search_analytics_api"
+        else payload.get("ready_for_product_decisions"),
+        "cannibalization_risk": detections.get("cannibalization", {}).get("status"),
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+    }
+
+    change_now: list[dict[str, Any]] = []
+    # Detectors may propose change-now only for non-excluded URLs with a real denominator.
+    for item in detections.get("wrong_landing", {}).get("items") or []:
+        landed = str(item.get("landed") or "")
+        intended = str(item.get("intended") or "")
+        if exclusion_for_url(landed) or exclusion_for_url(intended):
+            continue
+        if optional_metric(item, "impressions") is None:
+            continue
+        change_now.append(
+            {
+                "diagnosis": "wrong_landing",
+                "query_job": "non-brand query landed off the intended operational URL",
+                "current_url": landed,
+                "intended_url": intended,
+                "exclusion": None,
+                "hypothesis": "Aligning internal signals to the intended URL increases qualified clicks without a new page.",
+                "impact": "Wrong landing wastes existing impressions. No revenue invented.",
+                "first_test": "Confirm query×page join on the next live complete-day window before any copy change.",
+                "change": "Do not edit HTML in this PR. If later authorized: internal-link/canonical alignment only.",
+            }
+        )
+
+    selected: list[dict[str, Any]] = []
+    for spec in change_now:
+        if len(selected) >= max_items:
+            break
+        selected.append({**spec, "observe_only": False})
+    for spec in observe_specs:
+        if len(selected) >= max_items:
+            break
+        selected.append({**spec, "observe_only": True, "change": "none_this_cycle_observe_only"})
+
+    for i, spec in enumerate(selected[:max_items], start=1):
+        candidates.append(
+            _queue_candidate(
+                rank=i,
+                diagnosis=spec["diagnosis"],
+                query_job=spec["query_job"],
+                current_url=spec["current_url"],
+                intended_url=spec["intended_url"],
+                evidence=evidence_base,
+                hypothesis=spec["hypothesis"],
+                impact=spec["impact"],
+                change=spec.get("change") or "none_this_cycle_observe_only",
+                first_test=spec["first_test"],
+                earliest=earliest,
+                observe_only=spec["observe_only"],
+                exclusion=spec.get("exclusion"),
+            )
+        )
+
+    return {
+        "schema": "organic_demand_control_queue/v1",
+        "campaign": "CONFENGE-WEB-SEO-DEMAND-CONTROL-02",
+        "as_of": today.isoformat(),
+        "source_kind": kind,
+        "ready_for_product_decisions": False,
+        "max_items": max_items,
+        "count": len(candidates),
+        "authorizes_html_edit": False,
+        "excluded_families": [
+            "#126",
+            "#127",
+            "#128",
+            "#60",
+            "#83",
+            "#84",
+            "#89",
+            "checkout",
+            "SmartLic",
+        ],
+        "candidates": candidates,
+        "zero_inferred_from_absence": False,
+        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
+        "note": "Queue is a recommendation. It does not authorize HTML/copy/robots edits in this PR.",
+    }
+
+
+def render_human_report(baseline: dict[str, Any], queue: dict[str, Any]) -> str:
+    """Human report that must reconcile with the machine baseline on as_of/source/queue."""
+    windows = baseline.get("windows") or {}
+    pulse = windows.get("pulse_7") or {}
+    trend = windows.get("trend_28") or {}
+    prior = windows.get("prior_28") or {}
+    ctx = windows.get("context_90") or {}
+    defects = baseline.get("defects") or []
+    blocker = baseline.get("blocker")
+    lines = [
+        "# Organic demand-control report",
+        "",
+        f"- campaign: `{baseline.get('campaign')}`",
+        f"- as_of (last complete day): `{baseline.get('as_of')}`",
+        f"- timezone: `{baseline.get('timezone')}`",
+        f"- source_kind: `{baseline.get('source_kind')}`",
+        f"- freshness: `{baseline.get('freshness')}`",
+        f"- ready_for_product_decisions: `{str(baseline.get('ready_for_product_decisions')).lower()}`",
+        f"- live: `{str(baseline.get('live')).lower()}`",
+        f"- synthetic/fixture/historical: `{baseline.get('synthetic')}` / `{baseline.get('fixture')}` / `{baseline.get('historical')}`",
+        f"- truncated: `{baseline.get('truncated')}`",
+        f"- versions: `{json.dumps(baseline.get('versions') or {}, sort_keys=True)}`",
+        "",
+        "## Complete-day windows",
+        "",
+        f"- pulse 7: `{pulse.get('start')}` → `{pulse.get('end')}` coverage `{ (pulse.get('totals') or {}).get('coverage') }`",
+        f"- trend 28: `{trend.get('start')}` → `{trend.get('end')}` coverage `{ (trend.get('totals') or {}).get('coverage') }`",
+        f"- prior 28: `{prior.get('start')}` → `{prior.get('end')}` coverage `{ (prior.get('totals') or {}).get('coverage') }`",
+        f"- context 90: `{ctx.get('start')}` → `{ctx.get('end')}` coverage `{ (ctx.get('totals') or {}).get('coverage') }`",
+        "",
+        "Absence is ABSENT/UNKNOWN with null value — never numeric zero. Search Analytics top-row omission is not zero impressions.",
+        "",
+        "## Brand split (returned set only)",
+        "",
+    ]
+    for window_name, blob in (("pulse_7", pulse), ("trend_28", trend), ("prior_28", prior), ("context_90", ctx)):
+        totals = blob.get("totals") or {}
+        lines.append(f"### {window_name}")
+        for label in ("brand", "legacy_brand", "non_brand"):
+            cell = totals.get(label) or {}
+            lines.append(
+                f"- {label}: impressions `{cell.get('impressions')}` clicks `{cell.get('clicks')}`"
+            )
+        lines.append("")
+    lines.extend(
+        [
+            "## Authorities (uncollapsed)",
+            "",
+            "- appearance / click: Search Analytics",
+            "- session / referral / engagement: analytics (UNKNOWN unless imported)",
+            "- lead / pipeline: Warmbly (UNKNOWN; query is never joined to a person)",
+            "",
+            "## Technical defects",
+            "",
+        ]
+    )
+    if not defects:
+        lines.append("- none recorded")
+    for defect in defects:
+        lines.append(
+            f"- `{defect.get('id')}` ({defect.get('severity')}): {defect.get('cause')}"
+        )
+    if blocker:
+        lines.extend(
+            [
+                "",
+                "## External blocker",
+                "",
+                f"- secret: `{blocker.get('secret')}`",
+                f"- required_env: `{', '.join(blocker.get('required_env') or [])}`",
+                f"- consequence: {blocker.get('consequence')}",
+                f"- one external action: {blocker.get('external_action')}",
+            ]
+        )
+    lines.extend(["", "## Next-action queue (max 3, recommendation only)", ""])
+    cands = queue.get("candidates") or []
+    lines.append(f"- queue_length: `{len(cands)}`")
+    lines.append(f"- authorizes_html_edit: `{str(queue.get('authorizes_html_edit')).lower()}`")
+    for cand in cands:
+        lines.extend(
+            [
+                "",
+                f"### {cand.get('rank')}. {cand.get('diagnosis')} ({cand.get('action')})",
+                f"- query/job/intent: {cand.get('query_job_intent')}",
+                f"- current landing: `{cand.get('current_landing')}`",
+                f"- intended landing: `{cand.get('intended_landing')}`",
+                f"- evidence denominator: `{ (cand.get('evidence') or {}).get('denominator_impressions') }` "
+                f"status `{(cand.get('evidence') or {}).get('denominator_status')}`",
+                f"- hypothesis: {cand.get('falsifiable_hypothesis')}",
+                f"- impact: {cand.get('probable_commercial_impact')}",
+                f"- cannibalization risk: `{cand.get('cannibalization_risk')}`",
+                f"- minimal change: {cand.get('minimal_suggested_change')}",
+                f"- first test: {cand.get('first_test')}",
+                f"- earliest_safe_action_at: `{cand.get('earliest_safe_action_at')}`",
+                f"- owner: `{cand.get('owner')}`",
+                f"- exclusion: `{cand.get('exclusion')}`",
+                f"- kill/revert: {cand.get('kill_revert_gate')}",
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            "## Coverage limits",
+            "",
+            f"- {SEARCH_ANALYTICS_LIMITATION}",
+            "- Individual queries are hashed in git-safe output and are never joined to a lead.",
+            "",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def write_demand_control_artifacts(
+    *,
+    snapshot: dict[str, Any] | None = None,
+    today: date | None = None,
+) -> dict[str, Any]:
+    """Write reconciling JSON + markdown under data/organic and docs/ops."""
+    baseline = build_operational_baseline(snapshot, today=today)
+    queue = build_next_action_queue(snapshot, today=today)
+    report = render_human_report(baseline, queue)
+    json_path = ROOT / "data" / "organic" / "demand-control-baseline.json"
+    queue_path = ROOT / "data" / "organic" / "demand-control-queue.json"
+    md_path = ROOT / "docs" / "ops" / "ORGANIC-DEMAND-CONTROL-REPORT.md"
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    md_path.parent.mkdir(parents=True, exist_ok=True)
+    json_path.write_text(json.dumps(baseline, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    queue_path.write_text(json.dumps(queue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    md_path.write_text(report, encoding="utf-8")
+    return {
+        "ok": True,
+        "as_of": baseline.get("as_of"),
+        "source_kind": baseline.get("source_kind"),
+        "queue_length": queue.get("count"),
+        "baseline_path": str(json_path.relative_to(ROOT)),
+        "queue_path": str(queue_path.relative_to(ROOT)),
+        "report_path": str(md_path.relative_to(ROOT)),
+        "ready_for_product_decisions": baseline.get("ready_for_product_decisions"),
+        "baseline": baseline,
+        "queue": queue,
+        "report": report,
     }
 
 
@@ -1883,6 +2818,13 @@ def main(argv: list[str] | None = None) -> int:
         help="Mark committed GSC snapshots synthetic/fixture and not product-ready",
     )
 
+    p_base = sub.add_parser(
+        "baseline",
+        help="Write reconciling machine baseline + human report + next-action queue",
+    )
+    p_base.add_argument("--snapshot", type=Path, default=None)
+    p_base.add_argument("--dry-run", action="store_true")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "import-csv":
@@ -1927,13 +2869,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "pull-api":
         result = pull_api(args.days, reprocess_days=getattr(args, "reprocess_days", 3))
         if getattr(args, "smoke", False):
+            rows = result.get("rows")
             print(
-                "GSC_SMOKE ok={ok} error={err} site={site} rows={rows} max_date={max_date} "
+                "GSC_SMOKE ok={ok} error={err} source_kind={kind} site={site} rows={rows} max_date={max_date} "
                 "ready_for_product_decisions={ready}".format(
                     ok=str(bool(result.get("ok"))).lower(),
                     err=result.get("error") or "none",
-                    site=result.get("site") or os.environ.get("GSC_SITE_URL", "sc-domain:confenge.com.br"),
-                    rows=result.get("rows", 0),
+                    kind=classify_snapshot_source(result),
+                    site=result.get("site") or env_nonempty("GSC_SITE_URL") or "unset",
+                    rows="none" if rows is None else rows,
                     max_date=result.get("max_date") or "none",
                     ready=str(bool(result.get("ready_for_product_decisions"))).lower(),
                 )
@@ -1969,15 +2913,18 @@ def main(argv: list[str] | None = None) -> int:
             use_fixture=args.fixture,
         )
         if getattr(args, "smoke", False):
+            rows = result.get("rows")
             print(
-                "GSC_SMOKE ok={ok} error={err} source={src} max_date={max_date} "
-                "ready_for_product_decisions={ready} synthetic={syn}".format(
+                "GSC_SMOKE ok={ok} error={err} source_kind={kind} source={src} max_date={max_date} "
+                "ready_for_product_decisions={ready} synthetic={syn} rows={rows}".format(
                     ok=str(bool(result.get("ok"))).lower(),
                     err=result.get("error") or "none",
-                    src=result.get("source") or "api",
+                    kind=classify_snapshot_source(result),
+                    src=result.get("source") or classify_snapshot_source(result),
                     max_date=result.get("max_date") or "none",
                     ready=str(bool(result.get("ready_for_product_decisions"))).lower(),
                     syn=str(bool(result.get("synthetic"))).lower(),
+                    rows="none" if rows is None else rows,
                 )
             )
         else:
@@ -2031,6 +2978,46 @@ def main(argv: list[str] | None = None) -> int:
             "GSC_STAMP stamped={n} manifest={path} ready_for_product_decisions=false".format(
                 n=len(stamped.get("stamped") or []),
                 path=manifest.get("path"),
+            )
+        )
+        return 0
+
+    if args.cmd == "baseline":
+        snapshot = None
+        if args.snapshot:
+            path = args.snapshot if args.snapshot.is_absolute() else ROOT / args.snapshot
+            snapshot = load_labeled_snapshot(path)
+        if args.dry_run:
+            baseline = build_operational_baseline(snapshot)
+            queue = build_next_action_queue(snapshot)
+            print(
+                json.dumps(
+                    {
+                        "ok": True,
+                        "dry_run": True,
+                        "as_of": baseline.get("as_of"),
+                        "source_kind": baseline.get("source_kind"),
+                        "freshness": baseline.get("freshness"),
+                        "ready_for_product_decisions": baseline.get("ready_for_product_decisions"),
+                        "queue_length": queue.get("count"),
+                        "windows": {
+                            "pulse": (baseline.get("windows") or {}).get("pulse_7", {}).get("start"),
+                            "trend": (baseline.get("windows") or {}).get("trend_28", {}).get("start"),
+                            "prior": (baseline.get("windows") or {}).get("prior_28", {}).get("start"),
+                            "context": (baseline.get("windows") or {}).get("context_90", {}).get("start"),
+                        },
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            )
+            return 0
+        written = write_demand_control_artifacts(snapshot=snapshot)
+        print(
+            json.dumps(
+                {k: v for k, v in written.items() if k not in {"baseline", "queue", "report"}},
+                ensure_ascii=False,
+                indent=2,
             )
         )
         return 0
