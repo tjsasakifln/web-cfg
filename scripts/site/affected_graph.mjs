@@ -424,6 +424,16 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/inteligencia/valor-tipico-contratos-pavimentacao/"],
   },
+  "test:growth-accounting": {
+    producers: [
+      "tests/growth_accounting/",
+      "scripts/growth_accounting/",
+      "data/growth-accounting/",
+      "data/organic/",
+    ],
+    artifacts: [],
+    surfaces: [],
+  },
   "test:affected-selector": {
     producers: [
       "scripts/site/affected_graph.mjs",
