@@ -447,7 +447,7 @@ def test_git_diff_is_exclusive_area():
     frozen_html = (
         "ferramentas/diagnostico-defesa-margem/",
         "conteudos/chuva-prorrogacao-prazo-obra-publica/",
-        "conteudos/sinapi-desonerado-nao-desonerado/",
+        # #126 authorizes title/meta rewrite on the GSC SINAPI URL.
         "aditivos-obras-publicas/index.html",
         "diagnostico-b2g-360/index.html",
         "diagnostico-pre-licitacao/index.html",

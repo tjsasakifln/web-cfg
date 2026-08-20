@@ -292,13 +292,13 @@ def test_ferramentas_eyebrow_client_facing():
 
 
 def test_sinapi_snippet_unique_not_generic():
-    """#126: unfrozen SINAPI sibling title, H1 and meta stay distinct and decision-oriented.
+    """#126: GSC URL title, H1 and meta name the SINAPI desonerado decision.
 
-    Frozen experiment HTML at conteudos/sinapi-desonerado-nao-desonerado/ is exclusive-area.
+    Drives the shipped page that currently gets 89 impressions / 1 click.
+    Fails if the original title (no SINAPI) or truncated/generic snippet returns.
     """
-    html = (ROOT / "conteudos" / "sinapi-ou-sicro-obra-publica" / "index.html").read_text(
-        encoding="utf-8"
-    )
+    path = ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html"
+    html = path.read_text(encoding="utf-8")
     title_m = re.search(r"<title>([^<]+)</title>", html, re.I)
     h1_m = re.search(r"<h1>([^<]+)</h1>", html, re.I)
     desc_m = re.search(
@@ -307,11 +307,14 @@ def test_sinapi_snippet_unique_not_generic():
         html,
         re.I,
     )
-    assert title_m and h1_m and desc_m, "SINAPI page missing title, H1 or meta description"
+    assert title_m and h1_m and desc_m, f"{path.name}: missing title, H1 or meta description"
     title = title_m.group(1).strip()
     h1 = h1_m.group(1).strip()
     meta = (desc_m.group(1) or desc_m.group(2)).strip()
     title_core = re.sub(r"\s*\|\s*CONFENGE\s*$", "", title).strip()
+    # Original GSC snippet hid the query term "SINAPI" from the title.
+    assert "SINAPI" in title_core, "title must name SINAPI (original defect: omitted query)"
+    assert title_core != "Desonerado e não desonerado: o que o edital exige"
     assert title_core != h1, "title and H1 must not be duplicates"
     assert title_core.lower() not in meta.lower(), "title duplicated into meta"
     assert h1.lower() not in meta.lower(), "H1 duplicated into meta"
@@ -320,11 +323,15 @@ def test_sinapi_snippet_unique_not_generic():
         lower = blob.lower()
         for generic in ("guia completo", "tudo sobre", "saiba mais", "página inicial", "clique aqui"):
             assert generic not in lower, f"{name} generic: {generic}"
-        assert re.search(r"SINAPI", blob), f"{name} missing SINAPI intent"
-        assert re.search(r"SICRO", blob, re.I), f"{name} missing SICRO intent"
+        assert "SINAPI" in blob, f"{name} missing SINAPI intent"
+        assert "desonerad" in lower, f"{name} missing desonerado intent"
     assert 24 <= len(title_core) <= 62, f"title core length {len(title_core)}"
     assert 70 <= len(meta) <= 170, f"meta length {len(meta)}"
     assert "SINAPI" in h1
+    # Sibling SINAPI/SICRO page is a different query; this gate is the GSC URL only.
+    assert "sinapi-desonerado-nao-desonerado" in html or path.as_posix().endswith(
+        "sinapi-desonerado-nao-desonerado/index.html"
+    )
 
 
 def test_banlist_includes_conversion_eyebrow():
