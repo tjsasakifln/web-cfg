@@ -1,0 +1,3585 @@
+{
+  "as_of": "2026-08-19",
+  "campaign": "CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02",
+  "census_summary": {
+    "confenge_observed_by_family": {
+      "aditivos": false,
+      "bid-readiness": false,
+      "carteira-operacao": true,
+      "defesa-margem": true,
+      "edital-proposta": true,
+      "medicoes-pagamentos": true,
+      "orcamento-bdi": true,
+      "partner-integrity": false,
+      "reequilibrio": false
+    },
+    "max_queries": 4,
+    "official_position_claimed": false,
+    "over_limit": {},
+    "p0_p1_missing_census": []
+  },
+  "content_sha256": "a6e8eadea57503c2809bdb8b856545c42f5b3d74d26c27f9047683dde9e07662",
+  "families": [
+    {
+      "active_issue": 128,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 128,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/aditivos-obras-publicas/",
+        "url": "https://confenge.com.br/aditivos-obras-publicas/"
+      },
+      "census": [
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "aditivos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Sample dominated by concrete-admixture and academic/legal explainers. CONFENGE pillar not observed. Not an official rank.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 1,
+              "url": "https://www.youtube.com/watch?v=isEMj-6rQng"
+            },
+            {
+              "host": "interempresas.net",
+              "intent_fit": "mismatch_material_admixture",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://www.interempresas.net/ObrasPublicas/494172-Master-Builders-Solutions-referente-mundial-en-aditivos-para-la-Construccion.html"
+            },
+            {
+              "host": "jusbrasil.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_aggregator",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 3,
+              "url": "https://www.jusbrasil.com.br/artigos/alteracoes-contratuais-aditivos-nas-obras-publicas/1289579327"
+            },
+            {
+              "host": "eventos.antac.org.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://eventos.antac.org.br/index.php/entac/article/download/1050/670"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "aditivos obras públicas",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "aditivos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Query leaks to ES/DO/news archives. CONFENGE /conteudos/limite-aditivo-25-50-obra-publica/ not in this sample.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "oglobo.globo.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 1,
+              "url": "https://oglobo.globo.com/economia/senado-aprova-limite-de-25-para-aditivos-nos-contratos-de-obras-servico-com-setor-publico-16074547"
+            },
+            {
+              "host": "em.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://www.em.com.br/app/noticia/politica/2012/05/24/interna_politica,296256/comissao-do-senado-reduz-para-25-limite-dos-aditivos-em-contrato-de-obra-publica.shtml"
+            },
+            {
+              "host": "acento.com.do",
+              "intent_fit": "mismatch_foreign_jurisdiction",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://acento.com.do/opinion/el-incomprendido-limite-del-25-en-las-obras-publicas-9126934.html"
+            },
+            {
+              "host": "obcp.es",
+              "intent_fit": "mismatch_foreign_jurisdiction",
+              "page_type": "third_party",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 4,
+              "url": "https://obcp.es/opiniones/el-limite-de-las-modificaciones-de-contratos-no-previstas-del-articulo-2052-lcsp"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "limite aditivo 25 50 obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "aditivos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Owned article exists historically in GSC; this web_search_api sample did not show it. No official position.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://licitacoesecontratos.tcu.gov.br/6-2-alteracao-do-contrato/"
+            },
+            {
+              "host": "zenite.blog.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 2,
+              "url": "https://zenite.blog.br/o-polemico-art-125-da-lei-no-14-133-21/"
+            },
+            {
+              "host": "conjur.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 3,
+              "url": "https://conjur.com.br/2025-set-03/e-possivel-fazer-alteracoes-contratuais-originariamente-unilaterais-por-acordo-entre-as-partes-na-lei-14-133-2/"
+            },
+            {
+              "host": "instagram.com",
+              "intent_fit": "adjacent",
+              "page_type": "social",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://www.instagram.com/p/DUqe2OND8gD/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "aditivo qualitativo e quantitativo",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "aditivos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Same 14.133 alteration cluster as qualitative/quantitative. CONFENGE not observed in sample.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "zenite.blog.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 1,
+              "url": "https://zenite.blog.br/o-polemico-art-125-da-lei-no-14-133-21/"
+            },
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://www.gov.br/agu/pt-br/composicao/cgu/cgu/modelos/licitacoesecontratos/14133/modelos-antigos/termo_aditivo_alteracao_contratual_lei_14-133-dez-23.docx"
+            },
+            {
+              "host": "revista.tce.mg.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://revista.tce.mg.gov.br/pagina/article/download/411/2026-44-1/719"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://licitacoesecontratos.tcu.gov.br/6-2-alteracao-do-contrato/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "acréscimo e supressão contrato público",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "Do not create keyword variants or index the noindex library to feed this pillar (#127).",
+      "decision": "Enquadrar o fato, o saldo 25%/50% e o documento do termo vs apostila.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": 0.0,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": 12.0,
+        "is_gsc_live": false,
+        "position": 49.25,
+        "reason": "historical_csv_row",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv",
+        "url": "https://confenge.com.br/aditivos-obras-publicas/",
+        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+      },
+      "freeze": {
+        "census_allowed": true,
+        "frozen": true,
+        "html_edit": false,
+        "issue": 128,
+        "reason": "frozen_issue_128",
+        "spec_allowed": true
+      },
+      "gate": null,
+      "id": "aditivos",
+      "job": "Decidir se um acréscimo, supressão ou serviço extra cabe em aditivo formal antes de executar sem cobertura.",
+      "kill": "If 28d live GSC still shows 0 service clicks while content clicks hold, the gap is offer/SERP and #88/#60 own the next move.",
+      "negative_queries": [
+        "aditivos para concreto",
+        "aditivo plastificante",
+        "master builders aditivos"
+      ],
+      "next_test": "After 2026-09-16 and live GSC credentials, re-read commercial clicks on /aditivos-obras-publicas/ without editing HTML now.",
+      "overlap": [
+        {
+          "other_family": "orcamento-bdi",
+          "rule": "item_novo_price_belongs_to_aditivos_not_bdi_audit"
+        },
+        {
+          "other_family": "defesa-margem",
+          "rule": "pillar_owns_query_tool_is_second_reading_not_landing"
+        }
+      ],
+      "owner": "/aditivos-obras-publicas/",
+      "owner_issue": 128,
+      "primary_queries": [
+        "aditivos obras públicas",
+        "limite aditivo 25 50 obra pública",
+        "aditivo qualitativo e quantitativo",
+        "acréscimo e supressão contrato público"
+      ],
+      "priority": "P1",
+      "reason": "frozen_issue_128",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "Do not create keyword variants or index the noindex library to feed this pillar (#127).",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "aditivos",
+        "kill": "If 28d live GSC still shows 0 service clicks while content clicks hold, the gap is offer/SERP and #88/#60 own the next move.",
+        "next_test": "After 2026-09-16 and live GSC credentials, re-read commercial clicks on /aditivos-obras-publicas/ without editing HTML now.",
+        "state": "FROZEN",
+        "summary": "Family aditivos is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
+      },
+      "state": "FROZEN",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 128,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 128,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/medicoes-glosas-obras-publicas/",
+        "url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+      },
+      "census": [
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/conteudos/glosa-de-medicao-obra-publica/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "medicoes-pagamentos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Owned MOFU article appeared in sample; service pillar /medicoes-glosas-obras-publicas/ did not. Not official rank.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-3-7-criterios-de-medicao-e-de-pagamento-2/"
+            },
+            {
+              "host": "migalhas.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 2,
+              "url": "https://www.migalhas.com.br/depeso/231732/o-instituto-da-glosa--retencao-de-pagamentos-nos-contratos-administrativos"
+            },
+            {
+              "host": "effecti.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://effecti.com.br/glosa-contrato-publico/"
+            },
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "editorial_article",
+              "proof_pattern": "owned_explainer",
+              "rank_in_sample": 4,
+              "url": "https://confenge.com.br/conteudos/glosa-de-medicao-obra-publica/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "glosa de medição obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "medicoes-pagamentos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Exact query not independently sampled; cluster reused from glosa sample. Historical GSC query row exists and is not live. CONFENGE not claimed in this SERP sample.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-3-7-criterios-de-medicao-e-de-pagamento-2/"
+            },
+            {
+              "host": "effecti.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://effecti.com.br/glosa-contrato-publico/"
+            },
+            {
+              "host": "instagram.com",
+              "intent_fit": "adjacent",
+              "page_type": "social",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://www.instagram.com/p/DYxy5mHvKiO/?hl=sr"
+            },
+            {
+              "host": "migalhas.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 4,
+              "url": "https://www.migalhas.com.br/depeso/231732/o-instituto-da-glosa--retencao-de-pagamentos-nos-contratos-administrativos"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "medição de obra pública rejeitada",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "medicoes-pagamentos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Cluster sample. Supporting lei URL is in-repo content, not a claimed SERP hit.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-3-7-criterios-de-medicao-e-de-pagamento-2/"
+            },
+            {
+              "host": "migalhas.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 2,
+              "url": "https://www.migalhas.com.br/depeso/231732/o-instituto-da-glosa--retencao-de-pagamentos-nos-contratos-administrativos"
+            },
+            {
+              "host": "planalto.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm"
+            },
+            {
+              "host": "effecti.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://effecti.com.br/glosa-contrato-publico/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "parcela incontroversa medição",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "medicoes-pagamentos",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Owned article historically clicked in GSC 2026-08-09 page export; that is not a SERP sample hit and not live rank.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-3-7-criterios-de-medicao-e-de-pagamento-2/"
+            },
+            {
+              "host": "effecti.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://effecti.com.br/glosa-contrato-publico/"
+            },
+            {
+              "host": "chamados.ifsc.edu.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://chamados.ifsc.edu.br/otrs/public.pl?Action=PublicFAQZoom;CategoryID=78;ItemID=225"
+            },
+            {
+              "host": "migalhas.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 4,
+              "url": "https://www.migalhas.com.br/depeso/231732/o-instituto-da-glosa--retencao-de-pagamentos-nos-contratos-administrativos"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "fiscal não assina medição",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "Lei 14.133 parcela-incontroversa remains MOFU supporting content, not a second BOFU owner.",
+      "decision": "Recuperar caixa vs aceitar o corte vs acionar defesa formal.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": 0.0,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": 8.0,
+        "is_gsc_live": false,
+        "position": 7.88,
+        "reason": "historical_csv_row",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv",
+        "url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+      },
+      "freeze": {
+        "census_allowed": true,
+        "frozen": true,
+        "html_edit": false,
+        "issue": 128,
+        "reason": "frozen_issue_128",
+        "spec_allowed": true
+      },
+      "gate": null,
+      "id": "medicoes-pagamentos",
+      "job": "Contestar glosa, medição rejeitada ou parcela retida com nexo contratual e prova contemporânea.",
+      "kill": "Kill further snippet work if historical top-10 on the pillar never becomes a click after live GSC is restored.",
+      "negative_queries": [
+        "glosa plano de saúde",
+        "glosa médica convênio"
+      ],
+      "next_test": "Observe whether owned articles (glosa/rejeitada/fiscal) transfer to the pillar once #153 destination events exist.",
+      "overlap": [
+        {
+          "other_family": "defesa-sancoes",
+          "rule": "payment_dispute_stays_here_until_sanction_notice"
+        },
+        {
+          "other_family": "defesa-margem",
+          "rule": "pillar_owns_query_diagnosis_is_not_the_money_landing"
+        }
+      ],
+      "owner": "/medicoes-glosas-obras-publicas/",
+      "owner_issue": 128,
+      "primary_queries": [
+        "glosa de medição obra pública",
+        "medição de obra pública rejeitada",
+        "parcela incontroversa medição",
+        "fiscal não assina medição"
+      ],
+      "priority": "P1",
+      "reason": "frozen_issue_128",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "Lei 14.133 parcela-incontroversa remains MOFU supporting content, not a second BOFU owner.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "medicoes-pagamentos",
+        "kill": "Kill further snippet work if historical top-10 on the pillar never becomes a click after live GSC is restored.",
+        "next_test": "Observe whether owned articles (glosa/rejeitada/fiscal) transfer to the pillar once #153 destination events exist.",
+        "state": "FROZEN",
+        "summary": "Family medicoes-pagamentos is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
+      },
+      "state": "FROZEN",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 128,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 128,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/reequilibrio-obras-publicas/",
+        "url": "https://confenge.com.br/reequilibrio-obras-publicas/"
+      },
+      "census": [
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "reequilibrio",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "CONFENGE not observed. Matches 2026-08-14 focused sample CONFENGE_NOT_OBSERVED for a related query.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "revista.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://revista.tcu.gov.br/ojs/index.php/RTCU/article/download/2123/1975/4443"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"
+            },
+            {
+              "host": "zenite.blog.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 3,
+              "url": "https://zenite.blog.br/metodologia-ao-restabelecimento-do-equilibrio-economico-financeiro-inicial-em-contratos-de-obras-publicas/"
+            },
+            {
+              "host": "zambonpericia.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 4,
+              "url": "https://zambonpericia.com.br/reequilibrio-obras-publicas/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "reequilíbrio econômico financeiro obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "reequilibrio",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Control-body and commentary dominate. No official position assigned.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "proad.ufscar.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://www.proad.ufscar.br/pt-br/servicos/contratos/gestao-de-contratos/reequilibrio-economico-de-contratos"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"
+            },
+            {
+              "host": "11e.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 3,
+              "url": "https://11e.com.br/o-atraso-na-obra-pode-justificar-o-reequilibrio-economico-financeiro-do-contrato/"
+            },
+            {
+              "host": "zenite.blog.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 4,
+              "url": "https://zenite.blog.br/metodologia-ao-restabelecimento-do-equilibrio-economico-financeiro-inicial-em-contratos-de-obras-publicas/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "pedido de reequilíbrio contrato público",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "reequilibrio",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Cluster sample. Supporting lei URL is in-repo; not claimed as a SERP hit. Pillar not observed.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"
+            },
+            {
+              "host": "proad.ufscar.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://www.proad.ufscar.br/pt-br/servicos/contratos/gestao-de-contratos/reequilibrio-economico-de-contratos"
+            },
+            {
+              "host": "zenite.blog.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 3,
+              "url": "https://zenite.blog.br/metodologia-ao-restabelecimento-do-equilibrio-economico-financeiro-inicial-em-contratos-de-obras-publicas/"
+            },
+            {
+              "host": "zambonpericia.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 4,
+              "url": "https://zambonpericia.com.br/reequilibrio-obras-publicas/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "reajuste ou reequilíbrio obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "reequilibrio",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Historical GSC query export 2026-08-09 listed this query (1 click / 5 impr / pos 4.4) — that is not this SERP sample and not live.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "zenite.blog.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 1,
+              "url": "https://zenite.blog.br/metodologia-ao-restabelecimento-do-equilibrio-economico-financeiro-inicial-em-contratos-de-obras-publicas/"
+            },
+            {
+              "host": "revista.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://revista.tcu.gov.br/ojs/index.php/RTCU/article/download/2123/1975/4443"
+            },
+            {
+              "host": "zambonpericia.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 3,
+              "url": "https://zambonpericia.com.br/reequilibrio-obras-publicas/"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "curva abc reequilíbrio",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "Lei reequilibrio-reajuste-repactuacao is supporting, not a competing BOFU URL.",
+      "decision": "Reajuste/repactuação vs reequilíbrio vs não pleitear.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": 0.0,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": 4.0,
+        "is_gsc_live": false,
+        "position": 7.75,
+        "reason": "historical_csv_row",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv",
+        "url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+      },
+      "freeze": {
+        "census_allowed": true,
+        "frozen": true,
+        "html_edit": false,
+        "issue": 128,
+        "reason": "frozen_issue_128",
+        "spec_allowed": true
+      },
+      "gate": null,
+      "id": "reequilibrio",
+      "job": "Decidir se cabe reequilíbrio econômico-financeiro agora e como instruir o pleito.",
+      "kill": "If demand is only generic TCU explainer with no commercial click, stop forcing the generic query.",
+      "negative_queries": [
+        "reequilíbrio ambiental",
+        "reequilíbrio de treino"
+      ],
+      "next_test": "Do not claim unindexed from the 2026-08-14 site: sample. Wait for live URL inspection + GSC.",
+      "overlap": [
+        {
+          "other_family": "atrasos-prorrogacao",
+          "rule": "delay_may_feed_reequilibrio_but_prazo_job_stays_on_atrasos"
+        },
+        {
+          "other_family": "defesa-margem",
+          "rule": "checklist_tool_is_not_the_service_canonical"
+        }
+      ],
+      "owner": "/reequilibrio-obras-publicas/",
+      "owner_issue": 128,
+      "primary_queries": [
+        "reequilíbrio econômico financeiro obra pública",
+        "pedido de reequilíbrio contrato público",
+        "reajuste ou reequilíbrio obra pública",
+        "curva abc reequilíbrio"
+      ],
+      "priority": "P1",
+      "reason": "frozen_issue_128",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "Lei reequilibrio-reajuste-repactuacao is supporting, not a competing BOFU URL.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "reequilibrio",
+        "kill": "If demand is only generic TCU explainer with no commercial click, stop forcing the generic query.",
+        "next_test": "Do not claim unindexed from the 2026-08-14 site: sample. Wait for live URL inspection + GSC.",
+        "state": "FROZEN",
+        "summary": "Family reequilibrio is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
+      },
+      "state": "FROZEN",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 128,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 128,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/auditoria-orcamento-licitacao/",
+        "url": "https://confenge.com.br/auditoria-orcamento-licitacao/"
+      },
+      "census": [
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "orcamento-bdi",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Control/training results. CONFENGE pillar was not in this exact sample. No official position.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "repositorio.cgu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://repositorio.cgu.gov.br/bitstream/1/44963/5/Manual_de_Auditoria_de_Obras_Publicas_II.pdf"
+            },
+            {
+              "host": "newroads.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 2,
+              "url": "https://newroads.com.br/auditoria-e-pericia-em-custos-de-obras-publicas/"
+            },
+            {
+              "host": "ibdic.org.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 3,
+              "url": "https://ibdic.org.br/a-auditoria-de-obras-publicas-e-praticas-internacionais-a-jurisprudencia-do-tcu-e-perspectivas-para-uso-futuro/"
+            },
+            {
+              "host": "egem.org.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://www.egem.org.br/detalhe/?id=398"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "auditoria orçamento licitação",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/auditoria-orcamento-licitacao/",
+            "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "orcamento-bdi",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Owned article historically 2 clicks / pos 6.27 in page export. Not live GSC.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "orcafascio.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 1,
+              "url": "https://www.orcafascio.com/papodeengenheiro/bdi-em-obras-publicas"
+            },
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "service_pillar",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 2,
+              "url": "https://confenge.com.br/auditoria-orcamento-licitacao/"
+            },
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "editorial_article",
+              "proof_pattern": "owned_explainer",
+              "rank_in_sample": 3,
+              "url": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/"
+            },
+            {
+              "host": "buscadorsinapi.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "utility",
+              "rank_in_sample": 4,
+              "url": "https://buscadorsinapi.com.br/calculadora-bdi"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "bdi diferenciado obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "orcamento-bdi",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "OrçaFascio/YouTube dominate this sample. Query remains #126 observation; do not steal onto the frozen pillar. CONFENGE article historically in GSC page export — not this sample.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "orcafascio.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 1,
+              "url": "https://www.orcafascio.com/papodeengenheiro/bdi-em-obras-publicas"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 2,
+              "url": "https://www.youtube.com/watch?v=olQGv3GZR-0"
+            },
+            {
+              "host": "orcamenta.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://orcamenta.com.br/blog/o-que-e-sinapi"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 4,
+              "url": "https://www.youtube.com/watch?v=ozY5L8_Zg98"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "sinapi desonerado ou não desonerado",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "orcamento-bdi",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Cluster sample. Supporting article historically in 2026-08-09 page export (0 clicks / pos 9.8) is not a SERP hit here.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "orcamenta.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 1,
+              "url": "https://orcamenta.com.br/blog/o-que-e-sinapi"
+            },
+            {
+              "host": "repositorio.cgu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://repositorio.cgu.gov.br/bitstream/1/44963/5/Manual_de_Auditoria_de_Obras_Publicas_II.pdf"
+            },
+            {
+              "host": "orcafascio.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://www.orcafascio.com/papodeengenheiro/bdi-em-obras-publicas"
+            },
+            {
+              "host": "buscadorsinapi.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "utility",
+              "rank_in_sample": 4,
+              "url": "https://buscadorsinapi.com.br/calculadora-bdi"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "sinapi ou sicro obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "Keep /conteudos/sinapi-desonerado-nao-desonerado/ as supporting; do not create a second audit URL.",
+      "decision": "Participar, impugnar a planilha ou recusar a licitação.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": 0.0,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": 3.0,
+        "is_gsc_live": false,
+        "position": 9.0,
+        "reason": "historical_csv_row",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv",
+        "url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+      },
+      "freeze": {
+        "census_allowed": true,
+        "frozen": true,
+        "html_edit": false,
+        "issue": 128,
+        "reason": "frozen_issue_128",
+        "spec_allowed": true
+      },
+      "gate": null,
+      "id": "orcamento-bdi",
+      "job": "Auditar orçamento, BDI e base SINAPI/SICRO do edital antes de precificar a proposta.",
+      "kill": "If the pillar never earns a commercial click after bridges + live GSC, treat demand as informational SINAPI-only.",
+      "negative_queries": [
+        "auditoria TCU de obras como carreira",
+        "calculadora bdi genérica sem edital"
+      ],
+      "next_test": "SINAPI article CTR remains #126; do not steal that query onto the pillar while #126 observation runs.",
+      "overlap": [
+        {
+          "other_family": "edital-proposta",
+          "rule": "budget_base_belongs_here_go_nogo_edital_belongs_to_edital-proposta"
+        },
+        {
+          "other_family": "bid-readiness",
+          "rule": "gated_readiness_must_not_replace_this_pillar"
+        }
+      ],
+      "owner": "/auditoria-orcamento-licitacao/",
+      "owner_issue": 128,
+      "primary_queries": [
+        "auditoria orçamento licitação",
+        "bdi diferenciado obra pública",
+        "sinapi desonerado ou não desonerado",
+        "sinapi ou sicro obra pública"
+      ],
+      "priority": "P1",
+      "reason": "frozen_issue_128",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "Keep /conteudos/sinapi-desonerado-nao-desonerado/ as supporting; do not create a second audit URL.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "orcamento-bdi",
+        "kill": "If the pillar never earns a commercial click after bridges + live GSC, treat demand as informational SINAPI-only.",
+        "next_test": "SINAPI article CTR remains #126; do not steal that query onto the pillar while #126 observation runs.",
+        "state": "FROZEN",
+        "summary": "Family orcamento-bdi is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
+      },
+      "state": "FROZEN",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 128,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 128,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/diagnostico-b2g-360/",
+        "url": "https://confenge.com.br/diagnostico-b2g-360/"
+      },
+      "census": [
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/diagnostico-b2g-360/",
+            "https://confenge.com.br/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "carteira-operacao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Brand-adjacent query. Sample is not proof of non-brand dominance.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "service_pillar",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://confenge.com.br/diagnostico-b2g-360/"
+            },
+            {
+              "host": "redeb2g.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 2,
+              "url": "https://www.redeb2g.com.br/"
+            },
+            {
+              "host": "conquistagov.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 3,
+              "url": "https://conquistagov.com.br/"
+            },
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "home",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 4,
+              "url": "https://confenge.com.br/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "diagnóstico B2G 360",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "carteira-operacao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Generic B2G consultoria market. 360 pillar not isolated. No official rank.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "home",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://confenge.com.br/"
+            },
+            {
+              "host": "conquistagov.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 2,
+              "url": "https://conquistagov.com.br/"
+            },
+            {
+              "host": "redeb2g.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 3,
+              "url": "https://www.redeb2g.com.br/"
+            },
+            {
+              "host": "b2gsolutions.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 4,
+              "url": "https://b2gsolutions.com.br/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "consultoria B2G engenharia construtora",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "carteira-operacao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Exact query not independently sampled. Overlap with gestao-contratual is declared in the registry; no winner from this sample.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "contratosgov.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "utility",
+              "rank_in_sample": 1,
+              "url": "https://contratosgov.com.br/"
+            },
+            {
+              "host": "radarppp.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 2,
+              "url": "https://radarppp.com/consultoria/"
+            },
+            {
+              "host": "conquistagov.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 3,
+              "url": "https://conquistagov.com.br/"
+            },
+            {
+              "host": "b2gsolutions.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 4,
+              "url": "https://b2gsolutions.com.br/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "gestão de carteira contratos obras públicas",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/",
+            "https://confenge.com.br/diagnostico-b2g-360/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "carteira-operacao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "/diretoria-b2g/ is an offer format, not a family in this ledger.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "home",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://confenge.com.br/"
+            },
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "service_pillar",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 2,
+              "url": "https://confenge.com.br/diagnostico-b2g-360/"
+            },
+            {
+              "host": "redeb2g.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 3,
+              "url": "https://www.redeb2g.com.br/"
+            },
+            {
+              "host": "instagram.com",
+              "intent_fit": "adjacent",
+              "page_type": "social",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://www.instagram.com/reel/DbeG5pTvvpD/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "diretoria B2G construtora",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "Do not split 360 into município × oferta URLs.",
+      "decision": "Rotina contínua vs apoio pontual vs não contratar.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": 0.0,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": 1.0,
+        "is_gsc_live": false,
+        "position": 15.0,
+        "reason": "historical_csv_row",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv",
+        "url": "https://confenge.com.br/diagnostico-b2g-360/",
+        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+      },
+      "freeze": {
+        "census_allowed": true,
+        "frozen": true,
+        "html_edit": false,
+        "issue": 128,
+        "reason": "frozen_issue_128",
+        "spec_allowed": true
+      },
+      "gate": null,
+      "id": "carteira-operacao",
+      "job": "Diagnosticar a operação B2G da carteira, não um contrato isolado.",
+      "kill": "If the URL only ranks for brand, do not expand portfolio pages.",
+      "negative_queries": [
+        "diagnóstico médico 360",
+        "B2B SaaS 360"
+      ],
+      "next_test": "Confirm branded/generic 'diagnóstico B2G' does not cannibalize Diretoria B2G or 360.",
+      "overlap": [
+        {
+          "other_family": "gestao-contratual",
+          "rule": "360_owns_portfolio_job_acompanhamento_owns_continuous_pleito_routine"
+        },
+        {
+          "other_family": "defesa-margem",
+          "rule": "single_contract_second_reading_is_not_360"
+        }
+      ],
+      "owner": "/diagnostico-b2g-360/",
+      "owner_issue": 128,
+      "primary_queries": [
+        "diagnóstico B2G 360",
+        "consultoria B2G engenharia construtora",
+        "gestão de carteira contratos obras públicas",
+        "diretoria B2G construtora"
+      ],
+      "priority": "P1",
+      "reason": "frozen_issue_128",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "Do not split 360 into município × oferta URLs.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "carteira-operacao",
+        "kill": "If the URL only ranks for brand, do not expand portfolio pages.",
+        "next_test": "Confirm branded/generic 'diagnóstico B2G' does not cannibalize Diretoria B2G or 360.",
+        "state": "FROZEN",
+        "summary": "Family carteira-operacao is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
+      },
+      "state": "FROZEN",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 128,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 128,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/diagnostico-pre-licitacao/",
+        "url": "https://confenge.com.br/diagnostico-pre-licitacao/"
+      },
+      "census": [
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/diagnostico-pre-licitacao/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "edital-proposta",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Canonical pré-licitação URL observed in this sample. Not official position.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "service_pillar",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://confenge.com.br/diagnostico-pre-licitacao/"
+            },
+            {
+              "host": "sienge.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://sienge.com.br/blog/como-funciona-a-licitacao-para-obras-publicas-no-brasil/"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-1-3-requisitos-da-contratacao/"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 4,
+              "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "diagnóstico pré-licitação obras",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "edital-proposta",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Demand-engine July snapshot listed a related query with join_unavailable. That is not live and not this SERP sample.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "sienge.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 1,
+              "url": "https://sienge.com.br/blog/como-funciona-a-licitacao-para-obras-publicas-no-brasil/"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-1-3-requisitos-da-contratacao/"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 3,
+              "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8"
+            },
+            {
+              "host": "revista.tcm.sp.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://revista.tcm.sp.gov.br/simetria/article/view/18/12"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "comprovação de exequibilidade proposta obra",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "edital-proposta",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Intent split with orcamento-bdi is declared in overlap rules. No CONFENGE URL in this cluster sample.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "repositorio.cgu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://repositorio.cgu.gov.br/bitstream/1/44963/5/Manual_de_Auditoria_de_Obras_Publicas_II.pdf"
+            },
+            {
+              "host": "tce.sp.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://www.tce.sp.gov.br/6524-artigo-sobrepreco-e-superfaturamento-obras-publicas-nova-lei-licitacoes"
+            },
+            {
+              "host": "newroads.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 3,
+              "url": "https://newroads.com.br/auditoria-e-pericia-em-custos-de-obras-publicas/"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-1-3-requisitos-da-contratacao/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "orçamento incompleto edital obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "edital-proposta",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Supporting article is mapped in content-service-map; it is not claimed as a SERP hit here.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://licitacoesecontratos.tcu.gov.br/4-1-3-requisitos-da-contratacao/"
+            },
+            {
+              "host": "sienge.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://sienge.com.br/blog/como-funciona-a-licitacao-para-obras-publicas-no-brasil/"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 3,
+              "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8"
+            },
+            {
+              "host": "tce.sp.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://www.tce.sp.gov.br/6524-artigo-sobrepreco-e-superfaturamento-obras-publicas-nova-lei-licitacoes"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "empreitada preço global vs preço unitário",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "One canonical pré-licitação service. No pSEO per edital.",
+      "decision": "Go / no-go humano no edital, regime e matriz de riscos.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": 0.0,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": 1.0,
+        "is_gsc_live": false,
+        "position": 18.0,
+        "reason": "historical_csv_row",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv",
+        "url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+        "window": "gsc-export-last-7-days-as-of-2026-08-09"
+      },
+      "freeze": {
+        "census_allowed": true,
+        "frozen": true,
+        "html_edit": false,
+        "issue": 128,
+        "reason": "frozen_issue_128",
+        "spec_allowed": true
+      },
+      "gate": null,
+      "id": "edital-proposta",
+      "job": "Decidir participar, impugnar ou ajustar a proposta antes do preço final.",
+      "kill": "If the page never appears for non-brand decision queries after live GSC, do not clone it.",
+      "negative_queries": [
+        "modelo de edital PDF",
+        "como ganhar licitação garantido"
+      ],
+      "next_test": "Keep Bid Room as offer format, not a second pré-licitação URL.",
+      "overlap": [
+        {
+          "other_family": "orcamento-bdi",
+          "rule": "planilha_audit_is_orcamento_go_nogo_is_here"
+        },
+        {
+          "other_family": "bid-room",
+          "rule": "bid_room_is_delivery_format_this_is_the_decision_landing"
+        },
+        {
+          "other_family": "bid-readiness",
+          "rule": "gated_utility_must_not_replace_this_canonical"
+        }
+      ],
+      "owner": "/diagnostico-pre-licitacao/",
+      "owner_issue": 128,
+      "primary_queries": [
+        "diagnóstico pré-licitação obras",
+        "comprovação de exequibilidade proposta obra",
+        "orçamento incompleto edital obra pública",
+        "empreitada preço global vs preço unitário"
+      ],
+      "priority": "P1",
+      "reason": "frozen_issue_128",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "One canonical pré-licitação service. No pSEO per edital.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "edital-proposta",
+        "kill": "If the page never appears for non-brand decision queries after live GSC, do not clone it.",
+        "next_test": "Keep Bid Room as offer format, not a second pré-licitação URL.",
+        "state": "FROZEN",
+        "summary": "Family edital-proposta is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
+      },
+      "state": "FROZEN",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 60,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 60,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/defesa-margem-contratos-publicos/",
+        "url": "https://confenge.com.br/defesa-margem-contratos-publicos/"
+      },
+      "census": [
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "defesa-margem",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Tool observed; offer URL /defesa-margem-contratos-publicos/ not isolated in this sample. Negative query risk: margem de preferência.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "tool",
+              "proof_pattern": "utility",
+              "rank_in_sample": 1,
+              "url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "mismatch_procurement_preference",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://licitacoesecontratos.tcu.gov.br/5-11-2-garantias-2/"
+            },
+            {
+              "host": "planalto.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://www.planalto.gov.br/ccivil_03/leis/l8666cons.htm"
+            },
+            {
+              "host": "tce.pr.gov.br",
+              "intent_fit": "mismatch_procurement_preference",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://www.tce.pr.gov.br/noticias/aplicacao-de-margem-de-preferencia-para-microempresas-tem-que-ser-fundamentada.htm"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "defesa de margem contrato público",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "defesa-margem",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Generic 'diagnóstico contrato' collides with 360 and pré-licitação. Overlap rules apply. Tool was observed on a sibling query, not claimed here.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "redeb2g.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://www.redeb2g.com.br/"
+            },
+            {
+              "host": "conquistagov.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 2,
+              "url": "https://conquistagov.com.br/"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://licitacoesecontratos.tcu.gov.br/5-11-2-garantias-2/"
+            },
+            {
+              "host": "conjur.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 4,
+              "url": "https://conjur.com.br/2026-mai-24/analise-economica-da-suspensao-de-contratos-de-obras-publicas-de-engenharia-2/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "diagnóstico contrato obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": true,
+          "confenge_urls": [
+            "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+          ],
+          "device": "UNKNOWN",
+          "family_id": "defesa-margem",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Phrase is CONFENGE copy. Personalization=UNKNOWN; do not treat as non-brand demand.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "confenge.com.br",
+              "intent_fit": "owned",
+              "page_type": "tool",
+              "proof_pattern": "utility",
+              "rank_in_sample": 1,
+              "url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+            },
+            {
+              "host": "conjur.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "legal_commentary",
+              "proof_pattern": "legal_explainer",
+              "rank_in_sample": 2,
+              "url": "https://conjur.com.br/2026-mai-24/analise-economica-da-suspensao-de-contratos-de-obras-publicas-de-engenharia-2/"
+            },
+            {
+              "host": "planalto.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://www.planalto.gov.br/ccivil_03/leis/l8666cons.htm"
+            },
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://www.gov.br/agu/pt-br/composicao/cgu/cgu/manuais/obras-e-servicos-de-engenharia-indd.pdf"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "segunda leitura contrato público",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "defesa-margem",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "English product name is branded CONFENGE copy. Exact sample did not isolate the offer URL. Do not treat as non-brand demand or TOP*.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://www.gov.br/agu/pt-br/composicao/cgu/cgu/manuais/obras-e-servicos-de-engenharia-indd.pdf"
+            },
+            {
+              "host": "auditoria.mpu.mp.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://auditoria.mpu.mp.br/documentos-audin-mpu/manuais-e-cartilhas/cartilha-da-audin-mpu/cartilha-audin-mpu-obras/cartilha-de-boas-praticas-de-obras"
+            },
+            {
+              "host": "planalto.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://www.planalto.gov.br/ccivil_03/leis/l8666cons.htm"
+            },
+            {
+              "host": "licitacoesecontratos.tcu.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "control_body",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://licitacoesecontratos.tcu.gov.br/5-11-2-garantias-2/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "contract defense margin obras públicas",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "Keep one money-asset diagnosis. PR #157 analysis canaries must CTA here, not become a parallel offer.",
+      "decision": "Contratar Diagnóstico de Defesa de Margem vs seguir internamente.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": null,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": false,
+        "path": "/defesa-margem-contratos-publicos/",
+        "position": null,
+        "reason": "path_absent_from_historical_export_not_zero",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": null,
+      "id": "defesa-margem",
+      "job": "Partir de um contrato público real e decidir se vale uma segunda leitura técnica de margem.",
+      "kill": "If branded-only demand and no qualified hand-raise, do not spawn sibling offer URLs.",
+      "negative_queries": [
+        "margem de preferência ME EPP",
+        "proteção de margem de rio"
+      ],
+      "next_test": "Tool /ferramentas/diagnostico-defesa-margem/ is the utility; this path stays the commercial owner. No HTML in this slot.",
+      "overlap": [
+        {
+          "other_family": "reequilibrio",
+          "rule": "offer_owns_second_reading_pillar_owns_reequilibrio_query"
+        },
+        {
+          "other_family": "aditivos",
+          "rule": "offer_is_not_the_aditivos_canonical"
+        },
+        {
+          "other_family": "carteira-operacao",
+          "rule": "one_contract_vs_portfolio"
+        }
+      ],
+      "owner": "/defesa-margem-contratos-publicos/",
+      "owner_issue": 60,
+      "primary_queries": [
+        "defesa de margem contrato público",
+        "diagnóstico contrato obra pública",
+        "segunda leitura contrato público",
+        "contract defense margin obras públicas"
+      ],
+      "priority": "P0",
+      "reason": "canonical_page_exists_current_rank_unknown",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "Keep one money-asset diagnosis. PR #157 analysis canaries must CTA here, not become a parallel offer.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "defesa-margem",
+        "kill": "If branded-only demand and no qualified hand-raise, do not spawn sibling offer URLs.",
+        "next_test": "Tool /ferramentas/diagnostico-defesa-margem/ is the utility; this path stays the commercial owner. No HTML in this slot.",
+        "state": "COVERED",
+        "summary": "Family defesa-margem is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+      },
+      "state": "COVERED",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 127,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 128,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/atrasos-prorrogacao-obras-publicas/",
+        "url": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/"
+      },
+      "census": [],
+      "consolidate": "One prazo pillar. No weather × município pages.",
+      "decision": "Notificar, pedir prazo, defender-se ou acelerar.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": null,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": false,
+        "path": "/atrasos-prorrogacao-obras-publicas/",
+        "position": null,
+        "reason": "path_absent_from_historical_export_not_zero",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv"
+      },
+      "freeze": {
+        "frozen": false,
+        "note": "Service URL is not in the #128 six-URL freeze list; supporting noindex content remains #127."
+      },
+      "gate": null,
+      "id": "atrasos-prorrogacao",
+      "job": "Proteger prazo e documentar prorrogação, paralisação ou atraso imputável.",
+      "kill": "If only informational chuva queries click, do not force the service URL.",
+      "negative_queries": [
+        "prorrogação de matrícula",
+        "atraso de voo"
+      ],
+      "next_test": "Do not index the #127 noindex library to feed this pillar.",
+      "overlap": [
+        {
+          "other_family": "defesa-sancoes",
+          "rule": "notice_response_moves_to_defesa_when_sanction_risk_dominates"
+        },
+        {
+          "other_family": "reequilibrio",
+          "rule": "delay_is_input_to_reequilibrio_not_a_second_prazo_url"
+        }
+      ],
+      "owner": "/atrasos-prorrogacao-obras-publicas/",
+      "owner_issue": 128,
+      "primary_queries": [
+        "prorrogação prazo obra pública",
+        "atraso imputável administração",
+        "notificação atraso obra pública",
+        "chuva prorrogação prazo obra pública"
+      ],
+      "priority": "P2",
+      "reason": "canonical_page_exists_current_rank_unknown",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "One prazo pillar. No weather × município pages.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "atrasos-prorrogacao",
+        "kill": "If only informational chuva queries click, do not force the service URL.",
+        "next_test": "Do not index the #127 noindex library to feed this pillar.",
+        "state": "COVERED",
+        "summary": "Family atrasos-prorrogacao is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+      },
+      "state": "COVERED",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 61,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 61,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/defesa-tecnica-contratos-publicos/",
+        "url": "https://confenge.com.br/defesa-tecnica-contratos-publicos/"
+      },
+      "census": [],
+      "consolidate": "One defesa-técnica service.",
+      "decision": "Defender, negociar ou preparar extinção/impedimento.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": null,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": false,
+        "path": "/defesa-tecnica-contratos-publicos/",
+        "position": null,
+        "reason": "path_absent_from_historical_export_not_zero",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": null,
+      "id": "defesa-sancoes",
+      "job": "Responder notificação, defesa técnica ou risco de sanção/extinção com cronologia e nexo.",
+      "kill": "If the page only ranks for brand, do not add sanção variants.",
+      "negative_queries": [
+        "defesa pessoal",
+        "sanção penal genérica"
+      ],
+      "next_test": "No HTML. Confirm the URL is not competing with defesa-margem copy.",
+      "overlap": [
+        {
+          "other_family": "atrasos-prorrogacao",
+          "rule": "prazo_job_stays_on_atrasos_until_sanction_path"
+        },
+        {
+          "other_family": "partner-integrity",
+          "rule": "CEIS_CNEP_is_gated_other_job"
+        }
+      ],
+      "owner": "/defesa-tecnica-contratos-publicos/",
+      "owner_issue": 61,
+      "primary_queries": [
+        "defesa técnica contrato público",
+        "resposta notificação atraso obra pública",
+        "processo sancionador contrato obra",
+        "extinção contrato administrativo obra"
+      ],
+      "priority": "P2",
+      "reason": "canonical_page_exists_current_rank_unknown",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "One defesa-técnica service.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "defesa-sancoes",
+        "kill": "If the page only ranks for brand, do not add sanção variants.",
+        "next_test": "No HTML. Confirm the URL is not competing with defesa-margem copy.",
+        "state": "COVERED",
+        "summary": "Family defesa-sancoes is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+      },
+      "state": "COVERED",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 61,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 61,
+        "page_exists": true,
+        "page_type": "service_pillar",
+        "path": "/acompanhamento-contratos-obras/",
+        "url": "https://confenge.com.br/acompanhamento-contratos-obras/"
+      },
+      "census": [],
+      "consolidate": "Prefer 360 for portfolio diagnosis; keep this URL for ongoing pleito routine.",
+      "decision": "Equipe própria vs consultoria de gestão vs 360 pontual.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": null,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": false,
+        "path": "/acompanhamento-contratos-obras/",
+        "position": null,
+        "reason": "path_absent_from_historical_export_not_zero",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": null,
+      "id": "gestao-contratual",
+      "job": "Decidir se a construtora contrata acompanhamento contínuo de contratos públicos.",
+      "kill": "If both 360 and acompanhamento rank for the same generic gestão query, consolidate internal links — do not add a third URL.",
+      "negative_queries": [
+        "software de gestão de contratos genérico"
+      ],
+      "next_test": "Watch cannibalization with /diagnostico-b2g-360/ and /diretoria-b2g/.",
+      "overlap": [
+        {
+          "other_family": "carteira-operacao",
+          "rule": "360_is_diagnosis_this_is_continuous_operating_routine"
+        }
+      ],
+      "owner": "/acompanhamento-contratos-obras/",
+      "owner_issue": 61,
+      "primary_queries": [
+        "gestão de contratos de obras públicas",
+        "acompanhamento contratos obras",
+        "consultoria gestão contratual B2G",
+        "pleitos contínuos contrato público"
+      ],
+      "priority": "P2",
+      "reason": "canonical_page_exists_current_rank_unknown",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "Prefer 360 for portfolio diagnosis; keep this URL for ongoing pleito routine.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "gestao-contratual",
+        "kill": "If both 360 and acompanhamento rank for the same generic gestão query, consolidate internal links — do not add a third URL.",
+        "next_test": "Watch cannibalization with /diagnostico-b2g-360/ and /diretoria-b2g/.",
+        "state": "COVERED",
+        "summary": "Family gestao-contratual is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+      },
+      "state": "COVERED",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 88,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 88,
+        "page_exists": true,
+        "page_type": "offer",
+        "path": "/bid-room-licitacoes-obras/",
+        "url": "https://confenge.com.br/bid-room-licitacoes-obras/"
+      },
+      "census": [],
+      "consolidate": "One Bid Room offer.",
+      "decision": "Montar Bid Room vs diagnóstico pré-licitação pontual.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": null,
+        "date": "2026-08-09",
+        "denominator": "impressions_in_export_row",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": false,
+        "path": "/bid-room-licitacoes-obras/",
+        "position": null,
+        "reason": "path_absent_from_historical_export_not_zero",
+        "source": "historical_csv_not_live",
+        "source_kind": "historical_csv"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": null,
+      "id": "bid-room",
+      "job": "Operar uma sala de licitação de obras com recorte, prazo e decisão humana.",
+      "kill": "If Bid Room never receives origin→service from pré-licitação, fix #153 rather than cloning pages.",
+      "negative_queries": [
+        "bid room software procurement US",
+        "hotel bid room"
+      ],
+      "next_test": "Do not create a second Bid Room URL for #155.",
+      "overlap": [
+        {
+          "other_family": "edital-proposta",
+          "rule": "pre_licitacao_is_the_decision_landing_bid_room_is_the_delivery_offer"
+        },
+        {
+          "other_family": "bid-readiness",
+          "rule": "gated_readiness_utility_is_not_this_offer"
+        }
+      ],
+      "owner": "/bid-room-licitacoes-obras/",
+      "owner_issue": 88,
+      "primary_queries": [
+        "bid room licitações obras",
+        "sala de licitação construtora",
+        "apoio a proposta de obra pública",
+        "war room licitação engenharia"
+      ],
+      "priority": "P2",
+      "reason": "canonical_page_exists_current_rank_unknown",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "One Bid Room offer.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "bid-room",
+        "kill": "If Bid Room never receives origin→service from pré-licitação, fix #153 rather than cloning pages.",
+        "next_test": "Do not create a second Bid Room URL for #155.",
+        "state": "COVERED",
+        "summary": "Family bid-room is COVERED with live GSC blocked. No edit-now; wait for credentials or earliest_safe_action_at."
+      },
+      "state": "COVERED",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 155,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": false,
+        "issue": 155,
+        "page_exists": false,
+        "page_type": null,
+        "path": null,
+        "url": null
+      },
+      "census": [
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "bid-readiness",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "No CONFENGE landing. Family is GATED (#155). Sample includes unrelated triagem/edital noise.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "instagram.com",
+              "intent_fit": "adjacent",
+              "page_type": "social",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 1,
+              "url": "https://www.instagram.com/p/Dbnir_9lBi6/"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 2,
+              "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8"
+            },
+            {
+              "host": "pncp.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://pncp.gov.br/app/editais?q=engenharia&status=recebendo_proposta&pagina=1"
+            },
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://www.gov.br/compras/pt-br/nllc/modelos-de-licitacoes-e-contratos"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "prontidão licitação obras",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "bid-readiness",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "English mix. No CONFENGE URL. Do not invent a landing from this census.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "conlicitacao.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "utility",
+              "rank_in_sample": 1,
+              "url": "https://conlicitacao.com.br/triagem-advanced/"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 2,
+              "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8"
+            },
+            {
+              "host": "sienge.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://sienge.com.br/blog/como-funciona-a-licitacao-para-obras-publicas-no-brasil/"
+            },
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://www.gov.br/compras/pt-br/nllc/modelos-de-licitacoes-e-contratos"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "bid readiness licitação",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "bid-readiness",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Negative-intent collision with 'centro de triagem'. GATED family has no canonical.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "instagram.com",
+              "intent_fit": "adjacent",
+              "page_type": "social",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 1,
+              "url": "https://www.instagram.com/p/Dbnir_9lBi6/"
+            },
+            {
+              "host": "conlicitacao.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "utility",
+              "rank_in_sample": 2,
+              "url": "https://conlicitacao.com.br/triagem-advanced/"
+            },
+            {
+              "host": "correios.com.br",
+              "intent_fit": "mismatch_sorting_equipment",
+              "page_type": "official",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://www.correios.com.br/acesso-a-informacao/licitacoes-e-contratos/minutas-de-editais/bens-de-consumo/edital-de-sistema-de-triagem-automatica-mectri"
+            },
+            {
+              "host": "ferrazdevasconcelos.sp.gov.br",
+              "intent_fit": "mismatch_waste_sorting_center",
+              "page_type": "official",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://ferrazdevasconcelos.sp.gov.br/web/wp-content/uploads/2025/06/EDITAL-30-25-CE-09-25-CENTRO-DE-TRIAGEM_removed_compressed.pdf"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "triagem edital orçamento acervo",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "bid-readiness",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Existing pré-licitação pillar is adjacent in the registry, not a substitute canary and not claimed as a hit here. #155 stays GATED.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://www.gov.br/compras/pt-br/nllc/modelos-de-licitacoes-e-contratos"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 2,
+              "url": "https://www.youtube.com/watch?v=RmPXRMjPOg8"
+            },
+            {
+              "host": "sienge.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://sienge.com.br/blog/como-funciona-a-licitacao-para-obras-publicas-no-brasil/"
+            },
+            {
+              "host": "conlicitacao.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "utility",
+              "rank_in_sample": 4,
+              "url": "https://conlicitacao.com.br/triagem-advanced/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "checklist prontidão proposta obra pública",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "One future canary URL. No pages per edital/CNPJ/órgão.",
+      "decision": "Seguir, bloquear, ou pedir Bid Room/diagnóstico — sem parecer automático.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": null,
+        "date": null,
+        "denominator": null,
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": false,
+        "position": null,
+        "reason": "no_canonical_path",
+        "source": "none",
+        "source_kind": "none"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": {
+        "gated": true,
+        "issue": 155,
+        "page_exists": false,
+        "reason": "gated_issue_no_public_page",
+        "status": "GATED"
+      },
+      "id": "bid-readiness",
+      "job": "Antes de enviar a proposta, o edital, a planilha, a documentação e o acervo estão cobertos para um go/no-go humano?",
+      "kill": "Kill if documents cannot produce auditable FACT/RISK/UNKNOWN or if 28d qualified use does not transfer BOFU.",
+      "negative_queries": [
+        "centro de triagem de resíduos",
+        "sistema de triagem automática correios"
+      ],
+      "next_test": "Consumer contract extra-cli ↔ web-cfg before any landing. This slot does not ship HTML.",
+      "overlap": [
+        {
+          "other_family": "edital-proposta",
+          "rule": "existing_pre_licitacao_remains_canonical_until_canary_proves_utility"
+        },
+        {
+          "other_family": "orcamento-bdi",
+          "rule": "do_not_replace_auditoria_pillar"
+        },
+        {
+          "other_family": "bid-room",
+          "rule": "cta_may_point_to_bid_room_after_human_review"
+        }
+      ],
+      "owner": "issue:155",
+      "owner_issue": 155,
+      "primary_queries": [
+        "prontidão licitação obras",
+        "bid readiness licitação",
+        "triagem edital orçamento acervo",
+        "checklist prontidão proposta obra pública"
+      ],
+      "priority": "P1",
+      "reason": "gated_issue_no_public_page",
+      "recommendation": {
+        "action": "hold_gated",
+        "authorizes_html_edit": false,
+        "consolidate": "One future canary URL. No pages per edital/CNPJ/órgão.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "bid-readiness",
+        "kill": "Kill if documents cannot produce auditable FACT/RISK/UNKNOWN or if 28d qualified use does not transfer BOFU.",
+        "next_test": "Consumer contract extra-cli ↔ web-cfg before any landing. This slot does not ship HTML.",
+        "state": "NO_CANONICAL",
+        "summary": "Family bid-readiness is GATED/NO_CANONICAL. Do not publish a page in this slot."
+      },
+      "state": "NO_CANONICAL",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 156,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": false,
+        "issue": 156,
+        "page_exists": false,
+        "page_type": null,
+        "path": null,
+        "url": null
+      },
+      "census": [
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "partner-integrity",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Official CEIS surfaces dominate. No CONFENGE landing. Family GATED on extra-cli#436.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "portaldatransparencia.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://portaldatransparencia.gov.br/entenda-a-gestao-publica/ceis"
+            },
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 2,
+              "url": "https://www.gov.br/iti/pt-br/acesso-a-informacao/sancoes-administrativas/cadastro-de-empresas-inidoneas-e-suspensas-ceis"
+            },
+            {
+              "host": "mutuus.net",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://www.mutuus.net/blog/ceis-e-cnep/"
+            },
+            {
+              "host": "sentinela.ai",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 4,
+              "url": "https://sentinela.ai/inteligencia/o-que-e-ceis"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "consulta CEIS CNEP empresa",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "partner-integrity",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "No CONFENGE URL. Copy 'empresa limpa' is a negative query, not a target.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "portaldatransparencia.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://portaldatransparencia.gov.br/entenda-a-gestao-publica/ceis"
+            },
+            {
+              "host": "espectrosint.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://www.espectrosint.com/blog/osint-fornecedor-licitacao"
+            },
+            {
+              "host": "mutuus.net",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://www.mutuus.net/blog/ceis-e-cnep/"
+            },
+            {
+              "host": "goias.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://goias.gov.br/controladoria/ceis-cadastro-nacional-de-empresas-inidoneas-e-suspensas/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "due diligence parceiro licitação",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "partner-integrity",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Do not confuse with defesa-sancoes (contractor defense). This job is partner lookup.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "portaldatransparencia.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://portaldatransparencia.gov.br/entenda-a-gestao-publica/ceis"
+            },
+            {
+              "host": "sentinela.ai",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://sentinela.ai/inteligencia/o-que-e-ceis"
+            },
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 3,
+              "url": "https://www.gov.br/iti/pt-br/acesso-a-informacao/sancoes-administrativas/cadastro-de-empresas-inidoneas-e-suspensas-ceis"
+            },
+            {
+              "host": "goias.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 4,
+              "url": "https://goias.gov.br/controladoria/ceis-cadastro-nacional-de-empresas-inidoneas-e-suspensas/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "sanções CNEP CEIS construtora",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "partner-integrity",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "GATED. SmartLic /compliance/[cnpj] is donor UX only, not a CONFENGE canonical.",
+          "observed_at": "2026-08-19",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "portaldatransparencia.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "official_manual",
+              "rank_in_sample": 1,
+              "url": "https://portaldatransparencia.gov.br/entenda-a-gestao-publica/ceis"
+            },
+            {
+              "host": "espectrosint.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 2,
+              "url": "https://www.espectrosint.com/blog/osint-fornecedor-licitacao"
+            },
+            {
+              "host": "mutuus.net",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "unclassified",
+              "rank_in_sample": 3,
+              "url": "https://www.mutuus.net/blog/ceis-e-cnep/"
+            },
+            {
+              "host": "youtube.com",
+              "intent_fit": "adjacent",
+              "page_type": "video",
+              "proof_pattern": "video",
+              "rank_in_sample": 4,
+              "url": "https://www.youtube.com/watch?v=4jp8uTQYHj0"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "integridade parceiro contrato público",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "Reuse SmartLic UX pattern only. No SmartLic brand, runtime or /compliance/[cnpj] public URL.",
+      "decision": "Ampliar diligência documental vs seguir com cobertura UNKNOWN — never 'empresa limpa'.",
+      "earliest_safe_action_at": "2026-09-16",
+      "evidence": {
+        "clicks": null,
+        "date": null,
+        "denominator": null,
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": false,
+        "position": null,
+        "reason": "no_canonical_path",
+        "source": "none",
+        "source_kind": "none"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": {
+        "blocked_on": "extra-cli#436",
+        "gated": true,
+        "issue": 156,
+        "page_exists": false,
+        "reason": "gated_issue_no_public_page",
+        "status": "GATED"
+      },
+      "id": "partner-integrity",
+      "job": "Consultar ocorrências públicas CEIS/CNEP de parceiro/consórcio/subcontratado antes de diligência humana.",
+      "kill": "Do not index if source cannot paginate/provenance, if copy implies certificado, or if CNPJ leaks.",
+      "negative_queries": [
+        "empresa limpa",
+        "certidão de idoneidade",
+        "empresa idônea automática"
+      ],
+      "next_test": "Hold until extra-cli#436 is green and #154/#155 slot rules allow a second BOFU canary.",
+      "overlap": [
+        {
+          "other_family": "defesa-sancoes",
+          "rule": "sanctions_defense_is_not_partner_lookup"
+        },
+        {
+          "other_family": "bid-readiness",
+          "rule": "do_not_run_two_bofu_canaries_in_parallel_by_default"
+        }
+      ],
+      "owner": "issue:156",
+      "owner_issue": 156,
+      "primary_queries": [
+        "consulta CEIS CNEP empresa",
+        "due diligence parceiro licitação",
+        "sanções CNEP CEIS construtora",
+        "integridade parceiro contrato público"
+      ],
+      "priority": "P1",
+      "reason": "gated_issue_no_public_page",
+      "recommendation": {
+        "action": "hold_gated",
+        "authorizes_html_edit": false,
+        "consolidate": "Reuse SmartLic UX pattern only. No SmartLic brand, runtime or /compliance/[cnpj] public URL.",
+        "earliest_safe_action_at": "2026-09-16",
+        "family_id": "partner-integrity",
+        "kill": "Do not index if source cannot paginate/provenance, if copy implies certificado, or if CNPJ leaks.",
+        "next_test": "Hold until extra-cli#436 is green and #154/#155 slot rules allow a second BOFU canary.",
+        "state": "NO_CANONICAL",
+        "summary": "Family partner-integrity is GATED/NO_CANONICAL. Do not publish a page in this slot."
+      },
+      "state": "NO_CANONICAL",
+      "transition_owner_issue": 153
+    }
+  ],
+  "family_count": 13,
+  "git_head": "faadc16609210522c9ffaf32a7b944817f6c6214",
+  "graph": {
+    "canary_not_family_pr": 157,
+    "data_desk_kit_pr": 158,
+    "edges": [
+      {
+        "from": "issue-61",
+        "rel": "parent",
+        "to": "issue-128"
+      },
+      {
+        "from": "issue-61",
+        "rel": "parent",
+        "to": "issue-151"
+      },
+      {
+        "from": "issue-61",
+        "rel": "parent",
+        "to": "issue-152"
+      },
+      {
+        "from": "issue-61",
+        "rel": "parent",
+        "to": "issue-154"
+      },
+      {
+        "from": "issue-61",
+        "rel": "parent",
+        "to": "issue-155"
+      },
+      {
+        "from": "issue-61",
+        "rel": "parent",
+        "to": "issue-156"
+      },
+      {
+        "from": "issue-128",
+        "rel": "measurement_dependency",
+        "to": "issue-153"
+      },
+      {
+        "external": true,
+        "from": "issue-153",
+        "rel": "downstream_commercial",
+        "to": "issue-88-conversion"
+      },
+      {
+        "from": "issue-151",
+        "rel": "freshness_blocks_sitemap_member",
+        "to": "issue-152"
+      },
+      {
+        "from": "issue-155",
+        "rel": "scale_gate",
+        "to": "issue-154"
+      },
+      {
+        "from": "issue-156",
+        "rel": "scale_gate",
+        "to": "issue-154"
+      },
+      {
+        "external": true,
+        "from": "issue-156",
+        "rel": "blocked_on_producer",
+        "to": "extra-cli-436"
+      },
+      {
+        "external": true,
+        "from": "pr-157",
+        "rel": "implements_canary_not_bofu_family",
+        "to": "issue-83-canary"
+      },
+      {
+        "external": true,
+        "from": "pr-158",
+        "rel": "implements_kit_not_bofu_registry",
+        "to": "issue-89-data-desk"
+      },
+      {
+        "from": "pr-159",
+        "rel": "observes_frozen_pillars",
+        "to": "issue-128"
+      },
+      {
+        "external": true,
+        "from": "pr-159",
+        "rel": "consumes_observatory",
+        "to": "issue-86-discovery"
+      }
+    ],
+    "frozen_owner_issue": 128,
+    "nodes": [
+      {
+        "id": "issue-61",
+        "kind": "epic",
+        "note": "Parent inbound compounding epic. Not a BOFU family.",
+        "ref": 61,
+        "role": "inbound_epic"
+      },
+      {
+        "id": "issue-128",
+        "kind": "issue",
+        "note": "Six live BOFU pillars. Census/spec allowed; HTML edits frozen until earliest_safe_action_at.",
+        "ref": 128,
+        "role": "frozen_pillar_owner"
+      },
+      {
+        "id": "issue-151",
+        "kind": "issue",
+        "note": "Market Answer real-clock freshness. Not a BOFU family.",
+        "ref": 151,
+        "role": "freshness_clock"
+      },
+      {
+        "id": "issue-152",
+        "kind": "issue",
+        "note": "Deterministic freshness-aware sitemap graph. Not a BOFU family.",
+        "ref": 152,
+        "role": "sitemap_graph"
+      },
+      {
+        "id": "issue-153",
+        "kind": "issue",
+        "note": "Canonical owner of content→service transition with destination_service_id.",
+        "ref": 153,
+        "role": "origin_to_service_owner"
+      },
+      {
+        "id": "issue-154",
+        "kind": "issue",
+        "note": "Compounding standard. Does not authorize BOFU page scale.",
+        "ref": 154,
+        "role": "growth_accounting"
+      },
+      {
+        "family_id": "bid-readiness",
+        "id": "issue-155",
+        "kind": "issue",
+        "note": "GATED bid-readiness canary. Not an existing page.",
+        "ref": 155,
+        "role": "gated_family"
+      },
+      {
+        "family_id": "partner-integrity",
+        "id": "issue-156",
+        "kind": "issue",
+        "note": "GATED partner-integrity canary. Blocked on extra-cli#436.",
+        "ref": 156,
+        "role": "gated_family"
+      },
+      {
+        "head": "campaign/confenge-web-contract-authority-canary-03",
+        "id": "pr-157",
+        "kind": "pull_request",
+        "merged_to_main": false,
+        "note": "Exactly one official-live contract analysis canary. Not a new BOFU family.",
+        "ref": 157,
+        "role": "contract_analysis_canary_not_family",
+        "sha": "42056bb11bfd1ee273ea922f4d1348fb98fac2a5",
+        "state": "draft_open"
+      },
+      {
+        "head": "campaign/confenge-web-data-desk-authority-02",
+        "id": "pr-158",
+        "kind": "pull_request",
+        "merged_to_main": false,
+        "note": "Approved SC Data Desk citation kit. Do not create a second target registry here.",
+        "ref": 158,
+        "role": "data_desk_kit_not_registry",
+        "sha": "769764a72c2b7457f9ee7c8a86804e57caf38311",
+        "state": "draft_open"
+      },
+      {
+        "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
+        "head": "campaign/confenge-web-seo-demand-control-02",
+        "id": "pr-159",
+        "kind": "pull_request",
+        "merged_to_main": false,
+        "note": "Search-demand observability producer. Candidate to merge; not main; not GSC live.",
+        "ref": 159,
+        "role": "observability_candidate_not_live_gsc",
+        "sha": "feba68928ab997229028a66bb25d3b3b5a439206",
+        "state": "draft_open"
+      }
+    ],
+    "observability_candidate_pr": 159,
+    "required_issues": [
+      61,
+      128,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156
+    ],
+    "required_prs": [
+      157,
+      158,
+      159
+    ],
+    "transition_owner_issue": 153
+  },
+  "gsc_live": {
+    "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
+    "last_sync_blocked": true,
+    "last_sync_error": "missing_credentials",
+    "note": "Absence of live Search Analytics is NEEDS_EXTERNAL_ACTION, not ranking zero. Historical CSV, redacted snapshots and SERP samples are not GSC live.",
+    "pr_159_role": "observability_candidate_not_merged_to_main",
+    "ready_for_product_decisions": false,
+    "recommendation": "NEEDS_EXTERNAL_ACTION",
+    "required_env": [
+      "GSC_SITE_URL",
+      "GSC_CREDENTIALS_JSON (service account path or JSON) OR (GSC_CLIENT_SECRETS_JSON + GSC_TOKEN_JSON)"
+    ]
+  },
+  "gsc_live_state": "BLOCKED_CREDENTIAL_FAILURE",
+  "historical_gsc": {
+    "as_of": "2026-08-09",
+    "dir": "seo/gsc-2026-08-09",
+    "is_gsc_live": false,
+    "note": "Historical export only. Not live Search Analytics.",
+    "pages": 27,
+    "queries": 12
+  },
+  "next_actions": [
+    {
+      "action": "NEEDS_EXTERNAL_ACTION",
+      "authorizes_html_edit": false,
+      "id": "gsc-credentials",
+      "owner": "operator_secrets",
+      "refs": [
+        "pr-159",
+        "issue-128"
+      ],
+      "summary": "Set GSC_CREDENTIALS_JSON (or client secrets+token) and GSC_SITE_URL. Until then gsc_live_state=BLOCKED_CREDENTIAL_FAILURE. Do not treat historical CSV, redacted snapshots or SERP samples as live."
+    },
+    {
+      "action": "observe_only",
+      "authorizes_html_edit": false,
+      "earliest_safe_action_at": "2026-09-16",
+      "id": "freeze-128",
+      "owner": "issue-128",
+      "refs": [
+        "issue-128"
+      ],
+      "summary": "Keep the six #128 BOFU pillars FROZEN. Census and spec are allowed; do not recommend snippet/HTML edit-now before 2026-09-16."
+    },
+    {
+      "action": "keep_owner",
+      "authorizes_html_edit": false,
+      "id": "origin-to-service-153",
+      "owner": "issue-153",
+      "refs": [
+        "issue-153",
+        "issue-128"
+      ],
+      "summary": "#153 owns the origin→service transition with destination_service_id. This ledger does not reimplement analytics or edit script.js."
+    },
+    {
+      "action": "hold_gated",
+      "authorizes_html_edit": false,
+      "id": "gated-155-156",
+      "owner": "issue-155",
+      "refs": [
+        "issue-155",
+        "issue-156",
+        "issue-154"
+      ],
+      "summary": "#155 bid-readiness and #156 partner-integrity enter as GATED, not as existing pages. Do not ship HTML. #156 stays blocked on extra-cli#436."
+    },
+    {
+      "action": "do_not_duplicate",
+      "authorizes_html_edit": false,
+      "id": "prs-157-159-roles",
+      "owner": "pr-159",
+      "refs": [
+        "pr-157",
+        "pr-158",
+        "pr-159"
+      ],
+      "summary": "PR #157 is one contract-analysis canary, not a BOFU family. PR #158 is the Data Desk kit, not a second target registry. PR #159 is an observability candidate to merge, not live GSC on main."
+    }
+  ],
+  "origin_main": "faadc16609210522c9ffaf32a7b944817f6c6214",
+  "rules": {
+    "duplicate_organic_engine": false,
+    "frozen_html": false,
+    "gated_155_156_are_existing_pages": false,
+    "missing_gsc_credentials_are_zero_rank": false,
+    "pr157_is_bofu_family": false,
+    "pr158_is_second_target_registry": false,
+    "pr159_is_main_live_gsc": false,
+    "top_requires_context": true,
+    "transition_owner_issue": 153
+  },
+  "schema": "bofu-intent-status/1.0",
+  "slot": "BOFU-CORE",
+  "state_counts": {
+    "COVERED": 5,
+    "FROZEN": 6,
+    "NO_CANONICAL": 2
+  }
+}
