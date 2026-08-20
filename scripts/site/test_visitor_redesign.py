@@ -648,6 +648,68 @@ def test_home_nav_and_hierarchy():
     assert "evidence-matrix" in home or "hero-evidence" in home
 
 
+def test_home_form_anchor_reveals_fields():
+    """Hero/primary 'Analisar meu caso' must land on the form, not the long contact copy."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    form = re.search(
+        r'<form\b[^>]*\bid="formulario-contato"[^>]*>[\s\S]*?</form>',
+        html,
+        re.I,
+    )
+    if not form:
+        form = re.search(
+            r'<form\b[^>]*class="[^"]*\bcontact-form\b[^"]*"[^>]*>[\s\S]*?</form>',
+            html,
+            re.I,
+        )
+        assert form and 'id="formulario-contato"' in html, 'home missing id="formulario-contato"'
+    else:
+        form_html = form.group(0)
+        assert re.search(r"<input\b|<select\b|<textarea\b", form_html, re.I), (
+            "first field must be a descendant of #formulario-contato"
+        )
+        assert re.search(r"<h2\b", form_html, re.I), "form card must include its title"
+    hero = re.search(
+        r'<a\b[^>]*data-cta-position="hero"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Analisar meu caso',
+        html,
+        re.I,
+    )
+    if not hero:
+        hero = re.search(
+            r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*button-lg[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Analisar meu caso',
+            html,
+            re.I,
+        )
+    assert hero, "hero/primary Analisar meu caso CTA missing"
+    assert "#formulario-contato" in hero.group(1), (
+        f"hero/primary CTA must target #formulario-contato, got {hero.group(1)!r}"
+    )
+    assert 'id="contato"' in html, "keep #contato section id for back-compat"
+    assert re.search(r"#formulario-contato\s*\{[^}]*scroll-margin-top", css), (
+        "CSS must set scroll-margin-top on #formulario-contato"
+    )
+    mobile = re.search(
+        r"@media\s*\(\s*max-width:\s*(?:900|700)px\s*\)\s*\{[^}]*contact-grid[^}]*order",
+        css,
+        re.I | re.S,
+    )
+    if not mobile:
+        mobile = re.search(
+            r"@media\s*\(\s*max-width:\s*(?:900|700)px\s*\)\s*\{[^}]*\{[^}]*order\s*:\s*-?1",
+            css,
+            re.I | re.S,
+        )
+    assert mobile or (
+        "contact-grid" in css
+        and re.search(r"@media\s*\(\s*max-width:\s*(?:900|700)px\s*\)", css)
+        and re.search(r"\.contact-form\{[^}]*order\s*:\s*-1", css)
+    ), "mobile CSS must reorder .contact-grid so the form appears before channel copy"
+    assert re.search(r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1", css.replace(" ", "")), (
+        "mobile rule must set form order so title + first field lead the 390px viewport"
+    )
+
+
 def test_form_no_contingency_copy():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Se o botão Continuar não aparecer" not in home
