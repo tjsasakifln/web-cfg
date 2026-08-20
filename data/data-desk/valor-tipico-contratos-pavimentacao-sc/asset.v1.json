@@ -1,0 +1,195 @@
+{
+  "schema": "data_desk_asset_v1",
+  "id": "valor-tipico-contratos-pavimentacao-sc-citation-kit",
+  "approved": true,
+  "fixture": false,
+  "watermark": null,
+  "swap_is": "configuration",
+  "title": "Ticket contratual típico de pavimentação em Santa Catarina — kit de citação",
+  "description": "Recorte agregado e citável do Market Answer aprovado de pavimentação em Santa Catarina: quartis, n, missingness, método e limitações. A fonte canônica continua sendo a resposta pública.",
+  "canonical_source": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "public_canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "permalink": "https://confenge.com.br/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+  "indexable": false,
+  "do_not_index": true,
+  "sitemap": false,
+  "external_distribution": false,
+  "citation_text": "CONFENGE. Valor típico dos contratos públicos de pavimentação em Santa Catarina. Mediana 218284.5 BRL (valor integral nominal do instrumento); P25 19969.495; P75 708950.0; n útil 5038 de 5063 (missingness 25). Período 2023-07-20–2026-08-15. UF=SC. Método integral-nominal-nearest-rank/1.0. Fonte canônica: https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/. Não é custo por km, m² ou unidade física. Não é estatística nacional.",
+  "citation_short": "CONFENGE (2026). Valor típico dos contratos públicos de pavimentação em Santa Catarina. https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "method_version": "integral-nominal-nearest-rank/1.0",
+  "schema_version": "data_desk_asset_v1",
+  "source_schema_version": "public-read-market-answer/1.0",
+  "data_version": "sc-pavimentacao-ticket-1.0",
+  "as_of": "2026-08-17T11:29:23.193694+02:00",
+  "geography": {
+    "kind": "uf",
+    "code": "SC",
+    "label": "Santa Catarina"
+  },
+  "geography_code": "SC",
+  "period": {
+    "start": "2023-07-20",
+    "end": "2026-08-15"
+  },
+  "grain": "integral_nominal_instrument",
+  "grain_not": [
+    "cost_per_km",
+    "unit_price",
+    "price_per_m2",
+    "custo_por_km"
+  ],
+  "currency": "BRL",
+  "stats": {
+    "p25": 19969.495,
+    "median": 218284.5,
+    "p75": 708950.0,
+    "n": 5038,
+    "unit": "integral_nominal_instrument"
+  },
+  "coverage": {
+    "missing_or_nonpositive": 25,
+    "n": 5038,
+    "status": "COMPLETE",
+    "total_keyword_rows": 5063,
+    "usable_n": 5038
+  },
+  "missingness": {
+    "total_keyword_rows": 5063,
+    "unknown_or_nonpositive": 25,
+    "usable": 5038
+  },
+  "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
+  "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+  "extra_cli_content_hash": "dbb6254950f8e25f12676636c7dd39a339b300a48c2544c68a4a750813c41e18",
+  "coverage_text": "Cobertura COMPLETE do recorte UF=SC. n útil = 5038. Denominador do recorte = 5063. missingness = 25 (valores totais não positivos). Período 2023-07-20–2026-08-15. Não é censo nacional.",
+  "limitations": "O número é o valor integral nominal do instrumento, não custo por km, m² ou unidade física. O recorte é exclusivamente de Santa Catarina e não descreve o país. Comparáveis oficiais permanecem indisponíveis. Valores totais não positivos entram em missingness e não entram na amostra útil (25 de 5063). A tipologia usa classificador documental por palavra-chave e pode misturar escopos de obra.",
+  "limitations_pt": [
+    "O número é o valor integral nominal do instrumento, não custo por km, m² ou unidade física.",
+    "O recorte é exclusivamente de Santa Catarina. Não descreve o país inteiro.",
+    "Comparáveis oficiais permanecem indisponíveis neste recorte. Não há grupo de pares publicado.",
+    "O drill-down de contratos individuais permanece limitado. Não há páginas combinatórias por município, órgão ou métrica.",
+    "A tipologia usa o classificador documental de pavimentação do recorte. Correspondências por palavra-chave podem misturar escopos de obra.",
+    "Valores totais não positivos entram em missingness e não entram na amostra útil (25 de 5063)."
+  ],
+  "prohibited_claims": [
+    "estatística nacional ou brasileira",
+    "custo por km, m² ou unidade física",
+    "ranking de empresas ou órgãos",
+    "irregularidade, superfaturamento ou sobrepreço a partir de um outlier",
+    "dump de contratos, IDs pessoais ou documentos brutos"
+  ],
+  "can_answer": "Qual é a mediana e a faixa interquartil do valor integral nominal dos contratos públicos de pavimentação no recorte de Santa Catarina, com n, missingness, período e método visíveis.",
+  "cannot_answer": "Custo por km, preço unitário, ranking, irregularidade, ou qualquer estatística nacional.",
+  "correction_link": "https://confenge.com.br/correcoes/",
+  "correction_owner": "Tiago Sasaki",
+  "creator": "CONFENGE",
+  "publisher": "CONFENGE",
+  "owner": "Tiago Sasaki",
+  "refresh_owner": "CONFENGE / market-answers",
+  "license": "NEEDS_REVIEW",
+  "license_review": "NEEDS_REVIEW",
+  "license_url": "https://confenge.com.br/termos-de-uso/",
+  "usage_guidance": "Citar com o link canônico da CONFENGE, método, as_of, n/missingness e limitações visíveis. Não concedemos licença aberta (CC-BY ou equivalente) neste pacote. Não republicar como estatística nacional. Não converter o ticket em custo/km. Pedidos de recorte usam request-contract.json. Correções: https://confenge.com.br/correcoes/. Licença formal: NEEDS_REVIEW.",
+  "identifier": "valor-tipico-contratos-pavimentacao-sc-citation-kit",
+  "provenance": "SELECT-only from data/extra-cli/public-read-market-answer-pavimentacao/1.0/export.json stats plus editorial approval hashes in data/editorial/market-answers/approvals.json. Quartiles are copied, never recomputed.",
+  "invalidation": {
+    "keys": [
+      "payload_content_hash",
+      "rendered_content_hash",
+      "facts",
+      "coverage",
+      "method",
+      "geography",
+      "visible_copy",
+      "limitations",
+      "source",
+      "as_of"
+    ],
+    "rule": "Any change to an invalidation key requires a new data_version and a new package_hash. Silent backfill is forbidden.",
+    "owner": "CONFENGE / market-answers"
+  },
+  "has_dataset": true,
+  "dataset": {
+    "name": "Quartis agregados do ticket contratual de pavimentação em Santa Catarina",
+    "description": "Tabela agregada com P25, mediana, P75, n útil, denominador e missingness do recorte UF=SC. Não é dump de contratos nem de IDs pessoais.",
+    "download_filename": "table.csv",
+    "encoding_format": "text/csv"
+  },
+  "media": {
+    "svg": "chart.svg",
+    "png": null
+  },
+  "csv": "table.csv",
+  "syndication_targets": [
+    {
+      "id": "sicepot-sc",
+      "organization": "SICEPOT-SC",
+      "target_nominal": "SICEPOT-SC",
+      "audience_type": "associação",
+      "public_url": "https://sicepot.com.br/",
+      "person_role": null,
+      "why_useful": "Associadas de construção pesada em SC calibram porte de contrato de pavimentação com quartis estaduais, não com custo/km.",
+      "angle": "Referência estadual de ticket nominal para associadas de obras pesadas em Santa Catarina.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://sicepot.com.br/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "crea-sc",
+      "organization": "CREA-SC",
+      "target_nominal": "CREA-SC / Notícias",
+      "audience_type": "conselho profissional",
+      "public_url": "https://portal.crea-sc.org.br/noticias-crea-sc/",
+      "person_role": "canal Notícias CREA-SC (função pública do canal; pessoa não nomeada)",
+      "why_useful": "Profissionais de engenharia em SC leem porte contratual com método e limitações visíveis.",
+      "angle": "Pauta técnica de ticket típico de pavimentação em SC, sem endosso do plenário.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://portal.crea-sc.org.br/noticias-crea-sc/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "cbic-coinfra",
+      "organization": "CBIC / COINFRA",
+      "target_nominal": "CBIC / COINFRA",
+      "audience_type": "associação",
+      "public_url": "https://cbic.org.br/assessoria-de-imprensa/",
+      "person_role": "Assessoria de Imprensa da CBIC",
+      "why_useful": "A comissão de infraestrutura trata de porte de contratos de obras públicas; o recorte SC é evidência estadual verificável.",
+      "angle": "Quartis de ticket de pavimentação em SC adjacentes à pauta de porte contratual da COINFRA.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://cbic.org.br/assessoria-de-imprensa/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "aneor",
+      "organization": "ANEOR",
+      "target_nominal": "ANEOR — Associação Nacional das Empresas de Obras Rodoviárias",
+      "audience_type": "associação",
+      "public_url": "https://www.aneor.org.br/",
+      "person_role": null,
+      "why_useful": "Empresas de obras rodoviárias usam porte de instrumento, não custo/km inventado, para calibrar expectativa de contrato.",
+      "angle": "Ticket nominal de pavimentação em SC como recorte estadual para o setor rodoviário.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://www.aneor.org.br/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "id": "agencia-infra",
+      "organization": "Agência iNFRA",
+      "target_nominal": "Agência iNFRA",
+      "audience_type": "imprensa",
+      "public_url": "https://agenciainfra.com/blog/",
+      "person_role": "redação / formulário de contato",
+      "why_useful": "Imprensa especializada em infraestrutura cita dado original com n, período, quartis e a recusa explícita de custo/km.",
+      "angle": "Nota factual de ticket contratual de pavimentação em Santa Catarina.",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "contact_route": "https://agenciainfra.com/blog/contato/",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN"
+    }
+  ]
+}
