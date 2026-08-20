@@ -1,0 +1,69 @@
+{
+  "as_of": "2026-08-19",
+  "readonly": true,
+  "login_required": false,
+  "mutation": false,
+  "api_write": false,
+  "owner": "founder",
+  "steps": [
+    {
+      "id": "gbp-01",
+      "action": "Abrir uma janela anônima/privada. Não entrar em conta Google, não abrir o app Google Business Profile e não usar API.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-02",
+      "action": "Pesquisar no Google (deslogado): CONFENGE.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-03",
+      "action": "Pesquisar: CONFENGE consultoria.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-04",
+      "action": "Pesquisar: Engº Tiago Sasaki.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-05",
+      "action": "Pesquisar: CONFENGE Florianópolis.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-06",
+      "action": "Pesquisar: consultoria licitações obras públicas Santa Catarina.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-07",
+      "action": "Anotar se aparece painel de conhecimento, pacote de mapas (map-pack) ou cartão de perfil. Presença = presente / ausente / pouco claro. Não clicar em 'Reivindicar esta empresa' nem 'Possui este negócio?'.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-08",
+      "action": "No Google Maps (deslogado), pesquisar CONFENGE. Não sugerir edição, não adicionar ficha, não enviar foto, não pedir avaliação.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-09",
+      "action": "Se uma ficha estiver visível, copiar só o que está público na tela (nome, telefone, site) e comparar com o contato já publicado em data/site/brand.json. Não editar a ficha.",
+      "readonly": true
+    },
+    {
+      "id": "gbp-10",
+      "action": "Se nenhuma ficha estiver visível, registrar UNKNOWN. Uma ficha futura de área de serviço (endereço oculto) é decisão do fundador fora deste PR. Não inventar rua, CEP, horário de loja nem pedido de review.",
+      "readonly": true
+    }
+  ],
+  "forbidden": [
+    "login",
+    "GBP API write",
+    "claim listing",
+    "add street address",
+    "request reviews",
+    "upload photos",
+    "suggest an edit"
+  ]
+}

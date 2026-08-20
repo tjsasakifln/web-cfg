@@ -1,0 +1,416 @@
+{
+  "campaign": "CONFENGE-WEB-LOCAL-ENTITY-SEARCH-02",
+  "as_of": "2026-08-19",
+  "decision_state": "VALIDATE",
+  "organization": {
+    "@type": "Organization",
+    "@id": "https://confenge.com.br/#organization",
+    "name": "CONFENGE",
+    "legalName": "CONFENGE",
+    "url": "https://confenge.com.br/",
+    "logo": "https://confenge.com.br/assets/logo-confenge.png",
+    "image": "https://confenge.com.br/assets/og-confenge.jpg",
+    "description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Brasil"
+    },
+    "email": "tiago.sasaki@confenge.com.br",
+    "telephone": "+55-48-98834-4559",
+    "taxID": "52.407.089/0001-09",
+    "founder": {
+      "@id": "https://confenge.com.br/#tiago"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "telephone": "+55-48-98834-4559",
+      "email": "tiago.sasaki@confenge.com.br",
+      "areaServed": "BR",
+      "availableLanguage": [
+        "pt-BR",
+        "en"
+      ]
+    }
+  },
+  "person": {
+    "@type": "Person",
+    "@id": "https://confenge.com.br/#tiago",
+    "name": "Engº Tiago Sasaki",
+    "image": "https://confenge.com.br/assets/tiago-sasaki-foto-v11-sem-fundo.png",
+    "url": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+    "jobTitle": "Engenheiro Civil e consultor B2G",
+    "worksFor": {
+      "@id": "https://confenge.com.br/#organization"
+    },
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Universidade de São Paulo"
+    },
+    "knowsAbout": [
+      "Licitações de obras públicas",
+      "Gestão de contratos públicos",
+      "Orçamentação de obras",
+      "SINAPI",
+      "SICRO",
+      "BDI",
+      "Aditivos",
+      "Reequilíbrio econômico-financeiro",
+      "Fiscalização e medição de obras",
+      "Lei 14.133/2021"
+    ]
+  },
+  "raw_types": [
+    "BreadcrumbList",
+    "ContactPoint",
+    "Organization",
+    "Person",
+    "ProfilePage"
+  ],
+  "canonical_ids": {
+    "organization": "https://confenge.com.br/#organization",
+    "person": "https://confenge.com.br/#tiago"
+  },
+  "proof_limitation": "data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+  "claims": [
+    {
+      "id": "org-id",
+      "entity": "Organization",
+      "field": "@id",
+      "value": "https://confenge.com.br/#organization",
+      "status": "SELF_DECLARED",
+      "basis": "committed_specialist_jsonld",
+      "third_party_verified": false,
+      "notes": "Canonical Organization @id published on owned HTML. Not a third-party registry ID.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-id",
+      "entity": "Person",
+      "field": "@id",
+      "value": "https://confenge.com.br/#tiago",
+      "status": "SELF_DECLARED",
+      "basis": "committed_specialist_jsonld",
+      "third_party_verified": false,
+      "notes": "Canonical Person @id published on owned HTML. Not a third-party Person ID.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-credentials-alumni",
+      "entity": "Person",
+      "field": "credentials",
+      "value": "Universidade de São Paulo",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json self_attested_public + specialist JSON-LD alumniOf",
+      "third_party_verified": false,
+      "notes": "Engenharia Civil / EESC-USP is published owned copy. proof.json VERIFIED + perfil-publico-especialista is remapped to SELF_DECLARED. No diploma, CREA number, or third-party badge is in-repo.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-jobTitle",
+      "entity": "Person",
+      "field": "credentials",
+      "value": "Engenheiro Civil e consultor B2G",
+      "status": "SELF_DECLARED",
+      "basis": "specialist JSON-LD jobTitle + brand.json person.jobTitle",
+      "third_party_verified": false,
+      "notes": "Job title is institutional copy, not a licensed credential record.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-credential-crea",
+      "entity": "Person",
+      "field": "credentials",
+      "value": null,
+      "status": "NOT_PUBLIC",
+      "basis": "absent_from_public_proof",
+      "third_party_verified": false,
+      "notes": "CREA number, badge, rating and years-of-experience figures are not public proof records. Do not invent.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-hasCredential",
+      "entity": "Person",
+      "field": "credentials",
+      "value": null,
+      "status": "NOT_PUBLIC",
+      "basis": "absent_jsonld",
+      "third_party_verified": false,
+      "notes": "No schema.org hasCredential node is published. Inventing one is a defect.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-worksFor",
+      "entity": "Person",
+      "field": "worksFor",
+      "value": "https://confenge.com.br/#organization",
+      "status": "SELF_DECLARED",
+      "basis": "specialist JSON-LD worksFor",
+      "third_party_verified": false,
+      "notes": "Person worksFor the owned Organization @id. Founder relationship is self-declared on owned pages.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-knowsAbout",
+      "entity": "Person",
+      "field": "knowsAbout",
+      "value": [
+        "Licitações de obras públicas",
+        "Gestão de contratos públicos",
+        "Orçamentação de obras",
+        "SINAPI",
+        "SICRO",
+        "BDI",
+        "Aditivos",
+        "Reequilíbrio econômico-financeiro",
+        "Fiscalização e medição de obras",
+        "Lei 14.133/2021"
+      ],
+      "status": "SELF_DECLARED",
+      "basis": "specialist JSON-LD knowsAbout",
+      "third_party_verified": false,
+      "notes": "Topic list repeats published technical library subjects. Not a third-party expertise certification.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "org-sameAs",
+      "entity": "Organization",
+      "field": "sameAs",
+      "value": null,
+      "status": "UNKNOWN",
+      "basis": "absent_jsonld",
+      "third_party_verified": false,
+      "notes": "No public sameAs profiles are classified in-repo. Do not invent LinkedIn, CREA directory, or social URLs.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-sameAs",
+      "entity": "Person",
+      "field": "sameAs",
+      "value": null,
+      "status": "UNKNOWN",
+      "basis": "absent_jsonld",
+      "third_party_verified": false,
+      "notes": "No public Person sameAs profiles are classified. Do not invent.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "org-contact-email",
+      "entity": "Organization",
+      "field": "contact",
+      "value": "tiago.sasaki@confenge.com.br",
+      "status": "SELF_DECLARED",
+      "basis": "specialist JSON-LD + data/site/brand.json contact",
+      "third_party_verified": false,
+      "notes": "Public commercial email already on the specialist page. Extra personal mailboxes are NOT_PUBLIC.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "org-contact-telephone",
+      "entity": "Organization",
+      "field": "contact",
+      "value": "+55-48-98834-4559",
+      "status": "SELF_DECLARED",
+      "basis": "specialist JSON-LD + data/site/brand.json contact",
+      "third_party_verified": false,
+      "notes": "Public commercial phone (DDD 48) already on the specialist page. DDD is contact, not a storefront or city areaServed.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "org-contact-taxID",
+      "entity": "Organization",
+      "field": "contact",
+      "value": "52.407.089/0001-09",
+      "status": "SELF_DECLARED",
+      "basis": "specialist JSON-LD + footer CNPJ + brand.json",
+      "third_party_verified": false,
+      "notes": "CNPJ is published owned copy. No Receita Federal lookup is committed in this campaign.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-extra-email",
+      "entity": "Person",
+      "field": "contact",
+      "value": null,
+      "status": "NOT_PUBLIC",
+      "basis": "not_a_public_contact",
+      "third_party_verified": false,
+      "notes": "Personal mailboxes beyond tiago.sasaki@confenge.com.br must not appear in local-entity outputs.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "org-areaServed",
+      "entity": "Organization",
+      "field": "areaServed",
+      "value": {
+        "@type": "Country",
+        "name": "Brasil"
+      },
+      "status": "SELF_DECLARED",
+      "basis": "specialist JSON-LD areaServed Country Brasil + visible atendimento nacional",
+      "third_party_verified": false,
+      "notes": "National service-area is self-declared. No city AdministrativeArea is published. Do not invent a city as areaServed.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "org-areaServed-city",
+      "entity": "Organization",
+      "field": "areaServed",
+      "value": null,
+      "status": "UNKNOWN",
+      "basis": "absent_city_claim",
+      "third_party_verified": false,
+      "notes": "No city-level areaServed is published. DDD 48 is a phone prefix, not a verified local service area.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "org-streetAddress",
+      "entity": "Organization",
+      "field": "contact",
+      "value": null,
+      "status": "NOT_PUBLIC",
+      "basis": "no_public_street_address",
+      "third_party_verified": false,
+      "notes": "No public street NAP is published. Inventing PostalAddress / LocalBusiness is a defect.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "person-residential-nap",
+      "entity": "Person",
+      "field": "contact",
+      "value": null,
+      "status": "NOT_PUBLIC",
+      "basis": "pii",
+      "third_party_verified": false,
+      "notes": "Person residential NAP is NOT_PUBLIC and must not be serialized as a value.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-usp-civil",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Engenharia Civil pela USP (EESC-USP)",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=perfil-publico-especialista verification_class=self_attested_public",
+      "third_party_verified": false,
+      "notes": "Publicado em especialista/tiago-jun-sasaki e materiais institucionais. Sem diploma digital de terceiro anexado neste repositório. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-private-public",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Experiência na iniciativa privada e na Administração Pública",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=perfil-publico-especialista verification_class=self_attested_public",
+      "third_party_verified": false,
+      "notes": "Fato biográfico já publicado no site. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-fiscalizacao-gestao",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Visão de fiscalização, gestão e execução contratual",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=perfil-publico-especialista verification_class=self_attested_public",
+      "third_party_verified": false,
+      "notes": "Experiência em fiscalização e gestão de contratos públicos. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-nacional",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Atendimento nacional",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=operacao-remota-declarada verification_class=operational_declared",
+      "third_party_verified": false,
+      "notes": "Atuação remota nacional declarada no site e formulários. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-lei-14133",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Atuação com referência à Lei nº 14.133/2021",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=conteudo-tecnico-publicado verification_class=content_published",
+      "third_party_verified": false,
+      "notes": "Biblioteca técnica e páginas-pilar tratam a Lei 14.133. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-orcamentacao",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Experiência em orçamentação e referências oficiais (SINAPI/SICRO/BDI)",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=conteudo-tecnico-publicado verification_class=content_published",
+      "third_party_verified": false,
+      "notes": "Cluster auditoria-orcamento e guias técnicos publicados. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-tech-infra",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Tecnologia aplicada como infraestrutura de inteligência e evidência",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=operacao-interna verification_class=operational_declared",
+      "third_party_verified": false,
+      "notes": "Pode ser descrito como sistema proprietário de inteligência; não expor nome extra-cli ao público. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:claim-blocked-client-names",
+      "entity": "ProofRecord",
+      "field": "restricted",
+      "value": "Nomes de clientes e contratos",
+      "status": "NOT_PUBLIC",
+      "basis": "proof.json source=n/a verification_class=None",
+      "third_party_verified": false,
+      "notes": "Bloqueado sem autorização formal do cliente. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:claim-blocked-financial-results",
+      "entity": "ProofRecord",
+      "field": "restricted",
+      "value": "Percentuais de economia, vitória ou resultado financeiro",
+      "status": "UNKNOWN",
+      "basis": "proof.json source=n/a verification_class=None",
+      "third_party_verified": false,
+      "notes": "Exige evidência e aprovação editorial antes de qualquer publicação. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:claim-blocked-work-values",
+      "entity": "ProofRecord",
+      "field": "restricted",
+      "value": "Valores de obras e quantidade de portarias",
+      "status": "UNKNOWN",
+      "basis": "proof.json source=n/a verification_class=None",
+      "third_party_verified": false,
+      "notes": "Não publicar sem evidência verificável e autorização. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    }
+  ],
+  "claim_statuses": [
+    "NOT_PUBLIC",
+    "SELF_DECLARED",
+    "UNKNOWN"
+  ],
+  "graph_fields_present": [
+    "@id",
+    "areaServed",
+    "contact",
+    "credentials",
+    "knowsAbout",
+    "restricted",
+    "sameAs",
+    "worksFor"
+  ],
+  "self_attested_not_upgraded": true,
+  "third_party_verified_count": 0
+}
