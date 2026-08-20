@@ -1,0 +1,29 @@
+{
+  "schema": "data_desk_syndication_canary_v1",
+  "issue": 89,
+  "decision_state": "VALIDATE",
+  "status": "PREPARED_NOT_SENT",
+  "auto_send": false,
+  "sent": false,
+  "smtp_called": false,
+  "webhook_called": false,
+  "as_of": "2026-08-17T11:29:23.193694+02:00",
+  "owner": "Tiago Sasaki",
+  "canonical_host": "confenge.com.br",
+  "asset_id": "valor-tipico-contratos-pavimentacao-sc-citation-kit",
+  "public_page": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "html": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+  "canonical_url": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "citation_link_requirements": "Preserve CONFENGE permalink, method/as_of, n/missingness and limitations. Do not convert the integral nominal ticket into custo/km. Do not claim a national statistic.",
+  "visible_on_page": ["source", "as_of", "limit"],
+  "note": "Prepare-only canary pointing at the existing Data Desk public page. Nothing is sent. Manual distribution stays in #66.",
+  "targets": [
+    {
+      "id": "canary-sicepot-sc",
+      "audience_type": "associação",
+      "status": "PREPARED_NOT_SENT",
+      "outcome": "UNKNOWN",
+      "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
+    }
+  ]
+}
