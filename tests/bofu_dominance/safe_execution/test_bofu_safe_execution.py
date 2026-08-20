@@ -440,24 +440,31 @@ def test_existing_css_js_only():
 
 
 def test_git_diff_is_exclusive_area():
-    """On a single-PR branch this is exclusive-area. On convergence, frozen
-    experiment HTML still cannot change; other transplanted trees may.
+    """Experiment HTML stays frozen. Hash-bound BOFU pillars may change only
+    when frozen-spec snapshots match live HTML.
     """
+    from scripts.bofu_dominance.frozen_specs.constants import PILLARS
+    from scripts.bofu_dominance.frozen_specs.snapshot import snapshot_pillar
+    from scripts.bofu_dominance.frozen_specs.spec import load_spec
+
     names = git_diff_names()
-    frozen_html = (
+    experiment_html = (
         "ferramentas/diagnostico-defesa-margem/",
         "conteudos/chuva-prorrogacao-prazo-obra-publica/",
         "conteudos/sinapi-desonerado-nao-desonerado/",
-        "aditivos-obras-publicas/index.html",
-        "diagnostico-b2g-360/index.html",
-        "diagnostico-pre-licitacao/index.html",
-        "auditoria-orcamento-licitacao/index.html",
-        "reequilibrio-obras-publicas/index.html",
-        "medicoes-glosas-obras-publicas/index.html",
     )
-    for forbidden in frozen_html:
+    for forbidden in experiment_html:
         hits = [n for n in names if n == forbidden or n.startswith(forbidden)]
         assert not hits, f"frozen path changed: {hits}"
+    for pillar in PILLARS:
+        rel = pillar["html_rel"]
+        if rel not in names:
+            continue
+        live = snapshot_pillar(pillar["slug"], ROOT)
+        spec = load_spec(pillar["slug"])
+        assert spec["snapshot"]["content_sha256"] == live["content_sha256"], (
+            f"{rel} changed without frozen-spec recapture"
+        )
     for slug in PAGES:
         assert any(n.startswith(f"{slug}/") for n in names) or (ROOT / slug / "index.html").is_file()
 
