@@ -17,11 +17,13 @@ from scripts.market_answers import (
     ASSET_FAMILY,
     ASSET_ID,
     CANONICAL,
+    DEFAULT_LKG,
     PAGE_DIR,
     PRODUCER_STATUS_FIXTURE,
     ROUTE_FAMILY,
     SITE,
 )
+from scripts.market_answers.clock import parse_instant
 from scripts.market_answers.copy import first_fold_copy, geography_label, visitor_copy
 from scripts.market_answers.events import catalog
 from scripts.market_answers.gate import GateDecision, write_lkg
@@ -417,7 +419,13 @@ def write_page(
     html = render_html(record, payload, decision, site_root=root)
     path = directory / "index.html"
     path.write_text(html, encoding="utf-8")
-    as_of = _text(payload.get("as_of"))[:10] or "2026-08-17"
-    apply_market_answer_sitemap(root, indexable=decision.indexable, lastmod=as_of)
-    write_lkg(decision)
+    as_of = parse_instant(payload.get("as_of"))
+    evaluated = parse_instant(decision.evaluated_at)
+    lastmod = ""
+    if as_of is not None:
+        lastmod = as_of.date().isoformat()
+    elif evaluated is not None:
+        lastmod = evaluated.date().isoformat()
+    apply_market_answer_sitemap(root, indexable=decision.indexable, lastmod=lastmod)
+    write_lkg(decision, path=root / DEFAULT_LKG)
     return {"page": path}

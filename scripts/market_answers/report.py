@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import json
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
-from scripts.market_answers import STATUS_STEM
+from scripts.market_answers import FRESHNESS_CLASSES, STATUS_STEM
+from scripts.market_answers.clock import format_utc, resolve_now
 from scripts.market_answers.events import catalog
 from scripts.market_answers.gate import GateDecision
 
@@ -26,9 +27,12 @@ def build_status(
     payload: dict[str, Any],
     decision: GateDecision,
     written: dict[str, Path] | None = None,
+    now: datetime | None = None,
     today: date | None = None,
 ) -> dict[str, Any]:
-    today = today or date(2026, 8, 16)
+    instant = resolve_now(now=now, today=today)
+    evaluated_at = decision.evaluated_at or format_utc(instant)
+    freshness_class = decision.freshness_class if decision.freshness_class in FRESHNESS_CLASSES else "UNKNOWN"
     events = catalog(
         asset_version=str(record.get("version") or "1.0"),
         content_hash=decision.content_hash,
@@ -40,13 +44,16 @@ def build_status(
         "Do not claim country-wide coverage until extra-cli #302 closes the publishing-org denominator.",
         "Do not close web-cfg #84 until organic discovery → engagement → handoff → real outcome.",
         "Keep query/filter/drill-down URLs noindex. Do not mint a pSEO matrix.",
+        "STALE or UNKNOWN freshness is an operational incident: consume a renewed extra-cli payload plus matching approval, or keep noindex/off-sitemap.",
     ]
     return {
         "report": STATUS_STEM,
-        "as_of_report": today.isoformat(),
-        "generated_at": datetime(today.year, today.month, today.day, tzinfo=timezone.utc).strftime(
-            "%Y-%m-%dT00:00:00Z"
-        ),
+        "as_of_report": instant.date().isoformat(),
+        "generated_at": evaluated_at,
+        "freshness_class": freshness_class,
+        "evaluated_at": evaluated_at,
+        "age_seconds": decision.age_seconds,
+        "expires_at": decision.expires_at,
         "candidate_decision": {
             "question": record.get("question"),
             "question_id": decision.question_id,
@@ -75,6 +82,10 @@ def build_status(
             "indexable": decision.indexable,
             "conditions": decision.conditions,
             "reason_codes": list(decision.reason_codes),
+            "freshness_class": freshness_class,
+            "evaluated_at": evaluated_at,
+            "age_seconds": decision.age_seconds,
+            "expires_at": decision.expires_at,
         },
         "page_index_state": {
             "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
@@ -83,6 +94,11 @@ def build_status(
             "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
             "rendered": sorted(str(path) for path in (written or {}).values()),
             "fixture_marked": decision.is_fixture,
+            "indexable": decision.indexable,
+            "freshness_class": freshness_class,
+            "evaluated_at": evaluated_at,
+            "age_seconds": decision.age_seconds,
+            "expires_at": decision.expires_at,
         },
         "engagement_events_available": events,
         "blockers": blockers,
@@ -127,6 +143,10 @@ def render_markdown(status: dict[str, Any]) -> str:
 - indexable: `{gate.get('indexable')}`
 - robots: `{page.get('robots')}`
 - sitemap: `{page.get('sitemap')}`
+- freshness_class: `{status.get('freshness_class')}`
+- evaluated_at: `{status.get('evaluated_at')}`
+- age_seconds: `{status.get('age_seconds')}`
+- expires_at: `{status.get('expires_at')}`
 
 {cond_lines}
 
@@ -159,8 +179,8 @@ Do not close #84. Discovery/outcome remain residual after the SC index flip. ext
 """
 
 
-def write_status(status: dict[str, Any]) -> dict[str, Path]:
-    root = _root()
+def write_status(status: dict[str, Any], *, root: Path | None = None) -> dict[str, Path]:
+    root = root or _root()
     md = root / REPORT_MD
     js = root / REPORT_JSON
     md.parent.mkdir(parents=True, exist_ok=True)
