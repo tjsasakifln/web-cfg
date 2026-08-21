@@ -1147,3 +1147,30 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
     margin-bottom:32px;
   }
 }
+
+/* Compact shared mobile chrome: preserve a 44px target without letting the
+   brand row dominate the viewport. The menu top follows the sticky row. */
+@media (max-width:900px){
+  html{scroll-padding-top:72px}
+  .header-inner{min-height:64px}
+  .brand{width:176px}
+  .brand img{width:176px}
+  .mobile-nav{
+    top:64px;
+    max-height:calc(100dvh - 76px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+}
+
+@media (max-width:620px){
+  html{scroll-padding-top:68px}
+  .header-inner{min-height:60px}
+  .brand,.brand img{width:160px}
+  .mobile-nav{top:60px;max-height:calc(100dvh - 70px)}
+  .pillar-docs li:not(:has(.icon)){
+    display:block;
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+}

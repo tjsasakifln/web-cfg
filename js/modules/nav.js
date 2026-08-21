@@ -11,7 +11,25 @@
     if (toggle && menu) {
       toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), menu.querySelector('a')?.focus()));
       menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
-      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenu(true); });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeMenu(true);
+          return;
+        }
+        if (event.key !== 'Tab' || toggle.getAttribute('aria-expanded') !== 'true') return;
+        const focusable = [toggle, ...menu.querySelectorAll('a[href], button:not([disabled])')]
+          .filter((element) => element.offsetParent !== null);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
       document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
