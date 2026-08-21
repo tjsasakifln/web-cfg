@@ -20,7 +20,8 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
 def test_home_contract_case_has_provenance_and_no_client_claim():
     html = HOME.read_text(encoding="utf-8")
 
-    assert "pncp.gov.br/api/pncp/v1/orgaos/81648859000103/contratos/2026/45" in html
+    assert "pncp.gov.br/app/contratos/81648859000103/2026/45" in html
+    assert "pncp.gov.br/api/pncp/" not in html
     assert "Amostra verificada em 20/08/2026" in html
     assert "não são cases de clientes" in html
     assert "nem indicam problema nesses contratos" in html
