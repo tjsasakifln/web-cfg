@@ -459,6 +459,36 @@ def test_pillar_evidence_contrast_on_navy():
         assert 'class="pillar-evidence"' in html, f"{path.relative_to(ROOT)} missing pillar-evidence"
 
 
+def test_offer_context_component_css():
+    """Offer framing is its own component; .hero-proof stays a credential list."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    compact = re.sub(r"\s+", "", css)
+    assert ".offer-context{" in compact
+    assert ".offer-context-item{" in compact
+    assert ".offer-contextdt{" in compact
+    assert ".offer-contextdd{" in compact
+    assert "repeat(3,minmax(0,1fr))" in compact
+    # dt is .875rem (14px), not .75rem, to keep functional text ≥ 14px.
+    assert re.search(r"\.offer-context dt\{[^}]*font-size:\.875rem", css)
+    assert re.search(r"\.offer-context dd\{[^}]*font-size:\.95rem", css)
+    assert ".hero-proofli{" in compact or re.search(r"\.hero-proof li\{", css)
+    for path in (
+        ROOT / "diretoria-b2g" / "index.html",
+        ROOT / "diagnostico-b2g-expansao" / "index.html",
+        ROOT / "bid-room-licitacoes-obras" / "index.html",
+        ROOT / "acompanhamento-contratos-obras" / "index.html",
+        ROOT / "defesa-margem-contratos-publicos" / "index.html",
+        ROOT / "defesa-tecnica-contratos-publicos" / "index.html",
+        ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
+    ):
+        html = path.read_text(encoding="utf-8")
+        assert 'class="offer-context"' in html, f"{path.relative_to(ROOT)} missing offer-context"
+        assert not re.search(r"<dl\b[^>]*\bhero-proof\b", html), f"{path.relative_to(ROOT)} still has dl.hero-proof"
+        assert "<dt>O que resolvemos</dt>" in html, f"{path.relative_to(ROOT)} missing visitor label"
+        assert "<dt>Para quem é</dt>" in html, f"{path.relative_to(ROOT)} missing visitor label"
+        assert "<dt>Quando faz sentido</dt>" in html, f"{path.relative_to(ROOT)} missing visitor label"
+
+
 def test_thankyou_specialist_cta_family():
     for name in ("obrigado.html", "obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         path = ROOT / name

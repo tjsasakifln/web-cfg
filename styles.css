@@ -1000,3 +1000,57 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
   .contact-grid > .contact-form,
   #formulario-contato{order:-1}
 }
+
+/* Offer framing for visitors. Never reuse .hero-proof (credentials list). */
+.offer-context{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px;
+  margin:32px 0;
+  padding:28px 0;
+  max-width:100%;
+  min-width:0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.offer-context-item{
+  display:grid;
+  align-content:start;
+  min-width:0;
+  max-width:100%;
+}
+.offer-context dt,
+.offer-context dd{
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:break-word;
+}
+.offer-context dt{
+  margin:0 0 8px;
+  color:var(--green-700);
+  font-size:.875rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.offer-context dd{
+  margin:0;
+  color:var(--text);
+  font-size:.95rem;
+  line-height:1.65;
+}
+.content-hero-grid > *{
+  min-width:0;
+  max-width:100%;
+}
+@media (min-width:761px){
+  .offer-context:has(> .offer-context-item:nth-child(4)){
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media (max-width:760px){
+  .offer-context{
+    grid-template-columns:1fr;
+    gap:22px;
+  }
+}

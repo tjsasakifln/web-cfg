@@ -239,6 +239,7 @@ export const SUITE_GRAPH = Object.freeze({
   "test:copy": {
     producers: [
       "scripts/site/test_copy_gates.py",
+      "scripts/site/test_public_internal_marketing_labels.py",
       "scripts/site/scrub_em_dashes.py",
       "scripts/site/lint_editorial_copy.py",
       "scripts/site/test_scrub_em_dashes.py",

@@ -46,7 +46,7 @@ JOB_TOKENS = {
         "equipe ilimitada",
     ),
     "expansao": (
-        "one-off",
+        "pontual",
         "cfg-diag-exp-v1",
         "expansão",
         "não é o diagnóstico b2g 360",

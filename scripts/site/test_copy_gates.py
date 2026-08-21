@@ -215,6 +215,33 @@ PUBLIC_BACKSTAGE_PATTERNS = (
     re.compile(r"\blineage\b", re.I),
 )
 
+# Internal offer taxonomy must never ship as visitor chrome.
+# jobTitle in JSON-LD is out of scope; these patterns target dt/aria markup.
+VISITOR_CONTEXT_BANNED = (
+    re.compile(r"<dl\b[^>]*\bclass=['\"][^'\"]*\bhero-proof\b", re.I),
+    re.compile(r"<dt>\s*Job\s*</dt>", re.I),
+    re.compile(r"<dt>\s*ICP\s*</dt>", re.I),
+    re.compile(r"<dt>\s*Trigger\s*</dt>", re.I),
+    re.compile(r"""aria-label=['"]Job,\s*ICP e trigger['"]""", re.I),
+)
+
+# Authenticated / internal HTML trees. Not an allowlist for marketing pages.
+_VISITOR_HTML_SKIP_PARTS = {
+    "docs",
+    "scripts",
+    "tests",
+    "data",
+    "seo",
+    "netlify",
+    "node_modules",
+    "_site",
+    ".git",
+    ".worktrees",
+    ".pytest_cache",
+    "supabase",
+    "ops",
+}
+
 
 def _public_html_surfaces() -> list[Path]:
     """Indexable/reachable public HTML roots (not docs/ops/seo)."""
@@ -252,6 +279,7 @@ def _public_html_surfaces() -> list[Path]:
         ROOT / "diagnostico-pre-licitacao",
         ROOT / "medicoes-glosas-obras-publicas",
         ROOT / "reequilibrio-obras-publicas",
+        ROOT / "diagnostico-b2g-expansao",
     ]
     out: list[Path] = []
     for r in roots:
@@ -260,6 +288,50 @@ def _public_html_surfaces() -> list[Path]:
         elif r.is_dir():
             out.extend(sorted(r.rglob("*.html")))
     return out
+
+
+def _visitor_facing_html_files() -> list[Path]:
+    """All shipped visitor HTML. A new public offer page is in scope by default."""
+    out: list[Path] = []
+    for path in ROOT.rglob("*.html"):
+        rel_parts = path.relative_to(ROOT).parts
+        if any(part in _VISITOR_HTML_SKIP_PARTS for part in rel_parts):
+            continue
+        out.append(path)
+    return sorted(out)
+
+
+def test_visitor_offer_context_has_no_internal_labels():
+    """No Job/ICP/Trigger chrome and no dl.hero-proof on visitor HTML."""
+    failures: list[str] = []
+    scanned = 0
+    for path in _visitor_facing_html_files():
+        scanned += 1
+        text = path.read_text(encoding="utf-8")
+        vis = re.sub(r"<script[\s\S]*?</script>", " ", text, flags=re.I)
+        vis = re.sub(r"<style[\s\S]*?</style>", " ", vis, flags=re.I)
+        for cre in VISITOR_CONTEXT_BANNED:
+            if cre.search(vis):
+                failures.append(f"{path.relative_to(ROOT)}: {cre.pattern}")
+    assert scanned >= 20, f"visitor HTML scan too narrow: {scanned}"
+    assert not failures, failures
+
+
+def test_hero_proof_credentials_list_still_present():
+    """ul.hero-proof remains the credentials component; dl.hero-proof is gone."""
+    diretoria = (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert re.search(r"<ul\b[^>]*\bhero-proof\b", diretoria), "diretoria credentials ul.hero-proof missing"
+    assert re.search(r"<ul\b[^>]*\bhero-proof\b", home), "home credentials ul.hero-proof missing"
+    assert "Credenciais e posicionamento" in diretoria
+    assert not re.search(r"<dl\b[^>]*\bhero-proof\b", diretoria)
+    assert 'class="offer-context"' in diretoria
+    assert "<dt>O que resolvemos</dt>" in diretoria
+    assert "<dt>Para quem é</dt>" in diretoria
+    assert "<dt>Quando faz sentido</dt>" in diretoria
+    assert "<dt>Job</dt>" not in diretoria
+    assert "<dt>ICP</dt>" not in diretoria
+    assert "<dt>Trigger</dt>" not in diretoria
 
 
 def test_public_backstage_language_absent():
@@ -382,6 +454,8 @@ if __name__ == "__main__":
         test_concordance_and_forbidden_microcopy,
         test_public_surfaces_have_no_prose_em_dashes,
         test_whatsapp_float_in_landmark,
+        test_visitor_offer_context_has_no_internal_labels,
+        test_hero_proof_credentials_list_still_present,
         test_public_backstage_language_absent,
         test_ferramentas_eyebrow_client_facing,
         test_visitor_copy_rejects_internal_strategy_phrases,
