@@ -11,10 +11,10 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
 
     assert "Exemplo ilustrativo" not in html
     assert "Ordem de serviço altera escopo sem termo" not in html
-    assert "Contrato real · PNCP" in html
+    assert "Contrato real no PNCP" in html
     assert "R$ 18.293.629,80" in html
     assert "900 dias" in html
-    assert "R$ 182,9 mil dependem de prova" in html
+    assert "Quando 1% vale R$ 182,9 mil, cada registro importa" in html
 
 
 def test_home_contract_case_has_provenance_and_no_client_claim():
@@ -22,9 +22,9 @@ def test_home_contract_case_has_provenance_and_no_client_claim():
 
     assert "pncp.gov.br/app/contratos/81648859000103/2026/45" in html
     assert "pncp.gov.br/api/pncp/" not in html
-    assert "Amostra verificada em 20/08/2026" in html
-    assert "não são cases de clientes" in html
-    assert "nem indicam problema nesses contratos" in html
+    assert "Dados conferidos em 20/08/2026" in html
+    assert "não são clientes da CONFENGE" in html
+    assert "não indicam falha nos contratos" in html
 
 
 def test_home_contract_case_keeps_one_primary_hero_cta():

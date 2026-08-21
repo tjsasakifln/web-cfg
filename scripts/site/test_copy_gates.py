@@ -144,8 +144,8 @@ def test_public_surfaces_have_no_prose_em_dashes():
     assert "perfil da empresa (capacidade, acervo" in radar
     assert "calibrar o recorte, não assinar" in radar
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Premissas e decisões ficam registradas" in home
-    assert "confrontada posteriormente com o resultado" in home or "confrontada depois com o resultado" in home
+    assert "Cada decisão registra o motivo, a prova e o responsável" in home
+    assert "o resultado volta para a mesa e melhora a próxima escolha" in home
     # Journey confirmations exist
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         p = ROOT / name
