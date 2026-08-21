@@ -185,10 +185,13 @@ async function main() {
         ctaTop: r.top,
         ctaInFirstScreen: r.top < vh && r.bottom > 0,
         visualDisplay: vis,
+        visualIsEvidence: Boolean(visual?.matches("[data-evidence-selector]")),
       };
     });
     if (!mob.ctaInFirstScreen) throw new Error(`CTA not in first screen: top=${mob.ctaTop}`);
-    if (mob.visualDisplay !== "none") throw new Error(`hero visual still shown on mobile: ${mob.visualDisplay}`);
+    if (mob.visualDisplay !== "none" && !mob.visualIsEvidence) {
+      throw new Error(`non-evidence hero visual still shown on mobile: ${mob.visualDisplay}`);
+    }
     ok("mobile_hero_cta_without_decor_panel");
   } catch (e) {
     fail("mobile_hero_cta_without_decor_panel", e.message || e);
@@ -477,9 +480,16 @@ async function main() {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     for (const j of ["contrato", "edital", "operacao"]) {
+      await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
       await page.click(`[data-set-journey="${j}"]`);
-      const val = await page.$eval("#jornada-hidden", (el) => el.value);
-      if (val !== j) throw new Error(`data-set-journey=${j} left hidden=${val}`);
+      const state = await page.evaluate(() => ({
+        journey: document.querySelector("#jornada-hidden")?.value || "",
+        stageJourney: document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey || "",
+        action: document.querySelector("#formulario-contato")?.getAttribute("action") || "",
+      }));
+      if (state.journey !== j) throw new Error(`data-set-journey=${j} left hidden=${state.journey}`);
+      if (state.stageJourney !== j) throw new Error(`data-set-journey=${j} left stage=${state.stageJourney}`);
+      if (!state.action.includes(j)) throw new Error(`data-set-journey=${j} left action=${state.action}`);
     }
     ok("journey_cta_binds_form");
   } catch (e) {
