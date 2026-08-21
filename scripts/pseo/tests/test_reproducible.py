@@ -366,6 +366,7 @@ class TestCliAuditEntrypoint(unittest.TestCase):
             _write(site / "styles.css", "body{}\n")
             _write(site / "script.js", "console.log(1)\n")
             _json(site / ".well-known" / "pseo-build.json", {"schema_version": "1.1.0"})
+            _json(site / ".well-known" / "css-assets.json", {"schema_version": "1.0.0", "files": {}})
             env = os.environ.copy()
             env.pop("PYTHONPATH", None)
             proc = subprocess.run(

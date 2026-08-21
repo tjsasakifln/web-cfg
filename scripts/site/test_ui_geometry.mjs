@@ -856,6 +856,89 @@ async function main() {
     fail("offer_context_geometry", e.message || e);
   }
 
+  // offer-context: CSS actually applied (computed styles), not file substring
+  try {
+    const threeItem = "/diretoria-b2g/";
+    const fourItem = "/defesa-margem-contratos-publicos/";
+    const measure = async (path, w, h) => {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      return page.evaluate((vpW) => {
+        const issues = [];
+        const ctx = document.querySelector(".offer-context");
+        if (!ctx) return ["missing offer-context"];
+        const cs = getComputedStyle(ctx);
+        const items = [...document.querySelectorAll(".offer-context-item")];
+        const dds = [...ctx.querySelectorAll("dd")];
+        const colTracks = (cs.gridTemplateColumns || "")
+          .trim()
+          .split(/\s+(?![^()]*\))/)
+          .filter(Boolean);
+        const display = cs.display;
+        if (vpW >= 1440) {
+          if (display !== "grid") issues.push(`display:${display}`);
+          if (items.length >= 3 && colTracks.length < 3) {
+            issues.push(`cols:${colTracks.length}:${cs.gridTemplateColumns}`);
+          }
+        }
+        if (vpW <= 390) {
+          if (display !== "grid") issues.push(`display:${display}`);
+          if (colTracks.length !== 1) issues.push(`mobile-cols:${colTracks.length}`);
+        }
+        for (const dd of dds) {
+          const ml = getComputedStyle(dd).marginLeft;
+          if (ml !== "0px") issues.push(`dd-margin-left:${ml}`);
+        }
+        for (const item of items) {
+          const dt = item.querySelector("dt");
+          const dd = item.querySelector("dd");
+          if (!dt || !dd) continue;
+          const rdt = dt.getBoundingClientRect();
+          const rdd = dd.getBoundingClientRect();
+          const pairDx = Math.abs(rdt.left - rdd.left);
+          if (pairDx > 2) issues.push(`dt-dd-misalign:${Math.round(pairDx * 10) / 10}`);
+        }
+        if (vpW >= 1440 && items.length >= 4) {
+          const r1 = items[0].getBoundingClientRect();
+          const r4 = items[3].getBoundingClientRect();
+          if (!(r4.top > r1.bottom - 2)) issues.push("fourth-not-conclusion-strip");
+        }
+        return {
+          issues,
+          display,
+          colTracks: colTracks.length,
+          ddMarginLeft: dds[0] ? getComputedStyle(dds[0]).marginLeft : null,
+          itemCount: items.length,
+        };
+      }, w);
+    };
+    const desktop3 = await measure(threeItem, 1440, 900);
+    const desktop4 = await measure(fourItem, 1440, 900);
+    const mobile3 = await measure(threeItem, 390, 844);
+    const mobile4 = await measure(fourItem, 390, 844);
+    const all = [
+      ["diretoria@1440", desktop3],
+      ["defesa-margem@1440", desktop4],
+      ["diretoria@390", mobile3],
+      ["defesa-margem@390", mobile4],
+    ];
+    const badComputed = all
+      .filter(([, r]) => r.issues && r.issues.length)
+      .map(([name, r]) => `${name}:${r.issues.join(",")}`);
+    if (badComputed.length) throw new Error(badComputed.join(" | "));
+    if (desktop3.display !== "grid" || desktop3.colTracks < 3) {
+      throw new Error(`desktop3 display=${desktop3.display} cols=${desktop3.colTracks}`);
+    }
+    if (desktop3.ddMarginLeft !== "0px") {
+      throw new Error(`desktop3 dd.marginLeft=${desktop3.ddMarginLeft}`);
+    }
+    ok(
+      `offer_context_computed (3col=${desktop3.colTracks} ddml=${desktop3.ddMarginLeft} 4items=${desktop4.itemCount})`
+    );
+  } catch (e) {
+    fail("offer_context_computed", e.message || e);
+  }
+
   await browser.close();
   if (ownServer && server) server.close();
   if (failed) {

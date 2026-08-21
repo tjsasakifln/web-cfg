@@ -470,7 +470,15 @@ def test_offer_context_component_css():
     assert "repeat(3,minmax(0,1fr))" in compact
     # dt is .875rem (14px), not .75rem, to keep functional text ≥ 14px.
     assert re.search(r"\.offer-context dt\{[^}]*font-size:\.875rem", css)
-    assert re.search(r"\.offer-context dd\{[^}]*font-size:\.95rem", css)
+    assert re.search(r"\.offer-context dd\{[^}]*font-size:1rem", css)
+    assert re.search(r"\.offer-context dd\{[^}]*margin-inline-start:0", css)
+    assert "decimal-leading-zero" in css
+    assert "counter-reset:offer-ctx" in compact
+    # Four items stay a 3-column band + conclusion strip — not an automatic 2×2.
+    assert not re.search(
+        r"\.offer-context:has\(>\s*\.offer-context-item:nth-child\(4\)\)\{[^}]*repeat\(2,",
+        css,
+    )
     assert ".hero-proofli{" in compact or re.search(r"\.hero-proof li\{", css)
     for path in (
         ROOT / "diretoria-b2g" / "index.html",

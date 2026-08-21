@@ -119,6 +119,28 @@ ok("js_200", js.status === 200 && js.body.length > 1000, `js status=${js.status}
 ok("css_has_contact_float", css.body.includes("contact-float"), "contact-float styles missing");
 ok("css_has_whatsapp_float", css.body.includes("whatsapp-float"), "whatsapp-float styles missing");
 
+const offerPage = await fetchText("/diretoria-b2g/");
+const sheetHrefs = [...offerPage.body.matchAll(/<link[^>]+rel=["']stylesheet["'][^>]*>/gi)]
+  .map((m) => {
+    const href = m[0].match(/href=["']([^"']+)["']/i);
+    return href ? href[1] : "";
+  })
+  .filter(Boolean);
+const fingerprinted = sheetHrefs.filter((h) => /\/assets\/css\/styles\.[a-f0-9]{12}\.css(\?|$)/i.test(h));
+ok(
+  "offer_html_stylesheet_fingerprinted",
+  fingerprinted.length >= 1,
+  `hrefs=${sheetHrefs.join(",")}`
+);
+if (fingerprinted.length) {
+  const linked = await fetchText(fingerprinted[0]);
+  ok(
+    "linked_css_has_offer_context",
+    linked.status === 200 && linked.body.includes(".offer-context{") && linked.body.includes("repeat(3,minmax(0,1fr))"),
+    `status=${linked.status} href=${fingerprinted[0]}`
+  );
+}
+
 const localCss = localArtifact("styles.css");
 const localJs = localArtifact("script.js");
 if (localCss) {
