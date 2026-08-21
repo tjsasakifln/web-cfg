@@ -273,10 +273,12 @@ def test_prefers_reduced_motion_declared():
 def test_operating_flow_has_sitewide_fallback():
     """The visitor flow must not regress to raw browser bullets on stale offer CSS."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    offers_css = (ROOT / "styles-offers.css").read_text(encoding="utf-8")
     html = (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
     assert ".operating-flow{" in css
     assert ".operating-flow{display:grid;gap:0;margin:0;padding:0;list-style:none}" in css
     assert "#operating-system-title{scroll-margin-top:" in css
+    assert ".operating-flow" not in offers_css
     assert '<ol class="operating-flow"' in html
 
 
