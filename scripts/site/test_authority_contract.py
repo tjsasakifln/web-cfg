@@ -614,6 +614,21 @@ def test_fail_closed_breadcrumb_and_dataset_must_match_visible():
     assert check_schema_mirrors_visible(honest) == []
 
 
+def test_margin_defense_pillar_shows_source_as_of_limitation():
+    """#60 VALIDATE canary: the public pillar keeps visible provenance tokens."""
+    path = ROOT / "defesa-margem-contratos-publicos" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    assert path.is_file()
+    assert "authority-method" in html
+    assert 'id="proveniencia-vertical"' in html
+    lower = html.lower()
+    assert "source" in lower
+    assert "as_of" in lower
+    assert "limitation" in lower
+    assert "unknown" in lower
+    assert "smartlic" not in lower
+
+
 def test_family_audit_fails_closed_on_unclassified_and_covers_matrix():
     audit = audit_public_families()
     assert audit["matrix_errors"] == []
