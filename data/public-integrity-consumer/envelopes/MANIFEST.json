@@ -1,0 +1,289 @@
+{
+  "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
+  "claimed_live": false,
+  "consumed_schema": "public-read-integrity/1.0",
+  "consumer_issue": "web-cfg#156",
+  "envelopes": [
+    {
+      "aggregate_state": "NO_MATCH_CONFIRMED",
+      "ceis_status": "NO_MATCH_CONFIRMED",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "f205866db10fdfd0a2e1397ee01dbd34c9998aff16f0e0bf14bb546477b67c31",
+      "coverage_ceis": true,
+      "coverage_cnep": true,
+      "failure_fixture": false,
+      "file": "empty-complete.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "empty-complete.json",
+      "reason_codes": [
+        "uncontracted_source_ignored",
+        "missing_value_not_negative"
+      ],
+      "record_count": 0
+    },
+    {
+      "aggregate_state": "MATCHES_FOUND",
+      "ceis_status": "MATCHES_FOUND",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "ae379a96379270fedc28360bceb0e68aa0b2a024774379b3766035323c3f4066",
+      "coverage_ceis": true,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "ceis-match.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "matches.json",
+      "reason_codes": [
+        "duplicate_official_id",
+        "duplicate_normalized_fingerprint",
+        "uncontracted_source_ignored"
+      ],
+      "record_count": 1
+    },
+    {
+      "aggregate_state": "MATCHES_FOUND",
+      "ceis_status": "NO_MATCH_CONFIRMED",
+      "cnep_status": "MATCHES_FOUND",
+      "content_hash": "8e276a5e3f9c1492b8f7f9c4f2dcfc0f3dd5bd4347c535c3516fded23c953596",
+      "coverage_ceis": true,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "cnep-match.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "cnep-occurrence.json",
+      "reason_codes": [
+        "uncontracted_source_ignored"
+      ],
+      "record_count": 1
+    },
+    {
+      "aggregate_state": "MATCHES_FOUND",
+      "ceis_status": "MATCHES_FOUND",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "39d61913c5d33fb2855aadcd1d2435ccf9e24d451ca8e51676ac126bba93a850",
+      "coverage_ceis": true,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "multi-page.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "multi-page-ceis.json",
+      "reason_codes": [
+        "uncontracted_source_ignored"
+      ],
+      "record_count": 2
+    },
+    {
+      "aggregate_state": "PARTIAL",
+      "ceis_status": "UNKNOWN",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "84d4e44f057894c622e7fc847a91ff5966899ef62fad1dc04bd75053ad278fa3",
+      "coverage_ceis": false,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "timeout.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "timeout.json",
+      "reason_codes": [
+        "timeout",
+        "pagination_incomplete",
+        "uncontracted_source_ignored",
+        "coverage_incomplete"
+      ],
+      "record_count": 0
+    },
+    {
+      "aggregate_state": "PARTIAL",
+      "ceis_status": "UNKNOWN",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "1e8f992f1243799f849778a66f70a9e756bab308fb51803f7de1d1ec2ba84108",
+      "coverage_ceis": false,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "rate-limit-429.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "rate-limit-429.json",
+      "reason_codes": [
+        "rate_limit_exhausted",
+        "retry_exhausted",
+        "pagination_incomplete",
+        "uncontracted_source_ignored",
+        "coverage_incomplete"
+      ],
+      "record_count": 0
+    },
+    {
+      "aggregate_state": "PARTIAL",
+      "ceis_status": "UNKNOWN",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "679bc75fbda1792c50c5d929123abbec7633bc84f358ee70eadc9453c8fb6816",
+      "coverage_ceis": false,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "http-5xx.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "http-5xx.json",
+      "reason_codes": [
+        "http_5xx",
+        "retry_exhausted",
+        "pagination_incomplete",
+        "uncontracted_source_ignored",
+        "coverage_incomplete"
+      ],
+      "record_count": 0
+    },
+    {
+      "aggregate_state": "PARTIAL",
+      "ceis_status": "UNKNOWN",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "679468aa9683c02ec6be1ae0d037a97da4b2351ddb98bdacfb6b55ee31ddd01e",
+      "coverage_ceis": false,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "schema-drift.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "schema-drift.json",
+      "reason_codes": [
+        "schema_drift",
+        "pagination_incomplete",
+        "uncontracted_source_ignored",
+        "coverage_incomplete"
+      ],
+      "record_count": 0
+    },
+    {
+      "aggregate_state": "PARTIAL",
+      "ceis_status": "PARTIAL",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "dd578e5623b8c2c781bc15c34b878814fc92ca6cd55edff233cf83045efb2be9",
+      "coverage_ceis": false,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "parse-partial.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "parse-incomplete.json",
+      "reason_codes": [
+        "parse_incomplete",
+        "coverage_incomplete",
+        "pagination_incomplete",
+        "uncontracted_source_ignored"
+      ],
+      "record_count": 1
+    },
+    {
+      "aggregate_state": "PARTIAL",
+      "ceis_status": "PARTIAL",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "21703d0a02b9c21902d1e678f070efbadfe804eea5b540156e4c8039e1231a83",
+      "coverage_ceis": false,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "incomplete-pagination.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "incomplete-pagination.json",
+      "reason_codes": [
+        "timeout",
+        "pagination_incomplete",
+        "uncontracted_source_ignored",
+        "coverage_incomplete"
+      ],
+      "record_count": 1
+    },
+    {
+      "aggregate_state": "PARTIAL",
+      "ceis_status": "MATCHES_FOUND",
+      "cnep_status": "UNKNOWN",
+      "content_hash": "df16da4b8b72963e80b3ae1bb42e8af351653148cb8a1d468a0c7335ae0aa311",
+      "coverage_ceis": true,
+      "coverage_cnep": false,
+      "failure_fixture": true,
+      "file": "source-degraded.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "source-degraded.json",
+      "reason_codes": [
+        "timeout",
+        "pagination_incomplete",
+        "uncontracted_source_ignored",
+        "coverage_incomplete"
+      ],
+      "record_count": 1
+    },
+    {
+      "aggregate_state": "UNKNOWN",
+      "ceis_status": "UNKNOWN",
+      "cnep_status": "UNKNOWN",
+      "content_hash": "57f026be867ad8553133526d4d093a2f6aaa7ee8efcf5390f0eb4bc4910c8f4f",
+      "coverage_ceis": false,
+      "coverage_cnep": false,
+      "failure_fixture": true,
+      "file": "stale-expired.json",
+      "freshness_status": "expired",
+      "is_current": false,
+      "producer_fixture": "stale-cache.json",
+      "reason_codes": [
+        "source_unavailable",
+        "pagination_incomplete",
+        "uncontracted_source_ignored",
+        "coverage_incomplete",
+        "cache_expired",
+        "stale_cache",
+        "not_current"
+      ],
+      "record_count": 0
+    },
+    {
+      "aggregate_state": "UNKNOWN",
+      "ceis_status": "UNKNOWN",
+      "cnep_status": "UNKNOWN",
+      "content_hash": "64a743082b02b1eeacc2304bb3531d17aa5c90d5fd443aed17bc0f311f9b0693",
+      "coverage_ceis": false,
+      "coverage_cnep": false,
+      "failure_fixture": true,
+      "file": "invalid-cnpj.json",
+      "freshness_status": "expired",
+      "is_current": false,
+      "producer_fixture": "empty-complete.json + invalid cnpj",
+      "reason_codes": [
+        "invalid_cnpj",
+        "coverage_incomplete",
+        "uncontracted_source_ignored",
+        "invalid_cnpj",
+        "coverage_incomplete"
+      ],
+      "record_count": 0
+    },
+    {
+      "aggregate_state": "NO_MATCH_CONFIRMED",
+      "ceis_status": "NO_MATCH_CONFIRMED",
+      "cnep_status": "NO_MATCH_CONFIRMED",
+      "content_hash": "da39e4537c8c106b766b33a25e4e59d59d84cd3c10f1324ca9bd56c6a9767f7c",
+      "coverage_ceis": true,
+      "coverage_cnep": true,
+      "failure_fixture": true,
+      "file": "coverage-lie-incomplete-pages.json",
+      "freshness_status": "current",
+      "is_current": true,
+      "producer_fixture": "consumer mutation: coverage_complete true with pages_fetched < pages_expected",
+      "reason_codes": [
+        "pagination_incomplete",
+        "coverage_incomplete"
+      ],
+      "record_count": 0
+    }
+  ],
+  "not_live": true,
+  "producer_issue": "extra-cli#436",
+  "producer_sha": "8e15f94fb641a79954a8c909417bb9df18c0d491",
+  "redaction": "[REDACTED_CNPJ]",
+  "schema": "public-read-integrity-consumer-envelopes/1.0",
+  "select_only": true
+}

@@ -1,0 +1,89 @@
+{
+  "aggregate_state": "PARTIAL",
+  "as_of": "2026-08-01T12:00:00+00:00",
+  "checked_at": "2026-08-01T12:00:00+00:00",
+  "content_hash": "dd578e5623b8c2c781bc15c34b878814fc92ca6cd55edff233cf83045efb2be9",
+  "contracted_sources": [
+    "CEIS",
+    "CNEP"
+  ],
+  "expires_at": "2026-08-02T12:00:00+00:00",
+  "freshness": {
+    "is_current": true,
+    "policy": "public-read-integrity-ttl/1.0",
+    "status": "current",
+    "ttl_seconds": 86400
+  },
+  "limitations": [
+    "Consulta limitada aos cadastros CEIS e CNEP do Portal da Transparencia.",
+    "Cadastros nao contratados nao entram na conclusao.",
+    "Valor ausente nao e fato negativo.",
+    "Ocorrencias observadas nao constituem conclusao juridica, certificacao ou recomendacao."
+  ],
+  "not_legal_conclusion": true,
+  "producer_version": "public-read-integrity-producer/1.0",
+  "queried_cnpj": "[REDACTED_CNPJ]",
+  "query_id": "pri1-052f287529fb3053",
+  "reason_codes": [
+    "parse_incomplete",
+    "coverage_incomplete",
+    "pagination_incomplete",
+    "uncontracted_source_ignored"
+  ],
+  "records": [
+    {
+      "authority": "Orgao Sancionador Exemplo",
+      "captured_at": "2026-08-01T12:00:00+00:00",
+      "end_date": null,
+      "observed_status": "Impedimento de licitar e contratar",
+      "official_id": "9001",
+      "original": {},
+      "record_type": "Impedimento de licitar e contratar",
+      "source_id": "CEIS",
+      "source_url": "https://portaldatransparencia.gov.br/sancoes/ceis",
+      "start_date": "2024-03-01"
+    }
+  ],
+  "schema": "public-read-integrity/1.0",
+  "schema_version": "public-read-integrity/1.0",
+  "sources": {
+    "CEIS": {
+      "api_url": "https://api.portaldatransparencia.gov.br/api-de-dados/ceis",
+      "as_of": "2026-08-01T12:00:00+00:00",
+      "attempts": 1,
+      "authority": "Controladoria-Geral da Uniao (CGU) / Portal da Transparencia",
+      "coverage_complete": false,
+      "deduped_count": 1,
+      "error_class": "parse_incomplete",
+      "normalized_count": 1,
+      "official_url": "https://portaldatransparencia.gov.br/sancoes/ceis",
+      "pages_expected": null,
+      "pages_fetched": 1,
+      "raw_count": 2,
+      "reason_codes": [
+        "parse_incomplete",
+        "coverage_incomplete",
+        "pagination_incomplete"
+      ],
+      "source_id": "CEIS",
+      "status": "PARTIAL"
+    },
+    "CNEP": {
+      "api_url": "https://api.portaldatransparencia.gov.br/api-de-dados/cnep",
+      "as_of": "2026-08-01T12:00:00+00:00",
+      "attempts": 1,
+      "authority": "Controladoria-Geral da Uniao (CGU) / Portal da Transparencia",
+      "coverage_complete": true,
+      "deduped_count": 0,
+      "error_class": null,
+      "normalized_count": 0,
+      "official_url": "https://portaldatransparencia.gov.br/sancoes/cnep",
+      "pages_expected": 1,
+      "pages_fetched": 1,
+      "raw_count": 0,
+      "reason_codes": [],
+      "source_id": "CNEP",
+      "status": "NO_MATCH_CONFIRMED"
+    }
+  }
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Resultado da consulta preliminar | CONFENGE</title>
+<meta name="description" content="Resultado individual da consulta preliminar CEIS e CNEP. Pagina privada, fora de indice."/>
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+<meta name="googlebot" content="noindex,nofollow,noarchive"/>
+<link rel="canonical" href="https://confenge.com.br/piloto/consulta-ocorrencias-publicas/r/"/>
+<link rel="stylesheet" href="/styles.css"/>
+<link rel="stylesheet" href="/styles-tools.css"/>
+<meta http-equiv="Cache-Control" content="no-store"/>
+</head>
+<body data-asset-family="public_integrity" data-asset-id="consulta-ocorrencias-ceis-cnep" data-asset-version="1.0" data-source="CONFENGE_WEB">
+<a class="skip-link" href="#conteudo">Ir ao conteudo</a>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, pagina inicial" class="brand" href="/"><img alt="CONFENGE Inteligencia Tecnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
+<nav aria-label="Navegacao principal" class="desktop-nav">
+<a href="/#ofertas">Servicos</a>
+<a href="/#jornadas">Problemas que resolvemos</a>
+<a href="/conteudos/">Conteudos e ferramentas</a>
+<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+</nav>
+<a class="button button-primary header-cta" href="/#contato">Analisar meu caso</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button"><span>Menu</span></button>
+</div>
+<nav aria-label="Navegacao movel" class="mobile-nav" id="mobile-menu">
+<a href="/#ofertas">Servicos</a>
+<a href="/#jornadas">Problemas que resolvemos</a>
+<a href="/conteudos/">Conteudos e ferramentas</a>
+<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+<a class="button button-primary" href="/#contato">Analisar meu caso</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav class="breadcrumbs container" aria-label="breadcrumb"><ol>
+<li><a href="/">Inicio</a></li>
+<li><a href="/piloto/consulta-ocorrencias-publicas/">Consulta preliminar CEIS e CNEP</a></li>
+<li aria-current="page">Resultado</li>
+</ol></nav>
+<div class="container tool-shell">
+<header>
+<p class="eyebrow">Resultado individual · noindex</p>
+<h1>Resultado da consulta preliminar</h1>
+<p id="resultado-status" role="status" aria-live="polite">Aguardando token opaco da consulta. Sem token, o estado permanece indefinido (UNKNOWN), nunca uma lista vazia.</p>
+</header>
+<section id="resultado-dinamico"></section>
+<section id="metodo" aria-labelledby="metodo-res">
+<h2 id="metodo-res">Metodo e limites</h2>
+<p>Metodo: consumo fail-closed do contrato public-read-integrity/1.0 (SELECT-only). CEIS e CNEP sao consultados em separado, com paginacao ate pagina terminal bem sucedida. O agregado so confirma ausencia quando as duas fontes e todas as paginas completam vazias.</p>
+<ul>
+<li>Consulta limitada aos cadastros CEIS e CNEP do Portal da Transparencia.</li>
+<li>Cadastros nao contratados nao entram na conclusao.</li>
+<li>Valor ausente nao e fato negativo.</li>
+<li>Ocorrencias observadas nao constituem conclusao juridica, certificacao ou recomendacao.</li>
+</ul>
+<p>Autor: Eng. Tiago Sasaki. Revisor: Eng. Tiago Sasaki.</p>
+<p><a href="/correcoes/">Como corrigir um fato publicado</a></p>
+</section>
+<section aria-labelledby="proxima">
+<h2 id="proxima">Proxima acao humana</h2>
+<p>Nao foi possivel concluir a leitura enquanto o token estiver ausente ou expirado. O estado permanece indefinido.</p>
+<p><a class="button button-primary" data-cta-id="diligencia-humana-diagnostico" data-cta-version="1.0" data-destination-service-id="diagnostico-b2g-360" href="/diagnostico-b2g-360/">Pedir diligencia humana (diagnostico B2G 360)</a></p>
+</section>
+</div>
+</main>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get("t") || params.get("token") || "";
+  var status = document.getElementById("resultado-status");
+  var host = document.getElementById("resultado-dinamico");
+  if (!token) {
+    if (status) status.textContent = "Resultado indisponivel: token ausente. Estado UNKNOWN. Falha de token nao e ausencia confirmada nas fontes.";
+    return;
+  }
+  if (/cnpj=/i.test(window.location.search) || /cnpj=/i.test(window.location.hash)) {
+    if (status) status.textContent = "Consulta bloqueada: identificador nao pode aparecer na URL.";
+    return;
+  }
+  fetch("/.netlify/functions/public-integrity-consult?action=result&t=" + encodeURIComponent(token), {
+    headers: { "Accept": "text/html" },
+    credentials: "same-origin",
+    referrerPolicy: "no-referrer"
+  }).then(function (res) { return res.text(); }).then(function (html) {
+    if (!html || /queried_cnpj/i.test(html)) {
+      if (status) status.textContent = "Nao foi possivel concluir a leitura.";
+      return;
+    }
+    document.open();
+    document.write(html);
+    document.close();
+  }).catch(function () {
+    if (status) status.textContent = "Nao foi possivel concluir a leitura. Estado UNKNOWN.";
+    if (host) host.textContent = "";
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "campaign": "CONFENGE-WEB-PUBLIC-INTEGRITY-CONSUMER-PREPARE-01",
+  "decision_state": "VALIDATE",
+  "wave": "CONSUMER_PREPARE_ONLY",
+  "producer_status": "PRODUCER_CODE_DEPLOYED",
+  "keyed_live_canary": "KEYED_LIVE_CANARY_PENDING",
+  "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
+  "consumed_schema": "public-read-integrity/1.0",
+  "producer_sha": "8e15f94fb641a79954a8c909417bb9df18c0d491",
+  "producer_issue": "extra-cli#436",
+  "consumer_issue": "web-cfg#156",
+  "feature_flag": "PUBLIC_INTEGRITY_CONSUMER",
+  "flag_default": false,
+  "public_landing_indexable": false,
+  "result_surface_indexable": false,
+  "sitemap_member": false,
+  "merged": false,
+  "deployed": false,
+  "final_verdict": "READY_FOR_KEYED_LIVE_CANARY",
+  "claimed_live": false
+}

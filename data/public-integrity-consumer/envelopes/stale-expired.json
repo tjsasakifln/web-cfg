@@ -1,0 +1,81 @@
+{
+  "aggregate_state": "UNKNOWN",
+  "as_of": "2026-08-10T12:00:00+00:00",
+  "checked_at": "2026-08-10T12:00:00+00:00",
+  "content_hash": "57f026be867ad8553133526d4d093a2f6aaa7ee8efcf5390f0eb4bc4910c8f4f",
+  "contracted_sources": [
+    "CEIS",
+    "CNEP"
+  ],
+  "expires_at": "2026-08-11T12:00:00+00:00",
+  "freshness": {
+    "is_current": false,
+    "policy": "public-read-integrity-ttl/1.0",
+    "status": "expired",
+    "ttl_seconds": 86400
+  },
+  "limitations": [
+    "Consulta limitada aos cadastros CEIS e CNEP do Portal da Transparencia.",
+    "Cadastros nao contratados nao entram na conclusao.",
+    "Valor ausente nao e fato negativo.",
+    "Ocorrencias observadas nao constituem conclusao juridica, certificacao ou recomendacao."
+  ],
+  "not_legal_conclusion": true,
+  "producer_version": "public-read-integrity-producer/1.0",
+  "queried_cnpj": "[REDACTED_CNPJ]",
+  "query_id": "pri1-70cdd84dde04a455",
+  "reason_codes": [
+    "source_unavailable",
+    "pagination_incomplete",
+    "uncontracted_source_ignored",
+    "coverage_incomplete",
+    "cache_expired",
+    "stale_cache",
+    "not_current"
+  ],
+  "records": [],
+  "schema": "public-read-integrity/1.0",
+  "schema_version": "public-read-integrity/1.0",
+  "sources": {
+    "CEIS": {
+      "api_url": "https://api.portaldatransparencia.gov.br/api-de-dados/ceis",
+      "as_of": "2026-08-10T12:00:00+00:00",
+      "attempts": 1,
+      "authority": "Controladoria-Geral da Uniao (CGU) / Portal da Transparencia",
+      "coverage_complete": false,
+      "deduped_count": 0,
+      "error_class": "source_unavailable",
+      "normalized_count": 0,
+      "official_url": "https://portaldatransparencia.gov.br/sancoes/ceis",
+      "pages_expected": null,
+      "pages_fetched": 1,
+      "raw_count": 0,
+      "reason_codes": [
+        "source_unavailable",
+        "pagination_incomplete"
+      ],
+      "source_id": "CEIS",
+      "status": "UNKNOWN"
+    },
+    "CNEP": {
+      "api_url": "https://api.portaldatransparencia.gov.br/api-de-dados/cnep",
+      "as_of": "2026-08-10T12:00:00+00:00",
+      "attempts": 1,
+      "authority": "Controladoria-Geral da Uniao (CGU) / Portal da Transparencia",
+      "coverage_complete": false,
+      "deduped_count": 0,
+      "error_class": "source_unavailable",
+      "normalized_count": 0,
+      "official_url": "https://portaldatransparencia.gov.br/sancoes/cnep",
+      "pages_expected": null,
+      "pages_fetched": 1,
+      "raw_count": 0,
+      "reason_codes": [
+        "source_unavailable",
+        "pagination_incomplete"
+      ],
+      "source_id": "CNEP",
+      "status": "UNKNOWN"
+    }
+  }
+}

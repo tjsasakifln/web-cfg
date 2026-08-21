@@ -65,6 +65,12 @@
 /piloto/ofertas/*
   X-Robots-Tag: noindex, nofollow
 
+# Public-integrity consumer PREPARE-ONLY: landing noindex while flag off; result always noindex
+/piloto/consulta-ocorrencias-publicas/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, max-age=0, must-revalidate
+  Referrer-Policy: no-referrer
+
 # CONFENGE Data Desk citation kits — exclusive namespace, not indexable
 /assets/data-desk/*
   X-Robots-Tag: noindex, follow
