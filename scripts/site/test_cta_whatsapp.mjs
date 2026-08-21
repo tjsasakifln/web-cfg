@@ -109,6 +109,9 @@ for (const full of htmlFiles) {
   for (const sym of symbols) {
     const paths = [...sym[1].matchAll(/<path\b[^>]*\bd="([^"]*)"/gi)].map((m) => m[1]);
     if (!paths.length) issues.push({ rel, error: "whatsapp_path_missing" });
+    if (paths.length < 2 || !paths.some((d) => d.startsWith("M8.4 7.7"))) {
+      issues.push({ rel, error: "whatsapp_phone_glyph_missing" });
+    }
     for (const d of paths) {
       if (!svgPathCommandsParse(d)) {
         issues.push({ rel, error: "whatsapp_path_unparsed", d: d.slice(0, 80) });
