@@ -674,26 +674,50 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 
 /* Hero evidence (not dashboard) */
 .hero-evidence{
-  min-height:0;padding:1.35rem 1.4rem;background:#071a31;color:#e8eef4;
+  min-height:0;padding:1.45rem 1.5rem;background:#071a31;color:#e8eef4;
   border:1px solid #0a294b;border-radius:var(--radius-sm);box-shadow:none;
 }
+.hero-real-proof{display:none}
+.evidence-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.55rem}
 .hero-evidence .evidence-kicker{
-  margin:0 0 .5rem;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;
-  color:#9aabbc;font-weight:700;
+  margin:0;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--lime);font-weight:750;
 }
+.evidence-heading>span{color:#8fa3b5;font-family:var(--mono);font-size:.68rem;white-space:nowrap}
 .hero-evidence .evidence-title{
-  margin:0 0 1rem;font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:-.02em;
+  max-width:19ch;margin:0 0 .35rem;font-size:clamp(1.2rem,1.8vw,1.55rem);font-weight:760;color:#fff;letter-spacing:-.025em;line-height:1.18;
 }
-.evidence-matrix{width:100%;border-collapse:collapse;font-size:.82rem;line-height:1.4}
-.evidence-matrix th,.evidence-matrix td{
-  text-align:left;vertical-align:top;padding:.55rem .4rem;border-bottom:1px solid rgba(255,255,255,.12);
+.evidence-context{margin:0 0 1rem;color:#aebdca;font-size:.78rem;line-height:1.45}
+.evidence-facts{display:grid;grid-template-columns:1fr .72fr 1.45fr;margin:0 0 1rem;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+.evidence-facts>div{min-width:0;padding:.65rem .55rem .7rem 0}
+.evidence-facts>div+div{padding-left:.7rem;border-left:1px solid rgba(255,255,255,.12)}
+.evidence-facts dt{margin:0 0 .15rem;color:#8fa3b5;font-size:.64rem;font-weight:700;letter-spacing:.045em;text-transform:uppercase}
+.evidence-facts dd{margin:0;color:#f2f6f9;font-size:.78rem;font-weight:720;line-height:1.35}
+.evidence-exposure{margin:0 0 1rem;padding:.85rem .9rem;background:rgba(206,214,42,.075);border-left:3px solid var(--lime)}
+.evidence-exposure>span{display:block;margin-bottom:.12rem;color:#bac8d3;font-size:.7rem}
+.evidence-exposure strong{display:block;color:#fff;font-size:1.14rem;line-height:1.25;letter-spacing:-.015em}
+.evidence-exposure p{margin:.3rem 0 0;color:#c5d0d9;font-size:.74rem;line-height:1.45}
+.evidence-method{display:grid;gap:.42rem;margin:0 0 1rem;padding:0;list-style:none}
+.evidence-method li{display:grid;grid-template-columns:1.6rem 1fr;gap:.55rem;align-items:start}
+.evidence-method li>span{padding-top:.05rem;color:var(--lime);font-family:var(--mono);font-size:.67rem;font-weight:700}
+.evidence-method p{margin:0;color:#c7d2dc;font-size:.76rem;line-height:1.4}
+.evidence-method strong{color:#fff}
+.evidence-comparables{padding-top:.8rem;border-top:1px solid rgba(255,255,255,.12)}
+.evidence-comparables>p{margin:0 0 .45rem;color:#8fa3b5;font-size:.66rem;font-weight:700;letter-spacing:.045em;text-transform:uppercase}
+.evidence-comparables ul{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin:0;padding:0;list-style:none}
+.evidence-comparables li{display:grid;gap:.05rem}
+.evidence-comparables strong{color:#fff;font-size:.8rem}
+.evidence-comparables span{color:#aebdca;font-size:.68rem;line-height:1.35}
+.evidence-source{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-top:.8rem;padding-top:.7rem;border-top:1px solid rgba(255,255,255,.12)}
+.evidence-source a{flex:none;color:#e8efb2;font-size:.7rem;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.evidence-source p{max-width:31ch;margin:0;color:#7f93a5;font-size:.6rem;line-height:1.35;text-align:right}
+@media(max-width:1100px){
+  .hero-evidence{max-width:34rem}
 }
-.evidence-matrix th{color:#b0bfcc;font-weight:650;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
-.evidence-matrix td{color:#dce4eb}
-.evidence-foot{margin:.9rem 0 0;font-size:.85rem;color:#9aabbc;line-height:1.5}
 @media(max-width:700px){
-  /* keep .hero-visual hidden on mobile (includes evidence matrix) for CTA-first fold */
-  .evidence-matrix{font-size:.78rem}
+  .hero-real-proof{display:block;margin:1rem 0 0;padding:.75rem .85rem;color:#314256;background:#f3f7f2;border-left:3px solid var(--green-700);font-size:.78rem;line-height:1.5}
+  .hero-real-proof span{display:block;margin-bottom:.1rem;color:var(--green-700);font-size:.66rem;font-weight:800;letter-spacing:.055em;text-transform:uppercase}
+  .hero-real-proof a{color:var(--green-700);font-weight:750;text-decoration:underline;text-underline-offset:2px}
 }
 
 /* Journey list — editorial rows, not equal cards */
