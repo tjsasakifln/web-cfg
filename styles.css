@@ -1001,32 +1001,73 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
   #formulario-contato{order:-1}
 }
 
-/* Offer framing for visitors. Never reuse .hero-proof (credentials list). */
+/* Offer framing for visitors. Never reuse .hero-proof (credentials list).
+   Integrated executive band: 3 columns from 761px, 1 column at ≤760px.
+   Fourth item ("O que você recebe") is a full-width conclusion strip, not 2×2. */
+.offer-hero:has(.offer-context){
+  padding:48px 0 52px;
+}
+.offer-hero:has(.offer-context) h1{
+  margin-bottom:16px;
+}
+.offer-hero:has(.offer-context) .content-lead{
+  max-width:52ch;
+  margin-bottom:0;
+}
+.offer-hero:has(.offer-context) .offer-hero-desc{
+  max-width:58ch;
+  margin-top:12px;
+  color:var(--muted);
+  font-size:.95rem;
+  line-height:1.65;
+}
 .offer-context{
+  counter-reset:offer-ctx;
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:24px;
-  margin:32px 0;
-  padding:28px 0;
+  grid-template-columns:1fr;
+  gap:0;
+  margin:32px 0 40px;
+  padding:8px 0;
   max-width:100%;
   min-width:0;
+  background:rgba(245,247,246,.45);
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
+.content-hero-grid > .offer-context{
+  grid-column:1 / -1;
+}
 .offer-context-item{
-  display:grid;
-  align-content:start;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
   min-width:0;
   max-width:100%;
+  padding:20px 0;
+}
+.offer-context-item + .offer-context-item{
+  border-top:1px solid var(--line);
+}
+.offer-context-item::before{
+  counter-increment:offer-ctx;
+  content:counter(offer-ctx, decimal-leading-zero);
+  color:#8fa0ae;
+  font-family:var(--mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size:.75rem;
+  font-weight:650;
+  letter-spacing:.12em;
+  line-height:1;
 }
 .offer-context dt,
 .offer-context dd{
   min-width:0;
-  max-width:100%;
+  max-width:42ch;
   overflow-wrap:break-word;
 }
 .offer-context dt{
-  margin:0 0 8px;
+  margin:0;
   color:var(--green-700);
   font-size:.875rem;
   font-weight:800;
@@ -1035,22 +1076,50 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 }
 .offer-context dd{
   margin:0;
+  margin-inline-start:0;
   color:var(--text);
-  font-size:.95rem;
-  line-height:1.65;
+  font-size:1rem;
+  line-height:1.62;
 }
 .content-hero-grid > *{
   min-width:0;
   max-width:100%;
 }
 @media (min-width:761px){
-  .offer-context:has(> .offer-context-item:nth-child(4)){
-    grid-template-columns:repeat(2,minmax(0,1fr));
+  .offer-context{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    padding:28px 0;
+    background:rgba(245,247,246,.4);
+  }
+  .offer-context-item{
+    padding:0 28px;
+  }
+  .offer-context-item:first-child{
+    padding-left:0;
+  }
+  .offer-context-item:nth-child(3){
+    padding-right:0;
+  }
+  .offer-context-item + .offer-context-item{
+    border-top:0;
+    border-left:1px solid var(--line);
+  }
+  .offer-context > .offer-context-item:nth-child(4){
+    grid-column:1 / -1;
+    margin-top:22px;
+    padding:22px 0 0;
+    border-left:0;
+    border-top:1px solid var(--line);
+  }
+  .offer-context > .offer-context-item:nth-child(4) dt,
+  .offer-context > .offer-context-item:nth-child(4) dd{
+    max-width:72ch;
   }
 }
 @media (max-width:760px){
   .offer-context{
     grid-template-columns:1fr;
-    gap:22px;
+    margin-top:28px;
+    margin-bottom:32px;
   }
 }

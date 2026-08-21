@@ -72,6 +72,8 @@ jobs:
           npm run test:nurture
       - name: Build public site
         run: npm run build:site
+      - name: CSS asset integrity after publish
+        run: python3 scripts/site/test_fingerprint_css.py
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v2
         id: setup-chrome
