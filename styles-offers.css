@@ -88,3 +88,18 @@
   .offer-detail-disclosure > summary{min-height:76px;font-size:.96rem}
   .offer-detail-disclosure > .section{padding-top:34px;padding-bottom:34px}
 }
+
+/* Diretoria-specific editorial spacing; the operating flow component itself
+   lives in styles.css so stale offer CSS cannot restore browser bullets. */
+@media (max-width:760px){
+  body[data-offer-id="diretoria-b2g"] .offer-problem.section--default{padding:40px 0 42px}
+  body[data-offer-id="diretoria-b2g"] .editorial-head{margin-bottom:30px}
+  body[data-offer-id="diretoria-b2g"] .editorial-head h2{
+    font-size:clamp(1.85rem,7.6vw,2.18rem);
+    line-height:1.1;
+  }
+  body[data-offer-id="diretoria-b2g"] .editorial-lead{
+    font-size:1.0625rem;
+    line-height:1.6;
+  }
+}

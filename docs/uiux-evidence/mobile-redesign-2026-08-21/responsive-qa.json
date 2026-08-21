@@ -1,0 +1,270 @@
+{
+  "viewports": [
+    {
+      "requested": {
+        "width": 320,
+        "height": 700
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 60.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 700,
+      "innerWidth": 320,
+      "mainDocumentTop": 60.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    },
+    {
+      "requested": {
+        "width": 360,
+        "height": 740
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 60.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 740,
+      "innerWidth": 360,
+      "mainDocumentTop": 60.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    },
+    {
+      "requested": {
+        "width": 375,
+        "height": 780
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 60.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 780,
+      "innerWidth": 375,
+      "mainDocumentTop": 60.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    },
+    {
+      "requested": {
+        "width": 390,
+        "height": 844
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 60.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "mainDocumentTop": 60.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    },
+    {
+      "requested": {
+        "width": 412,
+        "height": 860
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 60.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 860,
+      "innerWidth": 412,
+      "mainDocumentTop": 60.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    },
+    {
+      "requested": {
+        "width": 430,
+        "height": 900
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 60.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 900,
+      "innerWidth": 430,
+      "mainDocumentTop": 60.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    },
+    {
+      "requested": {
+        "width": 768,
+        "height": 900
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 64.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 900,
+      "innerWidth": 768,
+      "mainDocumentTop": 64.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    },
+    {
+      "requested": {
+        "width": 1280,
+        "height": 900
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 82.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 900,
+      "innerWidth": 1280,
+      "mainDocumentTop": 82.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": null
+    },
+    {
+      "requested": {
+        "width": 320,
+        "height": 480
+      },
+      "clippedProcess": false,
+      "contentFlowOffsetCorrect": true,
+      "headerHeight": 60.8,
+      "horizontalOverflow": 0,
+      "innerHeight": 480,
+      "innerWidth": 320,
+      "mainDocumentTop": 60.8,
+      "process": {
+        "listStyle": "none",
+        "paddingLeft": "0px",
+        "semanticList": "OL",
+        "steps": 4
+      },
+      "toggle": {
+        "height": 44,
+        "width": 44
+      }
+    }
+  ],
+  "shortViewportMenu": {
+    "expanded": "true",
+    "inner": {
+      "h": 480,
+      "w": 320
+    },
+    "nav": {
+      "bottom": 432.6000061035156,
+      "clientHeight": 371,
+      "height": 372.6000061035156,
+      "maxHeight": "410px",
+      "overflowY": "auto",
+      "scrollHeight": 371,
+      "top": 60
+    },
+    "overflowX": 0
+  },
+  "menuKeyboard": {
+    "openState": {
+      "activeText": "Serviços",
+      "bodyLocked": true,
+      "expanded": "true",
+      "menuRect": {
+        "bottom": 432.6000061035156,
+        "height": 372.6000061035156,
+        "left": 10,
+        "right": 380.3999938964844,
+        "top": 60,
+        "width": 370.3999938964844,
+        "x": 10,
+        "y": 60
+      },
+      "menuVisible": "grid"
+    },
+    "cycledFocus": {
+      "className": "menu-toggle",
+      "label": "Fechar menu",
+      "tag": "BUTTON"
+    },
+    "closedState": {
+      "activeLabel": "Abrir menu",
+      "bodyLocked": false,
+      "expanded": "false",
+      "menuVisible": "none"
+    }
+  },
+  "semantics": {
+    "descriptions": [
+      "O que entra, o que espera e o que é recusado com registro.",
+      "Avançar, revisar ou recusar com premissas e impacto em capital.",
+      "Bid Room das oportunidades aceitas e defesa de margem do contrato ativo.",
+      "Decisões e resultados confrontados para a próxima rodada."
+    ],
+    "headings": [
+      "Triagem semanal",
+      "Sala de decisão",
+      "Coordenação",
+      "Memória"
+    ],
+    "labelledSection": "operating-system-title",
+    "listLabel": "Ciclo operacional da Diretoria B2G"
+  }
+}

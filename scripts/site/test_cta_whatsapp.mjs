@@ -106,9 +106,15 @@ for (const full of htmlFiles) {
   const symbols = [
     ...html.matchAll(/<symbol\b[^>]*id="i-whatsapp"[^>]*>([\s\S]*?)<\/symbol>/gi),
   ];
+  if (html.includes('href="#i-whatsapp"') && !symbols.length) {
+    issues.push({ rel, error: "whatsapp_symbol_missing" });
+  }
   for (const sym of symbols) {
     const paths = [...sym[1].matchAll(/<path\b[^>]*\bd="([^"]*)"/gi)].map((m) => m[1]);
     if (!paths.length) issues.push({ rel, error: "whatsapp_path_missing" });
+    if (paths.length < 2 || !paths.some((d) => d.startsWith("M8.4 7.7"))) {
+      issues.push({ rel, error: "whatsapp_phone_glyph_missing" });
+    }
     for (const d of paths) {
       if (!svgPathCommandsParse(d)) {
         issues.push({ rel, error: "whatsapp_path_unparsed", d: d.slice(0, 80) });
@@ -120,6 +126,11 @@ for (const full of htmlFiles) {
       }
     }
   }
+}
+
+const pseoShell = fs.readFileSync(path.join(root, "scripts/pseo/html_shell.py"), "utf8");
+if (!pseoShell.includes('id="i-whatsapp"') || !pseoShell.includes("M8.4 7.7")) {
+  issues.push({ rel: "scripts/pseo/html_shell.py", error: "whatsapp_generator_glyph_missing" });
 }
 
 const out = { ok: issues.length === 0, found: found.length, html_scanned: htmlFiles.length, issues };

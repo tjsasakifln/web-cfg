@@ -2,6 +2,9 @@
  * Source modules: js/modules/analytics.js, nav.js, form.js
  * Rebuild: node scripts/site/build_script_modules.mjs --write
  */
+/* MODULE analytics — BR-PRIV-01 no-PII analytics bus (SYS-03)
+ * Runtime: assembled into /script.js. Do not load alone.
+ */
 (() => {
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
@@ -444,6 +447,9 @@
 
   const init = () => {
 
+/* MODULE nav — header / mobile navigation (SYS-03)
+ * Runtime: assembled into /script.js. Do not load alone.
+ */
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
     const closeMenu = (returnFocus = false) => {
@@ -454,7 +460,25 @@
     if (toggle && menu) {
       toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), menu.querySelector('a')?.focus()));
       menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
-      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenu(true); });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeMenu(true);
+          return;
+        }
+        if (event.key !== 'Tab' || toggle.getAttribute('aria-expanded') !== 'true') return;
+        const focusable = [toggle, ...menu.querySelectorAll('a[href], button:not([disabled])')]
+          .filter((element) => element.offsetParent !== null);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
       document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
@@ -991,6 +1015,9 @@
     if (form) {
       let formStarted = false;
 
+/* MODULE form — multi-step lead form + focus (SYS-03 / UX-15)
+ * Runtime: assembled into /script.js. Do not load alone.
+ */
       let formStep = 1;
       const multi = form.getAttribute('data-form-multistep') === 'true';
       const step1 = form.querySelector('[data-form-step="1"]');
