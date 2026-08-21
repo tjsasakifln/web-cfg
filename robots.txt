@@ -7,6 +7,7 @@ Sitemap: https://confenge.com.br/sitemap-index.xml
 # Ops / private surfaces
 User-agent: *
 Disallow: /ops/
+Disallow: /intranet
 Disallow: /.netlify/
 Disallow: /piloto/
 

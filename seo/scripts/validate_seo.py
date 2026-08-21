@@ -71,6 +71,93 @@ def page_path(p: Path) -> str:
     return "/" + str(p.relative_to(ROOT)).replace("\\", "/")
 
 
+INTRANET_PATH_RE = re.compile(r"(?:^|/)intranet(?:/|$|\?|#)", re.I)
+NAV_BLOCK_RE = re.compile(r"<nav\b[^>]*>.*?</nav>", re.I | re.S)
+LD_JSON_RE = re.compile(
+    r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+    re.I | re.S,
+)
+ATTR_URL_RE = re.compile(
+    r'''(?:href|content|src)=["']([^"']+)["']''',
+    re.I,
+)
+
+
+def _page_path_for(p: Path, base: Path) -> str:
+    if p.name == "index.html":
+        if p.parent == base:
+            return "/"
+        return "/" + str(p.parent.relative_to(base)).replace("\\", "/") + "/"
+    return "/" + str(p.relative_to(base)).replace("\\", "/")
+
+
+def intranet_url_match(value: str) -> bool:
+    """True when value is an /intranet URL, loc, or href — not the bare word."""
+    raw = (value or "").strip()
+    if not raw:
+        return False
+    candidate = raw
+    if candidate.startswith("//"):
+        candidate = "https:" + candidate
+    if candidate.startswith(("http://", "https://")):
+        path = urlparse(candidate).path or "/"
+    else:
+        path = candidate.split("?")[0].split("#")[0]
+    return bool(INTRANET_PATH_RE.search(path))
+
+
+def intranet_indexable_hits(root: Path | None = None) -> list[str]:
+    """Scan shipped sitemap/nav/JSON-LD/public HTML for indexable /intranet URLs."""
+    base = (root or ROOT).resolve()
+    hits: list[str] = []
+
+    for cand in (base / "intranet" / "index.html", base / "intranet.html"):
+        if cand.is_file():
+            hits.append(f"public_html_page:{cand.relative_to(base).as_posix()}")
+
+    from scripts.organic.sitemap_graph import load_graph_locs
+
+    for loc in load_graph_locs(base):
+        if intranet_url_match(loc):
+            hits.append(f"sitemap_loc:{loc}")
+
+    sitemap_files = sorted(base.glob("sitemap*.xml"))
+    txt = base / "sitemap.txt"
+    if txt.is_file():
+        sitemap_files.append(txt)
+    for sm in sitemap_files:
+        text = sm.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"<loc>\s*([^<]+)\s*</loc>", text, re.I):
+            loc = m.group(1).strip()
+            if intranet_url_match(loc):
+                hits.append(f"sitemap_xml_loc:{sm.name}:{loc}")
+        if sm.suffix == ".txt":
+            for line in text.splitlines():
+                item = line.strip()
+                if item and intranet_url_match(item):
+                    hits.append(f"sitemap_txt:{item}")
+
+    for p in iter_seo_html_pages(base):
+        t = p.read_text(encoding="utf-8", errors="replace")
+        try:
+            rel = p.relative_to(base).as_posix()
+        except ValueError:
+            rel = str(p)
+        path = _page_path_for(p, base)
+        if path.rstrip("/") == "/intranet" or path.startswith("/intranet/"):
+            hits.append(f"public_page:{path}")
+        for href in ATTR_URL_RE.findall(t):
+            if intranet_url_match(href):
+                hits.append(f"html_href:{rel}:{href}")
+        for block in LD_JSON_RE.findall(t):
+            if intranet_url_match(block) or re.search(r"/intranet(?:/|$|\?|#|\"|')", block, re.I):
+                hits.append(f"jsonld:{rel}")
+        for nav in NAV_BLOCK_RE.findall(t):
+            if intranet_url_match(nav) or re.search(r'''href=["'][^"']*/intranet''', nav, re.I):
+                hits.append(f"nav:{rel}")
+    return hits
+
+
 def main() -> int:
     html_pages = iter_seo_html_pages(ROOT)
     from scripts.organic.sitemap_graph import load_graph_locs, load_index_members
@@ -611,6 +698,9 @@ def main() -> int:
     for leg in legacy:
         if leg not in cfg:
             errors.append(f"redirect missing {leg}")
+
+    for hit in intranet_indexable_hits(ROOT):
+        errors.append(f"intranet must not be indexable: {hit}")
 
     print(f"pages={len(html_pages)} sitemap={len(sm_urls)} indexable={len(indexable)}")
     print(f"errors={len(errors)} warnings={len(warnings)}")
