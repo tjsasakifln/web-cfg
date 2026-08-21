@@ -83,6 +83,7 @@ PUBLIC_ROOT_FILES = frozenset(
         "styles.css",
         "styles-tokens.css",
         "styles-tools.css",
+        "styles-offers.css",
         "script.js",
         "robots.txt",
         "_redirects",

@@ -939,6 +939,48 @@ async function main() {
     fail("offer_context_computed", e.message || e);
   }
 
+  // Commercial offers: the action is visible before optional contracting detail.
+  try {
+    const routes = [
+      "/diretoria-b2g/",
+      "/bid-room-licitacoes-obras/",
+      "/defesa-margem-contratos-publicos/",
+      "/diagnostico-b2g-expansao/",
+    ];
+    const reports = [];
+    for (const [w, h] of [[390, 844], [1280, 720]]) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      for (const path of routes) {
+        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        const rep = await page.evaluate(() => {
+          const cta = document.querySelector(".offer-hero .button-primary");
+          const box = cta?.getBoundingClientRect();
+          const details = [...document.querySelectorAll(".offer-detail-disclosure")];
+          return {
+            ctaTop: box ? Math.round(box.top) : null,
+            ctaBottom: box ? Math.round(box.bottom) : null,
+            ctaHref: cta?.getAttribute("href") || "",
+            ctaVisible: Boolean(box && box.top < window.innerHeight && box.bottom > 0),
+            details: details.length,
+            detailsClosed: details.every((el) => !el.open),
+            height: document.documentElement.scrollHeight,
+          };
+        });
+        reports.push(`${path}@${w}:${rep.height}px`);
+        if (!rep.ctaVisible) throw new Error(`${path}@${w}: CTA outside first viewport ${JSON.stringify(rep)}`);
+        if (!rep.details || !rep.detailsClosed) throw new Error(`${path}@${w}: optional details invalid ${JSON.stringify(rep)}`);
+        if (path === "/diagnostico-b2g-expansao/") {
+          if (rep.ctaHref !== "#pedido-diagnostico") throw new Error(`${path}: unexpected CTA ${rep.ctaHref}`);
+        } else if (!rep.ctaHref.startsWith("https://wa.me/")) {
+          throw new Error(`${path}: primary CTA adds a page change ${rep.ctaHref}`);
+        }
+      }
+    }
+    ok(`offer_cta_first_viewport_and_progressive_detail (${reports.join(", ")})`);
+  } catch (e) {
+    fail("offer_cta_first_viewport_and_progressive_detail", e.message || e);
+  }
+
   await browser.close();
   if (ownServer && server) server.close();
   if (failed) {

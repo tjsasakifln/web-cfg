@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Drive fingerprint_published_css against a real mini publish tree.
 
-Fails if this build's HTML can still point at unversioned /styles.css
+Fails if this build's HTML can still point at an unversioned stylesheet
 (the URL CDN/browser may keep for hours).
 """
 
@@ -35,6 +35,13 @@ COMMERCIAL_ROUTES = (
     "atrasos-prorrogacao-obras-publicas",
 )
 
+OFFER_ROUTES = (
+    "diretoria-b2g",
+    "diagnostico-b2g-expansao",
+    "bid-room-licitacoes-obras",
+    "defesa-margem-contratos-publicos",
+)
+
 
 def test_fingerprint_rewrites_html_to_hashed_css():
     marker = ".offer-context{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}"
@@ -49,10 +56,15 @@ def test_fingerprint_rewrites_html_to_hashed_css():
             '@import url("/styles-tokens.css");\n.tool{color:red}\n',
             encoding="utf-8",
         )
+        (dest / "styles-offers.css").write_text(
+            '@import url("/styles-tokens.css");\n.offer-detail-disclosure{color:blue}\n',
+            encoding="utf-8",
+        )
         page = dest / "diretoria-b2g" / "index.html"
         page.parent.mkdir(parents=True)
         page.write_text(
             '<!DOCTYPE html><html><head><link href="/styles.css" rel="stylesheet"/>'
+            '<link href="/styles-offers.css" rel="stylesheet"/>'
             "</head><body><dl class=\"offer-context\"></dl></body></html>\n",
             encoding="utf-8",
         )
@@ -72,6 +84,7 @@ def test_fingerprint_rewrites_html_to_hashed_css():
         assert not html_uses_unversioned_styles(html), hrefs
         assert hrefs[0].startswith(f"/{ASSET_DIR}/styles."), hrefs
         assert hrefs[0] != "/styles.css"
+        assert any(h.startswith(f"/{ASSET_DIR}/styles-offers.") for h in hrefs), hrefs
 
         hashed = dest / hrefs[0].lstrip("/")
         assert hashed.is_file(), hrefs[0]
@@ -90,6 +103,7 @@ def test_fingerprint_rewrites_html_to_hashed_css():
         assert man_path.is_file()
         man = json.loads(man_path.read_text(encoding="utf-8"))
         assert man["files"]["styles.css"]["href"] == hrefs[0]
+        assert man["files"]["styles-offers.css"]["href"] in hrefs
         assert man["html_rewritten"] >= 2
         assert report["files"]["styles.css"]["href"] == hrefs[0]
 
@@ -101,6 +115,7 @@ def test_source_html_may_keep_unversioned_href_for_local_dev():
     """Repo source is not the publish tree; fingerprint only rewrites _site."""
     html = (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
     assert "/styles.css" in html
+    assert "/styles-offers.css" in html
 
 
 def test_site_artifact_commercial_html_cannot_load_unversioned_css():
@@ -127,6 +142,9 @@ def test_site_artifact_commercial_html_cannot_load_unversioned_css():
         hrefs = stylesheet_hrefs(html)
         assert not html_uses_unversioned_styles(html), (slug, hrefs)
         assert href in hrefs, (slug, hrefs)
+        if slug in OFFER_ROUTES:
+            offer_href = man["files"]["styles-offers.css"]["href"]
+            assert offer_href in hrefs, (slug, hrefs)
 
 
 def run_all() -> int:

@@ -2,7 +2,7 @@
 """Content-hash published CSS so HTML release N cannot load CSS release N-1.
 
 Source HTML keeps `/styles.css` for local viewing. The public artifact (`_site`)
-rewrites stylesheet hrefs to `/assets/css/styles.<12-hex>.css` (and tokens/tools).
+rewrites stylesheet hrefs to `/assets/css/styles.<12-hex>.css` (and tokens/tools/offers).
 Unversioned `/styles.css` remains as a fallback for leftover clients; it is not
 what this build's HTML loads.
 """
@@ -20,7 +20,7 @@ ASSET_DIR = "assets/css"
 MANIFEST_REL = ".well-known/css-assets.json"
 
 STYLESHEET_HREF_RE = re.compile(
-    r"""(href\s*=\s*["'])(/styles(?:-tokens|-tools)?\.css)(["'])"""
+    r"""(href\s*=\s*["'])(/styles(?:-tokens|-tools|-offers)?\.css)(["'])"""
 )
 IMPORT_RE = re.compile(
     r"""(@import\s+url\(\s*["']?)(/styles-tokens\.css)(["']?\s*\))"""
@@ -59,7 +59,12 @@ def html_uses_unversioned_styles(html: str) -> bool:
     """True when a stylesheet link still points at cacheable /styles.css."""
     for href in stylesheet_hrefs(html):
         path = href.split("?", 1)[0]
-        if path in {"/styles.css", "/styles-tokens.css", "/styles-tools.css"}:
+        if path in {
+            "/styles.css",
+            "/styles-tokens.css",
+            "/styles-tools.css",
+            "/styles-offers.css",
+        }:
             return True
     return False
 
@@ -83,7 +88,12 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
     )
 
     css_dir = dest / ASSET_DIR
-    if token_bytes or (dest / "styles.css").is_file() or (dest / "styles-tools.css").is_file():
+    if (
+        token_bytes
+        or (dest / "styles.css").is_file()
+        or (dest / "styles-tools.css").is_file()
+        or (dest / "styles-offers.css").is_file()
+    ):
         css_dir.mkdir(parents=True, exist_ok=True)
 
     if token_bytes:
@@ -95,7 +105,7 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
             "href": token_href,
         }
 
-    for name in ("styles.css", "styles-tools.css"):
+    for name in ("styles.css", "styles-tools.css", "styles-offers.css"):
         path = dest / name
         if not path.is_file():
             continue

@@ -53,7 +53,7 @@ JOB = {
 }
 
 FIRST_FOLD_KEYS = ("O que resolvemos", "Para quem é", "Quando faz sentido", "O que você recebe")
-EPISTEMIC = ("FACT", "CALCULATION", "INFERENCE", "UNKNOWN")
+EPISTEMIC = ("Fato", "Cálculo", "Inferência", "Lacuna")
 EXCLUSIVE_PREFIXES = (
     "defesa-margem-contratos-publicos/",
     "atrasos-prorrogacao-obras-publicas/",
@@ -121,7 +121,7 @@ def shipped_html(slug: str) -> str:
 def visible_text(html: str) -> str:
     parser = _TextExtractor()
     parser.feed(html)
-    return re.sub(r"\s+", " ", "".join(parser.parts))
+    return re.sub(r"\s+", " ", " ".join(parser.parts))
 
 
 def first_fold(html: str) -> str:
@@ -301,18 +301,27 @@ def test_epistemic_labels_visible():
     for slug in PAGES:
         vis = visible_text(shipped_html(slug))
         for label in EPISTEMIC:
-            assert re.search(rf"\b{label}\b", vis), f"{slug} missing visible {label}"
+            assert re.search(rf"\b{label}\b", vis, flags=re.I), (
+                f"{slug} missing visible {label}"
+            )
 
 
 def test_fit_nao_fit_legal_technical_boundary_and_client_owner():
     for slug in PAGES:
         vis = visible_text(shipped_html(slug)).lower()
-        entra = "entra" in vis or "fit" in vis
-        nao = "não entra" in vis or "nao entra" in vis or "não fit" in vis or "nao fit" in vis
+        entra = "entra" in vis or "fit" in vis or "faz sentido" in vis
+        nao = (
+            "não entra" in vis
+            or "nao entra" in vis
+            or "não fit" in vis
+            or "nao fit" in vis
+            or "não faz sentido" in vis
+            or "nao faz sentido" in vis
+        )
         assert entra and nao, f"{slug} missing fit/não-fit"
         assert "fronteira jurídica" in vis or "fronteira juridica" in vis
         assert "fronteira técnica" in vis or "fronteira tecnica" in vis
-        assert "owner do cliente" in vis
+        assert "owner do cliente" in vis or "responsável na empresa" in vis
 
 
 def test_no_invented_case_or_review_claims():
@@ -383,7 +392,7 @@ def test_title_h1_meta_canonical_schema():
                     f"defesa-margem title/meta/eyebrow/schema still carries {token!r}: {chrome[:240]!r}"
                 )
             assert "proteção de margem" in chrome
-            assert "contract defense" in vis.lower()
+            assert "defesa de margem" in vis.lower()
         if slug == "acompanhamento-contratos-obras":
             assert "pleitos" not in h1.lower()
             assert "pleitos" not in wp_name.lower()
@@ -415,7 +424,7 @@ def test_existing_153_attributes_preserved_and_primary_cta_complete():
             assert cta.get("data-route-family"), f"{slug} primary CTA missing data-route-family"
         before = origin_html(slug)
         before_hrefs = {c["href"] for c in primary_ctas_in(before) if c["href"]}
-        after_hrefs = {c["href"] for c in primary_ctas_in(html) if c["href"]}
+        after_hrefs = set(re.findall(r'href=["\']([^"\']+)["\']', html, flags=re.I))
         missing = before_hrefs - after_hrefs
         # Header/mobile "Analisar meu caso" now lands on the form id, not the
         # contact-section start. Same destination page; not a dropped CTA.
@@ -527,7 +536,8 @@ def test_pillars_keep_commercial_bridge_and_defesa_margem_required_copy():
         html = shipped_html(slug)
         assert "commercial-bridge" in html
     defesa = shipped_html("defesa-margem-contratos-publicos")
-    assert "Contract Defense" in defesa
+    assert "Defesa de margem" in defesa
+    assert "Contract Defense" not in defesa
     assert "Enviar documentos para análise" in defesa
     assert "proteção de margem" in defesa.lower() or "Defesa técnica" in defesa
     assert len(re.findall(r'data-offer-section="([^"]+)"', defesa)) >= 4

@@ -167,7 +167,8 @@ def test_offer_depth_and_distinct_layouts():
     assert "revisão crítica independente" in bid.lower()
     assert "red team" not in bid.lower()
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
-    assert "Contract Defense" in defesa
+    assert "Defesa de margem" in defesa
+    assert "Contract Defense" not in defesa
     assert "proteção de margem" in defesa.lower() or "Defesa técnica" in defesa
 
 
