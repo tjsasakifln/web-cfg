@@ -230,6 +230,16 @@ def test_run_all_gates_ok():
     )
 
 
+def test_llms_txt_provenance_canonical_host():
+    """Shipped llms.txt must name confenge.com.br and refuse smartlic.tech."""
+    text = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    lower = text.lower()
+    assert "confenge.com.br" in lower, "llms.txt missing canonical host"
+    assert "as_of" in lower, "llms.txt missing visible as_of provenance"
+    assert "canonical_host" in lower or "canonical host" in lower
+    assert "smartlic.tech" not in lower, "llms.txt must not advertise smartlic.tech"
+
+
 def test_no_auto_approve_in_remediation_scripts():
     """Remediation must not stamp HUMAN_APPROVED / INDEXABLE."""
     for rel in (
