@@ -83,6 +83,7 @@ PUBLIC_ROOT_FILES = frozenset(
         "styles.css",
         "styles-tokens.css",
         "styles-tools.css",
+        "styles-offers.css",
         "script.js",
         "robots.txt",
         "_redirects",
@@ -334,6 +335,10 @@ def assemble_public_artifact(
         if ".well-known/" not in copied_dirs:
             copied_dirs.append(".well-known/")
 
+    from scripts.site.fingerprint_css import fingerprint_published_css
+
+    css_assets = fingerprint_published_css(dest)
+
     artifact_hash = _sha256_tree(dest)
     inv = inventory_public_routes(root)
     report = {
@@ -345,6 +350,7 @@ def assemble_public_artifact(
         "html_route_count": inv["html_route_count"],
         "errors": errors,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "css_assets": css_assets,
     }
 
     # Private inventory (not published)
@@ -496,6 +502,7 @@ def audit_public_artifact(
         "styles.css",
         "script.js",
         ".well-known/pseo-build.json",
+        ".well-known/css-assets.json",
     ]
     for req in required:
         if not (dest / req).exists():
@@ -504,6 +511,26 @@ def audit_public_artifact(
                     "code": "missing_required",
                     "path": req,
                     "detail": "required public file missing",
+                }
+            )
+
+    from scripts.site.fingerprint_css import html_uses_unversioned_styles, stylesheet_hrefs
+
+    for html_path in sorted(dest.rglob("*.html")):
+        rel = html_path.relative_to(dest).as_posix()
+        try:
+            html = html_path.read_text(encoding="utf-8")
+        except OSError as exc:
+            findings.append({"code": "read_error", "path": rel, "detail": str(exc)})
+            continue
+        if not stylesheet_hrefs(html):
+            continue
+        if html_uses_unversioned_styles(html):
+            findings.append(
+                {
+                    "code": "unversioned_stylesheet",
+                    "path": rel,
+                    "detail": "HTML of this build still points at /styles.css (or tokens/tools); CDN may serve CSS N-1",
                 }
             )
 

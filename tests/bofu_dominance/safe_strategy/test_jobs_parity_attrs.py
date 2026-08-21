@@ -27,27 +27,27 @@ SECTION_TOKENS = (
     ("outputs", ("entregáveis", "o que está incluído")),
     ("workflow", ("fluxo de trabalho",)),
     ("inputs", ("insumos",)),
-    ("wip", ("wip",)),
+    ("capacity", ("wip", "capacidade de atendimento", "capacidade simultânea")),
     ("exclusions", ("não entra", "o que não entra", "exclusões")),
     ("proof", ("método", "fonte", "atualizado")),
 )
 
 JOB_TOKENS = {
     "bid-room": (
-        "execução recorrente",
-        "pipeline de propostas",
+        "para o edital que exige coordenação da proposta, não improviso.",
+        "propostas para licitações de obras",
         "construtoras",
         "editais sobrepostos",
     ),
     "diretoria": (
-        "coordenação recorrente",
+        "uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
         "bid room",
-        "contract defense",
+        "defesa de margem",
         "equipe ilimitada",
     ),
     "expansao": (
-        "one-off",
-        "cfg-diag-exp-v1",
+        "mapa de compradores",
+        "pagamento único",
         "expansão",
         "não é o diagnóstico b2g 360",
     ),
@@ -102,7 +102,7 @@ def test_diretoria_scope_wip_not_unlimited():
     html = read_html("diretoria")
     text = visible_text(html).lower()
     fold = first_fold(html).lower()
-    assert "bid room" in fold and "contract defense" in fold
+    assert "bid room" in fold and "defesa de margem" in fold
     assert "quatro oportunidades" in text
     assert "um contrato" in text or "um contrato ou obra" in text
     assert "não é equipe ilimitada" in text
@@ -114,7 +114,7 @@ def test_diretoria_scope_wip_not_unlimited():
 def test_expansao_one_off_authority_deliverables_not_360():
     html = read_html("expansao")
     text = visible_text(html).lower()
-    assert "cfg-diag-exp-v1" in text
+    assert 'data-offer-id="CFG-DIAG-EXP-v1"' in html
     assert "one-off" in text or "pontual" in text
     for item in (
         "mapa de compradores",
@@ -124,7 +124,7 @@ def test_expansao_one_off_authority_deliverables_not_360():
         "recomendações",
         "pdf executivo",
         "planilhas",
-        "kickoff",
+        "reunião inicial",
         "apresentação final",
     ):
         assert item in text, item

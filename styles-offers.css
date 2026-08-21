@@ -1,0 +1,105 @@
+/* Commercial offers: put the decision before the supporting detail. */
+.offer-hero:has(.offer-context) > .container{
+  display:flex;
+  flex-direction:column;
+}
+.offer-hero:has(.offer-context) > .container > .eyebrow{order:1}
+.offer-hero:has(.offer-context) > .container > h1{order:2;max-width:18ch}
+.offer-hero:has(.offer-context) > .container > .content-lead{order:3}
+.offer-hero:has(.offer-context) > .container > .hero-actions{
+  order:4;
+  margin:24px 0 4px;
+}
+.offer-hero:has(.offer-context) > .container > .offer-context{
+  order:5;
+  margin:24px 0 20px;
+}
+.offer-hero:has(.offer-context) > .container > .offer-hero-desc{order:6}
+.offer-hero:has(.offer-context) > .container > .offer-result{order:7}
+.offer-hero:has(.offer-context) > .container > .hero-proof{order:8}
+.offer-hero:has(.offer-context) > .container > .hero-micro{order:9}
+.offer-hero:has(.offer-context) > .container > .authority-byline{order:10}
+.offer-hero:has(.offer-context) .offer-result{
+  max-width:58ch;
+  margin:10px 0 0;
+}
+.offer-hero:has(.offer-context) .hero-proof{
+  margin-top:20px;
+  padding-top:16px;
+}
+.offer-hero:has(.offer-context) .hero-micro{
+  max-width:72ch;
+  margin:16px 0 0;
+}
+.offer-hero:has(.offer-context) .authority-byline{
+  max-width:86ch;
+  margin:10px 0 0;
+}
+
+/* Secondary contracting detail stays available without dominating the first read. */
+.offer-detail-disclosure{
+  margin:0;
+  color:var(--text);
+  background:#f7f9f8;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.offer-detail-disclosure > summary{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:88px;
+  padding-top:20px;
+  padding-bottom:20px;
+  color:var(--ink);
+  font-size:1.05rem;
+  font-weight:780;
+  list-style:none;
+  cursor:pointer;
+}
+.offer-detail-disclosure > summary::-webkit-details-marker{display:none}
+.offer-detail-disclosure > summary::after{
+  content:"+";
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  flex:none;
+  color:var(--green-700);
+  background:#fff;
+  border:1px solid #c5cfd7;
+  border-radius:50%;
+  font-size:1.15rem;
+  font-weight:500;
+}
+.offer-detail-disclosure[open] > summary::after{content:"−"}
+.offer-detail-disclosure[open] > summary{border-bottom:1px solid var(--line)}
+.offer-detail-disclosure > .section{padding-top:44px;padding-bottom:44px}
+.offer-detail-disclosure > .section + .section{border-top:1px solid var(--line)}
+.offer-detail-disclosure > .section:nth-of-type(even){background:#fff}
+
+@media (max-width:760px){
+  .offer-hero:has(.offer-context){padding:30px 0 36px}
+  .offer-hero:has(.offer-context) > .container > h1{max-width:none}
+  .offer-hero:has(.offer-context) > .container > .hero-actions{margin-top:20px}
+  .offer-hero:has(.offer-context) > .container > .offer-context{margin:22px 0 16px}
+  .offer-detail-disclosure > summary{min-height:76px;font-size:.96rem}
+  .offer-detail-disclosure > .section{padding-top:34px;padding-bottom:34px}
+}
+
+/* Diretoria-specific editorial spacing; the operating flow component itself
+   lives in styles.css so stale offer CSS cannot restore browser bullets. */
+@media (max-width:760px){
+  body[data-offer-id="diretoria-b2g"] .offer-problem.section--default{padding:40px 0 42px}
+  body[data-offer-id="diretoria-b2g"] .editorial-head{margin-bottom:30px}
+  body[data-offer-id="diretoria-b2g"] .editorial-head h2{
+    font-size:clamp(1.85rem,7.6vw,2.18rem);
+    line-height:1.1;
+  }
+  body[data-offer-id="diretoria-b2g"] .editorial-lead{
+    font-size:1.0625rem;
+    line-height:1.6;
+  }
+}

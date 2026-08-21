@@ -2,6 +2,9 @@
  * Source modules: js/modules/analytics.js, nav.js, form.js
  * Rebuild: node scripts/site/build_script_modules.mjs --write
  */
+/* MODULE analytics — BR-PRIV-01 no-PII analytics bus (SYS-03)
+ * Runtime: assembled into /script.js. Do not load alone.
+ */
 (() => {
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
@@ -444,6 +447,9 @@
 
   const init = () => {
 
+/* MODULE nav — header / mobile navigation (SYS-03)
+ * Runtime: assembled into /script.js. Do not load alone.
+ */
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
     const closeMenu = (returnFocus = false) => {
@@ -454,7 +460,25 @@
     if (toggle && menu) {
       toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), menu.querySelector('a')?.focus()));
       menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
-      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenu(true); });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeMenu(true);
+          return;
+        }
+        if (event.key !== 'Tab' || toggle.getAttribute('aria-expanded') !== 'true') return;
+        const focusable = [toggle, ...menu.querySelectorAll('a[href], button:not([disabled])')]
+          .filter((element) => element.offsetParent !== null);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
       document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
@@ -480,6 +504,47 @@
           if (panel && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
           }
+        });
+      });
+    });
+
+    // Contract-size proof selector — deliberate user control, never autorotates.
+    document.querySelectorAll('[data-evidence-selector]').forEach((selector) => {
+      const tabs = [...selector.querySelectorAll('[data-evidence-tab]')];
+      const panels = [...selector.querySelectorAll('[data-evidence-panel]')];
+      if (!tabs.length || tabs.length !== panels.length) return;
+
+      const activateEvidence = (id, moveFocus = false) => {
+        tabs.forEach((tab) => {
+          const active = tab.getAttribute('data-evidence-tab') === id;
+          tab.classList.toggle('is-active', active);
+          tab.setAttribute('aria-selected', active ? 'true' : 'false');
+          tab.setAttribute('tabindex', active ? '0' : '-1');
+          if (active && moveFocus) tab.focus();
+        });
+        panels.forEach((panel) => {
+          const active = panel.getAttribute('data-evidence-panel') === id;
+          panel.classList.toggle('is-active', active);
+          panel.hidden = !active;
+        });
+      };
+
+      selector.setAttribute('data-enhanced', 'true');
+      const initialTab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') || tabs[0];
+      activateEvidence(initialTab.getAttribute('data-evidence-tab'));
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+          activateEvidence(tab.getAttribute('data-evidence-tab'));
+        });
+        tab.addEventListener('keydown', (event) => {
+          let nextIndex = index;
+          if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+          else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+          else if (event.key === 'Home') nextIndex = 0;
+          else if (event.key === 'End') nextIndex = tabs.length - 1;
+          else return;
+          event.preventDefault();
+          activateEvidence(tabs[nextIndex].getAttribute('data-evidence-tab'), true);
         });
       });
     });
@@ -705,13 +770,13 @@
       if (s.includes('operação') || s.includes('operacao') || s.includes('oportunidade') || s.includes('estrutur')) return 'operacao';
       return 'operacao';
     };
-    const applyJourneyToForm = (journeyId) => {
+    const applyJourneyToForm = (journeyId, forceStage = false) => {
       if (!form || !journeyId) return;
       const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'operacao';
       ensureHidden('jornada', j, true);
       form.setAttribute('action', JOURNEY_ACTIONS[j] || '/obrigado');
       const stage = form.querySelector('#estagio');
-      if (stage && !stage.value) {
+      if (stage && (forceStage || !stage.value)) {
         const opt = [...stage.options].find((o) => o.getAttribute('data-journey') === j);
         if (opt) stage.value = opt.value;
       }
@@ -758,7 +823,7 @@
     // Journey preselect from CTA links
     document.querySelectorAll('[data-set-journey]').forEach((el) => {
       el.addEventListener('click', () => {
-        applyJourneyToForm(el.getAttribute('data-set-journey'));
+        applyJourneyToForm(el.getAttribute('data-set-journey'), true);
       });
     });
 
@@ -868,6 +933,7 @@
         correlation_id: fromUrl.correlation_id || '',
       };
       if (classified.kind === 'whatsapp') {
+        const whatsappAttrs = attrsFromEl(el);
         track('whatsapp_click', {
           ...base,
           cta_label: label || 'whatsapp',
@@ -875,6 +941,8 @@
           journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
           content_type: isEditorial ? (editorialType || 'editorial') : undefined,
           topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
+          asset_id: whatsappAttrs.asset_id,
+          cta_id: whatsappAttrs.cta_id,
         });
         return;
       }
@@ -991,6 +1059,9 @@
     if (form) {
       let formStarted = false;
 
+/* MODULE form — multi-step lead form + focus (SYS-03 / UX-15)
+ * Runtime: assembled into /script.js. Do not load alone.
+ */
       let formStep = 1;
       const multi = form.getAttribute('data-form-multistep') === 'true';
       const step1 = form.querySelector('[data-form-step="1"]');

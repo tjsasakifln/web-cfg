@@ -185,10 +185,13 @@ async function main() {
         ctaTop: r.top,
         ctaInFirstScreen: r.top < vh && r.bottom > 0,
         visualDisplay: vis,
+        visualIsEvidence: Boolean(visual?.matches("[data-evidence-selector]")),
       };
     });
     if (!mob.ctaInFirstScreen) throw new Error(`CTA not in first screen: top=${mob.ctaTop}`);
-    if (mob.visualDisplay !== "none") throw new Error(`hero visual still shown on mobile: ${mob.visualDisplay}`);
+    if (mob.visualDisplay !== "none" && !mob.visualIsEvidence) {
+      throw new Error(`non-evidence hero visual still shown on mobile: ${mob.visualDisplay}`);
+    }
     ok("mobile_hero_cta_without_decor_panel");
   } catch (e) {
     fail("mobile_hero_cta_without_decor_panel", e.message || e);
@@ -231,6 +234,8 @@ async function main() {
       ".related-card small",
       ".service-number",
       ".deliverables-list span",
+      ".offer-context dt",
+      ".offer-context dd",
     ].join(",");
     const measureFonts = async (path) => {
       await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded" });
@@ -475,9 +480,16 @@ async function main() {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     for (const j of ["contrato", "edital", "operacao"]) {
+      await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
       await page.click(`[data-set-journey="${j}"]`);
-      const val = await page.$eval("#jornada-hidden", (el) => el.value);
-      if (val !== j) throw new Error(`data-set-journey=${j} left hidden=${val}`);
+      const state = await page.evaluate(() => ({
+        journey: document.querySelector("#jornada-hidden")?.value || "",
+        stageJourney: document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey || "",
+        action: document.querySelector("#formulario-contato")?.getAttribute("action") || "",
+      }));
+      if (state.journey !== j) throw new Error(`data-set-journey=${j} left hidden=${state.journey}`);
+      if (state.stageJourney !== j) throw new Error(`data-set-journey=${j} left stage=${state.stageJourney}`);
+      if (!state.action.includes(j)) throw new Error(`data-set-journey=${j} left action=${state.action}`);
     }
     ok("journey_cta_binds_form");
   } catch (e) {
@@ -783,6 +795,200 @@ async function main() {
     }
   } catch (e) {
     fail("axe_home_no_critical_serious", e.message || e);
+  }
+
+  // offer-context: dt sits with its dd; dl.hero-proof is gone
+  try {
+    const routes = [
+      "/diretoria-b2g/",
+      "/diagnostico-b2g-expansao/",
+      "/bid-room-licitacoes-obras/",
+      "/acompanhamento-contratos-obras/",
+      "/defesa-margem-contratos-publicos/",
+      "/defesa-tecnica-contratos-publicos/",
+      "/atrasos-prorrogacao-obras-publicas/",
+    ];
+    const viewports = [
+      [390, 844],
+      [1440, 900],
+    ];
+    const bad = [];
+    for (const [w, h] of viewports) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      for (const path of routes) {
+        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        const report = await page.evaluate((vpW) => {
+          const issues = [];
+          if (document.querySelectorAll("dl.hero-proof").length) issues.push("dl.hero-proof");
+          const ctx = document.querySelector(".offer-context");
+          if (!ctx) issues.push("missing offer-context");
+          const container = ctx && ctx.closest(".container");
+          const cbox = container ? container.getBoundingClientRect() : null;
+          const items = [...document.querySelectorAll(".offer-context-item")];
+          if (!items.length) issues.push("missing offer-context-item");
+          for (const item of items) {
+            const dt = item.querySelector("dt");
+            const dd = item.querySelector("dd");
+            if (!dt || !dd) {
+              issues.push("item missing dt/dd");
+              continue;
+            }
+            const ritem = item.getBoundingClientRect();
+            const rdt = dt.getBoundingClientRect();
+            const rdd = dd.getBoundingClientRect();
+            if (rdt.width === 0 || rdt.height === 0 || rdd.width === 0 || rdd.height === 0) {
+              issues.push("zero-box");
+              continue;
+            }
+            if (cbox && ritem.right > cbox.right + 2) issues.push("item-overflows-container");
+            const hGap = rdd.left - rdt.right;
+            if (hGap > 64) issues.push(`hGap:${Math.round(hGap)}`);
+            if (vpW <= 430 && !(rdd.top > rdt.bottom - 1)) issues.push("mobile-dd-not-below-dt");
+            const ox = Math.min(rdt.right, rdd.right) - Math.max(rdt.left, rdd.left);
+            const oy = Math.min(rdt.bottom, rdd.bottom) - Math.max(rdt.top, rdd.top);
+            if (ox > 2 && oy > 2) issues.push("overlap");
+            const fsDt = parseFloat(getComputedStyle(dt).fontSize);
+            const fsDd = parseFloat(getComputedStyle(dd).fontSize);
+            if (fsDt < 14 || fsDd < 14) issues.push(`tiny-type:${fsDt}/${fsDd}`);
+            const label = (dt.textContent || "").trim();
+            if (/^(Job|ICP|Trigger)$/i.test(label)) issues.push(`internal-label:${label}`);
+            const pairDx = Math.abs(rdt.left - rdd.left);
+            if (pairDx > 48 && hGap > 64) issues.push(`pair-far:${Math.round(pairDx)}`);
+          }
+          return issues;
+        }, w);
+        if (report.length) bad.push(`${path}@${w}x${h}:${report.join(",")}`);
+      }
+    }
+    if (bad.length) throw new Error(bad.slice(0, 10).join(" | "));
+    ok(`offer_context_geometry (${routes.length} routes × ${viewports.length} viewports)`);
+  } catch (e) {
+    fail("offer_context_geometry", e.message || e);
+  }
+
+  // offer-context: CSS actually applied (computed styles), not file substring
+  try {
+    const threeItem = "/diretoria-b2g/";
+    const fourItem = "/defesa-margem-contratos-publicos/";
+    const measure = async (path, w, h) => {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      return page.evaluate((vpW) => {
+        const issues = [];
+        const ctx = document.querySelector(".offer-context");
+        if (!ctx) return ["missing offer-context"];
+        const cs = getComputedStyle(ctx);
+        const items = [...document.querySelectorAll(".offer-context-item")];
+        const dds = [...ctx.querySelectorAll("dd")];
+        const colTracks = (cs.gridTemplateColumns || "")
+          .trim()
+          .split(/\s+(?![^()]*\))/)
+          .filter(Boolean);
+        const display = cs.display;
+        if (vpW >= 1440) {
+          if (display !== "grid") issues.push(`display:${display}`);
+          if (items.length >= 3 && colTracks.length < 3) {
+            issues.push(`cols:${colTracks.length}:${cs.gridTemplateColumns}`);
+          }
+        }
+        if (vpW <= 390) {
+          if (display !== "grid") issues.push(`display:${display}`);
+          if (colTracks.length !== 1) issues.push(`mobile-cols:${colTracks.length}`);
+        }
+        for (const dd of dds) {
+          const ml = getComputedStyle(dd).marginLeft;
+          if (ml !== "0px") issues.push(`dd-margin-left:${ml}`);
+        }
+        for (const item of items) {
+          const dt = item.querySelector("dt");
+          const dd = item.querySelector("dd");
+          if (!dt || !dd) continue;
+          const rdt = dt.getBoundingClientRect();
+          const rdd = dd.getBoundingClientRect();
+          const pairDx = Math.abs(rdt.left - rdd.left);
+          if (pairDx > 2) issues.push(`dt-dd-misalign:${Math.round(pairDx * 10) / 10}`);
+        }
+        if (vpW >= 1440 && items.length >= 4) {
+          const r1 = items[0].getBoundingClientRect();
+          const r4 = items[3].getBoundingClientRect();
+          if (!(r4.top > r1.bottom - 2)) issues.push("fourth-not-conclusion-strip");
+        }
+        return {
+          issues,
+          display,
+          colTracks: colTracks.length,
+          ddMarginLeft: dds[0] ? getComputedStyle(dds[0]).marginLeft : null,
+          itemCount: items.length,
+        };
+      }, w);
+    };
+    const desktop3 = await measure(threeItem, 1440, 900);
+    const desktop4 = await measure(fourItem, 1440, 900);
+    const mobile3 = await measure(threeItem, 390, 844);
+    const mobile4 = await measure(fourItem, 390, 844);
+    const all = [
+      ["diretoria@1440", desktop3],
+      ["defesa-margem@1440", desktop4],
+      ["diretoria@390", mobile3],
+      ["defesa-margem@390", mobile4],
+    ];
+    const badComputed = all
+      .filter(([, r]) => r.issues && r.issues.length)
+      .map(([name, r]) => `${name}:${r.issues.join(",")}`);
+    if (badComputed.length) throw new Error(badComputed.join(" | "));
+    if (desktop3.display !== "grid" || desktop3.colTracks < 3) {
+      throw new Error(`desktop3 display=${desktop3.display} cols=${desktop3.colTracks}`);
+    }
+    if (desktop3.ddMarginLeft !== "0px") {
+      throw new Error(`desktop3 dd.marginLeft=${desktop3.ddMarginLeft}`);
+    }
+    ok(
+      `offer_context_computed (3col=${desktop3.colTracks} ddml=${desktop3.ddMarginLeft} 4items=${desktop4.itemCount})`
+    );
+  } catch (e) {
+    fail("offer_context_computed", e.message || e);
+  }
+
+  // Commercial offers: the action is visible before optional contracting detail.
+  try {
+    const routes = [
+      "/diretoria-b2g/",
+      "/bid-room-licitacoes-obras/",
+      "/defesa-margem-contratos-publicos/",
+      "/diagnostico-b2g-expansao/",
+    ];
+    const reports = [];
+    for (const [w, h] of [[390, 844], [1280, 720]]) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      for (const path of routes) {
+        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        const rep = await page.evaluate(() => {
+          const cta = document.querySelector(".offer-hero .button-primary");
+          const box = cta?.getBoundingClientRect();
+          const details = [...document.querySelectorAll(".offer-detail-disclosure")];
+          return {
+            ctaTop: box ? Math.round(box.top) : null,
+            ctaBottom: box ? Math.round(box.bottom) : null,
+            ctaHref: cta?.getAttribute("href") || "",
+            ctaVisible: Boolean(box && box.top < window.innerHeight && box.bottom > 0),
+            details: details.length,
+            detailsClosed: details.every((el) => !el.open),
+            height: document.documentElement.scrollHeight,
+          };
+        });
+        reports.push(`${path}@${w}:${rep.height}px`);
+        if (!rep.ctaVisible) throw new Error(`${path}@${w}: CTA outside first viewport ${JSON.stringify(rep)}`);
+        if (!rep.details || !rep.detailsClosed) throw new Error(`${path}@${w}: optional details invalid ${JSON.stringify(rep)}`);
+        if (path === "/diagnostico-b2g-expansao/") {
+          if (rep.ctaHref !== "#pedido-diagnostico") throw new Error(`${path}: unexpected CTA ${rep.ctaHref}`);
+        } else if (!rep.ctaHref.startsWith("https://wa.me/")) {
+          throw new Error(`${path}: primary CTA adds a page change ${rep.ctaHref}`);
+        }
+      }
+    }
+    ok(`offer_cta_first_viewport_and_progressive_detail (${reports.join(", ")})`);
+  } catch (e) {
+    fail("offer_cta_first_viewport_and_progressive_detail", e.message || e);
   }
 
   await browser.close();

@@ -34,6 +34,7 @@ def test_shipped_copy_script_is_check_only():
     assert "scrub_em_dashes.py --write" not in copy, copy
     assert "scrub_em_dashes.py --check" in copy, copy
     assert "test_copy_gates.py" in copy
+    assert "test_public_internal_marketing_labels.py" in copy
     assert "lint_editorial_copy.py" in copy
     assert pkg["scripts"]["scrub:em-dashes"].endswith("scrub_em_dashes.py --write")
     site_ci = SITE_CI.read_text(encoding="utf-8")

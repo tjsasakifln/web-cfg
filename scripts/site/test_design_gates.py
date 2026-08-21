@@ -167,7 +167,8 @@ def test_offer_depth_and_distinct_layouts():
     assert "revisão crítica independente" in bid.lower()
     assert "red team" not in bid.lower()
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
-    assert "Contract Defense" in defesa
+    assert "Defesa de margem" in defesa
+    assert "Contract Defense" not in defesa
     assert "proteção de margem" in defesa.lower() or "Defesa técnica" in defesa
 
 
@@ -267,6 +268,18 @@ def test_prefers_reduced_motion_declared():
     assert "prefers-reduced-data" in css
     # Functional text floor: hero proof and mono labels ≥14px (.875rem)
     assert "font-size:.875rem" in css or "font-size: .875rem" in css or "font-size:0.875rem" in css
+
+
+def test_operating_flow_has_sitewide_fallback():
+    """The visitor flow must not regress to raw browser bullets on stale offer CSS."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    offers_css = (ROOT / "styles-offers.css").read_text(encoding="utf-8")
+    html = (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
+    assert ".operating-flow{" in css
+    assert ".operating-flow{display:grid;gap:0;margin:0;padding:0;list-style:none}" in css
+    assert "#operating-system-title{scroll-margin-top:" in css
+    assert ".operating-flow" not in offers_css
+    assert '<ol class="operating-flow"' in html
 
 
 def test_mobile_matrix_composition():
@@ -457,6 +470,44 @@ def test_pillar_evidence_contrast_on_navy():
     for path in pillars:
         html = path.read_text(encoding="utf-8")
         assert 'class="pillar-evidence"' in html, f"{path.relative_to(ROOT)} missing pillar-evidence"
+
+
+def test_offer_context_component_css():
+    """Offer framing is its own component; .hero-proof stays a credential list."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    compact = re.sub(r"\s+", "", css)
+    assert ".offer-context{" in compact
+    assert ".offer-context-item{" in compact
+    assert ".offer-contextdt{" in compact
+    assert ".offer-contextdd{" in compact
+    assert "repeat(3,minmax(0,1fr))" in compact
+    # dt is .875rem (14px), not .75rem, to keep functional text ≥ 14px.
+    assert re.search(r"\.offer-context dt\{[^}]*font-size:\.875rem", css)
+    assert re.search(r"\.offer-context dd\{[^}]*font-size:1rem", css)
+    assert re.search(r"\.offer-context dd\{[^}]*margin-inline-start:0", css)
+    assert "decimal-leading-zero" in css
+    assert "counter-reset:offer-ctx" in compact
+    # Four items stay a 3-column band + conclusion strip — not an automatic 2×2.
+    assert not re.search(
+        r"\.offer-context:has\(>\s*\.offer-context-item:nth-child\(4\)\)\{[^}]*repeat\(2,",
+        css,
+    )
+    assert ".hero-proofli{" in compact or re.search(r"\.hero-proof li\{", css)
+    for path in (
+        ROOT / "diretoria-b2g" / "index.html",
+        ROOT / "diagnostico-b2g-expansao" / "index.html",
+        ROOT / "bid-room-licitacoes-obras" / "index.html",
+        ROOT / "acompanhamento-contratos-obras" / "index.html",
+        ROOT / "defesa-margem-contratos-publicos" / "index.html",
+        ROOT / "defesa-tecnica-contratos-publicos" / "index.html",
+        ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
+    ):
+        html = path.read_text(encoding="utf-8")
+        assert 'class="offer-context"' in html, f"{path.relative_to(ROOT)} missing offer-context"
+        assert not re.search(r"<dl\b[^>]*\bhero-proof\b", html), f"{path.relative_to(ROOT)} still has dl.hero-proof"
+        assert "<dt>O que resolvemos</dt>" in html, f"{path.relative_to(ROOT)} missing visitor label"
+        assert "<dt>Para quem é</dt>" in html, f"{path.relative_to(ROOT)} missing visitor label"
+        assert "<dt>Quando faz sentido</dt>" in html, f"{path.relative_to(ROOT)} missing visitor label"
 
 
 def test_thankyou_specialist_cta_family():
