@@ -557,3 +557,11 @@ def test_committed_pages_carry_the_current_shared_chrome():
     for page in pages:
         html = page.read_text(encoding="utf-8")
         assert SVG_SPRITE in html, f"{page.relative_to(root)} was built with stale shared chrome; rebuild the family"
+
+
+def test_family_is_in_the_publish_allowlist():
+    """`_site` copies only PUBLIC_TOP_DIRS; a family left out 404s in production."""
+    from scripts.market_panorama import FAMILY_SLUG
+    from scripts.pseo.public_artifact import PUBLIC_TOP_DIRS
+
+    assert FAMILY_SLUG in PUBLIC_TOP_DIRS
