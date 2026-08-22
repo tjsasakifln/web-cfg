@@ -15,6 +15,20 @@ class DriftHashes(TypedDict):
     live: str
 
 
+class DriftPolicy(DriftHashes):
+    category: str
+    severity: str
+    action: str
+
+
+_FROZEN_HTML = frozenset(
+    rel for rel in FORBIDDEN_RELATIVE_PATHS if rel.endswith("/index.html")
+)
+_RENDERING_COLLATERAL = frozenset(
+    {"script.js", "styles.css", "styles-tokens.css", "styles-tools.css"}
+)
+
+
 def content_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -61,3 +75,29 @@ def forbidden_drift(root: Path | None = None) -> dict[str, DriftHashes]:
         for rel in FORBIDDEN_RELATIVE_PATHS
         if baseline[rel] != live[rel]
     }
+
+
+def forbidden_drift_policy(root: Path | None = None) -> dict[str, DriftPolicy]:
+    """Classify drift without weakening the committed-baseline comparison.
+
+    Frozen pillar HTML and collateral capable of changing its rendering are
+    hard errors. Other collateral still fails closed, but names the required
+    remediation: a reviewed baseline recapture committed with the change.
+    """
+    drift = forbidden_drift(root)
+    out: dict[str, DriftPolicy] = {}
+    for rel, hashes in drift.items():
+        if rel in _FROZEN_HTML:
+            category = "frozen_html"
+            severity = "error"
+            action = "revert_frozen_html"
+        elif rel in _RENDERING_COLLATERAL:
+            category = "rendering_collateral"
+            severity = "error"
+            action = "prove_no_frozen_rendering_change_or_revert"
+        else:
+            category = "non_rendering_collateral"
+            severity = "recapture_required"
+            action = "commit_reviewed_hash_recapture"
+        out[rel] = {**hashes, "category": category, "severity": severity, "action": action}
+    return out

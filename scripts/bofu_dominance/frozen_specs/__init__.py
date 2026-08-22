@@ -14,6 +14,7 @@ from scripts.bofu_dominance.frozen_specs.hashing import (
     committed_forbidden_hashes,
     content_sha256,
     forbidden_drift,
+    forbidden_drift_policy,
     forbidden_path_hashes,
 )
 from scripts.bofu_dominance.frozen_specs.patch import apply_frozen_patch, parse_patch
@@ -32,6 +33,7 @@ __all__ = [
     "content_sha256",
     "evaluate_gate",
     "forbidden_drift",
+    "forbidden_drift_policy",
     "forbidden_path_hashes",
     "load_issue_state",
     "load_spec",

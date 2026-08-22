@@ -1,0 +1,32 @@
+{
+  "schema": "bofu_frozen_hashes/v1",
+  "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+  "html_mutation": false,
+  "pillars": {
+    "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
+    "medicoes-glosas-obras-publicas": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442",
+    "reequilibrio-obras-publicas": "0d87ae2a0a8c0c17f353c97ee41aae31d6a2473b7c229808cbf8a201430be202",
+    "auditoria-orcamento-licitacao": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
+    "diagnostico-b2g-360": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
+    "diagnostico-pre-licitacao": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529"
+  },
+  "forbidden": {
+    "aditivos-obras-publicas/index.html": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
+    "medicoes-glosas-obras-publicas/index.html": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442",
+    "reequilibrio-obras-publicas/index.html": "0d87ae2a0a8c0c17f353c97ee41aae31d6a2473b7c229808cbf8a201430be202",
+    "auditoria-orcamento-licitacao/index.html": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
+    "diagnostico-b2g-360/index.html": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
+    "diagnostico-pre-licitacao/index.html": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
+    "script.js": "2bc5888a9632d61f53e96471d66074ecc1e15f461d5762e25badb0cef868414b",
+    "styles.css": "91dfd31b8adaf718cc4085014c674f43ed624f4c09365e8782cfab80f5e3be6b",
+    "styles-tokens.css": "a6f70619a7490416ab8bb869c933565e3ac2a749dda8e29d17c3f64bd44083a0",
+    "styles-tools.css": "48a0681d8517956ede3c1f7007633f18c55146822b4dc8be811eb7035688d5ad",
+    "robots.txt": "02036e8cfc97bf4dd8eb909ff514c25db31ea345f872e4caa1d30266219d992e",
+    "sitemap.xml": "04cf86533b0fa94c4b47782dc801fd3cee870aff41f2e617ce8baa0532f702a3",
+    "sitemap.txt": "a4fc9632f15bcbeedfc1c1fd3c8209512563023d5a14db3c2105dad8ce238e8e",
+    "sitemap-index.xml": "ec92f4036c83955dc3308a2de720e81b40ecbf4801edb46d15b98b52ac5781cf",
+    "_redirects": "ce0cbcacf75863cbbe0e3556fe18e55aea76757c29890ae0b4335b6108555704",
+    "data/organic/content-service-map.json": "88177b77c2f6a3ad894ee0b67b951027f72603df1cf2df056f0eaf0128ff2c1a",
+    "js/modules/analytics.js": "9bc785821fa2c6a39dbb48621c73cf6a72b6c25b61cbea17a2cb50647d967307"
+  }
+}

@@ -8,7 +8,11 @@ from typing import Any
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLAR_SLUGS, ROOT
 from scripts.bofu_dominance.frozen_specs.gate import evaluate_gate
-from scripts.bofu_dominance.frozen_specs.hashing import forbidden_drift, forbidden_path_hashes
+from scripts.bofu_dominance.frozen_specs.hashing import (
+    forbidden_drift,
+    forbidden_drift_policy,
+    forbidden_path_hashes,
+)
 from scripts.bofu_dominance.frozen_specs.patch import apply_frozen_patch
 from scripts.bofu_dominance.frozen_specs.snapshot import snapshot_six
 from scripts.bofu_dominance.frozen_specs.spec import load_specs, validate_spec
@@ -41,6 +45,7 @@ def run_entry(
             html_mutation = True
     after_hashes = forbidden_path_hashes(base)
     drift_after = forbidden_drift(base)
+    drift_policy = forbidden_drift_policy(base)
     specs = load_specs()
     spec_reports = []
     for spec in specs:
@@ -56,6 +61,8 @@ def run_entry(
         "specs": spec_reports,
         "forbidden_unchanged": not drift_after,
         "forbidden_drift": drift_after,
+        "forbidden_drift_policy": drift_policy,
+        "forbidden_action_required": bool(drift_policy),
         "forbidden_drift_before": drift_before,
         "forbidden_hashes": after_hashes,
         "pillar_count": len(snapshots),

@@ -45,7 +45,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     report = run_entry(mutate=False)
     print(json.dumps(report, indent=2, ensure_ascii=False, default=str))
-    if report["html_mutation"] is not False:
+    if report["html_mutation"] is not False or report["forbidden_action_required"]:
         return 1
     return 0
 
