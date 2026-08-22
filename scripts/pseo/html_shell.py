@@ -276,11 +276,16 @@ def page_shell(
     attrs = data_attrs or {}
     body_attr = " ".join(f'data-{k}="{e(v)}"' for k, v in attrs.items())
     author = author_name or "Engº Tiago Sasaki"
+    # The JSON goes inside a <script> element, where the HTML tokenizer reacts to
+    # literal "<" regardless of JSON quoting: "</script>" closes the block and
+    # "<script" flips it into an escaped state that swallows the next close tag.
+    # < is valid JSON, round-trips to the same string, and leaves no "<" for
+    # the tokenizer to act on.
     ld = json.dumps(
         {"@context": "https://schema.org", "@graph": jsonld_graph},
         ensure_ascii=False,
         separators=(",", ":"),
-    )
+    ).replace("<", "\\u003c")
     return f"""<!DOCTYPE html>
 <html class="no-js" lang="pt-BR">
 <head>

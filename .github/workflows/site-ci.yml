@@ -57,6 +57,8 @@ jobs:
           npm run test:local-entity
           npm run test:market-answers
           npm run test:contract-analysis
+          npm run test:market-panorama
+          npm run market-panorama:validate
           npm run test:lead-store-production
           npm run test:ops-auth
           npm run test:env-example
