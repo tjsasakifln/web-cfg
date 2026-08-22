@@ -28,6 +28,7 @@ on:
           - weekly
           - nurture
           - gsc
+          - inbound-proof
           - all
 
 concurrency:
@@ -73,7 +74,31 @@ jobs:
           path: |
             data/revops/gsc/last_sync.json
             data/revops/schedule-runs/
-          if-no-files-found: ignore
+          if-no-files-found: error
+
+  inbound_proof:
+    name: inbound-counters-proof
+    if: >
+      github.event_name == 'workflow_dispatch' && (github.event.inputs.job == 'inbound-proof' || github.event.inputs.job == 'all')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+      - name: Read-only authenticated inbound counters proof
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+        run: node scripts/revops/inbound_counters_proof.mjs
+      - name: Upload inbound counters proof
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: inbound-counters-proof-${{ github.run_id }}
+          path: data/revops/inbound-proof-runs/
+          if-no-files-found: error
 
   nurture:
     name: nurture-tick

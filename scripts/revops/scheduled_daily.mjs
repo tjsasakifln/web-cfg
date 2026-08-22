@@ -8,9 +8,10 @@
  * Exit 0 only when all critical checks pass. Writes proof under data/revops/schedule-runs/.
  */
 import { execSync } from "child_process";
-import { mkdirSync, writeFileSync, existsSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import { createOpsJsonClient, sanitizeTransportError } from "./ops_fetch.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const BASE = (process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
@@ -21,6 +22,8 @@ const out = {
   ts: new Date().toISOString(),
   checks: [],
   alerts: [],
+  ops_requests: [],
+  completed: false,
 };
 
 function check(name, ok, detail = "", { critical = true } = {}) {
@@ -29,17 +32,13 @@ function check(name, ok, detail = "", { critical = true } = {}) {
   if (!ok && critical) out.alerts.push({ name, detail });
 }
 
-async function j(path, opts = {}) {
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
-    ...(opts.headers || {}),
-  };
-  const res = await fetch(`${BASE}${path}`, { ...opts, headers });
-  const body = await res.json().catch(() => ({}));
-  return { status: res.status, body };
-}
+const j = createOpsJsonClient({
+  base: BASE,
+  token: TOKEN,
+  onResult: (request) => out.ops_requests.push(request),
+});
+
+async function run() {
 
 // 1 Critical URLs
 const critical = ["/", "/conteudos/", "/ferramentas/", "/ops/", "/robots.txt", "/sitemap.xml"];
@@ -279,7 +278,13 @@ function parseJsonBlob(text) {
 }
 
 // Persist proof
-const runDir = resolve(ROOT, "data/revops/schedule-runs");
+  out.completed = true;
+}
+
+function persistProof() {
+const runDir = process.env.REVOPS_RUN_DIR
+  ? resolve(process.env.REVOPS_RUN_DIR)
+  : resolve(ROOT, "data/revops/schedule-runs");
 mkdirSync(runDir, { recursive: true });
 const day = out.ts.slice(0, 10);
 const proofPath = resolve(runDir, `daily-${day}-${Date.now().toString(36)}.json`);
@@ -288,4 +293,16 @@ out.ok = failedCritical === 0;
 out.failed_critical = failedCritical;
 writeFileSync(proofPath, JSON.stringify(out, null, 2) + "\n");
 console.log(JSON.stringify({ ok: out.ok, failed_critical: failedCritical, proof: proofPath, alerts: out.alerts }, null, 2));
-if (!out.ok) process.exit(1);
+return out.ok;
+}
+
+try {
+  await run();
+} catch (error) {
+  const detail = sanitizeTransportError(error);
+  out.fatal_error = detail;
+  check("orchestration_unhandled", false, detail);
+} finally {
+  const ok = persistProof();
+  if (!ok) process.exitCode = 1;
+}
