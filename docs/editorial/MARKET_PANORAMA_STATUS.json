@@ -1,0 +1,27 @@
+{
+  "decisions": [
+    {
+      "content_hash": "sha256:bde025fed2ba4247c79f6e57358c5187b56fb8bbdeecf2e03e2bacbe4e58903a",
+      "indexable": false,
+      "panorama_id": "mp-518b8c14f902",
+      "reason_codes": [
+        "payload_not_official_live",
+        "payload_not_publication_ready"
+      ],
+      "slug": "obras-publicas-sc-2026-08",
+      "state": "BLOCKED"
+    }
+  ],
+  "evaluated": 1,
+  "handoff": {
+    "decision": "FIXTURE"
+  },
+  "index_count": 0,
+  "reason_codes": [],
+  "source_kind": "test_only_fixture",
+  "states": [
+    "BLOCKED"
+  ],
+  "test_only": true,
+  "written": {}
+}
