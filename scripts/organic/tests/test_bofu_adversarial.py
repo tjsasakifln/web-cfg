@@ -27,6 +27,7 @@ def test_finding_codes_cover_criterion_3():
         "SMARTLIC_CANONICAL",
         "ROUTE_MISSING_OWNER_UPDATE_POLICY",
         "CTA_DROPS_ATTRIBUTION",
+        "PILLAR_MISSING_ONPAGE_CAPTURE",
     }
     assert required.issubset(set(FINDING_CODES))
 
@@ -125,6 +126,39 @@ def test_audit_fails_on_noindex_commercial_page(tmp_path: Path):
     codes = {f["code"] for f in report["findings"]}
     assert "COMMERCIAL_PAGE_NOINDEX" in codes
     assert report["ok"] is False
+
+
+def test_audit_fails_when_nonfrozen_pillar_has_no_onpage_capture(tmp_path: Path):
+    matrix = {
+        "schema_version": "bofu-intent-matrix-v1",
+        "rows": [
+            {
+                "intent_cluster": "fixture",
+                "canonical_service_route": "/defesa-margem-contratos-publicos/",
+                "supporting_indexable_routes": [],
+                "cta": "x",
+                "destination_service_id": "defesa-margem-contratos-publicos",
+                "primary_queries": ["fixture query"],
+                "parent_route": None,
+                "exceptions": [],
+            }
+        ],
+    }
+    page = tmp_path / "defesa-margem-contratos-publicos" / "index.html"
+    page.parent.mkdir()
+    page.write_text(
+        '<html><head><title>x</title><meta name="robots" content="index,follow">'
+        '<link rel="canonical" href="https://confenge.com.br/defesa-margem-contratos-publicos/">'
+        '</head><body><h1>x</h1><a href="https://wa.me/5548988344559">WhatsApp</a></body></html>',
+        encoding="utf-8",
+    )
+    (tmp_path / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+    (tmp_path / "sitemap.xml").write_text(
+        "<urlset><loc>https://confenge.com.br/defesa-margem-contratos-publicos/</loc></urlset>",
+        encoding="utf-8",
+    )
+    report = run_audit(tmp_path, matrix)
+    assert "PILLAR_MISSING_ONPAGE_CAPTURE" in {f["code"] for f in report["findings"]}
 
 
 def test_indexable_bridges_still_full():

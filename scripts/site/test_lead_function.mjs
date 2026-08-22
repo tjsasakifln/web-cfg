@@ -178,6 +178,67 @@ _reset();
   }
 }
 
+// 5b) Five unpriced service pillars persist distinct attribution without data-* PII.
+{
+  const pillars = [
+    ["defesa-margem-contratos-publicos", "contrato"],
+    ["atrasos-prorrogacao-obras-publicas", "contrato"],
+    ["defesa-tecnica-contratos-publicos", "contrato"],
+    ["acompanhamento-contratos-obras", "operacao"],
+    ["bid-room-licitacoes-obras", "edital"],
+  ];
+  const ids = new Set();
+  for (let i = 0; i < pillars.length; i += 1) {
+    const [slug, jornada] = pillars[i];
+    const html = fs.readFileSync(path.join(root, slug, "index.html"), "utf8");
+    const form = html.match(/<form\b[^>]*action="\/\.netlify\/functions\/lead"[^>]*>[\s\S]*?<\/form>/i)?.[0] || "";
+    if (!form) fail("pillar_form_missing", slug);
+    if (/data-[a-z-]+="[^"]*(?:@|\b\d{8,}\b)[^"]*"/i.test(form)) {
+      fail("pillar_form_data_attr_pii", slug);
+    }
+    if (!/name="offer_id" value=""/.test(form) || !/name="terms_id" value=""/.test(form)) {
+      fail("pillar_form_invented_offer", slug);
+    }
+    const res = await handler(
+      event(
+        {
+          nome: `QA Pilar ${i + 1}`,
+          email: `qa-pillar-${i + 1}@example.com`,
+          estagio: slug,
+          jornada,
+          consentimento: "1",
+          offer_id: "",
+          terms_id: "",
+          origem: slug,
+          landing_page: `https://confenge.com.br/${slug}/`,
+          route_family: slug,
+          asset_id: slug,
+          cta_id: `${slug}-handraise`,
+          record_kind: "qa",
+          test_mode: true,
+          idempotency_key: `qa-pillar-${i + 1}`,
+        },
+        "POST",
+        { ip: `198.51.100.${20 + i}` },
+      ),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.ok || !data.lead_id) {
+      fail("pillar_form_persist", { slug, status: res.statusCode, data });
+    }
+    const stored = await mem.get(data.lead_id);
+    if (!stored || stored.route_family !== slug || stored.origem !== slug) {
+      fail("pillar_form_attribution", { slug, stored });
+    }
+    if (stored.offer_id || stored.terms_id || stored.source !== "CONFENGE_WEB") {
+      fail("pillar_form_unpriced_contract", { slug, stored });
+    }
+    ids.add(data.lead_id);
+  }
+  if (ids.size !== pillars.length) fail("pillar_form_distinct_receipts", [...ids]);
+  pass("pillar_forms_distinct_attribution", { routes: pillars.map(([slug]) => slug) });
+}
+
 // 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent
 {
   const payload = {

@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -163,6 +164,33 @@ def test_brand_shell_on_indexable_conteudos():
 def test_conversion_indexable_has_cta():
     r = gate_conversion()
     assert r.ok, r.findings[:10]
+
+
+def test_conversion_fails_before_and_passes_after_onpage_capture():
+    routes = (
+        "defesa-margem-contratos-publicos",
+        "atrasos-prorrogacao-obras-publicas",
+        "defesa-tecnica-contratos-publicos",
+        "acompanhamento-contratos-obras",
+        "bid-room-licitacoes-obras",
+    )
+    with tempfile.TemporaryDirectory(prefix="confenge-capture-gate-") as tmp:
+        tmp_path = Path(tmp)
+        for slug in routes:
+            target = tmp_path / slug / "index.html"
+            target.parent.mkdir(parents=True)
+            target.write_text((ROOT / slug / "index.html").read_text(encoding="utf-8"), encoding="utf-8")
+        assert gate_conversion(tmp_path).ok
+
+        for slug in routes:
+            target = tmp_path / slug / "index.html"
+            html = target.read_text(encoding="utf-8")
+            html = re.sub(r'<form\b[^>]*>.*?</form>', "", html, flags=re.I | re.S)
+            target.write_text(html, encoding="utf-8")
+        report = gate_conversion(tmp_path)
+        missing = [f for f in report.findings if f.reason == "pillar_missing_onpage_capture"]
+        assert report.ok is False
+        assert len(missing) == 5
 
 
 def test_legacy_redirects_matrix():
