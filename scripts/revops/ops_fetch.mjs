@@ -19,12 +19,14 @@ export function createOpsJsonClient({
   sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
   maxAttempts = boundedInteger(process.env.OPS_FETCH_MAX_ATTEMPTS, 3, 1, 5),
   backoffMs = boundedInteger(process.env.OPS_FETCH_BACKOFF_MS, 250, 0, 5000),
+  timeoutMs = boundedInteger(process.env.OPS_FETCH_TIMEOUT_MS, 30000, 100, 30000),
   onResult = () => {},
 } = {}) {
   if (!base) throw new Error("ops_base_required");
   if (typeof fetchImpl !== "function") throw new Error("fetch_implementation_required");
   const boundedAttempts = boundedInteger(maxAttempts, 3, 1, 5);
   const boundedBackoff = boundedInteger(backoffMs, 250, 0, 5000);
+  const boundedTimeout = boundedInteger(timeoutMs, 30000, 100, 30000);
 
   return async function request(path, opts = {}) {
     const {
@@ -43,13 +45,20 @@ export function createOpsJsonClient({
     };
 
     for (let attempt = 1; attempt <= attemptLimit; attempt += 1) {
+      const controller = new AbortController();
+      const timeout = setTimeout(
+        () => controller.abort(new Error(`ops_fetch_timeout_${boundedTimeout}ms`)),
+        boundedTimeout
+      );
       try {
         const response = await fetchImpl(`${base}${path}`, {
           ...fetchOptions,
           method,
           headers,
+          signal: controller.signal,
         });
         const body = await response.json().catch(() => ({}));
+        clearTimeout(timeout);
         if (RETRYABLE_HTTP.has(response.status) && attempt < attemptLimit) {
           await sleep(boundedBackoff * 2 ** (attempt - 1));
           continue;
@@ -58,6 +67,7 @@ export function createOpsJsonClient({
         onResult({ path, method, status: response.status, attempts: attempt, error: null });
         return result;
       } catch (error) {
+        clearTimeout(timeout);
         const message = sanitizeTransportError(error);
         if (attempt < attemptLimit) {
           await sleep(boundedBackoff * 2 ** (attempt - 1));

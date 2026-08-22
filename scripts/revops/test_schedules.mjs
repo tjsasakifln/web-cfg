@@ -198,6 +198,25 @@ for (const rel of [
   const exhausted = await bounded("/.netlify/functions/ops?action=health");
   if (boundedCalls !== 5 || exhausted.attempts !== 5) fail("ops_retry_upper_bound", exhausted);
   else pass("ops_retry_upper_bound", `attempts=${exhausted.attempts}`);
+
+  let timeoutCalls = 0;
+  const timesOut = createOpsJsonClient({
+    base: "https://ops.invalid",
+    maxAttempts: 2,
+    backoffMs: 0,
+    timeoutMs: 100,
+    sleep: async () => {},
+    fetchImpl: async (_url, options) => {
+      timeoutCalls += 1;
+      return new Promise((_resolve, reject) => {
+        options.signal.addEventListener("abort", () => reject(options.signal.reason), { once: true });
+      });
+    },
+  });
+  const timedOut = await timesOut("/.netlify/functions/ops?action=inbound_handoff");
+  if (timeoutCalls !== 2 || timedOut.attempts !== 2 || !timedOut.error?.includes("ops_fetch_timeout")) {
+    fail("ops_attempt_timeout_bounded", timedOut);
+  } else pass("ops_attempt_timeout_bounded", timedOut.error);
 }
 
 function parseJsonBlob(text) {
