@@ -497,6 +497,16 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/diagnostico-b2g-360/", "/diagnostico-b2g-expansao/", "/diretoria-b2g/"],
   },
+  "test:icp-trigger-offer": {
+    producers: [
+      "tests/offers/test_icp_trigger_offer.py",
+      "data/offers/icp-trigger-offer.v1.json",
+      "scripts/offers/registry.cjs",
+      "index.html",
+    ],
+    artifacts: [],
+    surfaces: ["/"],
+  },
   "validate:seo": {
     producers: ["seo/scripts/validate_seo.py", "seo/", "tests/data_desk/test_data_desk.py"],
     artifacts: [],

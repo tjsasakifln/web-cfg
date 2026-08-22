@@ -80,6 +80,16 @@ function expectSubset(result, mustInclude, because) {
 }
 
 {
+  const paths = ["data/offers/icp-trigger-offer.v1.json"];
+  const result = selectAffected(paths, scripts);
+  expectSubset(
+    result,
+    ["test:icp-trigger-offer", "test:conversion"],
+    "ICP trigger offer mapping",
+  );
+}
+
+{
   const paths = [".github/workflows/site-ci.yml"];
   const result = selectAffected(paths, scripts);
   expectSubset(result, ["test:workflow-gates"], "workflow yaml");
