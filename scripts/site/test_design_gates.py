@@ -350,29 +350,90 @@ def test_img_rules_declare_height_auto():
         )
 
 
-def test_article_cover_html_keeps_intrinsic_1200x630():
-    """CSS height:auto is the distortion fix; HTML still declares 1200x630 intrinsic size."""
-    article = ROOT / "conteudos" / "documentos-reequilibrio-obra-publica" / "index.html"
-    pillar = ROOT / "reequilibrio-obras-publicas" / "index.html"
-    for path in (article, pillar):
-        assert path.exists(), f"missing {path.relative_to(ROOT)}"
+def _meta_properties(html: str) -> dict[str, str]:
+    properties: dict[str, str] = {}
+    for tag in re.findall(r"<meta\b[^>]*>", html, re.I):
+        attrs = {
+            key.lower(): value
+            for key, _quote, value in re.findall(
+                r"([:\w-]+)\s*=\s*([\"'])(.*?)\2", tag, re.I | re.S
+            )
+        }
+        prop = attrs.get("property", "").lower()
+        if prop:
+            properties[prop] = attrs.get("content", "")
+    return properties
+
+
+def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
+    """Remove redundant inline cards without bypassing the #128/#226 freeze."""
+    frozen_bofu = {
+        "aditivos-obras-publicas/index.html",
+        "auditoria-orcamento-licitacao/index.html",
+        "diagnostico-b2g-360/index.html",
+        "diagnostico-pre-licitacao/index.html",
+        "medicoes-glosas-obras-publicas/index.html",
+        "reequilibrio-obras-publicas/index.html",
+    }
+    candidates: list[Path] = []
+    frozen_candidates: set[str] = set()
+    for path in ROOT.rglob("index.html"):
+        if any(part in {".git", ".worktrees", "_site", "node_modules"} for part in path.parts):
+            continue
         html = path.read_text(encoding="utf-8")
+        meta = _meta_properties(html)
+        og_image = meta.get("og:image", "")
+        if not og_image.startswith(
+            (
+                "https://confenge.com.br/assets/conteudos/",
+                "https://confenge.com.br/assets/clusters/",
+            )
+        ):
+            continue
+        candidates.append(path)
+        relative_asset = og_image.removeprefix("https://confenge.com.br/")
+        assert (ROOT / relative_asset).exists(), f"{path.relative_to(ROOT)}: missing OG asset"
+        assert meta.get("og:image:width") == "1200", path.relative_to(ROOT)
+        assert meta.get("og:image:height") == "630", path.relative_to(ROOT)
+        relative = path.relative_to(ROOT).as_posix()
         figures = re.findall(
-            r"<figure\b[^>]*class=\"[^\"]*\barticle-cover\b[^\"]*\"[^>]*>[\s\S]*?</figure>",
+            r"<figure\b[^>]*class=[\"'][^\"']*\barticle-cover\b[^\"']*[\"'][^>]*>"
+            r"[\s\S]*?</figure>",
             html,
             re.I,
         )
-        assert figures, f"{path.relative_to(ROOT)}: missing <figure class=\"article-cover\">"
-        matched = False
-        for fig in figures:
-            if re.search(r"<img\b[^>]*\bwidth=\"1200\"[^>]*\bheight=\"630\"", fig, re.I) or re.search(
-                r"<img\b[^>]*\bheight=\"630\"[^>]*\bwidth=\"1200\"", fig, re.I
-            ):
-                matched = True
-                break
-        assert matched, (
-            f"{path.relative_to(ROOT)}: article-cover img must keep width=\"1200\" height=\"630\""
-        )
+        if relative in frozen_bofu:
+            frozen_candidates.add(relative)
+            assert len(figures) == 1, f"{relative}: frozen cover changed"
+            image = re.search(r"<img\b[^>]*>", figures[0], re.I)
+            assert image, f"{relative}: frozen cover image missing"
+            attrs = {
+                key.lower(): value
+                for key, _quote, value in re.findall(
+                    r"([:\w-]+)\s*=\s*([\"'])(.*?)\2", image.group(0), re.I | re.S
+                )
+            }
+            assert attrs.get("src") == "/" + relative_asset, relative
+            assert attrs.get("width") == "1200", relative
+            assert attrs.get("height") == "630", relative
+        else:
+            assert not figures, f"{relative}: redundant raster title card must be OG-only"
+            hero = re.search(
+                r"<header\b[^>]*class=[\"'][^\"']*\bcontent-hero\b[^\"']*[\"']",
+                html,
+                re.I,
+            )
+            assert hero and "article-hero" in hero.group(0), (
+                f"{relative}: coverless route must reuse the one-column article hero"
+            )
+
+    representative = {
+        ROOT / "conteudos" / "documentos-reequilibrio-obra-publica" / "index.html",
+        ROOT / "acompanhamento-contratos-obras" / "index.html",
+    }
+    assert representative <= set(candidates)
+    assert len(candidates) == 128, f"expected the 128 audited routes, got {len(candidates)}"
+    assert frozen_candidates == frozen_bofu - {"diagnostico-b2g-360/index.html"}
 
 
 def test_home_header_footer_asset_budget():

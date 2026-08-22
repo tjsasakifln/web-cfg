@@ -1002,6 +1002,74 @@ async function main() {
     fail("offer_cta_first_viewport_and_progressive_detail", e.message || e);
   }
 
+  // Editorial cards are OG-only outside #128/#226; frozen covers remain proportional.
+  try {
+    const routes = [
+      { path: "/conteudos/documentos-reequilibrio-obra-publica/", frozen: false },
+      { path: "/acompanhamento-contratos-obras/", frozen: false },
+      { path: "/reequilibrio-obras-publicas/", frozen: true },
+    ];
+    const reports = [];
+    for (const width of [320, 390, 768, 1024, 1440]) {
+      await page.setViewport({ width, height: 844, deviceScaleFactor: 1 });
+      for (const route of routes) {
+        const { path, frozen } = route;
+        await page.goto(`${BASE}${path}`, { waitUntil: "networkidle0", timeout: 30000 });
+        const rep = await page.evaluate(() => {
+          const h1 = document.querySelector("h1");
+          const hero = document.querySelector(".content-hero");
+          const answer = document.querySelector("#resposta");
+          const og = document.querySelector('meta[property="og:image"]')?.getAttribute("content") || "";
+          const localOg = og.replace("https://confenge.com.br", "");
+          const repeatedOg = [...document.images].filter((img) => img.getAttribute("src") === localOg);
+          const grid = document.querySelector(".content-hero-grid");
+          const coverImage = document.querySelector(".article-cover img");
+          const h1Box = h1?.getBoundingClientRect();
+          const heroBox = hero?.getBoundingClientRect();
+          const answerBox = answer?.getBoundingClientRect();
+          const gridBox = grid?.getBoundingClientRect();
+          return {
+            h1Visible: Boolean(h1Box && h1Box.top >= 0 && h1Box.top < window.innerHeight),
+            heroHeight: heroBox ? Math.round(heroBox.height) : null,
+            answerTop: answerBox ? Math.round(answerBox.top) : null,
+            articleCovers: document.querySelectorAll(".article-cover").length,
+            repeatedOg: repeatedOg.length,
+            coverIntrinsic: coverImage ? [coverImage.getAttribute("width"), coverImage.getAttribute("height")] : null,
+            coverRatio: coverImage ? coverImage.getBoundingClientRect().width / coverImage.getBoundingClientRect().height : null,
+            hasGrid: Boolean(grid),
+            gridColumns: grid ? getComputedStyle(grid).gridTemplateColumns : "",
+            heroContained: Boolean(
+              h1Box && gridBox && h1Box.left >= -1 && h1Box.right <= window.innerWidth + 1 &&
+              gridBox.left >= -1 && gridBox.right <= window.innerWidth + 1
+            ),
+          };
+        });
+        reports.push(`${path}@${width}:hero=${rep.heroHeight},answer=${rep.answerTop}`);
+        if (!rep.h1Visible) throw new Error(`${path}@${width}: H1 outside first viewport`);
+        if (frozen) {
+          if (rep.articleCovers !== 1 || rep.repeatedOg !== 1) {
+            throw new Error(`${path}@${width}: frozen cover or OG changed ${JSON.stringify(rep)}`);
+          }
+          if (rep.coverIntrinsic?.join("x") !== "1200x630" || Math.abs(rep.coverRatio - (1200 / 630)) > 0.02) {
+            throw new Error(`${path}@${width}: frozen cover distorted ${JSON.stringify(rep)}`);
+          }
+        } else if (rep.articleCovers || rep.repeatedOg) {
+          throw new Error(`${path}@${width}: raster title card still inline ${JSON.stringify(rep)}`);
+        }
+        if (!rep.hasGrid || !rep.gridColumns) {
+          throw new Error(`${path}@${width}: content hero grid missing`);
+        }
+        if (!rep.heroContained) throw new Error(`${path}@${width}: hero escapes viewport ${JSON.stringify(rep)}`);
+        if (path.startsWith("/conteudos/") && width <= 390 && rep.answerTop >= 844) {
+          throw new Error(`${path}@${width}: initial answer below first viewport ${rep.answerTop}`);
+        }
+      }
+    }
+    ok(`editorial_cover_scope_geometry (${reports.join(", ")})`);
+  } catch (e) {
+    fail("editorial_cover_scope_geometry", e.message || e);
+  }
+
   await browser.close();
   if (ownServer && server) server.close();
   if (failed) {
