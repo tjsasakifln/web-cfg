@@ -20,7 +20,12 @@ from scripts.bofu_dominance.frozen_specs.constants import (
 )
 from scripts.bofu_dominance.frozen_specs.entry import run_entry
 from scripts.bofu_dominance.frozen_specs.gate import evaluate_gate, load_issue_state
-from scripts.bofu_dominance.frozen_specs.hashing import content_sha256, forbidden_path_hashes
+from scripts.bofu_dominance.frozen_specs.hashing import (
+    committed_forbidden_hashes,
+    content_sha256,
+    forbidden_drift,
+    forbidden_path_hashes,
+)
 from scripts.bofu_dominance.frozen_specs.patch import apply_frozen_patch, parse_patch
 from scripts.bofu_dominance.frozen_specs.snapshot import snapshot_pillar, snapshot_six
 from scripts.bofu_dominance.frozen_specs.spec import load_spec, load_specs, validate_spec
@@ -147,11 +152,32 @@ def test_entry_twice_html_mutation_false():
 
 
 def test_forbidden_paths_unchanged_list():
+    baseline = committed_forbidden_hashes(ROOT)
     hashes = forbidden_path_hashes(ROOT)
+    assert forbidden_drift(ROOT) == {}
     for rel in FORBIDDEN_RELATIVE_PATHS:
         path = ROOT / rel
         assert path.is_file(), rel
-        assert hashes[rel] == content_sha256(path)
+        assert baseline[rel] == hashes[rel] == content_sha256(path)
+
+
+def test_forbidden_drift_reads_committed_baseline(tmp_path):
+    for rel in FORBIDDEN_RELATIVE_PATHS:
+        source = ROOT / rel
+        target = tmp_path / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(source.read_bytes())
+    baseline_source = ROOT / "data/bofu-dominance/frozen-specs/hashes.json"
+    baseline_target = tmp_path / "data/bofu-dominance/frozen-specs/hashes.json"
+    baseline_target.parent.mkdir(parents=True, exist_ok=True)
+    baseline_target.write_bytes(baseline_source.read_bytes())
+
+    protected = tmp_path / FORBIDDEN_RELATIVE_PATHS[0]
+    protected.write_bytes(protected.read_bytes() + b"\n<!-- forbidden mutation -->\n")
+
+    drift = forbidden_drift(tmp_path)
+    assert list(drift) == [FORBIDDEN_RELATIVE_PATHS[0]]
+    assert drift[FORBIDDEN_RELATIVE_PATHS[0]]["baseline"] != drift[FORBIDDEN_RELATIVE_PATHS[0]]["live"]
 
 
 def test_citations_in_specs():
