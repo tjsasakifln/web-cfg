@@ -485,8 +485,11 @@
       };
       if (classified.kind === 'whatsapp') {
         const whatsappAttrs = attrsFromEl(el);
+        const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
           ...base,
+          correlation_id: base.correlation_id || whatsappProtocol,
+          whatsapp_protocol: whatsappProtocol,
           cta_label: label || 'whatsapp',
           destination_type: 'whatsapp',
           journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',

@@ -1,7 +1,7 @@
 # Story 1.8 — Form multi-step a11y + tool commercial CTA
 
 **Epic:** EPIC-TD-001  
-**Status:** Done  
+**Status:** Corrected after reopening
 **Priority:** P1  
 **Phase:** B  
 **Estimate:** 8–16h  
@@ -109,3 +109,6 @@ Improves conversion accessibility and reduces CTA competition after tools diagno
 **Date:** 2026-08-05  
 **Notes:** Automated gates for story ACs green; no HIGH/CRITICAL open. Production Playwright optional evidence in composite scorecard.
 
+## 2026-08-22 correction
+
+Issue #234 proved that three tool result branches marked Done had no commercial next action when the result was healthy. Both positive and negative branches now keep the result ungated and route contextually to the canonical service with attribution IDs. `npm run test:tools` asserts both branches.

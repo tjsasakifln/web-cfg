@@ -34,6 +34,22 @@ DEFAULT_MEMBERS = (
     "sitemap-inteligencia.xml",
 )
 
+PUBLIC_HTML_SKIP_DIRS = frozenset(
+    {
+        ".git",
+        ".netlify",
+        ".cache",
+        "_site",
+        "data",
+        "docs",
+        "netlify",
+        "node_modules",
+        "scripts",
+        "seo",
+        "tests",
+    }
+)
+
 FAMILY_FOR_MEMBER = {
     "sitemap.xml": "core",
     "sitemap-editorial.xml": "editorial",
@@ -701,6 +717,50 @@ def load_graph_locs(root: Path) -> list[str]:
     return locs
 
 
+def local_indexable_paths(root: Path, *, headers_text: str = "") -> set[str]:
+    """Return live public HTML paths that search engines may index.
+
+    Attribute order in ``<meta name=robots>`` is deliberately irrelevant.
+    Repository/tooling trees and confirmation utilities are not public SEO
+    targets. X-Robots-Tag family rules are applied with the same semantics as
+    sitemap membership validation.
+    """
+    paths: set[str] = set()
+    for page in root.rglob("*.html"):
+        try:
+            rel = page.relative_to(root)
+        except ValueError:
+            continue
+        if any(part in PUBLIC_HTML_SKIP_DIRS for part in rel.parts):
+            continue
+        if page.name == "index.html":
+            path = "/" if rel.parent == Path(".") else f"/{rel.parent.as_posix()}/"
+        else:
+            path = f"/{rel.as_posix()}"
+        if path == "/404.html" or path.startswith("/obrigado"):
+            continue
+        html = page.read_text(encoding="utf-8", errors="replace")
+        if meta_robots_noindex(html) or x_robots_noindex(headers_text, path):
+            continue
+        paths.add(path)
+    return paths
+
+
+def indexability_graph_issues(
+    root: Path,
+    entries: Iterable[UrlEntry],
+    *,
+    headers_text: str = "",
+) -> list[GraphIssue]:
+    """Enforce ``indexable => present_in_a_valid_sitemap`` fail-closed."""
+    graph_paths = {loc_path(entry.loc) for entry in entries}
+    indexable = local_indexable_paths(root, headers_text=headers_text)
+    return [
+        GraphIssue(severity="high", code="indexable_missing_from_sitemap", url=path)
+        for path in sorted(indexable - graph_paths)
+    ]
+
+
 def audit_graph(
     root: Path,
     *,
@@ -748,6 +808,14 @@ def audit_graph(
         )
     entries, members, walk_issues = walk_index_children(index_xml, children)
     issues.extend(walk_issues)
+    member_counts: dict[str, int] = {member.filename: 0 for member in members}
+    for entry in entries:
+        member_counts[entry.member] = member_counts.get(entry.member, 0) + 1
+    for filename, count in member_counts.items():
+        if count == 0 and children.get(filename) is not None:
+            issues.append(
+                GraphIssue(severity="high", code="empty_sitemap_member", detail=filename)
+            )
     issues.extend(lastmod_issues(entries, as_of=as_of))
 
     ma_flag = (
@@ -783,6 +851,7 @@ def audit_graph(
                 as_of=as_of,
             )
         )
+    issues.extend(indexability_graph_issues(root, entries, headers_text=headers_text))
 
     txt_path = root / TXT_NAME
     named: dict[str, Iterable[str]] = {
@@ -913,9 +982,11 @@ def close_graph(
         kept.sort(key=lambda item: loc_key(item[0]))
         child_path.write_text(render_urlset(kept), encoding="utf-8")
         all_locs.extend(loc for loc, _ in kept)
-        rewritten.append(
-            (member.loc, child_lastmod((lm for _, lm in kept), as_of=as_of))
-        )
+        # Empty family sitemaps must not remain referenced by the public index.
+        if kept:
+            rewritten.append(
+                (member.loc, child_lastmod((lm for _, lm in kept), as_of=as_of))
+            )
 
     index_path.write_text(render_sitemap_index(rewritten), encoding="utf-8")
     (root / TXT_NAME).write_text(render_sitemap_txt(all_locs), encoding="utf-8")

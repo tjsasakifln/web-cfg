@@ -1,8 +1,8 @@
 # BOFU intent dominance — BOFU-CORE
 
 **Campaign:** `CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02`  
-**As of:** 2026-08-19  
-**Git head (origin/main pin):** `faadc16609210522c9ffaf32a7b944817f6c6214`  
+**As of:** 2026-08-22
+**Git head (origin/main pin):** `14740dab6b21bde19ecc62396d89393c2c7adab6`
 **Decision state:** VALIDATE (ledger) / EXECUTE_NOW (honesty gates)  
 **Leverage:** distribution, data, trust  
 **Time to evidence:** this PR for the ledger; `gsc_live_state` is `LIVE_JOB_OK`  
@@ -32,8 +32,8 @@ main. Absence of a path in the returned top rows is not ranking zero.
 
 ## Coverage
 
-- families: **13** (100% owner/state/reason)
-- state counts: `COVERED`=5, `FROZEN`=6, `NO_CANONICAL`=2
+- families: **15** (100% owner/state/reason)
+- state counts: `COVERED`=7, `FROZEN`=6, `NO_CANONICAL`=2
 - P0/P1 census missing: none
 - official SERP position claimed: `False`
 
@@ -52,6 +52,8 @@ main. Absence of a path in the returned top rows is not ranking zero.
 | `defesa-sancoes` | P2 | `COVERED` | `/defesa-tecnica-contratos-publicos/` | 61 | canonical_page_exists_current_rank_unknown | no |
 | `gestao-contratual` | P2 | `COVERED` | `/acompanhamento-contratos-obras/` | 61 | canonical_page_exists_current_rank_unknown | no |
 | `bid-room` | P2 | `COVERED` | `/bid-room-licitacoes-obras/` | 88 | canonical_page_exists_current_rank_unknown | no |
+| `diagnostico-expansao` | P0 | `COVERED` | `/diagnostico-b2g-expansao/` | 237 | canonical_page_exists_current_rank_unknown | no |
+| `diretoria-b2g` | P0 | `COVERED` | `/diretoria-b2g/` | 237 | canonical_page_exists_current_rank_unknown | no |
 | `bid-readiness` | P1 | `NO_CANONICAL` | `issue:155` | 155 | gated_issue_no_public_page | no |
 | `partner-integrity` | P1 | `NO_CANONICAL` | `issue:156` | 156 | gated_issue_no_public_page | no |
 
@@ -96,4 +98,3 @@ Notable sample facts (not ranks):
 ## Rollback
 
 Revert this PR. No public HTML changed.
-

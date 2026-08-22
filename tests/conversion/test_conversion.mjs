@@ -70,6 +70,21 @@ const VALID = "11222333000181";
     if (r.sla !== "UNKNOWN") fail("sla_unknown", r.id);
   }
   pass("sla_unknown_all_routes");
+  const canonicalServices = JSON.parse(
+    fs.readFileSync(path.join(root, "data/organic/bofu-intent-matrix.json"), "utf8"),
+  ).rows.map((row) => row.destination_service_id);
+  const routedServices = new Set(
+    matrix.listRoutes().map((route) => route.service_id).filter(Boolean),
+  );
+  const missingServices = canonicalServices.filter((serviceId) => !routedServices.has(serviceId));
+  if (missingServices.length) fail("service_action_completeness", missingServices);
+  else pass("service_action_completeness", `${routedServices.size}/${canonicalServices.length}`);
+  const addedRoutes = matrix.listRoutes().filter((route) => route.question_class === "service_handraise" || route.question_class === "paid_offer_handraise");
+  if (addedRoutes.some((route) => route.sla !== "UNKNOWN" || route.auto_send !== false || route.first_canary !== false)) {
+    fail("new_service_route_safety", addedRoutes);
+  } else pass("new_service_route_safety", addedRoutes.length);
+  if (matrix.optInAuthorized()) fail("opt_in_still_deferred", "authorized");
+  else pass("opt_in_still_deferred");
 }
 
 // --- CNPJ ---

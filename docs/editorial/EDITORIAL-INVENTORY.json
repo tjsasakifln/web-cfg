@@ -1,7 +1,7 @@
 {
   "schema_version": "3.0.0",
-  "derived_at": "2026-08-05T02:09:17Z",
-  "commit_sha": "8535e50420ca5a455ca80da02753f92b941e2f73",
+  "derived_at": "2026-08-22T23:39:00Z",
+  "commit_sha": "56d0f0970b145e10c9d7bc9c923ec11f4fcd28d6",
   "commit_sha_role": "informational_only",
   "terminal_status": "READY_FOR_RELEASE",
   "registry_counts": {
@@ -65,9 +65,9 @@
     "awaiting_page_ids": []
   },
   "public_inventory": {
-    "conteudos_indexable": 20,
-    "hub_claimed_guides": 20,
-    "legacy_indexable_public_surface": 20,
+    "conteudos_indexable": 21,
+    "hub_claimed_guides": 21,
+    "legacy_indexable_public_surface": 21,
     "first_cohort_awaiting_approval": 0,
     "first_cohort_published": 3,
     "editorial_backlog_awaiting_approval": 8,
@@ -77,11 +77,11 @@
     "editorial_locs": 5,
     "jurisprudencia_locs": 0,
     "editorial_urls": [
+      "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "/lei-14133-obras/limite-25-50-aditivo-obra/",
       "/lei-14133-obras/",
-      "/guias-contratos-obras/"
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
     ],
     "expected_urls": [
       "/guias-contratos-obras/",

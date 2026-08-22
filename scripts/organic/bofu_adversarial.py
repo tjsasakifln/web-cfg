@@ -49,6 +49,7 @@ FINDING_CODES = (
     "PILLAR_NOT_INDEX_FOLLOW",
     "PILLAR_NOT_IN_SITEMAP",
     "PILLAR_MISSING_ONPAGE_CAPTURE",
+    "SLA_NOT_IN_CATALOG",
 )
 
 _TAG_RE = re.compile(r"<[^>]+>", re.I)
@@ -191,6 +192,60 @@ def catalog_offer_ids(root: Path) -> set[str]:
             if oid:
                 ids.add(oid)
     return ids
+
+
+def catalog_offers(root: Path) -> dict[str, dict[str, Any]]:
+    snapshot = root / "data" / "offers" / "catalog.snapshot.json"
+    if not snapshot.is_file():
+        snapshot = ROOT / "data" / "offers" / "catalog.snapshot.json"
+    if not snapshot.is_file():
+        return {}
+    doc = json.loads(snapshot.read_text(encoding="utf-8"))
+    return {str(offer["offer_id"]): offer for offer in doc.get("offers") or []}
+
+
+def audit_service_sla_claims(
+    path: str,
+    html: str,
+    row: dict[str, Any],
+    offers: dict[str, dict[str, Any]],
+) -> list[dict[str, str]]:
+    visible = _visible_text(html)
+    sentences = re.split(r"(?<=[.!?])\s+", visible)
+    delivery_sentences = [
+        sentence
+        for sentence in sentences
+        if re.search(r"\b(entrega|prazo (?:de entrega|do diagn[oó]stico))\b", sentence, re.I)
+        and re.search(
+            r"\d{1,2}\s*(?:a|-)\s*\d{1,2}\s+dias [uú]teis|at[eé]\s+\d{1,2}\s+dias [uú]teis",
+            sentence,
+            re.I,
+        )
+    ]
+    if not delivery_sentences:
+        return []
+    raw_ids = row.get("offer_id")
+    offer_ids = [raw_ids] if isinstance(raw_ids, str) else list(raw_ids or [])
+    allowed = {
+        str(offers[offer_id]["sla_business_days"])
+        for offer_id in offer_ids
+        if offer_id in offers and offers[offer_id].get("sla_business_days")
+    }
+    claimed_numbers = {
+        number
+        for sentence in delivery_sentences
+        for number in re.findall(r"\b\d{1,2}\b", sentence)
+    }
+    allowed_numbers = {number for sla in allowed for number in re.findall(r"\b\d{1,2}\b", sla)}
+    if not allowed or not claimed_numbers.issubset(allowed_numbers):
+        return [
+            _finding(
+                "SLA_NOT_IN_CATALOG",
+                path,
+                f"claimed={sorted(claimed_numbers)} catalog={sorted(allowed)}",
+            )
+        ]
+    return []
 
 
 def _schema_types_and_blob(html: str) -> tuple[list[str], str]:
@@ -460,6 +515,7 @@ def run_audit(root: Path | None = None, matrix: dict[str, Any] | None = None) ->
     matrix = matrix or load_intent_matrix()
     sitemap = parse_sitemap_locs(root)
     catalog_ids = catalog_offer_ids(root)
+    offers = catalog_offers(root)
     findings: list[dict[str, str]] = []
     for row in matrix.get("rows") or []:
         path = row.get("canonical_service_route")
@@ -480,6 +536,7 @@ def run_audit(root: Path | None = None, matrix: dict[str, Any] | None = None) ->
                 row=row,
             )
         )
+        findings.extend(audit_service_sla_claims(path, html, row, offers))
     findings.extend(audit_preferred_destinations(matrix, root))
     findings.extend(audit_intent_cannibalization(matrix))
     # indexable mapped content → exactly one preferred destination

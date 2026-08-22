@@ -19,6 +19,7 @@ from scripts.organic.sitemap_graph import (
     consumed_market_answer_indexable,
     exact_one_issues,
     loc_set_drift,
+    indexability_graph_issues,
     market_answer_canonical,
     normalize_lastmod,
     parse_sitemap_index,
@@ -180,7 +181,8 @@ def test_include_and_remove_via_close_graph(tmp_path: Path):
         pages={loc_a: {"modified": "2026-08-01"}, loc_b: {"modified": "2026-08-02"}},
     )
     first = audit_sitemaps(tmp_path)
-    assert first["ok"] is True
+    assert first["ok"] is False
+    assert any(i["code"] == "indexable_missing_from_sitemap" for i in first["issues"])
     assert loc_a in first["locs"]
     assert loc_b not in first["locs"]
 
@@ -265,6 +267,41 @@ def test_close_graph_drops_noindex_html(tmp_path: Path):
     assert loc_no not in txt
 
 
+def test_indexable_must_be_in_valid_sitemap_attribute_order_independent(tmp_path: Path):
+    indexed = f"{SITE}/indexed/"
+    missing = f"{SITE}/missing/"
+    noindex = f"{SITE}/draft/"
+    _seed(
+        tmp_path,
+        members={"sitemap.xml": [(indexed, None)]},
+        pages={indexed: {}, missing: {}, noindex: {"robots": "noindex,follow"}},
+    )
+    # Exercise the reversed attribute order that caused #223/#244.
+    draft = tmp_path / "draft" / "index.html"
+    draft.write_text(
+        draft.read_text(encoding="utf-8").replace(
+            'name="robots" content="noindex,follow"',
+            'content="noindex,follow" name="robots"',
+        ),
+        encoding="utf-8",
+    )
+    entries = [UrlEntry(loc=indexed, lastmod=None, member="sitemap.xml")]
+    issues = indexability_graph_issues(tmp_path, entries)
+    assert [issue.url for issue in issues] == ["/missing/"]
+
+
+def test_audit_rejects_referenced_empty_sitemap(tmp_path: Path):
+    loc = f"{SITE}/a/"
+    _seed(
+        tmp_path,
+        members={"sitemap.xml": [(loc, None)], "sitemap-empty.xml": []},
+        pages={loc: {}},
+    )
+    report = audit_sitemaps(tmp_path)
+    assert report["ok"] is False
+    assert any(i["code"] == "empty_sitemap_member" for i in report["issues"])
+
+
 def test_stale_market_answer_absent_and_present(tmp_path: Path):
     loc = f"{SITE}/a/"
     _seed(
@@ -273,7 +310,7 @@ def test_stale_market_answer_absent_and_present(tmp_path: Path):
             "sitemap.xml": [(loc, None)],
             "sitemap-inteligencia.xml": [(MA, "2026-08-17")],
         },
-        pages={loc: {}, MA: {"robots": "index,follow", "modified": "2026-08-17"}},
+        pages={loc: {}, MA: {"robots": "noindex,follow", "modified": "2026-08-17"}},
     )
     present = audit_graph(
         tmp_path, as_of=AS_OF, market_answer_indexable=False
@@ -417,7 +454,7 @@ def test_shipped_reports_share_graph_cardinality():
     assert report["unique_paths"] == inbound.stats["sitemap_locs"] == len(graph)
     assert {loc_key(url) for url in txt} == graph
     assert "sitemap.xml" in report["walked_members"]
-    assert len(report["walked_members"]) >= 4
+    assert not any(i["code"] == "empty_sitemap_member" for i in report["issues"])
 
 
 def test_audit_sitemaps_is_the_shipped_entry_point(tmp_path: Path):

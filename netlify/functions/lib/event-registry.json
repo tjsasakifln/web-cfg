@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "source": "CONFENGE_WEB",
   "pii_policy": "aggregate_allowlist_empty",
   "aggregate_pii_allowlist": [],
@@ -158,7 +158,7 @@
       "schema_version": "1.0.0",
       "producers": ["js/modules/nav.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Click on a wa.me destination. Engagement."
+      "semantic": "Click on a wa.me destination. Engagement. Carries a non-PII short protocol in the visitor-initiated message for later Warmbly reconciliation."
     },
     "email_click": {
       "layer": "engagement",
@@ -207,14 +207,6 @@
       "producers": ["js/modules/analytics.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "semantic": "Anonymous Core Web Vital sample."
-    },
-    "return_visit": {
-      "layer": "engagement",
-      "owner": "web-cfg",
-      "schema_version": "1.0.0",
-      "producers": [],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Reserved returning-session marker. No current producer."
     },
     "comparison_view": {
       "layer": "engagement",
@@ -447,14 +439,6 @@
       "producers": ["js/modules/form.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "semantic": "pSEO related-page click."
-    },
-    "nurture_opt_in": {
-      "layer": "engagement",
-      "owner": "web-cfg",
-      "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Nurture opt-in click. Not a lead persist."
     },
     "xray_error": {
       "layer": "engagement",
@@ -717,7 +701,7 @@
     "pseo_cta_click": "pseo"
   },
   "source_to_service": {
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "unknown_service": "UNKNOWN_SERVICE",
     "destinations": {
       "/auditoria-orcamento-licitacao/": "auditoria-orcamento-licitacao",
@@ -732,6 +716,7 @@
       "/diagnostico-b2g-360/": "diagnostico-b2g-360",
       "/bid-room-licitacoes-obras/": "bid-room-licitacoes-obras",
       "/defesa-margem-contratos-publicos/": "defesa-margem-contratos-publicos",
+      "/diagnostico-b2g-expansao/": "diagnostico-b2g-expansao",
       "/ferramentas/diagnostico-defesa-margem/": "diagnostico-defesa-margem"
     },
     "origin_prefixes": {
@@ -740,6 +725,8 @@
       "/jurisprudencia-contratos-obras/": "editorial",
       "/guias-contratos-obras/": "editorial",
       "/analises-contratos-publicos/": "editorial",
+      "/panorama-mercado-obras-publicas/": "editorial",
+      "/casos/": "case",
       "/inteligencia/": "data",
       "/radar/": "data",
       "/ferramentas/": "tool"
@@ -752,8 +739,7 @@
       "/correcoes/",
       "/uso-de-ia/",
       "/conflitos/",
-      "/imprensa/",
-      "/casos/",
+    "/imprensa/",
       "/nurture/",
       "/ops/",
       "/comercial/",

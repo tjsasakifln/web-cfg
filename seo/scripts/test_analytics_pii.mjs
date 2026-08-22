@@ -48,6 +48,28 @@ if (typeof track !== "function") {
   process.exit(1);
 }
 
+const waProtocol = sandbox.window.__CONFENGE_EVENT_CONTRACT?.appendWhatsappProtocol;
+if (typeof waProtocol !== "function") {
+  console.error("FAIL: WhatsApp protocol helper not exported");
+  process.exit(1);
+}
+const waAttrs = { href: "https://wa.me/5548988344559?text=Mensagem%20existente" };
+const waLink = {
+  getAttribute: (key) => waAttrs[key] || "",
+  setAttribute: (key, value) => { waAttrs[key] = value; },
+};
+const protocol = waProtocol(waLink, "e-session-abcdef12");
+if (protocol !== "CFG-WA-ABCDEF12" || !decodeURIComponent(waAttrs.href.replace(/\+/g, "%20")).includes("Mensagem existente\nProtocolo CONFENGE: CFG-WA-ABCDEF12")) {
+  console.error("FAIL: WhatsApp protocol not appended", { protocol, waAttrs });
+  process.exit(1);
+}
+waProtocol(waLink, "e-session-12345678");
+const decodedWa = decodeURIComponent(waAttrs.href.replace(/\+/g, "%20"));
+if (!decodedWa.includes("CFG-WA-12345678") || decodedWa.includes("CFG-WA-ABCDEF12")) {
+  console.error("FAIL: WhatsApp protocol not replaced idempotently", decodedWa);
+  process.exit(1);
+}
+
 track("whatsapp_click", {
   page_path: "/x",
   cta_label: "ok",
@@ -90,4 +112,4 @@ if (sub.journey !== "contrato" || sub.stage_category !== "problema urgente em co
   process.exit(1);
 }
 
-console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, submit: sub }));
+console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, submit: sub, whatsapp_protocol: protocol }));

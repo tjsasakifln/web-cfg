@@ -209,8 +209,8 @@
     cta.hidden=false;
     var needs=(s.semProvaContemporanea||0)+(s.semPeriodoDefinido||0);
     cta.innerHTML=needs
-      ? '<p>Há eventos sem prova contemporânea ou período definido. Envie cronograma e comunicações para análise de nexo.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/#contato?jornada=contrato">Analisar cronograma e prova</a></div>'
-      : '<p><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></p>';
+      ? '<p>Há eventos sem prova contemporânea ou período definido. Enquadre cronograma, causa e comunicações.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-lacunas" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" href="/atrasos-prorrogacao-obras-publicas/">Enquadrar cronograma e prova</a></div>'
+      : '<p>A matriz está mais consistente; valide o nexo antes de pedir prazo ou custo.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-completa" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" href="/atrasos-prorrogacao-obras-publicas/">Validar causa e caminho crítico</a><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></div>';
     T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis"});
     persist();
   });

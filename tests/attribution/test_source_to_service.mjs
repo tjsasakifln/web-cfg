@@ -14,6 +14,7 @@ const require = createRequire(import.meta.url);
 const contract = require(path.join(root, "netlify/functions/lib/event-contract.cjs"));
 const collect = require(path.join(root, "netlify/functions/collect.cjs"));
 const agg = require(path.join(root, "netlify/functions/lib/analytics-agg.cjs"));
+const sourceToService = require(path.join(root, "netlify/functions/lib/source-to-service.cjs"));
 
 const MIN_FIELDS = [
   "source_path",
@@ -207,6 +208,35 @@ async function postCollect(events) {
     if (!script.includes(dest) || !analyticsMod.includes(`'${dest}': '${id}'`)) {
       fail("client_dest_drift", { dest, id });
     }
+  }
+  const intentMatrix = JSON.parse(
+    fs.readFileSync(path.join(root, "data/organic/bofu-intent-matrix.json"), "utf8"),
+  );
+  for (const row of intentMatrix.rows || []) {
+    const route = row.canonical_service_route;
+    if (maps.source_to_service.destinations[route] !== row.destination_service_id) {
+      fail("canonical_service_missing_from_registry", {
+        route,
+        expected: row.destination_service_id,
+        actual: maps.source_to_service.destinations[route] || null,
+      });
+    }
+  }
+  const caseTransition = sourceToService.classifyTransition({
+    origin_path: "/casos/aditivo-art125-demonstrativo/",
+    href: "/aditivos-obras-publicas/",
+    attributes: { cta_id: "case-to-aditivos", route_family: "case" },
+  });
+  if (caseTransition.kind !== "transition" || caseTransition.event !== "content_to_service") {
+    fail("case_origin_not_transition", caseTransition);
+  }
+  const panoramaTransition = sourceToService.classifyTransition({
+    origin_path: "/panorama-mercado-obras-publicas/",
+    href: "/diagnostico-b2g-expansao/",
+    attributes: { cta_id: "panorama-to-diagnostico", route_family: "panorama" },
+  });
+  if (panoramaTransition.destination_service_id !== "diagnostico-b2g-expansao") {
+    fail("paid_offer_destination_unknown", panoramaTransition);
   }
   if (!contract.ENVELOPE_ID_KEYS.has("event_id")) fail("event_id_not_envelope");
 }

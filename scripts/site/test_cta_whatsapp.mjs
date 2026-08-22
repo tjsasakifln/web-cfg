@@ -11,19 +11,34 @@ const catalog = JSON.parse(
   fs.readFileSync(path.join(root, "data/site/whatsapp-messages.json"), "utf8"),
 );
 
-const pages = [
-  "index.html",
-  "obrigado.html",
-  "obrigado-contrato.html",
-  "obrigado-edital.html",
-  "obrigado-operacao.html",
-  "defesa-margem-contratos-publicos/index.html",
-  "bid-room-licitacoes-obras/index.html",
-  "diretoria-b2g/index.html",
-  "diagnostico-b2g-360/index.html",
-];
+const matrix = JSON.parse(
+  fs.readFileSync(path.join(root, "data/organic/bofu-intent-matrix.json"), "utf8"),
+);
+const serviceRows = matrix.rows || [];
+const pages = serviceRows.map(({ canonical_service_route }) =>
+  `${canonical_service_route.replace(/^\/+|\/+$/g, "")}/index.html`,
+);
+const frozenBaseline = JSON.parse(
+  fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/hashes.json"), "utf8"),
+);
+const frozenPages = new Set(Object.keys(frozenBaseline.pillars || {}).map((slug) => `${slug}/index.html`));
+const constantsSource = fs.readFileSync(
+  path.join(root, "scripts/bofu_dominance/frozen_specs/constants.py"),
+  "utf8",
+);
+const safeDateMatch = constantsSource.match(/EARLIEST_SAFE_ACTION_AT\s*=\s*date\((\d+),\s*(\d+),\s*(\d+)\)/);
+if (!safeDateMatch) throw new Error("EARLIEST_SAFE_ACTION_AT missing");
+const earliestSafeActionAt = `${safeDateMatch[1]}-${safeDateMatch[2].padStart(2, "0")}-${safeDateMatch[3].padStart(2, "0")}`;
+const auditDate = process.env.BOFU_GATE_DATE || new Date().toISOString().slice(0, 10);
+const genericPrefill = "Olá, Tiago. Gostaria de analisar uma demanda relacionada a licitação, contrato ou obra pública.";
+const requiredCatalogKey = new Map([
+  ["defesa-tecnica-contratos-publicos/index.html", "sancao_notificacao"],
+  ["acompanhamento-contratos-obras/index.html", "contrato_pressao"],
+  ["atrasos-prorrogacao-obras-publicas/index.html", "atraso_pagamento"],
+]);
 
 const issues = [];
+const warnings = [];
 const found = [];
 
 for (const rel of pages) {
@@ -36,15 +51,26 @@ for (const rel of pages) {
   const re = /https:\/\/wa\.me\/(\d+)\?text=([^"'\s]+)/g;
   let m;
   let count = 0;
+  let genericFound = false;
   while ((m = re.exec(html))) {
     count++;
     const num = m[1];
     const text = decodeURIComponent(m[2]);
     if (num !== NUMBER) issues.push({ rel, error: "wrong_number", num });
     if (!text || text.length < 20) issues.push({ rel, error: "weak_text", text });
+    if (text === genericPrefill) genericFound = true;
+    const requiredKey = requiredCatalogKey.get(rel);
+    if (requiredKey && text !== catalog.messages[requiredKey]) {
+      issues.push({ rel, error: "catalog_prefill_mismatch", required_key: requiredKey, text });
+    }
     found.push({ rel, num, text_len: text.length });
   }
   if (count === 0) issues.push({ rel, error: "no_wa_link" });
+  if (genericFound) {
+    const finding = { rel, error: "generic_prefill_on_service_page" };
+    if (frozenPages.has(rel) && auditDate < earliestSafeActionAt) warnings.push(finding);
+    else issues.push(finding);
+  }
 }
 
 // Catalog completeness
@@ -133,7 +159,16 @@ if (!pseoShell.includes('id="i-whatsapp"') || !pseoShell.includes("M8.4 7.7")) {
   issues.push({ rel: "scripts/pseo/html_shell.py", error: "whatsapp_generator_glyph_missing" });
 }
 
-const out = { ok: issues.length === 0, found: found.length, html_scanned: htmlFiles.length, issues };
+const out = {
+  ok: issues.length === 0,
+  found: found.length,
+  service_pages: pages.length,
+  html_scanned: htmlFiles.length,
+  earliest_safe_action_at: earliestSafeActionAt,
+  audit_date: auditDate,
+  warnings,
+  issues,
+};
 fs.mkdirSync(path.join(root, "docs/evidence/inbound-10"), { recursive: true });
 fs.writeFileSync(
   path.join(root, "docs/evidence/inbound-10/cta-audit.json"),
@@ -144,4 +179,4 @@ if (issues.length) {
   console.error("CTA_AUDIT_FAIL", JSON.stringify(issues, null, 2));
   process.exit(1);
 }
-console.log("CTA_AUDIT_OK", JSON.stringify({ found: found.length, html_scanned: htmlFiles.length }));
+console.log("CTA_AUDIT_OK", JSON.stringify({ found: found.length, service_pages: pages.length, warnings: warnings.length, html_scanned: htmlFiles.length }));

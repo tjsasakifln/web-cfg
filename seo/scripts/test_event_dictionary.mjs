@@ -110,6 +110,20 @@ for (const ev of inventory.events) {
       fail("outcome_not_observed_only", ev);
     }
   }
+  if (ev.admission === "collect") {
+    if (!ev.producers.length) fail("admitted_event_without_emitter", ev.name);
+    const emittedNames = [
+      ev.name,
+      ...inventory.aliases.filter((alias) => alias.canonical === ev.name).map((alias) => alias.name),
+    ];
+    const emitterEvidence = ev.producers.some((rel) => {
+      const full = path.join(root, rel);
+      if (!fs.existsSync(full)) fail("event_producer_missing", { name: ev.name, rel });
+      const source = fs.readFileSync(full, "utf8");
+      return emittedNames.some((name) => source.includes(name));
+    });
+    if (!emitterEvidence) fail("admitted_event_without_emitter", ev.name);
+  }
 }
 for (const alias of inventory.aliases) {
   if (alias.classification !== "alias" || !alias.canonical || alias.same_layer !== true) {

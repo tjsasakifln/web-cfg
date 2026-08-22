@@ -78,15 +78,11 @@
   "member_sitemaps": [
     "https://confenge.com.br/sitemap.xml",
     "https://confenge.com.br/sitemap-editorial.xml",
-    "https://confenge.com.br/sitemap-jurisprudencia.xml",
-    "https://confenge.com.br/sitemap-inteligencia.xml",
     "https://confenge.com.br/sitemap-analises-contratos.xml"
   ],
   "walked_members": [
     "sitemap.xml",
     "sitemap-editorial.xml",
-    "sitemap-jurisprudencia.xml",
-    "sitemap-inteligencia.xml",
     "sitemap-analises-contratos.xml"
   ],
   "robots_sitemaps": [

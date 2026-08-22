@@ -1,0 +1,31 @@
+{
+  "schema": "confenge.whatsapp_correlation_hypothesis/1.0",
+  "as_of": "2026-08-22",
+  "decision_state": "VALIDATE",
+  "issue": 242,
+  "owner": "web-cfg/measurement",
+  "commercial_system_owner": "warmbly",
+  "variant": "short_protocol_in_visitor_initiated_text",
+  "protocol_format": "CFG-WA-XXXXXXXX",
+  "pii": false,
+  "form_required": false,
+  "first_party_crm_created": false,
+  "join": {
+    "web_event": "whatsapp_click.whatsapp_protocol",
+    "conversation_marker": "Protocolo CONFENGE: CFG-WA-XXXXXXXX",
+    "qualified_outcome_owner": "warmbly"
+  },
+  "primary_metric": "qualified_pipeline_with_attributable_whatsapp_protocol",
+  "guardrails": [
+    "no PII in analytics",
+    "WhatsApp remains available without form submission",
+    "web-cfg does not store the conversation or become a CRM",
+    "no autonomous message"
+  ],
+  "kill": {
+    "owner": "web-cfg/measurement",
+    "evaluate_on": "2026-09-19",
+    "condition": "Kill if operators cannot reliably preserve the protocol through qualification, or if qualified-pipeline reconciliation remains zero despite protocol-bearing conversations.",
+    "fallback": "Remove runtime protocol mutation and retain anonymous whatsapp_click attribution only."
+  }
+}

@@ -160,7 +160,11 @@ def intranet_indexable_hits(root: Path | None = None) -> list[str]:
 
 def main() -> int:
     html_pages = iter_seo_html_pages(ROOT)
-    from scripts.organic.sitemap_graph import load_graph_locs, load_index_members
+    from scripts.organic.sitemap_graph import (
+        load_graph_locs,
+        load_index_members,
+        meta_robots_noindex,
+    )
 
     sm_urls = load_graph_locs(ROOT)
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
@@ -188,9 +192,7 @@ def main() -> int:
             r'name=["\']description["\'][^>]*content=["\']([^"\']*)["\']|content=["\']([^"\']*)["\'][^>]*name=["\']description["\']',
             t,
         )
-        is_noindex = bool(
-            re.search(r'name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', t, re.I)
-        )
+        is_noindex = meta_robots_noindex(t)
         is_utility = (
             path in ("/404.html", "/obrigado.html")
             or path.startswith("/obrigado")
@@ -236,13 +238,13 @@ def main() -> int:
         if path in ("/404.html", "/obrigado.html") or path.startswith("/obrigado") or p.name.startswith("obrigado"):
             continue
         t = p.read_text(encoding="utf-8", errors="replace")
-        if re.search(r'name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', t, re.I):
+        if meta_robots_noindex(t):
             continue
         indexable.add(path)
     if sm_paths - indexable:
         errors.append(f"sitemap not on FS: {sorted(sm_paths - indexable)}")
     if indexable - sm_paths:
-        warnings.append(f"indexable not in sitemap: {sorted(indexable - sm_paths)}")
+        errors.append(f"indexable not in sitemap: {sorted(indexable - sm_paths)}")
 
     legacy = [
         "/servicos",

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://confenge.com.br/contracts/organic-funnel-export.v1.schema.json",
+  "title": "CONFENGE aggregate organic funnel export",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "label", "as_of", "source", "pii", "metrics"],
+  "properties": {
+    "schema": {"const": "confenge.organic_funnel_export/1.0"},
+    "label": {"type": "string"},
+    "as_of": {"type": "string", "format": "date"},
+    "source": {"type": "string"},
+    "pii": {"const": false},
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "value"],
+        "properties": {
+          "status": {"enum": ["MEASURED", "UNKNOWN"]},
+          "value": {"type": ["number", "null"]},
+          "numerator": {"type": ["number", "null"]},
+          "denominator": {"type": ["number", "null"]},
+          "reason_code": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

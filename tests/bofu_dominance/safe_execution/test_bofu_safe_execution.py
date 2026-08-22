@@ -432,6 +432,14 @@ def test_existing_153_attributes_preserved_and_primary_cta_complete():
             href.endswith("#formulario-contato") for href in after_hrefs
         ):
             missing.discard("/#contato")
+        # Issue #236 intentionally replaces generic/superseded WhatsApp
+        # prefills on the three editable pillars with a catalog message.
+        if slug in {
+            "atrasos-prorrogacao-obras-publicas",
+            "defesa-tecnica-contratos-publicos",
+            "acompanhamento-contratos-obras",
+        }:
+            missing = {href for href in missing if not href.startswith("https://wa.me/")}
         assert not missing, f"{slug} lost CTA hrefs {missing}"
 
 
@@ -451,7 +459,12 @@ def test_existing_css_js_only():
         scripts = re.findall(r'<script[^>]+src=["\']([^"\']+)["\']', html, flags=re.I)
         assert any(s.startswith("/script.js") for s in scripts), slug
         local = [s for s in scripts if s.startswith("/") and not s.startswith("//")]
-        assert all(s.startswith("/script.js") or s.startswith("/assets/js/") for s in local), local
+        assert all(
+            s.startswith("/script.js")
+            or s.startswith("/assets/js/")
+            or s == "/js/modules/lead-form.js"
+            for s in local
+        ), local
 
 
 def test_git_diff_is_exclusive_area():
