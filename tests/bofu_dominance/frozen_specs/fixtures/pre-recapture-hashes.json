@@ -1,9 +1,6 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "14740dab6b21bde19ecc62396d89393c2c7adab6",
-  "recaptured_at": "2026-08-22",
-  "recapture_reason": "Issue #226: accept the reviewed origin/main collateral state; all six frozen pillar HTML hashes remain unchanged.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -20,16 +17,16 @@
     "auditoria-orcamento-licitacao/index.html": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
     "diagnostico-b2g-360/index.html": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
     "diagnostico-pre-licitacao/index.html": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
-    "script.js": "94759d833e366766e2cd0d90bd121db67675aa1ea8420bd53da39f276ced7114",
-    "styles.css": "5d9b5922c6b777a91d5c93bc0048aeeb0f35e65f762fdca22c52741eebffb60f",
-    "styles-tokens.css": "fc9ff3dd5645da772d22d51f5c4af808fcc80b0fcd3e74c3655e461e4ce2574a",
-    "styles-tools.css": "8d72c676d70ea28b57a7a9cabf095b5314f90a1c91522241c1b869e77f0540a5",
-    "robots.txt": "762ed294580bfb8a88944481c93a7dad9bef70eb2e580cfa14ac6c46548bacc3",
-    "sitemap.xml": "e643e438f288245f62ed8c8d68f578fa36bb76fb799a0e1dab70a875ca8b20ba",
-    "sitemap.txt": "42e5fdb11492e22a92ade92394f986543dbcb9a3230b5cf6411c77ad8d874e57",
-    "sitemap-index.xml": "964eaa9f053105e98c236bcda2ce91b1171cf654a4d266c81dd49eb31652d011",
-    "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
-    "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "6917603c42041fd6905be3c9c92caeaab822133d5286704bd7d5866aa92c96a2"
+    "script.js": "2bc5888a9632d61f53e96471d66074ecc1e15f461d5762e25badb0cef868414b",
+    "styles.css": "91dfd31b8adaf718cc4085014c674f43ed624f4c09365e8782cfab80f5e3be6b",
+    "styles-tokens.css": "a6f70619a7490416ab8bb869c933565e3ac2a749dda8e29d17c3f64bd44083a0",
+    "styles-tools.css": "48a0681d8517956ede3c1f7007633f18c55146822b4dc8be811eb7035688d5ad",
+    "robots.txt": "02036e8cfc97bf4dd8eb909ff514c25db31ea345f872e4caa1d30266219d992e",
+    "sitemap.xml": "04cf86533b0fa94c4b47782dc801fd3cee870aff41f2e617ce8baa0532f702a3",
+    "sitemap.txt": "a4fc9632f15bcbeedfc1c1fd3c8209512563023d5a14db3c2105dad8ce238e8e",
+    "sitemap-index.xml": "ec92f4036c83955dc3308a2de720e81b40ecbf4801edb46d15b98b52ac5781cf",
+    "_redirects": "ce0cbcacf75863cbbe0e3556fe18e55aea76757c29890ae0b4335b6108555704",
+    "data/organic/content-service-map.json": "88177b77c2f6a3ad894ee0b67b951027f72603df1cf2df056f0eaf0128ff2c1a",
+    "js/modules/analytics.js": "9bc785821fa2c6a39dbb48621c73cf6a72b6c25b61cbea17a2cb50647d967307"
   }
 }

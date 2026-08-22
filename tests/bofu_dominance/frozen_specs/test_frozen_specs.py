@@ -18,14 +18,33 @@ from scripts.bofu_dominance.frozen_specs.constants import (
     html_path,
     patch_path,
 )
+from scripts.bofu_dominance.frozen_specs import __main__ as frozen_cli
 from scripts.bofu_dominance.frozen_specs.entry import run_entry
 from scripts.bofu_dominance.frozen_specs.gate import evaluate_gate, load_issue_state
-from scripts.bofu_dominance.frozen_specs.hashing import content_sha256, forbidden_path_hashes
+from scripts.bofu_dominance.frozen_specs.hashing import (
+    committed_forbidden_hashes,
+    content_sha256,
+    forbidden_drift,
+    forbidden_drift_policy,
+    forbidden_path_hashes,
+)
 from scripts.bofu_dominance.frozen_specs.patch import apply_frozen_patch, parse_patch
 from scripts.bofu_dominance.frozen_specs.snapshot import snapshot_pillar, snapshot_six
 from scripts.bofu_dominance.frozen_specs.spec import load_spec, load_specs, validate_spec
 
 FROZEN_NOW = date(2026, 8, 19)
+PRE_RECAPTURE = Path(__file__).with_name("fixtures") / "pre-recapture-hashes.json"
+
+
+def _copy_forbidden_tree(target: Path) -> None:
+    for rel in FORBIDDEN_RELATIVE_PATHS:
+        source = ROOT / rel
+        dest = target / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(source.read_bytes())
+    baseline = target / "data/bofu-dominance/frozen-specs/hashes.json"
+    baseline.parent.mkdir(parents=True, exist_ok=True)
+    baseline.write_bytes((ROOT / "data/bofu-dominance/frozen-specs/hashes.json").read_bytes())
 
 
 def test_six_specs_present_with_required_fields():
@@ -147,11 +166,86 @@ def test_entry_twice_html_mutation_false():
 
 
 def test_forbidden_paths_unchanged_list():
+    baseline = committed_forbidden_hashes(ROOT)
     hashes = forbidden_path_hashes(ROOT)
+    assert forbidden_drift(ROOT) == {}
     for rel in FORBIDDEN_RELATIVE_PATHS:
         path = ROOT / rel
         assert path.is_file(), rel
-        assert hashes[rel] == content_sha256(path)
+        assert baseline[rel] == hashes[rel] == content_sha256(path)
+
+
+def test_forbidden_drift_reads_committed_baseline(tmp_path):
+    _copy_forbidden_tree(tmp_path)
+
+    protected = tmp_path / FORBIDDEN_RELATIVE_PATHS[0]
+    protected.write_bytes(protected.read_bytes() + b"\n<!-- forbidden mutation -->\n")
+
+    drift = forbidden_drift(tmp_path)
+    assert list(drift) == [FORBIDDEN_RELATIVE_PATHS[0]]
+    assert drift[FORBIDDEN_RELATIVE_PATHS[0]]["baseline"] != drift[FORBIDDEN_RELATIVE_PATHS[0]]["live"]
+
+
+def test_pre_recapture_fixture_names_all_eleven_collateral_drifts(tmp_path):
+    _copy_forbidden_tree(tmp_path)
+    baseline = tmp_path / "data/bofu-dominance/frozen-specs/hashes.json"
+    baseline.write_bytes(PRE_RECAPTURE.read_bytes())
+
+    expected = {
+        "script.js",
+        "styles.css",
+        "styles-tokens.css",
+        "styles-tools.css",
+        "robots.txt",
+        "sitemap.xml",
+        "sitemap.txt",
+        "sitemap-index.xml",
+        "_redirects",
+        "data/organic/content-service-map.json",
+        "js/modules/analytics.js",
+    }
+    drift = forbidden_drift(tmp_path)
+    assert set(drift) == expected
+    assert all(item["baseline"] != item["live"] for item in drift.values())
+
+
+def test_drift_policy_separates_html_rendering_and_recapture(tmp_path):
+    _copy_forbidden_tree(tmp_path)
+    mutations = {
+        "aditivos-obras-publicas/index.html": ("frozen_html", "error", "revert_frozen_html"),
+        "script.js": (
+            "rendering_collateral",
+            "error",
+            "prove_no_frozen_rendering_change_or_revert",
+        ),
+        "robots.txt": (
+            "non_rendering_collateral",
+            "recapture_required",
+            "commit_reviewed_hash_recapture",
+        ),
+    }
+    for rel in mutations:
+        path = tmp_path / rel
+        path.write_bytes(path.read_bytes() + b"\n# drift\n")
+
+    policy = forbidden_drift_policy(tmp_path)
+    assert set(policy) == set(mutations)
+    for rel, expected in mutations.items():
+        assert (policy[rel]["category"], policy[rel]["severity"], policy[rel]["action"]) == expected
+
+
+def test_cli_fails_when_committed_baseline_requires_action(monkeypatch, capsys):
+    monkeypatch.setattr(
+        frozen_cli,
+        "run_entry",
+        lambda **_kwargs: {
+            "html_mutation": False,
+            "forbidden_action_required": True,
+            "forbidden_drift": {"robots.txt": {"baseline": "old", "live": "new"}},
+        },
+    )
+    assert frozen_cli.main([]) == 1
+    assert '"forbidden_action_required": true' in capsys.readouterr().out
 
 
 def test_citations_in_specs():
