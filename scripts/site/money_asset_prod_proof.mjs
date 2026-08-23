@@ -2,8 +2,8 @@
  * Honest Money Asset production proof.
  *
  * Proves only what this environment can reach. Never invents INBOUND NOW.
- * Synthetic/qa only. Persist-first capture may succeed while Warmbly is SKIPPED
- * (non-real records never mint a commercial inbound action).
+ * Synthetic/qa only. Non-real records persist locally and never cross to
+ * Warmbly or mint a commercial action.
  *
  * Usage:
  *   node scripts/site/money_asset_prod_proof.mjs [baseUrl] [out.json]
@@ -52,7 +52,7 @@ const report = {
   steps: {},
   remaining_commands: [],
   note:
-    "A 201 on local/public capture is not INBOUND NOW. Synthetic/qa records persist and SKIP Warmbly by design.",
+    "A capture 201 is not INBOUND NOW. Synthetic/qa records persist and SKIP Warmbly by design.",
 };
 
 try {
@@ -178,7 +178,8 @@ try {
 
 if (opsToken) {
   try {
-    const res = await fetch(`${base}/.netlify/functions/ops?action=inbound_handoff`, {
+    const receiptQuery = report.lead_id ? `&lead_id=${encodeURIComponent(report.lead_id)}` : "";
+    const res = await fetch(`${base}/.netlify/functions/ops?action=inbound_handoff${receiptQuery}`, {
       headers: { Authorization: `Bearer ${opsToken}`, Origin: "https://confenge.com.br" },
     });
     const data = await res.json().catch(() => ({}));
@@ -197,6 +198,28 @@ if (opsToken) {
       pii: pii,
       counters: data.counters || null,
       money_asset: chain || null,
+      configuration: data.configuration || null,
+    });
+    const receipt = data.receipt;
+    const safelySkipped =
+      receipt &&
+      receipt.lead_id === report.lead_id &&
+      receipt.receipt_id === report.lead_id &&
+      receipt.record_kind !== "real" &&
+      receipt.source === "CONFENGE_WEB" &&
+      receipt.asset_id === "diagnostico-defesa-margem" &&
+      receipt.handoff?.status === "SKIPPED" &&
+      !receipt.handoff?.downstream;
+    report.steps.synthetic_safely_skipped = step(safelySkipped ? "PROVEN" : "BLOCKED", {
+      same_lead_id: Boolean(receipt && receipt.lead_id === report.lead_id),
+      record_kind: receipt?.record_kind || null,
+      source: receipt?.source || null,
+      asset_id: receipt?.asset_id || null,
+      handoff_status: receipt?.handoff?.status || null,
+      attempts: receipt?.handoff?.attempts ?? null,
+      warmbly_receipt: receipt?.handoff?.downstream?.downstream_receipt || null,
+      warmbly_action: receipt?.handoff?.downstream?.action_id || null,
+      no_commercial_action: !receipt?.handoff?.downstream,
     });
   } catch (err) {
     report.steps.ops_counters = step("BLOCKED", { error: String(err && err.message ? err.message : err).slice(0, 160) });
@@ -231,12 +254,11 @@ if (inboundUrl && inboundSecret) {
   });
 }
 
-// Synthetic records SKIP Warmbly. INBOUND NOW cannot be proven by this probe.
 report.steps.inbound_now = step("BLOCKED", {
   reason:
-    "Shipped rule: synthetic/qa persist and do not POST Warmbly. This probe is labeled SYNTHETIC-INBOUND / @example.com so it cannot mint INBOUND NOW.",
+    "Shipped rule: synthetic/qa persist and do not POST Warmbly. This probe cannot mint INBOUND NOW.",
   next_irreversible_proof:
-    "A real qualified lead from /ferramentas/diagnostico-defesa-margem/ (or a real rejection), with inbound URL+secret live, auto-send OFF, same lead_id on receipt and Warmbly INBOUND NOW.",
+    "A genuine consented lead, with inbound URL+secret live, auto-send OFF, and the same lead_id on the web-cfg receipt and Warmbly action.",
 });
 
 report.steps.commercial_send = step("PROVEN", {
@@ -249,8 +271,8 @@ report.remaining_commands = [
   "export OPS_TOKEN='<production ops token>'",
   "export CONFENGE_AUTO_SEND_EVIDENCE=OFF",
   "node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br",
-  "GET /.netlify/functions/ops?action=inbound_handoff (auth) and reconcile receipt lead_id. Synthetic remains SKIPPED.",
-  "Next irreversible proof: one real qualified money-asset lead or a real rejection — do not invent one.",
+  "GET /.netlify/functions/ops?action=inbound_handoff&lead_id=<receipt> (auth) and prove the synthetic receipt remains SKIPPED.",
+  "Next irreversible proof: one genuine consented lead or a real rejection — do not invent one.",
 ];
 
 const captureOk = report.steps.capture && report.steps.capture.status === "PROVEN";

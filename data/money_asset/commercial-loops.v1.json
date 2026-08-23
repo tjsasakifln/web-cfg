@@ -17,7 +17,7 @@
       },
       "capture_contract": {
         "page_path": "/ferramentas/diagnostico-defesa-margem/",
-        "form_action": "/obrigado",
+        "form_action": "/.netlify/functions/lead",
         "ajax_to_lead_function": true,
         "method": "post",
         "consent_field": "consentimento",

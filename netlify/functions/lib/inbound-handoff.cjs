@@ -607,6 +607,9 @@ function isDue(handoff, now = new Date()) {
 }
 
 async function postInbound(record, { now = new Date(), env = process.env } = {}) {
+  if (!isCommercialRecord(record)) {
+    return { status: STATUS.SKIPPED, reason: "non_real", attemptsDelta: 0 };
+  }
   const cfg = resolveInboundConfig(env);
   if (cfg.skip) return { status: STATUS.SKIPPED, reason: cfg.reason, attemptsDelta: 0 };
   if (cfg.blocked) return { status: STATUS.BLOCKED, reason: cfg.reason, last_error: cfg.reason, attemptsDelta: 0 };

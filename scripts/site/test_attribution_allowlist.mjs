@@ -67,7 +67,7 @@ if (analysisPicked.evidence_pack_version !== "1.0") fail("evidence_pack_version"
 if (analysisPicked.asset_family !== "analise-tecnica-contrato-publico") fail("asset_family", analysisPicked);
 if (analysisPicked.correlation_id !== "corr-analysis-1") fail("analysis_correlation", analysisPicked);
 if (analysisPicked.query_class !== "analise_tecnica_contrato") fail("query_class", analysisPicked);
-if (analysisPicked.referrer !== "https://www.google.com/search?q=bdi") fail("referrer", analysisPicked);
+if (analysisPicked.referrer !== "https://www.google.com/search") fail("referrer_query_must_be_stripped", analysisPicked);
 pass("pickAttribution_keeps_analysis_family");
 if (picked.correlation_id !== "corr-test-001") fail("correlation", picked);
 pass("pickAttribution_drops_unlisted_and_pii");

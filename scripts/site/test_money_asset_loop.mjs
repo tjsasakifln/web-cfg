@@ -84,6 +84,15 @@ const indexability = JSON.parse(
     if (indexability.html_noindex !== true || indexability.in_sitemap !== false) fail("indexability_inconsistent", indexability);
   }
   if (!pageHtml.includes("Quero uma segunda leitura deste contrato")) fail("cta_copy");
+  if (!pageHtml.includes('action="/.netlify/functions/lead"') || !pageHtml.includes('data-receipt-required="true"')) {
+    fail("receipt_required_form_action");
+  }
+  if (!pageHtml.includes('role="status"') || !pageHtml.includes('aria-live="polite"')) {
+    fail("actionable_status_a11y");
+  }
+  if (!pageHtml.includes('id="metodo"') || !pageHtml.includes('aria-label="Método e limitações"')) {
+    fail("method_landmark_a11y");
+  }
   if (!pageHtml.includes('rel="canonical"') || !pageHtml.includes("diagnostico-defesa-margem")) {
     fail("canonical");
   }
@@ -380,7 +389,13 @@ const submitBtn = makeEl({
 const form = makeEl({
   id: "lead-form",
   tagName: "FORM",
-  attrs: { name: "diagnostico-b2g", "data-ajax": "true" },
+  attrs: {
+    name: "diagnostico-b2g",
+    action: "/.netlify/functions/lead",
+    "data-ajax": "true",
+    "data-receipt-required": "true",
+    "data-success-destination": "/obrigado-contrato",
+  },
 });
 form.name = "diagnostico-b2g";
 form.elements = [...hidden, submitBtn];
@@ -403,6 +418,7 @@ class IntersectionObserver {
 
 const dataLayer = [];
 const assigns = [];
+const sessionValues = new Map();
 const document = {
   readyState: "loading",
   visibilityState: "visible",
@@ -448,7 +464,11 @@ const windowObj = {
   },
   innerHeight: 800,
   scrollY: 0,
-  sessionStorage: { getItem: () => null, setItem() {} },
+  sessionStorage: {
+    getItem(key) { return sessionValues.has(key) ? sessionValues.get(key) : null; },
+    setItem(key, value) { sessionValues.set(key, String(value)); },
+    removeItem(key) { sessionValues.delete(key); },
+  },
   IntersectionObserver,
   CONFENGE_DEBUG_ANALYTICS: false,
   navigator: {},
@@ -523,6 +543,13 @@ vm.runInContext(scriptSrc, sandbox);
 document.readyState = "complete";
 for (const fn of docListeners.DOMContentLoaded || []) fn();
 
+const browserIdempotency = form.querySelector('[name="idempotency_key"]')?.value || '';
+if (!/^fe-/.test(browserIdempotency)) fail("browser_idempotency_missing", browserIdempotency);
+const browserStorageEntry = [...sessionValues.entries()].find(([, value]) => value === browserIdempotency);
+if (!browserStorageEntry) {
+  fail("browser_idempotency_not_persisted", [...sessionValues.entries()]);
+}
+
 for (let i = 0; i < 30 && !sandbox.window.ConfengeDiagnoseMargin; i += 1) {
   await new Promise((r) => setTimeout(r, 10));
 }
@@ -555,6 +582,9 @@ if (!lastLeadHttp || lastLeadHttp.statusCode !== 201) {
 }
 const created = JSON.parse(lastLeadHttp.body);
 if (!created.ok || !created.lead_id) fail("page_submit_body", created);
+if (sessionValues.has(browserStorageEntry[0])) {
+  fail("browser_idempotency_not_rotated_after_success", [...sessionValues.entries()]);
+}
 const createdStr = JSON.stringify(created);
 if (PII_NEEDLES.some((n) => createdStr.includes(n))) fail("response_pii", created);
 if (JSON.stringify(dataLayer).includes("maria.costa@") || JSON.stringify(dataLayer).includes("Maria Costa")) {
@@ -660,23 +690,41 @@ if (collectBatch.statusCode !== 202) fail("collect_batch", collectBatch.body);
 
 delete require.cache[require.resolve(opsPath)];
 const ops = require(opsPath);
-async function opsGet(action) {
+async function opsGet(action, leadId = "") {
+  const queryStringParameters = { action };
+  if (leadId) queryStringParameters.lead_id = leadId;
   return ops.handler({
     httpMethod: "GET",
     headers: {
       origin: "https://confenge.com.br",
       authorization: "Bearer ops-money-loop-token16",
     },
-    queryStringParameters: { action },
-    rawUrl: `https://confenge.com.br/.netlify/functions/ops?action=${action}`,
+    queryStringParameters,
+    rawUrl: `https://confenge.com.br/.netlify/functions/ops?action=${action}${leadId ? `&lead_id=${encodeURIComponent(leadId)}` : ""}`,
   });
 }
-const opsHandoff = await opsGet("inbound_handoff");
+const opsHandoff = await opsGet("inbound_handoff", created.lead_id);
 const opsSummary = await opsGet("analytics_summary");
 if (opsHandoff.statusCode !== 200) fail("ops_handoff_http", opsHandoff.body);
 if (opsSummary.statusCode !== 200) fail("ops_summary_http", opsSummary.body);
 const handoffJson = JSON.parse(opsHandoff.body);
 const summaryJson = JSON.parse(opsSummary.body);
+const exactReceipt = handoffJson.receipt;
+if (
+  !exactReceipt ||
+  exactReceipt.lead_id !== created.lead_id ||
+  exactReceipt.receipt_id !== created.lead_id ||
+  exactReceipt.source !== "CONFENGE_WEB" ||
+  exactReceipt.asset_id !== "diagnostico-defesa-margem" ||
+  exactReceipt.handoff?.status !== "DELIVERED" ||
+  exactReceipt.handoff?.downstream?.downstream_receipt !== `wb-${created.lead_id}`
+) {
+  fail("ops_exact_receipt_reconciliation", exactReceipt);
+}
+pass("ops_exact_receipt_reconciliation", {
+  lead_id: exactReceipt.lead_id,
+  warmbly_receipt: exactReceipt.handoff.downstream.downstream_receipt,
+});
 const chain = handoffJson.money_asset || summaryJson.money_asset;
 if (!chain || !chain.events || !chain.handoff) fail("ops_money_asset_missing", { handoffJson, summaryJson });
 for (const key of ["asset_view", "contract_analyzed", "cta_view", "cta_click", "lead_created"]) {

@@ -175,7 +175,7 @@ const inbound = loadInbound();
   });
   if (piiUrl.ok || !piiUrl.blocked) fail("fail_closed_query_pii", piiUrl);
   const missing = inbound.resolveInboundConfig({});
-  if (!missing.skip) fail("unconfigured_skip", missing);
+  if (!missing.skip || missing.reason !== "not_configured") fail("unconfigured_skip", missing);
   const wrongHost = inbound.resolveInboundConfig({
     CONFENGE_INBOUND_WEBHOOK_URL: "https://ops.example/api/v1/webhooks/confenge/inbound",
     CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
@@ -421,6 +421,20 @@ console.error = (...a) => {
 };
 
 try {
+  // Even a direct helper call cannot bypass the non-real commercial boundary.
+  {
+    const before = mock.seen.length;
+    const result = await inbound.postInbound(
+      { lead_id: "synthetic-direct-guard", record_kind: "synthetic" },
+      { env: process.env },
+    );
+    if (result.status !== "SKIPPED" || result.reason !== "non_real") {
+      fail("direct_non_real_handoff_guard", result);
+    }
+    if (mock.seen.length !== before) fail("direct_non_real_posted", mock.seen.length - before);
+    pass("direct_non_real_handoff_guard");
+  }
+
   // persist-first + 201 + contract body
   {
     const origMemGet = mem.get.bind(mem);
@@ -591,8 +605,8 @@ try {
   {
     const opsFileStore = new FileStore(storeDir);
     await opsFileStore.put({
-      lead_id: "opsaudit0000000000000001",
-      receipt_id: "opsaudit0000000000000001",
+      lead_id: "opsaudit:0000000000000001",
+      receipt_id: "opsaudit:0000000000000001",
       record_kind: "real",
       consentimento: true,
       nome: "Pessoa que não pode aparecer",
@@ -642,6 +656,32 @@ try {
     pass("ops_inbound_configuration", data.configuration);
     pass("ops_counters", data.counters);
 
+    const receiptRes = await ops.handler({
+      httpMethod: "GET",
+      headers: {
+        origin: "https://confenge.com.br",
+        authorization: "Bearer ops-test-token-16chars-min",
+      },
+      queryStringParameters: {
+        action: "inbound_handoff",
+        lead_id: "opsaudit:0000000000000001",
+      },
+      rawUrl:
+        "https://confenge.com.br/.netlify/functions/ops?action=inbound_handoff&lead_id=opsaudit%3A0000000000000001",
+    });
+    const receiptData = JSON.parse(receiptRes.body);
+    if (
+      receiptRes.statusCode !== 200 ||
+      receiptData.receipt?.lead_id !== "opsaudit:0000000000000001" ||
+      receiptData.receipt?.handoff?.status !== "SKIPPED"
+    ) {
+      fail("ops_exact_receipt", receiptData);
+    }
+    if (JSON.stringify(receiptData.receipt).includes("privado@")) {
+      fail("ops_exact_receipt_pii", receiptData.receipt);
+    }
+    pass("ops_exact_receipt");
+
     const opsEvent = (action, method = "GET", body = null) => ({
       httpMethod: method,
       headers: {
@@ -671,7 +711,7 @@ try {
       opsEvent("requeue_inbound", "POST", { mode: "eligible_only", dry_run: false, limit: 1 }),
     );
     if (unsafeRes.statusCode !== 409) fail("ops_requeue_auto_send_abort", JSON.parse(unsafeRes.body));
-    if ((await opsFileStore.get("opsaudit0000000000000001")).handoff.status !== "SKIPPED") {
+    if ((await opsFileStore.get("opsaudit:0000000000000001")).handoff.status !== "SKIPPED") {
       fail("ops_requeue_auto_send_mutation");
     }
     mock.setAutoSendEnabled(false);

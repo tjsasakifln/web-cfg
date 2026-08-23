@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-05T11:59:57.483Z",
+  "generated_at": "2026-08-23T02:24:00.454Z",
   "pages": [
     {
       "path": "/",
@@ -43,6 +43,16 @@
     },
     {
       "path": "/defesa-margem-contratos-publicos/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
       "counts": {
         "critical": 0,
         "serious": 0,
