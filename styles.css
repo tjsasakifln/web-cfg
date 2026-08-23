@@ -1256,6 +1256,11 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 /* #185: keep below-the-fold home sections out of the initial style/layout
    pass. `auto` retains the measured size after first rendering, while the
    fallback size keeps anchors and document height stable before that point. */
+/* #182: without JS the mobile nav is rendered inline, so a sticky header grows
+   to roughly a third of a 390px screen and covers whatever the fragment lands
+   on. Let it scroll away — there is no menu toggle to keep in reach either. */
+html.no-js .site-header{position:static}
+
 /* #182: deferred sizes make fragment targets move while the jump runs, and only
    the shipped JS re-aligns the landing. Without JS there is no corrector, so the
    containment is not applied and anchors stay exact. */
