@@ -54,6 +54,9 @@ PUBLIC_TOP_DIRS = frozenset(
         "bid-room-licitacoes-obras",
         "defesa-margem-contratos-publicos",
         "metodologia-inteligencia",
+        # Task-first navigation hubs (#183): destinations behind the header labels
+        "servicos-obras-publicas",
+        "problemas-que-resolvemos",
         # Editorial Wave 1 hubs + archetype pages
         "lei-14133-obras",
         "jurisprudencia-contratos-obras",

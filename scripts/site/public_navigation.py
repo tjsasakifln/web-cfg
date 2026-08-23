@@ -103,9 +103,19 @@ def _current_hrefs(anchors: list[str], relative_path: str) -> set[str]:
     return current & canonical_hrefs
 
 
-def _canonical_anchor(label: str, href: str, *, current: bool) -> str:
+def _canonical_anchor(
+    label: str,
+    href: str,
+    *,
+    current: bool,
+    kind: str,
+) -> str:
     aria = ' aria-current="page"' if current else ""
-    return f'<a{aria} href="{escape(href, quote=True)}">{escape(label)}</a>'
+    position = "header_nav" if kind == "desktop" else "mobile_nav"
+    return (
+        f'<a data-cta-position="{position}"{aria} '
+        f'href="{escape(href, quote=True)}">{escape(label)}</a>'
+    )
 
 
 def _canonicalize_nav_block(
@@ -145,7 +155,7 @@ def _canonicalize_nav_block(
 
     current = _current_hrefs(anchors, relative_path)
     rendered = [
-        _canonical_anchor(label, href, current=href in current)
+        _canonical_anchor(label, href, current=href in current, kind=kind)
         for label, href in CANONICAL_NAV_ITEMS
     ]
     rendered.extend(utility)

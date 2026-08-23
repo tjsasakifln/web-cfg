@@ -212,8 +212,12 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
         href = n["href"]
         label = n["label"]
         cur = ' aria-current="page"' if current and href.rstrip("/") == current.rstrip("/") else ""
-        desktop_parts.append(f'<a href="{href}"{cur}>{label}</a>')
-        mobile_parts.append(f'<a href="{href}"{cur}>{label}</a>')
+        desktop_parts.append(
+            f'<a data-cta-position="header_nav" href="{href}"{cur}>{label}</a>'
+        )
+        mobile_parts.append(
+            f'<a data-cta-position="mobile_nav" href="{href}"{cur}>{label}</a>'
+        )
     desktop = "\n".join(desktop_parts)
     mobile = "".join(mobile_parts)
     cta_html = (

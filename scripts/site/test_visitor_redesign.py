@@ -29,6 +29,7 @@ EXPECTED_NAV = [
     "Problemas que resolvemos",
     "Entregas",
     "Conteúdos",
+    "Ferramentas",
     "Especialista",
 ]
 LEGACY_NAV = [

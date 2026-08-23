@@ -19,7 +19,7 @@ const port = 8795;
 const widths = [320, 390, 768, 1024, 1440];
 const screenshotDir = String(process.env.DELIVERABLES_SCREENSHOT_DIR || "").trim();
 const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
-const promotedNav = ["Serviços", "Problemas que resolvemos", "Entregas", "Conteúdos", "Especialista"];
+const promotedNav = ["Serviços", "Problemas que resolvemos", "Entregas", "Conteúdos", "Ferramentas", "Especialista"];
 const legacyNav = ["Serviços", "Problemas que resolvemos", "Conteúdos", "Ferramentas", "Especialista"];
 const frozenRoutes = [
   "/aditivos-obras-publicas/",
@@ -176,7 +176,7 @@ for (const { route, expectedNav } of [
   }
   if (expectedNav === promotedNav) {
     if (metrics.nav.filter(({ href }) => href === "/entregas/").length !== 1) errors.push("deliverables_nav_missing");
-    if (metrics.nav.some(({ text }) => text === "Ferramentas")) errors.push("legacy_top_nav_visible");
+    if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("tools_nav_missing");
   } else {
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");
     if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("frozen_tools_missing");

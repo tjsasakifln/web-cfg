@@ -34,6 +34,7 @@ EXPECTED_NAV = [
     "Problemas que resolvemos",
     "Entregas",
     "Conteúdos",
+    "Ferramentas",
     "Especialista",
 ]
 LEGACY_NAV = [
@@ -232,8 +233,17 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
         ]
         assert hrefs == expected_hrefs
         assert labels == expected_labels
-        assert "Ferramentas" not in block
-        assert 'aria-current="page"' not in block
+        expected_position = "header_nav" if index == 0 else "mobile_nav"
+        assert all(
+            f'data-cta-position="{expected_position}"' in anchor
+            for anchor in navigation
+        )
+        assert '/#ofertas' not in block and '/#jornadas' not in block
+        current = [
+            anchor for anchor in navigation if 'aria-current="page"' in anchor
+        ]
+        assert len(current) == 1
+        assert 'href="/ferramentas/"' in current[0]
         if index == 1:
             assert "Analisar meu caso" in block
 

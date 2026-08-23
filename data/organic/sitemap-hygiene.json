@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 65,
-  "unique_paths": 65,
+  "url_count": 69,
+  "unique_paths": 69,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -13,6 +13,7 @@
     "https://confenge.com.br/casos/",
     "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
     "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+    "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
     "https://confenge.com.br/comercial/privacidade-leads/",
     "https://confenge.com.br/comercial/termos-diagnostico-b2g/",
     "https://confenge.com.br/conflitos/",
@@ -45,6 +46,7 @@
     "https://confenge.com.br/diagnostico-b2g-expansao/",
     "https://confenge.com.br/diagnostico-pre-licitacao/",
     "https://confenge.com.br/diretoria-b2g/",
+    "https://confenge.com.br/entregas/",
     "https://confenge.com.br/especialista/tiago-jun-sasaki/",
     "https://confenge.com.br/ferramentas/",
     "https://confenge.com.br/ferramentas/checklist-reequilibrio/",
@@ -59,8 +61,10 @@
     "https://confenge.com.br/politica-editorial/historico/",
     "https://confenge.com.br/politica-editorial/v/1.0.0/",
     "https://confenge.com.br/privacidade/",
+    "https://confenge.com.br/problemas-que-resolvemos/",
     "https://confenge.com.br/radar/nacional-obras-publicas/",
     "https://confenge.com.br/reequilibrio-obras-publicas/",
+    "https://confenge.com.br/servicos-obras-publicas/",
     "https://confenge.com.br/termos-de-uso/",
     "https://confenge.com.br/uso-de-ia/",
     "https://confenge.com.br/guias-contratos-obras/",
@@ -71,7 +75,7 @@
     "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
-    "core": 59,
+    "core": 63,
     "editorial": 5,
     "contract_analysis": 1
   },
