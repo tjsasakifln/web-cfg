@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "35f39a7a514bc0edfc0d1c60c34e1ae773b84f14",
+  "baseline_commit": "f41f66cbc93585fd1fa8670a5e31bc8e6b42e564",
   "recaptured_at": "2026-08-23",
-  "recapture_reason": "Reviewed recapture of sitemap.xml only (non_rendering_collateral) after issue #250 gave the three /casos/ demonstrative pages TechArticle + Person + BreadcrumbList JSON-LD. The TechArticle nodes carry dateModified 2026-08-03, mirroring the <time> already visible in each authority byline, so substantial_lastmod_from_html now derives a verifiable <lastmod> for /casos/, /casos/aditivo-art125-demonstrativo/ and /casos/medicao-glosa-demonstrativo/. That is the only delta in sitemap.xml: three added lastmod lines, no loc added, removed or reordered. All six frozen pillar HTML files, script.js, styles*.css, robots.txt, sitemap.txt, sitemap-index.xml, _redirects, content-service-map.json and analytics.js are byte-identical to the previous baseline; no frozen rendering surface was touched and html_mutation remains false.",
+  "recapture_reason": "Reviewed combined recapture after PR #281 expanded the canonical graph from 65 to 66 indexable URLs with the synthetic public report model and issue #250 added TechArticle + Person + BreadcrumbList to the three /casos/ demonstrative pages. The report URL remains present and sitemap.txt/sitemap-index.xml remain byte-identical to main; sitemap.xml adds only the three verifiable lastmod values derived from the visible bylines (2026-08-23 on the hub and 2026-08-03 on the two case pages). All six frozen pillar HTML files, script.js, styles*.css, robots.txt, _redirects, content-service-map.json and analytics.js remain byte-identical; no frozen rendering surface changed and html_mutation remains false.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -25,9 +25,9 @@
     "styles-tokens.css": "fc9ff3dd5645da772d22d51f5c4af808fcc80b0fcd3e74c3655e461e4ce2574a",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
     "robots.txt": "762ed294580bfb8a88944481c93a7dad9bef70eb2e580cfa14ac6c46548bacc3",
-    "sitemap.xml": "451191bd4e2e552dac654ddd46e959dd2da2ad92d950d51bfb785f8590e02447",
-    "sitemap.txt": "42e5fdb11492e22a92ade92394f986543dbcb9a3230b5cf6411c77ad8d874e57",
-    "sitemap-index.xml": "91e12605f49d3675e3ac76af1443a4cbb6f4b9504cca50c009b33bec930be81f",
+    "sitemap.xml": "a200a0fc81dfb9c9e8a7b788551d5a5686ed7308d348549fde0a9e3e1edf9f3e",
+    "sitemap.txt": "d696ce93b10367f556dafbc54d15be4f77ba7d939422b14897e6f4f192768246",
+    "sitemap-index.xml": "bff94a1e5fb612cd05ef9803a90c044f9419dd4a4528e8c6f40c3f20776d572e",
     "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "480a12e3a3b05686326e2376803d4946e844d96c899401c84965954966dc2188"
