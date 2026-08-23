@@ -21,6 +21,8 @@ const SENSITIVE = [
   "gsc_insights",
   "backfill_record_kind",
   "inbound_handoff",
+  "audit_inbound_requeue",
+  "requeue_inbound",
   "drain_inbound",
   "search_observation",
   "produce_search_observation",

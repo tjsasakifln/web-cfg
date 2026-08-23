@@ -18,6 +18,14 @@ const SOURCE_WARMBLY = "CONFENGE_WEB";
 const DEFAULT_TIMEOUT_MS = 8000;
 const DEFAULT_MAX_ATTEMPTS = 8;
 const HMAC_SKEW_MS = 5 * 60 * 1000;
+const REQUEUE_CLASS = Object.freeze({
+  NEVER_REQUEUE_NON_REAL: "NEVER_REQUEUE_NON_REAL",
+  ELIGIBLE_REAL_NOT_CONFIGURED: "ELIGIBLE_REAL_NOT_CONFIGURED",
+  MANUAL_REVIEW_LEGACY: "MANUAL_REVIEW_LEGACY",
+  DNC_OR_SUPPRESSED: "DNC_OR_SUPPRESSED",
+  ALREADY_DELIVERED: "ALREADY_DELIVERED",
+  OTHER_BLOCKER: "OTHER_BLOCKER",
+});
 
 const STATUS = {
   PENDING: "PENDING",
@@ -304,6 +312,250 @@ function isCommercialRecord(record) {
   return false;
 }
 
+function hasExplicitConsent(record) {
+  return Boolean(
+    record &&
+      (record.consentimento === true ||
+        (record.consent && record.consent.granted === true))
+  );
+}
+
+function hasValidJoinId(record) {
+  if (!record) return false;
+  const leadId = String(record.lead_id || "").trim();
+  const receiptId = String(record.receipt_id || record.lead_id || "").trim();
+  const valid = (value) => /^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$/.test(value);
+  return valid(leadId) && valid(receiptId);
+}
+
+function isDncOrSuppressed(record) {
+  if (!record) return false;
+  const consent = record.consent && typeof record.consent === "object" ? record.consent : {};
+  if (record.dnc === true || record.do_not_contact === true || consent.dnc === true) return true;
+  const values = [
+    record.status,
+    record.commercial_stage,
+    record.next_action,
+    record.loss_reason,
+    record.suppress_reason,
+    record.stopped_reason,
+  ]
+    .map((v) => String(v || "").trim().toLowerCase())
+    .filter(Boolean);
+  return values.some((value) =>
+    /^(dnc|suppressed|unsubscribed|do_not_contact|exclude_from_commercial)$/.test(value)
+  );
+}
+
+function hasNonRealOrTestIdentity(record) {
+  if (!record) return false;
+  const kind = String(record.record_kind || "").trim().toLowerCase();
+  if (["synthetic", "qa", "spam", "internal"].includes(kind)) return true;
+  try {
+    const { detectNonRealSignals, RESERVED_TEST_EMAIL_DOMAINS } = require("./record-kind.cjs");
+    const email = String(record.email || "").trim().toLowerCase();
+    const [local = "", domain = ""] = email.split("@");
+    if (RESERVED_TEST_EMAIL_DOMAINS.includes(domain)) return true;
+    if (/^(probe|qa|test)(\+|$)|synthetic/.test(local)) return true;
+    const detected = detectNonRealSignals(record);
+    return Boolean(detected && detected.kind && detected.kind !== "real");
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Strict replay classifier. Missing record_kind never defaults to real here.
+ */
+function classifySkippedForRequeue(record) {
+  const handoff = (record && record.handoff) || {};
+  const status = String(handoff.status || "").toUpperCase();
+  const reason = String(handoff.reason || "").trim().toLowerCase();
+  const kind = String((record && record.record_kind) || "").trim().toLowerCase();
+
+  if (status === STATUS.DELIVERED || handoff.delivered_at || handoff.downstream) {
+    return { classification: REQUEUE_CLASS.ALREADY_DELIVERED, reason: "already_delivered" };
+  }
+  if (isDncOrSuppressed(record)) {
+    return { classification: REQUEUE_CLASS.DNC_OR_SUPPRESSED, reason: "dnc_or_suppressed" };
+  }
+  if (status !== STATUS.SKIPPED) {
+    return { classification: REQUEUE_CLASS.OTHER_BLOCKER, reason: "not_skipped" };
+  }
+  if (reason === "non_real") {
+    return { classification: REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL, reason: "non_real" };
+  }
+  if (reason !== "not_configured") {
+    return { classification: REQUEUE_CLASS.OTHER_BLOCKER, reason: reason || "missing_skip_reason" };
+  }
+  if (!kind) {
+    return { classification: REQUEUE_CLASS.MANUAL_REVIEW_LEGACY, reason: "legacy_kind_unknown" };
+  }
+  if (kind !== "real" || hasNonRealOrTestIdentity(record)) {
+    return { classification: REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL, reason: "non_real_or_test_identity" };
+  }
+  if (!hasExplicitConsent(record)) {
+    return { classification: REQUEUE_CLASS.MANUAL_REVIEW_LEGACY, reason: "missing_explicit_consent" };
+  }
+  if (!hasValidJoinId(record)) {
+    return { classification: REQUEUE_CLASS.OTHER_BLOCKER, reason: "invalid_join_id" };
+  }
+  return {
+    classification: REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED,
+    reason: "eligible_real_not_configured",
+  };
+}
+
+function countInto(target, key) {
+  const safe = String(key || "UNKNOWN").slice(0, 120);
+  target[safe] = (target[safe] || 0) + 1;
+}
+
+function createdWindow(record) {
+  const raw = record && (record.received_at || record.created_at);
+  const parsed = Date.parse(raw || "");
+  if (!Number.isFinite(parsed)) return "UNKNOWN";
+  return new Date(parsed).toISOString().slice(0, 7);
+}
+
+/** Aggregate-only outbox audit. No IDs or contact fields leave this function. */
+function auditSkippedHandoffs(leads) {
+  const audit = {
+    total: 0,
+    by_status: {},
+    by_reason: {},
+    by_record_kind: {},
+    by_consent_state: {},
+    by_commercial_eligibility: {},
+    by_created_at_window: {},
+    eligible_real_not_configured: 0,
+    never_requeue: 0,
+    manual_review: 0,
+    suppressed: 0,
+    already_delivered: 0,
+    other: 0,
+    reason_counts: {},
+  };
+  for (const record of leads || []) {
+    audit.total += 1;
+    const handoff = (record && record.handoff) || {};
+    const result = classifySkippedForRequeue(record);
+    countInto(audit.by_status, String(handoff.status || "MISSING").toUpperCase());
+    countInto(audit.by_reason, handoff.reason || "MISSING");
+    countInto(audit.by_record_kind, (record && record.record_kind) || "MISSING");
+    countInto(audit.by_consent_state, hasExplicitConsent(record) ? "EXPLICIT_TRUE" : "MISSING_OR_FALSE");
+    countInto(audit.by_commercial_eligibility, result.classification);
+    countInto(audit.by_created_at_window, createdWindow(record));
+    countInto(audit.reason_counts, result.reason);
+    if (result.classification === REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED) audit.eligible_real_not_configured += 1;
+    else if (result.classification === REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL) audit.never_requeue += 1;
+    else if (result.classification === REQUEUE_CLASS.MANUAL_REVIEW_LEGACY) audit.manual_review += 1;
+    else if (result.classification === REQUEUE_CLASS.DNC_OR_SUPPRESSED) audit.suppressed += 1;
+    else if (result.classification === REQUEUE_CLASS.ALREADY_DELIVERED) audit.already_delivered += 1;
+    else audit.other += 1;
+  }
+  return audit;
+}
+
+async function probeInboundDestinationHealth({ env = process.env } = {}) {
+  const cfg = resolveInboundConfig(env);
+  if (!cfg.ok) {
+    return {
+      ok: false,
+      contract: cfg.skip ? "UNSET" : "BLOCKED",
+      auto_send_off: false,
+      status: "UNKNOWN",
+      reason: cfg.reason || "configuration_not_ready",
+    };
+  }
+  const healthUrl = new URL(cfg.url);
+  healthUrl.pathname = `${healthUrl.pathname.replace(/\/$/, "")}/health`;
+  healthUrl.search = "";
+  healthUrl.hash = "";
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), cfg.timeoutMs) : null;
+  try {
+    const res = await getFetch()(healthUrl.toString(), {
+      method: "GET",
+      headers: { Accept: "application/json", "User-Agent": "confenge-inbound-gate/1.0" },
+      signal: controller ? controller.signal : undefined,
+    });
+    const body = await res.json().catch(() => ({}));
+    const autoSendOff = body.auto_send_enabled === false;
+    const receiveReady = res.status === 200 && body.status === "READY";
+    const dispatchOff = body.dispatch_attempted === false;
+    return {
+      ok: receiveReady && autoSendOff && dispatchOff,
+      contract: receiveReady ? "READY" : "BLOCKED",
+      auto_send_off: autoSendOff,
+      status: String(body.status || "UNKNOWN").slice(0, 40),
+      dispatch_attempted: body.dispatch_attempted === true,
+      reason: receiveReady && autoSendOff && dispatchOff ? null : "destination_safety_gate_failed",
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      contract: "BLOCKED",
+      auto_send_off: false,
+      status: "UNKNOWN",
+      reason: sanitizeError(err),
+    };
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+async function requeueEligibleHandoffs(
+  store,
+  { dryRun = true, limit = 1, now = new Date(), safetyGate = null } = {}
+) {
+  if (!store || typeof store.list !== "function") {
+    return { ok: false, error: "store_list_unavailable" };
+  }
+  const leads = await store.list();
+  const audit = auditSkippedHandoffs(leads);
+  const base = {
+    eligible_count: audit.eligible_real_not_configured,
+    never_requeue_count: audit.never_requeue,
+    manual_review_count: audit.manual_review,
+    reason_counts: audit.reason_counts,
+  };
+  if (dryRun) return { ok: true, dry_run: true, ...base };
+  if (
+    !safetyGate ||
+    safetyGate.ok !== true ||
+    safetyGate.auto_send_off !== true ||
+    safetyGate.contract !== "READY"
+  ) {
+    return { ok: false, error: "global_safety_gate_required", ...base };
+  }
+
+  const bounded = Math.min(20, Math.max(1, Number(limit || 1)));
+  const eligible = (leads || [])
+    .filter((record) => classifySkippedForRequeue(record).classification === REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED)
+    .sort((a, b) => String(a.received_at || a.created_at || "").localeCompare(String(b.received_at || b.created_at || "")))
+    .slice(0, bounded);
+  let requeued = 0;
+  for (const record of eligible) {
+    const fresh = typeof store.get === "function" ? await store.get(record.lead_id) : record;
+    if (classifySkippedForRequeue(fresh).classification !== REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED) continue;
+    const next = {
+      ...(fresh.handoff || {}),
+      target: "warmbly_inbound",
+      status: STATUS.PENDING,
+      reason: "not_configured",
+      attempts: 0,
+      last_error: null,
+      next_attempt_at: now.toISOString(),
+      requeued_at: now.toISOString(),
+      requeue_mode: "eligible_only",
+    };
+    const updated = await store.update(fresh.lead_id, { handoff: next });
+    if (updated && updated.handoff && updated.handoff.status === STATUS.PENDING) requeued += 1;
+  }
+  return { ok: true, dry_run: false, ...base, selected_count: eligible.length, requeued_count: requeued };
+}
+
 function initialHandoff(env = process.env, record = null) {
   if (record && !isCommercialRecord(record)) {
     return {
@@ -491,7 +743,7 @@ async function attemptInboundHandoff(store, record, opts = {}) {
 }
 
 async function drainPendingHandoffs(store, { now = new Date(), env = process.env, limit = 20 } = {}) {
-  const summary = { scanned: 0, attempted: 0, delivered: 0, retryable: 0, dead: 0, blocked: 0, skipped: 0 };
+  const summary = { scanned: 0, attempted: 0, delivered: 0, retryable: 0, dead: 0, blocked: 0, skipped: 0, aborted: false, abort_reason: null };
   if (!store || typeof store.list !== "function") {
     return { ok: false, error: "store_list_unavailable", ...summary };
   }
@@ -506,6 +758,16 @@ async function drainPendingHandoffs(store, { now = new Date(), env = process.env
     else if (next.status === STATUS.DEAD) summary.dead += 1;
     else if (next.status === STATUS.BLOCKED) summary.blocked += 1;
     else if (next.status === STATUS.SKIPPED) summary.skipped += 1;
+    if (next.status === STATUS.BLOCKED) {
+      summary.aborted = true;
+      summary.abort_reason = "authentication_or_destination_blocked";
+      break;
+    }
+    if (summary.attempted >= 2 && summary.retryable / summary.attempted >= 0.5) {
+      summary.aborted = true;
+      summary.abort_reason = "abnormal_retryable_rate";
+      break;
+    }
   }
   return { ok: true, ...summary };
 }
@@ -569,6 +831,7 @@ module.exports = {
   SOURCE_INTERNAL,
   SOURCE_WARMBLY,
   STATUS,
+  REQUEUE_CLASS,
   PII_QUERY_KEYS,
   mapLeadToInboundV1,
   signWarmblyInbound,
@@ -577,6 +840,13 @@ module.exports = {
   sanitizeUrl,
   urlHasPiiQuery,
   initialHandoff,
+  hasExplicitConsent,
+  hasValidJoinId,
+  isDncOrSuppressed,
+  classifySkippedForRequeue,
+  auditSkippedHandoffs,
+  probeInboundDestinationHealth,
+  requeueEligibleHandoffs,
   isDue,
   postInbound,
   applyAttempt,

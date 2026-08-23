@@ -176,7 +176,70 @@ const inbound = loadInbound();
   if (piiUrl.ok || !piiUrl.blocked) fail("fail_closed_query_pii", piiUrl);
   const missing = inbound.resolveInboundConfig({});
   if (!missing.skip) fail("unconfigured_skip", missing);
+  const wrongHost = inbound.resolveInboundConfig({
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://ops.example/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+    CONFENGE_INBOUND_ALLOWED_HOSTS: "api.confenge.com.br",
+  });
+  if (wrongHost.ok || wrongHost.reason !== "host_not_allowed") fail("fail_closed_wrong_host", wrongHost);
+  const wrongPath = inbound.resolveInboundConfig({
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/not-inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+  });
+  if (wrongPath.ok || wrongPath.reason !== "invalid_path") fail("fail_closed_wrong_path", wrongPath);
   pass("fail_closed_config");
+}
+
+// --- strict historical SKIPPED classifier: unknown never defaults to real ---
+{
+  const base = {
+    lead_id: "abc123abc123abc123abc123",
+    receipt_id: "abc123abc123abc123abc123",
+    record_kind: "real",
+    consentimento: true,
+    email: "compras@construtora-real.com.br",
+    handoff: { status: "SKIPPED", reason: "not_configured" },
+  };
+  const expectClass = (name, record, expected) => {
+    const got = inbound.classifySkippedForRequeue(record);
+    if (got.classification !== expected) fail(name, got);
+  };
+  expectClass(
+    "requeue_non_real_reason_never",
+    { ...base, handoff: { status: "SKIPPED", reason: "non_real" } },
+    inbound.REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL,
+  );
+  expectClass(
+    "requeue_synthetic_never",
+    { ...base, record_kind: "synthetic" },
+    inbound.REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL,
+  );
+  expectClass("requeue_qa_never", { ...base, record_kind: "qa" }, inbound.REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL);
+  expectClass(
+    "requeue_missing_consent_manual",
+    { ...base, consentimento: false },
+    inbound.REQUEUE_CLASS.MANUAL_REVIEW_LEGACY,
+  );
+  const { record_kind: _legacyKind, ...legacy } = base;
+  expectClass("requeue_legacy_kind_manual", legacy, inbound.REQUEUE_CLASS.MANUAL_REVIEW_LEGACY);
+  expectClass(
+    "requeue_reserved_test_identity_never",
+    { ...base, email: "person@example.com" },
+    inbound.REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL,
+  );
+  expectClass(
+    "requeue_dnc_suppressed",
+    { ...base, consent: { granted: true, dnc: true } },
+    inbound.REQUEUE_CLASS.DNC_OR_SUPPRESSED,
+  );
+  expectClass("requeue_real_consent_eligible", base, inbound.REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED);
+  const audit = inbound.auditSkippedHandoffs([base, legacy, { ...base, record_kind: "synthetic" }]);
+  if (audit.total !== 3 || audit.eligible_real_not_configured !== 1 || audit.manual_review !== 1 || audit.never_requeue !== 1) {
+    fail("requeue_aggregate_audit", audit);
+  }
+  const auditBlob = JSON.stringify(audit);
+  if (auditBlob.includes(base.email) || auditBlob.includes(base.lead_id)) fail("requeue_audit_pii", audit);
+  pass("strict_requeue_classifier_and_aggregate_audit", audit.by_commercial_eligibility);
 }
 
 function moneyPayload(extra = {}) {
@@ -216,6 +279,7 @@ function event(body, extraHeaders = {}) {
 
 function startMock({ mode = "ok", secret = SECRET } = {}) {
   const seen = [];
+  let autoSendEnabled = false;
   const server = http.createServer((req, res) => {
     const chunks = [];
     req.on("data", (c) => chunks.push(c));
@@ -230,6 +294,18 @@ function startMock({ mode = "ok", secret = SECRET } = {}) {
         raw,
       };
       seen.push(rec);
+
+      if (req.method === "GET" && url.pathname === "/api/v1/webhooks/confenge/inbound/health") {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            status: autoSendEnabled ? "BLOCKED" : "READY",
+            auto_send_enabled: autoSendEnabled,
+            dispatch_attempted: false,
+          }),
+        );
+        return;
+      }
 
       if (req.method !== "POST" || url.pathname !== "/api/v1/webhooks/confenge/inbound") {
         res.writeHead(404, { "Content-Type": "application/json" });
@@ -268,6 +344,11 @@ function startMock({ mode = "ok", secret = SECRET } = {}) {
         res.end(JSON.stringify({ error: "invalid inbound signature" }));
         return;
       }
+      if (mode === "403") {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "forbidden" }));
+        return;
+      }
       if (mode === "timeout") {
         return; // never respond
       }
@@ -297,6 +378,9 @@ function startMock({ mode = "ok", secret = SECRET } = {}) {
         setMode(next) {
           mode = next;
         },
+        setAutoSendEnabled(next) {
+          autoSendEnabled = Boolean(next);
+        },
         close() {
           return new Promise((r) => server.close(r));
         },
@@ -305,7 +389,7 @@ function startMock({ mode = "ok", secret = SECRET } = {}) {
   });
 }
 
-const { MemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+const { MemoryStore, FileStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 const { handler, setStoreForTests } = loadHandler();
 const { _reset } = require(path.join(root, "netlify/functions/lib/lead-rate-limit.cjs"));
 const mem = new MemoryStore();
@@ -505,6 +589,26 @@ try {
 
   // ops counters + drain auth surface (no PII)
   {
+    const opsFileStore = new FileStore(storeDir);
+    await opsFileStore.put({
+      lead_id: "opsaudit0000000000000001",
+      receipt_id: "opsaudit0000000000000001",
+      record_kind: "real",
+      consentimento: true,
+      nome: "Pessoa que não pode aparecer",
+      email: "privado@empresa-real.com.br",
+      received_at: "2026-08-20T12:00:00.000Z",
+      handoff: { status: "SKIPPED", reason: "not_configured", attempts: 0 },
+    });
+    await opsFileStore.put({
+      lead_id: "opssynth0000000000000001",
+      receipt_id: "opssynth0000000000000001",
+      record_kind: "synthetic",
+      consentimento: true,
+      email: "probe@example.com",
+      received_at: "2026-08-20T12:01:00.000Z",
+      handoff: { status: "SKIPPED", reason: "not_configured", attempts: 0 },
+    });
     process.env.OPS_TOKEN = "ops-test-token-16chars-min";
     delete require.cache[require.resolve(opsPath)];
     const ops = require(opsPath);
@@ -537,7 +641,129 @@ try {
     }
     pass("ops_inbound_configuration", data.configuration);
     pass("ops_counters", data.counters);
+
+    const opsEvent = (action, method = "GET", body = null) => ({
+      httpMethod: method,
+      headers: {
+        origin: "https://confenge.com.br",
+        authorization: "Bearer ops-test-token-16chars-min",
+      },
+      queryStringParameters: { action },
+      rawUrl: `https://confenge.com.br/.netlify/functions/ops?action=${action}`,
+      body: body ? JSON.stringify(body) : null,
+    });
+    const auditRes = await ops.handler(opsEvent("audit_inbound_requeue"));
+    const auditData = JSON.parse(auditRes.body);
+    if (auditRes.statusCode !== 200 || auditData.audit.eligible_real_not_configured !== 1 || auditData.audit.never_requeue !== 1) {
+      fail("ops_requeue_audit", auditData);
+    }
+    const auditText = JSON.stringify(auditData);
+    if (auditText.includes("privado@") || auditText.includes("Pessoa que não")) fail("ops_requeue_audit_pii", auditData);
+    const dryRes = await ops.handler(
+      opsEvent("requeue_inbound", "POST", { mode: "eligible_only", dry_run: true }),
+    );
+    const dryData = JSON.parse(dryRes.body);
+    if (dryRes.statusCode !== 200 || dryData.eligible_count !== 1 || dryData.never_requeue_count !== 1) {
+      fail("ops_requeue_dry_run", dryData);
+    }
+    mock.setAutoSendEnabled(true);
+    const unsafeRes = await ops.handler(
+      opsEvent("requeue_inbound", "POST", { mode: "eligible_only", dry_run: false, limit: 1 }),
+    );
+    if (unsafeRes.statusCode !== 409) fail("ops_requeue_auto_send_abort", JSON.parse(unsafeRes.body));
+    if ((await opsFileStore.get("opsaudit0000000000000001")).handoff.status !== "SKIPPED") {
+      fail("ops_requeue_auto_send_mutation");
+    }
+    mock.setAutoSendEnabled(false);
+    pass("ops_requeue_audit_dry_run_and_global_abort");
     delete process.env.OPS_TOKEN;
+  }
+
+  // Strict requeue is dry-run first, safety-gated, bounded, and idempotent.
+  {
+    const requeueStore = new MemoryStore();
+    const eligible = {
+      lead_id: "eligible0000000000000001",
+      receipt_id: "eligible0000000000000001",
+      record_kind: "real",
+      consentimento: true,
+      email: "compras@empresa-real.com.br",
+      received_at: "2026-08-01T12:00:00.000Z",
+      handoff: { status: "SKIPPED", reason: "not_configured", attempts: 0 },
+    };
+    await requeueStore.put(eligible);
+    const dry = await inbound.requeueEligibleHandoffs(requeueStore, { dryRun: true });
+    if (!dry.ok || dry.eligible_count !== 1) fail("requeue_dry_run", dry);
+    const withoutGate = await inbound.requeueEligibleHandoffs(requeueStore, { dryRun: false, limit: 1 });
+    if (withoutGate.ok || withoutGate.error !== "global_safety_gate_required") fail("requeue_requires_global_gate", withoutGate);
+
+    mock.setAutoSendEnabled(true);
+    const unsafeGate = await inbound.probeInboundDestinationHealth({ env: process.env });
+    if (unsafeGate.ok || unsafeGate.auto_send_off) fail("requeue_auto_send_global_abort", unsafeGate);
+    const unsafeRun = await inbound.requeueEligibleHandoffs(requeueStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: unsafeGate,
+    });
+    if (unsafeRun.ok) fail("requeue_auto_send_mutated", unsafeRun);
+    if ((await requeueStore.get(eligible.lead_id)).handoff.status !== "SKIPPED") fail("requeue_auto_send_changed_status");
+
+    mock.setAutoSendEnabled(false);
+    const gate = await inbound.probeInboundDestinationHealth({ env: process.env });
+    if (!gate.ok || !gate.auto_send_off || gate.contract !== "READY") fail("requeue_safe_gate", gate);
+    const run = await inbound.requeueEligibleHandoffs(requeueStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+      now: new Date("2026-08-23T02:00:00.000Z"),
+    });
+    if (!run.ok || run.requeued_count !== 1) fail("requeue_eligible_to_pending", run);
+    if ((await requeueStore.get(eligible.lead_id)).handoff.status !== "PENDING") fail("requeue_not_pending", run);
+    const repeat = await inbound.requeueEligibleHandoffs(requeueStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+    });
+    if (!repeat.ok || repeat.requeued_count !== 0) fail("requeue_second_run_idempotent", repeat);
+    const before = mock.seen.filter((item) => item.body && item.body.lead_id === eligible.lead_id).length;
+    const drain = await inbound.drainPendingHandoffs(requeueStore, { now: new Date() });
+    const delivered = await requeueStore.get(eligible.lead_id);
+    if (!drain.ok || drain.delivered !== 1 || delivered.handoff.status !== "DELIVERED") fail("requeue_pending_to_delivered", { drain, handoff: delivered.handoff });
+    const after = mock.seen.filter((item) => item.body && item.body.lead_id === eligible.lead_id).length;
+    if (after !== before + 1) fail("requeue_exactly_one_post", { before, after });
+    pass("requeue_dry_run_gate_pending_delivered_idempotent");
+  }
+
+  // Auth failures block the row and abort the remaining batch immediately.
+  {
+    const blockedStore = new MemoryStore();
+    const pending = (lead_id) => ({
+      lead_id,
+      receipt_id: lead_id,
+      record_kind: "real",
+      consentimento: true,
+      email: "ops@empresa-real.com.br",
+      handoff: { status: "PENDING", attempts: 0, next_attempt_at: "2026-08-01T00:00:00.000Z" },
+    });
+    await blockedStore.put(pending("blocked00000000000000001"));
+    await blockedStore.put(pending("blocked00000000000000002"));
+    mock.setMode("401");
+    const blocked = await inbound.drainPendingHandoffs(blockedStore, { now: new Date() });
+    if (!blocked.aborted || blocked.abort_reason !== "authentication_or_destination_blocked" || blocked.attempted !== 1 || blocked.blocked !== 1) {
+      fail("requeue_401_batch_abort", blocked);
+    }
+    const rows = await blockedStore.list();
+    if (rows.filter((row) => row.handoff.status === "PENDING").length !== 1) fail("requeue_401_attempted_more_than_one", rows.map((row) => row.handoff.status));
+    mock.setMode("403");
+    const forbidden = await inbound.postInbound(pending("forbid000000000000000001"), { now: new Date(), env: process.env });
+    if (forbidden.status !== "BLOCKED" || forbidden.http !== 403) fail("requeue_403_blocked", forbidden);
+    mock.setMode("ok");
+    const originalSecret = process.env.CONFENGE_INBOUND_WEBHOOK_SECRET;
+    process.env.CONFENGE_INBOUND_WEBHOOK_SECRET = "mismatched-test-secret";
+    const mismatch = await inbound.postInbound(pending("mismatch00000000000000001"), { now: new Date(), env: process.env });
+    process.env.CONFENGE_INBOUND_WEBHOOK_SECRET = originalSecret;
+    if (mismatch.status !== "BLOCKED" || mismatch.http !== 401) fail("requeue_secret_mismatch_blocked", mismatch);
+    pass("requeue_auth_failures_abort_batch");
   }
 
   // Non-real / synthetic never mint a Warmbly commercial post

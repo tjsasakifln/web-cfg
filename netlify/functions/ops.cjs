@@ -22,6 +22,8 @@
  *   POST backfill_record_kind { dry_run?, apply_ids? }
  *   POST rollback_record_kind { snapshot_id }
  *   GET  inbound_handoff
+ *   GET  audit_inbound_requeue
+ *   POST requeue_inbound { mode: "eligible_only", dry_run: boolean, limit?: 1..20 }
  *   POST drain_inbound
  *   GET  search_observation
  *   POST produce_search_observation
@@ -54,6 +56,9 @@ const {
   drainPendingHandoffs,
   resolveInboundConfig,
   summarizeHandoffs,
+  auditSkippedHandoffs,
+  probeInboundDestinationHealth,
+  requeueEligibleHandoffs,
 } = require("./lib/inbound-handoff.cjs");
 const {
   createObservationStore,
@@ -780,6 +785,63 @@ exports.handler = async (event) => {
     );
   }
 
+  if (action === "audit_inbound_requeue" && event.httpMethod === "GET") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const leads = await listLeads(store);
+    return json(
+      200,
+      {
+        ok: true,
+        audit: auditSkippedHandoffs(leads),
+        ts: new Date().toISOString(),
+        note: "Aggregate-only SKIPPED audit. No IDs, PII, or secret values.",
+      },
+      origin
+    );
+  }
+
+  if (action === "requeue_inbound" && event.httpMethod === "POST") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const body = parseBody(event);
+    if (!body) return json(400, { ok: false, error: "invalid_json" }, origin);
+    if (body.mode !== "eligible_only") {
+      return json(400, { ok: false, error: "eligible_only_mode_required" }, origin);
+    }
+    if (typeof body.dry_run !== "boolean") {
+      return json(400, { ok: false, error: "explicit_dry_run_required" }, origin);
+    }
+    if (body.dry_run) {
+      const result = await requeueEligibleHandoffs(store, { dryRun: true });
+      return json(200, result, origin);
+    }
+    const limit = Number(body.limit);
+    if (!Number.isInteger(limit) || limit < 1 || limit > 20) {
+      return json(400, { ok: false, error: "bounded_limit_1_20_required" }, origin);
+    }
+    const gate = await probeInboundDestinationHealth({ env: process.env });
+    if (!gate.ok) {
+      safeLog("warn", "ops_requeue_inbound_global_abort", {
+        contract: gate.contract,
+        auto_send_off: gate.auto_send_off,
+        status: gate.status,
+        reason: gate.reason,
+      });
+      return json(409, { ok: false, error: "global_safety_gate_blocked", gate }, origin);
+    }
+    const result = await requeueEligibleHandoffs(store, {
+      dryRun: false,
+      limit,
+      now: new Date(),
+      safetyGate: gate,
+    });
+    safeLog("info", "ops_requeue_inbound", {
+      eligible: result.eligible_count,
+      selected: result.selected_count,
+      requeued: result.requeued_count,
+    });
+    return json(200, { ...result, gate }, origin);
+  }
+
   if (action === "drain_inbound" && event.httpMethod === "POST") {
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const body = parseBody(event) || {};
@@ -790,6 +852,8 @@ exports.handler = async (event) => {
       delivered: result.delivered,
       retryable: result.retryable,
       dead: result.dead,
+      aborted: result.aborted,
+      abort_reason: result.abort_reason,
     });
     return json(200, { ok: true, ...result }, origin);
   }
