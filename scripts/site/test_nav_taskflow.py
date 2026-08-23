@@ -26,11 +26,14 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.shell_nav import (  # noqa: E402
     FROZEN_SHELL_FILES,
+    MOBILE_NAV_RE,
     ROOT as SHELL_ROOT,
+    desktop_cta,
     hub,
     load_brand,
+    mobile_cta,
     nav_items,
-    page_path,
+    nav_cta,
     shipped_html_files,
 )
 
@@ -41,19 +44,6 @@ TASKS = {
     "reequilibrio": "/reequilibrio-obras-publicas/",
     "ferramenta": "/ferramentas/",
 }
-MIN_SUCCESS_RATE = 0.80
-
-# Entry pages a search visitor typically lands on (article / guide / data page).
-ENTRY_GLOBS = (
-    "conteudos/*/index.html",
-    "guias-contratos-obras/*/index.html",
-    "lei-14133-obras/*/index.html",
-    "jurisprudencia-contratos-obras/*/index.html",
-    "inteligencia/mercados/*/index.html",
-    "analises-contratos-publicos/*/index.html",
-)
-
-
 class _NavLinks(HTMLParser):
     """Collect (href, label) for one nav class, in document order."""
 
@@ -108,13 +98,6 @@ def internal_hrefs(html: str) -> set[str]:
     return out
 
 
-def entry_pages() -> list[Path]:
-    pages: list[Path] = []
-    for pattern in ENTRY_GLOBS:
-        pages.extend(sorted(ROOT.glob(pattern)))
-    return pages
-
-
 def main() -> int:
     brand = load_brand()
     failures: list[str] = []
@@ -140,6 +123,9 @@ def main() -> int:
     # --- 2. Desktop / mobile / footer carry the same taxonomy ---------------
     expected = [(i["href"], i["label"]) for i in nav_items(brand)]
     expected_labels = [label for _, label in expected]
+    expected_cta = nav_cta(brand)
+    expected_desktop_cta = desktop_cta(brand)
+    expected_mobile_cta = mobile_cta(brand)
     checked = 0
     for path in shipped_html_files():
         html = path.read_text(encoding="utf-8", errors="replace")
@@ -153,6 +139,17 @@ def main() -> int:
         mobile = nav_links(html, "mobile-nav")
         if mobile and mobile != expected:
             failures.append(f"{rel}: mobile nav {mobile} != {expected}")
+        if expected_desktop_cta not in html:
+            failures.append(
+                f"{rel}: desktop CTA is not navigation.cta "
+                f"{expected_cta['label']!r} -> {expected_cta['href']!r}"
+            )
+        mobile_block = MOBILE_NAV_RE.search(html)
+        if mobile_block and expected_mobile_cta not in mobile_block.group(2):
+            failures.append(
+                f"{rel}: mobile CTA is not navigation.cta "
+                f"{expected_cta['label']!r} -> {expected_cta['href']!r}"
+            )
         footer = re.search(
             r'<div class="footer-links"><strong>Navegação</strong>(.*?)</div>', html, re.S
         )
@@ -193,14 +190,55 @@ def main() -> int:
         if labels != expected_labels:
             failures.append(f"{rel}: frozen page labels {labels} != {expected_labels}")
 
-    # --- 3. Active state is perceivable on internal pages -------------------
-    for meta in (services, problems):
-        path = ROOT / meta["url"].strip("/") / "index.html"
+    # --- 3. Active state is visible and inherited by descendant/task routes -
+    active_cases = {
+        services["url"]: services["url"],
+        problems["url"]: problems["url"],
+        "/bid-room-licitacoes-obras/": services["url"],
+        "/defesa-tecnica-contratos-publicos/": problems["url"],
+        "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
+        "/ferramentas/limite-acrescimos-supressoes/": "/ferramentas/",
+        "/especialista/tiago-jun-sasaki/": "/especialista/tiago-jun-sasaki/",
+    }
+    for current, active in active_cases.items():
+        path = ROOT / current.strip("/") / "index.html"
         html = path.read_text(encoding="utf-8")
-        if f'href="{meta["url"]}" aria-current="page"' not in html:
-            failures.append(f"{meta['url']}: header does not mark aria-current=page")
+        for nav_class in ("desktop-nav", "mobile-nav"):
+            match = re.search(
+                rf'<nav\b[^>]*\b{nav_class}\b[^>]*>(.*?)</nav>', html, re.S | re.I
+            )
+            current_hrefs = (
+                re.findall(
+                    r'<a\b(?=[^>]*\baria-current="page")[^>]*\bhref="([^"]+)"',
+                    match.group(1),
+                )
+                if match
+                else []
+            )
+            if current_hrefs != [active]:
+                failures.append(
+                    f"{current}: {nav_class} active branch {current_hrefs} != {[active]}"
+                )
 
-    # --- 4. Tree-test walk: task reachable in <= 2 clicks from the header ---
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    for selector in (
+        '.desktop-nav a[aria-current="page"]',
+        '.mobile-nav a[aria-current="page"]',
+    ):
+        if selector not in css:
+            failures.append(f"styles.css misses visible active selector {selector}")
+
+    # The generated hubs must switch no-js to js before CSS can expose JS-only states.
+    for meta in (services, problems):
+        html = (ROOT / meta["url"].strip("/") / "index.html").read_text(
+            encoding="utf-8"
+        )
+        toggle = "document.documentElement.classList.replace('no-js','js')"
+        if toggle not in html or html.index(toggle) > html.index('href="/styles.css"'):
+            failures.append(f"{meta['url']}: no-js -> js toggle missing before stylesheet")
+
+    # --- 4. Static reachability: each named task is <= 2 links from the header
+    # This is a repository contract, not a participant study or conversion result.
     hub_targets: dict[str, set[str]] = {}
     for item in nav_items(brand):
         href = item["href"]
@@ -208,31 +246,24 @@ def main() -> int:
         if target.is_file():
             hub_targets[href] = internal_hrefs(target.read_text(encoding="utf-8"))
 
-    attempts = 0
+    header = {href for href, _ in expected}
+    attempts = len(TASKS)
     successes = 0
     misses: list[str] = []
-    for path in entry_pages():
-        html = path.read_text(encoding="utf-8", errors="replace")
-        header = {href for href, _ in nav_links(html, "desktop-nav")}
-        for task, destination in TASKS.items():
-            attempts += 1
-            direct = destination in header
-            via_hub = any(
-                href in header and destination in reachable
-                for href, reachable in hub_targets.items()
-            )
-            if direct or via_hub:
-                successes += 1
-            else:
-                misses.append(f"{page_path(path)} -> {task}")
+    for task, destination in TASKS.items():
+        direct = destination in header
+        via_hub = any(
+            href in header and destination in reachable
+            for href, reachable in hub_targets.items()
+        )
+        if direct or via_hub:
+            successes += 1
+        else:
+            misses.append(task)
 
-    rate = (successes / attempts) if attempts else 0.0
-    if attempts < 40:
-        failures.append(f"tree test needs a real sample of entry pages, got {attempts}")
-    if rate < MIN_SUCCESS_RATE:
+    if successes != attempts:
         failures.append(
-            f"tree test success rate {rate:.0%} < {MIN_SUCCESS_RATE:.0%}; "
-            f"first misses: {misses[:10]}"
+            f"static reachability {successes}/{attempts}; unreachable tasks: {misses}"
         )
 
     if failures:
@@ -244,8 +275,8 @@ def main() -> int:
         "PASS nav taskflow",
         {
             "pages_with_shell": checked,
-            "tree_test_attempts": attempts,
-            "tree_test_success_rate": f"{rate:.0%}",
+            "static_reachability": f"{successes}/{attempts}",
+            "participant_study": "not run; issue #183 remains open",
             "tasks": sorted(TASKS),
         },
     )

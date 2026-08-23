@@ -93,6 +93,10 @@ MOBILE_NAV_RE = re.compile(
     r'(<nav\b[^>]*\bclass="[^"]*\bmobile-nav\b[^"]*"[^>]*>)(.*?)(</nav>)',
     re.S | re.I,
 )
+HEADER_CTA_RE = re.compile(
+    r'<a\b(?=[^>]*\bheader-cta\b)[^>]*>.*?</a>',
+    re.S | re.I,
+)
 FOOTER_NAV_COL_RE = re.compile(
     r'(<div class="footer-links"><strong>Navegação</strong>)(.*?)(</div>)',
     re.S,
@@ -131,32 +135,76 @@ def problem_stages(brand: dict[str, Any]) -> list[dict[str, str]]:
     return list(brand.get("problem_stages") or [])
 
 
-def _current_flag(href: str, current: str | None) -> str:
-    if not current:
+def _path(value: str | None) -> str:
+    """Normalize one public path for exact and descendant comparisons."""
+    if not value:
         return ""
-    if href.startswith("/#") or href.startswith("#"):
+    path = value.split("#", 1)[0].split("?", 1)[0]
+    if not path.startswith("/"):
         return ""
-    return ' aria-current="page"' if href.rstrip("/") == current.rstrip("/") else ""
+    return path.rstrip("/") or "/"
+
+
+def _within(current: str, target: str) -> bool:
+    return current == target or (target != "/" and current.startswith(target + "/"))
+
+
+def active_nav_href(brand: dict[str, Any], current: str | None) -> str | None:
+    """Return the one task-first branch that owns the current route."""
+    current_path = _path(current)
+    if not current_path:
+        return None
+
+    # Taxonomy roots own their descendants (articles, tools and specialist pages).
+    for item in nav_items(brand):
+        href = item["href"]
+        target = _path(href)
+        if target and not href.startswith("/#") and _within(current_path, target):
+            return href
+
+    services = hub(brand, "services").get("url")
+    if services and any(
+        _within(current_path, _path(offer.get("url")))
+        for offer in brand.get("offers") or []
+        if _path(offer.get("url"))
+    ):
+        return services
+
+    problems = hub(brand, "problems").get("url")
+    if problems and any(
+        _within(current_path, _path(cluster.get("url")))
+        for cluster in problem_clusters(brand)
+        if _path(cluster.get("url"))
+    ):
+        return problems
+    return None
+
+
+def _current_flag(href: str, active: str | None) -> str:
+    return ' aria-current="page"' if active and href == active else ""
 
 
 def desktop_links(brand: dict[str, Any], current: str | None = None) -> str:
+    active = active_nav_href(brand, current)
     return "\n".join(
         f'<a data-cta-position="header_nav" href="{i["href"]}"'
-        f'{_current_flag(i["href"], current)}>{i["label"]}</a>'
+        f'{_current_flag(i["href"], active)}>{i["label"]}</a>'
         for i in nav_items(brand)
     )
 
 
 def mobile_links(brand: dict[str, Any], current: str | None = None) -> str:
+    active = active_nav_href(brand, current)
     return "".join(
         f'<a data-cta-position="mobile_nav" href="{i["href"]}"'
-        f'{_current_flag(i["href"], current)}>{i["label"]}</a>'
+        f'{_current_flag(i["href"], active)}>{i["label"]}</a>'
         for i in nav_items(brand)
     )
 
 
 def footer_nav_links(brand: dict[str, Any], current: str | None = None) -> str:
     """Footer navigation column: same taxonomy and order as the header."""
+    active = active_nav_href(brand, current)
     parts = ['<a href="/">Início</a>']
     seen = {"/"}
     for item in nav_items(brand):
@@ -167,10 +215,28 @@ def footer_nav_links(brand: dict[str, Any], current: str | None = None) -> str:
         seen.add(href)
         parts.append(
             f'<a href="{html_lib.escape(href)}"'
-            f'{_current_flag(href, current)}>{html_lib.escape(label)}</a>'
+            f'{_current_flag(href, active)}>{html_lib.escape(label)}</a>'
         )
     parts.append('<a href="/#contato">Contato</a>')
     return "".join(parts)
+
+
+def desktop_cta(brand: dict[str, Any]) -> str:
+    cta = nav_cta(brand)
+    return (
+        f'<a class="button button-primary header-cta" '
+        f'href="{html_lib.escape(cta["href"], quote=True)}">'
+        f'{html_lib.escape(cta["label"])}</a>'
+    )
+
+
+def mobile_cta(brand: dict[str, Any]) -> str:
+    cta = nav_cta(brand)
+    return (
+        f'<a class="button button-primary" '
+        f'href="{html_lib.escape(cta["href"], quote=True)}">'
+        f'{html_lib.escape(cta["label"])}</a>'
+    )
 
 
 def page_path(path: Path) -> str:
@@ -201,11 +267,6 @@ def _replace_nav(text: str, regex: re.Pattern[str], inner: str) -> str:
     return regex.sub(sub, text, count=1)
 
 
-def _mobile_cta(match_inner: str) -> str:
-    cta = re.search(r'<a\b[^>]*\bbutton-primary\b[^>]*>.*?</a>', match_inner, re.S)
-    return cta.group(0) if cta else ""
-
-
 def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
     """Idempotently align one page's header/footer navigation with brand.json."""
     if 'class="desktop-nav"' not in text and 'class="mobile-nav"' not in text:
@@ -214,12 +275,12 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
     if DESKTOP_NAV_RE.search(text):
         text = _replace_nav(text, DESKTOP_NAV_RE, desktop_links(brand, current))
 
+    if HEADER_CTA_RE.search(text):
+        text = HEADER_CTA_RE.sub(lambda _: desktop_cta(brand), text, count=1)
+
     mobile = MOBILE_NAV_RE.search(text)
     if mobile:
-        cta = _mobile_cta(mobile.group(2))
-        inner = mobile_links(brand, current)
-        if cta:
-            inner = f"{inner}\n{cta}"
+        inner = f"{mobile_links(brand, current)}\n{mobile_cta(brand)}"
         text = _replace_nav(text, MOBILE_NAV_RE, inner)
 
     if FOOTER_NAV_COL_RE.search(text):

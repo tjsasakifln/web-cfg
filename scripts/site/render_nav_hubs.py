@@ -126,6 +126,7 @@ def _document(
 <meta content="{e(title)}" property="og:title"/>
 <meta content="{e(description)}" property="og:description"/>
 <meta content="{SITE}{url}" property="og:url"/>
+<script>document.documentElement.classList.replace('no-js','js');</script>
 <link href="/styles.css" rel="stylesheet"/>
 <script defer="" src="{SCRIPT_SRC}"></script>
 <meta content="Engº Tiago Sasaki" name="author"/>
