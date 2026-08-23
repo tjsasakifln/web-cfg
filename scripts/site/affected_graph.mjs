@@ -194,6 +194,34 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: [],
   },
+  "test:report-model": {
+    producers: [
+      "scripts/site/test_report_model_599.py",
+      "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "casos/index.html",
+      "bid-room-licitacoes-obras/index.html",
+      "diretoria-b2g/index.html",
+      "sitemap.xml",
+      "sitemap.txt",
+      "sitemap-index.xml",
+      "docs/contracts/intent-action/intent-action-matrix.v1.json",
+      "scripts/offers/registry.cjs",
+      "data/offers/catalog.snapshot.json",
+    ],
+    artifacts: ["_site/casos/modelo-relatorio-inteligencia-licitacoes/"],
+    surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
+  "test:report-model-ui": {
+    producers: [
+      "scripts/site/test_report_model_ui.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "styles.css",
+      "script.js",
+    ],
+    artifacts: [],
+    surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
   "test:cta-whatsapp": {
     producers: ["scripts/site/test_cta_whatsapp.mjs", "data/site/whatsapp-messages.json"],
     artifacts: [],
@@ -524,7 +552,7 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: [],
   },
   "test:conversion": {
-    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
+    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "docs/contracts/intent-action/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
     artifacts: [],
     surfaces: ["/diagnostico-b2g-360/", "/diagnostico-b2g-expansao/", "/diretoria-b2g/"],
   },

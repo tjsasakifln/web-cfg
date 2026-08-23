@@ -24,6 +24,8 @@ const REQUIRED_ENVELOPE = [
   "intent",
   "cta_id",
   "cta_position",
+  "offer_id",
+  "next_action_id",
   "correlation_id",
   "idempotency_key",
   "consent",

@@ -1,6 +1,6 @@
-# Intent → action matrix v1.0.0
+# Intent → action matrix v1.2.0
 
-Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-16.
+Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-23.
 
 SLA is `UNKNOWN` on every route until Warmbly #55 measures a representative baseline. This file does not invent prazo.
 
@@ -26,6 +26,7 @@ Issue #90 (owned-audience opt-in) is **not authorized**. The `ainda_nao_pronto` 
 | revisar_contrato | revisar contrato | Visitor asks human review of their contract | Defesa de Margem / Analise Meu Contrato | nome + contato + consent + contract/document | warmbly-after-capture | form_then_warmbly | UNKNOWN | explicit consent; no auto-send | operational WhatsApp if form fails | auto-message; “we found a problem” | analise-meu-contrato / defesa-margem-contratos-publicos |
 | urgencia_real | urgencia real | Live pressure AND owned channel exists | WhatsApp or phone; no agenda (route absent) | none | tiago-jun-sasaki | whatsapp | UNKNOWN | visitor-initiated channel; persist only with consent | hand-raise without channel promise | invented SLA or ownerless agenda | falar-especialista / diagnostico-b2g-360 |
 | ainda_nao_pronto | ainda nao pronto | Wants citation/download; #90 deferred | Citation or download; no form | none | web-cfg/editorial | citation_download | UNKNOWN | no PII; opt-in blocked | leave with visible answer | email capture or fake #90 | citation-download / — |
+| contratar_relatorio_inteligencia_599 | contratar relatório de inteligência | Read the public synthetic model; owner authorized only the R$ 599 unit price | Human scoping and acceptance before any charge; not checkout/catalog | none | tiago-jun-sasaki | whatsapp | UNKNOWN | visitor-initiated; no message/PII in analytics | visible report remains ungated | price drift, invented scope/SLA, checkout or PII analytics | handraise-report-intelligence-599-v1 / — |
 
 ## Operational channels
 
