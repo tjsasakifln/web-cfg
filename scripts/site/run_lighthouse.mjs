@@ -16,6 +16,18 @@ const OUT = join(ROOT, "docs", "lighthouse-runs");
 const PAGES = process.env.LH_PAGES
   ? process.env.LH_PAGES.split(",").map((s) => s.trim()).filter(Boolean)
   : ["/", "/diretoria-b2g/", "/conteudos/"];
+const IMAGE_GATE_PAGES = new Set(
+  (process.env.LH_IMAGE_GATE_PAGES || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean),
+);
+const missingImageGatePages = [...IMAGE_GATE_PAGES].filter((path) => !PAGES.includes(path));
+if (missingImageGatePages.length) {
+  throw new Error(
+    `LH_IMAGE_GATE_PAGES must be included in LH_PAGES: ${missingImageGatePages.join(", ")}`,
+  );
+}
 const PORT = 8766;
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -120,6 +132,8 @@ try {
         tbt_ms: audits["total-blocking-time"]?.numericValue,
         fcp_ms: audits["first-contentful-paint"]?.numericValue,
         si_ms: audits["speed-index"]?.numericValue,
+        image_aspect_ratio: audits["image-aspect-ratio"]?.score,
+        image_size_responsive: audits["image-size-responsive"]?.score,
       };
       results.push(row);
       console.log(JSON.stringify(row));
@@ -144,6 +158,9 @@ const failed = results.filter(
     r.performance < 90 ||
     r.accessibility < 95 ||
     r.best_practices < 95 ||
-    r.seo < 95,
+    r.seo < 95 ||
+    (IMAGE_GATE_PAGES.has(r.path) &&
+      (r.image_aspect_ratio !== 1 || r.image_size_responsive !== 1)),
 );
+if (failed.length) console.error("Lighthouse gates failed", JSON.stringify(failed));
 process.exit(failed.length ? 1 : 0);
