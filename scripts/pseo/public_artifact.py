@@ -54,6 +54,9 @@ PUBLIC_TOP_DIRS = frozenset(
         "bid-room-licitacoes-obras",
         "defesa-margem-contratos-publicos",
         "metodologia-inteligencia",
+        # Task-first navigation hubs (#183): destinations behind the header labels
+        "servicos-obras-publicas",
+        "problemas-que-resolvemos",
         # Editorial Wave 1 hubs + archetype pages
         "lei-14133-obras",
         "jurisprudencia-contratos-obras",
@@ -338,6 +341,14 @@ def assemble_public_artifact(
         if ".well-known/" not in copied_dirs:
             copied_dirs.append(".well-known/")
 
+    from scripts.site.public_navigation import (
+        audit_public_navigation_tree,
+        promote_public_navigation_tree,
+    )
+
+    promoted_navigation_files = promote_public_navigation_tree(dest)
+    navigation_audit = audit_public_navigation_tree(dest)
+
     from scripts.site.fingerprint_css import fingerprint_published_css
 
     css_assets = fingerprint_published_css(dest)
@@ -354,6 +365,8 @@ def assemble_public_artifact(
         "errors": errors,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "css_assets": css_assets,
+        "promoted_navigation_files": promoted_navigation_files,
+        "navigation_audit": navigation_audit,
     }
 
     # Private inventory (not published)
@@ -364,6 +377,8 @@ def assemble_public_artifact(
         "public_artifact_hash": artifact_hash,
         "copied_dirs": copied_dirs,
         "copied_files": copied_files,
+        "promoted_navigation_files": promoted_navigation_files,
+        "navigation_audit": navigation_audit,
     }
     man_path.write_text(
         json.dumps(man_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -390,6 +405,20 @@ def audit_public_artifact(
             "findings": [{"code": "missing_artifact", "path": dest_name, "detail": "not found"}],
             "file_count": 0,
         }
+
+    from scripts.site.public_navigation import audit_public_navigation_tree
+
+    navigation_audit: dict[str, int] | None = None
+    try:
+        navigation_audit = audit_public_navigation_tree(dest)
+    except ValueError as exc:
+        findings.append(
+            {
+                "code": "public_navigation_contract",
+                "path": dest_name,
+                "detail": str(exc),
+            }
+        )
 
     # netlify.toml publish alignment is checked by caller / CI
     for p in sorted(dest.rglob("*")):
@@ -543,6 +572,7 @@ def audit_public_artifact(
         "public_directory": dest_name,
         "public_artifact_hash": _sha256_tree(dest),
         "file_count": file_count,
+        "navigation_audit": navigation_audit,
         "findings": findings,
         "errors": [f"{f['code']}:{f['path']}" for f in findings],
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

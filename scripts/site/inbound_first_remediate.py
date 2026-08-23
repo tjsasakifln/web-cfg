@@ -212,8 +212,12 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
         href = n["href"]
         label = n["label"]
         cur = ' aria-current="page"' if current and href.rstrip("/") == current.rstrip("/") else ""
-        desktop_parts.append(f'<a href="{href}"{cur}>{label}</a>')
-        mobile_parts.append(f'<a href="{href}"{cur}>{label}</a>')
+        desktop_parts.append(
+            f'<a data-cta-position="header_nav" href="{href}"{cur}>{label}</a>'
+        )
+        mobile_parts.append(
+            f'<a data-cta-position="mobile_nav" href="{href}"{cur}>{label}</a>'
+        )
     desktop = "\n".join(desktop_parts)
     mobile = "".join(mobile_parts)
     cta_html = (
@@ -222,7 +226,7 @@ def build_nav_html(brand: dict[str, Any], current: str | None = None) -> tuple[s
     mobile_cta = f'<a class="button button-primary" href="{cta["href"]}">{cta["label"]}</a>'
     header = f"""<header class="site-header" id="inicio">
 <div class="container header-inner">
-<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge.png" width="224"/></a>
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
 {desktop}
 </nav>

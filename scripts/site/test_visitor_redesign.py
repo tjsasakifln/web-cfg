@@ -18,6 +18,10 @@ from scripts.site.inbound_first_remediate import (  # noqa: E402
     load_stage_classification,
     resolve_content_stage,
 )
+from scripts.site.public_navigation import (  # noqa: E402
+    FROZEN_NAV_HTML_PATHS,
+    audit_public_navigation_tree,
+)
 
 ALLOWED = frozenset(ALLOWED_STAGES)
 EXPECTED_NAV = [
@@ -25,6 +29,7 @@ EXPECTED_NAV = [
     "Problemas que resolvemos",
     "Entregas",
     "Conteúdos",
+    "Ferramentas",
     "Especialista",
 ]
 LEGACY_NAV = [
@@ -145,11 +150,6 @@ class _DesktopNav(HTMLParser):
 
 def _hub_html() -> str:
     return (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
-
-
-def _effective_nav(labels: list[str]) -> list[str]:
-    """Model the shipped runtime upgrade for frozen legacy HTML shells."""
-    return EXPECTED_NAV if labels == LEGACY_NAV else labels
 
 
 def _parse_hub_items() -> list[dict[str, str]]:
@@ -424,10 +424,10 @@ def test_public_taxonomy_jargon_absent():
 # ---------------------------------------------------------------------------
 
 
-def test_global_shell_nav_uniform():
+def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
     brand = load_brand()
     brand_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
-    assert brand_labels in (EXPECTED_NAV, LEGACY_NAV)
+    assert brand_labels == EXPECTED_NAV
     cta_meta = (brand.get("navigation") or {}).get("cta") or {}
     assert cta_meta.get("label") == EXPECTED_CTA
     assert "#formulario-contato" in (cta_meta.get("href") or ""), (
@@ -436,6 +436,7 @@ def test_global_shell_nav_uniform():
 
     surfaces = [
         ROOT / "index.html",
+        ROOT / "entregas" / "index.html",
         ROOT / "conteudos" / "index.html",
         ROOT / "medicoes-glosas-obras-publicas" / "index.html",
         ROOT / "aditivos-obras-publicas" / "index.html",
@@ -459,11 +460,14 @@ def test_global_shell_nav_uniform():
     if checklist.exists():
         surfaces.append(checklist)
 
-    ref: list[str] | None = None
     failures = []
     nav_runtime = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
-    if '/entregas/' not in nav_runtime or '/ferramentas/' not in nav_runtime:
-        failures.append("nav runtime missing legacy deliverables promotion")
+    if "toolsLink.textContent = 'Entregas'" in nav_runtime:
+        failures.append("global runtime must not mutate frozen navigation")
+    direct_deliverables = {
+        ROOT / "index.html",
+        ROOT / "entregas" / "index.html",
+    }
     for path in surfaces:
         if not path.exists():
             failures.append(f"missing {path.relative_to(ROOT)}")
@@ -472,23 +476,16 @@ def test_global_shell_nav_uniform():
         if not labels:
             failures.append(f"{path.relative_to(ROOT)}: no desktop-nav labels")
             continue
-        effective_labels = _effective_nav(labels)
-        if labels == LEGACY_NAV:
-            html = path.read_text(encoding="utf-8", errors="replace")
-            if 'src="/script.js' not in html:
-                failures.append(
-                    f"{path.relative_to(ROOT)}: legacy nav has no runtime upgrade"
-                )
-        if ref is None:
-            ref = effective_labels
-        # only aria-current may differ after the frozen-shell runtime upgrade
-        if effective_labels != ref:
+        relative_path = path.relative_to(ROOT).as_posix()
+        if relative_path in FROZEN_NAV_HTML_PATHS:
+            expected = LEGACY_NAV
+        elif path in direct_deliverables:
+            expected = EXPECTED_NAV
+        else:
+            expected = None
+        if expected is not None and labels != expected:
             failures.append(
-                f"{path.relative_to(ROOT)}: effective nav {effective_labels} != ref {ref}"
-            )
-        if effective_labels != EXPECTED_NAV:
-            failures.append(
-                f"{path.relative_to(ROOT)}: expected {EXPECTED_NAV}, got {effective_labels}"
+                f"{path.relative_to(ROOT)}: expected source nav {expected}, got {labels}"
             )
         if cta and cta != EXPECTED_CTA:
             failures.append(f"{path.relative_to(ROOT)}: cta {cta!r}")
@@ -538,6 +535,13 @@ def test_global_shell_nav_uniform():
                 )
                 if nav_m and banned in nav_m.group(1):
                     failures.append(f"{path.relative_to(ROOT)}: old nav {banned}")
+
+    artifact_root = ROOT / "_site"
+    if artifact_root.exists():
+        try:
+            audit_public_navigation_tree(artifact_root)
+        except ValueError as error:
+            failures.append(f"public artifact navigation: {error}")
     assert not failures, failures
 
 
@@ -733,6 +737,141 @@ def test_lead_inline_not_before_main_or_h1():
             )
 
 
+def test_lead_inline_never_precedes_main_or_h1_sitewide():
+    """No public page may hoist a promotional lead-inline above <main>/<h1>."""
+    for path in _public_html_files():
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if "lead-inline" not in html:
+            continue
+        rel = path.relative_to(ROOT)
+        main = re.search(r"<main\b", html, re.I)
+        h1 = re.search(r"<h1\b", html, re.I)
+        assert main, f"{rel}: page has lead-inline but no <main"
+        assert h1, f"{rel}: page has lead-inline but no <h1"
+        first = re.search(r"\blead-inline\b", html)
+        assert first.start() > main.start(), f"{rel}: lead-inline before <main"
+        assert first.start() > h1.start(), f"{rel}: lead-inline before first <h1"
+
+
+_ANCHOR = re.compile(r"<a\b[^>]*>[\s\S]*?</a>", re.I)
+
+
+def _cta_anchors(fragment: str) -> list[tuple[str, str]]:
+    """(href, visible label) for CTA-looking anchors, in document order."""
+    out: list[tuple[str, str]] = []
+    for m in _ANCHOR.finditer(fragment):
+        tag = m.group(0)
+        head = tag[: tag.index(">") + 1]
+        if "button" not in head and "text-link" not in head:
+            continue
+        href = re.search(r'href="([^"]*)"', head)
+        label = " ".join(re.sub(r"<[^>]+>", " ", tag[len(head) : -4]).split())
+        out.append((href.group(1) if href else "", label))
+    return out
+
+
+def _main_fragment(html: str) -> str:
+    start = re.search(r"<main\b", html, re.I)
+    end = re.search(r"</main>", html, re.I)
+    assert start and end
+    return html[start.start() : end.start()]
+
+
+def test_no_consecutive_duplicate_cta():
+    """The same offer must not be repeated back to back before any content."""
+    for path in LEAD_INLINE_HIERARCHY_ROUTES:
+        html = path.read_text(encoding="utf-8")
+        seq = _cta_anchors(_main_fragment(html))
+        for before, after in zip(seq, seq[1:]):
+            assert before != after, (
+                f"{path.relative_to(ROOT)}: duplicated consecutive CTA "
+                f"{before[0]} / {before[1]!r}"
+            )
+
+
+def test_organic_tool_block_never_glued_to_hero():
+    """The organic injector must land promotional blocks below the first
+    content section, so the visitor gets the direct answer before any offer."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    page = (
+        "<header class=\"site-header\"></header>"
+        "<main id=\"conteudo\">"
+        "<nav class=\"breadcrumbs\"></nav>"
+        "<header class=\"content-hero pillar-hero\"><h1>Titulo</h1>"
+        "<a class=\"button button-primary\" href=\"/ferramentas/x/\">Abrir</a>"
+        "</header>"
+        "<section id=\"resposta\"><h2>Resposta direta</h2></section>"
+        "<section id=\"depois\"></section>"
+        "</main>"
+    )
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    out = _insert_after_page_hero(page, block)
+    assert block in out, "injector dropped the block"
+    at = out.index(block)
+    assert at > out.index("<main"), "block hoisted above <main"
+    assert at > out.index("<h1"), "block hoisted above the H1"
+    assert at > out.index('<section id="resposta">'), "block glued to the hero"
+    assert at > out.index("</section>"), "block placed inside the first section"
+    assert at < out.index("</main>"), "block escaped <main"
+
+
+def test_organic_tool_block_skips_page_without_safe_section():
+    """No closed content section means there is no proven-safe insertion point."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    no_section = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<p id="resposta">Resposta sem section.</p></main>'
+    )
+    unclosed_section = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><p>Resposta incompleta.</p></main>'
+    )
+    unclosed_main = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><p>Resposta fora de uma main verificável.</p></section>'
+    )
+    assert _insert_after_page_hero(no_section, block) == no_section
+    assert _insert_after_page_hero(unclosed_section, block) == unclosed_section
+    assert _insert_after_page_hero(unclosed_main, block) == unclosed_main
+
+
+def test_organic_tool_block_matches_section_case_insensitively():
+    """HTML tag case must not send a valid content section down the unsafe fallback."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    page = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<SeCtIoN id="resposta"><p>Resposta direta.</p></sEcTiOn>'
+        '<section id="depois"></section></main>'
+    )
+    out = _insert_after_page_hero(page, block)
+    assert block in out
+    assert out.index(block) > out.index("</sEcTiOn>")
+    assert out.index(block) < out.index('<section id="depois">')
+
+
+def test_organic_tool_block_waits_for_outer_section_close():
+    """A nested section must not be mistaken for the end of the direct answer."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    page = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><section id="apoio"><p>Apoio.</p></section>'
+        '<p id="fim-resposta">Resposta completa.</p></section>'
+        '<section id="depois"></section></main>'
+    )
+    out = _insert_after_page_hero(page, block)
+    assert block in out
+    assert out.index(block) > out.index('<p id="fim-resposta">')
+    assert out.index(block) > out.index('<p id="fim-resposta">Resposta completa.</p></section>')
+    assert out.index(block) < out.index('<section id="depois">')
+
+
 def test_home_form_anchor_reveals_fields():
     """Hero/primary 'Analisar meu caso' must land on the form, not the long contact copy."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -798,6 +937,25 @@ def test_home_form_anchor_reveals_fields():
         r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
+    # #182: every direct-intent journey CTA sends the visitor to the fields,
+    # not to the contact intro that precedes them.
+    for match in re.finditer(
+        r'<a\b[^>]*data-cta-position="(journey_[abc])"[^>]*>', html
+    ):
+        tag = match.group(0)
+        href = re.search(r'href="([^"]+)"', tag)
+        assert href and "#formulario-contato" in href.group(1), (
+            f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
+        )
+    # The shipped script must realign the landing: deferred section sizes (#185)
+    # move the target while the jump runs.
+    nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
+    assert "scrollMarginTop" in nav_js and "requestAnimationFrame" in nav_js, (
+        "nav module must re-align fragment landings against the sticky header"
+    )
+    assert "cta_view" in nav_js, (
+        "arrival at the form must emit its own event, distinct from the CTA click"
+    )
 
 
 def test_analisar_meu_caso_shell_targets_form():
@@ -813,7 +971,7 @@ def test_analisar_meu_caso_shell_targets_form():
     failures = []
     for path in _public_html_files():
         labels, cta = _nav_from(path)
-        if _effective_nav(labels) != EXPECTED_NAV:
+        if labels not in (EXPECTED_NAV, LEGACY_NAV):
             continue
         html = path.read_text(encoding="utf-8", errors="replace")
         header_cta = re.search(

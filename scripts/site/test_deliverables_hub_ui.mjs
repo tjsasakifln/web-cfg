@@ -1,4 +1,4 @@
-/** Rendered quality gate for /entregas/, its home preview and legacy nav upgrade. */
+/** Rendered quality gate for /entregas/, its analytics and static nav promotion. */
 import fs from "fs";
 import path from "path";
 import { createServer } from "http";
@@ -14,10 +14,32 @@ const require = createRequire(import.meta.url);
 const axeSource = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 const root = path.resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const externalBase = process.argv[2];
+const artifactRoot = path.join(root, "_site");
+const siteRoot = !externalBase && fs.existsSync(path.join(artifactRoot, "index.html"))
+  ? artifactRoot
+  : root;
 const port = 8795;
 const widths = [320, 390, 768, 1024, 1440];
 const screenshotDir = String(process.env.DELIVERABLES_SCREENSHOT_DIR || "").trim();
 const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
+const promotedNav = ["Serviços", "Problemas que resolvemos", "Entregas", "Conteúdos", "Ferramentas", "Especialista"];
+const legacyNav = ["Serviços", "Problemas que resolvemos", "Conteúdos", "Ferramentas", "Especialista"];
+const frozenRoutes = [
+  "/aditivos-obras-publicas/",
+  "/medicoes-glosas-obras-publicas/",
+  "/reequilibrio-obras-publicas/",
+  "/auditoria-orcamento-licitacao/",
+  "/diagnostico-b2g-360/",
+  "/diagnostico-pre-licitacao/",
+];
+const mutableCanonicalRoutes = [
+  "/",
+  "/ferramentas/",
+  "/casos/",
+  "/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "/privacidade/",
+  "/radar/nacional-obras-publicas/",
+];
 
 function startStaticServer() {
   const mime = {
@@ -28,8 +50,8 @@ function startStaticServer() {
   const server = createServer((request, response) => {
     let urlPath = decodeURIComponent((request.url || "/").split("?")[0]);
     if (urlPath.endsWith("/")) urlPath += "index.html";
-    const file = path.join(root, urlPath);
-    if (!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+    const file = path.join(siteRoot, urlPath);
+    if (!file.startsWith(siteRoot) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
       response.writeHead(404); response.end("not found"); return;
     }
     response.writeHead(200, { "Content-Type": mime[path.extname(file)] || "application/octet-stream" });
@@ -41,6 +63,11 @@ function startStaticServer() {
 const server = externalBase ? null : await startStaticServer();
 const base = externalBase || `http://127.0.0.1:${port}`;
 let browser;
+if (required && !externalBase && siteRoot !== artifactRoot) {
+  console.error("DELIVERABLES_UI_ARTIFACT_MISSING run npm run build:site first");
+  if (server) server.close();
+  process.exit(2);
+}
 try {
   browser = await puppeteer.launch({
     executablePath: resolveChromePath(), headless: true,
@@ -124,7 +151,10 @@ for (const width of widths) {
   if (errors.length) failed += 1;
 }
 
-for (const route of ["/", "/ferramentas/"]) {
+for (const { route, expectedNav } of [
+  ...mutableCanonicalRoutes.map((route) => ({ route, expectedNav: promotedNav })),
+  ...frozenRoutes.map((route) => ({ route, expectedNav: legacyNav })),
+]) {
   await page.setViewport({ width: 1024, height: 900, deviceScaleFactor: 1 });
   const response = await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
   const metrics = await page.evaluate((currentRoute) => {
@@ -136,6 +166,7 @@ for (const route of ["/", "/ferramentas/"]) {
       route: currentRoute,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       nav,
+      navLabels: nav.map(({ text }) => text),
       previewVisible: currentRoute === "/" ? Boolean(preview && preview.height > 0) : null,
       sections: currentRoute === "/" ? document.querySelectorAll("main > section").length : null,
     };
@@ -143,8 +174,16 @@ for (const route of ["/", "/ferramentas/"]) {
   const errors = [];
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.overflow) errors.push("document_overflow");
-  if (metrics.nav.filter(({ href }) => href === "/entregas/").length !== 1) errors.push("deliverables_nav_missing");
-  if (metrics.nav.some(({ text }) => text === "Ferramentas")) errors.push("legacy_top_nav_visible");
+  if (JSON.stringify(metrics.navLabels) !== JSON.stringify(expectedNav)) {
+    errors.push(`nav_order=${JSON.stringify(metrics.navLabels)}`);
+  }
+  if (expectedNav === promotedNav) {
+    if (metrics.nav.filter(({ href }) => href === "/entregas/").length !== 1) errors.push("deliverables_nav_missing");
+    if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("tools_nav_missing");
+  } else {
+    if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");
+    if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("frozen_tools_missing");
+  }
   if (route === "/" && (!metrics.previewVisible || metrics.sections > 7)) errors.push("home_preview_contract");
   if (route === "/" && screenshotDir) {
     const preview = await page.$(".home-deliverables");
@@ -156,6 +195,37 @@ for (const route of ["/", "/ferramentas/"]) {
 
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+await page.evaluate(() => {
+  const target = document.querySelector('[data-cta-id="deliverables-open-report"]');
+  target?.addEventListener("click", (event) => event.preventDefault(), { capture: true });
+});
+await page.click('[data-cta-id="deliverables-open-report"]');
+const analytics = await page.evaluate(() => {
+  const events = (window.dataLayer || []).filter(({ event }) => event === "cta_click");
+  const event = events.at(-1) || null;
+  const piiKeys = ["email", "phone", "cnpj", "document", "nome", "empresa", "query"];
+  const hasPiiKey = Boolean(event && piiKeys.some((key) => Object.prototype.hasOwnProperty.call(event, key)));
+  const hasPiiValue = Boolean(event && Object.values(event).some((value) => {
+    if (typeof value !== "string") return false;
+    if (value.includes("@")) return true;
+    return /^\d{10,15}$/.test(value.replace(/[\s()+-]/g, ""));
+  }));
+  return { count: events.length, event, hasPiiKey, hasPiiValue };
+});
+if (
+  analytics.count !== 1
+  || analytics.event?.cta_id !== "deliverables-open-report"
+  || analytics.event?.asset_id !== "entregas-exemplos-hub"
+  || analytics.event?.source !== "CONFENGE_WEB"
+  || analytics.event?.page_path !== "/entregas/"
+  || analytics.hasPiiKey
+  || analytics.hasPiiValue
+) {
+  failed += 1;
+  findings.push({ route: "/entregas/", check: "analytics", analytics, errors: ["analytics_contract"] });
+} else {
+  findings.push({ route: "/entregas/", check: "analytics", analytics, errors: [] });
+}
 await page.addScriptTag({ content: axeSource });
 const axe = await page.evaluate(async () => {
   const result = await window.axe.run(document, {

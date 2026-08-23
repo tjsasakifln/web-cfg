@@ -27,6 +27,7 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:nurture-pages",
   "test:ferramentas-footer",
   "test:hub-truth",
+  "test:nav",
   "test:wave1-fields",
 ]);
 
@@ -251,6 +252,7 @@ export const SUITE_GRAPH = Object.freeze({
       "js/modules/nav.js",
       "scripts/pseo/html_shell.py",
       "scripts/pseo/public_artifact.py",
+      "scripts/site/public_navigation.py",
       "sitemap.xml",
       "sitemap.txt",
     ],
@@ -278,12 +280,21 @@ export const SUITE_GRAPH = Object.freeze({
       "styles.css",
       "script.js",
       "js/modules/nav.js",
+      "scripts/site/public_navigation.py",
     ],
     artifacts: [],
     surfaces: ["/", "/entregas/", "/ferramentas/"],
   },
   "test:cta-whatsapp": {
-    producers: ["scripts/site/test_cta_whatsapp.mjs", "data/site/whatsapp-messages.json"],
+    producers: [
+      "scripts/site/test_cta_whatsapp.mjs",
+      "scripts/site/svg_path_grammar.mjs",
+      "scripts/site/fixtures/svg_path/",
+      "scripts/pseo/html_shell.py",
+      "data/data-desk/",
+      "assets/data-desk/",
+      "data/site/whatsapp-messages.json",
+    ],
     artifacts: [],
     surfaces: ["/", "/diretoria-b2g/", "/defesa-margem-contratos-publicos/"],
   },
@@ -440,6 +451,19 @@ export const SUITE_GRAPH = Object.freeze({
     producers: ["scripts/site/test_ferramentas_brand_footer.py", "ferramentas/"],
     artifacts: [],
     surfaces: ["/ferramentas/"],
+  },
+  "test:nav": {
+    producers: [
+      "scripts/site/shell_nav.py",
+      "scripts/site/render_nav_hubs.py",
+      "scripts/site/test_nav_taskflow.py",
+      "data/site/brand.json",
+      "scripts/pseo/html_shell.py",
+      "servicos-obras-publicas/",
+      "problemas-que-resolvemos/",
+    ],
+    artifacts: ["servicos-obras-publicas/index.html", "problemas-que-resolvemos/index.html"],
+    surfaces: ["/servicos-obras-publicas/", "/problemas-que-resolvemos/"],
   },
   "test:hub-truth": {
     producers: [

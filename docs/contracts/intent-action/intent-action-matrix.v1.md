@@ -1,4 +1,4 @@
-# Intent → action matrix v1.2.0
+# Intent → action matrix v1.3.0
 
 Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-23.
 
@@ -26,7 +26,9 @@ Issue #90 (owned-audience opt-in) is **not authorized**. The `ainda_nao_pronto` 
 | revisar_contrato | revisar contrato | Visitor asks human review of their contract | Defesa de Margem / Analise Meu Contrato | nome + contato + consent + contract/document | warmbly-after-capture | form_then_warmbly | UNKNOWN | explicit consent; no auto-send | operational WhatsApp if form fails | auto-message; “we found a problem” | analise-meu-contrato / defesa-margem-contratos-publicos |
 | urgencia_real | urgencia real | Live pressure AND owned channel exists | WhatsApp or phone; no agenda (route absent) | none | tiago-jun-sasaki | whatsapp | UNKNOWN | visitor-initiated channel; persist only with consent | hand-raise without channel promise | invented SLA or ownerless agenda | falar-especialista / diagnostico-b2g-360 |
 | ainda_nao_pronto | ainda nao pronto | Wants citation/download; #90 deferred | Citation or download; no form | none | web-cfg/editorial | citation_download | UNKNOWN | no PII; opt-in blocked | leave with visible answer | email capture or fake #90 | citation-download / — |
-| contratar_relatorio_inteligencia_599 | contratar relatório de inteligência | Read the public synthetic model; owner authorized only the R$ 599 unit price | Human scoping and acceptance before any charge; not checkout/catalog | none | tiago-jun-sasaki | whatsapp | UNKNOWN | visitor-initiated; no message/PII in analytics | visible report remains ungated | price drift, invented scope/SLA, checkout or PII analytics | handraise-report-intelligence-599-v1 / — |
+| contratar_relatorio_inteligencia_599 | contratar relatório de inteligência | A empresa informa raio/contexto; a CONFENGE busca os editais abertos; a quantidade segue a disponibilidade publicada; a profundidade é a máxima sustentada pelas informações da empresa | Confirmar raio, contexto, prazo e aceite; depois buscar os editais abertos disponíveis e preparar um relatório; não é checkout/catálogo | none | tiago-jun-sasaki | whatsapp | UNKNOWN | visitor-initiated; no message/PII in analytics | visible report remains ungated | oportunidades fornecidas pelo visitante, quantidade fixa/negociada, profundidade negociada/limitada, preço divergente, escopo concreto/SLA inventado, checkout ou PII em analytics | handraise-report-intelligence-599-v1 / — |
+
+Nesta rota, `scope_state=UNKNOWN_UNTIL_HUMAN_ACCEPTANCE` vale para raio de atuação concreto, contexto da empresa, prazo e aceite. Não reabre os invariantes autorizados da entrega: a CONFENGE busca os editais abertos, a quantidade segue a disponibilidade publicada no raio confirmado e a análise alcança a profundidade máxima sustentada pelas informações apresentadas pela empresa.
 
 ## Operational channels
 

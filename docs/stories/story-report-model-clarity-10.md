@@ -20,7 +20,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 
 1. O primeiro viewport nomeia o produto como `Relatório Executivo de Priorização de Licitações`, explicita a decisão que ele suporta e mostra o resultado do exemplo `12 analisadas → 3 priorizadas → 7 recusadas`, sem depender de rolagem a 390 × 844 px.
 2. Antes do exemplar, a página responde em linguagem direta `o que é`, `para quem serve`, `o que você recebe`, `por que vale` e `como contratar`, sem jargão interno, formulário, modal, download ou conteúdo oculto.
-3. A oferta declara `R$ 599 = 1 relatório adaptado`; quantidade de oportunidades/documentos, prazo e aceite são confirmados por uma pessoa no WhatsApp antes de cobrança, sem inventar SLA ou escopo.
+3. A oferta declara `R$ 599 = 1 relatório adaptado`; a empresa informa raio de atuação e contexto, a CONFENGE busca os editais abertos nesse recorte e a quantidade decorre das licitações publicadas, sem cota combinada. A análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa; prazo e aceite são confirmados por uma pessoa no WhatsApp antes da cobrança.
 4. A percepção de valor cresce nesta ordem: custo da decisão errada, decisão executiva, entregáveis, exemplo, critérios eliminatórios, aderência da empresa, ficha por oportunidade, exposição financeira, rastreabilidade, plano de ação e limites.
 5. O exemplar preserva a topologia de evidência de uma entrega profissional com campos visíveis para fonte oficial, requisito do edital, evidência da empresa, confiança, ponto a revalidar e validade da decisão; todos os fatos permanecem sintéticos e não há links oficiais falsos.
 6. A carteira tem leitura móvel imediata das 12 decisões sem exigir rolagem horizontal para descobrir o status; a tabela detalhada pode continuar disponível como segunda camada acessível.
@@ -42,7 +42,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 - [x] Task 1: Reestruturar promessa e arquitetura de informação (AC: 1-4)
   - [x] Tornar produto, decisão, resultado demonstrativo e preço legíveis no primeiro viewport.
   - [x] Inserir entregáveis e valor estratégico antes do início do exemplar.
-  - [x] Explicitar o limite comercial autorizado sem inventar quantidade ou prazo.
+  - [x] Explicitar busca pela CONFENGE, volume condicionado às publicações e profundidade condicionada às informações da empresa, sem inventar quantidade ou prazo.
 - [x] Task 2: Reforçar prova e rastreabilidade (AC: 4-6)
   - [x] Preservar a progressão do relatório e acrescentar a topologia de evidência.
   - [x] Criar leitura móvel da carteira sem depender da tabela horizontal.
@@ -62,7 +62,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 - O preço versionado autoriza uma unidade `one_adapted_report`; `scope_state`, `terms_state` e `sla` permanecem desconhecidos até aceite humano. [Source: `docs/contracts/intent-action/intent-action-matrix.v1.json`]
 - O modelo é aquisição com utilidade real: precisa exibir método, proveniência, próximo passo e confiança, não apenas aparência premium. [Source: `docs/strategy/MARKET-CAPTURE-OS.md`]
 - A revisão adversarial observou no mobile: H1 em cinco linhas, prova abaixo da dobra, barra fixa cobrindo a nota do hero, tabela escondendo a decisão e explicação do método tardia. Esses defeitos viram regressões automatizadas.
-- Não alterar preço, habilitar checkout, prometer prazo, quantidade, vitória, economia ou resultado.
+- Não alterar preço, habilitar checkout, prometer prazo, cota de oportunidades, vitória, economia ou resultado. A CONFENGE busca os editais abertos no raio informado; a quantidade resulta da disponibilidade publicada e a profundidade chega ao máximo sustentado pelas informações apresentadas pela empresa.
 - Não inventar URL de fonte para os dados sintéticos. A página deve demonstrar quais campos rastreáveis existem na entrega contratada.
 
 ### Testing
@@ -98,6 +98,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 |---|---:|---|---|
 | 2026-08-23 | 1.0 | Story criada a partir da revisão adversarial e do contrato comercial versionado | @sm |
 | 2026-08-23 | 1.1 | Promessa, entrega, prova, leitura móvel e contratos regressivos implementados | @dev |
+| 2026-08-23 | 1.2 | Responsabilidade de busca, volume disponível e profundidade real do relatório corrigidos | @dev |
 
 ## Dev Agent Record
 
@@ -107,7 +108,7 @@ Codex GPT-5
 
 ### Debug Log References
 
-- `npm run test:report-model`: 9 testes aprovados.
+- `npm run test:report-model`: 17 testes aprovados.
 - `npm run test:report-model-ui`: cinco breakpoints aprovados; zero overflow e zero violação Axe séria/crítica.
 - `npm run test:design` e `npm run test:copy`: aprovados sem bypass.
 - `npm run test:analytics` e `npm run test:cta-whatsapp`: aprovados; contrato de clique único e sem PII preservado.
