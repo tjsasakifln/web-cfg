@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from decimal import Decimal
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -21,6 +22,18 @@ EXPECTED_MESSAGE = (
 
 def _html() -> str:
     return PAGE.read_text(encoding="utf-8")
+
+
+def _brl_millions(raw: str) -> Decimal:
+    value = raw.removeprefix("R$").strip().casefold()
+    if value.endswith("mi"):
+        return Decimal(value.removesuffix("mi").strip().replace(".", "").replace(",", "."))
+    if value.endswith("mil"):
+        thousands = Decimal(
+            value.removesuffix("mil").strip().replace(".", "").replace(",", ".")
+        )
+        return thousands / Decimal(1000)
+    raise AssertionError(f"unsupported BRL display amount: {raw!r}")
 
 
 def test_page_is_direct_public_html_without_friction() -> None:
@@ -54,6 +67,21 @@ def test_synthetic_disclosure_and_private_identity_denylist() -> None:
         assert forbidden not in lowered
     cnpjs = set(re.findall(r"\b\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\b", html))
     assert cnpjs == {"52.407.089/0001-09"}, "only CONFENGE's public CNPJ may appear"
+
+
+def test_portfolio_total_reconciles_with_all_twelve_synthetic_rows() -> None:
+    html = _html()
+    row_amounts = re.findall(
+        r'<tr[^>]*><td>A-\d{2}</td><th[^>]*>.*?</th><td>(R\$\s*[\d.,]+\s*(?:mi|mil))</td>',
+        html,
+        flags=re.DOTALL,
+    )
+    assert len(row_amounts) == 12
+    summary = re.search(r"<dt>Carteira lida</dt><dd>(R\$[^<]+)</dd>", html)
+    assert summary
+    assert sum(map(_brl_millions, row_amounts), Decimal(0)) == _brl_millions(
+        summary.group(1)
+    )
 
 
 def test_value_ladder_price_and_whatsapp_contract() -> None:
