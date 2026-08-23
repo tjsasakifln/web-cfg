@@ -203,6 +203,7 @@ export const SUITE_GRAPH = Object.freeze({
       "diretoria-b2g/index.html",
       "sitemap.xml",
       "sitemap.txt",
+      "sitemap-index.xml",
     ],
     artifacts: ["_site/casos/modelo-relatorio-inteligencia-licitacoes/"],
     surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
