@@ -27,6 +27,7 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:nurture-pages",
   "test:ferramentas-footer",
   "test:hub-truth",
+  "test:nav",
   "test:wave1-fields",
 ]);
 
@@ -352,6 +353,19 @@ export const SUITE_GRAPH = Object.freeze({
     producers: ["scripts/site/test_ferramentas_brand_footer.py", "ferramentas/"],
     artifacts: [],
     surfaces: ["/ferramentas/"],
+  },
+  "test:nav": {
+    producers: [
+      "scripts/site/shell_nav.py",
+      "scripts/site/render_nav_hubs.py",
+      "scripts/site/test_nav_taskflow.py",
+      "data/site/brand.json",
+      "scripts/pseo/html_shell.py",
+      "servicos-obras-publicas/",
+      "problemas-que-resolvemos/",
+    ],
+    artifacts: ["servicos-obras-publicas/index.html", "problemas-que-resolvemos/index.html"],
+    surfaces: ["/servicos-obras-publicas/", "/problemas-que-resolvemos/"],
   },
   "test:hub-truth": {
     producers: [
