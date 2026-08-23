@@ -199,6 +199,20 @@ def test_synthetic_base_reconciles_across_the_whole_family() -> None:
         html = _html(slug)
         for token in TIPOLOGY_SHARES:
             assert token in html, (slug, token)
+    # C-04's four-buyer allocation must remain identical in the buyer map,
+    # competitor map and executive summaries. The four values close R$ 8,90 mi.
+    buyer_map = _html("modelo-mapa-compradores-publicos")
+    assert "C-04 assina 1, no valor de R$ 6,19 mi" in buyer_map
+    competitor_map = _html("modelo-mapeamento-concorrentes-publicos")
+    for token in ("C-04", "R$ 8,90 mi", "R$ 6,19 mi"):
+        assert token in competitor_map, token
+    for slug in (
+        "modelo-relatorio-executivo-consolidado",
+        "modelo-apresentacao-executiva-resultados",
+    ):
+        html = _html(slug)
+        for token in ("C-04", "R$ 8,90 mi"):
+            assert token in html, (slug, token)
 
 
 def test_value_ladder_prices_are_visible_and_strictly_ascending() -> None:
