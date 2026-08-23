@@ -12,6 +12,12 @@ ROOT = Path(__file__).resolve().parents[2]
 ARTICLE = ROOT / "conteudos/resposta-notificacao-atraso-obra-publica/index.html"
 PILLAR = ROOT / "defesa-tecnica-contratos-publicos/index.html"
 OFFER = ROOT / "defesa-margem-contratos-publicos/index.html"
+EXPANSION_OFFER_HREF = "/diagnostico-b2g-expansao/"
+EXPANSION_ENTRY_PAGES = (
+    ROOT / "index.html",
+    ROOT / "diretoria-b2g/index.html",
+    ROOT / "bid-room-licitacoes-obras/index.html",
+)
 
 ARTICLE_HREF = "/defesa-tecnica-contratos-publicos/"
 PILLAR_OFFER_HREF = "/defesa-margem-contratos-publicos/"
@@ -36,3 +42,12 @@ def test_visitor_path_article_to_pillar_to_offer_cta() -> None:
     assert "button-primary" in offer
     for blob in (article, pillar, offer):
         assert "smartlic" not in blob.lower()
+
+
+def test_paid_expansion_diagnostic_has_contextual_internal_entries() -> None:
+    """The paid offer must be reachable from home and compatible services."""
+
+    for page in EXPANSION_ENTRY_PAGES:
+        html = page.read_text(encoding="utf-8")
+        assert EXPANSION_OFFER_HREF in html, page.relative_to(ROOT)
+        assert "expans" in html.lower(), page.relative_to(ROOT)
