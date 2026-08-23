@@ -46,6 +46,49 @@ HUB_DESCRIPTION = (
     "faixas de valor por categoria, estrutura de concorrência e editais abertos."
 )
 
+# Rows a single section is allowed to render.
+#
+# The producer caps its own sections (25 opportunities, 15 competitors), so a
+# well-formed pack never reaches these numbers. They exist so a producer change
+# that raises its own limits cannot silently ship an unreadable page: 50.000
+# opportunities render a 4,5 MB table in about 0,2 s, and nobody notices until
+# it is live. The cap is declared on the page — a truncated table that does not
+# say it is truncated reads as a complete one, and the total count stays
+# visible next to the rows that survived.
+PRICE_CATEGORY_ROW_CAP = 40
+OPPORTUNITY_ROW_CAP = 40
+
+
+def _as_number(value: Any, *, default: float = -1.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _capped(rows: list[Any], cap: int, *, key: Any) -> tuple[list[Any], int]:
+    """Order the rows, then keep at most `cap` of them.
+
+    Ordering before the cut makes the kept subset a decision instead of an
+    accident of the order the producer happened to serialise. `sorted` is
+    stable, so rows that tie on the key keep the producer's own order.
+    """
+    ordered = sorted(rows, key=key)
+    return ordered[:cap], len(ordered)
+
+
+def _truncation_note(shown: int, total: int, kept_phrase: str, remainder_phrase: str) -> str:
+    """Say out loud that the table is short, and of what total."""
+    if shown >= total:
+        return ""
+    return (
+        '<p class="ca-truncation-note">'
+        f"Mostrando {e(shown)} de {e(total)} {kept_phrase} "
+        f"A tabela acima está truncada nesta página: {remainder_phrase} "
+        "permanecem no recorte e continuam contados no total declarado."
+        "</p>"
+    )
+
 
 def _brl(value: Any) -> str:
     if value in (None, "", UNKNOWN):
@@ -98,6 +141,15 @@ def _price_table(payload: dict[str, Any]) -> str:
             "<p>Nenhuma categoria com referência de preço observada nesta data. "
             "Ausência de observação não é ausência de contrato.</p>"
         )
+    # Best-evidenced categories first, so a cut drops the thinnest rows.
+    shown, total = _capped(
+        list(categories),
+        PRICE_CATEGORY_ROW_CAP,
+        key=lambda c: (
+            -_as_number(c.get("reference_contract_count")),
+            str(c.get("categoria", UNKNOWN)),
+        ),
+    )
     rows = "".join(
         "<tr>"
         f"<td>{e(c.get('categoria', UNKNOWN))}</td>"
@@ -107,7 +159,13 @@ def _price_table(payload: dict[str, Any]) -> str:
         f"<td>{e(_brl(c.get('reference_p75')))}</td>"
         f"<td>{e(POSITION_LABEL.get(c.get('focal_position'), c.get('focal_position', UNKNOWN)))}</td>"
         "</tr>"
-        for c in categories
+        for c in shown
+    )
+    truncated = _truncation_note(
+        len(shown),
+        total,
+        "categorias observadas, as de maior número de contratos na referência.",
+        "as demais categorias",
     )
     note = ""
     if panel.get("out_of_range_category_count"):
@@ -123,6 +181,7 @@ def _price_table(payload: dict[str, Any]) -> str:
         "<thead><tr><th>Categoria</th><th>Contratos na referência</th><th>p25</th><th>Mediana</th>"
         "<th>p75</th><th>Posição observada</th></tr></thead>"
         f"<tbody>{rows}</tbody></table></div>"
+        f"{truncated}"
         f"<p>Escopo da referência: {e(panel.get('reference_scope', UNKNOWN))}.</p>"
         f"{note}"
     )
@@ -159,6 +218,17 @@ def _opportunities_block(payload: dict[str, Any]) -> str:
             "<p>Nenhum edital aberto foi observado para os compradores deste recorte na data de "
             "referência. Ausência de observação não é ausência de edital.</p>"
         )
+    # Soonest deadline first: if the table has to be cut, the rows a visitor
+    # can still act on are the ones that survive. UNKNOWN dates sort last.
+    shown, total = _capped(
+        list(opportunities),
+        OPPORTUNITY_ROW_CAP,
+        key=lambda o: (
+            str(o.get("data_encerramento") or UNKNOWN),
+            str(o.get("orgao_nome") or UNKNOWN),
+            str(o.get("modalidade") or UNKNOWN),
+        ),
+    )
     rows = "".join(
         "<tr>"
         f"<td>{e(o.get('orgao_nome', UNKNOWN))}</td>"
@@ -166,12 +236,19 @@ def _opportunities_block(payload: dict[str, Any]) -> str:
         f"<td>{e(o.get('data_encerramento', UNKNOWN))}</td>"
         f"<td>{e(_brl(o.get('valor_estimado')))}</td>"
         "</tr>"
-        for o in opportunities
+        for o in shown
+    )
+    truncated = _truncation_note(
+        len(shown),
+        total,
+        "editais observados, os de encerramento mais próximo.",
+        "os demais editais",
     )
     return (
         '<div class="table-wrap"><table class="data-table">'
         "<thead><tr><th>Órgão</th><th>Modalidade</th><th>Encerramento</th><th>Valor estimado</th></tr></thead>"
         f"<tbody>{rows}</tbody></table></div>"
+        f"{truncated}"
     )
 
 

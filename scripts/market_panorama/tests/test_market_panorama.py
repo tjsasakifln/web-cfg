@@ -565,3 +565,106 @@ def test_family_is_in_the_publish_allowlist():
     from scripts.pseo.public_artifact import PUBLIC_TOP_DIRS
 
     assert FAMILY_SLUG in PUBLIC_TOP_DIRS
+
+
+def _section_html(html: str, section_id: str) -> str:
+    """The markup of one rendered <section>, up to the next one."""
+    start = html.index(f'id="{section_id}"')
+    end = html.find("<section", start)
+    return html[start : end if end != -1 else len(html)]
+
+
+def _body_rows(html: str, section_id: str) -> int:
+    """Rows in the section table, minus the single <thead> row."""
+    block = _section_html(html, section_id)
+    return block.count("<tr>") - block.count("<thead>")
+
+
+def _many_opportunities(count: int) -> dict:
+    payload = _payload()
+    payload["sections"]["open_opportunities"] = {
+        "state": DATA_READY,
+        "payload": {
+            "opportunities": [
+                {
+                    "orgao_nome": f"ORGAO MUNICIPAL {index:06d}",
+                    "modalidade": "PREGAO ELETRONICO",
+                    "data_encerramento": f"2026-09-{(index % 28) + 1:02d}",
+                    "valor_estimado": "125000.00",
+                }
+                for index in range(count)
+            ]
+        },
+    }
+    return payload
+
+
+def _many_categories(count: int) -> dict:
+    payload = _payload()
+    payload["sections"]["price_panel"]["payload"]["categories"] = [
+        {
+            "categoria": f"CATEGORIA {index:04d}",
+            "reference_contract_count": index,
+            "reference_p25": "1000.00",
+            "reference_p50": "2000.00",
+            "reference_p75": "3000.00",
+            "focal_position": "P25_P50",
+        }
+        for index in range(count)
+    ]
+    return payload
+
+
+def test_a_huge_opportunity_list_is_capped_and_the_page_says_the_real_total():
+    from scripts.market_panorama.render import OPPORTUNITY_ROW_CAP
+
+    payload = _many_opportunities(50_000)
+    decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
+    html = render_panorama_html(payload, decision)
+    assert _body_rows(html, "editais") == OPPORTUNITY_ROW_CAP
+    assert f"Mostrando {OPPORTUNITY_ROW_CAP} de 50000 editais observados" in html
+    # 50.000 rows rendered a 4,5 MB page. The cap is what keeps it readable.
+    assert len(html) < 250_000
+
+
+def test_a_huge_price_panel_is_capped_and_the_page_says_the_real_total():
+    from scripts.market_panorama.render import PRICE_CATEGORY_ROW_CAP
+
+    payload = _many_categories(5_000)
+    decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
+    html = render_panorama_html(payload, decision)
+    assert _body_rows(html, "faixas-de-valor") == PRICE_CATEGORY_ROW_CAP
+    assert f"Mostrando {PRICE_CATEGORY_ROW_CAP} de 5000 categorias observadas" in html
+    assert len(html) < 250_000
+
+
+def test_the_capped_price_rows_are_the_best_evidenced_ones():
+    from scripts.market_panorama.render import PRICE_CATEGORY_ROW_CAP
+
+    payload = _many_categories(200)
+    decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
+    block = _section_html(render_panorama_html(payload, decision), "faixas-de-valor")
+    for index in range(200 - PRICE_CATEGORY_ROW_CAP, 200):
+        assert f"<td>CATEGORIA {index:04d}</td>" in block
+    assert "<td>CATEGORIA 0000</td>" not in block
+
+
+def test_the_capped_subset_does_not_depend_on_the_producer_order():
+    """A cut driven by serialisation order is not a decision, it is an accident."""
+    payload = _many_opportunities(300)
+    shuffled = _many_opportunities(300)
+    shuffled["sections"]["open_opportunities"]["payload"]["opportunities"].reverse()
+    decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
+    other = evaluate(shuffled, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
+    first = _section_html(render_panorama_html(payload, decision), "editais")
+    second = _section_html(render_panorama_html(shuffled, other), "editais")
+    assert first == second
+
+
+def test_a_section_under_the_cap_claims_no_truncation():
+    """Silence about truncation must mean the table is complete."""
+    payload = _many_opportunities(3)
+    decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
+    html = render_panorama_html(payload, decision)
+    assert _body_rows(html, "editais") == 3
+    assert "ca-truncation-note" not in html

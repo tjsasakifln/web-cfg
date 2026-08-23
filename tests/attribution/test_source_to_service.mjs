@@ -73,6 +73,9 @@ function makeEl(attrMap, text) {
       if (Object.prototype.hasOwnProperty.call(attrs, name)) return attrs[name];
       return null;
     },
+    setAttribute(name, value) {
+      attrs[name] = String(value);
+    },
     closest() {
       return null;
     },
@@ -454,6 +457,88 @@ for (const j of journeys) {
   if (!names.includes("whatsapp_click")) fail("missing_whatsapp_click", names);
   if (!names.includes("email_click")) fail("missing_email_click", names);
   if (!names.includes("outbound_click")) fail("missing_outbound_click", names);
+}
+
+// --- Versioned report hand-raise: one physical click, one enriched event ---
+{
+  const html = htmlOf("casos/modelo-relatorio-inteligencia-licitacoes/index.html");
+  const attrs = findAnchor(html, (a) =>
+    a["data-cta-id"] === "report-599-hero" &&
+    a["data-next-action-id"] === "contratar_relatorio_inteligencia_599"
+  );
+  if (!attrs) fail("report_handraise_anchor_missing");
+  const el = makeEl(attrs, "Quero meu relatório por R$ 599");
+  const driven = driveScript({
+    pathname: "/casos/modelo-relatorio-inteligencia-licitacoes/",
+    body: bodyAttrs(html),
+    hrefEls: [el],
+    waEls: [el],
+  });
+  el.click();
+  const physicalClickEvents = driven.dataLayer.filter((e) =>
+    e.event === "whatsapp_click" || e.event === "cta_click"
+  );
+  if (physicalClickEvents.length !== 1 || physicalClickEvents[0].event !== "whatsapp_click") {
+    fail("report_handraise_dual_count", physicalClickEvents);
+  }
+  const ev = physicalClickEvents[0];
+  const expected = {
+    asset_id: "relatorio-inteligencia-licitacoes-demonstrativo",
+    route_family: "edital-proposta",
+    cta_id: "report-599-hero",
+    cta_position: "report_hero",
+    cta_kind: "offer",
+    offer_id: "handraise-report-intelligence-599-v1",
+    next_action_id: "contratar_relatorio_inteligencia_599",
+    source: "CONFENGE_WEB",
+  };
+  for (const [key, value] of Object.entries(expected)) {
+    if (ev[key] !== value) fail("report_handraise_attribution", { key, expected: value, event: ev });
+  }
+  if (!ev.event_id) fail("report_handraise_event_id", ev);
+  if (!/^CFG-WA-[A-Z0-9]{8}$/.test(ev.correlation_id || "")) {
+    fail("report_handraise_correlation_protocol", ev);
+  }
+  if (!decodeURIComponent(el.attrs.href.replace(/\+/g, "%20")).includes(
+    `Protocolo CONFENGE: ${ev.correlation_id}`
+  )) {
+    fail("report_handraise_conversation_marker", { href: el.attrs.href, event: ev });
+  }
+  const reconciled = contract.reconcileFunnel({ events: [{ event: ev.event, props: ev }] });
+  if (reconciled.denominators.engagement !== 1) {
+    fail("report_handraise_engagement_inflated", reconciled);
+  }
+  const admission = contract.admitEvent({ event: ev.event, props: ev });
+  if (!admission.ok) fail("report_handraise_rejected", admission);
+  const admitted = admission.event.props;
+  if (
+    admitted?.offer_id !== expected.offer_id ||
+    admitted?.next_action_id !== expected.next_action_id ||
+    admitted?.event_id !== ev.event_id ||
+    admitted?.correlation_id !== ev.correlation_id ||
+    Object.prototype.hasOwnProperty.call(admitted || {}, "whatsapp_protocol")
+  ) {
+    fail("report_handraise_context_dropped", admitted);
+  }
+  const collectResult = await postCollect([{
+    event: ev.event,
+    props: ev,
+    path: "/casos/modelo-relatorio-inteligencia-licitacoes/",
+    sid: "report-handraise",
+  }]);
+  const collectBody = JSON.parse(collectResult.body);
+  const persisted = collect._recent().slice(-1)[0];
+  if (
+    collectResult.statusCode !== 202 ||
+    collectBody.accepted !== 1 ||
+    persisted?.correlation_id !== ev.correlation_id ||
+    persisted?.offer_id !== expected.offer_id ||
+    persisted?.next_action_id !== expected.next_action_id ||
+    persisted?.event_id !== ev.event_id ||
+    Object.prototype.hasOwnProperty.call(persisted || {}, "whatsapp_protocol")
+  ) {
+    fail("report_handraise_collector_persistence", { collectBody, persisted });
+  }
 }
 
 // --- Query and fragment stripped from destination_path ---
