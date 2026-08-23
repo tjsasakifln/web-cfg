@@ -516,13 +516,22 @@ def test_brand_logo_assets_fit_their_render_box():
 
 
 def test_shipped_pages_never_declare_oversized_logos():
-    """The header/footer chrome is on every page: one bad template wastes bytes site-wide."""
+    """The header/footer chrome is on every page: one bad template wastes bytes site-wide.
+
+    The six BOFU pillars are hash-frozen (data/bofu-dominance/frozen-specs/hashes.json,
+    authorizes_html_edit=false until the spec's earliest_safe_action_at) so their stale
+    declaration waits for the recapture. The asset they download is already the small
+    one; only the attribute is behind.
+    """
+    from scripts.bofu_dominance.frozen_specs.constants import FORBIDDEN_RELATIVE_PATHS
+
+    frozen = {rel for rel in FORBIDDEN_RELATIVE_PATHS if rel.endswith(".html")}
     skip = {"node_modules", "_site", "docs", "scripts", "tests", "netlify", "seo", "data", "supabase"}
     offenders: list[str] = []
     pages = 0
     for path in sorted(ROOT.rglob("*.html")):
         relative = path.relative_to(ROOT)
-        if any(part in skip for part in relative.parts):
+        if any(part in skip for part in relative.parts) or relative.as_posix() in frozen:
             continue
         html = path.read_text(encoding="utf-8", errors="replace")
         if "logo-confenge" not in html:
