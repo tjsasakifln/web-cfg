@@ -268,6 +268,61 @@ const extractionRegressionCases = [
   { id: "uppercase-unquoted", source: "<path D=M,0,0></path>", expected: ["M,0,0"] },
   { id: "lowercase-unquoted", source: "<path d=M0,0></path>", expected: ["M0,0"] },
   { id: "ignore-data-d", source: '<path data-d="M,0,0" d="M0,0"></path>', expected: ["M0,0"] },
+  {
+    id: "quoted-angle-before-d",
+    source: '<path data-note=">" D="M,0,0"></path>',
+    expected: ["M,0,0"],
+    parse: "invalid",
+  },
+  {
+    id: "fully-percent-encoded-tag",
+    source: "%3C%70%61%74%68%20%64%3D%22M0%200%22%3E",
+    expected: ["M0 0"],
+    parse: "valid",
+  },
+  {
+    id: "fully-percent-encoded-invalid-stays-fail-closed",
+    source: "%3Cpath%20d%3D%22M%2C0%2C0%22%3E",
+    expected: ["M,0,0"],
+    parse: "invalid",
+  },
+  {
+    id: "numeric-html-entity",
+    source: '<path d="M0&#32;0"></path>',
+    expected: ["M0 0"],
+    parse: "valid",
+  },
+  {
+    id: "entity-decode-stays-fail-closed",
+    source: '<path d="M0&#44;&#44;0"></path>',
+    expected: ["M0,,0"],
+    parse: "invalid",
+  },
+  {
+    id: "literal-percent-is-not-url-decoded",
+    source: '<path d="M0%200"></path>',
+    expected: ["M0%200"],
+    parse: "invalid",
+  },
+  {
+    id: "html-entities-decode-once",
+    source: '<path d="M0&amp;#32;0"></path>',
+    expected: ["M0&#32;0"],
+    parse: "invalid",
+  },
+  {
+    id: "ignore-inactive-and-arbitrary-source-text",
+    source:
+      '<script>const d = "M,0,0"; const x = `<path d="M,0,0">`;</script><!-- <path d="M,0,0"> -->',
+    expected: [],
+  },
+  {
+    id: "ignore-percent-encoded-inactive-markup",
+    source:
+      "%3Cscript%3E%3Cpath%20d%3D%22M%2C0%2C0%22%3E%3C%2Fscript%3E" +
+      "%3C%21--%3Cpath%20d%3D%22M%2C0%2C0%22%3E--%3E",
+    expected: [],
+  },
 ];
 for (const testCase of extractionRegressionCases) {
   const actual = extractPathData(testCase.source);
@@ -279,6 +334,18 @@ for (const testCase of extractionRegressionCases) {
       expected: testCase.expected,
       actual,
     });
+  }
+  if (testCase.parse && actual.length === 1) {
+    const accepted = parseSvgPath(actual[0]).ok;
+    if ((testCase.parse === "valid") !== accepted) {
+      issues.push({
+        rel: "scripts/site/svg_path_grammar.mjs",
+        error: "svg_path_extracted_value_regression",
+        id: testCase.id,
+        expected: testCase.parse,
+        actual: accepted ? "valid" : "invalid",
+      });
+    }
   }
 }
 

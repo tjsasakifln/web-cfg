@@ -210,18 +210,162 @@ export function parseSvgPath(d) {
 export function extractPathData(html) {
   // End tags may carry stray whitespace/attributes (`</script\n foo="bar">`) and
   // comments may close with `--!>`; browsers accept both, so the strippers do too.
-  const source = String(html ?? "")
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, " ")
-    .replace(/<!--[\s\S]*?--!?>/g, " ");
-  const out = [];
-  const tagRe = /(?:<|%3c)path\b[\s\S]*?(?:>|%3e)/gi;
-  const attrRe = /(?:^|[\s"'/])d\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i;
-  let tag;
-  while ((tag = tagRe.exec(source))) {
-    const attr = attrRe.exec(tag[0]);
-    if (attr) {
-      out.push(attr[1] !== undefined ? attr[1] : attr[2] !== undefined ? attr[2] : attr[3]);
+  const blankMatch = (match) => " ".repeat(match.length);
+  const stripInactiveMarkup = (value) =>
+    value
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, blankMatch)
+      .replace(/<!--[\s\S]*?--!?>/g, blankMatch);
+
+  // Decode a data-URI payload once while retaining which output characters came
+  // from percent escapes. Literal HTML must not treat `d="M0%200"` as valid,
+  // but `%3Cpath%20d%3D%22M0%200%22%3E` in CSS must be audited after URL decode.
+  const percentDecodeWithOrigins = (value) => {
+    let text = "";
+    const decoded = [];
+    for (let offset = 0; offset < value.length; offset += 1) {
+      const hex = value.slice(offset + 1, offset + 3);
+      if (value[offset] === "%" && /^[0-9a-f]{2}$/i.test(hex)) {
+        text += String.fromCharCode(Number.parseInt(hex, 16));
+        decoded.push(true);
+        offset += 2;
+      } else {
+        text += value[offset];
+        decoded.push(false);
+      }
     }
+    return { text, decoded };
+  };
+
+  // HTML character references are decoded by the browser before the SVG path
+  // grammar sees the attribute. Decode the path-relevant named entities and all
+  // numeric references exactly once; unknown/malformed references remain in the
+  // value and therefore fail closed in parseSvgPath().
+  const namedEntities = Object.freeze({
+    amp: "&",
+    apos: "'",
+    comma: ",",
+    gt: ">",
+    lt: "<",
+    NewLine: "\n",
+    nbsp: "\u00a0",
+    period: ".",
+    plus: "+",
+    quot: '"',
+    Tab: "\t",
+  });
+  const xmlNamedEntities = new Set(["amp", "apos", "gt", "lt", "quot"]);
+  const decodeHtmlEntities = (value, { htmlNamed = true } = {}) =>
+    value.replace(
+      /&#(?:[xX][0-9a-fA-F]+|[0-9]+);?|&(?:amp|apos|comma|gt|lt|NewLine|nbsp|period|plus|quot|Tab);/g,
+      (reference) => {
+        if (!reference.startsWith("&#")) {
+          const name = reference.slice(1, -1);
+          if (!htmlNamed && !xmlNamedEntities.has(name)) return reference;
+          return namedEntities[name] ?? reference;
+        }
+        const raw = reference.replace(/^&#/, "").replace(/;$/, "");
+        const radix = raw[0] === "x" || raw[0] === "X" ? 16 : 10;
+        const digits = radix === 16 ? raw.slice(1) : raw;
+        const codePoint = Number.parseInt(digits, radix);
+        if (
+          !Number.isFinite(codePoint) ||
+          codePoint === 0 ||
+          codePoint > 0x10ffff ||
+          (codePoint >= 0xd800 && codePoint <= 0xdfff)
+        ) {
+          return "\ufffd";
+        }
+        return String.fromCodePoint(codePoint);
+      },
+    );
+
+  const isTagSpace = (ch) =>
+    ch === " " || ch === "\t" || ch === "\n" || ch === "\r" || ch === "\f";
+
+  // A regex ending at the first `>` truncates valid tags such as
+  // `<path data-note=">" d="...">`. This scanner ends a start tag only when
+  // `>` occurs outside a quoted value.
+  const pathStartTags = (value, acceptOpen = () => true) => {
+    const tags = [];
+    for (let start = 0; start < value.length; start += 1) {
+      if (value[start] !== "<" || !acceptOpen(start)) continue;
+      if (value.slice(start + 1, start + 5).toLowerCase() !== "path") continue;
+      const boundary = value[start + 5];
+      if (boundary !== undefined && !isTagSpace(boundary) && boundary !== "/" && boundary !== ">") {
+        continue;
+      }
+      let quote = null;
+      for (let end = start + 5; end < value.length; end += 1) {
+        const ch = value[end];
+        if (quote !== null) {
+          if (ch === quote) quote = null;
+        } else if (ch === '"' || ch === "'") {
+          quote = ch;
+        } else if (ch === ">") {
+          tags.push(value.slice(start, end + 1));
+          start = end;
+          break;
+        }
+      }
+    }
+    return tags;
+  };
+
+  const dAttribute = (tag, entityOptions) => {
+    let offset = 5; // `<path`
+    while (offset < tag.length - 1) {
+      while (isTagSpace(tag[offset])) offset += 1;
+      if (tag[offset] === "/" || tag[offset] === ">" || tag[offset] === undefined) break;
+
+      const nameStart = offset;
+      while (
+        offset < tag.length &&
+        !isTagSpace(tag[offset]) &&
+        tag[offset] !== "=" &&
+        tag[offset] !== "/" &&
+        tag[offset] !== ">"
+      ) {
+        offset += 1;
+      }
+      const name = tag.slice(nameStart, offset).toLowerCase();
+      while (isTagSpace(tag[offset])) offset += 1;
+      if (tag[offset] !== "=") continue;
+      offset += 1;
+      while (isTagSpace(tag[offset])) offset += 1;
+
+      let rawValue;
+      if (tag[offset] === '"' || tag[offset] === "'") {
+        const quote = tag[offset];
+        const valueStart = ++offset;
+        while (offset < tag.length && tag[offset] !== quote) offset += 1;
+        rawValue = tag.slice(valueStart, offset);
+        if (tag[offset] === quote) offset += 1;
+      } else {
+        const valueStart = offset;
+        while (offset < tag.length && !isTagSpace(tag[offset]) && tag[offset] !== ">") {
+          offset += 1;
+        }
+        rawValue = tag.slice(valueStart, offset);
+      }
+      if (name === "d") return decodeHtmlEntities(rawValue, entityOptions);
+    }
+    return null;
+  };
+
+  const source = stripInactiveMarkup(String(html ?? ""));
+  const out = [];
+  for (const tag of pathStartTags(source)) {
+    const value = dAttribute(tag);
+    if (value !== null) out.push(value);
+  }
+
+  const percent = percentDecodeWithOrigins(source);
+  const decodedSource = stripInactiveMarkup(percent.text);
+  for (const tag of pathStartTags(decodedSource, (start) => percent.decoded[start] === true)) {
+    // Percent-encoded SVG data URIs are XML, where only the five predefined
+    // named entities exist. Numeric references remain valid in both modes.
+    const value = dAttribute(tag, { htmlNamed: false });
+    if (value !== null) out.push(value);
   }
   return out;
 }

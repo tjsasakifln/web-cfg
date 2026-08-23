@@ -37,7 +37,7 @@
     }
   ],
   "svg_path_parser_regressions": 7,
-  "svg_path_extraction_regressions": 3,
+  "svg_path_extraction_regressions": 12,
   "earliest_safe_action_at": "2026-09-16",
   "audit_date": "2026-08-23",
   "warnings": [
