@@ -243,9 +243,11 @@ def test_lighthouse_covers_article_cover_regression_routes():
             raise AssertionError(f"site-ci Lighthouse sample missing {route}")
     for needle in (
         "LH_IMAGE_GATE_PAGES",
+        "LH_SEO_EXEMPT_PAGES",
         'audits["image-aspect-ratio"]?.score',
         'audits["image-size-responsive"]?.score',
         "IMAGE_GATE_PAGES.has(r.path)",
+        "!SEO_EXEMPT_PAGES.has(r.path) && r.seo < 95",
     ):
         if needle not in runner:
             raise AssertionError(f"Lighthouse image regression gate missing {needle}")

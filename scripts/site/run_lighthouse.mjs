@@ -22,11 +22,20 @@ const IMAGE_GATE_PAGES = new Set(
     .map((s) => s.trim())
     .filter(Boolean),
 );
-const missingImageGatePages = [...IMAGE_GATE_PAGES].filter((path) => !PAGES.includes(path));
-if (missingImageGatePages.length) {
-  throw new Error(
-    `LH_IMAGE_GATE_PAGES must be included in LH_PAGES: ${missingImageGatePages.join(", ")}`,
-  );
+const SEO_EXEMPT_PAGES = new Set(
+  (process.env.LH_SEO_EXEMPT_PAGES || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean),
+);
+for (const [name, configuredPages] of [
+  ["LH_IMAGE_GATE_PAGES", IMAGE_GATE_PAGES],
+  ["LH_SEO_EXEMPT_PAGES", SEO_EXEMPT_PAGES],
+]) {
+  const missingPages = [...configuredPages].filter((path) => !PAGES.includes(path));
+  if (missingPages.length) {
+    throw new Error(`${name} must be included in LH_PAGES: ${missingPages.join(", ")}`);
+  }
 }
 const PORT = 8766;
 const MIME = {
@@ -134,6 +143,7 @@ try {
         si_ms: audits["speed-index"]?.numericValue,
         image_aspect_ratio: audits["image-aspect-ratio"]?.score,
         image_size_responsive: audits["image-size-responsive"]?.score,
+        seo_exempt: SEO_EXEMPT_PAGES.has(path),
       };
       results.push(row);
       console.log(JSON.stringify(row));
@@ -158,7 +168,7 @@ const failed = results.filter(
     r.performance < 90 ||
     r.accessibility < 95 ||
     r.best_practices < 95 ||
-    r.seo < 95 ||
+    (!SEO_EXEMPT_PAGES.has(r.path) && r.seo < 95) ||
     (IMAGE_GATE_PAGES.has(r.path) &&
       (r.image_aspect_ratio !== 1 || r.image_size_responsive !== 1)),
 );
