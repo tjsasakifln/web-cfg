@@ -11,7 +11,7 @@
   "form_required": false,
   "first_party_crm_created": false,
   "join": {
-    "web_event": "whatsapp_click.whatsapp_protocol",
+    "web_event": "whatsapp_click.correlation_id",
     "conversation_marker": "Protocolo CONFENGE: CFG-WA-XXXXXXXX",
     "qualified_outcome_owner": "warmbly"
   },
