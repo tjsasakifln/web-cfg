@@ -88,6 +88,16 @@ MODELS = [
 
 # Numbers every page must repeat, because all seven describe one synthetic base.
 SHARED_BASE = ("118", "R$ 132,40 mi", "54", "76", "88")
+TIPOLOGY_TOTALS = (
+    "R$ 96,20 mi",
+    "R$ 31,00 mi",
+    "R$ 5,20 mi",
+)
+TIPOLOGY_SHARES = (
+    "72,7%",
+    "23,4%",
+    "3,9%",
+)
 
 
 def _page(slug: str) -> Path:
@@ -171,6 +181,23 @@ def test_synthetic_base_reconciles_across_the_whole_family() -> None:
     ):
         html = _html(slug)
         for token in panel:
+            assert token in html, (slug, token)
+    # Totals and shares must also reconcile across every published summary of
+    # the same synthetic base, not only within each page in isolation.
+    for slug in (
+        "modelo-painel-precos-obras-publicas",
+        "modelo-relatorio-executivo-consolidado",
+        "modelo-apresentacao-executiva-resultados",
+    ):
+        html = _html(slug)
+        for token in TIPOLOGY_TOTALS:
+            assert token in html, (slug, token)
+    for slug in (
+        "modelo-relatorio-executivo-consolidado",
+        "modelo-apresentacao-executiva-resultados",
+    ):
+        html = _html(slug)
+        for token in TIPOLOGY_SHARES:
             assert token in html, (slug, token)
 
 
