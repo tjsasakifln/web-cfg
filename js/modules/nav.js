@@ -33,7 +33,10 @@
       document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
-    document.querySelectorAll('#year').forEach((el) => { el.textContent = new Date().getFullYear(); });
+    const currentYear = String(new Date().getFullYear());
+    document.querySelectorAll('#year').forEach((element) => {
+      if (element.textContent !== currentYear) element.textContent = currentYear;
+    });
 
     // Journey rail progressive enhancement — all stages remain in the DOM for no-JS
     document.querySelectorAll('[data-journey-enhance]').forEach((rail) => {
@@ -100,8 +103,8 @@
       });
     });
 
-    scheduleIdle(() => {
-      const reveals = document.querySelectorAll('.reveal');
+    const reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) scheduleIdle(() => {
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if ('IntersectionObserver' in window && !reducedMotion) {
         const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .08, rootMargin: '0px 0px -35px' });

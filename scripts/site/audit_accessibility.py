@@ -13,8 +13,37 @@ PAGES = [
     ROOT / "diagnostico-b2g-360" / "index.html",
     ROOT / "bid-room-licitacoes-obras" / "index.html",
     ROOT / "defesa-margem-contratos-publicos" / "index.html",
+    ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
+    ROOT / "defesa-tecnica-contratos-publicos" / "index.html",
+    ROOT / "acompanhamento-contratos-obras" / "index.html",
     ROOT / "ferramentas" / "diagnostico-defesa-margem" / "index.html",
 ]
+
+
+def has_accessible_label(html: str, field_id: str) -> bool:
+    field = re.search(
+        rf"<(?:input|select|textarea)\b[^>]*\bid=[\"']{re.escape(field_id)}[\"'][^>]*>",
+        html,
+        re.I,
+    )
+    if not field:
+        return True
+    tag = field.group(0)
+    aria_label = re.search(r"\baria-label=[\"']([^\"']*)[\"']", tag, re.I)
+    if aria_label and aria_label.group(1).strip():
+        return True
+    labelledby = re.search(r"\baria-labelledby=[\"']([^\"']+)[\"']", tag, re.I)
+    if labelledby and any(
+        re.search(rf"\bid=[\"']{re.escape(label_id)}[\"']", html, re.I)
+        for label_id in labelledby.group(1).split()
+    ):
+        return True
+    if re.search(rf"<label\b[^>]*\bfor=[\"']{re.escape(field_id)}[\"']", html, re.I):
+        return True
+    return any(
+        re.search(rf"\bid=[\"']{re.escape(field_id)}[\"']", label, re.I)
+        for label in re.findall(r"<label\b[^>]*>[\s\S]*?</label>", html, re.I)
+    )
 
 
 def check_page(path: Path) -> list[str]:
@@ -38,10 +67,16 @@ def check_page(path: Path) -> list[str]:
         if "aria-label" not in html:
             errors.append("expected some aria-labels")
     elif "<form" in html:
-        if 'id="nome"' in html and f'for="nome"' not in html:
-            errors.append("form field labeling: nome")
-        if 'id="email"' in html and f'for="email"' not in html:
-            errors.append("form field labeling: email")
+        for field in ("nome", "empresa", "email", "telefone", "mensagem"):
+            if not has_accessible_label(html, field):
+                errors.append(f"form field labeling: {field}")
+        consent = re.search(
+            r"<label\b[^>]*>[\s\S]*?<input\b[^>]*\bname=[\"']consentimento[\"'][^>]*>[\s\S]*?</label>",
+            html,
+            re.I,
+        )
+        if 'name="consentimento"' in html and not consent:
+            errors.append("form field labeling: consentimento")
     return errors
 
 

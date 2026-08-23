@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "c574dff638f68d751dc7a0724dd535aab3ea5d89",
+  "baseline_commit": "c5fa76277036de81e391ba469985b8923182e746",
   "recaptured_at": "2026-08-22",
-  "recapture_reason": "BOFU revenue convergence: reviewed attribution, WhatsApp correlation and sitemap reconciliation collateral after proving all six frozen pillar HTML files byte-identical to 14740dab6b21bde19ecc62396d89393c2c7adab6.",
+  "recapture_reason": "Adversarial UX closeout: reviewed home-only layout containment, behavior-preserving deterministic JS minification and deferred analytics work after proving all six frozen pillar HTML files byte-identical to c5fa76277036de81e391ba469985b8923182e746; strict browser geometry, analytics contracts and the full frozen suite remain green.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -20,8 +20,8 @@
     "auditoria-orcamento-licitacao/index.html": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
     "diagnostico-b2g-360/index.html": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
     "diagnostico-pre-licitacao/index.html": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
-    "script.js": "d766e3ce2f7d7a1c7d0d4f454b56dda6157a5f152ac87cb5a8a9b73381d5f161",
-    "styles.css": "5d9b5922c6b777a91d5c93bc0048aeeb0f35e65f762fdca22c52741eebffb60f",
+    "script.js": "02781e3cb22355b220c86b0c76bf6536cf71657b0a49defd433d04d50c4d3eeb",
+    "styles.css": "93fa460ed3bbd3c53f7f71965c4442419aeae4b849b7a7f56a10e922e83dc825",
     "styles-tokens.css": "fc9ff3dd5645da772d22d51f5c4af808fcc80b0fcd3e74c3655e461e4ce2574a",
     "styles-tools.css": "8d72c676d70ea28b57a7a9cabf095b5314f90a1c91522241c1b869e77f0540a5",
     "robots.txt": "762ed294580bfb8a88944481c93a7dad9bef70eb2e580cfa14ac6c46548bacc3",
@@ -30,6 +30,6 @@
     "sitemap-index.xml": "91e12605f49d3675e3ac76af1443a4cbb6f4b9504cca50c009b33bec930be81f",
     "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "5392f98bf6d9b590582324c5cb6944e446e41e1140e99e1708a008a3faf87d95"
+    "js/modules/analytics.js": "480a12e3a3b05686326e2376803d4946e844d96c899401c84965954966dc2188"
   }
 }

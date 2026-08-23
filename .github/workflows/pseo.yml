@@ -58,6 +58,7 @@ jobs:
       - name: Full test suite
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          UI_GEOMETRY_REQUIRED: "1"
         run: npm test
       - name: HTTP smoke on _site artifact
         run: |

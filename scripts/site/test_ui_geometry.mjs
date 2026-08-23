@@ -86,7 +86,8 @@ async function main() {
     const msg = String(err && err.message ? err.message : err);
     console.log("UI_GEOMETRY_UNAVAILABLE", msg.slice(0, 240));
     if (ownServer && server) server.close();
-    process.exit(0);
+    const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
+    process.exit(required ? 2 : 0);
   }
   const page = await browser.newPage();
 

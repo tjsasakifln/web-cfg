@@ -10,6 +10,7 @@ import { join, resolve, extname, dirname } from "path";
 import { fileURLToPath } from "url";
 import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
+import { evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(ROOT, "docs", "lighthouse-runs");
@@ -28,6 +29,10 @@ const SEO_EXEMPT_PAGES = new Set(
     .map((s) => s.trim())
     .filter(Boolean),
 );
+const HOME_RUNS = Number(process.env.LH_HOME_RUNS || 1);
+if (!Number.isInteger(HOME_RUNS) || HOME_RUNS < 1 || HOME_RUNS > 5) {
+  throw new Error(`LH_HOME_RUNS must be an integer from 1 to 5, got ${process.env.LH_HOME_RUNS}`);
+}
 for (const [name, configuredPages] of [
   ["LH_IMAGE_GATE_PAGES", IMAGE_GATE_PAGES],
   ["LH_SEO_EXEMPT_PAGES", SEO_EXEMPT_PAGES],
@@ -88,89 +93,93 @@ async function waitForCdp(port, attempts = 40) {
   throw new Error(`Chrome CDP not ready on port ${port}`);
 }
 
-const chrome = await launchChrome({
-  chromePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
-  chromeFlags: [
-    "--headless=new",
-    "--no-sandbox",
-    "--disable-gpu",
-    "--disable-dev-shm-usage",
-    "--disable-extensions",
-  ],
-  connectionPollInterval: 250,
-  maxConnectionRetries: 50,
-});
-await waitForCdp(chrome.port);
-console.log("Chrome CDP ready on", chrome.port);
-
 try {
   for (const path of PAGES) {
-    const url = `${BASE.replace(/\/$/, "")}${path}`;
-    const slug = path === "/" ? "home" : path.replace(/\//g, "_").replace(/^_|_$/g, "");
-    const outJson = join(OUT, `${slug}.json`);
-    console.log("Lighthouse", url, "port=", chrome.port);
-    try {
-      const runnerResult = await lighthouse(url, {
-        port: chrome.port,
-        hostname: "127.0.0.1",
-        output: "json",
-        logLevel: "error",
-        onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
-        formFactor: "mobile",
-        screenEmulation: {
-          mobile: true,
-          width: 390,
-          height: 844,
-          deviceScaleFactor: 2,
-          disabled: false,
-        },
-        maxWaitForLoad: 45000,
-      });
-      if (!runnerResult?.lhr) throw new Error("empty lighthouse result");
-      writeFileSync(outJson, JSON.stringify(runnerResult.lhr, null, 2));
-      const cats = runnerResult.lhr.categories || {};
-      const audits = runnerResult.lhr.audits || {};
-      const row = {
-        path,
-        performance: Math.round((cats.performance?.score || 0) * 100),
-        accessibility: Math.round((cats.accessibility?.score || 0) * 100),
-        best_practices: Math.round((cats["best-practices"]?.score || 0) * 100),
-        seo: Math.round((cats.seo?.score || 0) * 100),
-        lcp_ms: audits["largest-contentful-paint"]?.numericValue,
-        cls: audits["cumulative-layout-shift"]?.numericValue,
-        tbt_ms: audits["total-blocking-time"]?.numericValue,
-        fcp_ms: audits["first-contentful-paint"]?.numericValue,
-        si_ms: audits["speed-index"]?.numericValue,
-        image_aspect_ratio: audits["image-aspect-ratio"]?.score,
-        image_size_responsive: audits["image-size-responsive"]?.score,
-        seo_exempt: SEO_EXEMPT_PAGES.has(path),
-      };
-      results.push(row);
-      console.log(JSON.stringify(row));
-    } catch (err) {
-      const detail = (err && err.message) || String(err);
-      console.error("lighthouse failed", path, detail);
-      results.push({ path, error: detail, status: "error" });
+    const attempts = path === "/" ? HOME_RUNS : 1;
+    for (let run = 1; run <= attempts; run += 1) {
+      const url = `${BASE.replace(/\/$/, "")}${path}`;
+      const slug = path === "/" ? "home" : path.replace(/\//g, "_").replace(/^_|_$/g, "");
+      const suffix = attempts > 1 ? `-run-${run}` : "";
+      const outJson = join(OUT, `${slug}${suffix}.json`);
+      let chrome = null;
+      try {
+        chrome = await launchChrome({
+          chromePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
+          chromeFlags: [
+            "--headless=new",
+            "--no-sandbox",
+            "--disable-gpu",
+            "--disable-dev-shm-usage",
+            "--disable-extensions",
+          ],
+          connectionPollInterval: 250,
+          maxConnectionRetries: 50,
+        });
+        await waitForCdp(chrome.port);
+        console.log("Lighthouse", url, `run=${run}`, "clean_port=", chrome.port);
+        const runnerResult = await lighthouse(url, {
+          port: chrome.port,
+          hostname: "127.0.0.1",
+          output: "json",
+          logLevel: "error",
+          onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
+          formFactor: "mobile",
+          screenEmulation: {
+            mobile: true,
+            width: 390,
+            height: 844,
+            deviceScaleFactor: 2,
+            disabled: false,
+          },
+          maxWaitForLoad: 45000,
+        });
+        if (!runnerResult?.lhr) throw new Error("empty lighthouse result");
+        writeFileSync(outJson, JSON.stringify(runnerResult.lhr, null, 2));
+        const cats = runnerResult.lhr.categories || {};
+        const audits = runnerResult.lhr.audits || {};
+        const ownLongTasks = (audits["long-tasks"]?.details?.items || [])
+          .filter((item) => String(item.url || "").startsWith(BASE))
+          .map((item) => Number(item.duration) || 0);
+        const row = {
+          path,
+          run,
+          performance: Math.round((cats.performance?.score || 0) * 100),
+          accessibility: Math.round((cats.accessibility?.score || 0) * 100),
+          best_practices: Math.round((cats["best-practices"]?.score || 0) * 100),
+          seo: Math.round((cats.seo?.score || 0) * 100),
+          lcp_ms: audits["largest-contentful-paint"]?.numericValue,
+          cls: audits["cumulative-layout-shift"]?.numericValue,
+          tbt_ms: audits["total-blocking-time"]?.numericValue,
+          longest_own_task_ms: Math.max(0, ...ownLongTasks),
+          fcp_ms: audits["first-contentful-paint"]?.numericValue,
+          si_ms: audits["speed-index"]?.numericValue,
+          image_aspect_ratio: audits["image-aspect-ratio"]?.score,
+          image_size_responsive: audits["image-size-responsive"]?.score,
+          seo_exempt: SEO_EXEMPT_PAGES.has(path),
+        };
+        results.push(row);
+        console.log(JSON.stringify(row));
+      } catch (err) {
+        const detail = (err && err.message) || String(err);
+        console.error("lighthouse failed", path, `run ${run}`, detail);
+        results.push({ path, run, error: detail, status: "error" });
+      } finally {
+        if (chrome) await chrome.kill();
+      }
     }
   }
 } finally {
-  await chrome.kill();
   if (server) server.close();
 }
 
-const summary = { base: BASE, generated_at: new Date().toISOString(), results };
+const evaluation = evaluateLighthouseResults(results, {
+  homeRuns: HOME_RUNS,
+  imageGatePages: IMAGE_GATE_PAGES,
+  seoExemptPages: SEO_EXEMPT_PAGES,
+});
+const summary = { base: BASE, generated_at: new Date().toISOString(), results, evaluation };
 writeFileSync(join(OUT, "summary.json"), JSON.stringify(summary, null, 2));
 console.log("Wrote", join(OUT, "summary.json"));
-
-const failed = results.filter(
-  (r) =>
-    r.error ||
-    r.performance < 90 ||
-    r.accessibility < 95 ||
-    r.best_practices < 95 ||
-    (!SEO_EXEMPT_PAGES.has(r.path) && r.seo < 95) ||
-    (IMAGE_GATE_PAGES.has(r.path) &&
-      (r.image_aspect_ratio !== 1 || r.image_size_responsive !== 1)),
-);
-if (failed.length) console.error("Lighthouse gates failed", JSON.stringify(failed));
-process.exit(failed.length ? 1 : 0);
+if (!evaluation.ok) console.error("Lighthouse gates failed", JSON.stringify(evaluation));
+else console.log("Lighthouse gates passed", JSON.stringify(evaluation.home));
+process.exit(evaluation.ok ? 0 : 1);

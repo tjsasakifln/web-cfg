@@ -465,7 +465,27 @@ def test_home_header_footer_asset_budget():
     assert script, "home script.js tag missing"
     assert re.search(r"\bdefer\b", script.group(0), re.I), "home script.js must use defer"
     js = (ROOT / "script.js").read_text(encoding="utf-8")
+    analytics_js = (ROOT / "js" / "modules" / "analytics.js").read_text(encoding="utf-8")
+    nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
     assert "requestIdleCallback" in js, "non-critical init must use requestIdleCallback"
+    delay = re.search(r"ANALYTICS_FLUSH_DELAY_MS\s*=\s*(\d+)", analytics_js)
+    assert delay and int(delay.group(1)) >= 5000, (
+        "background analytics flush must stay outside the critical loading window"
+    )
+    assert "if (reveals.length) scheduleIdle" in nav_js, (
+        "do not schedule decorative reveal work on pages without reveal elements"
+    )
+
+
+def test_home_defers_below_fold_layout_work():
+    """#185: the long home must not fully lay out every section at startup."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    compact = re.sub(r"\s+", "", css)
+    selector = 'body[data-content-cluster="home"]main>section:not(.hero)'
+    assert selector in compact, "home below-fold containment selector missing"
+    rule = compact.split(selector, 1)[1].split("}", 1)[0]
+    assert "content-visibility:auto" in rule
+    assert "contain-intrinsic-size:auto900px" in rule
 
 
 def _srgb_channel(value: float) -> float:

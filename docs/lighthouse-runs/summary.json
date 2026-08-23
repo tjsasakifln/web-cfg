@@ -1,42 +1,68 @@
 {
   "base": "http://127.0.0.1:8766",
-  "generated_at": "2026-08-05T12:01:01.545Z",
+  "generated_at": "2026-08-23T01:53:18.779Z",
   "results": [
     {
       "path": "/",
-      "performance": 99,
+      "run": 1,
+      "performance": 95,
       "accessibility": 100,
-      "best_practices": 96,
+      "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 2124.526,
+      "lcp_ms": 2254.0467,
       "cls": 0,
-      "tbt_ms": 0,
-      "fcp_ms": 1224.526,
-      "si_ms": 1224.526
+      "tbt_ms": 143,
+      "longest_own_task_ms": 193,
+      "fcp_ms": 1954.0466999999999,
+      "si_ms": 1954.0466999999999,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "seo_exempt": false
     },
     {
-      "path": "/diretoria-b2g/",
-      "performance": 99,
+      "path": "/",
+      "run": 2,
+      "performance": 95,
       "accessibility": 100,
-      "best_practices": 96,
+      "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 2198.252,
+      "lcp_ms": 2552.6342999999997,
       "cls": 0,
-      "tbt_ms": 0,
-      "fcp_ms": 1223.252,
-      "si_ms": 1223.252
+      "tbt_ms": 103.99999999999977,
+      "longest_own_task_ms": 153.99999999999977,
+      "fcp_ms": 1952.6343000000002,
+      "si_ms": 1952.6343000000002,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "seo_exempt": false
     },
     {
-      "path": "/conteudos/",
+      "path": "/",
+      "run": 3,
       "performance": 98,
       "accessibility": 100,
-      "best_practices": 96,
+      "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 2428.1059999999998,
+      "lcp_ms": 2252.7417,
       "cls": 0,
-      "tbt_ms": 0,
-      "fcp_ms": 1228.106,
-      "si_ms": 1228.106
+      "tbt_ms": 27,
+      "longest_own_task_ms": 99,
+      "fcp_ms": 1502.7417,
+      "si_ms": 1502.7417,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "seo_exempt": false
     }
-  ]
+  ],
+  "evaluation": {
+    "ok": true,
+    "errors": [],
+    "home": {
+      "expected_runs": 3,
+      "observed_runs": 3,
+      "minimum_performance": 95,
+      "p75_tbt_ms": 143,
+      "maximum_own_long_task_ms": 193
+    }
+  }
 }

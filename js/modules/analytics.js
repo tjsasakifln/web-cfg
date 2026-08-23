@@ -115,6 +115,7 @@
     origin_prefixes: ORIGIN_PREFIXES,
   };
   const analyticsQueue = [];
+  const ANALYTICS_FLUSH_DELAY_MS = 30000;
   let analyticsFlushTimer = null;
   const trackedEventIds = new Set();
   const getSessionId = () => {
@@ -232,7 +233,9 @@
       }
       analyticsQueue.push({ eventName: resolved.canonical, safe });
       if (analyticsQueue.length >= 10) flushAnalytics();
-      else if (!analyticsFlushTimer) analyticsFlushTimer = setTimeout(flushAnalytics, 2000);
+      else if (!analyticsFlushTimer) {
+        analyticsFlushTimer = setTimeout(flushAnalytics, ANALYTICS_FLUSH_DELAY_MS);
+      }
       if (window.CONFENGE_DEBUG_ANALYTICS) {
         // eslint-disable-next-line no-console
         console.info('[confenge:analytics]', resolved.canonical, safe);
