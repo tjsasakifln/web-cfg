@@ -177,15 +177,23 @@ export function parseSvgPath(d) {
 }
 
 /**
- * Extract every `d="..."` / `d='...'` attribute value from an HTML/SVG string.
- * Only <path> and shape-level `d` attributes carry path data; the regex is kept
- * attribute-scoped so `data-*` attributes are never matched.
+ * Extract every `d="..."` / `d='...'` attribute value from an HTML/SVG/CSS
+ * source. The match is attribute-scoped (a preceding boundary character) so
+ * `data-*` and `jtbd=` never match, and it stays tag-agnostic on purpose:
+ * styles.css carries path data inside a percent-encoded `data:image/svg+xml`
+ * URI where the `<` of `<path` is written `%3C`.
+ *
+ * Script bodies and comments are dropped first, so a `const d = "..."` in
+ * inline JS cannot be mistaken for path data.
  */
 export function extractPathData(html) {
+  const source = String(html ?? "")
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ");
   const out = [];
   const re = /(?:^|[\s"'/])d\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
   let m;
-  while ((m = re.exec(html))) {
+  while ((m = re.exec(source))) {
     out.push(m[1] !== undefined ? m[1] : m[2]);
   }
   return out;
