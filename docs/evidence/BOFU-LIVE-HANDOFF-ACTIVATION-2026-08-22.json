@@ -1,0 +1,115 @@
+{
+  "schema": "confenge-bofu-live-handoff-activation-evidence/1.0",
+  "issue": 230,
+  "date": "2026-08-22",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "REVENUE NOW",
+  "time_to_evidence": "same_operational_run",
+  "leverage": ["revenue", "automation", "trust"],
+  "authorities": {
+    "web_cfg_base_sha": "c5fa76277036de81e391ba469985b8923182e746",
+    "web_cfg_final_sha": "2e9aa14a1d26ff09c689ae861adab59bad6be91f",
+    "netlify_production_deploy_sha": "2e9aa14a1d26ff09c689ae861adab59bad6be91f",
+    "netlify_production_deploy_id": "6a8a5d719be4360008444a04",
+    "warmbly_main_sha": "bb02162fcad576c4a3c64edf897037f38ec31bf2",
+    "warmbly_deployed_host_sha": "f2b25ba2637f7bc835a095689c2d32bd979f6cb4"
+  },
+  "production_proof": {
+    "github_actions_run": 32613457209,
+    "ops_health_http": 200,
+    "inbound_handoff_http": 200,
+    "audit_inbound_requeue_http": 200,
+    "requeue_inbound_dry_run_http": 200,
+    "commercial_funnel_http": 200
+  },
+  "netlify": {
+    "webhook_url": "UNSET",
+    "webhook_secret": "UNSET",
+    "contract": "UNSET",
+    "reason": "not_configured"
+  },
+  "warmbly": {
+    "secret": "SET",
+    "auto_send": false,
+    "auto_send_proof": "PROVEN",
+    "health_status": "READY",
+    "dispatch_attempted": false
+  },
+  "outbox_counters": {
+    "persisted": 124,
+    "delivered": 0,
+    "skipped": 124,
+    "pending": 0,
+    "retryable": 0,
+    "blocked": 0,
+    "dead": 0
+  },
+  "skipped_audit": {
+    "total": 124,
+    "by_status": {"SKIPPED": 22, "MISSING": 102},
+    "by_reason": {"non_real": 21, "not_configured": 1, "MISSING": 102},
+    "by_record_kind": {"synthetic": 66, "qa": 11, "real": 2, "MISSING": 45},
+    "by_consent_state": {"EXPLICIT_TRUE": 124},
+    "by_created_at_window": {"2026-08": 124},
+    "exclusive_classification": {
+      "DNC_OR_SUPPRESSED": 77,
+      "OTHER_BLOCKER": 46,
+      "ELIGIBLE_REAL_NOT_CONFIGURED": 1,
+      "MANUAL_REVIEW_LEGACY": 0,
+      "NEVER_REQUEUE_NON_REAL": 0,
+      "ALREADY_DELIVERED": 0
+    }
+  },
+  "requeue_dry_run": {
+    "mode": "eligible_only",
+    "dry_run": true,
+    "eligible_count": 1,
+    "never_requeue_count": 0,
+    "manual_review_count": 0,
+    "reason_counts": {
+      "dnc_or_suppressed": 77,
+      "not_skipped": 46,
+      "eligible_real_not_configured": 1
+    }
+  },
+  "replay": {
+    "eligible": 1,
+    "attempted": 0,
+    "delivered": 0,
+    "duplicates": 0,
+    "retryable": 0,
+    "blocked": 0,
+    "dead": 0,
+    "manual_review": 0,
+    "never_requeue": 0
+  },
+  "first_real_loop": {
+    "lead_persisted": false,
+    "warmbly_receipt": false,
+    "warmbly_action": false,
+    "commercial_event": false,
+    "qualified_pipeline": "UNKNOWN"
+  },
+  "blocker": {
+    "state": "BLOCKED_EXTERNAL_ACTION",
+    "authority": "Netlify production administrator",
+    "required_action": "Set exact inbound URL and allowed host, then copy the existing Warmbly HMAC into the homonymous Netlify production secret without exposing or rotating it."
+  },
+  "flags": {
+    "BOFU_CODE_READY": true,
+    "BOFU_TRANSPORT_CONFIG_READY": false,
+    "BOFU_SKIPPED_AUDITED": true,
+    "BOFU_SAFE_REQUEUE_READY": true,
+    "BOFU_HISTORICAL_REAL_REPLAY_PROVEN": false,
+    "BOFU_PRODUCTION_HANDOFF_READY": false,
+    "BOFU_REAL_LOOP_PROVEN": false,
+    "BOFU_REVENUE_CONVERGENCE_READY": false,
+    "READY_FOR_FIRST_REAL_CONTACT": false
+  },
+  "answers": {
+    "configured_for_next_real_consented_lead": "NO",
+    "real_lead_full_loop_proven": "NO"
+  },
+  "pii_in_evidence": false,
+  "secret_values_in_evidence": false
+}
