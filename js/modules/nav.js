@@ -399,39 +399,73 @@
       if (style) style.scrollBehavior = previous;
     };
     let anchorRun = 0;
-    const settleAnchor = (target, onArrive) => {
+    let cancelActiveAnchor = null;
+    const beginAnchorLifecycle = () => {
+      // A new fragment navigation supersedes every phase of the previous one,
+      // including the native smooth-scroll phase before correction begins.
+      if (typeof cancelActiveAnchor === 'function') cancelActiveAnchor();
+      const run = (anchorRun += 1);
+      const inputs = ['wheel', 'touchstart', 'keydown'];
+      let cleaned = false;
+      let cancel = null;
+      const cleanup = () => {
+        if (cleaned) return;
+        cleaned = true;
+        inputs.forEach((type) => window.removeEventListener(type, cancel));
+        if (cancelActiveAnchor === cancel) cancelActiveAnchor = null;
+      };
+      cancel = () => {
+        if (run !== anchorRun) { cleanup(); return; }
+        anchorRun += 1;
+        // Stop a native smooth scroll at its current position. The default
+        // wheel/key/touch action then continues from there and wins.
+        jumpTo(window.scrollY);
+        cleanup();
+      };
+      inputs.forEach((type) => window.addEventListener(type, cancel, { passive: true }));
+      cancelActiveAnchor = cancel;
+      return {
+        active: () => run === anchorRun,
+        cleanup,
+        complete: (onComplete) => {
+          if (run !== anchorRun) { cleanup(); return false; }
+          anchorRun += 1;
+          cleanup();
+          if (typeof onComplete === 'function') onComplete();
+          return true;
+        },
+      };
+    };
+    const settleAnchor = (target, onArrive, lifecycle) => {
+      const cycle = lifecycle || beginAnchorLifecycle();
       if (!measurable(target)) {
-        if (typeof onArrive === 'function') onArrive();
+        cycle.complete(onArrive);
         return;
       }
-      const run = (anchorRun += 1);
       const startedAt = Date.now();
       let stable = 0;
-      const cancel = () => { if (run === anchorRun) anchorRun += 1; };
-      const inputs = ['wheel', 'touchstart', 'keydown'];
-      inputs.forEach((type) => window.addEventListener(type, cancel, { passive: true }));
       const finish = (arrived) => {
-        inputs.forEach((type) => window.removeEventListener(type, cancel));
-        if (arrived && typeof onArrive === 'function') onArrive();
+        cycle.complete(arrived ? onArrive : null);
       };
       const step = () => {
-        if (run !== anchorRun) { finish(false); return; }
+        if (!cycle.active()) { cycle.cleanup(); return; }
         const y = anchorTargetY(target);
         if (Math.abs(window.scrollY - y) > 2) { jumpTo(y); stable = 0; } else stable += 1;
-        if (stable >= 4) { anchorRun += 1; finish(true); return; }
-        if (Date.now() - startedAt > 2500) { anchorRun += 1; finish(false); return; }
+        if (stable >= 4) { finish(true); return; }
+        if (Date.now() - startedAt > 2500) { finish(false); return; }
         window.requestAnimationFrame(step);
       };
       window.requestAnimationFrame(step);
     };
-    const afterScrollSettles = (fn) => {
+    const afterScrollSettles = (lifecycle, fn) => {
       const startedAt = Date.now();
       let last = window.scrollY;
       let still = 0;
       const watch = () => {
+        if (!lifecycle.active()) { lifecycle.cleanup(); return; }
         if (window.scrollY === last) still += 1;
         else { still = 0; last = window.scrollY; }
-        if (still >= 3 || Date.now() - startedAt > 1500) { fn(); return; }
+        if (still >= 3 || Date.now() - startedAt > 1500) { fn(lifecycle); return; }
         window.requestAnimationFrame(watch);
       };
       window.requestAnimationFrame(watch);
@@ -477,13 +511,13 @@
         arrive();
         return;
       }
+      const lifecycle = beginAnchorLifecycle();
       if (smooth && !reducedMotion()) {
-        anchorRun += 1;
         window.scrollTo({ top: anchorTargetY(target), left: 0, behavior: 'smooth' });
-        afterScrollSettles(() => settleAnchor(target, arrive));
+        afterScrollSettles(lifecycle, (cycle) => settleAnchor(target, arrive, cycle));
         return;
       }
-      settleAnchor(target, arrive);
+      settleAnchor(target, arrive, lifecycle);
     };
     const anchorFromHash = (hash) => {
       const raw = String(hash || '').replace(/^#/, '');
@@ -516,6 +550,7 @@
       goToAnchor(target, true);
     });
     window.addEventListener('popstate', () => {
+      if (typeof cancelActiveAnchor === 'function') cancelActiveAnchor();
       const target = anchorFromHash(window.location.hash);
       if (target) goToAnchor(target, false);
     });

@@ -579,6 +579,138 @@ async function main() {
     fail("cta_reveals_form_fields", e.message || e);
   }
 
+  // 13c) Manual input owns the scroll from the first smooth-scroll frame.
+  // A wheel action before the correction phase must not be followed by a
+  // delayed snap back to the form.
+  try {
+    await page.setViewport({ width: 390, height: 844, isMobile: false, hasTouch: false });
+    await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.click('.hero a[href="#formulario-contato"]');
+    await new Promise((r) => setTimeout(r, 50));
+    await page.mouse.move(195, 422);
+    await page.mouse.wheel({ deltaY: -1200 });
+    await new Promise((r) => setTimeout(r, 100));
+    const manualY = await page.evaluate(() => window.scrollY);
+    await new Promise((r) => setTimeout(r, 1800));
+    const afterManual = await page.evaluate(() => {
+      const form = document.querySelector("#formulario-contato");
+      const title = document.querySelector(".contact-form-title");
+      const offset = Math.max(
+        parseFloat(getComputedStyle(form).scrollMarginTop) || 0,
+        parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+      );
+      return {
+        y: window.scrollY,
+        targetY: Math.round(form.getBoundingClientRect().top + window.scrollY - offset),
+        titleTop: Math.round(title.getBoundingClientRect().top),
+        viewport: window.innerHeight,
+      };
+    });
+    if (Math.abs(afterManual.y - manualY) > 30) {
+      throw new Error(`manual scroll was reclaimed: ${manualY} -> ${afterManual.y}`);
+    }
+    if (afterManual.y >= afterManual.targetY - afterManual.viewport) {
+      throw new Error(`manual cancellation still landed near form: ${JSON.stringify(afterManual)}`);
+    }
+    ok("anchor_manual_input_wins_during_smooth_phase");
+  } catch (e) {
+    fail("anchor_manual_input_wins_during_smooth_phase", e.message || e);
+  }
+
+  // 13d) The latest of two competing fragment navigations owns the lifecycle.
+  // An older form navigation must neither reclaim the viewport nor emit its
+  // arrival event after the visitor chooses another anchor.
+  try {
+    await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+    await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+    await page.evaluate(async () => {
+      window.dataLayer = [];
+      window.scrollTo(0, 0);
+      document.querySelector('.hero a[href="#formulario-contato"]').click();
+      await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
+      document.querySelector('.hero a[href="#jornadas"]').click();
+    });
+    await new Promise((r) => setTimeout(r, 2600));
+    const competing = await page.evaluate(() => {
+      const target = document.querySelector("#jornadas");
+      const title = document.querySelector("#journeys-title");
+      const header = document.querySelector(".site-header");
+      const targetOffset = Math.max(
+        parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
+        parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+      );
+      const targetY = Math.round(target.getBoundingClientRect().top + window.scrollY - targetOffset);
+      return {
+        hash: window.location.hash,
+        y: Math.round(window.scrollY),
+        targetY,
+        titleTop: Math.round(title.getBoundingClientRect().top),
+        titleBottom: Math.round(title.getBoundingClientRect().bottom),
+        headerBottom: header ? Math.round(header.getBoundingClientRect().bottom) : 0,
+        viewport: window.innerHeight,
+        staleFormArrival: (window.dataLayer || []).some(
+          (event) => event.event === "cta_view" && event.cta_id === "formulario-contato"
+        ),
+      };
+    });
+    if (competing.hash !== "#jornadas") {
+      throw new Error(`latest fragment lost: ${JSON.stringify(competing)}`);
+    }
+    if (Math.abs(competing.y - competing.targetY) > 3) {
+      throw new Error(`latest anchor did not own final position: ${JSON.stringify(competing)}`);
+    }
+    if (competing.titleTop < competing.headerBottom - 1 || competing.titleBottom > competing.viewport) {
+      throw new Error(`latest anchor title not visible: ${JSON.stringify(competing)}`);
+    }
+    if (competing.staleFormArrival) throw new Error("superseded form anchor emitted cta_view");
+    ok("latest_anchor_wins_competing_navigation");
+  } catch (e) {
+    fail("latest_anchor_wins_competing_navigation", e.message || e);
+  }
+
+  // 13e) Back to the no-fragment history entry also cancels an in-flight run.
+  try {
+    await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+    await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+    await page.evaluate(() => {
+      window.dataLayer = [];
+      window.scrollTo(0, 0);
+    });
+    await page.click('.hero a[href="#formulario-contato"]');
+    await page.waitForFunction(() => window.location.hash === "#formulario-contato");
+    await page.evaluate(() => window.history.back());
+    await page.waitForFunction(() => window.location.hash === "");
+    await new Promise((r) => setTimeout(r, 1800));
+    const backed = await page.evaluate(() => {
+      const form = document.querySelector("#formulario-contato");
+      const title = document.querySelector(".contact-form-title");
+      const offset = Math.max(
+        parseFloat(getComputedStyle(form).scrollMarginTop) || 0,
+        parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+      );
+      const targetY = Math.round(form.getBoundingClientRect().top + window.scrollY - offset);
+      const titleBox = title.getBoundingClientRect();
+      return {
+        hash: window.location.hash,
+        y: Math.round(window.scrollY),
+        targetY,
+        titleVisible: titleBox.top < window.innerHeight && titleBox.bottom > 0,
+        staleFormArrival: (window.dataLayer || []).some(
+          (event) => event.event === "cta_view" && event.cta_id === "formulario-contato"
+        ),
+      };
+    });
+    if (backed.hash !== "") throw new Error(`Back did not restore empty fragment: ${backed.hash}`);
+    if (backed.titleVisible || backed.y >= backed.targetY - 844) {
+      throw new Error(`superseded anchor reclaimed Back position: ${JSON.stringify(backed)}`);
+    }
+    if (backed.staleFormArrival) throw new Error("anchor cancelled by Back emitted cta_view");
+    ok("back_cancels_inflight_anchor_navigation");
+  } catch (e) {
+    fail("back_cancels_inflight_anchor_navigation", e.message || e);
+  }
+
   // 14) consecutive section composition variety (archetypes)
   try {
     const html = readFileSync(join(ROOT, "index.html"), "utf8");
