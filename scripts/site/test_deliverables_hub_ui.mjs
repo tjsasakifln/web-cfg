@@ -1,0 +1,171 @@
+/** Rendered quality gate for /entregas/, its home preview and legacy nav upgrade. */
+import fs from "fs";
+import path from "path";
+import { createServer } from "http";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import puppeteer from "puppeteer-core";
+import { resolveChromePath } from "./resolve_chrome.mjs";
+
+const require = createRequire(import.meta.url);
+const axeSource = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
+const root = path.resolve(fileURLToPath(new URL("../..", import.meta.url)));
+const externalBase = process.argv[2];
+const port = 8795;
+const widths = [320, 390, 768, 1024, 1440];
+const screenshotDir = String(process.env.DELIVERABLES_SCREENSHOT_DIR || "").trim();
+const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
+
+function startStaticServer() {
+  const mime = {
+    ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
+    ".js": "application/javascript", ".png": "image/png", ".jpg": "image/jpeg",
+    ".svg": "image/svg+xml", ".json": "application/json", ".webmanifest": "application/manifest+json",
+  };
+  const server = createServer((request, response) => {
+    let urlPath = decodeURIComponent((request.url || "/").split("?")[0]);
+    if (urlPath.endsWith("/")) urlPath += "index.html";
+    const file = path.join(root, urlPath);
+    if (!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+      response.writeHead(404); response.end("not found"); return;
+    }
+    response.writeHead(200, { "Content-Type": mime[path.extname(file)] || "application/octet-stream" });
+    response.end(fs.readFileSync(file));
+  });
+  return new Promise((resolve) => server.listen(port, "127.0.0.1", () => resolve(server)));
+}
+
+const server = externalBase ? null : await startStaticServer();
+const base = externalBase || `http://127.0.0.1:${port}`;
+let browser;
+try {
+  browser = await puppeteer.launch({
+    executablePath: resolveChromePath(), headless: true,
+    args: ["--no-sandbox", "--disable-gpu", "--font-render-hinting=none"],
+  });
+} catch (error) {
+  console.log("DELIVERABLES_UI_UNAVAILABLE", String(error?.message || error).slice(0, 240));
+  if (server) server.close();
+  process.exit(required ? 2 : 0);
+}
+
+const findings = [];
+let failed = 0;
+const page = await browser.newPage();
+
+for (const width of widths) {
+  const height = width <= 390 ? 844 : width === 768 ? 1024 : 900;
+  await page.setViewport({ width, height, deviceScaleFactor: 1 });
+  const response = await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+  const metrics = await page.evaluate(() => {
+    const heroCta = document.querySelector('.deliverables-hero [href="#primeiro-exemplo"]')?.getBoundingClientRect();
+    const firstReport = document.querySelector('[data-cta-id="deliverables-open-report"]')?.getBoundingClientRect();
+    const desktopDeliverables = document.querySelector('.desktop-nav a[href="/entregas/"]');
+    return {
+      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      h1Count: document.querySelectorAll("h1").length,
+      h1Text: document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim() || "",
+      heroCtaVisible: Boolean(heroCta && heroCta.width > 0 && heroCta.height >= 44),
+      heroCtaBottom: heroCta?.bottom || null,
+      firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
+      examples: document.querySelectorAll(".deliverable-feature").length,
+      navDeliverables: desktopDeliverables?.textContent?.trim() || "",
+      navCurrent: desktopDeliverables?.getAttribute("aria-current") || "",
+      emptyPlaceholders: document.querySelectorAll("[data-placeholder], .placeholder").length,
+      overflowOffenders: [...document.querySelectorAll("body *")]
+        .filter((element) => {
+          const rect = element.getBoundingClientRect();
+          const style = getComputedStyle(element);
+          return style.display !== "none" && style.position !== "fixed" &&
+            (rect.left < -1 || rect.right > window.innerWidth + 1);
+        })
+        .slice(0, 8)
+        .map((element) => ({
+          tag: element.tagName, className: String(element.className || "").slice(0, 100),
+          left: Math.round(element.getBoundingClientRect().left),
+          right: Math.round(element.getBoundingClientRect().right),
+        })),
+    };
+  });
+  const errors = [];
+  if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
+  if (metrics.overflow) errors.push("document_overflow");
+  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("antes de contratar")) errors.push("hero_clarity");
+  if (!metrics.heroCtaVisible || (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
+  if (!metrics.firstReportVisible || metrics.examples !== 1) errors.push("single_example");
+  if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
+  if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
+
+  if (width <= 900) {
+    await page.click(".menu-toggle");
+    const mobile = await page.evaluate(() => {
+      const menu = document.querySelector(".mobile-nav");
+      const link = menu?.querySelector('a[href="/entregas/"]');
+      return {
+        expanded: document.querySelector(".menu-toggle")?.getAttribute("aria-expanded"),
+        linkVisible: Boolean(link && link.getBoundingClientRect().height >= 44),
+        linkText: link?.textContent?.trim() || "",
+      };
+    });
+    if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Entregas") {
+      errors.push("mobile_nav");
+    }
+    await page.click(".menu-toggle");
+  }
+  if (screenshotDir) {
+    fs.mkdirSync(screenshotDir, { recursive: true });
+    await page.mouse.move(1, 1);
+    await page.screenshot({ path: path.join(screenshotDir, `deliverables-${width}.png`), fullPage: width === 1440 });
+  }
+  findings.push({ route: "/entregas/", width, height, ...metrics, errors });
+  if (errors.length) failed += 1;
+}
+
+for (const route of ["/", "/ferramentas/"]) {
+  await page.setViewport({ width: 1024, height: 900, deviceScaleFactor: 1 });
+  const response = await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
+  const metrics = await page.evaluate((currentRoute) => {
+    const nav = [...document.querySelectorAll(".desktop-nav a")].map((a) => ({
+      text: a.textContent?.trim(), href: a.getAttribute("href"),
+    }));
+    const preview = document.querySelector(".home-deliverables")?.getBoundingClientRect();
+    return {
+      route: currentRoute,
+      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      nav,
+      previewVisible: currentRoute === "/" ? Boolean(preview && preview.height > 0) : null,
+      sections: currentRoute === "/" ? document.querySelectorAll("main > section").length : null,
+    };
+  }, route);
+  const errors = [];
+  if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
+  if (metrics.overflow) errors.push("document_overflow");
+  if (metrics.nav.filter(({ href }) => href === "/entregas/").length !== 1) errors.push("deliverables_nav_missing");
+  if (metrics.nav.some(({ text }) => text === "Ferramentas")) errors.push("legacy_top_nav_visible");
+  if (route === "/" && (!metrics.previewVisible || metrics.sections > 7)) errors.push("home_preview_contract");
+  if (route === "/" && screenshotDir) {
+    const preview = await page.$(".home-deliverables");
+    if (preview) await preview.screenshot({ path: path.join(screenshotDir, "home-deliverables.png") });
+  }
+  findings.push({ ...metrics, errors });
+  if (errors.length) failed += 1;
+}
+
+await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+await page.addScriptTag({ content: axeSource });
+const axe = await page.evaluate(async () => {
+  const result = await window.axe.run(document, {
+    runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"] },
+  });
+  return result.violations.map(({ id, impact, nodes }) => ({
+    id, impact, nodes: nodes.map(({ target, html, failureSummary }) => ({ target, html, failureSummary })),
+  }));
+});
+const hardAxe = axe.filter(({ impact }) => impact === "critical" || impact === "serious");
+if (hardAxe.length) failed += 1;
+
+await browser.close();
+if (server) server.close();
+console.log("DELIVERABLES_HUB_UI", JSON.stringify({ ok: failed === 0, findings, axe, hardAxe }));
+if (failed) process.exit(1);
