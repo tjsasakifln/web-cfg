@@ -786,6 +786,62 @@ def test_organic_tool_block_never_glued_to_hero():
     assert at < out.index("</main>"), "block escaped <main"
 
 
+def test_organic_tool_block_skips_page_without_safe_section():
+    """No closed content section means there is no proven-safe insertion point."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    no_section = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<p id="resposta">Resposta sem section.</p></main>'
+    )
+    unclosed_section = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><p>Resposta incompleta.</p></main>'
+    )
+    unclosed_main = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><p>Resposta fora de uma main verificável.</p></section>'
+    )
+    assert _insert_after_page_hero(no_section, block) == no_section
+    assert _insert_after_page_hero(unclosed_section, block) == unclosed_section
+    assert _insert_after_page_hero(unclosed_main, block) == unclosed_main
+
+
+def test_organic_tool_block_matches_section_case_insensitively():
+    """HTML tag case must not send a valid content section down the unsafe fallback."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    page = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<SeCtIoN id="resposta"><p>Resposta direta.</p></sEcTiOn>'
+        '<section id="depois"></section></main>'
+    )
+    out = _insert_after_page_hero(page, block)
+    assert block in out
+    assert out.index(block) > out.index("</sEcTiOn>")
+    assert out.index(block) < out.index('<section id="depois">')
+
+
+def test_organic_tool_block_waits_for_outer_section_close():
+    """A nested section must not be mistaken for the end of the direct answer."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    page = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><section id="apoio"><p>Apoio.</p></section>'
+        '<p id="fim-resposta">Resposta completa.</p></section>'
+        '<section id="depois"></section></main>'
+    )
+    out = _insert_after_page_hero(page, block)
+    assert block in out
+    assert out.index(block) > out.index('<p id="fim-resposta">')
+    assert out.index(block) > out.index('<p id="fim-resposta">Resposta completa.</p></section>')
+    assert out.index(block) < out.index('<section id="depois">')
+
+
 def test_home_form_anchor_reveals_fields():
     """Hero/primary 'Analisar meu caso' must land on the form, not the long contact copy."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
