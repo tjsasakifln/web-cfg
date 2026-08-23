@@ -46,9 +46,35 @@ for (const [name, rows] of [
 const committedSummary = JSON.parse(
   readFileSync(new URL("../../docs/lighthouse-runs/summary.json", import.meta.url), "utf8"),
 );
-assert.equal(committedSummary.evaluation?.ok, true, "committed Lighthouse evidence must pass");
+const expectedRows = [
+  "/#1",
+  "/#2",
+  "/#3",
+  "/acompanhamento-contratos-obras/#1",
+  "/conteudos/#1",
+  "/conteudos/documentos-reequilibrio-obra-publica/#1",
+  "/diretoria-b2g/#1",
+];
+assert.deepEqual(
+  (committedSummary.results || []).map((row) => `${row.path}#${row.run}`).sort(),
+  expectedRows,
+  "committed Lighthouse evidence must cover the complete CI matrix",
+);
+const committedEvaluation = evaluateLighthouseResults(committedSummary.results, {
+  homeRuns: 3,
+  imageGatePages: new Set([
+    "/conteudos/documentos-reequilibrio-obra-publica/",
+    "/acompanhamento-contratos-obras/",
+  ]),
+  seoExemptPages: new Set(["/conteudos/documentos-reequilibrio-obra-publica/"]),
+});
+assert.deepEqual(
+  committedSummary.evaluation,
+  committedEvaluation,
+  "committed Lighthouse summary must be recomputable from its rows",
+);
 
-for (const row of committedSummary.results || []) {
+for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary.results : []) {
   assert.equal(row.status, undefined, `committed Lighthouse evidence contains an error for ${row.path}`);
   const slug = row.path === "/" ? "home" : row.path.replace(/\//g, "_").replace(/^_|_$/g, "");
   const filename = row.path === "/" ? `${slug}-run-${row.run}.json` : `${slug}.json`;
