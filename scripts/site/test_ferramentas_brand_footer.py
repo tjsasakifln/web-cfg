@@ -12,10 +12,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 MARKERS = (
     "footer-top",
-    "logo-confenge-white.png",
+    "logo-confenge-white-500-1677038e.png",
     "52.407.089/0001-09",
     'class="brand"',
-    "logo-confenge.png",
+    "logo-confenge-500-f8a83f6d.png",
     "desktop-nav",
 )
 

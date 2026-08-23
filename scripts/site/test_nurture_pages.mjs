@@ -64,9 +64,9 @@ for (const rel of shellPages) {
   const html = readFileSync(resolve(ROOT, rel), "utf8");
   const checks = [
     ['class="brand"', "brand_logo_class"],
-    ["logo-confenge.png", "header_logo_asset"],
+    ["logo-confenge-500-f8a83f6d.png", "header_logo_asset"],
     ["footer-top", "footer_top"],
-    ["logo-confenge-white.png", "footer_logo_asset"],
+    ["logo-confenge-white-500-1677038e.png", "footer_logo_asset"],
     ["52.407.089/0001-09", "cnpj"],
     ["desktop-nav", "desktop_nav"],
   ];

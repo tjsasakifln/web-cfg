@@ -275,7 +275,7 @@ def render_html(
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="site-header" id="inicio">
 <div class="container header-inner">
-<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
 <a href="/#ofertas">Serviços</a>
 <a href="/inteligencia/">Inteligência</a>
