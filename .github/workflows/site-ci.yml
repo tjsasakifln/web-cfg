@@ -102,7 +102,9 @@ jobs:
       - name: Lighthouse local (_site)
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          LH_PAGES: "/,/diretoria-b2g/,/conteudos/"
+          LH_PAGES: "/,/diretoria-b2g/,/conteudos/,/conteudos/documentos-reequilibrio-obra-publica/,/acompanhamento-contratos-obras/"
+          LH_IMAGE_GATE_PAGES: "/conteudos/documentos-reequilibrio-obra-publica/,/acompanhamento-contratos-obras/"
+          LH_SEO_EXEMPT_PAGES: "/conteudos/documentos-reequilibrio-obra-publica/" # intentional noindex,follow
         run: npm run test:lighthouse
         continue-on-error: false
       - name: Tools UI/UX E2E

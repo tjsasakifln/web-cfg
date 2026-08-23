@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 CODEQL = ROOT / ".github" / "workflows" / "codeql.yml"
+LIGHTHOUSE_RUNNER = ROOT / "scripts" / "site" / "run_lighthouse.mjs"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -229,6 +230,29 @@ def test_pseo_still_requires_full_npm_test():
         raise AssertionError("pseo.yml must not soften or replace npm test with test:affected")
 
 
+def test_lighthouse_covers_article_cover_regression_routes():
+    """The image acceptance gate must exercise the article and pillar changed by #253."""
+    workflow = _read(SITE_CI)
+    runner = _read(LIGHTHOUSE_RUNNER)
+    routes = (
+        "/conteudos/documentos-reequilibrio-obra-publica/",
+        "/acompanhamento-contratos-obras/",
+    )
+    for route in routes:
+        if route not in workflow:
+            raise AssertionError(f"site-ci Lighthouse sample missing {route}")
+    for needle in (
+        "LH_IMAGE_GATE_PAGES",
+        "LH_SEO_EXEMPT_PAGES",
+        'audits["image-aspect-ratio"]?.score',
+        'audits["image-size-responsive"]?.score',
+        "IMAGE_GATE_PAGES.has(r.path)",
+        "!SEO_EXEMPT_PAGES.has(r.path) && r.seo < 95",
+    ):
+        if needle not in runner:
+            raise AssertionError(f"Lighthouse image regression gate missing {needle}")
+
+
 def test_codeql_soft_fail_is_explicit():
     """CodeQL may soft-fail only while code scanning is org-disabled — must stay honest."""
     text = _read(CODEQL)
@@ -277,6 +301,7 @@ def main() -> int:
         test_pseo_shape,
         test_merge_workflows_have_no_path_skip,
         test_pseo_still_requires_full_npm_test,
+        test_lighthouse_covers_article_cover_regression_routes,
         test_codeql_soft_fail_is_explicit,
         test_copy_ci_is_check_not_write,
         test_deliberate_force_fail_env,
