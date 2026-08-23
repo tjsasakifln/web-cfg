@@ -32,7 +32,7 @@ Tests: `python3 -m pytest tests/local_entity -q`
 
 Every identity claim is `VERIFIED` | `SELF_DECLARED` | `UNKNOWN` | `NOT_PUBLIC`.
 
-`data/site/proof.json` `VERIFIED` + `perfil-publico-especialista` is circular self-attestation. This campaign remaps those records to `SELF_DECLARED`. Campaign `VERIFIED` is reserved for independent third-party evidence committed in-repo. None is present for street address, CREA or ratings. The allowlisted founder GitHub `sameAs` is also `SELF_DECLARED`; it is an identity link, not independent credential proof.
+`data/site/proof.json` `VERIFIED` + `perfil-publico-especialista` is circular self-attestation. This campaign remaps those records to `SELF_DECLARED`. Campaign `VERIFIED` is reserved for independent third-party evidence committed in-repo. None is present for street address, CREA, ratings or `sameAs` profiles.
 
 Public phone, email and CNPJ already on `/especialista/tiago-jun-sasaki/` are existing public contact, not a new PII leak.
 
@@ -46,12 +46,22 @@ Current overlay is `LIVE_JOB_OK` with `core_ready_for_product_decisions=false`. 
 
 ## Data owner / contract
 
-Identity and provenance remain extra-cli contracts plus owned public copy. This package classifies what the specialist and canonical-home JSON-LD plus `proof.json` already publish. It does not create a second identity model, a crawler or a DataLake.
+Identity and provenance remain extra-cli contracts plus owned public copy. This package classifies what the specialist JSON-LD and `proof.json` already publish. It does not create a second identity model, a crawler or a DataLake.
+
+The canonical home is a **read-only audited input** to this package. Publishing a new
+identity fact there (including `PostalAddress`, `sameAs`, CREA/ART or a responsible-professional
+claim) is deferred until `extra-cli` supplies a versioned SELECT-only identity projection with
+provenance and freshness. The campaign deliberately does not hardcode an allowlist or copy those
+facts into a second identity model.
 
 ## Analytics / rollback
 
-No new public analytics events. Rollback is revert of this exclusive tree (`scripts/local_entity/**`, `data/local-entity/**`, `docs/seo/local-entity/**`, `tests/local_entity/**`). Shared schema builders, homepage, service pages, CSS/JS and sitemaps are untouched.
+No new public analytics events. Rollback is revert of the gate changes. The homepage is consumed
+but remains outside the campaign's exclusive write paths; service pages, CSS/JS and sitemaps are
+untouched.
 
 ## Quality gate
 
-`python3 -m pytest tests/local_entity -q` fail-closed on invented NAP/review/credential, PII in committed artifacts, collapsed map-pack/organic, live-GSC-as-zero, forbidden-tree edits and a new landing.
+`python3 -m pytest tests/local_entity -q` audits every JSON-LD node on both the specialist page and
+canonical home, and fails closed on invented NAP/review/credential, PII in committed artifacts,
+collapsed map-pack/organic, live-GSC-as-zero, forbidden-tree edits and a new landing.

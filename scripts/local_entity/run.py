@@ -1,4 +1,4 @@
-"""Campaign entry: audit + census + decision over in-repo specialist HTML and proof."""
+"""Campaign entry: audit public identity surfaces, then classify the specialist graph."""
 
 from __future__ import annotations
 
@@ -18,13 +18,12 @@ from scripts.local_entity.constants import (
     SPECIALIST_RELPATH,
 )
 from scripts.local_entity.decision import decide_surface
-from scripts.local_entity.graph import extract_entity_graph, merge_home_identity_graph
+from scripts.local_entity.graph import extract_entity_graph
 from scripts.local_entity.pack import citation_targets, gbp_checklist
 from scripts.local_entity.persist import write_bundle
 from scripts.local_entity.validate import (
     audit_graph_honesty,
     require_clean,
-    validate_home_identity_contract,
     validate_bundle,
 )
 
@@ -106,9 +105,9 @@ def run_campaign(
     home_graph = extract_entity_graph(canonical_home)
     honesty = audit_graph_honesty(graph, html)
     require_clean(honesty, "honesty")
-    require_clean(validate_home_identity_contract(home_graph, canonical_home), "home_identity")
-    public_graph = merge_home_identity_graph(graph, home_graph)
-    classified = classify_graph(public_graph, proof=proof_doc, brand=brand_doc)
+    home_honesty = audit_graph_honesty(home_graph, canonical_home)
+    require_clean(home_honesty, "home_honesty")
+    classified = classify_graph(graph, proof=proof_doc, brand=brand_doc)
     baseline = load_search_baseline(root)
     census = build_census(rows=census_rows, gsc_live=gsc_live, search_baseline=baseline)
     decision = decide_surface(classified=classified, graph=graph, honesty_errors=honesty)
@@ -117,6 +116,9 @@ def run_campaign(
     bundle = {
         "graph": graph,
         "html": html,
+        "additional_public_surfaces": [
+            {"id": "home", "graph": home_graph, "html": canonical_home}
+        ],
         "classified": classified,
         "census": census,
         "decision": decision,
@@ -129,9 +131,9 @@ def run_campaign(
         "campaign": CAMPAIGN,
         "as_of": CAMPAIGN_AS_OF,
         "decision_state": DECISION_STATE,
-        "organization": public_graph.get("organization"),
-        "person": public_graph.get("person"),
-        "raw_types": public_graph.get("raw_types"),
+        "organization": graph.get("organization"),
+        "person": graph.get("person"),
+        "raw_types": graph.get("raw_types"),
         "canonical_ids": classified.get("canonical_ids"),
         "proof_limitation": classified.get("proof_limitation"),
         "claims": classified.get("claims"),
@@ -156,10 +158,7 @@ def run_campaign(
             "without city-page farming or invented NAP."
         ),
         "data_owner": "web-cfg local-entity campaign; identity facts remain extra-cli / owned public copy",
-        "live_gsc": (
-            "LIVE_JOB_OK overlay (run 32322344062); "
-            "core_ready_for_product_decisions=false; absence is not zero"
-        ),
+        "live_gsc": "BLOCKED LIVE_JOB_OK (PR #159)",
         "new_public_landing_created": False,
         "surface_decision": decision["decision"],
     }
@@ -178,7 +177,7 @@ def run_campaign(
     observables = primary_observables(bundle)
     return {
         "graph": graph,
-        "public_graph": public_graph,
+        "home_graph": home_graph,
         "classified": classified,
         "census": census,
         "decision": decision,

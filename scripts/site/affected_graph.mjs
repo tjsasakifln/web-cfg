@@ -162,9 +162,9 @@ export const SUITE_GRAPH = Object.freeze({
     ],
   },
   "test:local-entity": {
-    producers: ["tests/local_entity/", "scripts/local_entity/", "data/local-entity/"],
+    producers: ["tests/local_entity/", "scripts/local_entity/", "data/local-entity/", "index.html"],
     artifacts: ["docs/seo/local-entity/"],
-    surfaces: ["/especialista/tiago-jun-sasaki/"],
+    surfaces: ["/", "/especialista/tiago-jun-sasaki/"],
   },
   "test:sitemap-graph": {
     producers: [

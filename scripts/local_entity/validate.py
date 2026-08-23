@@ -10,10 +10,8 @@ from scripts.site.authority import INVENTED_CREDENTIAL_PATTERNS
 
 from scripts.local_entity.census import validate_census, validate_gsc_live
 from scripts.local_entity.constants import (
-    ALLOWED_PUBLIC_ADDRESS_COUNTRIES,
     ALLOWED_PUBLIC_CNPJ,
     ALLOWED_PUBLIC_EMAILS,
-    ALLOWED_PUBLIC_SAME_AS,
     ALLOWED_WRITE_PREFIXES,
     CLAIM_STATUSES,
     FORBIDDEN_LOCAL_TYPES,
@@ -100,42 +98,6 @@ def audit_graph_honesty(graph: dict[str, Any], html: str = "") -> list[str]:
 
 def audit_html_honesty(html: str) -> list[str]:
     return audit_graph_honesty(extract_entity_graph(html), html)
-
-
-def validate_home_identity_contract(graph: dict[str, Any], html: str) -> list[str]:
-    """Allow only the narrow, self-declared home identity overlay from #243."""
-    errors: list[str] = []
-    org = graph.get("organization") or {}
-    person = graph.get("person") or {}
-    address = org.get("address")
-    if not isinstance(address, dict):
-        errors.append("home_address_absent")
-    else:
-        if address.get("@type") != "PostalAddress":
-            errors.append("home_address_type")
-        if address.get("addressCountry") not in ALLOWED_PUBLIC_ADDRESS_COUNTRIES:
-            errors.append("home_address_country")
-        extras = set(address) - {"@type", "addressCountry"}
-        if extras:
-            errors.append("home_address_extra_fields:" + ",".join(sorted(extras)))
-    same_as = person.get("sameAs")
-    same_urls = [same_as] if isinstance(same_as, str) else same_as
-    if not isinstance(same_urls, list) or not same_urls:
-        errors.append("home_person_sameAs_absent")
-    elif any(not isinstance(url, str) for url in same_urls):
-        errors.append("home_person_sameAs_invalid")
-    elif not set(same_urls) <= ALLOWED_PUBLIC_SAME_AS:
-        errors.append("home_person_sameAs_unclassified")
-    if org.get("sameAs"):
-        errors.append("home_organization_sameAs_unclassified")
-    if org.get("hasCredential") or person.get("hasCredential"):
-        errors.append("home_credential_unclassified")
-    visible = visible_text(html)
-    if "Responsável técnico:" not in visible:
-        errors.append("home_responsible_professional_absent")
-    if "autodeclarados (self-attested)" not in visible:
-        errors.append("home_self_attested_label_absent")
-    return sorted(set(errors))
 
 
 def classify_status_errors(classified: dict[str, Any]) -> list[str]:
@@ -247,6 +209,17 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
     graph = bundle.get("graph") or {}
     html = bundle.get("html") or ""
     errors.extend(audit_graph_honesty(graph, html))
+    for surface in bundle.get("additional_public_surfaces") or []:
+        if not isinstance(surface, dict):
+            errors.append("public_surface_invalid")
+            continue
+        surface_id = str(surface.get("id") or "unnamed")
+        surface_graph = surface.get("graph") or {}
+        surface_html = surface.get("html") or ""
+        errors.extend(
+            f"public_surface:{surface_id}:{error}"
+            for error in audit_graph_honesty(surface_graph, surface_html)
+        )
     classified = bundle.get("classified") or {}
     errors.extend(classify_status_errors(classified))
     census = bundle.get("census") or {}
