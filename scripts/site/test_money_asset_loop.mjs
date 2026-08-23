@@ -283,8 +283,6 @@ const { _reset } = require(path.join(root, "netlify/functions/lib/lead-rate-limi
 _reset();
 
 const mock = await startMock({ mode: "ok" });
-process.env.CONFENGE_INBOUND_CANARY_ENABLED = "1";
-process.env.CONFENGE_INBOUND_CANARY_ASSET_ID = "diagnostico-defesa-margem";
 process.env.CONFENGE_INBOUND_WEBHOOK_URL = mock.url;
 process.env.CONFENGE_INBOUND_WEBHOOK_SECRET = SECRET;
 process.env.CONFENGE_INBOUND_TIMEOUT_MS = "400";
@@ -469,6 +467,7 @@ const windowObj = {
   sessionStorage: {
     getItem(key) { return sessionValues.has(key) ? sessionValues.get(key) : null; },
     setItem(key, value) { sessionValues.set(key, String(value)); },
+    removeItem(key) { sessionValues.delete(key); },
   },
   IntersectionObserver,
   CONFENGE_DEBUG_ANALYTICS: false,
@@ -546,7 +545,8 @@ for (const fn of docListeners.DOMContentLoaded || []) fn();
 
 const browserIdempotency = form.querySelector('[name="idempotency_key"]')?.value || '';
 if (!/^fe-/.test(browserIdempotency)) fail("browser_idempotency_missing", browserIdempotency);
-if (![...sessionValues.values()].includes(browserIdempotency)) {
+const browserStorageEntry = [...sessionValues.entries()].find(([, value]) => value === browserIdempotency);
+if (!browserStorageEntry) {
   fail("browser_idempotency_not_persisted", [...sessionValues.entries()]);
 }
 
@@ -582,6 +582,9 @@ if (!lastLeadHttp || lastLeadHttp.statusCode !== 201) {
 }
 const created = JSON.parse(lastLeadHttp.body);
 if (!created.ok || !created.lead_id) fail("page_submit_body", created);
+if (sessionValues.has(browserStorageEntry[0])) {
+  fail("browser_idempotency_not_rotated_after_success", [...sessionValues.entries()]);
+}
 const createdStr = JSON.stringify(created);
 if (PII_NEEDLES.some((n) => createdStr.includes(n))) fail("response_pii", created);
 if (JSON.stringify(dataLayer).includes("maria.costa@") || JSON.stringify(dataLayer).includes("Maria Costa")) {

@@ -350,6 +350,18 @@ _reset();
   pass("attribution_pii_guard");
 }
 
+// 6aa) Percent-encoding cannot hide PII inside an absolute attribution path.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const encodedEmail = core.sanitizeAttributionLocation(
+    "https://search.example/result/private-person%40example.com",
+    240,
+    "referrer",
+  );
+  if (encodedEmail !== "") fail("attribution_encoded_pii_path", encodedEmail);
+  pass("attribution_encoded_pii_path");
+}
+
 // 6b) onlyIfNew path: lookup miss then create-only conflict still returns 200 (no re-delivery)
 {
   const payload = {

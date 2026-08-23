@@ -137,18 +137,6 @@ exports.handler = async (event) => {
   }
 
   const lead = validated.lead;
-  // Classification controls commercial denominators, so the public body cannot
-  // self-declare a non-real record. Only the authenticated production proof may
-  // preserve the explicit synthetic marker used for receipt reconciliation.
-  const requestedKind = String(parsed.data.record_kind || "").trim().toLowerCase();
-  const requestedTestMode =
-    parsed.data.test_mode === true ||
-    parsed.data.test_mode === "1" ||
-    parsed.data.test_mode === "true";
-  if (originCheck.probe && requestedKind === "synthetic" && requestedTestMode) {
-    lead.record_kind = "synthetic";
-    lead.test_mode = true;
-  }
   const ip = clientIp(event);
   const fingerprint = technicalFingerprint(event, lead);
 
@@ -318,9 +306,6 @@ exports.handler = async (event) => {
     headers: event.headers || {},
   });
   record.retention = retentionPolicy();
-  record.synthetic_handoff_authorized = Boolean(
-    originCheck.probe && record.record_kind === "synthetic",
-  );
   record.handoff = initialHandoff(process.env, record);
   // Safe operational log: kind only, never PII
   safeLog("info", "lead_record_kind", {

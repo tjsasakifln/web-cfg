@@ -45,8 +45,6 @@ See [ENV-VARS.md](./ENV-VARS.md). Required on both sides for a live handoff:
 
 - `CONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound`
 - `CONFENGE_INBOUND_WEBHOOK_SECRET` — shared HMAC secret (Netlify env + Warmbly env)
-- `CONFENGE_INBOUND_CANARY_ENABLED=1`
-- `CONFENGE_INBOUND_CANARY_ASSET_ID=diagnostico-defesa-margem`
 - Warmbly: `CONFENGE_AUTO_SEND_ENABLED=false`
 
 Optional: `CONFENGE_INBOUND_ALLOWED_HOSTS`, `CONFENGE_INBOUND_MAX_ATTEMPTS` (8), `CONFENGE_INBOUND_TIMEOUT_MS` (8000).
@@ -54,9 +52,9 @@ Optional: `CONFENGE_INBOUND_ALLOWED_HOSTS`, `CONFENGE_INBOUND_MAX_ATTEMPTS` (8),
 Keep the shared secret server-side only. Do not expose either the secret or a
 signed inbound request to browser code.
 
-Flag off or empty URL: capture still works; handoff `SKIPPED`. A canary asset other than `diagnostico-defesa-margem`, non-HTTPS in staging/prod, PII on the query, missing secret, or host off the allowlist is `BLOCKED` (no POST).
+Empty URL: capture still works; handoff `SKIPPED`. Non-HTTPS in staging/prod, PII on the query, missing secret, or host off the allowlist is `BLOCKED` (no POST).
 
-Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and skip Warmbly. The only exception is a synthetic receipt with all three guards: valid `X-Confenge-Probe`, `record_kind=synthetic`, and `CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED=1`. Warmbly persists it as synthetic and excludes it from the real queue and denominators.
+Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and skip Warmbly so probes never manufacture a commercial action.
 
 ## Ops
 
@@ -95,11 +93,6 @@ consented, has a valid join ID, is not DNC/suppressed and has no test identity.
 Missing legacy kind or consent requires manual review. Non-real, QA, internal,
 spam and reserved test identities are never requeued.
 
-While this canary is active, mutation is narrower than the aggregate audit:
-`canary_eligible_count` and the selected rows also must carry
-`asset_id=diagnostico-defesa-margem` and pass the exact server-side canary
-configuration. An eligible row from any other route is not changed to `PENDING`.
-
 Execution requires an explicit bounded limit (`1..20`) and re-probes the
 Warmbly health endpoint server-side. It refuses to mutate unless the configured
 contract is `READY`, `auto_send_enabled=false` and `dispatch_attempted=false`:
@@ -125,11 +118,10 @@ retry cannot create a second commercial action.
 
 ## Rollback
 
-1. Set `CONFENGE_INBOUND_CANARY_ENABLED=0` in Netlify (primary kill switch).
-2. Optionally unset `CONFENGE_INBOUND_WEBHOOK_URL` and/or `CONFENGE_INBOUND_WEBHOOK_SECRET`.
-3. Redeploy is not required for skip: flag off or missing URL → no POST.
-4. Lead capture continues (persist-first).
-5. Do not point `OPS_WEBHOOK_URL` at the Warmbly inbound path.
+1. Unset `CONFENGE_INBOUND_WEBHOOK_URL` and/or `CONFENGE_INBOUND_WEBHOOK_SECRET` in Netlify.
+2. Redeploy is not required for skip: missing URL → no POST.
+3. Lead capture continues (persist-first).
+4. Do not point `OPS_WEBHOOK_URL` at the Warmbly inbound path.
 
 Site-static rollback: [ROLLBACK.md](./ROLLBACK.md). Blobs of persisted leads are not deleted.
 
@@ -137,7 +129,7 @@ Site-static rollback: [ROLLBACK.md](./ROLLBACK.md). Blobs of persisted leads are
 
 Only when the inbound URL is reachable, the shared secret is set on both sides, and Warmbly auto-send is proven off. Use a clearly labeled synthetic (`SYNTHETIC-INBOUND`, `@example.com`). Do not generate a real contact. If any precondition is missing, record the exact blocker — do not fake INBOUND NOW.
 
-Default: non-real records persist and **SKIP** Warmbly. For the approved production proof only, enable `CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED=1`, submit through the authenticated harness, reconcile the same receipt in both systems, then switch the flag off. The receipt remains explicitly synthetic and excluded from real pipeline metrics.
+Non-real records persist and **SKIP** Warmbly. A synthetic `201` proves capture only; it cannot prove the commercial handoff or close #230.
 
 ### Money-asset proof harness
 
@@ -148,10 +140,9 @@ npm run probe:money-asset:prod
 ```
 
 This is the #60 probe (not `probe:lead`, which is jornada=operacao). It writes
-PROVEN/BLOCKED/UNKNOWN per step and exits non-zero unless capture + replay + the
-same synthetic receipt in web-cfg and Warmbly + auto-send OFF are all proven.
-That proves the transport pipeline only; it does not increment or claim a real
-qualified `INBOUND NOW` opportunity.
+PROVEN/BLOCKED/UNKNOWN per step. Synthetic capture and replay can pass, but the
+full loop remains blocked until one genuine consented lead is reconciled with a
+Warmbly receipt/action while auto-send is off.
 
 If env is missing here:
 

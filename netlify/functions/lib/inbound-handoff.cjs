@@ -26,7 +26,6 @@ const REQUEUE_CLASS = Object.freeze({
   ALREADY_DELIVERED: "ALREADY_DELIVERED",
   OTHER_BLOCKER: "OTHER_BLOCKER",
 });
-const CANARY_ASSET_ID = "diagnostico-defesa-margem";
 
 const STATUS = {
   PENDING: "PENDING",
@@ -36,10 +35,6 @@ const STATUS = {
   BLOCKED: "BLOCKED",
   SKIPPED: "SKIPPED",
 };
-
-function envEnabled(value) {
-  return /^(1|true|yes|on)$/i.test(String(value || "").trim());
-}
 
 const PII_QUERY_KEYS = new Set([
   "email",
@@ -195,8 +190,6 @@ function mapLeadToInboundV1(record) {
   if (evidencePackVersion) body.evidence_pack_version = evidencePackVersion;
   const assetFamily = clampText(record.asset_family, 80);
   if (assetFamily) body.asset_family = assetFamily;
-  const recordKind = clampText(record.record_kind, 40).toLowerCase();
-  if (recordKind) body.record_kind = recordKind;
 
   return body;
 }
@@ -514,22 +507,15 @@ async function probeInboundDestinationHealth({ env = process.env } = {}) {
 
 async function requeueEligibleHandoffs(
   store,
-  { dryRun = true, limit = 1, now = new Date(), safetyGate = null, env = process.env } = {}
+  { dryRun = true, limit = 1, now = new Date(), safetyGate = null } = {}
 ) {
   if (!store || typeof store.list !== "function") {
     return { ok: false, error: "store_list_unavailable" };
   }
   const leads = await store.list();
   const audit = auditSkippedHandoffs(leads);
-  const canaryEligible = (leads || []).filter(
-    (record) =>
-      classifySkippedForRequeue(record).classification ===
-        REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED &&
-      evaluateCanaryRecord(record, env).status === STATUS.PENDING,
-  );
   const base = {
     eligible_count: audit.eligible_real_not_configured,
-    canary_eligible_count: canaryEligible.length,
     never_requeue_count: audit.never_requeue,
     manual_review_count: audit.manual_review,
     reason_counts: audit.reason_counts,
@@ -545,7 +531,8 @@ async function requeueEligibleHandoffs(
   }
 
   const bounded = Math.min(20, Math.max(1, Number(limit || 1)));
-  const eligible = canaryEligible
+  const eligible = (leads || [])
+    .filter((record) => classifySkippedForRequeue(record).classification === REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED)
     .sort((a, b) => String(a.received_at || a.created_at || "").localeCompare(String(b.received_at || b.created_at || "")))
     .slice(0, bounded);
   let requeued = 0;
@@ -569,55 +556,35 @@ async function requeueEligibleHandoffs(
   return { ok: true, dry_run: false, ...base, selected_count: eligible.length, requeued_count: requeued };
 }
 
-function evaluateCanaryRecord(record, env = process.env) {
-  if (!envEnabled(env.CONFENGE_INBOUND_CANARY_ENABLED)) {
-    return {
-      status: STATUS.SKIPPED,
-      reason: "flag_disabled",
-      cfg: resolveInboundConfig(env),
-    };
-  }
-  if (!record || String(record.asset_id || "") !== CANARY_ASSET_ID) {
-    return { status: STATUS.SKIPPED, reason: "outside_canary", cfg: resolveInboundConfig(env) };
-  }
-  if (String(env.CONFENGE_INBOUND_CANARY_ASSET_ID || "").trim() !== CANARY_ASSET_ID) {
-    return {
-      status: STATUS.BLOCKED,
-      reason: "canary_scope_invalid",
-      cfg: resolveInboundConfig(env),
-    };
-  }
-  const cfg = resolveInboundConfig(env);
-  if (cfg.skip) return { status: STATUS.SKIPPED, reason: cfg.reason, cfg };
-  if (cfg.blocked) return { status: STATUS.BLOCKED, reason: cfg.reason, cfg };
-  if (isCommercialRecord(record)) return { status: STATUS.PENDING, reason: null, cfg };
-  const syntheticProbe =
-    record.record_kind === "synthetic" &&
-    record.synthetic_handoff_authorized === true &&
-    envEnabled(env.CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED);
-  if (syntheticProbe) return { status: STATUS.PENDING, reason: "synthetic_canary", cfg };
-  return { status: STATUS.SKIPPED, reason: "non_real", cfg };
-}
-
 function initialHandoff(env = process.env, record = null) {
-  const eligible = evaluateCanaryRecord(record, env);
-  if (eligible.status === STATUS.SKIPPED) {
+  if (record && !isCommercialRecord(record)) {
     return {
       target: "warmbly_inbound",
       status: STATUS.SKIPPED,
-      reason: eligible.reason,
+      reason: "non_real",
       attempts: 0,
       last_error: null,
       next_attempt_at: null,
     };
   }
-  if (eligible.status === STATUS.BLOCKED) {
+  const cfg = resolveInboundConfig(env);
+  if (cfg.skip) {
+    return {
+      target: "warmbly_inbound",
+      status: STATUS.SKIPPED,
+      reason: cfg.reason,
+      attempts: 0,
+      last_error: null,
+      next_attempt_at: null,
+    };
+  }
+  if (cfg.blocked) {
     return {
       target: "warmbly_inbound",
       status: STATUS.BLOCKED,
-      reason: eligible.reason,
+      reason: cfg.reason,
       attempts: 0,
-      last_error: eligible.reason,
+      last_error: cfg.reason,
       next_attempt_at: null,
     };
   }
@@ -640,10 +607,12 @@ function isDue(handoff, now = new Date()) {
 }
 
 async function postInbound(record, { now = new Date(), env = process.env } = {}) {
-  const eligible = evaluateCanaryRecord(record, env);
-  const cfg = eligible.cfg;
-  if (eligible.status === STATUS.SKIPPED) return { status: STATUS.SKIPPED, reason: eligible.reason, attemptsDelta: 0 };
-  if (eligible.status === STATUS.BLOCKED) return { status: STATUS.BLOCKED, reason: eligible.reason, last_error: eligible.reason, attemptsDelta: 0 };
+  if (!isCommercialRecord(record)) {
+    return { status: STATUS.SKIPPED, reason: "non_real", attemptsDelta: 0 };
+  }
+  const cfg = resolveInboundConfig(env);
+  if (cfg.skip) return { status: STATUS.SKIPPED, reason: cfg.reason, attemptsDelta: 0 };
+  if (cfg.blocked) return { status: STATUS.BLOCKED, reason: cfg.reason, last_error: cfg.reason, attemptsDelta: 0 };
 
   const payload = mapLeadToInboundV1(record);
   if (!payload.lead_id && !payload.receipt_id) {
@@ -866,13 +835,11 @@ module.exports = {
   SOURCE_WARMBLY,
   STATUS,
   REQUEUE_CLASS,
-  CANARY_ASSET_ID,
   PII_QUERY_KEYS,
   mapLeadToInboundV1,
   signWarmblyInbound,
   verifyWarmblyInbound,
   resolveInboundConfig,
-  evaluateCanaryRecord,
   sanitizeUrl,
   urlHasPiiQuery,
   initialHandoff,

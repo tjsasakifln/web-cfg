@@ -9,9 +9,6 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `OPS_WEBHOOK_URL` | recomendada | URL HTTPS autenticada para notificação ops (Slack-style `confenge.lead`; **not** Warmbly inbound) |
 | `OPS_WEBHOOK_SECRET` | recomendada | HMAC SHA-256 do body (`X-Confenge-Signature`) |
 | `OPS_WEBHOOK_BEARER` | opcional | Bearer token alternativo/adicional |
-| `CONFENGE_INBOUND_CANARY_ENABLED` | para o canário | `1` habilita o handoff somente quando o asset canônico abaixo coincide. Default off e kill switch. |
-| `CONFENGE_INBOUND_CANARY_ASSET_ID` | com o canário | Deve ser `diagnostico-defesa-margem`; outro valor bloqueia o contrato. |
-| `CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED` | só prova aprovada | `1` permite que um probe autenticado por `LEAD_PROBE_SECRET`, marcado `synthetic`, atravesse o handoff. Continua excluído dos denominadores reais. Default off. |
 | `CONFENGE_INBOUND_WEBHOOK_URL` | para INBOUND NOW | HTTPS `…/api/v1/webhooks/confenge/inbound`. Fail-closed sem HTTPS em staging/prod. Sem PII na query. |
 | `CONFENGE_INBOUND_WEBHOOK_SECRET` | com inbound URL | Segredo HMAC compartilhado com Warmbly (`X-Warmbly-Signature`). Somente server env. |
 | `CONFENGE_INBOUND_ALLOWED_HOSTS` | recomendada em prod | Allowlist de hosts (vírgula). Vazio + URL HTTPS válida é aceito. |

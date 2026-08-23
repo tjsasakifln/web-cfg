@@ -123,7 +123,13 @@ function sanitizeAttributionLocation(val, maxLen, key) {
     const url = new URL(raw);
     if (url.protocol !== "http:" && url.protocol !== "https:") return "";
     const clean = `${url.origin}${url.pathname}`.slice(0, maxLen || 240);
-    return looksLikePii(clean, key) ? "" : clean;
+    let decodedPath = url.pathname;
+    try {
+      decodedPath = decodeURIComponent(url.pathname);
+    } catch {
+      return "";
+    }
+    return looksLikePii(clean, key) || looksLikePii(decodedPath, key) ? "" : clean;
   } catch {
     // Same-site paths are stored without query/fragment; plain origin slugs use
     // the same strict token contract as the remaining attribution dimensions.

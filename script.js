@@ -1391,6 +1391,7 @@
             });
             try {
               if (protocol) sessionStorage.setItem('confenge_last_receipt', protocol);
+              if (receiptRequired) sessionStorage.removeItem(receiptStorageKey());
             } catch (_) { /* private mode */ }
             const q = protocol
               ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(protocol)}`

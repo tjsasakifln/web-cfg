@@ -43,7 +43,7 @@ flowchart LR
   V[Visitante no canário] -->|POST + Idempotency-Key| L[lead.cjs\nvalidação server-side]
   L -->|create-only| B[(receipt durável\nconfenge-leads)]
   B -->|201/200 + receipt sem PII| V
-  B -->|somente asset exato + flag| O[outbox/handoff]
+  B -->|lead real + contrato READY| O[outbox/handoff]
   O -->|HMAC X-Warmbly-Signature\nIdempotency-Key = lead_id| W[Warmbly inbound v1]
   W -->|dedupe receipt/lead_id| P[(lead + next action)]
   P -->|receipt/action id| O
@@ -62,23 +62,20 @@ tentativas). `5xx`/timeout ficam `RETRYABLE`; `401` e contrato inválido ficam
 
 ## Limite do canário e rollback
 
-Três guards server-side impedem expansão acidental:
+O canário é a superfície pública alterada: somente o formulário de
+`diagnostico-defesa-margem` passa a exigir receipt antes de confirmar sucesso.
+Ele não redefine o transporte canônico. Todo lead real consentido continua
+elegível ao mesmo contrato Warmbly quando URL e HMAC estão `READY`; registros
+`synthetic` / `qa` / `spam` / `internal` continuam `SKIPPED` sem exceção.
 
-1. `CONFENGE_INBOUND_CANARY_ENABLED=1`;
-2. `CONFENGE_INBOUND_CANARY_ASSET_ID=diagnostico-defesa-margem` exatamente;
-3. `asset_id=diagnostico-defesa-margem` no receipt validado.
+A recuperação histórica também preserva o classificador global fail-closed:
+somente `SKIPPED/not_configured`, `record_kind=real`, consentimento explícito,
+join ID válido, sem DNC/supressão nem identidade de teste. O `limit=1` escolhe um
+único registro após o health gate; a landing page não redefine elegibilidade.
 
-Qualquer outro asset recebe `SKIPPED/outside_canary`, mesmo se URL ou segredo
-estiverem incorretos. O kill switch é colocar
-`CONFENGE_INBOUND_CANARY_ENABLED=0`; captura persist-first continua ativa. Reverter
-o PR remove a UI/observabilidade nova, mas não apaga receipts já persistidos.
-
-O probe de produção exige ainda `X-Confenge-Probe` válido, marker
-`record_kind=synthetic`, `test_mode=true` e
-`CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED=1`. O corpo público não pode se
-autoclassificar como sintético. Após a prova, a flag sintética volta a `0`; o
-registro permanece/é arquivado como sintético, excluído da fila e dos
-denominadores comerciais reais.
+O kill switch do transporte continua sendo remover URL/segredo no Netlify.
+Captura persist-first permanece ativa. Reverter o PR remove a UI/observabilidade
+nova, mas não apaga receipts já persistidos.
 
 ## Atribuição e privacidade
 
@@ -114,10 +111,10 @@ recebeu nome acessível. Não houve redesign.
 
 | Gate | Resultado |
 |---|---|
-| Unitário de lead | 18 PASS, incluindo validação, persistência, idempotência e injeção de PII em atribuição |
-| Contrato/handoff | 22 PASS: HMAC, persist-before-destination, dedupe, 5xx, timeout, 401, flags, requeue restrito ao canário e sintético autenticado |
+| Unitário de lead | 19 PASS, incluindo validação, persistência, idempotência e PII percent-encoded em atribuição |
+| Contrato/handoff | 23 PASS: HMAC, persist-before-destination, dedupe, 5xx, timeout, 401, contrato global independente, consulta exata sem PII, requeue fail-closed e sintético sempre `SKIPPED` |
 | Loop integrado | mesmo receipt web-cfg/Warmbly, `downstream_receipt=wb-<lead_id>`; 1 delivered, 1 blocked, 1 retryable e 2 skipped em fixtures isoladas |
-| E2E Chromium 390 px | refresh manteve chave; timeout + reenvio deixou 1 receipt; duplicata não repostou; Warmbly 503 preservou `RETRYABLE`; sem overflow |
+| E2E Chromium 390 px | refresh manteve chave; timeout + reenvio deixou 1 receipt; sucesso rotacionou a chave para um novo pedido; duplicata não repostou; Warmbly 503 preservou `RETRYABLE`; sem overflow |
 | A11y | 14 páginas no preview Netlify, incluindo o canário: 0 critical, 0 serious, 0 moderate, 0 minor |
 | UI/#179 | suíte geométrica completa PASS; `image-aspect-ratio=1`, `image-size-responsive=1` |
 | Freeze BOFU | seis HTMLs protegidos inalterados; baseline revisado apenas para `script.js` e `styles-tools.css`; 70 PASS |
@@ -137,20 +134,20 @@ preview; não são mudanças da rota. A produção de referência permaneceu em 
 
 Ainda não é DONE em produção. Após aprovação normal do deploy:
 
-1. conferir no ops autenticado que as duas flags do canário, URL, segredo e
-   contrato estão `READY`;
+1. conferir no ops autenticado que URL e segredo estão `SET` e contrato está
+   `READY`;
 2. manter `CONFENGE_AUTO_SEND_ENABLED=false` no Warmbly;
-3. abrir por tempo limitado a flag sintética e rodar
-   `npm run probe:money-asset:prod` com `OPS_TOKEN`, `LEAD_PROBE_SECRET` e evidência
-   de auto-send off;
-4. exigir o mesmo `lead_id/receipt_id`, `record_kind=synthetic`, source, asset,
-   `handoff.status=DELIVERED` e `downstream_receipt` Warmbly;
-5. desligar a flag sintética e arquivar/reter o registro como sintético.
+3. repetir o audit e o dry-run agregados; confirmar que a coorte estrita continua
+   contendo o registro real consentido já auditado;
+4. requeue de exatamente um registro com `limit=1`, drenar somente após o gate e
+   reconciliar o mesmo `lead_id/receipt_id` com receipt/action Warmbly;
+5. manter probes sintéticos locais/produção em `SKIPPED`; eles nunca substituem a
+   evidência real nem entram em denominadores comerciais.
 
 Resíduos explícitos: aprovação/deploy, configuração secreta de produção e
-reconciliação do lead sintético. Um clique ou HTTP 200/201 isolado não
-fecha #230. Pipeline real qualificado permanece `UNKNOWN`; a prova sintética mede
-somente o transporte receipt → handoff → pipeline excluído.
+reconciliação de um registro real consentido. Um clique, HTTP 200/201 isolado ou
+probe sintético não fecha #230. Pipeline qualificado permanece `UNKNOWN` até a
+evidência comercial real existir.
 
 ## Contratos e ADRs
 

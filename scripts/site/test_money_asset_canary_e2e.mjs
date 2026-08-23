@@ -21,8 +21,6 @@ let responseDelayMs = 0;
 
 process.env.NODE_ENV = "test";
 process.env.LEAD_STORE_DIR = storeDir;
-process.env.CONFENGE_INBOUND_CANARY_ENABLED = "1";
-process.env.CONFENGE_INBOUND_CANARY_ASSET_ID = "diagnostico-defesa-margem";
 process.env.CONFENGE_INBOUND_TIMEOUT_MS = "250";
 delete process.env.RESEND_API_KEY;
 delete process.env.OPS_WEBHOOK_URL;
@@ -272,6 +270,19 @@ try {
   }
   if (requests.length !== beforePosts + 1) fail("duplicate_reposted_downstream", requests.length - beforePosts);
   pass("success_and_duplicate", { lead_id: firstPayload.lead_id });
+
+  await openCanary(success);
+  const nextRequestKey = await success.$eval(
+    '#lead-form [name="idempotency_key"]',
+    (node) => node.value,
+  );
+  if (!nextRequestKey.startsWith("fe-") || nextRequestKey === submittedPayload.idempotency_key) {
+    fail("successful_receipt_did_not_rotate_key", {
+      previous: submittedPayload.idempotency_key,
+      next: nextRequestKey,
+    });
+  }
+  pass("successful_receipt_rotates_key");
 
   downstreamMode = "unavailable";
   const unavailable = await browser.newPage();

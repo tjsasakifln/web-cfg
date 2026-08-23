@@ -54,7 +54,6 @@ const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require("./
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
 const {
   drainPendingHandoffs,
-  evaluateCanaryRecord,
   resolveInboundConfig,
   summarizeHandoffs,
   auditSkippedHandoffs,
@@ -766,30 +765,15 @@ exports.handler = async (event) => {
     const events = await loadRecentAnalytics(event);
     const money_asset = summarizeMoneyAssetLoop(events, leads);
     const inboundConfig = resolveInboundConfig(process.env);
-    const canaryConfig = evaluateCanaryRecord(
-      { asset_id: "diagnostico-defesa-margem", record_kind: "real" },
-      process.env,
-    );
     const requestedLeadId = String(event.queryStringParameters?.lead_id || "").trim();
-    const requestedLead = /^[a-zA-Z0-9_-]{8,160}$/.test(requestedLeadId)
+    const requestedLead = /^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$/.test(requestedLeadId)
       ? await store.get(requestedLeadId)
       : null;
     const configuration = {
-      canary_enabled: /^(1|true|yes|on)$/i.test(String(process.env.CONFENGE_INBOUND_CANARY_ENABLED || "")) ? "SET" : "UNSET",
-      canary_asset_id: process.env.CONFENGE_INBOUND_CANARY_ASSET_ID || null,
-      synthetic_canary_enabled: /^(1|true|yes|on)$/i.test(String(process.env.CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED || "")) ? "SET" : "UNSET",
       webhook_url: process.env.CONFENGE_INBOUND_WEBHOOK_URL ? "SET" : "UNSET",
       webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
-      contract:
-        canaryConfig.status === "PENDING" && inboundConfig.ok
-          ? "READY"
-          : canaryConfig.status === "SKIPPED"
-            ? "UNSET"
-            : "BLOCKED",
-      reason:
-        canaryConfig.status === "PENDING" && inboundConfig.ok
-          ? null
-          : canaryConfig.reason || inboundConfig.reason || "UNKNOWN",
+      contract: inboundConfig.ok ? "READY" : inboundConfig.skip ? "UNSET" : "BLOCKED",
+      reason: inboundConfig.ok ? null : inboundConfig.reason || "UNKNOWN",
     };
     return json(
       200,
