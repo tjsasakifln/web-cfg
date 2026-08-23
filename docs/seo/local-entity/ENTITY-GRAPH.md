@@ -20,3 +20,7 @@ Source: committed `especialista/tiago-jun-sasaki/index.html` JSON-LD, `data/site
 | streetAddress | NOT_PUBLIC | no public street NAP |
 
 No LocalBusiness, PostalAddress, Review or AggregateRating node is published on the specialist page. Adding one in this PR would fail the honesty gate.
+
+The canonical home is also audited node-by-node as a read-only input. New identity facts remain
+deferred until a versioned SELECT-only identity projection from `extra-cli` carries provenance and
+freshness; this package does not promote owned copy into an independent canonical identity source.

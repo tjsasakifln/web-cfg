@@ -162,9 +162,20 @@ export const SUITE_GRAPH = Object.freeze({
     ],
   },
   "test:local-entity": {
-    producers: ["tests/local_entity/", "scripts/local_entity/", "data/local-entity/"],
+    producers: [
+      "tests/local_entity/",
+      "scripts/local_entity/",
+      "data/local-entity/",
+      "index.html",
+      "especialista/tiago-jun-sasaki/index.html",
+      "data/site/brand.json",
+      "data/site/proof.json",
+      "data/organic/search-baseline-2026-08-14.json",
+      "scripts/site/brand.py",
+      "scripts/site/authority.py",
+    ],
     artifacts: ["docs/seo/local-entity/"],
-    surfaces: ["/especialista/tiago-jun-sasaki/"],
+    surfaces: ["/", "/especialista/tiago-jun-sasaki/"],
   },
   "test:sitemap-graph": {
     producers: [
