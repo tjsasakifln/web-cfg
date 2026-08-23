@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""PERF-185: keep the brand logos close to the size the site actually renders.
+"""PERF-185: build versioned brand logos close to their rendered size.
 
 The header logo renders at most 224 CSS px wide and the footer logo at most
 236 CSS px, so a 800x208 master is roughly 4x more pixels than any viewport
-asks for. This script downscales the two brand PNGs with an exact box filter,
-quantises them to a palette (logos are flat art) and re-encodes them with the
-smallest per-row filter, keeping the 800:208 aspect ratio bit-exact.
+asks for. This script reads the stable 800x208 masters and writes new,
+versioned 500x130 assets. It uses an exact box filter, quantises them to a
+palette (logos are flat art) and re-encodes them with the smallest per-row
+filter, keeping the 800:208 aspect ratio bit-exact.
 
 Usage:
     python3 scripts/site/optimize_brand_logos.py --report
@@ -18,6 +19,7 @@ stay reproducible from stdlib alone.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import struct
 import sys
 import zlib
@@ -380,24 +382,36 @@ def optimize(path: Path) -> bytes:
     return indexed if len(indexed) <= len(truecolor) else truecolor
 
 
+def versioned_asset_path(source_relative: str, payload: bytes) -> str:
+    """Return a content-addressed path so immutable URLs never change bytes."""
+    source = Path(source_relative)
+    digest = hashlib.sha256(payload).hexdigest()[:8]
+    filename = f"{source.stem}-{TARGET_WIDTH}-{digest}{source.suffix}"
+    return (source.parent / filename).as_posix()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write", action="store_true", help="rewrite the assets in place")
+    parser.add_argument(
+        "--write", action="store_true", help="write the versioned optimized assets"
+    )
     parser.add_argument("--report", action="store_true", help="print before/after sizes only")
     args = parser.parse_args(argv)
 
-    for relative in ASSETS:
-        path = ROOT / relative
-        before = path.stat().st_size
-        width, height, _ = read_png(path)
-        payload = optimize(path)
+    for source_relative in ASSETS:
+        source = ROOT / source_relative
+        before = source.stat().st_size
+        width, height, _ = read_png(source)
+        payload = optimize(source)
+        destination_relative = versioned_asset_path(source_relative, payload)
+        destination = ROOT / destination_relative
         print(
-            f"{relative}: {width}x{height} {before}B -> "
-            f"{TARGET_WIDTH}x{TARGET_HEIGHT} {len(payload)}B "
+            f"{source_relative}: {width}x{height} {before}B -> "
+            f"{destination_relative}: {TARGET_WIDTH}x{TARGET_HEIGHT} {len(payload)}B "
             f"({100 - round(100 * len(payload) / before)}% smaller)"
         )
         if args.write:
-            path.write_bytes(payload)
+            destination.write_bytes(payload)
     return 0
 
 

@@ -5,6 +5,7 @@ These tests drive the real shipped HTML/CSS/JSON — not re-implementations.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -436,6 +437,21 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
     assert frozen_candidates == frozen_bofu - {"diagnostico-b2g-360/index.html"}
 
 
+def _img_attributes(tag: str) -> dict[str, str]:
+    return {
+        key.lower(): value
+        for key, _quote, value in re.findall(
+            r"([:\w-]+)\s*=\s*([\"'])(.*?)\2", tag, re.I | re.S
+        )
+    }
+
+
+def _ratio_drift(width: int, height: int, reference_width: int, reference_height: int) -> float:
+    ratio = width / height
+    reference = reference_width / reference_height
+    return abs(ratio - reference) / reference
+
+
 def test_home_header_footer_asset_budget():
     """Home must not declare 800px logos for a ~190–224px box; footer logo is lazy."""
     html = HOME.read_text(encoding="utf-8")
@@ -446,12 +462,9 @@ def test_home_header_footer_asset_budget():
     )
     assert header, "home header .brand img missing"
     attrs = header.group(1)
-    width_m = re.search(r'\bwidth="(\d+)"', attrs, re.I)
-    assert width_m, "header .brand img must declare width"
-    assert int(width_m.group(1)) <= 224, (
-        f"header logo width attribute {width_m.group(1)} exceeds display box 224"
-    )
-    assert re.search(r'\bheight="(\d+)"', attrs, re.I), "header .brand img must declare height"
+    header_attrs = _img_attributes(attrs)
+    assert header_attrs.get("src") == "/assets/logo-confenge-500-f8a83f6d.png"
+    assert (header_attrs.get("width"), header_attrs.get("height")) == ("224", "58")
     footer = re.search(
         r'<div\b[^>]*class="[^"]*\bfooter-brand\b[^"]*"[^>]*>\s*<img\b([^>]+)>',
         html,
@@ -459,6 +472,9 @@ def test_home_header_footer_asset_budget():
     )
     assert footer, "home footer-brand img missing"
     fattrs = footer.group(1)
+    footer_attrs = _img_attributes(fattrs)
+    assert footer_attrs.get("src") == "/assets/logo-confenge-white-500-1677038e.png"
+    assert (footer_attrs.get("width"), footer_attrs.get("height")) == ("224", "58")
     assert re.search(r'\bloading="lazy"', fattrs, re.I), "footer logo must be loading=lazy"
     assert re.search(r'\bdecoding="async"', fattrs, re.I), "footer logo should decode async"
     script = re.search(r"<script\b[^>]*src=\"[^\"]*script\.js[^\"]*\"[^>]*>", html, re.I)
@@ -500,38 +516,58 @@ def test_brand_logo_assets_fit_their_render_box():
     assert boxes, "no CSS render box found for the brand logo"
     widest = max(boxes)
     assert widest <= 236, f"brand logo render box grew to {widest}px; revisit the asset budget"
-    for name in ("logo-confenge.png", "logo-confenge-white.png"):
-        path = ROOT / "assets" / name
-        width, height = _png_size(path)
-        size = path.stat().st_size
+    from scripts.site.optimize_brand_logos import optimize, versioned_asset_path
+
+    masters = {
+        "assets/logo-confenge.png": "e6af0125c73edd476cff82ab4ea1de3e459fbdbde63b886f6c55f8a93531505b",
+        "assets/logo-confenge-white.png": "e6bb135d070993411cb46adce88747187f3decd2f85f23e9899a9c89e97e7586",
+    }
+    for relative, expected_sha256 in masters.items():
+        source = ROOT / relative
+        source_bytes = source.read_bytes()
+        assert hashlib.sha256(source_bytes).hexdigest() == expected_sha256, (
+            f"{relative} backs frozen immutable URLs and must remain byte-identical"
+        )
+        source_width, source_height = _png_size(source)
+        assert (source_width, source_height) == (800, 208), relative
+
+        payload = optimize(source)
+        versioned_relative = versioned_asset_path(relative, payload)
+        versioned = ROOT / versioned_relative
+        assert versioned.exists(), f"missing generated asset {versioned_relative}"
+        assert versioned.read_bytes() == payload, (
+            f"{versioned_relative} is stale; rerun optimize_brand_logos.py --write"
+        )
+        width, height = _png_size(versioned)
+        assert (width, height) == (500, 130), versioned_relative
+        assert width >= widest * 2, f"{versioned_relative} no longer covers 2x DPR"
         assert width <= round(widest * 2.2), (
-            f"{name} is {width}px wide for a {widest}px box (over 2x DPR); "
-            "rerun scripts/site/optimize_brand_logos.py --write"
+            f"{versioned_relative} is {width}px wide for a {widest}px box"
         )
-        assert size <= 16 * 1024, f"{name} weighs {size}B; budget is 16KiB"
-        declared = 224 / 58
-        assert abs((width / height) - declared) / declared < 0.02, (
-            f"{name} aspect ratio {width}x{height} drifted from the declared 224x58 box"
+        assert versioned.stat().st_size <= 16 * 1024, (
+            f"{versioned_relative} exceeds the 16KiB budget"
+        )
+        assert width * source_height == height * source_width, (
+            f"{versioned_relative} changed the master aspect ratio"
+        )
+        assert _ratio_drift(width, height, 224, 58) < 0.02, (
+            f"{versioned_relative} drifted from the declared 224x58 render box"
         )
 
 
-def test_shipped_pages_never_declare_oversized_logos():
-    """The header/footer chrome is on every page: one bad template wastes bytes site-wide.
-
-    The six BOFU pillars are hash-frozen (data/bofu-dominance/frozen-specs/hashes.json,
-    authorizes_html_edit=false until the spec's earliest_safe_action_at) so their stale
-    declaration waits for the recapture. The asset they download is already the small
-    one; only the attribute is behind.
-    """
+def test_shipped_pages_use_versioned_proportional_logos():
+    """Every mutable page uses the content-addressed payload; frozen pages stay exact."""
     from scripts.bofu_dominance.frozen_specs.constants import FORBIDDEN_RELATIVE_PATHS
 
     frozen = {rel for rel in FORBIDDEN_RELATIVE_PATHS if rel.endswith(".html")}
     skip = {"node_modules", "_site", "docs", "scripts", "tests", "netlify", "seo", "data", "supabase"}
     offenders: list[str] = []
+    frozen_seen: set[str] = set()
     pages = 0
     for path in sorted(ROOT.rglob("*.html")):
         relative = path.relative_to(ROOT)
-        if any(part in skip for part in relative.parts) or relative.as_posix() in frozen:
+        relative_string = relative.as_posix()
+        if any(part in skip for part in relative.parts):
             continue
         html = path.read_text(encoding="utf-8", errors="replace")
         if "logo-confenge" not in html:
@@ -540,17 +576,44 @@ def test_shipped_pages_never_declare_oversized_logos():
         for tag in re.findall(r"<img\b[^>]*>", html, re.I):
             if "logo-confenge" not in tag:
                 continue
-            width = re.search(r'\bwidth="(\d+)"', tag, re.I)
-            if not width or int(width.group(1)) > 224:
-                offenders.append(f"{relative}: {tag}")
-            elif "logo-confenge-white" in tag and not re.search(r'\bloading="lazy"', tag, re.I):
+            attrs = _img_attributes(tag)
+            src = attrs.get("src", "")
+            white = "logo-confenge-white" in src
+            if relative_string in frozen:
+                frozen_seen.add(relative_string)
+                expected = (
+                    "/assets/logo-confenge-white.png"
+                    if white
+                    else "/assets/logo-confenge.png"
+                )
+                if src != expected or (attrs.get("width"), attrs.get("height")) != ("800", "208"):
+                    offenders.append(f"{relative}: frozen logo changed: {tag}")
+                continue
+
+            expected = (
+                "/assets/logo-confenge-white-500-1677038e.png"
+                if white
+                else "/assets/logo-confenge-500-f8a83f6d.png"
+            )
+            if src != expected:
+                offenders.append(f"{relative}: non-versioned logo URL: {tag}")
+                continue
+            if (attrs.get("width"), attrs.get("height")) != ("224", "58"):
+                offenders.append(f"{relative}: logo must declare 224x58: {tag}")
+                continue
+            if _ratio_drift(224, 58, 500, 130) >= 0.02:
+                offenders.append(f"{relative}: logo declaration is not proportional: {tag}")
+            if white and attrs.get("loading", "").lower() != "lazy":
                 offenders.append(f"{relative}: footer logo is not lazy")
+            if white and attrs.get("decoding", "").lower() != "async":
+                offenders.append(f"{relative}: footer logo does not decode async")
     assert pages > 100, f"expected the whole shipped chrome, scanned only {pages} pages"
-    assert not offenders, "oversized or eager brand logos:\n" + "\n".join(offenders[:20])
+    assert frozen_seen == frozen, f"frozen logo pages missing from scan: {frozen - frozen_seen}"
+    assert not offenders, "invalid brand logos:\n" + "\n".join(offenders[:20])
 
 
 def test_logo_templates_match_the_shipped_markup():
-    """Generated chrome must not reintroduce the 800x208 declaration on rebuild."""
+    """Generated chrome must keep the content-addressed, proportional markup."""
     for relative in (
         "scripts/pseo/html_shell.py",
         "scripts/market_answers/render.py",
@@ -558,11 +621,30 @@ def test_logo_templates_match_the_shipped_markup():
         "scripts/site/inbound_first_remediate.py",
     ):
         source = (ROOT / relative).read_text(encoding="utf-8")
-        for tag in re.findall(r"<img\b[^>]*>", source, re.I):
+        tags = [
+            tag
+            for tag in re.findall(r"<img\b[^>]*>", source, re.I)
+            if "logo-confenge" in tag
+        ]
+        assert tags, f"{relative} has no brand image template"
+        for tag in tags:
             if "logo-confenge" not in tag:
                 continue
-            width = re.search(r'\bwidth="(\d+)"', tag, re.I)
-            assert width and int(width.group(1)) <= 224, f"{relative} emits {tag}"
+            attrs = _img_attributes(tag)
+            white = "logo-confenge-white" in attrs.get("src", "")
+            expected = (
+                "/assets/logo-confenge-white-500-1677038e.png"
+                if white
+                else "/assets/logo-confenge-500-f8a83f6d.png"
+            )
+            assert attrs.get("src") == expected, f"{relative} emits {tag}"
+            assert (attrs.get("width"), attrs.get("height")) == ("224", "58"), (
+                f"{relative} emits non-proportional dimensions: {tag}"
+            )
+            assert _ratio_drift(224, 58, 500, 130) < 0.02
+            if white:
+                assert attrs.get("loading", "").lower() == "lazy", relative
+                assert attrs.get("decoding", "").lower() == "async", relative
 
 
 def test_home_defers_below_fold_layout_work():
