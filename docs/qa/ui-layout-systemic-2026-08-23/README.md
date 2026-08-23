@@ -43,6 +43,8 @@ Baseline em produção: 12 rotas críticas × 6 larguras = 72 checks; 60 combina
 
 Depois da primeira correção, a varredura completa encontrou 30 combinações residuais nos pilotos, Radar, Termos, Ops e um disclosure. O gate móvel foi então endurecido de 40 para 44 px e encontrou mais quatro combinações em Conteúdos e Nurture. Também foi eliminado um falso positivo de CSS medido antes do carregamento e um erro do coletor ao capturar componentes dentro de `<details>`.
 
+Na integração com o `main` atualizado, a suíte encontrou ainda um `approval_rendered_hash_mismatch` preexistente na análise contratual indexada: a promoção global de Entregas havia alterado somente os blocos de navegação do shell. O hash normalizado sem desktop/mobile nav permaneceu idêntico (`ea32f4d6…`). O hash integral foi recapturado com o valor anterior preservado no registro; material, fontes, corpo, canonical, atribuição e aprovação editorial não mudaram.
+
 Resultado final local:
 
 - 211 rotas do `seo/PUBLIC-ARTIFACT-MANIFEST.json`;
