@@ -1037,6 +1037,11 @@ async function main() {
             repeatedOg: repeatedOg.length,
             coverIntrinsic: coverImage ? [coverImage.getAttribute("width"), coverImage.getAttribute("height")] : null,
             coverRatio: coverImage ? coverImage.getBoundingClientRect().width / coverImage.getBoundingClientRect().height : null,
+            // Decoded size, not the declared attributes: catches a cover whose
+            // width/height lie about the real asset (#179).
+            coverNaturalRatio: coverImage && coverImage.naturalHeight
+              ? coverImage.naturalWidth / coverImage.naturalHeight
+              : null,
             hasGrid: Boolean(grid),
             gridColumns: grid ? getComputedStyle(grid).gridTemplateColumns : "",
             heroContained: Boolean(
@@ -1053,6 +1058,11 @@ async function main() {
           }
           if (rep.coverIntrinsic?.join("x") !== "1200x630" || Math.abs(rep.coverRatio - (1200 / 630)) > 0.02) {
             throw new Error(`${path}@${width}: frozen cover distorted ${JSON.stringify(rep)}`);
+          }
+          // The check above only proves the box matches the DECLARED attributes. Compare it
+          // to the decoded asset too, so wrong attributes cannot hide a squashed cover.
+          if (rep.coverNaturalRatio === null || Math.abs(rep.coverRatio - rep.coverNaturalRatio) > 0.02) {
+            throw new Error(`${path}@${width}: rendered box drifts from the decoded aspect ratio ${JSON.stringify(rep)}`);
           }
         } else if (rep.articleCovers || rep.repeatedOg) {
           throw new Error(`${path}@${width}: raster title card still inline ${JSON.stringify(rep)}`);
