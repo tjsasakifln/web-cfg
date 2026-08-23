@@ -142,6 +142,7 @@ Codex GPT-5
 - `casos/index.html`
 - `bid-room-licitacoes-obras/index.html`
 - `diretoria-b2g/index.html`
+- `data/bofu-dominance/frozen-specs/hashes.json`
 - `sitemap.xml`
 - `sitemap.txt`
 - `sitemap-index.xml`
