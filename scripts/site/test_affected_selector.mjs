@@ -144,6 +144,20 @@ function expectSubset(result, mustInclude, because) {
   assert.ok(SUITE_GRAPH["test:local-entity"].surfaces.includes("/"));
 }
 
+// Every external SVG tree scanned by the path-data audit must select its gate.
+{
+  const svgInputs = [
+    "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/chart.svg",
+    "data/data-desk/fixture/chart.svg",
+    "data/data-desk/packages/fixture-only/chart.svg",
+    "data/data-desk/packages/valor-tipico-contratos-pavimentacao-sc/chart.svg",
+  ];
+  for (const input of svgInputs) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:cta-whatsapp"], `SVG path-data input ${input}`);
+  }
+}
+
 // organic / distribution are mapped extra suites (not unknown → full)
 {
   const result = selectAffected(["scripts/organic/demand_engine.py"], scripts);

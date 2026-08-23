@@ -3,6 +3,42 @@
   "found": 42,
   "service_pages": 13,
   "html_scanned": 265,
+  "svg_files_scanned": 4,
+  "svg_paths_checked": 3487,
+  "svg_path_fixtures": [
+    {
+      "id": "corrupt-whatsapp-glyph",
+      "expect": "invalid",
+      "caught": true
+    },
+    {
+      "id": "missing-moveto",
+      "expect": "invalid",
+      "caught": true
+    },
+    {
+      "id": "invalid-arc-flag",
+      "expect": "invalid",
+      "caught": true
+    },
+    {
+      "id": "trailing-argument",
+      "expect": "invalid",
+      "caught": true
+    },
+    {
+      "id": "non-numeric-token",
+      "expect": "invalid",
+      "caught": true
+    },
+    {
+      "id": "valid-canonical",
+      "expect": "valid",
+      "caught": false
+    }
+  ],
+  "svg_path_parser_regressions": 15,
+  "svg_path_extraction_regressions": 23,
   "earliest_safe_action_at": "2026-09-16",
   "audit_date": "2026-08-23",
   "warnings": [
