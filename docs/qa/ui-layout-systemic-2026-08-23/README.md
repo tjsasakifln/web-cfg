@@ -76,7 +76,7 @@ Outras famílias:
 - SEO: canonical, metadata, structured data, robots e URLs preservados.
 - ADR afetado: nenhuma mudança de boundary. A implementação permanece compatível com ADR-STRAT-002 e RUNTIME-AUTHORITY.
 - Rollback: reverter os commits desta remediação restaura CSS/tokens/componentes e scripts de QA; não há migração de dados nem alteração irreversível.
-- BOFU frozen spec: os seis HTMLs protegidos permanecem byte-identical. A alteração deliberada dos dois stylesheets exige recaptura revisada dos hashes de rendering collateral depois de QA visual e suíte verdes.
+- BOFU frozen spec: os seis HTMLs protegidos permanecem byte-identical. Os hashes dos dois stylesheets foram recapturados de forma revisada contra o commit de implementação `9d0f75e8`, após QA visual e auditoria sitewide verdes.
 
 ## Integração e produção
 
