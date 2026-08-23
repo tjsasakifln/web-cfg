@@ -47,8 +47,10 @@ Missing Warmbly evidence stays `UNKNOWN`. Reconciliation never derives qualified
 
 A visitor-initiated `wa.me` activation emits one `whatsapp_click`. When the link
 names a versioned commercial hand-raise, that same event carries `offer_id`,
-`next_action_id`, `cta_id`, `cta_position` and one `event_id`; it must not be
-paired with a second alias or CTA event for the same physical click.
+`next_action_id`, `cta_id`, `cta_position` and one `event_id`; its validated
+`CFG-WA-*` conversation marker is the event's `correlation_id`, not a redundant
+PII-shaped property. It must not be paired with a second alias or CTA event for
+the same physical click.
 
 ## Compatibility
 

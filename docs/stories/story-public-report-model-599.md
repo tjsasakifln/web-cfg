@@ -71,7 +71,8 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
   `intent-action-matrix.v1.json`.
 - Cada ativação comercial emite somente um `whatsapp_click`, enriquecido com
   `offer_id`, `next_action_id`, identidade/posição do CTA e `event_id`; não há
-  segundo `cta_click` para o mesmo clique físico.
+  segundo `cta_click` para o mesmo clique físico. O marcador `CFG-WA-*` usado
+  pela conversa é persistido no campo canônico `correlation_id`.
 
 ### Testing
 

@@ -73,6 +73,9 @@ function makeEl(attrMap, text) {
       if (Object.prototype.hasOwnProperty.call(attrs, name)) return attrs[name];
       return null;
     },
+    setAttribute(name, value) {
+      attrs[name] = String(value);
+    },
     closest() {
       return null;
     },
@@ -493,6 +496,14 @@ for (const j of journeys) {
     if (ev[key] !== value) fail("report_handraise_attribution", { key, expected: value, event: ev });
   }
   if (!ev.event_id) fail("report_handraise_event_id", ev);
+  if (!/^CFG-WA-[A-Z0-9]{8}$/.test(ev.correlation_id || "")) {
+    fail("report_handraise_correlation_protocol", ev);
+  }
+  if (!decodeURIComponent(el.attrs.href.replace(/\+/g, "%20")).includes(
+    `Protocolo CONFENGE: ${ev.correlation_id}`
+  )) {
+    fail("report_handraise_conversation_marker", { href: el.attrs.href, event: ev });
+  }
   const reconciled = contract.reconcileFunnel({ events: [{ event: ev.event, props: ev }] });
   if (reconciled.denominators.engagement !== 1) {
     fail("report_handraise_engagement_inflated", reconciled);
@@ -503,9 +514,30 @@ for (const j of journeys) {
   if (
     admitted?.offer_id !== expected.offer_id ||
     admitted?.next_action_id !== expected.next_action_id ||
-    admitted?.event_id !== ev.event_id
+    admitted?.event_id !== ev.event_id ||
+    admitted?.correlation_id !== ev.correlation_id ||
+    Object.prototype.hasOwnProperty.call(admitted || {}, "whatsapp_protocol")
   ) {
     fail("report_handraise_context_dropped", admitted);
+  }
+  const collectResult = await postCollect([{
+    event: ev.event,
+    props: ev,
+    path: "/casos/modelo-relatorio-inteligencia-licitacoes/",
+    sid: "report-handraise",
+  }]);
+  const collectBody = JSON.parse(collectResult.body);
+  const persisted = collect._recent().slice(-1)[0];
+  if (
+    collectResult.statusCode !== 202 ||
+    collectBody.accepted !== 1 ||
+    persisted?.correlation_id !== ev.correlation_id ||
+    persisted?.offer_id !== expected.offer_id ||
+    persisted?.next_action_id !== expected.next_action_id ||
+    persisted?.event_id !== ev.event_id ||
+    Object.prototype.hasOwnProperty.call(persisted || {}, "whatsapp_protocol")
+  ) {
+    fail("report_handraise_collector_persistence", { collectBody, persisted });
   }
 }
 
