@@ -184,7 +184,7 @@
     "node": ">=20 <21"
   },
   "devDependencies": {
-    "axe-core": "^4.10.0",
+    "axe-core": "^4.13.0",
     "chrome-launcher": "^1.2.1",
     "lighthouse": "^12.8.2",
     "puppeteer-core": "^23.0.0",
