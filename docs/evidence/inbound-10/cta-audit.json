@@ -1,12 +1,11 @@
 {
-  "ok": false,
-  "found": 50,
+  "ok": true,
+  "found": 42,
   "service_pages": 13,
   "html_scanned": 263,
   "earliest_safe_action_at": "2026-09-16",
-  "audit_date": "2026-09-16",
-  "warnings": [],
-  "issues": [
+  "audit_date": "2026-08-23",
+  "warnings": [
     {
       "rel": "aditivos-obras-publicas/index.html",
       "error": "generic_prefill_on_service_page"
@@ -27,5 +26,6 @@
       "rel": "diagnostico-pre-licitacao/index.html",
       "error": "generic_prefill_on_service_page"
     }
-  ]
+  ],
+  "issues": []
 }
