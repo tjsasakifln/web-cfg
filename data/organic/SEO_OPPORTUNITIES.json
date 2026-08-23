@@ -1,7 +1,7 @@
 {
   "schema_version": "seo-opportunities-v1",
-  "generated_at": "2026-08-09T20:12:02Z",
-  "as_of": "2026-08-09",
+  "generated_at": "2026-08-22T23:49:10Z",
+  "as_of": "2026-08-22",
   "north_star": "receita_esperada_atribuivel_ao_inbound_organico",
   "scoring": {
     "model": "content_value_score",
@@ -22,9 +22,9 @@
       "query_intent": "informational",
       "related_queries": [],
       "intent_page_mismatch": false,
-      "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
-      "title_length": 61,
-      "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+      "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
+      "title_length": 69,
+      "meta_description": "SINAPI desonerado e não desonerado diferem nos encargos da mão de obra. Use a tabela que o edital e a planilha modelo fixam na data-base; misturar bases distorce o preço.",
       "h1": "SINAPI desonerado ou não desonerado: qual usar?",
       "above_the_fold_lead": "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Use a versão que o edital fixa (ou a planilha modelo do órgão), alinha BDI e regime da empresa à mesma base e confira data-base, misturar tabelas sem memória de cálculo distorce preço e exequibilidade",
       "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -54,7 +54,9 @@
         "cluster_id": "orcamento-bdi",
         "service_path": "/auditoria-orcamento-licitacao/",
         "service_slug": "auditoria-orcamento-licitacao",
-        "tools": [],
+        "tools": [
+          "/ferramentas/diagnostico-defesa-margem/"
+        ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando o orçamento do edital vira risco de proposta",
         "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
@@ -64,10 +66,11 @@
       "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
       "issues": [
         "title_long_desktop",
-        "title_long_mobile_truncation_risk"
+        "title_long_mobile_truncation_risk",
+        "meta_description_long"
       ],
       "clickbait_flags": [],
-      "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
+      "recommended_title": "Desonerado e não desonerado no SINAPI: o que o edital fixa",
       "recommended_description": null,
       "gsc": {
         "impressions": 89.0,
@@ -131,7 +134,8 @@
         "service_path": "/atrasos-prorrogacao-obras-publicas/",
         "service_slug": "atrasos-prorrogacao-obras-publicas",
         "tools": [
-          "/ferramentas/matriz-atraso-obra/"
+          "/ferramentas/matriz-atraso-obra/",
+          "/ferramentas/diagnostico-defesa-margem/"
         ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando o atraso deixa de ser só cronograma",
@@ -211,7 +215,8 @@
         "service_path": "/aditivos-obras-publicas/",
         "service_slug": "aditivos-obras-publicas",
         "tools": [
-          "/ferramentas/limite-acrescimos-supressoes/"
+          "/ferramentas/limite-acrescimos-supressoes/",
+          "/ferramentas/diagnostico-defesa-margem/"
         ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando o aditivo passa a afetar margem",
@@ -290,7 +295,8 @@
         "service_path": "/atrasos-prorrogacao-obras-publicas/",
         "service_slug": "atrasos-prorrogacao-obras-publicas",
         "tools": [
-          "/ferramentas/matriz-atraso-obra/"
+          "/ferramentas/matriz-atraso-obra/",
+          "/ferramentas/diagnostico-defesa-margem/"
         ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando o atraso deixa de ser só cronograma",
@@ -368,7 +374,8 @@
         "service_path": "/atrasos-prorrogacao-obras-publicas/",
         "service_slug": "atrasos-prorrogacao-obras-publicas",
         "tools": [
-          "/ferramentas/matriz-atraso-obra/"
+          "/ferramentas/matriz-atraso-obra/",
+          "/ferramentas/diagnostico-defesa-margem/"
         ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando o atraso deixa de ser só cronograma",
@@ -413,13 +420,13 @@
       "query_intent": "informational",
       "related_queries": [],
       "intent_page_mismatch": false,
-      "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
-      "title_length": 69,
-      "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
-      "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
-      "above_the_fold_lead": "Os limites de 25% e 50% nos aditivos não são só percentual na ponta do lápis: o que entra na conta, o tipo de alteração e o saldo acumulado definem se o teto estoura.",
+      "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
+      "title_length": 67,
+      "meta_description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado.",
+      "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
+      "above_the_fold_lead": "O percentual só fecha a conta quando a base de cálculo, o histórico de acréscimos e supressões e a natureza da alteração estão documentados. Este guia responde o limite específico; o hub de aditivos trata tipos de mudança, serviços extras e decisão de margem.",
       "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
-      "robots": "noindex,follow",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "structured_data_present": true,
       "breadcrumb_present": true,
       "organization_schema_present": true,
@@ -445,7 +452,8 @@
         "service_path": "/aditivos-obras-publicas/",
         "service_slug": "aditivos-obras-publicas",
         "tools": [
-          "/ferramentas/limite-acrescimos-supressoes/"
+          "/ferramentas/limite-acrescimos-supressoes/",
+          "/ferramentas/diagnostico-defesa-margem/"
         ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando o aditivo passa a afetar margem",
@@ -457,10 +465,10 @@
       "issues": [
         "title_long_desktop",
         "title_long_mobile_truncation_risk",
-        "robots_noindex"
+        "meta_description_long"
       ],
       "clickbait_flags": [],
-      "recommended_title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133",
+      "recommended_title": "Limite de aditivo 25% e 50% em obra pública: o que conta",
       "recommended_description": null,
       "gsc": {
         "impressions": 14.0,
@@ -481,7 +489,7 @@
         "priority_force_include": false
       },
       "confidence": 0.3,
-      "sample_quality": "very_low+noindex",
+      "sample_quality": "very_low",
       "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "html_present": true,
       "kind": "ctr_gap"
@@ -523,7 +531,9 @@
         "cluster_id": "medicoes-pagamentos",
         "service_path": "/medicoes-glosas-obras-publicas/",
         "service_slug": "medicoes-glosas-obras-publicas",
-        "tools": [],
+        "tools": [
+          "/ferramentas/diagnostico-defesa-margem/"
+        ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando a glosa ou a medição vira problema de caixa",
         "bridge_body": "Critério de medição contestado, glosa sem nexo ou parcela retida vira risco de fluxo se a equipe não organiza prova contemporânea e contesta no tempo certo.",
@@ -597,7 +607,9 @@
         "cluster_id": "orcamento-bdi",
         "service_path": "/auditoria-orcamento-licitacao/",
         "service_slug": "auditoria-orcamento-licitacao",
-        "tools": [],
+        "tools": [
+          "/ferramentas/diagnostico-defesa-margem/"
+        ],
         "specialist": "/especialista/tiago-jun-sasaki/",
         "bridge_title": "Quando o orçamento do edital vira risco de proposta",
         "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
@@ -637,22 +649,22 @@
     }
   ],
   "counts": {
-    "total": 31,
+    "total": 32,
     "by_action": {
       "improve": 24,
-      "keep": 3,
+      "keep": 4,
       "create": 4
     },
     "by_intent": {
-      "bofu": 4,
+      "bofu": 5,
       "mofu": 15,
       "tofu": 12
     },
     "by_publishability": {
-      "indexable_candidate": 17,
+      "indexable_candidate": 18,
       "blocked_by_gate": 14
     },
-    "bofu": 4,
+    "bofu": 5,
     "data_driven": 11,
     "serp_ctr_gap": 7,
     "serp_priority_benchmarks": 1
@@ -831,7 +843,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-1679425",
+      "id": "opp-gsc-ctr-8698278",
       "topic": "CTR opportunity: /conteudos/sinapi-desonerado-nao-desonerado/",
       "cluster": "orcamento-bdi",
       "intent": "mofu",
@@ -851,12 +863,13 @@
         "ctr": 0.011235955056179775,
         "url": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
         "serp_diagnosis": {
-          "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
-          "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+          "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
+          "meta_description": "SINAPI desonerado e não desonerado diferem nos encargos da mão de obra. Use a tabela que o edital e a planilha modelo fixam na data-base; misturar bases distorce o preço.",
           "h1": "SINAPI desonerado ou não desonerado: qual usar?",
           "issues": [
             "title_long_desktop",
-            "title_long_mobile_truncation_risk"
+            "title_long_mobile_truncation_risk",
+            "meta_description_long"
           ],
           "alternate_landing_candidate": "/auditoria-orcamento-licitacao/",
           "ctr_gap": {
@@ -911,7 +924,7 @@
         "competitive_opportunity": 3
       },
       "score_penalties": {},
-      "rationale": "CTR gap configurável: impr=89.0 cliques=1.0 pos=7.27 ctr=0.01124 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk",
+      "rationale": "CTR gap configurável: impr=89.0 cliques=1.0 pos=7.27 ctr=0.01124 expected=0.04 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,meta_description_long",
       "suggested_cta": "Ver auditoria de orçamento e edital",
       "suggested_internal_links": [
         "/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -1023,7 +1036,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-4030622",
+      "id": "opp-gsc-ctr-878974",
       "topic": "CTR opportunity: /conteudos/aditivo-qualitativo-quantitativo/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -1218,7 +1231,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-5489243",
+      "id": "opp-gsc-ctr-2242264",
       "topic": "CTR opportunity: /conteudos/chuva-prorrogacao-prazo-obra-publica/",
       "cluster": "atrasos-prorrogacao",
       "intent": "mofu",
@@ -1325,6 +1338,84 @@
         ]
       },
       "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-need-defesa-margem-diagnostico",
+      "topic": "O que este contrato público já mostra — e o que permanece UNKNOWN — antes de pedir uma segunda leitura?",
+      "cluster": "defesa-margem",
+      "intent": "bofu",
+      "persona": "diretor-construtora",
+      "jtbd": "Partir de um contrato real e decidir se vale pedir segunda leitura técnica",
+      "commercial_fit": 0.95,
+      "service_fit": "defesa-margem-contratos-publicos",
+      "service_path": "/defesa-margem-contratos-publicos/",
+      "demand_signal": {
+        "strength": 0.35,
+        "source": "inferred"
+      },
+      "search_console_evidence": {},
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "site",
+        "record_count": 1,
+        "methodology": "Página de serviço/editorial já publicada no site Confenge",
+        "limitations": [
+          "Não é agregação do datalake; autoridade editorial + serviço."
+        ],
+        "sources": [
+          "site-confenge"
+        ],
+        "confidence": 0.8
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.4
+      },
+      "competition": {
+        "score": 0.35
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/ferramentas/diagnostico-defesa-margem/",
+      "existing_url": "/ferramentas/diagnostico-defesa-margem/",
+      "action": "keep",
+      "score": 64,
+      "score_breakdown": {
+        "commercial_intent": 25,
+        "service_fit": 19,
+        "data_moat": 3,
+        "demand_evidence": 5,
+        "topical_authority": 8,
+        "freshness_trigger": 2,
+        "competitive_opportunity": 2
+      },
+      "score_penalties": {},
+      "rationale": "Necessidade canônica do grafo de demanda (need-defesa-margem-diagnostico): Contrato público em execução sem leitura factual de margem, prazos e eventos",
+      "suggested_cta": "Quero uma segunda leitura deste contrato",
+      "suggested_internal_links": [
+        "/defesa-margem-contratos-publicos/",
+        "/ferramentas/diagnostico-defesa-margem/"
+      ],
+      "confidence": 0.55,
+      "source": "demand_graph",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.15,
+      "demand_strength": 0.35,
+      "topical_authority_score": 0.75,
+      "freshness_score": 0.4,
+      "competitive_score": 0.35,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": true,
+        "decision": "indexable_candidate",
+        "fails": [],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "indexable_candidate"
     },
     {
       "id": "opp-need-edital-orcamento",
@@ -1483,7 +1574,7 @@
       "publishability": "indexable_candidate"
     },
     {
-      "id": "opp-gsc-ctr-1146523",
+      "id": "opp-gsc-ctr-5561925",
       "topic": "CTR opportunity: /conteudos/limite-aditivo-25-50-obra-publica/",
       "cluster": "aditivos",
       "intent": "mofu",
@@ -1503,13 +1594,13 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
         "serp_diagnosis": {
-          "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
-          "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
-          "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
+          "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
+          "meta_description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado.",
+          "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
           "issues": [
             "title_long_desktop",
             "title_long_mobile_truncation_risk",
-            "robots_noindex"
+            "meta_description_long"
           ],
           "alternate_landing_candidate": "/aditivos-obras-publicas/",
           "ctr_gap": {
@@ -1564,7 +1655,7 @@
         "competitive_opportunity": 3
       },
       "score_penalties": {},
-      "rationale": "CTR gap configurável: impr=14.0 cliques=0.0 pos=11.0 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,robots_noindex",
+      "rationale": "CTR gap configurável: impr=14.0 cliques=0.0 pos=11.0 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk,meta_description_long",
       "suggested_cta": "Ver serviço de aditivos",
       "suggested_internal_links": [
         "/conteudos/limite-aditivo-25-50-obra-publica/",
@@ -1592,115 +1683,7 @@
       "publishability": "blocked_by_gate"
     },
     {
-      "id": "opp-gsc-ctr-3260573",
-      "topic": "CTR opportunity: /conteudos/prorrogacao-prazo-obra-publica-documentos/",
-      "cluster": "atrasos-prorrogacao",
-      "intent": "mofu",
-      "persona": "orcamentista",
-      "jtbd": "Corrigir título/meta para capturar impressões existentes",
-      "commercial_fit": 0.95,
-      "service_fit": "atrasos-prorrogacao-obras-publicas",
-      "service_path": "/atrasos-prorrogacao-obras-publicas/",
-      "demand_signal": {
-        "strength": 0.655,
-        "source": "gsc"
-      },
-      "search_console_evidence": {
-        "impressions": 15.0,
-        "clicks": 0.0,
-        "position": 9.2,
-        "ctr": 0.0,
-        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-        "serp_diagnosis": {
-          "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
-          "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
-          "h1": "Prorrogação de prazo: documentos que não podem faltar",
-          "issues": [
-            "title_long_desktop",
-            "title_long_mobile_truncation_risk"
-          ],
-          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
-          "ctr_gap": {
-            "is_opportunity": true,
-            "ctr": 0.0,
-            "expected_ctr": 0.025,
-            "gap": 0.025,
-            "reasons": [
-              "ctr_below_45%_of_expected",
-              "ctr_below_absolute_floor"
-            ],
-            "priority_force_include": false
-          }
-        }
-      },
-      "datalake_evidence": {
-        "dataset": "web-cfg-editorial",
-        "as_of": "gsc",
-        "record_count": 1,
-        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
-        "limitations": [
-          "Amostra GSC limitada no export disponível.",
-          "expected_ctr é heurística operacional, não garantia do Google."
-        ],
-        "sources": [
-          "google-search-console"
-        ],
-        "confidence": 0.3
-      },
-      "unique_data_available": false,
-      "freshness": {
-        "score": 0.7
-      },
-      "competition": {
-        "score": 0.6
-      },
-      "cannibalization": {
-        "risk": false,
-        "urls": []
-      },
-      "proposed_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-      "existing_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-      "action": "improve",
-      "score": 62,
-      "score_breakdown": {
-        "commercial_intent": 18,
-        "service_fit": 19,
-        "data_moat": 2,
-        "demand_evidence": 10,
-        "topical_authority": 6,
-        "freshness_trigger": 4,
-        "competitive_opportunity": 3
-      },
-      "score_penalties": {},
-      "rationale": "CTR gap configurável: impr=15.0 cliques=0.0 pos=9.2 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk",
-      "suggested_cta": "Ver serviço de prazos e prorrogações",
-      "suggested_internal_links": [
-        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-        "/atrasos-prorrogacao-obras-publicas/"
-      ],
-      "confidence": 0.3,
-      "source": "gsc_page",
-      "service_fit_score": 0.95,
-      "data_moat_score": 0.1,
-      "demand_strength": 0.655,
-      "topical_authority_score": 0.6,
-      "freshness_score": 0.7,
-      "competitive_score": 0.6,
-      "penalties": [],
-      "indexability_gate": {
-        "indexable": false,
-        "decision": "noindex",
-        "fails": [
-          "low_data_confidence"
-        ],
-        "warnings": [
-          "sample_thin_margin"
-        ]
-      },
-      "publishability": "blocked_by_gate"
-    },
-    {
-      "id": "opp-gsc-ctr-5929950",
+      "id": "opp-gsc-ctr-5681402",
       "topic": "CTR opportunity: /conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
       "cluster": "atrasos-prorrogacao",
       "intent": "mofu",
@@ -1809,7 +1792,115 @@
       "publishability": "blocked_by_gate"
     },
     {
-      "id": "opp-gsc-ctr-9675358",
+      "id": "opp-gsc-ctr-9148940",
+      "topic": "CTR opportunity: /conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "cluster": "atrasos-prorrogacao",
+      "intent": "mofu",
+      "persona": "orcamentista",
+      "jtbd": "Corrigir título/meta para capturar impressões existentes",
+      "commercial_fit": 0.95,
+      "service_fit": "atrasos-prorrogacao-obras-publicas",
+      "service_path": "/atrasos-prorrogacao-obras-publicas/",
+      "demand_signal": {
+        "strength": 0.655,
+        "source": "gsc"
+      },
+      "search_console_evidence": {
+        "impressions": 15.0,
+        "clicks": 0.0,
+        "position": 9.2,
+        "ctr": 0.0,
+        "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "serp_diagnosis": {
+          "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+          "meta_description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
+          "h1": "Prorrogação de prazo: documentos que não podem faltar",
+          "issues": [
+            "title_long_desktop",
+            "title_long_mobile_truncation_risk"
+          ],
+          "alternate_landing_candidate": "/atrasos-prorrogacao-obras-publicas/",
+          "ctr_gap": {
+            "is_opportunity": true,
+            "ctr": 0.0,
+            "expected_ctr": 0.025,
+            "gap": 0.025,
+            "reasons": [
+              "ctr_below_45%_of_expected",
+              "ctr_below_absolute_floor"
+            ],
+            "priority_force_include": false
+          }
+        }
+      },
+      "datalake_evidence": {
+        "dataset": "web-cfg-editorial",
+        "as_of": "gsc",
+        "record_count": 1,
+        "methodology": "GSC page-level SERP CTR gap using data/organic/serp-ctr-config.json (min_impressions, position band, expected_ctr_by_position_band, ctr_gap_ratio).",
+        "limitations": [
+          "Amostra GSC limitada no export disponível.",
+          "expected_ctr é heurística operacional, não garantia do Google."
+        ],
+        "sources": [
+          "google-search-console"
+        ],
+        "confidence": 0.3
+      },
+      "unique_data_available": false,
+      "freshness": {
+        "score": 0.7
+      },
+      "competition": {
+        "score": 0.6
+      },
+      "cannibalization": {
+        "risk": false,
+        "urls": []
+      },
+      "proposed_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "existing_url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "action": "improve",
+      "score": 62,
+      "score_breakdown": {
+        "commercial_intent": 18,
+        "service_fit": 19,
+        "data_moat": 2,
+        "demand_evidence": 10,
+        "topical_authority": 6,
+        "freshness_trigger": 4,
+        "competitive_opportunity": 3
+      },
+      "score_penalties": {},
+      "rationale": "CTR gap configurável: impr=15.0 cliques=0.0 pos=9.2 ctr=0.0 expected=0.025 reasons=ctr_below_45%_of_expected,ctr_below_absolute_floor issues=title_long_desktop,title_long_mobile_truncation_risk",
+      "suggested_cta": "Ver serviço de prazos e prorrogações",
+      "suggested_internal_links": [
+        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "confidence": 0.3,
+      "source": "gsc_page",
+      "service_fit_score": 0.95,
+      "data_moat_score": 0.1,
+      "demand_strength": 0.655,
+      "topical_authority_score": 0.6,
+      "freshness_score": 0.7,
+      "competitive_score": 0.6,
+      "penalties": [],
+      "indexability_gate": {
+        "indexable": false,
+        "decision": "noindex",
+        "fails": [
+          "low_data_confidence"
+        ],
+        "warnings": [
+          "sample_thin_margin"
+        ]
+      },
+      "publishability": "blocked_by_gate"
+    },
+    {
+      "id": "opp-gsc-ctr-3678434",
       "topic": "CTR opportunity: /conteudos/atraso-na-medicao-obra-publica/",
       "cluster": "medicoes-pagamentos",
       "intent": "mofu",
@@ -1932,7 +2023,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "site-confenge-guides",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 48,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -2025,7 +2116,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "site-confenge-guides",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 22,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -2118,7 +2209,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts,site-confenge-guides",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 48,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -2212,7 +2303,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts,site-confenge-guides",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 28,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -2306,7 +2397,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "site-confenge-guides,pncp_supplier_contracts",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 48,
         "methodology": "Padrão editorial-normativo: enquadramento problema→serviço com base em guias técnicos e arquétipos recorrentes. Não é contagem de contratos agregados nem ranking comercial.",
         "limitations": [
@@ -2400,7 +2491,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 13,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -2506,7 +2597,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 13,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -2612,7 +2703,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 12,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -2804,7 +2895,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_supplier_contracts",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 10,
         "methodology": "Agregação de contratos com valor_total > 0 e arquétipo AEC primário confirmado/probable no export pSEO; mediana e percentis no recorte.",
         "limitations": [
@@ -2910,7 +3001,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 15,
         "historical_count": 48,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -3006,7 +3097,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 3,
         "historical_count": 73,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -3103,7 +3194,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 4,
         "historical_count": 56,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -3200,7 +3291,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 4,
         "historical_count": 47,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -3297,7 +3388,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 4,
         "historical_count": 42,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -3394,7 +3485,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 7,
         "historical_count": 80,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -3491,7 +3582,7 @@
       "search_console_evidence": {},
       "datalake_evidence": {
         "dataset": "pncp_open_opportunities",
-        "as_of": "2026-08-09",
+        "as_of": "2026-08-22",
         "record_count": 5,
         "historical_count": 21,
         "methodology": "Filtro de status aberto sobre editais/compras do PNCP; histórico encerrado nunca é tratado como oportunidade vigente.",
@@ -3657,8 +3748,54 @@
     }
   ],
   "demand_map": {
-    "schema_version": "organic-demand-v1",
-    "model": "persona → problem → question → intent → service",
+    "schema_version": "organic-demand-v2",
+    "model": "query/problem → user job → ICP → stage → asset → unique utility → evidence → CTA → CONFENGE offer → success metric",
+    "inputs": [
+      {
+        "id": "gsc-current",
+        "kind": "google_search_console",
+        "path": "data/revops/gsc/insights_latest.json",
+        "as_of": "2026-07-30",
+        "limitations": "Aggregate search evidence; never joined query-to-lead."
+      },
+      {
+        "id": "smartlic-historical",
+        "kind": "pending_migration_evidence",
+        "path": "https://github.com/tjsasakifln/web-cfg/pull/68",
+        "as_of": "2026-08-14",
+        "state": "PENDING_ACCEPTANCE",
+        "limitations": "SmartLic donor GSC exports exist only in unmerged PR #68; current SmartLic GSC API state is UNKNOWN."
+      },
+      {
+        "id": "live-serp-2026-08-14",
+        "kind": "live_search_observation",
+        "path": "data/organic/search-baseline-2026-08-14.json",
+        "as_of": "2026-08-14",
+        "limitations": "Observed result sample, not rank tracking or exhaustive index coverage."
+      },
+      {
+        "id": "commercial-jobs",
+        "kind": "commercial_questions_and_objections",
+        "path": "index.html#jornadas",
+        "as_of": "2026-08-14",
+        "limitations": "Current positioning and operator knowledge; win/loss denominators are UNKNOWN."
+      },
+      {
+        "id": "public-read-v1",
+        "kind": "public_data_capability",
+        "path": "https://github.com/tjsasakifln/extra-cli/blob/main/docs/contracts/public-read-v1.md",
+        "as_of": "2026-08-14",
+        "limitations": "SELECT-only producer contract; live consumer query health must be verified separately."
+      },
+      {
+        "id": "service-economics",
+        "kind": "commercial_economics",
+        "path": null,
+        "as_of": "2026-08-14",
+        "state": "UNKNOWN",
+        "limitations": "No versioned ticket, close-rate or contribution-margin baseline was available."
+      }
+    ],
     "nodes": [
       {
         "id": "need-reequilibrio-pleito",
@@ -3677,7 +3814,36 @@
         ],
         "cta": "Analisar viabilidade de reequilíbrio",
         "funnel": "bofu",
-        "existing_url": "/reequilibrio-obras-publicas/"
+        "existing_url": "/reequilibrio-obras-publicas/",
+        "icp": "diretor-construtora",
+        "stage": "commercial_decision",
+        "asset": "/ferramentas/checklist-reequilibrio/",
+        "unique_utility": "Fail-closed documentary readiness check with central blockers, correction order and local-only answers.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/reequilibrio-obras-publicas/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "A contractor facing margin erosion will use a private readiness check before requesting a technical second reading.",
+          "target_query_job": "Proteger margem e decidir se vale montar pleito de reequilíbrio agora",
+          "commercial_offer": "/reequilibrio-obras-publicas/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       },
       {
         "id": "need-aditivo-limite",
@@ -3697,7 +3863,36 @@
         "cta": "Revisar estratégia de aditivo",
         "funnel": "mofu",
         "tool_path": "/ferramentas/limite-acrescimos-supressoes/",
-        "existing_url": "/aditivos-obras-publicas/"
+        "existing_url": "/aditivos-obras-publicas/",
+        "icp": "engenheiro-contratos",
+        "stage": "solution_evaluation",
+        "asset": "/ferramentas/limite-acrescimos-supressoes/",
+        "unique_utility": "Separates additions and suppressions and exposes the decision inputs instead of returning a context-free percentage.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/aditivos-obras-publicas/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "A contract engineer near an amendment limit will value a transparent calculation and request case review when assumptions are uncertain.",
+          "target_query_job": "Calcular saldo de aditivo e evitar pedido sem base",
+          "commercial_offer": "/aditivos-obras-publicas/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       },
       {
         "id": "need-medicao-glosa",
@@ -3716,7 +3911,36 @@
         ],
         "cta": "Revisar medição e glosa",
         "funnel": "bofu",
-        "existing_url": "/medicoes-glosas-obras-publicas/"
+        "existing_url": "/medicoes-glosas-obras-publicas/",
+        "icp": "engenheiro-obra",
+        "stage": "commercial_decision",
+        "asset": "/medicoes-glosas-obras-publicas/",
+        "unique_utility": "Connects measurement facts, proof and cash impact to an engineering-specific evidence workflow.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/medicoes-glosas-obras-publicas/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "A contractor with retained cash will prefer an evidence workflow over generic legal copy and request a measurement review.",
+          "target_query_job": "Recuperar medição e documentar nexo com o contrato",
+          "commercial_offer": "/medicoes-glosas-obras-publicas/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       },
       {
         "id": "need-sinapi-desonerado",
@@ -3735,7 +3959,36 @@
         ],
         "cta": "Auditar orçamento e BDI do edital",
         "funnel": "mofu",
-        "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/"
+        "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "icp": "orcamentista",
+        "stage": "solution_evaluation",
+        "asset": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "unique_utility": "Relates the selected SINAPI regime to BDI, payroll charges and proposal-margin consequences.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/auditoria-orcamento-licitacao/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "An estimator comparing SINAPI regimes will progress to an audit when the page makes the margin consequence explicit.",
+          "target_query_job": "Evitar erro de base que destrói margem na proposta",
+          "commercial_offer": "/auditoria-orcamento-licitacao/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       },
       {
         "id": "need-atraso-prorrogacao",
@@ -3755,7 +4008,36 @@
         "cta": "Montar defesa de prazo",
         "funnel": "mofu",
         "tool_path": "/ferramentas/matriz-atraso-obra/",
-        "existing_url": "/atrasos-prorrogacao-obras-publicas/"
+        "existing_url": "/atrasos-prorrogacao-obras-publicas/",
+        "icp": "gerente-contratos",
+        "stage": "solution_evaluation",
+        "asset": "/ferramentas/matriz-atraso-obra/",
+        "unique_utility": "Structures cause, responsibility, evidence and time impact without asserting an unsupported legal conclusion.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/atrasos-prorrogacao-obras-publicas/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "A contract manager under schedule pressure will use the matrix to find evidence gaps and request a second reading.",
+          "target_query_job": "Proteger prazo e evitar sanção indevida",
+          "commercial_offer": "/atrasos-prorrogacao-obras-publicas/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       },
       {
         "id": "need-edital-orcamento",
@@ -3774,7 +4056,36 @@
         ],
         "cta": "Auditar edital e orçamento",
         "funnel": "bofu",
-        "existing_url": "/auditoria-orcamento-licitacao/"
+        "existing_url": "/auditoria-orcamento-licitacao/",
+        "icp": "licitacoes",
+        "stage": "commercial_decision",
+        "asset": "/auditoria-orcamento-licitacao/",
+        "unique_utility": "Frames bid/no-bid around budget provenance, executability and margin rather than tender volume.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/auditoria-orcamento-licitacao/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "A bid team with an inconsistent budget will seek a technical audit before committing proposal capital.",
+          "target_query_job": "Decidir se a licitação é economicamente segura",
+          "commercial_offer": "/auditoria-orcamento-licitacao/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       },
       {
         "id": "need-benchmark-mercado",
@@ -3792,7 +4103,36 @@
         ],
         "cta": "Entender como a inteligência de mercado apoia decisões",
         "funnel": "tofu",
-        "requires_data_moat": true
+        "requires_data_moat": true,
+        "icp": "diretor-construtora",
+        "stage": "problem_awareness",
+        "asset": "/radar/nacional-obras-publicas/",
+        "unique_utility": "Uses normalized contract evidence with visible methodology and limitations for reuse and comparison.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/metodologia-inteligencia/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "Original, reusable contract evidence will earn citations and create qualified market-intelligence conversations.",
+          "target_query_job": "Comparar o próprio caso com evidência agregada do mercado",
+          "commercial_offer": "/metodologia-inteligencia/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       },
       {
         "id": "need-gestao-contratual",
@@ -3810,7 +4150,84 @@
         ],
         "cta": "Diagnosticar gestão contratual B2G",
         "funnel": "bofu",
-        "existing_url": "/acompanhamento-contratos-obras/"
+        "existing_url": "/acompanhamento-contratos-obras/",
+        "icp": "proprietario-construtora",
+        "stage": "commercial_decision",
+        "asset": "/acompanhamento-contratos-obras/",
+        "unique_utility": "Maps recurring contract-control failures to an explicit continuous operating routine and next decision.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/acompanhamento-contratos-obras/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "A director with recurring contract leakage will choose a diagnostic when continuous-routine fit is made concrete.",
+          "target_query_job": "Decidir se contrata apoio externo para gestão B2G",
+          "commercial_offer": "/acompanhamento-contratos-obras/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
+      },
+      {
+        "id": "need-defesa-margem-diagnostico",
+        "persona": "diretor-construtora",
+        "problem": "Contrato público em execução sem leitura factual de margem, prazos e eventos",
+        "question": "O que este contrato público já mostra — e o que permanece UNKNOWN — antes de pedir uma segunda leitura?",
+        "intent": "bofu",
+        "jtbd": "Partir de um contrato real e decidir se vale pedir segunda leitura técnica",
+        "cluster": "defesa-margem",
+        "service_slug": "defesa-margem-contratos-publicos",
+        "service_path": "/defesa-margem-contratos-publicos/",
+        "related_queries": [
+          "defesa de margem contrato público",
+          "diagnóstico contrato obra pública",
+          "segunda leitura contrato público"
+        ],
+        "cta": "Quero uma segunda leitura deste contrato",
+        "funnel": "bofu",
+        "existing_url": "/ferramentas/diagnostico-defesa-margem/",
+        "icp": "diretor-construtora",
+        "stage": "commercial_decision",
+        "asset": "/ferramentas/diagnostico-defesa-margem/",
+        "unique_utility": "Turns a public contract identifier into a provenance-bearing factual reading that preserves UNKNOWN instead of inventing legal credit.",
+        "evidence": [
+          "gsc-current",
+          "smartlic-historical",
+          "live-serp-2026-08-14",
+          "commercial-jobs"
+        ],
+        "confenge_offer": "/defesa-margem-contratos-publicos/",
+        "success_metric": "qualified_commercial_opportunity_created",
+        "experiment": {
+          "decision_state": "VALIDATE",
+          "hypothesis": "A contractor with a named public contract will request a CONFENGE second reading after seeing official facts and explicit UNKNOWN gaps.",
+          "target_query_job": "Partir de um contrato real e decidir se vale pedir segunda leitura técnica",
+          "commercial_offer": "/defesa-margem-contratos-publicos/",
+          "pipeline_mechanism": "useful_asset → contextual_CTA → attributable_lead → operator_next_action → qualified_conversation",
+          "publication_canary_size": "one canonical asset or family",
+          "promotion_threshold": "unique usefulness + crawl/index quality + engaged use or citation + commercial signal",
+          "kill_deindex_threshold": "thin or duplicate intent, unresolved factual defect, or no engaged/citation/commercial reason after the evidence cycle",
+          "maintenance_owner": "web-cfg public surface; extra-cli only where data-backed",
+          "maintenance_cost": "UNKNOWN until the first 28-day operating cycle",
+          "evidence_plan": {
+            "day_7": "crawl, index coverage, tool completion and attribution integrity",
+            "day_28": "engaged usage, citations/links and qualified commercial signals",
+            "day_90": "qualified pipeline, maintenance cost and promote/hold/deindex decision"
+          }
+        }
       }
     ],
     "by_cluster": {
@@ -3837,6 +4254,9 @@
       ],
       "gestao-contratual": [
         "need-gestao-contratual"
+      ],
+      "defesa-margem": [
+        "need-defesa-margem-diagnostico"
       ]
     },
     "by_intent": {
@@ -3844,7 +4264,8 @@
         "need-reequilibrio-pleito",
         "need-medicao-glosa",
         "need-edital-orcamento",
-        "need-gestao-contratual"
+        "need-gestao-contratual",
+        "need-defesa-margem-diagnostico"
       ],
       "mofu": [
         "need-aditivo-limite",
@@ -3874,45 +4295,55 @@
       "opportunity_count": 7,
       "mean_gap": 0.03768
     },
-    "commercial_bridge_coverage": 0.2857,
+    "commercial_bridge_coverage": 0.3,
     "content_to_service_link_coverage": 0.9714,
     "service_to_supporting_content_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
     "indexable_content_to_service_link_coverage": 1.0,
     "organic_assisted_conversion": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_service_page_entry": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_content_to_service_transition": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_content_to_lead": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_service_to_lead": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "note": "Impression/click shares from GSC page table. Funnel metrics need collect/attribution exports; do not invent conversion rates."
   },
   "link_coverage": {
     "content_to_service_link_coverage": 0.9714,
-    "commercial_bridge_coverage": 0.2857,
+    "commercial_bridge_coverage": 0.3,
     "service_to_supporting_content_coverage": 1.0,
     "indexable_content_to_service_link_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
-    "indexable_mapped": 20,
+    "indexable_mapped": 21,
     "mapped": 70,
     "content_pages_scanned": 120
   },
   "gsc_export": {
-    "dir": "seo/gsc-2026-08-09",
+    "dir": "/home/tjsasakifln/code/confenge/web-cfg-bofu-revenue-20260822/seo/gsc-2026-08-09",
     "export_id": "gsc-2026-08-09",
     "totals": {
       "pages_impressions_sum": 373.0,
@@ -3920,7 +4351,11 @@
       "queries_impressions_sum": 108.0,
       "queries_clicks_sum": 6.0,
       "devices_impressions_sum": 384.0,
-      "devices_clicks_sum": 10.0
+      "devices_clicks_sum": 10.0,
+      "countries_impressions_sum": 0,
+      "countries_clicks_sum": 0,
+      "dates_impressions_sum": 384.0,
+      "dates_clicks_sum": 10.0
     },
     "devices": [
       {
@@ -3948,6 +4383,6 @@
         "ctr": 0.0
       }
     ],
-    "aggregation_note": "GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality."
+    "aggregation_note": "GSC dimensional tables (pages/queries/devices/countries/dates) may disagree due to privacy thresholding and aggregation. Do not force equality."
   }
 }

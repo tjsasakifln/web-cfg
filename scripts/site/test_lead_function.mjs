@@ -123,6 +123,36 @@ _reset();
   pass("honeypot_suppressed");
 }
 
+// 4b) Diretoria handraise is catalog-bound but is not checkout.
+{
+  const base = {
+    nome: "QA Diretoria",
+    email: "qa-diretoria@example.com",
+    estagio: "enquadramento-diretoria-b2g",
+    jornada: "operacao",
+    consentimento: "1",
+    origem: "diretoria-b2g",
+    route_family: "diretoria-b2g",
+    landing_page: "https://confenge.com.br/diretoria-b2g/",
+    offer_id: "CFG-DIRB2G-FLEX-v1",
+  };
+  const termsMismatch = await handler(event({ ...base, terms_id: "CFG-TERMS-STALE" }));
+  const termsBody = JSON.parse(termsMismatch.body);
+  if (termsMismatch.statusCode !== 422 || termsBody.error !== "terms_version_mismatch") {
+    fail("diretoria_terms_mismatch", { status: termsMismatch.statusCode, body: termsBody });
+  }
+  const priceMismatch = await handler(event({
+    ...base,
+    terms_id: "CFG-TERMS-B2B-2026-08-17-v1",
+    amount_cents: 1,
+  }));
+  const priceBody = JSON.parse(priceMismatch.body);
+  if (priceMismatch.statusCode !== 422 || priceBody.error !== "price_mismatch") {
+    fail("diretoria_price_mismatch", { status: priceMismatch.statusCode, body: priceBody });
+  }
+  pass("diretoria_catalog_fail_closed");
+}
+
 // 5) happy path — persist then 201, no secrets in body
 {
   const originalFetch = globalThis.fetch;

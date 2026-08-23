@@ -1,6 +1,6 @@
 {
   "schema_version": "organic-growth-report-v1",
-  "generated_at": "2026-08-09T20:12:04Z",
+  "generated_at": "2026-08-22T23:49:10Z",
   "gsc_export": "gsc-2026-08-09",
   "gsc_totals": {
     "pages_impressions_sum": 373.0,
@@ -8,9 +8,13 @@
     "queries_impressions_sum": 108.0,
     "queries_clicks_sum": 6.0,
     "devices_impressions_sum": 384.0,
-    "devices_clicks_sum": 10.0
+    "devices_clicks_sum": 10.0,
+    "countries_impressions_sum": 0,
+    "countries_clicks_sum": 0,
+    "dates_impressions_sum": 384.0,
+    "dates_clicks_sum": 10.0
   },
-  "aggregation_note": "GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality.",
+  "aggregation_note": "GSC dimensional tables (pages/queries/devices/countries/dates) may disagree due to privacy thresholding and aggregation. Do not force equality.",
   "metrics": {
     "schema_version": "commercial-exposure-metrics-v1",
     "totals": {
@@ -28,30 +32,40 @@
       "opportunity_count": 7,
       "mean_gap": 0.03768
     },
-    "commercial_bridge_coverage": 0.2857,
+    "commercial_bridge_coverage": 0.3,
     "content_to_service_link_coverage": 0.9714,
     "service_to_supporting_content_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
     "indexable_content_to_service_link_coverage": 1.0,
     "organic_assisted_conversion": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_service_page_entry": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_content_to_service_transition": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_content_to_lead": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "organic_service_to_lead": {
-      "status": "requires_analytics_export",
-      "value": null
+      "status": "UNKNOWN",
+      "value": null,
+      "reason_code": "ANALYTICS_EXPORT_ABSENT",
+      "as_of": "2026-08-22"
     },
     "note": "Impression/click shares from GSC page table. Funnel metrics need collect/attribution exports; do not invent conversion rates."
   },
@@ -59,8 +73,8 @@
     "content_pages_scanned": 120,
     "mapped": 70,
     "content_to_service_link_coverage": 0.9714,
-    "commercial_bridge_coverage": 0.2857,
-    "indexable_mapped": 20,
+    "commercial_bridge_coverage": 0.3,
+    "indexable_mapped": 21,
     "indexable_content_to_service_link_coverage": 1.0,
     "indexable_commercial_bridge_coverage": 1.0,
     "service_to_supporting_content_coverage": 1.0
@@ -157,9 +171,9 @@
           "sinapi desonerado"
         ],
         "intent_page_mismatch": false,
-        "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
-        "title_length": 61,
-        "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+        "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
+        "title_length": 69,
+        "meta_description": "SINAPI desonerado e não desonerado diferem nos encargos da mão de obra. Use a tabela que o edital e a planilha modelo fixam na data-base; misturar bases distorce o preço.",
         "h1": "SINAPI desonerado ou não desonerado: qual usar?",
         "above_the_fold_lead": "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Use a versão que o edital fixa (ou a planilha modelo do órgão), alinha BDI e regime da empresa à mesma base e confira data-base, misturar tabelas sem memória de cálculo distorce preço e exequibilidade",
         "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -189,7 +203,9 @@
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",
           "service_slug": "auditoria-orcamento-licitacao",
-          "tools": [],
+          "tools": [
+            "/ferramentas/diagnostico-defesa-margem/"
+          ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o orçamento do edital vira risco de proposta",
           "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
@@ -199,10 +215,11 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk"
+          "title_long_mobile_truncation_risk",
+          "meta_description_long"
         ],
         "clickbait_flags": [],
-        "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
+        "recommended_title": "Desonerado e não desonerado no SINAPI: o que o edital fixa",
         "recommended_description": null,
         "gsc": {
           "impressions": 89.0,
@@ -273,7 +290,8 @@
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
           "service_slug": "atrasos-prorrogacao-obras-publicas",
           "tools": [
-            "/ferramentas/matriz-atraso-obra/"
+            "/ferramentas/matriz-atraso-obra/",
+            "/ferramentas/diagnostico-defesa-margem/"
           ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o atraso deixa de ser só cronograma",
@@ -356,7 +374,8 @@
           "service_path": "/aditivos-obras-publicas/",
           "service_slug": "aditivos-obras-publicas",
           "tools": [
-            "/ferramentas/limite-acrescimos-supressoes/"
+            "/ferramentas/limite-acrescimos-supressoes/",
+            "/ferramentas/diagnostico-defesa-margem/"
           ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o aditivo passa a afetar margem",
@@ -438,7 +457,8 @@
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
           "service_slug": "atrasos-prorrogacao-obras-publicas",
           "tools": [
-            "/ferramentas/matriz-atraso-obra/"
+            "/ferramentas/matriz-atraso-obra/",
+            "/ferramentas/diagnostico-defesa-margem/"
           ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o atraso deixa de ser só cronograma",
@@ -523,7 +543,8 @@
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
           "service_slug": "atrasos-prorrogacao-obras-publicas",
           "tools": [
-            "/ferramentas/matriz-atraso-obra/"
+            "/ferramentas/matriz-atraso-obra/",
+            "/ferramentas/diagnostico-defesa-margem/"
           ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o atraso deixa de ser só cronograma",
@@ -575,13 +596,13 @@
           "aditivos obras públicas"
         ],
         "intent_page_mismatch": false,
-        "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
-        "title_length": 69,
-        "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
-        "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
-        "above_the_fold_lead": "Os limites de 25% e 50% nos aditivos não são só percentual na ponta do lápis: o que entra na conta, o tipo de alteração e o saldo acumulado definem se o teto estoura.",
+        "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
+        "title_length": 67,
+        "meta_description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado.",
+        "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
+        "above_the_fold_lead": "O percentual só fecha a conta quando a base de cálculo, o histórico de acréscimos e supressões e a natureza da alteração estão documentados. Este guia responde o limite específico; o hub de aditivos trata tipos de mudança, serviços extras e decisão de margem.",
         "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
-        "robots": "noindex,follow",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
         "structured_data_present": true,
         "breadcrumb_present": true,
         "organization_schema_present": true,
@@ -607,7 +628,8 @@
           "service_path": "/aditivos-obras-publicas/",
           "service_slug": "aditivos-obras-publicas",
           "tools": [
-            "/ferramentas/limite-acrescimos-supressoes/"
+            "/ferramentas/limite-acrescimos-supressoes/",
+            "/ferramentas/diagnostico-defesa-margem/"
           ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o aditivo passa a afetar margem",
@@ -619,10 +641,10 @@
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex"
+          "meta_description_long"
         ],
         "clickbait_flags": [],
-        "recommended_title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133",
+        "recommended_title": "Limite de aditivo 25% e 50% em obra pública: o que conta",
         "recommended_description": null,
         "gsc": {
           "impressions": 14.0,
@@ -643,7 +665,7 @@
           "priority_force_include": false
         },
         "confidence": 0.3,
-        "sample_quality": "very_low+noindex",
+        "sample_quality": "very_low",
         "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
         "html_present": true,
         "kind": "ctr_gap"
@@ -691,7 +713,9 @@
           "cluster_id": "medicoes-pagamentos",
           "service_path": "/medicoes-glosas-obras-publicas/",
           "service_slug": "medicoes-glosas-obras-publicas",
-          "tools": [],
+          "tools": [
+            "/ferramentas/diagnostico-defesa-margem/"
+          ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando a glosa ou a medição vira problema de caixa",
           "bridge_body": "Critério de medição contestado, glosa sem nexo ou parcela retida vira risco de fluxo se a equipe não organiza prova contemporânea e contesta no tempo certo.",
@@ -773,7 +797,9 @@
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",
           "service_slug": "auditoria-orcamento-licitacao",
-          "tools": [],
+          "tools": [
+            "/ferramentas/diagnostico-defesa-margem/"
+          ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o orçamento do edital vira risco de proposta",
           "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
@@ -1026,9 +1052,9 @@
           "sinapi desonerado"
         ],
         "intent_page_mismatch": false,
-        "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
-        "title_length": 61,
-        "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+        "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
+        "title_length": 69,
+        "meta_description": "SINAPI desonerado e não desonerado diferem nos encargos da mão de obra. Use a tabela que o edital e a planilha modelo fixam na data-base; misturar bases distorce o preço.",
         "h1": "SINAPI desonerado ou não desonerado: qual usar?",
         "above_the_fold_lead": "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Use a versão que o edital fixa (ou a planilha modelo do órgão), alinha BDI e regime da empresa à mesma base e confira data-base, misturar tabelas sem memória de cálculo distorce preço e exequibilidade",
         "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -1058,7 +1084,9 @@
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",
           "service_slug": "auditoria-orcamento-licitacao",
-          "tools": [],
+          "tools": [
+            "/ferramentas/diagnostico-defesa-margem/"
+          ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o orçamento do edital vira risco de proposta",
           "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
@@ -1068,10 +1096,11 @@
         "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk"
+          "title_long_mobile_truncation_risk",
+          "meta_description_long"
         ],
         "clickbait_flags": [],
-        "recommended_title": "SINAPI desonerado ou não: qual base o edital exige",
+        "recommended_title": "Desonerado e não desonerado no SINAPI: o que o edital fixa",
         "recommended_description": null,
         "gsc": {
           "impressions": 89.0,
@@ -1141,7 +1170,8 @@
           "service_path": "/atrasos-prorrogacao-obras-publicas/",
           "service_slug": "atrasos-prorrogacao-obras-publicas",
           "tools": [
-            "/ferramentas/matriz-atraso-obra/"
+            "/ferramentas/matriz-atraso-obra/",
+            "/ferramentas/diagnostico-defesa-margem/"
           ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o atraso deixa de ser só cronograma",
@@ -1163,6 +1193,92 @@
           "position": 9.2,
           "ctr": 0.0,
           "url": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/"
+        },
+        "ctr_gap": {
+          "is_opportunity": true,
+          "ctr": 0.0,
+          "expected_ctr": 0.025,
+          "gap": 0.025,
+          "reasons": [
+            "ctr_below_45%_of_expected",
+            "ctr_below_absolute_floor"
+          ],
+          "priority_force_include": false
+        },
+        "confidence": 0.3,
+        "sample_quality": "very_low",
+        "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
+        "html_present": true,
+        "kind": "ctr_gap"
+      },
+      {
+        "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "query_intent": "informational",
+        "related_queries": [
+          "aditivo qualitativo e quantitativo",
+          "prorrogação prazo obra pública chuva",
+          "glosa de medição obra pública",
+          "bdi diferenciado obra pública",
+          "medição rejeitada obra pública",
+          "aditivos obras públicas"
+        ],
+        "intent_page_mismatch": false,
+        "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
+        "title_length": 67,
+        "meta_description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado.",
+        "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
+        "above_the_fold_lead": "O percentual só fecha a conta quando a base de cálculo, o histórico de acréscimos e supressões e a natureza da alteração estão documentados. Este guia responde o limite específico; o hub de aditivos trata tipos de mudança, serviços extras e decisão de margem.",
+        "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+        "structured_data_present": true,
+        "breadcrumb_present": true,
+        "organization_schema_present": true,
+        "site_name": "CONFENGE",
+        "service_fit": {
+          "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+          "match_source": "tokens",
+          "confidence": "medium",
+          "ambiguous": false,
+          "token_scores": {
+            "aditivos": {
+              "cluster_id": "aditivos",
+              "hits": [
+                "aditivo"
+              ],
+              "hit_count": 1,
+              "service_path": "/aditivos-obras-publicas/"
+            }
+          },
+          "tied_clusters": [],
+          "matched": true,
+          "cluster_id": "aditivos",
+          "service_path": "/aditivos-obras-publicas/",
+          "service_slug": "aditivos-obras-publicas",
+          "tools": [
+            "/ferramentas/limite-acrescimos-supressoes/",
+            "/ferramentas/diagnostico-defesa-margem/"
+          ],
+          "specialist": "/especialista/tiago-jun-sasaki/",
+          "bridge_title": "Quando o aditivo passa a afetar margem",
+          "bridge_body": "Mudança de escopo, item novo ou limite de 25%/50% deixa de ser dúvida de planilha quando a decisão formal define preço, prazo e exposição. Aí vale enquadrar o fato antes de executar ou assinar.",
+          "cta_label": "Ver serviço de aditivos"
+        },
+        "alternate_landing_candidate": "/aditivos-obras-publicas/",
+        "internal_cannibalization_note": "Compare title/H1 with sibling /conteudos/ and service pillar for same cluster.",
+        "issues": [
+          "title_long_desktop",
+          "title_long_mobile_truncation_risk",
+          "meta_description_long"
+        ],
+        "clickbait_flags": [],
+        "recommended_title": "Limite de aditivo 25% e 50% em obra pública: o que conta",
+        "recommended_description": null,
+        "gsc": {
+          "impressions": 14.0,
+          "clicks": 0.0,
+          "position": 11.0,
+          "ctr": 0.0,
+          "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
         },
         "ctr_gap": {
           "is_opportunity": true,
@@ -1224,7 +1340,9 @@
           "cluster_id": "medicoes-pagamentos",
           "service_path": "/medicoes-glosas-obras-publicas/",
           "service_slug": "medicoes-glosas-obras-publicas",
-          "tools": [],
+          "tools": [
+            "/ferramentas/diagnostico-defesa-margem/"
+          ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando a glosa ou a medição vira problema de caixa",
           "bridge_body": "Critério de medição contestado, glosa sem nexo ou parcela retida vira risco de fluxo se a equipe não organiza prova contemporânea e contesta no tempo certo.",
@@ -1304,7 +1422,9 @@
           "cluster_id": "orcamento-bdi",
           "service_path": "/auditoria-orcamento-licitacao/",
           "service_slug": "auditoria-orcamento-licitacao",
-          "tools": [],
+          "tools": [
+            "/ferramentas/diagnostico-defesa-margem/"
+          ],
           "specialist": "/especialista/tiago-jun-sasaki/",
           "bridge_title": "Quando o orçamento do edital vira risco de proposta",
           "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
@@ -1395,10 +1515,11 @@
       "serp_diagnosis": {
         "issues": [
           "title_long_desktop",
-          "title_long_mobile_truncation_risk"
+          "title_long_mobile_truncation_risk",
+          "meta_description_long"
         ],
-        "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
-        "meta_description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+        "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
+        "meta_description": "SINAPI desonerado e não desonerado diferem nos encargos da mão de obra. Use a tabela que o edital e a planilha modelo fixam na data-base; misturar bases distorce o preço.",
         "h1": "SINAPI desonerado ou não desonerado: qual usar?"
       }
     },
@@ -1528,22 +1649,22 @@
         "ctr": 0.0,
         "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
       },
-      "recommended_action": "Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)",
+      "recommended_action": "Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR",
       "related_service": "/aditivos-obras-publicas/",
       "expected_commercial_impact": "low",
       "confidence": 0.3,
-      "sample_quality": "very_low+noindex",
+      "sample_quality": "very_low",
       "evidence_note": "expected_ctr is a planning heuristic, not a Google guarantee. CTR-gap flags are ranking hypotheses for human review when sample_quality is low/very_low/anecdotal — not automatic proof of a title problem.",
       "class": "ctr_gap",
       "serp_diagnosis": {
         "issues": [
           "title_long_desktop",
           "title_long_mobile_truncation_risk",
-          "robots_noindex"
+          "meta_description_long"
         ],
-        "title": "Aditivos em obra pública: limite de 25% e 50% (Lei 14.133) | CONFENGE",
-        "meta_description": "Limite de 25% e 50% em aditivos de obra pública: o que entra na conta, exceções e como não estourar o teto na Lei 14.133.",
-        "h1": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133"
+        "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
+        "meta_description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado.",
+        "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta"
       }
     },
     {
@@ -1734,8 +1855,8 @@
     }
   ],
   "opportunities_engine_ref": {
-    "total": 31,
-    "bofu": 4
+    "total": 32,
+    "bofu": 5
   },
   "hypotheses_not_proven": [
     "Title/meta changes will lift CTR — validate with post-deploy GSC export",

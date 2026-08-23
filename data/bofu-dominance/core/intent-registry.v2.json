@@ -2,7 +2,7 @@
   "schema": "bofu-intent-registry/2.0",
   "campaign": "CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02",
   "slot": "BOFU-CORE",
-  "as_of": "2026-08-19",
+  "as_of": "2026-08-22",
   "public_surface": "https://confenge.com.br",
   "gsc_live_state": "LIVE_JOB_OK",
   "notes": [
@@ -415,6 +415,76 @@
       "next_test": "Do not create a second Bid Room URL for #155.",
       "kill": "If Bid Room never receives origin→service from pré-licitação, fix #153 rather than cloning pages.",
       "consolidate": "One Bid Room offer."
+    },
+    {
+      "id": "diagnostico-expansao",
+      "priority": "P0",
+      "priority_reason": "Only one-off paid diagnostic; qualified opportunity is direct revenue leverage.",
+      "job": "Decidir em quais compradores, territórios e segmentos a construtora deve concentrar uma expansão B2G antes de dispersar capital comercial.",
+      "decision": "Contratar o diagnóstico pontual de expansão vs manter o recorte atual vs não investir agora.",
+      "primary_queries": [
+        "diagnóstico B2G de expansão",
+        "mercado de obras públicas para construtora",
+        "onde vender para governo construção",
+        "mapa de compradores públicos obras"
+      ],
+      "negative_queries": ["expansão imobiliária residencial", "curso vender para governo", "lista de leads públicos"],
+      "canonical_owner": {
+        "path": "/diagnostico-b2g-expansao/",
+        "url": "https://confenge.com.br/diagnostico-b2g-expansao/",
+        "page_type": "paid_offer",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 237
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 237,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-08-22",
+      "overlap": [
+        {"other_family": "carteira-operacao", "rule": "expansao_owns_where_to_grow_360_owns_internal_operating_diagnosis"},
+        {"other_family": "bid-room", "rule": "expansao_owns_portfolio_choice_bid_room_owns_one_live_proposal"},
+        {"other_family": "defesa-margem", "rule": "expansao_owns_market_choice_defesa_margem_owns_one_live_contract"},
+        {"other_family": "diretoria-b2g", "rule": "expansao_is_paid_one_off_diagnosis_diretoria_is_recurring_execution"}
+      ],
+      "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile attributed entry → handraise → qualified opportunity for CFG-DIAG-EXP-v1; official SERP position remains UNKNOWN until a source with complete context exists.",
+      "kill": "Owner web-cfg/conversion: on 2026-09-19 kill paid-offer promotion if qualified opportunities remain zero after 28 days with attributable commercial entries; do not create segment variants.",
+      "consolidate": "One paid expansion diagnosis. No buyer, territory or segment landing-page family."
+    },
+    {
+      "id": "diretoria-b2g",
+      "priority": "P0",
+      "priority_reason": "Only recurring paid offer; capacity-qualified handraises are direct pipeline leverage.",
+      "job": "Decidir se a construtora precisa de direção B2G recorrente para priorizar oportunidades e contratos dentro da capacidade disponível.",
+      "decision": "Pedir enquadramento de capacidade para Diretoria B2G vs contratar apoio pontual vs seguir com equipe própria.",
+      "primary_queries": [
+        "diretoria B2G fracionada",
+        "consultoria recorrente licitações obras",
+        "gestão B2G para construtora",
+        "direção de licitações e contratos públicos"
+      ],
+      "negative_queries": ["diretoria de empresa pública", "vaga diretor licitações", "software automação licitação"],
+      "canonical_owner": {
+        "path": "/diretoria-b2g/",
+        "url": "https://confenge.com.br/diretoria-b2g/",
+        "page_type": "paid_offer",
+        "page_exists": true,
+        "indexable": true,
+        "issue": 237
+      },
+      "freeze": {"frozen": false},
+      "active_issue": 237,
+      "active_pr": null,
+      "earliest_safe_action_at": "2026-08-22",
+      "overlap": [
+        {"other_family": "carteira-operacao", "rule": "diretoria_owns_recurring_action_360_owns_diagnosis"},
+        {"other_family": "gestao-contratual", "rule": "diretoria_owns_portfolio_direction_acompanhamento_owns_contract_routine"},
+        {"other_family": "defesa-margem", "rule": "diretoria_owns_portfolio_direction_defesa_margem_owns_single_contract_second_reading"},
+        {"other_family": "diagnostico-expansao", "rule": "diretoria_is_recurring_execution_expansao_is_one_off_market_choice"}
+      ],
+      "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile on-page capacity handraise → qualified opportunity for the catalog offer; official SERP position remains UNKNOWN without complete evidence.",
+      "kill": "Owner web-cfg/conversion: kill checkout language or autonomous sending immediately; on 2026-09-19 consolidate into the operational diagnosis if capacity-qualified requests remain zero rather than cloning pages.",
+      "consolidate": "One Diretoria B2G canonical owner across Flex, 180 and 365; plans do not receive public URLs."
     },
     {
       "id": "bid-readiness",

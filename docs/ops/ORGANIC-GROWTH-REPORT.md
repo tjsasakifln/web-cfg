@@ -1,9 +1,9 @@
 # Organic Growth Report
 
-**generated_at:** 2026-08-09T20:12:04Z
+**generated_at:** 2026-08-22T23:49:10Z
 **gsc_export:** gsc-2026-08-09
 
-> GSC dimensional tables (pages/queries/devices/chart) may disagree due to privacy thresholding and aggregation. Do not force equality.
+> GSC dimensional tables (pages/queries/devices/countries/dates) may disagree due to privacy thresholding and aggregation. Do not force equality.
 
 > GSC window is short and low-volume. CTR-gap and expected_ctr are ranking hypotheses for human review, not automatic proof. Do not treat impressions < 30 as statistically significant.
 
@@ -14,7 +14,7 @@
 - commercial_click_share: `0.0`
 - serp_ctr_gap opportunities: `7`
 - content_to_service_link_coverage: `0.9714`
-- commercial_bridge_coverage: `0.2857`
+- commercial_bridge_coverage: `0.3`
 - service_to_supporting_content_coverage: `1.0`
 
 ## Ações recomendadas
@@ -62,10 +62,10 @@
 ### ctr_gap: `/conteudos/limite-aditivo-25-50-obra-publica/`
 - **O que aconteceu:** URL em posição 11.0 com 14.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)
 - **Por que importa:** Impressões competitivas com zero cliques: autoridade emergente sem captura de clique
-- **Ação:** Revisar title/meta front-loaded; não clickbait; candidata a indexação humana (não auto-indexar)
+- **Ação:** Revisar title/meta front-loaded; não clickbait; otimizar snippet com base no gap de CTR
 - **Serviço:** /aditivos-obras-publicas/
 - **Impacto comercial esperado:** low
-- **Confiança:** 0.3 (very_low+noindex)
+- **Confiança:** 0.3 (very_low)
 
 ### ctr_gap: `/conteudos/atraso-na-medicao-obra-publica/`
 - **O que aconteceu:** URL em posição 8.1 com 10.0 impressões, 0 clique(s), CTR 0.00% (esperado ~2.50%)

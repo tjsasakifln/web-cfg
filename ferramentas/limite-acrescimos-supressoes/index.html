@@ -323,8 +323,8 @@
     var cta = document.getElementById("cta");
     cta.hidden = false;
     cta.innerHTML = (!r.withinAc || !r.withinSu)
-      ? '<p>O total informado ultrapassa o limite numérico em pelo menos um eixo. Envie a memória de aditivos para revisão técnica.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/#contato?jornada=contrato">Solicitar revisão</a></div>'
-      : '<p>Saldos dentro do limite numérico informado.</p><div class="tool-actions"><a class="button button-secondary" data-tool-to-content href="/guias-contratos-obras/checklist-pedido-aditivo/">Checklist de aditivo</a></div>';
+      ? '<p>O total informado ultrapassa o limite numérico em pelo menos um eixo. Enquadre o aditivo antes de avançar.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="limite-aditivo-excedido" data-route-family="aditivos" data-asset-id="limite-acrescimos-supressoes" href="/aditivos-obras-publicas/">Enquadrar o aditivo</a></div>'
+      : '<p>Os saldos estão dentro do limite numérico informado, mas a validade depende do objeto e da instrução.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="limite-aditivo-dentro" data-route-family="aditivos" data-asset-id="limite-acrescimos-supressoes" href="/aditivos-obras-publicas/">Validar objeto e instrução</a><a class="button button-secondary" data-tool-to-content href="/guias-contratos-obras/checklist-pedido-aditivo/">Checklist de aditivo</a></div>';
     T.track("tool_complete", { tool: TOOL, level: r.level, tipo: r.tipo, within_ac: r.withinAc, within_su: r.withinSu });
     persist();
   });

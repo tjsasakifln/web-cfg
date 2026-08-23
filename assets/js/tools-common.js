@@ -1,4 +1,4 @@
-/** Canonical events: tool_view, tool_start, tool_complete, tool_copy, tool_download, tool_reset, tool_to_content, tool_to_offer, tool_to_whatsapp, tool_to_form, nurture_opt_in */
+/** Canonical events: tool_view, tool_start, tool_complete, tool_copy, tool_download, tool_reset, tool_to_content, tool_to_offer, tool_to_whatsapp, tool_to_form */
 (function () {
   "use strict";
   var P = "confenge.tool.", TTL = 864e5 * 30;
@@ -40,7 +40,6 @@
     document.querySelectorAll("[data-tool-to-form], a[href*='#contato']").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_form", { tool: tool }); }); });
     document.querySelectorAll("[data-tool-to-offer]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_offer", { tool: tool, offer: el.getAttribute("data-tool-to-offer") || "" }); }); });
     document.querySelectorAll("[data-tool-to-content]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_content", { tool: tool }); }); });
-    document.querySelectorAll("[data-nurture-opt-in]").forEach(function (el) { el.addEventListener("click", function () { emit("nurture_opt_in", { tool: tool, source: "tool_page" }); }); });
   }
   function escapeHtml(s) {
     return String(s == null ? "" : s)

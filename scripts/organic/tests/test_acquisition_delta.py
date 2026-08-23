@@ -195,6 +195,36 @@ def test_commercial_metrics_shares():
     assert m["informational_impression_share"] == 0.8
     assert m["commercial_impression_share"] == 0.2
     assert m["commercial_click_share"] == 0.2
+    for name in (
+        "organic_assisted_conversion",
+        "organic_service_page_entry",
+        "organic_content_to_service_transition",
+        "organic_content_to_lead",
+        "organic_service_to_lead",
+    ):
+        assert m[name]["status"] == "UNKNOWN"
+        assert m[name]["value"] is None
+        assert m[name]["reason_code"] == "ANALYTICS_EXPORT_ABSENT"
+        assert m[name]["as_of"]
+
+
+def test_empty_analytics_export_is_unknown_not_zero():
+    fixture = ROOT / "data" / "organic" / "analytics-export" / "fixtures" / "empty.v1.json"
+    m = commercial_exposure_metrics([], analytics_export_path=fixture)
+    assert all(m[name]["status"] == "UNKNOWN" for name in (
+        "organic_assisted_conversion",
+        "organic_service_page_entry",
+        "organic_content_to_service_transition",
+        "organic_content_to_lead",
+        "organic_service_to_lead",
+    ))
+    assert all(m[name]["reason_code"] == "ANALYTICS_EXPORT_EMPTY" for name in (
+        "organic_assisted_conversion",
+        "organic_service_page_entry",
+        "organic_content_to_service_transition",
+        "organic_content_to_lead",
+        "organic_service_to_lead",
+    ))
 
 
 def test_sitemap_hygiene_and_robots():

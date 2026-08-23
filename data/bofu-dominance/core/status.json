@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-19",
+  "as_of": "2026-08-22",
   "campaign": "CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02",
   "census_summary": {
     "confenge_observed_by_family": {
@@ -7,6 +7,8 @@
       "bid-readiness": false,
       "carteira-operacao": true,
       "defesa-margem": true,
+      "diagnostico-expansao": false,
+      "diretoria-b2g": false,
       "edital-proposta": true,
       "medicoes-pagamentos": true,
       "orcamento-bdi": true,
@@ -18,7 +20,7 @@
     "over_limit": {},
     "p0_p1_missing_census": []
   },
-  "content_sha256": "03d882499c43b214509331493c3a087ec368a8f6aaf985a2c17cfd7938fe7422",
+  "content_sha256": "7c055a63eecfe9c576db182023ecc1a2b674472bbea2dd7b6ff21eedb6bf82e2",
   "families": [
     {
       "active_issue": 128,
@@ -2660,6 +2662,476 @@
       "transition_owner_issue": 153
     },
     {
+      "active_issue": 237,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 237,
+        "page_exists": true,
+        "page_type": "paid_offer",
+        "path": "/diagnostico-b2g-expansao/",
+        "url": "https://confenge.com.br/diagnostico-b2g-expansao/"
+      },
+      "census": [
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diagnostico-expansao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Exact paid-offer phrase was not observed. Sample is not an official position; absence stays UNKNOWN.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "breveia.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "market_data",
+              "rank_in_sample": 1,
+              "url": "https://www.breveia.com.br/mercado/construcao/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "diagnóstico B2G de expansão",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diagnostico-expansao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Official public-works registry observed; no CONFENGE position is claimed.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "obrasgov.sistema.gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "public_works_registry",
+              "rank_in_sample": 1,
+              "url": "https://obrasgov.sistema.gov.br/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "mercado de obras públicas para construtora",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diagnostico-expansao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Supplier entrypoint observed; this is not proof of commercial-intent fit or rank.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "supplier_entrypoint",
+              "rank_in_sample": 1,
+              "url": "https://www.gov.br/contratamaisbrasil/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "onde vender para governo construção",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diagnostico-expansao",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Public procurement discovery source observed; no official CONFENGE position.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "gov.br",
+              "intent_fit": "adjacent",
+              "page_type": "official",
+              "proof_pattern": "procurement_discovery",
+              "rank_in_sample": 1,
+              "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/sistemas/conheca-o-compras/aplicativo-compras"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "mapa de compradores públicos obras",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "One paid expansion diagnosis. No buyer, territory or segment landing-page family.",
+      "decision": "Contratar o diagnóstico pontual de expansão vs manter o recorte atual vs não investir agora.",
+      "earliest_safe_action_at": "2026-08-22",
+      "evidence": {
+        "clicks": null,
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": true,
+        "path": "/diagnostico-b2g-expansao/",
+        "position": null,
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": null,
+      "id": "diagnostico-expansao",
+      "job": "Decidir em quais compradores, territórios e segmentos a construtora deve concentrar uma expansão B2G antes de dispersar capital comercial.",
+      "kill": "Owner web-cfg/conversion: on 2026-09-19 kill paid-offer promotion if qualified opportunities remain zero after 28 days with attributable commercial entries; do not create segment variants.",
+      "negative_queries": [
+        "expansão imobiliária residencial",
+        "curso vender para governo",
+        "lista de leads públicos"
+      ],
+      "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile attributed entry → handraise → qualified opportunity for CFG-DIAG-EXP-v1; official SERP position remains UNKNOWN until a source with complete context exists.",
+      "overlap": [
+        {
+          "other_family": "carteira-operacao",
+          "rule": "expansao_owns_where_to_grow_360_owns_internal_operating_diagnosis"
+        },
+        {
+          "other_family": "bid-room",
+          "rule": "expansao_owns_portfolio_choice_bid_room_owns_one_live_proposal"
+        },
+        {
+          "other_family": "defesa-margem",
+          "rule": "expansao_owns_market_choice_defesa_margem_owns_one_live_contract"
+        },
+        {
+          "other_family": "diretoria-b2g",
+          "rule": "expansao_is_paid_one_off_diagnosis_diretoria_is_recurring_execution"
+        }
+      ],
+      "owner": "/diagnostico-b2g-expansao/",
+      "owner_issue": 237,
+      "primary_queries": [
+        "diagnóstico B2G de expansão",
+        "mercado de obras públicas para construtora",
+        "onde vender para governo construção",
+        "mapa de compradores públicos obras"
+      ],
+      "priority": "P0",
+      "reason": "canonical_page_exists_current_rank_unknown",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "One paid expansion diagnosis. No buyer, territory or segment landing-page family.",
+        "earliest_safe_action_at": "2026-08-22",
+        "family_id": "diagnostico-expansao",
+        "kill": "Owner web-cfg/conversion: on 2026-09-19 kill paid-offer promotion if qualified opportunities remain zero after 28 days with attributable commercial entries; do not create segment variants.",
+        "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile attributed entry → handraise → qualified opportunity for CFG-DIAG-EXP-v1; official SERP position remains UNKNOWN until a source with complete context exists.",
+        "state": "COVERED",
+        "summary": "Family diagnostico-expansao is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
+      },
+      "state": "COVERED",
+      "transition_owner_issue": 153
+    },
+    {
+      "active_issue": 237,
+      "active_pr": null,
+      "canonical_owner": {
+        "indexable": true,
+        "issue": 237,
+        "page_exists": true,
+        "page_type": "paid_offer",
+        "path": "/diretoria-b2g/",
+        "url": "https://confenge.com.br/diretoria-b2g/"
+      },
+      "census": [
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diretoria-b2g",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Exact CONFENGE offer phrase was not observed; sample is not an official position.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "liciteobras.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://www.liciteobras.com.br/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "diretoria B2G fracionada",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diretoria-b2g",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Recurring service observed; no rank or qualified-demand claim.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "grupoliderlicita.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "recurring_commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://grupoliderlicita.com.br/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "consultoria recorrente licitações obras",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diretoria-b2g",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Adjacent recurring licitation service observed; B2G wording and position remain UNKNOWN.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "solicitalicitacoes.com.br",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_service",
+              "rank_in_sample": 1,
+              "url": "https://solicitalicitacoes.com.br/"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "gestão B2G para construtora",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        },
+        {
+          "confenge_observed": false,
+          "confenge_urls": [],
+          "device": "UNKNOWN",
+          "family_id": "diretoria-b2g",
+          "geo": "UNKNOWN",
+          "local_pack": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "notes": "Consulting explainer observed; no official CONFENGE position is claimed.",
+          "observed_at": "2026-08-22",
+          "official_position": null,
+          "official_position_refused_reason": "not_official_google_serp_census",
+          "organic": [
+            {
+              "host": "sentinelagov.com",
+              "intent_fit": "adjacent",
+              "page_type": "third_party",
+              "proof_pattern": "commercial_explainer",
+              "rank_in_sample": 1,
+              "url": "https://www.sentinelagov.com/blog/consultoria-de-licitacao"
+            }
+          ],
+          "paid": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "personalization": "UNKNOWN",
+          "query": "direção de licitações e contratos públicos",
+          "ranking_context": "UNKNOWN",
+          "serp_features": {
+            "reason": "web_search_api_does_not_separate_this_object",
+            "status": "UNKNOWN"
+          },
+          "source": "web_search_api"
+        }
+      ],
+      "consolidate": "One Diretoria B2G canonical owner across Flex, 180 and 365; plans do not receive public URLs.",
+      "decision": "Pedir enquadramento de capacidade para Diretoria B2G vs contratar apoio pontual vs seguir com equipe própria.",
+      "earliest_safe_action_at": "2026-08-22",
+      "evidence": {
+        "clicks": null,
+        "date": "2026-08-17",
+        "denominator": "impressions_in_returned_top_rows",
+        "device": "UNKNOWN",
+        "geo": "UNKNOWN",
+        "impressions": null,
+        "is_gsc_live": true,
+        "path": "/diretoria-b2g/",
+        "position": null,
+        "query_text_redacted": true,
+        "reason": "path_absent_from_live_top_rows_not_zero",
+        "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe.",
+        "source": "gsc_live",
+        "source_kind": "search_analytics_api_live"
+      },
+      "freeze": {
+        "frozen": false
+      },
+      "gate": null,
+      "id": "diretoria-b2g",
+      "job": "Decidir se a construtora precisa de direção B2G recorrente para priorizar oportunidades e contratos dentro da capacidade disponível.",
+      "kill": "Owner web-cfg/conversion: kill checkout language or autonomous sending immediately; on 2026-09-19 consolidate into the operational diagnosis if capacity-qualified requests remain zero rather than cloning pages.",
+      "negative_queries": [
+        "diretoria de empresa pública",
+        "vaga diretor licitações",
+        "software automação licitação"
+      ],
+      "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile on-page capacity handraise → qualified opportunity for the catalog offer; official SERP position remains UNKNOWN without complete evidence.",
+      "overlap": [
+        {
+          "other_family": "carteira-operacao",
+          "rule": "diretoria_owns_recurring_action_360_owns_diagnosis"
+        },
+        {
+          "other_family": "gestao-contratual",
+          "rule": "diretoria_owns_portfolio_direction_acompanhamento_owns_contract_routine"
+        },
+        {
+          "other_family": "defesa-margem",
+          "rule": "diretoria_owns_portfolio_direction_defesa_margem_owns_single_contract_second_reading"
+        },
+        {
+          "other_family": "diagnostico-expansao",
+          "rule": "diretoria_is_recurring_execution_expansao_is_one_off_market_choice"
+        }
+      ],
+      "owner": "/diretoria-b2g/",
+      "owner_issue": 237,
+      "primary_queries": [
+        "diretoria B2G fracionada",
+        "consultoria recorrente licitações obras",
+        "gestão B2G para construtora",
+        "direção de licitações e contratos públicos"
+      ],
+      "priority": "P0",
+      "reason": "canonical_page_exists_current_rank_unknown",
+      "recommendation": {
+        "action": "observe_only",
+        "authorizes_html_edit": false,
+        "consolidate": "One Diretoria B2G canonical owner across Flex, 180 and 365; plans do not receive public URLs.",
+        "earliest_safe_action_at": "2026-08-22",
+        "family_id": "diretoria-b2g",
+        "kill": "Owner web-cfg/conversion: kill checkout language or autonomous sending immediately; on 2026-09-19 consolidate into the operational diagnosis if capacity-qualified requests remain zero rather than cloning pages.",
+        "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile on-page capacity handraise → qualified opportunity for the catalog offer; official SERP position remains UNKNOWN without complete evidence.",
+        "state": "COVERED",
+        "summary": "Family diretoria-b2g is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
+      },
+      "state": "COVERED",
+      "transition_owner_issue": 153
+    },
+    {
       "active_issue": 155,
       "active_pr": null,
       "canonical_owner": {
@@ -3316,8 +3788,8 @@
       "transition_owner_issue": 153
     }
   ],
-  "family_count": 13,
-  "git_head": "faadc16609210522c9ffaf32a7b944817f6c6214",
+  "family_count": 15,
+  "git_head": "14740dab6b21bde19ecc62396d89393c2c7adab6",
   "graph": {
     "canary_not_family_pr": 157,
     "data_desk_kit_pr": 158,
@@ -3636,7 +4108,7 @@
       "summary": "PR #157 is one contract-analysis canary, not a BOFU family. PR #158 is the Data Desk kit, not a second target registry. PR #159 is an observability candidate to merge, not live GSC on main."
     }
   ],
-  "origin_main": "faadc16609210522c9ffaf32a7b944817f6c6214",
+  "origin_main": "14740dab6b21bde19ecc62396d89393c2c7adab6",
   "rules": {
     "duplicate_organic_engine": false,
     "frozen_html": false,
@@ -3651,7 +4123,7 @@
   "schema": "bofu-intent-status/1.0",
   "slot": "BOFU-CORE",
   "state_counts": {
-    "COVERED": 5,
+    "COVERED": 7,
     "FROZEN": 6,
     "NO_CANONICAL": 2
   }

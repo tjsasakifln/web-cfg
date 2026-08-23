@@ -173,8 +173,8 @@
     var cta=document.getElementById("cta");
     cta.hidden=false;
     cta.innerHTML=r.hasCentralBlocker
-      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-tool-to-form href="/?jornada=contrato&amp;tema=checklist-reequilibrio&amp;origem=%2Fferramentas%2Fchecklist-reequilibrio%2F#contato">Organizar dossiê</a></div>'
-      : '<p><a class="button button-secondary" data-tool-to-content href="/conteudos/calculo-reequilibrio-economico-financeiro/">Cálculo de reequilíbrio</a></p>';
+      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-bloqueado" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" href="/reequilibrio-obras-publicas/">Enquadrar o dossiê de reequilíbrio</a></div>'
+      : '<p>O dossiê está mais completo; a próxima decisão ainda precisa de leitura contratual.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-pronto" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" href="/reequilibrio-obras-publicas/">Validar o enquadramento</a><a class="button button-secondary" data-tool-to-content href="/conteudos/calculo-reequilibrio-economico-financeiro/">Revisar o cálculo</a></div>';
     T.track("tool_complete",{tool:TOOL,readiness:r.readiness,level:r.level,blockers:(r.missingBlockers||[]).length,urgencia:r.urgencia,materialidade:r.materialidade});
     persist();
   });
