@@ -228,7 +228,8 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <h1 id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead">{e(meta["lead"])}</p>
 </header>
-<div class="problem-stages">{stages_html}</div>
+<h2 id="hub-stages">Onde você está no ciclo do contrato?</h2>
+<div class="problem-stages" aria-labelledby="hub-stages">{stages_html}</div>
 </div>
 </section>
 <section aria-labelledby="hub-next" class="section section--default">
