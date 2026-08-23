@@ -67,6 +67,13 @@ async function run() {
     `http=${inbound.status} counters_present=${Boolean(counters && typeof counters === "object")}`
   );
   out.inbound_handoff_counters = counters && typeof counters === "object" ? counters : null;
+  const configuration = inbound.body?.configuration;
+  check(
+    "inbound_handoff_configuration_observable",
+    inbound.status === 200 && configuration && typeof configuration === "object",
+    `http=${inbound.status} configuration_present=${Boolean(configuration && typeof configuration === "object")}`
+  );
+  out.inbound_handoff_configuration = configuration && typeof configuration === "object" ? configuration : null;
 
   const funnel = await request("/.netlify/functions/ops?action=funnel");
   const funnelCounts = funnel.body?.funnel?.counts;

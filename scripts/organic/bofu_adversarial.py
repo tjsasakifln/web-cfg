@@ -204,45 +204,118 @@ def catalog_offers(root: Path) -> dict[str, dict[str, Any]]:
     return {str(offer["offer_id"]): offer for offer in doc.get("offers") or []}
 
 
+_SLA_RANGE_RE = re.compile(
+    r"(?:\bentre\s+(?P<between_lower>\d{1,3})\s+e\s+(?P<between_upper>\d{1,3})"
+    r"|\b(?P<range_lower>\d{1,3})\s*(?:a|[-–—])\s*(?P<range_upper>\d{1,3}))"
+    r"\s+dias(?:\s+[uú]teis)?\b",
+    re.I,
+)
+_SLA_UP_TO_RE = re.compile(r"\bat[eé]\s+(?P<upper>\d{1,3})\s+dias(?:\s+[uú]teis)?\b", re.I)
+_SLA_SINGLE_RE = re.compile(r"\b(?P<value>\d{1,3})\s+dias(?:\s+[uú]teis)?\b", re.I)
+
+
+def _parse_catalog_sla_interval(raw: Any) -> tuple[int, int] | None:
+    match = re.fullmatch(r"\s*(\d{1,3})\s*[-–—]\s*(\d{1,3})\s*", str(raw or ""))
+    if not match:
+        return None
+    lower, upper = int(match.group(1)), int(match.group(2))
+    if lower < 1 or upper <= lower:
+        return None
+    return lower, upper
+
+
+def _delivery_sentences(html: str) -> list[str]:
+    cut = re.sub(r"<script\b[^>]*>.*?</script>", " ", html, flags=re.I | re.S)
+    cut = re.sub(r"<style\b[^>]*>.*?</style>", " ", cut, flags=re.I | re.S)
+    cut = re.sub(r"</?(?:p|li|h[1-6]|dt|dd|summary|section|header|div)\b[^>]*>", ". ", cut, flags=re.I)
+    visible = _strip(cut).lower()
+    sentences = [part.strip(" .") for part in re.split(r"(?<=[.!?])\s+", visible) if part.strip(" .")]
+    selected: list[str] = []
+    for index, sentence in enumerate(sentences):
+        if not re.search(r"\b\d{1,3}\s+dias|\b\d{1,3}\s*(?:a|[-–—])\s*\d{1,3}\s+dias|\bentre\s+\d{1,3}\s+e\s+\d{1,3}\s+dias", sentence, re.I):
+            continue
+        previous = sentences[index - 1] if index else ""
+        delivery_context = bool(
+            re.search(
+                r"\b(prazo (?:de entrega|do diagn[oó]stico|contratual)|intervalo contratual|compromisso)\b",
+                sentence,
+                re.I,
+            )
+            or re.search(r"\bentrega\b.{0,80}\b\d{1,3}\b", sentence, re.I)
+            or re.search(r"qual [eé] o prazo", previous, re.I)
+        )
+        response_context = bool(
+            re.search(r"\b(retorno|resposta|acuse|triagem|corre[cç][aã]o)\b", sentence, re.I)
+        )
+        if delivery_context and not response_context:
+            selected.append(sentence)
+    return selected
+
+
+def _claim_semantics(sentence: str) -> list[tuple[str, int, int]]:
+    claims: list[tuple[str, int, int]] = []
+    occupied: list[tuple[int, int]] = []
+    for match in _SLA_RANGE_RE.finditer(sentence):
+        lower = int(match.group("between_lower") or match.group("range_lower"))
+        upper = int(match.group("between_upper") or match.group("range_upper"))
+        claims.append(("interval", lower, upper))
+        occupied.append(match.span())
+    for pattern, kind in ((_SLA_UP_TO_RE, "upper_bound"), (_SLA_SINGLE_RE, "single")):
+        for match in pattern.finditer(sentence):
+            if any(start <= match.start() and match.end() <= end for start, end in occupied):
+                continue
+            value = int(match.group("upper") if kind == "upper_bound" else match.group("value"))
+            claims.append((kind, value, value))
+            occupied.append(match.span())
+    return claims
+
+
 def audit_service_sla_claims(
     path: str,
     html: str,
     row: dict[str, Any],
     offers: dict[str, dict[str, Any]],
 ) -> list[dict[str, str]]:
-    visible = _visible_text(html)
-    sentences = re.split(r"(?<=[.!?])\s+", visible)
-    delivery_sentences = [
-        sentence
-        for sentence in sentences
-        if re.search(r"\b(entrega|prazo (?:de entrega|do diagn[oó]stico))\b", sentence, re.I)
-        and re.search(
-            r"\d{1,2}\s*(?:a|-)\s*\d{1,2}\s+dias [uú]teis|at[eé]\s+\d{1,2}\s+dias [uú]teis",
-            sentence,
-            re.I,
-        )
-    ]
-    if not delivery_sentences:
-        return []
+    delivery_sentences = _delivery_sentences(html)
     raw_ids = row.get("offer_id")
     offer_ids = [raw_ids] if isinstance(raw_ids, str) else list(raw_ids or [])
-    allowed = {
+    allowed_raw = {
         str(offers[offer_id]["sla_business_days"])
         for offer_id in offer_ids
         if offer_id in offers and offers[offer_id].get("sla_business_days")
     }
-    claimed_numbers = {
-        number
-        for sentence in delivery_sentences
-        for number in re.findall(r"\b\d{1,2}\b", sentence)
-    }
-    allowed_numbers = {number for sla in allowed for number in re.findall(r"\b\d{1,2}\b", sla)}
-    if not allowed or not claimed_numbers.issubset(allowed_numbers):
+    allowed = {_parse_catalog_sla_interval(raw) for raw in allowed_raw}
+    if None in allowed:
         return [
             _finding(
                 "SLA_NOT_IN_CATALOG",
                 path,
-                f"claimed={sorted(claimed_numbers)} catalog={sorted(allowed)}",
+                f"invalid_catalog_interval={sorted(allowed_raw)}",
+            )
+        ]
+    if not delivery_sentences:
+        if allowed:
+            return [
+                _finding(
+                    "SLA_NOT_IN_CATALOG",
+                    path,
+                    f"claimed=[] catalog={sorted(allowed_raw)}",
+                )
+            ]
+        return []
+
+    claims = [claim for sentence in delivery_sentences for claim in _claim_semantics(sentence)]
+    exact = [
+        claim
+        for claim in claims
+        if claim[0] == "interval" and (claim[1], claim[2]) in allowed
+    ]
+    if not allowed or len(exact) != len(claims) or not claims:
+        return [
+            _finding(
+                "SLA_NOT_IN_CATALOG",
+                path,
+                f"claimed={claims} catalog={sorted(allowed_raw)}",
             )
         ]
     return []

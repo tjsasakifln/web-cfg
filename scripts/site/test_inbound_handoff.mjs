@@ -522,10 +522,20 @@ try {
     for (const k of ["persisted_leads", "pending", "delivered", "retries", "permanent_failures", "latency"]) {
       if (!(k in data.counters)) fail("ops_counter_key", k);
     }
+    if (
+      !data.configuration ||
+      data.configuration.webhook_url !== "SET" ||
+      data.configuration.webhook_secret !== "SET" ||
+      data.configuration.contract !== "READY" ||
+      data.configuration.reason !== null
+    ) {
+      fail("ops_inbound_configuration", data.configuration);
+    }
     const s = JSON.stringify(data);
     if (s.includes("maria.costa@") || s.includes("Maria Costa") || s.includes(SECRET)) {
       fail("ops_counters_pii_or_secret", data);
     }
+    pass("ops_inbound_configuration", data.configuration);
     pass("ops_counters", data.counters);
     delete process.env.OPS_TOKEN;
   }

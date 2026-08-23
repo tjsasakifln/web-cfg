@@ -58,9 +58,15 @@ Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and 
 
 ## Ops
 
-- Counters (auth): `GET /.netlify/functions/ops?action=inbound_handoff`
+- Counters and safe configuration state (auth): `GET /.netlify/functions/ops?action=inbound_handoff`
 - Drain due rows: `POST /.netlify/functions/ops?action=drain_inbound`
 - Daily schedule calls drain when `OPS_TOKEN` is set.
+
+The authenticated response reports only `SET | UNSET` for the webhook URL and
+secret, plus the resolved contract state `READY | UNSET | BLOCKED`. It never
+returns either value. A committed value or a local shell variable is not proof
+of the Netlify production environment; use this response after the production
+deploy.
 
 States: `PENDING | DELIVERED | RETRYABLE | DEAD | BLOCKED | SKIPPED`.
 

@@ -1,0 +1,51 @@
+{
+  "schema": "confenge-inbound-counters-proof/1.0",
+  "issue": 230,
+  "decision_state": "EXECUTE_NOW",
+  "evidence_scope": "read_only_authenticated_ops_configuration_and_aggregate_counters",
+  "base": "https://confenge.com.br",
+  "ts": "2026-08-23T01:01:57.695Z",
+  "git_sha": "2086e7138d87d9fe92f509b4748b1e59e7260107",
+  "github_actions_run": "https://github.com/tjsasakifln/web-cfg/actions/runs/32609349404",
+  "ok": true,
+  "checks": [
+    {"name": "ops_token_configured", "ok": true, "detail": "configured=true", "critical": true},
+    {"name": "ops_health_authenticated", "ok": true, "detail": "http=200 auth_configured=true", "critical": true},
+    {"name": "inbound_handoff_counters", "ok": true, "detail": "http=200 counters_present=true", "critical": true},
+    {"name": "commercial_funnel_counters", "ok": true, "detail": "http=200 commercial_only=true", "critical": true}
+  ],
+  "consented_real_contact": "MISSING",
+  "real_loop_status": "BLOCKED",
+  "inbound_handoff_counters": {
+    "persisted_leads": 123,
+    "pending": 0,
+    "delivered": 0,
+    "retryable": 0,
+    "retries": 0,
+    "permanent_failures": 0,
+    "skipped": 123,
+    "blocked": 0,
+    "dead": 0,
+    "latency": {"count": 0, "last_ms": null, "p50_ms": null, "p95_ms": null}
+  },
+  "funnel": {
+    "commercial_only": true,
+    "counts": {
+      "visitor": 0,
+      "cta_triggered": 0,
+      "form_started": 0,
+      "lead_persisted": 36,
+      "contacted": 0,
+      "qualified": 0,
+      "meeting": 0,
+      "proposal": 0,
+      "won": 0,
+      "lost": 0
+    }
+  },
+  "non_claims": [
+    "does_not_prove_netlify_inbound_secrets_are_configured",
+    "does_not_prove_a_consented_real_contact_exists",
+    "does_not_prove_end_to_end_commercial_handoff"
+  ]
+}

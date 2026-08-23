@@ -13,19 +13,26 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   CANONICAL_INBOUND_URL,
-  MONEY_ASSET_PATH,
-  PILLAR_PATH,
-  NEXT_COMMAND,
-  buildReview,
+  buildCommercialLoopReport,
   envPresenceFromProcess,
   extractDiagnosticoSignals,
+  extractLoopSurfaceSignals,
   extractPillarSignals,
   extractSitemapSignals,
   stripPii,
+  validateCommercialLoopRegistry,
 } from "./commercial_dod.mjs";
 
 const require = createRequire(import.meta.url);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const registryPath = path.join(root, "data/money_asset/commercial-loops.v1.json");
+const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
+const registryValidation = validateCommercialLoopRegistry(registry);
+if (!registryValidation.ok) {
+  throw new Error(`invalid commercial loop registry: ${registryValidation.errors.join(",")}`);
+}
+const loops = registry.loops.filter((loop) => loop.enabled === true);
+const primaryLoop = loops[0];
 const {
   diagnoseMargin,
   selectContract,
@@ -57,12 +64,12 @@ function loadFacts() {
 }
 
 async function liveObservations() {
-  const diagnostico = await fetchText(`${base}${MONEY_ASSET_PATH}`);
-  const pillar = await fetchText(`${base}${PILLAR_PATH}`);
+  const diagnostico = await fetchText(`${base}${primaryLoop.asset_path}`);
+  const pillar = await fetchText(`${base}${primaryLoop.service_path}`);
   const sitemap = await fetchText(`${base}/sitemap.xml`);
   const robots = await fetchText(`${base}/robots.txt`);
   const buildInfo = await fetchText(`${base}/.well-known/build-info.json`);
-  const snapshot = await fetchText(`${base}${MONEY_ASSET_PATH}snapshot.json`);
+  const snapshot = await fetchText(`${base}${primaryLoop.asset_path}snapshot.json`);
 
   let inbound = { http: null, body: null, error: null };
   try {
@@ -106,9 +113,23 @@ async function liveObservations() {
     build = {};
   }
 
-  const page = extractDiagnosticoSignals(diagnostico.text);
-  const pillarSignals = extractPillarSignals(pillar.text);
-  const map = extractSitemapSignals(sitemap.text, { indexable: page.robots_indexable });
+  const page = extractDiagnosticoSignals(diagnostico.text, primaryLoop);
+  const pillarSignals = extractPillarSignals(pillar.text, primaryLoop);
+  const map = extractSitemapSignals(sitemap.text, primaryLoop, { indexable: page.robots_indexable });
+  const loopSurfaces = [];
+  for (const loop of loops) {
+    const asset = loop.id === primaryLoop.id ? diagnostico : await fetchText(`${base}${loop.asset_path}`);
+    const service = loop.id === primaryLoop.id
+      ? pillar
+      : loop.service_path === loop.asset_path
+        ? asset
+        : await fetchText(`${base}${loop.service_path}`);
+    loopSurfaces.push({
+      ...extractLoopSurfaceSignals(loop, { asset_html: asset.text, service_html: service.text }),
+      asset_http: asset.http,
+      service_http: service.http,
+    });
+  }
 
   return {
     live: {
@@ -127,23 +148,35 @@ async function liveObservations() {
     pillar: pillarSignals,
     sitemap: map,
     use_path: usePath,
+    loop_surfaces: loopSurfaces,
   };
+}
+
+function localLoopSurfaces() {
+  return loops.map((loop) => {
+    const assetHtml = fs.readFileSync(path.join(root, loop.asset_path.replace(/^\//, ""), "index.html"), "utf8");
+    const serviceHtml = loop.service_path === loop.asset_path
+      ? assetHtml
+      : fs.readFileSync(path.join(root, loop.service_path.replace(/^\//, ""), "index.html"), "utf8");
+    return extractLoopSurfaceSignals(loop, { asset_html: assetHtml, service_html: serviceHtml });
+  });
 }
 
 const fileFacts = loadFacts();
 const env = envPresenceFromProcess(process.env);
 
 const observed = skipLive
-  ? {}
+  ? { loop_surfaces: localLoopSurfaces() }
   : await liveObservations();
 
-const facts = {
+const defaultFacts = {
   consented_real_contact: false,
   lead_id: null,
   record_kind: null,
   outcome: "UNKNOWN",
   human_route_action: null,
   operator_or_warmbly_evidence: false,
+  warmbly_handoff_observed: false,
   probe: false,
   test_mode: false,
   product_volume_only: false,
@@ -156,35 +189,65 @@ const facts = {
   reduces_cost: false,
   already_shipped: ["#76", "#79", "#80", "#81", "#82"],
   ...env,
-  ...fileFacts,
 };
 
-if (facts.consented_real_contact === true && !fileFacts.consented_real_contact) {
-  throw new Error("refusing to mark consented_real_contact without --facts");
-}
+const surfaceById = new Map((observed.loop_surfaces || []).map((item) => [item.loop_id, item]));
+const loopReports = loops.map((loop) => {
+  const scopedFacts = fileFacts.loops?.[loop.id] || {};
+  const facts = {
+    ...defaultFacts,
+    ...(fileFacts.scope === "all_enabled_loops" || loop.id === primaryLoop.id ? fileFacts : {}),
+    ...scopedFacts,
+  };
+  if (facts.consented_real_contact === true && !factsPath) {
+    throw new Error(`refusing to mark consented_real_contact for ${loop.id} without --facts`);
+  }
+  return buildCommercialLoopReport(loop, facts, surfaceById.get(loop.id) || {});
+});
 
-const review = buildReview(facts);
+const review = loopReports[0].review;
+const generalizedReady = loopReports.length >= 2 && loopReports.every((item) =>
+  item.surface_ready && item.capture_ready && item.attribution_ready,
+);
+const fullLoopReady = generalizedReady && loopReports.every((item) => item.review.exit === "READY");
+
+const factsUsed = {};
+for (const item of loopReports) {
+  const real = item.review.real_loop;
+  factsUsed[item.loop_id] = {
+    consented_real_contact: real.missing_prerequisites?.every((row) => row.prerequisite !== "consented_real_contact") || false,
+    record_kind: real.record_kind,
+    lead_id: real.lead_id || null,
+    outcome: real.outcome,
+  };
+}
+const loopSummaries = loopReports.map(({ review: loopReview, ...summary }) => ({
+  ...summary,
+  learning: loopReview.learning,
+  exit: loopReview.exit,
+}));
 
 const report = stripPii({
-  ok: review.exit === "READY",
-  campaign: "WEB-011",
-  generated_from: skipLive ? "facts_only" : "live+facts",
-  env_present: env,
-  observed,
-  facts_used: {
-    consented_real_contact: facts.consented_real_contact,
-    inbound_url_set: facts.inbound_url_set,
-    inbound_secret_set: facts.inbound_secret_set,
-    ops_token_set: facts.ops_token_set,
-    auto_send_off_evidenced: facts.auto_send_off_evidenced,
-    record_kind: facts.record_kind,
-    lead_id: facts.lead_id || null,
+  schema: "confenge.commercial-dod-report/1.0",
+  ok: fullLoopReady,
+  commercial_dod_generalized: generalizedReady,
+  registry: {
+    path: "data/money_asset/commercial-loops.v1.json",
+    version: registry.version,
+    decision_state: registry.decision_state,
+    enabled_loop_count: loops.length,
   },
+  generated_from: skipLive ? "local_surfaces+facts" : "live+facts",
+  audit_shell_env_present: env,
+  observed,
+  facts_used: factsUsed,
+  loops: loopSummaries,
+  // Compatibility view for WEB-011 consumers; the decision is now registry-driven.
   review,
   real_loop: {
     status: review.real_loop.status,
     prerequisite: (review.real_loop.missing_prerequisites || [])[0]?.prerequisite || "consented_real_contact",
-    next_command: NEXT_COMMAND,
+    next_command: review.next_command,
     note: "Did not POST a person. Did not send WhatsApp/email.",
   },
 });
@@ -195,6 +258,6 @@ if (outPath) {
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, json, "utf8");
 }
-if (review.exit === "BLOCKED" || review.exit === "NO_GO" || review.exit === "ADJUST") {
+if (!report.ok) {
   process.exitCode = 2;
 }

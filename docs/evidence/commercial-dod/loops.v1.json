@@ -1,0 +1,197 @@
+{
+  "schema": "confenge.commercial-dod-report/1.0",
+  "ok": false,
+  "commercial_dod_generalized": true,
+  "registry": {
+    "path": "data/money_asset/commercial-loops.v1.json",
+    "version": "1.0.0",
+    "decision_state": "EXECUTE_NOW",
+    "enabled_loop_count": 2
+  },
+  "generated_from": "local_surfaces+facts",
+  "audit_shell_env_present": {
+    "inbound_url_set": false,
+    "inbound_secret_set": false,
+    "ops_token_set": false,
+    "auto_send_off_evidenced": false
+  },
+  "observed": {
+    "loop_surfaces": [
+      {
+        "loop_id": "defesa-margem-segunda-leitura",
+        "surface_ready": true,
+        "capture_ready": true,
+        "attribution_ready": true,
+        "reason_codes": []
+      },
+      {
+        "loop_id": "defesa-tecnica-handraise",
+        "surface_ready": true,
+        "capture_ready": true,
+        "attribution_ready": true,
+        "reason_codes": []
+      }
+    ]
+  },
+  "facts_used": {
+    "defesa-margem-segunda-leitura": {
+      "consented_real_contact": false,
+      "record_kind": null,
+      "lead_id": null,
+      "outcome": "UNKNOWN"
+    },
+    "defesa-tecnica-handraise": {
+      "consented_real_contact": false,
+      "record_kind": null,
+      "lead_id": null,
+      "outcome": "UNKNOWN"
+    }
+  },
+  "loops": [
+    {
+      "loop_id": "defesa-margem-segunda-leitura",
+      "enabled": true,
+      "asset_path": "/ferramentas/diagnostico-defesa-margem/",
+      "service_path": "/defesa-margem-contratos-publicos/",
+      "surface_ready": true,
+      "capture_ready": true,
+      "attribution_ready": true,
+      "handoff_ready": false,
+      "commercial_event": false,
+      "qualified_pipeline": "UNKNOWN",
+      "outcome": "UNKNOWN",
+      "outcome_owner": "warmbly",
+      "reason_codes": [
+        "COMMERCIAL_OUTCOME_UNKNOWN",
+        "CONFENGE_INBOUND_WEBHOOK_SECRET_UNKNOWN",
+        "CONFENGE_INBOUND_WEBHOOK_URL_UNKNOWN",
+        "CONSENTED_REAL_CONTACT_MISSING",
+        "WARMBLY_RECEIPT_ACTION_BLOCKED"
+      ],
+      "learning": "NEED_MORE_DATA",
+      "exit": "BLOCKED"
+    },
+    {
+      "loop_id": "defesa-tecnica-handraise",
+      "enabled": true,
+      "asset_path": "/defesa-tecnica-contratos-publicos/",
+      "service_path": "/defesa-tecnica-contratos-publicos/",
+      "surface_ready": true,
+      "capture_ready": true,
+      "attribution_ready": true,
+      "handoff_ready": false,
+      "commercial_event": false,
+      "qualified_pipeline": "UNKNOWN",
+      "outcome": "UNKNOWN",
+      "outcome_owner": "warmbly",
+      "reason_codes": [
+        "COMMERCIAL_OUTCOME_UNKNOWN",
+        "CONFENGE_INBOUND_WEBHOOK_SECRET_UNKNOWN",
+        "CONFENGE_INBOUND_WEBHOOK_URL_UNKNOWN",
+        "CONSENTED_REAL_CONTACT_MISSING",
+        "WARMBLY_RECEIPT_ACTION_BLOCKED"
+      ],
+      "learning": "NEED_MORE_DATA",
+      "exit": "BLOCKED"
+    }
+  ],
+  "review": {
+    "campaign": "BOFU-PRODUCTION-CLOSURE-2026-08-22",
+    "loop_id": "defesa-margem-segunda-leitura",
+    "asset": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+    "pillar": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+    "outcome_owner": "warmbly",
+    "learning": "NEED_MORE_DATA",
+    "exit": "BLOCKED",
+    "real_loop": {
+      "status": "BLOCKED",
+      "commercial_event": false,
+      "qualified_lead": false,
+      "qualified_pipeline": "UNKNOWN",
+      "outcome": "UNKNOWN",
+      "human_route_action": null,
+      "lead_id": null,
+      "record_kind": null,
+      "reason": "No persist-first real lead_id with consent. Fail closed.",
+      "missing_prerequisites": [
+        {
+          "prerequisite": "consented_real_contact",
+          "status": "MISSING",
+          "note": "No consented real person used /ferramentas/diagnostico-defesa-margem/. Do not invent one."
+        },
+        {
+          "prerequisite": "CONFENGE_INBOUND_WEBHOOK_URL",
+          "status": "UNKNOWN",
+          "note": "Set on Netlify production to https://api.confenge.com.br/api/v1/webhooks/confenge/inbound"
+        },
+        {
+          "prerequisite": "CONFENGE_INBOUND_WEBHOOK_SECRET",
+          "status": "UNKNOWN",
+          "note": "Shared HMAC with Warmbly. Server env only."
+        },
+        {
+          "prerequisite": "Warmbly receipt/action",
+          "status": "BLOCKED",
+          "note": "No matching Warmbly receipt/action was observed for a real persisted lead."
+        }
+      ],
+      "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+      "residual": [
+        "consented_real_contact",
+        "CONFENGE_INBOUND_WEBHOOK_URL",
+        "CONFENGE_INBOUND_WEBHOOK_SECRET",
+        "Warmbly receipt/action"
+      ]
+    },
+    "dimensions": {
+      "icp": {
+        "token": "NEED_MORE_DATA",
+        "evidenced": false,
+        "note": "No real account or decision unit observed from this vertical. ICP stays hypothesized."
+      },
+      "trigger": {
+        "token": "NEED_MORE_DATA",
+        "evidenced": false,
+        "note": "Reajuste / reequilíbrio / medição stay UNKNOWN on the live sample; BDI is not in the diagnose utility (footer cluster only)."
+      },
+      "offer": {
+        "token": "NEED_MORE_DATA",
+        "evidenced": false,
+        "note": "Offer copy 'segunda leitura deste contrato' is shipped. No real uptake."
+      },
+      "friction": {
+        "token": "NEED_MORE_DATA",
+        "evidenced": false,
+        "note": "Named blockers are inbound env / auto-send evidence / consented contact — not a proven product-copy friction."
+      }
+    },
+    "already_shipped": [
+      "#76",
+      "#79",
+      "#80",
+      "#81",
+      "#82"
+    ],
+    "residual": [
+      "consented_real_contact",
+      "CONFENGE_INBOUND_WEBHOOK_URL",
+      "CONFENGE_INBOUND_WEBHOOK_SECRET",
+      "Warmbly receipt/action"
+    ],
+    "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+    "kill_gate": {
+      "reduces_risk": true,
+      "reduces_time_to_evidence": true,
+      "reduces_cost": false,
+      "reduces_uncertainty": true,
+      "product_volume_only": false
+    },
+    "note": "Fixture, preview, dry-run, or synthetic 201 is not campaign-complete."
+  },
+  "real_loop": {
+    "status": "BLOCKED",
+    "prerequisite": "consented_real_contact",
+    "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+    "note": "Did not POST a person. Did not send WhatsApp/email."
+  }
+}

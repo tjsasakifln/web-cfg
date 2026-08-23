@@ -1,0 +1,75 @@
+{
+  "schema": "confenge.commercial-loops/1.0",
+  "version": "1.0.0",
+  "as_of": "2026-08-22",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "COMPOUNDING SYSTEM",
+  "leverage": ["automation", "revenue", "trust"],
+  "outcome_semantics": "Infrastructure and form presence never imply a commercial event, qualified lead or pipeline. UNKNOWN remains UNKNOWN.",
+  "loops": [
+    {
+      "id": "defesa-margem-segunda-leitura",
+      "asset_path": "/ferramentas/diagnostico-defesa-margem/",
+      "service_path": "/defesa-margem-contratos-publicos/",
+      "expected_transition": {
+        "kind": "internal_link",
+        "href": "/defesa-margem-contratos-publicos/"
+      },
+      "capture_contract": {
+        "page_path": "/ferramentas/diagnostico-defesa-margem/",
+        "form_action": "/obrigado",
+        "ajax_to_lead_function": true,
+        "method": "post",
+        "consent_field": "consentimento",
+        "required_fields": ["nome", "consentimento"]
+      },
+      "cta_contract": {
+        "copy": "Quero uma segunda leitura deste contrato",
+        "cta_id": "segunda-leitura-contrato",
+        "cta_position": "money-asset"
+      },
+      "attribution_contract": {
+        "source": "CONFENGE_WEB",
+        "asset_id": "diagnostico-defesa-margem",
+        "route_family": "defesa-margem-diagnostico",
+        "cta_id": "segunda-leitura-contrato",
+        "landing_page": "/ferramentas/diagnostico-defesa-margem/",
+        "destination_service_id": "defesa-margem-contratos-publicos"
+      },
+      "outcome_owner": "warmbly",
+      "enabled": true
+    },
+    {
+      "id": "defesa-tecnica-handraise",
+      "asset_path": "/defesa-tecnica-contratos-publicos/",
+      "service_path": "/defesa-tecnica-contratos-publicos/",
+      "expected_transition": {
+        "kind": "on_page_anchor",
+        "href": "#captura-pilar"
+      },
+      "capture_contract": {
+        "page_path": "/defesa-tecnica-contratos-publicos/",
+        "form_action": "/.netlify/functions/lead",
+        "ajax_to_lead_function": false,
+        "method": "post",
+        "consent_field": "consentimento",
+        "required_fields": ["nome", "consentimento"]
+      },
+      "cta_contract": {
+        "copy": "Enviar para análise",
+        "cta_id": "defesa-tecnica-contratos-publicos-handraise",
+        "cta_position": "pillar_capture"
+      },
+      "attribution_contract": {
+        "source": "CONFENGE_WEB",
+        "asset_id": "defesa-tecnica-contratos-publicos",
+        "route_family": "defesa-tecnica-contratos-publicos",
+        "cta_id": "defesa-tecnica-contratos-publicos-handraise",
+        "landing_page": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+        "destination_service_id": "defesa-tecnica-contratos-publicos"
+      },
+      "outcome_owner": "warmbly",
+      "enabled": true
+    }
+  ]
+}

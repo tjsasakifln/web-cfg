@@ -52,6 +52,7 @@ const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require("./
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
 const {
   drainPendingHandoffs,
+  resolveInboundConfig,
   summarizeHandoffs,
 } = require("./lib/inbound-handoff.cjs");
 const {
@@ -758,12 +759,20 @@ exports.handler = async (event) => {
     const counters = summarizeHandoffs(leads);
     const events = await loadRecentAnalytics(event);
     const money_asset = summarizeMoneyAssetLoop(events, leads);
+    const inboundConfig = resolveInboundConfig(process.env);
+    const configuration = {
+      webhook_url: process.env.CONFENGE_INBOUND_WEBHOOK_URL ? "SET" : "UNSET",
+      webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
+      contract: inboundConfig.ok ? "READY" : inboundConfig.skip ? "UNSET" : "BLOCKED",
+      reason: inboundConfig.ok ? null : inboundConfig.reason || "UNKNOWN",
+    };
     return json(
       200,
       {
         ok: true,
         counters,
         money_asset,
+        configuration,
         ts: new Date().toISOString(),
         note: "Operational counters only. No PII. Warmbly auto-send is not controlled here.",
       },

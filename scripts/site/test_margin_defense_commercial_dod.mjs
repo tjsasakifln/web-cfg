@@ -13,18 +13,21 @@ import { fileURLToPath } from "node:url";
 import {
   LEARNING_TOKENS,
   EXIT_TOKENS,
-  NEXT_COMMAND,
   PII_KEYS,
   blobHasPii,
+  buildCommercialLoopReport,
+  buildNextCommand,
   buildReview,
   classifyRealLoop,
   decideExit,
   decideLearning,
   extractDiagnosticoSignals,
+  extractLoopSurfaceSignals,
   extractPillarSignals,
   extractSitemapSignals,
   parseCanonicalHref,
   stripPii,
+  validateCommercialLoopRegistry,
 } from "../money_asset/commercial_dod.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -46,10 +49,14 @@ const pillarHtml = fs.readFileSync(
 const sitemapXml = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 const factsPath = path.join(root, "docs/evidence/web-011/facts.v1.json");
 const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
+const loopRegistry = JSON.parse(
+  fs.readFileSync(path.join(root, "data/money_asset/commercial-loops.v1.json"), "utf8"),
+);
+const [primaryLoop, secondLoop] = loopRegistry.loops.filter((loop) => loop.enabled);
 
 // --- shipped page signals ---
 {
-  const page = extractDiagnosticoSignals(diagnosticoHtml);
+  const page = extractDiagnosticoSignals(diagnosticoHtml, primaryLoop);
   assert.equal(page.utility_before_cta, true);
   assert.equal(page.cta_segunda_leitura, true);
   assert.equal(page.visible_fonte, true);
@@ -68,11 +75,11 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
   pass("diagnostico_signals", {
     utility_before_cta: page.utility_before_cta,
     cta: page.cta_segunda_leitura,
-  });
+  }, primaryLoop);
 }
 
 {
-  const pillar = extractPillarSignals(pillarHtml);
+  const pillar = extractPillarSignals(pillarHtml, primaryLoop);
   assert.equal(pillar.links_to_diagnostico, true);
   assert.equal(pillar.segunda_leitura_phrase, true);
   assert.equal(pillar.canonical_host_confenge, true);
@@ -82,13 +89,14 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
 }
 
 {
-  const map = extractSitemapSignals(sitemapXml, { indexable: true });
+  const map = extractSitemapSignals(sitemapXml, primaryLoop, { indexable: true });
   assert.equal(map.has_diagnostico_loc, true);
   assert.equal(map.has_pillar_loc, true);
   assert.equal(map.consistent_with_indexable, true);
   pass("sitemap_signals", map);
   const evil = extractSitemapSignals(
     "<urlset><loc>https://evil.example/https://confenge.com.br/ferramentas/diagnostico-defesa-margem/</loc></urlset>",
+    primaryLoop,
   );
   assert.equal(evil.has_diagnostico_loc, false);
   pass("sitemap_rejects_host_prefix", evil);
@@ -122,7 +130,7 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
   pass("shipped_use_path", {
     public_id: diagnosis.public_id.value,
     unknown_count: diagnosis.unknown_count,
-  });
+  }, primaryLoop);
 }
 
 // --- shipped lead persist + PII drop; synthetic ≠ pipeline ---
@@ -214,7 +222,7 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
     inbound_secret_set: false,
     ops_token_set: false,
     auto_send_off_evidenced: false,
-  });
+  }, primaryLoop);
   assert.equal(loop.commercial_event, false);
   assert.equal(loop.qualified_lead, false);
   assert.equal(loop.qualified_pipeline, false);
@@ -232,7 +240,7 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
     inbound_secret_set: false,
     ops_token_set: false,
     auto_send_off_evidenced: false,
-  });
+  }, primaryLoop);
   assert.equal(decideLearning({}, blocked), "NEED_MORE_DATA");
   assert.equal(
     decideExit({ reduces_uncertainty: true, reduces_time_to_evidence: true }, blocked),
@@ -254,9 +262,10 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
     inbound_secret_set: true,
     ops_token_set: true,
     auto_send_off_evidenced: true,
+    warmbly_handoff_observed: true,
     salvage: true,
     repeatable: true,
-  });
+  }, primaryLoop);
   assert.equal(won.commercial_event, true);
   assert.equal(won.qualified_lead, true);
   assert.equal(decideLearning({ repeatable: true }, won), "REPEAT");
@@ -274,12 +283,13 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
     inbound_secret_set: true,
     ops_token_set: true,
     auto_send_off_evidenced: true,
+    warmbly_handoff_observed: true,
     named_friction: "cta_requires_whatsapp_and_email",
     friction_requires_change: true,
     product_change_required: true,
     salvage: true,
   };
-  const changed = classifyRealLoop(changeFacts);
+  const changed = classifyRealLoop(changeFacts, primaryLoop);
   assert.equal(decideLearning(changeFacts, changed), "CHANGE");
   assert.equal(decideExit(changeFacts, changed), "ADJUST");
 
@@ -295,9 +305,10 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
     inbound_secret_set: true,
     ops_token_set: true,
     auto_send_off_evidenced: true,
+    warmbly_handoff_observed: true,
     salvage: false,
   };
-  assert.equal(decideLearning(stopFacts, classifyRealLoop(stopFacts)), "STOP");
+  assert.equal(decideLearning(stopFacts, classifyRealLoop(stopFacts, primaryLoop)), "STOP");
 
   const pii = stripPii({
     nome: "Maria",
@@ -317,7 +328,7 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
 // --- committed facts.v1 → review tokens ---
 {
   const facts = JSON.parse(fs.readFileSync(factsPath, "utf8"));
-  const review = buildReview(facts);
+  const review = buildReview(facts, primaryLoop);
   const committed = JSON.parse(fs.readFileSync(reviewPath, "utf8"));
   assert.equal(review.learning, "NEED_MORE_DATA");
   assert.equal(review.exit, "BLOCKED");
@@ -326,11 +337,11 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
   assert.deepEqual(committed.residual, review.residual);
   assert.ok(LEARNING_TOKENS.includes(review.learning));
   assert.ok(EXIT_TOKENS.includes(review.exit));
-  assert.equal(review.real_loop.qualified_pipeline, false);
+  assert.equal(review.real_loop.qualified_pipeline, "UNKNOWN");
   assert.equal(review.real_loop.qualified_lead, false);
   assert.equal(review.real_loop.missing_prerequisites[0].prerequisite, "consented_real_contact");
   assert.equal(blobHasPii(review), false);
-  assert.equal(review.next_command, NEXT_COMMAND);
+  assert.equal(review.next_command, buildNextCommand(primaryLoop));
   pass("committed_review", { learning: review.learning, exit: review.exit });
 }
 
@@ -355,9 +366,47 @@ const reviewPath = path.join(root, "docs/evidence/web-011/review.json");
   assert.equal(cli.review.exit, "BLOCKED");
   assert.equal(cli.real_loop.prerequisite, "consented_real_contact");
   assert.equal(cli.review.real_loop.missing_prerequisites[0].prerequisite, "consented_real_contact");
+  assert.equal(cli.commercial_dod_generalized, true);
+  assert.equal(cli.loops.length, 2);
   assert.match(cli.real_loop.next_command, /Do not invent a person/);
   assert.equal(blobHasPii(cli), false);
   pass("cli_facts_skip_live", { exit: cli.review.exit, status: ran.status });
+}
+
+// --- versioned registry drives two real loops through one evaluator ---
+{
+  const validation = validateCommercialLoopRegistry(loopRegistry);
+  assert.equal(validation.ok, true, validation.errors.join(","));
+  assert.ok(loopRegistry.loops.length >= 2);
+  for (const loop of [primaryLoop, secondLoop]) {
+    const assetHtml = fs.readFileSync(path.join(root, loop.asset_path.slice(1), "index.html"), "utf8");
+    const serviceHtml = loop.service_path === loop.asset_path
+      ? assetHtml
+      : fs.readFileSync(path.join(root, loop.service_path.slice(1), "index.html"), "utf8");
+    const surface = extractLoopSurfaceSignals(loop, { asset_html: assetHtml, service_html: serviceHtml });
+    assert.equal(surface.surface_ready, true, `${loop.id}: ${surface.reason_codes}`);
+    assert.equal(surface.capture_ready, true, `${loop.id}: ${surface.reason_codes}`);
+    assert.equal(surface.attribution_ready, true, `${loop.id}: ${surface.reason_codes}`);
+    const report = buildCommercialLoopReport(loop, {
+      consented_real_contact: false,
+      outcome: "UNKNOWN",
+    }, surface);
+    assert.equal(report.commercial_event, false);
+    assert.equal(report.qualified_pipeline, "UNKNOWN");
+  }
+
+  const thirdLoop = { ...secondLoop, id: "registry-addition-fixture" };
+  const extended = { ...loopRegistry, loops: [...loopRegistry.loops, thirdLoop] };
+  assert.equal(validateCommercialLoopRegistry(extended).ok, true);
+  const synthetic = buildCommercialLoopReport(thirdLoop, {
+    lead_id: "fixture-id",
+    record_kind: "synthetic",
+    consented_real_contact: false,
+    outcome: "UNKNOWN",
+  }, { surface_ready: true, capture_ready: true, attribution_ready: true });
+  assert.equal(synthetic.commercial_event, false);
+  assert.equal(synthetic.qualified_pipeline, false);
+  pass("registry_generalizes_without_script_copy", { loops: extended.loops.length });
 }
 
 console.log("MARGIN_DEFENSE_COMMERCIAL_DOD_OK");

@@ -1,0 +1,70 @@
+{
+  "ok": false,
+  "proven_as": "capture_only_synthetic",
+  "asset": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+  "lead_endpoint": "https://confenge.com.br/.netlify/functions/lead",
+  "label": "SYNTHETIC-INBOUND",
+  "ts": "2026-08-23T01:11:17.730Z",
+  "env_present": {
+    "CONFENGE_INBOUND_WEBHOOK_URL": false,
+    "CONFENGE_INBOUND_WEBHOOK_SECRET": false,
+    "OPS_TOKEN": false,
+    "LEAD_PROBE_SECRET": false,
+    "CONFENGE_AUTO_SEND_EVIDENCE": false
+  },
+  "steps": {
+    "page_live": {
+      "status": "PROVEN",
+      "http": 200,
+      "noindex": false,
+      "cta": true,
+      "utility_before_cta": true
+    },
+    "indexability_hygiene": {
+      "status": "PROVEN",
+      "noindex": false,
+      "in_sitemap": true,
+      "gate": "indexable only when data_confidence floor holds; do not relax"
+    },
+    "capture": {
+      "status": "PROVEN",
+      "http": 201,
+      "ok": true,
+      "lead_id": "9d6250652daf95a942c73876",
+      "receipt_id": "9d6250652daf95a942c73876",
+      "pii_in_response": false,
+      "notify_status": "skipped",
+      "email_status": "skipped",
+      "body_error": null
+    },
+    "replay": {
+      "status": "PROVEN",
+      "http": 200,
+      "same_lead_id": true,
+      "idempotent": true,
+      "second_lead_id": "9d6250652daf95a942c73876"
+    },
+    "ops_counters": {
+      "status": "BLOCKED",
+      "reason": "OPS_TOKEN unset in this environment"
+    },
+    "warmbly_auto_send_off": {
+      "status": "UNKNOWN",
+      "reason": "No evidence in this environment that Warmbly CONFENGE_AUTO_SEND_ENABLED=false"
+    },
+    "inbound_env_local": {
+      "status": "BLOCKED",
+      "reason": "CONFENGE_INBOUND_WEBHOOK_URL and/or CONFENGE_INBOUND_WEBHOOK_SECRET unset here"
+    },
+    "inbound_now": {
+      "status": "BLOCKED",
+      "reason": "Shipped rule: synthetic/qa persist and do not POST Warmbly. This probe is labeled SYNTHETIC-INBOUND / @example.com so it cannot mint INBOUND NOW.",
+      "next_irreversible_proof": "A real qualified lead from /ferramentas/diagnostico-defesa-margem/ (or a real rejection), with inbound URL+secret live, auto-send OFF, same lead_id on receipt and Warmbly INBOUND NOW."
+    },
+    "commercial_send": {
+      "status": "PROVEN",
+      "note": "Probe is synthetic/qa; shipped handoff skips non-real. No commercial send attempted by this harness."
+    }
+  },
+  "note": "A 201 on local/public capture is not INBOUND NOW. Synthetic/qa records persist and SKIP Warmbly by design."
+}

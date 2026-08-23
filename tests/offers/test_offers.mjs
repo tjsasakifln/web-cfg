@@ -24,6 +24,7 @@ const sandbox = require(path.join(root, "scripts/offers/sandbox.cjs"));
 const events = require(path.join(root, "scripts/offers/events.cjs"));
 const journey = require(path.join(root, "scripts/offers/journey.cjs"));
 const structuredData = require(path.join(root, "scripts/offers/structured_data.cjs"));
+const contractualClaims = require(path.join(root, "scripts/offers/contractual_claims.cjs"));
 const { MemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
 const CNPJ = "11222333000181";
@@ -66,11 +67,45 @@ assert("diag_schema_availability", diagService.offers.availability === expectedD
 assert("diag_schema_url", diagService.offers.url === expectedDiagOffer.url, diagService.offers);
 assert("diag_schema_seller", diagService.offers.seller?.["@id"] === expectedDiagOffer.seller["@id"], diagService.offers);
 assert("diag_schema_no_invented_expiry", !("priceValidUntil" in diagService.offers), diagService.offers);
+const offerWithRealExpiry = structuredData.offerStructuredData(
+  { ...diag, price_valid_until: "2026-12-31" },
+  {
+    url: "https://confenge.com.br/diagnostico-b2g-expansao/#pedido-diagnostico",
+    sellerId: "https://confenge.com.br/#organization",
+  },
+);
+assert("diag_schema_real_expiry", offerWithRealExpiry.priceValidUntil === "2026-12-31", offerWithRealExpiry);
+const noExpiryFromFallback = structuredData.offerStructuredData(
+  { ...diag, price_valid_until: null, effective_to: null, effective_from: "2026-08-17", frozen_at: "2026-08-17" },
+  {
+    url: "https://confenge.com.br/diagnostico-b2g-expansao/#pedido-diagnostico",
+    sellerId: "https://confenge.com.br/#organization",
+    priceValidUntil: "2099-12-31",
+  },
+);
+assert("diag_schema_invented_fallback_rejected", !("priceValidUntil" in noExpiryFromFallback), noExpiryFromFallback);
+let invalidExpiryFailed = false;
+try {
+  structuredData.offerStructuredData(
+    { ...diag, price_valid_until: "not-a-real-date" },
+    { url: "https://confenge.com.br/diagnostico-b2g-expansao/", sellerId: "https://confenge.com.br/#organization" },
+  );
+} catch (error) {
+  invalidExpiryFailed = /invalid authoritative offer expiry/.test(String(error.message));
+}
+assert("diag_schema_invalid_expiry_fails_closed", invalidExpiryFailed, "invalid expiry must throw");
 assert(
   "diag_kill_switch_sold_out",
   structuredData.offerAvailability({ ...diag, kill_switch: true }) === "https://schema.org/SoldOut",
   structuredData.offerAvailability({ ...diag, kill_switch: true }),
 );
+
+const snapshot = JSON.parse(fs.readFileSync(path.join(root, "data/offers/catalog.snapshot.json"), "utf8"));
+const snapshotDiag = snapshot.offers.find((offer) => offer.offer_id === "CFG-DIAG-EXP-v1");
+const expectedSlaCopy = contractualClaims.formatBusinessDayInterval(snapshotDiag.sla_business_days);
+assert("diag_sla_derived_from_snapshot", diagHtml.includes(`Prazo de entrega: ${expectedSlaCopy}`), expectedSlaCopy);
+const contractualClaimCheck = contractualClaims.syncContractualClaims({ write: false });
+assert("diag_sla_generated_block_current", contractualClaimCheck.ok, contractualClaimCheck);
 
 const catalog = pub.publicCatalog();
 assert("no_public_10k", !catalog.offers.some((o) => o.amount_cents === 1000000), catalog.offers.map((o) => o.amount_cents));
