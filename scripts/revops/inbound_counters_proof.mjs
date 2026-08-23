@@ -75,6 +75,32 @@ async function run() {
   );
   out.inbound_handoff_configuration = configuration && typeof configuration === "object" ? configuration : null;
 
+  const audit = await request("/.netlify/functions/ops?action=audit_inbound_requeue");
+  const skippedAudit = audit.body?.audit;
+  check(
+    "skipped_requeue_audit_aggregate_only",
+    audit.status === 200 && audit.body.ok === true && skippedAudit && typeof skippedAudit === "object",
+    `http=${audit.status} aggregate_present=${Boolean(skippedAudit && typeof skippedAudit === "object")}`
+  );
+  out.skipped_requeue_audit = skippedAudit && typeof skippedAudit === "object" ? skippedAudit : null;
+
+  const requeueDryRun = await request("/.netlify/functions/ops?action=requeue_inbound", {
+    method: "POST",
+    body: JSON.stringify({ mode: "eligible_only", dry_run: true }),
+  });
+  const dryRunSummary = requeueDryRun.body?.summary;
+  check(
+    "skipped_requeue_dry_run_aggregate_only",
+    requeueDryRun.status === 200 &&
+      requeueDryRun.body.ok === true &&
+      requeueDryRun.body.dry_run === true &&
+      dryRunSummary &&
+      typeof dryRunSummary === "object",
+    `http=${requeueDryRun.status} dry_run=${requeueDryRun.body.dry_run === true} aggregate_present=${Boolean(dryRunSummary && typeof dryRunSummary === "object")}`
+  );
+  out.skipped_requeue_dry_run =
+    dryRunSummary && typeof dryRunSummary === "object" ? dryRunSummary : null;
+
   const funnel = await request("/.netlify/functions/ops?action=funnel");
   const funnelCounts = funnel.body?.funnel?.counts;
   check(

@@ -59,6 +59,8 @@ Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and 
 ## Ops
 
 - Counters and safe configuration state (auth): `GET /.netlify/functions/ops?action=inbound_handoff`
+- Aggregate historical audit (auth): `GET /.netlify/functions/ops?action=audit_inbound_requeue`
+- Strict historical recovery (auth): `POST /.netlify/functions/ops?action=requeue_inbound`
 - Drain due rows: `POST /.netlify/functions/ops?action=drain_inbound`
 - Daily schedule calls drain when `OPS_TOKEN` is set.
 
@@ -69,6 +71,50 @@ of the Netlify production environment; use this response after the production
 deploy.
 
 States: `PENDING | DELIVERED | RETRYABLE | DEAD | BLOCKED | SKIPPED`.
+
+### Recovering historical `SKIPPED/not_configured`
+
+The common drain never consumes `SKIPPED`. Historical recovery is a separate,
+fail-closed operation. Start with the aggregate-only audit, then dry-run:
+
+```bash
+curl -fsS 'https://confenge.com.br/.netlify/functions/ops?action=audit_inbound_requeue' \
+  -H "Authorization: Bearer $OPS_TOKEN"
+
+curl -fsS -X POST 'https://confenge.com.br/.netlify/functions/ops?action=requeue_inbound' \
+  -H "Authorization: Bearer $OPS_TOKEN" \
+  -H 'Content-Type: application/json' \
+  --data '{"mode":"eligible_only","dry_run":true}'
+```
+
+The response is counts only. A row is automatically eligible only when it is
+exactly `SKIPPED/not_configured`, explicitly `record_kind=real`, explicitly
+consented, has a valid join ID, is not DNC/suppressed and has no test identity.
+Missing legacy kind or consent requires manual review. Non-real, QA, internal,
+spam and reserved test identities are never requeued.
+
+Execution requires an explicit bounded limit (`1..20`) and re-probes the
+Warmbly health endpoint server-side. It refuses to mutate unless the configured
+contract is `READY`, `auto_send_enabled=false` and `dispatch_attempted=false`:
+
+```bash
+# Canary: requeue at most one eligible row. This does not drain automatically.
+curl -fsS -X POST 'https://confenge.com.br/.netlify/functions/ops?action=requeue_inbound' \
+  -H "Authorization: Bearer $OPS_TOKEN" \
+  -H 'Content-Type: application/json' \
+  --data '{"mode":"eligible_only","dry_run":false,"limit":1}'
+
+# Only after reviewing the canary result:
+curl -fsS -X POST 'https://confenge.com.br/.netlify/functions/ops?action=drain_inbound' \
+  -H "Authorization: Bearer $OPS_TOKEN" \
+  -H 'Content-Type: application/json' \
+  --data '{"limit":1}'
+```
+
+The drain aborts the remaining batch on `401/403` and on an abnormal retryable
+failure rate. Repeating requeue does not move `PENDING` or `DELIVERED` rows.
+Warmbly uses the same `lead_id` as its durable idempotency key, so a transport
+retry cannot create a second commercial action.
 
 ## Rollback
 
