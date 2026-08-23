@@ -736,6 +736,141 @@ def test_lead_inline_not_before_main_or_h1():
             )
 
 
+def test_lead_inline_never_precedes_main_or_h1_sitewide():
+    """No public page may hoist a promotional lead-inline above <main>/<h1>."""
+    for path in _public_html_files():
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if "lead-inline" not in html:
+            continue
+        rel = path.relative_to(ROOT)
+        main = re.search(r"<main\b", html, re.I)
+        h1 = re.search(r"<h1\b", html, re.I)
+        assert main, f"{rel}: page has lead-inline but no <main"
+        assert h1, f"{rel}: page has lead-inline but no <h1"
+        first = re.search(r"\blead-inline\b", html)
+        assert first.start() > main.start(), f"{rel}: lead-inline before <main"
+        assert first.start() > h1.start(), f"{rel}: lead-inline before first <h1"
+
+
+_ANCHOR = re.compile(r"<a\b[^>]*>[\s\S]*?</a>", re.I)
+
+
+def _cta_anchors(fragment: str) -> list[tuple[str, str]]:
+    """(href, visible label) for CTA-looking anchors, in document order."""
+    out: list[tuple[str, str]] = []
+    for m in _ANCHOR.finditer(fragment):
+        tag = m.group(0)
+        head = tag[: tag.index(">") + 1]
+        if "button" not in head and "text-link" not in head:
+            continue
+        href = re.search(r'href="([^"]*)"', head)
+        label = " ".join(re.sub(r"<[^>]+>", " ", tag[len(head) : -4]).split())
+        out.append((href.group(1) if href else "", label))
+    return out
+
+
+def _main_fragment(html: str) -> str:
+    start = re.search(r"<main\b", html, re.I)
+    end = re.search(r"</main>", html, re.I)
+    assert start and end
+    return html[start.start() : end.start()]
+
+
+def test_no_consecutive_duplicate_cta():
+    """The same offer must not be repeated back to back before any content."""
+    for path in LEAD_INLINE_HIERARCHY_ROUTES:
+        html = path.read_text(encoding="utf-8")
+        seq = _cta_anchors(_main_fragment(html))
+        for before, after in zip(seq, seq[1:]):
+            assert before != after, (
+                f"{path.relative_to(ROOT)}: duplicated consecutive CTA "
+                f"{before[0]} / {before[1]!r}"
+            )
+
+
+def test_organic_tool_block_never_glued_to_hero():
+    """The organic injector must land promotional blocks below the first
+    content section, so the visitor gets the direct answer before any offer."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    page = (
+        "<header class=\"site-header\"></header>"
+        "<main id=\"conteudo\">"
+        "<nav class=\"breadcrumbs\"></nav>"
+        "<header class=\"content-hero pillar-hero\"><h1>Titulo</h1>"
+        "<a class=\"button button-primary\" href=\"/ferramentas/x/\">Abrir</a>"
+        "</header>"
+        "<section id=\"resposta\"><h2>Resposta direta</h2></section>"
+        "<section id=\"depois\"></section>"
+        "</main>"
+    )
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    out = _insert_after_page_hero(page, block)
+    assert block in out, "injector dropped the block"
+    at = out.index(block)
+    assert at > out.index("<main"), "block hoisted above <main"
+    assert at > out.index("<h1"), "block hoisted above the H1"
+    assert at > out.index('<section id="resposta">'), "block glued to the hero"
+    assert at > out.index("</section>"), "block placed inside the first section"
+    assert at < out.index("</main>"), "block escaped <main"
+
+
+def test_organic_tool_block_skips_page_without_safe_section():
+    """No closed content section means there is no proven-safe insertion point."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    no_section = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<p id="resposta">Resposta sem section.</p></main>'
+    )
+    unclosed_section = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><p>Resposta incompleta.</p></main>'
+    )
+    unclosed_main = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><p>Resposta fora de uma main verificável.</p></section>'
+    )
+    assert _insert_after_page_hero(no_section, block) == no_section
+    assert _insert_after_page_hero(unclosed_section, block) == unclosed_section
+    assert _insert_after_page_hero(unclosed_main, block) == unclosed_main
+
+
+def test_organic_tool_block_matches_section_case_insensitively():
+    """HTML tag case must not send a valid content section down the unsafe fallback."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    page = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<SeCtIoN id="resposta"><p>Resposta direta.</p></sEcTiOn>'
+        '<section id="depois"></section></main>'
+    )
+    out = _insert_after_page_hero(page, block)
+    assert block in out
+    assert out.index(block) > out.index("</sEcTiOn>")
+    assert out.index(block) < out.index('<section id="depois">')
+
+
+def test_organic_tool_block_waits_for_outer_section_close():
+    """A nested section must not be mistaken for the end of the direct answer."""
+    from scripts.organic.cohort import _insert_after_page_hero
+
+    block = '<aside class="lead-inline" data-organic-tool="1"></aside>'
+    page = (
+        '<main id="conteudo"><header class="content-hero"><h1>Titulo</h1></header>'
+        '<section id="resposta"><section id="apoio"><p>Apoio.</p></section>'
+        '<p id="fim-resposta">Resposta completa.</p></section>'
+        '<section id="depois"></section></main>'
+    )
+    out = _insert_after_page_hero(page, block)
+    assert block in out
+    assert out.index(block) > out.index('<p id="fim-resposta">')
+    assert out.index(block) > out.index('<p id="fim-resposta">Resposta completa.</p></section>')
+    assert out.index(block) < out.index('<section id="depois">')
+
+
 def test_home_form_anchor_reveals_fields():
     """Hero/primary 'Analisar meu caso' must land on the form, not the long contact copy."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
