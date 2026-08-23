@@ -14,6 +14,10 @@ ROUTE = "/casos/modelo-relatorio-inteligencia-licitacoes/"
 CANONICAL = f"https://confenge.com.br{ROUTE}"
 PAGE = ROOT / ROUTE.strip("/") / "index.html"
 CSS = PAGE.with_name("styles.css")
+ACTION_MATRIX = ROOT / "docs/contracts/intent-action/intent-action-matrix.v1.json"
+CATALOG = ROOT / "data/offers/catalog.snapshot.json"
+ACTION_ID = "contratar_relatorio_inteligencia_599"
+HANDRAISE_ID = "handraise-report-intelligence-599-v1"
 EXPECTED_MESSAGE = (
     "Olá, Tiago. Vi o modelo de relatório de inteligência de licitações e quero "
     "contratar uma versão adaptada à minha empresa por R$ 599."
@@ -87,7 +91,13 @@ def test_portfolio_total_reconciles_with_all_twelve_synthetic_rows() -> None:
 def test_value_ladder_price_and_whatsapp_contract() -> None:
     html = _html()
     positions = set(re.findall(r'data-cta-position="(report_[^"]+)"', html))
-    assert {"report_hero", "report_after_proof", "report_final"} <= positions
+    assert {
+        "report_header",
+        "report_hero",
+        "report_after_proof",
+        "report_final",
+        "report_mobile_sticky",
+    } == positions
     assert html.count("Quero meu relatório por R$ 599") >= 3
     assert "R$ 599 por relatório" in html
     for marker in (
@@ -103,11 +113,58 @@ def test_value_ladder_price_and_whatsapp_contract() -> None:
         assert marker in html
 
     links = re.findall(r'href="(https://wa\.me/5548988344559\?text=[^"]+)"', html)
-    assert len(links) >= 4
+    assert len(links) == 5
     for link in links:
         parsed = urlparse(link)
         assert parsed.netloc == "wa.me" and parsed.path == "/5548988344559"
         assert parse_qs(parsed.query).get("text") == [EXPECTED_MESSAGE]
+
+    commercial_tags = re.findall(
+        r'<a\b[^>]*href="https://wa\.me/5548988344559\?text=[^"]+"[^>]*>', html
+    )
+    assert len(commercial_tags) == 5
+    for tag in commercial_tags:
+        assert f'data-next-action-id="{ACTION_ID}"' in tag
+        assert f'data-offer-id="{HANDRAISE_ID}"' in tag
+        assert 'data-cta-kind="offer"' in tag
+        assert re.search(r'data-cta-id="report-599-[^"]+"', tag)
+        assert re.search(r'data-cta-position="report_[^"]+"', tag)
+    assert 'data-event-name="offer_cta_click"' not in html
+
+
+def test_price_has_versioned_non_catalog_action_authority() -> None:
+    html = _html()
+    matrix = json.loads(ACTION_MATRIX.read_text(encoding="utf-8"))
+    route = next(row for row in matrix["routes"] if row["id"] == ACTION_ID)
+    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    catalog_ids = {offer["offer_id"] for offer in catalog["offers"]}
+
+    assert matrix["version"] == "1.2.0"
+    assert route["offer_id"] == HANDRAISE_ID
+    assert route["service_id"] is None
+    assert route["asset_id"] == "relatorio-inteligencia-licitacoes-demonstrativo"
+    assert HANDRAISE_ID not in catalog_ids
+    assert route["commercial_action_type"] == "owner_approved_non_catalog_whatsapp_handraise"
+    assert route["authority_source"].startswith("docs/stories/story-public-report-model-599.md")
+    assert route["authorized_amount_cents"] == 59900
+    assert route["currency"] == "BRL"
+    assert route["unit"] == "one_adapted_report"
+    assert route["scope_state"] == "UNKNOWN_UNTIL_HUMAN_ACCEPTANCE"
+    assert route["terms_state"] == "UNKNOWN_UNTIL_HUMAN_ACCEPTANCE"
+    assert route["checkout_enabled"] is False
+    assert route["auto_send"] is False
+    assert route["sla"] == "UNKNOWN"
+    assert f'data-next-action-id="{ACTION_ID}"' in html
+    assert f'data-offer-id="{HANDRAISE_ID}"' in html
+    body_tag = re.search(r"<body\b[^>]*>", html)
+    assert body_tag and "data-offer-id" not in body_tag.group(0), (
+        "non-catalog handraise must not emit catalog offer_view on page load"
+    )
+    assert "Escopo e aceite são confirmados" in html
+
+    assert 'window.confengeTrack("offer_cta_click"' in html
+    assert "next_action_id: link.dataset.nextActionId" in html
+    assert "offer_id: link.dataset.offerId" in html
 
 
 def test_schema_attribution_and_internal_discovery() -> None:

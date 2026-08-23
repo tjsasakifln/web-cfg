@@ -65,6 +65,10 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 - A página vive sob `casos/`, diretório já permitido no artefato público. O build deve copiar somente arquivos allowlisted. [Source: `scripts/pseo/public_artifact.py`]
 - Não usar dados dos PDFs como fatos públicos. O exemplar deve ser sintético, coerente e explicitamente demonstrativo.
 - Não criar promessa de prazo, vitória, economia ou resultado. O usuário autorizou apenas o preço unitário de R$ 599.
+- O preço não cria SKU no catálogo congelado #88. A ação versionada
+  `handraise-report-intelligence-599-v1` é WhatsApp iniciado pelo visitante,
+  com escopo e termos `UNKNOWN` até aceite humano e checkout desabilitado em
+  `intent-action-matrix.v1.json`.
 
 ### Testing
 
@@ -150,3 +154,5 @@ Codex GPT-5
 - `scripts/site/test_report_model_ui.mjs`
 - `package.json`
 - `docs/stories/story-public-report-model-599.md`
+- `docs/contracts/intent-action/intent-action-matrix.v1.json`
+- `docs/contracts/intent-action/intent-action-matrix.v1.md`
