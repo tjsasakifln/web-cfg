@@ -52,6 +52,14 @@
         statusEl.classList.toggle('is-error', kind === 'error');
         statusEl.classList.toggle('is-ok', kind === 'ok');
       };
+      const safeSuccessDestination = (candidate) => {
+        switch (candidate) {
+          case '/obrigado-contrato': return '/obrigado-contrato';
+          case '/obrigado-edital': return '/obrigado-edital';
+          case '/obrigado-operacao': return '/obrigado-operacao';
+          default: return '/obrigado';
+        }
+      };
       const markStart = () => {
         if (formStarted) return;
         formStarted = true;
@@ -266,9 +274,9 @@
         // then FormSubmit/Netlify Forms, then WhatsApp operational fallback.
         if (typeof window.fetch === 'function' && form.getAttribute('data-ajax') !== 'false') {
           event.preventDefault();
-          const dest = form.getAttribute('data-success-destination')
-            || JOURNEY_ACTIONS[journey]
-            || '/obrigado';
+          const dest = safeSuccessDestination(
+            form.getAttribute('data-success-destination') || JOURNEY_ACTIONS[journey],
+          );
           const fd = new FormData(form);
           if (!fd.get('form-name')) fd.set('form-name', form.getAttribute('name') || 'diagnostico-b2g');
           if (!fd.get('jornada')) fd.set('jornada', journey || '');

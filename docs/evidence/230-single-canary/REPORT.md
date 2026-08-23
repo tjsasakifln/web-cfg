@@ -1,7 +1,7 @@
 # #230 em #61 — canário único de segunda leitura contratual
 
 Data da auditoria: 2026-08-22 BRT (2026-08-23 UTC). Base: `origin/main` em
-`c5fa76277036de81e391ba469985b8923182e746`.
+`2e9aa14a1d26ff09c689ae861adab59bad6be91f`.
 
 ## Decisão e hipótese
 
@@ -110,23 +110,27 @@ corrigidos somente em `styles-tools.css`, com ocultação visual recortada e que
 segura da fonte. Axe também encontrou `#metodo` fora de landmark nomeado; a seção
 recebeu nome acessível. Não houve redesign.
 
-## Evidência depois do slice (local)
+## Evidência depois do slice (local e preview)
 
 | Gate | Resultado |
 |---|---|
 | Unitário de lead | 18 PASS, incluindo validação, persistência, idempotência e injeção de PII em atribuição |
-| Contrato/handoff | 18 PASS: HMAC, persist-before-destination, dedupe, 5xx, timeout, 401, flags e sintético autenticado |
+| Contrato/handoff | 22 PASS: HMAC, persist-before-destination, dedupe, 5xx, timeout, 401, flags, requeue restrito ao canário e sintético autenticado |
 | Loop integrado | mesmo receipt web-cfg/Warmbly, `downstream_receipt=wb-<lead_id>`; 1 delivered, 1 blocked, 1 retryable e 2 skipped em fixtures isoladas |
 | E2E Chromium 390 px | refresh manteve chave; timeout + reenvio deixou 1 receipt; duplicata não repostou; Warmbly 503 preservou `RETRYABLE`; sem overflow |
-| A11y | 14 páginas, incluindo o canário: 0 critical, 0 serious, 0 moderate, 0 minor |
+| A11y | 14 páginas no preview Netlify, incluindo o canário: 0 critical, 0 serious, 0 moderate, 0 minor |
 | UI/#179 | suíte geométrica completa PASS; `image-aspect-ratio=1`, `image-size-responsive=1` |
 | BOFU | 15 PASS |
 | Analytics/atribuição | PASS; allowlist sem PII; qualified/pipeline continuam `UNKNOWN` até evento real |
 | Build | PASS; 0 páginas pSEO publicáveis, 5 noindex, 18 rejeitadas; mudanças geradas fora do slice descartadas |
-| Performance | live baseline: performance 98, a11y 100, best practices 96, SEO 100, LCP 2,08 s, CLS 0. Servidor Python local sem compressão: 87–89, logo preview Netlify ainda é gate obrigatório |
+| Performance | preview Netlify: performance 92, a11y 100, LCP 1,71 s, CLS 0 e checks de proporção/responsividade de imagem aprovados. Baseline live: performance 98, a11y 100, best practices 96, SEO 100, LCP 2,08 s, CLS 0 |
 
 Lint editorial e `node --check` dos entrypoints/bundle também passaram. Os módulos
 em `js/modules/` são fragmentos concatenados e não são entrypoints JS autônomos.
+No preview, best practices 93 decorreu das injeções do toolbar Netlify
+(CSP/permissions) e SEO 69 do `X-Robots-Tag: noindex` deliberado do ambiente de
+preview; não são mudanças da rota. A produção de referência permaneceu em 96 e
+100, respectivamente.
 
 ## Gate de produção e resíduos
 
@@ -142,8 +146,8 @@ Ainda não é DONE em produção. Após aprovação normal do deploy:
    `handoff.status=DELIVERED` e `downstream_receipt` Warmbly;
 5. desligar a flag sintética e arquivar/reter o registro como sintético.
 
-Resíduos explícitos: preview Netlify, aprovação/deploy, configuração secreta de
-produção e reconciliação do lead sintético. Um clique ou HTTP 200/201 isolado não
+Resíduos explícitos: aprovação/deploy, configuração secreta de produção e
+reconciliação do lead sintético. Um clique ou HTTP 200/201 isolado não
 fecha #230. Pipeline real qualificado permanece `UNKNOWN`; a prova sintética mede
 somente o transporte receipt → handoff → pipeline excluído.
 
