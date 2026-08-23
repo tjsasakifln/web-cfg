@@ -199,6 +199,7 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/site/test_cta_whatsapp.mjs",
       "scripts/site/svg_path_grammar.mjs",
       "scripts/site/fixtures/svg_path/",
+      "scripts/pseo/html_shell.py",
       "data/site/whatsapp-messages.json",
     ],
     artifacts: [],

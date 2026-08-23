@@ -237,6 +237,51 @@ if (!fixtureResults.some((r) => r.expect === "valid")) {
   issues.push({ rel: SVG_FIXTURE_DIR, error: "svg_path_positive_control_missing" });
 }
 
+// Direct grammar regressions cover separators/radii that are easy to weaken
+// while refactoring the parser. The extraction cases prove that uppercase and
+// unquoted path attributes cannot evade the repository-wide audit.
+const parserRegressionCases = [
+  { id: "leading-comma", d: "M,0,0", expect: "invalid" },
+  { id: "trailing-comma", d: "M0,0,", expect: "invalid" },
+  { id: "comma-after-closepath", d: "M0 0Z,", expect: "invalid" },
+  { id: "comma-before-command", d: "M0,0L1,1,", expect: "invalid" },
+  { id: "negative-arc-rx", d: "M0 0A-1 2 0 0 1 3 4", expect: "invalid" },
+  { id: "negative-arc-ry", d: "M0 0A1 -2 0 0 1 3 4", expect: "invalid" },
+  { id: "implicit-signed-coordinate", d: "M0-1L.5.5", expect: "valid" },
+];
+for (const testCase of parserRegressionCases) {
+  const parsed = parseSvgPath(testCase.d);
+  const accepted = parsed.ok;
+  if ((testCase.expect === "valid") !== accepted) {
+    issues.push({
+      rel: "scripts/site/svg_path_grammar.mjs",
+      error: "svg_path_parser_regression",
+      id: testCase.id,
+      expected: testCase.expect,
+      actual: accepted ? "valid" : "invalid",
+      reason: parsed.error,
+    });
+  }
+}
+
+const extractionRegressionCases = [
+  { id: "uppercase-unquoted", source: "<path D=M,0,0></path>", expected: ["M,0,0"] },
+  { id: "lowercase-unquoted", source: "<path d=M0,0></path>", expected: ["M0,0"] },
+  { id: "ignore-data-d", source: '<path data-d="M,0,0" d="M0,0"></path>', expected: ["M0,0"] },
+];
+for (const testCase of extractionRegressionCases) {
+  const actual = extractPathData(testCase.source);
+  if (JSON.stringify(actual) !== JSON.stringify(testCase.expected)) {
+    issues.push({
+      rel: "scripts/site/svg_path_grammar.mjs",
+      error: "svg_path_extraction_regression",
+      id: testCase.id,
+      expected: testCase.expected,
+      actual,
+    });
+  }
+}
+
 const out = {
   ok: issues.length === 0,
   found: found.length,
@@ -244,6 +289,8 @@ const out = {
   html_scanned: htmlFiles.length,
   svg_paths_checked: pathsChecked,
   svg_path_fixtures: fixtureResults,
+  svg_path_parser_regressions: parserRegressionCases.length,
+  svg_path_extraction_regressions: extractionRegressionCases.length,
   earliest_safe_action_at: earliestSafeActionAt,
   audit_date: auditDate,
   warnings,
