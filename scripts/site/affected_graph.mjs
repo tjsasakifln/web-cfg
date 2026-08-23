@@ -19,6 +19,7 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:authority",
   "test:design",
   "test:copy",
+  "audit:accessibility",
   "test:ui",
   "test:inbound-gates",
   "test:cta-whatsapp",
@@ -246,6 +247,21 @@ export const SUITE_GRAPH = Object.freeze({
     ],
     artifacts: ["docs/editorial/COPY-LINT-REPORT.json"],
     surfaces: ["/", "/conteudos/"],
+  },
+  "audit:accessibility": {
+    producers: ["scripts/site/audit_accessibility.py"],
+    artifacts: [],
+    surfaces: ["/", "/ferramentas/", "/diretoria-b2g/"],
+  },
+  "test:lighthouse-gates": {
+    producers: [
+      "scripts/site/test_lighthouse_thresholds.mjs",
+      "scripts/site/lighthouse_thresholds.mjs",
+      "scripts/site/run_lighthouse.mjs",
+      ".github/workflows/site-ci.yml",
+    ],
+    artifacts: ["docs/lighthouse-runs/summary.json"],
+    surfaces: ["/"],
   },
   "test:ui": {
     producers: [

@@ -13,8 +13,43 @@ PAGES = [
     ROOT / "diagnostico-b2g-360" / "index.html",
     ROOT / "bid-room-licitacoes-obras" / "index.html",
     ROOT / "defesa-margem-contratos-publicos" / "index.html",
+    ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
+    ROOT / "defesa-tecnica-contratos-publicos" / "index.html",
+    ROOT / "acompanhamento-contratos-obras" / "index.html",
     ROOT / "ferramentas" / "diagnostico-defesa-margem" / "index.html",
 ]
+
+
+def find_form_field(html: str, field_id: str) -> re.Match[str] | None:
+    return re.search(
+        rf"<(?:input|select|textarea)\b[^>]*\b(?:id|name)=[\"']{re.escape(field_id)}[\"'][^>]*>",
+        html,
+        re.I,
+    )
+
+
+def has_accessible_label(html: str, field_id: str) -> bool:
+    field = find_form_field(html, field_id)
+    if not field:
+        return False
+    tag = field.group(0)
+    aria_label = re.search(r"\baria-label=[\"']([^\"']*)[\"']", tag, re.I)
+    if aria_label and aria_label.group(1).strip():
+        return True
+    labelledby = re.search(r"\baria-labelledby=[\"']([^\"']+)[\"']", tag, re.I)
+    if labelledby and any(
+        re.search(rf"\bid=[\"']{re.escape(label_id)}[\"']", html, re.I)
+        for label_id in labelledby.group(1).split()
+    ):
+        return True
+    element_id = re.search(r"\bid=[\"']([^\"']+)[\"']", tag, re.I)
+    if element_id and re.search(
+        rf"<label\b[^>]*\bfor=[\"']{re.escape(element_id.group(1))}[\"']",
+        html,
+        re.I,
+    ):
+        return True
+    return any(tag in label for label in re.findall(r"<label\b[^>]*>[\s\S]*?</label>", html, re.I))
 
 
 def check_page(path: Path) -> list[str]:
@@ -31,17 +66,20 @@ def check_page(path: Path) -> list[str]:
     # Home contact form fields are only required on the site home page.
     if path == ROOT / "index.html":
         for field in ("nome", "empresa", "email", "estagio", "urgencia", "mensagem"):
-            if f'for="{field}"' not in html and f'id="{field}"' not in html:
+            if not has_accessible_label(html, field):
                 errors.append(f"form field labeling: {field}")
+        if not has_accessible_label(html, "consentimento"):
+            errors.append("form field labeling: consentimento")
         if not re.search(r"<h1[\s>]", html):
             errors.append("missing h1")
         if "aria-label" not in html:
             errors.append("expected some aria-labels")
     elif "<form" in html:
-        if 'id="nome"' in html and f'for="nome"' not in html:
-            errors.append("form field labeling: nome")
-        if 'id="email"' in html and f'for="email"' not in html:
-            errors.append("form field labeling: email")
+        for field in ("nome", "empresa", "email", "telefone", "mensagem"):
+            if find_form_field(html, field) and not has_accessible_label(html, field):
+                errors.append(f"form field labeling: {field}")
+        if find_form_field(html, "consentimento") and not has_accessible_label(html, "consentimento"):
+            errors.append("form field labeling: consentimento")
     return errors
 
 
@@ -62,7 +100,7 @@ def main() -> int:
             print(" -", f)
         return 1
     print("OK audit:accessibility")
-    print("checks: landmarks, skip-link, lang, form labels (home), reduced-motion, focus")
+    print("checks: landmarks, skip-link, lang, form labels, consent, reduced-motion, focus")
     return 0
 
 

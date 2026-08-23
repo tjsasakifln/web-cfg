@@ -22,6 +22,7 @@ SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 CODEQL = ROOT / ".github" / "workflows" / "codeql.yml"
 LIGHTHOUSE_RUNNER = ROOT / "scripts" / "site" / "run_lighthouse.mjs"
+LIGHTHOUSE_THRESHOLDS = ROOT / "scripts" / "site" / "lighthouse_thresholds.mjs"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -136,6 +137,13 @@ def test_site_ci_shape():
         errors.append("site-ci must install Chrome before npm run test:ui")
     if chrome_at >= 0 and axe_at >= 0 and chrome_at > axe_at:
         errors.append("site-ci must install Chrome before npm run audit:axe")
+    if 'UI_GEOMETRY_REQUIRED: "1"' not in text:
+        errors.append("site-ci must fail closed when UI geometry cannot launch Chrome")
+    if 'LH_HOME_RUNS: "3"' not in text:
+        errors.append("site-ci must run the #185 home Lighthouse gate three times")
+    for needle in ("npm run audit:accessibility", "npm run test:lighthouse-gates"):
+        if needle not in text:
+            errors.append(f"site-ci missing adversarial UI gate: {needle}")
 
     assert not errors, "site-ci shape failures:\n- " + "\n- ".join(errors)
 
@@ -192,6 +200,8 @@ def test_pseo_shape():
         errors.append("pseo must install Chrome via browser-actions/setup-chrome")
     if chrome_at >= 0 and npm_test_at >= 0 and chrome_at > npm_test_at:
         errors.append("pseo must install Chrome before npm test")
+    if 'UI_GEOMETRY_REQUIRED: "1"' not in text:
+        errors.append("pseo must fail closed when UI geometry cannot launch Chrome")
 
     assert not errors, "pseo shape failures:\n- " + "\n- ".join(errors)
 
@@ -234,6 +244,7 @@ def test_lighthouse_covers_article_cover_regression_routes():
     """The image acceptance gate must exercise the article and pillar changed by #253."""
     workflow = _read(SITE_CI)
     runner = _read(LIGHTHOUSE_RUNNER)
+    thresholds = _read(LIGHTHOUSE_THRESHOLDS)
     routes = (
         "/conteudos/documentos-reequilibrio-obra-publica/",
         "/acompanhamento-contratos-obras/",
@@ -246,11 +257,15 @@ def test_lighthouse_covers_article_cover_regression_routes():
         "LH_SEO_EXEMPT_PAGES",
         'audits["image-aspect-ratio"]?.score',
         'audits["image-size-responsive"]?.score',
-        "IMAGE_GATE_PAGES.has(r.path)",
-        "!SEO_EXEMPT_PAGES.has(r.path) && r.seo < 95",
     ):
         if needle not in runner:
             raise AssertionError(f"Lighthouse image regression gate missing {needle}")
+    for needle in (
+        "imageGatePages.has(row.path)",
+        "!seoExemptPages.has(row.path) && row.seo < 95",
+    ):
+        if needle not in thresholds:
+            raise AssertionError(f"Lighthouse threshold module missing {needle}")
 
 
 def test_codeql_soft_fail_is_explicit():

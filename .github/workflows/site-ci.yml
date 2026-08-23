@@ -45,6 +45,8 @@ jobs:
           npm run test:brand
           npm run test:copy
           npm run test:design
+          npm run audit:accessibility
+          npm run test:lighthouse-gates
           npm run pseo:test
           npm run organic:test
           npm run test:diagnose-margin
@@ -86,6 +88,7 @@ jobs:
       - name: UI geometry
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          UI_GEOMETRY_REQUIRED: "1"
         run: npm run test:ui
       - name: pSEO validate and audit
         run: |
@@ -106,10 +109,13 @@ jobs:
       - name: Lighthouse local (_site)
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          LH_HOME_RUNS: "3"
           LH_PAGES: "/,/diretoria-b2g/,/conteudos/,/conteudos/documentos-reequilibrio-obra-publica/,/acompanhamento-contratos-obras/"
           LH_IMAGE_GATE_PAGES: "/conteudos/documentos-reequilibrio-obra-publica/,/acompanhamento-contratos-obras/"
           LH_SEO_EXEMPT_PAGES: "/conteudos/documentos-reequilibrio-obra-publica/" # intentional noindex,follow
-        run: npm run test:lighthouse
+        run: |
+          npm run test:lighthouse
+          LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates
         continue-on-error: false
       - name: Tools UI/UX E2E
         env:
