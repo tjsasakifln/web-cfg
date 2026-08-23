@@ -187,9 +187,11 @@ export function parseSvgPath(d) {
  * inline JS cannot be mistaken for path data.
  */
 export function extractPathData(html) {
+  // End tags may carry stray whitespace/attributes (`</script\n foo="bar">`) and
+  // comments may close with `--!>`; browsers accept both, so the strippers do too.
   const source = String(html ?? "")
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ")
-    .replace(/<!--[\s\S]*?-->/g, " ");
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, " ")
+    .replace(/<!--[\s\S]*?--!?>/g, " ");
   const out = [];
   const re = /(?:^|[\s"'/])d\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
   let m;
