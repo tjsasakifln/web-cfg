@@ -68,6 +68,10 @@ for (const width of widths) {
     const sticky = document.querySelector(".report-mobile-cta");
     const heroRect = heroCta?.getBoundingClientRect();
     const stickyRect = sticky?.getBoundingClientRect();
+    const heroResult = document.querySelector(".report-hero-result")?.getBoundingClientRect();
+    const h1 = document.querySelector("h1");
+    const mobilePortfolio = document.querySelector(".report-mobile-portfolio");
+    const mobilePortfolioStyle = mobilePortfolio ? getComputedStyle(mobilePortfolio) : null;
     const focusTarget = document.querySelector(".report-table-wrap");
     focusTarget?.focus();
     const focusStyle = focusTarget ? getComputedStyle(focusTarget) : null;
@@ -75,12 +79,27 @@ for (const width of widths) {
       documentOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       heroCtaBottom: heroRect?.bottom || null,
       heroCtaVisible: Boolean(heroRect && heroRect.width > 0 && heroRect.height >= 48),
+      heroResultBottom: heroResult?.bottom || null,
+      heroResultVisible: Boolean(heroResult && heroResult.width > 0 && heroResult.height > 0),
+      h1Text: h1?.textContent?.trim() || "",
+      h1Height: h1?.getBoundingClientRect().height || 0,
       stickyVisible: Boolean(stickyRect && stickyRect.width > 0 && stickyRect.height > 0),
       stickyHeight: stickyRect?.height || 0,
       focusOutline: focusStyle?.outlineStyle || "none",
+      tableVisible: Boolean(focusTarget && getComputedStyle(focusTarget).display !== "none"),
       tableOverflowContained: Boolean(
         focusTarget && focusTarget.scrollWidth >= focusTarget.clientWidth &&
         getComputedStyle(focusTarget).overflowX === "auto"
+      ),
+      mobilePortfolioVisible: Boolean(
+        mobilePortfolio && mobilePortfolioStyle?.display !== "none" &&
+        mobilePortfolio.getBoundingClientRect().height > 0
+      ),
+      mobilePortfolioItems: mobilePortfolio?.querySelectorAll("[data-decision]").length || 0,
+      deliverablesBeforeExample: Boolean(
+        document.querySelector("#o-que-recebe")?.compareDocumentPosition(
+          document.querySelector("#conclusao")
+        ) & Node.DOCUMENT_POSITION_FOLLOWING
       ),
       h1Count: document.querySelectorAll("h1").length,
       reportSections: document.querySelectorAll(".report-section").length,
@@ -104,26 +123,78 @@ for (const width of widths) {
   });
 
   const errors = [];
+  let stickyAfterHero = null;
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.documentOverflow) errors.push("document_overflow");
   if (!metrics.heroCtaVisible || metrics.heroCtaBottom > height) errors.push("hero_cta_below_fold");
-  if (!metrics.tableOverflowContained) errors.push("table_overflow_not_contained");
-  if (metrics.focusOutline === "none") errors.push("table_focus_missing");
+  if (!metrics.heroResultVisible || metrics.heroResultBottom > height) errors.push("hero_result_below_fold");
+  if (metrics.h1Text !== "Escolha quais licitações disputar e quais recusar.") errors.push("hero_promise");
+  if (!metrics.deliverablesBeforeExample) errors.push("offer_before_example");
   if (metrics.h1Count !== 1 || metrics.reportSections < 8) errors.push("report_structure");
   if (metrics.whatsappCtas < 4) errors.push("whatsapp_ctas");
-  if (width <= 390 && (!metrics.stickyVisible || metrics.stickyHeight > 64)) errors.push("mobile_sticky");
+  if (width <= 390 && metrics.h1Height > 180) errors.push("mobile_h1_too_tall");
+  if (width <= 620 && (!metrics.mobilePortfolioVisible || metrics.mobilePortfolioItems !== 12)) errors.push("mobile_portfolio");
+  if (width > 620 && (!metrics.tableVisible || !metrics.tableOverflowContained)) errors.push("table_overflow_not_contained");
+  if (width > 620 && metrics.focusOutline === "none") errors.push("table_focus_missing");
+  if (width <= 390 && metrics.stickyVisible) errors.push("mobile_sticky_over_hero");
   if (width > 620 && metrics.stickyVisible) errors.push("desktop_sticky_visible");
 
   if (screenshotDir) {
     fs.mkdirSync(screenshotDir, { recursive: true });
     await page.screenshot({ path: path.join(screenshotDir, `report-${width}.png`), fullPage: false });
   }
-  findings.push({ width, height, ...metrics, errors });
+
+  if (width <= 390) {
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, document.querySelector("#o-que-recebe").offsetTop + 100);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 180));
+    stickyAfterHero = await page.evaluate(() => {
+      const sticky = document.querySelector(".report-mobile-cta")?.getBoundingClientRect();
+      const actionHidden = document.querySelector(".report-mobile-action")?.hidden;
+      return {
+        visible: Boolean(!actionHidden && sticky && sticky.width > 0 && sticky.height > 0),
+        height: sticky?.height || 0,
+        actionHidden,
+        scrollY: window.scrollY,
+        heroBottom: document.querySelector("[data-report-hero]")?.getBoundingClientRect().bottom,
+        bodyClass: document.body.className,
+      };
+    });
+    if (!stickyAfterHero.visible || stickyAfterHero.height > 64) errors.push("mobile_sticky_after_hero");
+  }
+  findings.push({ width, height, ...metrics, stickyAfterHero, errors });
   if (errors.length) failed += 1;
 }
 
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
+const clickEvents = await page.evaluate(() => {
+  window.dataLayer = [];
+  const link = document.querySelector('[data-cta-position="report_hero"]');
+  link?.addEventListener("click", (event) => event.preventDefault(), { capture: true, once: true });
+  link?.click();
+  return (window.dataLayer || []).filter(({ event }) =>
+    ["whatsapp_click", "cta_click"].includes(event)
+  );
+});
+if (
+  clickEvents.length !== 1 ||
+  clickEvents[0]?.event !== "whatsapp_click" ||
+  clickEvents[0]?.asset_id !== "relatorio-inteligencia-licitacoes-demonstrativo" ||
+  clickEvents[0]?.route_family !== "edital-proposta" ||
+  clickEvents[0]?.cta_id !== "report-599-hero" ||
+  clickEvents[0]?.cta_position !== "report_hero" ||
+  clickEvents[0]?.cta_kind !== "offer" ||
+  clickEvents[0]?.offer_id !== "handraise-report-intelligence-599-v1" ||
+  clickEvents[0]?.next_action_id !== "contratar_relatorio_inteligencia_599" ||
+  !clickEvents[0]?.event_id ||
+  clickEvents[0]?.source !== "CONFENGE_WEB"
+) {
+  findings.push({ analytics: clickEvents, errors: ["report_offer_click_contract"] });
+  failed += 1;
+}
 await page.addScriptTag({ content: axeSource });
 const axe = await page.evaluate(async () => {
   const result = await window.axe.run(document, {
@@ -141,7 +212,13 @@ if (hardAxe.length) failed += 1;
 if (screenshotDir) {
   await page.setViewport({ width: 1440, height: 1000, deviceScaleFactor: 1 });
   await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
-  for (const [name, selector] of [["portfolio", "#carteira"], ["proof", "#ficha-a01"], ["final", ".report-final"]]) {
+  for (const [name, selector] of [
+    ["offer", "#o-que-recebe"],
+    ["portfolio", "#carteira"],
+    ["proof", "#ficha-a01"],
+    ["evidence", "#evidencias"],
+    ["final", ".report-final"],
+  ]) {
     const element = await page.$(selector);
     if (element) await element.screenshot({ path: path.join(screenshotDir, `report-${name}-1440.png`) });
   }

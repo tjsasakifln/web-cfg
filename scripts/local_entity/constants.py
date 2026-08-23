@@ -10,6 +10,7 @@ ORG_ID = f"{SITE}/#organization"
 PERSON_ID = f"{SITE}/#tiago"
 SPECIALIST_PATH = "/especialista/tiago-jun-sasaki/"
 SPECIALIST_RELPATH = "especialista/tiago-jun-sasaki/index.html"
+HOME_RELPATH = "index.html"
 
 CLAIM_STATUSES = frozenset({"VERIFIED", "SELF_DECLARED", "UNKNOWN", "NOT_PUBLIC"})
 SURFACE_DECISIONS = frozenset(

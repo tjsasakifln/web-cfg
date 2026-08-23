@@ -173,6 +173,8 @@ exports.handler = async (event) => {
       correlation_id: safe.props && safe.props.correlation_id,
       idempotency_key: safe.props && safe.props.idempotency_key,
       event_id: safe.props && safe.props.event_id,
+      offer_id: safe.props && safe.props.offer_id,
+      next_action_id: safe.props && safe.props.next_action_id,
     });
     accepted.push(safe);
 
