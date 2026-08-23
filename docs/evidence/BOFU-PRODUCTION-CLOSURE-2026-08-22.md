@@ -8,6 +8,7 @@ claimed without a consented real contact and an observable Warmbly receipt.
 
 - `BASE_SHA`: `2086e7138d87d9fe92f509b4748b1e59e7260107`
 - `FINAL_SHA`: `f3319adf684e842d60bb696f47e34e48ddbdae94`
+- `PRODUCTION_SHA`: `97d8338640379d15b58ac5a1453b8420ac606aec`
 - Repository/public authority: `tjsasakifln/web-cfg`, `confenge.com.br`
 - Affected ADR: `ADR-STRAT-002`; no boundary change, so no ADR amendment
 - Decision state: `EXECUTE_NOW`
@@ -67,6 +68,9 @@ Explicit fixtures:
 An authoritative snapshot change changes the generated expectation and makes
 `test:offers` fail until the HTML is regenerated coherently.
 
+Production at `PRODUCTION_SHA` returns the exact generated interval and no
+`até 15 dias úteis` delivery claim.
+
 ## #233 — `priceValidUntil` specification reconciliation
 
 Status: `PASS`, fail closed.
@@ -120,26 +124,27 @@ No secret value was read, printed or committed.
 
 | Item | Local shell | Production authority | Evidence |
 | --- | --- | --- | --- |
-| `CONFENGE_INBOUND_WEBHOOK_URL` | `UNSET` | `UNKNOWN` until the new authenticated safe state is deployed | committed value is not env proof |
-| `CONFENGE_INBOUND_WEBHOOK_SECRET` | `UNSET` | `UNKNOWN` until the new authenticated safe state is deployed | committed value is not env proof |
+| `CONFENGE_INBOUND_WEBHOOK_URL` | `UNSET` | `UNSET` | authenticated production ops response |
+| `CONFENGE_INBOUND_WEBHOOK_SECRET` | `UNSET` | `UNSET` | authenticated production ops response |
 | `OPS_TOKEN` | `UNSET` | `SET` in GitHub Actions | authenticated ops proof run succeeded |
 | `REVOPS_TOKEN` | `UNSET` | `SET` in GitHub Actions | secret name only |
 | `CONFENGE_AUTO_SEND_ENABLED` | `UNSET` | `false` on Warmbly host | read-only boolean check over `ec-prod` |
 | Warmbly inbound secret | not applicable | `SET` on Warmbly host | read-only presence check over `ec-prod` |
 
-The web-cfg authenticated `inbound_handoff` response now exposes only safe
+The deployed web-cfg authenticated `inbound_handoff` response exposes only safe
 `SET | UNSET` presence and `READY | UNSET | BLOCKED` contract state. It never
-returns URL or secret values. The post-deploy workflow is the authority for the
-two Netlify states above.
+returns URL or secret values. Post-deploy Actions run `32610623004` observed
+`webhook_url=UNSET`, `webhook_secret=UNSET`, `contract=UNSET` and
+`reason=not_configured` at `PRODUCTION_SHA`.
 
-### Production observations before this deploy
+### Final production observations
 
-- GitHub Actions run
-  `https://github.com/tjsasakifln/web-cfg/actions/runs/32609349404`:
-  authenticated health, inbound counters and commercial-only funnel all HTTP
-  200.
-- Counters at the observation boundary: `persisted=123`, `delivered=0`,
-  `skipped=123`, `pending=0`, `retryable=0`, `blocked=0`, `dead=0`.
+- GitHub Actions post-deploy run
+  `https://github.com/tjsasakifln/web-cfg/actions/runs/32610623004`:
+  authenticated health, inbound counters/configuration and commercial-only
+  funnel all HTTP 200.
+- Counters at the final observation boundary: `persisted=124`, `delivered=0`,
+  `skipped=124`, `pending=0`, `retryable=0`, `blocked=0`, `dead=0`.
 - Official command:
   `node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br`.
   It produced a synthetic capture HTTP 201, idempotent replay HTTP 200 with the
@@ -156,21 +161,21 @@ two Netlify states above.
 Safe artifacts:
 
 - `docs/evidence/bofu-production-closure/inbound-counters-proof-32609349404.json`
+- `docs/evidence/bofu-production-closure/inbound-counters-proof-32610623004.json`
 - `docs/evidence/bofu-production-closure/money-asset-prod-proof-2026-08-23.json`
 - `docs/evidence/commercial-dod/facts.closure.v1.json`
 
 ### External action contract
 
-The two Netlify items below are provisional until the post-deploy authenticated
-response resolves them. They must not be removed based on local or committed
-values.
+The two Netlify items below are exact post-deploy blockers. They must not be
+removed based on local or committed values.
 
 ```text
 ITEM:
 CONFENGE_INBOUND_WEBHOOK_URL
 
 STATE:
-UNKNOWN
+UNSET
 
 OWNER:
 CONFENGE Netlify production operator
@@ -193,7 +198,7 @@ ITEM:
 CONFENGE_INBOUND_WEBHOOK_SECRET
 
 STATE:
-UNKNOWN
+UNSET
 
 OWNER:
 CONFENGE Netlify production operator
@@ -283,10 +288,10 @@ Supported runtime: Node `20.19.0`. The complete requested sequence exited 0:
 | `npm run test:ops-auth` | PASS |
 | explicit SLA adversarial fixtures | PASS, 3 accepted and 6 rejected as specified |
 
-`test:ui` inside `npm test` reported `UI_GEOMETRY_UNAVAILABLE` because the
-local Chromium image lacked `libnspr4`; the gate honestly records that state
-and does not claim a browser geometry pass. CI remains the required browser
-authority. No threshold was reduced and no test was removed.
+`test:ui` inside the local `npm test` reported `UI_GEOMETRY_UNAVAILABLE`
+because the local Chromium image lacked `libnspr4`; the gate honestly recorded
+that state. The required `site-ci` browser gate then passed on PR #257. No
+threshold was reduced and no test was removed.
 
 Analytics: existing allowlisted events and `CONFENGE_WEB` attribution are
 preserved; PII remains absent from analytics and committed evidence. The new
@@ -313,6 +318,6 @@ BLOCKED_EXTERNAL_ACTION=CONFENGE_INBOUND_WEBHOOK_URL,CONFENGE_INBOUND_WEBHOOK_SE
 
 `PARTIAL`
 
-- Netlify production inbound URL/secret state is not yet proven.
+- Netlify production inbound URL and secret are `UNSET`.
 - No consented real contact exists for the proof.
 - No matching Warmbly receipt/action for a consented real contact is observable.
