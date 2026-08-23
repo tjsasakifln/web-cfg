@@ -18,6 +18,10 @@ from scripts.site.inbound_first_remediate import (  # noqa: E402
     load_stage_classification,
     resolve_content_stage,
 )
+from scripts.site.public_navigation import (  # noqa: E402
+    FROZEN_NAV_HTML_PATHS,
+    audit_public_navigation_tree,
+)
 
 ALLOWED = frozenset(ALLOWED_STAGES)
 EXPECTED_NAV = [
@@ -145,11 +149,6 @@ class _DesktopNav(HTMLParser):
 
 def _hub_html() -> str:
     return (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
-
-
-def _effective_nav(labels: list[str]) -> list[str]:
-    """Model the shipped runtime upgrade for frozen legacy HTML shells."""
-    return EXPECTED_NAV if labels == LEGACY_NAV else labels
 
 
 def _parse_hub_items() -> list[dict[str, str]]:
@@ -424,10 +423,10 @@ def test_public_taxonomy_jargon_absent():
 # ---------------------------------------------------------------------------
 
 
-def test_global_shell_nav_uniform():
+def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
     brand = load_brand()
     brand_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
-    assert brand_labels in (EXPECTED_NAV, LEGACY_NAV)
+    assert brand_labels == EXPECTED_NAV
     cta_meta = (brand.get("navigation") or {}).get("cta") or {}
     assert cta_meta.get("label") == EXPECTED_CTA
     assert "#formulario-contato" in (cta_meta.get("href") or ""), (
@@ -436,6 +435,7 @@ def test_global_shell_nav_uniform():
 
     surfaces = [
         ROOT / "index.html",
+        ROOT / "entregas" / "index.html",
         ROOT / "conteudos" / "index.html",
         ROOT / "medicoes-glosas-obras-publicas" / "index.html",
         ROOT / "aditivos-obras-publicas" / "index.html",
@@ -459,11 +459,14 @@ def test_global_shell_nav_uniform():
     if checklist.exists():
         surfaces.append(checklist)
 
-    ref: list[str] | None = None
     failures = []
     nav_runtime = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
-    if '/entregas/' not in nav_runtime or '/ferramentas/' not in nav_runtime:
-        failures.append("nav runtime missing legacy deliverables promotion")
+    if "toolsLink.textContent = 'Entregas'" in nav_runtime:
+        failures.append("global runtime must not mutate frozen navigation")
+    direct_deliverables = {
+        ROOT / "index.html",
+        ROOT / "entregas" / "index.html",
+    }
     for path in surfaces:
         if not path.exists():
             failures.append(f"missing {path.relative_to(ROOT)}")
@@ -472,23 +475,16 @@ def test_global_shell_nav_uniform():
         if not labels:
             failures.append(f"{path.relative_to(ROOT)}: no desktop-nav labels")
             continue
-        effective_labels = _effective_nav(labels)
-        if labels == LEGACY_NAV:
-            html = path.read_text(encoding="utf-8", errors="replace")
-            if 'src="/script.js' not in html:
-                failures.append(
-                    f"{path.relative_to(ROOT)}: legacy nav has no runtime upgrade"
-                )
-        if ref is None:
-            ref = effective_labels
-        # only aria-current may differ after the frozen-shell runtime upgrade
-        if effective_labels != ref:
+        relative_path = path.relative_to(ROOT).as_posix()
+        if relative_path in FROZEN_NAV_HTML_PATHS:
+            expected = LEGACY_NAV
+        elif path in direct_deliverables:
+            expected = EXPECTED_NAV
+        else:
+            expected = None
+        if expected is not None and labels != expected:
             failures.append(
-                f"{path.relative_to(ROOT)}: effective nav {effective_labels} != ref {ref}"
-            )
-        if effective_labels != EXPECTED_NAV:
-            failures.append(
-                f"{path.relative_to(ROOT)}: expected {EXPECTED_NAV}, got {effective_labels}"
+                f"{path.relative_to(ROOT)}: expected source nav {expected}, got {labels}"
             )
         if cta and cta != EXPECTED_CTA:
             failures.append(f"{path.relative_to(ROOT)}: cta {cta!r}")
@@ -538,6 +534,13 @@ def test_global_shell_nav_uniform():
                 )
                 if nav_m and banned in nav_m.group(1):
                     failures.append(f"{path.relative_to(ROOT)}: old nav {banned}")
+
+    artifact_root = ROOT / "_site"
+    if artifact_root.exists():
+        try:
+            audit_public_navigation_tree(artifact_root)
+        except ValueError as error:
+            failures.append(f"public artifact navigation: {error}")
     assert not failures, failures
 
 
@@ -813,7 +816,7 @@ def test_analisar_meu_caso_shell_targets_form():
     failures = []
     for path in _public_html_files():
         labels, cta = _nav_from(path)
-        if _effective_nav(labels) != EXPECTED_NAV:
+        if labels not in (EXPECTED_NAV, LEGACY_NAV):
             continue
         html = path.read_text(encoding="utf-8", errors="replace")
         header_cta = re.search(

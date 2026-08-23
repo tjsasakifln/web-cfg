@@ -398,6 +398,63 @@ for (const j of journeys) {
   assertMinFields(hits[0], "duplicate_listener");
 }
 
+// --- Deliverables evidence: one named CTA click from the shipped bundle ---
+{
+  const html = htmlOf("entregas/index.html");
+  const attrs = findAnchor(
+    html,
+    (a) => a["data-cta-id"] === "deliverables-open-report",
+  );
+  if (!attrs) fail("deliverables_open_report_missing");
+  if (attrs["data-event-name"] !== "cta_click") {
+    fail("deliverables_event_name", attrs);
+  }
+  const el = makeEl(attrs, "Consultar o relatório completo");
+  const driven = driveScript({
+    pathname: "/entregas/",
+    body: bodyAttrs(html),
+    hrefEls: [el],
+    namedEls: [el],
+  });
+  el.click();
+  const hits = driven.dataLayer.filter((event) => event.event === "cta_click");
+  if (hits.length !== 1) {
+    fail("deliverables_cta_click_count", {
+      count: hits.length,
+      events: driven.dataLayer.map((event) => event.event),
+    });
+  }
+  const event = hits[0];
+  if (event.cta_id !== "deliverables-open-report") fail("deliverables_cta_id", event);
+  if (event.asset_id !== "entregas-exemplos-hub") fail("deliverables_asset_id", event);
+  if (event.source !== "CONFENGE_WEB") fail("deliverables_source", event);
+  if (event.page_path !== "/entregas/") fail("deliverables_page_path", event);
+  for (const key of ["email", "phone", "cnpj", "document", "nome", "empresa", "query"]) {
+    if (Object.prototype.hasOwnProperty.call(event, key)) {
+      fail("deliverables_pii_key", { key, event });
+    }
+  }
+  for (const [key, value] of Object.entries(event)) {
+    if (typeof value !== "string") continue;
+    if (value.includes("@")) fail("deliverables_pii_email_value", { key, value });
+    const compact = value.replace(/[\s()+-]/g, "");
+    if (/^\d{10,15}$/.test(compact)) {
+      fail("deliverables_pii_phone_value", { key, value });
+    }
+  }
+
+  const flushed = flushedEvents(driven.fetches).filter((item) => item.event === "cta_click");
+  if (flushed.length !== 1) fail("deliverables_flush_count", flushed);
+  const admitted = contract.admitEvent(flushed[0]);
+  if (!admitted.ok) fail("deliverables_collect_rejected", admitted);
+  if (admitted.event.props.cta_id !== "deliverables-open-report") {
+    fail("deliverables_collect_cta_id", admitted.event.props);
+  }
+  if (admitted.event.props.asset_id !== "entregas-exemplos-hub") {
+    fail("deliverables_collect_asset_id", admitted.event.props);
+  }
+}
+
 // --- Duplicate event_id on track + collect ---
 {
   const driven = driveScript({ pathname: "/conteudos/sinapi-desonerado-nao-desonerado/", body: {}, hrefEls: [] });

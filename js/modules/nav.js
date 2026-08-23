@@ -1,24 +1,6 @@
 /* MODULE nav — header / mobile navigation (SYS-03)
  * Runtime: assembled into /script.js. Do not load alone.
  */
-    // Promote the public deliverables library across already-published static shells.
-    // New templates emit /entregas/ directly; this keeps frozen legacy HTML visually
-    // consistent without duplicating links or rewriting hundreds of source pages.
-    document.querySelectorAll('.desktop-nav, .mobile-nav').forEach((nav) => {
-      if (nav.querySelector('a[href="/entregas/"]')) return;
-      const toolsLink = nav.querySelector('a[href="/ferramentas/"]');
-      if (toolsLink) {
-        toolsLink.setAttribute('href', '/entregas/');
-        toolsLink.textContent = 'Entregas';
-        return;
-      }
-      const link = document.createElement('a');
-      link.setAttribute('href', '/entregas/');
-      link.textContent = 'Entregas';
-      const specialist = nav.querySelector('a[href^="/especialista/"]');
-      const navCta = nav.querySelector('a.button');
-      nav.insertBefore(link, specialist || navCta || null);
-    });
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
     const closeMenu = (returnFocus = false) => {
