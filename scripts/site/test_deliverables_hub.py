@@ -188,7 +188,12 @@ def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:
     assert "Promote the public deliverables library" not in nav_source
     assert "toolsLink.textContent = 'Entregas'" not in nav_source
     script_hash = hashlib.sha256((ROOT / "script.js").read_bytes()).hexdigest()
-    assert script_hash == "1318160424ac32efc3d06c979620eb208515172c90882f72f524100158b0d664"
+    frozen_hashes = json.loads(
+        (ROOT / "data/bofu-dominance/frozen-specs/hashes.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert script_hash == frozen_hashes["forbidden"]["script.js"]
     for pillar in PILLARS:
         frozen = ROOT / pillar["html_rel"]
         assert _desktop_labels(frozen) == LEGACY_NAV, frozen

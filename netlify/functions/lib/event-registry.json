@@ -142,7 +142,11 @@
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "ferramentas/diagnostico-defesa-margem/index.html"],
+      "producers": [
+        "assets/js/market-answer.js",
+        "ferramentas/diagnostico-defesa-margem/index.html",
+        "js/modules/nav.js"
+      ],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "semantic": "CTA became visible. Engagement; not a lead."
     },

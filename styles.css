@@ -1479,8 +1479,17 @@ details>summary{min-height:44px;padding-block:9px}
 /* #185: keep below-the-fold home sections out of the initial style/layout
    pass. `auto` retains the measured size after first rendering, while the
    fallback size keeps anchors and document height stable before that point. */
+/* #182: without JS the mobile nav is rendered inline, so a sticky header grows
+   to roughly a third of a 390px screen and covers whatever the fragment lands
+   on. Let it scroll away — there is no menu toggle to keep in reach either.
+   Home only: the frozen pillar pages must keep rendering byte-for-byte. */
+html.no-js body[data-content-cluster="home"] .site-header{position:static}
+
+/* #182: deferred sizes make fragment targets move while the jump runs, and only
+   the shipped JS re-aligns the landing. Without JS there is no corrector, so the
+   containment is not applied and anchors stay exact. */
 @supports (content-visibility:auto){
-  body[data-content-cluster="home"] main>section:not(.hero){
+  html.js body[data-content-cluster="home"] main>section:not(.hero){
     content-visibility:auto;
     contain-intrinsic-size:auto 900px;
   }
