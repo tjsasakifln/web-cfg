@@ -25,18 +25,39 @@ FORBIDDEN_PUBLIC_FRAGMENTS = (
 )
 
 
+def _after_first_content_section(html: str, start: int) -> int:
+    """Offset just past the first content section that follows ``start``.
+
+    The promotional block must not be glued to the hero: the visitor reads the
+    H1 and the first answer block before any offer. Falls back to ``start`` when
+    the page has no section between the hero and the end of <main>.
+    """
+    main_end = html.lower().find("</main>", start)
+    limit = main_end if main_end != -1 else len(html)
+    opened = html.find("<section", start)
+    if opened == -1 or opened >= limit:
+        return start
+    closed = html.find("</section>", opened)
+    if closed == -1 or closed >= limit:
+        return start
+    return closed + len("</section>")
+
+
 def _insert_after_page_hero(html: str, block: str) -> str:
-    """Place a block inside <main> after H1/hero — never between site header and main."""
+    """Place a block inside <main> after H1/hero and after the first content
+    section — never between site header and main, never glued to the hero."""
     m = re.search(
         r"<main\b[\s\S]*?<header class=\"[^\"]*(?:content-hero|article-hero|pillar-hero)[^\"]*\"[^>]*>[\s\S]*?</header>",
         html,
         re.I,
     )
     if m:
-        return html[: m.end()] + "\n" + block + html[m.end() :]
+        at = _after_first_content_section(html, m.end())
+        return html[:at] + "\n" + block + html[at:]
     m = re.search(r"(<main\b[^>]*>[\s\S]*?</h1>)", html, re.I)
     if m:
-        return html[: m.end()] + "\n" + block + html[m.end() :]
+        at = _after_first_content_section(html, m.end())
+        return html[:at] + "\n" + block + html[at:]
     return html
 
 
