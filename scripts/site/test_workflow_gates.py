@@ -23,6 +23,10 @@ PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 CODEQL = ROOT / ".github" / "workflows" / "codeql.yml"
 LIGHTHOUSE_RUNNER = ROOT / "scripts" / "site" / "run_lighthouse.mjs"
 LIGHTHOUSE_THRESHOLDS = ROOT / "scripts" / "site" / "lighthouse_thresholds.mjs"
+WORKFLOWS_DIR = ROOT / ".github" / "workflows"
+NETLIFY_TOML = ROOT / "netlify.toml"
+PACKAGE_JSON = ROOT / "package.json"
+NVMRC = ROOT / ".nvmrc"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -96,6 +100,12 @@ def test_site_ci_shape():
         install = m.group(1)
     if "npm ci" not in text:
         errors.append("site-ci must run npm ci")
+    # EBADENGINE is only a warning without this flag, so a dependency declaring a
+    # Node floor above the runner installs green (Dependabot #264, #265).
+    if "npm ci --engine-strict" not in text:
+        errors.append(
+            "site-ci must install with 'npm ci --engine-strict' so EBADENGINE fails the build"
+        )
     if re.search(r"npm ci\s*\|\|\s*npm install", text):
         errors.append("site-ci must not use 'npm ci || npm install' (hides lock failures)")
     if "npm install" in text and "npm ci" in text:
@@ -116,6 +126,7 @@ def test_site_ci_shape():
         "npm run pseo:audit",
         "npm run audit:public-artifact",
         "npm run test:lead-function",
+        "npm run test:external-runtime",
         "npm run organic:test",
         "npm run test:diagnose-margin",
         "npm run editorial:test",
@@ -170,6 +181,10 @@ def test_pseo_shape():
 
     if "npm ci" not in text:
         errors.append("pseo must run npm ci")
+    if "npm ci --engine-strict" not in text:
+        errors.append(
+            "pseo must install with 'npm ci --engine-strict' so EBADENGINE fails the build"
+        )
     if re.search(r"npm ci\s*\|\|\s*npm install", text):
         errors.append("pseo must not use 'npm ci || npm install'")
     # Soft "if lock then ci else install" also hides missing lock expectations
@@ -204,6 +219,59 @@ def test_pseo_shape():
         errors.append("pseo must fail closed when UI geometry cannot launch Chrome")
 
     assert not errors, "pseo shape failures:\n- " + "\n- ".join(errors)
+
+
+def test_node_pin_is_single_source():
+    """Every Node pin in the repo must agree with netlify.toml.
+
+    Netlify is the production runtime, so netlify.toml NODE_VERSION is the
+    authority. The migration note calls a split between Netlify and GitHub
+    Actions "high" production risk, but nothing gated it: only site-ci and pseo
+    were checked for node-version, never netlify.toml, revops-scheduled.yml,
+    package.json engines or .nvmrc. This closes that drift.
+
+    Lift all of these together as one coordinated change (issue #149), never
+    one file at a time.
+    """
+    import json as _json
+
+    errors: list[str] = []
+
+    toml_text = _read(NETLIFY_TOML)
+    m = re.search(r'NODE_VERSION\s*=\s*"(\d+)', toml_text)
+    if not m:
+        raise AssertionError("netlify.toml must pin [build.environment] NODE_VERSION")
+    expected = m.group(1)
+
+    # package.json engines must bound the same major, e.g. ">=20 <21"
+    pkg = _json.loads(_read(PACKAGE_JSON))
+    engines = (pkg.get("engines") or {}).get("node", "")
+    wanted = f">={expected} <{int(expected) + 1}"
+    if engines.strip() != wanted:
+        errors.append(
+            f"package.json engines.node must be {wanted!r} to match "
+            f"netlify.toml NODE_VERSION={expected}, got {engines!r}"
+        )
+
+    # .nvmrc keeps local dev on the same major as CI and Netlify
+    if not NVMRC.is_file():
+        errors.append(".nvmrc must exist so local dev matches CI and Netlify")
+    else:
+        nvmrc = NVMRC.read_text(encoding="utf-8").strip().lstrip("v")
+        if nvmrc.split(".")[0] != expected:
+            errors.append(f".nvmrc must pin Node {expected}, got {nvmrc!r}")
+
+    # Every workflow that sets up Node must use the same major
+    for wf in sorted(WORKFLOWS_DIR.glob("*.yml")):
+        text = wf.read_text(encoding="utf-8")
+        for pin in re.findall(r"node-version:\s*[\"']?(\d+)", text):
+            if pin != expected:
+                errors.append(
+                    f"{wf.name} pins node-version {pin}, but netlify.toml pins {expected} "
+                    "(split-brain between CI and the production runtime)"
+                )
+
+    assert not errors, "node pin drift:\n- " + "\n- ".join(errors)
 
 
 def _on_block(text: str) -> str:

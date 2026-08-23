@@ -50,6 +50,7 @@
     "migration:build-manifesto": "python3 scripts/legacy_equity/build_inventory.py",
     "migration:crawl-targets": "python3 scripts/migration/crawl_targets.py",
     "test:secrets-scan": "node scripts/site/test_secrets_scan.mjs",
+    "test:report-model": "python3 -m pytest scripts/site/test_report_model_599.py -q",
     "test:cta-whatsapp": "node scripts/site/test_cta_whatsapp.mjs",
     "probe:lead": "node scripts/site/synthetic_lead_probe.mjs",
     "probe:lead:prod": "node scripts/site/synthetic_lead_probe.mjs https://confenge.com.br",
@@ -67,6 +68,7 @@
     "test:copy": "python3 scripts/site/test_copy_gates.py && python3 scripts/site/test_public_internal_marketing_labels.py && python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json && python3 scripts/site/test_scrub_em_dashes.py && python3 scripts/site/scrub_em_dashes.py --check && python3 scripts/site/test_copy_ci_hermetic.py",
     "test:visual-structure": "python3 scripts/site/test_design_gates.py",
     "test:ui": "node scripts/site/test_ui_geometry.mjs",
+    "test:report-model-ui": "node scripts/site/test_report_model_ui.mjs",
     "test:screenshots": "node scripts/site/capture_screenshots.mjs",
     "audit:performance": "python3 scripts/site/audit_performance.py",
     "audit:accessibility": "python3 scripts/site/audit_accessibility.py",
@@ -85,7 +87,7 @@
     "pseo:enrich-problem-service": "python3 scripts/pseo/enrich_problem_service.py",
     "pseo:test": "python3 -m pytest scripts/pseo/tests -q",
     "pseo:review": "python3 scripts/pseo/review.py",
-    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:inbound-handoff && npm run test:search-observation && npm run test:commercial-event && npm run test:checkout-negatives && npm run test:attribution-allowlist && npm run test:secrets-scan && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:authority && npm run test:visible-parity && npm run test:design && npm run test:copy && npm run audit:accessibility && npm run test:lighthouse-gates && npm run test:ui && npm run test:inbound-gates && npm run test:workflow-gates && npm run test:ops-docs && npm run test:revops && npm run test:schedules && npm run test:tools && npm run test:nurture && npm run test:nurture-pages && npm run test:ferramentas-footer && npm run test:hub-truth && npm run test:nav && npm run test:tool-compute && npm run test:wave1-fields && npm run test:lead-store-production && npm run test:ops-auth && npm run test:env-example && npm run test:epic-td && npm run test:script-modules && npm run test:indexnow && npm run test:diagnose-margin && npm run test:research-pack && npm run test:contract-analysis && npm run test:market-answers && npm run test:bofu-dominance && npm run test:local-entity && npm run test:sitemap-graph && npm run discovery:test && npm run test:conversion && npm run test:knowledge-funnel && npm run validate:seo && npm run test:migration-manifesto && npm run test:affected-selector",
+    "test": "npm run pseo:test && npm run editorial:test && npm run test:analytics && npm run test:form-funnel && npm run test:lead-function && npm run test:inbound-handoff && npm run test:search-observation && npm run test:commercial-event && npm run test:checkout-negatives && npm run test:attribution-allowlist && npm run test:secrets-scan && npm run test:report-model && npm run test:cta-whatsapp && npm run test:pseo-attribution && npm run test:brand && npm run test:authority && npm run test:visible-parity && npm run test:design && npm run test:copy && npm run audit:accessibility && npm run test:lighthouse-gates && npm run test:ui && npm run test:report-model-ui && npm run test:inbound-gates && npm run test:workflow-gates && npm run test:ops-docs && npm run test:revops && npm run test:schedules && npm run test:tools && npm run test:nurture && npm run test:nurture-pages && npm run test:ferramentas-footer && npm run test:hub-truth && npm run test:nav && npm run test:tool-compute && npm run test:wave1-fields && npm run test:lead-store-production && npm run test:external-runtime && npm run test:ops-auth && npm run test:env-example && npm run test:epic-td && npm run test:script-modules && npm run test:indexnow && npm run test:diagnose-margin && npm run test:research-pack && npm run test:contract-analysis && npm run test:market-answers && npm run test:bofu-dominance && npm run test:local-entity && npm run test:sitemap-graph && npm run discovery:test && npm run test:conversion && npm run test:knowledge-funnel && npm run validate:seo && npm run test:migration-manifesto && npm run test:affected-selector",
     "pseo:editorial": "python3 scripts/pseo/editorial_audit.py",
     "editorial:build": "python3 scripts/editorial/build.py",
     "editorial:approve": "python3 scripts/editorial/approve_cli.py",
@@ -159,6 +161,7 @@
     "test:visitor-redesign": "python3 scripts/site/test_visitor_redesign.py",
     "test:stories-ready": "python3 scripts/site/test_stories_ready.py",
     "test:lead-store-production": "node scripts/site/test_lead_store_production_profile.mjs",
+    "test:external-runtime": "node scripts/site/test_external_runtime_modules.mjs",
     "test:ops-auth": "node scripts/site/test_ops_auth_matrix.mjs",
     "test:env-example": "python3 scripts/site/test_env_example_honesty.py",
     "test:epic-td": "node scripts/site/test_epic_td_suite.mjs",
@@ -177,15 +180,13 @@
     "organic:demand-engine": "python3 -m scripts.organic demand-engine",
     "organic:test": "python3 -m pytest scripts/organic/tests -q",
     "scrub:em-dashes": "python3 scripts/site/scrub_em_dashes.py --write",
-    "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check",
-    "test:nav": "python3 scripts/site/shell_nav.py --check && python3 scripts/site/render_nav_hubs.py --check && python3 scripts/site/test_nav_taskflow.py",
-    "nav:sync": "python3 scripts/site/render_nav_hubs.py --write && python3 scripts/site/shell_nav.py --write"
+    "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check"
   },
   "engines": {
     "node": ">=20 <21"
   },
   "devDependencies": {
-    "axe-core": "^4.10.0",
+    "axe-core": "^4.13.0",
     "chrome-launcher": "^1.2.1",
     "lighthouse": "^12.8.2",
     "puppeteer-core": "^23.0.0",
