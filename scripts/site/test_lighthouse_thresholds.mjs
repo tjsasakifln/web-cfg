@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { evaluateLighthouseResults, percentile75 } from "./lighthouse_thresholds.mjs";
 
 const home = (run, performance, tbt_ms, longest_own_task_ms) => ({
@@ -40,6 +41,40 @@ for (const [name, rows] of [
     false,
     `${name} must fail closed`,
   );
+}
+
+const committedSummary = JSON.parse(
+  readFileSync(new URL("../../docs/lighthouse-runs/summary.json", import.meta.url), "utf8"),
+);
+assert.equal(committedSummary.evaluation?.ok, true, "committed Lighthouse evidence must pass");
+
+for (const row of committedSummary.results || []) {
+  assert.equal(row.status, undefined, `committed Lighthouse evidence contains an error for ${row.path}`);
+  const slug = row.path === "/" ? "home" : row.path.replace(/\//g, "_").replace(/^_|_$/g, "");
+  const filename = row.path === "/" ? `${slug}-run-${row.run}.json` : `${slug}.json`;
+  const report = JSON.parse(
+    readFileSync(new URL(`../../docs/lighthouse-runs/${filename}`, import.meta.url), "utf8"),
+  );
+  const categories = report.categories || {};
+  const audits = report.audits || {};
+  const ownLongTasks = (audits["long-tasks"]?.details?.items || [])
+    .filter((item) => String(item.url || "").startsWith(committedSummary.base))
+    .map((item) => Number(item.duration) || 0);
+  const expected = {
+    performance: Math.round((categories.performance?.score || 0) * 100),
+    accessibility: Math.round((categories.accessibility?.score || 0) * 100),
+    best_practices: Math.round((categories["best-practices"]?.score || 0) * 100),
+    seo: Math.round((categories.seo?.score || 0) * 100),
+    tbt_ms: audits["total-blocking-time"]?.numericValue,
+    longest_own_task_ms: Math.max(0, ...ownLongTasks),
+  };
+  for (const [field, value] of Object.entries(expected)) {
+    assert.equal(
+      row[field],
+      value,
+      `summary.json ${field} does not match ${filename}`,
+    );
+  }
 }
 
 console.log("LIGHTHOUSE_THRESHOLDS_OK");

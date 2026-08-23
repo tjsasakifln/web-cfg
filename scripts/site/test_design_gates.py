@@ -488,6 +488,20 @@ def test_home_defers_below_fold_layout_work():
     assert "contain-intrinsic-size:auto900px" in rule
 
 
+def test_accessibility_label_gate_rejects_id_only_fields():
+    """An id makes a field addressable; it does not give it an accessible name."""
+    from scripts.site.audit_accessibility import has_accessible_label
+
+    assert not has_accessible_label("<form></form>", "email")
+    assert not has_accessible_label('<input id="email" type="email">', "email")
+    assert has_accessible_label(
+        '<label for="email">E-mail</label><input id="email" type="email">',
+        "email",
+    )
+    assert has_accessible_label('<input id="email" aria-label="E-mail" type="email">', "email")
+    assert has_accessible_label('<label>E-mail <input name="email" type="email"></label>', "email")
+
+
 def _srgb_channel(value: float) -> float:
     return value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
 
