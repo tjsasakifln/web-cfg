@@ -1246,6 +1246,10 @@ async function main() {
       for (const route of routes) {
         const { path, frozen } = route;
         await page.goto(`${BASE}${path}`, { waitUntil: "networkidle0", timeout: 30000 });
+        // Earlier interaction tests intentionally leave this shared page scrolled.
+        // This gate measures a fresh top-of-document arrival, so make that
+        // precondition explicit instead of depending on navigation restoration.
+        await page.evaluate(() => window.scrollTo(0, 0));
         const rep = await page.evaluate(() => {
           const h1 = document.querySelector("h1");
           const hero = document.querySelector(".content-hero");
@@ -1260,6 +1264,8 @@ async function main() {
           const answerBox = answer?.getBoundingClientRect();
           const gridBox = grid?.getBoundingClientRect();
           return {
+            scrollY: Math.round(window.scrollY),
+            h1Top: h1Box ? Math.round(h1Box.top) : null,
             h1Visible: Boolean(h1Box && h1Box.top >= 0 && h1Box.top < window.innerHeight),
             heroHeight: heroBox ? Math.round(heroBox.height) : null,
             answerTop: answerBox ? Math.round(answerBox.top) : null,
@@ -1281,7 +1287,12 @@ async function main() {
           };
         });
         reports.push(`${path}@${width}:hero=${rep.heroHeight},answer=${rep.answerTop}`);
-        if (!rep.h1Visible) throw new Error(`${path}@${width}: H1 outside first viewport`);
+        if (!rep.h1Visible) {
+          throw new Error(
+            `${path}@${width}: H1 outside first viewport `
+            + `(scrollY=${rep.scrollY}, h1Top=${rep.h1Top})`
+          );
+        }
         if (frozen) {
           if (rep.articleCovers !== 1 || rep.repeatedOg !== 1) {
             throw new Error(`${path}@${width}: frozen cover or OG changed ${JSON.stringify(rep)}`);
