@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "cb78a42b90f7554a0254961e27977db8e5ce3197",
+  "baseline_commit": "f41f66cbc93585fd1fa8670a5e31bc8e6b42e564",
   "recaptured_at": "2026-08-23",
-  "recapture_reason": "Issue #182 mobile form reveal: recaptured script.js and styles.css after proving all six frozen pillar HTML files byte-identical to cb78a42b90f7554a0254961e27977db8e5ce3197 and their rendered layout unchanged (per-element position, size, display, visibility, content-visibility and document height dumped at 390px and 1440px, diff empty). Incremental review recaptured script.js again after making manual input, competing anchors and Back share one cancellable same-page-fragment lifecycle from the first smooth-scroll frame; the six protected HTML files and all CSS remain unchanged by this follow-up. Browser regressions were added to the CI geometry suite; local Chrome execution is explicitly unavailable because libnspr4.so is absent. Design, analytics, form-funnel, script-module and frozen-spec gates remain green locally.",
+  "recapture_reason": "Combined reviewed recapture after integrating the canonical sitemap expansion from PR #281 with issue #182 mobile form reveal. The 66-URL sitemap hashes come from current main. script.js and styles.css retain the reviewed #182 landing correction; the follow-up makes manual input, competing anchors and Back share one cancellable same-page-fragment lifecycle from the first smooth-scroll frame. All six protected pillar HTML files remain byte-identical and html_mutation remains false. Real local Chrome geometry passed, including cancellation/manual/Back regressions; the same tests fail on the previous deploy preview where manual scroll and Back are reclaimed by the stale form anchor.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -25,9 +25,9 @@
     "styles-tokens.css": "fc9ff3dd5645da772d22d51f5c4af808fcc80b0fcd3e74c3655e461e4ce2574a",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
     "robots.txt": "762ed294580bfb8a88944481c93a7dad9bef70eb2e580cfa14ac6c46548bacc3",
-    "sitemap.xml": "2dc4aa1cec283daeeb03d24e54494b4ac5fc4c4e30b29cd8f083a704aa34bd51",
-    "sitemap.txt": "42e5fdb11492e22a92ade92394f986543dbcb9a3230b5cf6411c77ad8d874e57",
-    "sitemap-index.xml": "91e12605f49d3675e3ac76af1443a4cbb6f4b9504cca50c009b33bec930be81f",
+    "sitemap.xml": "790ec4b239e4dc7db303c14125bac620d4bcf65fc958350c43bc40e43d80e63f",
+    "sitemap.txt": "d696ce93b10367f556dafbc54d15be4f77ba7d939422b14897e6f4f192768246",
+    "sitemap-index.xml": "bff94a1e5fb612cd05ef9803a90c044f9419dd4a4528e8c6f40c3f20776d572e",
     "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "480a12e3a3b05686326e2376803d4946e844d96c899401c84965954966dc2188"
