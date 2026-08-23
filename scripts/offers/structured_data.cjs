@@ -4,6 +4,15 @@ function offerAvailability(offer) {
   return contractable ? "https://schema.org/InStock" : "https://schema.org/SoldOut";
 }
 
+function authoritativePriceExpiry(offer) {
+  const value = offer && (offer.price_valid_until || offer.effective_to || null);
+  if (!value) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value))) {
+    throw new Error("invalid authoritative offer expiry");
+  }
+  return String(value);
+}
+
 function offerStructuredData(offer, { url, sellerId }) {
   const data = {
     "@type": "Offer",
@@ -13,9 +22,9 @@ function offerStructuredData(offer, { url, sellerId }) {
     url,
     seller: { "@id": sellerId },
   };
-  const realPriceExpiry = offer.price_valid_until || offer.effective_to || null;
+  const realPriceExpiry = authoritativePriceExpiry(offer);
   if (realPriceExpiry) data.priceValidUntil = realPriceExpiry;
   return data;
 }
 
-module.exports = { offerAvailability, offerStructuredData };
+module.exports = { authoritativePriceExpiry, offerAvailability, offerStructuredData };

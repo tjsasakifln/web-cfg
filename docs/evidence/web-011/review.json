@@ -1,15 +1,16 @@
 {
   "campaign": "WEB-011",
-  "vertical": "defesa-margem",
+  "loop_id": "defesa-margem-segunda-leitura",
   "asset": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
   "pillar": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+  "outcome_owner": "warmbly",
   "learning": "NEED_MORE_DATA",
   "exit": "BLOCKED",
   "real_loop": {
     "status": "BLOCKED",
     "commercial_event": false,
     "qualified_lead": false,
-    "qualified_pipeline": false,
+    "qualified_pipeline": "UNKNOWN",
     "outcome": "UNKNOWN",
     "human_route_action": null,
     "lead_id": null,
@@ -19,7 +20,7 @@
       {
         "prerequisite": "consented_real_contact",
         "status": "MISSING",
-        "note": "No consented real person used segunda leitura. Do not invent one."
+        "note": "No consented real person used /ferramentas/diagnostico-defesa-margem/. Do not invent one."
       },
       {
         "prerequisite": "CONFENGE_INBOUND_WEBHOOK_URL",
@@ -40,15 +41,21 @@
         "prerequisite": "CONFENGE_AUTO_SEND_ENABLED",
         "status": "UNKNOWN",
         "note": "Warmbly auto-send must be proven false before claiming INBOUND NOW."
+      },
+      {
+        "prerequisite": "Warmbly receipt/action",
+        "status": "UNKNOWN",
+        "note": "No matching Warmbly receipt/action was observed for a real persisted lead."
       }
     ],
-    "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/ → segunda leitura.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+    "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
     "residual": [
       "consented_real_contact",
       "CONFENGE_INBOUND_WEBHOOK_URL",
       "CONFENGE_INBOUND_WEBHOOK_SECRET",
       "OPS_TOKEN",
-      "CONFENGE_AUTO_SEND_ENABLED"
+      "CONFENGE_AUTO_SEND_ENABLED",
+      "Warmbly receipt/action"
     ]
   },
   "dimensions": {
@@ -85,9 +92,10 @@
     "CONFENGE_INBOUND_WEBHOOK_URL",
     "CONFENGE_INBOUND_WEBHOOK_SECRET",
     "OPS_TOKEN",
-    "CONFENGE_AUTO_SEND_ENABLED"
+    "CONFENGE_AUTO_SEND_ENABLED",
+    "Warmbly receipt/action"
   ],
-  "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/ → segunda leitura.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+  "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
   "kill_gate": {
     "reduces_risk": true,
     "reduces_time_to_evidence": true,

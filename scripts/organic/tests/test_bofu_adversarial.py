@@ -167,24 +167,50 @@ def test_audit_fails_when_nonfrozen_pillar_has_no_onpage_capture(tmp_path: Path)
     assert "PILLAR_MISSING_ONPAGE_CAPTURE" in {f["code"] for f in report["findings"]}
 
 
-def test_sla_guard_rejects_delivery_deadline_missing_from_catalog():
-    findings = audit_service_sla_claims(
+def _sla_fixture(claim: str, *, catalog_sla: str | None = "10-15"):
+    offer = {"offer_id": "CFG-FIXTURE-v1"}
+    if catalog_sla is not None:
+        offer["sla_business_days"] = catalog_sla
+    return audit_service_sla_claims(
         "/fixture-svc/",
-        "<main><p>Prazo de entrega: até 7 dias úteis.</p></main>",
+        f"<main><p>Prazo contratual de entrega: {claim}.</p></main>",
         {"offer_id": "CFG-FIXTURE-v1"},
-        {"CFG-FIXTURE-v1": {"offer_id": "CFG-FIXTURE-v1"}},
+        {"CFG-FIXTURE-v1": offer},
     )
+
+
+def test_sla_guard_accepts_semantically_exact_catalog_intervals():
+    assert _sla_fixture("10–15 dias úteis") == []
+    assert _sla_fixture("10 a 15 dias úteis") == []
+    assert _sla_fixture("entre 10 e 15 dias úteis") == []
+
+
+def test_sla_guard_rejects_reduced_expanded_or_singleton_claims():
+    for claim in (
+        "até 15 dias úteis",
+        "15 dias úteis",
+        "10 dias úteis",
+        "5–15 dias úteis",
+        "10–20 dias úteis",
+        "até 10 dias úteis",
+    ):
+        findings = _sla_fixture(claim)
+        assert [finding["code"] for finding in findings] == ["SLA_NOT_IN_CATALOG"], claim
+
+
+def test_sla_guard_rejects_claim_when_catalog_has_no_sla():
+    findings = _sla_fixture("10 a 15 dias úteis", catalog_sla=None)
     assert [finding["code"] for finding in findings] == ["SLA_NOT_IN_CATALOG"]
 
 
-def test_sla_guard_accepts_catalog_range():
+def test_sla_guard_requires_catalog_sla_to_be_rendered():
     findings = audit_service_sla_claims(
         "/fixture-svc/",
-        "<main><p>Prazo do diagnóstico: 10 a 15 dias úteis.</p></main>",
+        "<main><p>Entrega técnica sem prazo publicado.</p></main>",
         {"offer_id": "CFG-FIXTURE-v1"},
         {"CFG-FIXTURE-v1": {"offer_id": "CFG-FIXTURE-v1", "sla_business_days": "10-15"}},
     )
-    assert findings == []
+    assert [finding["code"] for finding in findings] == ["SLA_NOT_IN_CATALOG"]
 
 
 def test_indexable_bridges_still_full():
