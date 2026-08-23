@@ -1,0 +1,85 @@
+/* Acentos da página /casos/modelo-painel-precos-obras-publicas/.
+   O kit base vem de /assets/report-model.css e não é alterado aqui. */
+
+.case-badge {
+  background: #fef3c7;
+  border-radius: 4px;
+  color: #92400e;
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  margin: 12px 0 0;
+  padding: .25rem .55rem;
+}
+
+/* Linha que fecha a conta: sempre visível, inclusive onde a tabela some. */
+.panel-reconcile {
+  border-left: 3px solid var(--r-lime);
+  color: #c9d5df;
+  font-size: .92rem;
+  line-height: 1.65;
+  margin: 22px 0 0;
+  max-width: 88ch;
+  padding-left: 16px;
+}
+.report-section:not(.report-section-dark) .panel-reconcile {
+  border-left-color: var(--r-green);
+  color: var(--r-muted);
+}
+
+/* Uma tipologia por bloco: nada de mistura silenciosa entre escalas. */
+.panel-typology {
+  background: #fff;
+  border: 1px solid var(--r-line);
+  margin-top: 30px;
+  padding: clamp(24px, 3vw, 38px);
+}
+.panel-typology-head > span {
+  color: var(--r-green);
+  font-family: var(--r-mono);
+  font-size: .73rem;
+  font-weight: 850;
+  letter-spacing: .1em;
+}
+.panel-typology-head h3 {
+  color: var(--r-ink);
+  font-family: var(--r-serif);
+  font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  margin: 8px 0 6px;
+}
+.panel-typology-head > p {
+  color: var(--r-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+.panel-typology .report-capacity { margin-top: 26px; }
+.panel-typology .report-weighting { margin-top: 30px; }
+
+.panel-inference {
+  border-top: 1px solid var(--r-line);
+  color: var(--r-text);
+  line-height: 1.65;
+  margin: 26px 0 0;
+  padding-top: 18px;
+}
+.panel-inference strong { color: var(--r-green); }
+
+/* Rótulo de tratamento com largura estável nos sinais de leitura. */
+.panel-signals em {
+  min-width: 132px;
+  text-align: right;
+}
+
+/* Destaque da linha TOTAL do painel consolidado. */
+#painel .report-table tbody tr:last-child th,
+#painel .report-table tbody tr:last-child td {
+  border-top: 2px solid var(--r-lime);
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .panel-signals em { min-width: 0; text-align: left; }
+}

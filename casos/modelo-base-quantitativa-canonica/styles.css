@@ -1,0 +1,225 @@
+/* Acentos da página modelo Base Quantitativa Canônica.
+   O kit compartilhado vive em /assets/report-model.css e não é alterado aqui. */
+
+.case-badge {
+  background: #fef3c7;
+  border-radius: 4px;
+  color: #92400e;
+  display: inline-block;
+  font-family: var(--r-mono);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  margin: 16px 0 0;
+  padding: 6px 9px;
+}
+
+.bq-note {
+  color: var(--r-text);
+  line-height: 1.65;
+  margin: 30px 0 0;
+  max-width: 78ch;
+}
+
+/* Tabelas em seções claras: o kit compartilhado assume fundo escuro. */
+.report-section:not(.report-section-dark) .report-table { color: var(--r-text); }
+.report-section:not(.report-section-dark) .report-table caption { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table th,
+.report-section:not(.report-section-dark) .report-table td { border-bottom-color: var(--r-line); }
+.report-section:not(.report-section-dark) .report-table thead th { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table tbody th { color: var(--r-ink); }
+.report-section:not(.report-section-dark) .report-table tbody td { color: var(--r-text); }
+.report-section:not(.report-section-dark) .report-table tbody tr:nth-child(odd) { background: rgba(6, 26, 51, .028); }
+.report-section:not(.report-section-dark) .report-table-note { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table-wrap:focus { outline-color: var(--r-green); }
+
+.report-table thead th { vertical-align: bottom; }
+.report-table code {
+  font-family: var(--r-mono);
+  font-size: .78rem;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+.report-table-dictionary { min-width: 1180px; }
+.report-table-evidence { min-width: 1180px; }
+.report-table-formula { min-width: 1040px; }
+.report-table-formula code { white-space: normal; }
+
+/* Naturezas declaradas campo a campo. */
+.bq-nature {
+  display: inline-block;
+  font-family: var(--r-mono);
+  font-size: .64rem;
+  font-weight: 900;
+  letter-spacing: .05em;
+  padding: 5px 7px;
+  white-space: nowrap;
+}
+.bq-nature-fato { background: #14431a; color: #eaf7e6; }
+.bq-nature-calculo { background: #0a294b; color: #dbe9f7; }
+.bq-nature-inferencia { background: #8a5a00; color: #fff4e0; }
+.bq-nature-incerteza { border: 1px solid #7d8a97; color: #3d4b59; }
+
+.report-nature-legend {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 42px;
+}
+.report-nature-legend > div {
+  background: var(--r-soft);
+  border-top: 3px solid var(--r-green);
+  padding: 20px;
+}
+.report-nature-legend p {
+  color: var(--r-muted);
+  font-size: .9rem;
+  line-height: 1.5;
+  margin: 12px 0 0;
+}
+
+/* Grupos de colunas da aba Base_Contratos. */
+.bq-columns { margin: 40px 0 0; }
+.bq-columns > div {
+  border-top: 1px solid #cfd7dc;
+  display: grid;
+  gap: 12px 28px;
+  grid-template-columns: 260px minmax(0, 1fr);
+  padding: 17px 0;
+}
+.bq-columns dt {
+  color: var(--r-ink);
+  font-size: .95rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.bq-columns dt em {
+  color: var(--r-green);
+  display: block;
+  font-family: var(--r-mono);
+  font-size: .72rem;
+  font-style: normal;
+  font-weight: 850;
+  margin-top: 5px;
+}
+.bq-columns dd {
+  color: var(--r-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Estado dos controles. */
+.bq-status {
+  display: inline-block;
+  font-family: var(--r-mono);
+  font-size: .64rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+  padding: 5px 7px;
+  white-space: nowrap;
+}
+.bq-status-ok { background: #14431a; color: #eaf7e6; }
+.bq-status-warn { background: #d9a23d; color: #211600; }
+
+/* Painel de qualidade, em seção escura. */
+.bq-qa {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 42px 0 0;
+}
+.bq-qa > div {
+  background: rgba(255, 255, 255, .065);
+  padding: 24px;
+}
+.bq-qa dt {
+  color: #9fb0bf;
+  font-family: var(--r-mono);
+  font-size: .72rem;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.bq-qa dd {
+  color: #fff;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 850;
+  letter-spacing: -.05em;
+  line-height: 1;
+  margin: 10px 0 0;
+}
+
+.bq-caveat {
+  background: rgba(217, 162, 61, .12);
+  border-left: 5px solid #d9a23d;
+  margin-top: 32px;
+  padding: 25px;
+}
+.bq-caveat span {
+  color: #f0c675;
+  font-family: var(--r-mono);
+  font-size: .74rem;
+  font-weight: 850;
+  letter-spacing: .07em;
+}
+.bq-caveat strong {
+  color: #fff;
+  display: block;
+  font-family: var(--r-serif);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin-top: 9px;
+}
+.bq-caveat p { color: #d1dce5; line-height: 1.6; margin: 10px 0 0; }
+
+.bq-subhead {
+  border-top: 1px solid rgba(255, 255, 255, .22);
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 46px 0 0;
+  padding-top: 30px;
+}
+
+.bq-hygiene {
+  display: grid;
+  gap: 0 34px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+}
+.bq-hygiene li {
+  border-top: 1px solid rgba(255, 255, 255, .14);
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 20px minmax(0, 1fr);
+  padding: 16px 0;
+}
+.bq-hygiene .icon { color: var(--r-lime); height: 18px; margin-top: 3px; width: 18px; }
+.bq-hygiene strong { color: #fff; font-size: .99rem; }
+.bq-hygiene p { color: #bdcad5; font-size: .89rem; line-height: 1.5; margin: 5px 0 0; }
+
+/* A regra de escada aparece sobre fundo branco na seção de reconciliação. */
+#reconciliacao .report-constraint { border: 1px solid var(--r-line); border-left: 5px solid var(--r-green); }
+#reconciliacao .report-constraint a { color: var(--r-green); }
+
+@media (max-width: 960px) {
+  .report-nature-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+  .bq-columns > div { gap: 8px; grid-template-columns: 1fr; }
+  .bq-hygiene { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  /* A página inteira é feita de tabelas: elas continuam visíveis e rolam na horizontal. */
+  .report-table-wrap,
+  .report-table-note { display: block; }
+  .report-table-wrap { -webkit-overflow-scrolling: touch; margin-left: -16px; margin-right: -16px; padding: 0 16px; }
+  .report-table caption::after { content: " \00b7 Arraste a tabela para o lado."; }
+  .report-nature-legend { grid-template-columns: 1fr; }
+  .bq-qa { grid-template-columns: 1fr; }
+  .bq-qa dd { font-size: 2.4rem; }
+  .bq-caveat { margin-left: -16px; margin-right: -16px; padding: 22px 16px; }
+  .case-badge { font-size: .62rem; }
+}

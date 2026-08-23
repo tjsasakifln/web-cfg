@@ -206,6 +206,25 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: [],
   },
+  "test:deliverable-models": {
+    producers: [
+      "scripts/site/test_deliverable_models.py",
+      "casos/modelo-base-quantitativa-canonica/",
+      "casos/modelo-apresentacao-executiva-resultados/",
+      "casos/modelo-mapa-compradores-publicos/",
+      "casos/modelo-contratos-vincendos-relicitacao/",
+      "casos/modelo-mapeamento-concorrentes-publicos/",
+      "casos/modelo-painel-precos-obras-publicas/",
+      "casos/modelo-relatorio-executivo-consolidado/",
+      "casos/index.html",
+      "entregas/index.html",
+      "assets/report-model.css",
+      "docs/contracts/intent-action/intent-action-matrix.v1.json",
+      "docs/stories/story-deliverable-models-value-ladder.md",
+      "sitemap.xml",
+      "sitemap.txt",
+    ],
+  },
   "test:report-model": {
     producers: [
       "scripts/site/test_report_model_599.py",

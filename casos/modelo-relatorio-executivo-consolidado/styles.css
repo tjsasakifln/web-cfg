@@ -1,0 +1,100 @@
+/* Acentos da página /casos/modelo-relatorio-executivo-consolidado/.
+ * O kit compartilhado vive em /assets/report-model.css. Aqui ficam apenas os
+ * componentes exclusivos do relatório consolidado e os ajustes exigidos por eles.
+ */
+
+.case-badge { background: #fef3c7; border-radius: 4px; color: #92400e; display: inline-block; font-size: .75rem; font-weight: 700; margin: 12px 0 0; padding: .2rem .5rem; }
+
+/* Rótulos epistêmicos */
+.rec-tag { border-radius: 3px; display: inline-block; font-family: var(--r-mono); font-size: .66rem; font-style: normal; font-weight: 850; letter-spacing: .09em; margin-right: 7px; padding: 2px 6px; vertical-align: baseline; }
+.rec-tag.is-fact { background: rgba(45, 111, 45, .13); color: var(--r-green); }
+.rec-tag.is-calc { background: rgba(6, 26, 51, .09); color: var(--r-navy-2); }
+.rec-tag.is-infer { background: rgba(206, 214, 42, .34); color: #575c07; }
+.rec-tag.is-unknown { background: rgba(100, 113, 130, .15); color: var(--r-muted); }
+.report-section-dark .rec-tag.is-fact { background: rgba(206, 214, 42, .16); color: var(--r-lime); }
+.report-section-dark .rec-tag.is-calc { background: rgba(255, 255, 255, .11); color: #dbe4ec; }
+.report-section-dark .rec-tag.is-infer { background: rgba(206, 214, 42, .16); color: #e4ea86; }
+.report-section-dark .rec-tag.is-unknown { background: rgba(255, 255, 255, .08); color: #aebcca; }
+.rec-legend { border-top: 1px solid var(--r-line); color: var(--r-muted); font-size: .86rem; line-height: 2.1; margin: 34px 0 0; padding-top: 18px; }
+
+.rec-subhead { color: var(--r-ink); font-size: 1.14rem; margin: 44px 0 0; }
+.report-section-dark .rec-subhead { color: #fff; }
+
+.rec-callout { background: #fff; border-left: 4px solid var(--r-lime); color: var(--r-text); line-height: 1.62; margin: 26px 0 0; padding: 20px 22px; }
+.rec-callout-dark { background: rgba(255, 255, 255, .05); color: #d1dce5; }
+
+/* 02 · módulos e funis */
+.rec-modules { list-style: none; margin: 0 0 48px; padding: 0; }
+.rec-modules li { border-top: 1px solid rgba(255, 255, 255, .18); display: grid; gap: 8px 30px; grid-template-columns: 150px minmax(0, 1fr); padding: 26px 0; }
+.rec-module-ref { color: var(--r-lime); font-family: var(--r-mono); font-size: .74rem; font-weight: 850; grid-column: 1; grid-row: 1 / span 4; letter-spacing: .08em; }
+.rec-modules strong { color: #fff; font-family: var(--r-serif); font-size: 1.5rem; grid-column: 2; }
+.rec-modules p { color: #c6d2dc; grid-column: 2; line-height: 1.55; margin: 0; }
+.rec-funnel { background: rgba(255, 255, 255, .05); border-left: 3px solid var(--r-lime); font-family: var(--r-mono); font-size: .8rem; line-height: 1.7; padding: 11px 14px; }
+.rec-funnel em { color: var(--r-lime); font-style: normal; font-weight: 850; letter-spacing: .08em; margin-right: 8px; }
+.rec-funnel b { color: var(--r-lime); font-weight: 400; padding: 0 3px; }
+.rec-note { color: #aebcca; font-size: .88rem; }
+
+/* 05 · as quatro decisões */
+.rec-decisions { display: grid; gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; margin: 0 0 42px; padding: 0; }
+.rec-decisions li { background: #fff; border: 1px solid var(--r-line); border-top: 4px solid var(--r-green); padding: 26px; }
+.rec-decisions header { align-items: center; display: flex; gap: 16px; justify-content: space-between; margin-bottom: 14px; }
+.rec-decisions header > span { color: var(--r-muted); font-family: var(--r-mono); font-size: .72rem; font-weight: 850; letter-spacing: .1em; }
+.rec-decisions > li > strong { color: var(--r-ink); display: block; font-family: var(--r-serif); font-size: 1.42rem; line-height: 1.2; }
+.rec-decisions > li > p { color: var(--r-text); line-height: 1.58; margin: 12px 0 0; }
+.rec-decisions p b { color: var(--r-green); font-family: var(--r-mono); font-size: .74rem; font-weight: 850; letter-spacing: .07em; }
+.rec-decisions dl { border-top: 1px solid var(--r-line); margin: 18px 0 0; }
+.rec-decisions dl div { display: grid; gap: 6px 16px; grid-template-columns: 74px minmax(0, 1fr); padding: 11px 0; }
+.rec-decisions dt { color: var(--r-green); font-family: var(--r-mono); font-size: .71rem; font-weight: 850; text-transform: uppercase; }
+.rec-decisions dd { color: var(--r-muted); font-size: .89rem; line-height: 1.5; margin: 0; }
+
+/* 07 · reconciliação */
+.rec-chain { list-style: none; margin: 40px 0 0; padding: 0; }
+.rec-chain li { border-top: 1px solid rgba(255, 255, 255, .18); display: grid; gap: 22px; grid-template-columns: 40px minmax(0, 1fr); padding: 18px 0; }
+.rec-chain li > span { color: var(--r-lime); font-family: var(--r-mono); font-size: .78rem; font-weight: 850; }
+.rec-chain strong { color: #fff; font-size: 1.05rem; }
+.rec-chain p { color: #aebcca; line-height: 1.55; margin: 5px 0 0; }
+.rec-ledger { margin-top: 12px; }
+.report-section-dark .report-capacity > div { border-color: rgba(255, 255, 255, .2); }
+.report-section-dark .report-capacity dt { color: #aebcca; }
+.report-section-dark .report-capacity dd { color: #fff; }
+.report-section-dark .report-capacity .report-capacity-note { color: #bdcad5; }
+
+/* 09 · controle editorial e escada */
+.rec-editorial { border-left: 4px solid var(--r-green); margin-top: 40px; padding-left: 22px; }
+.rec-editorial p { color: var(--r-text); line-height: 1.62; margin: 12px 0 0; }
+.rec-ladder { background: #fff; border: 1px solid var(--r-line); margin-top: 32px; padding: 26px; }
+.rec-ladder p { color: var(--r-text); line-height: 1.62; margin: 12px 0 0; }
+.rec-ladder a { color: var(--r-green); font-weight: 700; }
+
+/* Tabelas fora das seções escuras */
+.report-section:not(.report-section-dark) .report-table { color: var(--r-text); }
+.report-section:not(.report-section-dark) .report-table caption { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table th,
+.report-section:not(.report-section-dark) .report-table td { border-bottom-color: var(--r-line); }
+.report-section:not(.report-section-dark) .report-table thead th { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table tbody th { color: var(--r-ink); }
+.report-section:not(.report-section-dark) .report-table tbody td { color: var(--r-text); }
+.report-section:not(.report-section-dark) .report-table tbody tr.is-go { background: rgba(45, 111, 45, .07); }
+.report-section:not(.report-section-dark) .report-table tbody tr.is-condition { background: rgba(6, 26, 51, .04); }
+.report-section:not(.report-section-dark) .report-table-note { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table-wrap:focus { outline-color: var(--r-green); }
+
+@media (max-width: 700px) {
+  .rec-decisions { grid-template-columns: 1fr; }
+  .rec-modules li { gap: 10px; grid-template-columns: 1fr; }
+  .rec-module-ref { grid-column: 1; grid-row: auto; }
+  .rec-modules strong,
+  .rec-modules p { grid-column: 1; }
+}
+
+@media (max-width: 620px) {
+  /* O relatório consolidado é feito de tabelas; elas continuam legíveis por rolagem lateral. */
+  .report-table-wrap,
+  .report-table-note { display: block; }
+  .report-table { min-width: 660px; }
+  .report-table th,
+  .report-table td { padding: 12px 10px; }
+  .rec-legend { line-height: 2.3; }
+  .rec-decisions li { padding: 22px; }
+  .rec-ladder { padding: 22px; }
+}

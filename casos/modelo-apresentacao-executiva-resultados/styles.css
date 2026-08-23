@@ -1,0 +1,48 @@
+/* Acentos da página: apresentação executiva de resultados.
+   O kit base vive em /assets/report-model.css e não é alterado aqui. */
+
+/* Tabelas do relatório reaproveitadas em seções claras. */
+.report-section:not(.report-section-dark) .report-table { color: var(--r-text); }
+.report-section:not(.report-section-dark) .report-table caption { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table th,
+.report-section:not(.report-section-dark) .report-table td { border-bottom-color: var(--r-line); }
+.report-section:not(.report-section-dark) .report-table thead th { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-table tbody th { color: var(--r-ink); }
+.report-section:not(.report-section-dark) .report-table tbody td { color: var(--r-text); }
+.report-section:not(.report-section-dark) .report-table tbody tr.is-go { background: rgba(45, 111, 45, .07); }
+.report-section:not(.report-section-dark) .report-table tbody tr.is-condition { background: rgba(7, 26, 49, .04); }
+.report-section:not(.report-section-dark) .report-table-note { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .decision-review { border-color: #8ba2b5; color: var(--r-ink); }
+.report-section:not(.report-section-dark) .decision-no { border-color: #a9b6c2; color: var(--r-muted); }
+
+/* Listas móveis das mesmas tabelas em seções claras. */
+.report-section:not(.report-section-dark) .report-mobile-opportunity { border-top-color: var(--r-line); }
+.report-section:not(.report-section-dark) .report-mobile-opportunity > span { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .report-mobile-opportunity > strong { color: var(--r-ink); }
+.report-section:not(.report-section-dark) .report-mobile-portfolio + .report-table-wrap { margin-top: 0; }
+
+/* Múltiplos quadros na mesma seção precisam de respiro entre eles. */
+.report-section .report-mobile-portfolio,
+.report-section .report-table-wrap { margin-top: 44px; }
+.report-section .report-table-note + .report-mobile-portfolio { margin-top: 52px; }
+
+/* Regras de construção da apresentação (slide 03). */
+.model-rules-title { color: var(--r-ink); font-size: 1.06rem; margin: 44px 0 0; }
+.model-rules { border-bottom: 1px solid var(--r-line); list-style: none; margin: 16px 0 0; padding: 0; }
+.model-rules li { border-top: 1px solid var(--r-line); color: var(--r-muted); line-height: 1.55; padding: 15px 0; }
+.model-rules strong { color: var(--r-ink); }
+
+/* Cadência 30/60/90 sobre fundo escuro (slide 14). */
+.model-timeline-dark li { border-top-color: rgba(255, 255, 255, .18); }
+.model-timeline-dark time { color: var(--r-lime); }
+.model-timeline-dark span { color: #9fb0bf; }
+.model-timeline-dark strong { color: #fff; }
+.model-timeline-dark p { color: #cbd6df; }
+
+/* Três decisões lado a lado (slide 15). */
+.model-decisions { grid-template-columns: repeat(3, 1fr); }
+.model-decisions .compare-outcome { font-family: var(--r-mono); font-size: .82rem; letter-spacing: .03em; }
+
+@media (max-width: 900px) {
+  .model-decisions { grid-template-columns: 1fr; }
+}
