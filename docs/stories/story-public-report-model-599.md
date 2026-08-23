@@ -21,7 +21,7 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 1. Existe uma página pública em `/casos/modelo-relatorio-inteligencia-licitacoes/`, renderizada em HTML estático, integralmente legível sem cadastro, formulário, modal, download ou conteúdo oculto.
 2. O exemplar usa apenas um caso composto sintético e declara de forma visível que empresa, oportunidades, números e decisões são demonstrativos; nenhum dado capaz de identificar a Extra Construtora aparece no HTML, metadados ou JSON-LD.
 3. A narrativa aumenta a percepção de valor ao longo da leitura: conclusão executiva, carteira priorizada, critérios e gates, capacidade da empresa, fichas decisórias, exposição financeira, exclusões, plano de 72 horas, metodologia e limitações.
-4. O preço `R$ 599 por relatório` e o CTA `Quero meu relatório por R$ 599` aparecem no primeiro viewport e retornam após a principal prova de valor e no encerramento, sem bloquear a consulta.
+4. O preço `R$ 599 por relatório` e o CTA `Quero meu relatório por R$ 599` aparecem no primeiro viewport e retornam após a principal prova de valor e no encerramento, sem bloquear a consulta. A empresa informa raio de atuação e contexto; a CONFENGE busca os editais abertos; a quantidade decorre das licitações publicadas no recorte, sem cota combinada; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
 5. Todos os CTAs comerciais abrem `https://wa.me/5548988344559` com mensagem pré-preenchida sobre o modelo e o preço; não ativam checkout nem alteram os flags financeiros existentes.
 6. A página segue o design system de engenharia editorial premium, HTML semântico, WCAG AA, mobile-first e sem sequência de cards genéricos ou dashboard fictício.
 7. A URL possui canonical próprio, `index,follow`, Open Graph e JSON-LD `WebPage` + `Report`, consta no sitemap canônico e é alcançável por links no hub de casos, na página de Bid Room e na Diretoria B2G.
@@ -64,11 +64,12 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 - O design deve comunicar precisão técnica, responsabilidade e alto valor econômico, usando tokens, contraste editorial e artefatos de método, não card soup ou dashboard SaaS. [Source: `docs/DESIGN-SYSTEM.md#conceito`]
 - A página vive sob `casos/`, diretório já permitido no artefato público. O build deve copiar somente arquivos allowlisted. [Source: `scripts/pseo/public_artifact.py`]
 - Não usar dados dos PDFs como fatos públicos. O exemplar deve ser sintético, coerente e explicitamente demonstrativo.
-- Não criar promessa de prazo, vitória, economia ou resultado. O usuário autorizou apenas o preço unitário de R$ 599.
+- Não criar promessa de prazo, vitória, economia ou resultado. O usuário autorizou o preço unitário de R$ 599 e três invariantes de entrega: a CONFENGE busca os editais abertos no raio da empresa; a quantidade resulta da disponibilidade publicada, sem negociação de cota; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
 - O preço não cria SKU no catálogo congelado #88. A ação versionada
   `handraise-report-intelligence-599-v1` é WhatsApp iniciado pelo visitante,
-  com escopo e termos `UNKNOWN` até aceite humano e checkout desabilitado em
-  `intent-action-matrix.v1.json`.
+  com raio, contexto concreto, prazo e termos `UNKNOWN` até aceite humano e
+  checkout desabilitado em `intent-action-matrix.v1.json`. Esse estado não
+  reabre negociação sobre os três invariantes de entrega autorizados.
 - Cada ativação comercial emite somente um `whatsapp_click`, enriquecido com
   `offer_id`, `next_action_id`, identidade/posição do CTA e `event_id`; não há
   segundo `cta_click` para o mesmo clique físico. O marcador `CFG-WA-*` usado
@@ -122,6 +123,7 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 | 2026-08-23 | 1.0 | Story aprovada a partir do plano confirmado pelo proprietário | @sm |
 | 2026-08-23 | 1.1 | Exemplar, descoberta, conversão e gates locais concluídos | @dev |
 | 2026-08-23 | 1.2 | Ação comercial versionada e clique único reconciliável sem PII | @dev |
+| 2026-08-23 | 1.3 | Busca, volume por disponibilidade e profundidade máxima incorporados à autoridade comercial | @dev |
 
 ## Dev Agent Record
 
@@ -132,7 +134,7 @@ Codex GPT-5
 ### Debug Log References
 
 - `npm run build:site && npm run audit:public-artifact`: 451 arquivos públicos, zero finding, paridade 66/66.
-- `npm run test:report-model`: 5 testes de contrato público aprovados.
+- `npm run test:report-model`: 17 testes de contrato público aprovados.
 - `npm run test:report-model-ui`: 320, 390, 768, 1024 e 1440 px aprovados; Axe sem violação.
 - `npm run test:analytics`, `npm run test:cta-whatsapp`, `npm run test:copy`, `npm run test:ui`, `npm run audit:accessibility` e `npm run validate:seo`: aprovados.
 

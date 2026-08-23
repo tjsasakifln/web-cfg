@@ -2,10 +2,24 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from html.parser import HTMLParser
 from pathlib import Path
+
+import pytest
+
+from scripts.bofu_dominance.frozen_specs.constants import PILLARS
+from scripts.site.public_navigation import (
+    CANONICAL_NAV_ITEMS,
+    audit_public_navigation_tree,
+    promote_public_navigation,
+)
+from scripts.site.test_report_model_599 import (
+    _assert_no_scope_contradictions,
+    _visible_text,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -116,6 +130,23 @@ def test_hub_is_honest_about_one_complete_example() -> None:
     assert html.count('class="deliverable-feature"') == 1
 
 
+def test_hub_and_report_share_the_versioned_delivery_scope() -> None:
+    hub_text = _visible_text(_html())
+    report_text = _visible_text(_html(REPORT))
+
+    for phrase in (
+        "editais abertos localizados pela confenge",
+        "a confenge busca os editais abertos no raio informado",
+        "a quantidade depende das licitações publicadas",
+        "a profundidade é a máxima permitida pelas informações da empresa",
+    ):
+        assert phrase in hub_text
+
+    for text in (hub_text, report_text):
+        _assert_no_scope_contradictions(text)
+        assert "quantidade de oportunidades e documentos, escopo e prazo" not in text
+
+
 def test_schema_describes_a_single_item_collection_and_breadcrumb() -> None:
     graph = _jsonld_graph()
     types = {node.get("@type") for node in graph}
@@ -147,22 +178,78 @@ def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
     assert offers and "home-deliverables" in offers.group(0)
 
 
-def test_new_surfaces_and_frozen_shell_runtime_promotion() -> None:
+def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:
     brand = json.loads((ROOT / "data/site/brand.json").read_text(encoding="utf-8"))
     labels = [item["label"] for item in brand["navigation"]["desktop"]]
-    # Keep the approval-era generator contract stable: its rendered hash protects
-    # already-reviewed technical analyses. The shipped runtime promotes those
-    # frozen shells, while new hand-authored surfaces emit Entregas directly.
-    assert labels == LEGACY_NAV
+    assert labels == EXPECTED_NAV
     for path in (ROOT / "index.html", PAGE, REPORT):
         assert _desktop_labels(path) == EXPECTED_NAV, path
     nav_source = (ROOT / "js/modules/nav.js").read_text(encoding="utf-8")
-    assert "nav.querySelector('a[href=\"/entregas/\"]')" in nav_source
-    assert "nav.querySelector('a[href=\"/ferramentas/\"]')" in nav_source
-    assert "toolsLink.textContent = 'Entregas'" in nav_source
+    assert "Promote the public deliverables library" not in nav_source
+    assert "toolsLink.textContent = 'Entregas'" not in nav_source
+    script_hash = hashlib.sha256((ROOT / "script.js").read_bytes()).hexdigest()
+    assert script_hash == "1318160424ac32efc3d06c979620eb208515172c90882f72f524100158b0d664"
+    for pillar in PILLARS:
+        frozen = ROOT / pillar["html_rel"]
+        assert _desktop_labels(frozen) == LEGACY_NAV, frozen
+        assert promote_public_navigation(
+            _html(frozen), relative_path=pillar["html_rel"]
+        ) == _html(frozen)
     for path in (ROOT / "index.html", PAGE):
         footer = _html(path).split('<footer class="site-footer">', 1)[1]
         assert 'href="/ferramentas/"' in footer
+
+
+def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
+    tmp_path: Path,
+) -> None:
+    legacy = """<header>
+    <nav class="desktop-nav"><a href="/#atuacao">Atuação</a><a href="/conteudos/">Conteúdos</a><a aria-current="page" href="/ferramentas/">Qualquer texto</a><a href="/#faq">Dúvidas</a></nav>
+    <nav class="mobile-nav"><a href="/bid-room-licitacoes-obras/">Analisar licitação</a><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a class="button button-primary" href="/#contato">Analisar meu caso</a></nav>
+    </header>"""
+    promoted = promote_public_navigation(legacy, relative_path="ferramentas/index.html")
+    blocks = re.findall(
+        r'<nav\b[^>]*(?:desktop-nav|mobile-nav)[^>]*>(.*?)</nav>',
+        promoted,
+        flags=re.DOTALL,
+    )
+    expected_hrefs = [href for _, href in CANONICAL_NAV_ITEMS]
+    expected_labels = [label for label, _ in CANONICAL_NAV_ITEMS]
+    for index, block in enumerate(blocks):
+        anchors = re.findall(r'<a\b[^>]*>.*?</a>', block, flags=re.DOTALL)
+        navigation = [anchor for anchor in anchors if 'class="button ' not in anchor]
+        hrefs = [
+            re.search(r'href="([^"]+)"', anchor).group(1)
+            for anchor in navigation
+        ]
+        labels = [
+            re.sub(r"<[^>]+>", "", anchor).strip() for anchor in navigation
+        ]
+        assert hrefs == expected_hrefs
+        assert labels == expected_labels
+        assert "Ferramentas" not in block
+        assert 'aria-current="page"' not in block
+        if index == 1:
+            assert "Analisar meu caso" in block
+
+    artifact = tmp_path / "artifact"
+    artifact.mkdir()
+    (artifact / "index.html").write_text(promoted, encoding="utf-8")
+    assert audit_public_navigation_tree(artifact) == {
+        "audited_files": 1,
+        "audited_blocks": 2,
+        "frozen_files": 0,
+    }
+    (artifact / "index.html").write_text(legacy, encoding="utf-8")
+    with pytest.raises(ValueError, match="navigation is not canonical"):
+        audit_public_navigation_tree(artifact)
+
+    unsupported = legacy.replace(
+        '<a href="/#faq">Dúvidas</a>',
+        '<span data-nav-extra>Texto solto</span>',
+    )
+    with pytest.raises(ValueError, match="unsupported content"):
+        promote_public_navigation(unsupported, relative_path="mutable/index.html")
 
 
 def test_report_returns_to_deliverables_without_changing_offer_contract() -> None:
@@ -199,4 +286,10 @@ def test_asset_identifiers_are_stable_and_do_not_contain_pii() -> None:
         assert f'data-cta-id="{cta_id}"' in html
     tags = re.findall(r'<a\b[^>]*data-cta-id="[^"]+"[^>]*>', html)
     assert tags
+    assert all('data-event-name="cta_click"' in tag for tag in tags)
     assert not any("@" in tag or re.search(r"\+?\d{10,}", tag) for tag in tags)
+
+    home = _html(ROOT / "index.html")
+    for cta_id in ("home-know-deliverables", "home-open-first-deliverable"):
+        tag = re.search(rf'<a\b[^>]*data-cta-id="{cta_id}"[^>]*>', home)
+        assert tag and 'data-event-name="cta_click"' in tag.group(0)

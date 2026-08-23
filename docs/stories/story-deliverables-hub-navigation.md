@@ -19,14 +19,14 @@ quality_gate_tools: ["test:deliverables-hub", "test:deliverables-hub-ui", "test:
 ## Acceptance Criteria
 
 1. A home contém um acesso visível com a expressão `Conheça nossas entregas`, sem criar um oitavo bloco narrativo, e explica em linguagem direta que os exemplos permitem avaliar profundidade, método e utilidade antes da contratação.
-2. O item `Entregas` substitui visualmente `Ferramentas` no menu superior público para preservar a largura e a hierarquia de cinco itens; `Ferramentas` continua acessível no rodapé.
-3. A home, o novo hub e o relatório atual emitem o link diretamente no HTML. Páginas já publicadas com o shell anterior recebem a promoção em tempo de execução, sem duplicidade e sem invalidar hashes de análises técnicas aprovadas.
+2. O menu superior do artefato público mutável segue integralmente a ordem `Serviços → Problemas que resolvemos → Entregas → Conteúdos → Especialista`; `Ferramentas` continua acessível no rodapé. As seis rotas BOFU em janela `PREPARE-ONLY` preservam temporariamente o menu legado até 16 de setembro de 2026.
+3. A home, o novo hub e o relatório atual emitem o link diretamente no HTML. O build reconstrói e audita todos os menus mutáveis no artefato estático a partir de `brand.json`, de forma determinística e fail-closed, mas exclui as seis rotas congeladas e não altera o JavaScript global aprovado.
 4. Existe uma página pública em `/entregas/`, HTML estático, indexável e legível sem JavaScript, cadastro, formulário, modal, download ou conteúdo oculto.
 5. O hub deixa inequívoco que há `1 exemplo disponível` e que o Relatório Executivo de Priorização de Licitações é o primeiro exemplo publicado; não exibe cards vazios nem sugere entregas inexistentes.
-6. O primeiro exemplo conduz diretamente a `/casos/modelo-relatorio-inteligencia-licitacoes/` e explicita o valor demonstrado `12 analisadas → 3 priorizadas → 7 recusadas`, a natureza sintética e a opção de relatório adaptado por R$ 599.
+6. O primeiro exemplo conduz diretamente a `/casos/modelo-relatorio-inteligencia-licitacoes/` e explicita o valor demonstrado `12 analisadas → 3 priorizadas → 7 recusadas`, a natureza sintética e a opção de relatório adaptado por R$ 599. A empresa informa raio e contexto; a CONFENGE busca os editais abertos; a quantidade decorre da disponibilidade publicada, sem cota combinada; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
 7. O hub possui canonical próprio, `index,follow`, Open Graph e JSON-LD `CollectionPage` + `ItemList` + `BreadcrumbList`; a URL consta nos sitemaps e no artefato público allowlisted.
 8. A home, o hub e o relatório formam uma navegação bidirecional coerente; o relatório usa `Entregas` em seu breadcrumb e menu sem alterar preço, escopo, CTA ou contrato comercial vigente.
-9. Analytics e links usam identificadores sem PII; testes cobrem descoberta, navegação efetiva, HTML direto, claims honestos, schema, sitemap, artefato público, ausência de fricção e regressões do relatório.
+9. Analytics e links usam identificadores sem PII. O clique principal emite exatamente um `cta_click` com `cta_id=deliverables-open-report`, `asset_id=entregas-exemplos-hub` e `source=CONFENGE_WEB`; testes de runtime e browser cobrem essa emissão, descoberta, navegação efetiva, HTML direto, claims honestos, schema, sitemap, artefato público, ausência de fricção e regressões do relatório.
 10. A experiência passa em 320, 390, 768, 1024 e 1440 px, sem overflow e sem violações Axe sérias/críticas; após CI verde, merge em `main` e deploy Netlify, `/entregas/`, a home e o relatório respondem corretamente e o build marker corresponde ao SHA integrado.
 
 ## Market-Capture Gate
@@ -45,10 +45,10 @@ quality_gate_tools: ["test:deliverables-hub", "test:deliverables-hub-ui", "test:
   - [x] Integrar canonical, robots, OG, JSON-LD, sitemap e allowlist do artefato.
 - [x] Task 2: Integrar a descoberta na home e no topo (AC: 1-3, 8)
   - [x] Inserir uma prévia dentro do bloco comercial existente da home.
-  - [x] Emitir `Entregas` diretamente nas superfícies novas e promover shells anteriores pelo runtime.
-  - [x] Garantir compatibilidade visual das páginas estáticas anteriores e manter Ferramentas no rodapé.
+  - [x] Emitir `Entregas` diretamente nas superfícies novas e promover shells mutáveis no artefato estático.
+  - [x] Preservar byte a byte o runtime e as seis rotas BOFU congeladas; manter Ferramentas no rodapé.
 - [x] Task 3: Conectar o exemplar atual e provar qualidade (AC: 6, 8-10)
-  - [x] Atualizar menu e breadcrumb do relatório sem tocar no contrato de R$ 599.
+  - [x] Atualizar menu e breadcrumb do relatório preservando o contrato versionado de R$ 599.
   - [x] Adicionar testes funcionais e renderizados nos cinco breakpoints.
   - [x] Rodar design, copy, SEO, acessibilidade, analytics, build e auditoria do artefato.
 - [ ] Task 4: Publicar e comprovar produção (AC: 10)
@@ -63,14 +63,15 @@ quality_gate_tools: ["test:deliverables-hub", "test:deliverables-hub-ui", "test:
 - Inteligência pública deve entregar utilidade, método, próximo passo e aprendizagem mensurável; volume de páginas não é sucesso. [Source: `docs/strategy/MARKET-CAPTURE-OS.md#corporate-thesis-and-north-star`]
 - A home aceita no máximo sete grandes blocos narrativos; a prévia deve ser incorporada ao bloco `offer_dominant`. [Source: `scripts/site/test_design_gates.py#test_home_archetypes_diverse`]
 - O conceito visual é `engenharia editorial premium`, com hierarquia, contraste, WCAG AA e limite de card grids. [Source: `docs/DESIGN-SYSTEM.md#conceito`]
-- O exemplar vigente é integralmente sintético e o contrato comercial autoriza apenas `R$ 599 = 1 relatório adaptado`; não alterar quantidade, prazo, checkout ou promessa de resultado. [Source: `docs/stories/story-report-model-clarity-10.md#acceptance-criteria`]
+- O exemplar vigente é integralmente sintético. O contrato comercial autoriza `R$ 599 = 1 relatório adaptado` e três invariantes: a CONFENGE busca os editais abertos no raio informado; a quantidade resulta da disponibilidade publicada, sem negociação de cota; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa. Raio concreto, contexto, prazo e aceite permanecem humanos; não criar checkout ou promessa de resultado. [Source: `docs/contracts/intent-action/intent-action-matrix.v1.json`]
 - `PUBLIC_TOP_DIRS` controla o que chega ao artefato Netlify; `/entregas/` precisa entrar explicitamente nessa allowlist. [Source: `scripts/pseo/public_artifact.py`]
+- A campanha BOFU está em `PREPARE-ONLY` até 16 de setembro de 2026 e proíbe mutação de `script.js` e das seis páginas protegidas. A descoberta global usa transformação estática somente fora desse conjunto. [Source: `docs/seo/bofu-dominance/frozen-specs/README.md`]
 - Os arquivos `docs/framework/*` e fallbacks declarados no core config não existem neste workspace; foram usados os contratos locais acima e o design system versionado.
 
 ### Testing
 
-- Teste de contrato Python para HTML direto, texto, links, navegação, schema, sitemap e allowlist.
-- Teste renderizado com Puppeteer + Axe em 320, 390, 768, 1024 e 1440 px.
+- Teste de contrato Python para HTML direto, texto, links, navegação fonte/artefato, preservação frozen, schema, sitemap e allowlist.
+- Teste runtime do bundle e teste renderizado com Puppeteer + Axe em 320, 390, 768, 1024 e 1440 px, incluindo o payload `cta_click` sem PII.
 - Rodar: `npm run test:deliverables-hub`, `npm run test:deliverables-hub-ui`, `npm run test:report-model`, `npm run test:design`, `npm run test:copy`, `npm run test:analytics`, `npm run test:ui`, `npm run validate:seo`, `npm run build:site` e `npm run audit:public-artifact`.
 
 ## CodeRabbit Integration
@@ -114,6 +115,8 @@ quality_gate_tools: ["test:deliverables-hub", "test:deliverables-hub-ui", "test:
 |---|---:|---|---|
 | 2026-08-23 | 1.0 | Story criada e validada a partir do pedido do proprietário e dos contratos vigentes | @sm |
 | 2026-08-23 | 1.1 | Hub, descoberta, navegação efetiva e suíte de qualidade implementados; geradores aprovados preservados | @dev |
+| 2026-08-23 | 1.2 | Hub e story alinhados aos invariantes comerciais da matriz v1.3.0 | @dev |
+| 2026-08-23 | 1.3 | Promoção runtime revertida; navegação movida ao artefato estático fora das seis rotas frozen; `cta_click` comprovado no bundle e browser | @dev |
 
 ## Dev Agent Record
 
@@ -131,9 +134,10 @@ Codex GPT-5
 ### Completion Notes List
 
 - Biblioteca pública criada com uma única entrega comprovável, sem cadastro, download, modal ou inventário fictício.
-- Home e menu superior agora tornam a descoberta imediata; o relatório retorna ao hub por breadcrumb e navegação.
-- Runtime promove shells legados sem regravar análises técnicas aprovadas; o validador de contrato permaneceu verde.
-- Suíte integral verde, inclusive Puppeteer/Axe nos cinco breakpoints; build público auditado com 453 arquivos e zero finding.
+- Home e menu superior mutável tornam a descoberta imediata; o relatório retorna ao hub por breadcrumb e navegação.
+- O artefato reconstrói e audita integralmente os menus mutáveis a partir de `brand.json`, sem tocar no runtime ou nas seis rotas congeladas; essa exceção temporária fica explícita e testada.
+- O clique principal produz um único `cta_click` admitido, com origem e identificadores estáveis, sem PII.
+- Gates dedicados, build público de 453 arquivos e auditoria integral dos menus aprovados localmente; a suíte obrigatória e o Puppeteer/Axe do SHA final permanecem evidência exigida do CI antes do merge.
 
 ### File List
 
@@ -148,8 +152,10 @@ Codex GPT-5
 - `script.js`
 - `scripts/pseo/public_artifact.py`
 - `scripts/site/affected_graph.mjs`
+- `scripts/site/public_navigation.py`
 - `scripts/site/test_deliverables_hub.py`
 - `scripts/site/test_deliverables_hub_ui.mjs`
 - `scripts/site/test_visitor_redesign.py`
+- `tests/attribution/test_source_to_service.mjs`
 - `sitemap.txt`
 - `sitemap.xml`
