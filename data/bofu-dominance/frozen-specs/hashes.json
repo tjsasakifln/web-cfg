@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "e01de758af3486636e6be15a030d8d3f329e8c2e",
+  "baseline_commit": "9d0f75e8cb13e810de40840ef04e55d556fa2616",
   "recaptured_at": "2026-08-23",
-  "recapture_reason": "Reviewed recapture for the new /entregas/ public library. sitemap.xml and sitemap.txt add only that indexable URL. The global script.js was restored byte-for-byte to the approved frozen baseline, so legacy and BOFU shells are not promoted at runtime before 2026-09-16. The six frozen pillar HTML files, styles, analytics, robots.txt, sitemap-index.xml, redirects and organic contracts remain byte-identical; html_mutation remains false.",
+  "recapture_reason": "Reviewed recapture for the P0 systemic UI/layout remediation integrated after the /entregas/ navigation correction. The six frozen pillar HTML files remain byte-identical; the approved global script.js baseline from main is preserved, while styles.css and styles-tokens.css add shared structured-layout primitives and spacing tokens. Evidence includes the production baseline, before/after screenshots, a green 211-route x 6-breakpoint rendered audit, and unchanged content, canonical, tracking and conversion contracts. html_mutation remains false.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -21,8 +21,8 @@
     "diagnostico-b2g-360/index.html": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
     "diagnostico-pre-licitacao/index.html": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
     "script.js": "1318160424ac32efc3d06c979620eb208515172c90882f72f524100158b0d664",
-    "styles.css": "93fa460ed3bbd3c53f7f71965c4442419aeae4b849b7a7f56a10e922e83dc825",
-    "styles-tokens.css": "fc9ff3dd5645da772d22d51f5c4af808fcc80b0fcd3e74c3655e461e4ce2574a",
+    "styles.css": "e8f4e3c0ac27d4e337cce6380cc5030a1508534bbd53b2d73790c50edf5edc0d",
+    "styles-tokens.css": "a25a9603d5c0a7abec5471d9730eec7506ce3950c29c428a6d86d130b41a2e1c",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
     "robots.txt": "762ed294580bfb8a88944481c93a7dad9bef70eb2e580cfa14ac6c46548bacc3",
     "sitemap.xml": "b5ea10f3334d8eadc56e081ed4cba8f1484d2a98e601734bf3b9320d0eb1b8b7",

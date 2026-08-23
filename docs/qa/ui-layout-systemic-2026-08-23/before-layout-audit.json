@@ -1,0 +1,1472 @@
+{
+  "generated_at": "2026-08-23T21:14:22.190Z",
+  "base_url": "https://confenge.com.br",
+  "scope": "critical",
+  "route_count": 12,
+  "widths": [
+    360,
+    390,
+    768,
+    1024,
+    1440,
+    1920
+  ],
+  "checks": 72,
+  "failures": [
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".decision-map",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".decision-map-rail",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".dm-node",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".dm-node",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "horizontal_overflow",
+          "detail": "369>360",
+          "offenders": [
+            {
+              "tag": "div",
+              "class": "",
+              "right": 369
+            },
+            {
+              "tag": "p",
+              "class": "eyebrow eyebrow-light",
+              "right": 369
+            },
+            {
+              "tag": "h2",
+              "class": "",
+              "right": 369
+            },
+            {
+              "tag": "p",
+              "class": "",
+              "right": 369
+            },
+            {
+              "tag": "a",
+              "class": "button button-light button-lg",
+              "right": 369
+            }
+          ]
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".content-editorial-layout",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails > a",
+          "detail": "inline"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".content-feature",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-reads",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".content-trails > a",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "touch_target_height",
+          "detail": [
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "width": 360,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "horizontal_overflow",
+          "detail": "398>390",
+          "offenders": [
+            {
+              "tag": "div",
+              "class": "",
+              "right": 398
+            },
+            {
+              "tag": "p",
+              "class": "eyebrow eyebrow-light",
+              "right": 398
+            },
+            {
+              "tag": "h2",
+              "class": "",
+              "right": 398
+            },
+            {
+              "tag": "p",
+              "class": "",
+              "right": 398
+            },
+            {
+              "tag": "a",
+              "class": "button button-light button-lg",
+              "right": 398
+            }
+          ]
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".decision-map",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".decision-map-rail",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".dm-node",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".dm-node",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".content-editorial-layout",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails > a",
+          "detail": "inline"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".content-feature",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-reads",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".content-trails > a",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "touch_target_height",
+          "detail": [
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            },
+            {
+              "tag": "input",
+              "class": "",
+              "height": 32
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "width": 390,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".decision-map",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".decision-map-rail",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".dm-node",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".dm-node",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".content-editorial-layout",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails > a",
+          "detail": "inline"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".content-feature",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-reads",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".content-trails > a",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "width": 768,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".decision-map",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".decision-map-rail",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".dm-node",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".dm-node",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".content-editorial-layout",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails > a",
+          "detail": "inline"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".content-feature",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-reads",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".content-trails > a",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "width": 1024,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".decision-map",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".decision-map-rail",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".dm-node",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".dm-node",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".content-editorial-layout",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails > a",
+          "detail": "inline"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".content-feature",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-reads",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".content-trails > a",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "width": 1440,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".decision-map",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".decision-map-rail",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".dm-node",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".dm-node",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".content-editorial-layout",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-trails > a",
+          "detail": "inline"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".content-feature",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".content-reads",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "label_value_concatenated",
+          "selector": ".content-trails > a",
+          "detail": "horizontal-gap:0"
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "text_clipping",
+          "detail": [
+            "p.honeypot"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "width": 1920,
+      "issues": [
+        {
+          "code": "primitive_display",
+          "selector": ".compare-split",
+          "detail": "block"
+        },
+        {
+          "code": "primitive_spacing",
+          "selector": ".compare-side",
+          "detail": "0px"
+        },
+        {
+          "code": "primitive_display",
+          "selector": ".faq-layout",
+          "detail": "block"
+        }
+      ]
+    }
+  ],
+  "ok": false
+}
