@@ -6,7 +6,7 @@
 
   /** Analytics bus — no PII. First-party collector + optional gtag/plausible. */
   // EVENT_CONTRACT_CLIENT_START — keep in lockstep with netlify/functions/lib/event-registry.json
-  const EVENT_CONTRACT_SCHEMA_VERSION = '1.1.0';
+  const EVENT_CONTRACT_SCHEMA_VERSION = '1.2.0';
   const EVENT_SOURCE = 'CONFENGE_WEB';
   const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
   const AGGREGATE_PII_ALLOWLIST = [];
@@ -30,6 +30,7 @@
     '/diagnostico-b2g-360/': 'diagnostico-b2g-360',
     '/bid-room-licitacoes-obras/': 'bid-room-licitacoes-obras',
     '/defesa-margem-contratos-publicos/': 'defesa-margem-contratos-publicos',
+    '/diagnostico-b2g-expansao/': 'diagnostico-b2g-expansao',
     '/ferramentas/diagnostico-defesa-margem/': 'diagnostico-defesa-margem',
   };
   const ORIGIN_PREFIXES = {
@@ -38,13 +39,15 @@
     '/jurisprudencia-contratos-obras/': 'editorial',
     '/guias-contratos-obras/': 'editorial',
     '/analises-contratos-publicos/': 'editorial',
+    '/panorama-mercado-obras-publicas/': 'editorial',
+    '/casos/': 'case',
     '/inteligencia/': 'data',
     '/radar/': 'data',
     '/ferramentas/': 'tool',
   };
   const CHROME_PREFIXES = [
     '/especialista/', '/politica-editorial/', '/privacidade/', '/termos-de-uso/',
-    '/correcoes/', '/uso-de-ia/', '/conflitos/', '/imprensa/', '/casos/',
+    '/correcoes/', '/uso-de-ia/', '/conflitos/', '/imprensa/',
     '/nurture/', '/ops/', '/comercial/', '/obrigado',
   ];
   const EVENT_ALIASES = {
@@ -84,11 +87,11 @@
     evidence_drilldown: 1, field_abandonment: 1, handraise_complete: 1, internal_search: 1,
     lead_form_backend_error: 1, lead_form_error: 1, lead_form_start: 1, lead_form_step: 1,
     lead_form_submit: 1, lead_form_success: 1, lead_persisted: 1, lead_receipt_correlated: 1,
-    legal_article_view: 1, method_open: 1, nurture_opt_in: 1, offer_view: 1,
+    legal_article_view: 1, method_open: 1, offer_view: 1,
     organic_landing: 1, outbound_click: 1, page_view: 1, proof_expand: 1,
     pseo_related_page_click: 1, pseo_source_open: 1, pseo_table_interaction: 1,
     qualification_stage_select: 1, qualification_urgency_select: 1,
-    return_visit: 1, scroll_depth: 1, service_page_view: 1, session_start: 1,
+    scroll_depth: 1, service_page_view: 1, session_start: 1,
     tool_complete: 1, tool_copy: 1, tool_download: 1, tool_reset: 1, tool_start: 1,
     tool_to_content: 1, tool_to_form: 1, tool_to_offer: 1, tool_to_whatsapp: 1,
     tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
@@ -417,11 +420,32 @@
     const sid = getSessionId().replace(/[^a-z0-9]/gi, '').slice(0, 8) || 'anon';
     return `e-${sid}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
   };
+  const whatsappProtocolFromEventId = (eventId) => {
+    const compact = String(eventId || '').replace(/[^a-z0-9]/gi, '').toUpperCase();
+    return `CFG-WA-${compact.slice(-8).padStart(8, '0')}`;
+  };
+  const appendWhatsappProtocol = (el, eventId) => {
+    if (!el || typeof el.getAttribute !== 'function' || typeof el.setAttribute !== 'function') return '';
+    const href = String(el.getAttribute('href') || '');
+    if (!/^https:\/\/(?:wa\.me|api\.whatsapp\.com)\//i.test(href)) return '';
+    const split = href.indexOf('?');
+    const base = split === -1 ? href : href.slice(0, split);
+    const params = new URLSearchParams(split === -1 ? '' : href.slice(split + 1));
+    const protocol = whatsappProtocolFromEventId(eventId);
+    const cleanMessage = String(params.get('text') || '')
+      .replace(/\s*Protocolo CONFENGE:\s*CFG-WA-[A-Z0-9]{8}\s*$/i, '')
+      .trim();
+    params.set('text', `${cleanMessage}${cleanMessage ? '\n' : ''}Protocolo CONFENGE: ${protocol}`);
+    el.setAttribute('href', `${base}?${params.toString()}`);
+    el.setAttribute('data-whatsapp-protocol', protocol);
+    return protocol;
+  };
 
   window.__CONFENGE_EVENT_CONTRACT.canonicalizeDestination = canonicalizeDestination;
   window.__CONFENGE_EVENT_CONTRACT.classifyTransition = classifyTransition;
   window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
   window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
+  window.__CONFENGE_EVENT_CONTRACT.appendWhatsappProtocol = appendWhatsappProtocol;
 
   // Decorative reveal only. Never throw: missing window.setTimeout must not abort form/analytics.
   const scheduleIdle = (fn) => {

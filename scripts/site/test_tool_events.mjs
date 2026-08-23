@@ -23,7 +23,6 @@ const required = [
   "tool_to_offer",
   "tool_to_whatsapp",
   "tool_to_form",
-  "nurture_opt_in",
 ];
 
 const common = readFileSync(resolve(ROOT, "assets/js/tools-common.js"), "utf8");

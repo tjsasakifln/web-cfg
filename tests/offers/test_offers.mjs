@@ -23,6 +23,7 @@ const eligibility = require(path.join(root, "scripts/offers/eligibility.cjs"));
 const sandbox = require(path.join(root, "scripts/offers/sandbox.cjs"));
 const events = require(path.join(root, "scripts/offers/events.cjs"));
 const journey = require(path.join(root, "scripts/offers/journey.cjs"));
+const structuredData = require(path.join(root, "scripts/offers/structured_data.cjs"));
 const { MemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
 const CNPJ = "11222333000181";
@@ -49,6 +50,27 @@ assert("diag_cents", diag.amount_cents === 800000, diag.amount_cents);
 assert("flex_cents", flex.amount_cents === 2000000 && flex.notice_days === 30 && flex.max_payments == null, flex);
 assert("180_cents", m180.amount_cents === 1500000 && m180.total_commitment_cents === 9000000 && m180.max_payments === 6, m180);
 assert("365_cents", m365.amount_cents === 1250000 && m365.total_commitment_cents === 15000000 && m365.max_payments === 12, m365);
+
+const diagHtml = fs.readFileSync(path.join(root, "diagnostico-b2g-expansao/index.html"), "utf8");
+const diagGraphs = [...diagHtml.matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)]
+  .map((match) => JSON.parse(match[1]));
+const diagNodes = diagGraphs.flatMap((graph) => graph["@graph"] || [graph]);
+const diagService = diagNodes.find((node) => node["@type"] === "Service" && node.offers);
+const expectedDiagOffer = structuredData.offerStructuredData(diag, {
+  url: "https://confenge.com.br/diagnostico-b2g-expansao/#pedido-diagnostico",
+  sellerId: "https://confenge.com.br/#organization",
+});
+assert("diag_schema_offer_present", Boolean(diagService && diagService.offers), diagService);
+assert("diag_schema_price", diagService.offers.price === expectedDiagOffer.price, diagService.offers);
+assert("diag_schema_availability", diagService.offers.availability === expectedDiagOffer.availability, diagService.offers);
+assert("diag_schema_url", diagService.offers.url === expectedDiagOffer.url, diagService.offers);
+assert("diag_schema_seller", diagService.offers.seller?.["@id"] === expectedDiagOffer.seller["@id"], diagService.offers);
+assert("diag_schema_no_invented_expiry", !("priceValidUntil" in diagService.offers), diagService.offers);
+assert(
+  "diag_kill_switch_sold_out",
+  structuredData.offerAvailability({ ...diag, kill_switch: true }) === "https://schema.org/SoldOut",
+  structuredData.offerAvailability({ ...diag, kill_switch: true }),
+);
 
 const catalog = pub.publicCatalog();
 assert("no_public_10k", !catalog.offers.some((o) => o.amount_cents === 1000000), catalog.offers.map((o) => o.amount_cents));

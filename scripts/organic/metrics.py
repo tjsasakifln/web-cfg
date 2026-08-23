@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from scripts.organic.serp_ctr import load_ctr_config
+from scripts.organic.analytics_export import read_funnel_metrics
 
 
 def _is_prefix(path: str, prefixes: list[str]) -> bool:
@@ -17,6 +18,7 @@ def commercial_exposure_metrics(
     config: dict[str, Any] | None = None,
     link_coverage: dict[str, Any] | None = None,
     ctr_opportunities: list[dict[str, Any]] | None = None,
+    analytics_export_path: Any | None = None,
 ) -> dict[str, Any]:
     """Compute impression/click shares and coverage metrics from GSC page rows."""
     config = config or load_ctr_config()
@@ -55,6 +57,7 @@ def commercial_exposure_metrics(
         avg_gap = round(sum(gaps) / len(gaps), 5)
 
     cov = link_coverage or {}
+    funnel_metrics = read_funnel_metrics(analytics_export_path)
     return {
         "schema_version": "commercial-exposure-metrics-v1",
         "totals": {
@@ -83,27 +86,7 @@ def commercial_exposure_metrics(
         "indexable_content_to_service_link_coverage": cov.get(
             "indexable_content_to_service_link_coverage"
         ),
-        # Funnel metrics require analytics pipeline — placeholders until wired
-        "organic_assisted_conversion": {
-            "status": "requires_analytics_export",
-            "value": None,
-        },
-        "organic_service_page_entry": {
-            "status": "requires_analytics_export",
-            "value": None,
-        },
-        "organic_content_to_service_transition": {
-            "status": "requires_analytics_export",
-            "value": None,
-        },
-        "organic_content_to_lead": {
-            "status": "requires_analytics_export",
-            "value": None,
-        },
-        "organic_service_to_lead": {
-            "status": "requires_analytics_export",
-            "value": None,
-        },
+        **funnel_metrics,
         "note": (
             "Impression/click shares from GSC page table. Funnel metrics need "
             "collect/attribution exports; do not invent conversion rates."

@@ -1,0 +1,8 @@
+{
+  "schema": "confenge.organic_funnel_export/1.0",
+  "label": "FIXTURE_ONLY_EMPTY_EXPORT",
+  "as_of": "2026-08-22",
+  "source": "test_fixture",
+  "pii": false,
+  "metrics": {}
+}

@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 46,
+        "scanned": 55,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -28,14 +28,133 @@
     },
     "conversion": {
       "ok": true,
-      "findings": [],
+      "findings": [
+        {
+          "gate": "conversion",
+          "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "casos/medicao-glosa-demonstrativo/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/matriz-atraso-obra/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/checklist-reequilibrio/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/limite-acrescimos-supressoes/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "diagnostico-b2g-360/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/diagnostico-b2g-360/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "medicoes-glosas-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/medicoes-glosas-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "aditivos-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/aditivos-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "reequilibrio-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "auditoria-orcamento-licitacao/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/auditoria-orcamento-licitacao/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "diagnostico-pre-licitacao/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/diagnostico-pre-licitacao/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "diagnostico-pre-licitacao/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "metodologia-inteligencia/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        }
+      ],
       "stats": {
-        "scanned": 21,
+        "scanned": 55,
         "journeys": [
           "contrato",
           "edital",
           "operacao"
-        ]
+        ],
+        "profiles": {
+          "service_pillar": 13,
+          "editorial_or_other": 42
+        },
+        "main_cta": {
+          "covered": 55,
+          "total": 55,
+          "coverage": 1.0
+        },
+        "on_page_capture": {
+          "covered": 7,
+          "total": 13,
+          "coverage": 0.5385
+        },
+        "freeze": {
+          "earliest_safe_action_at": "2026-09-16",
+          "warn_before_date": true
+        },
+        "errors": 0,
+        "warnings": 14
       }
     },
     "legacy_entity": {

@@ -145,6 +145,31 @@ def test_representative_authority_pages_pass_visible_parity():
         assert parity["ok"], f"{kind} {path}: {parity['defects']}"
 
 
+def test_editable_money_surfaces_have_visible_person_and_faq_schema():
+    routes = (
+        "defesa-margem-contratos-publicos",
+        "bid-room-licitacoes-obras",
+        "diretoria-b2g",
+        "diagnostico-b2g-expansao",
+    )
+    for route in routes:
+        html = (ROOT / route / "index.html").read_text(encoding="utf-8")
+        assert '"@type":"Person"' in html, route
+        assert '"@type":"FAQPage"' in html, route
+        parity = compare_visible_parity(html, url=f"https://confenge.com.br/{route}/")
+        assert parity["ok"], f"{route}: {parity['defects']}"
+
+
+def test_invisible_faq_schema_fails_closed():
+    html = """<!doctype html><html><head><title>Teste</title>
+    <meta name=\"robots\" content=\"index,follow\"><link rel=\"canonical\" href=\"https://confenge.com.br/teste/\">
+    <script type=\"application/ld+json\">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Pergunta invisível?","acceptedAnswer":{"@type":"Answer","text":"Resposta invisível."}}]}</script>
+    </head><body data-visible-schema-parity="true"><main><h1>Teste</h1></main></body></html>"""
+    parity = compare_visible_parity(html, url="https://confenge.com.br/teste/")
+    assert not parity["ok"]
+    assert any("schema_faq_" in defect["claimed"] for defect in parity["defects"])
+
+
 def test_correction_same_render_updates_visible_and_jsonld():
     src = json.loads(
         (ROOT / "data" / "editorial" / "pages" / "lei-limite-25-50.json").read_text(

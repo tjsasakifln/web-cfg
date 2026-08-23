@@ -881,6 +881,24 @@ def check_schema_mirrors_visible(html: str) -> list[str]:
         if "BreadcrumbList" in types:
             errors.extend(check_breadcrumb_mirrors_visible(node, raw_html))
 
+        # FAQ parity is opt-in while legacy generated articles are dispositioned.
+        # Money surfaces covered by #235 carry this marker and therefore fail
+        # closed if schema claims are not also rendered to visitors.
+        if "FAQPage" in types and 'data-visible-schema-parity="true"' in raw_html:
+            entities = node.get("mainEntity") or []
+            if isinstance(entities, dict):
+                entities = [entities]
+            for entity in entities:
+                if not isinstance(entity, dict):
+                    continue
+                question = str(entity.get("name") or "").strip()
+                answer_node = entity.get("acceptedAnswer") or {}
+                answer = str(answer_node.get("text") or "").strip() if isinstance(answer_node, dict) else ""
+                if question and _norm(question) not in visible_blob:
+                    errors.append(f"schema_faq_question_not_visible:{question}")
+                if answer and _norm(answer) not in visible_blob:
+                    errors.append(f"schema_faq_answer_not_visible:{answer}")
+
     return errors
 
 

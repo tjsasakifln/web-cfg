@@ -11,6 +11,7 @@ import re
 import sys
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urlparse
@@ -806,35 +807,168 @@ def _onpage_capture_findings(root: Path, pii_re: re.Pattern[str]) -> tuple[list[
     return findings, scanned
 
 
-def gate_conversion(root: Path | None = None) -> GateReport:
-    """Indexable content pages need a primary journey CTA and no PII in data attrs."""
+def _main_html(html: str) -> str:
+    match = re.search(r"(?is)<main\b[^>]*>(.*?)</main>", html)
+    return match.group(1) if match else ""
+
+
+def _as_date(value: date | datetime | str | None) -> date:
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        return date.fromisoformat(value[:10])
+    return date.today()
+
+
+def _conversion_profile(route: str, service_routes: set[str]) -> str:
+    if route in service_routes:
+        return "service_pillar"
+    if route in {"/privacidade/", "/termos-de-uso/", "/conflitos/", "/uso-de-ia/", "/imprensa/", "/correcoes/"}:
+        return "trust_or_legal"
+    if route.startswith("/politica-editorial/"):
+        return "trust_or_legal"
+    return "commercial_content"
+
+
+def _conversion_files(base: Path) -> list[Path]:
+    # Conversion is a public-surface invariant. Do not reuse the smaller
+    # editorial/naturalness census above: newly added public families must be
+    # audited automatically instead of waiting for another hardcoded root.
+    skip = {
+        "docs",
+        "scripts",
+        "data",
+        "seo",
+        "tests",
+        "node_modules",
+        ".git",
+        ".netlify",
+        "_site",
+    }
+    return [
+        page
+        for page in base.rglob("*.html")
+        if not any(part in skip for part in page.relative_to(base).parts)
+    ]
+
+
+def gate_conversion(
+    root: Path | None = None,
+    *,
+    now: date | datetime | str | None = None,
+) -> GateReport:
+    """Audit public surfaces with family-specific, in-``main`` BOFU actions."""
+    from scripts.bofu_dominance.frozen_specs.constants import (
+        EARLIEST_SAFE_ACTION_AT,
+        PILLARS as FROZEN_PILLARS,
+    )
     from scripts.site.brand import load_brand
 
     base = root or ROOT
     brand = load_brand()
     journeys = {j["id"]: j for j in brand.get("journeys") or []}
+    matrix = json.loads((ROOT / "data/organic/bofu-intent-matrix.json").read_text(encoding="utf-8"))
+    service_routes = {
+        str(row["canonical_service_route"]): str(row["destination_service_id"])
+        for row in matrix.get("rows") or []
+    }
+    frozen_routes = {str(row["path"]) for row in FROZEN_PILLARS}
+    today = _as_date(now)
     findings: list[Finding] = []
     scanned = 0
+    main_cta_count = 0
+    main_cta_required = 0
+    main_cta_exempt = 0
+    service_scanned = 0
+    service_capture_count = 0
+    profile_counts = {"service_pillar": 0, "commercial_content": 0, "trust_or_legal": 0}
     pii_re = re.compile(
         r"\b(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b",
         re.I,
     )
-    for p in (base / "conteudos").glob("*/index.html"):
+    for p in _conversion_files(base):
         html = p.read_text(encoding="utf-8", errors="replace")
         if not is_indexable_html(html):
             continue
         scanned += 1
-        # Must have WhatsApp or form CTA
-        has_wa = "wa.me/" in html or "whatsapp" in html.lower()
-        has_form = "/#contato" in html or "jornada=" in html or "origem=" in html
-        if not (has_wa or has_form):
+        rel = p.relative_to(base)
+        route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
+        main = _main_html(html)
+        profile = _conversion_profile(route, set(service_routes))
+        profile_counts[profile] += 1
+        conversion_exempt = profile == "trust_or_legal"
+        has_main_wa = bool(re.search(r'(?is)<a\b[^>]+href=["\'][^"\']*(?:wa\.me|whatsapp\.com)', main))
+        has_main_form = bool(
+            re.search(r'(?is)<form\b[^>]+action=["\']/.netlify/functions/lead["\']', main)
+        )
+        has_main_service_link = any(
+            f'href="{destination}"' in main or f"href='{destination}'" in main
+            for destination in service_routes
+            if destination != route
+        )
+        has_main_contact = bool(
+            re.search(
+                r'(?is)<a\b[^>]+href=["\'](?:/#(?:contato|formulario-contato)|#(?:contato|pedido|formulario))',
+                main,
+            )
+        )
+        has_attributed_cta = bool(
+            re.search(
+                r'(?is)<a\b(?=[^>]*\bdata-cta-id=["\'][^"\']+)(?=[^>]*\bhref=["\'][^"\']+)[^>]*>',
+                main,
+            )
+        )
+        has_tool_result_cta = (
+            route.startswith("/ferramentas/")
+            and route != "/ferramentas/"
+            and len(
+                re.findall(
+                    r'(?is)data-cta-id=["\'][^"\']+["\'][^>]+href=["\']/[^"\']+',
+                    html,
+                )
+            )
+            >= 2
+        )
+        has_main_cta = (
+            conversion_exempt
+            or has_main_wa
+            or has_main_form
+            or has_main_service_link
+            or has_main_contact
+            or has_attributed_cta
+            or has_tool_result_cta
+        )
+        if conversion_exempt:
+            main_cta_exempt += 1
+        else:
+            main_cta_required += 1
+        if has_main_cta:
+            main_cta_count += 1
+        else:
             findings.append(
                 Finding(
                     gate="conversion",
                     path=str(p.relative_to(base)),
-                    reason="missing_cta",
+                    reason="missing_main_cta",
                 )
             )
+        if route in service_routes:
+            service_scanned += 1
+            if has_main_form:
+                service_capture_count += 1
+            else:
+                severity = "warn" if route in frozen_routes and today < EARLIEST_SAFE_ACTION_AT else "error"
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=str(p.relative_to(base)),
+                        reason="missing_on_page_form",
+                        excerpt=f"profile=service_pillar route={route}",
+                        severity=severity,
+                    )
+                )
         # dataLayer / analytics events should not embed emails/CPF in attributes
         for m in re.finditer(r'data-[a-z-]+=\"([^\"]{10,200})\"', html, re.I):
             if pii_re.search(m.group(1)) and "@confenge" not in m.group(1).lower():
@@ -861,7 +995,7 @@ def gate_conversion(root: Path | None = None) -> GateReport:
             "Analisar este cenário",
             "Analisar meu cenário",
         )
-        if not any(s.lower() in html.lower() for s in journey_signals):
+        if not conversion_exempt and not any(s.lower() in html.lower() for s in journey_signals):
             findings.append(
                 Finding(
                     gate="conversion",
@@ -881,6 +1015,29 @@ def gate_conversion(root: Path | None = None) -> GateReport:
             "scanned": scanned,
             "onpage_capture_scanned": capture_scanned,
             "journeys": list(journeys.keys()),
+            "profiles": profile_counts,
+            "main_cta": {
+                "covered": main_cta_count - main_cta_exempt,
+                "total": main_cta_required,
+                "coverage": round((main_cta_count - main_cta_exempt) / main_cta_required, 4)
+                if main_cta_required
+                else 0.0,
+                "exempt": main_cta_exempt,
+                "public_scanned": scanned,
+            },
+            "on_page_capture": {
+                "covered": service_capture_count,
+                "total": service_scanned,
+                "coverage": round(service_capture_count / service_scanned, 4)
+                if service_scanned
+                else 0.0,
+            },
+            "freeze": {
+                "earliest_safe_action_at": EARLIEST_SAFE_ACTION_AT.isoformat(),
+                "warn_before_date": today < EARLIEST_SAFE_ACTION_AT,
+            },
+            "errors": len(errors),
+            "warnings": sum(1 for finding in findings if finding.severity == "warn"),
         },
     )
 

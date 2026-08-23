@@ -10,7 +10,12 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.organic.bofu_adversarial import FINDING_CODES, load_intent_matrix, run_audit
+from scripts.organic.bofu_adversarial import (
+    FINDING_CODES,
+    audit_service_sla_claims,
+    load_intent_matrix,
+    run_audit,
+)
 from scripts.organic.bofu_exposure import evaluate_aditivos_snippet, evaluate_indexable_bridges
 from scripts.organic.service_map import map_content_to_service
 
@@ -28,6 +33,7 @@ def test_finding_codes_cover_criterion_3():
         "ROUTE_MISSING_OWNER_UPDATE_POLICY",
         "CTA_DROPS_ATTRIBUTION",
         "PILLAR_MISSING_ONPAGE_CAPTURE",
+        "SLA_NOT_IN_CATALOG",
     }
     assert required.issubset(set(FINDING_CODES))
 
@@ -159,6 +165,26 @@ def test_audit_fails_when_nonfrozen_pillar_has_no_onpage_capture(tmp_path: Path)
     )
     report = run_audit(tmp_path, matrix)
     assert "PILLAR_MISSING_ONPAGE_CAPTURE" in {f["code"] for f in report["findings"]}
+
+
+def test_sla_guard_rejects_delivery_deadline_missing_from_catalog():
+    findings = audit_service_sla_claims(
+        "/fixture-svc/",
+        "<main><p>Prazo de entrega: até 7 dias úteis.</p></main>",
+        {"offer_id": "CFG-FIXTURE-v1"},
+        {"CFG-FIXTURE-v1": {"offer_id": "CFG-FIXTURE-v1"}},
+    )
+    assert [finding["code"] for finding in findings] == ["SLA_NOT_IN_CATALOG"]
+
+
+def test_sla_guard_accepts_catalog_range():
+    findings = audit_service_sla_claims(
+        "/fixture-svc/",
+        "<main><p>Prazo do diagnóstico: 10 a 15 dias úteis.</p></main>",
+        {"offer_id": "CFG-FIXTURE-v1"},
+        {"CFG-FIXTURE-v1": {"offer_id": "CFG-FIXTURE-v1", "sla_business_days": "10-15"}},
+    )
+    assert findings == []
 
 
 def test_indexable_bridges_still_full():

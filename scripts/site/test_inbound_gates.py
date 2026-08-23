@@ -164,6 +164,12 @@ def test_brand_shell_on_indexable_conteudos():
 def test_conversion_indexable_has_cta():
     r = gate_conversion()
     assert r.ok, r.findings[:10]
+    from scripts.organic.sitemap_graph import load_graph_locs
+
+    assert r.stats["scanned"] == len(load_graph_locs(ROOT))
+    assert r.stats["profiles"]["service_pillar"] == 13
+    assert r.stats["main_cta"]["coverage"] == 1.0
+    assert r.stats["main_cta"]["total"] + r.stats["main_cta"]["exempt"] == r.stats["scanned"]
 
 
 def test_conversion_fails_before_and_passes_after_onpage_capture():

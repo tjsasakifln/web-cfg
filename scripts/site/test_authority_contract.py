@@ -265,6 +265,22 @@ def test_conteudos_lei_14133_guide_triggers_reviewer_slot():
     assert not errors, errors
 
 
+def test_specialist_page_shows_sameas_and_as_of():
+    """#74 VALIDATE: specialist HTML keeps a verifiable public identity signal."""
+    path = ROOT / "especialista" / "tiago-jun-sasaki" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    assert path.is_file()
+    assert "sameAs" in html
+    assert "https://github.com/tjsasakifln" in html
+    assert "as_of" in html
+    assert 'datetime="2026-07-15"' in html
+    assert "EESC-USP" in html or "Universidade de São Paulo" in html
+    assert "CREA" not in html
+    assert "smartlic" not in html.lower()
+    errors = check_schema_mirrors_visible(html)
+    assert not errors, errors
+
+
 def test_specialist_credentials_are_subset_of_public_verified_proof():
     path = ROOT / "especialista" / "tiago-jun-sasaki" / "index.html"
     html = path.read_text(encoding="utf-8")
@@ -612,6 +628,21 @@ def test_fail_closed_breadcrumb_and_dataset_must_match_visible():
         },
     )
     assert check_schema_mirrors_visible(honest) == []
+
+
+def test_margin_defense_pillar_shows_source_as_of_limitation():
+    """#60 VALIDATE canary: the public pillar keeps visible provenance tokens."""
+    path = ROOT / "defesa-margem-contratos-publicos" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    assert path.is_file()
+    assert "authority-method" in html
+    assert 'id="proveniencia-vertical"' in html
+    lower = html.lower()
+    assert "source" in lower
+    assert "as_of" in lower
+    assert "limitation" in lower
+    assert "unknown" in lower
+    assert "smartlic" not in lower
 
 
 def test_family_audit_fails_closed_on_unclassified_and_covers_matrix():
