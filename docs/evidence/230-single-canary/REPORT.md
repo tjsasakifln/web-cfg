@@ -1,7 +1,7 @@
 # #230 em #61 — canário único de segunda leitura contratual
 
 Data da auditoria: 2026-08-22 BRT (2026-08-23 UTC). Base: `origin/main` em
-`2e9aa14a1d26ff09c689ae861adab59bad6be91f`.
+`e18e583651b76af788e32e487abeb4c6b24a9c25`.
 
 ## Decisão e hipótese
 
@@ -120,6 +120,7 @@ recebeu nome acessível. Não houve redesign.
 | E2E Chromium 390 px | refresh manteve chave; timeout + reenvio deixou 1 receipt; duplicata não repostou; Warmbly 503 preservou `RETRYABLE`; sem overflow |
 | A11y | 14 páginas no preview Netlify, incluindo o canário: 0 critical, 0 serious, 0 moderate, 0 minor |
 | UI/#179 | suíte geométrica completa PASS; `image-aspect-ratio=1`, `image-size-responsive=1` |
+| Freeze BOFU | seis HTMLs protegidos inalterados; baseline revisado apenas para `script.js` e `styles-tools.css`; 70 PASS |
 | BOFU | 15 PASS |
 | Analytics/atribuição | PASS; allowlist sem PII; qualified/pipeline continuam `UNKNOWN` até evento real |
 | Build | PASS; 0 páginas pSEO publicáveis, 5 noindex, 18 rejeitadas; mudanças geradas fora do slice descartadas |
