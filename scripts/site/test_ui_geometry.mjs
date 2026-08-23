@@ -511,6 +511,74 @@ async function main() {
     fail("primary_cta_targets_form", e.message || e);
   }
 
+  // 13b) #182: the CTA must reveal the form, not the contact intro.
+  // Mobile and desktop: form title + first field share the viewport under the
+  // sticky header, the fragment stays in the URL, and the keyboard continues
+  // into the form instead of the WhatsApp/e-mail alternatives.
+  try {
+    const sizes = [
+      { w: 320, h: 844, mobile: true },
+      { w: 390, h: 844, mobile: true },
+      { w: 430, h: 932, mobile: true },
+      { w: 1440, h: 900, mobile: false },
+    ];
+    for (const size of sizes) {
+      await page.setViewport({
+        width: size.w,
+        height: size.h,
+        isMobile: size.mobile,
+        hasTouch: size.mobile,
+      });
+      await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.click('.hero a[href="#formulario-contato"]');
+      await new Promise((r) => setTimeout(r, 2600));
+      const rep = await page.evaluate(() => {
+        const form = document.querySelector("#formulario-contato");
+        const title = document.querySelector(".contact-form-title");
+        const first = form.querySelector(
+          'input:not([type="hidden"]):not([tabindex="-1"]), select, textarea'
+        );
+        const header = document.querySelector(".site-header");
+        const box = (el) => {
+          const r = el.getBoundingClientRect();
+          return { top: Math.round(r.top), bottom: Math.round(r.bottom) };
+        };
+        return {
+          hash: window.location.hash,
+          viewport: window.innerHeight,
+          headerBottom: header ? Math.round(header.getBoundingClientRect().bottom) : 0,
+          title: title ? box(title) : null,
+          first: first ? box(first) : null,
+          focusInsideForm: !!(document.activeElement && form.contains(document.activeElement)),
+        };
+      });
+      const visible = (b) => b && b.top >= rep.headerBottom - 1 && b.bottom <= rep.viewport;
+      if (rep.hash !== "#formulario-contato") {
+        throw new Error(`${size.w}px: fragment lost (${rep.hash || "empty"})`);
+      }
+      if (!visible(rep.title)) {
+        throw new Error(`${size.w}px: form title outside the viewport ${JSON.stringify(rep.title)}`);
+      }
+      if (!visible(rep.first)) {
+        throw new Error(`${size.w}px: first field outside the viewport ${JSON.stringify(rep.first)}`);
+      }
+      if (!rep.focusInsideForm) throw new Error(`${size.w}px: focus did not reach the form`);
+      const nextFocus = await page.evaluate(() => {
+        const form = document.querySelector("#formulario-contato");
+        return form.contains(document.activeElement) ? "form" : "outside";
+      });
+      await page.keyboard.press("Tab");
+      const tabbed = await page.evaluate(() => document.activeElement?.id || "");
+      if (nextFocus !== "form" || tabbed !== "nome") {
+        throw new Error(`${size.w}px: Tab after the CTA reached "${tabbed}", expected "nome"`);
+      }
+    }
+    ok("cta_reveals_form_fields (320,390,430,1440)");
+  } catch (e) {
+    fail("cta_reveals_form_fields", e.message || e);
+  }
+
   // 14) consecutive section composition variety (archetypes)
   try {
     const html = readFileSync(join(ROOT, "index.html"), "utf8");

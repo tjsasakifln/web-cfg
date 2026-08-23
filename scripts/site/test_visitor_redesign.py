@@ -772,6 +772,25 @@ def test_home_form_anchor_reveals_fields():
         r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
+    # #182: every direct-intent journey CTA sends the visitor to the fields,
+    # not to the contact intro that precedes them.
+    for match in re.finditer(
+        r'<a\b[^>]*data-cta-position="(journey_[abc])"[^>]*>', html
+    ):
+        tag = match.group(0)
+        href = re.search(r'href="([^"]+)"', tag)
+        assert href and "#formulario-contato" in href.group(1), (
+            f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
+        )
+    # The shipped script must realign the landing: deferred section sizes (#185)
+    # move the target while the jump runs.
+    nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
+    assert "scrollMarginTop" in nav_js and "requestAnimationFrame" in nav_js, (
+        "nav module must re-align fragment landings against the sticky header"
+    )
+    assert "cta_view" in nav_js, (
+        "arrival at the form must emit its own event, distinct from the CTA click"
+    )
 
 
 def test_analisar_meu_caso_shell_targets_form():
