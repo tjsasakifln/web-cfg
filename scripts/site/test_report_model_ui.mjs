@@ -124,6 +124,31 @@ for (const width of widths) {
 
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
+const clickEvents = await page.evaluate(() => {
+  window.dataLayer = [];
+  const link = document.querySelector('[data-cta-position="report_hero"]');
+  link?.addEventListener("click", (event) => event.preventDefault(), { capture: true, once: true });
+  link?.click();
+  return (window.dataLayer || []).filter(({ event }) =>
+    ["whatsapp_click", "cta_click"].includes(event)
+  );
+});
+if (
+  clickEvents.length !== 1 ||
+  clickEvents[0]?.event !== "whatsapp_click" ||
+  clickEvents[0]?.asset_id !== "relatorio-inteligencia-licitacoes-demonstrativo" ||
+  clickEvents[0]?.route_family !== "edital-proposta" ||
+  clickEvents[0]?.cta_id !== "report-599-hero" ||
+  clickEvents[0]?.cta_position !== "report_hero" ||
+  clickEvents[0]?.cta_kind !== "offer" ||
+  clickEvents[0]?.offer_id !== "handraise-report-intelligence-599-v1" ||
+  clickEvents[0]?.next_action_id !== "contratar_relatorio_inteligencia_599" ||
+  !clickEvents[0]?.event_id ||
+  clickEvents[0]?.source !== "CONFENGE_WEB"
+) {
+  findings.push({ analytics: clickEvents, errors: ["report_offer_click_contract"] });
+  failed += 1;
+}
 await page.addScriptTag({ content: axeSource });
 const axe = await page.evaluate(async () => {
   const result = await window.axe.run(document, {

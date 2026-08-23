@@ -204,6 +204,9 @@ export const SUITE_GRAPH = Object.freeze({
       "sitemap.xml",
       "sitemap.txt",
       "sitemap-index.xml",
+      "docs/contracts/intent-action/intent-action-matrix.v1.json",
+      "scripts/offers/registry.cjs",
+      "data/offers/catalog.snapshot.json",
     ],
     artifacts: ["_site/casos/modelo-relatorio-inteligencia-licitacoes/"],
     surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
@@ -549,7 +552,7 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: [],
   },
   "test:conversion": {
-    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
+    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "docs/contracts/intent-action/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
     artifacts: [],
     surfaces: ["/diagnostico-b2g-360/", "/diagnostico-b2g-expansao/", "/diretoria-b2g/"],
   },
