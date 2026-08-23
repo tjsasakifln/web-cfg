@@ -51,6 +51,42 @@ def test_page_is_direct_public_html_without_friction() -> None:
     assert not any(token in lowered for token in ("<form", "<dialog", "<details", ".pdf", "download"))
 
 
+def test_product_promise_value_and_scope_are_explicit_before_the_example() -> None:
+    html = _html()
+    offer_end = html.index('<article class="report-document"')
+    offer = html[:offer_end]
+
+    for phrase in (
+        "Relatório Executivo de Priorização de Licitações",
+        "Escolha quais licitações disputar e quais recusar.",
+        "12 analisadas",
+        "3 priorizadas",
+        "7 recusadas",
+        "O que você recebe",
+        "R$ 599 = 1 relatório adaptado",
+        "quantidade de oportunidades e documentos",
+        "prazo são confirmados",
+        "antes de qualquer cobrança",
+    ):
+        assert phrase in offer
+
+    for deliverable in (
+        "Decisão executiva",
+        "Carteira priorizada",
+        "Impedimentos e condições",
+        "Aderência à sua empresa",
+        "Exposição financeira preliminar",
+        "Ficha por oportunidade",
+        "Próximas ações",
+        "Fontes e rastreabilidade",
+    ):
+        assert deliverable in offer
+
+    assert offer.index("O que você recebe") < offer.index("CONSULTE O EXEMPLO")
+    assert "garante vitória" not in offer.casefold()
+    assert "entrega em" not in offer.casefold()
+
+
 def test_synthetic_disclosure_and_private_identity_denylist() -> None:
     html = _html()
     lowered = html.casefold()
@@ -87,6 +123,37 @@ def test_portfolio_total_reconciles_with_all_twelve_synthetic_rows() -> None:
         summary.group(1)
     )
 
+    mobile_items = re.findall(
+        r'<li class="report-mobile-opportunity[^>]*"[^>]*data-decision="([^"]+)"',
+        html,
+    )
+    assert len(mobile_items) == 12
+    assert mobile_items.count("PARTICIPAR") == 1
+    assert mobile_items.count("COM CONDIÇÕES") == 2
+    assert mobile_items.count("INVESTIGAR") == 2
+    assert mobile_items.count("NÃO PARTICIPAR") == 7
+
+
+def test_decision_sheet_preserves_evidence_topology_without_fake_sources() -> None:
+    html = _html()
+    evidence = re.search(
+        r'<section[^>]+id="evidencias".*?</section>', html, flags=re.DOTALL
+    )
+    assert evidence
+    block = evidence.group(0)
+    for field in (
+        "Fonte oficial",
+        "Requisito do edital",
+        "Evidência da empresa",
+        "Confiança da leitura",
+        "Ponto a revalidar",
+        "Validade da decisão",
+    ):
+        assert field in block
+    assert "referência sintética" in block.casefold()
+    assert "links diretos para as fontes oficiais" in block.casefold()
+    assert 'href="http' not in block
+
 
 def test_value_ladder_price_and_whatsapp_contract() -> None:
     html = _html()
@@ -99,7 +166,7 @@ def test_value_ladder_price_and_whatsapp_contract() -> None:
         "report_mobile_sticky",
     } == positions
     assert html.count("Quero meu relatório por R$ 599") >= 3
-    assert "R$ 599 por relatório" in html
+    assert "R$ 599 = 1 relatório adaptado" in html
     for marker in (
         "Conclusão executiva",
         "Carteira priorizada",
