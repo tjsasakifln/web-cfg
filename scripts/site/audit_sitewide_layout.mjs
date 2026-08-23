@@ -64,9 +64,9 @@ function startStaticServer() {
       }
       res.writeHead(200, { "Content-Type": MIME[extname(filePath)] || "application/octet-stream" });
       res.end(readFileSync(filePath));
-    } catch (error) {
+    } catch {
       res.writeHead(500);
-      res.end(String(error));
+      res.end("internal server error");
     }
   });
   return new Promise((done) => server.listen(PORT, "127.0.0.1", () => done(server)));
