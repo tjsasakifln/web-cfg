@@ -1,4 +1,4 @@
-"""Campaign entry: audit + census + decision over in-repo specialist HTML and proof."""
+"""Campaign entry: audit public identity surfaces, then classify the specialist graph."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ from scripts.local_entity.constants import (
     CAMPAIGN,
     CAMPAIGN_AS_OF,
     DECISION_STATE,
+    HOME_RELPATH,
     SPECIALIST_RELPATH,
 )
 from scripts.local_entity.decision import decide_surface
@@ -34,6 +35,10 @@ def repo_root() -> Path:
 def load_specialist_html(root: Path) -> str:
     path = root / SPECIALIST_RELPATH
     return path.read_text(encoding="utf-8")
+
+
+def load_home_html(root: Path) -> str:
+    return (root / HOME_RELPATH).read_text(encoding="utf-8")
 
 
 def primary_observables(bundle: dict[str, Any]) -> dict[str, Any]:
@@ -82,6 +87,7 @@ def run_campaign(
     *,
     root: Path | None = None,
     specialist_html: str | None = None,
+    home_html: str | None = None,
     proof: dict[str, Any] | None = None,
     brand: dict[str, Any] | None = None,
     census_rows: list[dict[str, Any]] | None = None,
@@ -92,11 +98,15 @@ def run_campaign(
 ) -> dict[str, Any]:
     root = root or repo_root()
     html = specialist_html if specialist_html is not None else load_specialist_html(root)
+    canonical_home = home_html if home_html is not None else load_home_html(root)
     proof_doc = proof if proof is not None else load_proof()
     brand_doc = brand if brand is not None else load_brand()
     graph = extract_entity_graph(html)
+    home_graph = extract_entity_graph(canonical_home)
     honesty = audit_graph_honesty(graph, html)
     require_clean(honesty, "honesty")
+    home_honesty = audit_graph_honesty(home_graph, canonical_home)
+    require_clean(home_honesty, "home_honesty")
     classified = classify_graph(graph, proof=proof_doc, brand=brand_doc)
     baseline = load_search_baseline(root)
     census = build_census(rows=census_rows, gsc_live=gsc_live, search_baseline=baseline)
@@ -106,6 +116,9 @@ def run_campaign(
     bundle = {
         "graph": graph,
         "html": html,
+        "additional_public_surfaces": [
+            {"id": "home", "graph": home_graph, "html": canonical_home}
+        ],
         "classified": classified,
         "census": census,
         "decision": decision,
@@ -164,6 +177,7 @@ def run_campaign(
     observables = primary_observables(bundle)
     return {
         "graph": graph,
+        "home_graph": home_graph,
         "classified": classified,
         "census": census,
         "decision": decision,

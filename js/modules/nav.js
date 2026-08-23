@@ -539,7 +539,8 @@
       if (href.indexOf('#') === -1) return;
       let url;
       try { url = new URL(href, window.location.href); } catch (_) { return; }
-      if (url.origin !== window.location.origin || !samePage(url.pathname)) return;
+      if (url.origin !== window.location.origin || !samePage(url.pathname)
+        || url.search !== window.location.search) return;
       const target = anchorFromHash(url.hash);
       if (!target) return;
       event.preventDefault();
@@ -691,15 +692,18 @@
         const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
           ...base,
-          correlation_id: base.correlation_id || whatsappProtocol,
-          whatsapp_protocol: whatsappProtocol,
+          correlation_id: whatsappProtocol,
           cta_label: label || 'whatsapp',
           destination_type: 'whatsapp',
           journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
           content_type: isEditorial ? (editorialType || 'editorial') : undefined,
           topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
           asset_id: whatsappAttrs.asset_id,
+          route_family: whatsappAttrs.route_family,
           cta_id: whatsappAttrs.cta_id,
+          cta_kind: el.getAttribute('data-cta-kind') || '',
+          offer_id: el.getAttribute('data-offer-id') || '',
+          next_action_id: el.getAttribute('data-next-action-id') || '',
         });
         return;
       }

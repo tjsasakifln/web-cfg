@@ -711,6 +711,36 @@ async function main() {
     fail("back_cancels_inflight_anchor_navigation", e.message || e);
   }
 
+  // 13f) A same-path link that changes the query is a real navigation. The
+  // fragment helper must not collapse it to pushState(hash) and discard
+  // attribution or journey context carried in the query string.
+  try {
+    await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+    await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+    await page.evaluate(() => {
+      const link = document.createElement("a");
+      link.id = "query-fragment-regression";
+      link.href = "/?tema=contrato#formulario-contato";
+      link.textContent = "Abrir formulário com contexto";
+      document.body.appendChild(link);
+    });
+    await page.click("#query-fragment-regression");
+    await page.waitForFunction(
+      () => window.location.search === "?tema=contrato",
+      { timeout: 5000 }
+    );
+    const routed = await page.evaluate(() => ({
+      search: window.location.search,
+      hash: window.location.hash,
+    }));
+    if (routed.search !== "?tema=contrato" || routed.hash !== "#formulario-contato") {
+      throw new Error(`query or fragment lost: ${JSON.stringify(routed)}`);
+    }
+    ok("query_changing_fragment_link_preserves_context");
+  } catch (e) {
+    fail("query_changing_fragment_link_preserves_context", e.message || e);
+  }
+
   // 14) consecutive section composition variety (archetypes)
   try {
     const html = readFileSync(join(ROOT, "index.html"), "utf8");
@@ -1237,6 +1267,11 @@ async function main() {
             repeatedOg: repeatedOg.length,
             coverIntrinsic: coverImage ? [coverImage.getAttribute("width"), coverImage.getAttribute("height")] : null,
             coverRatio: coverImage ? coverImage.getBoundingClientRect().width / coverImage.getBoundingClientRect().height : null,
+            // Decoded size, not the declared attributes: catches a cover whose
+            // width/height lie about the real asset (#179).
+            coverNaturalRatio: coverImage && coverImage.naturalHeight
+              ? coverImage.naturalWidth / coverImage.naturalHeight
+              : null,
             hasGrid: Boolean(grid),
             gridColumns: grid ? getComputedStyle(grid).gridTemplateColumns : "",
             heroContained: Boolean(
@@ -1253,6 +1288,11 @@ async function main() {
           }
           if (rep.coverIntrinsic?.join("x") !== "1200x630" || Math.abs(rep.coverRatio - (1200 / 630)) > 0.02) {
             throw new Error(`${path}@${width}: frozen cover distorted ${JSON.stringify(rep)}`);
+          }
+          // The check above only proves the box matches the DECLARED attributes. Compare it
+          // to the decoded asset too, so wrong attributes cannot hide a squashed cover.
+          if (rep.coverNaturalRatio === null || Math.abs(rep.coverRatio - rep.coverNaturalRatio) > 0.02) {
+            throw new Error(`${path}@${width}: rendered box drifts from the decoded aspect ratio ${JSON.stringify(rep)}`);
           }
         } else if (rep.articleCovers || rep.repeatedOg) {
           throw new Error(`${path}@${width}: raster title card still inline ${JSON.stringify(rep)}`);

@@ -125,6 +125,39 @@ function expectSubset(result, mustInclude, because) {
   }
 }
 
+// Every external input read by the local-entity campaign must select its gate.
+{
+  const inputs = [
+    "index.html",
+    "especialista/tiago-jun-sasaki/index.html",
+    "data/site/brand.json",
+    "data/site/proof.json",
+    "data/organic/search-baseline-2026-08-14.json",
+    "scripts/site/brand.py",
+    "scripts/site/authority.py",
+  ];
+  for (const input of inputs) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:local-entity"], `local-entity input ${input}`);
+    assert.ok(result.selected_ids.includes("test:local-entity"));
+  }
+  assert.ok(SUITE_GRAPH["test:local-entity"].surfaces.includes("/"));
+}
+
+// Every external SVG tree scanned by the path-data audit must select its gate.
+{
+  const svgInputs = [
+    "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/chart.svg",
+    "data/data-desk/fixture/chart.svg",
+    "data/data-desk/packages/fixture-only/chart.svg",
+    "data/data-desk/packages/valor-tipico-contratos-pavimentacao-sc/chart.svg",
+  ];
+  for (const input of svgInputs) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:cta-whatsapp"], `SVG path-data input ${input}`);
+  }
+}
+
 // organic / distribution are mapped extra suites (not unknown → full)
 {
   const result = selectAffected(["scripts/organic/demand_engine.py"], scripts);
