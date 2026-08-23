@@ -822,10 +822,31 @@ def _as_date(value: date | datetime | str | None) -> date:
     return date.today()
 
 
+def _conversion_profile(route: str, service_routes: set[str]) -> str:
+    if route in service_routes:
+        return "service_pillar"
+    if route in {"/privacidade/", "/termos-de-uso/", "/conflitos/", "/uso-de-ia/", "/imprensa/", "/correcoes/"}:
+        return "trust_or_legal"
+    if route.startswith("/politica-editorial/"):
+        return "trust_or_legal"
+    return "commercial_content"
+
+
 def _conversion_files(base: Path) -> list[Path]:
-    if base.resolve() == ROOT.resolve():
-        return public_html_files()
-    skip = {"docs", "scripts", "data", "seo", "tests", "node_modules", ".git", "_site"}
+    # Conversion is a public-surface invariant. Do not reuse the smaller
+    # editorial/naturalness census above: newly added public families must be
+    # audited automatically instead of waiting for another hardcoded root.
+    skip = {
+        "docs",
+        "scripts",
+        "data",
+        "seo",
+        "tests",
+        "node_modules",
+        ".git",
+        ".netlify",
+        "_site",
+    }
     return [
         page
         for page in base.rglob("*.html")
@@ -858,8 +879,11 @@ def gate_conversion(
     findings: list[Finding] = []
     scanned = 0
     main_cta_count = 0
+    main_cta_required = 0
+    main_cta_exempt = 0
     service_scanned = 0
     service_capture_count = 0
+    profile_counts = {"service_pillar": 0, "commercial_content": 0, "trust_or_legal": 0}
     pii_re = re.compile(
         r"\b(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b",
         re.I,
@@ -872,7 +896,9 @@ def gate_conversion(
         rel = p.relative_to(base)
         route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
         main = _main_html(html)
-        conversion_exempt = route in {"/privacidade/", "/termos-de-uso/"}
+        profile = _conversion_profile(route, set(service_routes))
+        profile_counts[profile] += 1
+        conversion_exempt = profile == "trust_or_legal"
         has_main_wa = bool(re.search(r'(?is)<a\b[^>]+href=["\'][^"\']*(?:wa\.me|whatsapp\.com)', main))
         has_main_form = bool(
             re.search(r'(?is)<form\b[^>]+action=["\']/.netlify/functions/lead["\']', main)
@@ -914,6 +940,10 @@ def gate_conversion(
             or has_attributed_cta
             or has_tool_result_cta
         )
+        if conversion_exempt:
+            main_cta_exempt += 1
+        else:
+            main_cta_required += 1
         if has_main_cta:
             main_cta_count += 1
         else:
@@ -965,7 +995,7 @@ def gate_conversion(
             "Analisar este cenário",
             "Analisar meu cenário",
         )
-        if not any(s.lower() in html.lower() for s in journey_signals):
+        if not conversion_exempt and not any(s.lower() in html.lower() for s in journey_signals):
             findings.append(
                 Finding(
                     gate="conversion",
@@ -985,14 +1015,15 @@ def gate_conversion(
             "scanned": scanned,
             "onpage_capture_scanned": capture_scanned,
             "journeys": list(journeys.keys()),
-            "profiles": {
-                "service_pillar": service_scanned,
-                "editorial_or_other": scanned - service_scanned,
-            },
+            "profiles": profile_counts,
             "main_cta": {
-                "covered": main_cta_count,
-                "total": scanned,
-                "coverage": round(main_cta_count / scanned, 4) if scanned else 0.0,
+                "covered": main_cta_count - main_cta_exempt,
+                "total": main_cta_required,
+                "coverage": round((main_cta_count - main_cta_exempt) / main_cta_required, 4)
+                if main_cta_required
+                else 0.0,
+                "exempt": main_cta_exempt,
+                "public_scanned": scanned,
             },
             "on_page_capture": {
                 "covered": service_capture_count,
