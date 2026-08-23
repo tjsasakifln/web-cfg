@@ -72,6 +72,21 @@ the family is `Disallow` and `X-Robots-Tag: noindex` by default, and only the
 approved slugs get an `Allow` and an `index, follow` override written after the
 family block, because Netlify applies the last matching rule.
 
+## Bounded rendering
+
+The producer caps its own sections (25 opportunities, 15 competitors) and
+`consume.load_cohort` refuses any rendezvous file over 4 MiB, so a well-formed
+pack is small. The renderer does not rely on that: `PRICE_CATEGORY_ROW_CAP` and
+`OPPORTUNITY_ROW_CAP` in `render.py` limit how many rows a section may draw, so
+a producer change that raises its own limits cannot ship a page nobody can open.
+
+The cap is applied **after** an explicit ordering — categories by contracts in
+the reference, opportunities by nearest closing date — so the rows that survive
+are a decision, not the accident of the order the payload was serialised in.
+When the cap bites, the page says `Mostrando N de M` and keeps the real total
+visible. A truncated table that does not declare itself truncated reads as a
+complete one, which is the kind of quiet claim this family does not make.
+
 ## Privacy
 
 The subject of the page is a market recorte, not a company. The rendered page

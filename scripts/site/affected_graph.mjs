@@ -162,9 +162,20 @@ export const SUITE_GRAPH = Object.freeze({
     ],
   },
   "test:local-entity": {
-    producers: ["tests/local_entity/", "scripts/local_entity/", "data/local-entity/"],
+    producers: [
+      "tests/local_entity/",
+      "scripts/local_entity/",
+      "data/local-entity/",
+      "index.html",
+      "especialista/tiago-jun-sasaki/index.html",
+      "data/site/brand.json",
+      "data/site/proof.json",
+      "data/organic/search-baseline-2026-08-14.json",
+      "scripts/site/brand.py",
+      "scripts/site/authority.py",
+    ],
     artifacts: ["docs/seo/local-entity/"],
-    surfaces: ["/especialista/tiago-jun-sasaki/"],
+    surfaces: ["/", "/especialista/tiago-jun-sasaki/"],
   },
   "test:sitemap-graph": {
     producers: [
@@ -194,12 +205,74 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: [],
   },
+  "test:report-model": {
+    producers: [
+      "scripts/site/test_report_model_599.py",
+      "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "casos/index.html",
+      "bid-room-licitacoes-obras/index.html",
+      "diretoria-b2g/index.html",
+      "sitemap.xml",
+      "sitemap.txt",
+      "sitemap-index.xml",
+      "docs/contracts/intent-action/intent-action-matrix.v1.json",
+      "scripts/offers/registry.cjs",
+      "data/offers/catalog.snapshot.json",
+    ],
+    artifacts: ["_site/casos/modelo-relatorio-inteligencia-licitacoes/"],
+    surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
+  "test:deliverables-hub": {
+    producers: [
+      "scripts/site/test_deliverables_hub.py",
+      "entregas/",
+      "index.html",
+      "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "data/site/brand.json",
+      "js/modules/nav.js",
+      "scripts/pseo/html_shell.py",
+      "scripts/pseo/public_artifact.py",
+      "scripts/site/public_navigation.py",
+      "sitemap.xml",
+      "sitemap.txt",
+    ],
+    artifacts: ["_site/entregas/"],
+    surfaces: ["/", "/entregas/", "/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
+  "test:report-model-ui": {
+    producers: [
+      "scripts/site/test_report_model_ui.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "styles.css",
+      "script.js",
+    ],
+    artifacts: [],
+    surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
+  "test:deliverables-hub-ui": {
+    producers: [
+      "scripts/site/test_deliverables_hub_ui.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      "entregas/",
+      "index.html",
+      "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "styles.css",
+      "script.js",
+      "js/modules/nav.js",
+      "scripts/site/public_navigation.py",
+    ],
+    artifacts: [],
+    surfaces: ["/", "/entregas/", "/ferramentas/"],
+  },
   "test:cta-whatsapp": {
     producers: [
       "scripts/site/test_cta_whatsapp.mjs",
       "scripts/site/svg_path_grammar.mjs",
       "scripts/site/fixtures/svg_path/",
       "scripts/pseo/html_shell.py",
+      "data/data-desk/",
+      "assets/data-desk/",
       "data/site/whatsapp-messages.json",
     ],
     artifacts: [],
@@ -388,6 +461,20 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/.netlify/functions/lead"],
   },
+  "test:external-runtime": {
+    // netlify.toml declares which modules stay unbundled; package.json decides
+    // whether they are installed at function runtime at all; the function trees
+    // are where the called API surface is derived from.
+    producers: [
+      "scripts/site/test_external_runtime_modules.mjs",
+      "netlify.toml",
+      "package.json",
+      "netlify/functions/",
+      "scripts/offers/",
+    ],
+    artifacts: [],
+    surfaces: ["/.netlify/functions/lead", "/.netlify/functions/ops"],
+  },
   "test:ops-auth": {
     producers: ["scripts/site/test_ops_auth_matrix.mjs", "netlify/functions/ops.cjs"],
     artifacts: [],
@@ -516,7 +603,7 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: [],
   },
   "test:conversion": {
-    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
+    producers: ["tests/conversion/", "scripts/conversion/", "data/conversion/", "docs/contracts/intent-action/", "tests/offers/", "scripts/offers/", "data/offers/", "scripts/offers/governance-pin.cjs", "data/offers/governance-authority-pin.json"],
     artifacts: [],
     surfaces: ["/diagnostico-b2g-360/", "/diagnostico-b2g-expansao/", "/diretoria-b2g/"],
   },

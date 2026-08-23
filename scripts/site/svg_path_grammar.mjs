@@ -109,6 +109,13 @@ export function parseSvgPath(d) {
 
   skipWsp();
   if (i >= n) return { ok: true, empty: true, commands: 0 };
+  const noneStart = i;
+  if (s.slice(i, i + 4) === "none") {
+    i += 4;
+    skipWsp();
+    if (i >= n) return { ok: true, empty: true, commands: 0 };
+    i = noneStart;
+  }
 
   if (s[i] !== "M" && s[i] !== "m") {
     return fail("path data must start with a moveto command (M/m)");
@@ -175,9 +182,6 @@ export function parseSvgPath(d) {
           }
           break;
         }
-        if (upper === "A" && (k === 0 || k === 1) && Number(value) < 0) {
-          return fail(`command "${command}" expected a non-negative radius at argument ${k + 1}`);
-        }
       }
       if (!complete) {
         i = setStart;
@@ -207,13 +211,14 @@ export function parseSvgPath(d) {
  * Script bodies and comments are dropped first, so a `const d = "..."` in
  * inline JS cannot be mistaken for path data.
  */
-export function extractPathData(html) {
+export function extractPathData(markup, { documentMode = "html" } = {}) {
   // End tags may carry stray whitespace/attributes (`</script\n foo="bar">`) and
   // comments may close with `--!>`; browsers accept both, so the strippers do too.
   const blankMatch = (match) => " ".repeat(match.length);
   const stripInactiveMarkup = (value) =>
     value
       .replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, blankMatch)
+      .replace(/<(textarea|title)\b[^>]*>[\s\S]*?<\/\1\b[^>]*>/gi, blankMatch)
       .replace(/<!--[\s\S]*?--!?>/g, blankMatch);
 
   // Decode a data-URI payload once while retaining which output characters came
@@ -254,10 +259,11 @@ export function extractPathData(html) {
     Tab: "\t",
   });
   const xmlNamedEntities = new Set(["amp", "apos", "gt", "lt", "quot"]);
-  const decodeHtmlEntities = (value, { htmlNamed = true } = {}) =>
+  const decodeHtmlEntities = (value, { htmlNamed = true, requireSemicolon = false } = {}) =>
     value.replace(
       /&#(?:[xX][0-9a-fA-F]+|[0-9]+);?|&(?:amp|apos|comma|gt|lt|NewLine|nbsp|period|plus|quot|Tab);/g,
       (reference) => {
+        if (requireSemicolon && !reference.endsWith(";")) return reference;
         if (!reference.startsWith("&#")) {
           const name = reference.slice(1, -1);
           if (!htmlNamed && !xmlNamedEntities.has(name)) return reference;
@@ -285,11 +291,12 @@ export function extractPathData(html) {
   // A regex ending at the first `>` truncates valid tags such as
   // `<path data-note=">" d="...">`. This scanner ends a start tag only when
   // `>` occurs outside a quoted value.
-  const pathStartTags = (value, acceptOpen = () => true) => {
+  const pathStartTags = (value, acceptOpen = () => true, { xml = false } = {}) => {
     const tags = [];
     for (let start = 0; start < value.length; start += 1) {
       if (value[start] !== "<" || !acceptOpen(start)) continue;
-      if (value.slice(start + 1, start + 5).toLowerCase() !== "path") continue;
+      const tagName = value.slice(start + 1, start + 5);
+      if (xml ? tagName !== "path" : tagName.toLowerCase() !== "path") continue;
       const boundary = value[start + 5];
       if (boundary !== undefined && !isTagSpace(boundary) && boundary !== "/" && boundary !== ">") {
         continue;
@@ -311,7 +318,7 @@ export function extractPathData(html) {
     return tags;
   };
 
-  const dAttribute = (tag, entityOptions) => {
+  const dAttribute = (tag, entityOptions = {}) => {
     let offset = 5; // `<path`
     while (offset < tag.length - 1) {
       while (isTagSpace(tag[offset])) offset += 1;
@@ -327,7 +334,8 @@ export function extractPathData(html) {
       ) {
         offset += 1;
       }
-      const name = tag.slice(nameStart, offset).toLowerCase();
+      const rawName = tag.slice(nameStart, offset);
+      const name = entityOptions.xml ? rawName : rawName.toLowerCase();
       while (isTagSpace(tag[offset])) offset += 1;
       if (tag[offset] !== "=") continue;
       offset += 1;
@@ -352,20 +360,46 @@ export function extractPathData(html) {
     return null;
   };
 
-  const source = stripInactiveMarkup(String(html ?? ""));
+  const source = stripInactiveMarkup(String(markup ?? ""));
   const out = [];
-  for (const tag of pathStartTags(source)) {
-    const value = dAttribute(tag);
+  const literalXml = documentMode === "xml";
+  const xmlEntityOptions = { htmlNamed: false, requireSemicolon: true, xml: true };
+  for (const tag of pathStartTags(source, () => true, { xml: literalXml })) {
+    const value = dAttribute(tag, literalXml ? xmlEntityOptions : undefined);
     if (value !== null) out.push(value);
   }
 
   const percent = percentDecodeWithOrigins(source);
   const decodedSource = stripInactiveMarkup(percent.text);
-  for (const tag of pathStartTags(decodedSource, (start) => percent.decoded[start] === true)) {
+  for (const tag of pathStartTags(
+    decodedSource,
+    (start) => percent.decoded[start] === true,
+    { xml: true },
+  )) {
     // Percent-encoded SVG data URIs are XML, where only the five predefined
     // named entities exist. Numeric references remain valid in both modes.
-    const value = dAttribute(tag, { htmlNamed: false });
+    const value = dAttribute(tag, xmlEntityOptions);
     if (value !== null) out.push(value);
+  }
+
+  // Base64 SVG data URIs are another shipped representation. Decode only a
+  // syntactically bounded payload and inspect its XML once; arbitrary base64
+  // elsewhere in the document is not treated as markup.
+  for (const match of decodedSource.matchAll(
+    /data:image\/svg\+xml(?:;[^,;\s"'()]+)*;base64,([a-z0-9+/=\t\n\f\r ]+)(?=["')>]|$)/gi,
+  )) {
+    const compactPayload = match[1].replace(/[\t\n\f\r ]/g, "");
+    let decoded;
+    try {
+      const binary = atob(compactPayload);
+      decoded = Buffer.from(binary, "binary").toString("utf8");
+    } catch {
+      continue;
+    }
+    for (const tag of pathStartTags(stripInactiveMarkup(decoded), () => true, { xml: true })) {
+      const value = dAttribute(tag, xmlEntityOptions);
+      if (value !== null) out.push(value);
+    }
   }
   return out;
 }

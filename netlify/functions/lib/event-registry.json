@@ -11,6 +11,8 @@
     "intent",
     "cta_id",
     "cta_position",
+    "offer_id",
+    "next_action_id",
     "correlation_id",
     "idempotency_key",
     "event_id",
@@ -158,7 +160,7 @@
       "schema_version": "1.0.0",
       "producers": ["js/modules/nav.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Click on a wa.me destination. Engagement. Carries a non-PII short protocol in the visitor-initiated message for later Warmbly reconciliation."
+      "semantic": "One physical click on a wa.me destination. Engagement. Carries the non-PII short protocol in correlation_id and, when named by the link, versioned offer and next-action context for later Warmbly reconciliation."
     },
     "email_click": {
       "layer": "engagement",

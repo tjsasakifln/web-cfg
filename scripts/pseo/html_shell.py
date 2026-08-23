@@ -130,8 +130,8 @@ def _build_header() -> str:
     nav = (brand.get("navigation") or {}).get("desktop") or [
         {"label": "Serviços", "href": "/#ofertas"},
         {"label": "Problemas que resolvemos", "href": "/#jornadas"},
+        {"label": "Entregas", "href": "/entregas/"},
         {"label": "Conteúdos", "href": "/conteudos/"},
-        {"label": "Ferramentas", "href": "/ferramentas/"},
         {"label": "Especialista", "href": "/especialista/tiago-jun-sasaki/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
