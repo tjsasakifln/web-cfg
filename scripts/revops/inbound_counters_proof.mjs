@@ -88,18 +88,27 @@ async function run() {
     method: "POST",
     body: JSON.stringify({ mode: "eligible_only", dry_run: true }),
   });
-  const dryRunSummary = requeueDryRun.body?.summary;
+  const dryRunSummary = {
+    eligible_count: requeueDryRun.body?.eligible_count,
+    never_requeue_count: requeueDryRun.body?.never_requeue_count,
+    manual_review_count: requeueDryRun.body?.manual_review_count,
+    reason_counts: requeueDryRun.body?.reason_counts,
+  };
+  const dryRunAggregatePresent =
+    Number.isInteger(dryRunSummary.eligible_count) &&
+    Number.isInteger(dryRunSummary.never_requeue_count) &&
+    Number.isInteger(dryRunSummary.manual_review_count) &&
+    dryRunSummary.reason_counts &&
+    typeof dryRunSummary.reason_counts === "object";
   check(
     "skipped_requeue_dry_run_aggregate_only",
     requeueDryRun.status === 200 &&
       requeueDryRun.body.ok === true &&
       requeueDryRun.body.dry_run === true &&
-      dryRunSummary &&
-      typeof dryRunSummary === "object",
-    `http=${requeueDryRun.status} dry_run=${requeueDryRun.body.dry_run === true} aggregate_present=${Boolean(dryRunSummary && typeof dryRunSummary === "object")}`
+      dryRunAggregatePresent,
+    `http=${requeueDryRun.status} dry_run=${requeueDryRun.body.dry_run === true} aggregate_present=${Boolean(dryRunAggregatePresent)}`
   );
-  out.skipped_requeue_dry_run =
-    dryRunSummary && typeof dryRunSummary === "object" ? dryRunSummary : null;
+  out.skipped_requeue_dry_run = dryRunAggregatePresent ? dryRunSummary : null;
 
   const funnel = await request("/.netlify/functions/ops?action=funnel");
   const funnelCounts = funnel.body?.funnel?.counts;
