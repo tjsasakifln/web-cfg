@@ -27,11 +27,15 @@ jobs:
       - name: Install dependencies (two clean installs)
         # Hard fail on lock desync — never soft-fallback to npm install.
         # Keep two clean installs here to make lockfile determinism explicit.
+        # --engine-strict turns npm's EBADENGINE warning into a hard failure, so a
+        # dependency that declares a Node floor above this runner cannot install
+        # green. Without it, Dependabot #264 (lighthouse 13, needs >=22.19) and
+        # #265 (@netlify/blobs 11, needs >=22.12) both passed required checks.
         run: |
           rm -rf node_modules
-          npm ci
+          npm ci --engine-strict
           rm -rf node_modules
-          npm ci
+          npm ci --engine-strict
           pip install pytest
       - name: Workflow gate shape
         run: npm run test:workflow-gates
@@ -62,6 +66,7 @@ jobs:
           npm run test:market-panorama
           npm run market-panorama:validate
           npm run test:lead-store-production
+          npm run test:external-runtime
           npm run test:ops-auth
           npm run test:env-example
           npm run test:epic-td

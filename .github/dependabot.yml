@@ -15,9 +15,26 @@ updates:
           - "axe-core"
           - "chrome-launcher"
     ignore:
-      # puppeteer-core@25+ requires Node >=22.12; CI still on Node 20.
-      # Remove this ignore after engines + workflows move to Node 22 LTS.
+      # Node 20 is the repository, CI and Netlify authority (PR #193 close,
+      # netlify.toml NODE_VERSION=20, engines ">=20 <21"). Every major below
+      # declares an engine this runtime does not satisfy, so Dependabot keeps
+      # reopening PRs that cannot land. Remove these ignores together, as part
+      # of the coordinated Node 22 migration tracked in issue #149 -- never
+      # one at a time as a drive-by bump.
+      #
+      # puppeteer-core@25+ requires Node >=22.12.
       - dependency-name: "puppeteer-core"
+        update-types:
+          - "version-update:semver-major"
+      # lighthouse@13+ requires Node >=22.19 (closed PRs #92, #264).
+      - dependency-name: "lighthouse"
+        update-types:
+          - "version-update:semver-major"
+      # @netlify/blobs@11+ requires Node >=22.12 (closed PR #265). This one is
+      # a runtime dependency of the Netlify Functions lead/ops path and is
+      # listed in netlify.toml external_node_modules, so it is never loaded
+      # during CI -- a green pipeline does NOT prove it works on Node 20.
+      - dependency-name: "@netlify/blobs"
         update-types:
           - "version-update:semver-major"
 

@@ -23,8 +23,10 @@ jobs:
       - name: Install test deps
         run: pip install pytest
       - name: npm ci
-        # Hard fail on lock desync — never soft-fallback to npm install
-        run: npm ci
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        # --engine-strict also hard-fails EBADENGINE, so a dependency declaring a
+        # Node floor above this runner cannot install green (see site-ci.yml).
+        run: npm ci --engine-strict
       - name: Workflow gate shape
         run: npm run test:workflow-gates
       - name: Netlify publish must equal _site
