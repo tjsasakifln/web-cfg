@@ -41,7 +41,7 @@ function page({ title, canonical, h1, lead, body }) {
 <a class="skip-link" href="#conteudo">Pular para o conteudo</a>
 <header class="site-header">
 <div class="container header-inner">
-<a class="brand" href="/" aria-label="CONFENGE, pagina inicial"><img alt="CONFENGE Inteligencia Tecnica" src="/assets/logo-confenge.png" width="800" height="208"/></a>
+<a class="brand" href="/" aria-label="CONFENGE, pagina inicial"><img alt="CONFENGE Inteligencia Tecnica" src="/assets/logo-confenge.png" width="224" height="58"/></a>
 </div>
 </header>
 <main id="conteudo" class="container" style="max-width:46rem;padding:1.5rem 1rem 4rem;">

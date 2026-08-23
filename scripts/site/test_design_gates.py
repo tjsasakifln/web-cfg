@@ -477,6 +477,85 @@ def test_home_header_footer_asset_budget():
     )
 
 
+def _png_size(path: Path) -> tuple[int, int]:
+    """Intrinsic size straight from IHDR, no image library needed."""
+    raw = path.read_bytes()
+    assert raw[:8] == b"\x89PNG\r\n\x1a\n", f"{path.name} is not a PNG"
+    assert raw[12:16] == b"IHDR", f"{path.name} has no leading IHDR"
+    width = int.from_bytes(raw[16:20], "big")
+    height = int.from_bytes(raw[20:24], "big")
+    return width, height
+
+
+def test_brand_logo_assets_fit_their_render_box():
+    """#185: shipping 800px logos for a 224/236px box wasted ~78% of the bytes.
+
+    The widest render is the footer at 236 CSS px, so 500 px still covers a 2x
+    device pixel ratio. Both files must also stay small enough that the header
+    logo never competes with the LCP element for bandwidth.
+    """
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    boxes = [int(m) for m in re.findall(r"\.(?:footer-)?brand(?:\s*,\s*\.brand)?\s*img\s*\{[^}]*?width:\s*(\d+)px", css)]
+    boxes += [int(m) for m in re.findall(r"\.brand\s*\{[^}]*?width:\s*(\d+)px", css)]
+    assert boxes, "no CSS render box found for the brand logo"
+    widest = max(boxes)
+    assert widest <= 236, f"brand logo render box grew to {widest}px; revisit the asset budget"
+    for name in ("logo-confenge.png", "logo-confenge-white.png"):
+        path = ROOT / "assets" / name
+        width, height = _png_size(path)
+        size = path.stat().st_size
+        assert width <= round(widest * 2.2), (
+            f"{name} is {width}px wide for a {widest}px box (over 2x DPR); "
+            "rerun scripts/site/optimize_brand_logos.py --write"
+        )
+        assert size <= 16 * 1024, f"{name} weighs {size}B; budget is 16KiB"
+        declared = 224 / 58
+        assert abs((width / height) - declared) / declared < 0.02, (
+            f"{name} aspect ratio {width}x{height} drifted from the declared 224x58 box"
+        )
+
+
+def test_shipped_pages_never_declare_oversized_logos():
+    """The header/footer chrome is on every page: one bad template wastes bytes site-wide."""
+    skip = {"node_modules", "_site", "docs", "scripts", "tests", "netlify", "seo", "data", "supabase"}
+    offenders: list[str] = []
+    pages = 0
+    for path in sorted(ROOT.rglob("*.html")):
+        relative = path.relative_to(ROOT)
+        if any(part in skip for part in relative.parts):
+            continue
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if "logo-confenge" not in html:
+            continue
+        pages += 1
+        for tag in re.findall(r"<img\b[^>]*>", html, re.I):
+            if "logo-confenge" not in tag:
+                continue
+            width = re.search(r'\bwidth="(\d+)"', tag, re.I)
+            if not width or int(width.group(1)) > 224:
+                offenders.append(f"{relative}: {tag}")
+            elif "logo-confenge-white" in tag and not re.search(r'\bloading="lazy"', tag, re.I):
+                offenders.append(f"{relative}: footer logo is not lazy")
+    assert pages > 100, f"expected the whole shipped chrome, scanned only {pages} pages"
+    assert not offenders, "oversized or eager brand logos:\n" + "\n".join(offenders[:20])
+
+
+def test_logo_templates_match_the_shipped_markup():
+    """Generated chrome must not reintroduce the 800x208 declaration on rebuild."""
+    for relative in (
+        "scripts/pseo/html_shell.py",
+        "scripts/market_answers/render.py",
+        "scripts/offers/render.cjs",
+        "scripts/site/inbound_first_remediate.py",
+    ):
+        source = (ROOT / relative).read_text(encoding="utf-8")
+        for tag in re.findall(r"<img\b[^>]*>", source, re.I):
+            if "logo-confenge" not in tag:
+                continue
+            width = re.search(r'\bwidth="(\d+)"', tag, re.I)
+            assert width and int(width.group(1)) <= 224, f"{relative} emits {tag}"
+
+
 def test_home_defers_below_fold_layout_work():
     """#185: the long home must not fully lay out every section at startup."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
