@@ -7,6 +7,9 @@ import { fileURLToPath } from "url";
 import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 
+// One .deliverable-feature per published example in the value ladder.
+const EXPECTED_EXAMPLES = 8;
+
 const require = createRequire(import.meta.url);
 const axeSource = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 const root = path.resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -92,7 +95,7 @@ for (const width of widths) {
   if (metrics.overflow) errors.push("document_overflow");
   if (metrics.h1Count !== 1 || !metrics.h1Text.includes("antes de contratar")) errors.push("hero_clarity");
   if (!metrics.heroCtaVisible || (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
-  if (!metrics.firstReportVisible || metrics.examples !== 1) errors.push("single_example");
+  if (!metrics.firstReportVisible || metrics.examples !== EXPECTED_EXAMPLES) errors.push("ladder_examples");
   if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 

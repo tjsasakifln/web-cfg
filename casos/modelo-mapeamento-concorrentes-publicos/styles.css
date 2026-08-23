@@ -1,0 +1,91 @@
+/* Acentos da página modelo de mapeamento de concorrentes.
+   O kit compartilhado vive em /assets/report-model.css; aqui ficam apenas
+   as variações que esta página, densa em tabelas, precisa. */
+
+/* Tabela em fundo claro. O kit entrega a variante escura por padrão. */
+.report-table.is-light { color: var(--r-ink); min-width: 0; }
+.report-table.is-light caption { color: var(--r-muted); }
+.report-table.is-light th,
+.report-table.is-light td { border-bottom: 1px solid var(--r-line); vertical-align: top; }
+.report-table.is-light thead th { color: var(--r-muted); }
+.report-table.is-light tbody th { color: var(--r-ink); font-weight: 800; white-space: normal; }
+.report-table.is-light tbody td { color: var(--r-text); line-height: 1.55; }
+.report-table.is-light tbody tr.is-go { background: rgba(45, 111, 45, .07); }
+.report-table.is-light tbody tr:last-child th,
+.report-table.is-light tbody tr:last-child td { border-bottom: 0; }
+
+/* Rodapé de tabela: subtotal do ranking. */
+.report-table tfoot th,
+.report-table tfoot td {
+  border-bottom: 0;
+  border-top: 2px solid rgba(255, 255, 255, .55);
+  color: #fff;
+  font-weight: 850;
+}
+
+/* Códigos de concorrente e de órgão em monoespaçado, para leitura de tabela. */
+.report-table tbody th[scope="row"] { font-family: var(--r-mono); letter-spacing: .02em; }
+.report-table.is-light tbody th[scope="row"] { font-family: inherit; letter-spacing: 0; }
+.report-table.is-light td:first-child,
+.report-table.is-light tbody tr > td:nth-child(4),
+.report-table.is-light tbody tr > td:nth-child(5) { font-family: var(--r-mono); font-size: .92em; }
+#dependencia .report-table.is-light tbody th[scope="row"] { font-family: var(--r-mono); }
+#ranking .report-table tbody th[scope="row"] { font-family: var(--r-mono); }
+
+/* Rotulagem epistêmica: fato, cálculo, inferência, incerteza. */
+.report-epistemic { list-style: none; margin: 34px 0 0; padding: 0; }
+.report-epistemic li {
+  border-top: 1px solid var(--r-line);
+  display: grid;
+  gap: 6px 22px;
+  grid-template-columns: 116px 1fr;
+  padding: 15px 0;
+}
+.report-epistemic li > span {
+  color: var(--r-green);
+  font-family: var(--r-mono);
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.report-epistemic p { color: var(--r-muted); line-height: 1.55; margin: 0; }
+.report-section-dark .report-epistemic li { border-top-color: rgba(255, 255, 255, .18); }
+.report-section-dark .report-epistemic li > span { color: var(--r-lime); }
+.report-section-dark .report-epistemic p { color: #cbd6df; }
+
+/* Listas do perfil de concorrente: presença observada e sete métricas. */
+.report-decision-sheet .report-rationale li,
+.report-decision-sheet .report-risk li { line-height: 1.5; }
+.report-decision-sheet .report-risk li { font-family: var(--r-mono); font-size: .88rem; }
+.report-decision-sheet .report-next li strong { color: var(--r-ink); }
+.report-proof .report-table-note { color: var(--r-muted); margin-top: 22px; }
+
+/* O gate aplicado no exemplo ganha respiro extra. */
+#unidade .report-constraint { margin-top: 40px; }
+#unidade .report-gates { margin-top: 34px; }
+
+/* Selo de classe de permissão dentro do aviso de dados sintéticos. */
+.report-disclaimer .case-badge {
+  color: var(--r-green);
+  font-family: var(--r-mono);
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .07em;
+  margin: 12px 0 0;
+}
+
+@media (max-width: 900px) {
+  .report-epistemic li { grid-template-columns: 1fr; }
+}
+
+/* Esta página é lida por tabelas. No celular elas continuam disponíveis,
+   com rolagem horizontal própria, em vez de desaparecerem. */
+@media (max-width: 620px) {
+  .report-table-wrap { display: block; }
+  .report-table-note { display: block; }
+  .report-table { font-size: .84rem; min-width: 620px; }
+  .report-table.is-light { min-width: 0; }
+  .report-table th,
+  .report-table td { padding: 12px 10px; }
+  .report-disclaimer .case-badge { line-height: 1.5; }
+}

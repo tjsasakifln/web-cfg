@@ -1,0 +1,134 @@
+/* Acentos da página modelo de contratos vincendos e recontratação.
+   O kit compartilhado vem de /assets/report-model.css; aqui ficam só os
+   componentes exclusivos deste entregável. */
+
+.report-table tfoot th,
+.report-table tfoot td {
+  border-top: 2px solid rgba(206, 214, 42, .55);
+  color: #fff;
+  font-family: var(--r-mono);
+  font-size: .86rem;
+  font-weight: 800;
+}
+
+.vinc-null {
+  align-items: baseline;
+  background: rgba(206, 214, 42, .09);
+  border-left: 5px solid var(--r-lime);
+  display: grid;
+  gap: 6px 22px;
+  grid-template-columns: auto auto 1fr;
+  margin-top: 36px;
+  padding: 24px 26px;
+}
+.vinc-null span {
+  color: var(--r-lime);
+  font-family: var(--r-mono);
+  font-size: .74rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+.vinc-null strong { color: #fff; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.03em; }
+.vinc-null p { color: #d1dce5; grid-column: 1 / -1; line-height: 1.6; margin: 4px 0 0; max-width: 78ch; }
+
+.vinc-table-wrap { margin-top: 40px; overflow-x: auto; }
+.vinc-rules { border-collapse: collapse; min-width: 520px; width: 100%; }
+.vinc-rules caption { color: var(--r-muted); font-size: .82rem; padding-bottom: 12px; text-align: left; }
+.vinc-rules thead th {
+  border-bottom: 2px solid var(--r-green);
+  color: var(--r-green);
+  font-family: var(--r-mono);
+  font-size: .72rem;
+  letter-spacing: .08em;
+  padding: 0 14px 10px 0;
+  text-align: left;
+  text-transform: uppercase;
+}
+.vinc-rules tbody th {
+  border-top: 1px solid var(--r-line);
+  color: var(--r-ink);
+  font-size: .94rem;
+  font-weight: 850;
+  padding: 16px 24px 16px 0;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.vinc-rules tbody td {
+  border-top: 1px solid var(--r-line);
+  color: var(--r-text);
+  line-height: 1.58;
+  padding: 16px 0;
+  vertical-align: top;
+}
+
+.vinc-funnel {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(4, 1fr);
+  list-style: none;
+  margin: 36px 0 0;
+  padding: 0;
+}
+.vinc-funnel li { border-left: 1px solid var(--r-line); padding: 14px 16px; }
+.vinc-funnel li:first-child { border-left: 3px solid var(--r-green); }
+.vinc-funnel span {
+  color: var(--r-ink);
+  display: block;
+  font-family: var(--r-mono);
+  font-size: 1.7rem;
+  font-weight: 850;
+  letter-spacing: -.04em;
+}
+.vinc-funnel strong { color: var(--r-muted); display: block; font-size: .82rem; font-weight: 700; line-height: 1.4; margin-top: 6px; }
+
+.vinc-note { color: var(--r-muted); font-size: .89rem; line-height: 1.6; margin: 18px 0 0; max-width: 78ch; }
+.report-section-dark .vinc-note { color: #aebcca; }
+
+.vinc-bands { display: grid; gap: 0; list-style: none; margin: 34px 0 0; padding: 0; }
+.vinc-bands li { border-top: 1px solid var(--r-line); display: grid; gap: 4px 20px; grid-template-columns: 130px minmax(0, 1fr); padding: 16px 0; }
+.vinc-bands span { color: var(--r-green); font-family: var(--r-mono); font-size: .8rem; font-weight: 850; }
+.vinc-bands strong { color: var(--r-ink); }
+.vinc-bands p { color: var(--r-muted); grid-column: 2; line-height: 1.5; margin: 0; }
+.vinc-bands .is-current { background: #fff; border-left: 4px solid var(--r-green); padding-left: 16px; }
+
+.vinc-claims p { color: var(--r-text); line-height: 1.6; margin: 0 0 14px; }
+.vinc-claims p:last-child { margin-bottom: 0; }
+.vinc-claims strong { color: var(--r-green); font-family: var(--r-mono); font-size: .76rem; letter-spacing: .06em; }
+
+.vinc-limitation {
+  background: #fff;
+  border-left: 5px solid var(--r-green);
+  color: var(--r-text);
+  line-height: 1.6;
+  margin: 34px 0 0;
+  padding: 22px 25px;
+}
+.vinc-limitation strong { color: var(--r-green); font-family: var(--r-mono); font-size: .78rem; letter-spacing: .06em; }
+
+.case-badge {
+  background: #fef3c7;
+  border-radius: 4px;
+  color: #92400e;
+  display: inline-block;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  margin: 14px 0 0;
+  padding: .3rem .6rem;
+}
+
+@media (max-width: 900px) {
+  .vinc-funnel { grid-template-columns: repeat(2, 1fr); }
+  .vinc-funnel li:nth-child(3) { border-left: 3px solid var(--r-green); }
+}
+
+@media (max-width: 620px) {
+  .vinc-null { display: block; padding: 20px; }
+  .vinc-null strong { display: block; margin-top: 4px; }
+  .vinc-rules tbody th { padding-bottom: 6px; padding-right: 0; white-space: normal; }
+  .vinc-rules tbody td { border-top: 0; padding-top: 0; }
+  .vinc-bands li { grid-template-columns: 1fr; }
+  .vinc-bands p { grid-column: 1; }
+  .vinc-bands .is-current { padding-left: 12px; }
+}

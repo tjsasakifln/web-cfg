@@ -1,0 +1,53 @@
+/* Acentos da página /casos/modelo-mapa-compradores-publicos/.
+   O kit compartilhado vive em /assets/report-model.css e não é alterado aqui. */
+
+.case-badge { background: #fef3c7; border-radius: 4px; color: #92400e; display: inline-block; font-family: var(--r-mono); font-size: .72rem; font-weight: 800; letter-spacing: .06em; margin: 24px 0 0; padding: .35rem .6rem; }
+
+/* Tabelas claras de regra (universo e subpesos do score). */
+.map-rules { border-collapse: collapse; color: var(--r-text); min-width: 760px; width: 100%; }
+.map-rules caption { color: var(--r-muted); font-size: .82rem; padding-bottom: 14px; text-align: left; }
+.map-rules th, .map-rules td { border-bottom: 1px solid var(--r-line); padding: 14px 12px; text-align: left; vertical-align: top; }
+.map-rules thead th { color: var(--r-green); font-family: var(--r-mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+.map-rules tbody th { color: var(--r-ink); font-weight: 800; white-space: nowrap; }
+.map-rules tbody td { line-height: 1.5; }
+.report-section-content > .report-table-wrap { margin-top: 42px; }
+
+/* Rótulos epistêmicos: FATO, CÁLCULO, INFERÊNCIA, INCERTEZA, AÇÃO. */
+.map-claims { border-bottom: 1px solid var(--r-line); margin: 38px 0 0; }
+.map-claims > div { border-top: 1px solid var(--r-line); display: grid; gap: 24px; grid-template-columns: 150px 1fr; padding: 16px 0; }
+.map-claims dt { color: var(--r-green); font-family: var(--r-mono); font-size: .74rem; font-weight: 900; letter-spacing: .08em; }
+.map-claims dd { color: var(--r-ink); line-height: 1.6; margin: 0; }
+.map-claims-dark { border-color: rgba(255, 255, 255, .2); }
+.map-claims-dark > div { border-color: rgba(255, 255, 255, .2); }
+.map-claims-dark dt { color: var(--r-lime); }
+.map-claims-dark dd { color: #d5dfe8; }
+
+/* Faixas de prioridade e notas de cálculo. */
+.map-bands { border-left: 3px solid var(--r-lime); margin-top: 26px; padding-left: 16px; }
+.map-bands p { color: #cbd6df; font-size: .92rem; line-height: 1.55; margin: 0; }
+.map-bands strong { color: #fff; }
+.map-note { color: var(--r-muted); font-size: .86rem; line-height: 1.55; margin: 16px 0 0; }
+
+/* Sazonalidade: 12 meses somando 118 contratos. */
+.map-season { list-style: none; margin: 40px 0 0; padding: 0; }
+.map-season li { align-items: center; background: linear-gradient(90deg, rgba(206, 214, 42, .3) var(--bar), transparent var(--bar)); border-bottom: 1px solid rgba(255, 255, 255, .16); display: grid; gap: 14px; grid-template-columns: 62px 1fr 62px; min-height: 44px; padding: 6px 10px; }
+.map-season span { color: #aebcca; font-family: var(--r-mono); font-size: .76rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.map-season strong { color: #fff; font-size: 1.05rem; font-weight: 850; }
+.map-season em { color: #cbd6df; font-family: var(--r-mono); font-size: .78rem; font-style: normal; text-align: right; }
+
+.report-constraint a { color: var(--r-green); font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
+.report-decision-sheet .report-rationale li,
+.report-decision-sheet .report-next li { line-height: 1.6; }
+
+@media (max-width: 700px) {
+  .map-claims > div { gap: 6px; grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  /* A referência esconde a tabela de carteira no telefone porque tem lista equivalente.
+     Aqui as tabelas de regra não têm equivalente, então continuam visíveis com rolagem. */
+  .report-table-wrap.map-wrap { display: block; }
+  .map-rules { min-width: 620px; }
+  #ranking .report-table-note { display: block; }
+  .map-season li { grid-template-columns: 48px 1fr 54px; }
+}

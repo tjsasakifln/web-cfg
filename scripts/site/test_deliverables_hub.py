@@ -15,6 +15,17 @@ PAGE = ROOT / "entregas" / "index.html"
 CSS = PAGE.with_name("styles.css")
 REPORT_ROUTE = "/casos/modelo-relatorio-inteligencia-licitacoes/"
 REPORT = ROOT / REPORT_ROUTE.strip("/") / "index.html"
+# Ascending value ladder, anchored on the published R$ 599 report.
+LADDER_ROUTES = [
+    REPORT_ROUTE,
+    "/casos/modelo-base-quantitativa-canonica/",
+    "/casos/modelo-apresentacao-executiva-resultados/",
+    "/casos/modelo-mapa-compradores-publicos/",
+    "/casos/modelo-contratos-vincendos-relicitacao/",
+    "/casos/modelo-mapeamento-concorrentes-publicos/",
+    "/casos/modelo-painel-precos-obras-publicas/",
+    "/casos/modelo-relatorio-executivo-consolidado/",
+]
 EXPECTED_NAV = [
     "Serviços",
     "Problemas que resolvemos",
@@ -94,11 +105,11 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
     assert html.count("<h1") == 1
 
 
-def test_hub_is_honest_about_one_complete_example() -> None:
+def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
         "Conheça nossas entregas",
-        "1 exemplo disponível",
+        "8 exemplos disponíveis",
         "Primeiro exemplo publicado",
         "Relatório Executivo de Priorização de Licitações",
         "Consultar o relatório completo",
@@ -109,14 +120,26 @@ def test_hub_is_honest_about_one_complete_example() -> None:
         "R$ 599 por unidade",
     ):
         assert phrase in html
-    assert f'href="{REPORT_ROUTE}"' in html
-    assert "EXEMPLO 02" not in html
+    for route in LADDER_ROUTES:
+        assert f'href="{route}"' in html, route
     assert "em breve" not in html.casefold()
     assert "placeholder" not in html.casefold()
-    assert html.count('class="deliverable-feature"') == 1
+    assert html.count('class="deliverable-feature"') == len(LADDER_ROUTES)
+    assert [f"EXEMPLO 0{n}" for n in range(1, 9)] == [
+        f"EXEMPLO 0{n}" for n in range(1, 9) if f"EXEMPLO 0{n}" in html
+    ]
+    assert "EXEMPLO 09" not in html
 
 
-def test_schema_describes_a_single_item_collection_and_breadcrumb() -> None:
+def test_hub_states_the_bundle_without_replacing_the_unit_prices() -> None:
+    html = _html()
+    assert 'href="/diagnostico-b2g-expansao/"' in html
+    assert "R$ 8.000" in html
+    for price in ("R$ 599", "R$ 690", "R$ 890", "R$ 1.200", "R$ 1.450", "R$ 1.900", "R$ 2.400", "R$ 3.750"):
+        assert price in html, price
+
+
+def test_schema_describes_the_full_collection_and_breadcrumb() -> None:
     graph = _jsonld_graph()
     types = {node.get("@type") for node in graph}
     assert {"CollectionPage", "ItemList", "BreadcrumbList"}.issubset(types)
@@ -124,9 +147,12 @@ def test_schema_describes_a_single_item_collection_and_breadcrumb() -> None:
     item_list = next(node for node in graph if node.get("@type") == "ItemList")
     breadcrumb = next(node for node in graph if node.get("@type") == "BreadcrumbList")
     assert collection["url"] == CANONICAL
-    assert item_list["numberOfItems"] == 1
-    assert len(item_list["itemListElement"]) == 1
+    assert item_list["numberOfItems"] == len(LADDER_ROUTES)
+    assert len(item_list["itemListElement"]) == len(LADDER_ROUTES)
     assert item_list["itemListElement"][0]["url"].endswith(REPORT_ROUTE)
+    listed = [entry["url"] for entry in item_list["itemListElement"]]
+    for route in LADDER_ROUTES:
+        assert any(url.endswith(route) for url in listed), route
     assert breadcrumb["itemListElement"][-1]["item"] == CANONICAL
 
 
