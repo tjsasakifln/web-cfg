@@ -11,6 +11,39 @@
       const estagioEl = form.querySelector('#estagio');
       const urgenciaEl = form.querySelector('#urgencia');
       const nomeEl = form.querySelector('#nome');
+      const receiptRequired = form.getAttribute('data-receipt-required') === 'true';
+
+      const receiptStorageKey = () => {
+        const asset = (form.querySelector('[name="asset_id"]')?.value || 'form').slice(0, 80);
+        const cta = (form.querySelector('[name="cta_id"]')?.value || 'submit').slice(0, 80);
+        return `confenge_idem:${pagePath}:${asset}:${cta}`;
+      };
+      const newIdempotencyKey = () => {
+        try {
+          if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+            return `fe-${window.crypto.randomUUID()}`;
+          }
+          if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+            const bytes = new Uint32Array(4);
+            window.crypto.getRandomValues(bytes);
+            return `fe-${Array.from(bytes, (n) => n.toString(36)).join('-')}`;
+          }
+        } catch (_) { /* fallback below */ }
+        return `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+      };
+      const ensureReceiptIdempotency = () => {
+        if (!receiptRequired) return '';
+        const input = form.querySelector('[name="idempotency_key"]');
+        let key = (input?.value || '').trim();
+        try {
+          key = key || sessionStorage.getItem(receiptStorageKey()) || '';
+        } catch (_) { /* private mode */ }
+        key = key || newIdempotencyKey();
+        ensureHidden('idempotency_key', key, true);
+        try { sessionStorage.setItem(receiptStorageKey(), key); } catch (_) { /* private mode */ }
+        return key;
+      };
+      ensureReceiptIdempotency();
 
       const showFormStatus = (msg, kind) => {
         if (!statusEl) return;
@@ -233,7 +266,9 @@
         // then FormSubmit/Netlify Forms, then WhatsApp operational fallback.
         if (typeof window.fetch === 'function' && form.getAttribute('data-ajax') !== 'false') {
           event.preventDefault();
-          const dest = JOURNEY_ACTIONS[journey] || form.getAttribute('action') || '/obrigado';
+          const dest = form.getAttribute('data-success-destination')
+            || JOURNEY_ACTIONS[journey]
+            || '/obrigado';
           const fd = new FormData(form);
           if (!fd.get('form-name')) fd.set('form-name', form.getAttribute('name') || 'diagnostico-b2g');
           if (!fd.get('jornada')) fd.set('jornada', journey || '');
@@ -302,10 +337,9 @@
             }
           };
           // Idempotency key for double-submit protection (server-side)
-          try {
-            payload.idempotency_key = payload.idempotency_key
-              || `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-          } catch (_) { /* ignore */ }
+          payload.idempotency_key = payload.idempotency_key
+            || ensureReceiptIdempotency()
+            || `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
           // Attribution already injected into hidden fields; ensure landing
           if (!payload.landing_page) payload.landing_page = pagePath;
           // Turnstile token if widget present
@@ -315,7 +349,11 @@
             payload['cf-turnstile-response'] = turnstileInput.value;
           }
           const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-          const timeoutId = controller ? setTimeout(() => controller.abort(), 15000) : null;
+          const configuredTimeout = Number(form.getAttribute('data-submit-timeout-ms') || 15000);
+          const submitTimeout = Number.isFinite(configuredTimeout)
+            ? Math.min(30000, Math.max(1000, configuredTimeout))
+            : 15000;
+          const timeoutId = controller ? setTimeout(() => controller.abort(), submitTimeout) : null;
           fetch('/.netlify/functions/lead', {
             method: 'POST',
             headers: {

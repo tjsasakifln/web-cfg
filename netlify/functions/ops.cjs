@@ -54,6 +54,7 @@ const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require("./
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
 const {
   drainPendingHandoffs,
+  evaluateCanaryRecord,
   resolveInboundConfig,
   summarizeHandoffs,
   auditSkippedHandoffs,
@@ -765,11 +766,30 @@ exports.handler = async (event) => {
     const events = await loadRecentAnalytics(event);
     const money_asset = summarizeMoneyAssetLoop(events, leads);
     const inboundConfig = resolveInboundConfig(process.env);
+    const canaryConfig = evaluateCanaryRecord(
+      { asset_id: "diagnostico-defesa-margem", record_kind: "real" },
+      process.env,
+    );
+    const requestedLeadId = String(event.queryStringParameters?.lead_id || "").trim();
+    const requestedLead = /^[a-zA-Z0-9_-]{8,160}$/.test(requestedLeadId)
+      ? await store.get(requestedLeadId)
+      : null;
     const configuration = {
+      canary_enabled: /^(1|true|yes|on)$/i.test(String(process.env.CONFENGE_INBOUND_CANARY_ENABLED || "")) ? "SET" : "UNSET",
+      canary_asset_id: process.env.CONFENGE_INBOUND_CANARY_ASSET_ID || null,
+      synthetic_canary_enabled: /^(1|true|yes|on)$/i.test(String(process.env.CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED || "")) ? "SET" : "UNSET",
       webhook_url: process.env.CONFENGE_INBOUND_WEBHOOK_URL ? "SET" : "UNSET",
       webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
-      contract: inboundConfig.ok ? "READY" : inboundConfig.skip ? "UNSET" : "BLOCKED",
-      reason: inboundConfig.ok ? null : inboundConfig.reason || "UNKNOWN",
+      contract:
+        canaryConfig.status === "PENDING" && inboundConfig.ok
+          ? "READY"
+          : canaryConfig.status === "SKIPPED"
+            ? "UNSET"
+            : "BLOCKED",
+      reason:
+        canaryConfig.status === "PENDING" && inboundConfig.ok
+          ? null
+          : canaryConfig.reason || inboundConfig.reason || "UNKNOWN",
     };
     return json(
       200,
@@ -778,6 +798,27 @@ exports.handler = async (event) => {
         counters,
         money_asset,
         configuration,
+        receipt: requestedLead
+          ? {
+              lead_id: requestedLead.lead_id,
+              receipt_id: requestedLead.receipt_id || requestedLead.lead_id,
+              record_kind: requestedLead.record_kind || "real",
+              source: requestedLead.source || "CONFENGE_WEB",
+              asset_id: requestedLead.asset_id || null,
+              route_family: requestedLead.route_family || null,
+              cta_id: requestedLead.cta_id || null,
+              handoff: requestedLead.handoff
+                ? {
+                    status: requestedLead.handoff.status,
+                    attempts: requestedLead.handoff.attempts,
+                    delivered_at: requestedLead.handoff.delivered_at || null,
+                    downstream: requestedLead.handoff.downstream || null,
+                    last_error: requestedLead.handoff.last_error || null,
+                    next_attempt_at: requestedLead.handoff.next_attempt_at || null,
+                  }
+                : null,
+            }
+          : null,
         ts: new Date().toISOString(),
         note: "Operational counters only. No PII. Warmbly auto-send is not controlled here.",
       },

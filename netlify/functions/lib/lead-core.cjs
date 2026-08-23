@@ -80,6 +80,20 @@ const ATTR_ALLOWLIST = [
   "terms_id",
 ];
 
+const ATTR_LOCATION_KEYS = new Set([
+  "origem",
+  "origin_url",
+  "landing_url",
+  "landing_page",
+  "referrer",
+]);
+
+// Attribution identifiers are machine-readable dimensions, not free text. Keeping
+// them token-shaped prevents a visitor name/message from being smuggled into logs
+// or analytics through a UTM/data-* field.
+const ATTR_TOKEN_RE = /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/;
+const ATTR_PATH_RE = /^\/[A-Za-z0-9._~!$&'()*+,;=:@/-]*$/;
+
 function looksLikePii(value, key) {
   const s = String(value || "");
   if (!s) return false;
@@ -94,8 +108,31 @@ function looksLikePii(value, key) {
 function sanitizeAttributionValue(val, maxLen, key) {
   if (val == null) return "";
   const s = stripControl(val).slice(0, maxLen || 180);
-  if (!s || looksLikePii(s, key)) return "";
+  if (!s || looksLikePii(s, key) || !ATTR_TOKEN_RE.test(s)) return "";
   return s;
+}
+
+function sanitizeAttributionLocation(val, maxLen, key) {
+  if (val == null) return "";
+  const raw = stripControl(val).slice(0, maxLen || 240);
+  if (!raw) return "";
+
+  try {
+    // Absolute URLs retain only scheme/host/path. Query and fragment are never
+    // attribution storage because they can contain email, phone or message text.
+    const url = new URL(raw);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+    const clean = `${url.origin}${url.pathname}`.slice(0, maxLen || 240);
+    return looksLikePii(clean, key) ? "" : clean;
+  } catch {
+    // Same-site paths are stored without query/fragment; plain origin slugs use
+    // the same strict token contract as the remaining attribution dimensions.
+    if (raw.startsWith("/")) {
+      const path = raw.split(/[?#]/, 1)[0].slice(0, maxLen || 240);
+      return path && !looksLikePii(path, key) && ATTR_PATH_RE.test(path) ? path : "";
+    }
+    return sanitizeAttributionValue(raw, maxLen, key);
+  }
 }
 
 /**
@@ -107,7 +144,9 @@ function pickAttribution(data) {
   for (const key of ATTR_ALLOWLIST) {
     if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
     const max = MAX_FIELD[key] || 180;
-    const v = sanitizeAttributionValue(src[key], max, key);
+    const v = ATTR_LOCATION_KEYS.has(key)
+      ? sanitizeAttributionLocation(src[key], max, key)
+      : sanitizeAttributionValue(src[key], max, key);
     if (v) out[key] = v;
   }
   return out;
@@ -329,17 +368,34 @@ function validateAndNormalize(data) {
     urgencia: clamp(data.urgencia, MAX_FIELD.urgencia) || null,
     mensagem: clamp(data.mensagem || data.message, MAX_FIELD.mensagem) || null,
     consentimento: true,
-    origem: clamp(data.origem, MAX_FIELD.origem) || null,
+    origem: sanitizeAttributionLocation(data.origem, MAX_FIELD.origem, "origem") || null,
     landing_page:
-      clamp(data.landing_page || data.landing || data.landing_url, MAX_FIELD.landing_page) || null,
-    landing_url: clamp(data.landing_url || data.landing_page, MAX_FIELD.landing_url) || null,
-    referrer: clamp(data.referrer || data.ref, MAX_FIELD.referrer) || null,
-    utm_source: clamp(data.utm_source, MAX_FIELD.utm_source) || null,
-    utm_medium: clamp(data.utm_medium, MAX_FIELD.utm_medium) || null,
-    utm_campaign: clamp(data.utm_campaign, MAX_FIELD.utm_campaign) || null,
-    utm_content: clamp(data.utm_content, MAX_FIELD.utm_content) || null,
-    utm_term: clamp(data.utm_term, MAX_FIELD.utm_term) || null,
-    content_cluster: clamp(data.content_cluster, MAX_FIELD.content_cluster) || null,
+      sanitizeAttributionLocation(
+        data.landing_page || data.landing || data.landing_url,
+        MAX_FIELD.landing_page,
+        "landing_page",
+      ) || null,
+    landing_url:
+      sanitizeAttributionLocation(
+        data.landing_url || data.landing_page,
+        MAX_FIELD.landing_url,
+        "landing_url",
+      ) || null,
+    referrer:
+      sanitizeAttributionLocation(data.referrer || data.ref, MAX_FIELD.referrer, "referrer") || null,
+    utm_source: sanitizeAttributionValue(data.utm_source, MAX_FIELD.utm_source, "utm_source") || null,
+    utm_medium: sanitizeAttributionValue(data.utm_medium, MAX_FIELD.utm_medium, "utm_medium") || null,
+    utm_campaign:
+      sanitizeAttributionValue(data.utm_campaign, MAX_FIELD.utm_campaign, "utm_campaign") || null,
+    utm_content:
+      sanitizeAttributionValue(data.utm_content, MAX_FIELD.utm_content, "utm_content") || null,
+    utm_term: sanitizeAttributionValue(data.utm_term, MAX_FIELD.utm_term, "utm_term") || null,
+    content_cluster:
+      sanitizeAttributionValue(
+        data.content_cluster,
+        MAX_FIELD.content_cluster,
+        "content_cluster",
+      ) || null,
     route_family: sanitizeAttributionValue(data.route_family, MAX_FIELD.route_family, "route_family") || null,
     cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id, "cta_id") || null,
     asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id") || null,
@@ -423,24 +479,34 @@ function technicalFingerprint(event, lead) {
   return crypto.createHash("sha256").update(material).digest("hex").slice(0, 16);
 }
 
+function probeAuthorized(event, env = process.env) {
+  const h = (event && event.headers) || {};
+  const provided = String(h["x-confenge-probe"] || h["X-Confenge-Probe"] || "");
+  const expected = String(env.LEAD_PROBE_SECRET || "");
+  if (!provided || expected.length < 16) return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
 function originAllowed(event) {
   const h = event.headers || {};
   const origin = String(h.origin || h.Origin || "").trim();
   const referer = String(h.referer || h.Referer || "").trim();
-  if (origin && ALLOWED_ORIGINS.has(origin)) return { ok: true, origin };
+  const probe = probeAuthorized(event);
+  if (origin && ALLOWED_ORIGINS.has(origin)) return { ok: true, origin, probe };
   // Same-site form posts may omit Origin; allow if Referer is our host
   if (!origin && referer) {
     try {
       const u = new URL(referer);
       const base = `${u.protocol}//${u.host}`;
-      if (ALLOWED_ORIGINS.has(base)) return { ok: true, origin: base };
+      if (ALLOWED_ORIGINS.has(base)) return { ok: true, origin: base, probe };
     } catch {
       /* ignore */
     }
   }
   // Netlify scheduled/synthetic probes without browser origin (ops only when header set)
-  const probe = h["x-confenge-probe"] || h["X-Confenge-Probe"];
-  if (probe && process.env.LEAD_PROBE_SECRET && probe === process.env.LEAD_PROBE_SECRET) {
+  if (probe) {
     return { ok: true, origin: "https://confenge.com.br", probe: true };
   }
   if (origin && !ALLOWED_ORIGINS.has(origin)) {
@@ -528,6 +594,7 @@ module.exports = {
   ALLOWED_JOURNEYS,
   looksLikePii,
   sanitizeAttributionValue,
+  sanitizeAttributionLocation,
   pickAttribution,
   parseBody,
   isHoneypot,
@@ -537,6 +604,7 @@ module.exports = {
   idempotencyKeyFor,
   clientIp,
   technicalFingerprint,
+  probeAuthorized,
   originAllowed,
   corsHeaders,
   publicSuccessBody,

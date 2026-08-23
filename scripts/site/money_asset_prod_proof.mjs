@@ -2,8 +2,8 @@
  * Honest Money Asset production proof.
  *
  * Proves only what this environment can reach. Never invents INBOUND NOW.
- * Synthetic/qa only. Persist-first capture may succeed while Warmbly is SKIPPED
- * (non-real records never mint a commercial inbound action).
+ * Synthetic/qa only. The production canary may cross to Warmbly only when the
+ * server-side synthetic flag and authenticated probe header both pass.
  *
  * Usage:
  *   node scripts/site/money_asset_prod_proof.mjs [baseUrl] [out.json]
@@ -52,7 +52,7 @@ const report = {
   steps: {},
   remaining_commands: [],
   note:
-    "A 201 on local/public capture is not INBOUND NOW. Synthetic/qa records persist and SKIP Warmbly by design.",
+    "A capture 201 is not completion. DONE requires the same synthetic lead_id in the authenticated web-cfg receipt and the stored Warmbly downstream receipt.",
 };
 
 try {
@@ -178,7 +178,8 @@ try {
 
 if (opsToken) {
   try {
-    const res = await fetch(`${base}/.netlify/functions/ops?action=inbound_handoff`, {
+    const receiptQuery = report.lead_id ? `&lead_id=${encodeURIComponent(report.lead_id)}` : "";
+    const res = await fetch(`${base}/.netlify/functions/ops?action=inbound_handoff${receiptQuery}`, {
       headers: { Authorization: `Bearer ${opsToken}`, Origin: "https://confenge.com.br" },
     });
     const data = await res.json().catch(() => ({}));
@@ -197,6 +198,28 @@ if (opsToken) {
       pii: pii,
       counters: data.counters || null,
       money_asset: chain || null,
+      configuration: data.configuration || null,
+    });
+    const receipt = data.receipt;
+    const exactDelivered =
+      receipt &&
+      receipt.lead_id === report.lead_id &&
+      receipt.receipt_id === report.lead_id &&
+      receipt.record_kind === "synthetic" &&
+      receipt.source === "CONFENGE_WEB" &&
+      receipt.asset_id === "diagnostico-defesa-margem" &&
+      receipt.handoff?.status === "DELIVERED" &&
+      Boolean(receipt.handoff?.downstream?.downstream_receipt);
+    report.steps.reconciled_receipt = step(exactDelivered ? "PROVEN" : "BLOCKED", {
+      same_lead_id: Boolean(receipt && receipt.lead_id === report.lead_id),
+      record_kind: receipt?.record_kind || null,
+      source: receipt?.source || null,
+      asset_id: receipt?.asset_id || null,
+      handoff_status: receipt?.handoff?.status || null,
+      attempts: receipt?.handoff?.attempts ?? null,
+      warmbly_receipt: receipt?.handoff?.downstream?.downstream_receipt || null,
+      warmbly_action: receipt?.handoff?.downstream?.action_id || null,
+      synthetic_excluded_from_real_pipeline: receipt?.record_kind === "synthetic",
     });
   } catch (err) {
     report.steps.ops_counters = step("BLOCKED", { error: String(err && err.message ? err.message : err).slice(0, 160) });
@@ -231,32 +254,32 @@ if (inboundUrl && inboundSecret) {
   });
 }
 
-// Synthetic records SKIP Warmbly. INBOUND NOW cannot be proven by this probe.
-report.steps.inbound_now = step("BLOCKED", {
-  reason:
-    "Shipped rule: synthetic/qa persist and do not POST Warmbly. This probe is labeled SYNTHETIC-INBOUND / @example.com so it cannot mint INBOUND NOW.",
-  next_irreversible_proof:
-    "A real qualified lead from /ferramentas/diagnostico-defesa-margem/ (or a real rejection), with inbound URL+secret live, auto-send OFF, same lead_id on receipt and Warmbly INBOUND NOW.",
+const reconciled = report.steps.reconciled_receipt?.status === "PROVEN";
+report.steps.inbound_pipeline = step(reconciled ? "PROVEN" : "BLOCKED", {
+  scope: "synthetic_transport_pipeline_only",
+  real_pipeline_increment: false,
+  reason: reconciled
+    ? "Same synthetic receipt persisted in web-cfg and Warmbly; excluded from real commercial denominators."
+    : "No exact persisted web-cfg receipt → Warmbly receipt reconciliation.",
 });
 
 report.steps.commercial_send = step("PROVEN", {
-  note: "Probe is synthetic/qa; shipped handoff skips non-real. No commercial send attempted by this harness.",
+  note: "Probe is synthetic and Warmbly auto-send must be off. No commercial contact is attempted.",
 });
 
 report.remaining_commands = [
-  "Netlify production: set CONFENGE_INBOUND_WEBHOOK_URL + CONFENGE_INBOUND_WEBHOOK_SECRET (HTTPS inbound path, no query PII).",
+  "Netlify production: set canary enabled + exact asset + inbound URL/secret; enable synthetic canary only for the approved proof window.",
   "Warmbly: deploy inbound ingest, set the same secret, CONFENGE_AUTO_SEND_ENABLED=false.",
   "export OPS_TOKEN='<production ops token>'",
   "export CONFENGE_AUTO_SEND_EVIDENCE=OFF",
   "node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br",
-  "GET /.netlify/functions/ops?action=inbound_handoff (auth) and reconcile receipt lead_id. Synthetic remains SKIPPED.",
-  "Next irreversible proof: one real qualified money-asset lead or a real rejection — do not invent one.",
+  "GET /.netlify/functions/ops?action=inbound_handoff&lead_id=<receipt> (auth) and reconcile the exact Warmbly receipt.",
+  "After proof: set CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED=0; retain/archive the row as synthetic so real denominators remain unchanged.",
 ];
 
 const captureOk = report.steps.capture && report.steps.capture.status === "PROVEN";
 const replayOk = report.steps.replay && report.steps.replay.status === "PROVEN";
-const inboundNow = report.steps.inbound_now && report.steps.inbound_now.status === "PROVEN";
-report.ok = Boolean(captureOk && replayOk && inboundNow && autoSendOff);
+report.ok = Boolean(captureOk && replayOk && reconciled && autoSendOff);
 report.proven_as = report.ok
   ? "full_loop"
   : captureOk && replayOk

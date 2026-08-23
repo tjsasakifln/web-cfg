@@ -27,6 +27,10 @@ delete process.env.CONTEXT;
 delete process.env.NETLIFY_CONTEXT;
 
 const SECRET = "inbound-test-secret-not-for-prod";
+const CANARY_ENV = {
+  CONFENGE_INBOUND_CANARY_ENABLED: "1",
+  CONFENGE_INBOUND_CANARY_ASSET_ID: "diagnostico-defesa-margem",
+};
 const PII_QUERY_KEYS = [
   "email",
   "nome",
@@ -112,9 +116,11 @@ const inbound = loadInbound();
     utm_medium: "cpc",
     mensagem: "Quero uma segunda leitura",
     correlation_id: "corr-1",
+    record_kind: "synthetic",
   });
   if (mapped.lead_id !== "abc123abc123abc123abc123") fail("map_lead_id", mapped);
   if (mapped.receipt_id !== mapped.lead_id) fail("map_receipt", mapped);
+  if (mapped.record_kind !== "synthetic") fail("map_record_kind", mapped);
   if (mapped.source !== "CONFENGE_WEB") fail("map_source", mapped.source);
   if (mapped.landing_url !== "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/") {
     fail("map_landing_url", mapped.landing_url);
@@ -157,6 +163,7 @@ const inbound = loadInbound();
 
 {
   const prod = inbound.resolveInboundConfig({
+    ...CANARY_ENV,
     NODE_ENV: "production",
     CONTEXT: "production",
     CONFENGE_INBOUND_WEBHOOK_URL: "http://evil.example/api/v1/webhooks/confenge/inbound",
@@ -164,18 +171,20 @@ const inbound = loadInbound();
   });
   if (prod.ok || !prod.blocked || prod.reason !== "https_required") fail("fail_closed_http", prod);
   const noSecret = inbound.resolveInboundConfig({
+    ...CANARY_ENV,
     NODE_ENV: "production",
     CONFENGE_INBOUND_WEBHOOK_URL: "https://ops.example/api/v1/webhooks/confenge/inbound",
   });
   if (noSecret.ok || !noSecret.blocked) fail("fail_closed_secret", noSecret);
   const piiUrl = inbound.resolveInboundConfig({
+    ...CANARY_ENV,
     CONFENGE_INBOUND_WEBHOOK_URL:
       "https://ops.example/api/v1/webhooks/confenge/inbound?email=a@b.com",
     CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
   });
   if (piiUrl.ok || !piiUrl.blocked) fail("fail_closed_query_pii", piiUrl);
   const missing = inbound.resolveInboundConfig({});
-  if (!missing.skip) fail("unconfigured_skip", missing);
+  if (!missing.skip || missing.reason !== "not_configured") fail("unconfigured_skip", missing);
   const wrongHost = inbound.resolveInboundConfig({
     CONFENGE_INBOUND_WEBHOOK_URL: "https://ops.example/api/v1/webhooks/confenge/inbound",
     CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
@@ -187,6 +196,24 @@ const inbound = loadInbound();
     CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
   });
   if (wrongPath.ok || wrongPath.reason !== "invalid_path") fail("fail_closed_wrong_path", wrongPath);
+  const flagOff = inbound.evaluateCanaryRecord({ asset_id: "diagnostico-defesa-margem", record_kind: "real" }, {});
+  if (flagOff.status !== "SKIPPED" || flagOff.reason !== "flag_disabled") fail("canary_flag", flagOff);
+  const wrongScope = inbound.evaluateCanaryRecord({ asset_id: "diagnostico-defesa-margem", record_kind: "real" }, {
+    ...CANARY_ENV,
+    CONFENGE_INBOUND_CANARY_ASSET_ID: "all-pages",
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+  });
+  if (wrongScope.status !== "BLOCKED" || wrongScope.reason !== "canary_scope_invalid") fail("canary_scope", wrongScope);
+  const outside = inbound.evaluateCanaryRecord(
+    { asset_id: "diretoria-b2g", record_kind: "real" },
+    {
+      ...CANARY_ENV,
+      CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+      CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+    },
+  );
+  if (outside.status !== "SKIPPED" || outside.reason !== "outside_canary") fail("outside_canary", outside);
   pass("fail_closed_config");
 }
 
@@ -404,6 +431,7 @@ mem.put = async (...args) => {
 };
 
 const mock = await startMock({ mode: "ok" });
+Object.assign(process.env, CANARY_ENV);
 process.env.CONFENGE_INBOUND_WEBHOOK_URL = mock.url;
 process.env.CONFENGE_INBOUND_WEBHOOK_SECRET = SECRET;
 process.env.CONFENGE_INBOUND_TIMEOUT_MS = "400";
@@ -630,6 +658,8 @@ try {
       !data.configuration ||
       data.configuration.webhook_url !== "SET" ||
       data.configuration.webhook_secret !== "SET" ||
+      data.configuration.canary_enabled !== "SET" ||
+      data.configuration.canary_asset_id !== "diagnostico-defesa-margem" ||
       data.configuration.contract !== "READY" ||
       data.configuration.reason !== null
     ) {
@@ -685,6 +715,7 @@ try {
     const eligible = {
       lead_id: "eligible0000000000000001",
       receipt_id: "eligible0000000000000001",
+      asset_id: "diagnostico-defesa-margem",
       record_kind: "real",
       consentimento: true,
       email: "compras@empresa-real.com.br",
@@ -740,6 +771,7 @@ try {
     const pending = (lead_id) => ({
       lead_id,
       receipt_id: lead_id,
+      asset_id: "diagnostico-defesa-margem",
       record_kind: "real",
       consentimento: true,
       email: "ops@empresa-real.com.br",
@@ -772,7 +804,7 @@ try {
     const res = await handler(
       event(
         moneyPayload({
-          nome: "SYNTHETIC-PROBE",
+          nome: "SYNTHETIC-INBOUND",
           email: "probe+inbound@example.com",
           idempotency_key: "inbound-synth-001",
           utm_source: "synthetic",
@@ -787,6 +819,43 @@ try {
     if (!stored.handoff || stored.handoff.status !== "SKIPPED") fail("synth_handoff", stored.handoff);
     if (mock.seen.length !== before) fail("synth_posted_to_warmbly", mock.seen.length - before);
     pass("non_real_skipped");
+  }
+
+  // A signed synthetic probe crosses only during the explicit canary window.
+  {
+    const probeSecret = "probe-secret-230-at-least-16";
+    process.env.LEAD_PROBE_SECRET = probeSecret;
+    process.env.CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED = "1";
+    const before = mock.seen.length;
+    const res = await handler(
+      event(
+        moneyPayload({
+          nome: "SYNTHETIC-INBOUND",
+          email: "probe+reconcile@example.com",
+          mensagem: "[QA] SYNTHETIC-INBOUND do not contact",
+          record_kind: "synthetic",
+          test_mode: true,
+          idempotency_key: "inbound-synth-reconcile-001",
+          utm_source: "synthetic",
+        }),
+        {
+          "Idempotency-Key": "inbound-synth-reconcile-001",
+          "X-Confenge-Probe": probeSecret,
+        },
+      ),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("synth_canary_capture", data);
+    const stored = await mem.get(data.lead_id);
+    if (stored?.record_kind !== "synthetic" || stored?.handoff?.status !== "DELIVERED") {
+      fail("synth_canary_reconcile", stored);
+    }
+    const hit = mock.seen.find((item) => item.body?.lead_id === data.lead_id);
+    if (!hit || hit.body.record_kind !== "synthetic") fail("synth_canary_contract", hit);
+    if (mock.seen.length !== before + 1) fail("synth_canary_post_count", mock.seen.length - before);
+    pass("synthetic_canary_authenticated_reconcile", { lead_id: data.lead_id });
+    delete process.env.CONFENGE_INBOUND_SYNTHETIC_CANARY_ENABLED;
+    delete process.env.LEAD_PROBE_SECRET;
   }
 
   // money-asset HTML carries public IDs already available; does not invent entity/CNPJ

@@ -21,6 +21,7 @@ const PAGES = [
   "/diagnostico-b2g-360/",
   "/bid-room-licitacoes-obras/",
   "/defesa-margem-contratos-publicos/",
+  "/ferramentas/diagnostico-defesa-margem/",
   "/especialista/tiago-jun-sasaki/",
   "/inteligencia/",
   "/conteudos/",

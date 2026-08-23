@@ -79,6 +79,10 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v2
         id: setup-chrome
+      - name: Money asset canary browser e2e
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run test:money-asset-canary-e2e
       - name: UI geometry
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
