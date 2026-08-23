@@ -194,6 +194,29 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: [],
   },
+  "test:report-model": {
+    producers: [
+      "scripts/site/test_report_model_599.py",
+      "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "casos/index.html",
+      "bid-room-licitacoes-obras/index.html",
+      "diretoria-b2g/index.html",
+      "sitemap.xml",
+      "sitemap.txt",
+      "sitemap-index.xml",
+    ],
+    artifacts: [],
+    surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
+  "test:report-model-ui": {
+    producers: [
+      "scripts/site/test_report_model_ui.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      "casos/modelo-relatorio-inteligencia-licitacoes/",
+    ],
+    artifacts: [],
+    surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
   "test:cta-whatsapp": {
     producers: ["scripts/site/test_cta_whatsapp.mjs", "data/site/whatsapp-messages.json"],
     artifacts: [],
