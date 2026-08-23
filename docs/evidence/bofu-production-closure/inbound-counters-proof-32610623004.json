@@ -1,0 +1,112 @@
+{
+  "schema": "confenge-inbound-counters-proof/1.0",
+  "issue": 230,
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "REVENUE NOW",
+  "leverage": "revenue",
+  "evidence_scope": "read_only_authenticated_ops_configuration_and_aggregate_counters",
+  "base": "https://confenge.com.br",
+  "ts": "2026-08-23T01:33:09.260Z",
+  "git_sha": "97d8338640379d15b58ac5a1453b8420ac606aec",
+  "checks": [
+    {
+      "name": "ops_token_configured",
+      "ok": true,
+      "detail": "configured=true",
+      "critical": true
+    },
+    {
+      "name": "ops_health_authenticated",
+      "ok": true,
+      "detail": "http=200 auth_configured=true",
+      "critical": true
+    },
+    {
+      "name": "inbound_handoff_counters",
+      "ok": true,
+      "detail": "http=200 counters_present=true",
+      "critical": true
+    },
+    {
+      "name": "inbound_handoff_configuration_observable",
+      "ok": true,
+      "detail": "http=200 configuration_present=true",
+      "critical": true
+    },
+    {
+      "name": "commercial_funnel_counters",
+      "ok": true,
+      "detail": "http=200 commercial_only=true",
+      "critical": true
+    }
+  ],
+  "ops_requests": [
+    {
+      "path": "/.netlify/functions/ops?action=health",
+      "method": "GET",
+      "status": 200,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "path": "/.netlify/functions/ops?action=inbound_handoff",
+      "method": "GET",
+      "status": 200,
+      "attempts": 2,
+      "error": null
+    },
+    {
+      "path": "/.netlify/functions/ops?action=funnel",
+      "method": "GET",
+      "status": 200,
+      "attempts": 1,
+      "error": null
+    }
+  ],
+  "consented_real_contact": "MISSING",
+  "real_loop_status": "BLOCKED",
+  "non_claims": [
+    "does_not_prove_netlify_inbound_secrets_are_configured",
+    "does_not_prove_a_consented_real_contact_exists",
+    "does_not_prove_end_to_end_commercial_handoff"
+  ],
+  "inbound_handoff_counters": {
+    "persisted_leads": 124,
+    "pending": 0,
+    "delivered": 0,
+    "retryable": 0,
+    "retries": 0,
+    "permanent_failures": 0,
+    "skipped": 124,
+    "blocked": 0,
+    "dead": 0,
+    "latency": {
+      "count": 0,
+      "last_ms": null,
+      "p50_ms": null,
+      "p95_ms": null
+    }
+  },
+  "inbound_handoff_configuration": {
+    "webhook_url": "UNSET",
+    "webhook_secret": "UNSET",
+    "contract": "UNSET",
+    "reason": "not_configured"
+  },
+  "funnel": {
+    "commercial_only": true,
+    "counts": {
+      "visitor": 0,
+      "cta_triggered": 0,
+      "form_started": 0,
+      "lead_persisted": 36,
+      "contacted": 0,
+      "qualified": 0,
+      "meeting": 0,
+      "proposal": 0,
+      "won": 0,
+      "lost": 0
+    }
+  },
+  "ok": true
+}

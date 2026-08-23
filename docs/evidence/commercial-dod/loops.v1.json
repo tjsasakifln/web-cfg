@@ -63,8 +63,8 @@
       "outcome_owner": "warmbly",
       "reason_codes": [
         "COMMERCIAL_OUTCOME_UNKNOWN",
-        "CONFENGE_INBOUND_WEBHOOK_SECRET_UNKNOWN",
-        "CONFENGE_INBOUND_WEBHOOK_URL_UNKNOWN",
+        "CONFENGE_INBOUND_WEBHOOK_SECRET_UNSET",
+        "CONFENGE_INBOUND_WEBHOOK_URL_UNSET",
         "CONSENTED_REAL_CONTACT_MISSING",
         "WARMBLY_RECEIPT_ACTION_BLOCKED"
       ],
@@ -86,8 +86,8 @@
       "outcome_owner": "warmbly",
       "reason_codes": [
         "COMMERCIAL_OUTCOME_UNKNOWN",
-        "CONFENGE_INBOUND_WEBHOOK_SECRET_UNKNOWN",
-        "CONFENGE_INBOUND_WEBHOOK_URL_UNKNOWN",
+        "CONFENGE_INBOUND_WEBHOOK_SECRET_UNSET",
+        "CONFENGE_INBOUND_WEBHOOK_URL_UNSET",
         "CONSENTED_REAL_CONTACT_MISSING",
         "WARMBLY_RECEIPT_ACTION_BLOCKED"
       ],
@@ -121,12 +121,12 @@
         },
         {
           "prerequisite": "CONFENGE_INBOUND_WEBHOOK_URL",
-          "status": "UNKNOWN",
+          "status": "UNSET",
           "note": "Set on Netlify production to https://api.confenge.com.br/api/v1/webhooks/confenge/inbound"
         },
         {
           "prerequisite": "CONFENGE_INBOUND_WEBHOOK_SECRET",
-          "status": "UNKNOWN",
+          "status": "UNSET",
           "note": "Shared HMAC with Warmbly. Server env only."
         },
         {
