@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from copy import deepcopy
 from html.parser import HTMLParser
 from typing import Any
 
@@ -143,11 +144,46 @@ def graph_field_snapshot(graph: dict[str, Any]) -> dict[str, Any]:
         "taxID": org.get("taxID"),
         "contactPoint": contact_point or None,
         "areaServed": org.get("areaServed") or contact_point.get("areaServed"),
+        "address": org.get("address"),
         "streetAddress": _street_value(graph),
         "hasCredential": person.get("hasCredential") or org.get("hasCredential"),
         "review": _first_present(graph, "review"),
         "aggregateRating": _first_present(graph, "aggregateRating"),
     }
+
+
+def merge_home_identity_graph(
+    specialist_graph: dict[str, Any], home_graph: dict[str, Any]
+) -> dict[str, Any]:
+    """Overlay the two identity signals intentionally published only on the home.
+
+    The specialist remains the fail-closed local-entity surface: it must not gain
+    a PostalAddress. The canonical home may publish the country-only address and
+    the already allowlisted Person sameAs. Keeping the overlay here makes the
+    committed machine record reproducible instead of hand-editing generated JSON.
+    """
+    if specialist_graph.get("org_id") != home_graph.get("org_id"):
+        raise ValueError("home_specialist_organization_id_mismatch")
+    if specialist_graph.get("person_id") != home_graph.get("person_id"):
+        raise ValueError("home_specialist_person_id_mismatch")
+
+    merged = deepcopy(specialist_graph)
+    organization = merged.get("organization") or {}
+    person = merged.get("person") or {}
+    home_organization = home_graph.get("organization") or {}
+    home_person = home_graph.get("person") or {}
+
+    if home_organization.get("address") is not None:
+        organization["address"] = deepcopy(home_organization["address"])
+    if home_person.get("sameAs") is not None:
+        person["sameAs"] = deepcopy(home_person["sameAs"])
+
+    raw_types = set(merged.get("raw_types") or [])
+    address = organization.get("address")
+    if isinstance(address, dict) and address.get("@type"):
+        raw_types.add(str(address["@type"]))
+    merged["raw_types"] = sorted(raw_types)
+    return merged
 
 
 def _street_value(graph: dict[str, Any]) -> Any:

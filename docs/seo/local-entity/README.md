@@ -32,7 +32,7 @@ Tests: `python3 -m pytest tests/local_entity -q`
 
 Every identity claim is `VERIFIED` | `SELF_DECLARED` | `UNKNOWN` | `NOT_PUBLIC`.
 
-`data/site/proof.json` `VERIFIED` + `perfil-publico-especialista` is circular self-attestation. This campaign remaps those records to `SELF_DECLARED`. Campaign `VERIFIED` is reserved for independent third-party evidence committed in-repo. None is present for street address, CREA, ratings or `sameAs` profiles.
+`data/site/proof.json` `VERIFIED` + `perfil-publico-especialista` is circular self-attestation. This campaign remaps those records to `SELF_DECLARED`. Campaign `VERIFIED` is reserved for independent third-party evidence committed in-repo. None is present for street address, CREA or ratings. The allowlisted founder GitHub `sameAs` is also `SELF_DECLARED`; it is an identity link, not independent credential proof.
 
 Public phone, email and CNPJ already on `/especialista/tiago-jun-sasaki/` are existing public contact, not a new PII leak.
 
@@ -46,7 +46,7 @@ Current overlay is `LIVE_JOB_OK` with `core_ready_for_product_decisions=false`. 
 
 ## Data owner / contract
 
-Identity and provenance remain extra-cli contracts plus owned public copy. This package classifies what the specialist JSON-LD and `proof.json` already publish. It does not create a second identity model, a crawler or a DataLake.
+Identity and provenance remain extra-cli contracts plus owned public copy. This package classifies what the specialist and canonical-home JSON-LD plus `proof.json` already publish. It does not create a second identity model, a crawler or a DataLake.
 
 ## Analytics / rollback
 

@@ -36,6 +36,17 @@ def test_run_campaign_on_real_specialist(tmp_path: Path) -> None:
     assert obs["invented_nap"] is False
     assert obs["invented_review"] is False
     assert obs["self_attested_not_upgraded"] is True
+    snapshot = first["artifacts"]["entity-graph.json"]
+    assert snapshot["organization"]["address"] == {
+        "@type": "PostalAddress",
+        "addressCountry": "BR",
+    }
+    assert snapshot["person"]["sameAs"] == ["https://github.com/tjsasakifln"]
+    claims = {claim["id"]: claim for claim in snapshot["claims"]}
+    assert claims["org-addressCountry"]["status"] == "SELF_DECLARED"
+    assert claims["person-sameAs"]["status"] == "SELF_DECLARED"
+    assert claims["org-streetAddress"]["status"] == "NOT_PUBLIC"
+    assert claims["person-credential-crea"]["status"] == "NOT_PUBLIC"
     text = format_observables(obs)
     assert "ready_for_product_decisions: false" in text
     assert "new_public_landing_created: false" in text

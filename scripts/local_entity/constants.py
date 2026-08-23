@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 CAMPAIGN = "CONFENGE-WEB-LOCAL-ENTITY-SEARCH-02"
-CAMPAIGN_AS_OF = "2026-08-19"
+CAMPAIGN_AS_OF = "2026-08-23"
 DECISION_STATE = "VALIDATE"
 SITE = "https://confenge.com.br"
 ORG_ID = f"{SITE}/#organization"
 PERSON_ID = f"{SITE}/#tiago"
 SPECIALIST_PATH = "/especialista/tiago-jun-sasaki/"
 SPECIALIST_RELPATH = "especialista/tiago-jun-sasaki/index.html"
+HOME_RELPATH = "index.html"
 
 CLAIM_STATUSES = frozenset({"VERIFIED", "SELF_DECLARED", "UNKNOWN", "NOT_PUBLIC"})
 SURFACE_DECISIONS = frozenset(
@@ -59,6 +60,8 @@ ALLOWED_PUBLIC_PHONES = frozenset(
     }
 )
 ALLOWED_PUBLIC_CNPJ = frozenset({"52.407.089/0001-09"})
+ALLOWED_PUBLIC_SAME_AS = frozenset({"https://github.com/tjsasakifln"})
+ALLOWED_PUBLIC_ADDRESS_COUNTRIES = frozenset({"BR"})
 
 PERSONAL_EMAIL_DOMAINS = frozenset(
     {
@@ -126,6 +129,7 @@ GRAPH_FIELDS = (
     "sameAs",
     "contact",
     "areaServed",
+    "address",
 )
 
 GSC_LIVE_BLOCKED = {

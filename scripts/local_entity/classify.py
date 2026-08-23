@@ -9,9 +9,11 @@ from __future__ import annotations
 from typing import Any
 
 from scripts.local_entity.constants import (
+    ALLOWED_PUBLIC_ADDRESS_COUNTRIES,
     ALLOWED_PUBLIC_CNPJ,
     ALLOWED_PUBLIC_EMAILS,
     ALLOWED_PUBLIC_PHONES,
+    ALLOWED_PUBLIC_SAME_AS,
     CAMPAIGN_AS_OF,
     CLAIM_STATUSES,
     GRAPH_FIELDS,
@@ -71,6 +73,14 @@ def _claim(
     }
 
 
+def _same_as_urls(value: Any) -> list[str]:
+    if isinstance(value, str):
+        return [value] if value else []
+    if isinstance(value, list):
+        return [str(item) for item in value if isinstance(item, str) and item]
+    return []
+
+
 def classify_graph(
     graph: dict[str, Any],
     *,
@@ -85,6 +95,7 @@ def classify_graph(
     claims: list[dict[str, Any]] = []
 
     org_id = snap.get("organization_id")
+    org_same_as = snap.get("sameAs_org")
     claims.append(
         _claim(
             cid="org-id",
@@ -203,21 +214,29 @@ def classify_graph(
             cid="org-sameAs",
             entity="Organization",
             field="sameAs",
-            value=snap.get("sameAs_org"),
+            value=org_same_as,
             status="UNKNOWN",
-            basis="absent_jsonld",
-            notes="No public sameAs profiles are classified in-repo. Do not invent LinkedIn, CREA directory, or social URLs.",
+            basis="absent_jsonld" if not org_same_as else "unclassified_jsonld",
+            notes="No Organization sameAs profile is allowlisted. Do not invent LinkedIn, CREA directory, or social URLs.",
         )
     )
+    person_same_as = snap.get("sameAs_person")
+    person_same_urls = _same_as_urls(person_same_as)
+    person_same_allowed = bool(person_same_urls) and set(person_same_urls) <= ALLOWED_PUBLIC_SAME_AS
     claims.append(
         _claim(
             cid="person-sameAs",
             entity="Person",
             field="sameAs",
-            value=snap.get("sameAs_person"),
-            status="UNKNOWN",
-            basis="absent_jsonld",
-            notes="No public Person sameAs profiles are classified. Do not invent.",
+            value=person_same_as,
+            status="SELF_DECLARED" if person_same_allowed else "UNKNOWN",
+            basis="committed_home_and_specialist_jsonld" if person_same_allowed else "absent_or_unclassified_jsonld",
+            notes=(
+                "The founder's public GitHub profile is an allowlisted self-declared identity link. "
+                "It is not independent evidence of credentials, CREA registration, ratings, or outcomes."
+                if person_same_allowed
+                else "No allowlisted Person sameAs profile is classified. Do not invent."
+            ),
         )
     )
 
@@ -236,6 +255,28 @@ def classify_graph(
             status="SELF_DECLARED" if email_ok else "UNKNOWN",
             basis="specialist JSON-LD + data/site/brand.json contact",
             notes="Public commercial email already on the specialist page. Extra personal mailboxes are NOT_PUBLIC.",
+        )
+    )
+    address = snap.get("address")
+    address_country = address.get("addressCountry") if isinstance(address, dict) else None
+    address_allowed = (
+        isinstance(address, dict)
+        and address.get("@type") == "PostalAddress"
+        and address_country in ALLOWED_PUBLIC_ADDRESS_COUNTRIES
+        and set(address) <= {"@type", "addressCountry"}
+    )
+    claims.append(
+        _claim(
+            cid="org-addressCountry",
+            entity="Organization",
+            field="address",
+            value=address,
+            status="SELF_DECLARED" if address_allowed else "UNKNOWN",
+            basis="home_jsonld_country_only_postal_address",
+            notes=(
+                "Country of registration is self-declared from the already public CNPJ. "
+                "No street, city, region, postal code, geo, hasMap, or public storefront is claimed."
+            ),
         )
     )
     claims.append(
@@ -311,7 +352,10 @@ def classify_graph(
             value=snap.get("streetAddress"),
             status="NOT_PUBLIC",
             basis="no_public_street_address",
-            notes="No public street NAP is published. Inventing PostalAddress / LocalBusiness is a defect.",
+            notes=(
+                "No public street NAP is published. The home country-only PostalAddress does not "
+                "promote streetAddress; inventing street/locality/geo or LocalBusiness remains a defect."
+            ),
         )
     )
     claims.append(
