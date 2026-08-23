@@ -120,6 +120,7 @@
     "revops:backfill-kind": "node scripts/revops/backfill_record_kind.mjs",
     "revops:backfill-kind:apply": "node scripts/revops/backfill_record_kind.mjs --apply",
     "revops:scheduled-daily": "node scripts/revops/scheduled_daily.mjs",
+    "revops:inbound-proof": "node scripts/revops/inbound_counters_proof.mjs",
     "revops:scheduled-nurture": "node scripts/revops/scheduled_nurture.mjs",
     "revops:scheduled-weekly": "node scripts/revops/scheduled_weekly.mjs",
     "revops:gsc:sync": "python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3",

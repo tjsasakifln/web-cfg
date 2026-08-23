@@ -2,19 +2,84 @@
  * Structural + unit proof that scheduled operations are versioned and runnable.
  * Does not require production secrets for core assertions.
  */
-import { readFileSync, existsSync } from "fs";
-import { execSync } from "child_process";
-import { resolve, dirname } from "path";
+import { readFileSync, existsSync, mkdtempSync, readdirSync } from "fs";
+import { execFileSync, execSync } from "child_process";
+import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
+import { tmpdir } from "os";
+import { createOpsJsonClient } from "./ops_fetch.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 let failed = 0;
 function pass(n, d = "") {
   console.log("PASS", n, d);
 }
+
+// 2c) An unhandled transport failure still emits a machine-readable partial report.
+{
+  const proofDir = mkdtempSync(join(tmpdir(), "confenge-daily-partial-"));
+  let failedAsExpected = false;
+  try {
+    execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: "pipe",
+      env: {
+        ...process.env,
+        BASE_URL: "http://127.0.0.1:9",
+        EXPECTED_SHA: "test-sha",
+        OPS_TOKEN: "unit-test-token",
+        OPS_FETCH_MAX_ATTEMPTS: "2",
+        OPS_FETCH_BACKOFF_MS: "0",
+        REVOPS_RUN_DIR: proofDir,
+      },
+    });
+  } catch {
+    failedAsExpected = true;
+  }
+  const reports = readdirSync(proofDir).filter((name) => name.endsWith(".json"));
+  const partial = reports.length === 1
+    ? JSON.parse(readFileSync(resolve(proofDir, reports[0]), "utf8"))
+    : null;
+  if (!failedAsExpected || !partial || partial.ok !== false || partial.completed !== false) {
+    fail("daily_partial_report_on_failure", partial || reports);
+  } else pass("daily_partial_report_on_failure", reports[0]);
+  if (JSON.stringify(partial || {}).includes("unit-test-token")) fail("daily_partial_report_secret_safe");
+  else pass("daily_partial_report_secret_safe");
+}
 function fail(n, d) {
   console.error("FAIL", n, d);
   failed += 1;
+}
+
+// 2d) The focal proof fails closed without the Actions secret and still emits evidence.
+{
+  const proofDir = mkdtempSync(join(tmpdir(), "confenge-inbound-proof-"));
+  const env = {
+    ...process.env,
+    INBOUND_PROOF_RUN_DIR: proofDir,
+  };
+  delete env.OPS_TOKEN;
+  let failedAsExpected = false;
+  try {
+    execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/inbound_counters_proof.mjs")], {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: "pipe",
+      env,
+    });
+  } catch {
+    failedAsExpected = true;
+  }
+  const reports = readdirSync(proofDir).filter((name) => name.endsWith(".json"));
+  const proof = reports.length === 1
+    ? JSON.parse(readFileSync(resolve(proofDir, reports[0]), "utf8"))
+    : null;
+  if (!failedAsExpected || !proof || proof.ok !== false) fail("inbound_proof_missing_token_fails_closed", proof);
+  else pass("inbound_proof_missing_token_fails_closed");
+  if (proof?.consented_real_contact !== "MISSING" || proof?.real_loop_status !== "BLOCKED") {
+    fail("inbound_proof_preserves_real_loop_blocker", proof);
+  } else pass("inbound_proof_preserves_real_loop_blocker");
 }
 
 // 1) Workflow exists and is the single primary scheduler
@@ -29,6 +94,11 @@ else {
   else pass("weekly_cron");
   if (!y.includes("scheduled_daily.mjs")) fail("daily_entry");
   else pass("daily_entry");
+  if (!y.includes("inbound_counters_proof.mjs") || !y.includes("inbound-proof")) {
+    fail("inbound_proof_dispatch");
+  } else pass("inbound_proof_dispatch");
+  if (!y.includes("inbound-counters-proof-${{ github.run_id }}")) fail("inbound_proof_artifact");
+  else pass("inbound_proof_artifact");
   if (!y.includes("scheduled_nurture.mjs")) fail("nurture_entry");
   else pass("nurture_entry");
   if (!y.includes("scheduled_weekly.mjs")) fail("weekly_entry");
@@ -40,6 +110,8 @@ else {
   // Secrets not hardcoded
   if (/OPS_TOKEN:\s*['\"][^$]/.test(y)) fail("secret_hardcoded");
   else pass("secrets_via_env");
+  if (!y.includes("if-no-files-found: error")) fail("partial_report_required");
+  else pass("partial_report_required");
 }
 
 {
@@ -47,6 +119,8 @@ else {
   if (!daily.includes("produce_search_observation") || !daily.includes("drain_search_observation")) {
     fail("daily_search_observation");
   } else pass("daily_search_observation");
+  if (!daily.includes("finally") || !daily.includes("persistProof()")) fail("daily_always_persists");
+  else pass("daily_always_persists");
   const toml = readFileSync(resolve(ROOT, "netlify.toml"), "utf8");
   if (!toml.includes("search-observation-tick") || !toml.includes("schedule")) {
     fail("netlify_search_observation_tick");
@@ -56,11 +130,93 @@ else {
 // 2) Entry scripts exist
 for (const rel of [
   "scripts/revops/scheduled_daily.mjs",
+  "scripts/revops/inbound_counters_proof.mjs",
+  "scripts/revops/ops_fetch.mjs",
   "scripts/revops/scheduled_nurture.mjs",
   "scripts/revops/scheduled_weekly.mjs",
 ]) {
   if (!existsSync(resolve(ROOT, rel))) fail("script_" + rel);
   else pass("script_" + rel);
+}
+
+// 2b) Safe ops reads retry with bounded backoff; mutating calls do not retry by default.
+{
+  let getCalls = 0;
+  const waits = [];
+  const summaries = [];
+  const read = createOpsJsonClient({
+    base: "https://ops.invalid",
+    token: "test-token-that-must-not-appear",
+    maxAttempts: 3,
+    backoffMs: 10,
+    sleep: async (milliseconds) => waits.push(milliseconds),
+    onResult: (summary) => summaries.push(summary),
+    fetchImpl: async (_url, options) => {
+      getCalls += 1;
+      if (getCalls < 3) throw new Error("UND_ERR_SOCKET");
+      if (options.headers.Authorization !== "Bearer test-token-that-must-not-appear") {
+        throw new Error("missing_auth_header");
+      }
+      return { status: 200, json: async () => ({ ok: true }) };
+    },
+  });
+  const result = await read("/.netlify/functions/ops?action=funnel");
+  if (result.status !== 200 || result.attempts !== 3) fail("ops_get_bounded_retry", result);
+  else pass("ops_get_bounded_retry", `attempts=${result.attempts}`);
+  if (waits.join(",") !== "10,20") fail("ops_get_exponential_backoff", waits);
+  else pass("ops_get_exponential_backoff", waits.join(","));
+  if (JSON.stringify(summaries).includes("test-token")) fail("ops_summary_secret_leak");
+  else pass("ops_summary_secret_safe");
+
+  let postCalls = 0;
+  const write = createOpsJsonClient({
+    base: "https://ops.invalid",
+    token: "test-token",
+    maxAttempts: 5,
+    backoffMs: 0,
+    sleep: async () => {},
+    fetchImpl: async () => {
+      postCalls += 1;
+      throw new Error("UND_ERR_SOCKET");
+    },
+  });
+  const post = await write("/.netlify/functions/ops?action=drain_inbound", { method: "POST" });
+  if (postCalls !== 1 || post.attempts !== 1 || post.status !== 0) fail("ops_post_no_implicit_retry", post);
+  else pass("ops_post_no_implicit_retry");
+
+  let boundedCalls = 0;
+  const bounded = createOpsJsonClient({
+    base: "https://ops.invalid",
+    maxAttempts: 99,
+    backoffMs: 0,
+    sleep: async () => {},
+    fetchImpl: async () => {
+      boundedCalls += 1;
+      throw new Error("still_down");
+    },
+  });
+  const exhausted = await bounded("/.netlify/functions/ops?action=health");
+  if (boundedCalls !== 5 || exhausted.attempts !== 5) fail("ops_retry_upper_bound", exhausted);
+  else pass("ops_retry_upper_bound", `attempts=${exhausted.attempts}`);
+
+  let timeoutCalls = 0;
+  const timesOut = createOpsJsonClient({
+    base: "https://ops.invalid",
+    maxAttempts: 2,
+    backoffMs: 0,
+    timeoutMs: 100,
+    sleep: async () => {},
+    fetchImpl: async (_url, options) => {
+      timeoutCalls += 1;
+      return new Promise((_resolve, reject) => {
+        options.signal.addEventListener("abort", () => reject(options.signal.reason), { once: true });
+      });
+    },
+  });
+  const timedOut = await timesOut("/.netlify/functions/ops?action=inbound_handoff");
+  if (timeoutCalls !== 2 || timedOut.attempts !== 2 || !timedOut.error?.includes("ops_fetch_timeout")) {
+    fail("ops_attempt_timeout_bounded", timedOut);
+  } else pass("ops_attempt_timeout_bounded", timedOut.error);
 }
 
 function parseJsonBlob(text) {
@@ -126,7 +282,7 @@ function parseJsonBlob(text) {
 // 5) Package scripts wired
 {
   const pkg = JSON.parse(readFileSync(resolve(ROOT, "package.json"), "utf8"));
-  for (const k of ["revops:scheduled-daily", "revops:gsc:sync", "test:schedules"]) {
+  for (const k of ["revops:scheduled-daily", "revops:inbound-proof", "revops:gsc:sync", "test:schedules"]) {
     if (!pkg.scripts[k]) fail("npm_script_" + k);
     else pass("npm_script_" + k);
   }
