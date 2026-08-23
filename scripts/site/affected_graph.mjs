@@ -382,6 +382,20 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/.netlify/functions/lead"],
   },
+  "test:external-runtime": {
+    // netlify.toml declares which modules stay unbundled; package.json decides
+    // whether they are installed at function runtime at all; the function trees
+    // are where the called API surface is derived from.
+    producers: [
+      "scripts/site/test_external_runtime_modules.mjs",
+      "netlify.toml",
+      "package.json",
+      "netlify/functions/",
+      "scripts/offers/",
+    ],
+    artifacts: [],
+    surfaces: ["/.netlify/functions/lead", "/.netlify/functions/ops"],
+  },
   "test:ops-auth": {
     producers: ["scripts/site/test_ops_auth_matrix.mjs", "netlify/functions/ops.cjs"],
     artifacts: [],
