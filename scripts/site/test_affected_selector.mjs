@@ -125,11 +125,22 @@ function expectSubset(result, mustInclude, because) {
   }
 }
 
-// The local-entity campaign audits the canonical home as an input surface.
+// Every external input read by the local-entity campaign must select its gate.
 {
-  const result = selectAffected(["index.html"], scripts);
-  expectSubset(result, ["test:local-entity"], "canonical home identity surface");
-  assert.ok(result.selected_ids.includes("test:local-entity"));
+  const inputs = [
+    "index.html",
+    "especialista/tiago-jun-sasaki/index.html",
+    "data/site/brand.json",
+    "data/site/proof.json",
+    "data/organic/search-baseline-2026-08-14.json",
+    "scripts/site/brand.py",
+    "scripts/site/authority.py",
+  ];
+  for (const input of inputs) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:local-entity"], `local-entity input ${input}`);
+    assert.ok(result.selected_ids.includes("test:local-entity"));
+  }
   assert.ok(SUITE_GRAPH["test:local-entity"].surfaces.includes("/"));
 }
 
