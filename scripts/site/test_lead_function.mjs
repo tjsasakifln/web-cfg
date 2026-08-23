@@ -296,6 +296,72 @@ _reset();
   pass("idempotency", { lead_id: d1.lead_id, second_status: r2.statusCode, idempotent: d2.idempotent });
 }
 
+// 6a) Attribution cannot become a side-channel for PII in receipts/logs/analytics.
+{
+  const marker = "private-person@example.com";
+  const originalLog = console.log;
+  const capturedLogs = [];
+  console.log = (...args) => {
+    capturedLogs.push(args.map(String).join(" "));
+  };
+  try {
+    const res = await handler(
+      event({
+        nome: "QA Attribution",
+        email: "qa-attribution@example.com",
+        estagio: "contrato em análise",
+        jornada: "contrato",
+        consentimento: "1",
+        idempotency_key: "attribution-pii-guard-001",
+        origem: `https://confenge.com.br/ferramentas/diagnostico-defesa-margem/?email=${marker}`,
+        landing_page: `/ferramentas/diagnostico-defesa-margem/?telefone=48999999999`,
+        referrer: `https://search.example/result?message=${marker}`,
+        utm_source: marker,
+        utm_campaign: "Maria Silva",
+        route_family: "48999999999",
+        asset_id: "diagnostico-defesa-margem",
+        cta_id: "segunda-leitura-contrato",
+      }),
+    );
+    const data = JSON.parse(res.body);
+    const stored = await mem.get(data.lead_id);
+    if (res.statusCode !== 201 || !stored) fail("attribution_pii_persist", { res, stored });
+    if (stored.origem !== "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/") {
+      fail("attribution_origin_query", stored.origem);
+    }
+    if (stored.landing_page !== "/ferramentas/diagnostico-defesa-margem/") {
+      fail("attribution_landing_query", stored.landing_page);
+    }
+    if (stored.referrer !== "https://search.example/result") fail("attribution_referrer_query", stored.referrer);
+    if (stored.utm_source || stored.utm_campaign || stored.route_family) {
+      fail("attribution_pii_dimensions", {
+        utm_source: stored.utm_source,
+        utm_campaign: stored.utm_campaign,
+        route_family: stored.route_family,
+      });
+    }
+    const publicAndLogs = `${res.body}\n${capturedLogs.join("\n")}`;
+    if (publicAndLogs.includes(marker) || publicAndLogs.includes("48999999999") || publicAndLogs.includes("Maria Silva")) {
+      fail("attribution_pii_log_or_response", publicAndLogs);
+    }
+  } finally {
+    console.log = originalLog;
+  }
+  pass("attribution_pii_guard");
+}
+
+// 6aa) Percent-encoding cannot hide PII inside an absolute attribution path.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const encodedEmail = core.sanitizeAttributionLocation(
+    "https://search.example/result/private-person%40example.com",
+    240,
+    "referrer",
+  );
+  if (encodedEmail !== "") fail("attribution_encoded_pii_path", encodedEmail);
+  pass("attribution_encoded_pii_path");
+}
+
 // 6b) onlyIfNew path: lookup miss then create-only conflict still returns 200 (no re-delivery)
 {
   const payload = {

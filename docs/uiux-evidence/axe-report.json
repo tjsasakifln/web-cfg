@@ -52,6 +52,16 @@
       "violations": []
     },
     {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
       "path": "/especialista/tiago-jun-sasaki/",
       "counts": {
         "critical": 0,

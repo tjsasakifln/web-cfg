@@ -52,9 +52,9 @@ Optional: `CONFENGE_INBOUND_ALLOWED_HOSTS`, `CONFENGE_INBOUND_MAX_ATTEMPTS` (8),
 Keep the shared secret server-side only. Do not expose either the secret or a
 signed inbound request to browser code.
 
-Empty URL: capture still works; handoff `SKIPPED`. Staging/prod refuse non-HTTPS, PII on the query, missing secret, or host off the allowlist (`BLOCKED`, no POST).
+Empty URL: capture still works; handoff `SKIPPED`. Non-HTTPS in staging/prod, PII on the query, missing secret, or host off the allowlist is `BLOCKED` (no POST).
 
-Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and skip Warmbly so probes do not mint an INBOUND NOW action.
+Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and skip Warmbly so probes never manufacture a commercial action.
 
 ## Ops
 
@@ -129,7 +129,7 @@ Site-static rollback: [ROLLBACK.md](./ROLLBACK.md). Blobs of persisted leads are
 
 Only when the inbound URL is reachable, the shared secret is set on both sides, and Warmbly auto-send is proven off. Use a clearly labeled synthetic (`SYNTHETIC-INBOUND`, `@example.com`). Do not generate a real contact. If any precondition is missing, record the exact blocker — do not fake INBOUND NOW.
 
-Non-real records persist and **SKIP** Warmbly. A synthetic 201 is capture proof, not INBOUND NOW.
+Non-real records persist and **SKIP** Warmbly. A synthetic `201` proves capture only; it cannot prove the commercial handoff or close #230.
 
 ### Money-asset proof harness
 
@@ -139,7 +139,10 @@ node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br
 npm run probe:money-asset:prod
 ```
 
-This is the #60 probe (not `probe:lead`, which is jornada=operacao). It writes PROVEN/BLOCKED/UNKNOWN per step and exits non-zero unless capture + replay + INBOUND NOW + auto-send OFF are all proven.
+This is the #60 probe (not `probe:lead`, which is jornada=operacao). It writes
+PROVEN/BLOCKED/UNKNOWN per step. Synthetic capture and replay can pass, but the
+full loop remains blocked until one genuine consented lead is reconciled with a
+Warmbly receipt/action while auto-send is off.
 
 If env is missing here:
 

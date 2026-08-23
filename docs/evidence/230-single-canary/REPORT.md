@@ -1,0 +1,159 @@
+# #230 em #61 — canário único de segunda leitura contratual
+
+Data da auditoria: 2026-08-22 BRT (2026-08-23 UTC). Base: `origin/main` em
+`e18e583651b76af788e32e487abeb4c6b24a9c25`.
+
+## Decisão e hipótese
+
+- Estado: **EXECUTE_NOW** (P0), frente **REVENUE NOW**.
+- Canário único: `/ferramentas/diagnostico-defesa-margem/`, CTA “Quero uma
+  segunda leitura deste contrato”. Nenhuma rota, página, schema ou regra de
+  robots foi criada.
+- Trabalho do visitante: pedir uma conferência humana do contrato que acabou de
+  consultar, sem perder o pedido quando Warmbly estiver lento ou indisponível.
+- Hipótese: um pedido contextual com receipt confirmado e handoff reconciliável
+  converte intenção contratual em oportunidade tratável com menos perda e menos
+  duplicação.
+- Evidência esperada: um dia para preview; produção somente após aprovação normal
+  do deploy.
+- Alavancas: receita, automação e confiança. Cem repetições melhoram o sistema
+  porque alimentam o mesmo receipt, dedupe, outbox e atribuição; não criam cem
+  operações manuais.
+- North Star: oportunidade comercial qualificada. Clique, `201` e page count não
+  são sucesso corporativo.
+
+## Auditoria antes do slice
+
+| Superfície | Evidência observada | Estado antes |
+|---|---|---|
+| CTA/form live | Página `200`, indexável, utilidade antes do CTA e copy honesta; o form live ainda tinha `action=/obrigado` e status sem live region | podia renderizar agradecimento sem receipt no caminho sem JS |
+| Captura | Prova anterior retornou `201`, replay `200`, mesmo `lead_id` e sem PII na resposta | persistência e dedupe local provados |
+| Handoff live | Prova autenticada em `97d8338`: `persisted_leads=124`, `skipped=124`, `delivered=0`, URL/secret/contrato `UNSET` | loop produção bloqueado, não DONE |
+| Auth ops | health público reportou `auth_configured=true`; `inbound_handoff` sem token retornou `401` | fail-closed |
+| Warmbly | health `200 READY`, `auto_send_enabled=false`; GET não assinado no ingest retornou `403` | receptor pronto e autenticado; segredo de produção ainda precisava ser ligado no emissor |
+| BOFU | `test:bofu-audit`: 15 testes aprovados | sem abrir campanha de 128 rotas |
+
+Fonte do baseline operacional:
+`docs/evidence/bofu-production-closure/inbound-counters-proof-32610623004.json`.
+
+## Fluxo entregue
+
+```mermaid
+flowchart LR
+  V[Visitante no canário] -->|POST + Idempotency-Key| L[lead.cjs\nvalidação server-side]
+  L -->|create-only| B[(receipt durável\nconfenge-leads)]
+  B -->|201/200 + receipt sem PII| V
+  B -->|lead real + contrato READY| O[outbox/handoff]
+  O -->|HMAC X-Warmbly-Signature\nIdempotency-Key = lead_id| W[Warmbly inbound v1]
+  W -->|dedupe receipt/lead_id| P[(lead + next action)]
+  P -->|receipt/action id| O
+  O --> R[ops autenticado\nreceipt exato]
+  W -. timeout/5xx .-> X[RETRYABLE + backoff]
+  X --> O
+  W -. 401/contrato inválido .-> F[BLOCKED acionável]
+```
+
+O servidor valida e normaliza antes de persistir. O receipt é gravado com
+`onlyIfNew` antes de qualquer POST downstream. O handoff usa o contrato
+`confenge.inbound.v1`, HMAC com timestamp, a mesma chave idempotente e a política
+de backoff já versionada (30 s, 60 s, 2 min, 5 min, 15 min, 1 h e 4 h; máximo 8
+tentativas). `5xx`/timeout ficam `RETRYABLE`; `401` e contrato inválido ficam
+`BLOCKED`; falha do Warmbly não apaga nem transforma a captura em erro falso.
+
+## Limite do canário e rollback
+
+O canário é a superfície pública alterada: somente o formulário de
+`diagnostico-defesa-margem` passa a exigir receipt antes de confirmar sucesso.
+Ele não redefine o transporte canônico. Todo lead real consentido continua
+elegível ao mesmo contrato Warmbly quando URL e HMAC estão `READY`; registros
+`synthetic` / `qa` / `spam` / `internal` continuam `SKIPPED` sem exceção.
+
+A recuperação histórica também preserva o classificador global fail-closed:
+somente `SKIPPED/not_configured`, `record_kind=real`, consentimento explícito,
+join ID válido, sem DNC/supressão nem identidade de teste. O `limit=1` escolhe um
+único registro após o health gate; a landing page não redefine elegibilidade.
+
+O kill switch do transporte continua sendo remover URL/segredo no Netlify.
+Captura persist-first permanece ativa. Reverter o PR remove a UI/observabilidade
+nova, mas não apaga receipts já persistidos.
+
+## Atribuição e privacidade
+
+- Fonte normalizada: `CONFENGE_WEB`.
+- Contexto: `asset_id=diagnostico-defesa-margem`,
+  `route_family=defesa-margem-diagnostico`,
+  `cta_id=segunda-leitura-contrato` e landing/origem da página.
+- Não existe oferta precificada/catalogada para este CTA; por isso nenhum
+  `offer_id` foi inventado. O contexto honesto da oferta é o asset + CTA de
+  segunda leitura.
+- Analytics recebe apenas dimensões allowlisted; nome, email, telefone e mensagem
+  não são enviados. URLs de atribuição perdem query/fragment e UTM/IDs aceitam
+  somente tokens, impedindo PII injetada de chegar a receipt, URL operacional,
+  logs ou analytics.
+- O receipt público contém ID opaco e estados técnicos, nunca os campos livres.
+
+## #179 e correções móveis/a11y do canário
+
+A causa concreta de #179 foi `max-width:100%` sem neutralizar o `height=630` da
+capa 1200×630, produzindo aproximadamente 348×628 em 390 px. O `main` de partida
+já contém o merge `2086e713` (#253), que mantém essas title cards apenas como OG
+nas rotas elegíveis, e a suíte geométrica cobre artigo/pilar em 320, 390, 768,
+1024 e 1440 px. O canário escolhido não tem `.article-cover`, portanto não seria
+honesto atribuir #179 a ele.
+
+No canário, o teste móvel encontrou dois blockers reais de overflow: honeypot
+posicionado fora da tela e URL longa na lista de fontes gerada em runtime. Foram
+corrigidos somente em `styles-tools.css`, com ocultação visual recortada e quebra
+segura da fonte. Axe também encontrou `#metodo` fora de landmark nomeado; a seção
+recebeu nome acessível. Não houve redesign.
+
+## Evidência depois do slice (local e preview)
+
+| Gate | Resultado |
+|---|---|
+| Unitário de lead | 19 PASS, incluindo validação, persistência, idempotência e PII percent-encoded em atribuição |
+| Contrato/handoff | 23 PASS: HMAC, persist-before-destination, dedupe, 5xx, timeout, 401, contrato global independente, consulta exata sem PII, requeue fail-closed e sintético sempre `SKIPPED` |
+| Loop integrado | mesmo receipt web-cfg/Warmbly, `downstream_receipt=wb-<lead_id>`; 1 delivered, 1 blocked, 1 retryable e 2 skipped em fixtures isoladas |
+| E2E Chromium 390 px | refresh manteve chave; timeout + reenvio deixou 1 receipt; sucesso rotacionou a chave para um novo pedido; duplicata não repostou; Warmbly 503 preservou `RETRYABLE`; sem overflow |
+| A11y | 14 páginas no preview Netlify, incluindo o canário: 0 critical, 0 serious, 0 moderate, 0 minor |
+| UI/#179 | suíte geométrica completa PASS; `image-aspect-ratio=1`, `image-size-responsive=1` |
+| Freeze BOFU | seis HTMLs protegidos inalterados; baseline revisado apenas para `script.js` e `styles-tools.css`; 70 PASS |
+| BOFU | 15 PASS |
+| Analytics/atribuição | PASS; allowlist sem PII; qualified/pipeline continuam `UNKNOWN` até evento real |
+| Build | PASS; 0 páginas pSEO publicáveis, 5 noindex, 18 rejeitadas; mudanças geradas fora do slice descartadas |
+| Performance | preview Netlify: performance 92, a11y 100, LCP 1,71 s, CLS 0 e checks de proporção/responsividade de imagem aprovados. Baseline live: performance 98, a11y 100, best practices 96, SEO 100, LCP 2,08 s, CLS 0 |
+
+Lint editorial e `node --check` dos entrypoints/bundle também passaram. Os módulos
+em `js/modules/` são fragmentos concatenados e não são entrypoints JS autônomos.
+No preview, best practices 93 decorreu das injeções do toolbar Netlify
+(CSP/permissions) e SEO 69 do `X-Robots-Tag: noindex` deliberado do ambiente de
+preview; não são mudanças da rota. A produção de referência permaneceu em 96 e
+100, respectivamente.
+
+## Gate de produção e resíduos
+
+Ainda não é DONE em produção. Após aprovação normal do deploy:
+
+1. conferir no ops autenticado que URL e segredo estão `SET` e contrato está
+   `READY`;
+2. manter `CONFENGE_AUTO_SEND_ENABLED=false` no Warmbly;
+3. repetir o audit e o dry-run agregados; confirmar que a coorte estrita continua
+   contendo o registro real consentido já auditado;
+4. requeue de exatamente um registro com `limit=1`, drenar somente após o gate e
+   reconciliar o mesmo `lead_id/receipt_id` com receipt/action Warmbly;
+5. manter probes sintéticos locais/produção em `SKIPPED`; eles nunca substituem a
+   evidência real nem entram em denominadores comerciais.
+
+Resíduos explícitos: aprovação/deploy, configuração secreta de produção e
+reconciliação de um registro real consentido. Um clique, HTTP 200/201 isolado ou
+probe sintético não fecha #230. Pipeline qualificado permanece `UNKNOWN` até a
+evidência comercial real existir.
+
+## Contratos e ADRs
+
+- Dono dos fatos, identidade e proveniência: `extra-cli`, consumido SELECT-only;
+  sem crawler/DataLake/identidade paralela.
+- Dono da ação comercial: Warmbly, source `CONFENGE_WEB` e contrato versionado.
+- Superfície pública única: CONFENGE; nenhum branding/runtime/URL SmartLic.
+- ADR afetado: `ADR-STRAT-002`, sem mudança de fronteira. O slice também respeita
+  `RUNTIME-AUTHORITY` e `MARKET-CAPTURE-OS`.

@@ -328,7 +328,11 @@
       if (!form || !journeyId) return;
       const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'operacao';
       ensureHidden('jornada', j, true);
-      form.setAttribute('action', JOURNEY_ACTIONS[j] || '/obrigado');
+      if (form.getAttribute('data-receipt-required') === 'true') {
+        form.setAttribute('data-success-destination', JOURNEY_ACTIONS[j] || '/obrigado');
+      } else {
+        form.setAttribute('action', JOURNEY_ACTIONS[j] || '/obrigado');
+      }
       const stage = form.querySelector('#estagio');
       if (stage && (forceStage || !stage.value)) {
         const opt = [...stage.options].find((o) => o.getAttribute('data-journey') === j);

@@ -56,6 +56,7 @@
     "probe:money-asset": "node scripts/site/money_asset_prod_proof.mjs",
     "probe:money-asset:prod": "node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br",
     "test:money-asset-loop": "node scripts/site/test_money_asset_loop.mjs",
+    "test:money-asset-canary-e2e": "node scripts/site/test_money_asset_canary_e2e.mjs",
     "test:pseo-attribution": "node seo/scripts/test_pseo_attribution.mjs",
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "test:brand": "python3 scripts/site/test_brand_contract.py",
