@@ -277,11 +277,11 @@ def render_html(
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="208" src="/assets/logo-confenge.png" width="800"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
-<a href="/#ofertas">Serviços</a>
-<a href="/inteligencia/">Inteligência</a>
-<a href="/conteudos/">Conteúdos</a>
-<a href="/ferramentas/">Ferramentas</a>
-<a href="/especialista/tiago-jun-sasaki/">Especialista</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/">Serviços</a>
+<a data-cta-position="header_nav" href="/problemas-que-resolvemos/">Problemas que resolvemos</a>
+<a data-cta-position="header_nav" href="/conteudos/">Conteúdos</a>
+<a data-cta-position="header_nav" href="/ferramentas/">Ferramentas</a>
+<a data-cta-position="header_nav" href="/especialista/tiago-jun-sasaki/">Especialista</a>
 </nav>
 <a class="button button-primary header-cta" href="#cta">Ver próximo passo</a>
 </div>

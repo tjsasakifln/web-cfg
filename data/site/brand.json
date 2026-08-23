@@ -90,11 +90,11 @@
     "desktop": [
       {
         "label": "Serviços",
-        "href": "/#ofertas"
+        "href": "/servicos-obras-publicas/"
       },
       {
         "label": "Problemas que resolvemos",
-        "href": "/#jornadas"
+        "href": "/problemas-que-resolvemos/"
       },
       {
         "label": "Conteúdos",
@@ -112,6 +112,24 @@
     "cta": {
       "label": "Analisar meu caso",
       "href": "/#formulario-contato"
+    },
+    "hubs": {
+      "services": {
+        "label": "Serviços",
+        "url": "/servicos-obras-publicas/",
+        "title": "Serviços para licitações e contratos de obras públicas",
+        "description": "Os quatro serviços da CONFENGE para construtoras: diagnóstico da operação, rotina de decisão, sala de decisão da proposta e defesa de margem em contrato público.",
+        "h1": "Serviços para licitações e contratos de obras públicas",
+        "lead": "Quatro formas de contratar a CONFENGE, da rotina contínua ao caso urgente. Escolha pelo momento em que sua empresa está."
+      },
+      "problems": {
+        "label": "Problemas que resolvemos",
+        "url": "/problemas-que-resolvemos/",
+        "title": "Problemas que resolvemos em licitações e contratos de obras",
+        "description": "Edital e orçamento, medição e glosa, aditivo, atraso, reequilíbrio e defesa técnica: escolha o problema do seu contrato e veja o caminho técnico.",
+        "h1": "Problemas que resolvemos em licitações e contratos de obras",
+        "lead": "Escolha pelo problema que está na sua mesa hoje. Cada frente reúne o método, os documentos e a próxima decisão."
+      }
     }
   },
   "offers": [
@@ -333,5 +351,80 @@
     "Experiência na iniciativa privada e na Administração Pública",
     "Fiscalização, gestão e orçamento contratual",
     "Atendimento nacional"
+  ],
+  "problem_clusters": [
+    {
+      "id": "edital-proposta",
+      "label": "Edital e proposta",
+      "url": "/diagnostico-pre-licitacao/",
+      "stage": "antes",
+      "summary": "Leitura crítica do edital, habilitação, acervo e a decisão de participar ou recusar antes de comprometer capital."
+    },
+    {
+      "id": "orcamento-bdi",
+      "label": "Orçamento e BDI",
+      "url": "/auditoria-orcamento-licitacao/",
+      "stage": "antes",
+      "summary": "Conferência de planilha, referência SINAPI e SICRO, composição de BDI e os erros que corroem margem antes da assinatura."
+    },
+    {
+      "id": "gestao-contratual",
+      "label": "Gestão contratual",
+      "url": "/acompanhamento-contratos-obras/",
+      "stage": "execucao",
+      "summary": "Rotina preventiva de registro, comunicação formal e controle de prazos para o contrato não chegar frágil ao conflito."
+    },
+    {
+      "id": "medicoes-glosas",
+      "label": "Medições e glosas",
+      "url": "/medicoes-glosas-obras-publicas/",
+      "stage": "execucao",
+      "summary": "Medição retida, glosa e atraso de pagamento: como contestar com memória de cálculo e evidência contemporânea."
+    },
+    {
+      "id": "aditivos",
+      "label": "Aditivos e serviços extras",
+      "url": "/aditivos-obras-publicas/",
+      "stage": "execucao",
+      "summary": "Serviço extra, quantitativo novo e limite de acréscimo: o que precisa estar documentado antes de executar."
+    },
+    {
+      "id": "atrasos",
+      "label": "Atrasos e prorrogação",
+      "url": "/atrasos-prorrogacao-obras-publicas/",
+      "stage": "execucao",
+      "summary": "Causa, responsabilidade, caminho crítico e o registro que sustenta o pedido de prorrogação."
+    },
+    {
+      "id": "reequilibrio",
+      "label": "Reequilíbrio econômico-financeiro",
+      "url": "/reequilibrio-obras-publicas/",
+      "stage": "conflito",
+      "summary": "Fato, nexo e cálculo: como montar o pedido de reequilíbrio com os documentos que a Administração exige."
+    },
+    {
+      "id": "defesa-tecnica",
+      "label": "Defesa técnica",
+      "url": "/defesa-tecnica-contratos-publicos/",
+      "stage": "conflito",
+      "summary": "Notificação, multa e sanção: subsídio técnico para a resposta, coordenado com o jurídico da empresa."
+    }
+  ],
+  "problem_stages": [
+    {
+      "id": "antes",
+      "label": "Antes de contratar",
+      "hint": "Edital em análise, proposta em montagem, decisão de participar."
+    },
+    {
+      "id": "execucao",
+      "label": "Durante a execução",
+      "hint": "Obra em andamento, medição, aditivo, prazo."
+    },
+    {
+      "id": "conflito",
+      "label": "Quando há conflito",
+      "hint": "Glosa mantida, notificação, desequilíbrio, sanção."
+    }
   ]
 }

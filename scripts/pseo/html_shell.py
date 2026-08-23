@@ -128,8 +128,8 @@ def _build_header() -> str:
     brand = _brand_safe()
     # Approved visitor redesign shell (fallback matches data/site/brand.json).
     nav = (brand.get("navigation") or {}).get("desktop") or [
-        {"label": "Serviços", "href": "/#ofertas"},
-        {"label": "Problemas que resolvemos", "href": "/#jornadas"},
+        {"label": "Serviços", "href": "/servicos-obras-publicas/"},
+        {"label": "Problemas que resolvemos", "href": "/problemas-que-resolvemos/"},
         {"label": "Conteúdos", "href": "/conteudos/"},
         {"label": "Ferramentas", "href": "/ferramentas/"},
         {"label": "Especialista", "href": "/especialista/tiago-jun-sasaki/"},
@@ -138,8 +138,12 @@ def _build_header() -> str:
         "label": "Analisar meu caso",
         "href": "/#formulario-contato",
     }
-    links = "\n".join(f'<a href="{n["href"]}">{n["label"]}</a>' for n in nav)
-    mobile = "".join(f'<a href="{n["href"]}">{n["label"]}</a>' for n in nav)
+    links = "\n".join(
+        f'<a data-cta-position="header_nav" href="{n["href"]}">{n["label"]}</a>' for n in nav
+    )
+    mobile = "".join(
+        f'<a data-cta-position="mobile_nav" href="{n["href"]}">{n["label"]}</a>' for n in nav
+    )
     return f"""<header class="site-header" id="inicio">
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge.png" width="224"/></a>
@@ -173,8 +177,8 @@ def _build_footer() -> str:
     return f"""<footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white.png" width="224"/><p>{html.escape(blurb)}</p></div>
-<div class="footer-links"><strong>Ofertas</strong>{offer_links}</div>
-<div class="footer-links footer-clusters"><strong>Problemas técnicos</strong><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
+<div class="footer-links"><strong>Serviços</strong><a href="/servicos-obras-publicas/">Todos os serviços</a>{offer_links}</div>
+<div class="footer-links footer-clusters"><strong>Problemas que resolvemos</strong><a href="/problemas-que-resolvemos/">Todos os problemas</a><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
 <div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="/metodologia-inteligencia/">Metodologia</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
 </div>
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span>{_authority_nav()}</div>
