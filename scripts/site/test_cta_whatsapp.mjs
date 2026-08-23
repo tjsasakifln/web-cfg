@@ -1,9 +1,11 @@
 /**
- * Audit main WhatsApp CTAs: correct number + non-empty text param.
+ * Audit main WhatsApp CTAs: correct number + non-empty text param, and gate
+ * every SVG path payload the site ships (issue #187).
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { parseSvgPath, extractPathData } from "./svg_path_grammar.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const NUMBER = "5548988344559";
@@ -95,40 +97,62 @@ for (const key of [
 if (catalog.number_e164 !== NUMBER) issues.push({ error: "catalog_number" });
 
 const SKIP_DIRS = new Set(["node_modules", "_site", ".git", ".venv", "venv", ".worktrees"]);
-const SVG_PATH_TOKEN =
-  /[MmLlHhVvCcSsQqTtAaZz]|[+-]?(?:\d*\.\d+|\d+)(?:[eE][+-]?\d+)?/g;
+// Fixture pages carry deliberately broken path data; they are graded by the
+// fixture harness below, never by the site-wide scan.
+const SVG_FIXTURE_DIR = "scripts/site/fixtures/svg_path";
 
-function walkHtmlFiles(dir, acc = []) {
+function walkMarkupFiles(dir, acc = { html: [], svg: [] }) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (SKIP_DIRS.has(ent.name)) continue;
     const full = path.join(dir, ent.name);
-    if (ent.isDirectory()) walkHtmlFiles(full, acc);
-    else if (ent.name.endsWith(".html")) acc.push(full);
+    const rel = path.relative(root, full).split(path.sep).join("/");
+    if (rel === SVG_FIXTURE_DIR) continue;
+    if (ent.isDirectory()) walkMarkupFiles(full, acc);
+    else if (ent.name.endsWith(".html")) acc.html.push(full);
+    else if (ent.name.endsWith(".svg")) acc.svg.push(full);
   }
   return acc;
 }
 
 function svgPathCommandsParse(d) {
-  const leftover = String(d)
-    .replace(SVG_PATH_TOKEN, "")
-    .replace(/[\s,]/g, "");
-  return leftover.length === 0;
+  return parseSvgPath(d).ok;
 }
 
-function hasCorruptNumber(d) {
-  return /0\.6\.7/.test(d) || /0 \.6\.7/.test(d) || /\d\.\d+\.\d/.test(d);
-}
-
-const htmlFiles = walkHtmlFiles(root);
-for (const full of htmlFiles) {
-  const rel = path.relative(root, full).split(path.sep).join("/");
-  const html = fs.readFileSync(full, "utf8");
-  const dAttrs = [...html.matchAll(/\bd="([^"]*)"/g)].map((m) => m[1]);
-  for (const d of dAttrs) {
-    if (d.includes("0.6.7") || d.includes("0 .6.7") || hasCorruptNumber(d)) {
-      issues.push({ rel, error: "corrupt_svg_path_number", d: d.slice(0, 80) });
+/**
+ * Grammar gate: every `d` payload in a scanned document must parse. Returns the
+ * issues found so the same routine grades generated HTML and template sources.
+ */
+function auditPathData(rel, source, options) {
+  const out = [];
+  let checked = 0;
+  for (const d of extractPathData(source, options)) {
+    checked += 1;
+    const parsed = parseSvgPath(d);
+    if (!parsed.ok) {
+      out.push({
+        rel,
+        error: "invalid_svg_path",
+        reason: parsed.error,
+        index: parsed.index,
+        d: d.slice(0, 120),
+      });
     }
   }
+  return { issues: out, checked };
+}
+
+const markupFiles = walkMarkupFiles(root);
+const htmlFiles = markupFiles.html;
+const svgFiles = markupFiles.svg;
+let pathsChecked = 0;
+for (const full of [...htmlFiles, ...svgFiles]) {
+  const rel = path.relative(root, full).split(path.sep).join("/");
+  const html = fs.readFileSync(full, "utf8");
+  const audited = auditPathData(rel, html, {
+    documentMode: full.endsWith(".svg") ? "xml" : "html",
+  });
+  pathsChecked += audited.checked;
+  issues.push(...audited.issues);
   const symbols = [
     ...html.matchAll(/<symbol\b[^>]*id="i-whatsapp"[^>]*>([\s\S]*?)<\/symbol>/gi),
   ];
@@ -159,11 +183,257 @@ if (!pseoShell.includes('id="i-whatsapp"') || !pseoShell.includes("M8.4 7.7")) {
   issues.push({ rel: "scripts/pseo/html_shell.py", error: "whatsapp_generator_glyph_missing" });
 }
 
+// Templates are the upstream of the generated HTML: a broken glyph here would be
+// stamped onto every regenerated page, which is how #187 reached 118 files.
+const TEMPLATE_SOURCES = ["scripts/pseo/html_shell.py", "styles.css"];
+for (const rel of TEMPLATE_SOURCES) {
+  const full = path.join(root, rel);
+  if (!fs.existsSync(full)) {
+    issues.push({ rel, error: "template_source_missing" });
+    continue;
+  }
+  const audited = auditPathData(rel, fs.readFileSync(full, "utf8"));
+  pathsChecked += audited.checked;
+  issues.push(...audited.issues);
+}
+
+// Negative fixtures: the gate has to be proven to reject the real defect, and
+// the positive control has to be proven to survive it.
+const fixtureDir = path.join(root, SVG_FIXTURE_DIR);
+const fixtureManifest = JSON.parse(fs.readFileSync(path.join(fixtureDir, "manifest.json"), "utf8"));
+const fixtureResults = [];
+for (const testCase of fixtureManifest.cases || []) {
+  const rel = `${SVG_FIXTURE_DIR}/${testCase.file}`;
+  const full = path.join(fixtureDir, testCase.file);
+  if (!fs.existsSync(full)) {
+    issues.push({ rel, error: "svg_path_fixture_missing", id: testCase.id });
+    continue;
+  }
+  const detected = auditPathData(rel, fs.readFileSync(full, "utf8")).issues;
+  const caught = detected.length > 0;
+  fixtureResults.push({ id: testCase.id, expect: testCase.expect, caught });
+  if (testCase.expect === "invalid" && !caught) {
+    issues.push({ rel, error: "svg_path_fixture_not_detected", id: testCase.id });
+  }
+  if (testCase.expect === "valid" && caught) {
+    issues.push({
+      rel,
+      error: "svg_path_gate_false_positive",
+      id: testCase.id,
+      reason: detected[0].reason,
+      d: detected[0].d,
+    });
+  }
+}
+if (!fixtureResults.some((r) => r.expect === "invalid")) {
+  issues.push({ rel: SVG_FIXTURE_DIR, error: "svg_path_negative_fixtures_missing" });
+}
+if (!fixtureResults.some((r) => r.expect === "valid")) {
+  issues.push({ rel: SVG_FIXTURE_DIR, error: "svg_path_positive_control_missing" });
+}
+
+// Direct grammar regressions cover separators and SVG 2 arc/none behavior
+// while refactoring the parser. The extraction cases prove that uppercase and
+// unquoted path attributes cannot evade the repository-wide audit.
+const parserRegressionCases = [
+  { id: "leading-comma", d: "M,0,0", expect: "invalid" },
+  { id: "trailing-comma", d: "M0,0,", expect: "invalid" },
+  { id: "comma-after-closepath", d: "M0 0Z,", expect: "invalid" },
+  { id: "comma-before-command", d: "M0,0L1,1,", expect: "invalid" },
+  { id: "negative-arc-rx-normalizes", d: "M0 0A-1 2 0 0 1 3 4", expect: "valid" },
+  { id: "negative-arc-ry-normalizes", d: "M0 0A1 -2 0 0 1 3 4", expect: "valid" },
+  { id: "none-disables-rendering", d: "none", expect: "valid" },
+  { id: "none-with-whitespace", d: "  none\n", expect: "valid" },
+  { id: "none-is-case-sensitive", d: "NONE", expect: "invalid" },
+  { id: "none-leading-nbsp", d: "\u00a0none", expect: "invalid" },
+  { id: "none-trailing-em-space", d: "none\u2003", expect: "invalid" },
+  { id: "none-leading-vtab", d: "\u000bnone", expect: "invalid" },
+  { id: "none-leading-bom", d: "\ufeffnone", expect: "invalid" },
+  { id: "compact-decimals", d: "M0.6.5", expect: "valid" },
+  { id: "implicit-signed-coordinate", d: "M0-1L.5.5", expect: "valid" },
+];
+for (const testCase of parserRegressionCases) {
+  const parsed = parseSvgPath(testCase.d);
+  const accepted = parsed.ok;
+  if ((testCase.expect === "valid") !== accepted) {
+    issues.push({
+      rel: "scripts/site/svg_path_grammar.mjs",
+      error: "svg_path_parser_regression",
+      id: testCase.id,
+      expected: testCase.expect,
+      actual: accepted ? "valid" : "invalid",
+      reason: parsed.error,
+    });
+  }
+}
+
+const extractionRegressionCases = [
+  { id: "uppercase-unquoted", source: "<path D=M,0,0></path>", expected: ["M,0,0"] },
+  { id: "lowercase-unquoted", source: "<path d=M0,0></path>", expected: ["M0,0"] },
+  {
+    id: "compact-decimals-pass-full-audit",
+    source: '<path d="M0.6.5"></path>',
+    expected: ["M0.6.5"],
+    parse: "valid",
+  },
+  { id: "ignore-data-d", source: '<path data-d="M,0,0" d="M0,0"></path>', expected: ["M0,0"] },
+  {
+    id: "quoted-angle-before-d",
+    source: '<path data-note=">" D="M,0,0"></path>',
+    expected: ["M,0,0"],
+    parse: "invalid",
+  },
+  {
+    id: "fully-percent-encoded-tag",
+    source: "%3C%70%61%74%68%20%64%3D%22M0%200%22%3E",
+    expected: ["M0 0"],
+    parse: "valid",
+  },
+  {
+    id: "fully-percent-encoded-invalid-stays-fail-closed",
+    source: "%3Cpath%20d%3D%22M%2C0%2C0%22%3E",
+    expected: ["M,0,0"],
+    parse: "invalid",
+  },
+  {
+    id: "numeric-html-entity",
+    source: '<path d="M0&#32;0"></path>',
+    expected: ["M0 0"],
+    parse: "valid",
+  },
+  {
+    id: "entity-decode-stays-fail-closed",
+    source: '<path d="M0&#44;&#44;0"></path>',
+    expected: ["M0,,0"],
+    parse: "invalid",
+  },
+  {
+    id: "literal-percent-is-not-url-decoded",
+    source: '<path d="M0%200"></path>',
+    expected: ["M0%200"],
+    parse: "invalid",
+  },
+  {
+    id: "html-entities-decode-once",
+    source: '<path d="M0&amp;#32;0"></path>',
+    expected: ["M0&#32;0"],
+    parse: "invalid",
+  },
+  {
+    id: "html-nbsp-is-not-svg-whitespace",
+    source: '<path d="&nbsp;none"></path>',
+    expected: ["\u00a0none"],
+    parse: "invalid",
+  },
+  {
+    id: "xml-rejects-html-named-entity",
+    source: '<path d="M0&plus;1"></path>',
+    options: { documentMode: "xml" },
+    expected: ["M0&plus;1"],
+    parse: "invalid",
+  },
+  {
+    id: "xml-numeric-entity-needs-semicolon",
+    source: '<path d="M0&#32 0"></path>',
+    options: { documentMode: "xml" },
+    expected: ["M0&#32 0"],
+    parse: "invalid",
+  },
+  {
+    id: "xml-element-and-attribute-case-sensitive",
+    source: '<PATH d="M,0,0"></PATH><path D="M,0,0"></path>',
+    options: { documentMode: "xml" },
+    expected: [],
+  },
+  {
+    id: "ignore-inactive-and-arbitrary-source-text",
+    source:
+      '<script>const d = "M,0,0"; const x = `<path d="M,0,0">`;</script><!-- <path d="M,0,0"> -->',
+    expected: [],
+  },
+  {
+    id: "ignore-html-raw-text-elements",
+    source:
+      '<textarea><path d="M,0,0"></textarea><title><path d="M,0,0"></title>',
+    expected: [],
+  },
+  {
+    id: "base64-svg-data-uri",
+    source:
+      'background:url("data:image/svg+xml;base64,PHN2Zz48cGF0aCBkPSJNMCAwIi8+PC9zdmc+")',
+    expected: ["M0 0"],
+    parse: "valid",
+  },
+  {
+    id: "base64-svg-data-uri-ascii-whitespace",
+    source:
+      'background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9\nIk0sLDAsMCIvPjwvc3ZnPg==")',
+    expected: ["M,,0,0"],
+    parse: "invalid",
+  },
+  {
+    id: "base64-svg-data-uri-percent-encoded-whitespace",
+    source:
+      'background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9%0AIk0sLDAsMCIvPjwvc3ZnPg==")',
+    expected: ["M,,0,0"],
+    parse: "invalid",
+  },
+  {
+    id: "base64-svg-data-uri-audited-once",
+    source:
+      '%41 background:url("data:image/svg+xml;base64,PHN2Zz48cGF0aCBkPSJNMCAwIi8+PC9zdmc+")',
+    expected: ["M0 0"],
+    parse: "valid",
+  },
+  {
+    id: "base64-invalid-padding-is-not-prefix-decoded",
+    source:
+      'background:url("data:image/svg+xml;base64,PHN2Zz48cGF0aCBkPSJNMCAwIi8+PC9zdmc+===")',
+    expected: [],
+  },
+  {
+    id: "ignore-percent-encoded-inactive-markup",
+    source:
+      "%3Cscript%3E%3Cpath%20d%3D%22M%2C0%2C0%22%3E%3C%2Fscript%3E" +
+      "%3C%21--%3Cpath%20d%3D%22M%2C0%2C0%22%3E--%3E",
+    expected: [],
+  },
+];
+for (const testCase of extractionRegressionCases) {
+  const actual = extractPathData(testCase.source, testCase.options);
+  if (JSON.stringify(actual) !== JSON.stringify(testCase.expected)) {
+    issues.push({
+      rel: "scripts/site/svg_path_grammar.mjs",
+      error: "svg_path_extraction_regression",
+      id: testCase.id,
+      expected: testCase.expected,
+      actual,
+    });
+  }
+  if (testCase.parse && actual.length === 1) {
+    const accepted = parseSvgPath(actual[0]).ok;
+    if ((testCase.parse === "valid") !== accepted) {
+      issues.push({
+        rel: "scripts/site/svg_path_grammar.mjs",
+        error: "svg_path_extracted_value_regression",
+        id: testCase.id,
+        expected: testCase.parse,
+        actual: accepted ? "valid" : "invalid",
+      });
+    }
+  }
+}
+
 const out = {
   ok: issues.length === 0,
   found: found.length,
   service_pages: pages.length,
   html_scanned: htmlFiles.length,
+  svg_files_scanned: svgFiles.length,
+  svg_paths_checked: pathsChecked,
+  svg_path_fixtures: fixtureResults,
+  svg_path_parser_regressions: parserRegressionCases.length,
+  svg_path_extraction_regressions: extractionRegressionCases.length,
   earliest_safe_action_at: earliestSafeActionAt,
   audit_date: auditDate,
   warnings,
@@ -179,4 +449,14 @@ if (issues.length) {
   console.error("CTA_AUDIT_FAIL", JSON.stringify(issues, null, 2));
   process.exit(1);
 }
-console.log("CTA_AUDIT_OK", JSON.stringify({ found: found.length, service_pages: pages.length, warnings: warnings.length, html_scanned: htmlFiles.length }));
+console.log(
+  "CTA_AUDIT_OK",
+  JSON.stringify({
+    found: found.length,
+    service_pages: pages.length,
+    warnings: warnings.length,
+    html_scanned: htmlFiles.length,
+    svg_paths_checked: pathsChecked,
+    svg_path_fixtures: fixtureResults.length,
+  }),
+);

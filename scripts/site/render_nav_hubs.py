@@ -35,7 +35,7 @@ from scripts.site.shell_nav import (  # noqa: E402
 )
 
 SITE = "https://confenge.com.br"
-SCRIPT_SRC = "/script.js?v=ced23fca5a"
+SCRIPT_SRC = "/script.js"
 
 
 def e(value: Any) -> str:

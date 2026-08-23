@@ -368,14 +368,211 @@
       mensagem.value = `Demanda relacionada a: ${t}.\n\nContexto:\n`;
       mensagem.focus();
     }
+    // #182 — fragment landings must reveal the target under the sticky header.
+    // Home sections defer their layout with content-visibility (#185), so the
+    // document keeps growing while the jump runs and the browser settles on a
+    // stale offset (the contact form ended up ~2 viewports below the fold on a
+    // 390px screen). Re-align until the layout stops moving; manual input wins.
+    const scrollRoot = document.documentElement;
+    const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Progressive enhancement: without these the plain fragment jump stands.
+    const canRealign = !!scrollRoot
+      && typeof window.requestAnimationFrame === 'function'
+      && typeof window.getComputedStyle === 'function'
+      && typeof window.scrollTo === 'function';
+    const measurable = (el) => canRealign && el && typeof el.getBoundingClientRect === 'function';
+    const anchorOffsetFor = (el) => {
+      const margin = parseFloat(window.getComputedStyle(el).scrollMarginTop) || 0;
+      const padding = parseFloat(window.getComputedStyle(scrollRoot).scrollPaddingTop) || 0;
+      return Math.max(margin, padding);
+    };
+    const anchorTargetY = (el) => {
+      const wanted = el.getBoundingClientRect().top + window.scrollY - anchorOffsetFor(el);
+      const limit = Math.max(0, scrollRoot.scrollHeight - window.innerHeight);
+      return Math.round(Math.min(Math.max(wanted, 0), limit));
+    };
+    const jumpTo = (y) => {
+      const style = scrollRoot.style;
+      const previous = style ? style.scrollBehavior : '';
+      if (style) style.scrollBehavior = 'auto';
+      window.scrollTo(0, y);
+      if (style) style.scrollBehavior = previous;
+    };
+    let anchorRun = 0;
+    let cancelActiveAnchor = null;
+    const beginAnchorLifecycle = () => {
+      // A new fragment navigation supersedes every phase of the previous one,
+      // including the native smooth-scroll phase before correction begins.
+      if (typeof cancelActiveAnchor === 'function') cancelActiveAnchor();
+      const run = (anchorRun += 1);
+      const inputs = ['wheel', 'touchstart', 'keydown'];
+      let cleaned = false;
+      let cancel = null;
+      const cleanup = () => {
+        if (cleaned) return;
+        cleaned = true;
+        inputs.forEach((type) => window.removeEventListener(type, cancel));
+        if (cancelActiveAnchor === cancel) cancelActiveAnchor = null;
+      };
+      cancel = () => {
+        if (run !== anchorRun) { cleanup(); return; }
+        anchorRun += 1;
+        // Stop a native smooth scroll at its current position. The default
+        // wheel/key/touch action then continues from there and wins.
+        jumpTo(window.scrollY);
+        cleanup();
+      };
+      inputs.forEach((type) => window.addEventListener(type, cancel, { passive: true }));
+      cancelActiveAnchor = cancel;
+      return {
+        active: () => run === anchorRun,
+        cleanup,
+        complete: (onComplete) => {
+          if (run !== anchorRun) { cleanup(); return false; }
+          anchorRun += 1;
+          cleanup();
+          if (typeof onComplete === 'function') onComplete();
+          return true;
+        },
+      };
+    };
+    const settleAnchor = (target, onArrive, lifecycle) => {
+      const cycle = lifecycle || beginAnchorLifecycle();
+      if (!measurable(target)) {
+        cycle.complete(onArrive);
+        return;
+      }
+      const startedAt = Date.now();
+      let stable = 0;
+      const finish = (arrived) => {
+        cycle.complete(arrived ? onArrive : null);
+      };
+      const step = () => {
+        if (!cycle.active()) { cycle.cleanup(); return; }
+        const y = anchorTargetY(target);
+        if (Math.abs(window.scrollY - y) > 2) { jumpTo(y); stable = 0; } else stable += 1;
+        if (stable >= 4) { finish(true); return; }
+        if (Date.now() - startedAt > 2500) { finish(false); return; }
+        window.requestAnimationFrame(step);
+      };
+      window.requestAnimationFrame(step);
+    };
+    const afterScrollSettles = (lifecycle, fn) => {
+      const startedAt = Date.now();
+      let last = window.scrollY;
+      let still = 0;
+      const watch = () => {
+        if (!lifecycle.active()) { lifecycle.cleanup(); return; }
+        if (window.scrollY === last) still += 1;
+        else { still = 0; last = window.scrollY; }
+        if (still >= 3 || Date.now() - startedAt > 1500) { fn(lifecycle); return; }
+        window.requestAnimationFrame(watch);
+      };
+      window.requestAnimationFrame(watch);
+    };
+    // Focus the landing zone so the keyboard continues from the form, not from
+    // the WhatsApp/e-mail alternatives that precede it in the DOM.
+    const focusAnchor = (el) => {
+      if (!el || typeof el.focus !== 'function' || typeof el.setAttribute !== 'function') return;
+      if (el.contains && el.contains(document.activeElement)) return;
+      const hadTabindex = el.hasAttribute('tabindex');
+      if (!hadTabindex) el.setAttribute('tabindex', '-1');
+      try { el.focus({ preventScroll: true }); } catch (_) { el.focus(); }
+      if (!hadTabindex) {
+        el.addEventListener('blur', () => el.removeAttribute('tabindex'), { once: true });
+      }
+    };
+    let formArrivalTracked = false;
+    const trackAnchorArrival = (target) => {
+      const form = target && (target.id === 'formulario-contato'
+        ? target
+        : target.querySelector && target.querySelector('#formulario-contato'));
+      if (!form || formArrivalTracked) return;
+      formArrivalTracked = true;
+      // No PII: position and device only. Distinct from the CTA click
+      // (cta_click) and from the first keystroke (lead_form_start).
+      track('cta_view', {
+        page_path: window.location.pathname || '/',
+        cta_position: 'contact_form',
+        cta_id: 'formulario-contato',
+        device_context: window.matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop',
+      });
+    };
+    const goToAnchor = (target, smooth) => {
+      if (!target) return;
+      const arrive = () => trackAnchorArrival(target);
+      if (!measurable(target)) {
+        if (typeof target.scrollIntoView === 'function') {
+          target.scrollIntoView({
+            behavior: smooth && !reducedMotion() ? 'smooth' : 'auto',
+            block: 'start',
+          });
+        }
+        arrive();
+        return;
+      }
+      const lifecycle = beginAnchorLifecycle();
+      if (smooth && !reducedMotion()) {
+        window.scrollTo({ top: anchorTargetY(target), left: 0, behavior: 'smooth' });
+        afterScrollSettles(lifecycle, (cycle) => settleAnchor(target, arrive, cycle));
+        return;
+      }
+      settleAnchor(target, arrive, lifecycle);
+    };
+    const anchorFromHash = (hash) => {
+      const raw = String(hash || '').replace(/^#/, '');
+      if (!raw) return null;
+      let id = raw;
+      try { id = decodeURIComponent(raw); } catch (_) { id = raw; }
+      return document.getElementById(id) || document.getElementById(raw);
+    };
+    const samePage = (pathname) => {
+      const normalize = (p) => String(p || '/').replace(/index\.html$/, '');
+      return normalize(pathname) === normalize(window.location.pathname);
+    };
+    document.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0
+        || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target && event.target.closest && event.target.closest('a[href]');
+      if (!link || link.hasAttribute('download') || link.getAttribute('target') === '_blank') return;
+      const href = link.getAttribute('href') || '';
+      if (href.indexOf('#') === -1) return;
+      let url;
+      try { url = new URL(href, window.location.href); } catch (_) { return; }
+      if (url.origin !== window.location.origin || !samePage(url.pathname)
+        || url.search !== window.location.search) return;
+      const target = anchorFromHash(url.hash);
+      if (!target) return;
+      event.preventDefault();
+      if (window.location.hash !== url.hash) {
+        try { window.history.pushState(null, '', url.hash); } catch (_) { window.location.hash = url.hash; }
+      }
+      focusAnchor(target);
+      goToAnchor(target, true);
+    });
+    window.addEventListener('popstate', () => {
+      if (typeof cancelActiveAnchor === 'function') cancelActiveAnchor();
+      const target = anchorFromHash(window.location.hash);
+      if (target) goToAnchor(target, false);
+    });
+
+    let anchoredOnLoad = false;
     if (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
       || window.location.hash.startsWith('#contato')
       || searchParams.get('jornada')) {
-      const contact = document.getElementById('contato');
+      const contact = document.getElementById('formulario-contato')
+        || document.getElementById('contato');
       if (contact && (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
         || searchParams.get('jornada') || window.location.hash.startsWith('#contato'))) {
-        contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        anchoredOnLoad = true;
+        goToAnchor(contact, true);
       }
+    }
+    if (!anchoredOnLoad) {
+      // The browser already jumped to the fragment; realign once the deferred
+      // sections above it have rendered and stopped changing the document.
+      const landed = anchorFromHash(window.location.hash);
+      if (landed) settleAnchor(landed, () => trackAnchorArrival(landed));
     }
 
     // Journey preselect from CTA links
@@ -495,15 +692,18 @@
         const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
           ...base,
-          correlation_id: base.correlation_id || whatsappProtocol,
-          whatsapp_protocol: whatsappProtocol,
+          correlation_id: whatsappProtocol,
           cta_label: label || 'whatsapp',
           destination_type: 'whatsapp',
           journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
           content_type: isEditorial ? (editorialType || 'editorial') : undefined,
           topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
           asset_id: whatsappAttrs.asset_id,
+          route_family: whatsappAttrs.route_family,
           cta_id: whatsappAttrs.cta_id,
+          cta_kind: el.getAttribute('data-cta-kind') || '',
+          offer_id: el.getAttribute('data-offer-id') || '',
+          next_action_id: el.getAttribute('data-next-action-id') || '',
         });
         return;
       }

@@ -26,6 +26,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.shell_nav import (  # noqa: E402
     FROZEN_SHELL_FILES,
+    HEADER_CTA_RE,
     MOBILE_NAV_RE,
     ROOT as SHELL_ROOT,
     desktop_cta,
@@ -44,6 +45,15 @@ TASKS = {
     "reequilibrio": "/reequilibrio-obras-publicas/",
     "ferramenta": "/ferramentas/",
 }
+FROZEN_NAV_LABELS = [
+    "Serviços",
+    "Problemas que resolvemos",
+    "Conteúdos",
+    "Ferramentas",
+    "Especialista",
+]
+
+
 class _NavLinks(HTMLParser):
     """Collect (href, label) for one nav class, in document order."""
 
@@ -139,7 +149,15 @@ def main() -> int:
         mobile = nav_links(html, "mobile-nav")
         if mobile and mobile != expected:
             failures.append(f"{rel}: mobile nav {mobile} != {expected}")
-        if expected_desktop_cta not in html:
+        header_cta = HEADER_CTA_RE.search(html)
+        protected_offer_cta = bool(
+            header_cta
+            and 'data-cta-kind="offer"' in header_cta.group(0)
+            and 'data-next-action-id="' in header_cta.group(0)
+            and 'data-offer-id="' in header_cta.group(0)
+            and 'data-cta-position="report_header"' in header_cta.group(0)
+        )
+        if expected_desktop_cta not in html and not protected_offer_cta:
             failures.append(
                 f"{rel}: desktop CTA is not navigation.cta "
                 f"{expected_cta['label']!r} -> {expected_cta['href']!r}"
@@ -174,6 +192,8 @@ def main() -> int:
     # The six BOFU pillars are byte-frozen by CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01
     # until 2026-09-16, so the sync skips them. They must still show the same labels,
     # and the skip list must be exactly the campaign's frozen HTML — never wider.
+    # The later deliverables decision added one mutable-shell label, so the frozen
+    # pages retain the earlier five-label contract until their own freeze lifts.
     from scripts.bofu_dominance.frozen_specs.constants import (  # noqa: PLC0415
         FORBIDDEN_RELATIVE_PATHS,
     )
@@ -187,8 +207,10 @@ def main() -> int:
     for rel in sorted(campaign_frozen):
         html = (SHELL_ROOT / rel).read_text(encoding="utf-8", errors="replace")
         labels = [label for _, label in nav_links(html, "desktop-nav")]
-        if labels != expected_labels:
-            failures.append(f"{rel}: frozen page labels {labels} != {expected_labels}")
+        if labels != FROZEN_NAV_LABELS:
+            failures.append(
+                f"{rel}: frozen page labels {labels} != {FROZEN_NAV_LABELS}"
+            )
 
     # --- 3. Active state is visible and inherited by descendant/task routes -
     active_cases = {

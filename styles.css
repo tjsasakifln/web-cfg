@@ -865,7 +865,7 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 /* Directory */
 .directory-filters{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.25rem}
 .dir-filter{
-  min-height:40px;padding:.45rem .85rem;border:1px solid var(--line);border-radius:999px;
+  min-height:44px;padding:.45rem .85rem;border:1px solid var(--line);border-radius:999px;
   background:#fff;color:#425265;font:650 .85rem/1.2 inherit;cursor:pointer;
 }
 .dir-filter.is-active,.dir-filter:hover{border-color:var(--green-700);color:var(--green-700);background:var(--green-100)}
@@ -1253,11 +1253,243 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 }
 @media (prefers-reduced-motion:reduce){.operating-system::after{display:none}}
 
+/* ===== Shared structured-content primitives =====
+   These contracts are used across offer, editorial and data-template families.
+   Labels and values remain separate DOM elements; spacing never depends on
+   whitespace embedded in copy. */
+.narrow{max-width:50rem}
+h1,h2,h3,p,li,dd,td{overflow-wrap:anywhere}
+.content-editorial-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(13.75rem,.9fr) minmax(13.75rem,.85fr);
+  gap:var(--space-5);
+  align-items:start;
+}
+.content-feature{
+  min-width:0;
+  padding:var(--space-8) var(--space-6);
+  color:#fff;
+  background:var(--navy-900);
+  border:1px solid var(--navy-800);
+  border-radius:12px;
+}
+.content-feature .type-mono{display:block;color:var(--lime);font-size:.875rem}
+.content-feature h3{margin:var(--space-3) 0 var(--space-2);color:#fff;font-size:1.45rem}
+.content-feature p{margin:0;color:#c8d4df;font-size:.95rem;line-height:1.65}
+.content-trails{display:grid;gap:var(--space-3);min-width:0}
+.content-trails>a{
+  display:grid;
+  gap:var(--space-1);
+  min-width:0;
+  min-height:72px;
+  padding:var(--space-4) var(--space-5);
+  background:#f7f9f8;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.content-trails>a:hover{border-color:#9bb89a}
+.content-trails .type-mono{color:var(--green-700);font-size:.875rem;line-height:1.4}
+.content-trails strong{min-width:0;color:var(--ink);font-size:1rem;line-height:1.4;overflow-wrap:anywhere}
+.content-reads{
+  display:grid;
+  gap:0;
+  min-width:0;
+  padding:var(--space-6);
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.content-reads>.type-mono{margin-bottom:var(--space-2);color:#526275;font-size:.875rem}
+.content-reads>p{margin:0;padding:var(--space-3) 0;border-bottom:1px solid var(--line);line-height:1.5}
+.content-reads>p strong{color:var(--ink);font-size:.95rem}
+.content-reads>.text-link{margin-top:var(--space-3)}
+
+.compare-split{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:var(--space-6);
+  align-items:stretch;
+}
+.compare-side{min-width:0;padding:var(--space-8) var(--space-6);border-top:3px solid var(--line)}
+.compare-tool{background:#f7f8f9}
+.compare-human{color:#fff;background:var(--navy-900);border-top-color:var(--lime)}
+.compare-side>.type-mono{display:block;margin-bottom:var(--space-5);color:#526275;font-size:.875rem}
+.compare-human>.type-mono{color:var(--lime)}
+.compare-side ul{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.compare-side li{padding:var(--space-3) 0;border-bottom:1px solid rgba(0,0,0,.09);color:#3b4d61;line-height:1.55}
+.compare-side li:last-child{border-bottom:0}
+.compare-human li{color:#d5dee7;border-bottom-color:rgba(255,255,255,.13)}
+.compare-divider{display:grid;place-items:center;color:#7a8796;font-size:1.25rem;font-weight:700}
+
+.decision-map{
+  min-width:0;
+  padding:var(--space-8);
+  color:#e8eef4;
+  background:linear-gradient(155deg,var(--navy-950),var(--navy-800));
+  border:1px solid rgba(7,26,49,.35);
+  border-radius:14px;
+}
+.decision-map-kicker{margin:0 0 var(--space-5);color:#a9bac8;font-size:.875rem}
+.decision-map-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3);margin:0;padding:0;list-style:none}
+.dm-node{display:grid;gap:var(--space-1);min-width:0;padding:var(--space-4);background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.12);border-radius:10px}
+.dm-node>.type-mono{display:block;color:#a9bac8;font-size:.875rem}
+.dm-node>strong{display:block;color:#fff;font-size:1rem;line-height:1.35;overflow-wrap:anywhere}
+.dm-node>em{display:block;color:#c2cfda;font-size:.875rem;font-style:normal;line-height:1.45}
+.dm-node.is-core{background:rgba(206,214,42,.09);border-color:rgba(206,214,42,.42)}
+.dm-node.is-core>.type-mono{color:var(--lime)}
+
+.faq-layout{display:grid;grid-template-columns:minmax(14rem,.7fr) minmax(0,1.3fr);gap:var(--space-12);align-items:start}
+
+.offer-request-form{
+  display:grid;
+  gap:var(--space-3);
+  margin-top:var(--space-8);
+  padding:var(--space-8);
+  background:#f7f9f8;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.offer-request-form>label{display:grid;gap:var(--space-2);color:var(--ink);font-weight:700}
+.offer-request-form input:not([type="hidden"]):not([type="checkbox"]),
+.offer-request-form select,
+.offer-request-form textarea{
+  width:100%;
+  min-height:48px;
+  padding:var(--space-3) var(--space-4);
+  color:var(--ink);
+  background:#fff;
+  border:1px solid #a9b6c0;
+  border-radius:8px;
+}
+.offer-request-form textarea{min-height:112px;resize:vertical}
+.offer-request-form>label:has(>input[type="checkbox"]){display:flex;align-items:flex-start;gap:var(--space-3);min-height:44px;font-weight:500;line-height:1.5}
+.offer-request-form input[type="checkbox"]{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--green-700)}
+
+/* Data/editorial template families share one readable shell instead of
+   shipping uncontained browser-default sections. */
+body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"],[data-surface-type="panorama_mercado_hub"]) .article-hero{
+  padding-top:var(--space-12);
+  padding-bottom:var(--space-8);
+}
+body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"],[data-surface-type="panorama_mercado_hub"]) .article-hero h1{
+  max-width:20ch;
+  margin-bottom:var(--space-5);
+  font-size:clamp(2.25rem,4.3vw,4.5rem);
+}
+body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"],[data-surface-type="panorama_mercado_hub"]) main>.section:not(.lead-inline),
+body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"],[data-surface-type="panorama_mercado_hub"]) main>.author-box{
+  width:min(calc(100% - 48px),50rem);
+  margin-inline:auto;
+}
+body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"],[data-surface-type="panorama_mercado_hub"]) main>.section:not(.lead-inline){padding:var(--space-10) 0}
+body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"]) main>.lead-inline{
+  width:min(calc(100% - 48px),50rem);
+  margin:var(--space-8) auto;
+}
+.ca-disclaimer{max-width:68ch;color:var(--muted);font-size:1rem;line-height:1.7}
+.ca-fixture-banner,.ca-draft-banner,.ai-disclosure{
+  max-width:72ch;
+  padding:var(--space-4);
+  color:#5b4800;
+  background:#fff8d8;
+  border:1px solid #e3d48c;
+  border-radius:8px;
+  line-height:1.55;
+}
+.ca-toc{
+  width:min(calc(100% - 48px),50rem);
+  margin:var(--space-4) auto var(--space-2);
+  padding:var(--space-4) 0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.ca-toc p{margin:0 0 var(--space-2);color:#526275;font-size:.875rem;font-weight:800}
+.ca-toc ul{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-4);margin:0;padding:0;list-style:none}
+.ca-toc a{color:var(--green-700);font-size:.875rem;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.ca-list{display:grid;gap:var(--space-3);margin:var(--space-5) 0 0;padding:0;list-style:none}
+.ca-list>li{padding:var(--space-5);background:#f7f9f8;border:1px solid var(--line);border-radius:10px;line-height:1.65}
+.ca-kind{display:inline-flex;margin:0 var(--space-2) var(--space-1) 0;padding:var(--space-1) var(--space-2);color:var(--green-700);background:var(--green-100);border-radius:999px;font-family:var(--mono);font-size:.875rem;font-weight:750;letter-spacing:.04em;text-transform:uppercase}
+.ca-list small{display:block;margin-top:var(--space-2);color:#526275;font-size:.875rem}
+.data-table{width:100%;min-width:36rem;border-collapse:collapse;font-size:.9rem}
+.data-table th,.data-table td{padding:var(--space-3) var(--space-4);text-align:left;vertical-align:top;border-bottom:1px solid var(--line);line-height:1.5}
+.data-table th{color:var(--ink);font-weight:750;background:#f7f9f8}
+.data-table td{color:#34465a;overflow-wrap:anywhere}
+.data-table tr:last-child th,.data-table tr:last-child td{border-bottom:0}
+.n-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);margin:0;padding:0}
+.n-card{min-width:0;padding:var(--space-6);background:#fff;border:1px solid var(--line);border-radius:12px}
+.n-card h2{margin:0 0 var(--space-3);font-size:1.35rem;line-height:1.3}
+.n-card p:last-child{margin-bottom:0;color:var(--muted)}
+.n-card form input:not([type="checkbox"]):not([type="radio"]),
+.n-card form select,
+.n-card form textarea{min-height:44px}
+
+/* Flexible CTA tracks must be allowed to shrink below long button labels. */
+.content-cta .container{grid-template-columns:minmax(0,1fr) minmax(0,auto)}
+.content-cta .container>*{min-width:0}
+.content-cta .button{max-width:100%;padding-block:var(--space-3);white-space:normal;text-align:center}
+
+/* The current directory template has one body child, not the historical
+   rank/body/arrow triplet. Let that body consume the full grid. */
+.content-directory-item>.dir-body:first-child:last-child{grid-column:1/-1;min-width:0}
+
+/* Compatibility primitives for public research previews created before the
+   current header/table vocabulary. One shared contract keeps every legacy
+   cohort responsive without route-level patches. */
+.site-header .logo{
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  margin-right:auto;
+  color:var(--navy-950);
+  font-weight:850;
+  letter-spacing:.08em;
+}
+.site-header .nav-desktop{display:flex;align-items:center;gap:var(--space-5)}
+.site-header .nav-desktop a{min-height:44px;display:inline-flex;align-items:center;color:#3e4e61;font-size:.875rem;font-weight:700}
+.pilot-wrap{min-width:0}
+main .pilot-table,
+main .radar-table{
+  display:block;
+  width:100%;
+  max-width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+details>summary{min-height:44px;padding-block:9px}
+
+@media (max-width:1100px){
+  .content-editorial-layout{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .content-feature{grid-column:1/-1}
+}
+@media (max-width:760px){
+  .content-editorial-layout,.compare-split,.faq-layout,.n-grid{grid-template-columns:minmax(0,1fr)}
+  .content-feature{grid-column:auto;padding:var(--space-6) var(--space-5)}
+  .compare-split{gap:0}
+  .compare-side{padding:var(--space-6) var(--space-5)}
+  .compare-divider{min-height:32px}
+  .decision-map{padding:var(--space-5)}
+  .decision-map-rail{grid-template-columns:minmax(0,1fr)}
+  .offer-request-form{padding:var(--space-6) var(--space-5)}
+  .content-cta .container{grid-template-columns:minmax(0,1fr);gap:var(--space-6)}
+  .data-table{min-width:30rem}
+}
+@media (max-width:900px){
+  .site-header .nav-desktop{display:none}
+}
+
 /* #185: keep below-the-fold home sections out of the initial style/layout
    pass. `auto` retains the measured size after first rendering, while the
    fallback size keeps anchors and document height stable before that point. */
+/* #182: without JS the mobile nav is rendered inline, so a sticky header grows
+   to roughly a third of a 390px screen and covers whatever the fragment lands
+   on. Let it scroll away — there is no menu toggle to keep in reach either.
+   Home only: the frozen pillar pages must keep rendering byte-for-byte. */
+html.no-js body[data-content-cluster="home"] .site-header{position:static}
+
+/* #182: deferred sizes make fragment targets move while the jump runs, and only
+   the shipped JS re-aligns the landing. Without JS there is no corrector, so the
+   containment is not applied and anchors stay exact. */
 @supports (content-visibility:auto){
-  body[data-content-cluster="home"] main>section:not(.hero){
+  html.js body[data-content-cluster="home"] main>section:not(.hero){
     content-visibility:auto;
     contain-intrinsic-size:auto 900px;
   }

@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 from datetime import datetime, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -25,18 +26,88 @@ FORBIDDEN_PUBLIC_FRAGMENTS = (
 )
 
 
+class _FirstSectionCloseParser(HTMLParser):
+    """Find the matching close of the first real ``section`` in a fragment."""
+
+    def __init__(self, fragment: str) -> None:
+        super().__init__(convert_charrefs=False)
+        self.fragment = fragment
+        self.line_offsets = [0]
+        self.line_offsets.extend(match.end() for match in re.finditer(r"\n", fragment))
+        self.depth = 0
+        self.opened = False
+        self.close_offset: int | None = None
+
+    def handle_starttag(self, tag: str, _attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "section" or self.close_offset is not None:
+            return
+        self.opened = True
+        self.depth += 1
+
+    def handle_startendtag(
+        self, tag: str, _attrs: list[tuple[str, str | None]]
+    ) -> None:
+        # A self-closing section has no visitor value to place an offer after.
+        # Ignore it and keep looking for the first normally closed section.
+        return
+
+    def handle_endtag(self, tag: str) -> None:
+        if (
+            tag != "section"
+            or self.close_offset is not None
+            or not self.opened
+            or self.depth <= 0
+        ):
+            return
+        self.depth -= 1
+        if self.depth:
+            return
+        line, column = self.getpos()
+        tag_start = self.line_offsets[line - 1] + column
+        tag_end = self.fragment.find(">", tag_start)
+        if tag_end != -1:
+            self.close_offset = tag_end + 1
+
+
+def _after_first_content_section(html: str, start: int) -> int | None:
+    """Offset just past the first content section that follows ``start``.
+
+    The promotional block must not be glued to the hero: the visitor reads the
+    H1 and the first answer block before any offer. Returns ``None`` when the
+    page has no safely closed section between the hero and the end of ``main``.
+    Section matching is case-insensitive and nesting-aware.
+    """
+    main_end = html.lower().find("</main>", start)
+    if main_end == -1:
+        return None
+    fragment = html[start:main_end]
+    parser = _FirstSectionCloseParser(fragment)
+    parser.feed(fragment)
+    parser.close()
+    if parser.close_offset is None:
+        return None
+    return start + parser.close_offset
+
+
 def _insert_after_page_hero(html: str, block: str) -> str:
-    """Place a block inside <main> after H1/hero — never between site header and main."""
+    """Place a block inside <main> after H1/hero and after the first content
+    section — never between site header and main, never glued to the hero."""
     m = re.search(
         r"<main\b[\s\S]*?<header class=\"[^\"]*(?:content-hero|article-hero|pillar-hero)[^\"]*\"[^>]*>[\s\S]*?</header>",
         html,
         re.I,
     )
     if m:
-        return html[: m.end()] + "\n" + block + html[m.end() :]
+        at = _after_first_content_section(html, m.end())
+        if at is None:
+            return html
+        return html[:at] + "\n" + block + html[at:]
     m = re.search(r"(<main\b[^>]*>[\s\S]*?</h1>)", html, re.I)
     if m:
-        return html[: m.end()] + "\n" + block + html[m.end() :]
+        at = _after_first_content_section(html, m.end())
+        if at is None:
+            return html
+        return html[:at] + "\n" + block + html[at:]
     return html
 
 

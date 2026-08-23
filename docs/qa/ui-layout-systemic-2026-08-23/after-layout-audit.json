@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-08-23T22:03:14.605Z",
+  "base_url": "http://127.0.0.1:8796",
+  "scope": "sitewide",
+  "route_count": 211,
+  "widths": [
+    360,
+    390,
+    768,
+    1024,
+    1440,
+    1920
+  ],
+  "checks": 1266,
+  "failures": [],
+  "ok": true
+}

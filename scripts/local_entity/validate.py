@@ -209,6 +209,17 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
     graph = bundle.get("graph") or {}
     html = bundle.get("html") or ""
     errors.extend(audit_graph_honesty(graph, html))
+    for surface in bundle.get("additional_public_surfaces") or []:
+        if not isinstance(surface, dict):
+            errors.append("public_surface_invalid")
+            continue
+        surface_id = str(surface.get("id") or "unnamed")
+        surface_graph = surface.get("graph") or {}
+        surface_html = surface.get("html") or ""
+        errors.extend(
+            f"public_surface:{surface_id}:{error}"
+            for error in audit_graph_honesty(surface_graph, surface_html)
+        )
     classified = bundle.get("classified") or {}
     errors.extend(classify_status_errors(classified))
     census = bundle.get("census") or {}

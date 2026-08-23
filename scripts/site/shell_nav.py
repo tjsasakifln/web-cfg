@@ -267,6 +267,18 @@ def _replace_nav(text: str, regex: re.Pattern[str], inner: str) -> str:
     return regex.sub(sub, text, count=1)
 
 
+def _header_cta(match: re.Match[str], brand: dict[str, Any]) -> str:
+    """Keep a versioned offer action; normalize only the generic shell CTA."""
+    anchor = match.group(0)
+    if (
+        'data-cta-kind="offer"' in anchor
+        and 'data-next-action-id="' in anchor
+        and 'data-offer-id="' in anchor
+    ):
+        return anchor
+    return desktop_cta(brand)
+
+
 def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
     """Idempotently align one page's header/footer navigation with brand.json."""
     if 'class="desktop-nav"' not in text and 'class="mobile-nav"' not in text:
@@ -276,7 +288,7 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
         text = _replace_nav(text, DESKTOP_NAV_RE, desktop_links(brand, current))
 
     if HEADER_CTA_RE.search(text):
-        text = HEADER_CTA_RE.sub(lambda _: desktop_cta(brand), text, count=1)
+        text = HEADER_CTA_RE.sub(lambda match: _header_cta(match, brand), text, count=1)
 
     mobile = MOBILE_NAV_RE.search(text)
     if mobile:

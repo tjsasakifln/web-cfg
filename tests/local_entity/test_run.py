@@ -6,15 +6,18 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
+
 from scripts.local_entity.constants import (
     CAMPAIGN,
     CLAIM_STATUSES,
     CENSUS_CHANNELS,
     SURFACE_DECISIONS,
 )
+from scripts.local_entity.graph import extract_entity_graph
 from scripts.local_entity.pack import citation_target_defects, gbp_checklist_defects
 from scripts.local_entity.run import format_observables, run_campaign
-from scripts.local_entity.validate import scan_artifact_payload, validate_bundle
+from scripts.local_entity.validate import LocalEntityError, scan_artifact_payload, validate_bundle
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data" / "local-entity"
@@ -57,6 +60,47 @@ def test_run_campaign_on_real_specialist(tmp_path: Path) -> None:
         }
     )
     assert errors == []
+
+
+def test_run_campaign_rejects_forbidden_jsonld_anywhere_on_home() -> None:
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    poisoned = home + """
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@graph":[
+        {"@type":"LocalBusiness","address":{"@type":"PostalAddress","streetAddress":"Rua Inventada, 1"}},
+        {"@type":"AggregateRating","ratingValue":"5","reviewCount":"99"}
+      ]}
+    </script>
+    """
+    with pytest.raises(LocalEntityError, match="home_honesty:.*invented_"):
+        run_campaign(root=ROOT, home_html=poisoned, write=False)
+
+
+def test_bundle_rejects_forbidden_jsonld_on_additional_public_surface() -> None:
+    result = run_campaign(root=ROOT, write=False)
+    malicious = """
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Organization",
+       "aggregateRating":{"@type":"AggregateRating","ratingValue":"5"}}
+    </script>
+    """
+    errors = validate_bundle(
+        {
+            "graph": result["graph"],
+            "html": (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(
+                encoding="utf-8"
+            ),
+            "additional_public_surfaces": [
+                {"id": "home", "graph": extract_entity_graph(malicious), "html": malicious}
+            ],
+            "classified": result["classified"],
+            "census": result["census"],
+            "decision": result["decision"],
+            "gbp": result["gbp"],
+            "citations": result["citations"],
+        }
+    )
+    assert any(error.startswith("public_surface:home:invented_review") for error in errors)
 
 
 def test_cli_entry_matches_library() -> None:
