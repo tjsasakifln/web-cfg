@@ -20,6 +20,24 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 SITE = "https://confenge.com.br"
+ONPAGE_CAPTURE_ROUTES = (
+    "defesa-margem-contratos-publicos",
+    "atrasos-prorrogacao-obras-publicas",
+    "defesa-tecnica-contratos-publicos",
+    "acompanhamento-contratos-obras",
+    "bid-room-licitacoes-obras",
+)
+CAPTURE_HIDDEN_FIELDS = (
+    "offer_id",
+    "terms_id",
+    "jornada",
+    "estagio",
+    "origem",
+    "asset_id",
+    "cta_id",
+    "route_family",
+    "landing_page",
+)
 
 # --- Patterns that signal machine / keyword-stuffed copy ---
 MACHINE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
@@ -658,10 +676,141 @@ def gate_brand_shell() -> GateReport:
     )
 
 
-def gate_conversion() -> GateReport:
+def _onpage_capture_findings(root: Path, pii_re: re.Pattern[str]) -> tuple[list[Finding], int]:
+    findings: list[Finding] = []
+    scanned = 0
+    for slug in ONPAGE_CAPTURE_ROUTES:
+        page = root / slug / "index.html"
+        scanned += 1
+        if not page.is_file():
+            findings.append(Finding(gate="conversion", path=str(page), reason="capture_page_missing"))
+            continue
+        html = page.read_text(encoding="utf-8", errors="replace")
+        form_match = re.search(
+            r'<form\b(?=[^>]*\bmethod=["\']post["\'])(?=[^>]*\baction=["\']/'
+            r'\.netlify/functions/lead["\'])[^>]*>(.*?)</form>',
+            html,
+            re.I | re.S,
+        )
+        if not form_match:
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=str(page.relative_to(root)),
+                    reason="pillar_missing_onpage_capture",
+                )
+            )
+            continue
+        form = form_match.group(0)
+        if html.find('href="#captura-pilar"') < 0 or html.find('href="#captura-pilar"') > form_match.start():
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=str(page.relative_to(root)),
+                    reason="pillar_primary_cta_bypasses_capture",
+                )
+            )
+        for attr in ("data-offer-id", "data-cta-id", "data-asset-id", "data-route-family", "data-cta-position"):
+            if not re.search(rf'\b{attr}=["\'][^"\']*["\']', form_match.group(0).split(">", 1)[0], re.I):
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=str(page.relative_to(root)),
+                        reason="capture_data_contract_missing",
+                        excerpt=attr,
+                    )
+                )
+        for name in CAPTURE_HIDDEN_FIELDS:
+            field = re.search(
+                rf'<input\b(?=[^>]*\btype=["\']hidden["\'])(?=[^>]*\bname=["\']{name}["\'])[^>]*>',
+                form,
+                re.I,
+            )
+            if not field:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=str(page.relative_to(root)),
+                        reason="capture_attribution_missing",
+                        excerpt=name,
+                    )
+                )
+        expected_values = {
+            "origem": slug,
+            "asset_id": slug,
+            "route_family": slug,
+            "landing_page": f"{SITE}/{slug}/",
+        }
+        for name, expected in expected_values.items():
+            field = re.search(
+                rf'<input\b(?=[^>]*\bname=["\']{name}["\'])[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+                form,
+                re.I,
+            )
+            if not field or field.group(1) != expected:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=str(page.relative_to(root)),
+                        reason="capture_attribution_mismatch",
+                        excerpt=f"{name}={field.group(1) if field else 'MISSING'} expected={expected}",
+                    )
+                )
+        for empty_name in ("offer_id", "terms_id"):
+            field = re.search(
+                rf'<input\b(?=[^>]*\bname=["\']{empty_name}["\'])[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+                form,
+                re.I,
+            )
+            if field and field.group(1).strip():
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=str(page.relative_to(root)),
+                        reason="unpriced_pillar_offer_invented",
+                        excerpt=f"{empty_name}={field.group(1)[:80]}",
+                    )
+                )
+        consent = re.search(
+            r'<input\b(?=[^>]*\btype=["\']checkbox["\'])(?=[^>]*\bname=["\']consentimento["\'])'
+            r'(?=[^>]*\brequired\b)[^>]*>',
+            form,
+            re.I,
+        )
+        if not consent:
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=str(page.relative_to(root)),
+                    reason="capture_consent_not_required",
+                )
+            )
+        if "priceValidUntil" in html or re.search(r'"price"\s*:', html):
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=str(page.relative_to(root)),
+                    reason="unpriced_pillar_price_invented",
+                )
+            )
+        for match in re.finditer(r'data-[a-z-]+="([^"]{1,200})"', form, re.I):
+            if pii_re.search(match.group(1)):
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=str(page.relative_to(root)),
+                        reason="possible_pii_in_data_attr",
+                        excerpt=match.group(1)[:80],
+                    )
+                )
+    return findings, scanned
+
+
+def gate_conversion(root: Path | None = None) -> GateReport:
     """Indexable content pages need a primary journey CTA and no PII in data attrs."""
     from scripts.site.brand import load_brand
 
+    base = root or ROOT
     brand = load_brand()
     journeys = {j["id"]: j for j in brand.get("journeys") or []}
     findings: list[Finding] = []
@@ -670,7 +819,7 @@ def gate_conversion() -> GateReport:
         r"\b(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b",
         re.I,
     )
-    for p in (ROOT / "conteudos").glob("*/index.html"):
+    for p in (base / "conteudos").glob("*/index.html"):
         html = p.read_text(encoding="utf-8", errors="replace")
         if not is_indexable_html(html):
             continue
@@ -682,7 +831,7 @@ def gate_conversion() -> GateReport:
             findings.append(
                 Finding(
                     gate="conversion",
-                    path=str(p.relative_to(ROOT)),
+                    path=str(p.relative_to(base)),
                     reason="missing_cta",
                 )
             )
@@ -692,7 +841,7 @@ def gate_conversion() -> GateReport:
                 findings.append(
                     Finding(
                         gate="conversion",
-                        path=str(p.relative_to(ROOT)),
+                        path=str(p.relative_to(base)),
                         reason="possible_pii_in_data_attr",
                         excerpt=m.group(1)[:80],
                     )
@@ -716,17 +865,23 @@ def gate_conversion() -> GateReport:
             findings.append(
                 Finding(
                     gate="conversion",
-                    path=str(p.relative_to(ROOT)),
+                    path=str(p.relative_to(base)),
                     reason="missing_journey_signal",
                     severity="warn",
                 )
             )
 
+    capture_findings, capture_scanned = _onpage_capture_findings(base, pii_re)
+    findings.extend(capture_findings)
     errors = [f for f in findings if f.severity == "error"]
     return GateReport(
         ok=len(errors) == 0,
         findings=findings,
-        stats={"scanned": scanned, "journeys": list(journeys.keys())},
+        stats={
+            "scanned": scanned,
+            "onpage_capture_scanned": capture_scanned,
+            "journeys": list(journeys.keys()),
+        },
     )
 
 

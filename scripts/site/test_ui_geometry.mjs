@@ -957,6 +957,10 @@ async function main() {
       "/defesa-margem-contratos-publicos/",
       "/diagnostico-b2g-expansao/",
     ];
+    const onPageCaptureRoutes = new Set([
+      "/bid-room-licitacoes-obras/",
+      "/defesa-margem-contratos-publicos/",
+    ]);
     const reports = [];
     for (const [w, h] of [[390, 844], [1280, 720]]) {
       await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
@@ -971,6 +975,9 @@ async function main() {
             ctaBottom: box ? Math.round(box.bottom) : null,
             ctaHref: cta?.getAttribute("href") || "",
             ctaVisible: Boolean(box && box.top < window.innerHeight && box.bottom > 0),
+            onPageLeadForm: Boolean(document.querySelector(
+              '#captura-pilar form[method="post"][action="/.netlify/functions/lead"] input[name="consentimento"][required]'
+            )),
             details: details.length,
             detailsClosed: details.every((el) => !el.open),
             height: document.documentElement.scrollHeight,
@@ -981,6 +988,10 @@ async function main() {
         if (!rep.details || !rep.detailsClosed) throw new Error(`${path}@${w}: optional details invalid ${JSON.stringify(rep)}`);
         if (path === "/diagnostico-b2g-expansao/") {
           if (rep.ctaHref !== "#pedido-diagnostico") throw new Error(`${path}: unexpected CTA ${rep.ctaHref}`);
+        } else if (onPageCaptureRoutes.has(path)) {
+          if (rep.ctaHref !== "#captura-pilar" || !rep.onPageLeadForm) {
+            throw new Error(`${path}: primary CTA must target the consented on-page lead form ${JSON.stringify(rep)}`);
+          }
         } else if (!rep.ctaHref.startsWith("https://wa.me/")) {
           throw new Error(`${path}: primary CTA adds a page change ${rep.ctaHref}`);
         }

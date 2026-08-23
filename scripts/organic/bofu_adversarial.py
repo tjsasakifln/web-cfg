@@ -24,6 +24,13 @@ ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "organic" / "bofu-intent-matrix.json"
 SITE = "https://confenge.com.br"
 MIN_INTERNAL_LINKS = 3
+ONPAGE_CAPTURE_PATHS = {
+    "/defesa-margem-contratos-publicos/",
+    "/atrasos-prorrogacao-obras-publicas/",
+    "/defesa-tecnica-contratos-publicos/",
+    "/acompanhamento-contratos-obras/",
+    "/bid-room-licitacoes-obras/",
+}
 
 FINDING_CODES = (
     "SERVICE_INSUFFICIENT_INTERNAL_LINKS",
@@ -41,6 +48,7 @@ FINDING_CODES = (
     "PILLAR_NOT_SELF_CANONICAL",
     "PILLAR_NOT_INDEX_FOLLOW",
     "PILLAR_NOT_IN_SITEMAP",
+    "PILLAR_MISSING_ONPAGE_CAPTURE",
 )
 
 _TAG_RE = re.compile(r"<[^>]+>", re.I)
@@ -250,6 +258,19 @@ def audit_service_page(
     row: dict[str, Any] | None = None,
 ) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
+    if path in ONPAGE_CAPTURE_PATHS and not re.search(
+        r'<form\b(?=[^>]*\bmethod=["\']post["\'])(?=[^>]*\baction=["\']/'
+        r'\.netlify/functions/lead["\'])',
+        html,
+        re.I,
+    ):
+        findings.append(
+            _finding(
+                "PILLAR_MISSING_ONPAGE_CAPTURE",
+                path,
+                "non-frozen service pillar must capture on-page before WhatsApp fallback",
+            )
+        )
     robots = _meta(html, "robots").lower()
     canonical = _canonical(html)
     expected = SITE + path
