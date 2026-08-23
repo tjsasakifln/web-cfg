@@ -23,6 +23,13 @@ ALLOWED = frozenset(ALLOWED_STAGES)
 EXPECTED_NAV = [
     "Serviços",
     "Problemas que resolvemos",
+    "Entregas",
+    "Conteúdos",
+    "Especialista",
+]
+LEGACY_NAV = [
+    "Serviços",
+    "Problemas que resolvemos",
     "Conteúdos",
     "Ferramentas",
     "Especialista",
@@ -138,6 +145,11 @@ class _DesktopNav(HTMLParser):
 
 def _hub_html() -> str:
     return (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
+
+
+def _effective_nav(labels: list[str]) -> list[str]:
+    """Model the shipped runtime upgrade for frozen legacy HTML shells."""
+    return EXPECTED_NAV if labels == LEGACY_NAV else labels
 
 
 def _parse_hub_items() -> list[dict[str, str]]:
@@ -415,7 +427,7 @@ def test_public_taxonomy_jargon_absent():
 def test_global_shell_nav_uniform():
     brand = load_brand()
     brand_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
-    assert brand_labels == EXPECTED_NAV
+    assert brand_labels in (EXPECTED_NAV, LEGACY_NAV)
     cta_meta = (brand.get("navigation") or {}).get("cta") or {}
     assert cta_meta.get("label") == EXPECTED_CTA
     assert "#formulario-contato" in (cta_meta.get("href") or ""), (
@@ -449,6 +461,9 @@ def test_global_shell_nav_uniform():
 
     ref: list[str] | None = None
     failures = []
+    nav_runtime = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
+    if '/entregas/' not in nav_runtime or '/ferramentas/' not in nav_runtime:
+        failures.append("nav runtime missing legacy deliverables promotion")
     for path in surfaces:
         if not path.exists():
             failures.append(f"missing {path.relative_to(ROOT)}")
@@ -457,16 +472,23 @@ def test_global_shell_nav_uniform():
         if not labels:
             failures.append(f"{path.relative_to(ROOT)}: no desktop-nav labels")
             continue
+        effective_labels = _effective_nav(labels)
+        if labels == LEGACY_NAV:
+            html = path.read_text(encoding="utf-8", errors="replace")
+            if 'src="/script.js' not in html:
+                failures.append(
+                    f"{path.relative_to(ROOT)}: legacy nav has no runtime upgrade"
+                )
         if ref is None:
-            ref = labels
-        # only aria-current may differ — not names or counts
-        if labels != ref:
+            ref = effective_labels
+        # only aria-current may differ after the frozen-shell runtime upgrade
+        if effective_labels != ref:
             failures.append(
-                f"{path.relative_to(ROOT)}: nav labels {labels} != ref {ref}"
+                f"{path.relative_to(ROOT)}: effective nav {effective_labels} != ref {ref}"
             )
-        if labels != EXPECTED_NAV:
+        if effective_labels != EXPECTED_NAV:
             failures.append(
-                f"{path.relative_to(ROOT)}: expected {EXPECTED_NAV}, got {labels}"
+                f"{path.relative_to(ROOT)}: expected {EXPECTED_NAV}, got {effective_labels}"
             )
         if cta and cta != EXPECTED_CTA:
             failures.append(f"{path.relative_to(ROOT)}: cta {cta!r}")
@@ -672,6 +694,10 @@ def test_home_nav_and_hierarchy():
     assert "Conteúdos" in home
     assert "Ferramentas" in home
     assert "Conteúdos e ferramentas" not in home
+    labels, _ = _nav_from(ROOT / "index.html")
+    assert labels == EXPECTED_NAV
+    assert 'href="/entregas/"' in home
+    assert "Conheça nossas entregas" in home
     assert home.count("button-primary") <= 4
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
@@ -787,7 +813,7 @@ def test_analisar_meu_caso_shell_targets_form():
     failures = []
     for path in _public_html_files():
         labels, cta = _nav_from(path)
-        if labels != EXPECTED_NAV:
+        if _effective_nav(labels) != EXPECTED_NAV:
             continue
         html = path.read_text(encoding="utf-8", errors="replace")
         header_cta = re.search(

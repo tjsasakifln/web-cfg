@@ -222,6 +222,22 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["_site/casos/modelo-relatorio-inteligencia-licitacoes/"],
     surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
   },
+  "test:deliverables-hub": {
+    producers: [
+      "scripts/site/test_deliverables_hub.py",
+      "entregas/",
+      "index.html",
+      "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "data/site/brand.json",
+      "js/modules/nav.js",
+      "scripts/pseo/html_shell.py",
+      "scripts/pseo/public_artifact.py",
+      "sitemap.xml",
+      "sitemap.txt",
+    ],
+    artifacts: ["_site/entregas/"],
+    surfaces: ["/", "/entregas/", "/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
   "test:report-model-ui": {
     producers: [
       "scripts/site/test_report_model_ui.mjs",
@@ -232,6 +248,20 @@ export const SUITE_GRAPH = Object.freeze({
     ],
     artifacts: [],
     surfaces: ["/casos/modelo-relatorio-inteligencia-licitacoes/"],
+  },
+  "test:deliverables-hub-ui": {
+    producers: [
+      "scripts/site/test_deliverables_hub_ui.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      "entregas/",
+      "index.html",
+      "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "styles.css",
+      "script.js",
+      "js/modules/nav.js",
+    ],
+    artifacts: [],
+    surfaces: ["/", "/entregas/", "/ferramentas/"],
   },
   "test:cta-whatsapp": {
     producers: ["scripts/site/test_cta_whatsapp.mjs", "data/site/whatsapp-messages.json"],
