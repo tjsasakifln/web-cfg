@@ -98,6 +98,13 @@ TIPOLOGY_SHARES = (
     "23,4%",
     "3,9%",
 )
+COMPETITOR_ROWS = (
+    ("C-01", 0.232, "0,2%"),
+    ("C-02", 0.762, "0,6%"),
+    ("C-03", 0.202, "0,2%"),
+    ("C-04", 8.900, "6,7%"),
+    ("C-05", 0.741, "0,6%"),
+)
 
 
 def _page(slug: str) -> Path:
@@ -213,6 +220,75 @@ def test_synthetic_base_reconciles_across_the_whole_family() -> None:
         html = _html(slug)
         for token in ("C-04", "R$ 8,90 mi"):
             assert token in html, (slug, token)
+
+
+def test_competitor_shares_use_the_shared_base_denominator() -> None:
+    total_mi = 132.40
+    expected_subtotal = round(
+        sum(value_mi for _, value_mi, _ in COMPETITOR_ROWS) / total_mi * 100,
+        1,
+    )
+    assert expected_subtotal == 8.2
+
+    for slug, *_ in MODELS:
+        assert "R$ 136,90 mi" not in _html(slug), slug
+
+    for slug in (
+        "modelo-mapeamento-concorrentes-publicos",
+        "modelo-apresentacao-executiva-resultados",
+        "modelo-relatorio-executivo-consolidado",
+    ):
+        html = _html(slug)
+        for competitor, value_mi, share in COMPETITOR_ROWS:
+            calculated = round(value_mi / total_mi * 100, 1)
+            assert share == f"{calculated:.1f}%".replace(".", ",")
+            row = re.search(
+                rf"<tr[^>]*>.*?>{competitor}</(?:th|td)>.*?</tr>",
+                html,
+                flags=re.DOTALL,
+            )
+            assert row and share in row.group(0), (slug, competitor, share)
+
+    competitor_map = _html("modelo-mapeamento-concorrentes-publicos")
+    assert "R$ 132,40 mi elegíveis" in competitor_map
+    assert "<td>8,2%</td>" in competitor_map
+    assert "somar as cinco participações já arredondadas devolve 8,3%" in competitor_map
+
+
+def test_price_outliers_distinguish_consolidated_rows_from_all_marks() -> None:
+    price_panel = _html("modelo-painel-precos-obras-publicas")
+    presentation = _html("modelo-apresentacao-executiva-resultados")
+    consolidated = _html("modelo-relatorio-executivo-consolidado")
+    base = _html("modelo-base-quantitativa-canonica")
+
+    assert re.search(
+        r">TOTAL</th><td>118</td>.*?<td>7</td></tr>",
+        price_panel,
+        flags=re.DOTALL,
+    )
+    assert re.search(
+        r">Total consolidado</th>.*?<td>118</td><td>7</td></tr>",
+        presentation,
+        flags=re.DOTALL,
+    )
+    assert re.search(
+        r">Total consolidado</th><td>118</td>.*?<td>7</td></tr>",
+        consolidated,
+        flags=re.DOTALL,
+    )
+    assert "Outliers no consolidado</dt><dd>7 de 118" in price_panel
+    assert "<dt>MARCAÇÕES DE OUTLIER</dt><dd>17" in price_panel
+    assert "<dt>Marcações de outlier preservadas</dt><dd>17" in presentation
+    assert "17 marcações de outlier" in consolidated.casefold()
+    assert "17 marcações de outlier" in base.casefold()
+
+
+def test_competitor_ranking_rule_is_consistent() -> None:
+    consolidated = _html("modelo-relatorio-executivo-consolidado")
+    competitor_map = _html("modelo-mapeamento-concorrentes-publicos")
+    assert "15 primeiros por valor" not in consolidated
+    assert "15 primeiros por frequência, com desempate por valor" in consolidated
+    assert "Ordenação por frequência, depois por valor" in competitor_map
 
 
 def test_value_ladder_prices_are_visible_and_strictly_ascending() -> None:
