@@ -7,8 +7,8 @@ claimed without a consented real contact and an observable Warmbly receipt.
 ## Provenance and decision gate
 
 - `BASE_SHA`: `2086e7138d87d9fe92f509b4748b1e59e7260107`
-- `FINAL_SHA`: `f3319adf684e842d60bb696f47e34e48ddbdae94`
-- `PRODUCTION_SHA`: `97d8338640379d15b58ac5a1453b8420ac606aec`
+- `FINAL_SHA`: `97d8338640379d15b58ac5a1453b8420ac606aec`
+- `IMPLEMENTATION_SOURCE_SHA`: `f3319adf684e842d60bb696f47e34e48ddbdae94`
 - Repository/public authority: `tjsasakifln/web-cfg`, `confenge.com.br`
 - Affected ADR: `ADR-STRAT-002`; no boundary change, so no ADR amendment
 - Decision state: `EXECUTE_NOW`
@@ -68,7 +68,7 @@ Explicit fixtures:
 An authoritative snapshot change changes the generated expectation and makes
 `test:offers` fail until the HTML is regenerated coherently.
 
-Production at `PRODUCTION_SHA` returns the exact generated interval and no
+Production at `FINAL_SHA` returns the exact generated interval and no
 `até 15 dias úteis` delivery claim.
 
 ## #233 — `priceValidUntil` specification reconciliation
@@ -135,7 +135,7 @@ The deployed web-cfg authenticated `inbound_handoff` response exposes only safe
 `SET | UNSET` presence and `READY | UNSET | BLOCKED` contract state. It never
 returns URL or secret values. Post-deploy Actions run `32610623004` observed
 `webhook_url=UNSET`, `webhook_secret=UNSET`, `contract=UNSET` and
-`reason=not_configured` at `PRODUCTION_SHA`.
+`reason=not_configured` at `FINAL_SHA`.
 
 ### Final production observations
 
