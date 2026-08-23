@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "f41f66cbc93585fd1fa8670a5e31bc8e6b42e564",
+  "baseline_commit": "27b417646272de37fe85e8c34427d3d44cccee15",
   "recaptured_at": "2026-08-23",
-  "recapture_reason": "Reviewed expansion of the canonical sitemap graph from 65 to 66 indexable URLs for the synthetic public report model in PR #281. The new URL passed sitemap graph, SEO, public artifact, copy, analytics and five-breakpoint browser gates; all six frozen pillar HTML files remain byte-identical and html_mutation remains false.",
+  "recapture_reason": "Reviewed analytics correction for the public report hand-raise: the deterministic runtime now emits one whatsapp_click per physical click with versioned offer and next-action context, covered by a real browser regression. The six frozen pillar HTML files remain byte-identical and html_mutation remains false.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
     "diagnostico-b2g-360/index.html": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
     "diagnostico-pre-licitacao/index.html": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
-    "script.js": "c2dca7fa7ac8c4ca32e2e8b1d19ac5b35ca6eedc9b6623c9c49655b8e586d166",
+    "script.js": "7f6043f5bff79e8e65647c32e6743773369a407e2161acafc1d414774da461c7",
     "styles.css": "93fa460ed3bbd3c53f7f71965c4442419aeae4b849b7a7f56a10e922e83dc825",
     "styles-tokens.css": "fc9ff3dd5645da772d22d51f5c4af808fcc80b0fcd3e74c3655e461e4ce2574a",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",

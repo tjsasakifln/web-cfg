@@ -21,6 +21,7 @@ Every admitted event carries:
 | `destination_path` / `destination_service_id` | Canonical dest on `content_to_service`. Unknown dest is `UNKNOWN_SERVICE` |
 | `intent` | When known |
 | `cta_id` / `cta_position` | When the event is a CTA |
+| `offer_id` / `next_action_id` | Versioned commercial identity and next action when known; never free text |
 | `correlation_id` / `idempotency_key` / `event_id` | When the producer has them. `event_id` dedupes one physical click |
 | `consent` | `not_required` on aggregate events |
 | `pii_policy` | `aggregate_allowlist_empty` |
@@ -43,6 +44,11 @@ The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query t
 `content_to_service` stays on the engagement layer. Aggregator `funnel_layers` reports `transition`, `lead`, `qualified`, `pipeline`, and `won_lost` as separate series. `qualified` / `pipeline` / `won_lost` are observed Warmbly inputs only (#88). Absence of a series is `UNKNOWN`, never numeric zero.
 
 Missing Warmbly evidence stays `UNKNOWN`. Reconciliation never derives qualified lead or pipeline from an earlier stage.
+
+A visitor-initiated `wa.me` activation emits one `whatsapp_click`. When the link
+names a versioned commercial hand-raise, that same event carries `offer_id`,
+`next_action_id`, `cta_id`, `cta_position` and one `event_id`; it must not be
+paired with a second alias or CTA event for the same physical click.
 
 ## Compatibility
 

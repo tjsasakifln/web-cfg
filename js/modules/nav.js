@@ -503,7 +503,11 @@
           content_type: isEditorial ? (editorialType || 'editorial') : undefined,
           topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
           asset_id: whatsappAttrs.asset_id,
+          route_family: whatsappAttrs.route_family,
           cta_id: whatsappAttrs.cta_id,
+          cta_kind: el.getAttribute('data-cta-kind') || '',
+          offer_id: el.getAttribute('data-offer-id') || '',
+          next_action_id: el.getAttribute('data-next-action-id') || '',
         });
         return;
       }

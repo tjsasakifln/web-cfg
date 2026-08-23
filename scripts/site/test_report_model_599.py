@@ -162,9 +162,8 @@ def test_price_has_versioned_non_catalog_action_authority() -> None:
     )
     assert "Escopo e aceite são confirmados" in html
 
-    assert 'window.confengeTrack("offer_cta_click"' in html
-    assert "next_action_id: link.dataset.nextActionId" in html
-    assert "offer_id: link.dataset.offerId" in html
+    assert 'window.confengeTrack("offer_cta_click"' not in html
+    assert "data-next-action-id" not in html.split("<script>")[-1]
 
 
 def test_schema_attribution_and_internal_discovery() -> None:

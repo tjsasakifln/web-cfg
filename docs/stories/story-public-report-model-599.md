@@ -69,6 +69,9 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
   `handraise-report-intelligence-599-v1` é WhatsApp iniciado pelo visitante,
   com escopo e termos `UNKNOWN` até aceite humano e checkout desabilitado em
   `intent-action-matrix.v1.json`.
+- Cada ativação comercial emite somente um `whatsapp_click`, enriquecido com
+  `offer_id`, `next_action_id`, identidade/posição do CTA e `event_id`; não há
+  segundo `cta_click` para o mesmo clique físico.
 
 ### Testing
 
@@ -117,6 +120,7 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 |---|---:|---|---|
 | 2026-08-23 | 1.0 | Story aprovada a partir do plano confirmado pelo proprietário | @sm |
 | 2026-08-23 | 1.1 | Exemplar, descoberta, conversão e gates locais concluídos | @dev |
+| 2026-08-23 | 1.2 | Ação comercial versionada e clique único reconciliável sem PII | @dev |
 
 ## Dev Agent Record
 

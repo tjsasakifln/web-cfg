@@ -456,6 +456,59 @@ for (const j of journeys) {
   if (!names.includes("outbound_click")) fail("missing_outbound_click", names);
 }
 
+// --- Versioned report hand-raise: one physical click, one enriched event ---
+{
+  const html = htmlOf("casos/modelo-relatorio-inteligencia-licitacoes/index.html");
+  const attrs = findAnchor(html, (a) =>
+    a["data-cta-id"] === "report-599-hero" &&
+    a["data-next-action-id"] === "contratar_relatorio_inteligencia_599"
+  );
+  if (!attrs) fail("report_handraise_anchor_missing");
+  const el = makeEl(attrs, "Quero meu relatório por R$ 599");
+  const driven = driveScript({
+    pathname: "/casos/modelo-relatorio-inteligencia-licitacoes/",
+    body: bodyAttrs(html),
+    hrefEls: [el],
+    waEls: [el],
+  });
+  el.click();
+  const physicalClickEvents = driven.dataLayer.filter((e) =>
+    e.event === "whatsapp_click" || e.event === "cta_click"
+  );
+  if (physicalClickEvents.length !== 1 || physicalClickEvents[0].event !== "whatsapp_click") {
+    fail("report_handraise_dual_count", physicalClickEvents);
+  }
+  const ev = physicalClickEvents[0];
+  const expected = {
+    asset_id: "relatorio-inteligencia-licitacoes-demonstrativo",
+    route_family: "edital-proposta",
+    cta_id: "report-599-hero",
+    cta_position: "report_hero",
+    cta_kind: "offer",
+    offer_id: "handraise-report-intelligence-599-v1",
+    next_action_id: "contratar_relatorio_inteligencia_599",
+    source: "CONFENGE_WEB",
+  };
+  for (const [key, value] of Object.entries(expected)) {
+    if (ev[key] !== value) fail("report_handraise_attribution", { key, expected: value, event: ev });
+  }
+  if (!ev.event_id) fail("report_handraise_event_id", ev);
+  const reconciled = contract.reconcileFunnel({ events: [{ event: ev.event, props: ev }] });
+  if (reconciled.denominators.engagement !== 1) {
+    fail("report_handraise_engagement_inflated", reconciled);
+  }
+  const admission = contract.admitEvent({ event: ev.event, props: ev });
+  if (!admission.ok) fail("report_handraise_rejected", admission);
+  const admitted = admission.event.props;
+  if (
+    admitted?.offer_id !== expected.offer_id ||
+    admitted?.next_action_id !== expected.next_action_id ||
+    admitted?.event_id !== ev.event_id
+  ) {
+    fail("report_handraise_context_dropped", admitted);
+  }
+}
+
 // --- Query and fragment stripped from destination_path ---
 {
   const html = htmlOf("conteudos/sinapi-desonerado-nao-desonerado/index.html");

@@ -298,19 +298,6 @@ window.addEventListener("DOMContentLoaded", function () {
       page_path: window.location.pathname,
       source: "CONFENGE_WEB"
     });
-    document.querySelectorAll('a[data-next-action-id="contratar_relatorio_inteligencia_599"]').forEach(function (link) {
-      link.addEventListener("click", function () {
-        window.confengeTrack("offer_cta_click", {
-          asset_id: "relatorio-inteligencia-licitacoes-demonstrativo",
-          cta_id: link.dataset.ctaId,
-          cta_position: link.dataset.ctaPosition,
-          next_action_id: link.dataset.nextActionId,
-          offer_id: link.dataset.offerId,
-          page_path: window.location.pathname,
-          route_family: "edital-proposta"
-        });
-      });
-    });
   }
 }, { once: true });
 </script>
