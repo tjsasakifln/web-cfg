@@ -378,7 +378,8 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
     candidates: list[Path] = []
     frozen_candidates: set[str] = set()
     for path in ROOT.rglob("index.html"):
-        if any(part in {".git", ".worktrees", "_site", "node_modules"} for part in path.parts):
+        relative_parts = path.relative_to(ROOT).parts
+        if any(part in {".git", ".worktrees", "_site", "node_modules"} for part in relative_parts):
             continue
         html = path.read_text(encoding="utf-8")
         meta = _meta_properties(html)

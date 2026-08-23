@@ -57,6 +57,17 @@
     "section_default": "80px 0",
     "section_loose": "104px 0",
     "container": "1200px",
+    "scale": {
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "8": "32px",
+      "10": "40px",
+      "12": "48px"
+    },
     "rule": "Never apply the same vertical padding to every consecutive section; alternate tight/default/loose and surface contrast"
   },
   "radii": {
