@@ -195,7 +195,12 @@ export const SUITE_GRAPH = Object.freeze({
     surfaces: [],
   },
   "test:cta-whatsapp": {
-    producers: ["scripts/site/test_cta_whatsapp.mjs", "data/site/whatsapp-messages.json"],
+    producers: [
+      "scripts/site/test_cta_whatsapp.mjs",
+      "scripts/site/svg_path_grammar.mjs",
+      "scripts/site/fixtures/svg_path/",
+      "data/site/whatsapp-messages.json",
+    ],
     artifacts: [],
     surfaces: ["/", "/diretoria-b2g/", "/defesa-margem-contratos-publicos/"],
   },

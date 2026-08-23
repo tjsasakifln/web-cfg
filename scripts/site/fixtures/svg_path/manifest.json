@@ -1,0 +1,51 @@
+{
+  "label": "FIXTURE_ONLY",
+  "public": false,
+  "index_eligible": false,
+  "note": "Negative SVG path-data cases for the #187 gate. Never copy into _site as INDEX surfaces.",
+  "gate": "npm run test:cta-whatsapp",
+  "cases": [
+    {
+      "id": "corrupt-whatsapp-glyph",
+      "file": "corrupt-whatsapp-glyph.html",
+      "expect": "invalid",
+      "defect": "svg_path_invalid",
+      "summary": "The literal #i-whatsapp glyph of issue #187 (concatenated numbers, `c` argument set not a multiple of 6)."
+    },
+    {
+      "id": "missing-moveto",
+      "file": "missing-moveto.html",
+      "expect": "invalid",
+      "defect": "svg_path_invalid",
+      "summary": "Path data that does not open with M/m."
+    },
+    {
+      "id": "invalid-arc-flag",
+      "file": "invalid-arc-flag.html",
+      "expect": "invalid",
+      "defect": "svg_path_invalid",
+      "summary": "Elliptical arc with a flag that is neither 0 nor 1."
+    },
+    {
+      "id": "trailing-argument",
+      "file": "trailing-argument.html",
+      "expect": "invalid",
+      "defect": "svg_path_invalid",
+      "summary": "Cubic curve with a trailing partial argument set; every token is a legal number, so only arity catches it."
+    },
+    {
+      "id": "non-numeric-token",
+      "file": "non-numeric-token.html",
+      "expect": "invalid",
+      "defect": "svg_path_invalid",
+      "summary": "Unrendered template placeholder leaked into the path data."
+    },
+    {
+      "id": "valid-canonical",
+      "file": "valid-canonical.html",
+      "expect": "valid",
+      "defect": null,
+      "summary": "Positive control: canonical glyph plus exponent, implicit-repeat and empty-d forms the grammar must keep accepting."
+    }
+  ]
+}

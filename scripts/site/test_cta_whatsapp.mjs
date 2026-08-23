@@ -1,9 +1,11 @@
 /**
- * Audit main WhatsApp CTAs: correct number + non-empty text param.
+ * Audit main WhatsApp CTAs: correct number + non-empty text param, and gate
+ * every SVG path payload the site ships (issue #187).
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { parseSvgPath, extractPathData } from "./svg_path_grammar.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const NUMBER = "5548988344559";
@@ -95,13 +97,16 @@ for (const key of [
 if (catalog.number_e164 !== NUMBER) issues.push({ error: "catalog_number" });
 
 const SKIP_DIRS = new Set(["node_modules", "_site", ".git", ".venv", "venv", ".worktrees"]);
-const SVG_PATH_TOKEN =
-  /[MmLlHhVvCcSsQqTtAaZz]|[+-]?(?:\d*\.\d+|\d+)(?:[eE][+-]?\d+)?/g;
+// Fixture pages carry deliberately broken path data; they are graded by the
+// fixture harness below, never by the site-wide scan.
+const SVG_FIXTURE_DIR = "scripts/site/fixtures/svg_path";
 
 function walkHtmlFiles(dir, acc = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (SKIP_DIRS.has(ent.name)) continue;
     const full = path.join(dir, ent.name);
+    const rel = path.relative(root, full).split(path.sep).join("/");
+    if (rel === SVG_FIXTURE_DIR) continue;
     if (ent.isDirectory()) walkHtmlFiles(full, acc);
     else if (ent.name.endsWith(".html")) acc.push(full);
   }
@@ -109,26 +114,50 @@ function walkHtmlFiles(dir, acc = []) {
 }
 
 function svgPathCommandsParse(d) {
-  const leftover = String(d)
-    .replace(SVG_PATH_TOKEN, "")
-    .replace(/[\s,]/g, "");
-  return leftover.length === 0;
+  return parseSvgPath(d).ok;
 }
 
 function hasCorruptNumber(d) {
   return /0\.6\.7/.test(d) || /0 \.6\.7/.test(d) || /\d\.\d+\.\d/.test(d);
 }
 
+/**
+ * Grammar gate: every `d` payload in a scanned document must parse. Returns the
+ * issues found so the same routine grades generated HTML and template sources.
+ */
+function auditPathData(rel, source) {
+  const out = [];
+  let checked = 0;
+  for (const d of extractPathData(source)) {
+    checked += 1;
+    const parsed = parseSvgPath(d);
+    if (!parsed.ok) {
+      out.push({
+        rel,
+        error: "invalid_svg_path",
+        reason: parsed.error,
+        index: parsed.index,
+        d: d.slice(0, 120),
+      });
+    }
+  }
+  return { issues: out, checked };
+}
+
 const htmlFiles = walkHtmlFiles(root);
+let pathsChecked = 0;
 for (const full of htmlFiles) {
   const rel = path.relative(root, full).split(path.sep).join("/");
   const html = fs.readFileSync(full, "utf8");
-  const dAttrs = [...html.matchAll(/\bd="([^"]*)"/g)].map((m) => m[1]);
+  const dAttrs = extractPathData(html);
   for (const d of dAttrs) {
     if (d.includes("0.6.7") || d.includes("0 .6.7") || hasCorruptNumber(d)) {
       issues.push({ rel, error: "corrupt_svg_path_number", d: d.slice(0, 80) });
     }
   }
+  const audited = auditPathData(rel, html);
+  pathsChecked += audited.checked;
+  issues.push(...audited.issues);
   const symbols = [
     ...html.matchAll(/<symbol\b[^>]*id="i-whatsapp"[^>]*>([\s\S]*?)<\/symbol>/gi),
   ];
@@ -159,11 +188,62 @@ if (!pseoShell.includes('id="i-whatsapp"') || !pseoShell.includes("M8.4 7.7")) {
   issues.push({ rel: "scripts/pseo/html_shell.py", error: "whatsapp_generator_glyph_missing" });
 }
 
+// Templates are the upstream of the generated HTML: a broken glyph here would be
+// stamped onto every regenerated page, which is how #187 reached 118 files.
+const TEMPLATE_SOURCES = ["scripts/pseo/html_shell.py", "styles.css"];
+for (const rel of TEMPLATE_SOURCES) {
+  const full = path.join(root, rel);
+  if (!fs.existsSync(full)) {
+    issues.push({ rel, error: "template_source_missing" });
+    continue;
+  }
+  const audited = auditPathData(rel, fs.readFileSync(full, "utf8"));
+  pathsChecked += audited.checked;
+  issues.push(...audited.issues);
+}
+
+// Negative fixtures: the gate has to be proven to reject the real defect, and
+// the positive control has to be proven to survive it.
+const fixtureDir = path.join(root, SVG_FIXTURE_DIR);
+const fixtureManifest = JSON.parse(fs.readFileSync(path.join(fixtureDir, "manifest.json"), "utf8"));
+const fixtureResults = [];
+for (const testCase of fixtureManifest.cases || []) {
+  const rel = `${SVG_FIXTURE_DIR}/${testCase.file}`;
+  const full = path.join(fixtureDir, testCase.file);
+  if (!fs.existsSync(full)) {
+    issues.push({ rel, error: "svg_path_fixture_missing", id: testCase.id });
+    continue;
+  }
+  const detected = auditPathData(rel, fs.readFileSync(full, "utf8")).issues;
+  const caught = detected.length > 0;
+  fixtureResults.push({ id: testCase.id, expect: testCase.expect, caught });
+  if (testCase.expect === "invalid" && !caught) {
+    issues.push({ rel, error: "svg_path_fixture_not_detected", id: testCase.id });
+  }
+  if (testCase.expect === "valid" && caught) {
+    issues.push({
+      rel,
+      error: "svg_path_gate_false_positive",
+      id: testCase.id,
+      reason: detected[0].reason,
+      d: detected[0].d,
+    });
+  }
+}
+if (!fixtureResults.some((r) => r.expect === "invalid")) {
+  issues.push({ rel: SVG_FIXTURE_DIR, error: "svg_path_negative_fixtures_missing" });
+}
+if (!fixtureResults.some((r) => r.expect === "valid")) {
+  issues.push({ rel: SVG_FIXTURE_DIR, error: "svg_path_positive_control_missing" });
+}
+
 const out = {
   ok: issues.length === 0,
   found: found.length,
   service_pages: pages.length,
   html_scanned: htmlFiles.length,
+  svg_paths_checked: pathsChecked,
+  svg_path_fixtures: fixtureResults,
   earliest_safe_action_at: earliestSafeActionAt,
   audit_date: auditDate,
   warnings,
@@ -179,4 +259,14 @@ if (issues.length) {
   console.error("CTA_AUDIT_FAIL", JSON.stringify(issues, null, 2));
   process.exit(1);
 }
-console.log("CTA_AUDIT_OK", JSON.stringify({ found: found.length, service_pages: pages.length, warnings: warnings.length, html_scanned: htmlFiles.length }));
+console.log(
+  "CTA_AUDIT_OK",
+  JSON.stringify({
+    found: found.length,
+    service_pages: pages.length,
+    warnings: warnings.length,
+    html_scanned: htmlFiles.length,
+    svg_paths_checked: pathsChecked,
+    svg_path_fixtures: fixtureResults.length,
+  }),
+);
