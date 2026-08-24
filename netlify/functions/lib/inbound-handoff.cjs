@@ -11,6 +11,12 @@
 const crypto = require("crypto");
 const { safeLog } = require("./lead-core.cjs");
 const { isProductionProfile } = require("./lead-store.cjs");
+const {
+  authorizeInboundBacklogReplay,
+  authorizeInboundBacklogDrain,
+  recordWithinApprovedAge,
+  backlogRequeueMarker,
+} = require("./inbound-backlog-policy.cjs");
 
 const INBOUND_PATH = "/api/v1/webhooks/confenge/inbound";
 const SOURCE_INTERNAL = "CONFENGE_WEB";
@@ -507,7 +513,15 @@ async function probeInboundDestinationHealth({ env = process.env } = {}) {
 
 async function requeueEligibleHandoffs(
   store,
-  { dryRun = true, limit = 1, now = new Date(), safetyGate = null } = {}
+  {
+    dryRun = true,
+    limit = 1,
+    now = new Date(),
+    safetyGate = null,
+    backlogDecision = null,
+    backlogExecutionAuthority = null,
+    approvalReference = "",
+  } = {}
 ) {
   if (!store || typeof store.list !== "function") {
     return { ok: false, error: "store_list_unavailable" };
@@ -521,6 +535,14 @@ async function requeueEligibleHandoffs(
     reason_counts: audit.reason_counts,
   };
   if (dryRun) return { ok: true, dry_run: true, ...base };
+  const authorization = authorizeInboundBacklogReplay(
+    backlogDecision,
+    backlogExecutionAuthority,
+    { approvalReference, limit }
+  );
+  if (!authorization.ok) {
+    return { ok: false, error: authorization.reason, ...base };
+  }
   if (
     !safetyGate ||
     safetyGate.ok !== true ||
@@ -530,11 +552,19 @@ async function requeueEligibleHandoffs(
     return { ok: false, error: "global_safety_gate_required", ...base };
   }
 
-  const bounded = Math.min(20, Math.max(1, Number(limit || 1)));
+  if (audit.eligible_real_not_configured !== backlogDecision.cutoff_policy.candidate_count) {
+    return { ok: false, error: "approved_candidate_count_drift", ...base };
+  }
   const eligible = (leads || [])
-    .filter((record) => classifySkippedForRequeue(record).classification === REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED)
+    .filter((record) =>
+      classifySkippedForRequeue(record).classification === REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED &&
+      recordWithinApprovedAge(record, now)
+    )
     .sort((a, b) => String(a.received_at || a.created_at || "").localeCompare(String(b.received_at || b.created_at || "")))
-    .slice(0, bounded);
+    .slice(0, 1);
+  if (eligible.length !== 1) {
+    return { ok: false, error: "approved_candidate_outside_age_cutoff", ...base };
+  }
   let requeued = 0;
   for (const record of eligible) {
     const fresh = typeof store.get === "function" ? await store.get(record.lead_id) : record;
@@ -549,6 +579,7 @@ async function requeueEligibleHandoffs(
       next_attempt_at: now.toISOString(),
       requeued_at: now.toISOString(),
       requeue_mode: "eligible_only",
+      requeue_policy: backlogRequeueMarker(authorization),
     };
     const updated = await store.update(fresh.lead_id, { handoff: next });
     if (updated && updated.handoff && updated.handoff.status === STATUS.PENDING) requeued += 1;
@@ -689,6 +720,8 @@ function applyAttempt(current, result, { now = new Date(), env = process.env } =
     latency_ms: result.latency_ms,
     http_status: result.http,
     downstream: result.downstream || (current && current.downstream) || undefined,
+    requeue_mode: current && current.requeue_mode ? current.requeue_mode : undefined,
+    requeue_policy: current && current.requeue_policy ? current.requeue_policy : undefined,
   };
   if (result.status === STATUS.DELIVERED) {
     next.delivered_at = now.toISOString();
@@ -722,6 +755,17 @@ async function attemptInboundHandoff(store, record, opts = {}) {
     && current.status !== STATUS.PENDING) {
     return current;
   }
+  if (current.requeue_mode === "eligible_only" || current.requeue_policy) {
+    const backlogAuthorization = authorizeInboundBacklogDrain(
+      opts.backlogDecision,
+      opts.backlogExecutionAuthority,
+      record,
+      { safetyGate: opts.backlogSafetyGate, now }
+    );
+    if (!backlogAuthorization.ok) {
+      return { ...current, policy_blocked: true, policy_reason: backlogAuthorization.reason };
+    }
+  }
   const result = await postInbound(record, { now, env });
   const next = applyAttempt(current, result, { now, env });
   safeLog("info", "inbound_handoff_attempt", {
@@ -745,16 +789,68 @@ async function attemptInboundHandoff(store, record, opts = {}) {
   return next;
 }
 
-async function drainPendingHandoffs(store, { now = new Date(), env = process.env, limit = 20 } = {}) {
-  const summary = { scanned: 0, attempted: 0, delivered: 0, retryable: 0, dead: 0, blocked: 0, skipped: 0, aborted: false, abort_reason: null };
+async function drainPendingHandoffs(
+  store,
+  {
+    now = new Date(),
+    env = process.env,
+    limit = 20,
+    backlogDecision = null,
+    backlogExecutionAuthority = null,
+    backlogSafetyGate = null,
+  } = {}
+) {
+  const summary = {
+    scanned: 0,
+    attempted: 0,
+    delivered: 0,
+    retryable: 0,
+    dead: 0,
+    blocked: 0,
+    skipped: 0,
+    backlog_attempted: 0,
+    backlog_policy_blocked: 0,
+    aborted: false,
+    abort_reason: null,
+  };
   if (!store || typeof store.list !== "function") {
     return { ok: false, error: "store_list_unavailable", ...summary };
   }
   const leads = await store.list();
   summary.scanned = Array.isArray(leads) ? leads.length : 0;
-  const due = (leads || []).filter((l) => isDue(l.handoff, now)).slice(0, limit);
+  const boundedLimit = Math.min(50, Math.max(1, Number(limit || 20)));
+  const due = (leads || []).filter((l) => isDue(l.handoff, now));
   for (const lead of due) {
-    const next = await attemptInboundHandoff(store, lead, { now, env });
+    if (summary.attempted >= boundedLimit) break;
+    const isBacklog = lead?.handoff?.requeue_mode === "eligible_only" || lead?.handoff?.requeue_policy;
+    if (isBacklog) {
+      if (summary.backlog_attempted >= 1) {
+        summary.backlog_policy_blocked += 1;
+        continue;
+      }
+      const authorization = authorizeInboundBacklogDrain(
+        backlogDecision,
+        backlogExecutionAuthority,
+        lead,
+        { safetyGate: backlogSafetyGate, now }
+      );
+      if (!authorization.ok) {
+        summary.backlog_policy_blocked += 1;
+        continue;
+      }
+      summary.backlog_attempted += 1;
+    }
+    const next = await attemptInboundHandoff(store, lead, {
+      now,
+      env,
+      backlogDecision,
+      backlogExecutionAuthority,
+      backlogSafetyGate,
+    });
+    if (next.policy_blocked) {
+      summary.backlog_policy_blocked += 1;
+      continue;
+    }
     summary.attempted += 1;
     if (next.status === STATUS.DELIVERED) summary.delivered += 1;
     else if (next.status === STATUS.RETRYABLE) summary.retryable += 1;

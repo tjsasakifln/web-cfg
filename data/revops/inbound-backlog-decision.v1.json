@@ -23,6 +23,7 @@
     "by_record_kind": {"synthetic": 67, "qa": 12, "MISSING": 45, "real": 2},
     "by_consent_state": {"EXPLICIT_TRUE": 126},
     "by_created_at_window": {"2026-08": 126},
+    "by_origin": {"UNKNOWN": 126},
     "by_commercial_eligibility": {
       "DNC_OR_SUPPRESSED": 79,
       "OTHER_BLOCKER": 46,
