@@ -1,4 +1,4 @@
-# Intent → action matrix v1.4.1
+# Intent → action matrix v1.4.2
 
 Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-24.
 
@@ -37,9 +37,12 @@ Nesta rota, `scope_state=PARAMETERS_PERSISTED_PENDING_HUMAN_PAYMENT_HANDOFF`: o 
   `web-cfg/conversion`, decided on 2026-08-24, review on 2026-09-20. Blocker:
   [Warmbly #55](https://github.com/tjsasakifln/warmbly/issues/55). Do not offer.
 - Exact reopen gate: `agenda.exists=true` is accepted only in the same PR as a
-  named operational owner, `EXECUTE_NOW`, activation date and an immutable,
-  dated, representative Warmbly #55 baseline with count, median, p75, p90,
-  censored/open cycles, intervalo de estágios, escopo de rota, clock e timezone.
+  named operational owner, canonical `https://confenge.com.br/.../` route,
+  matching local implementation, `EXECUTE_NOW`, activation date and a local
+  machine-readable snapshot bound by SHA-256 to an immutable Warmbly commit/blob.
+  The representative baseline includes count, median, p75, p90, censored/open
+  cycles, intervalo de estágios, escopo de rota, clock e IANA timezone; placeholder
+  values such as `UNKNOWN` and `TBD` fail closed.
   The measured baseline does not become a public promise: agenda SLA remains
   `UNKNOWN`.
 - Decision evidence and rollback:

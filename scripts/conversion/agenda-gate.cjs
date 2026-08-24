@@ -5,16 +5,27 @@
  * response-time promise. Agenda SLA remains UNKNOWN in this contract version.
  */
 
+const crypto = require("node:crypto");
+const childProcess = require("node:child_process");
+const fs = require("node:fs");
+const path = require("node:path");
+
 const WARMBLY_55 = "https://github.com/tjsasakifln/warmbly/issues/55";
 const WEB_CFG_248 = "https://github.com/tjsasakifln/web-cfg/issues/248";
 const DECISION_DOC = "docs/ops/AGENDA-LATENCY-DEFER-248.md";
 const SLA_POLICY = "UNKNOWN until Warmbly #55 measures a representative baseline. No invented prazo.";
+const SNAPSHOT_SCHEMA = "warmbly.commercial-latency-baseline/1.0";
+const REPO_ROOT = path.resolve(__dirname, "../..");
 
 const REQUIRED_FIELDS = Object.freeze([
   "operational_channels.agenda.owner",
+  "operational_channels.agenda.route_url",
+  "operational_channels.agenda.implementation_ref",
   "operational_channels.agenda.activated_at",
   "operational_channels.agenda.baseline.status=MEASURED",
   "operational_channels.agenda.baseline.evidence_ref",
+  "operational_channels.agenda.baseline.snapshot_path",
+  "operational_channels.agenda.baseline.snapshot_sha256",
   "operational_channels.agenda.baseline.measured_at",
   "operational_channels.agenda.baseline.period_start",
   "operational_channels.agenda.baseline.period_end",
@@ -34,6 +45,8 @@ const REQUIRED_FIELDS = Object.freeze([
 const AGENDA_KEYS = new Set([
   "exists",
   "owner",
+  "route_url",
+  "implementation_ref",
   "sla",
   "reason",
   "decision_state",
@@ -47,6 +60,42 @@ const AGENDA_KEYS = new Set([
   "activated_at",
 ]);
 const BASELINE_KEYS = new Set([
+  "status",
+  "owner",
+  "source_issue",
+  "evidence_ref",
+  "snapshot_path",
+  "snapshot_sha256",
+  "measured_at",
+  "period_start",
+  "period_end",
+  "sample_count",
+  "representative",
+  "stage_interval",
+  "route_scope",
+  "source_clock",
+  "timezone",
+  "metrics",
+]);
+const SNAPSHOT_KEYS = new Set([
+  "schema",
+  "status",
+  "owner",
+  "source_issue",
+  "evidence_ref",
+  "measured_at",
+  "period_start",
+  "period_end",
+  "sample_count",
+  "representative",
+  "stage_interval",
+  "route_scope",
+  "source_clock",
+  "timezone",
+  "metrics",
+  "privacy",
+]);
+const SNAPSHOT_BOUND_FIELDS = Object.freeze([
   "status",
   "owner",
   "source_issue",
@@ -69,9 +118,33 @@ const METRIC_KEYS = new Set([
   "p90_minutes",
   "censored_open_cycles",
 ]);
+const PRIVACY_KEYS = new Set(["aggregate_only", "pii_included"]);
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-const IMMUTABLE_EVIDENCE_RE = /^https:\/\/github\.com\/tjsasakifln\/warmbly\/(?:issues\/55#issuecomment-\d+|commit\/[0-9a-f]{40}|blob\/[0-9a-f]{40}\/[A-Za-z0-9._~!$&'()*+,;=:@%\/-]+(?:#L\d+(?:-L\d+)?)?)$/;
+const IMMUTABLE_EVIDENCE_RE = /^https:\/\/github\.com\/tjsasakifln\/warmbly\/(?:commit\/[0-9a-f]{40}|blob\/[0-9a-f]{40}\/[A-Za-z0-9._~!$&'()*+,;=:@%\/-]+(?:#L\d+(?:-L\d+)?)?)$/;
+const SNAPSHOT_PATH_RE = /^docs\/evidence\/commercial-latency\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/;
+const IMPLEMENTATION_PATH_RE = /^(?!_site\/)[A-Za-z0-9][A-Za-z0-9._\/-]*\/index\.html$/;
+const IDENTIFIER_RE = /^[a-z0-9][a-z0-9._\/-]*$/;
+const PLACEHOLDER_RE = /^(?:unknown|tbd|tba|todo|placeholder|pending|unassigned|unset|not[-_ ]?set|n\/?a|none|null|\?|-)$/i;
+const PLACEHOLDER_TOKEN_RE = /(?:^|[._\/-])(?:unknown|tbd|tba|todo|placeholder|pending|unassigned|unset|none|null)(?:$|[._\/-])/i;
+const SHA256_RE = /^[0-9a-f]{64}$/;
+const FORBIDDEN_PII_KEYS = new Set([
+  "name",
+  "nome",
+  "email",
+  "e_mail",
+  "phone",
+  "telefone",
+  "contact",
+  "contato",
+  "cpf",
+  "cnpj",
+  "message",
+  "mensagem",
+  "lead_id",
+  "person_id",
+  "participant_id",
+]);
 
 function dateValue(value) {
   if (!DATE_RE.test(String(value || ""))) return null;
@@ -85,8 +158,129 @@ function unknownKeys(value, allowed) {
   return Object.keys(value).filter((key) => !allowed.has(key));
 }
 
-function validateAgendaGate(matrix) {
+function meaningfulString(value) {
+  return typeof value === "string" && value.trim() === value && value.length > 0 && !isPlaceholder(value);
+}
+
+function isPlaceholder(value) {
+  return PLACEHOLDER_RE.test(value) || PLACEHOLDER_TOKEN_RE.test(value);
+}
+
+function validateNamedField(errors, value, name, pattern = null) {
+  if (typeof value !== "string" || !value.trim()) {
+    errors.push(`active_${name}_missing`);
+  } else if (value.trim() !== value || isPlaceholder(value)) {
+    errors.push(`active_${name}_placeholder`);
+  } else if (pattern && !pattern.test(value)) {
+    errors.push(`active_${name}_invalid`);
+  }
+}
+
+function resolveLocalFile(root, relativePath, pattern) {
+  if (!meaningfulString(relativePath) || !pattern.test(relativePath)) return null;
+  const absoluteRoot = path.resolve(root);
+  const absolutePath = path.resolve(absoluteRoot, relativePath);
+  if (!absolutePath.startsWith(`${absoluteRoot}${path.sep}`)) return null;
+  try {
+    const stat = fs.lstatSync(absolutePath);
+    if (!stat.isFile() || stat.isSymbolicLink()) return null;
+    return absolutePath;
+  } catch {
+    return null;
+  }
+}
+
+function isTracked(root, relativePath) {
+  const result = childProcess.spawnSync(
+    "git",
+    ["ls-files", "--error-unmatch", "--", relativePath],
+    { cwd: root, encoding: "utf8", stdio: "ignore" },
+  );
+  return result.status === 0;
+}
+
+function expectedImplementationRef(routeUrl) {
+  try {
+    const parsed = new URL(routeUrl);
+    if (
+      parsed.protocol !== "https:" ||
+      parsed.hostname !== "confenge.com.br" ||
+      parsed.username ||
+      parsed.password ||
+      parsed.port ||
+      parsed.search ||
+      parsed.hash ||
+      parsed.href !== routeUrl
+    ) return null;
+    if (parsed.pathname === "/" || !parsed.pathname.endsWith("/") || parsed.pathname.includes("//")) return null;
+    if (!/^\/[a-z0-9][a-z0-9\/-]*\/$/.test(parsed.pathname)) return null;
+    return `${parsed.pathname.slice(1)}index.html`;
+  } catch {
+    return null;
+  }
+}
+
+function containsPiiKey(value) {
+  if (!value || typeof value !== "object") return false;
+  if (Array.isArray(value)) return value.some(containsPiiKey);
+  return Object.entries(value).some(([key, child]) => FORBIDDEN_PII_KEYS.has(key.toLowerCase()) || containsPiiKey(child));
+}
+
+function loadBoundSnapshot(errors, baseline, root) {
+  let snapshot = null;
+  if (!SNAPSHOT_PATH_RE.test(String(baseline.snapshot_path || ""))) {
+    errors.push("active_baseline_snapshot_path_invalid");
+    return null;
+  }
+  if (!SHA256_RE.test(String(baseline.snapshot_sha256 || ""))) {
+    errors.push("active_baseline_snapshot_sha256_invalid");
+    return null;
+  }
+  const absolutePath = resolveLocalFile(root, baseline.snapshot_path, SNAPSHOT_PATH_RE);
+  if (!absolutePath) {
+    errors.push("active_baseline_snapshot_missing");
+    return null;
+  }
+  if (!isTracked(root, baseline.snapshot_path)) {
+    errors.push("active_baseline_snapshot_not_versioned");
+  }
+  const bytes = fs.readFileSync(absolutePath);
+  if (crypto.createHash("sha256").update(bytes).digest("hex") !== baseline.snapshot_sha256) {
+    errors.push("active_baseline_snapshot_hash_mismatch");
+    return null;
+  }
+  try {
+    snapshot = JSON.parse(bytes.toString("utf8"));
+  } catch {
+    errors.push("active_baseline_snapshot_json_invalid");
+    return null;
+  }
+  if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot)) {
+    errors.push("active_baseline_snapshot_shape_invalid");
+    return null;
+  }
+  for (const key of unknownKeys(snapshot, SNAPSHOT_KEYS)) errors.push(`baseline_snapshot_field_forbidden:${key}`);
+  if (snapshot.schema !== SNAPSHOT_SCHEMA) errors.push("active_baseline_snapshot_schema_invalid");
+  if (containsPiiKey(snapshot)) errors.push("active_baseline_snapshot_pii_forbidden");
+  if (!snapshot.privacy || typeof snapshot.privacy !== "object" || Array.isArray(snapshot.privacy)) {
+    errors.push("active_baseline_snapshot_privacy_missing");
+  } else {
+    for (const key of unknownKeys(snapshot.privacy, PRIVACY_KEYS)) errors.push(`baseline_snapshot_privacy_field_forbidden:${key}`);
+    if (snapshot.privacy.aggregate_only !== true || snapshot.privacy.pii_included !== false) {
+      errors.push("active_baseline_snapshot_not_aggregate_only");
+    }
+  }
+  for (const field of SNAPSHOT_BOUND_FIELDS) {
+    if (JSON.stringify(snapshot[field]) !== JSON.stringify(baseline[field])) {
+      errors.push(`active_baseline_snapshot_drift:${field}`);
+    }
+  }
+  return snapshot;
+}
+
+function validateAgendaGate(matrix, options = {}) {
   const errors = [];
+  const root = options.root ? path.resolve(options.root) : REPO_ROOT;
   const channels = matrix && matrix.operational_channels;
   const agenda = channels && channels.agenda;
 
@@ -135,6 +329,8 @@ function validateAgendaGate(matrix) {
 
   if (agenda.exists === false) {
     if (agenda.owner != null) errors.push("deferred_agenda_owner_must_be_null");
+    if (agenda.route_url != null) errors.push("deferred_agenda_route_url_must_be_null");
+    if (agenda.implementation_ref != null) errors.push("deferred_agenda_implementation_ref_must_be_null");
     if (agenda.activated_at != null) errors.push("deferred_agenda_activation_must_be_null");
     if (agenda.decision_state !== "DEFER") errors.push("deferred_agenda_state_must_be_defer");
     if (agenda.reason !== "no public booking route with owner and measured latency") {
@@ -143,6 +339,8 @@ function validateAgendaGate(matrix) {
     if (baseline.status !== "MISSING") errors.push("deferred_baseline_must_be_missing");
     for (const key of [
       "evidence_ref",
+      "snapshot_path",
+      "snapshot_sha256",
       "measured_at",
       "period_start",
       "period_end",
@@ -160,9 +358,24 @@ function validateAgendaGate(matrix) {
   }
 
   if (agenda.decision_state !== "EXECUTE_NOW") errors.push("active_agenda_state_not_execute_now");
-  if (typeof agenda.owner !== "string" || !agenda.owner.trim()) errors.push("active_agenda_owner_missing");
+  validateNamedField(errors, agenda.owner, "agenda_owner", IDENTIFIER_RE);
   if (agenda.reason != null) errors.push("active_agenda_reason_not_cleared");
   if (dateValue(agenda.activated_at) == null) errors.push("active_agenda_date_missing");
+
+  const expectedImplementation = expectedImplementationRef(agenda.route_url);
+  if (!expectedImplementation) errors.push("active_agenda_route_url_invalid");
+  validateNamedField(errors, agenda.implementation_ref, "agenda_implementation_ref", IMPLEMENTATION_PATH_RE);
+  if (expectedImplementation && agenda.implementation_ref !== expectedImplementation) {
+    errors.push("active_agenda_route_implementation_mismatch");
+  }
+  if (meaningfulString(agenda.implementation_ref) && IMPLEMENTATION_PATH_RE.test(agenda.implementation_ref)) {
+    if (!resolveLocalFile(root, agenda.implementation_ref, IMPLEMENTATION_PATH_RE)) {
+      errors.push("active_agenda_implementation_missing");
+    } else if (!isTracked(root, agenda.implementation_ref)) {
+      errors.push("active_agenda_implementation_not_versioned");
+    }
+  }
+
   if (baseline.status !== "MEASURED") errors.push("active_baseline_not_measured");
   if (!IMMUTABLE_EVIDENCE_RE.test(String(baseline.evidence_ref || ""))) {
     errors.push("active_baseline_evidence_not_immutable");
@@ -170,14 +383,23 @@ function validateAgendaGate(matrix) {
   if (!Array.isArray(agenda.decision_evidence) || !agenda.decision_evidence.includes(baseline.evidence_ref)) {
     errors.push("active_baseline_not_in_decision_evidence");
   }
+  loadBoundSnapshot(errors, baseline, root);
   if (baseline.representative !== true) errors.push("active_baseline_not_representative");
   if (!Number.isInteger(baseline.sample_count) || baseline.sample_count <= 0) errors.push("active_baseline_sample_invalid");
   if (baseline.stage_interval !== "first_commercial_action_to_conversation") {
     errors.push("active_baseline_stage_interval_invalid");
   }
-  if (typeof baseline.route_scope !== "string" || !baseline.route_scope.trim()) errors.push("active_baseline_route_scope_missing");
-  if (typeof baseline.source_clock !== "string" || !baseline.source_clock.trim()) errors.push("active_baseline_source_clock_missing");
-  if (typeof baseline.timezone !== "string" || !baseline.timezone.trim()) errors.push("active_baseline_timezone_missing");
+  validateNamedField(errors, baseline.route_scope, "baseline_route_scope", IDENTIFIER_RE);
+  validateNamedField(errors, baseline.source_clock, "baseline_source_clock", IDENTIFIER_RE);
+  validateNamedField(errors, baseline.timezone, "baseline_timezone");
+  if (meaningfulString(baseline.timezone)) {
+    try {
+      if (!baseline.timezone.includes("/")) throw new Error("timezone_must_be_iana_named");
+      new Intl.DateTimeFormat("en-US", { timeZone: baseline.timezone }).format();
+    } catch {
+      errors.push("active_baseline_timezone_invalid");
+    }
+  }
 
   const dates = {
     start: dateValue(baseline.period_start),
@@ -221,6 +443,7 @@ module.exports = {
   IMMUTABLE_EVIDENCE_RE,
   REQUIRED_FIELDS,
   SLA_POLICY,
+  SNAPSHOT_SCHEMA,
   WARMBLY_55,
   WEB_CFG_248,
   validateAgendaGate,

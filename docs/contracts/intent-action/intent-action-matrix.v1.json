@@ -1,6 +1,6 @@
 {
   "schema": "intent-action-matrix/1.0",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "as_of": "2026-08-24",
   "owner": "web-cfg/conversion",
   "sla_policy": "Commercial response SLA is UNKNOWN until Warmbly #55 measures a representative baseline. The owner-authorized Radar delivery clock is a separate contract: up to 48 business hours from persisted parameter submission, never from payment confirmation.",
@@ -36,6 +36,8 @@
     "agenda": {
       "exists": false,
       "owner": null,
+      "route_url": null,
+      "implementation_ref": null,
       "sla": "UNKNOWN",
       "reason": "no public booking route with owner and measured latency",
       "decision_state": "DEFER",
@@ -52,6 +54,8 @@
         "owner": "warmbly/commercial-latency",
         "source_issue": "https://github.com/tjsasakifln/warmbly/issues/55",
         "evidence_ref": null,
+        "snapshot_path": null,
+        "snapshot_sha256": null,
         "measured_at": null,
         "period_start": null,
         "period_end": null,
@@ -69,9 +73,13 @@
         "sla_after_activation": "UNKNOWN",
         "required_fields": [
           "operational_channels.agenda.owner",
+          "operational_channels.agenda.route_url",
+          "operational_channels.agenda.implementation_ref",
           "operational_channels.agenda.activated_at",
           "operational_channels.agenda.baseline.status=MEASURED",
           "operational_channels.agenda.baseline.evidence_ref",
+          "operational_channels.agenda.baseline.snapshot_path",
+          "operational_channels.agenda.baseline.snapshot_sha256",
           "operational_channels.agenda.baseline.measured_at",
           "operational_channels.agenda.baseline.period_start",
           "operational_channels.agenda.baseline.period_end",
@@ -87,7 +95,7 @@
           "operational_channels.agenda.baseline.metrics.p90_minutes",
           "operational_channels.agenda.baseline.metrics.censored_open_cycles"
         ],
-        "rule": "agenda.exists may change to true only in the same PR as a named owner and an immutable, dated, representative Warmbly #55 baseline. SLA remains UNKNOWN; baseline is not a promised prazo."
+        "rule": "agenda.exists may change to true only in the same PR as a named owner, a canonical CONFENGE route with local implementation, and a local SHA-256-bound snapshot of an immutable, dated, representative Warmbly #55 baseline pinned to a commit/blob. SLA remains UNKNOWN; baseline is not a promised prazo."
       }
     }
   },
