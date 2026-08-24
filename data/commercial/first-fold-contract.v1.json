@@ -1,0 +1,51 @@
+{
+  "schema": "confenge.first-fold-contract/1.0",
+  "contract_version": "CFG-FIRST-FOLD-2026-08-24-v1",
+  "issue": "#327",
+  "rule": "O visitante é cético e concede 3 segundos. Na primeira dobra ele precisa captar, sem ajuda, as quatro respostas obrigatórias.",
+  "required_answers": [
+    { "key": "what", "question": "o que a CONFENGE resolve ou entrega" },
+    { "key": "who", "question": "para quem ou para qual situação aquilo serve" },
+    { "key": "why_believe", "question": "por que há motivo verificável para acreditar" },
+    { "key": "next_action", "question": "qual é a próxima ação dominante" }
+  ],
+  "viewports": [
+    { "label": "mobile", "width": 390, "height": 844 },
+    { "label": "laptop", "width": 1366, "height": 768 },
+    { "label": "observado_producao_2026_08_24", "width": 1363, "height": 936 }
+  ],
+  "evidence_states": ["PENDING", "MEASURED_PASS", "MEASURED_FAIL"],
+  "measurement_rule": "Uma superfície só pode declarar MEASURED_PASS com um registro de medição vinculado. Nenhuma superfície é aprovada por opinião ou por passar em axe, Lighthouse e overflow.",
+  "human_validation": {
+    "minimum_icp_sessions": 5,
+    "state": "NOT_STARTED",
+    "protocol_package": "docs/research/icp-trust-session-v1"
+  },
+  "census": [
+    { "route": "/", "surface_class": "home", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/entregas/", "surface_class": "money_hub", "evidence_state": "PENDING", "measurement": null, "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo" },
+    { "route": "/servicos-obras-publicas/", "surface_class": "money_hub", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "H1 de y=235 a y=453; lista de serviços começa em y=620; sem prova verificável nem ação contextual no primeiro enquadramento" } },
+    { "route": "/problemas-que-resolvemos/", "surface_class": "money_hub", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "H1 de y=235 a y=525; primeira estrutura decisória em y=700; prova e próxima ação fora da primeira dobra" } },
+    { "route": "/diagnostico-b2g-expansao/", "surface_class": "money_offer", "evidence_state": "MEASURED_PASS", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória" } },
+    { "route": "/diagnostico-pre-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/auditoria-orcamento-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/bid-room-licitacoes-obras/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/defesa-margem-contratos-publicos/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/medicoes-glosas-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/aditivos-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/atrasos-prorrogacao-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/reequilibrio-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/defesa-tecnica-contratos-publicos/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/diagnostico-b2g-360/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/acompanhamento-contratos-obras/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/diretoria-b2g/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-relatorio-inteligencia-licitacoes/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-base-quantitativa-canonica/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-apresentacao-executiva-resultados/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-mapa-compradores-publicos/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-contratos-vincendos-relicitacao/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-mapeamento-concorrentes-publicos/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-painel-precos-obras-publicas/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
+    { "route": "/casos/modelo-relatorio-executivo-consolidado/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null }
+  ]
+}
