@@ -1,0 +1,29 @@
+{
+  "schema": "confenge.icp-trust-session-state.v1",
+  "protocol_version": "1.0.0",
+  "as_of": "2026-08-24",
+  "owner_role": "CONFENGE founder / research moderator",
+  "next_review_at": "2026-09-13",
+  "operational_package": "READY",
+  "human_execution": "BLOCKED_HUMAN_PARTICIPANTS",
+  "required_eligible_consented_completions": 5,
+  "observed": {
+    "eligible_consented_completions": 0,
+    "sessions_executed": 0,
+    "aggregate_records": 0
+  },
+  "result_status": "AMOSTRA_INSUFICIENTE",
+  "claims": {
+    "participant_result_proven": false,
+    "tree_test_success_rate_proven": false,
+    "five_second_comprehension_proven": false,
+    "copy_comprehension_proven": false
+  },
+  "residuals": {
+    "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
+    "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW",
+    "188": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_CLICK_WINDOW",
+    "297": "OPEN_BLOCKED_HUMAN_PARTICIPANTS"
+  },
+  "next_action": "Recruit five eligible people from the named source, record consent privately, execute the three frozen protocols, then commit only aggregate no-PII evidence and a separate interpretation."
+}

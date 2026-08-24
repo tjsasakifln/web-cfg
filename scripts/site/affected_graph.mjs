@@ -588,6 +588,15 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["data/research/"],
     surfaces: ["/radar/pesquisa/"],
   },
+  "test:trust-session-protocol": {
+    producers: [
+      "scripts/user_research_protocol/",
+      "docs/research/icp-trust-session-v1/",
+      "docs/ops/DSAR-RETENTION-RUNBOOK.md",
+    ],
+    artifacts: ["docs/research/icp-trust-session-v1/runs/"],
+    surfaces: [],
+  },
   "test:migration-manifesto": {
     producers: ["scripts/migration/", "data/migration/", "docs/migration/"],
     artifacts: ["data/migration/smartlic-confenge/manifesto.v1.json"],
