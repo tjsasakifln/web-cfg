@@ -50,6 +50,7 @@ jobs:
           npm run test:copy
           npm run test:design
           npm run audit:accessibility
+          npm run test:skip-link
           npm run test:lighthouse-gates
           npm run pseo:test
           npm run organic:test
