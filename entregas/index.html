@@ -13,6 +13,7 @@
 <link href="/manifest.webmanifest" rel="manifest"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <link href="/styles.css" rel="stylesheet"/>
+<link href="/styles-offers.css" rel="stylesheet"/>
 <link href="/entregas/styles.css" rel="stylesheet"/>
 <script defer src="/script.js?v=fortune04"></script>
 <meta content="website" property="og:type"/>
@@ -155,7 +156,7 @@
 <dl>
 <div><dt>Abas</dt><dd>13</dd></div>
 <div><dt>Campos documentados</dt><dd>252</dd></div>
-<div><dt>Controles</dt><dd>29</dd></div>
+<div><dt>Controles</dt><dd>30</dd></div>
 </dl>
 <div class="deliverable-verdict"><span>CONTROLES</span><strong>29 conformes, 1 ressalva declarada</strong><p>A ressalva é a cobertura de modalidade, declarada em vez de escondida.</p></div>
 <small>Exemplo composto. Empresa, órgãos, concorrentes, valores e decisões são integralmente sintéticos.</small>
@@ -392,6 +393,36 @@
 <a class="button button-light button-lg" data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-final-open-report" data-event-name="cta_click" href="/casos/modelo-relatorio-inteligencia-licitacoes/">Abrir o exemplo de entrada <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
 </aside>
+
+<section aria-labelledby="entregas-captura-title" class="section pillar-capture" id="captura-entregas">
+<div class="container pillar-capture-grid">
+<div class="pillar-capture-copy">
+<p class="eyebrow">Próximo passo</p>
+<h2 id="entregas-captura-title">Diga qual destas entregas resolve a sua pergunta</h2>
+<p>Você já viu o formato, o conteúdo e o preço de cada unidade. Descreva aqui a decisão que precisa tomar e a carteira envolvida: a resposta indica qual entrega se aplica, em qual ordem e com quais insumos.</p>
+<p>Este formulário registra o pedido de análise. Ele não cobra, não recebe pagamento e não conclui a contratação.</p>
+</div>
+<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="entregas-hub-handraise" data-asset-id="entregas-exemplos-hub" data-route-family="entregas" data-cta-position="hub_capture" data-journey="operacao">
+<input type="hidden" name="offer_id" value=""/>
+<input type="hidden" name="terms_id" value=""/>
+<input type="hidden" id="jornada-hidden" name="jornada" value="operacao"/>
+<input type="hidden" id="estagio" name="estagio" value="entregas-exemplos-hub"/>
+<input type="hidden" name="origem" value="entregas"/>
+<input type="hidden" name="asset_id" value="entregas-exemplos-hub"/>
+<input type="hidden" name="cta_id" value="entregas-hub-handraise"/>
+<input type="hidden" name="route_family" value="entregas"/>
+<input type="hidden" name="landing_page" value="https://confenge.com.br/entregas/"/>
+<label>Nome do representante <input id="nome" name="nome" required autocomplete="name"/></label>
+<label>Empresa <input id="empresa" name="empresa" autocomplete="organization"/></label>
+<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email"/></label>
+<label>WhatsApp <input id="telefone" name="telefone" inputmode="numeric" autocomplete="tel"/></label>
+<label>Qual decisão está na mesa <textarea id="mensagem" name="mensagem" rows="4" maxlength="2000" placeholder="Decisão a tomar, carteira envolvida e prazo. Sem dados de proposta sigilosa."></textarea></label>
+<label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>
+<button class="button button-primary" type="submit">Enviar para análise</button>
+<p class="form-status" role="status" aria-live="polite"></p>
+</form>
+</div>
+</section>
 </main>
 
 <footer class="site-footer">

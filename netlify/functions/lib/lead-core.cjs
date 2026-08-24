@@ -247,12 +247,54 @@ function isHoneypot(data) {
   return Boolean(hp && String(hp).trim());
 }
 
+/**
+ * Owner-approved non-catalog action identities (intent-action matrix).
+ * They are deliberately absent from the frozen catalog snapshot, so the price
+ * authority is the matrix `authorized_amount_cents`, not the offer registry.
+ */
+function nonCatalogAction(offerId) {
+  if (!offerId) return null;
+  try {
+    const matrix = require("../../../scripts/conversion/matrix.cjs");
+    const route = matrix
+      .listRoutes()
+      .find((r) => r && r.offer_id === offerId && r.authorized_amount_cents != null);
+    return route || null;
+  } catch {
+    return null;
+  }
+}
+
 function assertOfferTermsAndPrice(data) {
   const offerId = clamp(data.offer_id, MAX_FIELD.offer_id);
   const termsId = clamp(data.terms_id || data.terms_version, MAX_FIELD.terms_id);
   const amountRaw = data.amount_cents;
   if (!offerId && !termsId && (amountRaw == null || amountRaw === "")) {
     return { ok: true, offer_id: "", terms_id: "" };
+  }
+  const action = nonCatalogAction(offerId);
+  if (action) {
+    // Non-catalog action: no catalog terms version applies before human acceptance.
+    if (termsId) {
+      return {
+        ok: false,
+        status: 422,
+        error: "terms_version_mismatch",
+        message: "Os termos submetidos não coincidem com o registro vigente.",
+      };
+    }
+    if (amountRaw != null && amountRaw !== "") {
+      const cents = Number(amountRaw);
+      if (!Number.isFinite(cents) || cents !== action.authorized_amount_cents) {
+        return {
+          ok: false,
+          status: 422,
+          error: "price_mismatch",
+          message: "O valor submetido não coincide com o registro.",
+        };
+      }
+    }
+    return { ok: true, offer_id: offerId, terms_id: "" };
   }
   let registry;
   try {
@@ -317,9 +359,34 @@ function validateAndNormalize(data) {
   const offerCheck = assertOfferTermsAndPrice(data);
   if (!offerCheck.ok) return offerCheck;
 
+  // Radar Decisório purchase parameters. Server-side, fail-closed: the browser
+  // check is a convenience, this one is the contract.
+  let radarParams = null;
+  let radar = null;
+  try {
+    radar = require("./radar-params.cjs");
+  } catch {
+    radar = null;
+  }
+  if (radar && radar.isRadarSubmission(data)) {
+    if (offerCheck.offer_id && offerCheck.offer_id !== radar.RADAR_OFFER_ID) {
+      return {
+        ok: false,
+        status: 422,
+        error: "radar_offer_mismatch",
+        message: "A oferta submetida não corresponde ao Radar Decisório.",
+      };
+    }
+    const check = radar.validateRadarParams(data);
+    if (!check.ok) return check;
+    radarParams = check.params;
+    offerCheck.offer_id = radar.RADAR_OFFER_ID;
+  }
+
   const nome = clamp(data.nome || data.name, MAX_FIELD.nome);
   const telefone = normalizePhone(data.telefone || data.whatsapp || data.phone || data.tel);
-  const email = normalizeEmail(data.email);
+  // On a Radar order the delivery e-mail is also the contact channel.
+  const email = normalizeEmail(data.email) || (radarParams ? radarParams.email_entrega : "");
   const estagio = clamp(data.estagio || data.tipo_demanda || data.demand_type, MAX_FIELD.estagio);
   const jornada = normalizeJourney(data.jornada || data.journey, estagio);
   const consentRaw = data.consentimento ?? data.consent ?? data.lgpd;
@@ -422,6 +489,7 @@ function validateAndNormalize(data) {
     cnpj: clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
     offer_id: offerCheck.offer_id || null,
     terms_id: offerCheck.terms_id || null,
+    radar_params: radarParams,
     source: "CONFENGE_WEB",
   };
 
@@ -459,12 +527,35 @@ function idempotencyKeyFor(lead, explicit) {
   }
   // 15-minute window bucket to collapse double-submit
   const bucket = Math.floor(Date.now() / (15 * 60 * 1000));
+  // A Radar submission is an order specification, not only a contact lead.
+  // Two configurations from the same person in the same bucket must not
+  // collapse into one record and silently discard the later parameters.
+  // Normalize the set-valued field so a retry with a different checkbox order
+  // still converges to the same key.
+  const radar = lead && lead.radar_params;
+  const radarMaterial = radar
+    ? JSON.stringify({
+        schema: radar.schema || "",
+        offer_id: radar.offer_id || "",
+        cnpj: radar.cnpj || "",
+        recorte: radar.recorte || "",
+        uf: radar.uf || "",
+        cidade_base: radar.cidade_base || "",
+        raio_km: radar.raio_km == null ? "" : radar.raio_km,
+        segmentos: Array.isArray(radar.segmentos)
+          ? [...new Set(radar.segmentos.map(String))].sort()
+          : [],
+        acervo_tecnico: radar.acervo_tecnico || "",
+        email_entrega: radar.email_entrega || "",
+      })
+    : "";
   const material = [
     lead.nome,
     lead.telefone || "",
     lead.email || "",
     lead.jornada,
     lead.estagio,
+    radarMaterial,
     String(bucket),
   ].join("|");
   return `auto:${crypto.createHash("sha256").update(material).digest("hex").slice(0, 32)}`;
@@ -547,6 +638,9 @@ function publicSuccessBody({
   notify_status,
   email_status,
   idempotent,
+  correlation_id,
+  external_reference,
+  delivery_business_hours,
 }) {
   const body = {
     ok: true,
@@ -557,6 +651,14 @@ function publicSuccessBody({
     stage_category: stage_category ? String(stage_category).slice(0, 80) : undefined,
     status: status || "persisted",
   };
+  // Payment correlation for paid parameter orders. Never PII: an offer id and a
+  // digest. Emitted only after the durable persist succeeded.
+  if (correlation_id) body.correlation_id = String(correlation_id).slice(0, 60);
+  if (external_reference) body.external_reference = String(external_reference).slice(0, 200);
+  if (delivery_business_hours) {
+    body.delivery_business_hours = Number(delivery_business_hours);
+    body.delivery_clock_starts_at = "form_submitted";
+  }
   // Non-PII delivery status for probe/ops verification (never secrets/topics)
   if (notify_status) body.notify_status = String(notify_status).slice(0, 24);
   if (email_status) body.email_status = String(email_status).slice(0, 24);
@@ -604,6 +706,7 @@ module.exports = {
   pickAttribution,
   parseBody,
   isHoneypot,
+  nonCatalogAction,
   assertOfferTermsAndPrice,
   validateAndNormalize,
   generateLeadId,

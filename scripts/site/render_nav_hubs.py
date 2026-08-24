@@ -182,11 +182,11 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <div class="container">
 <header class="section-head">
 <h2 id="hub-next">Ainda não sabe qual serviço se aplica?</h2>
-<p class="section-lead">Comece pelo problema que está na sua mesa. Cada frente indica o serviço adequado e os documentos necessários.</p>
+<p class="section-lead">O Diagnóstico B2G 360° é o degrau de entrada: mapeia onde a frente pública perde tempo, margem e controle e diz qual dos quatro serviços responde ao seu caso.</p>
 </header>
+<p><a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-diagnostico-360" data-cta-position="hub_services" data-journey="operacao" data-route-family="servicos-obras-publicas" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico B2G 360° <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="{e(problems["url"])}">Conhecer os problemas que resolvemos <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="/ferramentas/">Usar uma ferramenta antes de falar com a gente <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="button button-primary" data-cta-position="hub_services" href="/#formulario-contato">Analisar meu caso <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>""",
         items,
@@ -236,12 +236,12 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <section aria-labelledby="hub-next" class="section section--default">
 <div class="container">
 <header class="section-head">
-<h2 id="hub-next">Já sabe o problema e quer saber como contratamos?</h2>
-<p class="section-lead">Os serviços mostram o formato de trabalho, o que entra em cada frente e o próximo passo.</p>
+<h2 id="hub-next">O problema já está dentro de um contrato em execução?</h2>
+<p class="section-lead">Enquanto o prazo corre, é o registro que sustenta o pedido. A defesa de margem organiza evento, documento e pedido antes que a posição enfraqueça.</p>
 </header>
+<p><a class="button button-primary" data-asset-family="hub" data-asset-id="problemas-que-resolvemos" data-cta-id="hub-problemas-defesa-margem" data-cta-position="hub_problems" data-journey="contrato" data-route-family="problemas-que-resolvemos" href="/defesa-margem-contratos-publicos/">Abrir a defesa de margem em contrato <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="{e(services["url"])}">Conhecer os serviços <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="/ferramentas/">Usar uma ferramenta antes de falar com a gente <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="button button-primary" data-cta-position="hub_problems" href="/#formulario-contato">Analisar meu caso <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>""",
         items,

@@ -60,6 +60,13 @@
         {
           "gate": "conversion",
           "path": "metodologia-inteligencia/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/metodologia-inteligencia/ required=capture_form_or_whatsapp issue=#74 expires_at=2026-10-31",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "metodologia-inteligencia/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -76,34 +83,6 @@
           "path": "auditoria-orcamento-licitacao/index.html",
           "reason": "missing_on_page_form",
           "excerpt": "profile=service_pillar route=/auditoria-orcamento-licitacao/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "servicos-obras-publicas/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "problemas-que-resolvemos/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "entregas/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
           "severity": "warn"
         },
         {
@@ -130,8 +109,22 @@
         {
           "gate": "conversion",
           "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/ required=capture_form_or_whatsapp issue=#83 expires_at=2026-10-31",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/matriz-atraso-obra/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
@@ -144,6 +137,13 @@
         {
           "gate": "conversion",
           "path": "ferramentas/checklist-reequilibrio/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/ferramentas/checklist-reequilibrio/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/checklist-reequilibrio/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -151,8 +151,29 @@
         {
           "gate": "conversion",
           "path": "ferramentas/limite-acrescimos-supressoes/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/ferramentas/limite-acrescimos-supressoes/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/limite-acrescimos-supressoes/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "casos/aditivo-art125-demonstrativo/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/casos/aditivo-art125-demonstrativo/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "casos/medicao-glosa-demonstrativo/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/casos/medicao-glosa-demonstrativo/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
@@ -173,8 +194,8 @@
         ],
         "profiles": {
           "service_pillar": 13,
-          "priced_offer": 8,
-          "commercial_content": 46,
+          "priced_offer": 9,
+          "commercial_content": 45,
           "trust_or_legal": 9
         },
         "main_cta": {
@@ -190,26 +211,182 @@
           "coverage": 0.5385
         },
         "priced_offer_capture": {
-          "covered": 8,
-          "total": 8,
-          "coverage": 1.0,
-          "routes": {
-            "/casos/modelo-apresentacao-executiva-resultados/": "registered_priced_action",
-            "/casos/modelo-base-quantitativa-canonica/": "registered_priced_action",
-            "/casos/modelo-contratos-vincendos-relicitacao/": "registered_priced_action",
-            "/casos/modelo-mapa-compradores-publicos/": "registered_priced_action",
-            "/casos/modelo-mapeamento-concorrentes-publicos/": "registered_priced_action",
-            "/casos/modelo-painel-precos-obras-publicas/": "registered_priced_action",
-            "/casos/modelo-relatorio-executivo-consolidado/": "registered_priced_action",
-            "/casos/modelo-relatorio-inteligencia-licitacoes/": "registered_priced_action"
-          }
+          "covered": 9,
+          "total": 9,
+          "coverage": 1.0
         },
+        "family_registry": {
+          "path": "data/organic/public-family-registry.json",
+          "schema_version": "public-family-registry-v1",
+          "families": 20,
+          "fail_closed": true,
+          "undeclared_routes": 0
+        },
+        "terminal_action": {
+          "covered": 54,
+          "total": 67,
+          "coverage": 0.806,
+          "exempt_trust_or_legal": 9,
+          "registered_debt": 7
+        },
+        "exemptions": [
+          {
+            "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+            "family": "analises-contratos-publicos",
+            "kind": "debt",
+            "reason": "Canário de análise técnica publicado sob gate editorial de #83, sem ação terminal no <main>. A ação terminal do canário é decisão de #83, que controla o gate editorial da família; alterar o HTML aqui furaria aquele gate.",
+            "owner_issue": 83,
+            "expires_at": "2026-10-31",
+            "required_terminal_action": "capture_form_or_whatsapp",
+            "expired": false
+          },
+          {
+            "route": "/casos/aditivo-art125-demonstrativo/",
+            "family": "casos",
+            "kind": "debt",
+            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
+            "owner_issue": 290,
+            "expires_at": "2026-09-30",
+            "required_terminal_action": "capture_form_or_whatsapp",
+            "expired": false
+          },
+          {
+            "route": "/casos/medicao-glosa-demonstrativo/",
+            "family": "casos",
+            "kind": "debt",
+            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
+            "owner_issue": 290,
+            "expires_at": "2026-09-30",
+            "required_terminal_action": "capture_form_or_whatsapp",
+            "expired": false
+          },
+          {
+            "route": "/ferramentas/checklist-reequilibrio/",
+            "family": "ferramentas",
+            "kind": "debt",
+            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+            "owner_issue": 290,
+            "expires_at": "2026-09-30",
+            "required_terminal_action": "capture_form_or_whatsapp",
+            "expired": false
+          },
+          {
+            "route": "/ferramentas/limite-acrescimos-supressoes/",
+            "family": "ferramentas",
+            "kind": "debt",
+            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+            "owner_issue": 290,
+            "expires_at": "2026-09-30",
+            "required_terminal_action": "capture_form_or_whatsapp",
+            "expired": false
+          },
+          {
+            "route": "/ferramentas/matriz-atraso-obra/",
+            "family": "ferramentas",
+            "kind": "debt",
+            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+            "owner_issue": 290,
+            "expires_at": "2026-09-30",
+            "required_terminal_action": "capture_form_or_whatsapp",
+            "expired": false
+          },
+          {
+            "route": "/metodologia-inteligencia/",
+            "family": "metodologia-inteligencia",
+            "kind": "debt",
+            "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. A ação terminal pertence ao trabalho de autoridade de #74; corrigir o HTML aqui invadiria o escopo daquela issue.",
+            "owner_issue": 74,
+            "expires_at": "2026-10-31",
+            "required_terminal_action": "capture_form_or_whatsapp",
+            "expired": false
+          },
+          {
+            "route": "/comercial/termos-diagnostico-b2g/",
+            "family": "comercial-condicoes",
+            "kind": "priced_reference",
+            "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>.",
+            "owner_issue": 88,
+            "expires_at": null
+          },
+          {
+            "route": "/conflitos/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/correcoes/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/imprensa/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/politica-editorial/",
+            "family": "politica-editorial",
+            "kind": "trust_or_legal",
+            "reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/politica-editorial/historico/",
+            "family": "politica-editorial",
+            "kind": "trust_or_legal",
+            "reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/politica-editorial/v/1.0.0/",
+            "family": "politica-editorial",
+            "kind": "trust_or_legal",
+            "reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/privacidade/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/termos-de-uso/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
+            "expires_at": null
+          },
+          {
+            "route": "/uso-de-ia/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
+            "expires_at": null
+          }
+        ],
         "freeze": {
           "earliest_safe_action_at": "2026-09-16",
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 19
+        "warnings": 22
       }
     },
     "legacy_entity": {

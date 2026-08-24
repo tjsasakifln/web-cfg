@@ -7,7 +7,6 @@ import re
 from decimal import Decimal
 from html import unescape
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
 
 import pytest
 
@@ -22,10 +21,6 @@ CATALOG = ROOT / "data/offers/catalog.snapshot.json"
 DELIVERABLES_STORY = ROOT / "docs/stories/story-deliverables-hub-navigation.md"
 ACTION_ID = "contratar_relatorio_inteligencia_599"
 HANDRAISE_ID = "handraise-report-intelligence-599-v1"
-EXPECTED_MESSAGE = (
-    "Olá, Tiago. Vi o modelo de relatório de inteligência de licitações e quero "
-    "contratar uma versão adaptada à minha empresa por R$ 599."
-)
 
 
 def _html() -> str:
@@ -779,8 +774,8 @@ def test_page_is_direct_public_html_without_friction() -> None:
     assert lowered.index("<form") > lowered.index("<article")
 
 
-def test_price_leaves_a_persisted_record_not_only_a_whatsapp_click() -> None:
-    """#289: the cheapest rung of the ladder still has to write a lead down."""
+def test_price_leaves_a_persisted_inline_record() -> None:
+    """#289: the cheapest rung also offers an on-page persisted handraise."""
     html = _html()
     match = re.search(r"<form\b[^>]*>.*?</form>", html, re.S)
     assert match
@@ -812,8 +807,10 @@ def test_price_leaves_a_persisted_record_not_only_a_whatsapp_click() -> None:
     assert 0 < anchor < match.start()
     band = re.search(r'<section class="report-capture".*?</section>', html, re.S)
     assert band and set(re.findall(r"R\$ [\d.]*\d", band.group(0))) == {"R$ 599"}
-    # WhatsApp is complemented, never replaced.
-    assert html.count("wa.me/5548988344559") == 5
+    # #304 remains authoritative: five CTAs use the canonical persisted order
+    # intake, while this form is the visitor's inline alternative.
+    assert html.count('href="/comercial/radar-decisorio/"') == 5
+    assert "wa.me/5548988344559" not in html
 
 
 def test_product_promise_value_and_scope_are_explicit_before_the_example() -> None:
@@ -832,7 +829,8 @@ def test_product_promise_value_and_scope_are_explicit_before_the_example() -> No
         "A CONFENGE busca os editais abertos nesse recorte",
         "a quantidade decorre das licitações publicadas",
         "a profundidade máxima permitida pelas informações da empresa",
-        "Prazo e aceite são confirmados",
+        "O prazo é de até 48 horas úteis",
+        "começa no envio dos parâmetros",
         "antes da cobrança",
     ):
         assert phrase in offer
@@ -1096,7 +1094,7 @@ def test_decision_sheet_preserves_evidence_topology_without_fake_sources() -> No
     assert 'href="http' not in block
 
 
-def test_value_ladder_price_and_whatsapp_contract() -> None:
+def test_value_ladder_price_and_persisted_order_entry_contract() -> None:
     html = _html()
     positions = set(re.findall(r'data-cta-position="(report_[^"]+)"', html))
     assert {
@@ -1106,7 +1104,7 @@ def test_value_ladder_price_and_whatsapp_contract() -> None:
         "report_final",
         "report_mobile_sticky",
     } == positions
-    assert html.count("Quero meu relatório por R$ 599") >= 3
+    assert html.count("Configurar meu relatório por R$ 599") >= 3
     assert "R$ 599 = 1 relatório adaptado" in html
     for marker in (
         "Conclusão executiva",
@@ -1120,23 +1118,19 @@ def test_value_ladder_price_and_whatsapp_contract() -> None:
     ):
         assert marker in html
 
-    links = re.findall(r'href="(https://wa\.me/5548988344559\?text=[^"]+)"', html)
-    assert len(links) == 5
-    for link in links:
-        parsed = urlparse(link)
-        assert parsed.netloc == "wa.me" and parsed.path == "/5548988344559"
-        assert parse_qs(parsed.query).get("text") == [EXPECTED_MESSAGE]
-
     commercial_tags = re.findall(
-        r'<a\b[^>]*href="https://wa\.me/5548988344559\?text=[^"]+"[^>]*>', html
+        r'<a\b[^>]*href="/comercial/radar-decisorio/"[^>]*>', html
     )
     assert len(commercial_tags) == 5
     for tag in commercial_tags:
         assert f'data-next-action-id="{ACTION_ID}"' in tag
         assert f'data-offer-id="{HANDRAISE_ID}"' in tag
         assert 'data-cta-kind="offer"' in tag
+        assert 'data-event-name="cta_click"' in tag
+        assert 'data-terminal-action="capture-route"' in tag
         assert re.search(r'data-cta-id="report-599-[^"]+"', tag)
         assert re.search(r'data-cta-position="report_[^"]+"', tag)
+    assert "https://wa.me/5548988344559" not in html
     assert 'data-event-name="offer_cta_click"' not in html
 
 
@@ -1147,13 +1141,13 @@ def test_price_has_versioned_non_catalog_action_authority() -> None:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     catalog_ids = {offer["offer_id"] for offer in catalog["offers"]}
 
-    assert matrix["version"] == "1.3.0"
+    assert matrix["version"] == "1.4.0"
     assert route["offer_id"] == HANDRAISE_ID
     assert route["service_id"] is None
     assert route["asset_id"] == "relatorio-inteligencia-licitacoes-demonstrativo"
     assert HANDRAISE_ID not in catalog_ids
-    assert route["commercial_action_type"] == "owner_approved_non_catalog_whatsapp_handraise"
-    assert route["authority_source"].startswith("docs/stories/story-public-report-model-599.md")
+    assert route["commercial_action_type"] == "owner_approved_non_catalog_persisted_order_intake"
+    assert route["authority_source"].startswith("docs/stories/story-radar-decisorio-purchase-params.md")
     assert route["authorized_amount_cents"] == 59900
     assert route["currency"] == "BRL"
     assert route["unit"] == "one_adapted_report"
@@ -1166,18 +1160,29 @@ def test_price_has_versioned_non_catalog_action_authority() -> None:
         "opportunity_count_negotiated": False,
         "analysis_depth_rule": "maximum_supported_by_company_provided_information",
     }
-    assert route["scope_state"] == "UNKNOWN_UNTIL_HUMAN_ACCEPTANCE"
+    assert route["scope_state"] == "PARAMETERS_PERSISTED_PENDING_HUMAN_PAYMENT_HANDOFF"
     assert route["terms_state"] == "UNKNOWN_UNTIL_HUMAN_ACCEPTANCE"
     assert route["checkout_enabled"] is False
     assert route["auto_send"] is False
-    assert route["sla"] == "UNKNOWN"
+    assert route["sla"] == "delivery_within_48_business_hours_from_persisted_form_submission"
+    assert route["channel"] == "persisted_web_form_then_owner_payment_handoff"
+    assert route["minimum_fields"] == [
+        "nome",
+        "cnpj",
+        "radar_recorte",
+        "radar_uf",
+        "radar_segmentos",
+        "radar_acervo_tecnico",
+        "radar_email_entrega",
+        "consentimento",
+    ]
     assert f'data-next-action-id="{ACTION_ID}"' in html
     assert f'data-offer-id="{HANDRAISE_ID}"' in html
     body_tag = re.search(r"<body\b[^>]*>", html)
     assert body_tag and "data-offer-id" not in body_tag.group(0), (
-        "non-catalog handraise must not emit catalog offer_view on page load"
+        "non-catalog order intake must not emit catalog offer_view on page load"
     )
-    assert "Prazo e aceite são confirmados" in html
+    assert "O prazo é de até 48 horas úteis" in html
 
     matrix_md = (ACTION_MATRIX.with_suffix(".md")).read_text(encoding="utf-8")
     public_story = (ROOT / "docs/stories/story-public-report-model-599.md").read_text(

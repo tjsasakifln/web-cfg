@@ -40,29 +40,6 @@ CAPTURE_HIDDEN_FIELDS = (
     "landing_page",
 )
 
-# ALLOWLIST-FREE BY DESIGN (#289). The priced-offer profile is never a list of
-# routes. A page enters it when it publishes a purchasable price of its own —
-# proved either by the versioned action contract or by the page's own commercial
-# markup — so a ninth priced page is gated the day it ships, without an edit
-# here. Editorial pages that merely quote a currency figure are not offers and
-# must not be dragged into the profile.
-INTENT_ACTION_MATRIX = ROOT / "docs/contracts/intent-action/intent-action-matrix.v1.json"
-OFFER_CTA_RE = re.compile(
-    r'(?is)<a\b(?=[^>]*\bdata-cta-kind=["\']offer["\'])[^>]*>.*?</a>'
-)
-VISIBLE_PRICE_RE = re.compile(r"R\$\s*\d")
-CAPTURE_FORM_RE = re.compile(
-    r'(?is)<form\b(?=[^>]*\bmethod=["\']post["\'])'
-    r'(?=[^>]*\baction=["\']/\.netlify/functions/lead["\'])[^>]*>.*?</form>'
-)
-CAPTURE_DATA_ATTRS = (
-    "data-offer-id",
-    "data-cta-id",
-    "data-asset-id",
-    "data-route-family",
-    "data-cta-position",
-)
-
 # --- Patterns that signal machine / keyword-stuffed copy ---
 MACHINE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     (
@@ -845,14 +822,104 @@ def _as_date(value: date | datetime | str | None) -> date:
     return date.today()
 
 
-def priced_action_registry() -> tuple[set[str], set[str]]:
-    """Action and offer ids the versioned intent-action contract prices.
+# --- Public family registry: fail-closed conversion contract (issue #300) ---
+#
+# The default conversion profile used to be ``commercial_content``, the most
+# permissive one, satisfied by any ``<a data-cta-id href>``. Every newly
+# published family landed there and passed. The default is now "declare
+# yourself": an indexable route with no family declaration in
+# ``data/organic/public-family-registry.json`` fails the gate. The declaration
+# is versioned data, not a Python constant, and every claim it makes is checked
+# against the rendered HTML.
+FAMILY_REGISTRY_REL = "data/organic/public-family-registry.json"
+FAMILY_REGISTRY_SCHEMA = "public-family-registry-v1"
+BOFU_SERVICE_ROUTE_SOURCE = (
+    "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"
+)
+CONVERSION_PROFILES = {"service_pillar", "priced_offer", "commercial_content", "trust_or_legal"}
+TERMINAL_ACTIONS = {
+    "capture_form",
+    "whatsapp",
+    "capture_form_or_whatsapp",
+    "service_transition",
+    "none",
+}
+GATE_COVERAGE_LEVELS = {"full", "partial", "none"}
+GATE_COVERAGE_KEYS = ("conversion", "copy", "accessibility")
+MIN_WRITTEN_REASON = 24
+MAX_DEBT_DURATION_DAYS = 90
 
-    Derived from ``intent-action-matrix.v1.json`` on every run. Publishing a
-    priced route without registering it there is itself a contract break, so
-    this stays the authoritative half of the priced-offer signal.
-    """
-    matrix = json.loads(INTENT_ACTION_MATRIX.read_text(encoding="utf-8"))
+# A price is "displayed" when structured offer markup is present, or when a
+# BRL amount sits next to a commitment word. Bare BRL amounts are data (contract
+# values, reference costs), not offers, so they must not escalate the profile.
+PRICE_MARKUP_RE = re.compile(r'"price"\s*:|"priceCurrency"\s*:|itemprop=["\']price["\']', re.I)
+_PRICE_AMOUNT = r"R\$\s*(?:\d{1,3}(?:\.\d{3})+|\d+)(?:,\d{2})?(?![\d.,])"
+_PRICE_COMMITMENT = (
+    r"investimento|pre[çc]o|a partir de|por unidade|pagamento [úu]nico|"
+    r"mensal|assinatura|por relat[óo]rio|entrega por|sob demanda|avulso|por entrega|plano"
+)
+PRICE_NEAR_RE = re.compile(
+    rf"(?is)(?:{_PRICE_COMMITMENT})[^.]{{0,80}}?{_PRICE_AMOUNT}"
+    rf"|{_PRICE_AMOUNT}[^.]{{0,60}}?(?:{_PRICE_COMMITMENT})"
+)
+PRICED_CAPTURE_DATA_ATTRS = (
+    "data-offer-id",
+    "data-cta-id",
+    "data-asset-id",
+    "data-route-family",
+    "data-cta-position",
+)
+
+
+def _is_iso_date(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
+
+
+def _is_owner_issue(value: Any) -> bool:
+    """A bool is an int in Python, but it is not an issue identifier."""
+    return type(value) is int and value > 0
+
+
+def _is_safe_public_path(value: Any) -> bool:
+    if not isinstance(value, str) or not value.startswith("/"):
+        return False
+    if any(char.isspace() for char in value):
+        return False
+    if any(token in value for token in ("?", "#", "\\", "//", "/./", "/../")):
+        return False
+    return not value.endswith("index.html")
+
+
+def _is_canonical_route(value: Any) -> bool:
+    return _is_safe_public_path(value) and (value == "/" or value.endswith("/"))
+
+
+def _is_safe_family_prefix(value: Any) -> bool:
+    # A root prefix would silently absorb every future family and recreate the
+    # permissive default this registry exists to remove.
+    return _is_safe_public_path(value) and value != "/"
+
+
+def _displays_price(main: str) -> bool:
+    """True when ``<main>`` shows a price for something CONFENGE sells."""
+    if PRICE_MARKUP_RE.search(main):
+        return True
+    return bool(PRICE_NEAR_RE.search(strip_html(main)))
+
+
+def priced_action_registry() -> tuple[set[str], set[str]]:
+    """Return the action and handraise ids with an owner-authorized amount."""
+    matrix = json.loads(
+        (ROOT / "docs/contracts/intent-action/intent-action-matrix.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
     actions: set[str] = set()
     offers: set[str] = set()
     for row in matrix.get("routes") or []:
@@ -866,51 +933,30 @@ def priced_action_registry() -> tuple[set[str], set[str]]:
     return actions, offers
 
 
-def priced_offer_signal(main: str, priced_actions: set[str], priced_offers: set[str]) -> str:
-    """Why this page counts as a priced offer, or "" when it does not.
-
-    Two independent detectors, both read off the page instead of a route list:
-
-    ``registered_priced_action``
-        the page carries a ``data-next-action-id`` / ``data-offer-id`` that the
-        intent-action contract prices;
-    ``visible_price_on_offer_cta``
-        the page shows a currency figure inside its own commercial CTA, which is
-        what "exibe preço" means for a visitor deciding to buy.
-
-    A page that quotes a value inside editorial prose has no commercial CTA
-    carrying it and is deliberately not matched.
-    """
-    for match in re.finditer(r'data-next-action-id=["\']([^"\']+)["\']', main, re.I):
-        if match.group(1) in priced_actions:
-            return "registered_priced_action"
-    for match in re.finditer(r'data-offer-id=["\']([^"\']+)["\']', main, re.I):
-        if match.group(1) in priced_offers:
-            return "registered_priced_action"
-    for tag in OFFER_CTA_RE.finditer(main):
-        block = tag.group(0)
-        label = re.search(r'aria-label=["\']([^"\']*)["\']', block, re.I)
-        if VISIBLE_PRICE_RE.search(strip_html(block)) or (
-            label and VISIBLE_PRICE_RE.search(label.group(1))
-        ):
-            return "visible_price_on_offer_cta"
-    return ""
-
-
 def priced_offer_routes(base: Path | None = None) -> dict[str, str]:
-    """Every indexable route that publishes a purchasable price, route -> signal."""
+    """Discover routes whose effective profile is a non-reference priced offer."""
     root = base or ROOT
-    priced_actions, priced_offers = priced_action_registry()
     routes: dict[str, str] = {}
+    registry = load_family_registry()
+    families = registry.get("families") or []
+    service_routes = _bofu_service_routes()
     for page in _conversion_files(root):
         html = page.read_text(encoding="utf-8", errors="replace")
         if not is_indexable_html(html):
             continue
-        rel = page.relative_to(root)
-        route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
-        signal = priced_offer_signal(_main_html(html), priced_actions, priced_offers)
-        if signal:
-            routes[route] = signal
+        main = _main_html(html)
+        if not _displays_price(main):
+            continue
+        rel = page.relative_to(root).as_posix()
+        route = "/" if rel == "index.html" else "/" + rel.removesuffix("index.html")
+        family = _match_family(route, families, service_routes)
+        priced_refs = {
+            str(entry.get("route"))
+            for entry in (family or {}).get("priced_reference_routes") or []
+        }
+        if route in service_routes or route in priced_refs:
+            continue
+        routes[route] = "displayed_price"
     return routes
 
 
@@ -920,79 +966,94 @@ def _priced_offer_findings(
     route: str,
     main: str,
     priced_offers: set[str],
+    family_id: str,
 ) -> list[Finding]:
-    """A published price must leave a persisted, attributed record behind.
-
-    ``has_attributed_cta`` is not enough here: a WhatsApp click on the most
-    expensive offer of the site is unobservable after it leaves the page.
-    """
+    """A priced surface must persist a fully attributed, non-checkout handraise."""
     rel = str(page.relative_to(base))
     findings: list[Finding] = []
 
     def fail(reason: str, excerpt: str = "") -> None:
         findings.append(
-            Finding(gate="conversion", path=rel, reason=reason, excerpt=excerpt or f"route={route}")
+            Finding(
+                gate="conversion",
+                path=rel,
+                reason=reason,
+                excerpt=excerpt or f"route={route}",
+            )
         )
 
-    form_match = CAPTURE_FORM_RE.search(main)
+    form_match = re.search(
+        r'<form\b(?=[^>]*\bmethod=["\']post["\'])'
+        r'(?=[^>]*\baction=["\']/.netlify/functions/lead["\'])[^>]*>.*?</form>',
+        main,
+        re.I | re.S,
+    )
     if not form_match:
         fail("priced_offer_missing_persisted_capture")
         return findings
     form = form_match.group(0)
     open_tag = form.split(">", 1)[0]
 
-    for attr in CAPTURE_DATA_ATTRS:
-        if not re.search(rf'\b{attr}=["\'][^"\']+["\']', open_tag, re.I):
+    declared: dict[str, str] = {}
+    for attr in PRICED_CAPTURE_DATA_ATTRS:
+        match = re.search(rf'\b{re.escape(attr)}=["\']([^"\']*)["\']', open_tag, re.I)
+        if not match:
             fail("priced_offer_capture_data_contract_missing", attr)
+        else:
+            declared[attr] = match.group(1)
 
-    declared_offer = re.search(r'\bdata-offer-id=["\']([^"\']*)["\']', open_tag, re.I)
-    if declared_offer and declared_offer.group(1) not in priced_offers:
-        fail("priced_offer_capture_offer_unregistered", declared_offer.group(1)[:80])
+    offer_id = declared.get("data-offer-id", "")
+    if offer_id and offer_id not in priced_offers:
+        fail("priced_offer_capture_offer_unregistered", offer_id[:80])
+    direct_model = family_id == "casos-modelos-precificados"
+    if direct_model and not offer_id:
+        fail("priced_offer_capture_offer_missing")
+    if direct_model and offer_id and main.count(f'data-offer-id="{offer_id}"') < 2:
+        fail("priced_offer_capture_offer_mismatch", offer_id[:80])
 
     form_id = re.search(r'\bid=["\']([^"\']+)["\']', open_tag, re.I)
-    if not form_id:
-        fail("priced_offer_capture_anchor_missing", "form has no id to link to")
-    else:
-        anchor = main.find(f'href="#{form_id.group(1)}"')
-        if anchor < 0 or anchor > form_match.start():
-            fail("priced_offer_capture_not_linked", f"#{form_id.group(1)}")
+    if direct_model:
+        if not form_id:
+            fail("priced_offer_capture_anchor_missing", "form has no id")
+        else:
+            anchor = main.find(f'href="#{form_id.group(1)}"')
+            if anchor < 0 or anchor > form_match.start():
+                fail("priced_offer_capture_not_linked", f"#{form_id.group(1)}")
 
+    hidden: dict[str, str] = {}
     for name in CAPTURE_HIDDEN_FIELDS:
-        if not re.search(
-            rf'<input\b(?=[^>]*\btype=["\']hidden["\'])(?=[^>]*\bname=["\']{name}["\'])[^>]*>',
-            form,
-            re.I,
-        ):
-            fail("priced_offer_capture_attribution_missing", name)
-
-    def declared(attr: str) -> str:
-        found = re.search(rf'\b{attr}=["\']([^"\']*)["\']', open_tag, re.I)
-        return found.group(1) if found else ""
-
-    # The persisted record must repeat exactly what the page already reports to
-    # analytics. A form that attributes itself differently is an unjoinable lead.
-    expected = {
-        "origem": route,
-        "landing_page": f"{SITE}{route}",
-        "asset_id": declared("data-asset-id"),
-        "cta_id": declared("data-cta-id"),
-        "route_family": declared("data-route-family"),
-    }
-    for name, want in expected.items():
         field = re.search(
-            rf'<input\b(?=[^>]*\bname=["\']{name}["\'])[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+            rf'<input\b(?=[^>]*\btype=["\']hidden["\'])'
+            rf'(?=[^>]*\bname=["\']{re.escape(name)}["\'])'
+            r'[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
             form,
             re.I,
         )
-        got = field.group(1) if field else "MISSING"
+        if not field:
+            fail("priced_offer_capture_attribution_missing", name)
+        else:
+            hidden[name] = field.group(1)
+
+    expected = {
+        "asset_id": declared.get("data-asset-id", ""),
+        "cta_id": declared.get("data-cta-id", ""),
+        "route_family": declared.get("data-route-family", ""),
+        "landing_page": f"{SITE}{route}",
+    }
+    if direct_model:
+        expected["origem"] = route
+    for name, want in expected.items():
+        got = hidden.get(name, "MISSING")
         if got != want:
             fail("priced_offer_capture_attribution_mismatch", f"{name}={got} expected={want}")
+    for name in ("origem", "jornada", "estagio"):
+        if not hidden.get(name, "").strip():
+            fail("priced_offer_capture_attribution_empty", name)
 
-    # #88 keeps the Asaas catalog frozen. A priced handraise page may never
-    # submit a catalog offer id, terms id or amount: that would be checkout.
     for empty_name in ("offer_id", "terms_id", "amount_cents"):
         field = re.search(
-            rf'<input\b(?=[^>]*\bname=["\']{empty_name}["\'])[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+            rf'<input\b(?=[^>]*\bname=["\']{empty_name}["\'])'
+            r'[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
             form,
             re.I,
         )
@@ -1000,30 +1061,434 @@ def _priced_offer_findings(
             fail("priced_offer_checkout_invented", f"{empty_name}={field.group(1)[:80]}")
 
     if not re.search(
-        r'<input\b(?=[^>]*\btype=["\']checkbox["\'])(?=[^>]*\bname=["\']consentimento["\'])'
-        r'(?=[^>]*\brequired\b)[^>]*>',
+        r'<input\b(?=[^>]*\btype=["\']checkbox["\'])'
+        r'(?=[^>]*\bname=["\']consentimento["\'])(?=[^>]*\brequired\b)[^>]*>',
         form,
         re.I,
     ):
         fail("priced_offer_capture_consent_not_required")
+    return findings
 
+
+def _has_linked_capture_route(root: Path, main: str) -> bool:
+    """Prove that an explicit terminal link lands on a real persisted capture.
+
+    A generic internal link is never terminal. This narrow contract exists for
+    dedicated noindex transaction steps: the source opts in on the anchor and
+    the gate follows only canonical ``/comercial/`` routes whose ``<main>``
+    contains the complete lead-function attribution/consent contract.
+    """
+    for tag in re.findall(r"(?is)<a\b[^>]*>", main):
+        marker = re.search(
+            r'\bdata-terminal-action=["\']capture-route["\']', tag, re.I
+        )
+        href_match = re.search(r'\bhref=["\']([^"\']+)["\']', tag, re.I)
+        if not marker or not href_match:
+            continue
+        route = href_match.group(1)
+        if not _is_canonical_route(route) or not route.startswith("/comercial/"):
+            continue
+        page = root / route.strip("/") / "index.html"
+        if not page.is_file():
+            continue
+        html = page.read_text(encoding="utf-8", errors="replace")
+        if not is_noindex(html):
+            continue
+        destination_main = _main_html(html)
+        form_match = re.search(
+            r'<form\b(?=[^>]*\bmethod=["\']post["\'])'
+            r'(?=[^>]*\baction=["\']/.netlify/functions/lead["\'])[^>]*>.*?</form>',
+            destination_main,
+            re.I | re.S,
+        )
+        if not form_match:
+            continue
+        form = form_match.group(0)
+        form_open = form.split(">", 1)[0]
+        if any(
+            not re.search(rf'\b{attr}=["\'][^"\']+["\']', form_open, re.I)
+            for attr in (
+                "data-cta-id",
+                "data-asset-id",
+                "data-route-family",
+                "data-cta-position",
+            )
+        ):
+            continue
+        if any(
+            not re.search(rf'\bname=["\']{name}["\']', form, re.I)
+            for name in (
+                "nome",
+                "estagio",
+                "jornada",
+                "origem",
+                "asset_id",
+                "cta_id",
+                "route_family",
+            )
+        ):
+            continue
+        if not re.search(
+            r'<input\b(?=[^>]*\btype=["\']checkbox["\'])'
+            r'(?=[^>]*\bname=["\']consentimento["\'])(?=[^>]*\brequired\b)[^>]*>',
+            form,
+            re.I,
+        ):
+            continue
+        return True
+    return False
+
+
+SERVICE_TRANSITION_ATTRS = (
+    "data-cta-id",
+    "data-cta-position",
+    "data-asset-id",
+    "data-asset-family",
+    "data-route-family",
+    "data-journey",
+)
+
+
+def _service_transition_destinations(main: str, service_routes: set[str]) -> list[str]:
+    """Return fully attributed, canonical service CTAs in ``<main>``.
+
+    This is intentionally narrower than ``has_main_service_link``. A navigation
+    link does not pay terminal-action debt. The owning family must declare a
+    service transition and expose exactly one dominant CTA whose destination is
+    in the versioned BOFU service contract and whose analytics context is
+    complete enough to emit ``content_to_service`` without guessing.
+    """
+    destinations: list[str] = []
+    for tag in re.findall(r"(?is)<a\b[^>]*>", main):
+        href_match = re.search(r'\bhref=["\']([^"\']+)["\']', tag, re.I)
+        if not href_match or href_match.group(1) not in service_routes:
+            continue
+        if any(
+            not re.search(rf'\b{re.escape(attr)}=["\'][^"\']+["\']', tag, re.I)
+            for attr in SERVICE_TRANSITION_ATTRS
+        ):
+            continue
+        destinations.append(href_match.group(1))
+    return destinations
+
+
+def load_family_registry(root: Path | None = None) -> dict[str, Any]:
+    path = (root or ROOT) / FAMILY_REGISTRY_REL
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _bofu_service_routes(root: Path | None = None) -> set[str]:
+    matrix = json.loads(
+        ((root or ROOT) / "data/organic/bofu-intent-matrix.json").read_text(encoding="utf-8")
+    )
+    return {str(row["canonical_service_route"]) for row in matrix.get("rows") or []}
+
+
+def _family_routes(family: dict[str, Any], service_routes: set[str]) -> tuple[set[str], str | None]:
+    """Return (explicit routes, prefix) declared by a family."""
+    match = family.get("match") or {}
+    if match.get("source") == BOFU_SERVICE_ROUTE_SOURCE:
+        return set(service_routes), None
+    if isinstance(match.get("routes"), list):
+        return {r for r in match["routes"] if _is_canonical_route(r)}, None
+    if _is_safe_family_prefix(match.get("prefix")):
+        return set(), str(match["prefix"])
+    return set(), None
+
+
+def _match_family(
+    route: str, families: list[dict[str, Any]], service_routes: set[str]
+) -> dict[str, Any] | None:
+    """Most specific declaration wins: exact route, then longest prefix."""
+    best: dict[str, Any] | None = None
+    best_len = -1
+    for family in families:
+        routes, prefix = _family_routes(family, service_routes)
+        if route in routes:
+            return family
+        if prefix and route.startswith(prefix) and len(prefix) > best_len:
+            best, best_len = family, len(prefix)
+    return best
+
+
+def _a11y_census() -> set[str]:
+    """Routes actually audited by scripts/site/audit_accessibility.py."""
+    from scripts.site.audit_accessibility import PAGES
+
+    census = set()
+    for page in PAGES:
+        rel = page.relative_to(ROOT).as_posix()
+        census.add("/" if rel == "index.html" else "/" + rel.removesuffix("index.html"))
+    return census
+
+
+def _copy_lint_census(root: Path | None = None) -> set[str]:
+    """Routes actually linted by scripts/site/lint_editorial_copy.py."""
+    base = root or ROOT
+    census = set()
+    for page in sorted((base / "data/editorial/pages").glob("*.json")):
+        payload = json.loads(page.read_text(encoding="utf-8"))
+        url = payload.get("url")
+        if isinstance(url, str) and url.startswith("/"):
+            census.add(url)
+    for page in sorted((base / "ferramentas").rglob("index.html")):
+        rel = page.relative_to(base).as_posix()
+        census.add("/" + rel.removesuffix("index.html"))
+    return census
+
+
+def _coverage_level(matched: set[str], census: set[str]) -> str:
+    if not matched:
+        return "none"
+    covered = matched & census
+    if not covered:
+        return "none"
+    return "full" if covered == matched else "partial"
+
+
+def _validate_family_registry(
+    registry: dict[str, Any],
+    service_routes: set[str],
+    indexable_routes: set[str],
+    *,
+    verify_coverage: bool = True,
+) -> list[Finding]:
+    """The registry must not be satisfiable by an empty line. Every field is checked."""
+    findings: list[Finding] = []
+    rel = FAMILY_REGISTRY_REL
+
+    def bad(reason: str, excerpt: str) -> None:
+        findings.append(Finding(gate="conversion", path=rel, reason=reason, excerpt=excerpt[:160]))
+
+    if registry.get("schema_version") != FAMILY_REGISTRY_SCHEMA:
+        bad("registry_schema_mismatch", str(registry.get("schema_version")))
+    if registry.get("fail_closed") is not True:
+        bad("registry_not_fail_closed", "fail_closed must be true")
+    registry_as_of_value = registry.get("as_of")
+    registry_as_of = (
+        date.fromisoformat(registry_as_of_value)
+        if _is_iso_date(registry_as_of_value)
+        else None
+    )
+    if registry_as_of is None:
+        bad("registry_as_of_invalid", str(registry_as_of_value))
+    if not _is_owner_issue(registry.get("owner_issue")):
+        bad("registry_owner_issue_invalid", str(registry.get("owner_issue")))
+
+    families_value = registry.get("families")
+    if not isinstance(families_value, list) or not families_value:
+        bad("registry_empty", "no families declared")
+        families: list[dict[str, Any]] = []
+    else:
+        families = families_value
+
+    a11y_census = _a11y_census()
+    copy_census = _copy_lint_census()
+    seen_ids: set[str] = set()
+    exact_owners: dict[str, str] = {}
+    prefix_owners: dict[str, str] = {}
+    service_source_ids: set[str] = set()
+    for family in families:
+        if not isinstance(family, dict):
+            bad("family_entry_invalid", repr(family))
+            continue
+        fid = str(family.get("id") or "")
+        if not fid or fid in seen_ids:
+            bad("family_id_invalid_or_duplicated", fid or "<empty>")
+            continue
+        seen_ids.add(fid)
+        profile = family.get("profile")
+        action = family.get("terminal_action")
+        if profile not in CONVERSION_PROFILES:
+            bad("family_profile_invalid", f"{fid}: {profile}")
+        if action not in TERMINAL_ACTIONS:
+            bad("family_terminal_action_invalid", f"{fid}: {action}")
+        if len(str(family.get("visitor_job") or "").strip()) < MIN_WRITTEN_REASON:
+            bad("family_visitor_job_missing", fid)
+        if not _is_owner_issue(family.get("owner_issue")):
+            bad("family_owner_issue_missing", fid)
+        declared_at_value = family.get("declared_at")
+        declared_at = (
+            date.fromisoformat(declared_at_value) if _is_iso_date(declared_at_value) else None
+        )
+        if declared_at is None:
+            bad("family_declared_at_invalid", f"{fid}: {declared_at_value}")
+        elif registry_as_of is not None and declared_at > registry_as_of:
+            bad("family_declared_at_after_registry_as_of", f"{fid}: {declared_at_value}")
+        match = family.get("match") or {}
+        if not isinstance(match, dict):
+            match = {}
+        match_keys = [key for key in ("routes", "prefix", "source") if key in match]
+        if len(match_keys) != 1:
+            bad("family_match_invalid", fid)
+        elif match_keys[0] == "source" and match.get("source") != BOFU_SERVICE_ROUTE_SOURCE:
+            bad("family_match_source_invalid", f"{fid}: {match.get('source')}")
+        elif match_keys[0] == "routes":
+            route_values = match.get("routes")
+            if not isinstance(route_values, list) or not route_values:
+                bad("family_match_routes_invalid", fid)
+            else:
+                if len(route_values) != len(set(map(str, route_values))):
+                    bad("family_match_routes_duplicated", fid)
+                for route in route_values:
+                    if not _is_canonical_route(route):
+                        bad("family_match_route_invalid", f"{fid}: {route}")
+        elif match_keys[0] == "prefix" and not _is_safe_family_prefix(match.get("prefix")):
+            bad("family_match_prefix_invalid", f"{fid}: {match.get('prefix')}")
+        uses_service_source = match.get("source") == BOFU_SERVICE_ROUTE_SOURCE
+        if uses_service_source:
+            service_source_ids.add(fid)
+        if profile == "service_pillar" and not uses_service_source:
+            bad("family_service_profile_match_invalid", fid)
+        if uses_service_source and profile != "service_pillar":
+            bad("family_service_source_profile_invalid", fid)
+        if profile == "service_pillar" and action != "capture_form":
+            bad("family_service_terminal_action_invalid", fid)
+        coverage = family.get("gate_coverage") or {}
+        for key in GATE_COVERAGE_KEYS:
+            if coverage.get(key) not in GATE_COVERAGE_LEVELS:
+                bad("family_gate_coverage_invalid", f"{fid}.{key}={coverage.get(key)}")
+        if coverage.get("conversion") != "full":
+            bad("family_conversion_coverage_understated", fid)
+        if action == "none" and profile != "trust_or_legal":
+            bad("family_no_action_outside_trust", fid)
+        if profile == "trust_or_legal" and action != "none":
+            bad("family_trust_action_invalid", fid)
+        if action == "service_transition" and profile != "commercial_content":
+            bad("family_service_transition_profile_invalid", fid)
+        if action == "service_transition" and not isinstance(match.get("routes"), list):
+            bad("family_service_transition_match_invalid", fid)
+        if action == "none" and len(
+            str(family.get("exemption_reason") or "").strip()
+        ) < MIN_WRITTEN_REASON:
+            bad("family_exemption_reason_missing", fid)
+
+        routes, prefix = _family_routes(family, service_routes)
+        for route in routes:
+            previous = exact_owners.setdefault(route, fid)
+            if previous != fid:
+                bad("family_match_overlap", f"{route}: {previous}, {fid}")
+        if prefix:
+            previous = prefix_owners.setdefault(prefix, fid)
+            if previous != fid:
+                bad("family_match_overlap", f"{prefix}: {previous}, {fid}")
+        matched = {r for r in indexable_routes if r in routes}
+        if prefix:
+            matched |= {r for r in indexable_routes if r.startswith(prefix)}
+        # A prefix family only owns the routes no more specific family claims.
+        for other in families:
+            if other is family:
+                continue
+            other_routes, other_prefix = _family_routes(other, service_routes)
+            matched -= {r for r in matched if r in other_routes}
+            if other_prefix and prefix and len(other_prefix) > len(prefix):
+                matched -= {r for r in matched if r.startswith(other_prefix)}
+
+        # Declared gate coverage is verified against the real gate censuses,
+        # so the field cannot become decoration.
+        if verify_coverage:
+            for key, census in (("accessibility", a11y_census), ("copy", copy_census)):
+                actual = _coverage_level(matched, census)
+                declared = coverage.get(key)
+                if declared in GATE_COVERAGE_LEVELS and declared != actual and matched:
+                    bad(
+                        "family_gate_coverage_mismatch",
+                        f"{fid}.{key} declared={declared} actual={actual}",
+                    )
+
+        debt_entries = family.get("debt") or []
+        if not isinstance(debt_entries, list):
+            bad("family_debt_invalid", fid)
+            debt_entries = []
+        seen_debt_routes: set[str] = set()
+        for entry in debt_entries:
+            if not isinstance(entry, dict):
+                bad("debt_entry_invalid", f"{fid}: {entry}")
+                continue
+            route = str(entry.get("route") or "")
+            if not route:
+                bad("debt_route_missing", fid)
+                continue
+            if not _is_canonical_route(route):
+                bad("debt_route_invalid", f"{fid}:{route}")
+            if route in seen_debt_routes:
+                bad("debt_route_duplicated", f"{fid}:{route}")
+            seen_debt_routes.add(route)
+            if not _is_owner_issue(entry.get("owner_issue")):
+                bad("debt_owner_issue_missing", f"{fid}:{route}")
+            if len(str(entry.get("reason") or "").strip()) < MIN_WRITTEN_REASON:
+                bad("debt_reason_missing", f"{fid}:{route}")
+            expires_at_value = entry.get("expires_at")
+            expires_at = (
+                date.fromisoformat(expires_at_value) if _is_iso_date(expires_at_value) else None
+            )
+            if expires_at is None:
+                bad("debt_expires_at_invalid", f"{fid}:{route}")
+            elif declared_at is not None and not (
+                0 <= (expires_at - declared_at).days <= MAX_DEBT_DURATION_DAYS
+            ):
+                bad(
+                    "debt_expiry_window_invalid",
+                    f"{fid}:{route} declared={declared_at} expires={expires_at}",
+                )
+            in_family = route in routes or (prefix and route.startswith(prefix))
+            if not in_family:
+                bad("debt_route_outside_family", f"{fid}:{route}")
+            if verify_coverage and route not in indexable_routes:
+                bad("debt_route_not_indexable", f"{fid}:{route}")
+
+        priced_reference_entries = family.get("priced_reference_routes") or []
+        if not isinstance(priced_reference_entries, list):
+            bad("family_priced_reference_invalid", fid)
+            priced_reference_entries = []
+        seen_reference_routes: set[str] = set()
+        for entry in priced_reference_entries:
+            if not isinstance(entry, dict):
+                bad("priced_reference_entry_invalid", f"{fid}: {entry}")
+                continue
+            route = str(entry.get("route") or "")
+            if not _is_canonical_route(route):
+                bad("priced_reference_route_invalid", f"{fid}:{route}")
+            if route in seen_reference_routes:
+                bad("priced_reference_route_duplicated", f"{fid}:{route}")
+            seen_reference_routes.add(route)
+            if len(str(entry.get("reason") or "").strip()) < MIN_WRITTEN_REASON:
+                bad("priced_reference_reason_missing", f"{fid}:{route}")
+            in_family = route in routes or (prefix and route.startswith(prefix))
+            if not in_family:
+                bad("priced_reference_route_outside_family", f"{fid}:{route}")
+            if verify_coverage and route not in indexable_routes:
+                bad("priced_reference_route_not_indexable", f"{fid}:{route}")
+    if len(service_source_ids) != 1:
+        bad(
+            "registry_service_source_owner_invalid",
+            f"expected one owner for {BOFU_SERVICE_ROUTE_SOURCE}, got {sorted(service_source_ids)}",
+        )
     return findings
 
 
 def _conversion_profile(
     route: str,
     service_routes: set[str],
-    priced_signal: str = "",
+    family: dict[str, Any] | None = None,
+    priced: bool = False,
 ) -> str:
+    """Effective conversion profile. Derived from data + rendered HTML, never defaulted."""
     if route in service_routes:
         return "service_pillar"
+    if family is not None:
+        declared = str(family.get("profile"))
+        if declared == "trust_or_legal":
+            return "trust_or_legal"
+        return "priced_offer" if priced else declared
+    # No declaration: legacy legal allowlist stays only so that a registry
+    # failure still classifies legal pages sanely. The missing declaration is
+    # reported as an error by gate_conversion itself.
     if route in {"/privacidade/", "/termos-de-uso/", "/conflitos/", "/uso-de-ia/", "/imprensa/", "/correcoes/"}:
         return "trust_or_legal"
     if route.startswith("/politica-editorial/"):
         return "trust_or_legal"
-    if priced_signal:
-        return "priced_offer"
-    return "commercial_content"
+    return "priced_offer" if priced else "commercial_content"
 
 
 def _conversion_files(base: Path) -> list[Path]:
@@ -1077,35 +1542,83 @@ def gate_conversion(
     main_cta_exempt = 0
     service_scanned = 0
     service_capture_count = 0
-    priced_scanned = 0
-    priced_capture_count = 0
-    priced_signals: dict[str, str] = {}
-    priced_actions, priced_offers = priced_action_registry()
     profile_counts = {
         "service_pillar": 0,
         "priced_offer": 0,
         "commercial_content": 0,
         "trust_or_legal": 0,
     }
+    terminal_required = 0
+    terminal_covered = 0
+    terminal_exempt_legal = 0
+    terminal_debt = 0
+    priced_capture_total = 0
+    priced_capture_covered = 0
+    exemptions: list[dict[str, Any]] = []
+    _, registered_priced_offers = priced_action_registry()
     pii_re = re.compile(
         r"\b(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b",
         re.I,
     )
+
+    # Pass 1: census of indexable public routes (sitewide, derived, never a list).
+    pages: list[tuple[Path, str, str, str]] = []
     for p in _conversion_files(base):
         html = p.read_text(encoding="utf-8", errors="replace")
         if not is_indexable_html(html):
             continue
-        scanned += 1
         rel = p.relative_to(base)
         route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
-        main = _main_html(html)
-        priced_signal = priced_offer_signal(main, priced_actions, priced_offers)
-        profile = _conversion_profile(route, set(service_routes), priced_signal)
+        pages.append((p, html, route, _main_html(html)))
+    indexable_routes = {route for _, _, route, _ in pages}
+
+    registry = load_family_registry()
+    families = registry.get("families") or []
+    findings.extend(
+        _validate_family_registry(
+            registry,
+            set(service_routes),
+            indexable_routes,
+            # Declared gate coverage describes the real public surface, so it is
+            # verified against ROOT, not against a fixture root under test.
+            verify_coverage=base == ROOT,
+        )
+    )
+    satisfied_debt: set[tuple[str, str]] = set()
+
+    for p, html, route, main in pages:
+        scanned += 1
+        family = _match_family(route, families, set(service_routes))
+        priced = _displays_price(main)
+        priced_refs = (
+            {str(e.get("route")) for e in (family or {}).get("priced_reference_routes") or []}
+        )
+        priced_reference = priced and route in priced_refs
+        if priced_reference:
+            priced = False
+        profile = _conversion_profile(route, set(service_routes), family, priced)
         profile_counts[profile] += 1
         conversion_exempt = profile == "trust_or_legal"
         has_main_wa = bool(re.search(r'(?is)<a\b[^>]+href=["\'][^"\']*(?:wa\.me|whatsapp\.com)', main))
         has_main_form = bool(
             re.search(r'(?is)<form\b[^>]+action=["\']/.netlify/functions/lead["\']', main)
+        )
+        if profile == "priced_offer":
+            priced_capture_total += 1
+            priced_findings = _priced_offer_findings(
+                p,
+                base,
+                route,
+                main,
+                registered_priced_offers,
+                str((family or {}).get("id") or ""),
+            )
+            findings.extend(priced_findings)
+            if not priced_findings:
+                priced_capture_covered += 1
+        has_linked_capture_route = _has_linked_capture_route(base, main)
+        service_transition_destinations = _service_transition_destinations(
+            main, set(service_routes)
         )
         has_main_service_link = any(
             f'href="{destination}"' in main or f"href='{destination}'" in main
@@ -1158,14 +1671,140 @@ def gate_conversion(
                     reason="missing_main_cta",
                 )
             )
-        if profile == "priced_offer":
-            priced_scanned += 1
-            priced_signals[route] = priced_signal
-            if has_main_form:
-                priced_capture_count += 1
-            findings.extend(
-                _priced_offer_findings(p, base, route, main, priced_offers)
+        # --- Fail-closed family + terminal-action contract (issue #300) ---
+        rel_path = str(p.relative_to(base))
+        if family is None:
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=rel_path,
+                    reason="public_family_not_declared",
+                    excerpt=(
+                        f"{route} — declare a família em {FAMILY_REGISTRY_REL} "
+                        "(profile, ação terminal, cobertura de gate)"
+                    ),
+                )
             )
+        else:
+            declared_profile = str(family.get("profile"))
+            if priced_reference:
+                entry = next(
+                    e
+                    for e in family.get("priced_reference_routes") or []
+                    if str(e.get("route")) == route
+                )
+                exemptions.append(
+                    {
+                        "route": route,
+                        "family": family.get("id"),
+                        "kind": "priced_reference",
+                        "reason": entry.get("reason"),
+                        "owner_issue": family.get("owner_issue"),
+                        "expires_at": None,
+                    }
+                )
+            if profile == "trust_or_legal" and priced:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=rel_path,
+                        reason="priced_route_in_trust_family",
+                        excerpt=f"{route} family={family.get('id')} rendered_price=yes",
+                    )
+                )
+            elif profile == "priced_offer" and declared_profile not in {
+                "priced_offer",
+                "service_pillar",
+            }:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=rel_path,
+                        reason="undeclared_priced_offer",
+                        excerpt=f"{route} declared={declared_profile} rendered_price=yes",
+                    )
+                )
+
+            required = "none" if profile == "trust_or_legal" else str(family.get("terminal_action"))
+            if profile == "priced_offer":
+                # A displayed price always demands persisted capture, whatever
+                # the family declared. Derived from the HTML, not declarable away.
+                required = "capture_form"
+            satisfied = {
+                "none": True,
+                "capture_form": has_main_form,
+                "whatsapp": has_main_wa,
+                "capture_form_or_whatsapp": (
+                    has_main_form or has_main_wa or has_linked_capture_route
+                ),
+                "service_transition": len(service_transition_destinations) == 1,
+            }.get(required, False)
+
+            if required == "none":
+                terminal_exempt_legal += 1
+                exemptions.append(
+                    {
+                        "route": route,
+                        "family": family.get("id"),
+                        "kind": "trust_or_legal",
+                        "reason": family.get("exemption_reason"),
+                        "owner_issue": family.get("owner_issue"),
+                        "expires_at": None,
+                    }
+                )
+            else:
+                terminal_required += 1
+                debt = next(
+                    (e for e in family.get("debt") or [] if str(e.get("route")) == route), None
+                )
+                if satisfied:
+                    terminal_covered += 1
+                    if debt is not None:
+                        satisfied_debt.add((str(family.get("id")), route))
+                elif route in service_routes:
+                    # Owned by the dedicated missing_on_page_form rule below,
+                    # which honours the #291 freeze. Do not duplicate it here.
+                    pass
+                elif debt is None:
+                    findings.append(
+                        Finding(
+                            gate="conversion",
+                            path=rel_path,
+                            reason="missing_terminal_action",
+                            excerpt=f"{route} family={family.get('id')} required={required}",
+                        )
+                    )
+                else:
+                    expires = _as_date(debt.get("expires_at"))
+                    expired = today > expires
+                    terminal_debt += 1
+                    exemptions.append(
+                        {
+                            "route": route,
+                            "family": family.get("id"),
+                            "kind": "debt",
+                            "reason": debt.get("reason"),
+                            "owner_issue": debt.get("owner_issue"),
+                            "expires_at": expires.isoformat(),
+                            "required_terminal_action": required,
+                            "expired": expired,
+                        }
+                    )
+                    findings.append(
+                        Finding(
+                            gate="conversion",
+                            path=rel_path,
+                            reason="terminal_action_debt_expired"
+                            if expired
+                            else "terminal_action_debt",
+                            excerpt=(
+                                f"{route} required={required} "
+                                f"issue=#{debt.get('owner_issue')} expires_at={expires.isoformat()}"
+                            ),
+                            severity="error" if expired else "warn",
+                        )
+                    )
+
         if route in service_routes:
             service_scanned += 1
             if has_main_form:
@@ -1217,6 +1856,21 @@ def gate_conversion(
                 )
             )
 
+    # Debt that the owning issue already paid must be removed, not left to rot
+    # into a silent exemption for whatever lands on that route next.
+    for family in families:
+        for entry in family.get("debt") or []:
+            if (str(family.get("id")), str(entry.get("route"))) in satisfied_debt:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=FAMILY_REGISTRY_REL,
+                        reason="debt_entry_satisfied_remove_it",
+                        excerpt=f"{entry.get('route')} issue=#{entry.get('owner_issue')}",
+                        severity="warn",
+                    )
+                )
+
     capture_findings, capture_scanned = _onpage_capture_findings(base, pii_re)
     findings.extend(capture_findings)
     errors = [f for f in findings if f.severity == "error"]
@@ -1245,13 +1899,31 @@ def gate_conversion(
                 else 0.0,
             },
             "priced_offer_capture": {
-                "covered": priced_capture_count,
-                "total": priced_scanned,
-                "coverage": round(priced_capture_count / priced_scanned, 4)
-                if priced_scanned
+                "covered": priced_capture_covered,
+                "total": priced_capture_total,
+                "coverage": round(priced_capture_covered / priced_capture_total, 4)
+                if priced_capture_total
                 else 0.0,
-                "routes": dict(sorted(priced_signals.items())),
             },
+            "family_registry": {
+                "path": FAMILY_REGISTRY_REL,
+                "schema_version": registry.get("schema_version"),
+                "families": len(families),
+                "fail_closed": bool(registry.get("fail_closed")),
+                "undeclared_routes": sum(
+                    1 for f in findings if f.reason == "public_family_not_declared"
+                ),
+            },
+            "terminal_action": {
+                "covered": terminal_covered,
+                "total": terminal_required,
+                "coverage": round(terminal_covered / terminal_required, 4)
+                if terminal_required
+                else 0.0,
+                "exempt_trust_or_legal": terminal_exempt_legal,
+                "registered_debt": terminal_debt,
+            },
+            "exemptions": sorted(exemptions, key=lambda e: (e["kind"], e["route"])),
             "freeze": {
                 "earliest_safe_action_at": EARLIEST_SAFE_ACTION_AT.isoformat(),
                 "warn_before_date": today < EARLIEST_SAFE_ACTION_AT,
