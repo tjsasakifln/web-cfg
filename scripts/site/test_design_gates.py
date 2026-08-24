@@ -77,6 +77,173 @@ def test_home_archetypes_diverse():
             raise AssertionError(f"three consecutive identical archetypes: {window}")
 
 
+VOID_TAGS = {
+    "area", "base", "br", "col", "embed", "hr", "img", "input",
+    "link", "meta", "param", "source", "track", "wbr",
+}
+NARRATIVE_TAGS = {"section", "aside", "header", "article"}
+
+
+class _NarrativeBlockScanner(HTMLParser):
+    """Top-level narrative blocks inside <main>, with archetype and skeleton.
+
+    The skeleton is the ordered tag/class signature of the block's first two
+    levels. It is what a reader perceives as "another one of those", so the
+    gate can catch a repeated section even when the archetype label is not.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.in_main = False
+        self.main_depth = 0
+        self.block: dict | None = None
+        self.block_depth = 0
+        self.blocks: list[dict] = []
+
+    def _signature(self, tag: str, attrs: dict) -> tuple[str, str]:
+        classes = " ".join(sorted((attrs.get("class") or "").split()))
+        return (tag, classes)
+
+    def handle_starttag(self, tag, attrs):
+        ad = {k: (v or "") for k, v in attrs}
+        if tag == "main":
+            self.in_main = True
+            self.main_depth = 0
+            return
+        if not self.in_main:
+            return
+        if tag in VOID_TAGS:
+            if self.block is not None and self.block_depth <= 2:
+                self.block["skeleton"].append(self._signature(tag, ad))
+            return
+        if self.block is None:
+            if self.main_depth == 0 and tag in NARRATIVE_TAGS:
+                self.block = {
+                    "tag": tag,
+                    "archetype": ad.get("data-section-archetype", ""),
+                    "id": ad.get("id", ""),
+                    "skeleton": [self._signature(tag, ad)],
+                }
+                self.block_depth = 0
+            else:
+                self.main_depth += 1
+            return
+        self.block_depth += 1
+        if self.block_depth <= 2:
+            self.block["skeleton"].append(self._signature(tag, ad))
+
+    def handle_startendtag(self, tag, attrs):
+        if self.in_main and self.block is not None and self.block_depth <= 2:
+            ad = {k: (v or "") for k, v in attrs}
+            self.block["skeleton"].append(self._signature(tag, ad))
+
+    def handle_endtag(self, tag):
+        if not self.in_main:
+            return
+        if tag == "main":
+            self.in_main = False
+            return
+        if tag in VOID_TAGS:
+            return
+        if self.block is None:
+            self.main_depth = max(0, self.main_depth - 1)
+            return
+        if self.block_depth == 0:
+            self.block["skeleton"] = tuple(self.block["skeleton"])
+            self.blocks.append(self.block)
+            self.block = None
+        else:
+            self.block_depth -= 1
+
+
+def narrative_blocks(html: str) -> list[dict]:
+    scanner = _NarrativeBlockScanner()
+    scanner.feed(html)
+    return scanner.blocks
+
+
+def _longest_run(values: list) -> tuple[int, object]:
+    best, best_value, run, previous = 0, None, 0, object()
+    for value in values:
+        run = run + 1 if value == previous else 1
+        previous = value
+        if run > best:
+            best, best_value = run, value
+    return best, best_value
+
+
+def test_section_archetype_gate_covers_more_than_the_home():
+    """Hierarchy is verified by gate on every declared surface, not by eye."""
+    ds = load_ds()
+    surfaces = ds.get("archetype_gated_surfaces") or []
+    assert "index.html" in surfaces, "home must stay inside the archetype gate"
+    assert "entregas/index.html" in surfaces, (
+        "the deliverables library must stay inside the archetype gate"
+    )
+    declared = set(ds["section_archetypes"])
+    for pattern in (
+        "more_than_two_consecutive_identical_section_archetypes",
+        "more_than_two_consecutive_identical_section_skeletons",
+    ):
+        assert pattern in ds["forbidden_patterns"], pattern
+
+    for relative in surfaces:
+        path = ROOT / relative
+        assert path.is_file(), relative
+        html = path.read_text(encoding="utf-8")
+        blocks = narrative_blocks(html)
+        assert len(blocks) >= 5, f"{relative}: only {len(blocks)} narrative blocks"
+
+        missing = [b["id"] or b["tag"] for b in blocks if not b["archetype"]]
+        assert not missing, f"{relative}: narrative blocks without archetype: {missing}"
+
+        unknown = sorted({b["archetype"] for b in blocks} - declared)
+        assert not unknown, f"{relative}: archetypes absent from design-system.json: {unknown}"
+
+        run, value = _longest_run([b["archetype"] for b in blocks])
+        assert run <= 2, f"{relative}: {run} consecutive '{value}' sections"
+
+        run, _ = _longest_run([b["skeleton"] for b in blocks])
+        assert run <= 2, (
+            f"{relative}: {run} consecutive sections with an identical skeleton; "
+            "vary the composition instead of relabelling it"
+        )
+
+        primaries = len(re.findall(r"button-primary", html))
+        assert primaries <= 4, f"{relative}: {primaries} primary CTAs"
+
+
+def test_deliverables_library_declares_its_hierarchy_in_copy():
+    """The most promoted item must be explained, not merely enlarged."""
+    path = ROOT / "entregas" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    blocks = narrative_blocks(html)
+    by_archetype = Counter(b["archetype"] for b in blocks)
+    assert by_archetype["ladder_entry"] == 1, by_archetype
+    assert by_archetype["compare_ladder"] == 1, by_archetype
+
+    text = re.sub(r"<[^>]+>", " ", html)
+    text = re.sub(r"\s+", " ", text)
+    assert "Por que abre a biblioteca" in text, "entry step must declare why it opens the page"
+
+    # No section may dominate by sheer length: the entry example used to be 59%
+    # longer than its peers, which is emphasis by accident instead of by choice.
+    lengths = {}
+    for block in blocks:
+        if not block["id"].startswith(("primeiro-exemplo", "exemplo-")):
+            continue
+        raw = re.search(
+            rf'<section[^>]+id="{re.escape(block["id"])}".*?</section>', html, flags=re.DOTALL
+        )
+        assert raw, block["id"]
+        visible = re.sub(r"<[^>]+>", " ", raw.group(0))
+        lengths[block["id"]] = len(re.sub(r"\s+", " ", visible).strip())
+    assert len(lengths) == 8, lengths
+    assert max(lengths.values()) <= int(min(lengths.values()) * 1.35), (
+        f"one example dominates by length: {lengths}"
+    )
+
+
 def test_home_card_grid_limit():
     html = HOME.read_text(encoding="utf-8")
     # Explicit card-grid markers from legacy patterns should be rare/absent

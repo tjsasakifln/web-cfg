@@ -89,6 +89,26 @@ Ver `forbidden_patterns` em `design-system.json`. Resumo operacional:
 - CTA primário em excesso
 - Linguagem de governança editorial no HTML público
 - Dashboard SaaS fictício, stock genérico, métricas inventadas
+- Mais de duas seções consecutivas com o mesmo arquétipo **ou com o mesmo esqueleto**
+
+## Arquétipos fora da home
+
+O gate de arquétipo não é exclusivo da home. `archetype_gated_surfaces` em
+`design-system.json` lista as superfícies em que **toda** seção narrativa no primeiro nível de
+`<main>` precisa declarar `data-section-archetype`, com o valor presente em
+`section_archetypes`.
+Nessas páginas o gate reprova:
+
+- seção narrativa sem arquétipo declarado;
+- arquétipo que não existe no design system;
+- mais de duas seções consecutivas com o mesmo arquétipo;
+- mais de duas seções consecutivas com o mesmo **esqueleto** (tag e classes dos dois primeiros
+  níveis), para que renomear o rótulo não sirva de escape;
+- mais de quatro `button-primary`.
+
+Rotular é declaração, não disfarce: se duas seções são estruturalmente iguais, a terceira precisa
+mudar de composição, não de nome. Para incluir uma página nova, acrescente o caminho relativo a
+`archetype_gated_surfaces`.
 
 ## Copy pública
 
