@@ -3,9 +3,16 @@
 Shared intent → next action → persist-first handoff.
 
 - Matrix: `docs/contracts/intent-action/intent-action-matrix.v1.json`
+- Agenda activation gate (#248): `agenda-gate.cjs` — `DEFER` until a canonical
+  CONFENGE route and an aggregate Warmbly #55 snapshot, local, tracked and
+  SHA-256-bound to commit/blob evidence land atomically. The pull-request base
+  SHA, 28-day/20-closed-cycle census, 30-day freshness, authorized owner,
+  canonical markup and `CONFENGE_WEB` attribution fail closed; SLA remains
+  `UNKNOWN`.
 - Isolated intake: `netlify/functions/market-answer-intake.cjs`
 - Adapter (does not edit PR #85 libs): `adapter.cjs`
-- Tests: `tests/conversion/test_conversion.mjs`
+- Tests: `tests/conversion/test_conversion.mjs` and
+  `tests/conversion/test_agenda_gate.mjs`
 
 ```bash
 npm run test:conversion

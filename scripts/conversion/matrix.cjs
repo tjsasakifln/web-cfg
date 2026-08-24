@@ -2,6 +2,7 @@
  * Intent → action matrix lookup. Pure: no I/O besides the versioned JSON.
  */
 const path = require("path");
+const { validateAgendaGate } = require("./agenda-gate.cjs");
 
 const MATRIX_PATH = path.join(
   __dirname,
@@ -100,6 +101,8 @@ function validateMatrixShape(matrix) {
   if (cta !== "Veja sua empresa neste mercado") {
     missing.push("first_canary_cta");
   }
+  const agendaGate = validateAgendaGate(src);
+  for (const error of agendaGate.errors) missing.push(`agenda_gate:${error}`);
   return { ok: missing.length === 0, missing, route_count: routes.length };
 }
 
@@ -115,5 +118,6 @@ module.exports = {
   optInAuthorized,
   operationalChannel,
   requiredRouteFields,
+  validateAgendaGate,
   validateMatrixShape,
 };
